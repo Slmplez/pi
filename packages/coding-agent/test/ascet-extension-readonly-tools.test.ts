@@ -54,73 +54,30 @@ describe("ASCET read-only PI tools", () => {
 		expect(getProcessTreeKillCommand(0, "win32")).toBeUndefined();
 	});
 
-	it("registers read-only tools as sequential PI tools", async () => {
+	it("does not register old fine-grained read-only tools as PI tools", async () => {
 		const ascetExtension = await loadAscetExtension();
+		const removedTools = [
+			"ascet_list_components",
+			"ascet_search_elements",
+			"ascet_search_components",
+			"ascet_search_occurrences",
+			"ascet_list_folders",
+			"ascet_resolve_component",
+			"ascet_read_component_summary",
+			"ascet_read_component_children",
+			"ascet_list_methods",
+			"ascet_read_method_code",
+			"ascet_read_project_formulas",
+			"ascet_list_diagrams",
+			"ascet_read_block_diagram",
+			"ascet_read_element_refs",
+			"ascet_diff_component_snapshot",
+			"ascet_verify_readback",
+		];
 
-		expect(ascetExtension?.tools.get("ascet_list_components")?.definition).toMatchObject({
-			name: "ascet_list_components",
-			executionMode: "sequential",
-		});
-		expect(ascetExtension?.tools.get("ascet_search_elements")?.definition).toMatchObject({
-			name: "ascet_search_elements",
-			executionMode: "sequential",
-		});
-		expect(ascetExtension?.tools.get("ascet_search_components")?.definition).toMatchObject({
-			name: "ascet_search_components",
-			executionMode: "sequential",
-		});
-		expect(ascetExtension?.tools.get("ascet_search_occurrences")?.definition).toMatchObject({
-			name: "ascet_search_occurrences",
-			executionMode: "sequential",
-		});
-		expect(ascetExtension?.tools.get("ascet_list_folders")?.definition).toMatchObject({
-			name: "ascet_list_folders",
-			executionMode: "sequential",
-		});
-		expect(ascetExtension?.tools.get("ascet_resolve_component")?.definition).toMatchObject({
-			name: "ascet_resolve_component",
-			executionMode: "sequential",
-		});
-		expect(ascetExtension?.tools.get("ascet_read_component_summary")?.definition).toMatchObject({
-			name: "ascet_read_component_summary",
-			executionMode: "sequential",
-		});
-		expect(ascetExtension?.tools.get("ascet_read_component_children")?.definition).toMatchObject({
-			name: "ascet_read_component_children",
-			executionMode: "sequential",
-		});
-		expect(ascetExtension?.tools.get("ascet_list_methods")?.definition).toMatchObject({
-			name: "ascet_list_methods",
-			executionMode: "sequential",
-		});
-		expect(ascetExtension?.tools.get("ascet_read_method_code")?.definition).toMatchObject({
-			name: "ascet_read_method_code",
-			executionMode: "sequential",
-		});
-		expect(ascetExtension?.tools.get("ascet_read_project_formulas")?.definition).toMatchObject({
-			name: "ascet_read_project_formulas",
-			executionMode: "sequential",
-		});
-		expect(ascetExtension?.tools.get("ascet_list_diagrams")?.definition).toMatchObject({
-			name: "ascet_list_diagrams",
-			executionMode: "sequential",
-		});
-		expect(ascetExtension?.tools.get("ascet_read_block_diagram")?.definition).toMatchObject({
-			name: "ascet_read_block_diagram",
-			executionMode: "sequential",
-		});
-		expect(ascetExtension?.tools.get("ascet_read_element_refs")?.definition).toMatchObject({
-			name: "ascet_read_element_refs",
-			executionMode: "sequential",
-		});
-		expect(ascetExtension?.tools.get("ascet_diff_component_snapshot")?.definition).toMatchObject({
-			name: "ascet_diff_component_snapshot",
-			executionMode: "sequential",
-		});
-		expect(ascetExtension?.tools.get("ascet_verify_readback")?.definition).toMatchObject({
-			name: "ascet_verify_readback",
-			executionMode: "sequential",
-		});
+		for (const name of removedTools) {
+			expect(ascetExtension?.tools.has(name)).toBe(false);
+		}
 	});
 
 	it("registers every ASCET extension tool as sequential", async () => {
@@ -136,7 +93,7 @@ describe("ASCET read-only PI tools", () => {
 
 	it("registers compact ASCET renderers for tool calls and results", async () => {
 		const ascetExtension = await loadAscetExtension();
-		const tool = ascetExtension?.tools.get("ascet_read_component_summary")?.definition;
+		const tool = ascetExtension?.tools.get("ascet_read")?.definition;
 		const theme = {
 			bold: (text: string) => text,
 			fg: (_role: string, text: string) => text,

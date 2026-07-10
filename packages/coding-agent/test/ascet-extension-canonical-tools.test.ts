@@ -1,15 +1,16 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { runAscetBrowse } from "../../ascet-extension/src/tools/browse.ts";
+import type { AscetCliExecutionResult, AscetCliRequest } from "../../ascet-extension/src/cli.ts";
+import { classifyAscetCliCommand } from "../../ascet-extension/src/routing/coverage.ts";
+import { listAscetRoutes, routeAscetAction } from "../../ascet-extension/src/routing/router.ts";
 import { runAscetCapabilities } from "../../ascet-extension/src/tools/capabilities.ts";
-import { runAscetCompare } from "../../ascet-extension/src/tools/compare.ts";
-import { runAscetInspect } from "../../ascet-extension/src/tools/inspect.ts";
-import { runAscetReadCode } from "../../ascet-extension/src/tools/read-code.ts";
+import { ascetDiffTool } from "../../ascet-extension/src/tools/diff/index.ts";
+import { ascetExploreTool } from "../../ascet-extension/src/tools/explore/index.ts";
+import { ascetReadTool } from "../../ascet-extension/src/tools/read/index.ts";
 import { runAscetRecover } from "../../ascet-extension/src/tools/recover.ts";
-import { runAscetReferences } from "../../ascet-extension/src/tools/references.ts";
-import { runAscetResolve } from "../../ascet-extension/src/tools/resolve.ts";
-import { runAscetSearch } from "../../ascet-extension/src/tools/search.ts";
+import { ascetReferenceTool } from "../../ascet-extension/src/tools/reference/index.ts";
+import { ascetSearchTool } from "../../ascet-extension/src/tools/search/index.ts";
 import { loadAscetExtension, repoRoot } from "./ascet-extension-test-helpers.ts";
 
 const CANONICAL_ASCET_TOOLS = [
@@ -17,16 +18,14 @@ const CANONICAL_ASCET_TOOLS = [
 	"ascet_capabilities",
 	"ascet_recover",
 	"ascet_scheduler_status",
-	"ascet_browse",
+	"ascet_explore",
 	"ascet_search",
-	"ascet_resolve",
-	"ascet_inspect",
-	"ascet_read_code",
-	"ascet_references",
-	"ascet_compare",
+	"ascet_read",
+	"ascet_reference",
+	"ascet_diff",
 	"ascet_write",
-	"ascet_verify",
 	"ascet_batch_write",
+	"ascet_verify",
 ] as const;
 
 const CANONICAL_ASCET_TOOL_MODULES = [
@@ -34,22 +33,49 @@ const CANONICAL_ASCET_TOOL_MODULES = [
 	["ascet_capabilities", "capabilities"],
 	["ascet_recover", "recover"],
 	["ascet_scheduler_status", "scheduler-status"],
-	["ascet_browse", "browse"],
+	["ascet_explore", "explore"],
 	["ascet_search", "search"],
-	["ascet_resolve", "resolve"],
-	["ascet_inspect", "inspect"],
-	["ascet_read_code", "read-code"],
-	["ascet_references", "references"],
-	["ascet_compare", "compare"],
+	["ascet_read", "read"],
+	["ascet_reference", "reference"],
+	["ascet_diff", "diff"],
 	["ascet_write", "write"],
-	["ascet_verify", "verify"],
 	["ascet_batch_write", "batch-write"],
+	["ascet_verify", "verify"],
+] as const;
+
+const REMOVED_FINE_GRAINED_TOOLS = [
+	"ascet_list_components",
+	"ascet_list_folders",
+	"ascet_contract_catalog",
+	"ascet_search_elements",
+	"ascet_search_components",
+	"ascet_search_occurrences",
+	"ascet_resolve_component",
+	"ascet_read_component_summary",
+	"ascet_read_component_children",
+	"ascet_read_method_code",
+	"ascet_read_project_formulas",
+	"ascet_list_methods",
+	"ascet_list_diagrams",
+	"ascet_read_block_diagram",
+	"ascet_read_element_refs",
+	"ascet_diff_component_snapshot",
+	"ascet_verify_readback",
+	"ascet_create_folder",
+	"ascet_create_component",
+	"ascet_create_method",
+	"ascet_set_class_method_code",
 ] as const;
 
 describe("ASCET canonical PI tools", () => {
 	it("registers the Copilot-aligned ASCET tool surface as sequential", async () => {
 		const ascetExtension = await loadAscetExtension();
 
+		for (const toolName of ascetExtension?.tools.keys() ?? []) {
+			if (toolName.startsWith("ascet_")) {
+				expect(CANONICAL_ASCET_TOOLS).toContain(toolName as (typeof CANONICAL_ASCET_TOOLS)[number]);
+			}
+		}
 		for (const name of CANONICAL_ASCET_TOOLS) {
 			expect(ascetExtension?.tools.get(name)?.definition).toMatchObject({
 				name,
@@ -63,91 +89,218 @@ describe("ASCET canonical PI tools", () => {
 		}
 	});
 
+	it("does not register old fine-grained ASCET tools as legacy aliases", async () => {
+		const ascetExtension = await loadAscetExtension();
+
+		for (const name of REMOVED_FINE_GRAINED_TOOLS) {
+			expect(ascetExtension?.tools.has(name)).toBe(false);
+		}
+	});
+
 	it("keeps canonical tool prompt and UI modules colocated with each tool", () => {
 		for (const [_name, moduleName] of CANONICAL_ASCET_TOOL_MODULES) {
 			const toolDir = join(repoRoot, "packages/ascet-extension/src/tools", moduleName);
 			expect(existsSync(join(toolDir, "index.ts"))).toBe(true);
-			expect(existsSync(join(toolDir, "prompt.ts"))).toBe(true);
-			expect(existsSync(join(toolDir, "ui.ts"))).toBe(true);
 		}
 	});
 
-	it("dispatches canonical read-only actions through the existing CLI wrappers", async () => {
-		const executeCli = async (request: never) => ({
+	it("routes Copilot-aligned actions through logical and backend command ids", () => {
+		expect(routeAscetAction({ toolName: "ascet_read", action: "read_code" })).toMatchObject({
+			toolName: "ascet_read",
+			action: "read_code",
+			logicalCommandId: "AscetReadCode",
+			backendCommandId: "AscetReadTextCode",
+			operation: "read_code",
+		});
+		expect(routeAscetAction({ toolName: "ascet_explore", action: "resolve_target" })).toMatchObject({
+			logicalCommandId: "AscetResolveComponent",
+			backendCommandId: "AscetResolveComponent",
+			operation: "resolve_component",
+		});
+		expect(listAscetRoutes().some((route) => route.toolName === "ascet_scheduler_status")).toBe(true);
+	});
+
+	it("classifies backend aliases without exposing backend implementation names as model concepts", () => {
+		expect(classifyAscetCliCommand("AscetReadTextCode")).toMatchObject({
+			category: "backend_alias",
+			toolName: "ascet_read",
+			action: "read_code",
+			logicalCommandId: "AscetReadCode",
+		});
+	});
+
+	it("dispatches canonical read-only actions through canonical tools", async () => {
+		const executeCli = async (request: AscetCliRequest): Promise<AscetCliExecutionResult> => ({
 			exitCode: 0,
 			stdout: JSON.stringify({ ok: true, result: { request } }),
 			stderr: "",
 			timedOut: false,
 			request,
 		});
-		const options = { cwd: repoRoot, executeCli };
+		const signal = new AbortController().signal;
+		const ctx = { cwd: repoRoot, executeCli };
 
 		await expect(
-			runAscetBrowse({ action: "components", folderPath: "DEMO", limit: 2 }, options),
-		).resolves.toMatchObject({ request: { args: ["exec", "list_components", "DEMO", "--limit", "2", "--json"] } });
+			ascetExploreTool.execute(
+				"tool-call",
+				{ action: "list_components", folderPath: "DEMO", limit: 2 },
+				signal,
+				undefined,
+				ctx,
+			),
+		).resolves.toMatchObject({
+			details: { request: { args: ["exec", "list_components", "DEMO", "--limit", "2", "--json"] } },
+		});
 		await expect(
-			runAscetSearch(
+			ascetSearchTool.execute(
+				"tool-call",
 				{ action: "search_elements", query: "pid_kp", componentPath: "DEMO\\PID", match: "exact", limit: 5 },
-				options,
+				signal,
+				undefined,
+				ctx,
 			),
 		).resolves.toMatchObject({
-			request: {
-				args: [
-					"exec",
-					"search_elements",
-					"pid_kp",
-					"--component",
-					"DEMO\\PID",
-					"--match",
-					"exact",
-					"--limit",
-					"5",
-					"--json",
-				],
+			details: {
+				request: {
+					args: [
+						"exec",
+						"search_elements",
+						"pid_kp",
+						"--component",
+						"DEMO\\PID",
+						"--match",
+						"exact",
+						"--limit",
+						"5",
+						"--json",
+					],
+				},
 			},
 		});
 		await expect(
-			runAscetResolve({ action: "component", query: "PID", scopePath: "DEMO", match: "exact" }, options),
+			ascetExploreTool.execute(
+				"tool-call",
+				{ action: "resolve_target", query: "PID", scopePath: "DEMO", match: "exact" },
+				signal,
+				undefined,
+				ctx,
+			),
 		).resolves.toMatchObject({
-			request: { args: ["exec", "resolve_component", "PID", "--scope", "DEMO", "--match", "exact", "--json"] },
-		});
-		await expect(runAscetInspect({ action: "summary", componentPath: "DEMO\\PID" }, options)).resolves.toMatchObject({
-			request: { args: ["exec", "read_component_summary", "DEMO\\PID", "--json"] },
-		});
-		await expect(
-			runAscetInspect({ action: "state_machine_flow", componentPath: "DEMO/SM", traceDepth: 2 }, options),
-		).resolves.toMatchObject({
-			request: { args: ["exec", "read_state_machine_flow", "DEMO\\SM", "--trace-depth", "2", "--json"] },
-		});
-		await expect(
-			runAscetReadCode({ action: "text", componentPath: "DEMO/PID", methodName: "calc", section: "body" }, options),
-		).resolves.toMatchObject({
-			request: {
-				args: ["exec", "read_text_code", "DEMO\\PID", "--method-name", "calc", "--section", "body", "--json"],
+			details: {
+				request: { args: ["exec", "resolve_component", "PID", "--scope", "DEMO", "--match", "exact", "--json"] },
 			},
 		});
 		await expect(
-			runAscetReferences(
+			ascetExploreTool.execute(
+				"tool-call",
+				{ action: "inspect_target", componentPath: "DEMO\\PID" },
+				signal,
+				undefined,
+				ctx,
+			),
+		).resolves.toMatchObject({
+			details: { request: { args: ["exec", "read_component_summary", "DEMO\\PID", "--json"] } },
+		});
+		await expect(
+			ascetReadTool.execute(
+				"tool-call",
+				{ action: "read_state_machine_flow", componentPath: "DEMO/SM", traceDepth: 2 },
+				signal,
+				undefined,
+				ctx,
+			),
+		).resolves.toMatchObject({
+			details: {
+				request: { args: ["exec", "read_state_machine_flow", "DEMO\\SM", "--trace-depth", "2", "--json"] },
+			},
+		});
+		await expect(
+			ascetReadTool.execute(
+				"tool-call",
+				{ action: "read_code", componentPath: "DEMO/PID", methodName: "calc", section: "body" },
+				signal,
+				undefined,
+				ctx,
+			),
+		).resolves.toMatchObject({
+			details: {
+				request: {
+					args: ["exec", "read_text_code", "DEMO\\PID", "--method-name", "calc", "--section", "body", "--json"],
+				},
+			},
+		});
+		await expect(
+			ascetReferenceTool.execute(
+				"tool-call",
 				{ action: "component_refs", componentPath: "DEMO/PID", direction: "out", depth: 1 },
-				options,
+				signal,
+				undefined,
+				ctx,
 			),
 		).resolves.toMatchObject({
-			request: {
-				args: ["exec", "read_component_refs", "DEMO\\PID", "--direction", "out", "--depth", "1", "--json"],
+			details: {
+				request: {
+					args: ["exec", "read_component_refs", "DEMO\\PID", "--direction", "out", "--depth", "1", "--json"],
+				},
 			},
 		});
 		await expect(
-			runAscetReferences({ action: "references", componentPath: "DEMO/PID" }, options),
-		).resolves.toMatchObject({
-			request: { args: ["exec", "read_references", "DEMO\\PID", "--json"] },
-		});
-		await expect(
-			runAscetCompare(
-				{ action: "method", leftComponentPath: "DEMO\\PID", rightComponentPath: "DEMO\\PID2", methodName: "calc" },
-				options,
+			ascetDiffTool.execute(
+				"tool-call",
+				{ action: "diff_method", leftPath: "DEMO\\PID", rightPath: "DEMO\\PID2", methodName: "calc" },
+				signal,
+				undefined,
+				ctx,
 			),
 		).resolves.toMatchObject({
-			request: { args: ["exec", "diff_method_code", "DEMO\\PID", "DEMO\\PID2", "calc", "--json"] },
+			details: { request: { args: ["exec", "diff_method_code", "DEMO\\PID", "DEMO\\PID2", "calc", "--json"] } },
+		});
+	});
+
+	it("routes canonical ascet_diff.diff to object-kind specific CLI operations", async () => {
+		const executeCli = async (request: AscetCliRequest): Promise<AscetCliExecutionResult> => ({
+			exitCode: 0,
+			stdout: "{}",
+			stderr: "",
+			timedOut: false,
+			request,
+		});
+		const signal = new AbortController().signal;
+
+		await expect(
+			ascetDiffTool.execute(
+				"tool-call",
+				{ action: "diff", objectKind: "class", leftPath: "DEMO/ClassA", rightPath: "DEMO/ClassB" },
+				signal,
+				undefined,
+				{ cwd: repoRoot, executeCli },
+			),
+		).resolves.toMatchObject({
+			details: { request: { args: ["exec", "diff_class", "DEMO\\ClassA", "DEMO\\ClassB", "--json"] } },
+		});
+
+		await expect(
+			ascetDiffTool.execute(
+				"tool-call",
+				{ action: "diff", objectKind: "module", leftPath: "DEMO/ModuleA", rightPath: "DEMO/ModuleB" },
+				signal,
+				undefined,
+				{ cwd: repoRoot, executeCli },
+			),
+		).resolves.toMatchObject({
+			details: { request: { args: ["exec", "diff_module", "DEMO\\ModuleA", "DEMO\\ModuleB", "--json"] } },
+		});
+
+		await expect(
+			ascetDiffTool.execute(
+				"tool-call",
+				{ action: "diff", objectKind: "statemachine", leftPath: "DEMO/SMA", rightPath: "DEMO/SMB" },
+				signal,
+				undefined,
+				{ cwd: repoRoot, executeCli },
+			),
+		).resolves.toMatchObject({
+			details: { request: { args: ["exec", "diff_state_machine", "DEMO\\SMA", "DEMO\\SMB", "--json"] } },
 		});
 	});
 
@@ -156,6 +309,11 @@ describe("ASCET canonical PI tools", () => {
 
 		expect(result.ok).toBe(true);
 		expect(result.data.matches.some((match) => match.operation === "read_component_code")).toBe(true);
+		expect(result.data.matches.find((match) => match.operation === "read_component_code")).toMatchObject({
+			coverageCategory: "unsupported_with_reason",
+			canonicalTool: undefined,
+			canonicalAction: undefined,
+		});
 	});
 
 	it("limits recover to extension-owned safe actions", async () => {

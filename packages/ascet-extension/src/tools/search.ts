@@ -1,5 +1,6 @@
 import { Type } from "typebox";
 import type { AscetCliExecutionResult, AscetCliJsonResult, AscetCliRequest } from "../cli.ts";
+import { formatResolveComponentResult, runAscetResolveComponent } from "../resolve-component.ts";
 import { formatSearchComponentsResult, runAscetSearchComponents } from "../search-components.ts";
 import { formatSearchElementsResult, runAscetSearchElements } from "../search-elements.ts";
 import { formatSearchOccurrencesResult, runAscetSearchOccurrences } from "../search-occurrences.ts";
@@ -13,6 +14,14 @@ export type AscetSearchParams =
 			match?: "exact" | "glob" | "contains";
 			limit?: number;
 			cursor?: string;
+	  }
+	| {
+			action: "resolve_component";
+			query: string;
+			scopePath?: string;
+			kind?: "class" | "module" | "statemachine";
+			match?: "exact" | "glob" | "contains";
+			limit?: number;
 	  }
 	| {
 			action: "search_elements";
@@ -52,6 +61,14 @@ export const ascetSearchParameters = Type.Union([
 		cursor: Type.Optional(Type.String()),
 	}),
 	Type.Object({
+		action: Type.Literal("resolve_component"),
+		query: Type.String({ minLength: 1 }),
+		scopePath: Type.Optional(Type.String()),
+		kind: Type.Optional(Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")])),
+		match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("glob"), Type.Literal("contains")])),
+		limit: Type.Optional(Type.Number({ minimum: 1, maximum: 200 })),
+	}),
+	Type.Object({
 		action: Type.Literal("search_elements"),
 		query: Type.String({ minLength: 1 }),
 		componentPath: Type.Optional(Type.String()),
@@ -78,6 +95,8 @@ export async function runAscetSearch(
 	switch (params.action) {
 		case "search_components":
 			return runAscetSearchComponents(params, options);
+		case "resolve_component":
+			return runAscetResolveComponent(params, options);
 		case "search_elements":
 			return runAscetSearchElements(params, options);
 		case "search_occurrences":
@@ -89,6 +108,8 @@ export function formatAscetSearchResult(params: AscetSearchParams, result: Ascet
 	switch (params.action) {
 		case "search_components":
 			return formatSearchComponentsResult(result);
+		case "resolve_component":
+			return formatResolveComponentResult(result);
 		case "search_elements":
 			return formatSearchElementsResult(result);
 		case "search_occurrences":

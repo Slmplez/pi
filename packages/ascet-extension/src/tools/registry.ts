@@ -1,0 +1,53 @@
+import { ascetBatchWriteTool } from "./batch-write/index.ts";
+import { ascetCapabilitiesTool } from "./capabilities/index.ts";
+import { ascetDiffTool } from "./diff/index.ts";
+import { ascetExploreTool } from "./explore/index.ts";
+import { ascetReadTool } from "./read/index.ts";
+import { ascetRecoverTool } from "./recover/index.ts";
+import { ascetReferenceTool } from "./reference/index.ts";
+import { ascetSchedulerStatusTool } from "./scheduler-status/index.ts";
+import { ascetSearchTool } from "./search/index.ts";
+import { ascetStatusTool } from "./status/index.ts";
+import { ascetVerifyTool } from "./verify/index.ts";
+import { ascetWriteTool } from "./write/index.ts";
+
+export const canonicalOpsTools = [
+	ascetStatusTool,
+	ascetCapabilitiesTool,
+	ascetRecoverTool,
+	ascetSchedulerStatusTool,
+] as const;
+
+export const canonicalDomainTools = [
+	ascetExploreTool,
+	ascetSearchTool,
+	ascetReadTool,
+	ascetReferenceTool,
+	ascetDiffTool,
+	ascetWriteTool,
+	ascetBatchWriteTool,
+	ascetVerifyTool,
+] as const;
+
+export const canonicalAscetToolNames = [
+	"ascet_status",
+	"ascet_capabilities",
+	"ascet_recover",
+	"ascet_scheduler_status",
+	"ascet_explore",
+	"ascet_search",
+	"ascet_read",
+	"ascet_reference",
+	"ascet_diff",
+	"ascet_write",
+	"ascet_batch_write",
+	"ascet_verify",
+] as const;
+
+export const canonicalAscetTools = [...canonicalOpsTools, ...canonicalDomainTools] as const;
+
+for (const [index, tool] of canonicalAscetTools.entries()) {
+	if (tool.name !== canonicalAscetToolNames[index]) {
+		throw new Error(`ASCET canonical tool order mismatch: ${tool.name}`);
+	}
+}

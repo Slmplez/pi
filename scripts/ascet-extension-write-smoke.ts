@@ -62,7 +62,7 @@ const loadResult = await withStage("load_extension", async () => {
 
 const extension = loadResult.extensions.find((entry) => entry.path.replaceAll("\\", "/").endsWith("ascet/index.ts"));
 const writeTool = extension?.tools.get("ascet_write")?.definition;
-const readTool = extension?.tools.get("ascet_read_code")?.definition;
+const readTool = extension?.tools.get("ascet_read")?.definition;
 const verifyTool = extension?.tools.get("ascet_verify")?.definition;
 if (!writeTool || !readTool || !verifyTool) {
 	throw new Error("ASCET write/read/verify tools are not registered");
@@ -136,7 +136,7 @@ const writeResponse = await withStage("set_class_method_code", () => executeTool
 
 const readResponse = await withStage("read_method_code", () => readTool.execute(
 	"ascet-write-smoke-read-method-code",
-	{ action: "method", componentPath, methodName },
+	{ action: "read_code", componentPath, methodName },
 	signal,
 	undefined,
 	{ cwd: repoRoot },

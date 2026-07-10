@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { Type } from "typebox";
+import { type AscetCliCoverageCategory, classifyAscetCliCommand } from "../routing/coverage.ts";
 import { createAscetStatusReport } from "../status.ts";
 
 interface AscetCapabilityCommand {
@@ -45,6 +46,10 @@ export interface AscetCapabilityMatch {
 	hostEligible?: boolean;
 	supportsBatch?: boolean;
 	supportsJson?: boolean;
+	coverageCategory?: AscetCliCoverageCategory;
+	canonicalTool?: string;
+	canonicalAction?: string;
+	logicalCommandId?: string;
 }
 
 export interface AscetCapabilitiesResult {
@@ -122,18 +127,25 @@ export function runAscetCapabilities(
 					value?.toLowerCase().includes(query),
 				);
 			})
-			.map((command) => ({
-				id: command.id,
-				operation: command.operation,
-				family: command.family,
-				risk: command.risk,
-				summary: command.summary,
-				objectKinds: command.objectKinds,
-				lane: command.lane,
-				hostEligible: command.hostEligible,
-				supportsBatch: command.supportsBatch,
-				supportsJson: command.supportsJson,
-			}));
+			.map((command) => {
+				const coverage = command.id ? classifyAscetCliCommand(command.id) : undefined;
+				return {
+					id: command.id,
+					operation: command.operation,
+					family: command.family,
+					risk: command.risk,
+					summary: command.summary,
+					objectKinds: command.objectKinds,
+					lane: command.lane,
+					hostEligible: command.hostEligible,
+					supportsBatch: command.supportsBatch,
+					supportsJson: command.supportsJson,
+					coverageCategory: coverage?.category,
+					canonicalTool: coverage?.toolName,
+					canonicalAction: coverage?.action,
+					logicalCommandId: coverage?.logicalCommandId,
+				};
+			});
 		const limit = params.limit ?? 50;
 
 		return {
@@ -168,6 +180,11 @@ export function formatAscetCapabilitiesResult(result: AscetCapabilitiesResult): 
 	}
 	return [
 		`ASCET capabilities: ${result.data.matches.length}/${result.data.totalMatches} matches`,
-		...result.data.matches.map((match) => `- ${match.operation ?? match.id}: ${match.summary ?? ""}`),
+		...result.data.matches.map((match) => {
+			const route = match.canonicalTool
+				? ` via ${match.canonicalTool}.${match.canonicalAction ?? "unknown"}`
+				: ` (${match.coverageCategory ?? "unclassified"})`;
+			return `- ${match.operation ?? match.id}: ${match.summary ?? ""}${route}`;
+		}),
 	].join("\n");
 }

@@ -70,7 +70,8 @@ describe("ASCET extension status diagnostics", () => {
 		const ascetExtension = await loadAscetExtension();
 
 		expect(ascetExtension?.tools.has("ascet_status")).toBe(true);
-		expect(ascetExtension?.tools.has("ascet_contract_catalog")).toBe(true);
+		expect(ascetExtension?.tools.has("ascet_capabilities")).toBe(true);
+		expect(ascetExtension?.tools.has("ascet_contract_catalog")).toBe(false);
 		expect(ascetExtension?.commands.has("ascet-status")).toBe(true);
 		expect(ascetExtension?.commands.has("ascet-scheduler-status")).toBe(true);
 	});
@@ -145,21 +146,25 @@ describe("ASCET extension status diagnostics", () => {
 		);
 	});
 
-	it("executes the ascet_contract_catalog tool with parsed catalog counts", async () => {
+	it("executes the ascet_capabilities tool with parsed catalog matches", async () => {
 		const ascetExtension = await loadAscetExtension();
-		const tool = ascetExtension?.tools.get("ascet_contract_catalog")?.definition;
+		const tool = ascetExtension?.tools.get("ascet_capabilities")?.definition;
 
 		expect(tool).toBeDefined();
 		expect(tool?.executionMode).toBe("sequential");
-		const response = await tool?.execute("test-catalog", {}, new AbortController().signal, undefined, {
-			cwd: repoRoot,
-		});
+		const response = await tool?.execute(
+			"test-capabilities",
+			{ family: "read" },
+			new AbortController().signal,
+			undefined,
+			{ cwd: repoRoot },
+		);
 
 		expect(response?.content[0]).toMatchObject({
 			type: "text",
-			text: expect.stringContaining("ASCET contract catalog:"),
+			text: expect.stringContaining("ASCET capabilities:"),
 		});
 		expect(response?.details.ok).toBe(true);
-		expect(response?.details.data.counts.commands).toBeGreaterThan(40);
+		expect(response?.details.data.totalMatches).toBeGreaterThan(0);
 	});
 });

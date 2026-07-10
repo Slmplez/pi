@@ -33,40 +33,16 @@ Canonical Copilot-aligned tools:
 - `ascet_capabilities`
 - `ascet_recover`
 - `ascet_scheduler_status`
-- `ascet_browse`
+- `ascet_explore`
 - `ascet_search`
-- `ascet_resolve`
-- `ascet_inspect`
-- `ascet_read_code`
-- `ascet_references`
-- `ascet_compare`
+- `ascet_read`
+- `ascet_reference`
+- `ascet_diff`
 - `ascet_write`
-- `ascet_verify`
 - `ascet_batch_write`
+- `ascet_verify`
 
-Legacy compatibility tools remain registered for one-operation workflows:
-
-- `ascet_contract_catalog`
-- `ascet_list_folders`
-- `ascet_list_components`
-- `ascet_search_components`
-- `ascet_search_elements`
-- `ascet_search_occurrences`
-- `ascet_resolve_component`
-- `ascet_read_component_summary`
-- `ascet_read_component_children`
-- `ascet_list_methods`
-- `ascet_read_method_code`
-- `ascet_read_project_formulas`
-- `ascet_list_diagrams`
-- `ascet_read_block_diagram`
-- `ascet_read_element_refs`
-- `ascet_diff_component_snapshot`
-- `ascet_verify_readback`
-- `ascet_create_folder`
-- `ascet_create_component`
-- `ascet_create_method`
-- `ascet_set_class_method_code`
+Old fine-grained tools are not registered as model tools or legacy aliases. Their low-level runner modules remain available internally for canonical tools.
 
 Guarded write tools are preflight-only by default and require explicit interactive approval before CLI execution. Canonical `ascet_write` returns a non-error `status: "preflight"` outcome when `executeWrite` is false. `ascet_batch_write` uses operation-specific request schemas and reports partial completion as `status: "partial"` when the ASCET batch backend returns item failures.
 
@@ -136,7 +112,7 @@ Default disposable target:
 When enabled, setup, write, readback, and verify all run through canonical PI tools:
 
 - `ascet_write`
-- `ascet_read_code`
+- `ascet_read`
 - `ascet_verify`
 
 ## Environment Overrides
