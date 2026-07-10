@@ -1,0 +1,15 @@
+{
+  "family": "ops",
+  "summary": "Low-level worker and concurrency helpers for diagnostics and runtime plumbing, not normal agent task execution.",
+  "recommendedTools": [],
+  "commandIds": [
+    "AscetWorker",
+    "AscetOrchestrator",
+    "AscetThreadHarness"
+  ],
+  "routingHints": [
+    "These commands are hidden from normal model-facing flows.",
+    "Use them only for internal diagnostics, worker execution, or concurrency validation.",
+    "Do not route ordinary read, diff, write, or verify tasks to ops commands."
+  ]
+}

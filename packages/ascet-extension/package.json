@@ -1,0 +1,30 @@
+{
+	"name": "@ascet/pi-extension",
+	"version": "0.1.0",
+	"description": "ASCET tool extension for PI.",
+	"type": "module",
+	"main": "./src/index.ts",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"copy-assets": "powershell -ExecutionPolicy Bypass -File scripts/copy-ascet-assets.ps1"
+	},
+	"pi": {
+		"extensions": [
+			"src/index.ts"
+		]
+	},
+	"files": [
+		"src",
+		"ascet-cli",
+		"README.md",
+		"!ascet-cli/bin/**/*.log",
+		"!ascet-cli/bin/**/*.out",
+		"!ascet-cli/bin/**/*.err"
+	],
+	"dependencies": {
+		"typebox": "1.1.38"
+	},
+	"private": true
+}

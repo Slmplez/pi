@@ -1,0 +1,21 @@
+{
+  "family": "diff",
+  "summary": "Compare components, methods, element specs, project formulas, and state machines before or after changes.",
+  "recommendedTools": ["AscetDiffTool"],
+  "commandIds": [
+    "AscetDiffClass",
+    "AscetDiffComponentSnapshot",
+    "AscetDiffElementSpec",
+    "AscetDiffMethodCode",
+    "AscetDiffModule",
+    "AscetDiffProjectFormulas",
+    "AscetDiffStateMachine",
+    "AscetDiffStateMachineDomain"
+  ],
+  "routingHints": [
+    "Prefer object-specific diff commands when the component kind is known.",
+    "Use method-level diff for narrow code comparisons instead of whole-component diff.",
+    "Use state_machine_domain diff when semantic state-machine changes matter more than raw component snapshots.",
+    "Do not pair diff with AscetVerifyTool by default; only add post-write readback when confirming a live write outcome."
+  ]
+}

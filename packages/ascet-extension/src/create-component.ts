@@ -1,0 +1,140 @@
+import { Type } from "typebox";
+import {
+	type AscetCliExecutionResult,
+	type AscetCliJsonResult,
+	type AscetCliRequest,
+	formatAscetCliJsonResult,
+	runAscetCliJson,
+} from "./cli.ts";
+import { createAscetStatusReport } from "./status.ts";
+import { type AscetWriteApprovalContext, requestAscetWriteApproval } from "./write-policy.ts";
+
+export interface AscetCreateComponentParams {
+	componentPath: string;
+	kind: "class" | "module" | "statemachine";
+	language?: "ESDL" | "BDE" | "C";
+	ifExists?: "fail" | "return-existing";
+	verifyReadback?: boolean;
+	rollbackOnFailure?: boolean;
+	executeWrite?: boolean;
+}
+
+export interface RunAscetCreateComponentOptions {
+	cwd: string;
+	env?: Record<string, string | undefined>;
+	signal?: AbortSignal;
+	timeoutMs?: number;
+	executeCli?: (request: AscetCliRequest) => Promise<AscetCliExecutionResult>;
+}
+
+export type AscetCreateComponentResult = AscetCliJsonResult;
+
+export const ascetCreateComponentParameters = Type.Object({
+	componentPath: Type.String({ description: "ASCET component path to create.", minLength: 1 }),
+	kind: Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")]),
+	language: Type.Optional(Type.Union([Type.Literal("ESDL"), Type.Literal("BDE"), Type.Literal("C")])),
+	ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("return-existing")])),
+	verifyReadback: Type.Optional(Type.Boolean({ description: "Ask the ASCET CLI to verify readback after writing." })),
+	rollbackOnFailure: Type.Optional(Type.Boolean({ description: "Ask the ASCET CLI to roll back when supported." })),
+	executeWrite: Type.Optional(
+		Type.Boolean({ description: "Defaults to false. When true, PI still requires interactive confirmation." }),
+	),
+});
+
+export function buildCreateComponentArgs(params: AscetCreateComponentParams): string[] {
+	const args = ["exec", "create_component", params.componentPath, "--kind", params.kind];
+	if (params.language) {
+		args.push("--language", params.language);
+	}
+	if (params.ifExists) {
+		args.push("--if-exists", params.ifExists);
+	}
+	if (params.verifyReadback) {
+		args.push("--verify-readback");
+	}
+	if (params.rollbackOnFailure) {
+		args.push("--rollback-on-failure");
+	}
+	args.push("--json");
+	return args;
+}
+
+export function createCreateComponentSummary(params: AscetCreateComponentParams): string {
+	return [
+		"ASCET write request:",
+		"operation: create_component",
+		`componentPath: ${params.componentPath}`,
+		`kind: ${params.kind}`,
+		`language: ${params.language ?? ""}`,
+		`ifExists: ${params.ifExists ?? ""}`,
+		`verifyReadback: ${params.verifyReadback === true}`,
+		`rollbackOnFailure: ${params.rollbackOnFailure === true}`,
+	].join("\n");
+}
+
+function createBlockedWriteResult(
+	params: AscetCreateComponentParams,
+	options: RunAscetCreateComponentOptions,
+	code: string,
+	message: string,
+): AscetCreateComponentResult {
+	const status = createAscetStatusReport({ cwd: options.cwd, env: options.env });
+	return {
+		ok: false,
+		data: {
+			operation: "create_component",
+			preflightOnly: true,
+			summary: createCreateComponentSummary(params),
+		},
+		request: {
+			cwd: options.cwd,
+			cliPath: status.paths.cliPath,
+			args: buildCreateComponentArgs(params),
+			signal: options.signal,
+			timeoutMs: options.timeoutMs,
+		},
+		stdout: "",
+		stderr: "",
+		exitCode: null,
+		timedOut: false,
+		error: { code, message },
+	};
+}
+
+export async function runAscetCreateComponent(
+	params: AscetCreateComponentParams,
+	options: RunAscetCreateComponentOptions,
+): Promise<AscetCreateComponentResult> {
+	return runAscetCliJson(buildCreateComponentArgs(params), options);
+}
+
+export async function runApprovedAscetCreateComponent(
+	params: AscetCreateComponentParams,
+	options: RunAscetCreateComponentOptions,
+	ctx: AscetWriteApprovalContext,
+): Promise<AscetCreateComponentResult> {
+	const approval = await requestAscetWriteApproval(
+		{
+			executeWrite: params.executeWrite,
+			title: "Confirm ASCET component creation",
+			message: createCreateComponentSummary(params),
+			signal: options.signal,
+		},
+		ctx,
+	);
+
+	if (!approval.approved) {
+		return createBlockedWriteResult(
+			params,
+			options,
+			approval.code ?? "ascet_write_rejected",
+			approval.message ?? "ASCET write was not approved.",
+		);
+	}
+
+	return runAscetCreateComponent(params, options);
+}
+
+export function formatCreateComponentResult(result: AscetCreateComponentResult): string {
+	return formatAscetCliJsonResult("create_component", result);
+}

@@ -1,0 +1,20 @@
+{
+  "family": "explore",
+  "summary": "Navigate the ASCET database structure, resolve targets, preview child structure, classify targets, and hand off cleanly before deeper reads.",
+  "recommendedTools": ["AscetExploreTool"],
+  "commandIds": [
+    "AscetListFolders",
+    "AscetListComponents",
+    "AscetListDiagrams",
+    "AscetResolveComponent",
+    "AscetReadComponentSummary",
+    "AscetReadComponentChildren",
+    "AscetListMethods"
+  ],
+  "routingHints": [
+    "Prefer AscetResolveComponent, AscetReadComponentSummary, AscetReadComponentChildren, and AscetListDiagrams for navigation-first exploration before deep reads.",
+    "Prefer AscetResolveComponent when the user likely means one specific component and AscetListComponents for fuzzy candidate discovery.",
+    "Prefer the inspect_target action after resolving a candidate, then use preview_children for shallow child previews before selecting a deeper read surface.",
+    "Hand summary, implementation, block-diagram, and state-machine-flow reads to AscetReadTool after Explore has identified the target and surface."
+  ]
+}

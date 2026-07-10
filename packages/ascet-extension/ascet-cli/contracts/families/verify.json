@@ -1,0 +1,17 @@
+{
+  "family": "verify",
+  "summary": "Run post-write readback confirmation only for ASCET components or projects.",
+  "recommendedTools": ["AscetVerifyTool"],
+  "commandIds": [
+    "AscetReadComponentSummary",
+    "AscetReadClassSummary",
+    "AscetReadModuleSummary",
+    "AscetReadStateMachineSummary",
+    "AscetReadProjectFormulas"
+  ],
+  "routingHints": [
+    "Use verify only after a live write when you need structured readback confirmation of what ASCET now contains.",
+    "Readback execution semantics are inherited from the routed summary command: object-specific readback routes (AscetReadClassSummary, AscetReadModuleSummary, AscetReadStateMachineSummary, AscetReadProjectFormulas) are legacy one-shot with hostEligible=false, while the generic fallback via AscetReadComponentSummary inherits pooled_read with hostEligible=true.",
+    "Do not position verify as a general summary browser or a general diagnostic shell."
+  ]
+}

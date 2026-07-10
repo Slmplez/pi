@@ -1,0 +1,119 @@
+import { Type } from "typebox";
+import {
+	type AscetCliExecutionResult,
+	type AscetCliJsonResult,
+	type AscetCliRequest,
+	formatAscetCliJsonResult,
+	runAscetCliJson,
+} from "./cli.ts";
+import { createAscetStatusReport } from "./status.ts";
+import { type AscetWriteApprovalContext, requestAscetWriteApproval } from "./write-policy.ts";
+
+export interface AscetCreateFolderParams {
+	folderPath: string;
+	verifyReadback?: boolean;
+	executeWrite?: boolean;
+}
+
+export interface RunAscetCreateFolderOptions {
+	cwd: string;
+	env?: Record<string, string | undefined>;
+	signal?: AbortSignal;
+	timeoutMs?: number;
+	executeCli?: (request: AscetCliRequest) => Promise<AscetCliExecutionResult>;
+}
+
+export type AscetCreateFolderResult = AscetCliJsonResult;
+
+export const ascetCreateFolderParameters = Type.Object({
+	folderPath: Type.String({ description: "ASCET folder path to create.", minLength: 1 }),
+	verifyReadback: Type.Optional(Type.Boolean({ description: "Ask the ASCET CLI to verify readback after writing." })),
+	executeWrite: Type.Optional(
+		Type.Boolean({ description: "Defaults to false. When true, PI still requires interactive confirmation." }),
+	),
+});
+
+export function buildCreateFolderArgs(params: AscetCreateFolderParams): string[] {
+	const args = ["exec", "create_folder", params.folderPath];
+	if (params.verifyReadback) {
+		args.push("--verify-readback");
+	}
+	args.push("--json");
+	return args;
+}
+
+export function createCreateFolderSummary(params: AscetCreateFolderParams): string {
+	return [
+		"ASCET write request:",
+		"operation: create_folder",
+		`folderPath: ${params.folderPath}`,
+		`verifyReadback: ${params.verifyReadback === true}`,
+	].join("\n");
+}
+
+function createBlockedWriteResult(
+	params: AscetCreateFolderParams,
+	options: RunAscetCreateFolderOptions,
+	code: string,
+	message: string,
+): AscetCreateFolderResult {
+	const status = createAscetStatusReport({ cwd: options.cwd, env: options.env });
+	return {
+		ok: false,
+		data: {
+			operation: "create_folder",
+			preflightOnly: true,
+			summary: createCreateFolderSummary(params),
+		},
+		request: {
+			cwd: options.cwd,
+			cliPath: status.paths.cliPath,
+			args: buildCreateFolderArgs(params),
+			signal: options.signal,
+			timeoutMs: options.timeoutMs,
+		},
+		stdout: "",
+		stderr: "",
+		exitCode: null,
+		timedOut: false,
+		error: { code, message },
+	};
+}
+
+export async function runAscetCreateFolder(
+	params: AscetCreateFolderParams,
+	options: RunAscetCreateFolderOptions,
+): Promise<AscetCreateFolderResult> {
+	return runAscetCliJson(buildCreateFolderArgs(params), options);
+}
+
+export async function runApprovedAscetCreateFolder(
+	params: AscetCreateFolderParams,
+	options: RunAscetCreateFolderOptions,
+	ctx: AscetWriteApprovalContext,
+): Promise<AscetCreateFolderResult> {
+	const approval = await requestAscetWriteApproval(
+		{
+			executeWrite: params.executeWrite,
+			title: "Confirm ASCET folder creation",
+			message: createCreateFolderSummary(params),
+			signal: options.signal,
+		},
+		ctx,
+	);
+
+	if (!approval.approved) {
+		return createBlockedWriteResult(
+			params,
+			options,
+			approval.code ?? "ascet_write_rejected",
+			approval.message ?? "ASCET write was not approved.",
+		);
+	}
+
+	return runAscetCreateFolder(params, options);
+}
+
+export function formatCreateFolderResult(result: AscetCreateFolderResult): string {
+	return formatAscetCliJsonResult("create_folder", result);
+}
