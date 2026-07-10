@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { runAscetContractCatalog } from "../../ascet-extension/src/contract-catalog.ts";
+import { createAscetRuntimeStatusReport } from "../../ascet-extension/src/status-runtime.ts";
 import { createAscetStatusReport, resolveAscetStatusPaths } from "../../ascet-extension/src/status.ts";
 import { ascetAgentRoot, loadAscetExtension, repoRoot } from "./ascet-extension-test-helpers.ts";
 
@@ -64,6 +65,62 @@ describe("ASCET extension status diagnostics", () => {
 		expect(report.summary).toContain("ASCET mode:");
 		expect(report.summary).toContain("ASCET contracts:");
 		expect(report.summary).toContain("cli-catalog.json:");
+	});
+
+	it("keeps installation status separate from live runtime status", async () => {
+		const report = await createAscetRuntimeStatusReport({
+			cwd: repoRoot,
+			env: {},
+			probe: async () => ({
+				ok: false,
+				data: null,
+				request: {
+					cwd: repoRoot,
+					cliPath: resolve(repoRoot, "packages/ascet-extension/ascet-cli/bin/AscetCli.exe"),
+					args: ["exec", "list_folders", "--depth", "0", "--json"],
+				},
+				stdout: "",
+				stderr: "ASCET ToolAPI unavailable",
+				exitCode: 1,
+				timedOut: false,
+				error: {
+					code: "ascet_cli_failed",
+					message: "ASCET ToolAPI unavailable",
+				},
+			}),
+		});
+
+		expect(report.installationOk).toBe(true);
+		expect(report.runtimeOk).toBe(false);
+		expect(report.ok).toBe(false);
+		expect(report.summary).toContain("ASCET installation: ready");
+		expect(report.summary).toContain("ASCET runtime: not ready");
+		expect(report.summary).toContain("ASCET runtime probe: FAILED (ascet_cli_failed)");
+	});
+
+	it("reports ready only when installation and live runtime probe both pass", async () => {
+		const report = await createAscetRuntimeStatusReport({
+			cwd: repoRoot,
+			env: {},
+			probe: async () => ({
+				ok: true,
+				data: { items: [] },
+				request: {
+					cwd: repoRoot,
+					cliPath: resolve(repoRoot, "packages/ascet-extension/ascet-cli/bin/AscetCli.exe"),
+					args: ["exec", "list_folders", "--depth", "0", "--json"],
+				},
+				stdout: "{\"items\":[]}",
+				stderr: "",
+				exitCode: 0,
+				timedOut: false,
+			}),
+		});
+
+		expect(report.installationOk).toBe(true);
+		expect(report.runtimeOk).toBe(true);
+		expect(report.ok).toBe(true);
+		expect(report.summary).toContain("ASCET runtime probe: OK");
 	});
 
 	it("loads the project-local ASCET extension and registers the status command plus tool", async () => {
@@ -131,11 +188,31 @@ describe("ASCET extension status diagnostics", () => {
 		const tool = ascetExtension?.tools.get("ascet_status")?.definition;
 
 		expect(tool).toBeDefined();
-		const response = await tool?.execute("test-call", {}, new AbortController().signal, undefined, { cwd: repoRoot });
+		const response = await tool?.execute("test-call", {}, new AbortController().signal, undefined, {
+			cwd: repoRoot,
+			ascetStatusProbe: async () => ({
+				ok: true,
+				data: { items: [] },
+				request: {
+					cwd: repoRoot,
+					cliPath: resolve(repoRoot, "packages/ascet-extension/ascet-cli/bin/AscetCli.exe"),
+					args: ["exec", "list_folders", "--depth", "0", "--json"],
+				},
+				stdout: "{\"items\":[]}",
+				stderr: "",
+				exitCode: 0,
+				timedOut: false,
+			}),
+		});
 
 		expect(response?.content[0]).toMatchObject({
 			type: "text",
 			text: expect.stringContaining("ASCET status:"),
+		});
+		expect(response?.details.installationOk).toBe(true);
+		expect(response?.details.runtimeOk).toBe(true);
+		expect(response?.details.runtime).toMatchObject({
+			commandId: "list_folders",
 		});
 		expect(response?.details.paths.mode).toBe("bundle");
 		expect(response?.details.paths.cliPath).toBe(

@@ -1,6 +1,6 @@
 import { defineSequentialAscetTool } from "../../core/tool.ts";
 import { routeAscetAction } from "../../routing/router.ts";
-import { createAscetStatusReport } from "../../status.ts";
+import { type AscetRuntimeStatusOptions, createAscetRuntimeStatusReport } from "../../status-runtime.ts";
 import { ascetStatusPrompt } from "./prompt.ts";
 import { type AscetStatusParams, ascetStatusParameters } from "./schema.ts";
 import { renderCall, renderResult } from "./ui.ts";
@@ -8,7 +8,7 @@ import { renderCall, renderResult } from "./ui.ts";
 export const ascetStatusTool = defineSequentialAscetTool({
 	name: "ascet_status",
 	label: "ASCET status",
-	description: "Report whether the local ASCET CLI executable and contract catalog are resolvable.",
+	description: "Report ASCET installation paths and verify the live ASCET ToolAPI runtime is reachable.",
 	...ascetStatusPrompt,
 	parameters: ascetStatusParameters,
 	renderCall,
@@ -18,9 +18,9 @@ export const ascetStatusTool = defineSequentialAscetTool({
 		_params: AscetStatusParams,
 		_signal: AbortSignal,
 		_onUpdate: unknown,
-		ctx: { cwd: string },
+		ctx: { cwd: string; ascetStatusProbe?: AscetRuntimeStatusOptions["probe"] },
 	) {
-		const report = createAscetStatusReport({ cwd: ctx.cwd });
+		const report = await createAscetRuntimeStatusReport({ cwd: ctx.cwd, signal: _signal, probe: ctx.ascetStatusProbe });
 		const route = routeAscetAction({ toolName: "ascet_status", action: "status" });
 		return {
 			content: [{ type: "text", text: report.summary }],

@@ -1,6 +1,6 @@
 import type { AscetExtensionAPI } from "./core/tool.ts";
 import { executeAscetSchedulerStatusCommand } from "./scheduler/status.ts";
-import { type AscetStatusReport, createAscetStatusReport } from "./status.ts";
+import { type AscetRuntimeStatusReport, createAscetRuntimeStatusReport } from "./status-runtime.ts";
 import { canonicalAscetTools } from "./tools/index.ts";
 
 export default function ascetExtension(pi: AscetExtensionAPI) {
@@ -9,9 +9,9 @@ export default function ascetExtension(pi: AscetExtensionAPI) {
 	}
 
 	pi.registerCommand("ascet-status", {
-		description: "Show ASCET CLI and contract path diagnostics",
+		description: "Show ASCET installation diagnostics and live ToolAPI runtime status",
 		handler: async (_args, ctx) => {
-			const report: AscetStatusReport = createAscetStatusReport({ cwd: ctx.cwd });
+			const report: AscetRuntimeStatusReport = await createAscetRuntimeStatusReport({ cwd: ctx.cwd });
 			ctx.ui.notify(report.summary, report.ok ? "info" : "error");
 		},
 	});
