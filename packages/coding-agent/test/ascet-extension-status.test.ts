@@ -72,6 +72,7 @@ describe("ASCET extension status diagnostics", () => {
 		expect(ascetExtension?.tools.has("ascet_status")).toBe(true);
 		expect(ascetExtension?.tools.has("ascet_contract_catalog")).toBe(true);
 		expect(ascetExtension?.commands.has("ascet-status")).toBe(true);
+		expect(ascetExtension?.commands.has("ascet-scheduler-status")).toBe(true);
 	});
 
 	it("loads and summarizes the bundled ASCET contract catalog", () => {

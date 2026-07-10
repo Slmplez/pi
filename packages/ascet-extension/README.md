@@ -32,6 +32,7 @@ Canonical Copilot-aligned tools:
 - `ascet_status`
 - `ascet_capabilities`
 - `ascet_recover`
+- `ascet_scheduler_status`
 - `ascet_browse`
 - `ascet_search`
 - `ascet_resolve`
@@ -68,6 +69,35 @@ Legacy compatibility tools remain registered for one-operation workflows:
 - `ascet_set_class_method_code`
 
 Guarded write tools are preflight-only by default and require explicit interactive approval before CLI execution. Canonical `ascet_write` returns a non-error `status: "preflight"` outcome when `executeWrite` is false. `ascet_batch_write` uses operation-specific request schemas and reports partial completion as `status: "partial"` when the ASCET batch backend returns item failures.
+
+## Scheduler Diagnostics
+
+ASCET ToolAPI-backed calls are serialized through the PI extension scheduler resource `ascet.toolapi.global` with concurrency `1`. This protects the ASCET CLI and ToolAPI host from concurrent calls that can otherwise overlap in the same local ASCET database session.
+
+Use `ascet_status` for resolver, bundled asset, and ASCET runtime availability. Use `ascet_scheduler_status` or the PI command `ascet-scheduler-status` for queue, active job, CLI lock, and per-operation health diagnostics. Use `ascet_recover` with `scheduler_status`, `scheduler_recover`, or `clear_stale_cli_lock` when a stale local lock or degraded operation needs recovery.
+
+Default PI-local runtime files:
+
+- lock: `%LOCALAPPDATA%\PI\ascet\locks\ascet-toolapi.lock`
+- operation health: `%LOCALAPPDATA%\PI\ascet\operation-health.json`
+
+`ascet_scheduler_status` returns the same information as the command:
+
+```text
+ASCET Scheduler Status
+
+Host: healthy
+Active: 0
+Resource: ascet.toolapi.global active=0 queued=0 concurrency=1
+Pending: 0
+Running: none
+
+CLI Lock:
+  owner: none
+
+Operation Health:
+  degraded: none
+```
 
 ## Verification
 
@@ -113,6 +143,9 @@ When enabled, setup, write, readback, and verify all run through canonical PI to
 
 - `ASCET_CLI_PATH`
 - `ASCET_CONTRACTS_PATH`
+- `PI_ASCET_RUNTIME_DIR`
+- `PI_ASCET_LOCK_PATH`
+- `PI_ASCET_OPERATION_HEALTH_PATH`
 - `ASCET_WRITE_SMOKE`
 - `ASCET_WRITE_SMOKE_COMPONENT`
 - `ASCET_WRITE_SMOKE_METHOD`

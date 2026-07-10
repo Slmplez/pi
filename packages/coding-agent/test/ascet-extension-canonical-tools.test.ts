@@ -16,6 +16,7 @@ const CANONICAL_ASCET_TOOLS = [
 	"ascet_status",
 	"ascet_capabilities",
 	"ascet_recover",
+	"ascet_scheduler_status",
 	"ascet_browse",
 	"ascet_search",
 	"ascet_resolve",
@@ -32,6 +33,7 @@ const CANONICAL_ASCET_TOOL_MODULES = [
 	["ascet_status", "status"],
 	["ascet_capabilities", "capabilities"],
 	["ascet_recover", "recover"],
+	["ascet_scheduler_status", "scheduler-status"],
 	["ascet_browse", "browse"],
 	["ascet_search", "search"],
 	["ascet_resolve", "resolve"],
@@ -156,13 +158,16 @@ describe("ASCET canonical PI tools", () => {
 		expect(result.data.matches.some((match) => match.operation === "read_component_code")).toBe(true);
 	});
 
-	it("limits recover to extension-owned safe actions", () => {
-		const status = runAscetRecover({ action: "status" }, { cwd: repoRoot });
-		const cleanup = runAscetRecover({ action: "clear_extension_temp" }, { cwd: repoRoot });
+	it("limits recover to extension-owned safe actions", async () => {
+		const status = await runAscetRecover({ action: "status" }, { cwd: repoRoot });
+		const cleanup = await runAscetRecover({ action: "clear_extension_temp" }, { cwd: repoRoot });
+		const schedulerStatus = await runAscetRecover({ action: "scheduler_status" }, { cwd: repoRoot });
 
 		expect(status.ok).toBe(true);
 		expect(status.action).toBe("status");
 		expect(cleanup.ok).toBe(true);
 		expect(cleanup.action).toBe("clear_extension_temp");
+		expect(schedulerStatus.ok).toBe(true);
+		expect(schedulerStatus.action).toBe("scheduler_status");
 	});
 });

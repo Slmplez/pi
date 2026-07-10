@@ -1,5 +1,15 @@
 import { type ChildProcess, spawn } from "node:child_process";
 import { existsSync } from "node:fs";
+import { AscetCliLockTimeoutError, acquireAscetCliLock } from "./scheduler/cli-lock.ts";
+import {
+	AscetSchedulerCancelledError,
+	AscetSchedulerExecutionTimeoutError,
+	AscetSchedulerQueueTimeoutError,
+} from "./scheduler/errors.ts";
+import { getGlobalAscetScheduler } from "./scheduler/global.ts";
+import { getGlobalAscetOperationHealthStore } from "./scheduler/operation-health.ts";
+import type { AscetScheduler } from "./scheduler/scheduler.ts";
+import type { AscetJobKind } from "./scheduler/types.ts";
 import { createAscetStatusReport } from "./status.ts";
 
 export interface AscetCliRequest {
@@ -25,7 +35,15 @@ export interface RunAscetCliJsonOptions {
 	env?: Record<string, string | undefined>;
 	signal?: AbortSignal;
 	timeoutMs?: number;
+	stdin?: string;
+	acceptedExitCodes?: number[];
 	executeCli?: (request: AscetCliRequest) => Promise<AscetCliExecutionResult>;
+	scheduler?: Pick<AscetScheduler, "submit" | "getSnapshot">;
+	agentId?: string;
+	toolName?: string;
+	commandId?: string;
+	jobKind?: AscetJobKind;
+	queueTimeoutMs?: number;
 }
 
 export interface AscetCliJsonResult {
@@ -123,6 +141,67 @@ export async function executeAscetCli(request: AscetCliRequest): Promise<AscetCl
 	});
 }
 
+function inferCommandId(args: string[]): string {
+	if (args[0] === "exec" && args[1]) {
+		return args[1];
+	}
+	if (args[0] === "batch" && args[1]) {
+		return `batch_${args[1]}`;
+	}
+	return args[0] ?? "ascet_cli";
+}
+
+function inferJobKind(commandId: string): AscetJobKind {
+	if (
+		commandId.startsWith("create_") ||
+		commandId.startsWith("delete_") ||
+		commandId.startsWith("set_") ||
+		commandId.startsWith("apply_") ||
+		commandId.startsWith("batch_")
+	) {
+		return "write";
+	}
+	return "read";
+}
+
+async function executeScheduledAscetCli(
+	request: AscetCliRequest,
+	options: RunAscetCliJsonOptions,
+): Promise<AscetCliExecutionResult> {
+	const commandId = options.commandId ?? inferCommandId(request.args);
+	const toolName = options.toolName ?? "ascet_cli";
+	const agentId = options.agentId ?? "system";
+	const scheduler = options.scheduler ?? getGlobalAscetScheduler();
+	return scheduler.submit({
+		agentId,
+		toolName,
+		commandId,
+		kind: options.jobKind ?? inferJobKind(commandId),
+		queueTimeoutMs: options.queueTimeoutMs ?? 60_000,
+		executionTimeoutMs: (request.timeoutMs ?? 60_000) + 5_000,
+		signal: request.signal,
+		async run() {
+			const lock = await acquireAscetCliLock(
+				{
+					agentId,
+					commandId,
+					toolName,
+					processName: "AscetCli.exe",
+				},
+				{
+					env: options.env,
+					acquireTimeoutMs: Math.min(options.queueTimeoutMs ?? 60_000, 60_000),
+				},
+			);
+			try {
+				return await (options.executeCli ?? executeAscetCli)(request);
+			} finally {
+				await lock.release();
+			}
+		},
+	});
+}
+
 function parseJson(text: string): { ok: true; data: unknown } | { ok: false; message: string } {
 	const trimmed = text.trim();
 	if (!trimmed) {
@@ -138,10 +217,12 @@ function parseJson(text: string): { ok: true; data: unknown } | { ok: false; mes
 
 export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOptions): Promise<AscetCliJsonResult> {
 	const status = createAscetStatusReport({ cwd: options.cwd, env: options.env });
+	const commandId = options.commandId ?? inferCommandId(args);
 	const request: AscetCliRequest = {
 		cwd: options.cwd,
 		cliPath: status.paths.cliPath,
 		args,
+		stdin: options.stdin,
 		signal: options.signal,
 		timeoutMs: options.timeoutMs,
 	};
@@ -178,11 +259,54 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 		};
 	}
 
-	const execution = await (options.executeCli ?? executeAscetCli)(request);
+	let execution: AscetCliExecutionResult;
+	try {
+		execution = await executeScheduledAscetCli(request, { ...options, commandId });
+	} catch (error) {
+		const errorCode =
+			error instanceof AscetSchedulerQueueTimeoutError
+				? "ascet_scheduler_queue_timeout"
+				: error instanceof AscetSchedulerExecutionTimeoutError
+					? "ascet_scheduler_exec_timeout"
+					: error instanceof AscetSchedulerCancelledError
+						? "ascet_cli_aborted"
+						: error instanceof AscetCliLockTimeoutError
+							? "ascet_cli_lock_timeout"
+							: "ascet_cli_failed";
+		const health = getGlobalAscetOperationHealthStore({ env: options.env });
+		if (errorCode === "ascet_scheduler_exec_timeout") {
+			health.recordFailure({ commandId, reason: "scheduler_timeout" });
+		}
+		if (errorCode === "ascet_cli_lock_timeout") {
+			health.recordFailure({ commandId, reason: "cli_lock_timeout" });
+		}
+		await health.flush();
+		return {
+			ok: false,
+			data: null,
+			request,
+			stdout: "",
+			stderr: "",
+			exitCode: null,
+			timedOut: error instanceof AscetSchedulerExecutionTimeoutError,
+			error: {
+				code: errorCode,
+				message: error instanceof Error ? error.message : String(error),
+			},
+		};
+	}
 	const parsed = parseJson(execution.stdout);
 	const aborted = options.signal?.aborted === true || execution.aborted === true;
-	const processOk = execution.exitCode === 0 && !execution.timedOut && !aborted;
+	const acceptedExitCodes = options.acceptedExitCodes ?? [0];
+	const processOk = acceptedExitCodes.includes(execution.exitCode ?? Number.NaN) && !execution.timedOut && !aborted;
 	const ok = processOk && parsed.ok;
+	const health = getGlobalAscetOperationHealthStore({ env: options.env });
+	if (execution.timedOut) {
+		health.recordFailure({ commandId, reason: "child_command_timeout" });
+	} else if (ok) {
+		health.recordSuccess(commandId);
+	}
+	await health.flush();
 
 	return {
 		ok,

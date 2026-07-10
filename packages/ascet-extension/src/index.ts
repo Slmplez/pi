@@ -95,6 +95,7 @@ import {
 	formatResolveComponentResult,
 	runAscetResolveComponent,
 } from "./resolve-component.ts";
+import { executeAscetSchedulerStatusCommand } from "./scheduler/status.ts";
 import {
 	type AscetSearchComponentsParams,
 	ascetSearchComponentsParameters,
@@ -722,6 +723,14 @@ export default function ascetExtension(pi: AscetExtensionAPI) {
 		handler: async (_args, ctx) => {
 			const report: AscetStatusReport = createAscetStatusReport({ cwd: ctx.cwd });
 			ctx.ui.notify(report.summary, report.ok ? "info" : "error");
+		},
+	});
+
+	pi.registerCommand("ascet-scheduler-status", {
+		description: "Show ASCET scheduler queue, PI CLI lock, and operation health diagnostics",
+		handler: async (args, ctx) => {
+			const summary = await executeAscetSchedulerStatusCommand(args);
+			ctx.ui.notify(summary, "info");
 		},
 	});
 }

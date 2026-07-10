@@ -23,7 +23,7 @@ export const ascetRecoverTool = defineSequentialAscetTool({
 		_onUpdate: unknown,
 		ctx: { cwd: string },
 	) {
-		const result = runAscetRecover(params, { cwd: ctx.cwd });
+		const result = await runAscetRecover(params, { cwd: ctx.cwd });
 		return {
 			content: [{ type: "text", text: formatAscetRecoverResult(result) }],
 			details: result,

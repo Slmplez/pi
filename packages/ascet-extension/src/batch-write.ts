@@ -3,8 +3,8 @@ import {
 	type AscetCliExecutionResult,
 	type AscetCliJsonResult,
 	type AscetCliRequest,
-	executeAscetCli,
 	formatAscetCliJsonResult,
+	runAscetCliJson,
 } from "./cli.ts";
 import type { AscetToolOutcome } from "./core/results.ts";
 import { createAscetStatusReport } from "./status.ts";
@@ -268,19 +268,6 @@ export function createBatchWriteSummary(params: AscetBatchWriteParams): string {
 		.join("\n");
 }
 
-function parseJson(text: string): { ok: true; data: unknown } | { ok: false; message: string } {
-	const trimmed = text.trim();
-	if (!trimmed) {
-		return { ok: false, message: "ASCET batch CLI produced empty stdout; expected JSON." };
-	}
-	try {
-		return { ok: true, data: JSON.parse(trimmed) };
-	} catch (error) {
-		const message = error instanceof Error ? error.message : String(error);
-		return { ok: false, message: `ASCET batch CLI produced invalid JSON: ${message}` };
-	}
-}
-
 function createBlockedBatchWriteResult(
 	params: AscetBatchWriteParams,
 	options: RunAscetBatchWriteOptions,
@@ -315,62 +302,14 @@ export async function runAscetBatchWrite(
 	params: AscetBatchWriteParams,
 	options: RunAscetBatchWriteOptions,
 ): Promise<AscetBatchWriteResult> {
-	const status = createAscetStatusReport({ cwd: options.cwd, env: options.env });
-	const request: AscetCliRequest = {
-		cwd: options.cwd,
-		cliPath: status.paths.cliPath,
-		args: buildBatchWriteArgs(params),
+	return runAscetCliJson(buildBatchWriteArgs(params), {
+		...options,
 		stdin: createBatchPayload(params),
-		signal: options.signal,
-		timeoutMs: options.timeoutMs,
-	};
-	if (options.signal?.aborted) {
-		return {
-			ok: false,
-			data: null,
-			request,
-			stdout: "",
-			stderr: "",
-			exitCode: null,
-			timedOut: false,
-			error: {
-				code: "ascet_cli_aborted",
-				message: "ASCET CLI execution was aborted before it started.",
-			},
-		};
-	}
-	const execution = await (options.executeCli ?? executeAscetCli)(request);
-	const parsed = parseJson(execution.stdout);
-	const aborted = options.signal?.aborted === true || execution.aborted === true;
-	const processOk = (execution.exitCode === 0 || execution.exitCode === 2) && !execution.timedOut && !aborted;
-	const ok = processOk && parsed.ok;
-	return {
-		ok,
-		data: parsed.ok ? parsed.data : null,
-		request: execution.request,
-		stdout: execution.stdout,
-		stderr: execution.stderr,
-		exitCode: execution.exitCode,
-		timedOut: execution.timedOut,
-		error: ok
-			? undefined
-			: {
-					code: aborted
-						? "ascet_cli_aborted"
-						: execution.timedOut
-							? "ascet_cli_timeout"
-							: processOk
-								? "ascet_cli_invalid_json"
-								: "ascet_cli_failed",
-					message: aborted
-						? "ASCET CLI execution was aborted."
-						: processOk && !parsed.ok
-							? parsed.message
-							: execution.stderr.trim() ||
-								execution.stdout.trim() ||
-								`ASCET CLI exited with ${execution.exitCode}`,
-				},
-	};
+		acceptedExitCodes: [0, 2],
+		commandId: `batch_${cliOperationByToolOperation[params.operation]}`,
+		toolName: "ascet_batch_write",
+		jobKind: "write",
+	});
 }
 
 export async function runApprovedAscetBatchWrite(

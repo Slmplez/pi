@@ -5,6 +5,7 @@ interface ToolResponse {
 	content: Array<{ type: string; text?: string }>;
 	details: {
 		ok: boolean;
+		[key: string]: unknown;
 		outcome?: {
 			status: string;
 		};
@@ -48,7 +49,7 @@ async function callTool(name: string, params: Record<string, unknown>) {
 	if (!response.details.ok) {
 		throw new Error(`${name} failed: ${response.details.error?.code ?? "unknown"} ${response.details.error?.message ?? ""}`);
 	}
-	return response.details.data?.result ?? response.details.data ?? {};
+	return response.details.data?.result ?? response.details.data ?? response.details;
 }
 
 const statusTool = extension.tools.get("ascet_status")?.definition;
@@ -66,6 +67,7 @@ if (!status.details.ok) {
 	throw new Error("ascet_status reported unavailable ASCET runtime");
 }
 
+const schedulerBefore = await callTool("ascet_scheduler_status", { format: "json" });
 const catalog = await callTool("ascet_contract_catalog", {});
 const capabilities = await callTool("ascet_capabilities", { family: "read", operationQuery: "component_code" });
 const folders = await callTool("ascet_browse", { action: "folders", rootPath: "DEMO", depth: 1 });
@@ -118,14 +120,20 @@ const verify = await callTool("ascet_verify", {
 	objectKind: "class",
 	componentPath: "DEMO\\PID",
 });
+const schedulerAfter = await callTool("ascet_scheduler_status", { format: "json" });
 
 console.log(
 	JSON.stringify(
 		{
 			ok: true,
-				tools: {
-					ascet_status: { mode: status.details.paths.mode, cliPath: status.details.paths.cliPath },
-					ascet_contract_catalog: { counts: catalog.counts, families: catalog.families },
+			tools: {
+				ascet_status: { mode: status.details.paths.mode, cliPath: status.details.paths.cliPath },
+				ascet_scheduler_status_before: {
+					scheduler: schedulerBefore.scheduler,
+					cliLock: schedulerBefore.cliLock,
+					operationHealth: schedulerBefore.operationHealth,
+				},
+				ascet_contract_catalog: { counts: catalog.counts, families: catalog.families },
 				ascet_capabilities: { matches: capabilities.matches?.length, totalMatches: capabilities.totalMatches },
 				ascet_browse_folders: { rootPath: folders.rootPath, counts: folders.counts },
 				ascet_browse_components: { counts: components.counts },
@@ -150,6 +158,11 @@ console.log(
 				ascet_references: { counts: refs.counts, summary: refs.summary },
 				ascet_compare: { counts: diff.counts },
 				ascet_verify: { counts: verify.counts, summary: verify.summary },
+				ascet_scheduler_status_after: {
+					scheduler: schedulerAfter.scheduler,
+					cliLock: schedulerAfter.cliLock,
+					operationHealth: schedulerAfter.operationHealth,
+				},
 			},
 		},
 		null,

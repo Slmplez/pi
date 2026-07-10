@@ -1,0 +1,216 @@
+import { existsSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { describe, expect, it } from "vitest";
+import { runAscetListComponents } from "../../ascet-extension/src/list-components.ts";
+import {
+	acquireAscetCliLock,
+	clearStaleAscetCliLock,
+	createAscetOperationHealthStore,
+	createAscetScheduler,
+	createAscetSchedulerStatusReport,
+	createFileOperationHealthPersistence,
+	executeAscetSchedulerStatusCommand,
+	formatAscetOperationHealthStatus,
+	formatAscetSchedulerSnapshot,
+	getAscetCliLockSnapshot,
+	resolvePiAscetLockPath,
+	resolvePiAscetOperationHealthPath,
+	resolvePiAscetRuntimeRoot,
+} from "../../ascet-extension/src/scheduler/index.ts";
+import { loadAscetExtension, repoRoot } from "./ascet-extension-test-helpers.ts";
+
+function tempRuntimeEnv() {
+	return { PI_ASCET_RUNTIME_DIR: mkdtempSync(join(tmpdir(), "pi-ascet-runtime-")) };
+}
+
+describe("ASCET scheduler diagnostics", () => {
+	it("uses PI-local runtime paths for lock and operation health", () => {
+		const env = { LOCALAPPDATA: "C:\\Users\\ZJR\\AppData\\Local" };
+
+		expect(resolvePiAscetRuntimeRoot({ env })).toBe("C:\\Users\\ZJR\\AppData\\Local\\PI\\ascet");
+		expect(resolvePiAscetLockPath({ env })).toBe(
+			"C:\\Users\\ZJR\\AppData\\Local\\PI\\ascet\\locks\\ascet-toolapi.lock",
+		);
+		expect(resolvePiAscetOperationHealthPath({ env })).toBe(
+			"C:\\Users\\ZJR\\AppData\\Local\\PI\\ascet\\operation-health.json",
+		);
+	});
+
+	it("formats an empty scheduler snapshot like the Copilot status command", () => {
+		const scheduler = createAscetScheduler();
+		const output = formatAscetSchedulerSnapshot(scheduler.getSnapshot());
+
+		expect(output).toContain("Host: healthy");
+		expect(output).toContain("Active: 0");
+		expect(output).toContain("Resource: ascet.toolapi.global active=0 queued=0 concurrency=1");
+		expect(output).toContain("Pending: 0");
+		expect(output).toContain("Running: none");
+		expect(output).toContain("Pending by agent: {}");
+	});
+
+	it("serializes ASCET jobs and exposes queued/running state", async () => {
+		const scheduler = createAscetScheduler();
+		let releaseFirst!: () => void;
+		const first = scheduler.submit({
+			agentId: "agent-a",
+			toolName: "ascet_test",
+			commandId: "first",
+			kind: "read",
+			queueTimeoutMs: 1_000,
+			executionTimeoutMs: 1_000,
+			run: () =>
+				new Promise<string>((resolve) => {
+					releaseFirst = () => resolve("first");
+				}),
+		});
+		const second = scheduler.submit({
+			agentId: "agent-b",
+			toolName: "ascet_test",
+			commandId: "second",
+			kind: "read",
+			queueTimeoutMs: 1_000,
+			executionTimeoutMs: 1_000,
+			run: async () => "second",
+		});
+
+		await new Promise((resolve) => setTimeout(resolve, 0));
+		const snapshot = scheduler.getSnapshot();
+		expect(snapshot.runningJob?.commandId).toBe("first");
+		expect(snapshot.queuedJobs.map((job) => job.commandId)).toEqual(["second"]);
+		expect(snapshot.pendingByAgent).toEqual({ "agent-a": 1, "agent-b": 1 });
+
+		releaseFirst();
+		await expect(first).resolves.toBe("first");
+		await expect(second).resolves.toBe("second");
+	});
+
+	it("reports and clears stale PI CLI locks", async () => {
+		const env = tempRuntimeEnv();
+		const lock = await acquireAscetCliLock(
+			{ agentId: "agent", commandId: "read", toolName: "ascet_test", processName: "AscetCli.exe" },
+			{ env, pid: process.pid, tokenFactory: () => "owned" },
+		);
+		const active = await getAscetCliLockSnapshot({ env });
+		expect(active.locked).toBe(true);
+		expect(active.locked ? active.owner.toolName : "").toBe("ascet_test");
+		await lock.release();
+		expect((await getAscetCliLockSnapshot({ env })).locked).toBe(false);
+
+		const stalePath = resolvePiAscetLockPath({ env });
+		writeFileSync(
+			stalePath,
+			JSON.stringify({
+				token: "stale",
+				pid: 999999,
+				agentId: "agent",
+				commandId: "read",
+				toolName: "ascet_test",
+				processName: "AscetCli.exe",
+				acquiredAt: new Date(0).toISOString(),
+				heartbeatAt: new Date(0).toISOString(),
+			}),
+		);
+		expect((await getAscetCliLockSnapshot({ env, isPidAlive: () => false })).locked).toBe(true);
+		expect(await clearStaleAscetCliLock({ env, isPidAlive: () => false })).toBe(true);
+		expect(existsSync(stalePath)).toBe(false);
+	});
+
+	it("persists degraded operation health under the PI runtime directory", async () => {
+		const env = tempRuntimeEnv();
+		const path = resolvePiAscetOperationHealthPath({ env });
+		const store = createAscetOperationHealthStore({
+			persistence: createFileOperationHealthPersistence(path),
+		});
+
+		store.recordFailure({ commandId: "list_components", reason: "child_command_timeout" });
+		await store.flush();
+
+		const raw = readFileSync(path, "utf8");
+		expect(raw).toContain("list_components");
+		expect(formatAscetOperationHealthStatus(store.listUnhealthy())).toContain("status=degraded");
+	});
+
+	it("registers ascet_scheduler_status tool and ascet-scheduler-status command", async () => {
+		const ascetExtension = await loadAscetExtension();
+		const tool = ascetExtension?.tools.get("ascet_scheduler_status")?.definition;
+
+		expect(tool).toMatchObject({ name: "ascet_scheduler_status", executionMode: "sequential" });
+		expect(ascetExtension?.commands.has("ascet-scheduler-status")).toBe(true);
+		const response = await tool?.execute("scheduler", { action: "status" }, new AbortController().signal, undefined, {
+			cwd: repoRoot,
+		});
+		expect(response?.content[0].text).toContain("ASCET Scheduler Status");
+		expect(response?.content[0].text).toContain("CLI Lock:");
+		expect(response?.content[0].text).toContain("Operation Health:");
+	});
+
+	it("formats scheduler status command output and recover output", async () => {
+		const env = tempRuntimeEnv();
+		const scheduler = createAscetScheduler();
+		const operationHealth = createAscetOperationHealthStore();
+		operationHealth.recordFailure({ commandId: "read_component_refs", reason: "child_command_timeout" });
+
+		const status = await executeAscetSchedulerStatusCommand("", { env, scheduler, operationHealth });
+		expect(status).toContain("ASCET Scheduler Status");
+		expect(status).toContain("read_component_refs status=degraded");
+
+		const recover = await executeAscetSchedulerStatusCommand("--recover", {
+			env,
+			scheduler,
+			operationHealth,
+			recover: async () => undefined,
+		});
+		expect(recover).toContain("Recovery: succeeded");
+		expect(recover).toContain("degraded: none");
+	});
+
+	it("routes CLI execution through the scheduler and releases the PI lock", async () => {
+		const env = tempRuntimeEnv();
+		const scheduler = createAscetScheduler();
+		const result = await runAscetListComponents(
+			{ folderPath: "DEMO", limit: 2 },
+			{
+				cwd: repoRoot,
+				env,
+				scheduler,
+				executeCli: async (request) => {
+					expect((await getAscetCliLockSnapshot({ env })).locked).toBe(true);
+					return {
+						exitCode: 0,
+						stdout: JSON.stringify({ ok: true, result: [] }),
+						stderr: "",
+						timedOut: false,
+						request,
+					};
+				},
+			},
+		);
+
+		expect(result.ok).toBe(true);
+		expect((await getAscetCliLockSnapshot({ env })).locked).toBe(false);
+		expect(scheduler.getSnapshot().recentJobs.at(-1)?.commandId).toBe("list_components");
+	});
+
+	it("captures timeout failures in operation health", async () => {
+		const env = tempRuntimeEnv();
+		const result = await runAscetListComponents(
+			{ folderPath: "DEMO", limit: 2 },
+			{
+				cwd: repoRoot,
+				env,
+				executeCli: async (request) => ({
+					exitCode: null,
+					stdout: "",
+					stderr: "",
+					timedOut: true,
+					request,
+				}),
+			},
+		);
+		const report = await createAscetSchedulerStatusReport("status", { env });
+
+		expect(result.ok).toBe(false);
+		expect(report.operationHealth.some((state) => state.commandId === "list_components")).toBe(true);
+	});
+});
