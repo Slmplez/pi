@@ -1,0 +1,359 @@
+import { Type } from "typebox";
+import { runApprovedAscetApplyElementSpec } from "../apply-element-spec.ts";
+import { runApprovedAscetApplyProjectFormula } from "../apply-project-formula.ts";
+import type { AscetCliJsonResult } from "../cli.ts";
+import { type AscetToolOutcome, createPreflightOutcome } from "../core/results.ts";
+import { withInlineCodeFile } from "../core/temp-files.ts";
+import { runApprovedAscetCreateComponent } from "../create-component.ts";
+import { runApprovedAscetCreateFolder } from "../create-folder.ts";
+import { runApprovedAscetCreateMethod } from "../create-method.ts";
+import { runApprovedAscetDeleteComponent } from "../delete-component.ts";
+import { runApprovedAscetDeleteFolder } from "../delete-folder.ts";
+import { runApprovedAscetDeleteMethod } from "../delete-method.ts";
+import { runApprovedAscetSetClassMethodCode } from "../set-class-method-code.ts";
+import { runApprovedAscetSetMethodCode } from "../set-method-code.ts";
+import { runApprovedAscetSetModuleCode } from "../set-module-code.ts";
+import { runApprovedAscetSetStateMachineCode } from "../set-state-machine-code.ts";
+import type { RunAscetWriteOperationOptions } from "../write-common.ts";
+import type { AscetWriteApprovalContext } from "../write-policy.ts";
+
+type CodeSource = { code?: string; codeFile?: string };
+
+export type AscetWriteParams =
+	| { action: "create_folder"; folderPath: string; verifyReadback?: boolean; executeWrite?: boolean }
+	| {
+			action: "create_component";
+			componentPath: string;
+			kind: "class" | "module" | "statemachine";
+			language?: "ESDL" | "C";
+			ifExists?: "fail" | "return-existing" | "overwrite";
+			verifyReadback?: boolean;
+			rollbackOnFailure?: boolean;
+			executeWrite?: boolean;
+	  }
+	| {
+			action: "create_method";
+			componentPath: string;
+			methodName: string;
+			methodKind?: "abstract" | "process" | "action" | "condition" | "trigger";
+			ifExists?: "fail" | "return-existing" | "overwrite";
+			verifyReadback?: boolean;
+			executeWrite?: boolean;
+	  }
+	| {
+			action: "delete_component";
+			componentPath: string;
+			ifMissing?: "fail" | "ignore";
+			verifyReadback?: boolean;
+			executeWrite?: boolean;
+	  }
+	| {
+			action: "delete_method";
+			componentPath: string;
+			methodName: string;
+			ifMissing?: "fail" | "ignore";
+			verifyReadback?: boolean;
+			executeWrite?: boolean;
+	  }
+	| {
+			action: "delete_folder";
+			folderPath: string;
+			ifMissing?: "fail" | "ignore";
+			verifyReadback?: boolean;
+			executeWrite?: boolean;
+	  }
+	| ({
+			action: "set_method_code";
+			componentPath: string;
+			methodName: string;
+			verifyReadback?: boolean;
+			executeWrite?: boolean;
+	  } & CodeSource)
+	| ({
+			action: "set_class_method_code";
+			classPath: string;
+			methodName: string;
+			verifyReadback?: boolean;
+			executeWrite?: boolean;
+	  } & CodeSource)
+	| ({
+			action: "set_module_code";
+			modulePath: string;
+			operation: "set-method" | "set-header" | "set-external-c-code";
+			methodName?: string;
+			verifyReadback?: boolean;
+			executeWrite?: boolean;
+	  } & CodeSource)
+	| ({
+			action: "set_state_machine_code";
+			stateMachinePath: string;
+			operation:
+				| "set-method"
+				| "set-state-entry-esdl"
+				| "set-state-exit-esdl"
+				| "set-state-static-esdl"
+				| "bind-state-entry-method"
+				| "bind-state-exit-method"
+				| "bind-state-static-method"
+				| "set-transition-condition-esdl"
+				| "set-transition-action-esdl"
+				| "bind-transition-condition-method"
+				| "bind-transition-action-method"
+				| "set-start-state";
+			stateName?: string;
+			sourceState?: string;
+			targetState?: string;
+			priority?: number;
+			methodName?: string;
+			verifyReadback?: boolean;
+			executeWrite?: boolean;
+	  } & CodeSource)
+	| {
+			action: "apply_element_spec";
+			componentPath: string;
+			specFile: string;
+			projectPath?: string;
+			mode?: "restore";
+			deleteMissing?: boolean;
+			recreateIncompatible?: boolean;
+			verifyReadback?: boolean;
+			executeWrite?: boolean;
+	  }
+	| {
+			action: "apply_project_formula";
+			projectPath: string;
+			specFile: string;
+			mode?: "restore";
+			deleteMissing?: boolean;
+			verifyReadback?: boolean;
+			executeWrite?: boolean;
+	  };
+
+export interface AscetWriteResult {
+	content: Array<{ type: "text"; text: string }>;
+	details: {
+		outcome: AscetToolOutcome;
+		raw?: AscetCliJsonResult;
+		error?: { code: string; message: string };
+	};
+}
+
+const codeSourceSchema = {
+	code: Type.Optional(Type.String()),
+	codeFile: Type.Optional(Type.String()),
+};
+
+export const ascetWriteParameters = Type.Union([
+	Type.Object({
+		action: Type.Literal("create_folder"),
+		folderPath: Type.String({ minLength: 1 }),
+		verifyReadback: Type.Optional(Type.Boolean()),
+		executeWrite: Type.Optional(Type.Boolean()),
+	}),
+	Type.Object({
+		action: Type.Literal("create_component"),
+		componentPath: Type.String({ minLength: 1 }),
+		kind: Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")]),
+		language: Type.Optional(Type.Union([Type.Literal("ESDL"), Type.Literal("C")])),
+		ifExists: Type.Optional(
+			Type.Union([Type.Literal("fail"), Type.Literal("return-existing"), Type.Literal("overwrite")]),
+		),
+		verifyReadback: Type.Optional(Type.Boolean()),
+		rollbackOnFailure: Type.Optional(Type.Boolean()),
+		executeWrite: Type.Optional(Type.Boolean()),
+	}),
+	Type.Object({
+		action: Type.Literal("create_method"),
+		componentPath: Type.String({ minLength: 1 }),
+		methodName: Type.String({ minLength: 1 }),
+		methodKind: Type.Optional(
+			Type.Union([
+				Type.Literal("abstract"),
+				Type.Literal("process"),
+				Type.Literal("action"),
+				Type.Literal("condition"),
+				Type.Literal("trigger"),
+			]),
+		),
+		ifExists: Type.Optional(
+			Type.Union([Type.Literal("fail"), Type.Literal("return-existing"), Type.Literal("overwrite")]),
+		),
+		verifyReadback: Type.Optional(Type.Boolean()),
+		executeWrite: Type.Optional(Type.Boolean()),
+	}),
+	Type.Object({
+		action: Type.Literal("delete_component"),
+		componentPath: Type.String({ minLength: 1 }),
+		ifMissing: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")])),
+		verifyReadback: Type.Optional(Type.Boolean()),
+		executeWrite: Type.Optional(Type.Boolean()),
+	}),
+	Type.Object({
+		action: Type.Literal("delete_method"),
+		componentPath: Type.String({ minLength: 1 }),
+		methodName: Type.String({ minLength: 1 }),
+		ifMissing: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")])),
+		verifyReadback: Type.Optional(Type.Boolean()),
+		executeWrite: Type.Optional(Type.Boolean()),
+	}),
+	Type.Object({
+		action: Type.Literal("delete_folder"),
+		folderPath: Type.String({ minLength: 1 }),
+		ifMissing: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")])),
+		verifyReadback: Type.Optional(Type.Boolean()),
+		executeWrite: Type.Optional(Type.Boolean()),
+	}),
+	Type.Object({
+		action: Type.Literal("set_method_code"),
+		componentPath: Type.String({ minLength: 1 }),
+		methodName: Type.String({ minLength: 1 }),
+		...codeSourceSchema,
+		verifyReadback: Type.Optional(Type.Boolean()),
+		executeWrite: Type.Optional(Type.Boolean()),
+	}),
+	Type.Object({
+		action: Type.Literal("set_class_method_code"),
+		classPath: Type.String({ minLength: 1 }),
+		methodName: Type.String({ minLength: 1 }),
+		...codeSourceSchema,
+		verifyReadback: Type.Optional(Type.Boolean()),
+		executeWrite: Type.Optional(Type.Boolean()),
+	}),
+	Type.Object({
+		action: Type.Literal("set_module_code"),
+		modulePath: Type.String({ minLength: 1 }),
+		operation: Type.Union([
+			Type.Literal("set-method"),
+			Type.Literal("set-header"),
+			Type.Literal("set-external-c-code"),
+		]),
+		methodName: Type.Optional(Type.String()),
+		...codeSourceSchema,
+		verifyReadback: Type.Optional(Type.Boolean()),
+		executeWrite: Type.Optional(Type.Boolean()),
+	}),
+	Type.Object({
+		action: Type.Literal("set_state_machine_code"),
+		stateMachinePath: Type.String({ minLength: 1 }),
+		operation: Type.String({ minLength: 1 }),
+		stateName: Type.Optional(Type.String()),
+		sourceState: Type.Optional(Type.String()),
+		targetState: Type.Optional(Type.String()),
+		priority: Type.Optional(Type.Number()),
+		methodName: Type.Optional(Type.String()),
+		...codeSourceSchema,
+		verifyReadback: Type.Optional(Type.Boolean()),
+		executeWrite: Type.Optional(Type.Boolean()),
+	}),
+	Type.Object({
+		action: Type.Literal("apply_element_spec"),
+		componentPath: Type.String({ minLength: 1 }),
+		specFile: Type.String({ minLength: 1 }),
+		projectPath: Type.Optional(Type.String()),
+		mode: Type.Optional(Type.Literal("restore")),
+		deleteMissing: Type.Optional(Type.Boolean()),
+		recreateIncompatible: Type.Optional(Type.Boolean()),
+		verifyReadback: Type.Optional(Type.Boolean()),
+		executeWrite: Type.Optional(Type.Boolean()),
+	}),
+	Type.Object({
+		action: Type.Literal("apply_project_formula"),
+		projectPath: Type.String({ minLength: 1 }),
+		specFile: Type.String({ minLength: 1 }),
+		mode: Type.Optional(Type.Literal("restore")),
+		deleteMissing: Type.Optional(Type.Boolean()),
+		verifyReadback: Type.Optional(Type.Boolean()),
+		executeWrite: Type.Optional(Type.Boolean()),
+	}),
+]);
+
+function outcomeFromCliResult(result: AscetCliJsonResult): AscetToolOutcome {
+	if (result.ok) {
+		return { status: "ok", data: result.data, warnings: [] };
+	}
+	const code = result.error?.code ?? "ascet_write_failed";
+	const message = result.error?.message ?? "ASCET write failed.";
+	if (code === "ascet_write_ui_required" || code === "ascet_write_rejected") {
+		return { status: "blocked", code, message };
+	}
+	return { status: "error", error: { code, message } };
+}
+
+function asResponse(outcome: AscetToolOutcome, raw?: AscetCliJsonResult): AscetWriteResult {
+	return {
+		content: [{ type: "text", text: JSON.stringify(outcome, null, 2) }],
+		details: {
+			outcome,
+			raw,
+			error: outcome.status === "error" ? outcome.error : undefined,
+		},
+	};
+}
+
+async function withWriteCode<T>(
+	params: CodeSource & { action: string },
+	run: (codeFile: string) => Promise<T>,
+): Promise<T> {
+	return withInlineCodeFile({ code: params.code, codeFile: params.codeFile, prefix: params.action }, run);
+}
+
+export async function runAscetWrite(
+	params: AscetWriteParams,
+	options: RunAscetWriteOperationOptions,
+	ctx: AscetWriteApprovalContext,
+): Promise<AscetWriteResult> {
+	if (!params.executeWrite) {
+		return asResponse(createPreflightOutcome({ action: params.action, params }));
+	}
+
+	const raw = await dispatchWrite(params, options, ctx);
+	return asResponse(outcomeFromCliResult(raw), raw);
+}
+
+async function dispatchWrite(
+	params: AscetWriteParams,
+	options: RunAscetWriteOperationOptions,
+	ctx: AscetWriteApprovalContext,
+): Promise<AscetCliJsonResult> {
+	switch (params.action) {
+		case "create_folder":
+			return runApprovedAscetCreateFolder(params, options, ctx);
+		case "create_component":
+			return runApprovedAscetCreateComponent(params, options, ctx);
+		case "create_method":
+			return runApprovedAscetCreateMethod(params, options, ctx);
+		case "delete_component":
+			return runApprovedAscetDeleteComponent(params, options, ctx);
+		case "delete_method":
+			return runApprovedAscetDeleteMethod(params, options, ctx);
+		case "delete_folder":
+			return runApprovedAscetDeleteFolder(params, options, ctx);
+		case "set_method_code":
+			return withWriteCode(params, (codeFile) =>
+				runApprovedAscetSetMethodCode({ ...params, codeFile }, options, ctx),
+			);
+		case "set_class_method_code":
+			return withWriteCode(params, (codeFile) =>
+				runApprovedAscetSetClassMethodCode({ ...params, codeFile }, options, ctx),
+			);
+		case "set_module_code":
+			return withWriteCode(params, (codeFile) =>
+				runApprovedAscetSetModuleCode({ ...params, codeFile }, options, ctx),
+			);
+		case "set_state_machine_code":
+			if (params.code !== undefined || params.codeFile !== undefined) {
+				return withWriteCode(params, (codeFile) =>
+					runApprovedAscetSetStateMachineCode({ ...params, codeFile }, options, ctx),
+				);
+			}
+			return runApprovedAscetSetStateMachineCode(params, options, ctx);
+		case "apply_element_spec":
+			return runApprovedAscetApplyElementSpec(params, options, ctx);
+		case "apply_project_formula":
+			return runApprovedAscetApplyProjectFormula(params, options, ctx);
+	}
+}
+
+export function formatAscetWriteResult(result: AscetWriteResult): string {
+	return result.content[0]?.text ?? "";
+}

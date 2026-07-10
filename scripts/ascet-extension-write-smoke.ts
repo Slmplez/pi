@@ -61,13 +61,10 @@ const loadResult = await withStage("load_extension", async () => {
 });
 
 const extension = loadResult.extensions.find((entry) => entry.path.replaceAll("\\", "/").endsWith("ascet/index.ts"));
-const createFolderTool = extension?.tools.get("ascet_create_folder")?.definition;
-const createComponentTool = extension?.tools.get("ascet_create_component")?.definition;
-const createMethodTool = extension?.tools.get("ascet_create_method")?.definition;
-const writeTool = extension?.tools.get("ascet_set_class_method_code")?.definition;
-const readTool = extension?.tools.get("ascet_read_method_code")?.definition;
-const verifyTool = extension?.tools.get("ascet_verify_readback")?.definition;
-if (!createFolderTool || !createComponentTool || !createMethodTool || !writeTool || !readTool || !verifyTool) {
+const writeTool = extension?.tools.get("ascet_write")?.definition;
+const readTool = extension?.tools.get("ascet_read_code")?.definition;
+const verifyTool = extension?.tools.get("ascet_verify")?.definition;
+if (!writeTool || !readTool || !verifyTool) {
 	throw new Error("ASCET write/read/verify tools are not registered");
 }
 
@@ -86,6 +83,13 @@ async function executeTool(toolName: string, params: Record<string, unknown>, ct
 		throw new Error(`ASCET tool is not registered: ${toolName}`);
 	}
 	const response = await tool.execute(`ascet-write-smoke-${toolName}`, params, signal, undefined, ctx);
+	const outcome = response.details?.outcome;
+	if (outcome) {
+		if (outcome.status !== "ok") {
+			throw new Error(`${toolName} failed: ${outcome.error?.message ?? outcome.message ?? outcome.status}`);
+		}
+		return response;
+	}
 	if (!response.details.ok) {
 		throw new Error(`${toolName} failed: ${response.details.error?.message ?? "unknown"}`);
 	}
@@ -93,13 +97,14 @@ async function executeTool(toolName: string, params: Record<string, unknown>, ct
 }
 
 const createFolderResponse = await withStage("create_folder", () => executeTool(
-	"ascet_create_folder",
-	{ folderPath, verifyReadback: true, executeWrite: true },
+	"ascet_write",
+	{ action: "create_folder", folderPath, verifyReadback: true, executeWrite: true },
 	writeContext,
 ));
 const createComponentResponse = await withStage("create_component", () => executeTool(
-	"ascet_create_component",
+	"ascet_write",
 	{
+		action: "create_component",
 		componentPath,
 		kind: "class",
 		language: "ESDL",
@@ -110,8 +115,9 @@ const createComponentResponse = await withStage("create_component", () => execut
 	writeContext,
 ));
 const createMethodResponse = await withStage("create_method", () => executeTool(
-	"ascet_create_method",
+	"ascet_write",
 	{
+		action: "create_method",
 		componentPath,
 		methodName,
 		methodKind: "abstract",
@@ -122,27 +128,15 @@ const createMethodResponse = await withStage("create_method", () => executeTool(
 	writeContext,
 ));
 
-const writeResponse = await withStage("set_class_method_code", () => writeTool.execute(
-	"ascet-write-smoke-set-class-method-code",
-	{
-		classPath: componentPath,
-		methodName,
-		codeFile,
-		verifyReadback: true,
-		executeWrite: true,
-	},
-	signal,
-	undefined,
+const writeResponse = await withStage("set_class_method_code", () => executeTool(
+	"ascet_write",
+	{ action: "set_class_method_code", classPath: componentPath, methodName, codeFile, verifyReadback: true, executeWrite: true },
 	writeContext,
 ));
 
-if (!writeResponse.details.ok) {
-	throw new Error(`ascet_set_class_method_code failed: ${writeResponse.details.error?.message ?? "unknown"}`);
-}
-
 const readResponse = await withStage("read_method_code", () => readTool.execute(
 	"ascet-write-smoke-read-method-code",
-	{ componentPath, methodName },
+	{ action: "method", componentPath, methodName },
 	signal,
 	undefined,
 	{ cwd: repoRoot },
@@ -172,11 +166,11 @@ console.log(
 			methodName,
 			codeFile,
 			setup: {
-				folder: createFolderResponse.details.data,
-				component: createComponentResponse.details.data,
-				method: createMethodResponse.details.data,
+				folder: createFolderResponse.details.outcome,
+				component: createComponentResponse.details.outcome,
+				method: createMethodResponse.details.outcome,
 			},
-			write: writeResponse.details.data,
+			write: writeResponse.details.outcome,
 			readback: {
 				methodName: readResponse.details.data?.result?.methodName,
 				code: readResponse.details.data?.result?.code,

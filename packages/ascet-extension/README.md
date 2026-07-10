@@ -27,9 +27,24 @@ Expected bundled paths:
 
 ## Tools
 
-Current read-only tools include:
+Canonical Copilot-aligned tools:
 
 - `ascet_status`
+- `ascet_capabilities`
+- `ascet_recover`
+- `ascet_browse`
+- `ascet_search`
+- `ascet_resolve`
+- `ascet_inspect`
+- `ascet_read_code`
+- `ascet_references`
+- `ascet_compare`
+- `ascet_write`
+- `ascet_verify`
+- `ascet_batch_write`
+
+Legacy compatibility tools remain registered for one-operation workflows:
+
 - `ascet_contract_catalog`
 - `ascet_list_folders`
 - `ascet_list_components`
@@ -47,14 +62,12 @@ Current read-only tools include:
 - `ascet_read_element_refs`
 - `ascet_diff_component_snapshot`
 - `ascet_verify_readback`
-
-Guarded write tools are registered but preflight-only by default and require explicit interactive approval before CLI execution:
-
 - `ascet_create_folder`
 - `ascet_create_component`
 - `ascet_create_method`
 - `ascet_set_class_method_code`
-- `ascet_batch_write`
+
+Guarded write tools are preflight-only by default and require explicit interactive approval before CLI execution. Canonical `ascet_write` returns a non-error `status: "preflight"` outcome when `executeWrite` is false. `ascet_batch_write` uses operation-specific request schemas and reports partial completion as `status: "partial"` when the ASCET batch backend returns item failures.
 
 ## Verification
 
@@ -90,14 +103,11 @@ Default disposable target:
 - component: `DEMO\__pi_write_smoke__\PiSmoke`
 - method: `calc`
 
-When enabled, setup, write, readback, and verify all run through PI tools:
+When enabled, setup, write, readback, and verify all run through canonical PI tools:
 
-- `ascet_create_folder`
-- `ascet_create_component`
-- `ascet_create_method`
-- `ascet_set_class_method_code`
-- `ascet_read_method_code`
-- `ascet_verify_readback`
+- `ascet_write`
+- `ascet_read_code`
+- `ascet_verify`
 
 ## Environment Overrides
 

@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { getProcessTreeKillCommand } from "../../ascet-extension/src/cli.ts";
 import { buildDiffComponentSnapshotArgs } from "../../ascet-extension/src/diff-component-snapshot.ts";
+import { buildDiffElementSpecArgs } from "../../ascet-extension/src/diff-element-spec.ts";
+import { buildDiffMethodCodeArgs } from "../../ascet-extension/src/diff-method-code.ts";
+import { buildDiffProjectFormulasArgs } from "../../ascet-extension/src/diff-project-formulas.ts";
+import { buildDiffStateMachineDomainArgs } from "../../ascet-extension/src/diff-state-machine-domain.ts";
 import { buildListComponentsArgs, runAscetListComponents } from "../../ascet-extension/src/list-components.ts";
 import { buildListDiagramsArgs, runAscetListDiagrams } from "../../ascet-extension/src/list-diagrams.ts";
 import { buildListFoldersArgs, runAscetListFolders } from "../../ascet-extension/src/list-folders.ts";
@@ -10,13 +14,29 @@ import {
 	buildReadComponentChildrenArgs,
 	runAscetReadComponentChildren,
 } from "../../ascet-extension/src/read-component-children.ts";
+import {
+	buildReadComponentCodeArgs,
+	runAscetReadComponentCode,
+} from "../../ascet-extension/src/read-component-code.ts";
+import {
+	buildReadComponentRefsArgs,
+	runAscetReadComponentRefs,
+} from "../../ascet-extension/src/read-component-refs.ts";
 import { buildReadComponentSummaryArgs } from "../../ascet-extension/src/read-component-summary.ts";
+import {
+	buildReadComponentUsedByArgs,
+	runAscetReadComponentUsedBy,
+} from "../../ascet-extension/src/read-component-used-by.ts";
 import { buildReadElementRefsArgs, runAscetReadElementRefs } from "../../ascet-extension/src/read-element-refs.ts";
+import { buildReadImplementationArgs } from "../../ascet-extension/src/read-implementation.ts";
 import { buildReadMethodCodeArgs, runAscetReadMethodCode } from "../../ascet-extension/src/read-method-code.ts";
 import {
 	buildReadProjectFormulasArgs,
 	runAscetReadProjectFormulas,
 } from "../../ascet-extension/src/read-project-formulas.ts";
+import { buildReadReferencesArgs } from "../../ascet-extension/src/read-references.ts";
+import { buildReadStateMachineFlowArgs } from "../../ascet-extension/src/read-state-machine-flow.ts";
+import { buildReadTextCodeArgs, runAscetReadTextCode } from "../../ascet-extension/src/read-text-code.ts";
 import { buildResolveComponentArgs } from "../../ascet-extension/src/resolve-component.ts";
 import { buildSearchComponentsArgs, runAscetSearchComponents } from "../../ascet-extension/src/search-components.ts";
 import { buildSearchElementsArgs, runAscetSearchElements } from "../../ascet-extension/src/search-elements.ts";
@@ -473,6 +493,24 @@ describe("ASCET read-only PI tools", () => {
 			"DEMO\\Project",
 			"--json",
 		]);
+		expect(buildReadImplementationArgs({ componentPath: "DEMO/PID", mode: "list" })).toEqual([
+			"exec",
+			"read_implementation",
+			"DEMO\\PID",
+			"--list",
+			"--json",
+		]);
+		expect(
+			buildReadImplementationArgs({ componentPath: "DEMO/PID", mode: "impl", implementationName: "Impl" }),
+		).toEqual(["exec", "read_implementation", "DEMO\\PID", "--impl", "Impl", "--json"]);
+		expect(buildReadStateMachineFlowArgs({ componentPath: "DEMO/SM", traceDepth: 2 })).toEqual([
+			"exec",
+			"read_state_machine_flow",
+			"DEMO\\SM",
+			"--trace-depth",
+			"2",
+			"--json",
+		]);
 	});
 
 	it("builds JSON read_method_code, read_element_refs, and diff invocations", () => {
@@ -489,6 +527,19 @@ describe("ASCET read-only PI tools", () => {
 			"calc",
 			"--json",
 		]);
+		expect(buildReadComponentCodeArgs({ componentPath: "DEMO/PID" })).toEqual([
+			"exec",
+			"read_component_code",
+			"DEMO\\PID",
+			"--json",
+		]);
+		expect(
+			buildReadTextCodeArgs({
+				componentPath: "DEMO/PID",
+				methodName: "calc",
+				section: "body",
+			}),
+		).toEqual(["exec", "read_text_code", "DEMO\\PID", "--method-name", "calc", "--section", "body", "--json"]);
 		expect(buildListDiagramsArgs({ componentPath: "DEMO\\PID", diagramKind: "block_diagram" })).toEqual([
 			"exec",
 			"list_diagrams",
@@ -511,6 +562,41 @@ describe("ASCET read-only PI tools", () => {
 			"pid_kp",
 			"--json",
 		]);
+		expect(buildReadReferencesArgs({ componentPath: "DEMO/PID" })).toEqual([
+			"exec",
+			"read_references",
+			"DEMO\\PID",
+			"--json",
+		]);
+		expect(buildReadComponentRefsArgs({ componentPath: "DEMO/PID", direction: "out", depth: 1 })).toEqual([
+			"exec",
+			"read_component_refs",
+			"DEMO\\PID",
+			"--direction",
+			"out",
+			"--depth",
+			"1",
+			"--json",
+		]);
+		expect(
+			buildReadComponentUsedByArgs({
+				componentPath: "DEMO/PID",
+				scopePath: "DEMO",
+				kind: "class",
+				limit: 10,
+			}),
+		).toEqual([
+			"exec",
+			"read_component_used_by",
+			"DEMO\\PID",
+			"--scope",
+			"DEMO",
+			"--kind",
+			"class",
+			"--limit",
+			"10",
+			"--json",
+		]);
 		expect(
 			buildDiffComponentSnapshotArgs({
 				leftComponentPath: "DEMO\\PID",
@@ -518,6 +604,35 @@ describe("ASCET read-only PI tools", () => {
 				changesOnly: true,
 			}),
 		).toEqual(["exec", "diff_component_snapshot", "DEMO\\PID", "DEMO\\PID", "--changes-only", "--json"]);
+		expect(
+			buildDiffMethodCodeArgs({
+				leftComponentPath: "DEMO\\PID",
+				rightComponentPath: "DEMO\\PID2",
+				methodName: "calc",
+				changesOnly: true,
+			}),
+		).toEqual(["exec", "diff_method_code", "DEMO\\PID", "DEMO\\PID2", "calc", "--changes-only", "--json"]);
+		expect(
+			buildDiffElementSpecArgs({
+				componentPath: "DEMO/PID",
+				specFile: "C:\\tmp\\pid.spec.json",
+				changesOnly: true,
+			}),
+		).toEqual(["exec", "diff_element_spec", "DEMO\\PID", "C:\\tmp\\pid.spec.json", "--changes-only", "--json"]);
+		expect(
+			buildDiffProjectFormulasArgs({
+				leftProjectPath: "DEMO/ProjectA",
+				rightProjectPath: "DEMO/ProjectB",
+				changesOnly: true,
+			}),
+		).toEqual(["exec", "diff_project_formulas", "DEMO\\ProjectA", "DEMO\\ProjectB", "--changes-only", "--json"]);
+		expect(
+			buildDiffStateMachineDomainArgs({
+				leftStateMachinePath: "DEMO/SM_A",
+				rightStateMachinePath: "DEMO/SM_B",
+				changesOnly: true,
+			}),
+		).toEqual(["exec", "diff_state_machine_domain", "DEMO\\SM_A", "DEMO\\SM_B", "--changes-only", "--json"]);
 	});
 
 	it("builds verify readback invocations and validates target shape", async () => {
@@ -592,6 +707,32 @@ describe("ASCET read-only PI tools", () => {
 				}),
 			},
 		);
+		const componentCodeResult = await runAscetReadComponentCode(
+			{ componentPath: "DEMO/PID" },
+			{
+				cwd: repoRoot,
+				executeCli: async (request) => ({
+					exitCode: 0,
+					stdout: JSON.stringify({ ok: true, result: { componentPath: "DEMO\\PID", code: "pid_output = 0;" } }),
+					stderr: "",
+					timedOut: false,
+					request,
+				}),
+			},
+		);
+		const textCodeResult = await runAscetReadTextCode(
+			{ componentPath: "DEMO/PID", methodName: "calc", section: "body" },
+			{
+				cwd: repoRoot,
+				executeCli: async (request) => ({
+					exitCode: 0,
+					stdout: JSON.stringify({ ok: true, result: { componentPath: "DEMO\\PID", section: "body" } }),
+					stderr: "",
+					timedOut: false,
+					request,
+				}),
+			},
+		);
 		const formulasResult = await runAscetReadProjectFormulas(
 			{ projectPath: "DEMO\\Project" },
 			{
@@ -602,6 +743,32 @@ describe("ASCET read-only PI tools", () => {
 						ok: true,
 						result: { ProjectPath: "DEMO\\Project", Formulas: [{ Name: "ident" }] },
 					}),
+					stderr: "",
+					timedOut: false,
+					request,
+				}),
+			},
+		);
+		const componentRefsResult = await runAscetReadComponentRefs(
+			{ componentPath: "DEMO/PID", direction: "out", depth: 1 },
+			{
+				cwd: repoRoot,
+				executeCli: async (request) => ({
+					exitCode: 0,
+					stdout: JSON.stringify({ ok: true, result: { componentPath: "DEMO\\PID", references: [] } }),
+					stderr: "",
+					timedOut: false,
+					request,
+				}),
+			},
+		);
+		const usedByResult = await runAscetReadComponentUsedBy(
+			{ componentPath: "DEMO/PID", scopePath: "DEMO", kind: "class", limit: 10 },
+			{
+				cwd: repoRoot,
+				executeCli: async (request) => ({
+					exitCode: 0,
+					stdout: JSON.stringify({ ok: true, result: { componentPath: "DEMO\\PID", usedBy: [] } }),
 					stderr: "",
 					timedOut: false,
 					request,
@@ -671,6 +838,19 @@ describe("ASCET read-only PI tools", () => {
 		expect(listMethodsResult.request.args).toEqual(["exec", "list_methods", "DEMO\\PID", "--json"]);
 		expect(methodResult.ok).toBe(true);
 		expect(methodResult.request.args).toEqual(["exec", "read_method_code", "DEMO\\PID", "calc", "--json"]);
+		expect(componentCodeResult.ok).toBe(true);
+		expect(componentCodeResult.request.args).toEqual(["exec", "read_component_code", "DEMO\\PID", "--json"]);
+		expect(textCodeResult.ok).toBe(true);
+		expect(textCodeResult.request.args).toEqual([
+			"exec",
+			"read_text_code",
+			"DEMO\\PID",
+			"--method-name",
+			"calc",
+			"--section",
+			"body",
+			"--json",
+		]);
 		expect(formulasResult.ok).toBe(true);
 		expect(formulasResult.request.args).toEqual(["exec", "read_project_formulas", "DEMO\\Project", "--json"]);
 		expect(diagramsResult.ok).toBe(true);
@@ -679,5 +859,29 @@ describe("ASCET read-only PI tools", () => {
 		expect(blockDiagramResult.request.args).toEqual(["exec", "read_block_diagram", "DEMO\\PID", "Main", "--json"]);
 		expect(refsResult.ok).toBe(true);
 		expect(refsResult.request.args).toEqual(["exec", "read_element_refs", "DEMO\\PID", "pid_kp", "--json"]);
+		expect(componentRefsResult.ok).toBe(true);
+		expect(componentRefsResult.request.args).toEqual([
+			"exec",
+			"read_component_refs",
+			"DEMO\\PID",
+			"--direction",
+			"out",
+			"--depth",
+			"1",
+			"--json",
+		]);
+		expect(usedByResult.ok).toBe(true);
+		expect(usedByResult.request.args).toEqual([
+			"exec",
+			"read_component_used_by",
+			"DEMO\\PID",
+			"--scope",
+			"DEMO",
+			"--kind",
+			"class",
+			"--limit",
+			"10",
+			"--json",
+		]);
 	});
 });

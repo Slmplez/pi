@@ -2,6 +2,7 @@ import { Type } from "typebox";
 import {
 	type AscetBatchWriteParams,
 	ascetBatchWriteParameters,
+	createBatchWriteOutcome,
 	formatBatchWriteResult,
 	runApprovedAscetBatchWrite,
 } from "./batch-write.ts";
@@ -128,6 +129,68 @@ import {
 } from "./set-class-method-code.ts";
 import { type AscetStatusReport, createAscetStatusReport } from "./status.ts";
 import {
+	type AscetBrowseParams,
+	ascetBrowseParameters,
+	formatAscetBrowseResult,
+	runAscetBrowse,
+} from "./tools/browse.ts";
+import {
+	type AscetCapabilitiesParams,
+	ascetCapabilitiesParameters,
+	formatAscetCapabilitiesResult,
+	runAscetCapabilities,
+} from "./tools/capabilities.ts";
+import {
+	type AscetCompareParams,
+	ascetCompareParameters,
+	formatAscetCompareResult,
+	runAscetCompare,
+} from "./tools/compare.ts";
+import { canonicalAscetToolNames } from "./tools/index.ts";
+import {
+	type AscetInspectParams,
+	ascetInspectParameters,
+	formatAscetInspectResult,
+	runAscetInspect,
+} from "./tools/inspect.ts";
+import {
+	type AscetReadCodeParams,
+	ascetReadCodeParameters,
+	formatAscetReadCodeResult,
+	runAscetReadCode,
+} from "./tools/read-code.ts";
+import {
+	type AscetRecoverParams,
+	ascetRecoverParameters,
+	formatAscetRecoverResult,
+	runAscetRecover,
+} from "./tools/recover.ts";
+import {
+	type AscetReferencesParams,
+	ascetReferencesParameters,
+	formatAscetReferencesResult,
+	runAscetReferences,
+} from "./tools/references.ts";
+import {
+	type AscetResolveParams,
+	ascetResolveParameters,
+	formatAscetResolveResult,
+	runAscetResolve,
+} from "./tools/resolve.ts";
+import {
+	type AscetSearchParams,
+	ascetSearchParameters,
+	formatAscetSearchResult,
+	runAscetSearch,
+} from "./tools/search.ts";
+import {
+	type AscetVerifyParams,
+	ascetVerifyParameters,
+	formatAscetVerifyResult,
+	runAscetVerify,
+} from "./tools/verify.ts";
+import { type AscetWriteParams, ascetWriteParameters, formatAscetWriteResult, runAscetWrite } from "./tools/write.ts";
+import {
 	type AscetVerifyReadbackParams,
 	ascetVerifyReadbackParameters,
 	formatVerifyReadbackResult,
@@ -191,6 +254,294 @@ const statusTool = {
 		return {
 			content: [{ type: "text", text: report.summary }],
 			details: report,
+		};
+	},
+};
+
+const capabilitiesTool = {
+	name: "ascet_capabilities",
+	label: "ASCET capabilities",
+	description: "Search bundled ASCET operations by family, risk, object kind, or operation name.",
+	promptSnippet: "Discover available ASCET operations before choosing a read, compare, verify, or write action.",
+	promptGuidelines: [
+		"Use ascet_capabilities when selecting the right ASCET operation for an unfamiliar task.",
+		"Prefer family and operationQuery filters instead of dumping the full catalog.",
+	],
+	parameters: ascetCapabilitiesParameters,
+	executionMode: "sequential",
+	async execute(
+		_toolCallId: string,
+		params: AscetCapabilitiesParams,
+		_signal: AbortSignal,
+		_onUpdate: unknown,
+		ctx: { cwd: string },
+	) {
+		const result = runAscetCapabilities(params, { cwd: ctx.cwd });
+		return {
+			content: [{ type: "text", text: formatAscetCapabilitiesResult(result) }],
+			details: result,
+		};
+	},
+};
+
+const recoverTool = {
+	name: "ascet_recover",
+	label: "ASCET recover",
+	description: "Run safe ASCET extension recovery actions without touching user-owned ASCET processes.",
+	promptSnippet: "Check ASCET extension recovery status or clear extension-owned temp files.",
+	promptGuidelines: [
+		"Use action='status' before recovery if the failure mode is unclear.",
+		"Only clear extension-owned temp files; this tool must not kill ASCET GUI or user-owned ToolAPI processes.",
+	],
+	parameters: ascetRecoverParameters,
+	executionMode: "sequential",
+	async execute(
+		_toolCallId: string,
+		params: AscetRecoverParams,
+		_signal: AbortSignal,
+		_onUpdate: unknown,
+		ctx: { cwd: string },
+	) {
+		const result = runAscetRecover(params, { cwd: ctx.cwd });
+		return {
+			content: [{ type: "text", text: formatAscetRecoverResult(result) }],
+			details: result,
+		};
+	},
+};
+
+const browseTool = {
+	name: "ascet_browse",
+	label: "ASCET browse",
+	description: "Browse ASCET folders, components, children, methods, and diagrams through canonical actions.",
+	promptSnippet: "Browse ASCET structure with actions such as folders, components, children, methods, and diagrams.",
+	promptGuidelines: [
+		"Use ascet_browse for navigation before deeper reads.",
+		"Keep depth and limit bounded; use narrower component paths when possible.",
+	],
+	parameters: ascetBrowseParameters,
+	executionMode: "sequential",
+	async execute(
+		_toolCallId: string,
+		params: AscetBrowseParams,
+		signal: AbortSignal,
+		_onUpdate: unknown,
+		ctx: { cwd: string },
+	) {
+		const result = await runAscetBrowse(params, { cwd: ctx.cwd, signal, timeoutMs: 60_000 });
+		return {
+			content: [{ type: "text", text: formatAscetBrowseResult(params, result) }],
+			details: result,
+		};
+	},
+};
+
+const searchTool = {
+	name: "ascet_search",
+	label: "ASCET search",
+	description: "Search ASCET components, elements, and occurrences through canonical actions.",
+	promptSnippet: "Search ASCET with bounded actions: search_components, search_elements, or search_occurrences.",
+	promptGuidelines: [
+		"Prefer exact matches and bounded componentPath or scopePath filters.",
+		"Use cursor paging instead of large limits for broad searches.",
+	],
+	parameters: ascetSearchParameters,
+	executionMode: "sequential",
+	async execute(
+		_toolCallId: string,
+		params: AscetSearchParams,
+		signal: AbortSignal,
+		_onUpdate: unknown,
+		ctx: { cwd: string },
+	) {
+		const result = await runAscetSearch(params, { cwd: ctx.cwd, signal, timeoutMs: 60_000 });
+		return {
+			content: [{ type: "text", text: formatAscetSearchResult(params, result) }],
+			details: result,
+		};
+	},
+};
+
+const resolveTool = {
+	name: "ascet_resolve",
+	label: "ASCET resolve",
+	description: "Resolve ambiguous ASCET targets before read, compare, verify, or write operations.",
+	promptSnippet: "Resolve a component query to a concrete ASCET component candidate.",
+	promptGuidelines: [
+		"Use ascet_resolve when a user gives a name but not a full ASCET path.",
+		"Prefer match='exact' when the requested name is exact.",
+	],
+	parameters: ascetResolveParameters,
+	executionMode: "sequential",
+	async execute(
+		_toolCallId: string,
+		params: AscetResolveParams,
+		signal: AbortSignal,
+		_onUpdate: unknown,
+		ctx: { cwd: string },
+	) {
+		const result = await runAscetResolve(params, { cwd: ctx.cwd, signal, timeoutMs: 35_000 });
+		return {
+			content: [{ type: "text", text: formatAscetResolveResult(result) }],
+			details: result,
+		};
+	},
+};
+
+const inspectTool = {
+	name: "ascet_inspect",
+	label: "ASCET inspect",
+	description: "Inspect ASCET summaries, children, project formulas, and named block diagrams.",
+	promptSnippet: "Inspect a resolved ASCET target with summary, children, project_formulas, or block_diagram actions.",
+	promptGuidelines: [
+		"Use summary before broad child or diagram reads unless the user asks for a specific view.",
+		"Use project_formulas only for project targets.",
+	],
+	parameters: ascetInspectParameters,
+	executionMode: "sequential",
+	async execute(
+		_toolCallId: string,
+		params: AscetInspectParams,
+		signal: AbortSignal,
+		_onUpdate: unknown,
+		ctx: { cwd: string },
+	) {
+		const result = await runAscetInspect(params, { cwd: ctx.cwd, signal, timeoutMs: 90_000 });
+		return {
+			content: [{ type: "text", text: formatAscetInspectResult(params, result) }],
+			details: result,
+		};
+	},
+};
+
+const readCodeTool = {
+	name: "ascet_read_code",
+	label: "ASCET read code",
+	description: "Read ASCET method, component, or text-code sections through canonical actions.",
+	promptSnippet: "Read code with action='method', action='component', or action='text'.",
+	promptGuidelines: [
+		"Prefer action='method' for small targeted reads when the method name is known.",
+		"Use action='component' only when a broad component code read is necessary.",
+	],
+	parameters: ascetReadCodeParameters,
+	executionMode: "sequential",
+	async execute(
+		_toolCallId: string,
+		params: AscetReadCodeParams,
+		signal: AbortSignal,
+		_onUpdate: unknown,
+		ctx: { cwd: string },
+	) {
+		const result = await runAscetReadCode(params, { cwd: ctx.cwd, signal, timeoutMs: 90_000 });
+		return {
+			content: [{ type: "text", text: formatAscetReadCodeResult(params, result) }],
+			details: result,
+		};
+	},
+};
+
+const referencesTool = {
+	name: "ascet_references",
+	label: "ASCET references",
+	description: "Read ASCET element references, component references, and bounded reverse references.",
+	promptSnippet: "Inspect references with element_refs, component_refs, or used_by actions.",
+	promptGuidelines: [
+		"Prefer element_refs for a known element before broad component_refs scans.",
+		"Use used_by only with a bounded scopePath and small limit.",
+	],
+	parameters: ascetReferencesParameters,
+	executionMode: "sequential",
+	async execute(
+		_toolCallId: string,
+		params: AscetReferencesParams,
+		signal: AbortSignal,
+		_onUpdate: unknown,
+		ctx: { cwd: string },
+	) {
+		const result = await runAscetReferences(params, { cwd: ctx.cwd, signal, timeoutMs: 90_000 });
+		return {
+			content: [{ type: "text", text: formatAscetReferencesResult(params, result) }],
+			details: result,
+		};
+	},
+};
+
+const compareTool = {
+	name: "ascet_compare",
+	label: "ASCET compare",
+	description: "Compare ASCET components, methods, element specs, project formulas, and state-machine domains.",
+	promptSnippet:
+		"Compare ASCET targets with component_snapshot, method, element_spec, project_formulas, or state_machine_domain.",
+	promptGuidelines: [
+		"Use changesOnly=true for compact results when full unchanged sections are not needed.",
+		"Resolve both sides before comparing ambiguous component or project names.",
+	],
+	parameters: ascetCompareParameters,
+	executionMode: "sequential",
+	async execute(
+		_toolCallId: string,
+		params: AscetCompareParams,
+		signal: AbortSignal,
+		_onUpdate: unknown,
+		ctx: { cwd: string },
+	) {
+		const result = await runAscetCompare(params, { cwd: ctx.cwd, signal, timeoutMs: 90_000 });
+		return {
+			content: [{ type: "text", text: formatAscetCompareResult(params, result) }],
+			details: result,
+		};
+	},
+};
+
+const verifyTool = {
+	name: "ascet_verify",
+	label: "ASCET verify",
+	description: "Verify live ASCET state through canonical readback actions.",
+	promptSnippet: "Verify ASCET readback after writes or when checking live state.",
+	promptGuidelines: [
+		"Use componentPath for class, module, or state-machine readback.",
+		"Use projectPath only when objectKind is project.",
+	],
+	parameters: ascetVerifyParameters,
+	executionMode: "sequential",
+	async execute(
+		_toolCallId: string,
+		params: AscetVerifyParams,
+		signal: AbortSignal,
+		_onUpdate: unknown,
+		ctx: { cwd: string },
+	) {
+		const result = await runAscetVerify(params, { cwd: ctx.cwd, signal, timeoutMs: 60_000 });
+		return {
+			content: [{ type: "text", text: formatAscetVerifyResult(result) }],
+			details: result,
+		};
+	},
+};
+
+const writeTool = {
+	name: "ascet_write",
+	label: "ASCET write",
+	description: "Run a guarded single ASCET write action with canonical preflight and interactive confirmation.",
+	promptSnippet: "Prepare or confirm one ASCET write action such as create, delete, set code, or apply spec.",
+	promptGuidelines: [
+		"By default this tool returns a non-error preflight outcome and does not write.",
+		"Set executeWrite=true only when the user explicitly asks to apply the write; PI still requires confirmation.",
+		"Use verifyReadback=true unless the user explicitly asks to skip readback.",
+	],
+	parameters: ascetWriteParameters,
+	executionMode: "sequential",
+	async execute(
+		_toolCallId: string,
+		params: AscetWriteParams,
+		signal: AbortSignal,
+		_onUpdate: unknown,
+		ctx: AscetToolContext,
+	) {
+		const result = await runAscetWrite(params, { cwd: ctx.cwd, signal, timeoutMs: 120_000 }, ctx);
+		return {
+			content: [{ type: "text", text: formatAscetWriteResult(result) }],
+			details: result.details,
 		};
 	},
 };
@@ -774,35 +1125,61 @@ const batchWriteTool = {
 		const result = await runApprovedAscetBatchWrite(params, { cwd: ctx.cwd, signal, timeoutMs: 120_000 }, ctx);
 		return {
 			content: [{ type: "text", text: formatBatchWriteResult(result) }],
-			details: result,
+			details: { ...result, outcome: createBatchWriteOutcome(result) },
 		};
 	},
 };
 
+const canonicalAscetTools = [
+	statusTool,
+	capabilitiesTool,
+	recoverTool,
+	browseTool,
+	searchTool,
+	resolveTool,
+	inspectTool,
+	readCodeTool,
+	referencesTool,
+	compareTool,
+	writeTool,
+	verifyTool,
+	batchWriteTool,
+] as const;
+
+const legacyAscetTools = [
+	contractCatalogTool,
+	listFoldersTool,
+	listComponentsTool,
+	searchComponentsTool,
+	searchElementsTool,
+	searchOccurrencesTool,
+	resolveComponentTool,
+	readComponentSummaryTool,
+	readComponentChildrenTool,
+	listMethodsTool,
+	readMethodCodeTool,
+	readProjectFormulasTool,
+	listDiagramsTool,
+	readBlockDiagramTool,
+	readElementRefsTool,
+	diffComponentSnapshotTool,
+	verifyReadbackTool,
+	createFolderTool,
+	createComponentTool,
+	createMethodTool,
+	setClassMethodCodeTool,
+] as const;
+
 export default function ascetExtension(pi: AscetExtensionAPI) {
-	pi.registerTool(withAscetRendering(statusTool));
-	pi.registerTool(withAscetRendering(contractCatalogTool));
-	pi.registerTool(withAscetRendering(listFoldersTool));
-	pi.registerTool(withAscetRendering(listComponentsTool));
-	pi.registerTool(withAscetRendering(searchComponentsTool));
-	pi.registerTool(withAscetRendering(searchElementsTool));
-	pi.registerTool(withAscetRendering(searchOccurrencesTool));
-	pi.registerTool(withAscetRendering(resolveComponentTool));
-	pi.registerTool(withAscetRendering(readComponentSummaryTool));
-	pi.registerTool(withAscetRendering(readComponentChildrenTool));
-	pi.registerTool(withAscetRendering(listMethodsTool));
-	pi.registerTool(withAscetRendering(readMethodCodeTool));
-	pi.registerTool(withAscetRendering(readProjectFormulasTool));
-	pi.registerTool(withAscetRendering(listDiagramsTool));
-	pi.registerTool(withAscetRendering(readBlockDiagramTool));
-	pi.registerTool(withAscetRendering(readElementRefsTool));
-	pi.registerTool(withAscetRendering(diffComponentSnapshotTool));
-	pi.registerTool(withAscetRendering(verifyReadbackTool));
-	pi.registerTool(withAscetRendering(createFolderTool));
-	pi.registerTool(withAscetRendering(createComponentTool));
-	pi.registerTool(withAscetRendering(createMethodTool));
-	pi.registerTool(withAscetRendering(setClassMethodCodeTool));
-	pi.registerTool(withAscetRendering(batchWriteTool));
+	for (const [index, tool] of canonicalAscetTools.entries()) {
+		if (tool.name !== canonicalAscetToolNames[index]) {
+			throw new Error(`ASCET canonical tool order mismatch: ${tool.name}`);
+		}
+		pi.registerTool(withAscetRendering(tool));
+	}
+	for (const tool of legacyAscetTools) {
+		pi.registerTool(withAscetRendering(tool));
+	}
 
 	pi.registerCommand("ascet-status", {
 		description: "Show ASCET CLI and contract path diagnostics",

@@ -1,15 +1,35 @@
+import { existsSync } from "node:fs";
+import { mkdtemp, readFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { Value } from "typebox/value";
 import { describe, expect, it } from "vitest";
-import { buildBatchWriteArgs, runApprovedAscetBatchWrite } from "../../ascet-extension/src/batch-write.ts";
+import { buildApplyElementSpecArgs } from "../../ascet-extension/src/apply-element-spec.ts";
+import { buildApplyProjectFormulaArgs } from "../../ascet-extension/src/apply-project-formula.ts";
+import {
+	ascetBatchWriteParameters,
+	buildBatchWriteArgs,
+	createBatchWriteOutcome,
+	runApprovedAscetBatchWrite,
+} from "../../ascet-extension/src/batch-write.ts";
+import { withInlineCodeFile } from "../../ascet-extension/src/core/temp-files.ts";
 import {
 	buildCreateComponentArgs,
 	runApprovedAscetCreateComponent,
 } from "../../ascet-extension/src/create-component.ts";
 import { buildCreateFolderArgs, runApprovedAscetCreateFolder } from "../../ascet-extension/src/create-folder.ts";
 import { buildCreateMethodArgs, runApprovedAscetCreateMethod } from "../../ascet-extension/src/create-method.ts";
+import { buildDeleteComponentArgs } from "../../ascet-extension/src/delete-component.ts";
+import { buildDeleteFolderArgs } from "../../ascet-extension/src/delete-folder.ts";
+import { buildDeleteMethodArgs } from "../../ascet-extension/src/delete-method.ts";
 import {
 	buildSetClassMethodCodeArgs,
 	runApprovedAscetSetClassMethodCode,
 } from "../../ascet-extension/src/set-class-method-code.ts";
+import { buildSetMethodCodeArgs } from "../../ascet-extension/src/set-method-code.ts";
+import { buildSetModuleCodeArgs } from "../../ascet-extension/src/set-module-code.ts";
+import { buildSetStateMachineCodeArgs } from "../../ascet-extension/src/set-state-machine-code.ts";
+import { runAscetWrite } from "../../ascet-extension/src/tools/write.ts";
 import { requestAscetWriteApproval } from "../../ascet-extension/src/write-policy.ts";
 import { loadAscetExtension, repoRoot } from "./ascet-extension-test-helpers.ts";
 
@@ -86,6 +106,169 @@ describe("ASCET guarded write PI tools", () => {
 		]);
 	});
 
+	it("builds JSON delete, generic set-code, and apply-spec write invocations", () => {
+		expect(
+			buildDeleteComponentArgs({ componentPath: "DEMO/PID", ifMissing: "ignore", verifyReadback: true }),
+		).toEqual(["exec", "delete_component", "DEMO\\PID", "--if-missing", "ignore", "--verify-readback", "--json"]);
+		expect(
+			buildDeleteMethodArgs({
+				componentPath: "DEMO/PID",
+				methodName: "calc",
+				ifMissing: "ignore",
+				verifyReadback: true,
+			}),
+		).toEqual([
+			"exec",
+			"delete_method",
+			"DEMO\\PID",
+			"calc",
+			"--if-missing",
+			"ignore",
+			"--verify-readback",
+			"--json",
+		]);
+		expect(buildDeleteFolderArgs({ folderPath: "DEMO/tmp", ifMissing: "ignore", verifyReadback: true })).toEqual([
+			"exec",
+			"delete_folder",
+			"DEMO\\tmp",
+			"--if-missing",
+			"ignore",
+			"--verify-readback",
+			"--json",
+		]);
+		expect(
+			buildSetMethodCodeArgs({
+				componentPath: "DEMO/PID",
+				methodName: "calc",
+				codeFile: "E:\\tmp\\calc.c",
+				verifyReadback: true,
+			}),
+		).toEqual(["exec", "set_method_code", "DEMO\\PID", "calc", "E:\\tmp\\calc.c", "--verify-readback", "--json"]);
+		expect(
+			buildSetModuleCodeArgs({
+				modulePath: "DEMO/Module",
+				operation: "set-method",
+				methodName: "calc",
+				codeFile: "E:\\tmp\\calc.c",
+				verifyReadback: true,
+			}),
+		).toEqual([
+			"exec",
+			"set_module_code",
+			"DEMO\\Module",
+			"set-method",
+			"calc",
+			"E:\\tmp\\calc.c",
+			"--verify-readback",
+			"--json",
+		]);
+		expect(
+			buildSetStateMachineCodeArgs({
+				stateMachinePath: "DEMO/SM",
+				operation: "set-transition-action-esdl",
+				stateName: "Run",
+				sourceState: "Idle",
+				targetState: "Run",
+				priority: 1,
+				methodName: "act",
+				codeFile: "E:\\tmp\\act.esdl",
+				verifyReadback: true,
+			}),
+		).toEqual([
+			"exec",
+			"set_state_machine_code",
+			"DEMO\\SM",
+			"set-transition-action-esdl",
+			"Run",
+			"Idle",
+			"Run",
+			"1",
+			"act",
+			"E:\\tmp\\act.esdl",
+			"--verify-readback",
+			"--json",
+		]);
+		expect(
+			buildApplyElementSpecArgs({
+				componentPath: "DEMO/PID",
+				specFile: "E:\\tmp\\element-spec.json",
+				projectPath: "DEMO/Project",
+				mode: "restore",
+				deleteMissing: true,
+				recreateIncompatible: true,
+				verifyReadback: true,
+			}),
+		).toEqual([
+			"exec",
+			"apply_element_spec",
+			"DEMO\\PID",
+			"E:\\tmp\\element-spec.json",
+			"--project-path",
+			"DEMO\\Project",
+			"--mode",
+			"restore",
+			"--delete-missing",
+			"--recreate-incompatible",
+			"--verify-readback",
+			"--json",
+		]);
+		expect(
+			buildApplyProjectFormulaArgs({
+				projectPath: "DEMO/Project",
+				specFile: "E:\\tmp\\formula-spec.json",
+				mode: "restore",
+				deleteMissing: true,
+				verifyReadback: true,
+			}),
+		).toEqual([
+			"exec",
+			"apply_project_formula",
+			"DEMO\\Project",
+			"E:\\tmp\\formula-spec.json",
+			"--mode",
+			"restore",
+			"--delete-missing",
+			"--verify-readback",
+			"--json",
+		]);
+	});
+
+	it("represents canonical ascet_write preflight as a non-error outcome", async () => {
+		const result = await runAscetWrite(
+			{ action: "create_folder", folderPath: "DEMO\\X", executeWrite: false },
+			{ cwd: repoRoot },
+			{ hasUI: true, ui: { confirm: async () => true } },
+		);
+
+		expect(result.details.outcome.status).toBe("preflight");
+		expect(result.details.error).toBeUndefined();
+	});
+
+	it("cleans up inline code temp files on success and failure", async () => {
+		const tempRoot = await mkdtemp(join(tmpdir(), "pi-ascet-inline-"));
+		let successPath = "";
+		let failurePath = "";
+
+		const success = await withInlineCodeFile({ code: "x = 1;", prefix: "calc", tempRoot }, async (codeFile) => {
+			successPath = codeFile;
+			expect(await readFile(codeFile, "utf8")).toBe("x = 1;");
+			return "ok";
+		});
+
+		await expect(
+			withInlineCodeFile({ code: "x = 2;", prefix: "calc", tempRoot }, async (codeFile) => {
+				failurePath = codeFile;
+				throw new Error("boom");
+			}),
+		).rejects.toThrow("boom");
+
+		expect(success).toBe("ok");
+		expect(successPath).not.toBe("");
+		expect(failurePath).not.toBe("");
+		expect(existsSync(successPath)).toBe(false);
+		expect(existsSync(failurePath)).toBe(false);
+	});
+
 	it("builds batch write invocation and stdin payload", async () => {
 		expect(
 			buildBatchWriteArgs({
@@ -116,6 +299,64 @@ describe("ASCET guarded write PI tools", () => {
 				},
 			],
 		});
+	});
+
+	it("uses operation-specific batch write schemas", () => {
+		expect(
+			Value.Check(ascetBatchWriteParameters, {
+				operation: "batch_create_folder",
+				requests: [{ folderPath: "DEMO\\Batch", ifExists: "ignore", verifyReadback: true }],
+			}),
+		).toBe(true);
+		expect(
+			Value.Check(ascetBatchWriteParameters, {
+				operation: "batch_create_folder",
+				requests: [{ componentPath: "DEMO\\Wrong" }],
+			}),
+		).toBe(false);
+		expect(
+			Value.Check(ascetBatchWriteParameters, {
+				operation: "batch_set_method_code",
+				requests: [{ componentPath: "DEMO\\PID", codeFile: "E:\\tmp\\calc.c" }],
+			}),
+		).toBe(false);
+	});
+
+	it("represents partial batch completion as a first-class outcome", async () => {
+		const result = await runApprovedAscetBatchWrite(
+			{
+				operation: "batch_create_folder",
+				requests: [{ folderPath: "DEMO\\__pi_write_smoke__", ifExists: "ignore", verifyReadback: true }],
+				executeWrite: true,
+			},
+			{
+				cwd: repoRoot,
+				executeCli: async (request) => ({
+					exitCode: 2,
+					stdout: JSON.stringify({
+						ok: false,
+						results: [
+							{ id: "req-1", ok: true },
+							{ id: "req-2", ok: false, error: { code: "target_not_found" } },
+						],
+					}),
+					stderr: "",
+					timedOut: false,
+					request,
+				}),
+			},
+			{
+				hasUI: true,
+				ui: {
+					confirm: async () => true,
+				},
+			},
+		);
+		const outcome = createBatchWriteOutcome(result);
+
+		expect(result.ok).toBe(true);
+		expect(outcome.status).toBe("partial");
+		expect(outcome).toMatchObject({ failures: [{ id: "req-2", ok: false }] });
 	});
 
 	it("requires executeWrite before asking for interactive confirmation", async () => {

@@ -1,0 +1,74 @@
+import { Type } from "typebox";
+import { type AscetCliJsonResult, runAscetCliJson } from "./cli.ts";
+import { normalizeAscetPath } from "./core/path.ts";
+import {
+	type AscetWriteControlParams,
+	appendVerifyAndJson,
+	createWriteSummary,
+	formatWriteOperationResult,
+	ifMissingSchema,
+	type RunAscetWriteOperationOptions,
+	runApprovedAscetWriteOperation,
+} from "./write-common.ts";
+import type { AscetWriteApprovalContext } from "./write-policy.ts";
+
+export interface AscetDeleteMethodParams extends AscetWriteControlParams {
+	componentPath: string;
+	methodName: string;
+	ifMissing?: "fail" | "ignore";
+}
+
+export type RunAscetDeleteMethodOptions = RunAscetWriteOperationOptions;
+export type AscetDeleteMethodResult = AscetCliJsonResult;
+
+export const ascetDeleteMethodParameters = Type.Object({
+	componentPath: Type.String({ description: "ASCET component path.", minLength: 1 }),
+	methodName: Type.String({ description: "ASCET method name to delete.", minLength: 1 }),
+	ifMissing: ifMissingSchema,
+	verifyReadback: Type.Optional(Type.Boolean({ description: "Ask the ASCET CLI to verify readback after writing." })),
+	executeWrite: Type.Optional(Type.Boolean({ description: "When true, PI still requires interactive confirmation." })),
+});
+
+export function buildDeleteMethodArgs(params: AscetDeleteMethodParams): string[] {
+	const args = ["exec", "delete_method", normalizeAscetPath(params.componentPath), params.methodName];
+	if (params.ifMissing) {
+		args.push("--if-missing", params.ifMissing);
+	}
+	return appendVerifyAndJson(args, params.verifyReadback);
+}
+
+export function createDeleteMethodSummary(params: AscetDeleteMethodParams): string {
+	return createWriteSummary("delete_method", {
+		componentPath: params.componentPath,
+		methodName: params.methodName,
+		ifMissing: params.ifMissing ?? "fail",
+		verifyReadback: params.verifyReadback === true,
+	});
+}
+
+export async function runAscetDeleteMethod(
+	params: AscetDeleteMethodParams,
+	options: RunAscetDeleteMethodOptions,
+): Promise<AscetDeleteMethodResult> {
+	return runAscetCliJson(buildDeleteMethodArgs(params), options);
+}
+
+export async function runApprovedAscetDeleteMethod(
+	params: AscetDeleteMethodParams,
+	options: RunAscetDeleteMethodOptions,
+	ctx: AscetWriteApprovalContext,
+): Promise<AscetDeleteMethodResult> {
+	return runApprovedAscetWriteOperation(
+		"delete_method",
+		params,
+		options,
+		ctx,
+		buildDeleteMethodArgs,
+		createDeleteMethodSummary(params),
+		"Confirm ASCET method deletion",
+	);
+}
+
+export function formatDeleteMethodResult(result: AscetDeleteMethodResult): string {
+	return formatWriteOperationResult("delete_method", result);
+}

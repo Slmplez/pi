@@ -5,6 +5,9 @@ interface ToolResponse {
 	content: Array<{ type: string; text?: string }>;
 	details: {
 		ok: boolean;
+		outcome?: {
+			status: string;
+		};
 		data?: {
 			result?: Record<string, unknown>;
 		};
@@ -64,47 +67,53 @@ if (!status.details.ok) {
 }
 
 const catalog = await callTool("ascet_contract_catalog", {});
-const folders = await callTool("ascet_list_folders", { rootPath: "DEMO", depth: 1 });
-const components = await callTool("ascet_list_components", { folderPath: "DEMO", limit: 2 });
-const componentSearch = await callTool("ascet_search_components", {
+const capabilities = await callTool("ascet_capabilities", { family: "read", operationQuery: "component_code" });
+const folders = await callTool("ascet_browse", { action: "folders", rootPath: "DEMO", depth: 1 });
+const components = await callTool("ascet_browse", { action: "components", folderPath: "DEMO", limit: 2 });
+const componentSearch = await callTool("ascet_search", {
+	action: "search_components",
 	query: "PID",
 	scopePath: "DEMO",
 	match: "exact",
 	limit: 5,
 });
-const search = await callTool("ascet_search_elements", {
+const search = await callTool("ascet_search", {
+	action: "search_elements",
 	query: "pid_kp",
 	componentPath: "DEMO\\PID",
 	match: "exact",
 	limit: 5,
 });
-const occurrences = await callTool("ascet_search_occurrences", {
+const occurrences = await callTool("ascet_search", {
+	action: "search_occurrences",
 	query: "pid_kp",
 	target: "element",
 	scopePath: "DEMO",
 	match: "exact",
 	limit: 5,
 });
-const resolved = await callTool("ascet_resolve_component", {
+const resolved = await callTool("ascet_resolve", {
+	action: "component",
 	query: "PID",
 	scopePath: "DEMO",
 	match: "exact",
 	limit: 10,
 });
-const summary = await callTool("ascet_read_component_summary", { componentPath: "DEMO\\PID" });
-const children = await callTool("ascet_read_component_children", { componentPath: "DEMO\\PID", group: "methods" });
-const methods = await callTool("ascet_list_methods", { componentPath: "DEMO\\PID" });
-const method = await callTool("ascet_read_method_code", { componentPath: "DEMO\\PID", methodName: "calc" });
-const formulas = await callTool("ascet_read_project_formulas", { projectPath: "DEMO\\Project" });
-const diagrams = await callTool("ascet_list_diagrams", { componentPath: "DEMO\\PID" });
-const blockDiagram = await callTool("ascet_read_block_diagram", { componentPath: "DEMO\\PID", diagramName: "Main" });
-const refs = await callTool("ascet_read_element_refs", { componentPath: "DEMO\\PID", elementName: "pid_kp" });
-const diff = await callTool("ascet_diff_component_snapshot", {
+const summary = await callTool("ascet_inspect", { action: "summary", componentPath: "DEMO\\PID" });
+const children = await callTool("ascet_browse", { action: "children", componentPath: "DEMO\\PID", group: "methods" });
+const methods = await callTool("ascet_browse", { action: "methods", componentPath: "DEMO\\PID" });
+const method = await callTool("ascet_read_code", { action: "method", componentPath: "DEMO\\PID", methodName: "calc" });
+const formulas = await callTool("ascet_inspect", { action: "project_formulas", projectPath: "DEMO\\Project" });
+const diagrams = await callTool("ascet_browse", { action: "diagrams", componentPath: "DEMO\\PID" });
+const blockDiagram = await callTool("ascet_inspect", { action: "block_diagram", componentPath: "DEMO\\PID", diagramName: "Main" });
+const refs = await callTool("ascet_references", { action: "element_refs", componentPath: "DEMO\\PID", elementName: "pid_kp" });
+const diff = await callTool("ascet_compare", {
+	action: "component_snapshot",
 	leftComponentPath: "DEMO\\PID",
 	rightComponentPath: "DEMO\\PID",
 	changesOnly: true,
 });
-const verify = await callTool("ascet_verify_readback", {
+const verify = await callTool("ascet_verify", {
 	action: "readback",
 	objectKind: "class",
 	componentPath: "DEMO\\PID",
@@ -114,32 +123,33 @@ console.log(
 	JSON.stringify(
 		{
 			ok: true,
-			tools: {
-				ascet_status: { mode: status.details.paths.mode, cliPath: status.details.paths.cliPath },
-				ascet_contract_catalog: { counts: catalog.counts, families: catalog.families },
-				ascet_list_folders: { rootPath: folders.rootPath, counts: folders.counts },
-				ascet_list_components: { counts: components.counts },
+				tools: {
+					ascet_status: { mode: status.details.paths.mode, cliPath: status.details.paths.cliPath },
+					ascet_contract_catalog: { counts: catalog.counts, families: catalog.families },
+				ascet_capabilities: { matches: capabilities.matches?.length, totalMatches: capabilities.totalMatches },
+				ascet_browse_folders: { rootPath: folders.rootPath, counts: folders.counts },
+				ascet_browse_components: { counts: components.counts },
 				ascet_search_components: { counts: componentSearch.counts },
 				ascet_search_elements: { counts: search.counts },
 				ascet_search_occurrences: { counts: occurrences.counts },
-				ascet_resolve_component: { component: resolved.component },
-				ascet_read_component_summary: { counts: summary.counts, summary: summary.summary },
-				ascet_read_component_children: { selectedGroup: children.selectedGroup, counts: children.counts },
-				ascet_list_methods: { counts: methods.counts, methods: methods.methods },
-				ascet_read_method_code: { methodName: method.methodName },
-				ascet_read_project_formulas: {
+				ascet_resolve: { component: resolved.component },
+				ascet_inspect_summary: { counts: summary.counts, summary: summary.summary },
+				ascet_browse_children: { selectedGroup: children.selectedGroup, counts: children.counts },
+				ascet_browse_methods: { counts: methods.counts, methods: methods.methods },
+				ascet_read_code: { methodName: method.methodName },
+				ascet_inspect_project_formulas: {
 					projectPath: formulas.ProjectPath ?? formulas.projectPath,
 					formulas: formulas.Formulas?.length ?? formulas.formulas?.length,
 				},
-				ascet_list_diagrams: { items: diagrams.items, filters: diagrams.filters },
-				ascet_read_block_diagram: {
+				ascet_browse_diagrams: { items: diagrams.items, filters: diagrams.filters },
+				ascet_inspect_block_diagram: {
 					diagramName: blockDiagram.DiagramName ?? blockDiagram.diagramName,
 					elements: blockDiagram.Elements?.length ?? blockDiagram.elements?.length,
 					connections: blockDiagram.Connections?.length ?? blockDiagram.connections?.length,
 				},
-				ascet_read_element_refs: { counts: refs.counts, summary: refs.summary },
-				ascet_diff_component_snapshot: { counts: diff.counts },
-				ascet_verify_readback: { counts: verify.counts, summary: verify.summary },
+				ascet_references: { counts: refs.counts, summary: refs.summary },
+				ascet_compare: { counts: diff.counts },
+				ascet_verify: { counts: verify.counts, summary: verify.summary },
 			},
 		},
 		null,

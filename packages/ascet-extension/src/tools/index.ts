@@ -1,0 +1,15 @@
+export const canonicalAscetToolNames = [
+	"ascet_status",
+	"ascet_capabilities",
+	"ascet_recover",
+	"ascet_browse",
+	"ascet_search",
+	"ascet_resolve",
+	"ascet_inspect",
+	"ascet_read_code",
+	"ascet_references",
+	"ascet_compare",
+	"ascet_write",
+	"ascet_verify",
+	"ascet_batch_write",
+] as const;
