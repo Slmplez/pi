@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { runAscetBrowse } from "../../ascet-extension/src/tools/browse.ts";
 import { runAscetCapabilities } from "../../ascet-extension/src/tools/capabilities.ts";
@@ -26,6 +28,22 @@ const CANONICAL_ASCET_TOOLS = [
 	"ascet_batch_write",
 ] as const;
 
+const CANONICAL_ASCET_TOOL_MODULES = [
+	["ascet_status", "status"],
+	["ascet_capabilities", "capabilities"],
+	["ascet_recover", "recover"],
+	["ascet_browse", "browse"],
+	["ascet_search", "search"],
+	["ascet_resolve", "resolve"],
+	["ascet_inspect", "inspect"],
+	["ascet_read_code", "read-code"],
+	["ascet_references", "references"],
+	["ascet_compare", "compare"],
+	["ascet_write", "write"],
+	["ascet_verify", "verify"],
+	["ascet_batch_write", "batch-write"],
+] as const;
+
 describe("ASCET canonical PI tools", () => {
 	it("registers the Copilot-aligned ASCET tool surface as sequential", async () => {
 		const ascetExtension = await loadAscetExtension();
@@ -35,6 +53,20 @@ describe("ASCET canonical PI tools", () => {
 				name,
 				executionMode: "sequential",
 			});
+			const definition = ascetExtension?.tools.get(name)?.definition;
+			expect(definition?.promptSnippet).toBeTruthy();
+			expect(definition?.promptGuidelines?.length).toBeGreaterThan(0);
+			expect(definition?.renderCall).toEqual(expect.any(Function));
+			expect(definition?.renderResult).toEqual(expect.any(Function));
+		}
+	});
+
+	it("keeps canonical tool prompt and UI modules colocated with each tool", () => {
+		for (const [_name, moduleName] of CANONICAL_ASCET_TOOL_MODULES) {
+			const toolDir = join(repoRoot, "packages/ascet-extension/src/tools", moduleName);
+			expect(existsSync(join(toolDir, "index.ts"))).toBe(true);
+			expect(existsSync(join(toolDir, "prompt.ts"))).toBe(true);
+			expect(existsSync(join(toolDir, "ui.ts"))).toBe(true);
 		}
 	});
 
