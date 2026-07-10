@@ -50,43 +50,23 @@ export interface RunAscetSearchOptions {
 	executeCli?: (request: AscetCliRequest) => Promise<AscetCliExecutionResult>;
 }
 
-export const ascetSearchParameters = Type.Union([
-	Type.Object({
-		action: Type.Literal("search_components"),
-		query: Type.String({ minLength: 1 }),
-		scopePath: Type.Optional(Type.String()),
-		kind: Type.Optional(Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")])),
-		match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("glob"), Type.Literal("contains")])),
-		limit: Type.Optional(Type.Number({ minimum: 1, maximum: 200 })),
-		cursor: Type.Optional(Type.String()),
-	}),
-	Type.Object({
-		action: Type.Literal("resolve_component"),
-		query: Type.String({ minLength: 1 }),
-		scopePath: Type.Optional(Type.String()),
-		kind: Type.Optional(Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")])),
-		match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("glob"), Type.Literal("contains")])),
-		limit: Type.Optional(Type.Number({ minimum: 1, maximum: 200 })),
-	}),
-	Type.Object({
-		action: Type.Literal("search_elements"),
-		query: Type.String({ minLength: 1 }),
-		componentPath: Type.Optional(Type.String()),
-		group: Type.Optional(Type.String()),
-		match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("glob"), Type.Literal("contains")])),
-		limit: Type.Optional(Type.Number({ minimum: 1, maximum: 200 })),
-		cursor: Type.Optional(Type.String()),
-	}),
-	Type.Object({
-		action: Type.Literal("search_occurrences"),
-		query: Type.String({ minLength: 1 }),
-		target: Type.Union([Type.Literal("component"), Type.Literal("element"), Type.Literal("code")]),
-		scopePath: Type.Optional(Type.String()),
-		match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("glob"), Type.Literal("contains")])),
-		limit: Type.Optional(Type.Number({ minimum: 1, maximum: 200 })),
-		cursor: Type.Optional(Type.String()),
-	}),
-]);
+export const ascetSearchParameters = Type.Object({
+	action: Type.Union([
+		Type.Literal("search_components"),
+		Type.Literal("resolve_component"),
+		Type.Literal("search_elements"),
+		Type.Literal("search_occurrences"),
+	]),
+	query: Type.String({ minLength: 1 }),
+	scopePath: Type.Optional(Type.String()),
+	componentPath: Type.Optional(Type.String()),
+	group: Type.Optional(Type.String()),
+	target: Type.Optional(Type.Union([Type.Literal("component"), Type.Literal("element"), Type.Literal("code")])),
+	kind: Type.Optional(Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")])),
+	match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("glob"), Type.Literal("contains")])),
+	limit: Type.Optional(Type.Number({ minimum: 1, maximum: 200 })),
+	cursor: Type.Optional(Type.String()),
+});
 
 export async function runAscetSearch(
 	params: AscetSearchParams,

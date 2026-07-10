@@ -148,80 +148,36 @@ const deleteFolderRequest = Type.Object(
 	{ additionalProperties: false },
 );
 
-export const ascetBatchWriteParameters = Type.Union([
-	Type.Object(
-		{
-			operation: Type.Literal("batch_set_method_code"),
-			requests: Type.Array(setMethodCodeRequest, batchRequestArrayOptions),
-			...batchCommonOptions,
-		},
-		{ additionalProperties: false },
-	),
-	Type.Object(
-		{
-			operation: Type.Literal("batch_set_element_spec"),
-			requests: Type.Array(applyElementSpecRequest, batchRequestArrayOptions),
-			...batchCommonOptions,
-		},
-		{ additionalProperties: false },
-	),
-	Type.Object(
-		{
-			operation: Type.Literal("batch_create_component"),
-			requests: Type.Array(createComponentRequest, batchRequestArrayOptions),
-			...batchCommonOptions,
-		},
-		{ additionalProperties: false },
-	),
-	Type.Object(
-		{
-			operation: Type.Literal("batch_create_method"),
-			requests: Type.Array(createMethodRequest, batchRequestArrayOptions),
-			...batchCommonOptions,
-		},
-		{ additionalProperties: false },
-	),
-	Type.Object(
-		{
-			operation: Type.Literal("batch_set_project_formula"),
-			requests: Type.Array(applyProjectFormulaRequest, batchRequestArrayOptions),
-			...batchCommonOptions,
-		},
-		{ additionalProperties: false },
-	),
-	Type.Object(
-		{
-			operation: Type.Literal("batch_delete_component"),
-			requests: Type.Array(deleteComponentRequest, batchRequestArrayOptions),
-			...batchCommonOptions,
-		},
-		{ additionalProperties: false },
-	),
-	Type.Object(
-		{
-			operation: Type.Literal("batch_delete_method"),
-			requests: Type.Array(deleteMethodRequest, batchRequestArrayOptions),
-			...batchCommonOptions,
-		},
-		{ additionalProperties: false },
-	),
-	Type.Object(
-		{
-			operation: Type.Literal("batch_create_folder"),
-			requests: Type.Array(createFolderRequest, batchRequestArrayOptions),
-			...batchCommonOptions,
-		},
-		{ additionalProperties: false },
-	),
-	Type.Object(
-		{
-			operation: Type.Literal("batch_delete_folder"),
-			requests: Type.Array(deleteFolderRequest, batchRequestArrayOptions),
-			...batchCommonOptions,
-		},
-		{ additionalProperties: false },
-	),
+const batchRequestSchema = Type.Union([
+	setMethodCodeRequest,
+	applyElementSpecRequest,
+	createComponentRequest,
+	createMethodRequest,
+	applyProjectFormulaRequest,
+	deleteComponentRequest,
+	deleteMethodRequest,
+	createFolderRequest,
+	deleteFolderRequest,
 ]);
+
+export const ascetBatchWriteParameters = Type.Object(
+	{
+		operation: Type.Union([
+			Type.Literal("batch_set_method_code"),
+			Type.Literal("batch_set_element_spec"),
+			Type.Literal("batch_create_component"),
+			Type.Literal("batch_create_method"),
+			Type.Literal("batch_set_project_formula"),
+			Type.Literal("batch_delete_component"),
+			Type.Literal("batch_delete_method"),
+			Type.Literal("batch_create_folder"),
+			Type.Literal("batch_delete_folder"),
+		]),
+		requests: Type.Array(batchRequestSchema, batchRequestArrayOptions),
+		...batchCommonOptions,
+	},
+	{ additionalProperties: false },
+);
 
 const cliOperationByToolOperation: Record<AscetBatchWriteOperation, string> = {
 	batch_set_method_code: "set_method_code",

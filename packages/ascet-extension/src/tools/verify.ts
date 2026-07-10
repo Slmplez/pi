@@ -14,18 +14,17 @@ export interface RunAscetVerifyOptions {
 	executeCli?: (request: AscetCliRequest) => Promise<AscetCliExecutionResult>;
 }
 
-export const ascetVerifyParameters = Type.Union([
-	Type.Object({
-		action: Type.Literal("readback"),
-		objectKind: Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")]),
-		componentPath: Type.String({ minLength: 1 }),
-	}),
-	Type.Object({
-		action: Type.Literal("readback"),
-		objectKind: Type.Literal("project"),
-		projectPath: Type.String({ minLength: 1 }),
-	}),
-]);
+export const ascetVerifyParameters = Type.Object({
+	action: Type.Literal("readback"),
+	objectKind: Type.Union([
+		Type.Literal("class"),
+		Type.Literal("module"),
+		Type.Literal("statemachine"),
+		Type.Literal("project"),
+	]),
+	componentPath: Type.Optional(Type.String({ minLength: 1 })),
+	projectPath: Type.Optional(Type.String({ minLength: 1 })),
+});
 
 export async function runAscetVerify(
 	params: AscetVerifyParams,

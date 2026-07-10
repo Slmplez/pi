@@ -25,52 +25,39 @@ export type AscetExploreParams =
 			group?: "methods" | "elements" | "variables" | "diagrams" | "all";
 	  };
 
-export const ascetExploreParameters = Type.Union([
-	Type.Object({
-		action: Type.Literal("list_components"),
-		folderPath: Type.String({ minLength: 1 }),
-		kind: Type.Optional(
-			Type.Union([
-				Type.Literal("class"),
-				Type.Literal("module"),
-				Type.Literal("statemachine"),
-				Type.Literal("folder"),
-				Type.Literal("all"),
-			]),
-		),
-		query: Type.Optional(Type.String()),
-		limit: Type.Optional(Type.Number({ minimum: 1, maximum: 500 })),
-		recursive: Type.Optional(Type.Boolean()),
-	}),
-	Type.Object({
-		action: Type.Literal("list_diagrams"),
-		componentPath: Type.String({ minLength: 1 }),
-		diagramKind: Type.Optional(Type.String()),
-	}),
-	Type.Object({
-		action: Type.Literal("resolve_target"),
-		query: Type.String({ minLength: 1 }),
-		scopePath: Type.Optional(Type.String()),
-		kind: Type.Optional(Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")])),
-		match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("glob"), Type.Literal("contains")])),
-		limit: Type.Optional(Type.Number({ minimum: 1, maximum: 200 })),
-	}),
-	Type.Object({
-		action: Type.Literal("inspect_target"),
-		componentPath: Type.String({ minLength: 1 }),
-		detailLevel: Type.Optional(Type.Union([Type.Literal("summary"), Type.Literal("detailed")])),
-	}),
-	Type.Object({
-		action: Type.Literal("preview_children"),
-		componentPath: Type.String({ minLength: 1 }),
-		group: Type.Optional(
-			Type.Union([
-				Type.Literal("methods"),
-				Type.Literal("elements"),
-				Type.Literal("variables"),
-				Type.Literal("diagrams"),
-				Type.Literal("all"),
-			]),
-		),
-	}),
-]);
+export const ascetExploreParameters = Type.Object({
+	action: Type.Union([
+		Type.Literal("list_components"),
+		Type.Literal("list_diagrams"),
+		Type.Literal("resolve_target"),
+		Type.Literal("inspect_target"),
+		Type.Literal("preview_children"),
+	]),
+	folderPath: Type.Optional(Type.String({ minLength: 1 })),
+	componentPath: Type.Optional(Type.String({ minLength: 1 })),
+	query: Type.Optional(Type.String({ minLength: 1 })),
+	scopePath: Type.Optional(Type.String()),
+	kind: Type.Optional(
+		Type.Union([
+			Type.Literal("class"),
+			Type.Literal("module"),
+			Type.Literal("statemachine"),
+			Type.Literal("folder"),
+			Type.Literal("all"),
+		]),
+	),
+	match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("glob"), Type.Literal("contains")])),
+	limit: Type.Optional(Type.Number({ minimum: 1, maximum: 500 })),
+	recursive: Type.Optional(Type.Boolean()),
+	diagramKind: Type.Optional(Type.String()),
+	detailLevel: Type.Optional(Type.Union([Type.Literal("summary"), Type.Literal("detailed")])),
+	group: Type.Optional(
+		Type.Union([
+			Type.Literal("methods"),
+			Type.Literal("elements"),
+			Type.Literal("variables"),
+			Type.Literal("diagrams"),
+			Type.Literal("all"),
+		]),
+	),
+});

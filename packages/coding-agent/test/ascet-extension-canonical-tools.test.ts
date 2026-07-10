@@ -89,6 +89,15 @@ describe("ASCET canonical PI tools", () => {
 		}
 	});
 
+	it("exposes OpenAI-compatible object schemas for every canonical tool", async () => {
+		const ascetExtension = await loadAscetExtension();
+
+		for (const name of CANONICAL_ASCET_TOOLS) {
+			const definition = ascetExtension?.tools.get(name)?.definition as { parameters?: { type?: unknown } } | undefined;
+			expect(definition?.parameters?.type, name).toBe("object");
+		}
+	});
+
 	it("does not register old fine-grained ASCET tools as legacy aliases", async () => {
 		const ascetExtension = await loadAscetExtension();
 
@@ -317,7 +326,40 @@ describe("ASCET canonical PI tools", () => {
 	});
 
 	it("limits recover to extension-owned safe actions", async () => {
-		const status = await runAscetRecover({ action: "status" }, { cwd: repoRoot });
+		const status = await runAscetRecover(
+			{ action: "status" },
+			{
+				cwd: repoRoot,
+				createStatusReport: async () =>
+					({
+						ok: true,
+						installationOk: true,
+						runtimeOk: true,
+						paths: {
+							mode: "bundle",
+							extensionRoot: repoRoot,
+							cliPath: "AscetCli.exe",
+							contractsRoot: "contracts",
+							catalogPath: "contracts/cli-catalog.json",
+						},
+						checks: {
+							cliExists: true,
+							contractsRootExists: true,
+							catalogExists: true,
+						},
+						runtime: {
+							ok: true,
+							commandId: "list_folders",
+							description: "probe",
+							exitCode: 0,
+							timedOut: false,
+							stdout: "{}",
+							stderr: "",
+						},
+						summary: "ASCET status: ready",
+					}) as Awaited<ReturnType<NonNullable<Parameters<typeof runAscetRecover>[1]["createStatusReport"]>>>,
+			},
+		);
 		const cleanup = await runAscetRecover({ action: "clear_extension_temp" }, { cwd: repoRoot });
 		const schedulerStatus = await runAscetRecover({ action: "scheduler_status" }, { cwd: repoRoot });
 

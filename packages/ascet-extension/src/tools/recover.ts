@@ -4,7 +4,7 @@ import { resolve } from "node:path";
 import { Type } from "typebox";
 import { clearStaleAscetCliLock } from "../scheduler/cli-lock.ts";
 import { createAscetSchedulerStatusReport } from "../scheduler/status.ts";
-import { type AscetStatusReport, createAscetStatusReport } from "../status.ts";
+import { type AscetRuntimeStatusReport, createAscetRuntimeStatusReport } from "../status-runtime.ts";
 
 export type AscetRecoverParams =
 	| { action: "status" }
@@ -17,13 +17,14 @@ export interface RunAscetRecoverOptions {
 	cwd: string;
 	env?: Record<string, string | undefined>;
 	tempRoot?: string;
+	createStatusReport?: (options: RunAscetRecoverOptions) => Promise<AscetRuntimeStatusReport>;
 }
 
 export interface AscetRecoverResult {
 	ok: boolean;
 	action: AscetRecoverParams["action"];
 	data: {
-		status?: AscetStatusReport;
+		status?: AscetRuntimeStatusReport;
 		schedulerStatus?: Awaited<ReturnType<typeof createAscetSchedulerStatusReport>>;
 		tempRoot?: string;
 		cleared?: boolean;
@@ -31,13 +32,15 @@ export interface AscetRecoverResult {
 	};
 }
 
-export const ascetRecoverParameters = Type.Union([
-	Type.Object({ action: Type.Literal("status") }),
-	Type.Object({ action: Type.Literal("clear_extension_temp") }),
-	Type.Object({ action: Type.Literal("scheduler_status") }),
-	Type.Object({ action: Type.Literal("scheduler_recover") }),
-	Type.Object({ action: Type.Literal("clear_stale_cli_lock") }),
-]);
+export const ascetRecoverParameters = Type.Object({
+	action: Type.Union([
+		Type.Literal("status"),
+		Type.Literal("clear_extension_temp"),
+		Type.Literal("scheduler_status"),
+		Type.Literal("scheduler_recover"),
+		Type.Literal("clear_stale_cli_lock"),
+	]),
+});
 
 function getExtensionTempRoot(options: RunAscetRecoverOptions): string {
 	return options.tempRoot ?? resolve(tmpdir(), "pi-ascet-extension");
@@ -52,7 +55,7 @@ export async function runAscetRecover(
 			ok: true,
 			action: params.action,
 			data: {
-				status: createAscetStatusReport(options),
+				status: await (options.createStatusReport ?? createAscetRuntimeStatusReport)(options),
 			},
 		};
 	}

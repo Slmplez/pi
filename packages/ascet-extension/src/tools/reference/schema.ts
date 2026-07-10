@@ -11,23 +11,13 @@ export type AscetReferenceParams =
 	  }
 	| { action: "element_refs"; componentPath: string; elementName: string };
 
-export const ascetReferenceParameters = Type.Union([
-	Type.Object({
-		action: Type.Literal("component_refs"),
-		componentPath: Type.String({ minLength: 1 }),
-		direction: Type.Optional(Type.Union([Type.Literal("out"), Type.Literal("both")])),
-		depth: Type.Optional(Type.Number({ minimum: 1 })),
-	}),
-	Type.Object({
-		action: Type.Literal("used_by"),
-		componentPath: Type.String({ minLength: 1 }),
-		scopePath: Type.String({ minLength: 1 }),
-		kind: Type.Optional(Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")])),
-		limit: Type.Optional(Type.Number({ minimum: 1 })),
-	}),
-	Type.Object({
-		action: Type.Literal("element_refs"),
-		componentPath: Type.String({ minLength: 1 }),
-		elementName: Type.String({ minLength: 1 }),
-	}),
-]);
+export const ascetReferenceParameters = Type.Object({
+	action: Type.Union([Type.Literal("component_refs"), Type.Literal("used_by"), Type.Literal("element_refs")]),
+	componentPath: Type.String({ minLength: 1 }),
+	scopePath: Type.Optional(Type.String({ minLength: 1 })),
+	elementName: Type.Optional(Type.String({ minLength: 1 })),
+	direction: Type.Optional(Type.Union([Type.Literal("out"), Type.Literal("both")])),
+	depth: Type.Optional(Type.Number({ minimum: 1 })),
+	kind: Type.Optional(Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")])),
+	limit: Type.Optional(Type.Number({ minimum: 1 })),
+});
