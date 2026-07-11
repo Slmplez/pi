@@ -14,7 +14,13 @@ export type AscetReadParams =
 			implementationMode?: "list" | "default" | "class-impl" | "impl";
 			implementationName?: string;
 	  }
-	| { action: "read_block_diagram"; componentPath: string; diagramName?: string; detailLevel?: "summary" | "full" }
+	| {
+			action: "read_block_diagram";
+			componentPath: string;
+			diagramName?: string;
+			detailLevel?: "summary" | "full";
+			timeoutMs?: number;
+	  }
 	| {
 			action: "read_state_machine_flow";
 			componentPath: string;
@@ -42,4 +48,10 @@ export const ascetReadParameters = Type.Object({
 	diagramName: Type.Optional(Type.String()),
 	detailLevel: Type.Optional(Type.Union([Type.Literal("summary"), Type.Literal("full")])),
 	traceDepth: Type.Optional(Type.Number({ minimum: 0 })),
+	timeoutMs: Type.Optional(
+		Type.Number({
+			description: "Optional read_block_diagram execution timeout in milliseconds. Defaults to 60000.",
+			minimum: 1_000,
+		}),
+	),
 });

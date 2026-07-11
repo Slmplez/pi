@@ -123,6 +123,46 @@ describe("ASCET read-only PI tools", () => {
 		expect(resultLines?.[0]).toContain("Class PID has 0 references and 1 diagram");
 	});
 
+	it("uses a 60s default timeout and accepts timeoutMs for read_block_diagram", async () => {
+		const ascetExtension = await loadAscetExtension();
+		const tool = ascetExtension?.tools.get("ascet_read")?.definition;
+		const executeReadBlockDiagram = async (params: Record<string, unknown>) =>
+			tool?.execute(
+				"test-read-block-diagram-timeout",
+				params,
+				new AbortController().signal,
+				undefined,
+				{
+					cwd: repoRoot,
+					executeCli: async (request) => ({
+						exitCode: 0,
+						stdout: JSON.stringify({
+							ok: true,
+							result: { DiagramName: "Main", Elements: [{ id: "1" }], Connections: [] },
+						}),
+						stderr: "",
+						timedOut: false,
+						request,
+					}),
+				},
+			);
+
+		const defaultResult = await executeReadBlockDiagram({
+			action: "read_block_diagram",
+			componentPath: "DEMO\\BD",
+			diagramName: "Main",
+		});
+		const customResult = await executeReadBlockDiagram({
+			action: "read_block_diagram",
+			componentPath: "DEMO\\BD",
+			diagramName: "Main",
+			timeoutMs: 12_345,
+		});
+
+		expect(defaultResult?.details.diagnostics.request.timeoutMs).toBe(60_000);
+		expect(customResult?.details.diagnostics.request.timeoutMs).toBe(12_345);
+	});
+
 	it("builds JSON list_components CLI invocation", () => {
 		expect(buildListFoldersArgs({ rootPath: "DEMO", depth: 1 })).toEqual([
 			"exec",

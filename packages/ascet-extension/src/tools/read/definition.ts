@@ -19,6 +19,8 @@ interface RunOptions {
 	executeCli?: (request: AscetCliRequest) => Promise<AscetCliExecutionResult>;
 }
 
+const READ_BLOCK_DIAGRAM_DEFAULT_TIMEOUT_MS = 60_000;
+
 async function runAscetRead(params: AscetReadParams, options: RunOptions): Promise<AscetCliJsonResult> {
 	switch (params.action) {
 		case "read":
@@ -43,7 +45,10 @@ async function runAscetRead(params: AscetReadParams, options: RunOptions): Promi
 					componentPath: params.componentPath,
 					diagramName: params.diagramName ?? "Main",
 				},
-				options,
+				{
+					...options,
+					timeoutMs: normalizeTimeoutMs(params.timeoutMs) ?? READ_BLOCK_DIAGRAM_DEFAULT_TIMEOUT_MS,
+				},
 			);
 		case "read_state_machine_flow":
 			return runAscetReadStateMachineFlow(
@@ -54,6 +59,13 @@ async function runAscetRead(params: AscetReadParams, options: RunOptions): Promi
 				options,
 			);
 	}
+}
+
+function normalizeTimeoutMs(timeoutMs: number | undefined): number | undefined {
+	if (timeoutMs === undefined || !Number.isFinite(timeoutMs) || timeoutMs <= 0) {
+		return undefined;
+	}
+	return Math.trunc(timeoutMs);
 }
 
 function formatAscetReadResult(params: AscetReadParams, result: AscetCliJsonResult): string {
