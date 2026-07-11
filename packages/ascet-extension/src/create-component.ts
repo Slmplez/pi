@@ -29,17 +29,23 @@ export interface RunAscetCreateComponentOptions {
 
 export type AscetCreateComponentResult = AscetCliJsonResult;
 
-export const ascetCreateComponentParameters = Type.Object({
-	componentPath: Type.String({ description: "ASCET component path to create.", minLength: 1 }),
-	kind: Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")]),
-	language: Type.Optional(Type.Union([Type.Literal("ESDL"), Type.Literal("BDE"), Type.Literal("C")])),
-	ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("return-existing")])),
-	verifyReadback: Type.Optional(Type.Boolean({ description: "Ask the ASCET CLI to verify readback after writing." })),
-	rollbackOnFailure: Type.Optional(Type.Boolean({ description: "Ask the ASCET CLI to roll back when supported." })),
-	executeWrite: Type.Optional(
-		Type.Boolean({ description: "Defaults to false. When true, PI still requires interactive confirmation." }),
-	),
-});
+export const ascetCreateComponentParameters = Type.Object(
+	{
+		componentPath: Type.String({ description: "ASCET component path to create.", minLength: 1 }),
+		kind: Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")]),
+		language: Type.Optional(Type.Union([Type.Literal("ESDL"), Type.Literal("BDE"), Type.Literal("C")])),
+		ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("return-existing")])),
+		verifyReadback: Type.Optional(Type.Boolean({ description: "Ask the ASCET CLI to verify readback after writing." })),
+		rollbackOnFailure: Type.Optional(Type.Boolean({ description: "Ask the ASCET CLI to roll back when supported." })),
+		executeWrite: Type.Optional(
+			Type.Boolean({ description: "Defaults to false. When true, PI still requires interactive confirmation." }),
+		),
+	},
+	{
+		description:
+			"Create an ASCET component. Successful newly created results may include expectedDefaultScaffold with verified=false, expected generatedItems, and defaultEntryMethod.",
+	},
+);
 
 export function buildCreateComponentArgs(params: AscetCreateComponentParams): string[] {
 	const args = ["exec", "create_component", params.componentPath, "--kind", params.kind];

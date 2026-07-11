@@ -33,6 +33,7 @@ import { buildSetModuleCodeArgs } from "../../ascet-extension/src/set-module-cod
 import { buildSetStateMachineCodeArgs } from "../../ascet-extension/src/set-state-machine-code.ts";
 import { runAscetWrite } from "../../ascet-extension/src/tools/write.ts";
 import { ascetWriteTool } from "../../ascet-extension/src/tools/write/index.ts";
+import { ascetWritePrompt } from "../../ascet-extension/src/tools/write/prompt.ts";
 import { requestAscetWriteApproval } from "../../ascet-extension/src/write-policy.ts";
 import { loadAscetExtension, repoRoot } from "./ascet-extension-test-helpers.ts";
 
@@ -245,6 +246,58 @@ describe("ASCET guarded write PI tools", () => {
 
 		expect(result.details.outcome.status).toBe("preflight");
 		expect(result.details.error).toBeUndefined();
+	});
+
+	it("preserves create_component expected default scaffold as an unverified hint", async () => {
+		const result = await runAscetWrite(
+			{
+				action: "create_component",
+				componentPath: "DEMO\\ScaffoldProbe",
+				kind: "class",
+				language: "ESDL",
+				executeWrite: true,
+			},
+			{
+				cwd: repoRoot,
+				executeCli: async (request) => ({
+					exitCode: 0,
+					stdout: JSON.stringify({
+						ok: true,
+						result: {
+							payload: {
+								expectedDefaultScaffold: {
+									verified: false,
+									generatedItems: [{ kind: "method", name: "calc" }],
+									defaultEntryMethod: "calc",
+								},
+							},
+						},
+					}),
+					stderr: "",
+					timedOut: false,
+					request,
+				}),
+			},
+			{ hasUI: true, ui: { confirm: async () => true } },
+		);
+
+		expect(result.details.outcome).toMatchObject({
+			status: "ok",
+			data: {
+				result: {
+					payload: {
+						expectedDefaultScaffold: {
+							verified: false,
+							generatedItems: [{ kind: "method", name: "calc" }],
+							defaultEntryMethod: "calc",
+						},
+					},
+				},
+			},
+		});
+		expect(ascetWritePrompt.promptGuidelines).toContain(
+			"After create_component, inspect expectedDefaultScaffold.defaultEntryMethod as an unverified hint for the likely initial method.",
+		);
 	});
 
 	it("returns friendly validation for missing module/state-machine write selectors", async () => {
