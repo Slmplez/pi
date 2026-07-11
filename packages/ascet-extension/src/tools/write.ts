@@ -13,11 +13,16 @@ import { runApprovedAscetDeleteMethod } from "../delete-method.ts";
 import { runApprovedAscetSetClassMethodCode } from "../set-class-method-code.ts";
 import { runApprovedAscetSetMethodCode } from "../set-method-code.ts";
 import { runApprovedAscetSetModuleCode } from "../set-module-code.ts";
-import { runApprovedAscetSetStateMachineCode } from "../set-state-machine-code.ts";
+import {
+	ASCET_SET_STATE_MACHINE_CODE_OPERATIONS,
+	runApprovedAscetSetStateMachineCode,
+} from "../set-state-machine-code.ts";
 import type { RunAscetWriteOperationOptions } from "../write-common.ts";
 import type { AscetWriteApprovalContext } from "../write-policy.ts";
 
 type CodeSource = { code?: string; codeFile?: string };
+const VALID_STATE_MACHINE_OPERATIONS = new Set<string>(ASCET_SET_STATE_MACHINE_CODE_OPERATIONS);
+const VALID_STATE_MACHINE_OPERATIONS_TEXT = ASCET_SET_STATE_MACHINE_CODE_OPERATIONS.join(", ");
 
 export type AscetWriteParams =
 	| { action: "create_folder"; folderPath: string; verifyReadback?: boolean; executeWrite?: boolean }
@@ -285,7 +290,16 @@ function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | 
 			error: {
 				code: "ascet_write_missing_parameter",
 				message:
-					"operation parameter is required for set_state_machine_code. Valid values: set-method, set-state-entry-esdl, set-state-exit-esdl, set-state-static-esdl, bind-state-entry-method, bind-state-exit-method, bind-state-static-method, set-transition-condition-esdl, set-transition-action-esdl, bind-transition-condition-method, bind-transition-action-method, set-start-state.",
+					`operation parameter is required for set_state_machine_code. Valid values: ${VALID_STATE_MACHINE_OPERATIONS_TEXT}.`,
+			},
+		};
+	}
+	if (params.action === "set_state_machine_code" && !VALID_STATE_MACHINE_OPERATIONS.has(params.operation)) {
+		return {
+			status: "error",
+			error: {
+				code: "ascet_write_invalid_operation",
+				message: `Unknown state-machine write operation '${params.operation}'. Valid values: ${VALID_STATE_MACHINE_OPERATIONS_TEXT}.`,
 			},
 		};
 	}

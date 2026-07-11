@@ -265,6 +265,17 @@ describe("ASCET guarded write PI tools", () => {
 			{ cwd: repoRoot },
 			{ cwd: repoRoot },
 		);
+		const invalidStateMachineOperation = await runAscetWrite(
+			{
+				action: "set_state_machine_code",
+				stateMachinePath: "DEMO\\SM",
+				operation: "add_state" as never,
+				code: "x = 1;",
+				executeWrite: false,
+			},
+			{ cwd: repoRoot },
+			{ cwd: repoRoot },
+		);
 		const moduleSectionAlias = await runAscetWrite(
 			{
 				action: "set_module_code",
@@ -280,6 +291,11 @@ describe("ASCET guarded write PI tools", () => {
 		expect(missingModuleSection.details.error?.message).toBe("section parameter is required for set_module_code");
 		expect(missingStateMachineOperation.details.error?.message).toContain(
 			"Valid values: set-method, set-state-entry-esdl",
+		);
+		expect(invalidStateMachineOperation.details.outcome.status).toBe("error");
+		expect(invalidStateMachineOperation.details.error?.code).toBe("ascet_write_invalid_operation");
+		expect(invalidStateMachineOperation.details.error?.message).toContain(
+			"Unknown state-machine write operation 'add_state'",
 		);
 		expect(moduleSectionAlias.details.outcome.status).toBe("preflight");
 		expect(JSON.stringify(moduleSectionAlias.details.outcome)).toContain('"operation":"set-header"');

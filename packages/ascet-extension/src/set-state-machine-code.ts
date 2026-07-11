@@ -25,6 +25,21 @@ export type AscetSetStateMachineCodeOperation =
 	| "bind-transition-action-method"
 	| "set-start-state";
 
+export const ASCET_SET_STATE_MACHINE_CODE_OPERATIONS = [
+	"set-method",
+	"set-state-entry-esdl",
+	"set-state-exit-esdl",
+	"set-state-static-esdl",
+	"bind-state-entry-method",
+	"bind-state-exit-method",
+	"bind-state-static-method",
+	"set-transition-condition-esdl",
+	"set-transition-action-esdl",
+	"bind-transition-condition-method",
+	"bind-transition-action-method",
+	"set-start-state",
+] as const satisfies readonly AscetSetStateMachineCodeOperation[];
+
 export interface AscetSetStateMachineCodeParams extends AscetWriteControlParams {
 	stateMachinePath: string;
 	operation: AscetSetStateMachineCodeOperation;
@@ -39,20 +54,9 @@ export interface AscetSetStateMachineCodeParams extends AscetWriteControlParams 
 export type RunAscetSetStateMachineCodeOptions = RunAscetWriteOperationOptions;
 export type AscetSetStateMachineCodeResult = AscetCliJsonResult;
 
-const stateMachineOperationSchema = Type.Union([
-	Type.Literal("set-method"),
-	Type.Literal("set-state-entry-esdl"),
-	Type.Literal("set-state-exit-esdl"),
-	Type.Literal("set-state-static-esdl"),
-	Type.Literal("bind-state-entry-method"),
-	Type.Literal("bind-state-exit-method"),
-	Type.Literal("bind-state-static-method"),
-	Type.Literal("set-transition-condition-esdl"),
-	Type.Literal("set-transition-action-esdl"),
-	Type.Literal("bind-transition-condition-method"),
-	Type.Literal("bind-transition-action-method"),
-	Type.Literal("set-start-state"),
-]);
+const stateMachineOperationSchema = Type.Union(
+	ASCET_SET_STATE_MACHINE_CODE_OPERATIONS.map((operation) => Type.Literal(operation)),
+);
 
 export const ascetSetStateMachineCodeParameters = Type.Object({
 	stateMachinePath: Type.String({ description: "ASCET state-machine component path.", minLength: 1 }),

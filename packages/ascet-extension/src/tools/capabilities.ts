@@ -1,4 +1,5 @@
 import { existsSync, readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { Type } from "typebox";
 import { type AscetCliCoverageCategory, classifyAscetCliCommand } from "../routing/coverage.ts";
 import { createAscetStatusReport } from "../status.ts";
@@ -15,6 +16,11 @@ interface AscetCapabilityCommand {
 	lane?: string;
 	hostEligible?: boolean;
 	supportsBatch?: boolean;
+	args?: Array<{
+		name?: string;
+		type?: string;
+		enumValues?: string[];
+	}>;
 }
 
 interface AscetCliCatalog {
@@ -50,6 +56,7 @@ export interface AscetCapabilityMatch {
 	canonicalTool?: string;
 	canonicalAction?: string;
 	logicalCommandId?: string;
+	argumentEnums?: Record<string, string[]>;
 }
 
 export interface AscetCapabilitiesResult {
@@ -129,6 +136,7 @@ export function runAscetCapabilities(
 			})
 			.map((command) => {
 				const coverage = command.id ? classifyAscetCliCommand(command.id) : undefined;
+				const detailedCommand = loadCommandDetails(status.paths.contractsRoot, command);
 				return {
 					id: command.id,
 					operation: command.operation,
@@ -144,6 +152,7 @@ export function runAscetCapabilities(
 					canonicalTool: coverage?.toolName,
 					canonicalAction: coverage?.action,
 					logicalCommandId: coverage?.logicalCommandId,
+					argumentEnums: extractArgumentEnums(detailedCommand),
 				};
 			});
 		const limit = params.limit ?? 50;
@@ -174,6 +183,30 @@ export function runAscetCapabilities(
 	}
 }
 
+function loadCommandDetails(contractsRoot: string, command: AscetCapabilityCommand): AscetCapabilityCommand {
+	if (command.args || !command.id) {
+		return command;
+	}
+	const commandPath = resolve(contractsRoot, "commands", `${command.id}.json`);
+	if (!existsSync(commandPath)) {
+		return command;
+	}
+	try {
+		return { ...command, ...(JSON.parse(stripBom(readFileSync(commandPath, "utf8"))) as AscetCapabilityCommand) };
+	} catch {
+		return command;
+	}
+}
+
+function extractArgumentEnums(command: AscetCapabilityCommand): Record<string, string[]> | undefined {
+	const argumentEnums = Object.fromEntries(
+		(command.args ?? [])
+			.filter((arg) => Array.isArray(arg.enumValues) && arg.enumValues.length > 0)
+			.map((arg) => [arg.name ?? "argument", arg.enumValues ?? []]),
+	);
+	return Object.keys(argumentEnums).length > 0 ? argumentEnums : undefined;
+}
+
 export function formatAscetCapabilitiesResult(result: AscetCapabilitiesResult): string {
 	if (!result.ok) {
 		return `ASCET capabilities failed: ${result.error?.code ?? "unknown"}\n${result.error?.message ?? ""}`;
@@ -184,7 +217,12 @@ export function formatAscetCapabilitiesResult(result: AscetCapabilitiesResult): 
 			const route = match.canonicalTool
 				? ` via ${match.canonicalTool}.${match.canonicalAction ?? "unknown"}`
 				: ` (${match.coverageCategory ?? "unclassified"})`;
-			return `- ${match.operation ?? match.id}: ${match.summary ?? ""}${route}`;
+			const enumText = match.argumentEnums
+				? `; valid values: ${Object.entries(match.argumentEnums)
+						.map(([name, values]) => `${name}=${values.join("|")}`)
+						.join(", ")}`
+				: "";
+			return `- ${match.operation ?? match.id}: ${match.summary ?? ""}${route}${enumText}`;
 		}),
 	].join("\n");
 }

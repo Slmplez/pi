@@ -4,7 +4,10 @@ import { describe, expect, it } from "vitest";
 import type { AscetCliExecutionResult, AscetCliRequest } from "../../ascet-extension/src/cli.ts";
 import { classifyAscetCliCommand } from "../../ascet-extension/src/routing/coverage.ts";
 import { listAscetRoutes, routeAscetAction } from "../../ascet-extension/src/routing/router.ts";
-import { runAscetCapabilities } from "../../ascet-extension/src/tools/capabilities.ts";
+import {
+	formatAscetCapabilitiesResult,
+	runAscetCapabilities,
+} from "../../ascet-extension/src/tools/capabilities.ts";
 import { ascetDiffTool } from "../../ascet-extension/src/tools/diff/index.ts";
 import { ascetExploreTool } from "../../ascet-extension/src/tools/explore/index.ts";
 import { ascetReadTool } from "../../ascet-extension/src/tools/read/index.ts";
@@ -315,6 +318,10 @@ describe("ASCET canonical PI tools", () => {
 
 	it("searches ASCET capabilities from the bundled catalog", () => {
 		const result = runAscetCapabilities({ family: "read", operationQuery: "component_code" }, { cwd: repoRoot });
+		const stateMachineResult = runAscetCapabilities(
+			{ family: "write", operationQuery: "state_machine", includeHidden: true },
+			{ cwd: repoRoot },
+		);
 
 		expect(result.ok).toBe(true);
 		expect(result.data.matches.some((match) => match.operation === "read_component_code")).toBe(true);
@@ -323,6 +330,15 @@ describe("ASCET canonical PI tools", () => {
 			canonicalTool: undefined,
 			canonicalAction: undefined,
 		});
+		expect(stateMachineResult.ok).toBe(true);
+		expect(stateMachineResult.data.matches.find((match) => match.operation === "set_state_machine_code")).toMatchObject({
+			argumentEnums: {
+				operation: expect.arrayContaining(["set-method", "set-state-entry-esdl", "set-start-state"]),
+			},
+			canonicalTool: "ascet_write",
+			canonicalAction: "set_state_machine_code",
+		});
+		expect(formatAscetCapabilitiesResult(stateMachineResult)).toContain("operation=set-method|set-state-entry-esdl");
 	});
 
 	it("limits recover to extension-owned safe actions", async () => {
