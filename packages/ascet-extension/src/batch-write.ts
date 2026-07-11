@@ -1,4 +1,5 @@
 import { Type } from "typebox";
+import { Value } from "typebox/value";
 import {
 	type AscetCliExecutionResult,
 	type AscetCliJsonResult,
@@ -191,6 +192,56 @@ const cliOperationByToolOperation: Record<AscetBatchWriteOperation, string> = {
 	batch_delete_folder: "delete_folder",
 };
 
+const requestSchemaByToolOperation = {
+	batch_set_method_code: setMethodCodeRequest,
+	batch_set_element_spec: applyElementSpecRequest,
+	batch_create_component: createComponentRequest,
+	batch_create_method: createMethodRequest,
+	batch_set_project_formula: applyProjectFormulaRequest,
+	batch_delete_component: deleteComponentRequest,
+	batch_delete_method: deleteMethodRequest,
+	batch_create_folder: createFolderRequest,
+	batch_delete_folder: deleteFolderRequest,
+};
+
+function formatBatchRequestValidationPath(
+	index: number,
+	error: { keyword?: string; instancePath?: string; params?: unknown },
+): string {
+	const basePath = (error.instancePath ?? "").replace(/^\//, "").replace(/\//g, ".");
+	if (error.keyword === "required") {
+		const requiredProperty = (error.params as { requiredProperties?: string[] }).requiredProperties?.[0];
+		if (requiredProperty) {
+			return basePath
+				? `requests.${index}.${basePath}.${requiredProperty}`
+				: `requests.${index}.${requiredProperty}`;
+		}
+	}
+	return basePath ? `requests.${index}.${basePath}` : `requests.${index}`;
+}
+
+export function validateAscetBatchWriteParams(params: AscetBatchWriteParams): AscetBatchWriteParams {
+	const requestSchema = requestSchemaByToolOperation[params.operation];
+	if (!requestSchema || !Array.isArray(params.requests)) {
+		return params;
+	}
+	const errors: string[] = [];
+	for (const [index, request] of params.requests.entries()) {
+		for (const error of Value.Errors(requestSchema, request)) {
+			errors.push(`${formatBatchRequestValidationPath(index, error)}: ${error.message}`);
+		}
+	}
+	if (errors.length > 0) {
+		throw new Error(
+			[
+				`Validation failed for batch operation "${params.operation}":`,
+				...errors.map((error) => `  - ${error}`),
+			].join("\n"),
+		);
+	}
+	return params;
+}
+
 function createBatchPayload(params: AscetBatchWriteParams): string {
 	const cliOperation = cliOperationByToolOperation[params.operation];
 	return JSON.stringify({
@@ -258,6 +309,7 @@ export async function runAscetBatchWrite(
 	params: AscetBatchWriteParams,
 	options: RunAscetBatchWriteOptions,
 ): Promise<AscetBatchWriteResult> {
+	validateAscetBatchWriteParams(params);
 	return runAscetCliJson(buildBatchWriteArgs(params), {
 		...options,
 		stdin: createBatchPayload(params),
@@ -273,6 +325,7 @@ export async function runApprovedAscetBatchWrite(
 	options: RunAscetBatchWriteOptions,
 	ctx: AscetWriteApprovalContext,
 ): Promise<AscetBatchWriteResult> {
+	validateAscetBatchWriteParams(params);
 	const approval = await requestAscetWriteApproval(
 		{
 			executeWrite: params.executeWrite,

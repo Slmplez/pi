@@ -32,7 +32,10 @@ async function runAscetRead(params: AscetReadParams, options: RunOptions): Promi
 	switch (params.action) {
 		case "read":
 			if (params.methodName) {
-				return runAscetReadMethodCode(params, options);
+				return runAscetReadMethodCode(
+					{ componentPath: params.componentPath, methodName: params.methodName },
+					options,
+				);
 			}
 			return runAscetReadComponentSummary({ componentPath: params.componentPath }, options);
 		case "read_code":
@@ -69,8 +72,17 @@ async function runAscetRead(params: AscetReadParams, options: RunOptions): Promi
 			return runAscetReadImportExportMatch(params, options);
 		case "read_import_export_matches":
 			return runAscetReadImportExportMatches(params, options);
-		case "plan_element_dependency":
-			return runAscetPlanElementDependency(params, options);
+		case "plan_element_dependency": {
+			const targetPath = params.targetPath ?? params.componentPath ?? "";
+			return runAscetPlanElementDependency(
+				{
+					targetPath,
+					elementName: params.elementName,
+					targetKind: params.targetKind,
+				},
+				options,
+			);
+		}
 	}
 }
 

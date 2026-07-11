@@ -35,6 +35,9 @@ export const ascetPlanElementDependencyParameters = Type.Object({
 });
 
 export function buildPlanElementDependencyArgs(params: AscetPlanElementDependencyParams): string[] {
+	if (typeof params.targetPath !== "string" || params.targetPath.length === 0) {
+		throw new Error("targetPath is required for plan_element_dependency.");
+	}
 	const args = ["exec", "plan_element_dependency", normalizeAscetPath(params.targetPath)];
 	if (params.elementName) {
 		args.push(params.elementName);

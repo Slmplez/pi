@@ -40,7 +40,8 @@ export type AscetReadParams =
 	  }
 	| {
 			action: "plan_element_dependency";
-			targetPath: string;
+			targetPath?: string;
+			componentPath?: string;
 			elementName?: string;
 			targetKind?: "auto" | "component" | "folder" | "project";
 	  };

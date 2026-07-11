@@ -758,6 +758,42 @@ describe("ASCET read-only PI tools", () => {
 		]);
 	});
 
+	it("accepts componentPath as a compatibility alias for plan_element_dependency targetPath", async () => {
+		const ascetExtension = await loadAscetExtension();
+		const tool = ascetExtension?.tools.get("ascet_read")?.definition;
+
+		const result = await tool?.execute(
+			"test-plan-element-dependency-component-path",
+			{
+				action: "plan_element_dependency",
+				componentPath: "ETAS_SystemLib\\Nonlinears\\Limiter",
+				targetKind: "component",
+			},
+			new AbortController().signal,
+			undefined,
+			{
+				cwd: repoRoot,
+				executeCli: async (request: unknown) => ({
+					exitCode: 0,
+					stdout: JSON.stringify({ ok: true, result: { target: "ETAS_SystemLib\\Nonlinears\\Limiter" } }),
+					stderr: "",
+					timedOut: false,
+					request,
+				}),
+			},
+		);
+
+		const details = result?.details as { diagnostics: { request: { args: string[] } } } | undefined;
+		expect(details?.diagnostics.request.args).toEqual([
+			"exec",
+			"plan_element_dependency",
+			"ETAS_SystemLib\\Nonlinears\\Limiter",
+			"--target-kind",
+			"component",
+			"--json",
+		]);
+	});
+
 	it("builds JSON read_method_code, read_element_refs, and diff invocations", () => {
 		expect(buildListMethodsArgs({ componentPath: "DEMO\\PID" })).toEqual([
 			"exec",
@@ -878,6 +914,15 @@ describe("ASCET read-only PI tools", () => {
 				changesOnly: true,
 			}),
 		).toEqual(["exec", "diff_state_machine_domain", "DEMO\\SM_A", "DEMO\\SM_B", "--changes-only", "--json"]);
+	});
+
+	it("rejects diff_element_spec before building CLI args when specFile is missing", () => {
+		expect(() =>
+			buildDiffElementSpecArgs({
+				componentPath: "ETAS_SystemLib\\Memory\\Accumulator",
+				specFile: undefined as unknown as string,
+			}),
+		).toThrow("specFile is required for diff_element_spec");
 	});
 
 	it("builds verify readback invocations and validates target shape", async () => {

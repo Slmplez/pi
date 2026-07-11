@@ -1,9 +1,21 @@
-import { createBatchWriteOutcome, formatBatchWriteResult, runApprovedAscetBatchWrite } from "../../batch-write.ts";
+import {
+	createBatchWriteOutcome,
+	formatBatchWriteResult,
+	runApprovedAscetBatchWrite,
+	validateAscetBatchWriteParams,
+} from "../../batch-write.ts";
 import { type AscetToolContext, defineSequentialAscetTool } from "../../core/tool.ts";
 import { createAscetCliToolDetails } from "../_shared/envelope.ts";
 import { ascetBatchWritePrompt } from "./prompt.ts";
 import { type AscetBatchWriteParams, ascetBatchWriteParameters } from "./schema.ts";
 import { renderCall, renderResult } from "./ui.ts";
+
+function prepareAscetBatchWriteArguments(args: unknown): AscetBatchWriteParams {
+	if (!args || typeof args !== "object" || Array.isArray(args)) {
+		return args as AscetBatchWriteParams;
+	}
+	return validateAscetBatchWriteParams(args as AscetBatchWriteParams);
+}
 
 export const ascetBatchWriteTool = defineSequentialAscetTool({
 	name: "ascet_batch_write",
@@ -11,6 +23,7 @@ export const ascetBatchWriteTool = defineSequentialAscetTool({
 	description: "Run one ASCET batch write operation after explicit interactive confirmation.",
 	...ascetBatchWritePrompt,
 	parameters: ascetBatchWriteParameters,
+	prepareArguments: prepareAscetBatchWriteArguments,
 	renderCall,
 	renderResult,
 	async execute(

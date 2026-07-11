@@ -31,6 +31,12 @@ export const ascetDiffElementSpecParameters = Type.Object({
 });
 
 export function buildDiffElementSpecArgs(params: AscetDiffElementSpecParams): string[] {
+	if (typeof params.componentPath !== "string" || params.componentPath.length === 0) {
+		throw new Error("componentPath is required for diff_element_spec.");
+	}
+	if (typeof params.specFile !== "string" || params.specFile.length === 0) {
+		throw new Error("specFile is required for diff_element_spec.");
+	}
 	const args = ["exec", "diff_element_spec", normalizeAscetPath(params.componentPath), params.specFile];
 	if (params.changesOnly) {
 		args.push("--changes-only");

@@ -609,6 +609,38 @@ describe("ASCET guarded write PI tools", () => {
 		).toBe(true);
 	});
 
+	it("reports only operation-specific request validation errors for batch writes", async () => {
+		const ascetExtension = await loadAscetExtension();
+		const tool = ascetExtension?.tools.get("ascet_batch_write")?.definition;
+
+		expect(() =>
+			tool?.prepareArguments?.({
+				operation: "batch_set_method_code",
+				requests: [
+					{
+						componentPath: "ETAS_SystemLib\\Bitoperations\\and",
+						methodName: "and",
+						codeFile: "",
+						verifyReadback: false,
+					},
+				],
+			}),
+		).toThrow(/requests\.0\.codeFile: must not have fewer than 1 characters/);
+		expect(() =>
+			tool?.prepareArguments?.({
+				operation: "batch_set_method_code",
+				requests: [
+					{
+						componentPath: "ETAS_SystemLib\\Bitoperations\\and",
+						methodName: "and",
+						codeFile: "",
+						verifyReadback: false,
+					},
+				],
+			}),
+		).not.toThrow(/specFile|kind|projectPath/);
+	});
+
 	it("represents partial batch completion as a first-class outcome", async () => {
 		const result = await runApprovedAscetBatchWrite(
 			{
