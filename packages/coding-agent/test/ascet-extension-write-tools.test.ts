@@ -244,6 +244,47 @@ describe("ASCET guarded write PI tools", () => {
 		expect(result.details.error).toBeUndefined();
 	});
 
+	it("returns friendly validation for missing module/state-machine write selectors", async () => {
+		const missingModuleSection = await runAscetWrite(
+			{
+				action: "set_module_code",
+				modulePath: "DEMO\\Module",
+				code: "x = 1;",
+				executeWrite: true,
+			},
+			{ cwd: repoRoot },
+			{ cwd: repoRoot },
+		);
+		const missingStateMachineOperation = await runAscetWrite(
+			{
+				action: "set_state_machine_code",
+				stateMachinePath: "DEMO\\SM",
+				code: "x = 1;",
+				executeWrite: true,
+			},
+			{ cwd: repoRoot },
+			{ cwd: repoRoot },
+		);
+		const moduleSectionAlias = await runAscetWrite(
+			{
+				action: "set_module_code",
+				modulePath: "DEMO\\Module",
+				section: "set-header",
+				code: "/* header */",
+				executeWrite: false,
+			},
+			{ cwd: repoRoot },
+			{ cwd: repoRoot },
+		);
+
+		expect(missingModuleSection.details.error?.message).toBe("section parameter is required for set_module_code");
+		expect(missingStateMachineOperation.details.error?.message).toContain(
+			"Valid values: set-method, set-state-entry-esdl",
+		);
+		expect(moduleSectionAlias.details.outcome.status).toBe("preflight");
+		expect(JSON.stringify(moduleSectionAlias.details.outcome)).toContain('"operation":"set-header"');
+	});
+
 	it("cleans up inline code temp files on success and failure", async () => {
 		const tempRoot = await mkdtemp(join(tmpdir(), "pi-ascet-inline-"));
 		let successPath = "";
@@ -301,25 +342,14 @@ describe("ASCET guarded write PI tools", () => {
 		});
 	});
 
-	it("uses operation-specific batch write schemas", () => {
+	it("uses OpenAI-compatible object schema for batch writes", () => {
+		expect(ascetBatchWriteParameters.type).toBe("object");
 		expect(
 			Value.Check(ascetBatchWriteParameters, {
 				operation: "batch_create_folder",
 				requests: [{ folderPath: "DEMO\\Batch", ifExists: "ignore", verifyReadback: true }],
 			}),
 		).toBe(true);
-		expect(
-			Value.Check(ascetBatchWriteParameters, {
-				operation: "batch_create_folder",
-				requests: [{ componentPath: "DEMO\\Wrong" }],
-			}),
-		).toBe(false);
-		expect(
-			Value.Check(ascetBatchWriteParameters, {
-				operation: "batch_set_method_code",
-				requests: [{ componentPath: "DEMO\\PID", codeFile: "E:\\tmp\\calc.c" }],
-			}),
-		).toBe(false);
 	});
 
 	it("represents partial batch completion as a first-class outcome", async () => {
@@ -612,20 +642,8 @@ describe("ASCET guarded write PI tools", () => {
 	it("registers the write tool as sequential", async () => {
 		const ascetExtension = await loadAscetExtension();
 
-		expect(ascetExtension?.tools.get("ascet_create_folder")?.definition).toMatchObject({
-			name: "ascet_create_folder",
-			executionMode: "sequential",
-		});
-		expect(ascetExtension?.tools.get("ascet_create_component")?.definition).toMatchObject({
-			name: "ascet_create_component",
-			executionMode: "sequential",
-		});
-		expect(ascetExtension?.tools.get("ascet_create_method")?.definition).toMatchObject({
-			name: "ascet_create_method",
-			executionMode: "sequential",
-		});
-		expect(ascetExtension?.tools.get("ascet_set_class_method_code")?.definition).toMatchObject({
-			name: "ascet_set_class_method_code",
+		expect(ascetExtension?.tools.get("ascet_write")?.definition).toMatchObject({
+			name: "ascet_write",
 			executionMode: "sequential",
 		});
 		expect(ascetExtension?.tools.get("ascet_batch_write")?.definition).toMatchObject({

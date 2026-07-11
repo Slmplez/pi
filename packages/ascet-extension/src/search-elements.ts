@@ -43,10 +43,11 @@ export const ascetSearchElementsParameters = Type.Object({
 
 export function buildSearchElementsArgs(params: AscetSearchElementsParams): string[] {
 	const args = ["exec", "search_elements", params.query];
-	if (params.componentPath) {
-		args.push("--component", params.componentPath);
+	const componentPath = params.componentPath ?? inferComponentPathFromScope(params);
+	if (componentPath) {
+		args.push("--component", componentPath);
 	}
-	if (params.scopePath) {
+	if (params.scopePath && !componentPath) {
 		args.push("--scope", params.scopePath);
 	}
 	if (params.group) {
@@ -66,6 +67,16 @@ export function buildSearchElementsArgs(params: AscetSearchElementsParams): stri
 	}
 	args.push("--json");
 	return args;
+}
+
+function inferComponentPathFromScope(params: AscetSearchElementsParams): string | undefined {
+	if (params.componentPath || !params.scopePath) {
+		return params.componentPath;
+	}
+	if (params.match === "exact" && /[\\/]/.test(params.scopePath)) {
+		return params.scopePath;
+	}
+	return undefined;
 }
 
 export async function runAscetSearchElements(

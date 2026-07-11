@@ -77,9 +77,10 @@ export type AscetWriteParams =
 			executeWrite?: boolean;
 	  } & CodeSource)
 	| ({
-			action: "set_module_code";
-			modulePath: string;
-			operation: "set-method" | "set-header" | "set-external-c-code";
+		action: "set_module_code";
+		modulePath: string;
+		operation?: "set-method" | "set-header" | "set-external-c-code";
+		section?: "set-method" | "set-header" | "set-external-c-code";
 			methodName?: string;
 			verifyReadback?: boolean;
 			executeWrite?: boolean;
@@ -176,7 +177,27 @@ export const ascetWriteParameters = Type.Object({
 			Type.Literal("trigger"),
 		]),
 	),
-	operation: Type.Optional(Type.String({ minLength: 1 })),
+	operation: Type.Optional(
+		Type.Union([
+			Type.Literal("set-method"),
+			Type.Literal("set-header"),
+			Type.Literal("set-external-c-code"),
+			Type.Literal("set-state-entry-esdl"),
+			Type.Literal("set-state-exit-esdl"),
+			Type.Literal("set-state-static-esdl"),
+			Type.Literal("bind-state-entry-method"),
+			Type.Literal("bind-state-exit-method"),
+			Type.Literal("bind-state-static-method"),
+			Type.Literal("set-transition-condition-esdl"),
+			Type.Literal("set-transition-action-esdl"),
+			Type.Literal("bind-transition-condition-method"),
+			Type.Literal("bind-transition-action-method"),
+			Type.Literal("set-start-state"),
+		]),
+	),
+	section: Type.Optional(
+		Type.Union([Type.Literal("set-method"), Type.Literal("set-header"), Type.Literal("set-external-c-code")]),
+	),
 	stateName: Type.Optional(Type.String()),
 	sourceState: Type.Optional(Type.String()),
 	targetState: Type.Optional(Type.String()),
@@ -228,12 +249,47 @@ export async function runAscetWrite(
 	options: RunAscetWriteOperationOptions,
 	ctx: AscetWriteApprovalContext,
 ): Promise<AscetWriteResult> {
+	const normalizedParams = normalizeAscetWriteParams(params);
+	const validation = validateAscetWriteParams(normalizedParams);
+	if (validation) {
+		return asResponse(validation);
+	}
 	if (!params.executeWrite) {
-		return asResponse(createPreflightOutcome({ action: params.action, params }));
+		return asResponse(createPreflightOutcome({ action: normalizedParams.action, params: normalizedParams }));
 	}
 
-	const raw = await dispatchWrite(params, options, ctx);
+	const raw = await dispatchWrite(normalizedParams, options, ctx);
 	return asResponse(outcomeFromCliResult(raw), raw);
+}
+
+function normalizeAscetWriteParams(params: AscetWriteParams): AscetWriteParams {
+	if (params.action === "set_module_code" && !params.operation && params.section) {
+		return { ...params, operation: params.section };
+	}
+	return params;
+}
+
+function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | undefined {
+	if (params.action === "set_module_code" && !params.operation) {
+		return {
+			status: "error",
+			error: {
+				code: "ascet_write_missing_parameter",
+				message: "section parameter is required for set_module_code",
+			},
+		};
+	}
+	if (params.action === "set_state_machine_code" && !params.operation) {
+		return {
+			status: "error",
+			error: {
+				code: "ascet_write_missing_parameter",
+				message:
+					"operation parameter is required for set_state_machine_code. Valid values: set-method, set-state-entry-esdl, set-state-exit-esdl, set-state-static-esdl, bind-state-entry-method, bind-state-exit-method, bind-state-static-method, set-transition-condition-esdl, set-transition-action-esdl, bind-transition-condition-method, bind-transition-action-method, set-start-state.",
+			},
+		};
+	}
+	return undefined;
 }
 
 async function dispatchWrite(
@@ -264,7 +320,7 @@ async function dispatchWrite(
 			);
 		case "set_module_code":
 			return withWriteCode(params, (codeFile) =>
-				runApprovedAscetSetModuleCode({ ...params, codeFile }, options, ctx),
+				runApprovedAscetSetModuleCode({ ...params, operation: params.operation!, codeFile }, options, ctx),
 			);
 		case "set_state_machine_code":
 			if (params.code !== undefined || params.codeFile !== undefined) {

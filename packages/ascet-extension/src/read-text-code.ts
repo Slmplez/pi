@@ -48,9 +48,34 @@ export async function runAscetReadTextCode(
 	params: AscetReadTextCodeParams,
 	options: RunAscetReadTextCodeOptions,
 ): Promise<AscetReadTextCodeResult> {
-	return runAscetCliJson(buildReadTextCodeArgs(params), options);
+	const result = await runAscetCliJson(buildReadTextCodeArgs(params), options);
+	return normalizeReadTextCodeResult(params, result);
 }
 
 export function formatReadTextCodeResult(result: AscetReadTextCodeResult): string {
 	return formatAscetCliJsonResult("read_text_code", result);
+}
+
+function normalizeReadTextCodeResult(
+	params: AscetReadTextCodeParams,
+	result: AscetReadTextCodeResult,
+): AscetReadTextCodeResult {
+	const message = result.error?.message ?? "";
+	if (!result.ok && message.includes("ESDL code view is not available")) {
+		return {
+			...result,
+			error: {
+				code: result.error?.code ?? "ascet_unsupported_code_surface",
+				message:
+					"ESDL module does not support text code sections; use ascet_read with action=\"read\" and methodName, or ascet_write action=\"set_method_code\" instead.",
+			},
+			data: {
+				componentPath: params.componentPath,
+				methodName: params.methodName,
+				section: params.section,
+				recommendation: "Use ascet_read.read with methodName for method code, or ascet_write.set_method_code for updates.",
+			},
+		};
+	}
+	return result;
 }

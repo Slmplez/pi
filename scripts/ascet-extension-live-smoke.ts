@@ -52,6 +52,21 @@ async function callTool(name: string, params: Record<string, unknown>) {
 	return response.details.data?.result ?? response.details.data ?? response.details;
 }
 
+async function callToolAllowingError(name: string, params: Record<string, unknown>) {
+	const tool = extension?.tools.get(name)?.definition;
+	if (!tool) {
+		throw new Error(`Tool is not registered: ${name}`);
+	}
+	const response = (await tool.execute(
+		`ascet-live-smoke-${name}`,
+		params,
+		new AbortController().signal,
+		undefined,
+		{ cwd: repoRoot },
+	)) as ToolResponse;
+	return response.details;
+}
+
 const statusTool = extension.tools.get("ascet_status")?.definition;
 if (!statusTool) {
 	throw new Error("Tool is not registered: ascet_status");
@@ -104,7 +119,16 @@ const children = await callTool("ascet_explore", { action: "preview_children", c
 const method = await callTool("ascet_read", { action: "read", componentPath: "DEMO\\PID", methodName: "calc" });
 const code = await callTool("ascet_read", { action: "read_code", componentPath: "DEMO\\PID", methodName: "calc" });
 const diagrams = await callTool("ascet_explore", { action: "list_diagrams", componentPath: "DEMO\\PID" });
-const blockDiagram = await callTool("ascet_read", { action: "read_block_diagram", componentPath: "DEMO\\PID", diagramName: "Main" });
+const blockDiagram = await callToolAllowingError("ascet_read", {
+	action: "read_block_diagram",
+	componentPath: "DEMO\\PID",
+	diagramName: "Main",
+});
+if (blockDiagram.ok || blockDiagram.error?.code !== "ascet_block_diagram_surface_not_supported") {
+	throw new Error(
+		`ascet_read.read_block_diagram expected unsupported text ESDL surface, got: ${blockDiagram.error?.code ?? "ok"}`,
+	);
+}
 const refs = await callTool("ascet_reference", { action: "element_refs", componentPath: "DEMO\\PID", elementName: "pid_kp" });
 const diff = await callTool("ascet_diff", {
 	action: "diff_component_snapshot",
@@ -142,9 +166,8 @@ console.log(
 				ascet_read_code: { methodName: code.methodName },
 				ascet_explore_diagrams: { items: diagrams.items, filters: diagrams.filters },
 				ascet_read_block_diagram: {
-					diagramName: blockDiagram.DiagramName ?? blockDiagram.diagramName,
-					elements: blockDiagram.Elements?.length ?? blockDiagram.elements?.length,
-					connections: blockDiagram.Connections?.length ?? blockDiagram.connections?.length,
+					ok: blockDiagram.ok,
+					error: blockDiagram.error,
 				},
 				ascet_reference: { counts: refs.counts, summary: refs.summary },
 				ascet_diff: { counts: diff.counts },

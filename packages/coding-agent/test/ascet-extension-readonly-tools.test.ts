@@ -309,6 +309,25 @@ describe("ASCET read-only PI tools", () => {
 			"--json",
 		]);
 		expect(
+			buildSearchElementsArgs({
+				query: "pid_kp",
+				scopePath: "DEMO\\PID",
+				match: "exact",
+				limit: 5,
+			}),
+		).toEqual([
+			"exec",
+			"search_elements",
+			"pid_kp",
+			"--component",
+			"DEMO\\PID",
+			"--match",
+			"exact",
+			"--limit",
+			"5",
+			"--json",
+		]);
+		expect(
 			buildSearchOccurrencesArgs({
 				query: "pid_kp",
 				target: "element",
@@ -403,6 +422,22 @@ describe("ASCET read-only PI tools", () => {
 			"--json",
 		]);
 		expect(result.data).toMatchObject({ ok: true, result: { matches: [{ path: "DEMO\\PID::pid_kp" }] } });
+		const scopedComponentResult = await runAscetSearchElements(
+			{ query: "pid_kp", scopePath: "DEMO\\PID", match: "exact", limit: 5 },
+			{
+				cwd: repoRoot,
+				executeCli: async (request) => ({
+					exitCode: 0,
+					stdout: JSON.stringify({ ok: true, result: { matches: [{ path: "DEMO\\PID::pid_kp" }] } }),
+					stderr: "",
+					timedOut: false,
+					request,
+				}),
+			},
+		);
+		expect(scopedComponentResult.ok).toBe(true);
+		expect(scopedComponentResult.request.args).toContain("--component");
+		expect(scopedComponentResult.request.args).not.toContain("--scope");
 		expect(occurrencesResult.ok).toBe(true);
 		expect(occurrencesResult.request.args).toEqual([
 			"exec",
@@ -690,6 +725,19 @@ describe("ASCET read-only PI tools", () => {
 				}),
 			},
 		);
+		const unsupportedTextCodeResult = await runAscetReadTextCode(
+			{ componentPath: "DEMO/TestModule", section: "all" },
+			{
+				cwd: repoRoot,
+				executeCli: async (request) => ({
+					exitCode: 1,
+					stdout: "",
+					stderr: "ESDL code view is not available for this target.",
+					timedOut: false,
+					request,
+				}),
+			},
+		);
 		const formulasResult = await runAscetReadProjectFormulas(
 			{ projectPath: "DEMO\\Project" },
 			{
@@ -751,7 +799,7 @@ describe("ASCET read-only PI tools", () => {
 				cwd: repoRoot,
 				executeCli: async (request) => ({
 					exitCode: 0,
-					stdout: JSON.stringify({ ok: true, result: { DiagramName: "Main", Elements: [] } }),
+					stdout: JSON.stringify({ ok: true, result: { DiagramName: "Main", Elements: [], Connections: [] } }),
 					stderr: "",
 					timedOut: false,
 					request,
@@ -808,11 +856,16 @@ describe("ASCET read-only PI tools", () => {
 			"body",
 			"--json",
 		]);
+		expect(unsupportedTextCodeResult.ok).toBe(false);
+		expect(unsupportedTextCodeResult.error?.message).toContain(
+			"ESDL module does not support text code sections",
+		);
 		expect(formulasResult.ok).toBe(true);
 		expect(formulasResult.request.args).toEqual(["exec", "read_project_formulas", "DEMO\\Project", "--json"]);
 		expect(diagramsResult.ok).toBe(true);
 		expect(diagramsResult.request.args).toEqual(["exec", "list_diagrams", "DEMO\\PID", "--json"]);
-		expect(blockDiagramResult.ok).toBe(true);
+		expect(blockDiagramResult.ok).toBe(false);
+		expect(blockDiagramResult.error?.code).toBe("ascet_block_diagram_surface_not_supported");
 		expect(blockDiagramResult.request.args).toEqual(["exec", "read_block_diagram", "DEMO\\PID", "Main", "--json"]);
 		expect(refsResult.ok).toBe(true);
 		expect(refsResult.request.args).toEqual(["exec", "read_element_refs", "DEMO\\PID", "pid_kp", "--json"]);
