@@ -3,6 +3,7 @@
     "npm:pi-subagents",
     "npm:@juicesharp/rpiv-todo",
     "npm:@juicesharp/rpiv-ask-user-question",
+    "..\\packages\\ascet-extension",
     "..\\packages\\Pi-ascet-ui-extension",
     "npm:pi-hermes-memory@0.7.23",
     "npm:@plannotator/pi-extension@0.23.0",
