@@ -113,4 +113,28 @@ describe("validateToolArguments", () => {
 			expect(() => validateToolArguments(tool, toolCall)).toThrow("Validation failed");
 		}
 	});
+
+	it("summarizes literal union validation errors with the allowed values", () => {
+		const tool: Tool = {
+			name: "write",
+			description: "Write tool",
+			parameters: Type.Object({
+				operation: Type.Union([
+					Type.Literal("set-method"),
+					Type.Literal("set-state-entry-esdl"),
+					Type.Literal("set-start-state"),
+				]),
+			}),
+		};
+		const toolCall: ToolCall = {
+			type: "toolCall",
+			id: "tool-1",
+			name: "write",
+			arguments: { operation: "add_state" },
+		};
+
+		expect(() => validateToolArguments(tool, toolCall)).toThrow(
+			"operation: must be one of: set-method, set-state-entry-esdl, set-start-state",
+		);
+	});
 });

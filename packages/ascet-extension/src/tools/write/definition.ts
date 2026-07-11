@@ -1,9 +1,30 @@
 import { type AscetToolContext, defineSequentialAscetTool } from "../../core/tool.ts";
 import { routeAscetAction } from "../../routing/router.ts";
+import { ASCET_SET_STATE_MACHINE_CODE_OPERATIONS } from "../../set-state-machine-code.ts";
 import { formatAscetWriteResult, runAscetWrite } from "../write.ts";
 import { ascetWritePrompt } from "./prompt.ts";
 import { type AscetWriteParams, ascetWriteParameters } from "./schema.ts";
 import { renderCall, renderResult } from "./ui.ts";
+
+const validStateMachineOperations = new Set<string>(ASCET_SET_STATE_MACHINE_CODE_OPERATIONS);
+const validStateMachineOperationsText = ASCET_SET_STATE_MACHINE_CODE_OPERATIONS.join(", ");
+
+function prepareAscetWriteArguments(args: unknown): AscetWriteParams {
+	if (!args || typeof args !== "object" || Array.isArray(args)) {
+		return args as AscetWriteParams;
+	}
+	const params = args as { action?: unknown; operation?: unknown };
+	if (
+		params.action === "set_state_machine_code" &&
+		typeof params.operation === "string" &&
+		!validStateMachineOperations.has(params.operation)
+	) {
+		throw new Error(
+			`Invalid operation for set_state_machine_code: '${params.operation}'. Valid values: ${validStateMachineOperationsText}.`,
+		);
+	}
+	return args as AscetWriteParams;
+}
 
 export const ascetWriteTool = defineSequentialAscetTool({
 	name: "ascet_write",
@@ -11,6 +32,7 @@ export const ascetWriteTool = defineSequentialAscetTool({
 	description: "Run a guarded single ASCET write action with canonical preflight and interactive confirmation.",
 	...ascetWritePrompt,
 	parameters: ascetWriteParameters,
+	prepareArguments: prepareAscetWriteArguments,
 	renderCall,
 	renderResult,
 	async execute(

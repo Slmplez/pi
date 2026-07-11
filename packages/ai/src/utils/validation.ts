@@ -8,6 +8,7 @@ const TYPEBOX_KIND = Symbol.for("TypeBox.Kind");
 
 interface JsonSchemaObject {
 	type?: string | string[];
+	const?: unknown;
 	properties?: Record<string, JsonSchemaObject>;
 	items?: JsonSchemaObject | JsonSchemaObject[];
 	additionalProperties?: boolean | JsonSchemaObject;
@@ -253,6 +254,69 @@ function formatValidationPath(error: TLocalizedValidationError): string {
 	return path || "root";
 }
 
+function getSchemaForPath(schema: JsonSchemaObject, path: string): JsonSchemaObject | undefined {
+	if (!path || path === "root") {
+		return schema;
+	}
+	let current: JsonSchemaObject | undefined = schema;
+	for (const segment of path.split(".")) {
+		if (!current) {
+			return undefined;
+		}
+		if (current.properties?.[segment]) {
+			current = current.properties[segment];
+			continue;
+		}
+		if (Array.isArray(current.items)) {
+			const index = Number(segment);
+			current = Number.isInteger(index) ? current.items[index] : undefined;
+			continue;
+		}
+		if (current.items && typeof current.items === "object") {
+			current = current.items;
+			continue;
+		}
+		return undefined;
+	}
+	return current;
+}
+
+function getLiteralUnionValues(schema: JsonSchemaObject | undefined): string[] {
+	const members = schema?.anyOf ?? schema?.oneOf;
+	if (!members) {
+		return [];
+	}
+	const values = members
+		.map((member) => member.const)
+		.filter((value): value is string | number | boolean => {
+			const valueType = typeof value;
+			return valueType === "string" || valueType === "number" || valueType === "boolean";
+		})
+		.map(String);
+	return values.length === members.length ? values : [];
+}
+
+function formatValidationErrors(schema: Tool["parameters"], errors: TLocalizedValidationError[]): string {
+	const formatted: string[] = [];
+	const summarizedPaths = new Set<string>();
+	for (const error of errors) {
+		const path = formatValidationPath(error);
+		if (!summarizedPaths.has(path) && error.keyword === "const") {
+			const values = getLiteralUnionValues(getSchemaForPath(schema as JsonSchemaObject, path));
+			if (values.length > 0) {
+				formatted.push(`  - ${path}: must be one of: ${values.join(", ")}`);
+				summarizedPaths.add(path);
+				continue;
+			}
+		}
+		if (summarizedPaths.has(path) && (error.keyword === "const" || error.keyword === "anyOf")) {
+			continue;
+		}
+		formatted.push(`  - ${path}: ${error.message}`);
+	}
+	return formatted.join("\n") || "Unknown validation error";
+}
+
 /**
  * Finds a tool by name and validates the tool call arguments against its TypeBox schema
  * @param tools Array of tool definitions
@@ -298,11 +362,7 @@ export function validateToolArguments(tool: Tool, toolCall: ToolCall): any {
 		return args;
 	}
 
-	const errors =
-		validator
-			.Errors(args)
-			.map((error) => `  - ${formatValidationPath(error)}: ${error.message}`)
-			.join("\n") || "Unknown validation error";
+	const errors = formatValidationErrors(tool.parameters, [...validator.Errors(args)]);
 
 	const errorMessage = `Validation failed for tool "${toolCall.name}":\n${errors}\n\nReceived arguments:\n${JSON.stringify(toolCall.arguments, null, 2)}`;
 

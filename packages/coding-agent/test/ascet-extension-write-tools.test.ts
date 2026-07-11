@@ -4,6 +4,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { Value } from "typebox/value";
 import { describe, expect, it } from "vitest";
+import type { ToolCall } from "../../ai/src/types.ts";
+import { validateToolArguments } from "../../ai/src/utils/validation.ts";
 import { buildApplyElementSpecArgs } from "../../ascet-extension/src/apply-element-spec.ts";
 import { buildApplyProjectFormulaArgs } from "../../ascet-extension/src/apply-project-formula.ts";
 import {
@@ -30,6 +32,7 @@ import { buildSetMethodCodeArgs } from "../../ascet-extension/src/set-method-cod
 import { buildSetModuleCodeArgs } from "../../ascet-extension/src/set-module-code.ts";
 import { buildSetStateMachineCodeArgs } from "../../ascet-extension/src/set-state-machine-code.ts";
 import { runAscetWrite } from "../../ascet-extension/src/tools/write.ts";
+import { ascetWriteTool } from "../../ascet-extension/src/tools/write/index.ts";
 import { requestAscetWriteApproval } from "../../ascet-extension/src/write-policy.ts";
 import { loadAscetExtension, repoRoot } from "./ascet-extension-test-helpers.ts";
 
@@ -299,6 +302,28 @@ describe("ASCET guarded write PI tools", () => {
 		);
 		expect(moduleSectionAlias.details.outcome.status).toBe("preflight");
 		expect(JSON.stringify(moduleSectionAlias.details.outcome)).toContain('"operation":"set-header"');
+	});
+
+	it("lists valid state-machine operations when schema validation rejects an invalid operation", () => {
+		const toolCall: ToolCall = {
+			type: "toolCall",
+			id: "tool-1",
+			name: "ascet_write",
+			arguments: {
+				action: "set_state_machine_code",
+				stateMachinePath: "DEMO\\SM",
+				operation: "add_state",
+				code: "x = 1;",
+				executeWrite: false,
+			},
+		};
+
+		expect(() => ascetWriteTool.prepareArguments?.(toolCall.arguments)).toThrow(
+			"Invalid operation for set_state_machine_code: 'add_state'. Valid values: set-method, set-state-entry-esdl",
+		);
+		expect(() => validateToolArguments(ascetWriteTool, toolCall)).toThrow(
+			"operation: must be one of: set-method, set-header, set-external-c-code, set-state-entry-esdl",
+		);
 	});
 
 	it("cleans up inline code temp files on success and failure", async () => {
