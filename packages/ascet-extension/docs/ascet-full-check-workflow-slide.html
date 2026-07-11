@@ -1,0 +1,1214 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ASCET Full Check Workflow Slide</title>
+  <style>
+    :root {
+      --bg: #171512;
+      --paper: #f1ead9;
+      --ink: #f8f3e6;
+      --muted: #b8ad98;
+      --line: rgba(241, 234, 217, 0.18);
+      --panel: #232017;
+      --panel-2: #302b1f;
+      --green: #7db46c;
+      --amber: #d9a441;
+      --rust: #c15f3f;
+      --steel: #88a0a8;
+      --blueprint: #253137;
+      --shadow: rgba(0, 0, 0, 0.32);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+    }
+
+    body {
+      overflow: hidden;
+    }
+
+    .deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background:
+        linear-gradient(90deg, rgba(241, 234, 217, 0.045) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(241, 234, 217, 0.035) 1px, transparent 1px),
+        radial-gradient(circle at 76% 18%, rgba(217, 164, 65, 0.14), transparent 32%),
+        radial-gradient(circle at 14% 82%, rgba(125, 180, 108, 0.12), transparent 30%),
+        var(--bg);
+      background-size: 64px 64px, 64px 64px, auto, auto, auto;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 26px;
+      padding: 58px 72px 42px;
+      opacity: 0;
+      transform: translateX(26px) scale(0.992);
+      pointer-events: none;
+      transition: opacity 320ms ease, transform 420ms cubic-bezier(0.2, 0.7, 0.1, 1);
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--amber);
+      font-family: "Cascadia Mono", Consolas, monospace;
+      font-size: 15px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 42px;
+      height: 2px;
+      background: var(--amber);
+    }
+
+    h1,
+    h2 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", "Microsoft YaHei", serif;
+      font-weight: 700;
+      letter-spacing: 0;
+      line-height: 0.98;
+    }
+
+    h1 {
+      max-width: 980px;
+      font-size: clamp(56px, 7.2vw, 104px);
+    }
+
+    h2 {
+      max-width: 1100px;
+      font-size: clamp(42px, 5.1vw, 76px);
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(20px, 1.7vw, 28px);
+      line-height: 1.42;
+    }
+
+    code,
+    .mono {
+      font-family: "Cascadia Mono", Consolas, "Microsoft YaHei UI", monospace;
+      font-variant-ligatures: none;
+    }
+
+    .title-layout {
+      align-self: center;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) 430px;
+      gap: 54px;
+      align-items: center;
+    }
+
+    .title-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .hero-panel,
+    .panel {
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(35, 32, 23, 0.96), rgba(37, 49, 55, 0.78));
+      box-shadow: 0 24px 70px var(--shadow);
+    }
+
+    .hero-panel {
+      min-height: 520px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-radius: 6px;
+    }
+
+    .command-card {
+      border: 1px solid rgba(217, 164, 65, 0.35);
+      background: rgba(217, 164, 65, 0.09);
+      padding: 20px;
+      border-radius: 4px;
+      color: var(--paper);
+      font-size: 22px;
+      line-height: 1.38;
+    }
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.16);
+    }
+
+    .metric strong {
+      display: block;
+      color: var(--ink);
+      font-size: 34px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .body-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 22px;
+      align-content: center;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(35, 32, 23, 0.86);
+      padding: 24px;
+      min-height: 146px;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+    }
+
+    .card h3 {
+      margin: 0 0 12px;
+      color: var(--paper);
+      font-size: 25px;
+      line-height: 1.18;
+    }
+
+    .card p,
+    .card li {
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.42;
+    }
+
+    .span-3 { grid-column: span 3; }
+    .span-4 { grid-column: span 4; }
+    .span-5 { grid-column: span 5; }
+    .span-6 { grid-column: span 6; }
+    .span-7 { grid-column: span 7; }
+    .span-8 { grid-column: span 8; }
+    .span-12 { grid-column: span 12; }
+
+    .layer-stack {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .layer {
+      position: relative;
+      min-height: 330px;
+      padding: 26px;
+      border: 1px solid var(--line);
+      background: rgba(35, 32, 23, 0.9);
+      border-radius: 6px;
+    }
+
+    .layer::after {
+      content: attr(data-index);
+      position: absolute;
+      right: 20px;
+      bottom: 16px;
+      color: rgba(241, 234, 217, 0.12);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 116px;
+      line-height: 1;
+    }
+
+    .layer h3 {
+      margin: 0 0 20px;
+      color: var(--amber);
+      font-size: 30px;
+    }
+
+    .layer ul,
+    .bullet-list {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--muted);
+      font-size: 20px;
+      line-height: 1.5;
+    }
+
+    .workflow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .step {
+      position: relative;
+      min-height: 158px;
+      border: 1px solid var(--line);
+      background: rgba(35, 32, 23, 0.88);
+      padding: 18px;
+      border-radius: 6px;
+    }
+
+    .step::before {
+      content: attr(data-step);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      margin-bottom: 14px;
+      border-radius: 50%;
+      background: var(--amber);
+      color: #1c1711;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .step::after {
+      content: "";
+      position: absolute;
+      right: -15px;
+      top: 50%;
+      width: 14px;
+      height: 2px;
+      background: var(--amber);
+    }
+
+    .step:nth-child(5)::after,
+    .step:nth-child(10)::after {
+      display: none;
+    }
+
+    .step strong {
+      display: block;
+      color: var(--paper);
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .step span {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.36;
+    }
+
+    .gate-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.08fr;
+      gap: 26px;
+      align-items: stretch;
+    }
+
+    .gate-box {
+      border: 1px solid rgba(125, 180, 108, 0.38);
+      background: rgba(125, 180, 108, 0.08);
+      padding: 26px;
+      border-radius: 6px;
+    }
+
+    .gate-box h3,
+    .danger-box h3 {
+      margin: 0 0 18px;
+      color: var(--paper);
+      font-size: 30px;
+    }
+
+    .agent-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .agent {
+      display: grid;
+      grid-template-columns: 210px 1fr;
+      gap: 12px;
+      border: 1px solid var(--line);
+      background: rgba(0, 0, 0, 0.12);
+      padding: 14px;
+      border-radius: 4px;
+      font-size: 17px;
+      line-height: 1.34;
+    }
+
+    .agent strong {
+      color: var(--green);
+      font-family: "Cascadia Mono", Consolas, monospace;
+      font-size: 16px;
+    }
+
+    .danger-box {
+      border: 1px solid rgba(193, 95, 63, 0.44);
+      background: rgba(193, 95, 63, 0.1);
+      padding: 26px;
+      border-radius: 6px;
+    }
+
+    .rule-table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: rgba(35, 32, 23, 0.88);
+      border-radius: 6px;
+    }
+
+    .rule-table th,
+    .rule-table td {
+      border-bottom: 1px solid var(--line);
+      padding: 16px 18px;
+      text-align: left;
+      vertical-align: top;
+      font-size: 17px;
+      line-height: 1.32;
+    }
+
+    .rule-table th {
+      color: var(--amber);
+      font-family: "Cascadia Mono", Consolas, monospace;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: rgba(0, 0, 0, 0.16);
+    }
+
+    .rule-table td:first-child {
+      color: var(--paper);
+      font-family: "Cascadia Mono", Consolas, monospace;
+      font-size: 15px;
+    }
+
+    .severity-high {
+      color: #f0b09c;
+    }
+
+    .severity-medium {
+      color: #f0cd82;
+    }
+
+    .evidence-map {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .evidence {
+      min-height: 190px;
+      border: 1px solid var(--line);
+      background: rgba(35, 32, 23, 0.9);
+      padding: 20px;
+      border-radius: 6px;
+    }
+
+    .evidence h3 {
+      margin: 0 0 14px;
+      color: var(--paper);
+      font-size: 24px;
+    }
+
+    .evidence .mono {
+      color: var(--steel);
+      font-size: 15px;
+      line-height: 1.48;
+    }
+
+    .artifact-grid {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 26px;
+      align-items: stretch;
+    }
+
+    .data-lane {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .data-node {
+      position: relative;
+      min-height: 214px;
+      border: 1px solid var(--line);
+      background: rgba(35, 32, 23, 0.9);
+      padding: 22px;
+      border-radius: 6px;
+    }
+
+    .data-node::after {
+      content: "";
+      position: absolute;
+      right: -19px;
+      top: 50%;
+      width: 20px;
+      height: 2px;
+      background: var(--amber);
+    }
+
+    .data-node:last-child::after {
+      display: none;
+    }
+
+    .data-node h3 {
+      margin: 0 0 14px;
+      color: var(--paper);
+      font-size: 24px;
+    }
+
+    .data-node p {
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.38;
+    }
+
+    .data-node .mono {
+      display: block;
+      margin-top: 14px;
+      color: var(--steel);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .data-split {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .mini-panel {
+      border: 1px solid var(--line);
+      background: rgba(0, 0, 0, 0.16);
+      padding: 18px;
+      border-radius: 6px;
+    }
+
+    .mini-panel strong {
+      display: block;
+      color: var(--amber);
+      margin-bottom: 8px;
+      font-size: 18px;
+    }
+
+    .mini-panel span {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.38;
+    }
+
+    .agent-map {
+      display: grid;
+      grid-template-columns: 1.05fr 1.55fr 1.05fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .agent-column {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .agent-node,
+    .parent-node,
+    .output-node {
+      border: 1px solid var(--line);
+      background: rgba(35, 32, 23, 0.9);
+      padding: 18px;
+      border-radius: 6px;
+    }
+
+    .parent-node {
+      min-height: 438px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-color: rgba(217, 164, 65, 0.42);
+      background: rgba(217, 164, 65, 0.08);
+    }
+
+    .output-node {
+      min-height: 438px;
+      border-color: rgba(125, 180, 108, 0.38);
+      background: rgba(125, 180, 108, 0.08);
+    }
+
+    .agent-node h3,
+    .parent-node h3,
+    .output-node h3 {
+      margin: 0 0 10px;
+      color: var(--paper);
+      font-size: 22px;
+    }
+
+    .agent-node p,
+    .parent-node p,
+    .output-node p {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.36;
+    }
+
+    .agent-node.live {
+      border-color: rgba(125, 180, 108, 0.36);
+    }
+
+    .agent-node.offline {
+      border-color: rgba(136, 160, 168, 0.32);
+    }
+
+    .handoff {
+      border: 1px dashed rgba(217, 164, 65, 0.44);
+      padding: 14px;
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .file-tree {
+      border: 1px solid var(--line);
+      background: rgba(35, 32, 23, 0.88);
+      padding: 26px;
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .summary-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .summary-item {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 14px;
+      align-items: start;
+      border: 1px solid var(--line);
+      background: rgba(35, 32, 23, 0.88);
+      padding: 18px;
+      border-radius: 6px;
+    }
+
+    .summary-item .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--green);
+      color: #11140f;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .summary-item strong {
+      display: block;
+      color: var(--paper);
+      margin-bottom: 6px;
+      font-size: 21px;
+    }
+
+    .summary-item span {
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.38;
+    }
+
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: rgba(241, 234, 217, 0.54);
+      font-family: "Cascadia Mono", Consolas, monospace;
+      font-size: 14px;
+    }
+
+    .nav {
+      position: fixed;
+      right: 26px;
+      bottom: 22px;
+      z-index: 10;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .nav button {
+      width: 44px;
+      height: 38px;
+      border: 1px solid var(--line);
+      background: rgba(35, 32, 23, 0.88);
+      color: var(--ink);
+      border-radius: 4px;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .nav button:hover {
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    .counter {
+      min-width: 78px;
+      text-align: center;
+      color: var(--muted);
+      font-family: "Cascadia Mono", Consolas, monospace;
+      font-size: 14px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 3px 9px;
+      border: 1px solid var(--line);
+      color: var(--paper);
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 999px;
+      font-family: "Cascadia Mono", Consolas, monospace;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    @media (max-width: 1100px) {
+      body {
+        overflow: auto;
+      }
+
+      .deck {
+        height: auto;
+        min-height: 100vh;
+      }
+
+      .slide {
+        position: relative;
+        display: none;
+        min-height: 100vh;
+        padding: 42px 26px 86px;
+      }
+
+      .slide.active {
+        display: grid;
+      }
+
+      .title-layout,
+      .gate-layout,
+      .artifact-grid,
+      .layer-stack,
+      .evidence-map,
+      .data-lane,
+      .data-split,
+      .agent-map {
+        grid-template-columns: 1fr;
+      }
+
+      .body-grid,
+      .workflow {
+        grid-template-columns: 1fr;
+      }
+
+      .span-3,
+      .span-4,
+      .span-5,
+      .span-6,
+      .span-7,
+      .span-8,
+      .span-12 {
+        grid-column: span 1;
+      }
+
+      .step::after {
+        display: none;
+      }
+
+      .data-node::after {
+        display: none;
+      }
+
+      .agent {
+        grid-template-columns: 1fr;
+      }
+
+      .rule-table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+
+    @media print {
+      body {
+        overflow: visible;
+      }
+
+      .deck {
+        height: auto;
+        background: var(--bg);
+      }
+
+      .slide {
+        position: relative;
+        opacity: 1;
+        transform: none;
+        page-break-after: always;
+        min-height: 100vh;
+      }
+
+      .nav {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-live="polite">
+    <section class="slide active">
+      <header class="eyebrow">ASCET extension skill</header>
+      <div class="title-layout">
+        <div class="title-copy">
+          <h1>ascet-full-check 工作流与检查能力</h1>
+          <p>一个面向 ASCET 组件、方法、图、BDE 信号映射和引用关系的可扩展检查框架。</p>
+        </div>
+        <aside class="hero-panel">
+          <div class="command-card mono">/ascet-full-check<br />status -> scope -> evidence -> check -> verify -> report</div>
+          <div class="metric-row">
+            <div class="metric"><strong>3</strong><span>分层职责</span></div>
+            <div class="metric"><strong>5</strong><span>首批规则</span></div>
+            <div class="metric"><strong>8</strong><span>专用 agents</span></div>
+          </div>
+          <p>目标不是一次性脚本，而是后续能持续加规则、换工具、扩 agent 的检查平台。</p>
+        </aside>
+      </div>
+      <footer class="footer"><span>packages/ascet-extension</span><span>HTML slide deck</span></footer>
+    </section>
+
+    <section class="slide">
+      <header class="eyebrow">implemented architecture</header>
+      <div>
+        <h2>三层结构，入口轻，规则外置</h2>
+      </div>
+      <div class="layer-stack">
+        <article class="layer" data-index="1">
+          <h3>/ascet-full-check command</h3>
+          <ul>
+            <li>收集用户请求参数</li>
+            <li>补充命令级约束</li>
+            <li>调用 <span class="mono">/skill:ascet-full-check</span></li>
+            <li>不硬编码具体检查规则</li>
+          </ul>
+        </article>
+        <article class="layer" data-index="2">
+          <h3>ascet-full-check skill</h3>
+          <ul>
+            <li>编排 status、scope、plan、evidence</li>
+            <li>根据 <span class="mono">check_item_count</span> 决定 inline 或 subagent</li>
+            <li>统一报告和证据合同</li>
+            <li>执行 live ASCET agent preflight</li>
+          </ul>
+        </article>
+        <article class="layer" data-index="3">
+          <h3>references / agents</h3>
+          <ul>
+            <li><span class="mono">rule-index.yaml</span> 注册规则</li>
+            <li><span class="mono">tool-map.md</span> 映射工具动作</li>
+            <li>checker agent 只读证据文件</li>
+            <li>report merge agent 去重排序</li>
+          </ul>
+        </article>
+      </div>
+      <footer class="footer"><span>设计原则</span><span>新增规则不改 command，不改主流程</span></footer>
+    </section>
+
+    <section class="slide">
+      <header class="eyebrow">workflow</header>
+      <div>
+        <h2>从问题到报告的执行链路</h2>
+      </div>
+      <div class="workflow">
+        <div class="step" data-step="1"><strong>Ask</strong><span>目标、范围、规则、验证深度、输出格式不清楚时调用 ask_user_question。</span></div>
+        <div class="step" data-step="2"><strong>Status</strong><span>先跑 ascet_status，必要时查 scheduler 状态。</span></div>
+        <div class="step" data-step="3"><strong>Scope</strong><span>解析 component、method、diagram、BDE surface。</span></div>
+        <div class="step" data-step="4"><strong>Plan</strong><span>加载 rule-index，生成 check-plan。</span></div>
+        <div class="step" data-step="5"><strong>Count</strong><span>check_item_count 统计待查对象，不只是 class。</span></div>
+        <div class="step" data-step="6"><strong>Mode</strong><span>小于 5 inline；大于等于 5 可启用 subagent。</span></div>
+        <div class="step" data-step="7"><strong>Preflight</strong><span>检查 agent tools 是否包含所需 ascet_*。</span></div>
+        <div class="step" data-step="8"><strong>Evidence</strong><span>按 tool-map 收集 JSONL 证据并复用。</span></div>
+        <div class="step" data-step="9"><strong>Check</strong><span>checker agents 基于证据输出 JSONL findings。</span></div>
+        <div class="step" data-step="10"><strong>Report</strong><span>验证高风险发现，合并 Markdown 和 JSON 报告。</span></div>
+      </div>
+      <footer class="footer"><span>关键边界</span><span>实时 ASCET 查询与规则判断解耦</span></footer>
+    </section>
+
+    <section class="slide">
+      <header class="eyebrow">subagent dispatch gate</header>
+      <div>
+        <h2>live ASCET 任务只发给有工具权限的 agent</h2>
+      </div>
+      <div class="gate-layout">
+        <div class="gate-box">
+          <h3>允许承接 live evidence</h3>
+          <div class="agent-list">
+            <div class="agent"><strong>ascet</strong><span>项目本地 fallback，具备 ASCET read-only 工具。</span></div>
+            <div class="agent"><strong>ascet-discovery</strong><span>解析范围、目标清单、组件和图面。</span></div>
+            <div class="agent"><strong>ascet-evidence</strong><span>收集 reusable evidence，避免重复 live 调用。</span></div>
+            <div class="agent"><strong>ascet-verify-checker</strong><span>验证高风险或不确定 findings。</span></div>
+          </div>
+        </div>
+        <div class="danger-box">
+          <h3>禁止错误分派</h3>
+          <ul class="bullet-list">
+            <li>不能把 live ASCET evidence 任务发给 builtin reviewer、worker、planner、researcher。</li>
+            <li>分派前必须比对任务需要的 <span class="mono">ascet_*</span> 与 profile <span class="mono">tools:</span>。</li>
+            <li>缺任何工具就不派发，改用 approved agent 或 parent inline。</li>
+            <li>BDE 图读取统一使用 <span class="mono">ascet_read</span> action <span class="mono">read_block_diagram</span>。</li>
+          </ul>
+        </div>
+      </div>
+      <footer class="footer"><span>解决的问题</span><span>避免 reviewer 无 ASCET 工具导致 intercom 卡住</span></footer>
+    </section>
+
+    <section class="slide">
+      <header class="eyebrow">check items</header>
+      <div>
+        <h2>首批规则覆盖哪些检查项目</h2>
+      </div>
+      <table class="rule-table">
+        <thead>
+          <tr>
+            <th>rule id</th>
+            <th>family</th>
+            <th>severity</th>
+            <th>检查内容</th>
+            <th>checker</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>signal.unused-local-variable</td>
+            <td>signal-variable</td>
+            <td class="severity-high">high</td>
+            <td>局部变量、signal、occurrence 证据交叉判断未使用或异常使用。</td>
+            <td>ascet-rule-checker</td>
+          </tr>
+          <tr>
+            <td>implementation.missing-final-else</td>
+            <td>condition-loop</td>
+            <td class="severity-medium">medium</td>
+            <td>方法代码和 implementation 中缺少最终 ELSE 或默认赋值路径。</td>
+            <td>ascet-rule-checker</td>
+          </tr>
+          <tr>
+            <td>semantic.position-variable-mapping</td>
+            <td>semantic</td>
+            <td class="severity-high">high</td>
+            <td>位置变量映射、命名、代码使用与 element metadata 不一致。</td>
+            <td>ascet-semantic-checker</td>
+          </tr>
+          <tr>
+            <td>reference.unexpected-external-used-by</td>
+            <td>reference</td>
+            <td class="severity-medium">medium</td>
+            <td>组件引用、元素引用、occurrence 与外部 used-by 异常关系。</td>
+            <td>ascet-reference-checker</td>
+          </tr>
+          <tr>
+            <td>bde.signal-mapping-mismatch</td>
+            <td>bde-signal-mapping</td>
+            <td class="severity-high">high</td>
+            <td>BDE 连线、信号、端口方向、代码使用之间的映射错误。</td>
+            <td>ascet-bde-signal-checker</td>
+          </tr>
+        </tbody>
+      </table>
+      <footer class="footer"><span>扩展方式</span><span>新增规则优先改 rule-index.yaml</span></footer>
+    </section>
+
+    <section class="slide">
+      <header class="eyebrow">evidence model</header>
+      <div>
+        <h2>所有检查都落到统一 evidence contract</h2>
+      </div>
+      <div class="evidence-map">
+        <article class="evidence">
+          <h3>Runtime</h3>
+          <div class="mono">runtime_status -> ascet_status<br />scheduler_status -> ascet_scheduler_status</div>
+        </article>
+        <article class="evidence">
+          <h3>Discovery</h3>
+          <div class="mono">components -> ascet_explore.list_components<br />target -> ascet_explore.resolve_target<br />diagrams -> ascet_explore.list_diagrams</div>
+        </article>
+        <article class="evidence">
+          <h3>Code</h3>
+          <div class="mono">component_code -> ascet_read.read_code<br />method_code -> ascet_read.read_code<br />implementation -> ascet_read.read_implementation</div>
+        </article>
+        <article class="evidence">
+          <h3>BDE Diagram</h3>
+          <div class="mono">block_diagram -> ascet_read.read_block_diagram<br />bde_connections -> derive<br />bde_signals -> derive</div>
+        </article>
+        <article class="evidence">
+          <h3>Reference</h3>
+          <div class="mono">component_refs -> ascet_reference.component_refs<br />element_refs -> ascet_reference.element_refs<br />occurrences -> ascet_search.search_occurrences</div>
+        </article>
+        <article class="evidence">
+          <h3>Verify</h3>
+          <div class="mono">component_diff -> ascet_diff<br />method_diff -> ascet_diff<br />readback_verify -> ascet_verify</div>
+        </article>
+      </div>
+      <footer class="footer"><span>证据策略</span><span>unsupported / not-found 也写入 evidence，不能静默丢弃</span></footer>
+    </section>
+
+    <section class="slide">
+      <header class="eyebrow">data lineage</header>
+      <div>
+        <h2>数据链路：live ASCET 到最终 finding</h2>
+      </div>
+      <div>
+        <div class="data-lane">
+          <article class="data-node">
+            <h3>1. 用户请求</h3>
+            <p>命令入口把自然语言请求转成检查任务，缺少 target、scope、rule、verify、format 时先问用户。</p>
+            <span class="mono">/ascet-full-check<br />ask_user_question</span>
+          </article>
+          <article class="data-node">
+            <h3>2. 范围清单</h3>
+            <p>父 agent 解析组件、方法、图、BDE 连线、signals、references，写入可复查的 scope manifest。</p>
+            <span class="mono">ascet_status<br />ascet_explore.*<br />scope-manifest.json</span>
+          </article>
+          <article class="data-node">
+            <h3>3. 规则计划</h3>
+            <p>从 rule-index.yaml 读取规则，展开成 rule-target pairs，并计算 check_item_count。</p>
+            <span class="mono">rule-index.yaml<br />check-plan.json<br />check_item_count</span>
+          </article>
+          <article class="data-node">
+            <h3>4. 证据缓存</h3>
+            <p>按 tool-map 采集 JSONL evidence。相同 target 的证据复用，失败和 unsupported 也记录。</p>
+            <span class="mono">evidence/*.jsonl<br />tool + action + target<br />ok / error</span>
+          </article>
+        </div>
+        <div class="data-split">
+          <div class="mini-panel">
+            <strong>证据进入 checker</strong>
+            <span>rule checker、semantic checker、reference checker、BDE checker 只读 evidence 文件，避免每个 checker 重复访问 live ASCET。</span>
+          </div>
+          <div class="mini-panel">
+            <strong>finding 进入 merge / verify</strong>
+            <span>每条 finding 带 rule_id、severity、target 和 evidence_id；高风险或不确定项再由 verify checker 调用 ascet_verify、ascet_read、ascet_diff。</span>
+          </div>
+        </div>
+      </div>
+      <footer class="footer"><span>数据原则</span><span>live data 先证据化，再规则化，最后报告化</span></footer>
+    </section>
+
+    <section class="slide">
+      <header class="eyebrow">multi-agent interaction</header>
+      <div>
+        <h2>多 agent 交互：parent 编排，子 agent 专职</h2>
+      </div>
+      <div class="agent-map">
+        <div class="parent-node">
+          <div>
+            <h3>Parent agent</h3>
+            <p>负责询问用户、运行 status、发现 scope、生成 plan、计算 check_item_count、执行 profile preflight。</p>
+          </div>
+          <div class="handoff">只把 live ASCET evidence 任务交给具备 ascet_* tools 的 approved agent。</div>
+          <div class="handoff">如果 check_item_count &lt; 5，直接 inline 完成同样的 evidence 和 report contract。</div>
+        </div>
+        <div class="agent-column">
+          <article class="agent-node live">
+            <h3>ascet-discovery</h3>
+            <p>读取 live ASCET 状态和结构，输出 scope-manifest 的候选目标。</p>
+          </article>
+          <article class="agent-node live">
+            <h3>ascet-evidence</h3>
+            <p>按 tool-map 采集 code、diagram、reference、diff 等证据，写入 evidence JSONL。</p>
+          </article>
+          <article class="agent-node offline">
+            <h3>rule / semantic / reference / BDE checkers</h3>
+            <p>读取 evidence 文件，按 rule-index 输出 findings，不直接访问 live ASCET。</p>
+          </article>
+          <article class="agent-node live">
+            <h3>ascet-verify-checker</h3>
+            <p>对 high severity 或低 confidence findings 做 readback、diff、verify。</p>
+          </article>
+          <article class="agent-node offline">
+            <h3>ascet-report-merge</h3>
+            <p>去重、排序、合并 evidence IDs，生成 Markdown 和 JSON 报告。</p>
+          </article>
+        </div>
+        <div class="output-node">
+          <h3>交互产物</h3>
+          <ul class="bullet-list">
+            <li><span class="mono">check-request.json</span></li>
+            <li><span class="mono">scope-manifest.json</span></li>
+            <li><span class="mono">check-plan.json</span></li>
+            <li><span class="mono">evidence/*.jsonl</span></li>
+            <li><span class="mono">findings/*.jsonl</span></li>
+            <li><span class="mono">report/*.md</span> / <span class="mono">report/*.json</span></li>
+          </ul>
+          <p style="margin-top: 18px;">generic reviewer 只能审 plan 或 evidence 文件，不能承接 live ASCET evidence 任务。</p>
+        </div>
+      </div>
+      <footer class="footer"><span>并行策略</span><span>多个 agent 可并行提交请求，由 ASCET scheduler 协调 live ToolAPI 执行</span></footer>
+    </section>
+
+    <section class="slide">
+      <header class="eyebrow">outputs</header>
+      <div>
+        <h2>每次运行都有可追溯产物</h2>
+      </div>
+      <div class="artifact-grid">
+        <pre class="file-tree">.pi/ascet-full-check/runs/&lt;run-id&gt;/
+check-request.json
+scope-manifest.json
+check-plan.json
+evidence/status.json
+evidence/components.jsonl
+evidence/block-diagrams.jsonl
+evidence/code.jsonl
+evidence/references.jsonl
+evidence/diffs.jsonl
+evidence/verify.jsonl
+findings/*.jsonl
+report/ascet-full-check-report.md
+report/ascet-full-check-report.json</pre>
+        <div class="summary-list">
+          <div class="summary-item"><span class="num">1</span><div><strong>固定 finding 结构</strong><span>rule_id、family、severity、component_path、method_name、diagram_name、evidence、recommendation、tool_evidence、confidence。</span></div></div>
+          <div class="summary-item"><span class="num">2</span><div><strong>可合并报告</strong><span>按 rule、component、method、diagram、element、signal 去重，保留最高 severity 和所有 evidence IDs。</span></div></div>
+          <div class="summary-item"><span class="num">3</span><div><strong>面向维护扩展</strong><span>新增检查先加 rule-index；复杂规则再补 reference 或 agent；工具改名只更新 tool-map。</span></div></div>
+        </div>
+      </div>
+      <footer class="footer"><span>最终报告章节</span><span>Summary / Scope / Runtime / Findings / BDE / Evidence Gaps / Verification</span></footer>
+    </section>
+
+    <section class="slide">
+      <header class="eyebrow">what it enables</header>
+      <div>
+        <h2>实现的功能总结</h2>
+      </div>
+      <div class="body-grid">
+        <article class="card span-4">
+          <h3>完整 ASCET 检查入口</h3>
+          <p>提供 <span class="mono">/ascet-full-check</span> 命令，能从模糊请求收集参数并进入标准检查流程。</p>
+        </article>
+        <article class="card span-4">
+          <h3>规则驱动检查框架</h3>
+          <p>规则、证据、报告、扩展方式拆到 references，避免把检查逻辑写死在入口。</p>
+        </article>
+        <article class="card span-4">
+          <h3>大范围任务自动分派</h3>
+          <p><span class="mono">check_item_count >= 5</span> 时启用 subagent，少量对象则 parent inline。</p>
+        </article>
+        <article class="card span-4">
+          <h3>ASCET live 工具门禁</h3>
+          <p>只允许具备 ASCET 工具的 agent 获取实时证据，防止 generic reviewer 卡在 intercom。</p>
+        </article>
+        <article class="card span-4">
+          <h3>BDE 信号映射检查</h3>
+          <p>新增 BDE signal mapping mismatch 规则，读取 block diagram、signals、children、code 和 refs 证据。</p>
+        </article>
+        <article class="card span-4">
+          <h3>可审计报告产物</h3>
+          <p>每条发现都带 evidence_id、tool、action、target，后续能验证、复查、去重和追踪。</p>
+        </article>
+      </div>
+      <footer class="footer"><span>ASCET full-check</span><span>可扩展检查框架，而不是一次性检查脚本</span></footer>
+    </section>
+  </main>
+
+  <nav class="nav" aria-label="slide navigation">
+    <button type="button" id="prev" aria-label="上一页">‹</button>
+    <span class="counter" id="counter">1 / 10</span>
+    <button type="button" id="next" aria-label="下一页">›</button>
+  </nav>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const counter = document.getElementById("counter");
+    let current = 0;
+
+    function showSlide(index) {
+      current = Math.max(0, Math.min(index, slides.length - 1));
+      slides.forEach((slide, i) => {
+        slide.classList.toggle("active", i === current);
+      });
+      counter.textContent = `${current + 1} / ${slides.length}`;
+      const hash = `slide-${current + 1}`;
+      if (location.hash.slice(1) !== hash) {
+        history.replaceState(null, "", `#${hash}`);
+      }
+    }
+
+    document.getElementById("prev").addEventListener("click", () => showSlide(current - 1));
+    document.getElementById("next").addEventListener("click", () => showSlide(current + 1));
+
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " ") {
+        event.preventDefault();
+        showSlide(current + 1);
+      }
+      if (event.key === "ArrowLeft" || event.key === "PageUp") {
+        event.preventDefault();
+        showSlide(current - 1);
+      }
+      if (event.key === "Home") {
+        event.preventDefault();
+        showSlide(0);
+      }
+      if (event.key === "End") {
+        event.preventDefault();
+        showSlide(slides.length - 1);
+      }
+    });
+
+    const initial = Number.parseInt(location.hash.replace("#slide-", ""), 10);
+    if (Number.isInteger(initial) && initial > 0) {
+      showSlide(initial - 1);
+    } else {
+      showSlide(0);
+    }
+  </script>
+</body>
+</html>

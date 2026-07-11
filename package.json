@@ -38,6 +38,7 @@
 		"release:minor": "node scripts/release.mjs minor",
 		"release:major": "node scripts/release.mjs major",
 		"release:fix-links": "node scripts/release-notes.mjs fix-github-releases",
+		"release:ascet-exe": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/package-ascet-copilot-exe-release.ps1",
 		"prepare": "husky"
 	},
 	"devDependencies": {
