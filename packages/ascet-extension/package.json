@@ -1,7 +1,7 @@
 {
-	"name": "@ascet/pi-extension",
+	"name": "@zeerke/ascet-copilot-extension",
 	"version": "0.1.0",
-	"description": "ASCET tool extension for PI.",
+	"description": "ASCET Copilot tool extension for Pi.",
 	"type": "module",
 	"main": "./src/index.ts",
 	"exports": {
@@ -34,8 +34,11 @@
 		"!ascet-cli/bin/**/*.out",
 		"!ascet-cli/bin/**/*.err"
 	],
-	"dependencies": {
-		"typebox": "1.1.38"
+	"peerDependencies": {
+		"typebox": "*"
 	},
-	"private": true
+	"private": false,
+	"publishConfig": {
+		"access": "public"
+	}
 }

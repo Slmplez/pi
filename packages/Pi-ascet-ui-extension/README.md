@@ -1,6 +1,6 @@
 # Pi ASCET UI Extension
 
-ASCET COPILOT startup UI package for Pi.
+ASCET Copilot startup UI package for Pi.
 
 ## Features
 
@@ -22,20 +22,28 @@ ASCET COPILOT startup UI package for Pi.
 
 ### From npm
 
+Recommended ASCET Copilot install:
+
 ```powershell
-pi install npm:pi-ascet-ui-extension
+pi install npm:@zeerke/ascet-copilot
+```
+
+Standalone UI package:
+
+```powershell
+pi install npm:@zeerke/ascet-copilot-ui
 ```
 
 Install a pinned version:
 
 ```powershell
-pi install npm:pi-ascet-ui-extension@0.1.0
+pi install npm:@zeerke/ascet-copilot-ui@0.1.0
 ```
 
 Try once without installing:
 
 ```powershell
-pi -e npm:pi-ascet-ui-extension
+pi -e npm:@zeerke/ascet-copilot-ui
 ```
 
 ### From GitHub
@@ -74,7 +82,7 @@ From a Pi source checkout:
 ## Update
 
 ```powershell
-pi update --extension npm:pi-ascet-ui-extension
+pi update --extension npm:@zeerke/ascet-copilot-ui
 ```
 
 Update all installed Pi packages:
@@ -88,7 +96,7 @@ If you installed from GitHub, use the same package source id that Pi registered 
 ## Remove
 
 ```powershell
-pi remove npm:pi-ascet-ui-extension
+pi remove npm:@zeerke/ascet-copilot-ui
 ```
 
 If you installed from GitHub, remove the matching GitHub package id instead.

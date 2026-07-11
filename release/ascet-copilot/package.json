@@ -1,0 +1,65 @@
+{
+  "name": "@zeerke/ascet-copilot",
+  "version": "0.1.0",
+  "description": "ASCET Copilot package bundle for Pi.",
+  "type": "module",
+  "license": "MIT",
+  "private": false,
+  "keywords": [
+    "pi-package",
+    "pi-extension",
+    "ascet",
+    "ascet-copilot"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@zeerke/ascet-copilot-extension": "0.1.0",
+    "@zeerke/ascet-copilot-ui": "0.1.0",
+    "pi-subagents": "0.34.0",
+    "@juicesharp/rpiv-todo": "1.20.0",
+    "@juicesharp/rpiv-ask-user-question": "1.20.0",
+    "pi-hermes-memory": "0.7.23",
+    "@plannotator/pi-extension": "0.23.0",
+    "pi-web-access": "0.13.0"
+  },
+  "bundledDependencies": [
+    "@zeerke/ascet-copilot-extension",
+    "@zeerke/ascet-copilot-ui",
+    "pi-subagents",
+    "@juicesharp/rpiv-todo",
+    "@juicesharp/rpiv-ask-user-question",
+    "pi-hermes-memory",
+    "@plannotator/pi-extension",
+    "pi-web-access"
+  ],
+  "pi": {
+    "extensions": [
+      "node_modules/@zeerke/ascet-copilot-extension/src/index.ts",
+      "node_modules/@zeerke/ascet-copilot-ui/extensions/index.ts",
+      "node_modules/pi-subagents/src/extension/index.ts",
+      "node_modules/@juicesharp/rpiv-todo/index.ts",
+      "node_modules/@juicesharp/rpiv-ask-user-question/index.ts",
+      "node_modules/pi-hermes-memory/src/index.ts",
+      "node_modules/@plannotator/pi-extension",
+      "node_modules/pi-web-access/index.ts"
+    ],
+    "skills": [
+      "node_modules/@zeerke/ascet-copilot-extension/skills",
+      "node_modules/pi-subagents/skills",
+      "node_modules/pi-web-access/skills"
+    ],
+    "prompts": [
+      "node_modules/pi-subagents/prompts"
+    ],
+    "themes": [
+      "node_modules/@zeerke/ascet-copilot-ui/themes"
+    ],
+    "subagents": {
+      "agents": [
+        "node_modules/@zeerke/ascet-copilot-extension/agents"
+      ]
+    }
+  }
+}
