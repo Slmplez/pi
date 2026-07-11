@@ -29,7 +29,7 @@ Compute `check_item_count` after scope discovery and plan generation. This count
 - If `check_item_count < 5`, run inline in the current agent.
 - If `check_item_count >= 5`, dispatch subagents unless the user explicitly requests inline execution.
 
-The main agent decides what counts as a check item based on target type and rule family.
+The main agent decides what counts as a check item based on target type and rule family. For parameter mapping checks, count importer/exporter component pairs, mapped elements, unmapped imported parameters, local dependency candidates, and evidence-gap records as check items.
 
 ### Live ASCET Dispatch Gate
 
@@ -53,6 +53,14 @@ Never send live ASCET evidence collection to builtin `reviewer`, `worker`, `plan
 
 BDE and block diagram evidence must use the canonical tool call `ascet_read` with action `read_block_diagram`. Do not use old fine-grained block-diagram tool names.
 
+Parameter mapping evidence must use the canonical tool calls:
+
+- `ascet_read` action `read_import_export_matches`
+- `ascet_read` action `read_import_export_match`
+- `ascet_read` action `plan_element_dependency`
+
+Do not use `ascet_write.set_element_dependency` in full-check.
+
 ## Standard Flow
 
 1. Run `ascet_status`.
@@ -64,6 +72,20 @@ BDE and block diagram evidence must use the canonical tool call `ascet_read` wit
 7. Run inline checks or subagent checks.
 8. Verify high-risk or uncertain findings when enabled.
 9. Merge findings and write final reports.
+
+## Parameter Mapping Flow
+
+Use this flow when `parameter-mapping` or `semantic.parameter-name-consistency` is in scope:
+
+1. Collect `component_refs` for candidate components and derive importer/exporter component pairs.
+2. Record an evidence gap when no importer/exporter relation can be established for a scoped component.
+3. Collect `children` with `ascet_explore` action `preview_children` and derive business parameter inventories from the returned child payloads. Do not assume that a model-specific `group="parameters"` exists.
+4. For each importer/exporter pair, collect `import_export_matches`.
+5. For each mapped or suspicious element, collect `import_export_match`.
+6. For each local parameter candidate, collect `element_dependency_plan`.
+7. For unmapped imported parameters, collect `occurrences`; collect `component_code` only when code context is required.
+8. Apply `special.dt-parameter-exemption` before normal parameter mapping rules.
+9. Emit findings to `findings/parameter-mapping.jsonl` and evidence gaps to the run evidence files.
 
 ## ASCET Scheduler Use
 

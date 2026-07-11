@@ -63,3 +63,119 @@ rules:
       - kind: element_refs
         scope: signal
     agent: ascet-bde-signal-checker
+
+  - id: parameter.imported-local-attribute-mismatch
+    family: parameter-mapping
+    severity: medium
+    evidence:
+      - kind: component_refs
+        scope: component
+      - kind: children
+        scope: component
+      - kind: import_export_matches
+        scope: component_pair
+      - kind: import_export_match
+        scope: element
+      - kind: element_dependency_plan
+        scope: element
+    agent: ascet-parameter-mapping-checker
+
+  - id: parameter.mapping-missing-imported
+    family: parameter-mapping
+    severity: high
+    evidence:
+      - kind: component_refs
+        scope: component
+      - kind: children
+        scope: component
+      - kind: import_export_matches
+        scope: component_pair
+      - kind: import_export_match
+        scope: element
+    agent: ascet-parameter-mapping-checker
+
+  - id: parameter.mapping-missing-local
+    family: parameter-mapping
+    severity: high
+    evidence:
+      - kind: component_refs
+        scope: component
+      - kind: children
+        scope: component
+      - kind: import_export_matches
+        scope: component_pair
+      - kind: import_export_match
+        scope: element
+      - kind: element_dependency_plan
+        scope: element
+    agent: ascet-parameter-mapping-checker
+
+  - id: parameter.imported-unmapped-and-unused
+    family: parameter-mapping
+    severity: medium
+    evidence:
+      - kind: children
+        scope: component
+      - kind: import_export_matches
+        scope: component_pair
+      - kind: occurrences
+        scope: element
+      - kind: component_code
+        scope: component
+    agent: ascet-parameter-mapping-checker
+
+  - id: parameter.local-constant-unmapped
+    family: parameter-mapping
+    severity: low
+    evidence:
+      - kind: children
+        scope: component
+      - kind: import_export_matches
+        scope: component_pair
+      - kind: element_dependency_plan
+        scope: element
+      - kind: occurrences
+        scope: element
+    agent: ascet-parameter-mapping-checker
+
+  - id: parameter.multiple-dependency-local-parameter
+    family: parameter-mapping
+    severity: medium
+    evidence:
+      - kind: import_export_matches
+        scope: component_pair
+      - kind: element_dependency_plan
+        scope: element
+      - kind: children
+        scope: component
+    agent: ascet-parameter-mapping-checker
+
+  - id: parameter.mapping-dt-business-crosswire
+    family: parameter-mapping
+    severity: high
+    evidence:
+      - kind: children
+        scope: component
+      - kind: import_export_matches
+        scope: component_pair
+      - kind: import_export_match
+        scope: element
+      - kind: element_dependency_plan
+        scope: element
+    agent: ascet-parameter-mapping-checker
+
+  - id: semantic.parameter-name-consistency
+    family: parameter-mapping
+    severity: medium
+    evidence:
+      - kind: component_refs
+        scope: component
+      - kind: children
+        scope: component
+      - kind: import_export_matches
+        scope: component_pair
+      - kind: import_export_match
+        scope: element
+      - kind: component_code
+        scope: component
+    agent: ascet-parameter-mapping-checker

@@ -36,6 +36,17 @@ Do not use old fine-grained block-diagram tool names. They are not part of the c
 - `element_refs`: `ascet_reference` action `element_refs`
 - `occurrences`: `ascet_search` action `search_occurrences`
 
+## Parameter Mapping Evidence
+
+- `import_export_matches`: `ascet_read` action `read_import_export_matches`
+- `import_export_match`: `ascet_read` action `read_import_export_match`
+- `element_dependency_plan`: `ascet_read` action `plan_element_dependency`
+- `parameter_children`: derive from `children`; do not assume a tool-specific `group="parameters"` exists
+- `parameter_occurrences`: `occurrences` filtered to the parameter element under inspection
+- `parameter_code_context`: `component_code` or `method_code` only when the rule needs code context
+
+Parameter mapping checks may use only read, explore, reference, and search evidence. Do not use `ascet_write.set_element_dependency` in full-check.
+
 ## Diff and Verify
 
 - `component_diff`: `ascet_diff`

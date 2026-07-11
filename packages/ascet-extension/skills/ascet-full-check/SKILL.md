@@ -1,6 +1,6 @@
 ---
 name: ascet-full-check
-description: Run an extensible ASCET full-check workflow for ASCET components, methods, diagrams, BDE signal mappings, references, and verification. Use when the user asks for ASCET full check, full inspection, rule-based checking, BDE/signal mapping analysis, or a maintainable ASCET check report driven by rule-index.yaml.
+description: Run an extensible ASCET full-check workflow for ASCET components, methods, diagrams, BDE signal mappings, parameter mappings, references, and verification. Use when the user asks for ASCET full check, full inspection, rule-based checking, BDE/signal mapping analysis, parameter mapping analysis, or a maintainable ASCET check report driven by rule-index.yaml.
 ---
 
 # ASCET Full Check
@@ -16,6 +16,8 @@ Read these before planning:
 - `references/tool-map.md` for ASCET evidence kinds and tool/action mapping.
 - `references/evidence-contract.md` for run directory and evidence JSONL format.
 - `references/report-contract.md` for finding and final report shape.
+
+Read `references/parameter-mapping.md` when the requested rule range includes parameter mappings, imported/exported parameters, local parameter dependencies, or semantic parameter-name consistency.
 
 Read `references/extension-guide.md` only when adding rules, evidence kinds, agents, or report fields.
 
@@ -51,6 +53,7 @@ Use the package subagents when available:
 - `ascet-rule-checker` checks implementation and signal-variable rules from evidence.
 - `ascet-reference-checker` checks reference and dependency evidence.
 - `ascet-semantic-checker` checks naming and semantic consistency rules.
+- `ascet-parameter-mapping-checker` checks imported/exported business parameter mappings, local dependency state, and dT exemption boundaries from evidence.
 - `ascet-bde-signal-checker` checks BDE diagram signal mapping rules.
 - `ascet-verify-checker` verifies high-risk or uncertain findings.
 - `ascet-report-merge` deduplicates and writes final reports.
@@ -72,6 +75,7 @@ Parallel ASCET evidence collection is allowed. The ASCET scheduler coordinates l
 
 - Do not use `ascet_write` or `ascet_batch_write`.
 - Do not modify the ASCET database.
+- Parameter mapping checks are read-only. They may use `ascet_read` actions `read_import_export_matches`, `read_import_export_match`, and `plan_element_dependency`, but must never use `ascet_write.set_element_dependency`.
 - Preserve exact ASCET paths, method names, diagram names, signal names, tool names, and error strings.
 - Treat runtime truth as authoritative. If tool success contradicts returned data, investigate before reporting success.
 - Keep new checks extensible: add rules to `rule-index.yaml`, tool mapping to `tool-map.md`, and complex logic to a focused subagent.
