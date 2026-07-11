@@ -15,7 +15,10 @@ interface AscetCatalog {
 
 function readCatalog(): AscetCatalog {
 	return JSON.parse(
-		readFileSync(join(repoRoot, "packages/ascet-extension/ascet-cli/contracts/cli-catalog.json"), "utf8"),
+		readFileSync(join(repoRoot, "packages/ascet-extension/ascet-cli/contracts/cli-catalog.json"), "utf8").replace(
+			/^\uFEFF/,
+			"",
+		),
 	) as AscetCatalog;
 }
 

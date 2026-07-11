@@ -27,6 +27,7 @@
 		"src",
 		"agents",
 		"skills",
+		"templates",
 		"ascet-cli",
 		"README.md",
 		"!ascet-cli/bin/**/*.log",

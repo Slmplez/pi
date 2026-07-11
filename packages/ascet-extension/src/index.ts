@@ -1,3 +1,4 @@
+import { executeAscetInitCommand } from "./ascet-init.ts";
 import type { AscetExtensionAPI } from "./core/tool.ts";
 import { executeAscetSchedulerStatusCommand } from "./scheduler/status.ts";
 import { type AscetRuntimeStatusReport, createAscetRuntimeStatusReport } from "./status-runtime.ts";
@@ -46,6 +47,13 @@ export default function ascetExtension(pi: AscetExtensionAPI) {
 		handler: async (args, ctx) => {
 			const summary = await executeAscetSchedulerStatusCommand(args);
 			ctx.ui.notify(summary, "info");
+		},
+	});
+
+	pi.registerCommand("ascet-init", {
+		description: "Create or update an ASCET workspace onboarding section",
+		handler: async (args, ctx) => {
+			await executeAscetInitCommand(args, ctx, pi);
 		},
 	});
 

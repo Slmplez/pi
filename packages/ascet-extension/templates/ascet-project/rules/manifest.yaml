@@ -1,0 +1,16 @@
+version: 1
+system: pi-ascet-extension
+default_entrypoints:
+  - ascet.init.workflow
+  - ascet.tools.pi
+
+rules:
+  - id: ascet.init.workflow
+    path: tasks/init.md
+    layer: task
+  - id: ascet.tools.pi
+    path: tools/pi-ascet-tools.md
+    layer: tools
+  - id: ascet.core.workflow
+    path: core/workflow.md
+    layer: core
