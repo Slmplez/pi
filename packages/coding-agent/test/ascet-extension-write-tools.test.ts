@@ -28,12 +28,16 @@ import {
 	buildSetClassMethodCodeArgs,
 	runApprovedAscetSetClassMethodCode,
 } from "../../ascet-extension/src/set-class-method-code.ts";
+import {
+	buildSetElementDependencyArgs,
+	runApprovedAscetSetElementDependency,
+} from "../../ascet-extension/src/set-element-dependency.ts";
 import { buildSetMethodCodeArgs } from "../../ascet-extension/src/set-method-code.ts";
 import { buildSetModuleCodeArgs } from "../../ascet-extension/src/set-module-code.ts";
 import { buildSetStateMachineCodeArgs } from "../../ascet-extension/src/set-state-machine-code.ts";
-import { runAscetWrite } from "../../ascet-extension/src/tools/write.ts";
 import { ascetWriteTool } from "../../ascet-extension/src/tools/write/index.ts";
 import { ascetWritePrompt } from "../../ascet-extension/src/tools/write/prompt.ts";
+import { runAscetWrite } from "../../ascet-extension/src/tools/write.ts";
 import { requestAscetWriteApproval } from "../../ascet-extension/src/write-policy.ts";
 import { loadAscetExtension, repoRoot } from "./ascet-extension-test-helpers.ts";
 
@@ -232,6 +236,165 @@ describe("ASCET guarded write PI tools", () => {
 			"--mode",
 			"restore",
 			"--delete-missing",
+			"--verify-readback",
+			"--json",
+		]);
+	});
+
+	it("builds JSON set_element_dependency invocation with readback verification", () => {
+		expect(
+			buildSetElementDependencyArgs({
+				targetPath: "DEMO/DiscreteRiccatiSolver",
+				elementName: "B01",
+				dependency: "dependent",
+				targetKind: "component",
+				match: "exact",
+				verifyReadback: true,
+			}),
+		).toEqual([
+			"exec",
+			"set_element_dependency",
+			"DEMO\\DiscreteRiccatiSolver",
+			"B01",
+			"dependent",
+			"--target-kind",
+			"component",
+			"--match",
+			"exact",
+			"--verify-readback",
+			"--json",
+		]);
+		expect(
+			buildSetElementDependencyArgs({
+				targetPath: "DEMO/Folder",
+				elementName: "B01",
+				dependency: "independent",
+				targetKind: "folder",
+				match: "all",
+				dryRun: true,
+				backupDir: "E:\\tmp\\dependency-backup",
+			}),
+		).toEqual([
+			"exec",
+			"set_element_dependency",
+			"DEMO\\Folder",
+			"B01",
+			"independent",
+			"--target-kind",
+			"folder",
+			"--match",
+			"all",
+			"--dry-run",
+			"--backup-dir",
+			"E:\\tmp\\dependency-backup",
+			"--json",
+		]);
+	});
+
+	it("guards set_element_dependency with preflight, confirmation, and folder match-all validation", async () => {
+		const preflight = await runAscetWrite(
+			{
+				action: "set_element_dependency",
+				targetPath: "DEMO\\DiscreteRiccatiSolver",
+				elementName: "B01",
+				dependency: "dependent",
+			},
+			{ cwd: repoRoot },
+			{ hasUI: true, ui: { confirm: async () => true } },
+		);
+		const invalidFolder = await runAscetWrite(
+			{
+				action: "set_element_dependency",
+				targetPath: "DEMO\\Folder",
+				elementName: "B01",
+				dependency: "dependent",
+				targetKind: "folder",
+				match: "exact",
+				executeWrite: true,
+			},
+			{ cwd: repoRoot },
+			{ hasUI: true, ui: { confirm: async () => true } },
+		);
+		const rejected = await runApprovedAscetSetElementDependency(
+			{
+				targetPath: "DEMO\\DiscreteRiccatiSolver",
+				elementName: "B01",
+				dependency: "dependent",
+				targetKind: "component",
+				verifyReadback: true,
+				executeWrite: true,
+			},
+			{ cwd: repoRoot },
+			{ hasUI: true, ui: { confirm: async () => false } },
+		);
+
+		expect(preflight.details.outcome.status).toBe("preflight");
+		expect(preflight.details.error).toBeUndefined();
+		expect(JSON.stringify(preflight.details.outcome)).toContain('"action":"set_element_dependency"');
+		expect(invalidFolder.details.outcome.status).toBe("error");
+		expect(invalidFolder.details.error?.code).toBe("ascet_write_invalid_scope");
+		expect(invalidFolder.details.error?.message).toContain('match="all"');
+		expect(rejected.ok).toBe(false);
+		expect(rejected.error?.code).toBe("ascet_write_rejected");
+	});
+
+	it("runs set_element_dependency only after interactive confirmation", async () => {
+		let confirmCalls = 0;
+		let executeCalls = 0;
+		const result = await runApprovedAscetSetElementDependency(
+			{
+				targetPath: "DEMO\\DiscreteRiccatiSolver",
+				elementName: "B01",
+				dependency: "dependent",
+				targetKind: "component",
+				match: "exact",
+				verifyReadback: true,
+				executeWrite: true,
+			},
+			{
+				cwd: repoRoot,
+				executeCli: async (request) => {
+					executeCalls++;
+					return {
+						exitCode: 0,
+						stdout: JSON.stringify({
+							ok: true,
+							result: {
+								operationName: "set_element_dependency",
+								payload: { dependency: { after: "dependent" } },
+								verification: { requested: true, attempted: true, succeeded: true },
+							},
+						}),
+						stderr: "",
+						timedOut: false,
+						request,
+					};
+				},
+			},
+			{
+				hasUI: true,
+				ui: {
+					confirm: async () => {
+						confirmCalls++;
+						return true;
+					},
+				},
+			},
+		);
+
+		expect(confirmCalls).toBe(1);
+		expect(executeCalls).toBe(1);
+		expect(result.ok).toBe(true);
+		expect(result.request.args).toEqual([
+			"exec",
+			"set_element_dependency",
+			"DEMO\\DiscreteRiccatiSolver",
+			"B01",
+			"dependent",
+			"--target-kind",
+			"component",
+			"--match",
+			"exact",
 			"--verify-readback",
 			"--json",
 		]);

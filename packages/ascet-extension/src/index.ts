@@ -19,6 +19,10 @@ function buildAscetFullCheckPrompt(args: string): string {
 		"- Compute check_item_count after scope discovery. It is not class count; it can count classes, methods, diagrams, BDE connections, signals, elements, references, or rule-target pairs.",
 		"- Use inline mode when check_item_count < 5.",
 		"- Use subagent mode when check_item_count >= 5 unless the user explicitly asks for inline execution.",
+		"- Dispatch ASCET live evidence work only to ascet, ascet-discovery, ascet-evidence, or ascet-verify-checker.",
+		"- Before dispatching any live ASCET subagent task, preflight the selected agent profile and confirm its tools include every required ascet_* tool. If not, do not dispatch; choose an approved ASCET-aware agent or run inline.",
+		"- Never send live ASCET evidence collection to builtin reviewer, worker, planner, researcher, or other generic agents.",
+		"- Use canonical BDE reads as ascet_read action read_block_diagram; do not use old fine-grained block-diagram tool names.",
 		"- Include BDE signal mapping analysis when BDE diagrams, block diagrams, connections, or signal routing are in scope.",
 		"- Keep the workflow rule-index driven. Do not hard-code rule steps outside the ascet-full-check skill references.",
 	].join("\n");

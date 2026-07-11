@@ -31,6 +31,28 @@ Compute `check_item_count` after scope discovery and plan generation. This count
 
 The main agent decides what counts as a check item based on target type and rule family.
 
+### Live ASCET Dispatch Gate
+
+Live ASCET evidence work is any task that must call `ascet_status`, `ascet_scheduler_status`, `ascet_explore`, `ascet_search`, `ascet_read`, `ascet_reference`, `ascet_diff`, or `ascet_verify`.
+
+Only these agent profiles may receive live ASCET evidence work:
+
+- `ascet`
+- `ascet-discovery`
+- `ascet-evidence`
+- `ascet-verify-checker`
+
+Before dispatching live ASCET evidence work, preflight the selected agent profile:
+
+1. Inspect the selected profile's `tools:` allowlist.
+2. List the `ascet_*` tools required by the planned task.
+3. Dispatch only when every required `ascet_*` tool appears in `tools:`.
+4. If any required tool is missing, do not dispatch. Choose one of the approved ASCET-aware profiles or run the task inline in the parent agent.
+
+Never send live ASCET evidence collection to builtin `reviewer`, `worker`, `planner`, `researcher`, or any generic agent. Those agents may review plans or evidence files only when the task does not require live ASCET tools.
+
+BDE and block diagram evidence must use the canonical tool call `ascet_read` with action `read_block_diagram`. Do not use old fine-grained block-diagram tool names.
+
 ## Standard Flow
 
 1. Run `ascet_status`.

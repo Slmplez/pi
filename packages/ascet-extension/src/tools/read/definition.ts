@@ -1,8 +1,15 @@
 import type { AscetCliExecutionResult, AscetCliJsonResult, AscetCliRequest } from "../../cli.ts";
 import { defineSequentialAscetTool } from "../../core/tool.ts";
+import { formatPlanElementDependencyResult, runAscetPlanElementDependency } from "../../plan-element-dependency.ts";
 import { formatReadBlockDiagramResult, runAscetReadBlockDiagram } from "../../read-block-diagram.ts";
 import { formatReadComponentSummaryResult, runAscetReadComponentSummary } from "../../read-component-summary.ts";
 import { formatReadImplementationResult, runAscetReadImplementation } from "../../read-implementation.ts";
+import {
+	formatReadImportExportMatchesResult,
+	formatReadImportExportMatchResult,
+	runAscetReadImportExportMatch,
+	runAscetReadImportExportMatches,
+} from "../../read-import-export-match.ts";
 import { formatReadMethodCodeResult, runAscetReadMethodCode } from "../../read-method-code.ts";
 import { formatReadStateMachineFlowResult, runAscetReadStateMachineFlow } from "../../read-state-machine-flow.ts";
 import { formatReadTextCodeResult, runAscetReadTextCode } from "../../read-text-code.ts";
@@ -58,6 +65,12 @@ async function runAscetRead(params: AscetReadParams, options: RunOptions): Promi
 				},
 				options,
 			);
+		case "read_import_export_match":
+			return runAscetReadImportExportMatch(params, options);
+		case "read_import_export_matches":
+			return runAscetReadImportExportMatches(params, options);
+		case "plan_element_dependency":
+			return runAscetPlanElementDependency(params, options);
 	}
 }
 
@@ -80,6 +93,12 @@ function formatAscetReadResult(params: AscetReadParams, result: AscetCliJsonResu
 			return formatReadBlockDiagramResult(result);
 		case "read_state_machine_flow":
 			return formatReadStateMachineFlowResult(result);
+		case "read_import_export_match":
+			return formatReadImportExportMatchResult(result);
+		case "read_import_export_matches":
+			return formatReadImportExportMatchesResult(result);
+		case "plan_element_dependency":
+			return formatPlanElementDependencyResult(result);
 	}
 }
 

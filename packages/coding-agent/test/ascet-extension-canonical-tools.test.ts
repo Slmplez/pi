@@ -4,10 +4,7 @@ import { describe, expect, it } from "vitest";
 import type { AscetCliExecutionResult, AscetCliRequest } from "../../ascet-extension/src/cli.ts";
 import { classifyAscetCliCommand } from "../../ascet-extension/src/routing/coverage.ts";
 import { listAscetRoutes, routeAscetAction } from "../../ascet-extension/src/routing/router.ts";
-import {
-	formatAscetCapabilitiesResult,
-	runAscetCapabilities,
-} from "../../ascet-extension/src/tools/capabilities.ts";
+import { formatAscetCapabilitiesResult, runAscetCapabilities } from "../../ascet-extension/src/tools/capabilities.ts";
 import { ascetDiffTool } from "../../ascet-extension/src/tools/diff/index.ts";
 import { ascetExploreTool } from "../../ascet-extension/src/tools/explore/index.ts";
 import { ascetReadTool } from "../../ascet-extension/src/tools/read/index.ts";
@@ -96,7 +93,9 @@ describe("ASCET canonical PI tools", () => {
 		const ascetExtension = await loadAscetExtension();
 
 		for (const name of CANONICAL_ASCET_TOOLS) {
-			const definition = ascetExtension?.tools.get(name)?.definition as { parameters?: { type?: unknown } } | undefined;
+			const definition = ascetExtension?.tools.get(name)?.definition as
+				| { parameters?: { type?: unknown } }
+				| undefined;
 			expect(definition?.parameters?.type, name).toBe("object");
 		}
 	});
@@ -331,7 +330,9 @@ describe("ASCET canonical PI tools", () => {
 			canonicalAction: undefined,
 		});
 		expect(stateMachineResult.ok).toBe(true);
-		expect(stateMachineResult.data.matches.find((match) => match.operation === "set_state_machine_code")).toMatchObject({
+		expect(
+			stateMachineResult.data.matches.find((match) => match.operation === "set_state_machine_code"),
+		).toMatchObject({
 			argumentEnums: {
 				operation: expect.arrayContaining(["set-method", "set-state-entry-esdl", "set-start-state"]),
 			},

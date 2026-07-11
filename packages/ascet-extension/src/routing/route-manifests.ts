@@ -165,6 +165,27 @@ export const ascetRouteManifestEntries = [
 		operation: "read_state_machine_flow",
 		category: "domain",
 	},
+	{
+		toolName: "ascet_read",
+		action: "read_import_export_match",
+		logicalCommandId: "AscetReadImportExportMatch",
+		operation: "read_import_export_match",
+		category: "domain",
+	},
+	{
+		toolName: "ascet_read",
+		action: "read_import_export_matches",
+		logicalCommandId: "AscetReadImportExportMatches",
+		operation: "read_import_export_matches",
+		category: "domain",
+	},
+	{
+		toolName: "ascet_read",
+		action: "plan_element_dependency",
+		logicalCommandId: "AscetPlanElementDependency",
+		operation: "plan_element_dependency",
+		category: "domain",
+	},
 
 	{
 		toolName: "ascet_reference",
@@ -313,6 +334,13 @@ export const ascetRouteManifestEntries = [
 		action: "apply_project_formula",
 		logicalCommandId: "AscetApplyProjectFormula",
 		operation: "apply_project_formula",
+		category: "domain",
+	},
+	{
+		toolName: "ascet_write",
+		action: "set_element_dependency",
+		logicalCommandId: "AscetSetElementDependency",
+		operation: "set_element_dependency",
 		category: "domain",
 	},
 

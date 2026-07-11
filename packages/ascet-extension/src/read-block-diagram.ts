@@ -75,7 +75,8 @@ function normalizeReadBlockDiagramResult(
 			data: {
 				componentPath: params.componentPath,
 				diagramName: params.diagramName,
-				recommendation: "Use ascet_read.read, ascet_read.read_code, or ascet_read.read_implementation for text ESDL components.",
+				recommendation:
+					"Use ascet_read.read, ascet_read.read_code, or ascet_read.read_implementation for text ESDL components.",
 			},
 			error: {
 				code: "ascet_block_diagram_surface_not_supported",

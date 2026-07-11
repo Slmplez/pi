@@ -3,8 +3,8 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { runAscetContractCatalog } from "../../ascet-extension/src/contract-catalog.ts";
-import { createAscetRuntimeStatusReport } from "../../ascet-extension/src/status-runtime.ts";
 import { createAscetStatusReport, resolveAscetStatusPaths } from "../../ascet-extension/src/status.ts";
+import { createAscetRuntimeStatusReport } from "../../ascet-extension/src/status-runtime.ts";
 import { ascetAgentRoot, loadAscetExtension, repoRoot } from "./ascet-extension-test-helpers.ts";
 
 describe("ASCET extension status diagnostics", () => {
@@ -110,7 +110,7 @@ describe("ASCET extension status diagnostics", () => {
 					cliPath: resolve(repoRoot, "packages/ascet-extension/ascet-cli/bin/AscetCli.exe"),
 					args: ["exec", "list_folders", "--depth", "0", "--json"],
 				},
-				stdout: "{\"items\":[]}",
+				stdout: '{"items":[]}',
 				stderr: "",
 				exitCode: 0,
 				timedOut: false,
@@ -198,7 +198,7 @@ describe("ASCET extension status diagnostics", () => {
 					cliPath: resolve(repoRoot, "packages/ascet-extension/ascet-cli/bin/AscetCli.exe"),
 					args: ["exec", "list_folders", "--depth", "0", "--json"],
 				},
-				stdout: "{\"items\":[]}",
+				stdout: '{"items":[]}',
 				stderr: "",
 				exitCode: 0,
 				timedOut: false,

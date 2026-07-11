@@ -11,6 +11,7 @@ import { runApprovedAscetDeleteComponent } from "../delete-component.ts";
 import { runApprovedAscetDeleteFolder } from "../delete-folder.ts";
 import { runApprovedAscetDeleteMethod } from "../delete-method.ts";
 import { runApprovedAscetSetClassMethodCode } from "../set-class-method-code.ts";
+import { runApprovedAscetSetElementDependency } from "../set-element-dependency.ts";
 import { runApprovedAscetSetMethodCode } from "../set-method-code.ts";
 import { runApprovedAscetSetModuleCode } from "../set-module-code.ts";
 import {
@@ -82,10 +83,10 @@ export type AscetWriteParams =
 			executeWrite?: boolean;
 	  } & CodeSource)
 	| ({
-		action: "set_module_code";
-		modulePath: string;
-		operation?: "set-method" | "set-header" | "set-external-c-code";
-		section?: "set-method" | "set-header" | "set-external-c-code";
+			action: "set_module_code";
+			modulePath: string;
+			operation?: "set-method" | "set-header" | "set-external-c-code";
+			section?: "set-method" | "set-header" | "set-external-c-code";
 			methodName?: string;
 			verifyReadback?: boolean;
 			executeWrite?: boolean;
@@ -133,6 +134,18 @@ export type AscetWriteParams =
 			deleteMissing?: boolean;
 			verifyReadback?: boolean;
 			executeWrite?: boolean;
+	  }
+	| {
+			action: "set_element_dependency";
+			targetPath: string;
+			elementName: string;
+			dependency: "dependent" | "independent";
+			targetKind?: "auto" | "component" | "folder";
+			match?: "exact" | "all";
+			dryRun?: boolean;
+			backupDir?: string;
+			verifyReadback?: boolean;
+			executeWrite?: boolean;
 	  };
 
 export interface AscetWriteResult {
@@ -163,6 +176,7 @@ export const ascetWriteParameters = Type.Object({
 		Type.Literal("set_state_machine_code"),
 		Type.Literal("apply_element_spec"),
 		Type.Literal("apply_project_formula"),
+		Type.Literal("set_element_dependency"),
 	]),
 	folderPath: Type.Optional(Type.String({ minLength: 1 })),
 	componentPath: Type.Optional(Type.String({ minLength: 1 })),
@@ -170,9 +184,14 @@ export const ascetWriteParameters = Type.Object({
 	modulePath: Type.Optional(Type.String({ minLength: 1 })),
 	stateMachinePath: Type.Optional(Type.String({ minLength: 1 })),
 	projectPath: Type.Optional(Type.String({ minLength: 1 })),
+	targetPath: Type.Optional(Type.String({ minLength: 1 })),
 	kind: Type.Optional(Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")])),
 	language: Type.Optional(Type.Union([Type.Literal("ESDL"), Type.Literal("C")])),
 	methodName: Type.Optional(Type.String({ minLength: 1 })),
+	elementName: Type.Optional(Type.String({ minLength: 1 })),
+	dependency: Type.Optional(Type.Union([Type.Literal("dependent"), Type.Literal("independent")])),
+	targetKind: Type.Optional(Type.Union([Type.Literal("auto"), Type.Literal("component"), Type.Literal("folder")])),
+	match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("all")])),
 	methodKind: Type.Optional(
 		Type.Union([
 			Type.Literal("abstract"),
@@ -211,7 +230,11 @@ export const ascetWriteParameters = Type.Object({
 	mode: Type.Optional(Type.Literal("restore")),
 	deleteMissing: Type.Optional(Type.Boolean()),
 	recreateIncompatible: Type.Optional(Type.Boolean()),
-	ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("return-existing"), Type.Literal("overwrite")])),
+	dryRun: Type.Optional(Type.Boolean()),
+	backupDir: Type.Optional(Type.String({ minLength: 1 })),
+	ifExists: Type.Optional(
+		Type.Union([Type.Literal("fail"), Type.Literal("return-existing"), Type.Literal("overwrite")]),
+	),
 	ifMissing: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")])),
 	rollbackOnFailure: Type.Optional(Type.Boolean()),
 	...codeSourceSchema,
@@ -289,8 +312,7 @@ function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | 
 			status: "error",
 			error: {
 				code: "ascet_write_missing_parameter",
-				message:
-					`operation parameter is required for set_state_machine_code. Valid values: ${VALID_STATE_MACHINE_OPERATIONS_TEXT}.`,
+				message: `operation parameter is required for set_state_machine_code. Valid values: ${VALID_STATE_MACHINE_OPERATIONS_TEXT}.`,
 			},
 		};
 	}
@@ -300,6 +322,15 @@ function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | 
 			error: {
 				code: "ascet_write_invalid_operation",
 				message: `Unknown state-machine write operation '${params.operation}'. Valid values: ${VALID_STATE_MACHINE_OPERATIONS_TEXT}.`,
+			},
+		};
+	}
+	if (params.action === "set_element_dependency" && params.targetKind === "folder" && params.match !== "all") {
+		return {
+			status: "error",
+			error: {
+				code: "ascet_write_invalid_scope",
+				message: 'set_element_dependency folder writes require match="all" to modify multiple candidates.',
 			},
 		};
 	}
@@ -347,6 +378,8 @@ async function dispatchWrite(
 			return runApprovedAscetApplyElementSpec(params, options, ctx);
 		case "apply_project_formula":
 			return runApprovedAscetApplyProjectFormula(params, options, ctx);
+		case "set_element_dependency":
+			return runApprovedAscetSetElementDependency(params, options, ctx);
 	}
 }
 

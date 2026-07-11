@@ -9,6 +9,10 @@ import { buildListComponentsArgs, runAscetListComponents } from "../../ascet-ext
 import { buildListDiagramsArgs, runAscetListDiagrams } from "../../ascet-extension/src/list-diagrams.ts";
 import { buildListFoldersArgs, runAscetListFolders } from "../../ascet-extension/src/list-folders.ts";
 import { buildListMethodsArgs, runAscetListMethods } from "../../ascet-extension/src/list-methods.ts";
+import {
+	buildPlanElementDependencyArgs,
+	runAscetPlanElementDependency,
+} from "../../ascet-extension/src/plan-element-dependency.ts";
 import { buildReadBlockDiagramArgs, runAscetReadBlockDiagram } from "../../ascet-extension/src/read-block-diagram.ts";
 import {
 	buildReadComponentChildrenArgs,
@@ -29,6 +33,11 @@ import {
 } from "../../ascet-extension/src/read-component-used-by.ts";
 import { buildReadElementRefsArgs, runAscetReadElementRefs } from "../../ascet-extension/src/read-element-refs.ts";
 import { buildReadImplementationArgs } from "../../ascet-extension/src/read-implementation.ts";
+import {
+	buildReadImportExportMatchArgs,
+	buildReadImportExportMatchesArgs,
+	runAscetReadImportExportMatch,
+} from "../../ascet-extension/src/read-import-export-match.ts";
 import { buildReadMethodCodeArgs, runAscetReadMethodCode } from "../../ascet-extension/src/read-method-code.ts";
 import {
 	buildReadProjectFormulasArgs,
@@ -573,6 +582,178 @@ describe("ASCET read-only PI tools", () => {
 			"DEMO\\SM",
 			"--trace-depth",
 			"2",
+			"--json",
+		]);
+	});
+
+	it("builds JSON import/export and dependency plan invocations", () => {
+		expect(
+			buildReadImportExportMatchArgs({
+				importerComponentPath: "DEMO/Class_ESDL_1",
+				exporterComponentPath: "DEMO/Class_ESDL_2",
+				elementName: "speed",
+			}),
+		).toEqual([
+			"exec",
+			"read_import_export_match",
+			"DEMO\\Class_ESDL_1",
+			"--exporter",
+			"DEMO\\Class_ESDL_2",
+			"speed",
+			"--json",
+		]);
+		expect(
+			buildReadImportExportMatchesArgs({
+				importerComponentPath: "DEMO/Class_ESDL_1",
+				exporterComponentPath: "DEMO/Class_ESDL_2",
+			}),
+		).toEqual([
+			"exec",
+			"read_import_export_matches",
+			"DEMO\\Class_ESDL_1",
+			"--exporter",
+			"DEMO\\Class_ESDL_2",
+			"--json",
+		]);
+		expect(
+			buildPlanElementDependencyArgs({
+				targetPath: "DEMO/DiscreteRiccatiSolver",
+				elementName: "B01",
+				targetKind: "component",
+			}),
+		).toEqual([
+			"exec",
+			"plan_element_dependency",
+			"DEMO\\DiscreteRiccatiSolver",
+			"B01",
+			"--target-kind",
+			"component",
+			"--json",
+		]);
+	});
+
+	it("runs import/export and dependency plan actions through canonical ascet_read", async () => {
+		const ascetExtension = await loadAscetExtension();
+		const tool = ascetExtension?.tools.get("ascet_read")?.definition;
+
+		const matchResult = await tool?.execute(
+			"test-read-import-export-match",
+			{
+				action: "read_import_export_match",
+				importerComponentPath: "DEMO\\Class_ESDL_1",
+				exporterComponentPath: "DEMO\\Class_ESDL_2",
+				elementName: "speed",
+			},
+			new AbortController().signal,
+			undefined,
+			{
+				cwd: repoRoot,
+				executeCli: async (request) => ({
+					exitCode: 0,
+					stdout: JSON.stringify({
+						ok: true,
+						result: { importer: "DEMO\\Class_ESDL_1", exporter: "DEMO\\Class_ESDL_2", element: "speed" },
+					}),
+					stderr: "",
+					timedOut: false,
+					request,
+				}),
+			},
+		);
+		const planResult = await tool?.execute(
+			"test-plan-element-dependency",
+			{
+				action: "plan_element_dependency",
+				targetPath: "DEMO\\DiscreteRiccatiSolver",
+				elementName: "B01",
+				targetKind: "component",
+			},
+			new AbortController().signal,
+			undefined,
+			{
+				cwd: repoRoot,
+				executeCli: async (request) => ({
+					exitCode: 0,
+					stdout: JSON.stringify({ ok: true, result: { target: "DEMO\\DiscreteRiccatiSolver", count: 1 } }),
+					stderr: "",
+					timedOut: false,
+					request,
+				}),
+			},
+		);
+
+		expect(matchResult?.details).toMatchObject({
+			ok: true,
+			tool: "ascet_read",
+			action: "read_import_export_match",
+			command: {
+				logicalCommandId: "AscetReadImportExportMatch",
+				operation: "read_import_export_match",
+			},
+		});
+		expect(matchResult?.details.diagnostics.request.args).toEqual([
+			"exec",
+			"read_import_export_match",
+			"DEMO\\Class_ESDL_1",
+			"--exporter",
+			"DEMO\\Class_ESDL_2",
+			"speed",
+			"--json",
+		]);
+		expect(planResult?.details).toMatchObject({
+			ok: true,
+			tool: "ascet_read",
+			action: "plan_element_dependency",
+			command: {
+				logicalCommandId: "AscetPlanElementDependency",
+				operation: "plan_element_dependency",
+			},
+		});
+		expect(planResult?.details.diagnostics.request.args).toEqual([
+			"exec",
+			"plan_element_dependency",
+			"DEMO\\DiscreteRiccatiSolver",
+			"B01",
+			"--target-kind",
+			"component",
+			"--json",
+		]);
+
+		const direct = await runAscetReadImportExportMatch(
+			{
+				importerComponentPath: "DEMO\\Class_ESDL_1",
+				exporterComponentPath: "DEMO\\Class_ESDL_2",
+				elementName: "speed",
+			},
+			{
+				cwd: repoRoot,
+				executeCli: async (request) => ({
+					exitCode: 0,
+					stdout: JSON.stringify({ ok: true, result: { element: "speed" } }),
+					stderr: "",
+					timedOut: false,
+					request,
+				}),
+			},
+		);
+		const directPlan = await runAscetPlanElementDependency(
+			{ targetPath: "DEMO\\DiscreteRiccatiSolver" },
+			{
+				cwd: repoRoot,
+				executeCli: async (request) => ({
+					exitCode: 0,
+					stdout: JSON.stringify({ ok: true, result: { count: 2 } }),
+					stderr: "",
+					timedOut: false,
+					request,
+				}),
+			},
+		);
+		expect(direct.ok).toBe(true);
+		expect(directPlan.request.args).toEqual([
+			"exec",
+			"plan_element_dependency",
+			"DEMO\\DiscreteRiccatiSolver",
 			"--json",
 		]);
 	});

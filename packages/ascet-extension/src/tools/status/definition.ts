@@ -20,7 +20,11 @@ export const ascetStatusTool = defineSequentialAscetTool({
 		_onUpdate: unknown,
 		ctx: { cwd: string; ascetStatusProbe?: AscetRuntimeStatusOptions["probe"] },
 	) {
-		const report = await createAscetRuntimeStatusReport({ cwd: ctx.cwd, signal: _signal, probe: ctx.ascetStatusProbe });
+		const report = await createAscetRuntimeStatusReport({
+			cwd: ctx.cwd,
+			signal: _signal,
+			probe: ctx.ascetStatusProbe,
+		});
 		const route = routeAscetAction({ toolName: "ascet_status", action: "status" });
 		return {
 			content: [{ type: "text", text: report.summary }],

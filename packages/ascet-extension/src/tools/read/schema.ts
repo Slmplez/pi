@@ -26,6 +26,23 @@ export type AscetReadParams =
 			componentPath: string;
 			detailLevel?: "summary" | "full";
 			traceDepth?: number;
+	  }
+	| {
+			action: "read_import_export_match";
+			importerComponentPath: string;
+			exporterComponentPath: string;
+			elementName: string;
+	  }
+	| {
+			action: "read_import_export_matches";
+			importerComponentPath: string;
+			exporterComponentPath: string;
+	  }
+	| {
+			action: "plan_element_dependency";
+			targetPath: string;
+			elementName?: string;
+			targetKind?: "auto" | "component" | "folder" | "project";
 	  };
 
 export const ascetReadParameters = Type.Object({
@@ -35,9 +52,16 @@ export const ascetReadParameters = Type.Object({
 		Type.Literal("read_implementation"),
 		Type.Literal("read_block_diagram"),
 		Type.Literal("read_state_machine_flow"),
+		Type.Literal("read_import_export_match"),
+		Type.Literal("read_import_export_matches"),
+		Type.Literal("plan_element_dependency"),
 	]),
-	componentPath: Type.String({ minLength: 1 }),
+	componentPath: Type.Optional(Type.String({ minLength: 1 })),
+	importerComponentPath: Type.Optional(Type.String({ minLength: 1 })),
+	exporterComponentPath: Type.Optional(Type.String({ minLength: 1 })),
+	targetPath: Type.Optional(Type.String({ minLength: 1 })),
 	methodName: Type.Optional(Type.String()),
+	elementName: Type.Optional(Type.String()),
 	section: Type.Optional(
 		Type.Union([Type.Literal("header"), Type.Literal("external-c"), Type.Literal("all"), Type.Literal("body")]),
 	),
@@ -48,6 +72,9 @@ export const ascetReadParameters = Type.Object({
 	diagramName: Type.Optional(Type.String()),
 	detailLevel: Type.Optional(Type.Union([Type.Literal("summary"), Type.Literal("full")])),
 	traceDepth: Type.Optional(Type.Number({ minimum: 0 })),
+	targetKind: Type.Optional(
+		Type.Union([Type.Literal("auto"), Type.Literal("component"), Type.Literal("folder"), Type.Literal("project")]),
+	),
 	timeoutMs: Type.Optional(
 		Type.Number({
 			description: "Optional read_block_diagram execution timeout in milliseconds. Defaults to 60000.",

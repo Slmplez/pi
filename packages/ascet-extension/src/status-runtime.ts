@@ -27,7 +27,12 @@ export interface AscetRuntimeStatusReport extends Omit<AscetStatusReport, "ok" |
 export interface AscetRuntimeStatusOptions extends AscetStatusPathOptions {
 	signal?: AbortSignal;
 	timeoutMs?: number;
-	probe?: (options: { cwd: string; env?: Record<string, string | undefined>; signal?: AbortSignal; timeoutMs: number }) => Promise<AscetCliJsonResult>;
+	probe?: (options: {
+		cwd: string;
+		env?: Record<string, string | undefined>;
+		signal?: AbortSignal;
+		timeoutMs: number;
+	}) => Promise<AscetCliJsonResult>;
 }
 
 const RUNTIME_PROBE_DESCRIPTION = "ASCET ToolAPI live probe: AscetCli.exe exec list_folders --depth 0 --json";

@@ -28,6 +28,8 @@ Use evidence kinds in rules. Resolve evidence kinds through this map when collec
 - `bde_connections`: derive from `block_diagram`
 - `bde_signals`: derive from `block_diagram`, `children`, and `component_code`
 
+Do not use old fine-grained block-diagram tool names. They are not part of the canonical model-facing tool surface.
+
 ## Reference Evidence
 
 - `component_refs`: `ascet_reference` action `component_refs`

@@ -6,6 +6,7 @@ export const ascetWritePrompt = {
 		"After create_component, inspect expectedDefaultScaffold.defaultEntryMethod as an unverified hint for the likely initial method.",
 		"For set_module_code, provide section/operation as one of set-method, set-header, or set-external-c-code.",
 		"For set_state_machine_code, use one of: set-method, set-state-entry-esdl, set-state-exit-esdl, set-state-static-esdl, bind-state-entry-method, bind-state-exit-method, bind-state-static-method, set-transition-condition-esdl, set-transition-action-esdl, bind-transition-condition-method, bind-transition-action-method, set-start-state.",
+		'Use set_element_dependency only after plan_element_dependency when the target scope is broad or uncertain; folder writes require match="all".',
 		"Use verifyReadback=true unless the user explicitly asks to skip readback.",
 	],
 } as const;
