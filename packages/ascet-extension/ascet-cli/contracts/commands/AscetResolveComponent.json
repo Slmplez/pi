@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetResolveComponent",
     "family":  "search",
     "summary":  "Resolve a fuzzy component query",
@@ -25,11 +25,18 @@
                      "description":  "Component query."
                  },
                  {
+                     "name":  "--component",
+                     "kind":  "option",
+                     "type":  "string",
+                     "required":  false,
+                     "description":  "Known ASCET component path for component-scoped element occurrence search, for example DEMO\\PID. Prefer this over --scope when searching elements inside one component."
+                 },
+                 {
                      "name":  "--scope",
                      "kind":  "option",
                      "type":  "string",
                      "required":  false,
-                     "description":  "Folder scope."
+                     "description":  "Folder scope. Use --component for a concrete component path such as DEMO\\PID."
                  },
                  {
                      "name":  "--kind",
@@ -92,3 +99,4 @@
                          },
     "hiddenFromModel":  false
 }
+

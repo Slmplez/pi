@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetReadClassSnapshot",
     "family":  "read",
     "summary":  "Class snapshot",
@@ -60,3 +60,4 @@
                          },
     "hiddenFromModel":  false
 }
+

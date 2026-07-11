@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetBatchDeleteMethod",
     "family":  "write",
     "summary":  "Batch delete multiple ASCET methods in a single ToolAPI session",
@@ -53,3 +53,4 @@
                          },
     "hiddenFromModel":  false
 }
+

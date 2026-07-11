@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetListComponents",
     "family":  "explore",
     "summary":  "List components in a folder",
@@ -87,3 +87,4 @@
                          },
     "hiddenFromModel":  false
 }
+

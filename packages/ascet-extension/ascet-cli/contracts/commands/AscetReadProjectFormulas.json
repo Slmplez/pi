@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetReadProjectFormulas",
     "family":  "read",
     "summary":  "Read project formulas",
@@ -60,3 +60,4 @@
                          },
     "hiddenFromModel":  false
 }
+

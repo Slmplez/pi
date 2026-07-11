@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetReadComponentUsedBy",
     "family":  "refs",
     "summary":  "Reverse refs within a bounded scope",
@@ -91,3 +91,4 @@
                          },
     "hiddenFromModel":  false
 }
+

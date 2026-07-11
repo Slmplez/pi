@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetListMethods",
     "family":  "explore",
     "summary":  "List component methods",
@@ -62,3 +62,4 @@
                          },
     "hiddenFromModel":  false
 }
+

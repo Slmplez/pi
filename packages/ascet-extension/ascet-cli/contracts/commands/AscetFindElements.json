@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetFindElements",
     "family":  "refs",
     "summary":  "Global element or signal search",
@@ -95,3 +95,4 @@
                          },
     "hiddenFromModel":  false
 }
+

@@ -6,6 +6,7 @@ import {
 	formatAscetCliJsonResult,
 	runAscetCliJson,
 } from "./cli.ts";
+import type { AscetScheduler } from "./scheduler/scheduler.ts";
 
 export interface AscetListComponentsParams {
 	folderPath: string;
@@ -21,6 +22,7 @@ export interface RunAscetListComponentsOptions {
 	signal?: AbortSignal;
 	timeoutMs?: number;
 	executeCli?: (request: AscetCliRequest) => Promise<AscetCliExecutionResult>;
+	scheduler?: Pick<AscetScheduler, "submit" | "getSnapshot">;
 }
 
 export type AscetListComponentsResult = AscetCliJsonResult;

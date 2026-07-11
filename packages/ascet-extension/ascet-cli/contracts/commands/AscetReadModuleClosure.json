@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetReadModuleClosure",
     "family":  "read",
     "summary":  "Module closure and dependency expansion",
@@ -67,3 +67,4 @@
                          },
     "hiddenFromModel":  false
 }
+

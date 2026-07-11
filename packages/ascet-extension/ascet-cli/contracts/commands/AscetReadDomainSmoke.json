@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetReadDomainSmoke",
     "family":  "verify",
     "summary":  "Smoke validation helper",
@@ -35,3 +35,4 @@
                  ],
     "hiddenFromModel":  true
 }
+

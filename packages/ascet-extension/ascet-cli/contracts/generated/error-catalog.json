@@ -1,6 +1,6 @@
-{
+﻿{
     "version":  1,
-    "generatedAt":  "2026-07-05T12:42:52.5764705Z",
+    "generatedAt":  "2026-07-11T06:33:18.3010601Z",
     "codes":  {
                   "invalid_argument":  {
                                            "category":  "invalid_input",
@@ -36,3 +36,4 @@
                                    }
               }
 }
+

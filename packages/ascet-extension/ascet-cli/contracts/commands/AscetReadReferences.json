@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetReadReferences",
     "family":  "refs",
     "summary":  "Read direct component reference graph",
@@ -62,3 +62,4 @@
                          },
     "hiddenFromModel":  false
 }
+

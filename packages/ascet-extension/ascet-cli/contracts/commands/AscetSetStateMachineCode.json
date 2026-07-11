@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetSetStateMachineCode",
     "family":  "write",
     "summary":  "State machine write entry",
@@ -133,3 +133,4 @@
                          },
     "hiddenFromModel":  false
 }
+

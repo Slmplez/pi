@@ -67,6 +67,31 @@ async function callToolAllowingError(name: string, params: Record<string, unknow
 	return response.details;
 }
 
+async function callWriteTool(name: string, params: Record<string, unknown>) {
+	const tool = extension?.tools.get(name)?.definition;
+	if (!tool) {
+		throw new Error(`Tool is not registered: ${name}`);
+	}
+	const response = (await tool.execute(
+		`ascet-live-smoke-${name}`,
+		params,
+		new AbortController().signal,
+		undefined,
+		{
+			cwd: repoRoot,
+			hasUI: true,
+			ui: {
+				confirm: async () => true,
+			},
+		},
+	)) as ToolResponse;
+	const outcome = response.details.outcome;
+	if (!outcome || outcome.status !== "ok") {
+		throw new Error(`${name} failed: ${response.details.error?.message ?? outcome?.status ?? "unknown"}`);
+	}
+	return outcome.data ?? response.details;
+}
+
 const statusTool = extension.tools.get("ascet_status")?.definition;
 if (!statusTool) {
 	throw new Error("Tool is not registered: ascet_status");
@@ -141,7 +166,35 @@ const verify = await callTool("ascet_verify", {
 	objectKind: "class",
 	componentPath: "DEMO\\PID",
 });
+const importExportMatch = await callTool("ascet_read", {
+	action: "read_import_export_match",
+	importerComponentPath: "DEMO\\Class_ESDL_1",
+	exporterComponentPath: "DEMO\\Class_ESDL_2",
+	elementName: "speed",
+});
+const importExportMatches = await callTool("ascet_read", {
+	action: "read_import_export_matches",
+	importerComponentPath: "DEMO\\Class_ESDL_1",
+	exporterComponentPath: "DEMO\\Class_ESDL_2",
+});
+const dependencyPlan = await callTool("ascet_read", {
+	action: "plan_element_dependency",
+	targetPath: "DEMO\\DiscreteRiccatiSolver",
+	elementName: "B01",
+	targetKind: "component",
+});
+const dependencyDryRun = await callWriteTool("ascet_write", {
+	action: "set_element_dependency",
+	targetPath: "DEMO\\DiscreteRiccatiSolver",
+	elementName: "B01",
+	dependency: "dependent",
+	targetKind: "component",
+	dryRun: true,
+	verifyReadback: true,
+	executeWrite: true,
+});
 const schedulerAfter = await callTool("ascet_scheduler_status", { format: "json" });
+const schedulerRecover = await callTool("ascet_scheduler_status", { action: "recover", format: "json" });
 
 console.log(
 	JSON.stringify(
@@ -172,10 +225,33 @@ console.log(
 				ascet_reference: { counts: refs.counts, summary: refs.summary },
 				ascet_diff: { counts: diff.counts },
 				ascet_verify: { counts: verify.counts, summary: verify.summary },
+				ascet_read_import_export_match: {
+					element: importExportMatch.element,
+					summary: importExportMatch.summary,
+				},
+				ascet_read_import_export_matches: {
+					count: importExportMatches.count,
+					summary: importExportMatches.summary,
+				},
+				ascet_read_dependency_plan: {
+					count: dependencyPlan.count,
+					summary: dependencyPlan.summary,
+				},
+				ascet_write_dependency_dry_run: {
+					ok: dependencyDryRun.ok,
+					operationName: dependencyDryRun.result?.operationName,
+					verification: dependencyDryRun.result?.verification,
+				},
 				ascet_scheduler_status_after: {
 					scheduler: schedulerAfter.scheduler,
 					cliLock: schedulerAfter.cliLock,
 					operationHealth: schedulerAfter.operationHealth,
+				},
+				ascet_scheduler_recover: {
+					recovery: schedulerRecover.recovery,
+					scheduler: schedulerRecover.scheduler,
+					cliLock: schedulerRecover.cliLock,
+					operationHealth: schedulerRecover.operationHealth,
 				},
 			},
 		},

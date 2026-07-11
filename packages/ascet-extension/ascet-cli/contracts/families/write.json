@@ -13,6 +13,7 @@
     "AscetSetClassMethodCode",
     "AscetSetModuleCode",
     "AscetSetStateMachineCode",
+    "AscetSetElementDependency",
     "AscetApplyElementSpec",
     "AscetApplyProjectFormula"
   ],

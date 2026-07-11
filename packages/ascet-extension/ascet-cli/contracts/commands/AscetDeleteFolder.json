@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetDeleteFolder",
     "family":  "write",
     "summary":  "Delete an empty folder",
@@ -77,3 +77,4 @@
                          },
     "hiddenFromModel":  false
 }
+

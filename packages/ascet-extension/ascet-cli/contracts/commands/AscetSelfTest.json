@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetSelfTest",
     "family":  "verify",
     "summary":  "Invoke unified selftest profiles through AscetCli.exe",
@@ -58,3 +58,4 @@
     "supportsBatch":  false,
     "hiddenFromModel":  false
 }
+

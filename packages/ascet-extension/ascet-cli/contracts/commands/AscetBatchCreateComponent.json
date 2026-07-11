@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetBatchCreateComponent",
     "family":  "write",
     "summary":  "Batch create multiple ASCET components in a single ToolAPI session",
@@ -58,3 +58,4 @@
                          },
     "hiddenFromModel":  false
 }
+

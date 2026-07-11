@@ -1,4 +1,4 @@
-{
+﻿{
     "version":  1,
     "generatedAt":  "2026-04-06T00:00:00Z",
     "commands":  [
@@ -1268,6 +1268,62 @@
                                        }
                      },
                      {
+                         "id":  "AscetReadImportExportMatch",
+                         "family":  "read",
+                         "summary":  "Read the exported counterpart for one imported element",
+                         "risk":  "read",
+                         "objectKinds":  [
+                                             "class",
+                                             "module"
+                                         ],
+                         "supportsJson":  true,
+                         "requiresSerialLiveAccess":  false,
+                         "hiddenFromModel":  false,
+                         "operation":  "read_import_export_match",
+                         "lane":  "legacy_read",
+                         "hostEligible":  false,
+                         "supportsBatch":  false,
+                         "execution":  {
+                                           "kind":  "unified_cli",
+                                           "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+                                           "subcommand":  "exec",
+                                           "operation":  "read_import_export_match"
+                                       },
+                         "executionProfile":  {
+                                                  "hostSafety":  "fragile",
+                                                  "hostPolicy":  "force_one_shot",
+                                                  "timeoutClass":  "expensive_read"
+                                              }
+                     },
+                     {
+                         "id":  "AscetReadImportExportMatches",
+                         "family":  "read",
+                         "summary":  "Read import/export counterparts between two components",
+                         "risk":  "read",
+                         "objectKinds":  [
+                                             "class",
+                                             "module"
+                                         ],
+                         "supportsJson":  true,
+                         "requiresSerialLiveAccess":  false,
+                         "hiddenFromModel":  false,
+                         "operation":  "read_import_export_matches",
+                         "lane":  "legacy_read",
+                         "hostEligible":  false,
+                         "supportsBatch":  false,
+                         "execution":  {
+                                           "kind":  "unified_cli",
+                                           "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+                                           "subcommand":  "exec",
+                                           "operation":  "read_import_export_matches"
+                                       },
+                         "executionProfile":  {
+                                                  "hostSafety":  "fragile",
+                                                  "hostPolicy":  "force_one_shot",
+                                                  "timeoutClass":  "expensive_read"
+                                              }
+                     },
+                     {
                          "id":  "AscetReadImplementation",
                          "family":  "read",
                          "summary":  "Read implementation data",
@@ -1445,6 +1501,36 @@
                          "lane":  "legacy_read",
                          "hostEligible":  false,
                          "supportsBatch":  false,
+                         "executionProfile":  {
+                                                  "hostSafety":  "fragile",
+                                                  "hostPolicy":  "force_one_shot",
+                                                  "timeoutClass":  "expensive_read"
+                                              }
+                     },
+                     {
+                         "id":  "AscetPlanElementDependency",
+                         "family":  "read",
+                         "summary":  "Plan supported element dependency changes for a component or folder",
+                         "risk":  "read",
+                         "objectKinds":  [
+                                             "class",
+                                             "module",
+                                             "folder",
+                                             "project"
+                                         ],
+                         "supportsJson":  true,
+                         "requiresSerialLiveAccess":  false,
+                         "hiddenFromModel":  false,
+                         "operation":  "plan_element_dependency",
+                         "lane":  "legacy_read",
+                         "hostEligible":  false,
+                         "supportsBatch":  false,
+                         "execution":  {
+                                           "kind":  "unified_cli",
+                                           "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+                                           "subcommand":  "exec",
+                                           "operation":  "plan_element_dependency"
+                                       },
                          "executionProfile":  {
                                                   "hostSafety":  "fragile",
                                                   "hostPolicy":  "force_one_shot",
@@ -1805,6 +1891,35 @@
                                               }
                      },
                      {
+                         "id":  "AscetSetElementDependency",
+                         "family":  "write",
+                         "summary":  "Set supported element dependency state with optional readback",
+                         "risk":  "write",
+                         "objectKinds":  [
+                                             "class",
+                                             "module",
+                                             "folder"
+                                         ],
+                         "supportsJson":  true,
+                         "requiresSerialLiveAccess":  true,
+                         "hiddenFromModel":  false,
+                         "operation":  "set_element_dependency",
+                         "lane":  "serial_write",
+                         "hostEligible":  false,
+                         "supportsBatch":  false,
+                         "execution":  {
+                                           "kind":  "unified_cli",
+                                           "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+                                           "subcommand":  "exec",
+                                           "operation":  "set_element_dependency"
+                                       },
+                         "executionProfile":  {
+                                                  "hostSafety":  "write",
+                                                  "hostPolicy":  "force_one_shot",
+                                                  "timeoutClass":  "write"
+                                              }
+                     },
+                     {
                          "id":  "AscetSetModuleCode",
                          "family":  "write",
                          "summary":  "Write module code or text sections",
@@ -1919,3 +2034,4 @@
                      }
                  ]
 }
+

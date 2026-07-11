@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetDiffProjectFormulas",
     "family":  "diff",
     "summary":  "Diff project formula spec",
@@ -74,3 +74,4 @@
                          },
     "hiddenFromModel":  false
 }
+

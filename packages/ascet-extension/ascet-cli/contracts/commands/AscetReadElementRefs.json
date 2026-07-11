@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetReadElementRefs",
     "family":  "refs",
     "summary":  "View refs for one element within a component",
@@ -69,3 +69,4 @@
                          },
     "hiddenFromModel":  false
 }
+

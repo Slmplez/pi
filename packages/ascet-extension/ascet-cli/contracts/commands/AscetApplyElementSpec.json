@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetApplyElementSpec",
     "family":  "write",
     "summary":  "Apply element spec",
@@ -110,3 +110,4 @@
                          },
     "hiddenFromModel":  false
 }
+

@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetReadElementCatalog",
     "family":  "read",
     "summary":  "Read element catalog or element spec view",
@@ -62,3 +62,4 @@
                          },
     "hiddenFromModel":  false
 }
+

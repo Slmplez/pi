@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetSetMethodCode",
     "family":  "write",
     "summary":  "Generic method write",
@@ -79,3 +79,4 @@
                          },
     "hiddenFromModel":  false
 }
+

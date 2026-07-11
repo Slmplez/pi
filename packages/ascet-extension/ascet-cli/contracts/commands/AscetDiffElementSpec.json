@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetDiffElementSpec",
     "family":  "diff",
     "summary":  "Diff element spec against live component",
@@ -76,3 +76,4 @@
                          },
     "hiddenFromModel":  false
 }
+

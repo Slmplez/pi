@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetBenchmark",
     "family":  "ops",
     "summary":  "Invoke benchmark entrypoints through AscetCli.exe",
@@ -45,3 +45,4 @@
     "supportsBatch":  false,
     "hiddenFromModel":  false
 }
+

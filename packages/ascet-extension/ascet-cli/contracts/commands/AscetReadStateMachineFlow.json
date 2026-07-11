@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetReadStateMachineFlow",
     "family":  "read",
     "summary":  "State machine flow read",
@@ -67,3 +67,4 @@
                          },
     "hiddenFromModel":  false
 }
+

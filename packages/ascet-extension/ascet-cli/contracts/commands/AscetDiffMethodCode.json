@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetDiffMethodCode",
     "family":  "diff",
     "summary":  "Diff one method between two components",
@@ -83,3 +83,4 @@
                          },
     "hiddenFromModel":  false
 }
+

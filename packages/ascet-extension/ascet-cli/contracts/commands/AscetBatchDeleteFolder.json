@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetBatchDeleteFolder",
     "family":  "write",
     "summary":  "Batch delete multiple empty ASCET folders in a single ToolAPI session",
@@ -50,3 +50,4 @@
                          },
     "hiddenFromModel":  false
 }
+

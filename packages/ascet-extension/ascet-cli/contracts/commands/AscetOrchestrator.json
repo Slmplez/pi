@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetOrchestrator",
     "family":  "ops",
     "summary":  "Multi-process worker orchestration helper",
@@ -34,3 +34,4 @@
                  ],
     "hiddenFromModel":  true
 }
+

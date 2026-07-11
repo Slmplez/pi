@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetDiffClass",
     "family":  "diff",
     "summary":  "Class diff",
@@ -74,3 +74,4 @@
                          },
     "hiddenFromModel":  false
 }
+

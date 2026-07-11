@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetReadComponentSummary",
     "family":  "explore",
     "summary":  "Compact component summary",
@@ -62,3 +62,4 @@
                          },
     "hiddenFromModel":  false
 }
+

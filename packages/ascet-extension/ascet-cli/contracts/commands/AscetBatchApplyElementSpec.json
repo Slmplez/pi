@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetBatchApplyElementSpec",
     "family":  "write",
     "summary":  "Batch apply element specifications to multiple components",
@@ -58,3 +58,4 @@
                          },
     "hiddenFromModel":  false
 }
+

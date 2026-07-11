@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetShowOccurrences",
     "family":  "refs",
     "summary":  "Mixed occurrence view over component and element matches",
@@ -80,3 +80,4 @@
                          },
     "hiddenFromModel":  false
 }
+

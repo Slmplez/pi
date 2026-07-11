@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetSearchComponents",
     "family":  "search",
     "summary":  "Paged component candidate search",
@@ -99,3 +99,4 @@
                          },
     "hiddenFromModel":  false
 }
+

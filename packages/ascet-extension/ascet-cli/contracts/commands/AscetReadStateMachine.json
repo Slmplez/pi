@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetReadStateMachine",
     "family":  "read",
     "summary":  "Lower-level state machine read",
@@ -60,3 +60,4 @@
                          },
     "hiddenFromModel":  false
 }
+

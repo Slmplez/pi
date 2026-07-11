@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetReadStateMachineSnapshot",
     "family":  "read",
     "summary":  "State machine snapshot",
@@ -60,3 +60,4 @@
                          },
     "hiddenFromModel":  false
 }
+

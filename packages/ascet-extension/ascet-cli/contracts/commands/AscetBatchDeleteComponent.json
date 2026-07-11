@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetBatchDeleteComponent",
     "family":  "write",
     "summary":  "Batch delete multiple ASCET components in a single ToolAPI session",
@@ -53,3 +53,4 @@
                          },
     "hiddenFromModel":  false
 }
+

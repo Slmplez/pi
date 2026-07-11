@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetReadComponentCode",
     "family":  "read",
     "summary":  "Broad component code read",
@@ -55,3 +55,4 @@
                          },
     "hiddenFromModel":  false
 }
+

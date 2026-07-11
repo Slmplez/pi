@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetDeleteMethod",
     "family":  "write",
     "summary":  "Delete an existing method",
@@ -87,3 +87,4 @@
                          },
     "hiddenFromModel":  false
 }
+

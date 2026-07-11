@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetReadOnlyExample",
     "family":  "verify",
     "summary":  "Minimal read-only sample against current database",
@@ -35,3 +35,4 @@
                  ],
     "hiddenFromModel":  true
 }
+

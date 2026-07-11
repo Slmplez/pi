@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetReadComponentRefs",
     "family":  "refs",
     "summary":  "Outgoing refs and trace",
@@ -76,3 +76,4 @@
                          },
     "hiddenFromModel":  false
 }
+

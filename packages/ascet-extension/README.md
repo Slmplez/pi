@@ -46,6 +46,18 @@ Old fine-grained tools are not registered as model tools or legacy aliases. Thei
 
 Guarded write tools are preflight-only by default and require explicit interactive approval before CLI execution. Canonical `ascet_write` returns a non-error `status: "preflight"` outcome when `executeWrite` is false. `ascet_batch_write` uses operation-specific request schemas and reports partial completion as `status: "partial"` when the ASCET batch backend returns item failures.
 
+## Import/Export And Dependency Actions
+
+`ascet_read` includes these ASCET ToolAPI-backed actions:
+
+- `read_import_export_match`: resolve one imported element in an importer component against an exporter component.
+- `read_import_export_matches`: inspect all imported elements in an importer component against an exporter component.
+- `plan_element_dependency`: find dependency candidates for an element in a component, folder, or project.
+
+`ascet_write` includes `set_element_dependency` for dependency flag changes. It uses the same guarded write contract as other write actions: preflight by default, interactive approval when `executeWrite=true`, optional `dryRun`, optional `backupDir`, and readback verification. Folder writes require `match="all"` so multi-component changes are explicit.
+
+All four actions call `runAscetCliJson`, enter the ASCET scheduler, and execute under the shared `ascet.toolapi.global` resource.
+
 ## Scheduler Diagnostics
 
 ASCET ToolAPI-backed calls are serialized through the PI extension scheduler resource `ascet.toolapi.global` with concurrency `1`. This protects the ASCET CLI and ToolAPI host from concurrent calls that can otherwise overlap in the same local ASCET database session.
@@ -83,10 +95,10 @@ Run the read-only live smoke from the PI repo root while an ASCET database conta
 npm run smoke:ascet-extension
 ```
 
-Run focused static coverage for status, read-only tools, guarded write policy, and catalog negative cases:
+Run focused static coverage for status, scheduler, read-only tools, guarded write policy, and catalog negative cases:
 
 ```powershell
-npm --workspace @earendil-works/pi-coding-agent test -- test/ascet-extension-status.test.ts test/ascet-extension-readonly-tools.test.ts test/ascet-extension-write-tools.test.ts
+npm --workspace @earendil-works/pi-coding-agent test -- test/ascet-extension-status.test.ts test/ascet-extension-scheduler.test.ts test/ascet-extension-readonly-tools.test.ts test/ascet-extension-write-tools.test.ts
 ```
 
 Run the default write smoke gate:

@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetReadModuleSummary",
     "family":  "read",
     "summary":  "Module summary",
@@ -60,3 +60,4 @@
                          },
     "hiddenFromModel":  false
 }
+

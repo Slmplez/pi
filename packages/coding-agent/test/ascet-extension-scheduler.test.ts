@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { runAscetListComponents } from "../../ascet-extension/src/list-components.ts";
+import { runAscetPlanElementDependency } from "../../ascet-extension/src/plan-element-dependency.ts";
 import {
 	acquireAscetCliLock,
 	clearStaleAscetCliLock,
@@ -18,6 +19,7 @@ import {
 	resolvePiAscetOperationHealthPath,
 	resolvePiAscetRuntimeRoot,
 } from "../../ascet-extension/src/scheduler/index.ts";
+import { runApprovedAscetSetElementDependency } from "../../ascet-extension/src/set-element-dependency.ts";
 import { loadAscetExtension, repoRoot } from "./ascet-extension-test-helpers.ts";
 
 function tempRuntimeEnv() {
@@ -190,6 +192,80 @@ describe("ASCET scheduler diagnostics", () => {
 		expect(result.ok).toBe(true);
 		expect((await getAscetCliLockSnapshot({ env })).locked).toBe(false);
 		expect(scheduler.getSnapshot().recentJobs.at(-1)?.commandId).toBe("list_components");
+	});
+
+	it("routes dependency plan and dependency dry-run writes through the scheduler", async () => {
+		const env = tempRuntimeEnv();
+		const scheduler = createAscetScheduler();
+		const seenLocks: boolean[] = [];
+
+		const plan = await runAscetPlanElementDependency(
+			{ targetPath: "DEMO\\DiscreteRiccatiSolver", elementName: "B01", targetKind: "component" },
+			{
+				cwd: repoRoot,
+				env,
+				scheduler,
+				executeCli: async (request) => {
+					seenLocks.push((await getAscetCliLockSnapshot({ env })).locked);
+					return {
+						exitCode: 0,
+						stdout: JSON.stringify({ ok: true, result: { count: 1 } }),
+						stderr: "",
+						timedOut: false,
+						request,
+					};
+				},
+			},
+		);
+		const write = await runApprovedAscetSetElementDependency(
+			{
+				targetPath: "DEMO\\DiscreteRiccatiSolver",
+				elementName: "B01",
+				dependency: "dependent",
+				targetKind: "component",
+				dryRun: true,
+				verifyReadback: true,
+				executeWrite: true,
+			},
+			{
+				cwd: repoRoot,
+				env,
+				scheduler,
+				executeCli: async (request) => {
+					seenLocks.push((await getAscetCliLockSnapshot({ env })).locked);
+					return {
+						exitCode: 0,
+						stdout: JSON.stringify({
+							ok: true,
+							result: {
+								operationName: "set_element_dependency",
+								writeSucceeded: true,
+								payload: { write: { dryRun: true }, dependency: { after: "independent" } },
+								verification: {
+									requested: true,
+									attempted: false,
+									succeeded: true,
+									summary: "dependency_dry_run",
+								},
+							},
+						}),
+						stderr: "",
+						timedOut: false,
+						request,
+					};
+				},
+			},
+			{ hasUI: true, ui: { confirm: async () => true } },
+		);
+
+		expect(plan.ok).toBe(true);
+		expect(write.ok).toBe(true);
+		expect(seenLocks).toEqual([true, true]);
+		expect((await getAscetCliLockSnapshot({ env })).locked).toBe(false);
+		expect(scheduler.getSnapshot().recentJobs.map((job) => job.commandId)).toEqual([
+			"plan_element_dependency",
+			"set_element_dependency",
+		]);
 	});
 
 	it("captures timeout failures in operation health", async () => {

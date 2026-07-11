@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetReadComponentSnapshot",
     "family":  "read",
     "summary":  "Unified snapshot across component kinds",
@@ -69,3 +69,4 @@
                          },
     "hiddenFromModel":  false
 }
+

@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetBatchCreateMethod",
     "family":  "write",
     "summary":  "Batch create multiple ASCET methods in a single ToolAPI session",
@@ -58,3 +58,4 @@
                          },
     "hiddenFromModel":  false
 }
+

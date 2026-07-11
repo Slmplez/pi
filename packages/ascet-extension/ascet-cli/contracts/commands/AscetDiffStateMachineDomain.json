@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetDiffStateMachineDomain",
     "family":  "diff",
     "summary":  "Domain-level state machine diff",
@@ -74,3 +74,4 @@
                          },
     "hiddenFromModel":  false
 }
+

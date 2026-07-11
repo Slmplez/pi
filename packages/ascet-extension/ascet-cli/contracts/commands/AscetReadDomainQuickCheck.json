@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetReadDomainQuickCheck",
     "family":  "verify",
     "summary":  "Lightweight domain check",
@@ -35,3 +35,4 @@
                  ],
     "hiddenFromModel":  true
 }
+

@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetReadHost",
     "family":  "ops",
     "summary":  "Persistent internal ASCET read host over line-delimited JSON",
@@ -38,3 +38,4 @@
     "supportsBatch":  false,
     "hiddenFromModel":  true
 }
+

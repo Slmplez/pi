@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetBatchApplyProjectFormula",
     "family":  "write",
     "summary":  "Batch apply project formula specs to multiple projects in a single ToolAPI session",
@@ -56,3 +56,4 @@
                          },
     "hiddenFromModel":  false
 }
+

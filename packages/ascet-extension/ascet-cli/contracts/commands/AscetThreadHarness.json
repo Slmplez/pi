@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetThreadHarness",
     "family":  "ops",
     "summary":  "Thread-based worker harness",
@@ -34,3 +34,4 @@
                  ],
     "hiddenFromModel":  true
 }
+

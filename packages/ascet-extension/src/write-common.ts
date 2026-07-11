@@ -6,6 +6,7 @@ import {
 	formatAscetCliJsonResult,
 	runAscetCliJson,
 } from "./cli.ts";
+import type { AscetScheduler } from "./scheduler/scheduler.ts";
 import { createAscetStatusReport } from "./status.ts";
 import { type AscetWriteApprovalContext, requestAscetWriteApproval } from "./write-policy.ts";
 
@@ -15,6 +16,7 @@ export interface RunAscetWriteOperationOptions {
 	signal?: AbortSignal;
 	timeoutMs?: number;
 	executeCli?: (request: AscetCliRequest) => Promise<AscetCliExecutionResult>;
+	scheduler?: Pick<AscetScheduler, "submit" | "getSnapshot">;
 }
 
 export interface AscetWriteControlParams {

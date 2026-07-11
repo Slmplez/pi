@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetBatchCreateFolder",
     "family":  "write",
     "summary":  "Batch create multiple ASCET folders in a single ToolAPI session",
@@ -49,3 +49,4 @@
                          },
     "hiddenFromModel":  false
 }
+

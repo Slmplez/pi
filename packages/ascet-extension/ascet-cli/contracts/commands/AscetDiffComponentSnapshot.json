@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetDiffComponentSnapshot",
     "family":  "diff",
     "summary":  "Explorer-oriented component diff",
@@ -76,3 +76,4 @@
                          },
     "hiddenFromModel":  false
 }
+

@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetReadBlockDiagram",
     "family":  "read",
     "summary":  "Read a named block diagram",
@@ -68,3 +68,4 @@
                          },
     "hiddenFromModel":  false
 }
+

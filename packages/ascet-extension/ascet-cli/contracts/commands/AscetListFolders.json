@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetListFolders",
     "family":  "explore",
     "summary":  "List folder tree",
@@ -66,3 +66,4 @@
                          },
     "hiddenFromModel":  false
 }
+

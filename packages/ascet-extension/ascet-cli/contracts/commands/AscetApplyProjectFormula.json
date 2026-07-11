@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetApplyProjectFormula",
     "family":  "write",
     "summary":  "Apply project formula spec",
@@ -94,3 +94,4 @@
                          },
     "hiddenFromModel":  false
 }
+

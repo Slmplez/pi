@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetReadComponentChildren",
     "family":  "explore",
     "summary":  "Grouped component internals",
@@ -69,3 +69,4 @@
                          },
     "hiddenFromModel":  false
 }
+

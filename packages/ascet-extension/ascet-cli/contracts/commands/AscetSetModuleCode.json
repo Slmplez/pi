@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetSetModuleCode",
     "family":  "write",
     "summary":  "Module write entry",
@@ -91,3 +91,4 @@
                          },
     "hiddenFromModel":  false
 }
+
