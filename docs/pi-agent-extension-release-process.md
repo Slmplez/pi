@@ -85,7 +85,7 @@ Resolver expectations:
 - `source` mode is allowed only for local development fallback beside the parent ASCET checkout.
 - Bundle mode must fail closed when partial bundled assets exist.
 
-ASCET ToolAPI-backed operations must stay serialized through the extension scheduler resource `ascet.toolapi.global` with concurrency `1`.
+ASCET ToolAPI-backed operations must go through the extension scheduler resource `ascet.toolapi.global`. Parallel requests from agents are allowed; the scheduler coordinates active execution, queueing, timeout handling, and operation health.
 
 ## Development Flow
 
@@ -146,8 +146,8 @@ Live ASCET verification is required when changes affect:
 
 Live validation rules:
 
-- Keep ASCET ToolAPI live checks serial.
-- Do not parallelize live ASCET commands.
+- Route live ASCET commands through the scheduler when running them from multiple agents.
+- Parallel live ASCET requests are allowed, but evidence collection must preserve exact tool/action/target details so reports can be merged deterministically.
 - Clean up stale `AscetCli` or ToolAPI child processes before retrying.
 - Treat runtime behavior as the source of truth, not just green build output.
 - If a smoke test reports success but the UI/tool/runtime disagrees, trace the failing layer and revalidate end to end.
@@ -349,7 +349,7 @@ A release candidate is done only when all of these are true:
 - The extension loads without `.pi/extensions` development paths.
 - Bundled ASCET assets are present or fail closed with clear diagnostics.
 - Focused extension tests pass.
-- Required live ASCET checks pass serially.
+- Required live ASCET checks pass through the scheduler with deterministic evidence and reports.
 - Changelogs document user-visible changes.
 - Installation, update, and rollback notes are clear.
 

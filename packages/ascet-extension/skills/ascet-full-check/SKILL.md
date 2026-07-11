@@ -53,7 +53,7 @@ Use the package subagents when available:
 - `ascet-verify-checker` verifies high-risk or uncertain findings.
 - `ascet-report-merge` deduplicates and writes final reports.
 
-Prefer serial ASCET evidence collection plus parallel offline checking. The ASCET scheduler protects ToolAPI calls, but the check plan still owns evidence de-duplication and report consistency.
+Parallel ASCET evidence collection is allowed. The ASCET scheduler coordinates live ToolAPI execution, while the check plan owns evidence de-duplication, baseline consistency, and report traceability.
 
 ## Guardrails
 

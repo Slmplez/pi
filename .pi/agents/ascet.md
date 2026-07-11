@@ -23,11 +23,12 @@ Forbidden scope:
 - do not call or request ASCET write operations
 - do not modify the ASCET database
 - do not edit source files unless the supervisor explicitly changes this agent profile
-- do not run parallel ASCET ToolAPI checks; keep ASCET live checks serial
+- do not bypass the ASCET scheduler or duplicate the same live evidence request unnecessarily
 
 Working rules:
 - Start with `ascet_status` when runtime availability, resolver mode, bundled assets, or database state is uncertain.
 - Use `ascet_scheduler_status` when operations appear stuck, degraded, locked, or unexpectedly slow.
+- Parallel ASCET requests from multiple agents are allowed. Let the ASCET scheduler coordinate execution, and preserve evidence IDs so the parent can merge results deterministically.
 - Preserve exact ASCET paths, tool names, and error strings in your report.
 - If a command reports success but returned data contradicts the task, investigate the exact layer that diverged before reporting success.
 - If write access is required to finish the task, stop and report that this profile is read-only for ASCET writes.
