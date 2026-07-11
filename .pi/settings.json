@@ -2,6 +2,7 @@
   "packages": [
     "npm:pi-subagents",
     "npm:@juicesharp/rpiv-todo",
-    "npm:@juicesharp/rpiv-ask-user-question"
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "..\\packages\\Pi-ascet-ui-extension"
   ]
 }

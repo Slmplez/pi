@@ -1,0 +1,53 @@
+{
+  "name": "pi-ascet-ui-extension",
+  "version": "0.1.0",
+  "description": "ASCET COPILOT startup UI extension for Pi.",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "pi-package",
+    "pi-extension",
+    "ascet",
+    "tui",
+    "ascet-copilot"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Slmplez/Pi-ascet-ui-extension.git"
+  },
+  "homepage": "https://github.com/Slmplez/Pi-ascet-ui-extension#readme",
+  "bugs": {
+    "url": "https://github.com/Slmplez/Pi-ascet-ui-extension/issues"
+  },
+  "files": [
+    "extensions/AscetHeader.ts",
+    "extensions/index.ts",
+    "extensions/logo.ts",
+    "extensions/recentSessions.ts",
+    "extensions/tips.ts",
+    "themes",
+    "README.md",
+    "LICENSE"
+  ],
+  "pi": {
+    "extensions": [
+      "./extensions/index.ts"
+    ],
+    "themes": [
+      "./themes"
+    ]
+  },
+  "scripts": {
+    "check": "tsc --noEmit",
+    "test": "tsx --test extensions/recentSessions.test.ts"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.19",
+    "tsx": "4.22.1",
+    "typescript": "5.9.3"
+  }
+}
