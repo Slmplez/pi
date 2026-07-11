@@ -1,0 +1,64 @@
+---
+name: ascet-full-check
+description: Run an extensible ASCET full-check workflow for ASCET components, methods, diagrams, BDE signal mappings, references, and verification. Use when the user asks for ASCET full check, full inspection, rule-based checking, BDE/signal mapping analysis, or a maintainable ASCET check report driven by rule-index.yaml.
+---
+
+# ASCET Full Check
+
+Use this skill to run a maintainable ASCET checking workflow. Keep this file as the orchestration layer only. Load reference files only when needed.
+
+## Required References
+
+Read these before planning:
+
+- `references/workflow.md` for run modes, ask-user-question policy, and dispatch rules.
+- `references/rule-index.yaml` for registered rules and rule families.
+- `references/tool-map.md` for ASCET evidence kinds and tool/action mapping.
+- `references/evidence-contract.md` for run directory and evidence JSONL format.
+- `references/report-contract.md` for finding and final report shape.
+
+Read `references/extension-guide.md` only when adding rules, evidence kinds, agents, or report fields.
+
+## Workflow
+
+1. Confirm the request is an ASCET check request.
+2. If target, scope, rule family, verification depth, or output format is ambiguous, call `ask_user_question` before planning. If that tool is unavailable, ask one concise blocking question.
+3. Run `ascet_status` before live ASCET work. Use `ascet_scheduler_status` when status is degraded, locked, slow, or unclear.
+4. Create a run directory under `.pi/ascet-full-check/runs/<run-id>/`.
+5. Write `check-request.json` with user parameters and any answers collected through `ask_user_question`.
+6. Resolve scope and write `scope-manifest.json`.
+7. Load `rule-index.yaml` and write `check-plan.json`.
+8. Compute `check_item_count`. This is the number of objects to inspect, not only class count. It may count classes, methods, diagrams, BDE connections, signals, elements, reference groups, or rule-target pairs.
+9. If `check_item_count < 5`, use inline mode in the current agent.
+10. If `check_item_count >= 5`, use subagent mode unless the user explicitly asks to keep everything inline.
+11. Collect evidence through the evidence kinds in `tool-map.md`.
+12. Produce findings that conform to `report-contract.md`.
+13. If live verification is enabled, verify high-severity or uncertain findings with `ascet_verify`, `ascet_read`, or `ascet_diff`.
+14. Write final Markdown and JSON reports under the run directory.
+
+## Inline Mode
+
+Use inline mode for small runs. Follow the same contracts and write the same files as subagent mode. Do not skip evidence files or report contracts just because the run is small.
+
+## Subagent Mode
+
+Use the package subagents when available:
+
+- `ascet-discovery` resolves scope and target inventory.
+- `ascet-evidence` collects reusable ASCET evidence and avoids duplicate live calls.
+- `ascet-rule-checker` checks implementation and signal-variable rules from evidence.
+- `ascet-reference-checker` checks reference and dependency evidence.
+- `ascet-semantic-checker` checks naming and semantic consistency rules.
+- `ascet-bde-signal-checker` checks BDE diagram signal mapping rules.
+- `ascet-verify-checker` verifies high-risk or uncertain findings.
+- `ascet-report-merge` deduplicates and writes final reports.
+
+Prefer serial ASCET evidence collection plus parallel offline checking. The ASCET scheduler protects ToolAPI calls, but the check plan still owns evidence de-duplication and report consistency.
+
+## Guardrails
+
+- Do not use `ascet_write` or `ascet_batch_write`.
+- Do not modify the ASCET database.
+- Preserve exact ASCET paths, method names, diagram names, signal names, tool names, and error strings.
+- Treat runtime truth as authoritative. If tool success contradicts returned data, investigate before reporting success.
+- Keep new checks extensible: add rules to `rule-index.yaml`, tool mapping to `tool-map.md`, and complex logic to a focused subagent.

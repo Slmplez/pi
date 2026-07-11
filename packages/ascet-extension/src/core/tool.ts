@@ -2,13 +2,23 @@ import { renderAscetToolCall, renderAscetToolResult } from "../rendering.ts";
 
 export interface AscetExtensionAPI {
 	registerTool(tool: unknown): void;
+	sendUserMessage(
+		content: string,
+		options?: {
+			deliverAs?: "steer" | "followUp";
+		},
+	): void;
 	registerCommand(
 		name: string,
 		options: {
 			description?: string;
 			handler: (
 				args: string,
-				ctx: { cwd: string; ui: { notify(message: string, level?: "info" | "error"): void } },
+				ctx: {
+					cwd: string;
+					isIdle(): boolean;
+					ui: { notify(message: string, level?: "info" | "warning" | "error"): void };
+				},
 			) => void;
 		},
 	): void;

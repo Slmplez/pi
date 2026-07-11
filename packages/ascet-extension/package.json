@@ -13,10 +13,20 @@
 	"pi": {
 		"extensions": [
 			"src/index.ts"
-		]
+		],
+		"skills": [
+			"skills"
+		],
+		"subagents": {
+			"agents": [
+				"agents"
+			]
+		}
 	},
 	"files": [
 		"src",
+		"agents",
+		"skills",
 		"ascet-cli",
 		"README.md",
 		"!ascet-cli/bin/**/*.log",

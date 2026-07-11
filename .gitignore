@@ -38,4 +38,7 @@ todo.md
 plans/
 .pi/hf-sessions/
 .pi/hf-sessions-backup/
+.pi-subagents/
+.pi/ascet-full-check/
+.pi/ascet-full-check-data.json
 collect.sh

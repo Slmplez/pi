@@ -121,6 +121,8 @@ Attribution:
 
 **Lockstep versioning**: all packages share one version; every release updates all together. `patch` = fixes + additions, `minor` = breaking changes. No major releases.
 
+When releasing Pi Agent with domain extensions such as ASCET, also follow `docs/pi-agent-extension-release-process.md`. That document is the required flow for package-shaped extension releases, isolated install validation, ASCET asset bundling, and serial live ASCET verification.
+
 1. **Update CHANGELOGs**: ask the user whether they ran the `/cl` prompt on the latest commit on `main`. If not, they must run `/cl` first to audit and update each package's `[Unreleased]` section before releasing.
 
 2. **Local smoke test**: build an unpublished release and smoke test from outside the repo (so it can't resolve workspace files):

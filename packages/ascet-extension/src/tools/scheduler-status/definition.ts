@@ -18,9 +18,9 @@ export const ascetSchedulerStatusTool = defineSequentialAscetTool({
 		params: AscetSchedulerStatusParams,
 		_signal: AbortSignal,
 		_onUpdate: unknown,
-		ctx: { cwd: string },
+		_ctx: { cwd: string },
 	) {
-		const report = await createAscetSchedulerStatusReport(params.action ?? "status", { cwd: ctx.cwd });
+		const report = await createAscetSchedulerStatusReport(params.action ?? "status");
 		const text = params.format === "json" ? JSON.stringify(report, null, 2) : report.summary;
 		const action = params.action ?? "status";
 		const route = routeAscetAction({ toolName: "ascet_scheduler_status", action });

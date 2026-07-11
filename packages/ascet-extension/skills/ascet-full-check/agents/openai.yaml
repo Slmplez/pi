@@ -1,0 +1,4 @@
+interface:
+  display_name: "ASCET Full Check"
+  short_description: "Run extensible ASCET full checks"
+  default_prompt: "Run an ASCET full check for the requested target."
