@@ -6,10 +6,12 @@ import {
 	formatAscetCliJsonResult,
 	runAscetCliJson,
 } from "./cli.ts";
+import { inferComponentPathFromScope } from "./search-scope.ts";
 
 export interface AscetSearchOccurrencesParams {
 	query: string;
 	target?: "component" | "element" | "code";
+	componentPath?: string;
 	scopePath?: string;
 	match?: "exact" | "glob" | "contains";
 	limit?: number;
@@ -29,7 +31,8 @@ export type AscetSearchOccurrencesResult = AscetCliJsonResult;
 export const ascetSearchOccurrencesParameters = Type.Object({
 	query: Type.String({ description: "Occurrence query for component or element matches.", minLength: 1 }),
 	target: Type.Optional(Type.Union([Type.Literal("component"), Type.Literal("element"), Type.Literal("code")])),
-	scopePath: Type.Optional(Type.String({ description: "ASCET folder scope, for example DEMO." })),
+	componentPath: Type.Optional(Type.String({ description: "Known ASCET component path, for example DEMO\\PID." })),
+	scopePath: Type.Optional(Type.String({ description: "ASCET folder scope when componentPath is unknown." })),
 	match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("glob"), Type.Literal("contains")])),
 	limit: Type.Optional(Type.Number({ minimum: 1, maximum: 200 })),
 	cursor: Type.Optional(Type.String()),
@@ -40,7 +43,11 @@ export function buildSearchOccurrencesArgs(params: AscetSearchOccurrencesParams)
 	if (params.target) {
 		args.push("--target", params.target);
 	}
-	if (params.scopePath) {
+	const componentPath = params.componentPath ?? inferComponentPathFromScope(params);
+	if (componentPath) {
+		args.push("--component", componentPath);
+	}
+	if (params.scopePath && !componentPath) {
 		args.push("--scope", params.scopePath);
 	}
 	if (params.match) {

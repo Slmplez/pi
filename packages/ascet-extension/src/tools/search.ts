@@ -36,6 +36,7 @@ export type AscetSearchParams =
 			action: "search_occurrences";
 			query: string;
 			target: "component" | "element" | "code";
+			componentPath?: string;
 			scopePath?: string;
 			match?: "exact" | "glob" | "contains";
 			limit?: number;

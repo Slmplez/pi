@@ -2,7 +2,7 @@
     "id":  "AscetSearchOccurrences",
     "family":  "search",
     "summary":  "Bounded mixed component and element occurrence search",
-    "usage":  "\u003cquery\u003e [--target component|element|code] [--scope \u003cfolder\u003e] [--limit \u003cn\u003e] [--cursor \u003ctoken\u003e] [--json]",
+    "usage":  "\u003cquery\u003e [--target component|element|code] [--component \u003cpath\u003e] [--scope \u003cfolder\u003e] [--limit \u003cn\u003e] [--cursor \u003ctoken\u003e] [--json]",
     "execution":  {
                       "kind":  "unified_cli",
                       "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
@@ -89,12 +89,13 @@
     "examples":  [
                      {
                          "description":  "Basic usage",
-                         "command":  "AscetCli.exe exec search_occurrences \u003cquery\u003e [--target component|element|code] [--scope \u003cfolder\u003e] [--limit \u003cn\u003e] [--cursor \u003ctoken\u003e] [--json]"
+                         "command":  "AscetCli.exe exec search_occurrences \u003cquery\u003e [--target component|element|code] [--component \u003cpath\u003e] [--scope \u003cfolder\u003e] [--limit \u003cn\u003e] [--cursor \u003ctoken\u003e] [--json]"
                      }
                  ],
     "pitfalls":  [
                      "Omitting --target keeps the legacy mixed component+element behavior.",
                      "target=code currently returns unsupported_target instead of pretending code text search succeeded.",
+                     "Use --component for element searches inside a concrete component; --scope is only a folder scope.",
                      "In mixed mode the cursor resumes the element scanning leg; component matches are bounded per page.",
                      "Only searchComplete=true means the selected scanning leg is complete."
                  ],
@@ -110,3 +111,4 @@
                          },
     "hiddenFromModel":  false
 }
+

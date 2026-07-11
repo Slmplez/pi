@@ -6,6 +6,7 @@ import {
 	formatAscetCliJsonResult,
 	runAscetCliJson,
 } from "./cli.ts";
+import { inferComponentPathFromScope } from "./search-scope.ts";
 
 export interface AscetSearchElementsParams {
 	query: string;
@@ -67,16 +68,6 @@ export function buildSearchElementsArgs(params: AscetSearchElementsParams): stri
 	}
 	args.push("--json");
 	return args;
-}
-
-function inferComponentPathFromScope(params: AscetSearchElementsParams): string | undefined {
-	if (params.componentPath || !params.scopePath) {
-		return params.componentPath;
-	}
-	if (params.match === "exact" && /[\\/]/.test(params.scopePath)) {
-		return params.scopePath;
-	}
-	return undefined;
 }
 
 export async function runAscetSearchElements(

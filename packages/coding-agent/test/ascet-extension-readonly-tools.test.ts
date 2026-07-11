@@ -127,25 +127,19 @@ describe("ASCET read-only PI tools", () => {
 		const ascetExtension = await loadAscetExtension();
 		const tool = ascetExtension?.tools.get("ascet_read")?.definition;
 		const executeReadBlockDiagram = async (params: Record<string, unknown>) =>
-			tool?.execute(
-				"test-read-block-diagram-timeout",
-				params,
-				new AbortController().signal,
-				undefined,
-				{
-					cwd: repoRoot,
-					executeCli: async (request) => ({
-						exitCode: 0,
-						stdout: JSON.stringify({
-							ok: true,
-							result: { DiagramName: "Main", Elements: [{ id: "1" }], Connections: [] },
-						}),
-						stderr: "",
-						timedOut: false,
-						request,
+			tool?.execute("test-read-block-diagram-timeout", params, new AbortController().signal, undefined, {
+				cwd: repoRoot,
+				executeCli: async (request) => ({
+					exitCode: 0,
+					stdout: JSON.stringify({
+						ok: true,
+						result: { DiagramName: "Main", Elements: [{ id: "1" }], Connections: [] },
 					}),
-				},
-			);
+					stderr: "",
+					timedOut: false,
+					request,
+				}),
+			});
 
 		const defaultResult = await executeReadBlockDiagram({
 			action: "read_block_diagram",
@@ -392,6 +386,28 @@ describe("ASCET read-only PI tools", () => {
 			"30",
 			"--json",
 		]);
+		expect(
+			buildSearchOccurrencesArgs({
+				query: "pid_kp",
+				target: "element",
+				scopePath: "DEMO\\PID",
+				match: "exact",
+				limit: 5,
+			}),
+		).toEqual([
+			"exec",
+			"search_occurrences",
+			"pid_kp",
+			"--target",
+			"element",
+			"--component",
+			"DEMO\\PID",
+			"--match",
+			"exact",
+			"--limit",
+			"5",
+			"--json",
+		]);
 	});
 
 	it("runs ascet_search_elements through an injected CLI executor", async () => {
@@ -478,6 +494,22 @@ describe("ASCET read-only PI tools", () => {
 		expect(scopedComponentResult.ok).toBe(true);
 		expect(scopedComponentResult.request.args).toContain("--component");
 		expect(scopedComponentResult.request.args).not.toContain("--scope");
+		const scopedOccurrenceResult = await runAscetSearchOccurrences(
+			{ query: "pid_kp", target: "element", scopePath: "DEMO\\PID", match: "exact", limit: 5 },
+			{
+				cwd: repoRoot,
+				executeCli: async (request) => ({
+					exitCode: 0,
+					stdout: JSON.stringify({ ok: true, result: { occurrences: [{ path: "DEMO\\PID::pid_kp" }] } }),
+					stderr: "",
+					timedOut: false,
+					request,
+				}),
+			},
+		);
+		expect(scopedOccurrenceResult.ok).toBe(true);
+		expect(scopedOccurrenceResult.request.args).toContain("--component");
+		expect(scopedOccurrenceResult.request.args).not.toContain("--scope");
 		expect(occurrencesResult.ok).toBe(true);
 		expect(occurrencesResult.request.args).toEqual([
 			"exec",
@@ -897,9 +929,7 @@ describe("ASCET read-only PI tools", () => {
 			"--json",
 		]);
 		expect(unsupportedTextCodeResult.ok).toBe(false);
-		expect(unsupportedTextCodeResult.error?.message).toContain(
-			"ESDL module does not support text code sections",
-		);
+		expect(unsupportedTextCodeResult.error?.message).toContain("ESDL module does not support text code sections");
 		expect(formulasResult.ok).toBe(true);
 		expect(formulasResult.request.args).toEqual(["exec", "read_project_formulas", "DEMO\\Project", "--json"]);
 		expect(diagramsResult.ok).toBe(true);
