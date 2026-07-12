@@ -1,6 +1,6 @@
 {
   "name": "@zeerke/ascet-copilot-ui",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "ASCET Copilot startup UI extension for Pi.",
   "type": "module",
   "license": "MIT",
@@ -27,6 +27,7 @@
     "extensions/index.ts",
     "extensions/logo.ts",
     "extensions/recentSessions.ts",
+    "extensions/releaseInfo.ts",
     "extensions/tips.ts",
     "themes",
     "README.md",
@@ -42,7 +43,7 @@
   },
   "scripts": {
     "check": "tsc --noEmit",
-    "test": "tsx --test extensions/recentSessions.test.ts"
+    "test": "tsx --test extensions/*.test.ts"
   },
   "peerDependencies": {
     "@earendil-works/pi-coding-agent": "*",

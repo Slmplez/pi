@@ -19,6 +19,11 @@ import {
 	visibleWidth,
 } from "./logo.ts";
 import { loadRecentSessions, type RecentSessionView } from "./recentSessions.ts";
+import {
+	checkAscetCopilotUpdate,
+	createReleaseRows,
+	type UpdateState,
+} from "./releaseInfo.ts";
 import { randomStartupTip } from "./tips.ts";
 
 export interface HeaderModelInfo {
@@ -60,6 +65,7 @@ export class AscetHeader implements Component {
 	private animating = true;
 	private disposed = false;
 	private recentSessionsState: RecentSessionsState = { status: "loading" };
+	private updateState: UpdateState = { status: "checking" };
 
 	constructor(tui: TUI, theme: Theme, options: AscetHeaderOptions = {}) {
 		this.tui = tui;
@@ -81,6 +87,7 @@ export class AscetHeader implements Component {
 			}, FEEDBACK_TICK_MS);
 		}
 		void this.loadRecentSessions();
+		void this.checkForUpdates();
 	}
 
 	invalidate(): void {}
@@ -141,8 +148,7 @@ export class AscetHeader implements Component {
 			"Ctrl+C interrupt / clear",
 			"Ctrl+T toggle thinking",
 			rightRule,
-			this.theme.bold("LSP Servers"),
-			this.theme.fg("dim", "No LSP servers"),
+			...this.renderReleaseRows(rightWidth),
 			"",
 			rightRule,
 			...this.renderRecentSessionRows(rightWidth),
@@ -234,6 +240,24 @@ export class AscetHeader implements Component {
 			this.recentSessionsState = { status: "error" };
 		}
 		this.tui.requestRender();
+	}
+
+	private async checkForUpdates(): Promise<void> {
+		const updateState = await checkAscetCopilotUpdate();
+		if (this.disposed) return;
+		this.updateState = updateState;
+		this.tui.requestRender();
+	}
+
+	private renderReleaseRows(width: number): string[] {
+		const rows = createReleaseRows(this.updateState);
+		return rows.map((row, index) => {
+			const text = truncateToWidth(row, Math.max(1, width), "", false);
+			if (index === 0) return this.theme.bold(text);
+			return index === rows.length - 1 && this.updateState.status !== "available"
+				? this.theme.fg("dim", text)
+				: text;
+		});
 	}
 
 	private renderRecentSessionRows(width: number): string[] {
