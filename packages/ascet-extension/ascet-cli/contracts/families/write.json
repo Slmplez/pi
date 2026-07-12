@@ -11,6 +11,7 @@
     "AscetDeleteMethod",
     "AscetSetMethodCode",
     "AscetSetClassMethodCode",
+    "AscetSetMethodSignature",
     "AscetSetModuleCode",
     "AscetSetStateMachineCode",
     "AscetSetElementDependency",

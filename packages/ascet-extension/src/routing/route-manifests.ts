@@ -282,6 +282,13 @@ export const ascetRouteManifestEntries = [
 	},
 	{
 		toolName: "ascet_write",
+		action: "set_method_signature",
+		logicalCommandId: "AscetSetMethodSignature",
+		operation: "set_method_signature",
+		category: "domain",
+	},
+	{
+		toolName: "ascet_write",
 		action: "delete_component",
 		logicalCommandId: "AscetDeleteComponent",
 		operation: "delete_component",

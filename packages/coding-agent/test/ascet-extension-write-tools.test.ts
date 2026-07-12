@@ -34,6 +34,10 @@ import {
 	runApprovedAscetSetElementDependency,
 } from "../../ascet-extension/src/set-element-dependency.ts";
 import { buildSetMethodCodeArgs } from "../../ascet-extension/src/set-method-code.ts";
+import {
+	buildSetMethodSignatureArgs,
+	runApprovedAscetSetMethodSignature,
+} from "../../ascet-extension/src/set-method-signature.ts";
 import { buildSetModuleCodeArgs } from "../../ascet-extension/src/set-module-code.ts";
 import { buildSetStateMachineCodeArgs } from "../../ascet-extension/src/set-state-machine-code.ts";
 import { ascetWriteTool } from "../../ascet-extension/src/tools/write/index.ts";
@@ -91,6 +95,26 @@ describe("ASCET guarded write PI tools", () => {
 			"abstract",
 			"--if-exists",
 			"return-existing",
+			"--verify-readback",
+			"--json",
+		]);
+		expect(
+			buildSetMethodSignatureArgs({
+				componentPath: "DEMO\\__pi_write_smoke__\\PiSmoke",
+				methodName: "calc",
+				returnType: "cont",
+				ifReturnExists: "replace",
+				verifyReadback: true,
+			}),
+		).toEqual([
+			"exec",
+			"set_method_signature",
+			"DEMO\\__pi_write_smoke__\\PiSmoke",
+			"calc",
+			"--return-type",
+			"cont",
+			"--if-return-exists",
+			"replace",
 			"--verify-readback",
 			"--json",
 		]);
@@ -859,6 +883,18 @@ describe("ASCET guarded write PI tools", () => {
 			options,
 			ctx,
 		);
+		await runApprovedAscetSetMethodSignature(
+			{
+				componentPath: "DEMO\\__pi_write_smoke__\\PiSmoke",
+				methodName: "calc",
+				returnType: "cont",
+				ifReturnExists: "keep",
+				verifyReadback: true,
+				executeWrite: true,
+			},
+			options,
+			ctx,
+		);
 
 		expect(executedArgs).toEqual([
 			["exec", "create_folder", "DEMO\\__pi_write_smoke__", "--verify-readback", "--json"],
@@ -884,6 +920,18 @@ describe("ASCET guarded write PI tools", () => {
 				"abstract",
 				"--if-exists",
 				"return-existing",
+				"--verify-readback",
+				"--json",
+			],
+			[
+				"exec",
+				"set_method_signature",
+				"DEMO\\__pi_write_smoke__\\PiSmoke",
+				"calc",
+				"--return-type",
+				"cont",
+				"--if-return-exists",
+				"keep",
 				"--verify-readback",
 				"--json",
 			],

@@ -1862,6 +1862,34 @@
                                               }
                      },
                      {
+                         "id":  "AscetSetMethodSignature",
+                         "family":  "write",
+                         "summary":  "Set a primitive method return signature",
+                         "risk":  "write",
+                         "objectKinds":  [
+                                             "class",
+                                             "module"
+                                         ],
+                         "supportsJson":  true,
+                         "requiresSerialLiveAccess":  true,
+                         "hiddenFromModel":  false,
+                         "execution":  {
+                                           "kind":  "unified_cli",
+                                           "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+                                           "subcommand":  "exec",
+                                           "operation":  "set_method_signature"
+                                       },
+                         "operation":  "set_method_signature",
+                         "lane":  "serial_write",
+                         "hostEligible":  true,
+                         "supportsBatch":  false,
+                         "executionProfile":  {
+                                                  "hostSafety":  "write",
+                                                  "hostPolicy":  "prefer_host",
+                                                  "timeoutClass":  "write"
+                                              }
+                     },
+                     {
                          "id":  "AscetSetMethodCode",
                          "family":  "write",
                          "summary":  "Write method code",

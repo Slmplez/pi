@@ -20,6 +20,7 @@ import {
 	resolvePiAscetRuntimeRoot,
 } from "../../ascet-extension/src/scheduler/index.ts";
 import { runApprovedAscetSetElementDependency } from "../../ascet-extension/src/set-element-dependency.ts";
+import { runApprovedAscetSetMethodSignature } from "../../ascet-extension/src/set-method-signature.ts";
 import { loadAscetExtension, repoRoot } from "./ascet-extension-test-helpers.ts";
 
 function tempRuntimeEnv() {
@@ -267,6 +268,54 @@ describe("ASCET scheduler diagnostics", () => {
 			"plan_element_dependency",
 			"set_element_dependency",
 		]);
+	});
+
+	it("routes method signature writes through the scheduler as serial writes", async () => {
+		const env = tempRuntimeEnv();
+		const scheduler = createAscetScheduler();
+		let sawLock = false;
+
+		const result = await runApprovedAscetSetMethodSignature(
+			{
+				componentPath: "DEMO\\PiSmoke",
+				methodName: "calc",
+				returnType: "cont",
+				ifReturnExists: "replace",
+				verifyReadback: true,
+				executeWrite: true,
+			},
+			{
+				cwd: repoRoot,
+				env,
+				scheduler,
+				executeCli: async (request) => {
+					sawLock = (await getAscetCliLockSnapshot({ env })).locked;
+					return {
+						exitCode: 0,
+						stdout: JSON.stringify({
+							ok: true,
+							result: {
+								operationName: "set_method_signature",
+								writeSucceeded: true,
+								payload: { returnElementModelType: "cont" },
+								verification: { requested: true, attempted: true, succeeded: true },
+							},
+						}),
+						stderr: "",
+						timedOut: false,
+						request,
+					};
+				},
+			},
+			{ hasUI: true, ui: { confirm: async () => true } },
+		);
+
+		expect(result.ok).toBe(true);
+		expect(sawLock).toBe(true);
+		expect((await getAscetCliLockSnapshot({ env })).locked).toBe(false);
+		const job = scheduler.getSnapshot().recentJobs.at(-1);
+		expect(job?.commandId).toBe("set_method_signature");
+		expect(job?.kind).toBe("write");
 	});
 
 	it("captures timeout failures in operation health", async () => {

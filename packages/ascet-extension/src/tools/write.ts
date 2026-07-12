@@ -13,6 +13,7 @@ import { runApprovedAscetDeleteMethod } from "../delete-method.ts";
 import { runApprovedAscetSetClassMethodCode } from "../set-class-method-code.ts";
 import { runApprovedAscetSetElementDependency } from "../set-element-dependency.ts";
 import { runApprovedAscetSetMethodCode } from "../set-method-code.ts";
+import { runApprovedAscetSetMethodSignature } from "../set-method-signature.ts";
 import { runApprovedAscetSetModuleCode } from "../set-module-code.ts";
 import {
 	ASCET_SET_STATE_MACHINE_CODE_OPERATIONS,
@@ -43,6 +44,15 @@ export type AscetWriteParams =
 			methodName: string;
 			methodKind: "abstract" | "process" | "action" | "condition" | "trigger";
 			ifExists?: "fail" | "return-existing";
+			verifyReadback?: boolean;
+			executeWrite?: boolean;
+	  }
+	| {
+			action: "set_method_signature";
+			componentPath: string;
+			methodName: string;
+			returnType: "cont" | "sdisc" | "udisc" | "log";
+			ifReturnExists?: "fail" | "keep" | "replace";
 			verifyReadback?: boolean;
 			executeWrite?: boolean;
 	  }
@@ -167,6 +177,7 @@ export const ascetWriteParameters = Type.Object({
 		Type.Literal("create_folder"),
 		Type.Literal("create_component"),
 		Type.Literal("create_method"),
+		Type.Literal("set_method_signature"),
 		Type.Literal("delete_component"),
 		Type.Literal("delete_method"),
 		Type.Literal("delete_folder"),
@@ -190,6 +201,9 @@ export const ascetWriteParameters = Type.Object({
 	methodName: Type.Optional(Type.String({ minLength: 1 })),
 	elementName: Type.Optional(Type.String({ minLength: 1 })),
 	dependency: Type.Optional(Type.Union([Type.Literal("dependent"), Type.Literal("independent")])),
+	returnType: Type.Optional(
+		Type.Union([Type.Literal("cont"), Type.Literal("sdisc"), Type.Literal("udisc"), Type.Literal("log")]),
+	),
 	targetKind: Type.Optional(Type.Union([Type.Literal("auto"), Type.Literal("component"), Type.Literal("folder")])),
 	match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("all")])),
 	methodKind: Type.Optional(
@@ -233,6 +247,7 @@ export const ascetWriteParameters = Type.Object({
 	dryRun: Type.Optional(Type.Boolean()),
 	backupDir: Type.Optional(Type.String({ minLength: 1 })),
 	ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("return-existing")])),
+	ifReturnExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("keep"), Type.Literal("replace")])),
 	ifMissing: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")])),
 	rollbackOnFailure: Type.Optional(Type.Boolean()),
 	...codeSourceSchema,
@@ -347,6 +362,8 @@ async function dispatchWrite(
 			return runApprovedAscetCreateComponent(params, options, ctx);
 		case "create_method":
 			return runApprovedAscetCreateMethod(params, options, ctx);
+		case "set_method_signature":
+			return runApprovedAscetSetMethodSignature(params, options, ctx);
 		case "delete_component":
 			return runApprovedAscetDeleteComponent(params, options, ctx);
 		case "delete_method":
