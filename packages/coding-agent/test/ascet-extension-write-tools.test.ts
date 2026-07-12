@@ -14,6 +14,7 @@ import {
 	createBatchWriteOutcome,
 	runApprovedAscetBatchWrite,
 } from "../../ascet-extension/src/batch-write.ts";
+import type { AscetCliRequest } from "../../ascet-extension/src/cli.ts";
 import { withInlineCodeFile } from "../../ascet-extension/src/core/temp-files.ts";
 import {
 	buildCreateComponentArgs,
@@ -472,17 +473,18 @@ describe("ASCET guarded write PI tools", () => {
 				executeWrite: true,
 			},
 			{ cwd: repoRoot },
-			{ cwd: repoRoot },
+			{},
 		);
 		const missingStateMachineOperation = await runAscetWrite(
 			{
 				action: "set_state_machine_code",
 				stateMachinePath: "DEMO\\SM",
+				operation: undefined as never,
 				code: "x = 1;",
 				executeWrite: true,
 			},
 			{ cwd: repoRoot },
-			{ cwd: repoRoot },
+			{},
 		);
 		const invalidStateMachineOperation = await runAscetWrite(
 			{
@@ -493,7 +495,7 @@ describe("ASCET guarded write PI tools", () => {
 				executeWrite: false,
 			},
 			{ cwd: repoRoot },
-			{ cwd: repoRoot },
+			{},
 		);
 		const moduleSectionAlias = await runAscetWrite(
 			{
@@ -504,7 +506,7 @@ describe("ASCET guarded write PI tools", () => {
 				executeWrite: false,
 			},
 			{ cwd: repoRoot },
-			{ cwd: repoRoot },
+			{},
 		);
 
 		expect(missingModuleSection.details.error?.message).toBe("section parameter is required for set_module_code");
@@ -780,7 +782,7 @@ describe("ASCET guarded write PI tools", () => {
 		const executedArgs: string[][] = [];
 		const options = {
 			cwd: repoRoot,
-			executeCli: async (request) => {
+			executeCli: async (request: AscetCliRequest) => {
 				executedArgs.push(request.args);
 				return {
 					exitCode: 0,

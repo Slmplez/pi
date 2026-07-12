@@ -202,9 +202,7 @@ class InProcessAscetScheduler implements AscetScheduler {
 						: error instanceof Error
 							? error.name
 							: "ASCET_JOB_FAILED";
-				if (this.#hostState !== "degraded") {
-					this.#hostState = "healthy";
-				}
+				this.#hostState = "healthy";
 			}
 			context.errorMessage = error instanceof Error ? error.message : String(error);
 			pending.reject(error);

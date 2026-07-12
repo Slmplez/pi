@@ -1,6 +1,6 @@
 {
 	"name": "@zeerke/ascet-copilot-extension",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "ASCET Copilot tool extension for Pi.",
 	"type": "module",
 	"main": "./src/index.ts",
@@ -36,6 +36,9 @@
 	],
 	"peerDependencies": {
 		"typebox": "*"
+	},
+	"dependencies": {
+		"exceljs": "4.4.0"
 	},
 	"private": false,
 	"publishConfig": {

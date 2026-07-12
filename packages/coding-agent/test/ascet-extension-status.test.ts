@@ -7,6 +7,18 @@ import { createAscetStatusReport, resolveAscetStatusPaths } from "../../ascet-ex
 import { createAscetRuntimeStatusReport } from "../../ascet-extension/src/status-runtime.ts";
 import { ascetAgentRoot, loadAscetExtension, repoRoot } from "./ascet-extension-test-helpers.ts";
 
+interface StatusDetails {
+	installationOk: boolean;
+	runtimeOk: boolean;
+	runtime: { commandId: string };
+	paths: { mode: string; cliPath: string; catalogPath: string };
+}
+
+interface CapabilitiesDetails {
+	ok: boolean;
+	data: { totalMatches: number };
+}
+
 describe("ASCET extension status diagnostics", () => {
 	it("resolves bundled ASCET CLI and contracts when package assets exist", () => {
 		const paths = resolveAscetStatusPaths({ cwd: repoRoot, env: {} });
@@ -115,7 +127,7 @@ describe("ASCET extension status diagnostics", () => {
 				exitCode: 0,
 				timedOut: false,
 			}),
-		});
+		} as never);
 
 		expect(report.installationOk).toBe(true);
 		expect(report.runtimeOk).toBe(true);
@@ -203,22 +215,21 @@ describe("ASCET extension status diagnostics", () => {
 				exitCode: 0,
 				timedOut: false,
 			}),
-		});
+		} as never);
 
 		expect(response?.content[0]).toMatchObject({
 			type: "text",
 			text: expect.stringContaining("ASCET status:"),
 		});
-		expect(response?.details.installationOk).toBe(true);
-		expect(response?.details.runtimeOk).toBe(true);
-		expect(response?.details.runtime).toMatchObject({
+		const details = response?.details as StatusDetails | undefined;
+		expect(details?.installationOk).toBe(true);
+		expect(details?.runtimeOk).toBe(true);
+		expect(details?.runtime).toMatchObject({
 			commandId: "list_folders",
 		});
-		expect(response?.details.paths.mode).toBe("bundle");
-		expect(response?.details.paths.cliPath).toBe(
-			resolve(repoRoot, "packages/ascet-extension/ascet-cli/bin/AscetCli.exe"),
-		);
-		expect(response?.details.paths.catalogPath).toBe(
+		expect(details?.paths.mode).toBe("bundle");
+		expect(details?.paths.cliPath).toBe(resolve(repoRoot, "packages/ascet-extension/ascet-cli/bin/AscetCli.exe"));
+		expect(details?.paths.catalogPath).toBe(
 			resolve(repoRoot, "packages/ascet-extension/ascet-cli/contracts/cli-catalog.json"),
 		);
 	});
@@ -234,14 +245,15 @@ describe("ASCET extension status diagnostics", () => {
 			{ family: "read" },
 			new AbortController().signal,
 			undefined,
-			{ cwd: repoRoot },
+			{ cwd: repoRoot } as never,
 		);
 
 		expect(response?.content[0]).toMatchObject({
 			type: "text",
 			text: expect.stringContaining("ASCET capabilities:"),
 		});
-		expect(response?.details.ok).toBe(true);
-		expect(response?.details.data.totalMatches).toBeGreaterThan(0);
+		const details = response?.details as CapabilitiesDetails | undefined;
+		expect(details?.ok).toBe(true);
+		expect(details?.data.totalMatches).toBeGreaterThan(0);
 	});
 });

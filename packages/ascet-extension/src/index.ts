@@ -1,3 +1,4 @@
+import { executeAscetDesignCommand } from "./ascet-design.ts";
 import { executeAscetInitCommand } from "./ascet-init.ts";
 import type { AscetExtensionAPI } from "./core/tool.ts";
 import { executeAscetSchedulerStatusCommand } from "./scheduler/status.ts";
@@ -54,6 +55,13 @@ export default function ascetExtension(pi: AscetExtensionAPI) {
 		description: "Create or update an ASCET workspace onboarding section",
 		handler: async (args, ctx) => {
 			await executeAscetInitCommand(args, ctx, pi);
+		},
+	});
+
+	pi.registerCommand("ascet-design", {
+		description: "Clarify a requirement, retrieve Excel risk context, and plan ASCET design",
+		handler: async (args, ctx) => {
+			await executeAscetDesignCommand(args, ctx, pi);
 		},
 	});
 

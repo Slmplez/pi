@@ -118,12 +118,20 @@ export async function executeAscetCli(request: AscetCliRequest): Promise<AscetCl
 		};
 		request.signal?.addEventListener("abort", abort, { once: true });
 
-		child.stdout.setEncoding("utf8");
-		child.stderr.setEncoding("utf8");
-		child.stdout.on("data", (chunk) => {
+		const stdoutStream = child.stdout;
+		const stderrStream = child.stderr;
+		const stdinStream = child.stdin;
+		if (!stdoutStream || !stderrStream || !stdinStream) {
+			reject(new Error("ASCET CLI process stdio streams are unavailable."));
+			return;
+		}
+
+		stdoutStream.setEncoding("utf8");
+		stderrStream.setEncoding("utf8");
+		stdoutStream.on("data", (chunk) => {
 			stdout += chunk;
 		});
-		child.stderr.on("data", (chunk) => {
+		stderrStream.on("data", (chunk) => {
 			stderr += chunk;
 		});
 		child.on("error", reject);
@@ -135,8 +143,8 @@ export async function executeAscetCli(request: AscetCliRequest): Promise<AscetCl
 			resolve({ exitCode, stdout, stderr, timedOut, aborted, request });
 		});
 		if (request.stdin !== undefined) {
-			child.stdin.write(request.stdin);
-			child.stdin.end();
+			stdinStream.write(request.stdin);
+			stdinStream.end();
 		}
 	});
 }

@@ -27,7 +27,7 @@ export type AscetSearchParams =
 			action: "search_elements";
 			query: string;
 			componentPath?: string;
-			group?: string;
+			group?: "all" | "primitive" | "complex" | "referenced";
 			match?: "exact" | "glob" | "contains";
 			limit?: number;
 			cursor?: string;
@@ -61,7 +61,9 @@ export const ascetSearchParameters = Type.Object({
 	query: Type.String({ minLength: 1 }),
 	scopePath: Type.Optional(Type.String()),
 	componentPath: Type.Optional(Type.String()),
-	group: Type.Optional(Type.String()),
+	group: Type.Optional(
+		Type.Union([Type.Literal("all"), Type.Literal("primitive"), Type.Literal("complex"), Type.Literal("referenced")]),
+	),
 	target: Type.Optional(Type.Union([Type.Literal("component"), Type.Literal("element"), Type.Literal("code")])),
 	kind: Type.Optional(Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")])),
 	match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("glob"), Type.Literal("contains")])),

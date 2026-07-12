@@ -53,6 +53,10 @@ import { buildSearchOccurrencesArgs, runAscetSearchOccurrences } from "../../asc
 import { buildVerifyReadbackArgs, runAscetVerifyReadback } from "../../ascet-extension/src/verify-readback.ts";
 import { loadAscetExtension, repoRoot } from "./ascet-extension-test-helpers.ts";
 
+interface CliRequestDetails {
+	diagnostics: { request: { args: string[]; timeoutMs?: number } };
+}
+
 describe("ASCET read-only PI tools", () => {
 	it("uses Windows process-tree termination for ASCET CLI timeouts", () => {
 		expect(getProcessTreeKillCommand(1234, "win32")).toEqual({
@@ -138,7 +142,7 @@ describe("ASCET read-only PI tools", () => {
 		const executeReadBlockDiagram = async (params: Record<string, unknown>) =>
 			tool?.execute("test-read-block-diagram-timeout", params, new AbortController().signal, undefined, {
 				cwd: repoRoot,
-				executeCli: async (request) => ({
+				executeCli: async (request: { timeoutMs?: number }) => ({
 					exitCode: 0,
 					stdout: JSON.stringify({
 						ok: true,
@@ -148,7 +152,7 @@ describe("ASCET read-only PI tools", () => {
 					timedOut: false,
 					request,
 				}),
-			});
+			} as never);
 
 		const defaultResult = await executeReadBlockDiagram({
 			action: "read_block_diagram",
@@ -162,8 +166,10 @@ describe("ASCET read-only PI tools", () => {
 			timeoutMs: 12_345,
 		});
 
-		expect(defaultResult?.details.diagnostics.request.timeoutMs).toBe(60_000);
-		expect(customResult?.details.diagnostics.request.timeoutMs).toBe(12_345);
+		const defaultDetails = defaultResult?.details as CliRequestDetails | undefined;
+		const customDetails = customResult?.details as CliRequestDetails | undefined;
+		expect(defaultDetails?.diagnostics.request.timeoutMs).toBe(60_000);
+		expect(customDetails?.diagnostics.request.timeoutMs).toBe(12_345);
 	});
 
 	it("builds JSON list_components CLI invocation", () => {
@@ -648,7 +654,7 @@ describe("ASCET read-only PI tools", () => {
 			undefined,
 			{
 				cwd: repoRoot,
-				executeCli: async (request) => ({
+				executeCli: async (request: { args: string[] }) => ({
 					exitCode: 0,
 					stdout: JSON.stringify({
 						ok: true,
@@ -658,7 +664,7 @@ describe("ASCET read-only PI tools", () => {
 					timedOut: false,
 					request,
 				}),
-			},
+			} as never,
 		);
 		const planResult = await tool?.execute(
 			"test-plan-element-dependency",
@@ -672,17 +678,19 @@ describe("ASCET read-only PI tools", () => {
 			undefined,
 			{
 				cwd: repoRoot,
-				executeCli: async (request) => ({
+				executeCli: async (request: { args: string[] }) => ({
 					exitCode: 0,
 					stdout: JSON.stringify({ ok: true, result: { target: "DEMO\\DiscreteRiccatiSolver", count: 1 } }),
 					stderr: "",
 					timedOut: false,
 					request,
 				}),
-			},
+			} as never,
 		);
 
-		expect(matchResult?.details).toMatchObject({
+		const matchDetails = matchResult?.details as CliRequestDetails | undefined;
+		const planDetails = planResult?.details as CliRequestDetails | undefined;
+		expect(matchDetails).toMatchObject({
 			ok: true,
 			tool: "ascet_read",
 			action: "read_import_export_match",
@@ -691,7 +699,7 @@ describe("ASCET read-only PI tools", () => {
 				operation: "read_import_export_match",
 			},
 		});
-		expect(matchResult?.details.diagnostics.request.args).toEqual([
+		expect(matchDetails?.diagnostics.request.args).toEqual([
 			"exec",
 			"read_import_export_match",
 			"DEMO\\Class_ESDL_1",
@@ -700,7 +708,7 @@ describe("ASCET read-only PI tools", () => {
 			"speed",
 			"--json",
 		]);
-		expect(planResult?.details).toMatchObject({
+		expect(planDetails).toMatchObject({
 			ok: true,
 			tool: "ascet_read",
 			action: "plan_element_dependency",
@@ -709,7 +717,7 @@ describe("ASCET read-only PI tools", () => {
 				operation: "plan_element_dependency",
 			},
 		});
-		expect(planResult?.details.diagnostics.request.args).toEqual([
+		expect(planDetails?.diagnostics.request.args).toEqual([
 			"exec",
 			"plan_element_dependency",
 			"DEMO\\DiscreteRiccatiSolver",
@@ -780,7 +788,7 @@ describe("ASCET read-only PI tools", () => {
 					timedOut: false,
 					request,
 				}),
-			},
+			} as never,
 		);
 
 		const details = result?.details as { diagnostics: { request: { args: string[] } } } | undefined;

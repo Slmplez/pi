@@ -32,7 +32,7 @@ export type AscetWriteParams =
 			componentPath: string;
 			kind: "class" | "module" | "statemachine";
 			language?: "ESDL" | "C";
-			ifExists?: "fail" | "return-existing" | "overwrite";
+			ifExists?: "fail" | "return-existing";
 			verifyReadback?: boolean;
 			rollbackOnFailure?: boolean;
 			executeWrite?: boolean;
@@ -41,8 +41,8 @@ export type AscetWriteParams =
 			action: "create_method";
 			componentPath: string;
 			methodName: string;
-			methodKind?: "abstract" | "process" | "action" | "condition" | "trigger";
-			ifExists?: "fail" | "return-existing" | "overwrite";
+			methodKind: "abstract" | "process" | "action" | "condition" | "trigger";
+			ifExists?: "fail" | "return-existing";
 			verifyReadback?: boolean;
 			executeWrite?: boolean;
 	  }
@@ -232,9 +232,7 @@ export const ascetWriteParameters = Type.Object({
 	recreateIncompatible: Type.Optional(Type.Boolean()),
 	dryRun: Type.Optional(Type.Boolean()),
 	backupDir: Type.Optional(Type.String({ minLength: 1 })),
-	ifExists: Type.Optional(
-		Type.Union([Type.Literal("fail"), Type.Literal("return-existing"), Type.Literal("overwrite")]),
-	),
+	ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("return-existing")])),
 	ifMissing: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")])),
 	rollbackOnFailure: Type.Optional(Type.Boolean()),
 	...codeSourceSchema,

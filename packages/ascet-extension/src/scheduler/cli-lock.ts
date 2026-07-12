@@ -60,13 +60,14 @@ interface AscetCliLockSnapshotOptions extends PiAscetRuntimePathOptions {
 
 export class AscetCliLockTimeoutError extends Error {
 	readonly code = "ASCET_CLI_LOCK_TIMEOUT";
+	readonly lockPath: string;
+	readonly timeoutMs: number;
 
-	constructor(
-		readonly lockPath: string,
-		readonly timeoutMs: number,
-	) {
+	constructor(lockPath: string, timeoutMs: number) {
 		super(`Timed out waiting ${timeoutMs}ms for ASCET CLI lock ${lockPath}.`);
 		this.name = "AscetCliLockTimeoutError";
+		this.lockPath = lockPath;
+		this.timeoutMs = timeoutMs;
 	}
 }
 

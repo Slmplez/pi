@@ -9,7 +9,11 @@ export type AscetExploreParams =
 			limit?: number;
 			recursive?: boolean;
 	  }
-	| { action: "list_diagrams"; componentPath: string; diagramKind?: string }
+	| {
+			action: "list_diagrams";
+			componentPath: string;
+			diagramKind?: "all" | "block" | "block_diagram" | "state" | "state_machine" | "sequence" | "unknown";
+	  }
 	| {
 			action: "resolve_target";
 			query: string;
@@ -49,7 +53,17 @@ export const ascetExploreParameters = Type.Object({
 	match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("glob"), Type.Literal("contains")])),
 	limit: Type.Optional(Type.Number({ minimum: 1, maximum: 500 })),
 	recursive: Type.Optional(Type.Boolean()),
-	diagramKind: Type.Optional(Type.String()),
+	diagramKind: Type.Optional(
+		Type.Union([
+			Type.Literal("all"),
+			Type.Literal("block"),
+			Type.Literal("block_diagram"),
+			Type.Literal("state"),
+			Type.Literal("state_machine"),
+			Type.Literal("sequence"),
+			Type.Literal("unknown"),
+		]),
+	),
 	detailLevel: Type.Optional(Type.Union([Type.Literal("summary"), Type.Literal("detailed")])),
 	group: Type.Optional(
 		Type.Union([

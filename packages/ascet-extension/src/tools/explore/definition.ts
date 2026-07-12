@@ -20,8 +20,13 @@ interface RunOptions {
 
 async function runAscetExplore(params: AscetExploreParams, options: RunOptions): Promise<AscetCliJsonResult> {
 	switch (params.action) {
-		case "list_components":
-			return runAscetListComponents(params, options);
+		case "list_components": {
+			const { kind, ...listParams } = params;
+			return runAscetListComponents(
+				{ ...listParams, kind: kind === "all" || kind === "folder" ? undefined : kind },
+				options,
+			);
+		}
 		case "list_diagrams":
 			return runAscetListDiagrams(params, options);
 		case "resolve_target":

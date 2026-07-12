@@ -141,10 +141,11 @@ describe("ASCET scheduler diagnostics", () => {
 		expect(ascetExtension?.commands.has("ascet-scheduler-status")).toBe(true);
 		const response = await tool?.execute("scheduler", { action: "status" }, new AbortController().signal, undefined, {
 			cwd: repoRoot,
-		});
-		expect(response?.content[0].text).toContain("ASCET Scheduler Status");
-		expect(response?.content[0].text).toContain("CLI Lock:");
-		expect(response?.content[0].text).toContain("Operation Health:");
+		} as never);
+		const text = response?.content[0]?.type === "text" ? response.content[0].text : "";
+		expect(text).toContain("ASCET Scheduler Status");
+		expect(text).toContain("CLI Lock:");
+		expect(text).toContain("Operation Health:");
 	});
 
 	it("formats scheduler status command output and recover output", async () => {
