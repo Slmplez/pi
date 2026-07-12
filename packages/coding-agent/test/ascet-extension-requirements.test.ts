@@ -3,8 +3,12 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import ExcelJS from "exceljs";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { ascetRequirementsTool } from "../../ascet-extension/src/tools/requirements/definition.ts";
 import { collectXlsxFiles } from "../../ascet-extension/src/tools/requirements/discovery.ts";
-import { runAscetRequirements } from "../../ascet-extension/src/tools/requirements/risk-context.ts";
+import {
+	formatAscetRequirementsResult,
+	runAscetRequirements,
+} from "../../ascet-extension/src/tools/requirements/risk-context.ts";
 
 const HEADER = [
 	"Design requirements name",
@@ -270,6 +274,130 @@ describe("ascet_requirements", () => {
 
 		const combinedIds = [...firstPage.data.risks, ...secondPage.data.risks].map((risk) => risk.riskId);
 		expect(new Set(combinedIds).size).toBe(combinedIds.length);
+	});
+
+	it("exposes risk_details evidence fields in model-visible json content", async () => {
+		const params = {
+			action: "risk_details" as const,
+			query: "907829",
+			sourceFile: workbookPath,
+			scope: "related" as const,
+			riskTypes: ["bosch_defect" as const],
+			limit: 2,
+			offset: 0,
+			format: "json" as const,
+		};
+		const result = await runAscetRequirements(params, { cwd: tempDir });
+		const text = formatAscetRequirementsResult(result, params);
+		const payload = JSON.parse(text);
+
+		expect(payload.action).toBe("risk_details");
+		expect(payload.total_count).toBeGreaterThan(2);
+		expect(payload.returned_count).toBe(2);
+		expect(payload.has_more).toBe(true);
+		expect(payload.next_offset).toBe(2);
+		expect(payload.details[0]).toMatchObject({
+			risk_id: expect.any(String),
+			target_requirement_id: "907829",
+			related_requirement_id: expect.any(String),
+			risk_type: "bosch_defect",
+			risk_content_raw: expect.stringContaining("Wheel speed quality defect"),
+			risk_identifiers: expect.arrayContaining(["6731279"]),
+			evidence_sheet: "Sheet1",
+			evidence_row: expect.any(Number),
+			evidence_column: expect.stringMatching(/^[A-Z]+$/),
+			evidence_cell: expect.stringMatching(/^[A-Z]+[0-9]+$/),
+			evidence_value: expect.stringContaining("Wheel speed quality defect"),
+			impact_basis: expect.any(String),
+			impact_confidence: expect.any(String),
+			confidence: expect.any(String),
+		});
+	});
+
+	it("exposes risk_details evidence fields in detailed text format", async () => {
+		const params = {
+			action: "risk_details" as const,
+			query: "907829",
+			sourceFile: workbookPath,
+			scope: "related" as const,
+			riskTypes: ["bosch_defect" as const],
+			limit: 1,
+			offset: 0,
+			format: "detailed" as const,
+		};
+		const result = await runAscetRequirements(params, { cwd: tempDir });
+		const text = formatAscetRequirementsResult(result, params);
+
+		expect(text).toContain("risk_id:");
+		expect(text).toContain("source_lead_id:");
+		expect(text).toContain("related_requirement_id:");
+		expect(text).toContain("relation_type:");
+		expect(text).toContain("risk_content_raw:");
+		expect(text).toContain("risk_identifiers:");
+		expect(text).toContain("risk_summary:");
+		expect(text).toContain("evidence:");
+		expect(text).toContain("evidence_row:");
+		expect(text).toContain("evidence_column:");
+		expect(text).toContain("evidence_column_header:");
+		expect(text).toContain("evidence_value:");
+		expect(text).toContain("ascet_impact_hint:");
+		expect(text).toContain("impact_basis:");
+		expect(text).toContain("impact_confidence:");
+		expect(text).toContain("confidence:");
+		expect(text).toContain("Wheel speed quality defect");
+	});
+
+	it("keeps concise risk_details useful instead of hiding all detail identifiers", async () => {
+		const params = {
+			action: "risk_details" as const,
+			query: "907829",
+			sourceFile: workbookPath,
+			scope: "related" as const,
+			riskTypes: ["bosch_defect" as const],
+			limit: 1,
+			offset: 0,
+			format: "concise" as const,
+		};
+		const result = await runAscetRequirements(params, { cwd: tempDir });
+		const text = formatAscetRequirementsResult(result, params);
+
+		expect(text).toContain("risk detail(s)");
+		expect(text).toContain("bosch_defect");
+		expect(text).toMatch(/Sheet1![A-Z]+[0-9]+/);
+	});
+
+	it("returns risk_details json in tool content, not only details", async () => {
+		const result = await ascetRequirementsTool.execute(
+			"test-call",
+			{
+				action: "risk_details",
+				query: "907829",
+				sourceFile: workbookPath,
+				scope: "related",
+				riskTypes: ["bosch_defect"],
+				limit: 1,
+				offset: 0,
+				format: "json",
+			},
+			new AbortController().signal,
+			undefined,
+			{ cwd: tempDir },
+		);
+		const content = result.content[0];
+		const text = content?.type === "text" ? content.text : "";
+		const payload = JSON.parse(text);
+
+		expect(payload.details[0].risk_content_raw).toContain("Wheel speed quality defect");
+		expect(payload.details[0].evidence_column).toMatch(/^[A-Z]+$/);
+	});
+
+	it("does not expose raw risk detail fields through risk_context formatter", async () => {
+		const params = { action: "risk_context" as const, query: "907829", sourceFile: workbookPath };
+		const result = await runAscetRequirements(params, { cwd: tempDir });
+		const text = formatAscetRequirementsResult(result, params);
+
+		expect(text).not.toContain("risk_content_raw");
+		expect(text).not.toContain("Wheel speed quality defect");
 	});
 
 	it("marks illegal gate state combinations as invalid", async () => {

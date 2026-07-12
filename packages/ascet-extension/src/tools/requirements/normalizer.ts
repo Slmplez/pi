@@ -97,6 +97,11 @@ function createRiskCell(
 	};
 }
 
+function columnLetterFromAddress(cellAddress: string): string | undefined {
+	const match = /^[A-Z]+/i.exec(cellAddress.trim());
+	return match?.[0]?.toUpperCase();
+}
+
 function createEvidence(
 	worksheet: RequirementWorksheetData,
 	rowNumber: number,
@@ -110,6 +115,8 @@ function createEvidence(
 		sheetName: worksheet.sheetName,
 		rowNumber,
 		column,
+		columnHeader: column,
+		columnLetter: columnLetterFromAddress(cellAddress),
 		cellAddress,
 		value,
 		reason,

@@ -21,7 +21,7 @@ export const ascetRequirementsTool = defineSequentialAscetTool({
 	) {
 		const result = await runAscetRequirements(params, { cwd: ctx.cwd });
 		return {
-			content: [{ type: "text", text: formatAscetRequirementsResult(result) }],
+			content: [{ type: "text", text: formatAscetRequirementsResult(result, params) }],
 			details: result,
 		};
 	},

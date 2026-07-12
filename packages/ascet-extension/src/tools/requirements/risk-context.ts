@@ -523,9 +523,145 @@ function summarizeResult(data: RequirementRiskContext, action: AscetRequirements
 	return `${data.targets.length} target requirement(s), ${data.relationLeadCount} relation lead(s), design_gate_ready=${data.design_gate_ready}.`;
 }
 
-export function formatAscetRequirementsResult(result: AscetRequirementsResult): string {
+function toWireRiskDetail(risk: RequirementRiskContext["risks"][number]) {
+	return {
+		risk_id: risk.riskId,
+		source_lead_id: risk.sourceLeadId,
+		target_requirement_id: risk.targetRequirementId,
+		related_requirement_id: risk.relatedRequirementId,
+		related_requirement_title: risk.relatedRequirementTitle,
+		relation_type: risk.relationType,
+		risk_type: risk.riskType,
+		risk_content_raw: risk.riskContentRaw,
+		risk_identifiers: risk.riskIdentifiers,
+		risk_summary: risk.riskSummary,
+		evidence_sheet: risk.evidence.sheetName,
+		evidence_row: risk.evidence.rowNumber,
+		evidence_column: risk.evidence.columnLetter ?? risk.evidence.column,
+		evidence_column_header: risk.evidence.columnHeader ?? risk.evidence.column,
+		evidence_cell: risk.evidence.cellAddress,
+		evidence_value: risk.evidence.value,
+		ascet_impact_hint: risk.ascetImpactHint,
+		impact_basis: risk.impactBasis,
+		impact_confidence: risk.impactConfidence,
+		confidence: risk.confidence,
+	};
+}
+
+function toRiskDetailsPayload(result: AscetRequirementsResult) {
+	const data = result.data;
+	const target = data.targets[0];
+	return {
+		tool: result.tool,
+		action: result.action,
+		requirement_id: target?.requirementId,
+		design_gate_ready: data.design_gate_ready,
+		risk_context_stage: data.riskContextStage,
+		evidence_status: data.evidenceStatus,
+		readiness: data.readiness,
+		state_valid: data.stateValid,
+		state_errors: data.stateErrors,
+		blocking_reasons: data.blockingReasons,
+		total_count: data.totalCount ?? 0,
+		returned_count: data.returnedCount ?? 0,
+		offset: data.offset ?? 0,
+		limit: data.limit ?? 10,
+		has_more: data.hasMore ?? false,
+		next_offset: data.nextOffset,
+		detail_completion: {
+			target_details_complete: data.detailCompletion.targetDetailsComplete,
+			relation_details_complete: data.detailCompletion.relationDetailsComplete,
+			all_pages_retrieved: data.detailCompletion.allPagesRetrieved,
+			evidence_complete: data.detailCompletion.evidenceComplete,
+			truncated: data.detailCompletion.truncated,
+		},
+		next_action: data.nextAction
+			? {
+					tool: data.nextAction.tool,
+					action: data.nextAction.action,
+					requirement_id: data.nextAction.requirementId,
+					offset: data.nextAction.offset,
+					limit: data.nextAction.limit,
+					priority_mode: data.nextAction.priorityMode,
+				}
+			: undefined,
+		details: data.risks.map(toWireRiskDetail),
+	};
+}
+
+function formatRiskDetailsDetailed(result: AscetRequirementsResult): string {
+	const payload = toRiskDetailsPayload(result);
+	const lines = [
+		`${payload.returned_count}/${payload.total_count} risk detail(s), design_gate_ready=${payload.design_gate_ready}.`,
+		`offset=${payload.offset}, limit=${payload.limit}, has_more=${payload.has_more}`,
+	];
+	if (payload.blocking_reasons.length > 0) {
+		lines.push(`Blocking reasons: ${payload.blocking_reasons.join(", ")}`);
+	}
+	for (const detail of payload.details) {
+		lines.push("");
+		lines.push(`- risk_id: ${detail.risk_id}`);
+		if (detail.source_lead_id) {
+			lines.push(`  source_lead_id: ${detail.source_lead_id}`);
+		}
+		lines.push(`  risk_type: ${detail.risk_type}`);
+		lines.push(`  target_requirement_id: ${detail.target_requirement_id ?? ""}`);
+		if (detail.related_requirement_id) {
+			lines.push(`  related_requirement_id: ${detail.related_requirement_id}`);
+		}
+		if (detail.related_requirement_title) {
+			lines.push(`  related_requirement_title: ${detail.related_requirement_title}`);
+		}
+		if (detail.relation_type) {
+			lines.push(`  relation_type: ${detail.relation_type}`);
+		}
+		lines.push(`  risk_identifiers: ${JSON.stringify(detail.risk_identifiers)}`);
+		if (detail.risk_summary) {
+			lines.push(`  risk_summary: ${detail.risk_summary}`);
+		}
+		lines.push(`  evidence: ${detail.evidence_sheet}!${detail.evidence_cell}`);
+		lines.push(`  evidence_row: ${detail.evidence_row}`);
+		lines.push(`  evidence_column: ${detail.evidence_column}`);
+		lines.push(`  evidence_column_header: ${detail.evidence_column_header}`);
+		lines.push(`  evidence_value: ${detail.evidence_value}`);
+		lines.push(`  risk_content_raw: ${detail.risk_content_raw}`);
+		if (detail.ascet_impact_hint) {
+			lines.push(`  ascet_impact_hint: ${detail.ascet_impact_hint}`);
+		}
+		lines.push(`  impact_basis: ${detail.impact_basis}`);
+		lines.push(`  impact_confidence: ${detail.impact_confidence}`);
+		lines.push(`  confidence: ${detail.confidence}`);
+	}
+	return lines.join("\n");
+}
+
+function formatRiskDetailsConcise(result: AscetRequirementsResult): string {
+	const payload = toRiskDetailsPayload(result);
+	const lines = [
+		`${payload.returned_count}/${payload.total_count} risk detail(s), design_gate_ready=${payload.design_gate_ready}.`,
+	];
+	for (const detail of payload.details) {
+		lines.push(`- ${detail.risk_id} ${detail.risk_type} ${detail.evidence_sheet}!${detail.evidence_cell}`);
+	}
+	return lines.join("\n");
+}
+
+export function formatAscetRequirementsResult(
+	result: AscetRequirementsResult,
+	params?: AscetRequirementsParams,
+): string {
 	if (!result.ok) {
 		return result.summary;
+	}
+	if (result.action === "risk_details") {
+		const format = params?.format ?? "json";
+		if (format === "detailed") {
+			return formatRiskDetailsDetailed(result);
+		}
+		if (format === "concise") {
+			return formatRiskDetailsConcise(result);
+		}
+		return JSON.stringify(toRiskDetailsPayload(result), null, 2);
 	}
 	const lines = [result.summary];
 	if (!result.data.designGateReady) {

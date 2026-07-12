@@ -88,6 +88,8 @@ export interface RequirementEvidence {
 	sheetName: string;
 	rowNumber: number;
 	column: string;
+	columnHeader?: string;
+	columnLetter?: string;
 	cellAddress: string;
 	value: string;
 	reason: string;
@@ -173,6 +175,7 @@ export interface RequirementRiskDetail {
 	targetRequirementId?: string;
 	relatedRequirementId?: string;
 	relatedRequirementTitle?: string;
+	relationType?: RelationType;
 	riskType: RiskType;
 	riskContentRaw: string;
 	riskIdentifiers: string[];
@@ -181,6 +184,7 @@ export interface RequirementRiskDetail {
 	ascetImpactHint?: string;
 	impactBasis: "direct_evidence" | "relation_inference" | "engineering_inference";
 	impactConfidence: "high" | "medium" | "low";
+	confidence: "high" | "medium" | "low";
 }
 
 export interface DetailCompletion {

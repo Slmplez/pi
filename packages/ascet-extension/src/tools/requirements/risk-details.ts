@@ -80,6 +80,7 @@ function toRiskDetail(
 			targetRequirementId: target?.requirementId ?? record.requirementId,
 			relatedRequirementId,
 			relatedRequirementTitle: sourceLead ? record.title : undefined,
+			relationType: sourceLead?.relationType,
 			riskType: cell.riskType,
 			riskContentRaw: cell.contentRaw,
 			riskIdentifiers: cell.identifiers,
@@ -90,6 +91,7 @@ function toRiskDetail(
 				: "Risk is directly attached to the target requirement.",
 			impactBasis: impactBasisFor(sourceLead),
 			impactConfidence: impactConfidenceFor(sourceLead),
+			confidence: sourceLead?.confidence ?? "high",
 		};
 	});
 }
