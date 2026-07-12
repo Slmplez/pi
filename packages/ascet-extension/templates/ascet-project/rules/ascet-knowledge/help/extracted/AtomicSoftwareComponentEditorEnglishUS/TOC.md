@@ -1,0 +1,289 @@
+# Table of Contents
+
+- Software Component Editor
+  - [Overview - Software Component Editor](markdown/ASCeditorOverview.md)
+  - Safety Information
+    - General Information
+  - Basics
+    - [Ports and Interfaces](markdown/ASCportsInterfaces.md)
+    - [Sender-Receiver Communication](markdown/ASCsenderReceiverCommunication.md)
+    - [Client-Server Communication](markdown/ASCClientServerCommunication.md)
+    - [Calibration](markdown/ASCcalibration.md)
+    - [Runnable Entities and Events](markdown/ASCRunnableEntity.md)
+    - Modes and Mode Groups
+    - [Exclusive Areas](markdown/ASCexclusiveAreas.md)
+    - [Interrunnable Variables](markdown/ASC_InterrunnableVariables.md)
+    - [Message Mapping](markdown/ASC_MessageMapping.md)
+    - Definitions
+      - [Expressions](markdown/ascexpressions.md)
+      - [Statements](markdown/ascstatements.md)
+      - [Method Call and Assignment](markdown/ascassignment.md)
+    - [RTE Access Macros](markdown/ASCrteAccessMacros.md)
+      - [Rte_IRead](markdown/ASCrteIRead.md)
+      - [Rte_IWrite](markdown/ASCrteIWrite.md)
+      - [Rte_IWriteRef](markdown/ASCrteIWriteRef.md)
+      - [Rte_Read](markdown/ASCrteRead.md)
+      - [Rte_Write](markdown/ASCrteWrite.md)
+      - [Rte_DRead](markdown/asc_rtedread.md)
+      - [Rte_IrvIRead and Rte_IrvIWrite](markdown/asc_rte_irviread_rte_irviwrite.md)
+      - [Rte_IrvRead and Rte_IrvWrite](markdown/asc_rteirv_read_rte_irvwrite.md)
+      - [Rte_Mode](markdown/ASCrteMode.md)
+      - [Rte_Enter and Rte_Exit](markdown/ASCrteEnterRTEExit.md)
+      - [Rte_Call](markdown/ASCrteCall.md)
+      - [Rte_Calprm](markdown/ASCrteCalprm.md)
+    - Creation of Software Components
+      - [Comments and Notes in Software Components](markdown/asccommentsandnotes.md)
+      - [Components as Complex Elements in SWC](markdown/asccomplexelements.md)
+      - [Sequence Calls](markdown/ascsequencecalls.md)
+      - [Implementation Casts in Software Components](markdown/ascimplementationcasts.md)
+    - [Implementation Data Type Bool](markdown/ascImplementationDataTypeBool.md)
+    - [Editing Software Components](markdown/asceditingswc.md)
+      - [Software Components with Multiple Diagrams](markdown/ASCswcMultipleDiagrams.md)
+      - [Graphical Hierarchies in SWC](markdown/ascgraphicalhierarchies.md)
+      - [Statement Blocks](markdown/asc_statementblocks.md)
+        - [Block-Local Sequence Calls](markdown/asc_blocklocalsequencecalls.md)
+        - [Example: Statement Block](markdown/asc_examplestatementblock.md)
+      - [Layout of Included Components](markdown/asclayoutincludedcomponents.md)
+    - [Analysis of Software Components](markdown/ASCanalyzeAtomicSWC.md)
+    - [Data Exchange](markdown/ASCDataExchange.md)
+  - Instructions
+    - [Creating a Software Component](markdown/ASCcreateAtomicSoftwareComponent.md)
+    - [Opening the Software Component Editor](markdown/ascopeneditor.md)
+    - [Specifying a Software Component](markdown/ASCspecifyAtomicSWC.md)
+    - [Creating a New Diagram](markdown/asccreatediagram.md)
+    - [Loading a Diagram](markdown/ascloaddiagram.md)
+    - [Saving a Software Component](markdown/ascsavecomponent.md)
+    - [Exiting the Software Component Editor](markdown/ascexiteditor.md)
+    - [Specifying Events](markdown/ASCSpecifyingEvents.md)
+      - [Creating an Event](markdown/ASCcreateEvent.md)
+      - [Setting Up an Event](markdown/ASCsetUpEvent.md)
+      - [Enabling/Disabling Modes](markdown/ASCenableDisableModes.md)
+      - [Assigning Events to Runnables](markdown/ASCassignEventsToRunnables.md)
+      - [Deassigning Events from Runnables](markdown/ASCdeassignEventsFromRunnables.md)
+      - [Renaming or Deleting Events](markdown/ASCrenameDeleteEvents.md)
+    - [AUTOSAR Interfaces](markdown/ASC_AUTOSAR_Interfaces.md)
+      - [Specifying a SenderReceiver/NVData Interface Prototype](markdown/ASCspecifySRIprototype.md)
+      - [Sending to a Port](markdown/ASCsendToPort.md)
+      - [Receiving from a Port](markdown/ASCreceiveFromPort.md)
+      - [Using Mode Groups](markdown/ASCusingModeGroups.md)
+      - [Specifying a ClientServer Interface Prototype](markdown/ASCspecifyClientServerInterfacePrototype.md)
+      - [Enabling Concurrent Invocation of a Server Runnable](markdown/ASCenableConcurrentInvocation_ServerRunnable.md)
+      - [Making a Client Request on a Port](markdown/ASCmakeClientRequest_on_Port.md)
+      - [Specifying a Calibration Interface Prototype](markdown/ASCspecifyCalibrationInterfacePrototype.md)
+      - [Accessing Calibration Parameters](markdown/ASCaccessCalibrationParameters.md)
+      - [Example: Accessing Calibration Parameters](markdown/ASC_ExampleAccessingCalibrationParameters.md)
+    - [Creating an Exclusive Area](markdown/ASCcreateExclusiveArea.md)
+    - [Using Exclusive Areas](markdown/ASCusingExclusiveAreas.md)
+    - [Creating a Scalar Interrunnable Variable](markdown/asc_createinterrunnablevariable.md)
+    - [Creating an Interrunnable Variable of Non-Scalar Type](markdown/RCE_CreateInterrunnableVariable_Record.md)
+    - [Mapping Messages and Parameters](markdown/ASC_MapMessagesParameters.md)
+      - [Accessing ASCET Messages](markdown/asc_accessmessages.md)
+      - [Example: Accessing ASCET Messages](markdown/ASC_ExampleAccessMessages.md)
+      - [Accessing Calibration Parameters](markdown/ASCaccessCalibrationParameters.md)
+      - [Example: Accessing Calibration Parameters](markdown/ASC_ExampleAccessingCalibrationParameters.md)
+      - [Exporting Message/Parameter Mappings](markdown/ASC_ExportMessageParameterMappings.md)
+      - [Importing Message/Parameter Mappings](markdown/ASC_ImportMessageParameterMappings.md)
+      - [Example: Mapping Export Files](markdown/ASCexampleMappingExportFiles.md)
+      - [Filtering the Mapping Views](markdown/ASC_Filter_MappingViews.md)
+    - [Defining the SWC Signature](markdown/ASCdefineSWCsignature.md)
+      - [Creating a Runnable](markdown/ASCcreateRunnable.md)
+      - [Editing the Implementation of a Runnable](markdown/ASCeditImplementationRunnable.md)
+      - [Creating a Method](markdown/asccreatemethod.md)
+      - [Selecting a Default Method/Runnable](markdown/ascselectdefaultmethodrunnable.md)
+      - [Editing the Signature of a Runnable or Method](markdown/asceditsignature.md)
+      - [Adding Local Variables to a Runnable or Method](markdown/ASCaddLocalvariables.md)
+      - [Adding an Argument to a Method](markdown/ascaddargument.md)
+      - [Assigning a Component or Enumeration as Argument](markdown/ASCAssignComponent.md)
+      - [Adding a Return Value to a Method](markdown/ascaddreturnvalue.md)
+      - [Editing Arguments and Local Variables](markdown/asceditarguments.md)
+      - [Shifting a Diagram](markdown/ascshiftDiagramRunnableMethod.md)
+      - [Moving Runnables and Methods between Diagrams](markdown/ascmoveRunnablesMethods.md)
+      - [Renaming or Deleting a Diagram, Runnable or Method](markdown/ascrenameordelete.md)
+      - [Searching/Deleting Unused Methods/Runnables](markdown/asc_searchdel_unused_methodsrunnables.md)
+      - [Using a Matrix Argument (Example)](markdown/ASC_UseMatrixArgument_Example.md)
+        - [Creating a Matrix Argument](markdown/ascmatrixargument.md)
+        - [Creating the Computation Class](markdown/ASC_CreateComputationClass.md)
+        - [Specifying the Matrix Addition](markdown/ASC_SpecifyMatrixAddition.md)
+        - [Performing the Calculation](markdown/ASC_PerformCalculation.md)
+    - [Creating the SWC Content](markdown/ASCcreateSWCcontent.md)
+      - [Placing a Signature Element](markdown/ascplaceelement.md)
+      - [Creating a Basic Element](markdown/ascbasicelement.md)
+      - [Inserting an Enumeration](markdown/ascinsertenumeration.md)
+      - [Creating an Array or Matrix](markdown/asccreatearray.md)
+      - [Creating a Normal or Fixed Characteristic Line/Map](markdown/asccreatenormal.md)
+      - [Creating a Distribution](markdown/asccreatedistribution.md)
+      - [Creating a Group Characteristic Line/Map](markdown/asccreategroup.md)
+      - [Including a Component as a Complex Element](markdown/ascincludecomponent.md)
+      - [Including a Component via the Block Library](markdown/ascincludecomponentblocklibrary.md)
+      - [Positioning an Operator](markdown/ascpositionoperator.md)
+      - [Connecting Diagram Elements](markdown/ascconnectdiagram.md)
+      - [Using the If Statements](markdown/ascuseif.md)
+      - [Using the Switch Operator](markdown/ascuseswitch.md)
+      - [Using the While Loop](markdown/ascusewhileloop.md)
+      - Using the Verify Operator
+      - [Using the Conversion Operator](markdown/asc_useconversionoperator.md)
+      - [Using the Assert Operator](markdown/asc_useassertoperator.md)
+      - Using Temporary Variables
+      - Adding and Editing a Comment
+      - Adding and Editing a Literal
+      - [Renaming or Deleting an Element](markdown/ascrenamedeleteElement.md)
+      - [Searching/Deleting Unused Elements](markdown/ASC_SearchDeleteUnusedElements.md)
+      - Copying Elements in the Outline Tab
+      - Inserting an Element into a Connection
+      - Removing a Connection
+      - Removing an Element
+      - [Copying/Moving Diagram Items in the Same Diagram](markdown/asccutcopypaste.md)
+      - [Copying/Moving Diagram Items Between Diagrams](markdown/asc_copymove_items_betweendiagram.md)
+      - Replacing a Diagram Item
+      - Implementation Casts
+        - [Adding Implementation Casts to Operators](markdown/ascaddimplementationcast.md)
+        - [Adding Implementation Casts to a Connection](markdown/ascaddimplcasttoconnect.md)
+      - [Editing Sequence Calls](markdown/ASCeditSequenceCalls.md)
+        - [Editing a Sequence Call in the Sequence Editor](markdown/ASCEditSequence.md)
+        - [Using Existing Sequence Numbers](markdown/ascusenumbers.md)
+        - [Automatically Assigning Individual Sequence Calls](markdown/ASCassignindividual.md)
+        - [Incrementing/Decrementing Individual Sequence Calls](markdown/ASCIncrementordecrement.md)
+        - [Resetting an Individual Sequence Call](markdown/ASCResetindividual.md)
+        - [Changing the Visibility of Individual Sequence Calls](markdown/ASCChangevisibility.md)
+        - [Automatically Assigning Sequence Calls](markdown/ASCassignSequence.md)
+        - [Automatically Assigning Sequence Calls from a Specific Number](markdown/ascautomaticallyassign.md)
+        - [Adding Sequence Calls to an Existing Sequence](markdown/ascaddsequence.md)
+        - [Scaling Sequence Calls](markdown/ascscalesequence.md)
+        - [Shifting Several Sequence Calls](markdown/ascshiftsequence.md)
+        - [Resetting Several Sequence Calls](markdown/ASCResetSequence.md)
+        - [Creating a Sequence of Protected Sequence Calls](markdown/ASCCreatesequence.md)
+        - [Moving Between Sequence Calls](markdown/ASCMovesequence.md)
+        - [Changing the Visibility of Several Sequence Calls](markdown/ascchangesequence.md)
+        - [Creating and Removing Connectors](markdown/asccreateconnectors.md)
+        - [Toggling between Connector and Block-Local Sequence Call](markdown/asc_convertconnectorsequencecall.md)
+      - [Using Graphical Hierarchies and Statement Blocks](markdown/ASC_UseGraphicalHierarchies_StatementBlocks.md)
+        - [Adding a Hierarchy](markdown/ascaddhierarchy.md)
+        - [Adding a Statement Block](markdown/ASC_addstatementblock.md)
+        - [Adding Input and Output Pins to the Hierarchy](markdown/ascaddinputhiera.md)
+        - [Converting Diagram Elements into a Hierarchy Block](markdown/ascconverthierarchy.md)
+        - [Converting Diagram Elements into a Statement Block](markdown/ASC_ConvertDiagramElementsStatementBlock.md)
+        - [Moving Elements Into/Out of a Hierarchy or Statement Block](markdown/ascmoveelements.md)
+        - [Changing the Appearance of a Hierarchy or Statement Block](markdown/ascappearancehierarchy.md)
+        - [Changing the Appearance of Input and Output Pins](markdown/ascchangeinputpins.md)
+        - [Navigating Between Hierarchy/Statement Block Levels](markdown/ascnavigatehierarchy.md)
+        - [Resolving a Hierarchy or Statement Block](markdown/ascresolvinghierarchy.md)
+    - Working on the SWC
+      - Viewing Elements
+        - [Viewing all Graphical Occurrences of an Element](markdown/ascviewoccurrence.md)
+        - [Viewing All Elements Connected to an Item](markdown/ascviewconnectedelements.md)
+        - [Changing the Software Component Display](markdown/ascchangeASWCDisplay.md)
+        - Changing the Grid
+      - Appearances and Views
+        - [Changing the Appearance of an SWC Item](markdown/ascchangeappearance.md)
+        - Editing the Views of a Diagram Item
+      - Data Exchange
+        - [Exporting the Data Set of an SWC](markdown/ascexportdata.md)
+        - Writing the Data from an Array or a Table to a File
+        - Reading the Data for an Array or a Table from a File
+      - Printing Diagrams
+        - Setting up the Printing Area
+        - [Printing a Software Component](markdown/ascprintblock.md)
+        - Exporting a Block Diagram
+      - Defining Global Elements in the Default Project
+    - [Working on Included Components](markdown/ASCworking_on_Included_Components.md)
+      - [Editing Included Components](markdown/asceditincludedcomponent.md)
+      - Editing the Size of a Graphical Occurrence
+      - Editing Ports
+      - Show/Hide Ports of an Included Component
+      - Using Changes as a New Default Layout
+      - Restoring the Default Layout
+      - [Editing the Notes for a Component](markdown/asceditnotes.md)
+      - Replacing an Included Component
+    - Code Generation
+      - Analyzing a Diagram
+      - [Adjusting the Project Settings for the SWC](markdown/ASCadjustProjectSettingsSWC.md)
+      - [Configuring the AUTOSAR XML Output](markdown/ascconfigureautosarxmloutput.md)
+      - [Generating AUTOSAR Code](markdown/ASCgenerateAUTOSARCode.md)
+      - Viewing the Generated Code
+    - Editor Settings
+      - [Setting the Size of the Drawing Area](markdown/ascsetsizedrawingarea.md)
+      - Configuring a Toolbar
+      - [Filtering the Tree Pane](markdown/ascfiltercomponentpane.md)
+      - Searching the Tree Pane
+      - Changing the Grid in the Drawing Area
+  - Reference to User Interface
+    - [Software Component Editor - Window Elements](markdown/ASCwindowDesc.md)
+    - [Toolbars](markdown/ASCtoolbars.md)
+      - [Toolbar General](markdown/ASCtoolbarGeneral.md)
+      - [Toolbar Elements](markdown/ASCtoolbarElements.md)
+      - [Toolbar Basic Blocks](markdown/ASCtoolbarBasicBlocks.md)
+        - [Arithmetic Operators](markdown/ASCarithmeticOperators.md)
+        - [Logical Operators](markdown/ASClogicalOperators.md)
+        - [Comparison Operators](markdown/ASCcomparisonOperators.md)
+        - [Input Operators](markdown/ASCinputOperators.md)
+        - [Negation Operator](markdown/ascnegationoperator.md)
+        - [Conversion Operator](markdown/asc_conversionoperator.md)
+        - Examples: Conversion Operator
+        - [Assert Operator](markdown/asc_assertoperator.md)
+        - [Example: Assert Operator](markdown/asc_exampleassertoperator.md)
+        - [Conditional Operators](markdown/ASCconditionaloperators.md)
+        - [Control Flow Operators](markdown/ASCcontrolFlowOperators.md)
+        - [Miscellaneous Basic Blocks](markdown/ascmiscbasicblocks.md)
+    - [Menus](markdown/ASCmenuBar.md)
+      - [File Menu](markdown/ASCfileMenu.md)
+      - [Edit Menu](markdown/ASCeditMenu.md)
+      - [View Menu](markdown/ASCviewMenu.md)
+      - [Insert Menu](markdown/ASCinsertMenu.md)
+      - [Build Menu](markdown/ASCbuildMenu.md)
+      - [Extras Menu](markdown/ASCextrasMenu.md)
+      - [Tools Menu](markdown/ASCtoolsMenu.md)
+      - [Windows Menu](markdown/ASCwindowsMenu.md)
+      - [Help Menu](markdown/ASChelpMenu.md)
+      - [Event Menu](markdown/ASCEventMenu.md)
+      - [Runnable Menu](markdown/ASCRunnableMenu.md)
+      - [Mapping Menu](markdown/ASCMappingMenu.md)
+    - [Context Menus](markdown/asccontextmenus.md)
+      - [Context Menu Components and Elements (Outline Tab)](markdown/ASCcontextMenuCPcomponentsAndElements.md)
+      - [Context Menu Diagram, Method or Runnable](markdown/ASCcontextMenuDiagramMethodOrRunnable.md)
+      - Context Menu Hierarchies and Statement Blocks
+      - [Context Menu Elements (Specification View)](markdown/ASCcontextMenuElements.md)
+      - [Context Menu Components (Specification View)](markdown/ASCcontextMenuComponents.md)
+      - [Context Menu Operators](markdown/ASCcontextMenuOperators.md)
+      - [Context Menu Control Flow Operators](markdown/ASCcontextMenuControlFlowOperators.md)
+      - [Context Menu Miscellaneous Diagram Elements](markdown/asccontextmenumiscdiagramelements.md)
+    - [Views](markdown/ASC_ViewsArea.md)
+      - [Specification View](markdown/ASCspecificatonView.md)
+        - [Context Menu Specification View](markdown/ASCcontextMenuSpecificationView.md)
+        - [Search Results View](markdown/ASCSearchResultsView.md)
+      - [Browse View](markdown/ASCbrowseView.md)
+        - [Context Menu Browse View](markdown/asc_contextmenubrowseview.md)
+      - [Event Specification View](markdown/ASCeventSpecificationView.md)
+      - [Parameter Mapping View](markdown/ASCParameterMappingView.md)
+      - [Message Mapping View](markdown/ASC_MessageMappingView.md)
+        - [Internal Access](markdown/ASC_MessageMappingView_InternalAccess.md)
+        - [External Access](markdown/ASC_MessageMappingView_ExternalAccess.md)
+      - [Filter Criteria Dialog Window](markdown/SWC_FilterCriteria_Window.md)
+      - [Export Selections Dialog Window](markdown/ASC_ExportSelections_Window.md)
+    - [Tree Pane](markdown/ASCcomponentPane.md)
+      - [Context Menus Tree Pane](markdown/ASCcontextmenusPanes.md)
+    - [Palettes](markdown/ASCPalettes.md)
+      - [Elements Palette](markdown/ASCelementsPalette.md)
+      - [Basic Blocks Palette](markdown/ASCbasicBlocksPalette.md)
+      - [Library Palette](markdown/ASClibraryPalette.md)
+    - [Signature Editor](markdown/ascsignatureeditor.md)
+      - [Local Variable Menu](markdown/asclocalvariablemenu.md)
+      - [Locals Tab](markdown/asclocalstab.md)
+      - [Settings Tab](markdown/ASCSettingsTab.md)
+      - [Arguments Menu](markdown/ascargumentsmenu.md)
+      - [Arguments Tab](markdown/ascargumentstab.md)
+      - [Return Menu](markdown/ascreturnmenu.md)
+      - [Return Tab](markdown/ascreturntab.md)
+      - Max and Variant Size for Dialog Window
+    - Miscellaneous
+      - Assert Attributes Dialog Window
+      - Connection Popup Window
+      - [Conversion Attributes Dialog Window](markdown/asc_conversionattributeswindow.md)
+      - Distribution for Dialog Window
+      - Enumeration / Mode Group Selection Window
+      - Occurrences for Dialog Window
+      - Paths for Window
+      - Print Diagrams Window
+      - Select Item Window (SWC Editor)
+      - Sequence Editor
+      - Toolbar Configuration Window
+      - Views Window

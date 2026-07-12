@@ -1,9 +1,16 @@
-version: 1
-system: pi-ascet-extension
+version: 2
+system: ascet-workflow-rules
 default_entrypoints:
   - ascet.init.workflow
   - ascet.tools.pi
-
+loading_policy:
+  mode: progressive-disclosure
+  strategy:
+    - load-core-first
+    - choose-tool-next
+    - augment-by-object
+    - augment-by-task
+    - load-evidence-last
 rules:
   - id: ascet.init.workflow
     path: tasks/init.md
@@ -11,6 +18,136 @@ rules:
   - id: ascet.tools.pi
     path: tools/pi-ascet-tools.md
     layer: tools
+  - id: ascet.index
+    path: index.md
+    layer: entry
+    always_load: true
   - id: ascet.core.workflow
     path: core/workflow.md
     layer: core
+    always_load: true
+  - id: ascet.core.routing
+    path: core/routing.md
+    layer: core
+    always_load: true
+  - id: ascet.core.execution-modes
+    path: core/execution-modes.md
+    layer: core
+    always_load: false
+  - id: ascet.core.verification
+    path: core/verification.md
+    layer: core
+    always_load: false
+    triggers:
+      - write
+      - verify
+      - readback
+      - diff
+  - id: ascet.tools.index
+    path: tools/index.md
+    layer: tool
+    always_load: true
+  - id: ascet.tool.explore
+    path: tools/explore.md
+    layer: tool
+  - id: ascet.tool.read
+    path: tools/read.md
+    layer: tool
+  - id: ascet.tool.reference
+    path: tools/reference.md
+    layer: tool
+  - id: ascet.tool.diff
+    path: tools/diff.md
+    layer: tool
+  - id: ascet.tool.write
+    path: tools/write.md
+    layer: tool
+  - id: ascet.tool.batch-write
+    path: tools/batch-write.md
+    layer: tool
+  - id: ascet.tool.verify
+    path: tools/verify.md
+    layer: tool
+  - id: ascet.tool.autocheck
+    path: tools/autocheck.md
+    layer: tool
+  - id: ascet.object.class-module-esdl
+    path: objects/class-module-esdl.md
+    layer: object
+    object_types:
+      - Class
+      - Module
+    languages:
+      - ESDL
+  - id: ascet.object.state-machine
+    path: objects/state-machine.md
+    layer: object
+    object_types:
+      - StateMachine
+  - id: ascet.object.implementation-data
+    path: objects/implementation-data.md
+    layer: object
+    object_types:
+      - Class
+      - Module
+      - StateMachine
+    domains:
+      - implementation
+      - data
+  - id: ascet.object.module-bde
+    path: objects/module-bde.md
+    layer: object
+    object_types:
+      - Module
+    languages:
+      - BDE
+  - id: ascet.task.readonly-analysis
+    path: tasks/readonly-analysis.md
+    layer: task
+    task_types:
+      - analyze
+      - explain
+      - inspect
+  - id: ascet.task.small-safe-edit
+    path: tasks/small-safe-edit.md
+    layer: task
+    task_types:
+      - edit
+      - patch
+      - local-change
+  - id: ascet.task.signature-change
+    path: tasks/signature-change.md
+    layer: task
+    task_types:
+      - signature-change
+      - rename
+      - api-change
+  - id: ascet.task.target-resolution
+    path: tasks/target-resolution.md
+    layer: task
+    task_types:
+      - resolve
+      - locate
+      - navigate
+  - id: ascet.task.batch-change
+    path: tasks/batch-change.md
+    layer: task
+    task_types:
+      - batch
+      - sync
+      - multi-target-change
+  - id: ascet.task.closeout
+    path: tasks/closeout.md
+    layer: task
+    task_types:
+      - verify
+      - report
+      - closeout
+docs:
+  knowledge_index: .ascet/rules/ascet-knowledge/index.md
+  help_index: .ascet/rules/ascet-knowledge/help/index.md
+  task_map: .ascet/rules/ascet-knowledge/help/ascet-agent-help-task-map.md
+  source_map: .ascet/rules/ascet-knowledge/help/ascet-agent-help-source-map.md
+  implementation_field_guide: .ascet/rules/ascet-knowledge/help/ascet-agent-signal-implementation-field-guide.md
+  tool_index: .ascet/rules/tools/index.md
+  vendor_extracted_index: .ascet/rules/ascet-knowledge/help/extracted/index.md
