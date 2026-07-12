@@ -3,17 +3,22 @@ import { AscetRequirementsError, readRequirementsWorkbook } from "./excel-reader
 import { writeRequirementIndex } from "./index-store.ts";
 import { normalizeRequirementRecords } from "./normalizer.ts";
 import { expandRequirementRelations } from "./relations.ts";
+import { buildAllRiskDetails, paginateRiskDetails } from "./risk-details.ts";
 import { searchRequirementRecords } from "./search.ts";
+import { computeRiskGateState } from "./state.ts";
 import type {
 	AscetRequirementsAction,
 	AscetRequirementsParams,
 	AscetRequirementsResult,
+	ClarificationItem,
+	DetailCompletion,
 	RequirementCanonicalField,
 	RequirementEvidence,
 	RequirementRecord,
 	RequirementRiskContext,
 	RequirementRiskItem,
 	RequirementSearchCandidate,
+	RiskType,
 } from "./types.ts";
 
 export interface RunAscetRequirementsOptions {
@@ -21,13 +26,47 @@ export interface RunAscetRequirementsOptions {
 }
 
 function emptyContext(relationDepth: 0 | 1 | 2): RequirementRiskContext {
+	const detailCompletion: DetailCompletion = {
+		targetDetailsComplete: false,
+		relationDetailsComplete: false,
+		allPagesRetrieved: false,
+		evidenceComplete: false,
+		truncated: false,
+	};
+	const gate = computeRiskGateState({
+		riskContextStage: "summary_only",
+		evidenceStatus: "missing",
+		readiness: "not_ready",
+		detailCompletion,
+		blockingClarificationCount: 0,
+	});
 	return {
 		rowCount: 0,
 		relationDepth,
 		needsClarification: false,
 		confidence: "low",
+		riskContextStage: gate.riskContextStage,
+		evidenceStatus: gate.evidenceStatus,
+		readiness: gate.readiness,
+		designGateReady: gate.designGateReady,
+		design_gate_ready: gate.design_gate_ready,
+		stateValid: gate.stateValid,
+		stateErrors: gate.stateErrors,
+		blockingReasons: gate.blockingReasons,
+		blockingClarifications: [],
+		nonBlockingClarifications: [],
+		detailCompletion,
+		targetFound: false,
+		selfRiskCount: 0,
+		relationLeadCount: 0,
+		relatedRequirementCount: 0,
+		riskDetailCount: 0,
+		riskSummaryByType: {},
+		riskSummaryByRequirement: [],
 		targets: [],
 		candidates: [],
+		relationLeads: [],
+		risks: [],
 		selfRisks: [],
 		relationRisks: [],
 		potentialRisks: [],
@@ -150,12 +189,15 @@ function isAmbiguous(candidates: RequirementSearchCandidate[], params: AscetRequ
 	if (!first || !second) {
 		return false;
 	}
+	if (params.query?.trim() && params.query.trim().split(/\s+/).length === 1 && candidates.length > 1) {
+		return true;
+	}
 	return first.score - second.score < 200;
 }
 
 function buildDesignImplications(context: {
 	selfRisks: RequirementRiskItem[];
-	relationRisks: RequirementRiskContext["relationRisks"];
+	relationLeads: RequirementRiskContext["relationLeads"];
 }): string[] {
 	const implications: string[] = [];
 	if (context.selfRisks.some((risk) => risk.field === "supplier_comments")) {
@@ -163,14 +205,14 @@ function buildDesignImplications(context: {
 	}
 	if (
 		context.selfRisks.some((risk) => risk.field === "defect") ||
-		context.relationRisks.some((risk) => risk.field === "defect")
+		context.relationLeads.some((lead) => lead.relationType === "same_defect")
 	) {
 		implications.push("Check defect-linked behavior before reusing existing signal or quality logic.");
 	}
-	if (context.relationRisks.some((risk) => risk.relationType === "same_reused_signal")) {
+	if (context.relationLeads.some((lead) => lead.relationType === "same_reused_signal")) {
 		implications.push("Validate reused-signal producer and quality propagation before design changes.");
 	}
-	if (context.relationRisks.some((risk) => risk.evidence.evidenceKind === "inferred")) {
+	if (context.relationLeads.some((lead) => lead.confidence !== "high")) {
 		implications.push("Treat inferred relation risks as search leads and confirm them with direct ASCET evidence.");
 	}
 	return implications;
@@ -211,33 +253,185 @@ function makeContext(
 	const limit = params.limit ?? 10;
 	const ambiguous = isAmbiguous(candidates, params);
 	const targets = selectTargets(candidates, ambiguous);
-	const relationRisks = expandRequirementRelations(targets, records, relationDepth, limit);
+	const targetRecords = targets.map((target) => target.record);
+	const relationLeads = expandRequirementRelations(targets, records, relationDepth, 50);
 	const selfRisks = collectSelfRisks(targets);
+	const allRisks = buildAllRiskDetails(targetRecords, records, relationLeads, { ...params, scope: "all", limit: 50 });
+	const riskSummaryByType = summarizeRisksByType(allRisks);
+	const riskSummaryByRequirement = summarizeRisksByRequirement(allRisks);
+	const blockingClarifications = buildBlockingClarifications(ambiguous, candidates);
+	const detailCompletion: DetailCompletion = {
+		targetDetailsComplete: false,
+		relationDetailsComplete: false,
+		allPagesRetrieved: false,
+		evidenceComplete: allRisks.length > 0,
+		truncated: false,
+	};
+	const gate = computeRiskGateState({
+		riskContextStage: "summary_only",
+		evidenceStatus: allRisks.length > 0 ? "partial" : "missing",
+		readiness: blockingClarifications.length > 0 ? "needs_clarification" : "not_ready",
+		detailCompletion,
+		blockingClarificationCount: blockingClarifications.length,
+		force: params.debugForceGateState,
+	});
 	const context = {
 		sourceFile: worksheet.sourceFile,
 		sheetName: worksheet.sheetName,
 		rowCount: worksheet.rowCount,
 		relationDepth,
-		needsClarification: ambiguous,
+		needsClarification: blockingClarifications.length > 0,
 		confidence: !candidates[0] ? "low" : ambiguous ? "medium" : "high",
+		riskContextStage: gate.riskContextStage,
+		evidenceStatus: gate.evidenceStatus,
+		readiness: gate.readiness,
+		designGateReady: gate.designGateReady,
+		design_gate_ready: gate.design_gate_ready,
+		stateValid: gate.stateValid,
+		stateErrors: gate.stateErrors,
+		blockingReasons: gate.blockingReasons,
+		blockingClarifications,
+		nonBlockingClarifications: [],
+		detailCompletion,
+		nextAction: targets[0]?.record.requirementId
+			? {
+					tool: "ascet_requirements",
+					action: "risk_details",
+					requirementId: targets[0].record.requirementId,
+					offset: 0,
+					limit,
+					priorityMode: "ascet_relevant_first",
+				}
+			: undefined,
+		targetFound: targets.length > 0,
+		selfRiskCount: targetRecords.reduce((count, record) => count + record.riskCells.length, 0),
+		relationLeadCount: relationLeads.length,
+		relatedRequirementCount: new Set(relationLeads.map((lead) => lead.relatedRequirementId).filter(Boolean)).size,
+		riskDetailCount: allRisks.length,
+		riskSummaryByType,
+		riskSummaryByRequirement,
 		targets: targets.map(candidateSummary),
 		candidates: candidates.map(candidateSummary),
+		relationLeads: [],
+		risks: [],
 		selfRisks,
-		relationRisks,
-		potentialRisks: relationRisks.filter((risk) => risk.evidence.evidenceKind === "inferred"),
+		relationRisks: [],
+		potentialRisks: [],
 		defectSignals: collectFieldRisks(targets, "defect"),
 		swimSignals: collectFieldRisks(targets, "swim"),
 		lessonsLearned: collectFieldRisks(targets, "lesson_learned"),
-		designImplications: buildDesignImplications({ selfRisks, relationRisks }),
-		suggestedQuestions: ambiguous
-			? ["Which requirement should drive the ASCET design? Choose one candidate by requirement ID or signal."]
-			: [],
+		designImplications: buildDesignImplications({ selfRisks, relationLeads }),
+		suggestedQuestions: blockingClarifications.map((item) => item.question),
 		diagnostics: {
 			totalCandidates: candidates.length,
 			searchLimit: limit,
 		},
 	} satisfies RequirementRiskContext;
 	return context;
+}
+
+function summarizeRisksByType(risks: Array<{ riskType: RiskType }>): Partial<Record<RiskType, number>> {
+	const summary: Partial<Record<RiskType, number>> = {};
+	for (const risk of risks) {
+		summary[risk.riskType] = (summary[risk.riskType] ?? 0) + 1;
+	}
+	return summary;
+}
+
+function summarizeRisksByRequirement(
+	risks: Array<{
+		relatedRequirementId?: string;
+		targetRequirementId?: string;
+		relatedRequirementTitle?: string;
+		riskType: RiskType;
+	}>,
+): RequirementRiskContext["riskSummaryByRequirement"] {
+	const byRequirement = new Map<string, { title?: string; riskCount: number; riskTypes: Set<RiskType> }>();
+	for (const risk of risks) {
+		const requirementId = risk.relatedRequirementId ?? risk.targetRequirementId ?? "<unknown>";
+		const current = byRequirement.get(requirementId) ?? {
+			title: risk.relatedRequirementTitle,
+			riskCount: 0,
+			riskTypes: new Set<RiskType>(),
+		};
+		current.riskCount += 1;
+		current.riskTypes.add(risk.riskType);
+		byRequirement.set(requirementId, current);
+	}
+	return Array.from(byRequirement.entries()).map(([requirementId, value]) => ({
+		requirementId,
+		title: value.title,
+		riskCount: value.riskCount,
+		topRiskTypes: Array.from(value.riskTypes),
+	}));
+}
+
+function buildBlockingClarifications(
+	ambiguous: boolean,
+	candidates: RequirementSearchCandidate[],
+): ClarificationItem[] {
+	if (!ambiguous) {
+		return [];
+	}
+	return [
+		{
+			id: "target_requirement_confirm",
+			question: "Which requirement should drive the ASCET design? Choose one candidate by requirement ID or signal.",
+			reason: `Search returned ${candidates.length} close requirement candidates.`,
+			requiredBeforeAscetDesign: true,
+		},
+	];
+}
+
+function makeRiskDetailsContext(
+	base: RequirementRiskContext,
+	records: RequirementRecord[],
+	targets: RequirementSearchCandidate[],
+	params: AscetRequirementsParams,
+): RequirementRiskContext {
+	const targetRecords = targets.map((target) => target.record);
+	const relationLeads = expandRequirementRelations(targets, records, params.relationDepth ?? 1, 50);
+	const allRisks = buildAllRiskDetails(targetRecords, records, relationLeads, params);
+	const page = paginateRiskDetails(allRisks, params);
+	const evidenceStatus = page.detailCompletion.evidenceComplete ? "complete" : "partial";
+	const gate = computeRiskGateState({
+		riskContextStage: page.hasMore ? "detail_partial" : "detail_complete",
+		evidenceStatus,
+		readiness: page.hasMore ? "not_ready" : "ready",
+		detailCompletion: page.detailCompletion,
+		blockingClarificationCount: base.blockingClarifications.length,
+	});
+	return {
+		...base,
+		riskContextStage: gate.riskContextStage,
+		evidenceStatus: gate.evidenceStatus,
+		readiness: gate.readiness,
+		designGateReady: gate.designGateReady,
+		design_gate_ready: gate.design_gate_ready,
+		stateValid: gate.stateValid,
+		stateErrors: gate.stateErrors,
+		blockingReasons: gate.blockingReasons,
+		detailCompletion: page.detailCompletion,
+		relationLeads: params.scope === "target" ? [] : relationLeads,
+		risks: page.items,
+		totalCount: page.totalCount,
+		returnedCount: page.returnedCount,
+		offset: page.offset,
+		limit: page.limit,
+		hasMore: page.hasMore,
+		nextOffset: page.nextOffset,
+		riskDetailCount: allRisks.length,
+		nextAction: page.hasMore
+			? {
+					tool: "ascet_requirements",
+					action: "risk_details",
+					requirementId: targetRecords[0]?.requirementId,
+					offset: page.nextOffset,
+					limit: page.limit,
+					priorityMode: params.priorityMode ?? "ascet_relevant_first",
+				}
+			: undefined,
+	};
 }
 
 export async function runAscetRequirements(
@@ -284,12 +478,26 @@ export async function runAscetRequirements(
 							evidence: record.evidenceByField.requirement_id ? [record.evidenceByField.requirement_id] : [],
 						}))
 				: searchRequirementRecords(records, params, limit);
-		const data = makeContext(params, worksheet, records, candidates);
+		let data = makeContext(params, worksheet, records, candidates);
+		if (params.action === "relation_leads") {
+			data = {
+				...data,
+				relationLeads: expandRequirementRelations(
+					candidates.slice(0, 1),
+					records,
+					params.relationDepth ?? 1,
+					limit,
+				),
+			};
+		}
+		if (params.action === "risk_details") {
+			data = makeRiskDetailsContext(data, records, candidates.slice(0, 1), params);
+		}
 		return {
 			ok: true,
 			tool: "ascet_requirements",
 			action: params.action,
-			summary: `${data.targets.length} target requirement(s), ${data.relationRisks.length} relation risk(s).`,
+			summary: summarizeResult(data, params.action),
 			data,
 		};
 	} catch (error) {
@@ -305,11 +513,32 @@ export async function runAscetRequirements(
 	}
 }
 
+function summarizeResult(data: RequirementRiskContext, action: AscetRequirementsAction): string {
+	if (action === "risk_details") {
+		return `${data.returnedCount ?? 0}/${data.totalCount ?? 0} risk detail(s), design_gate_ready=${data.design_gate_ready}.`;
+	}
+	if (action === "relation_leads") {
+		return `${data.relationLeads.length} relation lead(s), ${data.relatedRequirementCount} related requirement(s).`;
+	}
+	return `${data.targets.length} target requirement(s), ${data.relationLeadCount} relation lead(s), design_gate_ready=${data.design_gate_ready}.`;
+}
+
 export function formatAscetRequirementsResult(result: AscetRequirementsResult): string {
 	if (!result.ok) {
 		return result.summary;
 	}
 	const lines = [result.summary];
+	if (!result.data.designGateReady) {
+		lines.push("Current result cannot enter /ascet-design.");
+		if (result.data.blockingReasons.length > 0) {
+			lines.push(`Blocking reasons: ${result.data.blockingReasons.join(", ")}`);
+		}
+		if (result.data.nextAction) {
+			lines.push(
+				`Next action: ascet_requirements(action="${result.data.nextAction.action}", requirementId="${result.data.nextAction.requirementId ?? ""}", offset=${result.data.nextAction.offset ?? 0}, limit=${result.data.nextAction.limit ?? 10})`,
+			);
+		}
+	}
 	for (const target of result.data.targets) {
 		lines.push(`- target ${target.requirementId ?? "<unknown>"} ${target.title ?? ""}`.trim());
 	}

@@ -47,8 +47,13 @@ describe("/ascet-design command", () => {
 		expect(sentMessages).toHaveLength(1);
 		expect(sentMessages[0]?.options).toBeUndefined();
 		expect(sentMessages[0]?.content).toContain("call ask_user_question before searching");
-		expect(sentMessages[0]?.content).toContain("Use ascet_requirements.risk_context before ASCET live design");
-		expect(sentMessages[0]?.content).toContain("If risk_context returns needsClarification=true");
+		expect(sentMessages[0]?.content).toContain(
+			'Use ascet_requirements(action="risk_context") before ASCET live design',
+		);
+		expect(sentMessages[0]?.content).toContain("If design_gate_ready=false, do not enter ASCET design");
+		expect(sentMessages[0]?.content).toContain("If next_action is present, call that ascet_requirements action");
+		expect(sentMessages[0]?.content).toContain("If blocking_clarifications are present, call ask_user_question");
+		expect(sentMessages[0]?.content).toContain("Only enter ASCET design when detail_complete, evidence complete");
 		expect(sentMessages[0]?.content).toContain("Do not call ascet_write or ascet_batch_write");
 		expect(sentMessages[0]?.content).toContain("unless the user explicitly asks to apply changes");
 	});

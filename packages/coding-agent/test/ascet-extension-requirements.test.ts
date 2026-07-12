@@ -51,9 +51,9 @@ async function writeRequirementsWorkbook(path: string): Promise<void> {
 		"Vehicle",
 		"VehSpdLgt.VehSpdLgtQf",
 		"",
-		"",
-		"",
-		"",
+		"6731279: Wheel speed quality defect propagated to wheel slip consumers.",
+		"SWIM-1093525: Vehicle speed QF invalid shall reset wheel slip fallback.",
+		"LL-42: Verify quality propagation before reusing vehicle speed.",
 	]);
 	sheet.addRow([
 		"Rear wheel slip state quality",
@@ -66,9 +66,9 @@ async function writeRequirementsWorkbook(path: string): Promise<void> {
 		"Wheel",
 		"WhlSlipSt.ReLe",
 		"",
+		"6731279: Wheel position mapping defect reused across slip state.",
 		"",
-		"",
-		"",
+		"LL-43: Confirm rear wheel mapping before reuse.",
 	]);
 	sheet.addRow([
 		"Steering angle quality monitor",
@@ -103,7 +103,7 @@ describe("ascet_requirements", () => {
 		rmSync(tempDir, { recursive: true, force: true });
 	});
 
-	it("builds risk context with direct evidence, relation evidence, and default one-hop depth", async () => {
+	it("returns risk_context as a design gate summary without expanded risk detail content", async () => {
 		const result = await runAscetRequirements(
 			{ action: "risk_context", query: "907829", sourceFile: workbookPath },
 			{ cwd: tempDir },
@@ -111,23 +111,127 @@ describe("ascet_requirements", () => {
 
 		expect(result.ok).toBe(true);
 		expect(result.action).toBe("risk_context");
-		expect(result.data.relationDepth).toBe(1);
+		expect(result.data.riskContextStage).toBe("summary_only");
+		expect(result.data.evidenceStatus).toBe("partial");
+		expect(result.data.readiness).toBe("not_ready");
+		expect(result.data.designGateReady).toBe(false);
+		expect(result.data.design_gate_ready).toBe(false);
+		expect(result.data.stateValid).toBe(true);
+		expect(result.data.blockingReasons).toEqual(expect.arrayContaining(["summary_only", "evidence_partial"]));
 		expect(result.data.targets[0]).toMatchObject({
 			requirementId: "907829",
 			title: "Wheel slip state quality handling",
 		});
-		expect(result.data.selfRisks.some((risk) => risk.field === "supplier_comments")).toBe(true);
-		expect(result.data.defectSignals.map((risk) => risk.value)).toContain("6731279");
-		expect(result.data.swimSignals.map((risk) => risk.value)).toContain("SWIM-1093525");
-		expect(result.data.lessonsLearned.some((risk) => risk.value.includes("5478736"))).toBe(true);
-		expect(result.data.relationRisks.some((risk) => risk.relatedRequirementId === "76797")).toBe(true);
-		expect(result.data.relationRisks.some((risk) => risk.relationType === "signal_family")).toBe(true);
-		expect(result.data.selfRisks[0]?.evidence).toMatchObject({
-			sheetName: "Sheet1",
-			rowNumber: 2,
-			evidenceKind: "direct",
+		expect(result.data.relationLeadCount).toBeGreaterThan(0);
+		expect(result.data.riskSummaryByType.bosch_defect).toBeGreaterThan(0);
+		expect(result.data.nextAction).toMatchObject({
+			tool: "ascet_requirements",
+			action: "risk_details",
+			requirementId: "907829",
+			offset: 0,
 		});
-		expect(result.data.relationRisks.some((risk) => risk.evidence.evidenceKind === "inferred")).toBe(true);
+		expect(JSON.stringify(result.data)).not.toContain("riskContentRaw");
+		expect(JSON.stringify(result.data)).not.toContain("ascetImpactHint");
+		expect(JSON.stringify(result.data)).not.toContain("Wheel speed quality defect propagated");
+	});
+
+	it("returns relation_leads separately from risk details", async () => {
+		const result = await runAscetRequirements(
+			{ action: "relation_leads", query: "907829", sourceFile: workbookPath },
+			{ cwd: tempDir },
+		);
+
+		expect(result.ok).toBe(true);
+		expect(result.action).toBe("relation_leads");
+		expect(result.data.relationLeads.some((lead) => lead.relatedRequirementId === "76797")).toBe(true);
+		expect(result.data.relationLeads.some((lead) => lead.relationType === "signal_family")).toBe(true);
+		expect(result.data.relationLeads[0]).toMatchObject({
+			leadId: expect.any(String),
+			relationEvidence: expect.objectContaining({
+				value: expect.any(String),
+			}),
+		});
+		expect(JSON.stringify(result.data.relationLeads)).not.toContain("riskContentRaw");
+	});
+
+	it("returns paginated risk_details with raw evidence, deduplication, and completion state", async () => {
+		const firstPage = await runAscetRequirements(
+			{
+				action: "risk_details",
+				query: "907829",
+				sourceFile: workbookPath,
+				scope: "related",
+				riskTypes: ["bosch_defect"],
+				limit: 2,
+				offset: 0,
+			},
+			{ cwd: tempDir },
+		);
+		const secondPage = await runAscetRequirements(
+			{
+				action: "risk_details",
+				query: "907829",
+				sourceFile: workbookPath,
+				scope: "related",
+				riskTypes: ["bosch_defect"],
+				limit: 2,
+				offset: 2,
+			},
+			{ cwd: tempDir },
+		);
+
+		expect(firstPage.ok).toBe(true);
+		expect(firstPage.action).toBe("risk_details");
+		expect(firstPage.data.totalCount).toBeGreaterThan(2);
+		expect(firstPage.data.returnedCount).toBe(2);
+		expect(firstPage.data.offset).toBe(0);
+		expect(firstPage.data.limit).toBe(2);
+		expect(firstPage.data.hasMore).toBe(true);
+		expect(firstPage.data.nextOffset).toBe(2);
+		expect(firstPage.data.detailCompletion).toMatchObject({
+			allPagesRetrieved: false,
+			evidenceComplete: true,
+			truncated: false,
+		});
+		expect(firstPage.data.blockingReasons).toContain("pagination_incomplete");
+		expect(firstPage.data.designGateReady).toBe(false);
+		expect(firstPage.data.design_gate_ready).toBe(false);
+		expect(firstPage.data.risks[0]).toMatchObject({
+			riskId: expect.any(String),
+			riskContentRaw: expect.stringContaining("Wheel speed quality defect"),
+			riskIdentifiers: expect.arrayContaining(["6731279"]),
+			evidence: expect.objectContaining({
+				sheetName: "Sheet1",
+				cellAddress: expect.any(String),
+			}),
+			impactBasis: expect.any(String),
+		});
+
+		const combinedIds = [...firstPage.data.risks, ...secondPage.data.risks].map((risk) => risk.riskId);
+		expect(new Set(combinedIds).size).toBe(combinedIds.length);
+	});
+
+	it("marks illegal gate state combinations as invalid", async () => {
+		const result = await runAscetRequirements(
+			{
+				action: "risk_context",
+				query: "907829",
+				sourceFile: workbookPath,
+				debugForceGateState: {
+					riskContextStage: "summary_only",
+					evidenceStatus: "complete",
+					readiness: "ready",
+					designGateReady: true,
+				},
+			},
+			{ cwd: tempDir },
+		);
+
+		expect(result.ok).toBe(true);
+		expect(result.data.stateValid).toBe(false);
+		expect(result.data.stateErrors).toContain(
+			"design_gate_ready cannot be true when risk_context_stage is summary_only",
+		);
 	});
 
 	it("returns actionable errors for unsupported or missing Excel sources", async () => {
@@ -163,7 +267,9 @@ describe("ascet_requirements", () => {
 
 		expect(result.ok).toBe(true);
 		expect(result.data.needsClarification).toBe(true);
-		expect(result.data.suggestedQuestions.join("\n")).toContain("Which requirement should drive the ASCET design?");
+		expect(result.data.blockingClarifications[0]?.question).toContain(
+			"Which requirement should drive the ASCET design?",
+		);
 		expect(result.data.candidates.length).toBeGreaterThan(1);
 	});
 

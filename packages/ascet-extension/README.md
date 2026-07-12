@@ -45,7 +45,15 @@ Canonical Copilot-aligned tools:
 
 Old fine-grained tools are not registered as model tools or legacy aliases. Their low-level runner modules remain available internally for canonical tools.
 
-`ascet_requirements` is a read-only pre-design tool for requirements Excel risk retrieval. It supports `.xlsx` workbooks, maps requirement ID, title, description, Supplier Comments, feature, CCP, Signal, Reused Signal, Bosch Defect, COEM SWIM, and LL columns, and returns evidence with sheet, row, column, cell address, value, reason, and direct/inferred evidence kind. The default `relationDepth` is `1`, meaning one-hop related requirements and signals only.
+`ascet_requirements` is a read-only pre-design gate for requirements Excel risk retrieval before `/ascet-design`. It supports `.xlsx` workbooks, maps requirement ID, title, description, Supplier Comments, feature, CCP, Signal, Reused Signal, Bosch Defect, COEM SWIM, and LL columns, and preserves Excel evidence with sheet, row, column, cell address, raw value, reason, and direct/inferred evidence kind.
+
+The requirements gate separates summary, relation, and evidence retrieval:
+
+- `risk_context`: returns gate state, counts, risk summaries, blocking reasons, clarification items, and `nextAction`. It does not expose raw risk content or ASCET design conclusions.
+- `relation_leads`: explains why related requirements are connected, for example by same signal, reused signal, feature, CCP, signal family, or risk keyword.
+- `risk_details`: returns paginated raw Excel risk evidence with stable risk IDs, risk type, raw cell text, extracted identifiers, evidence location, impact hint basis, completion state, and paging metadata.
+
+`design_gate_ready` is the requirements-risk gate for entering ASCET design. It is unrelated to ASCET GUI or ToolAPI runtime availability. `/ascet-design` may proceed to ASCET design only when risk details are complete, evidence is complete, all pages are retrieved, and there are no blocking clarifications. The default `relationDepth` is `1`, meaning one-hop related requirements and signals only.
 
 Guarded write tools are preflight-only by default and require explicit interactive approval before CLI execution. Canonical `ascet_write` returns a non-error `status: "preflight"` outcome when `executeWrite` is false. `ascet_batch_write` uses operation-specific request schemas and reports partial completion as `status: "partial"` when the ASCET batch backend returns item failures.
 
@@ -59,9 +67,9 @@ Use `/ascet-design` when starting from a requirement, signal, function descripti
 /ascet-design implement wheel speed plausibility fallback for reused vehicle speed signal
 ```
 
-The command asks the model to clarify missing anchors with `ask_user_question`, then call `ascet_requirements.risk_context` before ASCET live design. If Excel retrieval returns ambiguous candidates, the workflow asks the user to choose the target requirement before continuing.
+The command asks the model to clarify missing anchors with `ask_user_question`, then call `ascet_requirements(action="risk_context")` before ASCET live design. If `design_gate_ready=false`, the model must follow `nextAction` such as `relation_leads` or `risk_details`, or ask blocking clarification questions before continuing. If Excel retrieval returns ambiguous candidates, the workflow asks the user to choose the target requirement before continuing.
 
-The first requirements-risk retrieval phase is read-only. `/ascet-design` must not call `ascet_write` or `ascet_batch_write` unless the user explicitly asks to apply changes, and any later write must be preceded by design intent, risk controls, and verification plan.
+The first requirements-risk retrieval phase is read-only. `/ascet-design` must not enter ASCET design or call `ascet_write` / `ascet_batch_write` until `design_gate_ready=true`. Any later write must be explicitly requested by the user and preceded by design intent, risk controls, and verification plan.
 
 ## Import/Export And Dependency Actions
 

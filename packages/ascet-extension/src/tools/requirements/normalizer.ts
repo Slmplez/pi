@@ -3,7 +3,9 @@ import type {
 	RequirementCanonicalField,
 	RequirementEvidence,
 	RequirementRecord,
+	RequirementRiskCell,
 	RequirementWorksheetData,
+	RiskType,
 } from "./types.ts";
 
 const FIELD_TO_PROPERTY: Partial<Record<RequirementCanonicalField, keyof RequirementRecord>> = {
@@ -63,6 +65,38 @@ function extractAcceptedExceptions(value: string | undefined): string[] {
 	return lower.includes("accepted") ? [value] : [];
 }
 
+function extractRiskIdentifiers(value: string, riskType: RiskType): string[] {
+	if (riskType === "bosch_defect") {
+		return extractIds(value, /\b\d{4,9}\b/g);
+	}
+	if (riskType === "coem_swim") {
+		return extractIds(value, /\bSWIM-\d+\b/gi);
+	}
+	if (riskType === "lesson_learned") {
+		return extractIds(value, /\b(?:LL-\d+|\d{4,9})\b/gi);
+	}
+	return extractIds(value, /\b(?:SWIM-\d+|LL-\d+|\d{4,9})\b/gi);
+}
+
+function createRiskCell(
+	riskType: RiskType,
+	field: RequirementCanonicalField,
+	contentRaw: string | undefined,
+	evidence: RequirementEvidence | undefined,
+): RequirementRiskCell | undefined {
+	const value = contentRaw?.trim();
+	if (!value || !evidence) {
+		return undefined;
+	}
+	return {
+		riskType,
+		field,
+		contentRaw: value,
+		identifiers: extractRiskIdentifiers(value, riskType),
+		evidence,
+	};
+}
+
 function createEvidence(
 	worksheet: RequirementWorksheetData,
 	rowNumber: number,
@@ -111,6 +145,7 @@ export function normalizeRequirementRecords(worksheet: RequirementWorksheetData)
 			lessons: [],
 			deviations: [],
 			acceptedExceptions: [],
+			riskCells: [],
 			rawCells,
 			evidenceByField,
 		};
@@ -145,6 +180,28 @@ export function normalizeRequirementRecords(worksheet: RequirementWorksheetData)
 		record.lessons = splitList(rawCells.lesson_learned);
 		record.deviations = extractDeviations(rawCells.supplier_comments);
 		record.acceptedExceptions = extractAcceptedExceptions(rawCells.supplier_comments);
+
+		for (const riskCell of [
+			createRiskCell(
+				"supplier_comments",
+				"supplier_comments",
+				rawCells.supplier_comments,
+				evidenceByField.supplier_comments,
+			),
+			createRiskCell("bosch_defect", "defect", rawCells.defect, evidenceByField.defect),
+			createRiskCell("coem_swim", "swim", rawCells.swim, evidenceByField.swim),
+			createRiskCell("lesson_learned", "lesson_learned", rawCells.lesson_learned, evidenceByField.lesson_learned),
+			...record.deviations.map((value) =>
+				createRiskCell("deviation", "supplier_comments", value, evidenceByField.supplier_comments),
+			),
+			...record.acceptedExceptions.map((value) =>
+				createRiskCell("accepted_exception", "supplier_comments", value, evidenceByField.supplier_comments),
+			),
+		]) {
+			if (riskCell) {
+				record.riskCells.push(riskCell);
+			}
+		}
 
 		if (record.requirementId || record.title || record.description) {
 			records.push(record);

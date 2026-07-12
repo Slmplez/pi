@@ -1,8 +1,9 @@
 import { signalFamily } from "./entities.ts";
 import type {
+	RelationLead,
+	RelationType,
 	RequirementEvidence,
 	RequirementRecord,
-	RequirementRelationRiskItem,
 	RequirementSearchCandidate,
 } from "./types.ts";
 
@@ -22,25 +23,42 @@ function inferEvidence(evidence: RequirementEvidence | undefined, reason: string
 	};
 }
 
-function relationItem(
+function sanitizeIdPart(value: string | undefined): string {
+	return (value ?? "unknown").replace(/[^A-Za-z0-9_.-]+/g, "_");
+}
+
+function makeLeadId(
+	target: RequirementRecord,
 	record: RequirementRecord,
-	relationType: RequirementRelationRiskItem["relationType"],
-	field: RequirementRelationRiskItem["field"],
+	relationType: RelationType,
 	value: string,
-	reason: string,
-	evidence: RequirementEvidence | undefined,
-): RequirementRelationRiskItem | undefined {
-	if (!evidence) {
-		return undefined;
-	}
+): string {
+	return `${sanitizeIdPart(target.requirementId)}->${sanitizeIdPart(record.requirementId)}:${relationType}:${sanitizeIdPart(value)}`;
+}
+
+function relationLead(
+	target: RequirementRecord,
+	record: RequirementRecord,
+	relationType: RelationType,
+	value: string,
+	sourceField: string,
+	targetEvidence: RequirementEvidence | undefined,
+	relatedEvidence: RequirementEvidence | undefined,
+	confidence: RelationLead["confidence"] = "high",
+): RelationLead {
 	return {
-		field,
-		value,
-		reason,
-		evidence,
+		leadId: makeLeadId(target, record, relationType, value),
+		targetRequirementId: target.requirementId,
 		relatedRequirementId: record.requirementId,
-		relatedTitle: record.title,
+		relatedRequirementTitle: record.title,
 		relationType,
+		relationEvidence: {
+			value,
+			targetCell: targetEvidence?.cellAddress,
+			relatedCell: relatedEvidence?.cellAddress,
+			sourceField,
+		},
+		confidence,
 	};
 }
 
@@ -89,14 +107,14 @@ export function expandRequirementRelations(
 	records: RequirementRecord[],
 	relationDepth: 0 | 1 | 2,
 	limit: number,
-): RequirementRelationRiskItem[] {
+): RelationLead[] {
 	if (relationDepth === 0) {
 		return [];
 	}
 
 	const targetIds = new Set(targets.map((target) => target.record.requirementId).filter((id): id is string => !!id));
 	const targetRecords = targets.map((target) => target.record);
-	const relationRisks: RequirementRelationRiskItem[] = [];
+	const relationLeads: RelationLead[] = [];
 
 	for (const record of records) {
 		if (record.requirementId && targetIds.has(record.requirementId)) {
@@ -106,124 +124,144 @@ export function expandRequirementRelations(
 		for (const target of targetRecords) {
 			const sameSignal = intersects(target.signals, record.signals);
 			if (sameSignal) {
-				const item = relationItem(
-					record,
-					"same_signal",
-					"signal",
-					sameSignal,
-					`Related by same signal: ${sameSignal}`,
-					record.evidenceByField.signal,
+				relationLeads.push(
+					relationLead(
+						target,
+						record,
+						"same_signal",
+						sameSignal,
+						"signal",
+						target.evidenceByField.signal,
+						record.evidenceByField.signal,
+					),
 				);
-				if (item) relationRisks.push(item);
 			}
 
 			const targetReuse = reusedReferencesRequirement(target, record.requirementId);
 			const recordReuse = reusedReferencesRequirement(record, target.requirementId);
 			const reusedValue = targetReuse ?? recordReuse;
 			if (reusedValue) {
-				const item = relationItem(
-					record,
-					"same_reused_signal",
-					"reused_signal",
-					reusedValue,
-					"Related by reused signal requirement reference.",
-					record.evidenceByField.reused_signal ?? target.evidenceByField.reused_signal,
+				relationLeads.push(
+					relationLead(
+						target,
+						record,
+						"same_reused_signal",
+						reusedValue,
+						"reused_signal",
+						target.evidenceByField.reused_signal,
+						record.evidenceByField.reused_signal,
+					),
 				);
-				if (item) relationRisks.push(item);
 			}
 
 			const crossReferenceEvidence =
 				containsRequirementReference(record, target.requirementId) ??
 				containsRequirementReference(target, record.requirementId);
 			if (crossReferenceEvidence) {
-				const item = relationItem(
-					record,
-					"requirement_cross_reference",
-					"description",
-					record.requirementId ?? crossReferenceEvidence.value,
-					"Related by explicit requirement ID cross-reference.",
-					crossReferenceEvidence,
+				relationLeads.push(
+					relationLead(
+						target,
+						record,
+						"requirement_cross_reference",
+						record.requirementId ?? crossReferenceEvidence.value,
+						"description",
+						target.evidenceByField.description,
+						crossReferenceEvidence,
+					),
 				);
-				if (item) relationRisks.push(item);
 			}
 
 			if (target.feature && record.feature && target.feature.toLowerCase() === record.feature.toLowerCase()) {
-				const item = relationItem(
-					record,
-					"same_feature",
-					"feature",
-					record.feature,
-					`Related by same feature: ${record.feature}`,
-					record.evidenceByField.feature,
+				relationLeads.push(
+					relationLead(
+						target,
+						record,
+						"same_feature",
+						record.feature,
+						"feature",
+						target.evidenceByField.feature,
+						record.evidenceByField.feature,
+					),
 				);
-				if (item) relationRisks.push(item);
 			}
 
 			const sameCcp = intersects(target.ccps, record.ccps);
 			if (sameCcp) {
-				const item = relationItem(
-					record,
-					"same_ccp",
-					"ccp",
-					sameCcp,
-					`Related by same CCP: ${sameCcp}`,
-					record.evidenceByField.ccp,
+				relationLeads.push(
+					relationLead(
+						target,
+						record,
+						"same_ccp",
+						sameCcp,
+						"ccp",
+						target.evidenceByField.ccp,
+						record.evidenceByField.ccp,
+					),
 				);
-				if (item) relationRisks.push(item);
 			}
 
 			const sameDefect = intersects(target.defects, record.defects);
 			if (sameDefect) {
-				const item = relationItem(
-					record,
-					"same_defect",
-					"defect",
-					sameDefect,
-					`Related by same defect: ${sameDefect}`,
-					record.evidenceByField.defect,
+				relationLeads.push(
+					relationLead(
+						target,
+						record,
+						"same_defect",
+						sameDefect,
+						"defect",
+						target.evidenceByField.defect,
+						record.evidenceByField.defect,
+					),
 				);
-				if (item) relationRisks.push(item);
 			}
 
 			const sameSwim = intersects(target.swims, record.swims);
 			if (sameSwim) {
-				const item = relationItem(
-					record,
-					"same_swim",
-					"swim",
-					sameSwim,
-					`Related by same SWIM: ${sameSwim}`,
-					record.evidenceByField.swim,
+				relationLeads.push(
+					relationLead(
+						target,
+						record,
+						"same_swim",
+						sameSwim,
+						"swim",
+						target.evidenceByField.swim,
+						record.evidenceByField.swim,
+					),
 				);
-				if (item) relationRisks.push(item);
 			}
 
 			for (const targetSignal of target.signals) {
 				for (const recordSignal of record.signals) {
 					if (targetSignal !== recordSignal && signalFamily(targetSignal) === signalFamily(recordSignal)) {
-						const item = relationItem(
-							record,
-							"signal_family",
-							"signal",
-							recordSignal,
-							`Potentially related by signal family: ${signalFamily(recordSignal)}`,
-							inferEvidence(record.evidenceByField.signal, "Signal family inferred from shared prefix."),
+						relationLeads.push(
+							relationLead(
+								target,
+								record,
+								"signal_family",
+								recordSignal,
+								"signal",
+								target.evidenceByField.signal,
+								inferEvidence(record.evidenceByField.signal, "Signal family inferred from shared prefix."),
+								"medium",
+							),
 						);
-						if (item) relationRisks.push(item);
 
 						if (hasWheelPositionToken(targetSignal) && hasWheelPositionToken(recordSignal)) {
-							const wheelItem = relationItem(
-								record,
-								"wheel_position_family",
-								"signal",
-								recordSignal,
-								`Potentially related by wheel-position signal family: ${signalFamily(recordSignal)}`,
-								inferEvidence(
-									record.evidenceByField.signal,
-									"Wheel-position relation inferred from signal family.",
+							relationLeads.push(
+								relationLead(
+									target,
+									record,
+									"wheel_position_family",
+									recordSignal,
+									"signal",
+									target.evidenceByField.signal,
+									inferEvidence(
+										record.evidenceByField.signal,
+										"Wheel-position relation inferred from signal family.",
+									),
+									"medium",
 								),
 							);
-							if (wheelItem) relationRisks.push(wheelItem);
 						}
 					}
 				}
@@ -232,23 +270,29 @@ export function expandRequirementRelations(
 			const targetKeyword = riskKeyword(target.supplierComments);
 			const recordKeyword = riskKeyword(record.supplierComments);
 			if (targetKeyword && recordKeyword && targetKeyword === recordKeyword) {
-				const item = relationItem(
-					record,
-					"risk_keyword",
-					"supplier_comments",
-					record.supplierComments ?? recordKeyword,
-					`Potentially related by risk keyword: ${recordKeyword}`,
-					inferEvidence(record.evidenceByField.supplier_comments, "Risk keyword relation inferred from comments."),
+				relationLeads.push(
+					relationLead(
+						target,
+						record,
+						"risk_keyword",
+						record.supplierComments ?? recordKeyword,
+						"supplier_comments",
+						target.evidenceByField.supplier_comments,
+						inferEvidence(
+							record.evidenceByField.supplier_comments,
+							"Risk keyword relation inferred from comments.",
+						),
+						"low",
+					),
 				);
-				if (item) relationRisks.push(item);
 			}
 		}
 	}
 
 	const seen = new Set<string>();
-	return relationRisks
-		.filter((risk) => {
-			const key = `${risk.relatedRequirementId}:${risk.relationType}:${risk.value}`;
+	return relationLeads
+		.filter((lead) => {
+			const key = `${lead.relatedRequirementId}:${lead.relationType}:${lead.relationEvidence.value}`;
 			if (seen.has(key)) {
 				return false;
 			}
