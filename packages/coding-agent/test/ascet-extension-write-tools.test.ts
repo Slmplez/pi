@@ -611,6 +611,36 @@ describe("ASCET guarded write PI tools", () => {
 		).toBe(true);
 	});
 
+	it("represents canonical ascet_batch_write preflight as a non-error outcome", async () => {
+		const ascetExtension = await loadAscetExtension();
+		const tool = ascetExtension?.tools.get("ascet_batch_write")?.definition;
+		const result = (await tool?.execute?.(
+			"tool-call",
+			{
+				operation: "batch_create_folder",
+				requests: [{ folderPath: "DEMO\\Batch", ifExists: "ignore", verifyReadback: true }],
+				executeWrite: false,
+			},
+			new AbortController().signal,
+			undefined,
+			{ cwd: repoRoot, hasUI: true, ui: { confirm: async () => true } } as never,
+		)) as {
+			content: Array<{ type: "text"; text: string }>;
+			details: { outcome: { status: string }; rawContent: string };
+		};
+		const content = JSON.parse(result.content[0]?.text ?? "{}");
+
+		expect(result.details.outcome.status).toBe("preflight");
+		expect(content).toMatchObject({
+			status: "preflight",
+			plan: {
+				operation: "batch_create_folder",
+				preflightOnly: true,
+			},
+		});
+		expect(result.details.rawContent).toContain("ASCET batch_write failed: ascet_write_preflight_required");
+	});
+
 	it("reports only operation-specific request validation errors for batch writes", async () => {
 		const ascetExtension = await loadAscetExtension();
 		const tool = ascetExtension?.tools.get("ascet_batch_write")?.definition;

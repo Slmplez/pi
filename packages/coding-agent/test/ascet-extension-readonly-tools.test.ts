@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { executeAscetCli, getProcessTreeKillCommand } from "../../ascet-extension/src/cli.ts";
+import { executeAscetCli, formatAscetCliJsonResult, getProcessTreeKillCommand } from "../../ascet-extension/src/cli.ts";
 import { buildDiffComponentSnapshotArgs } from "../../ascet-extension/src/diff-component-snapshot.ts";
 import { buildDiffElementSpecArgs } from "../../ascet-extension/src/diff-element-spec.ts";
 import { buildDiffMethodCodeArgs } from "../../ascet-extension/src/diff-method-code.ts";
@@ -77,6 +77,29 @@ describe("ASCET read-only PI tools", () => {
 		expect(result.exitCode).toBe(0);
 		expect(result.stdout).toBe("ok");
 		expect(result.stderr).toBe("");
+	});
+
+	it("adds a ToolAPI connection hint to runtime CLI failures", () => {
+		const text = formatAscetCliJsonResult("list_folders", {
+			ok: false,
+			data: null,
+			request: {
+				cwd: repoRoot,
+				cliPath: "AscetCli.exe",
+				args: ["exec", "list_folders", "--depth", "0", "--json"],
+			},
+			stdout: "",
+			stderr: "",
+			exitCode: 1,
+			timedOut: false,
+			error: {
+				code: "ascet_cli_failed",
+				message: "ASCET ToolAPI unavailable",
+			},
+		});
+
+		expect(text).toContain("ASCET list_folders failed: ascet_cli_failed");
+		expect(text).toContain("Start ASCET GUI with ToolAPI enabled");
 	});
 
 	it("does not register old fine-grained read-only tools as PI tools", async () => {

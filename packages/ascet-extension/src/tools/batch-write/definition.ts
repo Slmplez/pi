@@ -34,11 +34,13 @@ export const ascetBatchWriteTool = defineSequentialAscetTool({
 		ctx: AscetToolContext,
 	) {
 		const result = await runApprovedAscetBatchWrite(params, { cwd: ctx.cwd, signal, timeoutMs: 120_000 }, ctx);
+		const outcome = createBatchWriteOutcome(result);
 		return {
-			content: [{ type: "text", text: formatBatchWriteResult(result) }],
+			content: [{ type: "text", text: JSON.stringify(outcome, null, 2) }],
 			details: {
 				...createAscetCliToolDetails("ascet_batch_write", params.operation, result),
-				outcome: createBatchWriteOutcome(result),
+				outcome,
+				rawContent: formatBatchWriteResult(result),
 			},
 		};
 	},

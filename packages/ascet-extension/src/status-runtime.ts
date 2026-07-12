@@ -36,6 +36,8 @@ export interface AscetRuntimeStatusOptions extends AscetStatusPathOptions {
 }
 
 const RUNTIME_PROBE_DESCRIPTION = "ASCET ToolAPI live probe: AscetCli.exe exec list_folders --depth 0 --json";
+const RUNTIME_FAILURE_NEXT_STEP =
+	"Next step: start ASCET GUI with ToolAPI enabled, then rerun ascet_status or the ASCET command. If ASCET is already open, verify the ToolAPI connection/profile.";
 
 function formatRuntimeProbe(report: AscetRuntimeProbeReport): string {
 	if (report.ok) {
@@ -60,7 +62,10 @@ function createRuntimeSummary(installation: AscetStatusReport, runtime: AscetRun
 		`ASCET runtime: ${runtime.ok ? "ready" : "not ready"}`,
 		...installation.summary.split("\n").slice(1),
 		formatRuntimeProbe(runtime),
-	].join("\n");
+		installation.ok && !runtime.ok ? RUNTIME_FAILURE_NEXT_STEP : null,
+	]
+		.filter((line): line is string => line !== null)
+		.join("\n");
 }
 
 function toRuntimeProbeReport(result: AscetCliJsonResult): AscetRuntimeProbeReport {

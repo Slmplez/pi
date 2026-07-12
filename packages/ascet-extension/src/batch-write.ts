@@ -7,7 +7,7 @@ import {
 	formatAscetCliJsonResult,
 	runAscetCliJson,
 } from "./cli.ts";
-import type { AscetToolOutcome } from "./core/results.ts";
+import { type AscetToolOutcome, createPreflightOutcome } from "./core/results.ts";
 import { createAscetStatusReport } from "./status.ts";
 import { type AscetWriteApprovalContext, requestAscetWriteApproval } from "./write-policy.ts";
 
@@ -380,6 +380,9 @@ export function createBatchWriteOutcome(result: AscetBatchWriteResult): AscetToo
 	}
 	const code = result.error?.code ?? "ascet_batch_write_failed";
 	const message = result.error?.message ?? "ASCET batch write failed.";
+	if (code === "ascet_write_preflight_required") {
+		return createPreflightOutcome((asRecord(result.data) ?? { message }) as Record<string, unknown>);
+	}
 	if (code === "ascet_write_ui_required" || code === "ascet_write_rejected") {
 		return { status: "blocked", code, message };
 	}

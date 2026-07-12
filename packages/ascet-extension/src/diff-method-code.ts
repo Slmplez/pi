@@ -33,6 +33,15 @@ export const ascetDiffMethodCodeParameters = Type.Object({
 });
 
 export function buildDiffMethodCodeArgs(params: AscetDiffMethodCodeParams): string[] {
+	if (typeof params.leftComponentPath !== "string" || params.leftComponentPath.length === 0) {
+		throw new Error("leftPath is required for ascet_diff.diff_method.");
+	}
+	if (typeof params.rightComponentPath !== "string" || params.rightComponentPath.length === 0) {
+		throw new Error("rightPath is required for ascet_diff.diff_method.");
+	}
+	if (typeof params.methodName !== "string" || params.methodName.length === 0) {
+		throw new Error("methodName is required for ascet_diff.diff_method.");
+	}
 	const args = [
 		"exec",
 		"diff_method_code",

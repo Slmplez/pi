@@ -12,6 +12,8 @@ export function buildAscetDesignPrompt(args: string): string {
 		"- First decide whether the request has enough anchors for Excel risk search.",
 		"- If not, call ask_user_question before searching. Ask at most 3 concise questions.",
 		"- If ask_user_question is unavailable, ask one concise blocking question.",
+		"- Locate the requirements .xlsx with agent file search tools first; pass its absolute path as sourceFile to ascet_requirements.",
+		"- Do not rely on implicit ascet_requirements workbook discovery; use workspaceSearch=true only as an explicit fallback.",
 		'- Use ascet_requirements(action="risk_context") before ASCET live design.',
 		"- If design_gate_ready=false, do not enter ASCET design; continue requirements retrieval or clarification first.",
 		"- If next_action is present, call that ascet_requirements action before ASCET design.",

@@ -16,19 +16,46 @@ const IGNORED_DIRS = new Set([
 
 const PREFERRED_NAME_PARTS = ["requirement", "risk", "swim", "defect", "lesson", "ascet"];
 
+interface DirectoryEntry {
+	name: string;
+	isDirectory(): boolean;
+	isFile(): boolean;
+}
+
+type ReadDirectory = (path: string, options: { withFileTypes: true }) => DirectoryEntry[];
+
 function isPreferredCandidate(path: string): boolean {
 	const lower = path.toLowerCase();
 	return PREFERRED_NAME_PARTS.some((part) => lower.includes(part));
 }
 
-function collectXlsxFiles(root: string, output: string[], depth = 0): void {
+export function isRecoverableDiscoveryError(error: unknown): boolean {
+	const code = typeof error === "object" && error !== null && "code" in error ? String(error.code) : undefined;
+	return code === "EPERM" || code === "EACCES" || code === "ENOENT" || code === "ENOTDIR";
+}
+
+export function collectXlsxFiles(
+	root: string,
+	output: string[],
+	depth = 0,
+	readDirectory: ReadDirectory = readdirSync,
+): void {
 	if (depth > 5) {
 		return;
 	}
-	for (const entry of readdirSync(root, { withFileTypes: true })) {
+	let entries: DirectoryEntry[];
+	try {
+		entries = readDirectory(root, { withFileTypes: true });
+	} catch (error) {
+		if (isRecoverableDiscoveryError(error)) {
+			return;
+		}
+		throw error;
+	}
+	for (const entry of entries) {
 		if (entry.isDirectory()) {
 			if (!IGNORED_DIRS.has(entry.name)) {
-				collectXlsxFiles(join(root, entry.name), output, depth + 1);
+				collectXlsxFiles(join(root, entry.name), output, depth + 1, readDirectory);
 			}
 			continue;
 		}

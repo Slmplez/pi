@@ -270,6 +270,42 @@ describe("ASCET canonical PI tools", () => {
 		});
 	});
 
+	it("rejects invalid ascet_diff inputs before path normalization", async () => {
+		const executeCli = async (): Promise<AscetCliExecutionResult> => {
+			throw new Error("executeCli should not be called for invalid diff parameters");
+		};
+		const signal = new AbortController().signal;
+		const ctx = { cwd: repoRoot, executeCli };
+
+		await expect(
+			ascetDiffTool.execute(
+				"tool-call",
+				{ action: "diff_method", componentPath: "DEMO\\PID", methodName: "calc" } as never,
+				signal,
+				undefined,
+				ctx,
+			),
+		).rejects.toThrow("leftPath is required for ascet_diff.diff_method.");
+		await expect(
+			ascetDiffTool.execute(
+				"tool-call",
+				{ action: "diff_state_machine_domain", componentPath: "DEMO\\TEST_SM" } as never,
+				signal,
+				undefined,
+				ctx,
+			),
+		).rejects.toThrow("leftPath is required for ascet_diff.diff_state_machine_domain.");
+		await expect(
+			ascetDiffTool.execute(
+				"tool-call",
+				{ action: "diff_project_formulas", componentPath: "DEMO", specFile: "formulas.spec" } as never,
+				signal,
+				undefined,
+				ctx,
+			),
+		).rejects.toThrow("leftPath is required for ascet_diff.diff_project_formulas.");
+	});
+
 	it("routes canonical ascet_diff.diff to object-kind specific CLI operations", async () => {
 		const executeCli = async (request: AscetCliRequest): Promise<AscetCliExecutionResult> => ({
 			exitCode: 0,

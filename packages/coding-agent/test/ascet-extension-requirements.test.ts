@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import ExcelJS from "exceljs";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { collectXlsxFiles } from "../../ascet-extension/src/tools/requirements/discovery.ts";
 import { runAscetRequirements } from "../../ascet-extension/src/tools/requirements/risk-context.ts";
 
 const HEADER = [
@@ -101,6 +102,66 @@ describe("ascet_requirements", () => {
 
 	afterEach(() => {
 		rmSync(tempDir, { recursive: true, force: true });
+	});
+
+	it("skips inaccessible directories during automatic workbook discovery", () => {
+		const protectedDir = join(tempDir, "protected");
+		const safeDir = join(tempDir, "safe");
+		const workbook = join(safeDir, "requirements-risk.xlsx");
+		const output: string[] = [];
+		const readDirectory = (root: string) => {
+			if (root === protectedDir) {
+				throw Object.assign(new Error("EPERM: operation not permitted, scandir"), { code: "EPERM" });
+			}
+			if (root === tempDir) {
+				return [
+					{ name: "protected", isDirectory: () => true, isFile: () => false },
+					{ name: "safe", isDirectory: () => true, isFile: () => false },
+				];
+			}
+			if (root === safeDir) {
+				return [{ name: "requirements-risk.xlsx", isDirectory: () => false, isFile: () => true }];
+			}
+			return [];
+		};
+
+		collectXlsxFiles(tempDir, output, 0, readDirectory as never);
+
+		expect(output).toEqual([workbook]);
+	});
+
+	it("does not scan for workbooks unless workspaceSearch is explicitly enabled", async () => {
+		const passiveStatus = await runAscetRequirements({ action: "status" }, { cwd: tempDir });
+		const explicitSearchStatus = await runAscetRequirements(
+			{ action: "status", workspaceSearch: true },
+			{ cwd: tempDir },
+		);
+		const missingSource = await runAscetRequirements({ action: "risk_context", query: "907829" }, { cwd: tempDir });
+
+		expect(passiveStatus).toMatchObject({
+			ok: true,
+			summary: "ASCET requirements tool is available; no workbook selected.",
+			data: {
+				rowCount: 0,
+			},
+		});
+		expect(explicitSearchStatus).toMatchObject({
+			ok: true,
+			summary: "Indexed 4 requirement rows from Sheet1.",
+			data: {
+				sourceFile: workbookPath,
+				rowCount: 4,
+			},
+		});
+		expect(missingSource).toMatchObject({
+			ok: false,
+			error: {
+				code: "REQUIREMENTS_EXCEL_NOT_FOUND",
+				recoveryActions: expect.arrayContaining([
+					"Find the requirements .xlsx with the agent file search tools, then pass sourceFile.",
+				]),
+			},
+		});
 	});
 
 	it("returns risk_context as a design gate summary without expanded risk detail content", async () => {

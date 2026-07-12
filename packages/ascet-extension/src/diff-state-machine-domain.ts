@@ -31,6 +31,12 @@ export const ascetDiffStateMachineDomainParameters = Type.Object({
 });
 
 export function buildDiffStateMachineDomainArgs(params: AscetDiffStateMachineDomainParams): string[] {
+	if (typeof params.leftStateMachinePath !== "string" || params.leftStateMachinePath.length === 0) {
+		throw new Error("leftPath is required for ascet_diff.diff_state_machine_domain.");
+	}
+	if (typeof params.rightStateMachinePath !== "string" || params.rightStateMachinePath.length === 0) {
+		throw new Error("rightPath is required for ascet_diff.diff_state_machine_domain.");
+	}
 	const args = [
 		"exec",
 		"diff_state_machine_domain",

@@ -353,9 +353,15 @@ export function formatAscetCliJsonResult(operation: string, result: AscetCliJson
 	if (result.ok) {
 		return JSON.stringify(result.data, null, 2);
 	}
+	const message = result.error?.message ?? "";
+	const runtimeHint =
+		result.error?.code === "ascet_cli_failed" && /(ToolAPI|stdio streams are unavailable|runtime)/i.test(message)
+			? "hint: ASCET runtime (ToolAPI) is not connected. Start ASCET GUI with ToolAPI enabled, then rerun ascet_status or the ASCET command."
+			: "";
 	return [
 		`ASCET ${operation} failed: ${result.error?.code ?? "unknown"}`,
-		result.error?.message ?? "",
+		message,
+		runtimeHint,
 		result.stderr ? `stderr:\n${result.stderr.trim()}` : "",
 		result.stdout ? `stdout:\n${result.stdout.trim()}` : "",
 	]

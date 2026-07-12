@@ -31,6 +31,12 @@ export const ascetDiffProjectFormulasParameters = Type.Object({
 });
 
 export function buildDiffProjectFormulasArgs(params: AscetDiffProjectFormulasParams): string[] {
+	if (typeof params.leftProjectPath !== "string" || params.leftProjectPath.length === 0) {
+		throw new Error("leftPath is required for ascet_diff.diff_project_formulas.");
+	}
+	if (typeof params.rightProjectPath !== "string" || params.rightProjectPath.length === 0) {
+		throw new Error("rightPath is required for ascet_diff.diff_project_formulas.");
+	}
 	const args = [
 		"exec",
 		"diff_project_formulas",

@@ -220,11 +220,11 @@ function buildDesignImplications(context: {
 
 async function loadRecords(params: AscetRequirementsParams, options: RunAscetRequirementsOptions) {
 	const sourceFile =
-		params.sourceFile ?? (params.workspaceSearch === false ? undefined : discoverRequirementsWorkbook(options.cwd));
+		params.sourceFile ?? (params.workspaceSearch === true ? discoverRequirementsWorkbook(options.cwd) : undefined);
 	if (!sourceFile) {
 		throw new AscetRequirementsError("REQUIREMENTS_EXCEL_NOT_FOUND", "No requirements Excel source was provided.", [
-			"Pass sourceFile.",
-			"Enable workspaceSearch or place a .xlsx requirements workbook in the workspace.",
+			"Find the requirements .xlsx with the agent file search tools, then pass sourceFile.",
+			"Set workspaceSearch=true only when an explicit tool-side workspace scan is desired.",
 		]);
 	}
 	const worksheet = await readRequirementsWorkbook(sourceFile);
@@ -441,7 +441,7 @@ export async function runAscetRequirements(
 	const relationDepth = params.relationDepth ?? 1;
 	const limit = params.limit ?? 10;
 	try {
-		if (params.action === "status" && !params.sourceFile && params.workspaceSearch === false) {
+		if (params.action === "status" && !params.sourceFile && params.workspaceSearch !== true) {
 			return {
 				ok: true,
 				tool: "ascet_requirements",

@@ -108,6 +108,7 @@ describe("ASCET extension status diagnostics", () => {
 		expect(report.summary).toContain("ASCET installation: ready");
 		expect(report.summary).toContain("ASCET runtime: not ready");
 		expect(report.summary).toContain("ASCET runtime probe: FAILED (ascet_cli_failed)");
+		expect(report.summary).toContain("Next step: start ASCET GUI with ToolAPI enabled");
 	});
 
 	it("reports ready only when installation and live runtime probe both pass", async () => {

@@ -34,7 +34,37 @@ function operationForObjectKind(
 	}
 }
 
+function requireString(value: unknown, fieldName: string, action: AscetDiffParams["action"]): string {
+	if (typeof value !== "string" || value.length === 0) {
+		throw new Error(`${fieldName} is required for ascet_diff.${action}.`);
+	}
+	return value;
+}
+
+function validateAscetDiffParams(params: AscetDiffParams): void {
+	const rawParams = params as Record<string, unknown>;
+	switch (params.action) {
+		case "diff":
+		case "diff_component_snapshot":
+		case "diff_state_machine_domain":
+		case "diff_project_formulas":
+			requireString(rawParams.leftPath, "leftPath", params.action);
+			requireString(rawParams.rightPath, "rightPath", params.action);
+			return;
+		case "diff_method":
+			requireString(rawParams.leftPath, "leftPath", params.action);
+			requireString(rawParams.rightPath, "rightPath", params.action);
+			requireString(rawParams.methodName, "methodName", params.action);
+			return;
+		case "diff_element_spec":
+			requireString(rawParams.componentPath, "componentPath", params.action);
+			requireString(rawParams.specFile, "specFile", params.action);
+			return;
+	}
+}
+
 async function runAscetDiff(params: AscetDiffParams, options: RunOptions): Promise<AscetCliJsonResult> {
+	validateAscetDiffParams(params);
 	switch (params.action) {
 		case "diff": {
 			const operation = operationForObjectKind(params.objectKind);
