@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getProcessTreeKillCommand } from "../../ascet-extension/src/cli.ts";
+import { executeAscetCli, getProcessTreeKillCommand } from "../../ascet-extension/src/cli.ts";
 import { buildDiffComponentSnapshotArgs } from "../../ascet-extension/src/diff-component-snapshot.ts";
 import { buildDiffElementSpecArgs } from "../../ascet-extension/src/diff-element-spec.ts";
 import { buildDiffMethodCodeArgs } from "../../ascet-extension/src/diff-method-code.ts";
@@ -65,6 +65,18 @@ describe("ASCET read-only PI tools", () => {
 		});
 		expect(getProcessTreeKillCommand(1234, "linux")).toBeUndefined();
 		expect(getProcessTreeKillCommand(0, "win32")).toBeUndefined();
+	});
+
+	it("executes CLI requests without stdin when stdin is intentionally ignored", async () => {
+		const result = await executeAscetCli({
+			cwd: repoRoot,
+			cliPath: process.execPath,
+			args: ["-e", "process.stdout.write('ok')"],
+		});
+
+		expect(result.exitCode).toBe(0);
+		expect(result.stdout).toBe("ok");
+		expect(result.stderr).toBe("");
 	});
 
 	it("does not register old fine-grained read-only tools as PI tools", async () => {

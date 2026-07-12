@@ -120,9 +120,13 @@ export async function executeAscetCli(request: AscetCliRequest): Promise<AscetCl
 
 		const stdoutStream = child.stdout;
 		const stderrStream = child.stderr;
-		const stdinStream = child.stdin;
-		if (!stdoutStream || !stderrStream || !stdinStream) {
+		if (!stdoutStream || !stderrStream) {
 			reject(new Error("ASCET CLI process stdio streams are unavailable."));
+			return;
+		}
+		const stdinStream = child.stdin;
+		if (request.stdin !== undefined && !stdinStream) {
+			reject(new Error("ASCET CLI process stdin stream is unavailable."));
 			return;
 		}
 
@@ -143,8 +147,8 @@ export async function executeAscetCli(request: AscetCliRequest): Promise<AscetCl
 			resolve({ exitCode, stdout, stderr, timedOut, aborted, request });
 		});
 		if (request.stdin !== undefined) {
-			stdinStream.write(request.stdin);
-			stdinStream.end();
+			stdinStream?.write(request.stdin);
+			stdinStream?.end();
 		}
 	});
 }
