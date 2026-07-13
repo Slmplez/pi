@@ -17,6 +17,8 @@ import {
 import ascetExtension from "../../ascet-extension/src/index.ts";
 import { AuthStorage } from "../src/core/auth-storage.ts";
 import { ModelRegistry } from "../src/core/model-registry.ts";
+import type { AuthSelectorProvider } from "../src/modes/interactive/components/oauth-selector.ts";
+import { InteractiveMode } from "../src/modes/interactive/interactive-mode.ts";
 
 const farFuture = 4102444800000;
 
@@ -398,6 +400,45 @@ describe("bosch-llmfarm provider", () => {
 				maxTokens: 4096,
 			});
 			expect(await registry.getApiKeyForProvider(BOSCH_LLMFARM_PROVIDER_ID)).toBe("secret-key");
+		} finally {
+			if (existsSync(tempDir)) {
+				rmSync(tempDir, { recursive: true });
+			}
+		}
+	});
+
+	it("exposes Bosch LLM Farm as a real /login provider option after extension registration", () => {
+		const tempDir = join(
+			tmpdir(),
+			`pi-test-bosch-login-options-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+		);
+		mkdirSync(tempDir, { recursive: true });
+		try {
+			const authStorage = AuthStorage.create(join(tempDir, "auth.json"));
+			const registry = ModelRegistry.create(authStorage, join(tempDir, "models.json"));
+
+			ascetExtension({
+				registerTool: vi.fn(),
+				sendUserMessage: vi.fn(),
+				registerCommand: vi.fn(),
+				registerProvider: (name, config) => registry.registerProvider(name, config),
+			});
+
+			const getLoginProviderOptions = (
+				InteractiveMode as unknown as {
+					prototype: {
+						getLoginProviderOptions(this: { session: { modelRegistry: ModelRegistry } }): AuthSelectorProvider[];
+					};
+				}
+			).prototype.getLoginProviderOptions;
+			const options = getLoginProviderOptions.call({ session: { modelRegistry: registry } });
+
+			expect(options).toContainEqual({
+				id: BOSCH_LLMFARM_PROVIDER_ID,
+				name: "Bosch LLM Farm",
+				authType: "oauth",
+				loginMethodLabel: "Use Bosch LLM Farm",
+			});
 		} finally {
 			if (existsSync(tempDir)) {
 				rmSync(tempDir, { recursive: true });
