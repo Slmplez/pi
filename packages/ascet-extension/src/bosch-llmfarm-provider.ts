@@ -719,11 +719,13 @@ export function streamBoschLlmFarm(
 			}
 			const keyPlacement = getKeyPlacement(model, options);
 			const payload = createPayload(model, context, gatewayKey, keyPlacement, options);
+			const nextPayload = await options?.onPayload?.(payload, model);
+			const requestPayload = nextPayload ?? payload;
 			const requestFetch = options?.fetch ?? fetch;
 			const response = await requestFetch(buildBoschChatCompletionsUrl(model.baseUrl, gatewayKey, keyPlacement), {
 				method: "POST",
 				headers: buildRequestHeaders(gatewayKey, options),
-				body: JSON.stringify(payload),
+				body: JSON.stringify(requestPayload),
 				signal: options?.signal,
 			});
 			await options?.onResponse?.(
@@ -733,7 +735,7 @@ export function streamBoschLlmFarm(
 			if (!response.ok) {
 				throw await responseError(response, gatewayKey);
 			}
-			if (payload.stream) {
+			if ((requestPayload as BoschChatPayload).stream) {
 				await handleStreamingResponse(response, output, stream);
 			} else {
 				await handleNonStreamingResponse(response, output, stream);

@@ -227,6 +227,33 @@ describe("bosch-llmfarm provider", () => {
 		expect(JSON.parse(String(requests[1]!.init.body))).toMatchObject({ max_tokens: 99 });
 	});
 
+	it("allows onPayload to inspect and replace the Bosch request payload", async () => {
+		const requests: Array<{ url: string; init: RequestInit }> = [];
+		const fetchMock = vi.fn(async (url: string | URL | Request, init?: RequestInit) => {
+			requests.push({ url: String(url), init: init ?? {} });
+			return new Response(JSON.stringify({ choices: [{ message: { content: "pong" }, finish_reason: "stop" }] }), {
+				status: 200,
+				headers: { "content-type": "application/json" },
+			});
+		});
+		const seenPayloads: unknown[] = [];
+		const seenModels: string[] = [];
+
+		await streamBoschLlmFarm(createModel("alpha"), textContext, {
+			apiKey: "secret-key",
+			onPayload: (payload, model) => {
+				seenPayloads.push(payload);
+				seenModels.push(model.id);
+				return { ...(payload as Record<string, unknown>), temperature: 0.25 };
+			},
+			fetch: fetchMock,
+		}).result();
+
+		expect(seenModels).toEqual(["alpha"]);
+		expect(seenPayloads[0]).toMatchObject({ model: "alpha", max_tokens: 4096 });
+		expect(JSON.parse(String(requests[0]!.init.body))).toMatchObject({ model: "alpha", temperature: 0.25 });
+	});
+
 	it("uses key placement from registry request headers in the real streamSimple path", async () => {
 		const requests: Array<{ url: string; init: RequestInit }> = [];
 		const fetchMock = vi.fn(async (url: string | URL | Request, init?: RequestInit) => {
