@@ -75,7 +75,19 @@ The first requirements-risk retrieval phase is read-only. `/ascet-design` must n
 
 The extension registers a configurable `bosch-llmfarm` model provider for Bosch LLM Farm OpenAI-compatible gateways.
 
-Start the login flow:
+Start the login flow either from the top-level authentication selector:
+
+```text
+/login
+```
+
+then choose:
+
+```text
+Use Bosch LLM Farm
+```
+
+or jump directly to the Bosch setup flow:
 
 ```text
 /login bosch-llmfarm
@@ -132,7 +144,8 @@ with `model`, `messages`, optional `temperature`, `max_tokens`, optional OpenAI-
 
 Company-network validation checklist:
 
-- Run `/login bosch-llmfarm` with the real endpoint and gateway key.
+- Run `/login` and choose `Use Bosch LLM Farm`, or run `/login bosch-llmfarm` directly.
+- Enter the real endpoint and gateway key.
 - Enter one or more model IDs from Bosch Digital Assets.
 - Select `/model bosch-llmfarm/<model-id>`.
 - Send a text-only message and verify a normal response.
