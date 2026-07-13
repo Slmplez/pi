@@ -71,6 +71,75 @@ The command asks the model to clarify missing anchors with `ask_user_question`, 
 
 The first requirements-risk retrieval phase is read-only. `/ascet-design` must not enter ASCET design or call `ascet_write` / `ascet_batch_write` until `design_gate_ready=true`. Any later write must be explicitly requested by the user and preceded by design intent, risk controls, and verification plan.
 
+## Bosch LLM Farm Provider
+
+The extension registers a configurable `bosch-llmfarm` model provider for Bosch LLM Farm OpenAI-compatible gateways.
+
+Start the login flow:
+
+```text
+/login bosch-llmfarm
+```
+
+During login, enter:
+
+- Bosch LLM Farm endpoint, normally ending at `/v1`.
+- Gateway key.
+- Gateway key placement.
+- One or more model IDs, comma-separated.
+- Per-model context window, max output tokens, input support, reasoning support, and streaming support.
+
+The endpoint can be entered as either the base URL or the chat-completions URL. These forms normalize to the same base URL:
+
+```text
+https://apiroutecccn.apac.bosch.com/openapi/aigatewayprod/bdo-llmfarm-llm/v1
+https://apiroutecccn.apac.bosch.com/openapi/aigatewayprod/bdo-llmfarm-llm/v1/
+https://apiroutecccn.apac.bosch.com/openapi/aigatewayprod/bdo-llmfarm-llm/v1/chat/completions
+https://apiroutecccn.apac.bosch.com/openapi/aigatewayprod/bdo-llmfarm-llm/v1/chat/completions?gatewayKey=...
+```
+
+The default gateway-key placement is `header + query + body`, matching Bosch gateway examples:
+
+```http
+Authorization: Bearer <gatewayKey>
+```
+
+```text
+<baseUrl>/chat/completions?gatewayKey=<gatewayKey>
+```
+
+```json
+{
+  "gatewayKey": "<gatewayKey>"
+}
+```
+
+If the gateway only requires a bearer token, choose `header only` during login. The selected placement is stored with the model configuration and applied to later `/model bosch-llmfarm/<model-id>` requests.
+
+After login, select a configured model:
+
+```text
+/model bosch-llmfarm/<model-id>
+```
+
+Requests are sent as OpenAI-compatible chat completions:
+
+```text
+POST <baseUrl>/chat/completions
+```
+
+with `model`, `messages`, optional `temperature`, `max_tokens`, optional OpenAI-style `tools`, and the configured gateway-key placement. Non-streaming requests are the default until the real Bosch gateway is validated on the company network. Streaming SSE parsing exists in the provider adapter and can be enabled per model during login after confirming the gateway supports `stream: true`.
+
+Company-network validation checklist:
+
+- Run `/login bosch-llmfarm` with the real endpoint and gateway key.
+- Enter one or more model IDs from Bosch Digital Assets.
+- Select `/model bosch-llmfarm/<model-id>`.
+- Send a text-only message and verify a normal response.
+- Ask for an ASCET action and verify OpenAI-style tool calling works through the gateway.
+- If using a vision model, verify image input.
+- If the gateway supports SSE, set streaming support to `true` for one test model and verify streaming separately.
+
 ## Import/Export And Dependency Actions
 
 `ascet_read` includes these ASCET ToolAPI-backed actions:

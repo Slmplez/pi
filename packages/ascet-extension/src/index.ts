@@ -1,5 +1,6 @@
 import { executeAscetDesignCommand } from "./ascet-design.ts";
 import { executeAscetInitCommand } from "./ascet-init.ts";
+import { registerBoschLlmFarmProvider } from "./bosch-llmfarm-provider.ts";
 import type { AscetExtensionAPI } from "./core/tool.ts";
 import { executeAscetSchedulerStatusCommand } from "./scheduler/status.ts";
 import { type AscetRuntimeStatusReport, createAscetRuntimeStatusReport } from "./status-runtime.ts";
@@ -31,6 +32,8 @@ function buildAscetFullCheckPrompt(args: string): string {
 }
 
 export default function ascetExtension(pi: AscetExtensionAPI) {
+	registerBoschLlmFarmProvider(pi);
+
 	for (const tool of canonicalAscetTools) {
 		pi.registerTool(tool);
 	}

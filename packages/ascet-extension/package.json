@@ -35,6 +35,7 @@
 		"!ascet-cli/bin/**/*.err"
 	],
 	"peerDependencies": {
+		"@earendil-works/pi-ai": "*",
 		"typebox": "*"
 	},
 	"dependencies": {
