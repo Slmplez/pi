@@ -10,6 +10,7 @@ interface AscetCapabilityCommand {
 	summary?: string;
 	risk?: string;
 	objectKinds?: string[];
+	methodKindCompatibility?: Record<string, string[]>;
 	supportsJson?: boolean;
 	hiddenFromModel?: boolean;
 	operation?: string;
@@ -48,6 +49,7 @@ export interface AscetCapabilityMatch {
 	risk?: string;
 	summary?: string;
 	objectKinds?: string[];
+	methodKindCompatibility?: Record<string, string[]>;
 	lane?: string;
 	hostEligible?: boolean;
 	supportsBatch?: boolean;
@@ -144,6 +146,7 @@ export function runAscetCapabilities(
 					risk: command.risk,
 					summary: command.summary,
 					objectKinds: command.objectKinds,
+					methodKindCompatibility: detailedCommand.methodKindCompatibility,
 					lane: command.lane,
 					hostEligible: command.hostEligible,
 					supportsBatch: command.supportsBatch,
@@ -222,7 +225,12 @@ export function formatAscetCapabilitiesResult(result: AscetCapabilitiesResult): 
 						.map(([name, values]) => `${name}=${values.join("|")}`)
 						.join(", ")}`
 				: "";
-			return `- ${match.operation ?? match.id}: ${match.summary ?? ""}${route}${enumText}`;
+			const compatibilityText = match.methodKindCompatibility
+				? `; method kinds: ${Object.entries(match.methodKindCompatibility)
+						.map(([kind, values]) => `${kind}=${values.join("|")}`)
+						.join(", ")}`
+				: "";
+			return `- ${match.operation ?? match.id}: ${match.summary ?? ""}${route}${enumText}${compatibilityText}`;
 		}),
 	].join("\n");
 }

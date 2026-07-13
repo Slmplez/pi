@@ -26,14 +26,10 @@ import { buildDeleteComponentArgs } from "../../ascet-extension/src/delete-compo
 import { buildDeleteFolderArgs } from "../../ascet-extension/src/delete-folder.ts";
 import { buildDeleteMethodArgs } from "../../ascet-extension/src/delete-method.ts";
 import {
-	buildSetClassMethodCodeArgs,
-	runApprovedAscetSetClassMethodCode,
-} from "../../ascet-extension/src/set-class-method-code.ts";
-import {
 	buildSetElementDependencyArgs,
 	runApprovedAscetSetElementDependency,
 } from "../../ascet-extension/src/set-element-dependency.ts";
-import { buildSetMethodCodeArgs } from "../../ascet-extension/src/set-method-code.ts";
+import { buildSetMethodCodeArgs, runApprovedAscetSetMethodCode } from "../../ascet-extension/src/set-method-code.ts";
 import {
 	buildSetMethodSignatureArgs,
 	createMethodSignatureSpec,
@@ -152,25 +148,6 @@ describe("ASCET guarded write PI tools", () => {
 			ifReturnExists: "replace",
 			arguments: [{ name: "p_CmpF_MC1", type: "cont", ifExists: "keep" }],
 		});
-	});
-
-	it("builds JSON set_class_method_code invocation with readback verification", () => {
-		expect(
-			buildSetClassMethodCodeArgs({
-				classPath: "DEMO\\PID",
-				methodName: "calc",
-				codeFile: "E:\\tmp\\calc.c",
-				verifyReadback: true,
-			}),
-		).toEqual([
-			"exec",
-			"set_class_method_code",
-			"DEMO\\PID",
-			"calc",
-			"E:\\tmp\\calc.c",
-			"--verify-readback",
-			"--json",
-		]);
 	});
 
 	it("builds JSON delete, generic set-code, and apply-spec write invocations", () => {
@@ -506,6 +483,17 @@ describe("ASCET guarded write PI tools", () => {
 			{ cwd: repoRoot },
 			{ hasUI: true, ui: { confirm: async () => true } },
 		);
+		const missingKindForExecution = await runAscetWrite(
+			{
+				action: "create_method",
+				componentPath: "DEMO\\PID",
+				methodName: "calc2",
+				methodKind: "process",
+				executeWrite: true,
+			},
+			{ cwd: repoRoot },
+			{ hasUI: true, ui: { confirm: async () => true } },
+		);
 
 		expect(invalidClassMethod.details.outcome.status).toBe("error");
 		expect(invalidClassMethod.details.error?.code).toBe("ascet_write_incompatible_method_kind");
@@ -513,6 +501,9 @@ describe("ASCET guarded write PI tools", () => {
 		expect(invalidModuleMethod.details.outcome.status).toBe("error");
 		expect(invalidModuleMethod.details.error?.code).toBe("ascet_write_incompatible_method_kind");
 		expect(invalidModuleMethod.details.error?.message).toContain("Module method creation supports only process");
+		expect(missingKindForExecution.details.outcome.status).toBe("error");
+		expect(missingKindForExecution.details.error?.code).toBe("ascet_write_missing_component_kind");
+		expect(missingKindForExecution.details.error?.message).toContain("inspect the target");
 	});
 
 	it("preserves create_component expected default scaffold as an unverified hint", async () => {
@@ -873,9 +864,9 @@ describe("ASCET guarded write PI tools", () => {
 	});
 
 	it("blocks writes when no interactive confirmation UI is available", async () => {
-		const setCodeResult = await runApprovedAscetSetClassMethodCode(
+		const setCodeResult = await runApprovedAscetSetMethodCode(
 			{
-				classPath: "DEMO\\PID",
+				componentPath: "DEMO\\PID",
 				methodName: "calc",
 				codeFile: "E:\\tmp\\calc.c",
 				verifyReadback: true,
@@ -911,9 +902,9 @@ describe("ASCET guarded write PI tools", () => {
 	it("runs the write command only after interactive confirmation", async () => {
 		let confirmCalls = 0;
 		let executeCalls = 0;
-		const result = await runApprovedAscetSetClassMethodCode(
+		const result = await runApprovedAscetSetMethodCode(
 			{
-				classPath: "DEMO\\PID",
+				componentPath: "DEMO\\PID",
 				methodName: "calc",
 				codeFile: "E:\\tmp\\calc.c",
 				verifyReadback: true,

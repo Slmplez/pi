@@ -14,7 +14,6 @@ import {
 	type AscetCreateMethodComponentKind,
 	validateCreateMethodKindCompatibility,
 } from "../method-kind-compatibility.ts";
-import { runApprovedAscetSetClassMethodCode } from "../set-class-method-code.ts";
 import { runApprovedAscetSetElementDependency } from "../set-element-dependency.ts";
 import { runApprovedAscetSetMethodCode } from "../set-method-code.ts";
 import { runApprovedAscetSetMethodSignature } from "../set-method-signature.ts";
@@ -91,13 +90,6 @@ export type AscetWriteParams =
 	| ({
 			action: "set_method_code";
 			componentPath: string;
-			methodName: string;
-			verifyReadback?: boolean;
-			executeWrite?: boolean;
-	  } & CodeSource)
-	| ({
-			action: "set_class_method_code";
-			classPath: string;
 			methodName: string;
 			verifyReadback?: boolean;
 			executeWrite?: boolean;
@@ -203,7 +195,6 @@ export const ascetWriteParameters = Type.Object({
 		Type.Literal("delete_method"),
 		Type.Literal("delete_folder"),
 		Type.Literal("set_method_code"),
-		Type.Literal("set_class_method_code"),
 		Type.Literal("set_module_code"),
 		Type.Literal("set_state_machine_code"),
 		Type.Literal("apply_element_spec"),
@@ -212,7 +203,6 @@ export const ascetWriteParameters = Type.Object({
 	]),
 	folderPath: Type.Optional(Type.String({ minLength: 1 })),
 	componentPath: Type.Optional(Type.String({ minLength: 1 })),
-	classPath: Type.Optional(Type.String({ minLength: 1 })),
 	modulePath: Type.Optional(Type.String({ minLength: 1 })),
 	stateMachinePath: Type.Optional(Type.String({ minLength: 1 })),
 	projectPath: Type.Optional(Type.String({ minLength: 1 })),
@@ -335,6 +325,16 @@ function normalizeAscetWriteParams(params: AscetWriteParams): AscetWriteParams {
 
 function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | undefined {
 	if (params.action === "create_method") {
+		if (params.executeWrite && !params.componentKind) {
+			return {
+				status: "error",
+				error: {
+					code: "ascet_write_missing_component_kind",
+					message:
+						"create_method with executeWrite=true requires componentKind; inspect the target first so methodKind can be validated before ASCET ToolAPI execution.",
+				},
+			};
+		}
 		const compatibility = validateCreateMethodKindCompatibility(params);
 		if (compatibility) {
 			return {
@@ -418,10 +418,6 @@ async function dispatchWrite(
 		case "set_method_code":
 			return withWriteCode(params, (codeFile) =>
 				runApprovedAscetSetMethodCode({ ...params, codeFile }, options, ctx),
-			);
-		case "set_class_method_code":
-			return withWriteCode(params, (codeFile) =>
-				runApprovedAscetSetClassMethodCode({ ...params, codeFile }, options, ctx),
 			);
 		case "set_module_code":
 			return withWriteCode(params, (codeFile) =>

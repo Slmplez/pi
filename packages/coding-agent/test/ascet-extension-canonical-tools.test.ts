@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import type { AscetCliExecutionResult, AscetCliRequest } from "../../ascet-extension/src/cli.ts";
 import { classifyAscetCliCommand } from "../../ascet-extension/src/routing/coverage.ts";
 import { listAscetRoutes, routeAscetAction } from "../../ascet-extension/src/routing/router.ts";
+import { compactExamplesForTool } from "../../ascet-extension/src/tools/_shared/action-examples.ts";
 import { formatAscetCapabilitiesResult, runAscetCapabilities } from "../../ascet-extension/src/tools/capabilities.ts";
 import { ascetDiffTool } from "../../ascet-extension/src/tools/diff/index.ts";
 import { ascetExploreTool } from "../../ascet-extension/src/tools/explore/index.ts";
@@ -86,6 +87,7 @@ describe("ASCET canonical PI tools", () => {
 			const definition = ascetExtension?.tools.get(name)?.definition;
 			expect(definition?.promptSnippet).toBeTruthy();
 			expect(definition?.promptGuidelines?.length).toBeGreaterThan(0);
+			expect(definition?.promptGuidelines).toEqual(expect.arrayContaining(compactExamplesForTool(name)));
 			expect(definition?.renderCall).toEqual(expect.any(Function));
 			expect(definition?.renderResult).toEqual(expect.any(Function));
 		}
@@ -378,6 +380,23 @@ describe("ASCET canonical PI tools", () => {
 			canonicalAction: "set_state_machine_code",
 		});
 		expect(formatAscetCapabilitiesResult(stateMachineResult)).toContain("operation=set-method|set-state-entry-esdl");
+	});
+
+	it("reports create_method method-kind compatibility by component kind", () => {
+		const result = runAscetCapabilities({ family: "write", operationQuery: "create_method" }, { cwd: repoRoot });
+		const createMethod = result.data.matches.find((match) => match.operation === "create_method");
+
+		expect(result.ok).toBe(true);
+		expect(createMethod).toMatchObject({
+			canonicalTool: "ascet_write",
+			canonicalAction: "create_method",
+			methodKindCompatibility: {
+				class: ["abstract"],
+				module: ["process"],
+				statemachine: ["action", "condition", "trigger"],
+			},
+		});
+		expect(formatAscetCapabilitiesResult(result)).toContain("method kinds: class=abstract");
 	});
 
 	it("limits recover to extension-owned safe actions", async () => {
