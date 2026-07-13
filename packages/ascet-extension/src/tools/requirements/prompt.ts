@@ -1,3 +1,5 @@
+import { compactExamplesForTool } from "../_shared/action-examples.ts";
+
 export const ascetRequirementsPrompt = {
 	promptSnippet:
 		"Gate ASCET design by retrieving requirement relation leads and paginated Excel risk evidence before live ASCET design.",
@@ -13,5 +15,6 @@ export const ascetRequirementsPrompt = {
 		"Treat Excel evidence as historical risk context, not final truth; confirm implementation details with ASCET read/search/reference tools later.",
 		"Never modify Excel from this tool.",
 		"Never call ASCET write tools as part of requirements retrieval.",
+		...compactExamplesForTool("ascet_requirements"),
 	],
 };

@@ -83,24 +83,24 @@ test("createReleaseRows renders concise release and update text", () => {
 		createReleaseRows({ status: "checking" }, ASCET_COPILOT_RELEASE),
 		[
 			"Release",
-			"0.1.7 - Method return signature writes",
-			"set_method_signature routing",
-			"ASCET CLI contract refresh",
+			"0.1.8 - Method signature reads",
+			"Action few-shot prompts",
+			"Bosch LLM Farm provider",
 			"Checking updates...",
 		],
 	);
 	assert.deepEqual(
-		createReleaseRows({ status: "available", latestVersion: "0.1.8" }, ASCET_COPILOT_RELEASE),
-		["Update available", "0.1.7 -> 0.1.8", "pi update npm:@zeerke/ascet-copilot"],
+		createReleaseRows({ status: "available", latestVersion: "0.1.9" }, ASCET_COPILOT_RELEASE),
+		["Update available", "0.1.8 -> 0.1.9", "pi update npm:@zeerke/ascet-copilot"],
 	);
 	assert.deepEqual(
-		createReleaseRows({ status: "current", latestVersion: "0.1.7" }, ASCET_COPILOT_RELEASE),
+		createReleaseRows({ status: "current", latestVersion: "0.1.8" }, ASCET_COPILOT_RELEASE),
 		[
 			"Release",
-			"0.1.7 - Up to date",
-			"Method return signature writes",
-			"set_method_signature routing",
-			"ASCET CLI contract refresh",
+			"0.1.8 - Up to date",
+			"Method signature reads",
+			"Action few-shot prompts",
+			"Bosch LLM Farm provider",
 		],
 	);
 });

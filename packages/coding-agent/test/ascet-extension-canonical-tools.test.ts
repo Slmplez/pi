@@ -57,6 +57,7 @@ const REMOVED_FINE_GRAINED_TOOLS = [
 	"ascet_read_component_summary",
 	"ascet_read_component_children",
 	"ascet_read_method_code",
+	"ascet_read_method_signature",
 	"ascet_read_project_formulas",
 	"ascet_list_methods",
 	"ascet_list_diagrams",
@@ -126,6 +127,13 @@ describe("ASCET canonical PI tools", () => {
 			logicalCommandId: "AscetReadCode",
 			backendCommandId: "AscetReadTextCode",
 			operation: "read_code",
+		});
+		expect(routeAscetAction({ toolName: "ascet_read", action: "read_method_signature" })).toMatchObject({
+			toolName: "ascet_read",
+			action: "read_method_signature",
+			logicalCommandId: "AscetReadMethodSignature",
+			backendCommandId: "AscetReadMethodSignature",
+			operation: "read_method_signature",
 		});
 		expect(routeAscetAction({ toolName: "ascet_explore", action: "resolve_target" })).toMatchObject({
 			logicalCommandId: "AscetResolveComponent",
@@ -241,6 +249,21 @@ describe("ASCET canonical PI tools", () => {
 			details: {
 				request: {
 					args: ["exec", "read_text_code", "DEMO\\PID", "--method-name", "calc", "--section", "body", "--json"],
+				},
+			},
+		});
+		await expect(
+			ascetReadTool.execute(
+				"tool-call",
+				{ action: "read_method_signature", componentPath: "DEMO\\PID", methodName: "calc" },
+				signal,
+				undefined,
+				ctx,
+			),
+		).resolves.toMatchObject({
+			details: {
+				request: {
+					args: ["exec", "read_method_signature", "DEMO\\PID", "calc", "--json"],
 				},
 			},
 		});

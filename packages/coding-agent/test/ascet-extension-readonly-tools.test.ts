@@ -40,6 +40,10 @@ import {
 } from "../../ascet-extension/src/read-import-export-match.ts";
 import { buildReadMethodCodeArgs, runAscetReadMethodCode } from "../../ascet-extension/src/read-method-code.ts";
 import {
+	buildReadMethodSignatureArgs,
+	runAscetReadMethodSignature,
+} from "../../ascet-extension/src/read-method-signature.ts";
+import {
 	buildReadProjectFormulasArgs,
 	runAscetReadProjectFormulas,
 } from "../../ascet-extension/src/read-project-formulas.ts";
@@ -115,6 +119,7 @@ describe("ASCET read-only PI tools", () => {
 			"ascet_read_component_children",
 			"ascet_list_methods",
 			"ascet_read_method_code",
+			"ascet_read_method_signature",
 			"ascet_read_project_formulas",
 			"ascet_list_diagrams",
 			"ascet_read_block_diagram",
@@ -837,7 +842,7 @@ describe("ASCET read-only PI tools", () => {
 		]);
 	});
 
-	it("builds JSON read_method_code, read_element_refs, and diff invocations", () => {
+	it("builds JSON read_method_code, read_method_signature, read_element_refs, and diff invocations", () => {
 		expect(buildListMethodsArgs({ componentPath: "DEMO\\PID" })).toEqual([
 			"exec",
 			"list_methods",
@@ -847,6 +852,13 @@ describe("ASCET read-only PI tools", () => {
 		expect(buildReadMethodCodeArgs({ componentPath: "DEMO\\PID", methodName: "calc" })).toEqual([
 			"exec",
 			"read_method_code",
+			"DEMO\\PID",
+			"calc",
+			"--json",
+		]);
+		expect(buildReadMethodSignatureArgs({ componentPath: "DEMO\\PID", methodName: "calc" })).toEqual([
+			"exec",
+			"read_method_signature",
 			"DEMO\\PID",
 			"calc",
 			"--json",
@@ -1040,6 +1052,19 @@ describe("ASCET read-only PI tools", () => {
 				}),
 			},
 		);
+		const methodSignatureResult = await runAscetReadMethodSignature(
+			{ componentPath: "DEMO\\PID", methodName: "calc" },
+			{
+				cwd: repoRoot,
+				executeCli: async (request) => ({
+					exitCode: 0,
+					stdout: JSON.stringify({ ok: true, result: { methodName: "calc", arguments: [] } }),
+					stderr: "",
+					timedOut: false,
+					request,
+				}),
+			},
+		);
 		const componentCodeResult = await runAscetReadComponentCode(
 			{ componentPath: "DEMO/PID" },
 			{
@@ -1184,6 +1209,14 @@ describe("ASCET read-only PI tools", () => {
 		expect(listMethodsResult.request.args).toEqual(["exec", "list_methods", "DEMO\\PID", "--json"]);
 		expect(methodResult.ok).toBe(true);
 		expect(methodResult.request.args).toEqual(["exec", "read_method_code", "DEMO\\PID", "calc", "--json"]);
+		expect(methodSignatureResult.ok).toBe(true);
+		expect(methodSignatureResult.request.args).toEqual([
+			"exec",
+			"read_method_signature",
+			"DEMO\\PID",
+			"calc",
+			"--json",
+		]);
 		expect(componentCodeResult.ok).toBe(true);
 		expect(componentCodeResult.request.args).toEqual(["exec", "read_component_code", "DEMO\\PID", "--json"]);
 		expect(textCodeResult.ok).toBe(true);

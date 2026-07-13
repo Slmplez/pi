@@ -9,6 +9,11 @@ export type AscetReadParams =
 			section?: "header" | "external-c" | "all" | "body";
 	  }
 	| {
+			action: "read_method_signature";
+			componentPath: string;
+			methodName: string;
+	  }
+	| {
 			action: "read_implementation";
 			componentPath: string;
 			implementationMode?: "list" | "default" | "class-impl" | "impl";
@@ -50,6 +55,7 @@ export const ascetReadParameters = Type.Object({
 	action: Type.Union([
 		Type.Literal("read"),
 		Type.Literal("read_code"),
+		Type.Literal("read_method_signature"),
 		Type.Literal("read_implementation"),
 		Type.Literal("read_block_diagram"),
 		Type.Literal("read_state_machine_flow"),

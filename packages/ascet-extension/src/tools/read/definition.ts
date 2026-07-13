@@ -11,6 +11,7 @@ import {
 	runAscetReadImportExportMatches,
 } from "../../read-import-export-match.ts";
 import { formatReadMethodCodeResult, runAscetReadMethodCode } from "../../read-method-code.ts";
+import { formatReadMethodSignatureResult, runAscetReadMethodSignature } from "../../read-method-signature.ts";
 import { formatReadStateMachineFlowResult, runAscetReadStateMachineFlow } from "../../read-state-machine-flow.ts";
 import { formatReadTextCodeResult, runAscetReadTextCode } from "../../read-text-code.ts";
 import { createAscetCliToolDetails } from "../_shared/envelope.ts";
@@ -40,6 +41,11 @@ async function runAscetRead(params: AscetReadParams, options: RunOptions): Promi
 			return runAscetReadComponentSummary({ componentPath: params.componentPath }, options);
 		case "read_code":
 			return runAscetReadTextCode(params, options);
+		case "read_method_signature":
+			return runAscetReadMethodSignature(
+				{ componentPath: params.componentPath, methodName: params.methodName },
+				options,
+			);
 		case "read_implementation":
 			return runAscetReadImplementation(
 				{
@@ -99,6 +105,8 @@ function formatAscetReadResult(params: AscetReadParams, result: AscetCliJsonResu
 			return params.methodName ? formatReadMethodCodeResult(result) : formatReadComponentSummaryResult(result);
 		case "read_code":
 			return formatReadTextCodeResult(result);
+		case "read_method_signature":
+			return formatReadMethodSignatureResult(result);
 		case "read_implementation":
 			return formatReadImplementationResult(result);
 		case "read_block_diagram":

@@ -146,6 +146,13 @@ export const ascetRouteManifestEntries = [
 	},
 	{
 		toolName: "ascet_read",
+		action: "read_method_signature",
+		logicalCommandId: "AscetReadMethodSignature",
+		operation: "read_method_signature",
+		category: "domain",
+	},
+	{
+		toolName: "ascet_read",
 		action: "read_implementation",
 		logicalCommandId: "AscetReadImplementation",
 		operation: "read_implementation",
@@ -306,13 +313,6 @@ export const ascetRouteManifestEntries = [
 		action: "set_method_code",
 		logicalCommandId: "AscetSetMethodCode",
 		operation: "set_method_code",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_write",
-		action: "set_class_method_code",
-		logicalCommandId: "AscetSetClassMethodCode",
-		operation: "set_class_method_code",
 		category: "domain",
 	},
 	{

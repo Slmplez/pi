@@ -22,7 +22,6 @@ const EXPECTED_ACTIONS = {
 		"delete_component",
 		"delete_method",
 		"set_method_code",
-		"set_class_method_code",
 		"set_module_code",
 		"set_state_machine_code",
 		"apply_element_spec",
