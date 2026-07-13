@@ -10,6 +10,10 @@ import { runApprovedAscetCreateMethod } from "../create-method.ts";
 import { runApprovedAscetDeleteComponent } from "../delete-component.ts";
 import { runApprovedAscetDeleteFolder } from "../delete-folder.ts";
 import { runApprovedAscetDeleteMethod } from "../delete-method.ts";
+import {
+	type AscetCreateMethodComponentKind,
+	validateCreateMethodKindCompatibility,
+} from "../method-kind-compatibility.ts";
 import { runApprovedAscetSetClassMethodCode } from "../set-class-method-code.ts";
 import { runApprovedAscetSetElementDependency } from "../set-element-dependency.ts";
 import { runApprovedAscetSetMethodCode } from "../set-method-code.ts";
@@ -41,6 +45,7 @@ export type AscetWriteParams =
 	| {
 			action: "create_method";
 			componentPath: string;
+			componentKind?: AscetCreateMethodComponentKind;
 			methodName: string;
 			methodKind: "abstract" | "process" | "action" | "condition" | "trigger";
 			ifExists?: "fail" | "return-existing";
@@ -51,8 +56,13 @@ export type AscetWriteParams =
 			action: "set_method_signature";
 			componentPath: string;
 			methodName: string;
-			returnType: "cont" | "sdisc" | "udisc" | "log";
+			returnType?: "cont" | "sdisc" | "udisc" | "log";
 			ifReturnExists?: "fail" | "keep" | "replace";
+			arguments?: Array<{
+				name: string;
+				type: "cont" | "sdisc" | "udisc" | "log";
+				ifExists?: "fail" | "keep" | "replace";
+			}>;
 			verifyReadback?: boolean;
 			executeWrite?: boolean;
 	  }
@@ -171,6 +181,17 @@ const codeSourceSchema = {
 	code: Type.Optional(Type.String()),
 	codeFile: Type.Optional(Type.String()),
 };
+const primitiveSignatureTypeSchema = Type.Union([
+	Type.Literal("cont"),
+	Type.Literal("sdisc"),
+	Type.Literal("udisc"),
+	Type.Literal("log"),
+]);
+const methodSignatureArgumentSchema = Type.Object({
+	name: Type.String({ minLength: 1 }),
+	type: primitiveSignatureTypeSchema,
+	ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("keep"), Type.Literal("replace")])),
+});
 
 export const ascetWriteParameters = Type.Object({
 	action: Type.Union([
@@ -197,13 +218,15 @@ export const ascetWriteParameters = Type.Object({
 	projectPath: Type.Optional(Type.String({ minLength: 1 })),
 	targetPath: Type.Optional(Type.String({ minLength: 1 })),
 	kind: Type.Optional(Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")])),
+	componentKind: Type.Optional(
+		Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")]),
+	),
 	language: Type.Optional(Type.Union([Type.Literal("ESDL"), Type.Literal("C")])),
 	methodName: Type.Optional(Type.String({ minLength: 1 })),
 	elementName: Type.Optional(Type.String({ minLength: 1 })),
 	dependency: Type.Optional(Type.Union([Type.Literal("dependent"), Type.Literal("independent")])),
-	returnType: Type.Optional(
-		Type.Union([Type.Literal("cont"), Type.Literal("sdisc"), Type.Literal("udisc"), Type.Literal("log")]),
-	),
+	returnType: Type.Optional(primitiveSignatureTypeSchema),
+	arguments: Type.Optional(Type.Array(methodSignatureArgumentSchema)),
 	targetKind: Type.Optional(Type.Union([Type.Literal("auto"), Type.Literal("component"), Type.Literal("folder")])),
 	match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("all")])),
 	methodKind: Type.Optional(
@@ -311,6 +334,15 @@ function normalizeAscetWriteParams(params: AscetWriteParams): AscetWriteParams {
 }
 
 function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | undefined {
+	if (params.action === "create_method") {
+		const compatibility = validateCreateMethodKindCompatibility(params);
+		if (compatibility) {
+			return {
+				status: "error",
+				error: compatibility,
+			};
+		}
+	}
 	if (params.action === "set_module_code" && !params.operation) {
 		return {
 			status: "error",
@@ -335,6 +367,19 @@ function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | 
 			error: {
 				code: "ascet_write_invalid_operation",
 				message: `Unknown state-machine write operation '${params.operation}'. Valid values: ${VALID_STATE_MACHINE_OPERATIONS_TEXT}.`,
+			},
+		};
+	}
+	if (
+		params.action === "set_method_signature" &&
+		!params.returnType &&
+		(!params.arguments || params.arguments.length === 0)
+	) {
+		return {
+			status: "error",
+			error: {
+				code: "ascet_write_missing_parameter",
+				message: "set_method_signature requires returnType or at least one argument.",
 			},
 		};
 	}

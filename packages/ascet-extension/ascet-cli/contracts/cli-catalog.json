@@ -1864,7 +1864,7 @@
                      {
                          "id":  "AscetSetMethodSignature",
                          "family":  "write",
-                         "summary":  "Set a primitive method return signature",
+                         "summary":  "Patch primitive method signature return and arguments",
                          "risk":  "write",
                          "objectKinds":  [
                                              "class",

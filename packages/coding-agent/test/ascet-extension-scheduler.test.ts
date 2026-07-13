@@ -274,6 +274,7 @@ describe("ASCET scheduler diagnostics", () => {
 		const env = tempRuntimeEnv();
 		const scheduler = createAscetScheduler();
 		let sawLock = false;
+		let signatureSpec: unknown;
 
 		const result = await runApprovedAscetSetMethodSignature(
 			{
@@ -281,6 +282,7 @@ describe("ASCET scheduler diagnostics", () => {
 				methodName: "calc",
 				returnType: "cont",
 				ifReturnExists: "replace",
+				arguments: [{ name: "p_CmpF_MC1", type: "cont", ifExists: "keep" }],
 				verifyReadback: true,
 				executeWrite: true,
 			},
@@ -290,6 +292,9 @@ describe("ASCET scheduler diagnostics", () => {
 				scheduler,
 				executeCli: async (request) => {
 					sawLock = (await getAscetCliLockSnapshot({ env })).locked;
+					const signatureJsonIndex = request.args.indexOf("--signature-json");
+					expect(signatureJsonIndex).toBeGreaterThan(0);
+					signatureSpec = JSON.parse(readFileSync(request.args[signatureJsonIndex + 1]!, "utf8"));
 					return {
 						exitCode: 0,
 						stdout: JSON.stringify({
@@ -297,7 +302,7 @@ describe("ASCET scheduler diagnostics", () => {
 							result: {
 								operationName: "set_method_signature",
 								writeSucceeded: true,
-								payload: { returnElementModelType: "cont" },
+								payload: { returnElementModelType: "cont", arguments: [{ name: "p_CmpF_MC1" }] },
 								verification: { requested: true, attempted: true, succeeded: true },
 							},
 						}),
@@ -311,6 +316,11 @@ describe("ASCET scheduler diagnostics", () => {
 		);
 
 		expect(result.ok).toBe(true);
+		expect(signatureSpec).toEqual({
+			returnType: "cont",
+			ifReturnExists: "replace",
+			arguments: [{ name: "p_CmpF_MC1", type: "cont", ifExists: "keep" }],
+		});
 		expect(sawLock).toBe(true);
 		expect((await getAscetCliLockSnapshot({ env })).locked).toBe(false);
 		const job = scheduler.getSnapshot().recentJobs.at(-1);

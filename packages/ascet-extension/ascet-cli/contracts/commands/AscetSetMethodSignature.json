@@ -1,8 +1,8 @@
 ﻿{
     "id":  "AscetSetMethodSignature",
     "family":  "write",
-    "summary":  "Set a primitive method return signature",
-    "usage":  "\u003ccomponent-path\u003e \u003cmethod-name\u003e --return-type \u003ccont|sdisc|udisc|log\u003e [--if-return-exists \u003cfail|keep|replace\u003e] [--verify-readback] [--json]",
+    "summary":  "Patch primitive method signature return and arguments",
+    "usage":  "\u003ccomponent-path\u003e \u003cmethod-name\u003e ([--return-type \u003ccont|sdisc|udisc|log\u003e [--if-return-exists \u003cfail|keep|replace\u003e]] | [--signature-json \u003cfile\u003e]) [--verify-readback] [--json]",
     "execution":  {
                       "kind":  "unified_cli",
                       "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
@@ -36,8 +36,8 @@
                      "name":  "--return-type",
                      "kind":  "option",
                      "type":  "enum",
-                     "required":  true,
-                     "description":  "Primitive method return type.",
+                     "required":  false,
+                     "description":  "Primitive method return type. Use this for return-only writes, or use --signature-json for return plus arguments.",
                      "enumValues":  [
                                         "cont",
                                         "sdisc",
@@ -58,11 +58,18 @@
                                     ]
                  },
                  {
+                     "name":  "--signature-json",
+                     "kind":  "option",
+                     "type":  "path",
+                     "required":  false,
+                     "description":  "JSON signature patch file containing optional returnType, ifReturnExists, and arguments[]."
+                 },
+                 {
                      "name":  "--verify-readback",
                      "kind":  "flag",
                      "type":  "boolean",
                      "required":  false,
-                     "description":  "Verify return signature readback."
+                     "description":  "Verify method signature readback."
                  },
                  {
                      "name":  "--json",
@@ -85,7 +92,7 @@
     "examples":  [
                      {
                          "description":  "Basic usage",
-                         "command":  "AscetCli.exe exec set_method_signature \u003ccomponent-path\u003e \u003cmethod-name\u003e --return-type \u003ccont|sdisc|udisc|log\u003e [--if-return-exists \u003cfail|keep|replace\u003e] [--verify-readback] [--json]"
+                         "command":  "AscetCli.exe exec set_method_signature \u003ccomponent-path\u003e \u003cmethod-name\u003e ([--return-type \u003ccont|sdisc|udisc|log\u003e [--if-return-exists \u003cfail|keep|replace\u003e]] | [--signature-json \u003cfile\u003e]) [--verify-readback] [--json]"
                      }
                  ],
     "pitfalls":  [

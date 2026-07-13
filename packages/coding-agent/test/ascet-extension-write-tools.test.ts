@@ -36,13 +36,14 @@ import {
 import { buildSetMethodCodeArgs } from "../../ascet-extension/src/set-method-code.ts";
 import {
 	buildSetMethodSignatureArgs,
+	createMethodSignatureSpec,
 	runApprovedAscetSetMethodSignature,
 } from "../../ascet-extension/src/set-method-signature.ts";
 import { buildSetModuleCodeArgs } from "../../ascet-extension/src/set-module-code.ts";
 import { buildSetStateMachineCodeArgs } from "../../ascet-extension/src/set-state-machine-code.ts";
 import { ascetWriteTool } from "../../ascet-extension/src/tools/write/index.ts";
 import { ascetWritePrompt } from "../../ascet-extension/src/tools/write/prompt.ts";
-import { runAscetWrite } from "../../ascet-extension/src/tools/write.ts";
+import { ascetWriteParameters, runAscetWrite } from "../../ascet-extension/src/tools/write.ts";
 import { requestAscetWriteApproval } from "../../ascet-extension/src/write-policy.ts";
 import { loadAscetExtension, repoRoot } from "./ascet-extension-test-helpers.ts";
 
@@ -118,6 +119,39 @@ describe("ASCET guarded write PI tools", () => {
 			"--verify-readback",
 			"--json",
 		]);
+		expect(
+			buildSetMethodSignatureArgs(
+				{
+					componentPath: "DEMO\\__pi_write_smoke__\\PiSmoke",
+					methodName: "calc",
+					arguments: [{ name: "p_CmpF_MC1", type: "cont", ifExists: "keep" }],
+					verifyReadback: true,
+				},
+				"E:\\tmp\\signature.json",
+			),
+		).toEqual([
+			"exec",
+			"set_method_signature",
+			"DEMO\\__pi_write_smoke__\\PiSmoke",
+			"calc",
+			"--signature-json",
+			"E:\\tmp\\signature.json",
+			"--verify-readback",
+			"--json",
+		]);
+		expect(
+			createMethodSignatureSpec({
+				componentPath: "DEMO\\__pi_write_smoke__\\PiSmoke",
+				methodName: "calc",
+				returnType: "log",
+				ifReturnExists: "replace",
+				arguments: [{ name: "p_CmpF_MC1", type: "cont", ifExists: "keep" }],
+			}),
+		).toEqual({
+			returnType: "log",
+			ifReturnExists: "replace",
+			arguments: [{ name: "p_CmpF_MC1", type: "cont", ifExists: "keep" }],
+		});
 	});
 
 	it("builds JSON set_class_method_code invocation with readback verification", () => {
@@ -436,6 +470,51 @@ describe("ASCET guarded write PI tools", () => {
 		expect(result.details.error).toBeUndefined();
 	});
 
+	it("rejects create_method method kinds that are incompatible with the component kind before execution", async () => {
+		expect(
+			Value.Check(ascetWriteParameters, {
+				action: "create_method",
+				componentPath: "DEMO\\PID",
+				componentKind: "class",
+				methodName: "calc2",
+				methodKind: "abstract",
+				verifyReadback: true,
+			}),
+		).toBe(true);
+
+		const invalidClassMethod = await runAscetWrite(
+			{
+				action: "create_method",
+				componentPath: "DEMO\\PID",
+				componentKind: "class",
+				methodName: "calc2",
+				methodKind: "process",
+				executeWrite: true,
+			} as never,
+			{ cwd: repoRoot },
+			{ hasUI: true, ui: { confirm: async () => true } },
+		);
+		const invalidModuleMethod = await runAscetWrite(
+			{
+				action: "create_method",
+				componentPath: "DEMO\\Module_Block_Diagram",
+				componentKind: "module",
+				methodName: "onRun",
+				methodKind: "abstract",
+				executeWrite: true,
+			} as never,
+			{ cwd: repoRoot },
+			{ hasUI: true, ui: { confirm: async () => true } },
+		);
+
+		expect(invalidClassMethod.details.outcome.status).toBe("error");
+		expect(invalidClassMethod.details.error?.code).toBe("ascet_write_incompatible_method_kind");
+		expect(invalidClassMethod.details.error?.message).toContain("Class method creation supports only abstract");
+		expect(invalidModuleMethod.details.outcome.status).toBe("error");
+		expect(invalidModuleMethod.details.error?.code).toBe("ascet_write_incompatible_method_kind");
+		expect(invalidModuleMethod.details.error?.message).toContain("Module method creation supports only process");
+	});
+
 	it("preserves create_component expected default scaffold as an unverified hint", async () => {
 		const result = await runAscetWrite(
 			{
@@ -485,6 +564,20 @@ describe("ASCET guarded write PI tools", () => {
 		});
 		expect(ascetWritePrompt.promptGuidelines).toContain(
 			"After create_component, inspect expectedDefaultScaffold.defaultEntryMethod as an unverified hint for the likely initial method.",
+		);
+		expect(ascetWritePrompt.promptGuidelines).toEqual(
+			expect.arrayContaining([
+				expect.stringContaining('{"elements"'),
+				expect.stringContaining('"modelType":"cont"'),
+				expect.stringContaining('"scope":"exported"'),
+				expect.stringContaining('"min":0'),
+				expect.stringContaining('"max":8000'),
+				expect.stringContaining('"impl":{"formula":"ident"'),
+				expect.stringContaining('"limitAssignments":true'),
+				expect.stringContaining("Calibration is not an apply_element_spec field"),
+				expect.stringContaining("Dependency is not part of apply_element_spec"),
+				expect.stringContaining('apply_element_spec:preflight spec->ascet_write({action:"apply_element_spec"'),
+			]),
 		);
 	});
 
@@ -633,6 +726,30 @@ describe("ASCET guarded write PI tools", () => {
 				requests: [{ folderPath: "DEMO\\Batch", ifExists: "ignore", verifyReadback: true }],
 			}),
 		).toBe(true);
+	});
+
+	it("accepts method signature argument patches in ascet_write schema", async () => {
+		expect(
+			Value.Check(ascetWriteParameters, {
+				action: "set_method_signature",
+				componentPath: "DEMO\\PiSmoke",
+				methodName: "calc",
+				arguments: [{ name: "p_CmpF_MC1", type: "cont", ifExists: "keep" }],
+				verifyReadback: true,
+			}),
+		).toBe(true);
+
+		const result = await runAscetWrite(
+			{
+				action: "set_method_signature",
+				componentPath: "DEMO\\PiSmoke",
+				methodName: "calc",
+			},
+			{ cwd: repoRoot },
+			{ hasUI: true, ui: { confirm: async () => true } },
+		);
+		expect(result.details.outcome.status).toBe("error");
+		expect(result.details.error?.code).toBe("ascet_write_missing_parameter");
 	});
 
 	it("represents canonical ascet_batch_write preflight as a non-error outcome", async () => {
