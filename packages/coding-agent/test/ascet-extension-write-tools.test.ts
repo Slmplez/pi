@@ -556,6 +556,9 @@ describe("ASCET guarded write PI tools", () => {
 		expect(ascetWritePrompt.promptGuidelines).toContain(
 			"After create_component, inspect expectedDefaultScaffold.defaultEntryMethod as an unverified hint for the likely initial method.",
 		);
+		expect(ascetWritePrompt.promptGuidelines.join("\n")).not.toContain(
+			"Calibration is not an apply_element_spec field",
+		);
 		expect(ascetWritePrompt.promptGuidelines).toEqual(
 			expect.arrayContaining([
 				expect.stringContaining('{"elements"'),
@@ -564,8 +567,10 @@ describe("ASCET guarded write PI tools", () => {
 				expect.stringContaining('"min":0'),
 				expect.stringContaining('"max":8000'),
 				expect.stringContaining('"impl":{"formula":"ident"'),
+				expect.stringContaining('"calibration":true'),
+				expect.stringContaining('"impl":{"formula":"ident","min":0,"max":8000'),
 				expect.stringContaining('"limitAssignments":true'),
-				expect.stringContaining("Calibration is not an apply_element_spec field"),
+				expect.stringContaining("Calibration is an apply_element_spec primitive field"),
 				expect.stringContaining("Dependency is not part of apply_element_spec"),
 				expect.stringContaining('apply_element_spec:preflight spec->ascet_write({action:"apply_element_spec"'),
 			]),
