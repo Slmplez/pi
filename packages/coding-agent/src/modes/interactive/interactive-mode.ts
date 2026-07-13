@@ -4744,6 +4744,7 @@ export class InteractiveMode {
 			id: provider.id,
 			name: provider.name,
 			authType: "oauth",
+			loginMethodLabel: provider.loginMethodLabel,
 		}));
 
 		const modelProviders = new Set(this.session.modelRegistry.getAll().map((model) => model.provider));
@@ -4830,6 +4831,9 @@ export class InteractiveMode {
 	private showLoginAuthTypeSelector(providerOptions?: AuthSelectorProvider[]): void {
 		const subscriptionLabel = "Use a subscription";
 		const apiKeyLabel = "Use an API key";
+		const customLoginOptions = providerOptions
+			? []
+			: this.getLoginProviderOptions().filter((provider) => provider.loginMethodLabel);
 		const availableAuthTypes = providerOptions
 			? new Set(providerOptions.map((provider) => provider.authType))
 			: new Set<AuthSelectorProvider["authType"]>(["oauth", "api_key"]);
@@ -4839,6 +4843,11 @@ export class InteractiveMode {
 		}
 		if (availableAuthTypes.has("api_key")) {
 			options.push(apiKeyLabel);
+		}
+		for (const provider of customLoginOptions) {
+			if (provider.loginMethodLabel) {
+				options.push(provider.loginMethodLabel);
+			}
 		}
 
 		if (options.length === 0) {
@@ -4863,6 +4872,11 @@ export class InteractiveMode {
 				options,
 				(option) => {
 					done();
+					const customLoginOption = customLoginOptions.find((provider) => provider.loginMethodLabel === option);
+					if (customLoginOption) {
+						void this.startProviderLogin(customLoginOption);
+						return;
+					}
 					const authType = option === subscriptionLabel ? "oauth" : "api_key";
 					if (providerOptions) {
 						const providerOption = providerOptions.find((provider) => provider.authType === authType);

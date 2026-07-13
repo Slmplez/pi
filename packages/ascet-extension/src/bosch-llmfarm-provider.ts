@@ -784,6 +784,7 @@ export function registerBoschLlmFarmProvider(pi: AscetExtensionAPI): void {
 		],
 		oauth: {
 			name: "Bosch LLM Farm",
+			loginMethodLabel: "Use Bosch LLM Farm",
 			login: loginBoschLlmFarm,
 			refreshToken: refreshBoschLlmFarmToken,
 			getApiKey: (credentials) => credentials.access,

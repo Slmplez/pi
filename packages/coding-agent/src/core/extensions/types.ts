@@ -1417,6 +1417,8 @@ export interface ProviderConfig {
 	oauth?: {
 		/** Display name for the provider in login UI. */
 		name: string;
+		/** Optional first-level /login method label for custom provider setup flows. */
+		loginMethodLabel?: string;
 		/** Run the login flow, return credentials to persist. */
 		login(callbacks: OAuthLoginCallbacks): Promise<OAuthCredentials>;
 		/** Refresh expired credentials, return updated credentials to persist. */

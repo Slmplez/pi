@@ -479,6 +479,41 @@ describe("InteractiveMode.createBaseAutocompleteProvider", () => {
 			},
 		]);
 	});
+	test("shows custom login method labels in the authentication method selector", () => {
+		initTheme("dark");
+		let renderedSelector = "";
+		const fakeThis = {
+			getLoginProviderOptions: () => [
+				{
+					id: "bosch-llmfarm",
+					name: "Bosch LLM Farm",
+					authType: "oauth" as const,
+					loginMethodLabel: "Use Bosch LLM Farm",
+				},
+			],
+			showSelector: (
+				factory: (done: () => void) => {
+					component: Component;
+					focus: Focusable;
+				},
+			) => {
+				const { component } = factory(() => {});
+				renderedSelector = component.render(120).join("\n");
+			},
+			showStatus: vi.fn(),
+			ui: { requestRender: vi.fn() },
+		};
+
+		(
+			InteractiveMode as unknown as {
+				prototype: {
+					showLoginAuthTypeSelector(this: typeof fakeThis): void;
+				};
+			}
+		).prototype.showLoginAuthTypeSelector.call(fakeThis);
+
+		expect(renderedSelector).toContain("Use Bosch LLM Farm");
+	});
 });
 describe("InteractiveMode.showLoadedResources", () => {
 	beforeAll(() => {

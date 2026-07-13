@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import type { OAuthLoginCallbacks } from "../../ai/src/oauth.ts";
+import { getOAuthProvider } from "../../ai/src/oauth.ts";
 import type { Context, Model } from "../../ai/src/types.ts";
 import type { BoschLlmFarmCredentials } from "../../ascet-extension/src/bosch-llmfarm-provider.ts";
 import {
@@ -365,6 +366,8 @@ describe("bosch-llmfarm provider", () => {
 				registerCommand: vi.fn(),
 				registerProvider: (name, config) => registry.registerProvider(name, config),
 			});
+
+			expect(getOAuthProvider(BOSCH_LLMFARM_PROVIDER_ID)?.loginMethodLabel).toBe("Use Bosch LLM Farm");
 
 			await authStorage.login(
 				BOSCH_LLMFARM_PROVIDER_ID,

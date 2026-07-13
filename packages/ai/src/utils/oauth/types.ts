@@ -54,6 +54,8 @@ export interface OAuthLoginCallbacks {
 export interface OAuthProviderInterface {
 	readonly id: OAuthProviderId;
 	readonly name: string;
+	/** Optional first-level /login method label for custom provider setup flows. */
+	readonly loginMethodLabel?: string;
 
 	/** Run the login flow, return credentials to persist */
 	login(callbacks: OAuthLoginCallbacks): Promise<OAuthCredentials>;

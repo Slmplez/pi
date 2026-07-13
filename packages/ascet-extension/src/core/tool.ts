@@ -28,6 +28,7 @@ type AscetProviderConfig = {
 	models?: AscetProviderModelConfig[];
 	oauth?: {
 		name: string;
+		loginMethodLabel?: string;
 		login(callbacks: OAuthLoginCallbacks): Promise<OAuthCredentials>;
 		refreshToken(credentials: OAuthCredentials): Promise<OAuthCredentials>;
 		getApiKey(credentials: OAuthCredentials): string;
