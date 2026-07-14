@@ -15,7 +15,7 @@ export interface AscetSetElementDependencyParams extends AscetWriteControlParams
 	targetPath: string;
 	elementName: string;
 	dependency: "dependent" | "independent";
-	targetKind?: "auto" | "component" | "folder";
+	targetKind?: "auto" | "component" | "folder" | "project";
 	match?: "exact" | "all";
 	dryRun?: boolean;
 	backupDir?: string;
@@ -28,7 +28,9 @@ export const ascetSetElementDependencyParameters = Type.Object({
 	targetPath: Type.String({ description: "ASCET target component or folder path.", minLength: 1 }),
 	elementName: Type.String({ description: "Element name whose dependency flag should be changed.", minLength: 1 }),
 	dependency: Type.Union([Type.Literal("dependent"), Type.Literal("independent")]),
-	targetKind: Type.Optional(Type.Union([Type.Literal("auto"), Type.Literal("component"), Type.Literal("folder")])),
+	targetKind: Type.Optional(
+		Type.Union([Type.Literal("auto"), Type.Literal("component"), Type.Literal("folder"), Type.Literal("project")]),
+	),
 	match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("all")])),
 	dryRun: Type.Optional(Type.Boolean({ description: "Plan the write without importing patched XML." })),
 	backupDir: Type.Optional(Type.String({ description: "Directory for dependency write backups.", minLength: 1 })),

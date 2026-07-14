@@ -149,10 +149,11 @@ export type AscetWriteParams =
 	  }
 	| {
 			action: "set_element_dependency";
-			targetPath: string;
+			targetPath?: string;
+			componentPath?: string;
 			elementName: string;
 			dependency: "dependent" | "independent";
-			targetKind?: "auto" | "component" | "folder";
+			targetKind?: "auto" | "component" | "folder" | "project";
 			match?: "exact" | "all";
 			dryRun?: boolean;
 			backupDir?: string;
@@ -217,7 +218,9 @@ export const ascetWriteParameters = Type.Object({
 	dependency: Type.Optional(Type.Union([Type.Literal("dependent"), Type.Literal("independent")])),
 	returnType: Type.Optional(primitiveSignatureTypeSchema),
 	arguments: Type.Optional(Type.Array(methodSignatureArgumentSchema)),
-	targetKind: Type.Optional(Type.Union([Type.Literal("auto"), Type.Literal("component"), Type.Literal("folder")])),
+	targetKind: Type.Optional(
+		Type.Union([Type.Literal("auto"), Type.Literal("component"), Type.Literal("folder"), Type.Literal("project")]),
+	),
 	match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("all")])),
 	methodKind: Type.Optional(
 		Type.Union([
@@ -320,10 +323,45 @@ function normalizeAscetWriteParams(params: AscetWriteParams): AscetWriteParams {
 	if (params.action === "set_module_code" && !params.operation && params.section) {
 		return { ...params, operation: params.section };
 	}
+	if (params.action === "set_element_dependency") {
+		const targetPath = params.targetPath ?? params.componentPath;
+		if (targetPath) {
+			return { ...params, targetPath };
+		}
+	}
 	return params;
 }
 
 function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | undefined {
+	if (params.action === "set_element_dependency") {
+		if (!params.targetPath && !params.componentPath) {
+			return {
+				status: "error",
+				error: {
+					code: "ascet_write_missing_parameter",
+					message: "set_element_dependency requires targetPath or componentPath.",
+				},
+			};
+		}
+		if (!params.elementName) {
+			return {
+				status: "error",
+				error: {
+					code: "ascet_write_missing_parameter",
+					message: "set_element_dependency requires elementName.",
+				},
+			};
+		}
+		if (!params.dependency) {
+			return {
+				status: "error",
+				error: {
+					code: "ascet_write_missing_parameter",
+					message: "set_element_dependency requires dependency.",
+				},
+			};
+		}
+	}
 	if (params.action === "create_method") {
 		if (params.executeWrite && !params.componentKind) {
 			return {
@@ -435,7 +473,10 @@ async function dispatchWrite(
 		case "apply_project_formula":
 			return runApprovedAscetApplyProjectFormula(params, options, ctx);
 		case "set_element_dependency":
-			return runApprovedAscetSetElementDependency(params, options, ctx);
+			if (!params.targetPath) {
+				throw new Error("set_element_dependency requires targetPath after validation.");
+			}
+			return runApprovedAscetSetElementDependency({ ...params, targetPath: params.targetPath }, options, ctx);
 	}
 }
 

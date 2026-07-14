@@ -374,6 +374,52 @@ describe("ASCET guarded write PI tools", () => {
 		expect(rejected.error?.code).toBe("ascet_write_rejected");
 	});
 
+	it("returns a structured set_element_dependency validation error when target path is missing", async () => {
+		const result = await runAscetWrite(
+			{
+				action: "set_element_dependency",
+				elementName: "aw_gain",
+				dependency: "dependent",
+				executeWrite: true,
+			},
+			{ cwd: repoRoot },
+			{ hasUI: true, ui: { confirm: async () => true } },
+		);
+
+		expect(result.details.outcome).toEqual({
+			status: "error",
+			error: {
+				code: "ascet_write_missing_parameter",
+				message: "set_element_dependency requires targetPath or componentPath.",
+			},
+		});
+	});
+
+	it("uses componentPath as the set_element_dependency targetPath compatibility alias", async () => {
+		const result = await runAscetWrite(
+			{
+				action: "set_element_dependency",
+				componentPath: "DEMO/PID",
+				elementName: "aw_gain",
+				dependency: "dependent",
+			},
+			{ cwd: repoRoot },
+			{},
+		);
+
+		expect(result.details.outcome.status).toBe("preflight");
+		if (result.details.outcome.status !== "preflight") {
+			throw new Error("expected preflight outcome");
+		}
+		expect(result.details.outcome.plan.params).toMatchObject({
+			action: "set_element_dependency",
+			targetPath: "DEMO/PID",
+			componentPath: "DEMO/PID",
+			elementName: "aw_gain",
+			dependency: "dependent",
+		});
+	});
+
 	it("runs set_element_dependency only after interactive confirmation", async () => {
 		let confirmCalls = 0;
 		let executeCalls = 0;
@@ -559,21 +605,19 @@ describe("ASCET guarded write PI tools", () => {
 		expect(ascetWritePrompt.promptGuidelines.join("\n")).not.toContain(
 			"Calibration is not an apply_element_spec field",
 		);
-		expect(ascetWritePrompt.promptGuidelines).toEqual(
-			expect.arrayContaining([
-				expect.stringContaining('{"elements"'),
-				expect.stringContaining('"modelType":"cont"'),
-				expect.stringContaining('"scope":"exported"'),
-				expect.stringContaining('"min":0'),
-				expect.stringContaining('"max":8000'),
-				expect.stringContaining('"impl":{"formula":"ident"'),
-				expect.stringContaining('"calibration":true'),
-				expect.stringContaining('"impl":{"formula":"ident","min":0,"max":8000'),
-				expect.stringContaining('"limitAssignments":true'),
-				expect.stringContaining("Calibration is an apply_element_spec primitive field"),
-				expect.stringContaining("Dependency is not part of apply_element_spec"),
-				expect.stringContaining('apply_element_spec:preflight spec->ascet_write({action:"apply_element_spec"'),
-			]),
+		const promptGuidelinesText = ascetWritePrompt.promptGuidelines.join("\n");
+		expect(promptGuidelinesText).toContain('{"elements"');
+		expect(promptGuidelinesText).toContain('"modelType":"cont"');
+		expect(promptGuidelinesText).toContain('"scope":"exported"');
+		expect(promptGuidelinesText).toContain('"physicalRange":{"min":0,"max":8000');
+		expect(promptGuidelinesText).toContain('"implementationRange":{"min":0,"max":8000');
+		expect(promptGuidelinesText).toContain('"formula":"ident"');
+		expect(promptGuidelinesText).toContain('"calibration":true');
+		expect(promptGuidelinesText).toContain('"limitAssignments":true');
+		expect(promptGuidelinesText).toContain("Calibration is an apply_element_spec primitive field");
+		expect(promptGuidelinesText).toContain("Dependency is not part of apply_element_spec");
+		expect(promptGuidelinesText).toContain(
+			'apply_element_spec:preflight spec->ascet_write({action:"apply_element_spec"',
 		);
 	});
 
