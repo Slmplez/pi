@@ -36,6 +36,14 @@ Configure Bosch LLM Farm with:
 
 or select `Use a subscription`, then choose `Bosch LLM Farm`.
 
+Pi core builds that include the Bosch login shortcut patch can also use:
+
+```text
+/login-bosch-llmapi
+```
+
+`/loginBoschLLMAPI` is kept as a compatibility alias.
+
 ## Update
 
 ```powershell

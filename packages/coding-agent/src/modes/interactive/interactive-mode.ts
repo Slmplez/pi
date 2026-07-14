@@ -2703,6 +2703,11 @@ export class InteractiveMode {
 				this.editor.setText("");
 				return;
 			}
+			if (text === "/loginBoschLLMAPI" || text === "/login-bosch-llmapi") {
+				this.editor.setText("");
+				await this.handleLoginCommand("bosch-llmfarm");
+				return;
+			}
 			if (text === "/login" || text.startsWith("/login ")) {
 				const providerRef = text.startsWith("/login ") ? text.slice(7).trim() : undefined;
 				this.editor.setText("");
