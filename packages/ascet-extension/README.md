@@ -75,23 +75,26 @@ The first requirements-risk retrieval phase is read-only. `/ascet-design` must n
 
 The extension registers a configurable `bosch-llmfarm` model provider for Bosch LLM Farm OpenAI-compatible gateways.
 
-Start the login flow either from the top-level authentication selector:
+Start the login flow directly:
 
 ```text
-/login
+/login bosch-llmfarm
 ```
 
-then choose:
+On Pi builds that include custom login-method labels, `/login` also shows:
 
 ```text
 Use Bosch LLM Farm
 ```
 
-or jump directly to the Bosch setup flow:
+On `@earendil-works/pi-coding-agent@0.80.6`, the top-level `/login` selector is limited to:
 
 ```text
-/login bosch-llmfarm
+Use a subscription
+Use an API key
 ```
+
+For that runtime, choose `Use a subscription` and then select `Bosch LLM Farm`, or use `/login bosch-llmfarm` directly.
 
 During login, enter:
 
@@ -137,7 +140,7 @@ with `model`, `messages`, optional `temperature`, `max_tokens`, optional OpenAI-
 
 Company-network validation checklist:
 
-- Run `/login` and choose `Use Bosch LLM Farm`, or run `/login bosch-llmfarm` directly.
+- Run `/login bosch-llmfarm` directly, or run `/login`, choose `Use a subscription`, then select `Bosch LLM Farm`.
 - Enter the real endpoint and gateway key.
 - Enter one or more model IDs from Bosch Digital Assets.
 - Select `/model bosch-llmfarm/<model-id>`.
