@@ -81,14 +81,6 @@ Start the login flow directly:
 /login bosch-llmfarm
 ```
 
-On Pi builds that include the Bosch login shortcut command, this equivalent shorter entry is also available:
-
-```text
-/login-bosch-llmapi
-```
-
-`/loginBoschLLMAPI` is kept as a compatibility alias for the same flow.
-
 On Pi builds that include custom login-method labels, `/login` also shows:
 
 ```text
@@ -102,7 +94,7 @@ Use a subscription
 Use an API key
 ```
 
-For that runtime, choose `Use a subscription` and then select `Bosch LLM Farm`, or use `/login bosch-llmfarm` directly. The `/login-bosch-llmapi` shortcut requires a Pi core build that includes the Bosch shortcut patch.
+For that runtime, choose `Use a subscription` and then select `Bosch LLM Farm`, or use `/login bosch-llmfarm` directly.
 
 During login, enter:
 
@@ -148,7 +140,7 @@ with `model`, `messages`, optional `temperature`, `max_tokens`, optional OpenAI-
 
 Company-network validation checklist:
 
-- Run `/login-bosch-llmapi` on a patched Pi core, run `/login bosch-llmfarm` directly, or run `/login`, choose `Use a subscription`, then select `Bosch LLM Farm`.
+- Run `/login bosch-llmfarm` directly, or run `/login`, choose `Use a subscription`, then select `Bosch LLM Farm`.
 - Enter the real endpoint and gateway key.
 - Enter one or more model IDs from Bosch Digital Assets.
 - Select `/model bosch-llmfarm/<model-id>`.

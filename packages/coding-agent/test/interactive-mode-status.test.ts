@@ -5,7 +5,6 @@ import { beforeAll, describe, expect, test, vi } from "vitest";
 import { type Component, Container, type Focusable, TUI } from "../../tui/src/tui.ts";
 import { VirtualTerminal } from "../../tui/test/virtual-terminal.ts";
 import type { AutocompleteProviderFactory } from "../src/core/extensions/types.ts";
-import { BUILTIN_SLASH_COMMANDS } from "../src/core/slash-commands.ts";
 import type { SourceInfo } from "../src/core/source-info.ts";
 import type { AuthSelectorProvider } from "../src/modes/interactive/components/oauth-selector.ts";
 import { InteractiveMode } from "../src/modes/interactive/interactive-mode.ts";
@@ -514,41 +513,6 @@ describe("InteractiveMode.createBaseAutocompleteProvider", () => {
 		).prototype.showLoginAuthTypeSelector.call(fakeThis);
 
 		expect(renderedSelector).toContain("Use Bosch LLM Farm");
-	});
-
-	test("routes Bosch login shortcut commands to the Bosch provider login flow", async () => {
-		const setupEditorSubmitHandler = (
-			InteractiveMode as unknown as {
-				prototype: {
-					setupEditorSubmitHandler(this: {
-						defaultEditor: { onSubmit?: (text: string) => Promise<void> };
-						editor: { setText: (text: string) => void };
-						handleLoginCommand: (providerRef?: string) => Promise<void>;
-					}): void;
-				};
-			}
-		).prototype.setupEditorSubmitHandler;
-
-		for (const shortcut of ["/loginBoschLLMAPI", "/login-bosch-llmapi"]) {
-			const fakeThis = {
-				defaultEditor: {} as { onSubmit?: (text: string) => Promise<void> },
-				editor: { setText: vi.fn() },
-				handleLoginCommand: vi.fn(async () => {}),
-			};
-
-			setupEditorSubmitHandler.call(fakeThis);
-			await fakeThis.defaultEditor.onSubmit?.(shortcut);
-
-			expect(fakeThis.editor.setText).toHaveBeenCalledWith("");
-			expect(fakeThis.handleLoginCommand).toHaveBeenCalledWith("bosch-llmfarm");
-		}
-	});
-
-	test("includes Bosch login shortcuts in built-in slash command completions", () => {
-		const commandNames = BUILTIN_SLASH_COMMANDS.map((command) => command.name);
-
-		expect(commandNames).toContain("login-bosch-llmapi");
-		expect(commandNames).toContain("loginBoschLLMAPI");
 	});
 });
 describe("InteractiveMode.showLoadedResources", () => {
