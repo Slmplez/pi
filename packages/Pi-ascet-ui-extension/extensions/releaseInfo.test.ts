@@ -83,24 +83,24 @@ test("createReleaseRows renders concise release and update text", () => {
 		createReleaseRows({ status: "checking" }, ASCET_COPILOT_RELEASE),
 		[
 			"Release",
-			"0.1.12 - Plannotator extension removed",
-			"Bundle extension list cleanup",
-			"ASCET package refresh",
+			"0.1.13 - ASCET contract refresh",
+			"Explore routing guidance update",
+			"Create method metadata cleanup",
 			"Checking updates...",
 		],
 	);
 	assert.deepEqual(
-		createReleaseRows({ status: "available", latestVersion: "0.1.13" }, ASCET_COPILOT_RELEASE),
-		["Update available", "0.1.12 -> 0.1.13", "pi update npm:@zeerke/ascet-copilot"],
+		createReleaseRows({ status: "available", latestVersion: "0.1.14" }, ASCET_COPILOT_RELEASE),
+		["Update available", "0.1.13 -> 0.1.14", "pi update npm:@zeerke/ascet-copilot"],
 	);
 	assert.deepEqual(
-		createReleaseRows({ status: "current", latestVersion: "0.1.12" }, ASCET_COPILOT_RELEASE),
+		createReleaseRows({ status: "current", latestVersion: "0.1.13" }, ASCET_COPILOT_RELEASE),
 		[
 			"Release",
-			"0.1.12 - Up to date",
-			"Plannotator extension removed",
-			"Bundle extension list cleanup",
-			"ASCET package refresh",
+			"0.1.13 - Up to date",
+			"ASCET contract refresh",
+			"Explore routing guidance update",
+			"Create method metadata cleanup",
 		],
 	);
 });

@@ -18,19 +18,6 @@
                         "module",
                         "statemachine"
                     ],
-    "methodKindCompatibility":  {
-                                    "class":  [
-                                                  "abstract"
-                                              ],
-                                    "module":  [
-                                                   "process"
-                                               ],
-                                    "statemachine":  [
-                                                         "action",
-                                                         "condition",
-                                                         "trigger"
-                                                     ]
-                                },
     "args":  [
                  {
                      "name":  "component-path",
