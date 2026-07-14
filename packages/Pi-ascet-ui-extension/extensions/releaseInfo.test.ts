@@ -83,24 +83,24 @@ test("createReleaseRows renders concise release and update text", () => {
 		createReleaseRows({ status: "checking" }, ASCET_COPILOT_RELEASE),
 		[
 			"Release",
-			"0.1.10 - Bundle dependency refresh",
-			"ASCET core package sync",
-			"Stale bundled package fix",
+			"0.1.11 - Bosch LLM Farm provider update",
+			"Gateway auth compatibility",
+			"Provider configuration refresh",
 			"Checking updates...",
 		],
 	);
 	assert.deepEqual(
-		createReleaseRows({ status: "available", latestVersion: "0.1.11" }, ASCET_COPILOT_RELEASE),
-		["Update available", "0.1.10 -> 0.1.11", "pi update npm:@zeerke/ascet-copilot"],
+		createReleaseRows({ status: "available", latestVersion: "0.1.12" }, ASCET_COPILOT_RELEASE),
+		["Update available", "0.1.11 -> 0.1.12", "pi update npm:@zeerke/ascet-copilot"],
 	);
 	assert.deepEqual(
-		createReleaseRows({ status: "current", latestVersion: "0.1.10" }, ASCET_COPILOT_RELEASE),
+		createReleaseRows({ status: "current", latestVersion: "0.1.11" }, ASCET_COPILOT_RELEASE),
 		[
 			"Release",
-			"0.1.10 - Up to date",
-			"Bundle dependency refresh",
-			"ASCET core package sync",
-			"Stale bundled package fix",
+			"0.1.11 - Up to date",
+			"Bosch LLM Farm provider update",
+			"Gateway auth compatibility",
+			"Provider configuration refresh",
 		],
 	);
 });
