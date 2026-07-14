@@ -1,4 +1,5 @@
 import { existsSync, mkdirSync, rmSync } from "node:fs";
+import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it, vi } from "vitest";
@@ -203,6 +204,75 @@ describe("bosch-llmfarm provider", () => {
 			gatewayKey: "secret-key",
 			stream: false,
 		});
+	});
+
+	it("round trips through a local OpenAI-compatible gateway over fetch", async () => {
+		const requests: Array<{ url: string; authorization?: string; contentType: string; body: unknown }> = [];
+		const server = createServer((req, res) => {
+			let body = "";
+			req.setEncoding("utf8");
+			req.on("data", (chunk) => {
+				body += chunk;
+			});
+			req.on("end", () => {
+				requests.push({
+					url: req.url ?? "",
+					authorization: req.headers.authorization,
+					contentType: String(req.headers["content-type"] ?? ""),
+					body: JSON.parse(body),
+				});
+				res.writeHead(200, { "content-type": "application/json" });
+				res.end(
+					JSON.stringify({
+						id: "chatcmpl-local",
+						model: "alpha",
+						choices: [{ message: { content: "local pong" }, finish_reason: "stop" }],
+						usage: { prompt_tokens: 5, completion_tokens: 2, total_tokens: 7 },
+					}),
+				);
+			});
+		});
+
+		await new Promise<void>((resolve, reject) => {
+			server.once("error", reject);
+			server.listen(0, "127.0.0.1", () => {
+				server.off("error", reject);
+				resolve();
+			});
+		});
+
+		try {
+			const address = server.address();
+			if (typeof address !== "object" || !address?.port) {
+				throw new Error("Local gateway smoke server did not listen on a TCP port.");
+			}
+			const model = { ...createModel("alpha"), baseUrl: `http://127.0.0.1:${address.port}/openapi/service/v1` };
+
+			const result = await streamBoschLlmFarm(model, textContext, {
+				apiKey: "secret-key",
+				metadata: {
+					boschLlmFarm: {
+						keyPlacement: "header-query-body",
+					},
+				},
+			}).result();
+
+			expect(result.content).toEqual([{ type: "text", text: "local pong" }]);
+			expect(result.usage.totalTokens).toBe(7);
+			expect(requests).toHaveLength(1);
+			expect(requests[0]?.url).toBe("/openapi/service/v1/chat/completions?gatewayKey=secret-key");
+			expect(requests[0]?.authorization).toBe("Bearer secret-key");
+			expect(requests[0]?.contentType).toContain("application/json");
+			expect(requests[0]?.body).toMatchObject({
+				model: "alpha",
+				gatewayKey: "secret-key",
+				stream: false,
+			});
+		} finally {
+			await new Promise<void>((resolve, reject) => {
+				server.close((error) => (error ? reject(error) : resolve()));
+			});
+		}
 	});
 
 	it("uses the configured model maxTokens as the default max_tokens payload", async () => {
