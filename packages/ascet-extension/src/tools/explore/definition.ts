@@ -4,7 +4,6 @@ import { formatListComponentsResult, runAscetListComponents } from "../../list-c
 import { formatListDiagramsResult, runAscetListDiagrams } from "../../list-diagrams.ts";
 import { formatReadComponentChildrenResult, runAscetReadComponentChildren } from "../../read-component-children.ts";
 import { formatReadComponentSummaryResult, runAscetReadComponentSummary } from "../../read-component-summary.ts";
-import { formatResolveComponentResult, runAscetResolveComponent } from "../../resolve-component.ts";
 import { createAscetCliToolDetails } from "../_shared/envelope.ts";
 import { ascetExplorePrompt } from "./prompt.ts";
 import { type AscetExploreParams, ascetExploreParameters } from "./schema.ts";
@@ -29,17 +28,6 @@ async function runAscetExplore(params: AscetExploreParams, options: RunOptions):
 		}
 		case "list_diagrams":
 			return runAscetListDiagrams(params, options);
-		case "resolve_target":
-			return runAscetResolveComponent(
-				{
-					query: params.query,
-					scopePath: params.scopePath,
-					kind: params.kind,
-					match: params.match,
-					limit: params.limit,
-				},
-				options,
-			);
 		case "inspect_target":
 			return runAscetReadComponentSummary({ componentPath: params.componentPath }, options);
 		case "preview_children":
@@ -53,8 +41,6 @@ function formatAscetExploreResult(params: AscetExploreParams, result: AscetCliJs
 			return formatListComponentsResult(result);
 		case "list_diagrams":
 			return formatListDiagramsResult(result);
-		case "resolve_target":
-			return formatResolveComponentResult(result);
 		case "inspect_target":
 			return formatReadComponentSummaryResult(result);
 		case "preview_children":

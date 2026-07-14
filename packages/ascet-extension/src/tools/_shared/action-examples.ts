@@ -141,12 +141,6 @@ export const ascetActionExamples = [
 	}),
 	defineExample({
 		tool: "ascet_explore",
-		action: "resolve_target",
-		intent: "resolve name",
-		args: { action: "resolve_target", query: "PID", scopePath: "DEMO", match: "exact", limit: 5 },
-	}),
-	defineExample({
-		tool: "ascet_explore",
 		action: "inspect_target",
 		intent: "inspect target",
 		args: { action: "inspect_target", componentPath: "DEMO\\PID", detailLevel: "summary" },
@@ -178,8 +172,8 @@ export const ascetActionExamples = [
 	defineExample({
 		tool: "ascet_search",
 		action: "search_occurrences",
-		intent: "search code refs",
-		args: { action: "search_occurrences", query: "pid_kp", target: "code", componentPath: "DEMO\\PID", limit: 10 },
+		intent: "search element refs",
+		args: { action: "search_occurrences", query: "pid_kp", target: "element", componentPath: "DEMO\\PID", limit: 10 },
 	}),
 	defineExample({
 		tool: "ascet_read",

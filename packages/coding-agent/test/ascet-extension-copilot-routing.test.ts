@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { listAscetRoutes, routeAscetAction } from "../../ascet-extension/src/routing/router.ts";
 
 const EXPECTED_ACTIONS = {
-	ascet_explore: ["list_components", "list_diagrams", "resolve_target", "inspect_target", "preview_children"],
+	ascet_explore: ["list_components", "list_diagrams", "inspect_target", "preview_children"],
 	ascet_search: ["search_components", "resolve_component", "search_elements", "search_occurrences"],
 	ascet_read: ["read", "read_code", "read_implementation", "read_block_diagram", "read_state_machine_flow"],
 	ascet_reference: ["component_refs", "used_by", "element_refs"],

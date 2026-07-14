@@ -53,6 +53,8 @@ Never send live ASCET evidence collection to builtin `reviewer`, `worker`, `plan
 
 BDE and block diagram evidence must use the canonical tool call `ascet_read` with action `read_block_diagram`. Do not use old fine-grained block-diagram tool names.
 
+An empty block diagram is not automatically a design defect. Store valid empty graph evidence as evidence, and let the specific rule decide whether missing diagram content matters.
+
 Parameter mapping evidence must use the canonical tool calls:
 
 - `ascet_read` action `read_import_export_matches`
@@ -79,7 +81,7 @@ Use this flow when `parameter-mapping` or `semantic.parameter-name-consistency` 
 
 1. Collect `component_refs` for candidate components and derive importer/exporter component pairs.
 2. Record an evidence gap when no importer/exporter relation can be established for a scoped component.
-3. Collect `children` with `ascet_explore` action `preview_children` and derive business parameter inventories from the returned child payloads. Do not assume that a model-specific `group="parameters"` exists.
+3. Collect `children` with `ascet_explore` action `preview_children` and `group="parameters"` for importer and exporter components; fall back to `group="all"` only when parameter-only evidence is unavailable.
 4. For each importer/exporter pair, collect `import_export_matches`.
 5. For each mapped or suspicious element, collect `import_export_match`.
 6. For each local parameter candidate, collect `element_dependency_plan`.

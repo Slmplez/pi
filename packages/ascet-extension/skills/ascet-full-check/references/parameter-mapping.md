@@ -34,7 +34,7 @@ Use the bundled fixture under `fixtures/parameter-mapping/evidence/` as the smok
 2. Collect `component_refs` for each scoped component.
 3. Derive importer/exporter component pairs from reference evidence.
 4. If no importer/exporter pair can be established, write a `parameter_mapping_relation_gap` evidence record.
-5. Collect `children` with `preview_children` for importer and exporter components. Derive parameters from child payloads; do not assume a `group="parameters"` model exists.
+5. Collect `children` with `preview_children` and `group="parameters"` for importer and exporter components. Fall back to `group="all"` only when parameter-only evidence is unavailable.
 6. Call `read_import_export_matches` for each importer/exporter pair.
 7. Call `read_import_export_match` for mapped elements, missing endpoints, dT candidates, and semantic-name suspects.
 8. Call `plan_element_dependency` for local parameter candidates to determine dependent/independent state and multiple dependency risk.

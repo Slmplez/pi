@@ -81,13 +81,6 @@ export const ascetRouteManifestEntries = [
 	},
 	{
 		toolName: "ascet_explore",
-		action: "resolve_target",
-		logicalCommandId: "AscetResolveComponent",
-		operation: "resolve_component",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_explore",
 		action: "inspect_target",
 		logicalCommandId: "AscetReadComponentSummary",
 		operation: "read_component_summary",

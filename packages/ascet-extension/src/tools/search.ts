@@ -35,7 +35,7 @@ export type AscetSearchParams =
 	| {
 			action: "search_occurrences";
 			query: string;
-			target: "component" | "element" | "code";
+			target: "component" | "element";
 			componentPath?: string;
 			scopePath?: string;
 			match?: "exact" | "glob" | "contains";
@@ -64,7 +64,7 @@ export const ascetSearchParameters = Type.Object({
 	group: Type.Optional(
 		Type.Union([Type.Literal("all"), Type.Literal("primitive"), Type.Literal("complex"), Type.Literal("referenced")]),
 	),
-	target: Type.Optional(Type.Union([Type.Literal("component"), Type.Literal("element"), Type.Literal("code")])),
+	target: Type.Optional(Type.Union([Type.Literal("component"), Type.Literal("element")])),
 	kind: Type.Optional(Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")])),
 	match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("glob"), Type.Literal("contains")])),
 	limit: Type.Optional(Type.Number({ minimum: 1, maximum: 200 })),

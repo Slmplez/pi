@@ -1,5 +1,6 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
+import { Value } from "typebox/value";
 import { describe, expect, it } from "vitest";
 import type { AscetCliExecutionResult, AscetCliRequest } from "../../ascet-extension/src/cli.ts";
 import { classifyAscetCliCommand } from "../../ascet-extension/src/routing/coverage.ts";
@@ -8,10 +9,12 @@ import { compactExamplesForTool } from "../../ascet-extension/src/tools/_shared/
 import { formatAscetCapabilitiesResult, runAscetCapabilities } from "../../ascet-extension/src/tools/capabilities.ts";
 import { ascetDiffTool } from "../../ascet-extension/src/tools/diff/index.ts";
 import { ascetExploreTool } from "../../ascet-extension/src/tools/explore/index.ts";
+import { ascetExploreParameters } from "../../ascet-extension/src/tools/explore/schema.ts";
 import { ascetReadTool } from "../../ascet-extension/src/tools/read/index.ts";
 import { runAscetRecover } from "../../ascet-extension/src/tools/recover.ts";
 import { ascetReferenceTool } from "../../ascet-extension/src/tools/reference/index.ts";
 import { ascetSearchTool } from "../../ascet-extension/src/tools/search/index.ts";
+import { ascetSearchParameters } from "../../ascet-extension/src/tools/search/schema.ts";
 import { loadAscetExtension, repoRoot } from "./ascet-extension-test-helpers.ts";
 
 const CANONICAL_ASCET_TOOLS = [
@@ -105,6 +108,26 @@ describe("ASCET canonical PI tools", () => {
 		}
 	});
 
+	it("documents ASCET read/diff decision boundaries in prompt guidelines", async () => {
+		const ascetExtension = await loadAscetExtension();
+		const readGuidelines = ascetExtension?.tools.get("ascet_read")?.definition.promptGuidelines?.join("\n") ?? "";
+		const diffGuidelines = ascetExtension?.tools.get("ascet_diff")?.definition.promptGuidelines?.join("\n") ?? "";
+
+		expect(readGuidelines).toContain("read_block_diagram");
+		expect(readGuidelines).toContain("BDE");
+		expect(readGuidelines).toContain("ESDL");
+		expect(readGuidelines).toContain("read_state_machine_flow");
+		expect(readGuidelines).toContain("StateMachine");
+		expect(readGuidelines).toContain("header");
+		expect(readGuidelines).toContain("C module");
+
+		expect(diffGuidelines).toContain("diff_component_snapshot");
+		expect(diffGuidelines).toContain("quick");
+		expect(diffGuidelines).toContain("objectKind");
+		expect(diffGuidelines).toContain("Project");
+		expect(diffGuidelines).toContain("StateMachine");
+	});
+
 	it("does not register old fine-grained ASCET tools as legacy aliases", async () => {
 		const ascetExtension = await loadAscetExtension();
 
@@ -135,12 +158,41 @@ describe("ASCET canonical PI tools", () => {
 			backendCommandId: "AscetReadMethodSignature",
 			operation: "read_method_signature",
 		});
-		expect(routeAscetAction({ toolName: "ascet_explore", action: "resolve_target" })).toMatchObject({
+		expect(routeAscetAction({ toolName: "ascet_search", action: "resolve_component" })).toMatchObject({
 			logicalCommandId: "AscetResolveComponent",
 			backendCommandId: "AscetResolveComponent",
 			operation: "resolve_component",
 		});
+		expect(() => routeAscetAction({ toolName: "ascet_explore", action: "resolve_target" })).toThrow(
+			"Unsupported ASCET route: ascet_explore/resolve_target",
+		);
 		expect(listAscetRoutes().some((route) => route.toolName === "ascet_scheduler_status")).toBe(true);
+	});
+
+	it("keeps explore/search public schemas aligned with model-facing semantics", () => {
+		const exploreGuidelines = ascetExploreTool.promptGuidelines?.join("\n") ?? "";
+		const searchGuidelines = ascetSearchTool.promptGuidelines?.join("\n") ?? "";
+
+		expect(Value.Check(ascetExploreParameters, { action: "resolve_target", query: "PID" })).toBe(false);
+		expect(Value.Check(ascetExploreParameters, { action: "list_components", folderPath: "", limit: 2 })).toBe(true);
+		expect(
+			Value.Check(ascetExploreParameters, {
+				action: "preview_children",
+				componentPath: "DEMO\\PID",
+				group: "parameters",
+			}),
+		).toBe(true);
+		expect(exploreGuidelines).not.toContain("resolve_target");
+		expect(exploreGuidelines).toContain("ascet_search.resolve_component");
+
+		expect(
+			Value.Check(ascetSearchParameters, {
+				action: "search_occurrences",
+				query: "pid_kp",
+				target: "code",
+			}),
+		).toBe(false);
+		expect(searchGuidelines).not.toContain("target=code");
 	});
 
 	it("classifies backend aliases without exposing backend implementation names as model concepts", () => {
@@ -201,9 +253,9 @@ describe("ASCET canonical PI tools", () => {
 			},
 		});
 		await expect(
-			ascetExploreTool.execute(
+			ascetSearchTool.execute(
 				"tool-call",
-				{ action: "resolve_target", query: "PID", scopePath: "DEMO", match: "exact" },
+				{ action: "resolve_component", query: "PID", scopePath: "DEMO", match: "exact" },
 				signal,
 				undefined,
 				ctx,

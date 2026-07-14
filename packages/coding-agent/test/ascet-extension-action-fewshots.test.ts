@@ -97,7 +97,7 @@ describe("ASCET action few-shot examples", () => {
 		const actual = new Set(ascetActionExamples.map(exampleKey));
 
 		expect(actual).toEqual(expected);
-		expect(ascetActionExamples).toHaveLength(79);
+		expect(ascetActionExamples).toHaveLength(78);
 		expect(actual.has("ascet_write.set_class_method_code")).toBe(false);
 	});
 
@@ -130,7 +130,7 @@ describe("ASCET action few-shot examples", () => {
 		const allGuidelines = canonicalAscetToolNames.flatMap((tool) => compactExamplesForTool(tool));
 		const totalCharacters = allGuidelines.reduce((sum, guideline) => sum + guideline.length + 1, 0);
 
-		expect(allGuidelines).toHaveLength(79);
+		expect(allGuidelines).toHaveLength(78);
 		expect(totalCharacters).toBeLessThanOrEqual(11_000);
 		for (const guideline of allGuidelines) {
 			expect(guideline.length, guideline).toBeLessThanOrEqual(180);

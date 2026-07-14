@@ -14,30 +14,21 @@ export type AscetExploreParams =
 			componentPath: string;
 			diagramKind?: "all" | "block" | "block_diagram" | "state" | "state_machine" | "sequence" | "unknown";
 	  }
-	| {
-			action: "resolve_target";
-			query: string;
-			scopePath?: string;
-			kind?: "class" | "module" | "statemachine";
-			match?: "exact" | "glob" | "contains";
-			limit?: number;
-	  }
 	| { action: "inspect_target"; componentPath: string; detailLevel?: "summary" | "detailed" }
 	| {
 			action: "preview_children";
 			componentPath: string;
-			group?: "methods" | "elements" | "variables" | "diagrams" | "all";
+			group?: "all" | "methods" | "elements" | "components" | "arrays" | "parameters" | "variables" | "diagrams";
 	  };
 
 export const ascetExploreParameters = Type.Object({
 	action: Type.Union([
 		Type.Literal("list_components"),
 		Type.Literal("list_diagrams"),
-		Type.Literal("resolve_target"),
 		Type.Literal("inspect_target"),
 		Type.Literal("preview_children"),
 	]),
-	folderPath: Type.Optional(Type.String({ minLength: 1 })),
+	folderPath: Type.Optional(Type.String()),
 	componentPath: Type.Optional(Type.String({ minLength: 1 })),
 	query: Type.Optional(Type.String({ minLength: 1 })),
 	scopePath: Type.Optional(Type.String()),
@@ -69,6 +60,9 @@ export const ascetExploreParameters = Type.Object({
 		Type.Union([
 			Type.Literal("methods"),
 			Type.Literal("elements"),
+			Type.Literal("components"),
+			Type.Literal("arrays"),
+			Type.Literal("parameters"),
 			Type.Literal("variables"),
 			Type.Literal("diagrams"),
 			Type.Literal("all"),

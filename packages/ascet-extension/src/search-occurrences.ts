@@ -10,7 +10,7 @@ import { inferComponentPathFromScope } from "./search-scope.ts";
 
 export interface AscetSearchOccurrencesParams {
 	query: string;
-	target?: "component" | "element" | "code";
+	target?: "component" | "element";
 	componentPath?: string;
 	scopePath?: string;
 	match?: "exact" | "glob" | "contains";
@@ -30,7 +30,7 @@ export type AscetSearchOccurrencesResult = AscetCliJsonResult;
 
 export const ascetSearchOccurrencesParameters = Type.Object({
 	query: Type.String({ description: "Occurrence query for component or element matches.", minLength: 1 }),
-	target: Type.Optional(Type.Union([Type.Literal("component"), Type.Literal("element"), Type.Literal("code")])),
+	target: Type.Optional(Type.Union([Type.Literal("component"), Type.Literal("element")])),
 	componentPath: Type.Optional(Type.String({ description: "Known ASCET component path, for example DEMO\\PID." })),
 	scopePath: Type.Optional(Type.String({ description: "ASCET folder scope when componentPath is unknown." })),
 	match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("glob"), Type.Literal("contains")])),

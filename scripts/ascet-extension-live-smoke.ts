@@ -132,8 +132,8 @@ const occurrences = await callTool("ascet_search", {
 	match: "exact",
 	limit: 5,
 });
-const resolved = await callTool("ascet_explore", {
-	action: "resolve_target",
+const resolved = await callTool("ascet_search", {
+	action: "resolve_component",
 	query: "PID",
 	scopePath: "DEMO",
 	match: "exact",
@@ -149,9 +149,9 @@ const blockDiagram = await callToolAllowingError("ascet_read", {
 	componentPath: "DEMO\\PID",
 	diagramName: "Main",
 });
-if (blockDiagram.ok || blockDiagram.error?.code !== "ascet_block_diagram_surface_not_supported") {
+if (!blockDiagram.ok && blockDiagram.error?.code !== "ascet_block_diagram_surface_not_supported") {
 	throw new Error(
-		`ascet_read.read_block_diagram expected unsupported text ESDL surface, got: ${blockDiagram.error?.code ?? "ok"}`,
+		`ascet_read.read_block_diagram expected ok or unsupported text ESDL surface, got: ${blockDiagram.error?.code ?? "ok"}`,
 	);
 }
 const refs = await callTool("ascet_reference", { action: "element_refs", componentPath: "DEMO\\PID", elementName: "pid_kp" });
@@ -212,7 +212,7 @@ console.log(
 				ascet_search_components: { counts: componentSearch.counts },
 				ascet_search_elements: { counts: search.counts },
 				ascet_search_occurrences: { counts: occurrences.counts },
-				ascet_explore_resolve: { component: resolved.component },
+				ascet_search_resolve: { component: resolved.component },
 				ascet_explore_summary: { counts: summary.counts, summary: summary.summary },
 				ascet_explore_children: { selectedGroup: children.selectedGroup, counts: children.counts },
 				ascet_read_method: { methodName: method.methodName },
