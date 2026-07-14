@@ -103,6 +103,19 @@
     "lane":  "serial_write",
     "hostEligible":  false,
     "supportsBatch":  true,
+    "methodKindCompatibility":  {
+                                    "class":  [
+                                                  "abstract"
+                                              ],
+                                    "module":  [
+                                                   "process"
+                                               ],
+                                    "statemachine":  [
+                                                         "action",
+                                                         "condition",
+                                                         "trigger"
+                                                     ]
+                                },
     "executionProfile":  {
                              "hostSafety":  "write",
                              "hostPolicy":  "force_one_shot",

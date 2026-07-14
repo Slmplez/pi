@@ -96,15 +96,27 @@ describe("ascet-full-check parameter mapping skill", () => {
 	it("documents the read-only tool orchestration and report section", () => {
 		const parameterMappingReference = readFileSync(join(skillRoot, "references/parameter-mapping.md"), "utf8");
 		const reportContract = readFileSync(join(skillRoot, "references/report-contract.md"), "utf8");
+		const workflow = readFileSync(join(skillRoot, "references/workflow.md"), "utf8");
+		const toolMap = readFileSync(join(skillRoot, "references/tool-map.md"), "utf8");
 		const agent = readFileSync(
 			join(repoRoot, "packages/ascet-extension/agents/ascet-parameter-mapping-checker.md"),
 			"utf8",
 		);
+		const evidenceAgent = readFileSync(join(repoRoot, "packages/ascet-extension/agents/ascet-evidence.md"), "utf8");
 
 		expect(parameterMappingReference).toContain("read_import_export_matches");
 		expect(parameterMappingReference).toContain("plan_element_dependency");
 		expect(parameterMappingReference).toContain("special.dt-parameter-exemption");
 		expect(parameterMappingReference).toContain("Do not use `ascet_write.set_element_dependency`");
+		expect(workflow).toContain("empty block diagram");
+		expect(workflow).toContain("not automatically a design defect");
+		expect(toolMap).toContain("diff_component_snapshot");
+		expect(toolMap).toContain("quick snapshot");
+		expect(toolMap).toContain("ascet_diff` action `diff` with `objectKind`");
+		expect(toolMap).toContain("aggregates component dependency candidates");
+		expect(toolMap).toContain("project_component_enumeration_unavailable");
+		expect(evidenceAgent).toContain("Store empty block diagrams");
+		expect(evidenceAgent).toContain("diff_component_snapshot");
 		expect(reportContract).toContain("Parameter Mapping Findings");
 		expect(agent).toContain("check-parameter-mapping.mjs");
 	});

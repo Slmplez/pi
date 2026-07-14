@@ -353,7 +353,9 @@ export function formatAscetCliJsonResult(operation: string, result: AscetCliJson
 	if (result.ok) {
 		return JSON.stringify(result.data, null, 2);
 	}
-	const message = result.error?.message ?? "";
+	const message = sanitizeCliFailureText(result.error?.message ?? "");
+	const stderr = sanitizeCliFailureText(result.stderr);
+	const stdout = sanitizeCliFailureText(result.stdout);
 	const runtimeHint =
 		result.error?.code === "ascet_cli_failed" && /(ToolAPI|stdio streams are unavailable|runtime)/i.test(message)
 			? "hint: ASCET runtime (ToolAPI) is not connected. Start ASCET GUI with ToolAPI enabled, then rerun ascet_status or the ASCET command."
@@ -362,9 +364,18 @@ export function formatAscetCliJsonResult(operation: string, result: AscetCliJson
 		`ASCET ${operation} failed: ${result.error?.code ?? "unknown"}`,
 		message,
 		runtimeHint,
-		result.stderr ? `stderr:\n${result.stderr.trim()}` : "",
-		result.stdout ? `stdout:\n${result.stdout.trim()}` : "",
+		stderr ? `stderr:\n${stderr}` : "",
+		stdout ? `stdout:\n${stdout}` : "",
 	]
 		.filter(Boolean)
 		.join("\n");
+}
+
+function sanitizeCliFailureText(text: string): string {
+	return text
+		.split(/\r?\n/)
+		.filter((line) => !/^\s+at\s/.test(line))
+		.map((line) => line.replace(/^Exception\[\d+\]:\s*/i, ""))
+		.join("\n")
+		.trim();
 }

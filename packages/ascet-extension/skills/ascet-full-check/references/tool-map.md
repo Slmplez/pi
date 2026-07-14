@@ -49,7 +49,7 @@ If `read_block_diagram` returns a valid empty graph, keep it as empty `block_dia
 
 Parameter mapping checks may use only read, explore, reference, and search evidence. Do not use `ascet_write.set_element_dependency` in full-check.
 
-Project-level `element_dependency_plan` may report `project_component_enumeration_not_available` until project component enumeration is implemented. Record that as an evidence gap instead of inventing dependency candidates.
+Project-level `element_dependency_plan` enumerates code components and aggregates component dependency candidates. If the ASCET ToolAPI surface does not expose a supported project enumeration method, record `project_component_enumeration_unavailable` as an evidence gap instead of inventing dependency candidates.
 
 ## Diff and Verify
 

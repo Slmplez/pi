@@ -2,7 +2,7 @@
     "id":  "AscetReadStateMachineFlow",
     "family":  "read",
     "summary":  "State machine flow read",
-    "usage":  "\u003ccomponent-path\u003e [--trace-depth \u003cn\u003e] [--json]",
+    "usage":  "\u003ccomponent-path\u003e [--trace-depth \u003cn\u003e] [--detail-level summary|full] [--json]",
     "execution":  {
                       "kind":  "unified_cli",
                       "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
@@ -32,6 +32,17 @@
                      "description":  "Option value for --trace-depth"
                  },
                  {
+                     "name":  "--detail-level",
+                     "kind":  "option",
+                     "type":  "enum",
+                     "required":  false,
+                     "description":  "Option value for --detail-level",
+                     "enumValues":  [
+                                        "summary",
+                                        "full"
+                                    ]
+                 },
+                 {
                      "name":  "--json",
                      "kind":  "flag",
                      "type":  "boolean",
@@ -50,7 +61,7 @@
     "examples":  [
                      {
                          "description":  "Basic usage",
-                         "command":  "AscetCli.exe exec read_state_machine_flow \u003ccomponent-path\u003e [--trace-depth \u003cn\u003e] [--json]"
+                         "command":  "AscetCli.exe exec read_state_machine_flow \u003ccomponent-path\u003e [--trace-depth \u003cn\u003e] [--detail-level summary|full] [--json]"
                      }
                  ],
     "pitfalls":  [

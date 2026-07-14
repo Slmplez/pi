@@ -71,6 +71,7 @@ async function runAscetRead(params: AscetReadParams, options: RunOptions): Promi
 				{
 					componentPath: params.componentPath,
 					traceDepth: params.traceDepth,
+					detailLevel: params.detailLevel,
 				},
 				options,
 			);

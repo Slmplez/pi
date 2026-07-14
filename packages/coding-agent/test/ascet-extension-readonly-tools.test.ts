@@ -106,6 +106,31 @@ describe("ASCET read-only PI tools", () => {
 		expect(text).toContain("Start ASCET GUI with ToolAPI enabled");
 	});
 
+	it("sanitizes legacy CLI stack traces in formatted failures", () => {
+		const text = formatAscetCliJsonResult("diff_project_formulas", {
+			ok: false,
+			data: null,
+			request: {
+				cwd: repoRoot,
+				cliPath: "AscetCli.exe",
+				args: ["exec", "diff_project_formulas", "DEMO\\PID", "DEMO\\demoesdl", "--json"],
+			},
+			stdout: "Exception[0]: System.InvalidOperationException\n   at Internal.Frame()\n",
+			stderr: "System.InvalidOperationException: Item is not an ASCET project\n   at Internal.Frame()\n",
+			exitCode: 1,
+			timedOut: false,
+			error: {
+				code: "ascet_cli_failed",
+				message: "System.InvalidOperationException: Item is not an ASCET project\n   at Internal.Frame()",
+			},
+		});
+
+		expect(text).toContain("ASCET diff_project_formulas failed");
+		expect(text).toContain("not an ASCET project");
+		expect(text).not.toContain("   at ");
+		expect(text).not.toContain("Exception[0]");
+	});
+
 	it("does not register old fine-grained read-only tools as PI tools", async () => {
 		const ascetExtension = await loadAscetExtension();
 		const removedTools = [
@@ -210,6 +235,27 @@ describe("ASCET read-only PI tools", () => {
 		const customDetails = customResult?.details as CliRequestDetails | undefined;
 		expect(defaultDetails?.diagnostics.request.timeoutMs).toBe(60_000);
 		expect(customDetails?.diagnostics.request.timeoutMs).toBe(12_345);
+	});
+
+	it("does not hide backend unsupported block diagram errors", async () => {
+		const result = await runAscetReadBlockDiagram(
+			{ componentPath: "DEMO\\State_Machine", diagramName: "Main" },
+			{
+				cwd: repoRoot,
+				executeCli: async (request) => ({
+					exitCode: 1,
+					stdout: "",
+					stderr:
+						"unsupported_component_kind_for_block_diagram:read_block_diagram:Component must be a module or class.",
+					timedOut: false,
+					request,
+				}),
+			},
+		);
+
+		expect(result.ok).toBe(false);
+		expect(result.error?.code).toBe("ascet_cli_failed");
+		expect(result.error?.message).toContain("unsupported_component_kind_for_block_diagram");
 	});
 
 	it("builds JSON list_components CLI invocation", () => {
@@ -622,12 +668,16 @@ describe("ASCET read-only PI tools", () => {
 		expect(
 			buildReadImplementationArgs({ componentPath: "DEMO/PID", mode: "impl", implementationName: "Impl" }),
 		).toEqual(["exec", "read_implementation", "DEMO\\PID", "--impl", "Impl", "--json"]);
-		expect(buildReadStateMachineFlowArgs({ componentPath: "DEMO/SM", traceDepth: 2 })).toEqual([
+		expect(
+			buildReadStateMachineFlowArgs({ componentPath: "DEMO/SM", traceDepth: 2, detailLevel: "summary" }),
+		).toEqual([
 			"exec",
 			"read_state_machine_flow",
 			"DEMO\\SM",
 			"--trace-depth",
 			"2",
+			"--detail-level",
+			"summary",
 			"--json",
 		]);
 	});
@@ -1236,8 +1286,15 @@ describe("ASCET read-only PI tools", () => {
 		expect(formulasResult.request.args).toEqual(["exec", "read_project_formulas", "DEMO\\Project", "--json"]);
 		expect(diagramsResult.ok).toBe(true);
 		expect(diagramsResult.request.args).toEqual(["exec", "list_diagrams", "DEMO\\PID", "--json"]);
-		expect(blockDiagramResult.ok).toBe(false);
-		expect(blockDiagramResult.error?.code).toBe("ascet_block_diagram_surface_not_supported");
+		expect(blockDiagramResult.ok).toBe(true);
+		expect(blockDiagramResult.error).toBeUndefined();
+		expect(blockDiagramResult.data).toMatchObject({
+			ok: true,
+			result: {
+				Elements: [],
+				Connections: [],
+			},
+		});
 		expect(blockDiagramResult.request.args).toEqual(["exec", "read_block_diagram", "DEMO\\PID", "Main", "--json"]);
 		expect(refsResult.ok).toBe(true);
 		expect(refsResult.request.args).toEqual(["exec", "read_element_refs", "DEMO\\PID", "pid_kp", "--json"]);
