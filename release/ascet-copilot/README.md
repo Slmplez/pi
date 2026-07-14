@@ -17,7 +17,7 @@ pi install npm:@zeerke/ascet-copilot
 pi
 ```
 
-This bundle loads the ASCET tool extension, ASCET startup UI, subagents, todo overlay, ask-user-question, Hermes memory, Plannotator, and web access package resources.
+This bundle loads the ASCET tool extension, ASCET startup UI, subagents, todo overlay, ask-user-question, Hermes memory, and web access package resources.
 
 ## Update
 

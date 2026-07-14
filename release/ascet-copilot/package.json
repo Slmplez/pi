@@ -21,7 +21,6 @@
     "@juicesharp/rpiv-todo": "1.20.0",
     "@juicesharp/rpiv-ask-user-question": "1.20.0",
     "pi-hermes-memory": "0.7.23",
-    "@plannotator/pi-extension": "0.23.0",
     "pi-web-access": "0.13.0"
   },
   "bundledDependencies": [
@@ -31,7 +30,6 @@
     "@juicesharp/rpiv-todo",
     "@juicesharp/rpiv-ask-user-question",
     "pi-hermes-memory",
-    "@plannotator/pi-extension",
     "pi-web-access"
   ],
   "pi": {
@@ -42,7 +40,6 @@
       "node_modules/@juicesharp/rpiv-todo/index.ts",
       "node_modules/@juicesharp/rpiv-ask-user-question/index.ts",
       "node_modules/pi-hermes-memory/src/index.ts",
-      "node_modules/@plannotator/pi-extension",
       "node_modules/pi-web-access/index.ts"
     ],
     "skills": [
