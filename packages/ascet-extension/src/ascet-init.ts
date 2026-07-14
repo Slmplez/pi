@@ -1,7 +1,7 @@
-import { parseAscetInitScopeArgs } from "./ascet-init-scope.ts";
+import { type AscetInitScope, parseAscetInitScopeArgs } from "./ascet-init-scope.ts";
 import {
 	ensureRepoAscetRulesScaffold,
-	loadAscetInitEntrypoints,
+	loadAscetInitRuleBundle,
 	renderAscetInitRulesPrompt,
 } from "./ascet-project-rules.ts";
 import type { AscetExtensionAPI } from "./core/tool.ts";
@@ -20,22 +20,50 @@ export interface AscetInitPiApi {
 	sendUserMessage(content: string, options?: { deliverAs?: "steer" | "followUp" }): void;
 }
 
-const ASCET_INIT_PROMPT = `Create or update an ASCET-focused onboarding section for this PI project.
+type ValidAscetInitScope = Exclude<AscetInitScope, { ok: false }>;
 
-This command is for ASCET database onboarding, not generic repository onboarding.
+function renderScopePrompt(scope: ValidAscetInitScope): string {
+	if (scope.kind === "auto-detect") {
+		return "No explicit scope was provided. Start with ASCET engineering layout detection.";
+	}
+	if (scope.kind === "database") {
+		return "Explicit scope from command args: database";
+	}
+	return `Explicit scope from command args: ${scope.kind} ${scope.value}`;
+}
+
+const ASCET_INIT_PROMPT = `Create or update an ASCET model-engineering onboarding section for this PI project.
+
+This command is for ASCET model-based engineering onboarding, not generic repository onboarding.
 
 Your goal is to produce a concise, reusable ASCET workspace overview for future agents. Keep the scan bounded and sampled. Do not deeply read the whole database. Do not try to exhaustively crawl every folder or component.
 
-## Phase 1: Confirm scope
+## Phase 1: Detect ASCET engineering layout before asking scope
 
-If the requested scope is not explicit, ask the user what ASCET scope should be analyzed.
+ASCET is model-based engineering. Understand project assembly, signal and interface flow, scheduling, data semantics, and generated-code impact before reading or changing detailed implementation.
 
-Offer these options:
-- current database
+If an explicit scope is supplied, use it:
+- database
 - folder <path>
-- project <path-or-name>
+- project <name-or-path>
 
-If the user does not choose a narrower scope, default to the current database.
+If no explicit scope is supplied, start by looking for the common ASCET engineering layout:
+
+~~~text
+<domain>/components
+  <Project anchor>
+  XPASS
+  ASW2ASW
+~~~
+
+Treat the Project anchor as the assembly entry point. Treat XPASS and ASW2ASW as high-priority signal and interface adaptation anchors. Also inspect the parent <domain> folder for parameter, calibration, or implementation-data hints. A parent-level parameter area is useful context but not a complete parameter inventory.
+
+Use this confidence model:
+- strong: components plus Project anchor plus XPASS plus ASW2ASW
+- medium: components plus Project anchor plus one of XPASS or ASW2ASW
+- none: no useful components engineering layout
+
+For strong confidence, use the detected engineering unit as the onboarding scope. For medium confidence, ask the user to confirm. Ask Scope only if layout detection fails or is too weak to trust. When asking, offer exactly: database, folder <path>, or project <name-or-path>. Do not default to scanning the full database just because no args were provided.
 
 ## Phase 2: Read project context
 
@@ -60,16 +88,17 @@ Do not turn this into generic repository onboarding. Only read enough to update 
 Use ascet_status before live ASCET work.
 Use ascet_scheduler_status when runtime health, queueing, lock state, or degraded behavior is unclear.
 
-## Phase 4: Run bounded ASCET exploration
+## Phase 4: Run bounded ASCET model exploration
 
-Use PI canonical ASCET tools only. Do not use old ASCET Copilot tool names.
+Use PI canonical ASCET tools only. Use only the canonical PI ascet_* tool names listed in the loaded tool map.
 
 Preferred sequence:
 1. ascet_explore action=list_components folderPath="" kind="folder" to browse root folders
-2. ascet_explore action=list_components folderPath=<sample-folder> kind="all" to sample folder contents
-3. ascet_search action=resolve_component for likely representative targets
-4. ascet_search action=search_components when a project or component name is ambiguous
-5. ascet_explore action=inspect_target for a small number of representative targets
+2. ascet_explore action=list_components folderPath=<candidate>/components kind="all" to find the Project anchor, XPASS, and ASW2ASW
+3. ascet_explore action=list_components folderPath=<candidate-parent> kind="all" to sample parent-level parameter and data hints
+4. ascet_search action=resolve_component for likely representative targets
+5. ascet_search action=search_components when a project or component name is ambiguous
+6. ascet_explore action=inspect_target for a small number of representative targets
 
 Use ascet_read only for a few representative samples when needed:
 - ascet_read action=read_implementation
@@ -101,36 +130,37 @@ Generate a concise summary suitable for future agents. The summary must not be a
 
 Include these sections:
 
-### ASCET workspace scope
+### Engineering layout
 - what scope was analyzed
-- whether it was database, folder, or project scoped
+- whether the scope came from explicit args or engineering-layout detection
+- whether detection confidence was strong, medium, or unavailable
 - that the summary is sampled / heuristic when appropriate
 
-### Database shape
-- top-level folders or projects found
-- dominant object kinds present
-- notable component categories
+### Assembly entry points
+- likely Project anchor areas
+- composition or integration modules/classes/projects found
 
-### Architecture patterns
-Infer likely patterns from the sampled exploration, for example:
-- modules used for wiring or orchestration
-- classes used for logic or algorithms
-- state machines used for modes or transitions
-- projects used for composition or integration
+### Signal and interface path
+- likely flow through XPASS, ASW2ASW, or other adapter/interface areas
+- dependencies or references that a future agent should inspect first
 
-Be explicit when these are sampled inferences rather than confirmed facts.
+### Parameter and data semantics
+- parent-level parameter, calibration, or implementation-data areas found
+- clear caveat that this is not a complete parameter inventory
+
+### Scheduling and execution notes
+- any scheduling, runtime, generated-code, or execution-order evidence found from bounded reads
 
 ### Recommended navigation path
-Describe where a future agent should start when it wants to inspect:
-- behavior
-- wiring / composition
-- dependencies / references
-- mode / transition logic
+- where a future agent should start for assembly, signal/interface flow, parameters/data, scheduling, and detailed behavior
 
 ### Known limitations
-State clearly that this is a bounded onboarding summary, not a full semantic index.
+- state clearly that this is a bounded onboarding summary, not a full semantic index
+- state clearly when conclusions are sampled, inferred, or unverified
 
-## Phase 7: Update markdown
+## Phase 7: Proposal before markdown update
+
+Before modifying markdown, briefly propose the planned section replacement or append target. Then update markdown once the target is clear.
 
 Do not overwrite the whole guidance file.
 
@@ -159,10 +189,8 @@ Avoid:
 - generic coding guidance
 `;
 
-export function buildAscetInitPrompt(options: { args: string; projectRulesPrompt?: string }): string {
-	const requestedScope = options.args.trim()
-		? `Requested scope from command args: ${options.args.trim()}\n\n`
-		: "No explicit scope was provided in the command args. Confirm scope before scanning.\n\n";
+export function buildAscetInitPrompt(options: { scope: ValidAscetInitScope; projectRulesPrompt?: string }): string {
+	const requestedScope = `${renderScopePrompt(options.scope)}\n\n`;
 	const prompt = `${requestedScope}${ASCET_INIT_PROMPT}`;
 	return options.projectRulesPrompt ? `${options.projectRulesPrompt}\n\n${prompt}` : prompt;
 }
@@ -173,15 +201,15 @@ export async function executeAscetInitCommand(
 	pi: Pick<AscetExtensionAPI, "sendUserMessage"> | AscetInitPiApi,
 ): Promise<void> {
 	const scope = parseAscetInitScopeArgs(args);
-	if (!scope.ok) {
+	if (scope.ok === false) {
 		ctx.ui.notify(scope.usage, "warning");
 		return;
 	}
 
 	const { rulesDir } = await ensureRepoAscetRulesScaffold(ctx.cwd);
-	const entrypoints = await loadAscetInitEntrypoints(rulesDir);
+	const entrypoints = await loadAscetInitRuleBundle(rulesDir);
 	const projectRulesPrompt = renderAscetInitRulesPrompt(entrypoints);
-	const prompt = buildAscetInitPrompt({ args, projectRulesPrompt });
+	const prompt = buildAscetInitPrompt({ scope, projectRulesPrompt });
 
 	if (ctx.isIdle()) {
 		pi.sendUserMessage(prompt);

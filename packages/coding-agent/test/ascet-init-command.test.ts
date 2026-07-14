@@ -26,29 +26,51 @@ function removeTempProject(projectRoot: string): void {
 
 describe("ASCET init prompt", () => {
 	it("describes the bounded PI ASCET onboarding workflow", () => {
-		const prompt = buildAscetInitPrompt({ args: "", projectRulesPrompt: "ASCET project rules loaded." });
+		const prompt = buildAscetInitPrompt({
+			scope: { ok: true, kind: "auto-detect" },
+			projectRulesPrompt: "ASCET project rules loaded.",
+		});
 
 		expect(prompt).toContain("ASCET project rules loaded.");
-		expect(prompt).toContain("current database");
+		expect(prompt).toContain("No explicit scope was provided. Start with ASCET engineering layout detection.");
+		expect(prompt).toContain("Detect ASCET engineering layout before asking scope");
+		expect(prompt).toContain("Ask Scope only if layout detection fails");
+		expect(prompt).toContain("Proposal before markdown update");
+		expect(prompt).toContain("database");
 		expect(prompt).toContain("folder <path>");
-		expect(prompt).toContain("project <path-or-name>");
+		expect(prompt).toContain("project <name-or-path>");
+		expect(prompt).toContain("components");
+		expect(prompt).toContain("Project anchor");
+		expect(prompt).toContain("XPASS");
+		expect(prompt).toContain("ASW2ASW");
+		expect(prompt).toContain("parent-level parameter");
+		expect(prompt).toContain("not a complete parameter inventory");
 		expect(prompt).toContain("ascet_status");
 		expect(prompt).toContain("ascet_scheduler_status");
 		expect(prompt).toContain("ascet_explore");
 		expect(prompt).toContain("ascet_search");
 		expect(prompt).toContain("ascet_read");
 		expect(prompt).toContain(ASCET_AGENT_SECTION_TITLE);
+		expect(prompt).toContain("Engineering layout");
+		expect(prompt).toContain("Assembly entry points");
+		expect(prompt).toContain("Signal and interface path");
+		expect(prompt).toContain("Parameter and data semantics");
+		expect(prompt).toContain("Scheduling and execution notes");
 		expect(prompt).toContain("bounded");
 		expect(prompt).toContain("sampled");
-		expect(prompt).not.toContain("AscetExploreTool");
-		expect(prompt).not.toContain("AscetSearchTool");
-		expect(prompt).not.toContain("AscetReadTool");
+		expect(prompt).not.toMatch(/\bAscet[A-Za-z]+Tool\b/);
 	});
 
 	it("preserves explicit scope arguments in the generated prompt", () => {
-		expect(buildAscetInitPrompt({ args: "folder DEMO" })).toContain("Requested scope from command args: folder DEMO");
-		expect(buildAscetInitPrompt({ args: "project PID" })).toContain("Requested scope from command args: project PID");
-		expect(buildAscetInitPrompt({ args: "database" })).toContain("Requested scope from command args: database");
+		expect(buildAscetInitPrompt({ scope: { ok: true, kind: "folder", value: "DEMO" } })).toContain(
+			"Explicit scope from command args: folder DEMO",
+		);
+		expect(buildAscetInitPrompt({ scope: { ok: true, kind: "project", value: "PID" } })).toContain(
+			"Explicit scope from command args: project PID",
+		);
+		expect(buildAscetInitPrompt({ scope: { ok: true, kind: "database" } })).toContain(
+			"Explicit scope from command args: database",
+		);
 	});
 });
 
@@ -233,7 +255,10 @@ describe("ASCET init command", () => {
 			);
 
 			expect(sentMessages).toHaveLength(1);
-			expect(sentMessages[0].content).toContain("Requested scope from command args: folder DEMO");
+			expect(sentMessages[0].content).toContain("Explicit scope from command args: folder DEMO");
+			expect(sentMessages[0].content).toContain("ASCET project rules loaded for this command only.");
+			expect(sentMessages[0].content).toContain("tasks/init.md");
+			expect(sentMessages[0].content).toContain("tools/pi-ascet-tools.md");
 			expect(sentMessages[0].options).toBeUndefined();
 			expect(notifications).toEqual([]);
 		} finally {
@@ -263,7 +288,10 @@ describe("ASCET init command", () => {
 			);
 
 			expect(sentMessages).toHaveLength(1);
-			expect(sentMessages[0].content).toContain("Requested scope from command args: project PID");
+			expect(sentMessages[0].content).toContain("Explicit scope from command args: project PID");
+			expect(sentMessages[0].content).toContain("ASCET project rules loaded for this command only.");
+			expect(sentMessages[0].content).toContain("tasks/init.md");
+			expect(sentMessages[0].content).toContain("tools/pi-ascet-tools.md");
 			expect(sentMessages[0].options).toEqual({ deliverAs: "followUp" });
 			expect(notifications).toEqual([{ message: "Queued ASCET init as a follow-up.", level: "info" }]);
 		} finally {

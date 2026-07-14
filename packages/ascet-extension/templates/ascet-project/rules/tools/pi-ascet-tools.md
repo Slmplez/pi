@@ -10,6 +10,6 @@ Use canonical PI ASCET tools only.
 - Write: `ascet_write`, `ascet_batch_write`
 - Verify: `ascet_verify`
 
-Do not use old ASCET Copilot tool names such as `AscetExploreTool`, `AscetSearchTool`, or `AscetReadTool`.
+Do not use legacy CamelCase ASCET Copilot tool identifiers. Use only the canonical PI `ascet_*` tools listed above.
 
 For BDE or block diagram reads, use `ascet_read` with action `read_block_diagram`.
