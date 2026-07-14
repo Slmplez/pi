@@ -17,6 +17,7 @@ interface AscetRulesManifestRule {
 
 interface AscetRulesManifest {
 	default_entrypoints: string[];
+	init_bundle?: string[];
 	rules: AscetRulesManifestRule[];
 }
 
@@ -36,8 +37,9 @@ function parseInlineString(value: string): string {
 
 function parseAscetRulesManifest(content: string): AscetRulesManifest {
 	const defaultEntrypoints: string[] = [];
+	const initBundle: string[] = [];
 	const rules: AscetRulesManifestRule[] = [];
-	let section: "default_entrypoints" | "rules" | undefined;
+	let section: "default_entrypoints" | "init_bundle" | "rules" | undefined;
 	let currentRule: Partial<AscetRulesManifestRule> | undefined;
 
 	for (const rawLine of content.split(/\r?\n/)) {
@@ -46,6 +48,10 @@ function parseAscetRulesManifest(content: string): AscetRulesManifest {
 
 		if (line === "default_entrypoints:") {
 			section = "default_entrypoints";
+			continue;
+		}
+		if (line === "init_bundle:") {
+			section = "init_bundle";
 			continue;
 		}
 		if (line === "rules:") {
@@ -59,6 +65,11 @@ function parseAscetRulesManifest(content: string): AscetRulesManifest {
 
 		if (section === "default_entrypoints" && line.startsWith("- ")) {
 			defaultEntrypoints.push(parseInlineString(line.slice(2)));
+			continue;
+		}
+
+		if (section === "init_bundle" && line.startsWith("- ")) {
+			initBundle.push(parseInlineString(line.slice(2)));
 			continue;
 		}
 
@@ -87,7 +98,7 @@ function parseAscetRulesManifest(content: string): AscetRulesManifest {
 		rules.push({ id: currentRule.id, path: currentRule.path, layer: currentRule.layer });
 	}
 
-	return { default_entrypoints: defaultEntrypoints, rules };
+	return { default_entrypoints: defaultEntrypoints, init_bundle: initBundle, rules };
 }
 
 function resolveEntrypointPathWithinRulesDir(rulesDir: string, entrypointPath: string): string {
@@ -121,11 +132,33 @@ export async function loadAscetInitEntrypoints(rulesDir: string): Promise<AscetI
 	const manifestPath = getManifestPath(rulesDir);
 	const manifest = parseAscetRulesManifest(await readFile(manifestPath, "utf8"));
 
+	return loadRulesByIds(
+		rulesDir,
+		manifest,
+		manifest.default_entrypoints,
+		"ASCET default entrypoint is missing from manifest rules",
+	);
+}
+
+export async function loadAscetInitRuleBundle(rulesDir: string): Promise<AscetInitEntrypoint[]> {
+	const manifestPath = getManifestPath(rulesDir);
+	const manifest = parseAscetRulesManifest(await readFile(manifestPath, "utf8"));
+	const ids = manifest.init_bundle?.length ? manifest.init_bundle : manifest.default_entrypoints;
+
+	return loadRulesByIds(rulesDir, manifest, ids, "ASCET init bundle entry is missing from manifest rules");
+}
+
+async function loadRulesByIds(
+	rulesDir: string,
+	manifest: AscetRulesManifest,
+	ids: string[],
+	missingMessage: string,
+): Promise<AscetInitEntrypoint[]> {
 	return Promise.all(
-		manifest.default_entrypoints.map(async (entrypointId) => {
+		ids.map(async (entrypointId) => {
 			const rule = manifest.rules.find((candidate) => candidate.id === entrypointId);
 			if (!rule) {
-				throw new Error(`ASCET default entrypoint is missing from manifest rules: ${entrypointId}`);
+				throw new Error(`${missingMessage}: ${entrypointId}`);
 			}
 			const resolvedPath = resolveEntrypointPathWithinRulesDir(rulesDir, rule.path);
 			return {

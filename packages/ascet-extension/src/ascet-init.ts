@@ -1,3 +1,4 @@
+import { parseAscetInitScopeArgs } from "./ascet-init-scope.ts";
 import {
 	ensureRepoAscetRulesScaffold,
 	loadAscetInitEntrypoints,
@@ -171,6 +172,12 @@ export async function executeAscetInitCommand(
 	ctx: AscetInitCommandContext,
 	pi: Pick<AscetExtensionAPI, "sendUserMessage"> | AscetInitPiApi,
 ): Promise<void> {
+	const scope = parseAscetInitScopeArgs(args);
+	if (!scope.ok) {
+		ctx.ui.notify(scope.usage, "warning");
+		return;
+	}
+
 	const { rulesDir } = await ensureRepoAscetRulesScaffold(ctx.cwd);
 	const entrypoints = await loadAscetInitEntrypoints(rulesDir);
 	const projectRulesPrompt = renderAscetInitRulesPrompt(entrypoints);

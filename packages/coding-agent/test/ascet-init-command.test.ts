@@ -7,9 +7,11 @@ import {
 	buildAscetInitPrompt,
 	executeAscetInitCommand,
 } from "../../ascet-extension/src/ascet-init.ts";
+import { parseAscetInitScopeArgs } from "../../ascet-extension/src/ascet-init-scope.ts";
 import {
 	ensureRepoAscetRulesScaffold,
 	loadAscetInitEntrypoints,
+	loadAscetInitRuleBundle,
 	renderAscetInitRulesPrompt,
 } from "../../ascet-extension/src/ascet-project-rules.ts";
 import { loadAscetExtension } from "./ascet-extension-test-helpers.ts";
@@ -50,6 +52,30 @@ describe("ASCET init prompt", () => {
 	});
 });
 
+describe("ASCET init scope args", () => {
+	it("parses no-arg, database, folder, and project scopes", () => {
+		expect(parseAscetInitScopeArgs("")).toEqual({ ok: true, kind: "auto-detect" });
+		expect(parseAscetInitScopeArgs("database")).toEqual({ ok: true, kind: "database" });
+		expect(parseAscetInitScopeArgs("folder DEMO\\components")).toEqual({
+			ok: true,
+			kind: "folder",
+			value: "DEMO\\components",
+		});
+		expect(parseAscetInitScopeArgs("project IdleCon")).toEqual({
+			ok: true,
+			kind: "project",
+			value: "IdleCon",
+		});
+	});
+
+	it("rejects malformed init scope args", () => {
+		expect(parseAscetInitScopeArgs("database extra")).toMatchObject({ ok: false });
+		expect(parseAscetInitScopeArgs("folder")).toMatchObject({ ok: false });
+		expect(parseAscetInitScopeArgs("project")).toMatchObject({ ok: false });
+		expect(parseAscetInitScopeArgs("unknown DEMO")).toMatchObject({ ok: false });
+	});
+});
+
 describe("ASCET init project rules scaffold", () => {
 	it("creates default project rules and loads manifest entrypoints", async () => {
 		const projectRoot = createTempProject();
@@ -62,6 +88,9 @@ describe("ASCET init project rules scaffold", () => {
 
 			const entrypoints = await loadAscetInitEntrypoints(result.rulesDir);
 			expect(entrypoints.map((entrypoint) => entrypoint.id)).toEqual(["ascet.init.workflow", "ascet.tools.pi"]);
+
+			const bundle = await loadAscetInitRuleBundle(result.rulesDir);
+			expect(bundle.map((entrypoint) => entrypoint.id)).toEqual(["ascet.init.workflow", "ascet.tools.pi"]);
 
 			const rendered = renderAscetInitRulesPrompt(entrypoints);
 			expect(rendered).toContain("ASCET project rules loaded for this command only.");
@@ -115,6 +144,33 @@ describe("ASCET init project rules scaffold", () => {
 			removeTempProject(projectRoot);
 		}
 	});
+
+	it("rejects init bundle entries missing from manifest rules", async () => {
+		const projectRoot = createTempProject();
+		try {
+			const rulesDir = join(projectRoot, ".ascet", "rules");
+			mkdirSync(rulesDir, { recursive: true });
+			writeFileSync(
+				join(rulesDir, "manifest.yaml"),
+				[
+					"version: 2",
+					"init_bundle:",
+					"  - ascet.missing",
+					"rules:",
+					"  - id: ascet.init.workflow",
+					"    path: tasks/init.md",
+					"",
+				].join("\n"),
+				"utf8",
+			);
+
+			await expect(loadAscetInitRuleBundle(rulesDir)).rejects.toThrow(
+				"ASCET init bundle entry is missing from manifest rules",
+			);
+		} finally {
+			removeTempProject(projectRoot);
+		}
+	});
 });
 
 describe("ASCET init command", () => {
@@ -122,6 +178,40 @@ describe("ASCET init command", () => {
 		const ascetExtension = await loadAscetExtension();
 
 		expect(ascetExtension?.commands.has("ascet-init")).toBe(true);
+	});
+
+	it("rejects malformed args before scaffolding or sending a prompt", async () => {
+		const projectRoot = createTempProject();
+		try {
+			const sentMessages: Array<{ content: string; options?: { deliverAs?: "steer" | "followUp" } }> = [];
+			const notifications: Array<{ message: string; level?: "info" | "warning" | "error" }> = [];
+
+			await executeAscetInitCommand(
+				"folder",
+				{
+					cwd: projectRoot,
+					isIdle: () => true,
+					ui: {
+						notify: (message: string, level?: "info" | "warning" | "error") =>
+							notifications.push({ message, level }),
+					},
+				},
+				{
+					sendUserMessage: (content, options) => sentMessages.push({ content, options }),
+				},
+			);
+
+			expect(sentMessages).toEqual([]);
+			expect(notifications).toEqual([
+				{
+					message: "Usage: /ascet-init [database|folder <path>|project <name-or-path>]",
+					level: "warning",
+				},
+			]);
+			expect(existsSync(join(projectRoot, ".ascet", "rules", "manifest.yaml"))).toBe(false);
+		} finally {
+			removeTempProject(projectRoot);
+		}
 	});
 
 	it("sends the init prompt immediately when the agent is idle", async () => {

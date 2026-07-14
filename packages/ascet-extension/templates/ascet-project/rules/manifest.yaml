@@ -3,6 +3,9 @@ system: ascet-workflow-rules
 default_entrypoints:
   - ascet.init.workflow
   - ascet.tools.pi
+init_bundle:
+  - ascet.init.workflow
+  - ascet.tools.pi
 loading_policy:
   mode: progressive-disclosure
   strategy:
