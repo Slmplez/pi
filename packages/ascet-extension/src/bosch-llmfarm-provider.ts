@@ -24,7 +24,12 @@ const FAR_FUTURE_EXPIRES = 4102444800000;
 const INTERNAL_KEY_PLACEMENT_HEADER = "x-bosch-llmfarm-key-placement";
 const INTERNAL_STREAM_HEADER = "x-bosch-llmfarm-stream";
 
-export type BoschGatewayKeyPlacement = "header-query-body" | "header-only" | "header-body" | "header-query";
+export type BoschGatewayKeyPlacement =
+	| "authorization-gateway-header"
+	| "header-query-body"
+	| "header-only"
+	| "header-body"
+	| "header-query";
 
 export interface BoschModelConfig {
 	id: string;
@@ -184,6 +189,7 @@ async function selectKeyPlacement(callbacks: OAuthLoginCallbacks): Promise<Bosch
 	const selected = await callbacks.onSelect({
 		message: "Gateway key placement:",
 		options: [
+			{ id: "authorization-gateway-header", label: "authorization + gatewayKey header" },
 			{ id: "header-query-body", label: "header + query + body" },
 			{ id: "header-only", label: "header only" },
 			{ id: "header-body", label: "header + body" },
@@ -191,6 +197,7 @@ async function selectKeyPlacement(callbacks: OAuthLoginCallbacks): Promise<Bosch
 		],
 	});
 	if (
+		selected === "authorization-gateway-header" ||
 		selected === "header-only" ||
 		selected === "header-body" ||
 		selected === "header-query" ||
@@ -198,7 +205,7 @@ async function selectKeyPlacement(callbacks: OAuthLoginCallbacks): Promise<Bosch
 	) {
 		return selected;
 	}
-	return "header-query-body";
+	return "authorization-gateway-header";
 }
 
 export async function loginBoschLlmFarm(callbacks: OAuthLoginCallbacks): Promise<BoschLlmFarmCredentials> {
@@ -399,8 +406,13 @@ function shouldIncludeBodyKey(keyPlacement: BoschGatewayKeyPlacement): boolean {
 	return keyPlacement === "header-query-body" || keyPlacement === "header-body";
 }
 
+function shouldIncludeGatewayKeyHeader(keyPlacement: BoschGatewayKeyPlacement): boolean {
+	return keyPlacement === "authorization-gateway-header";
+}
+
 function parseKeyPlacement(value: unknown): BoschGatewayKeyPlacement | undefined {
 	if (
+		value === "authorization-gateway-header" ||
 		value === "header-only" ||
 		value === "header-body" ||
 		value === "header-query" ||
@@ -428,7 +440,7 @@ function getKeyPlacement(model: Model<Api>, options?: BoschStreamOptions): Bosch
 	if (modelPlacement) {
 		return modelPlacement;
 	}
-	return "header-query-body";
+	return "authorization-gateway-header";
 }
 
 function getStreamingEnabled(model: Model<Api>, options?: BoschStreamOptions): boolean {
@@ -467,7 +479,11 @@ function createPayload(
 	return payload;
 }
 
-function buildRequestHeaders(gatewayKey: string, options?: BoschStreamOptions): Record<string, string> {
+function buildRequestHeaders(
+	gatewayKey: string,
+	keyPlacement: BoschGatewayKeyPlacement,
+	options?: BoschStreamOptions,
+): Record<string, string> {
 	const headers: Record<string, string> = {};
 	for (const [name, value] of Object.entries(options?.headers ?? {})) {
 		if (value === null || value === undefined) {
@@ -485,6 +501,9 @@ function buildRequestHeaders(gatewayKey: string, options?: BoschStreamOptions): 
 		headers[name] = value;
 	}
 	headers.Authorization = `Bearer ${gatewayKey}`;
+	if (shouldIncludeGatewayKeyHeader(keyPlacement)) {
+		headers.gatewayKey = gatewayKey;
+	}
 	headers["Content-Type"] = "application/json";
 	return headers;
 }
@@ -724,7 +743,7 @@ export function streamBoschLlmFarm(
 			const requestFetch = options?.fetch ?? fetch;
 			const response = await requestFetch(buildBoschChatCompletionsUrl(model.baseUrl, gatewayKey, keyPlacement), {
 				method: "POST",
-				headers: buildRequestHeaders(gatewayKey, options),
+				headers: buildRequestHeaders(gatewayKey, keyPlacement, options),
 				body: JSON.stringify(requestPayload),
 				signal: options?.signal,
 			});

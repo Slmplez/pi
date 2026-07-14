@@ -110,21 +110,14 @@ https://apiroutecccn.apac.bosch.com/openapi/aigatewayprod/bdo-llmfarm-llm/v1/cha
 https://apiroutecccn.apac.bosch.com/openapi/aigatewayprod/bdo-llmfarm-llm/v1/chat/completions?gatewayKey=...
 ```
 
-The default gateway-key placement is `header + query + body`, matching Bosch gateway examples:
+The default gateway-key placement is `authorization + gatewayKey header`, matching the verified Bosch OpenAI SDK call shape:
 
 ```http
 Authorization: Bearer <gatewayKey>
+gatewayKey: <gatewayKey>
 ```
 
-```text
-<baseUrl>/chat/completions?gatewayKey=<gatewayKey>
-```
-
-```json
-{
-  "gatewayKey": "<gatewayKey>"
-}
-```
+With the default placement, the gateway key is not added to the URL query string or JSON body. Legacy placements are still available during login for gateways that expect `gatewayKey` in the query string, request body, or both.
 
 If the gateway only requires a bearer token, choose `header only` during login. The selected placement is stored with the model configuration and applied to later `/model bosch-llmfarm/<model-id>` requests.
 

@@ -101,7 +101,7 @@ describe("bosch-llmfarm provider", () => {
 			refresh: "",
 			expires: farFuture,
 			baseUrl: "https://gateway.example.com/openapi/service/v1",
-			keyPlacement: "header-query-body",
+			keyPlacement: "authorization-gateway-header",
 			models: [
 				{
 					id: "alpha",
@@ -157,6 +157,9 @@ describe("bosch-llmfarm provider", () => {
 	});
 
 	it("builds the chat completions URL with gatewayKey query only when configured", () => {
+		expect(
+			buildBoschChatCompletionsUrl("https://gateway.example.com/v1", "secret", "authorization-gateway-header"),
+		).toBe("https://gateway.example.com/v1/chat/completions");
 		expect(buildBoschChatCompletionsUrl("https://gateway.example.com/v1", "secret", "header-query-body")).toBe(
 			"https://gateway.example.com/v1/chat/completions?gatewayKey=secret",
 		);
@@ -206,8 +209,42 @@ describe("bosch-llmfarm provider", () => {
 		});
 	});
 
+	it("defaults to the successful OpenAI SDK Bosch gateway auth shape", async () => {
+		const requests: Array<{ url: string; init: RequestInit }> = [];
+		const fetchMock = vi.fn(async (url: string | URL | Request, init?: RequestInit) => {
+			requests.push({ url: String(url), init: init ?? {} });
+			return new Response(
+				JSON.stringify({
+					choices: [{ message: { role: "assistant", content: "pong" }, finish_reason: "stop" }],
+				}),
+				{ status: 200, headers: { "content-type": "application/json" } },
+			);
+		});
+
+		const result = await streamBoschLlmFarm(createModel("gpt-5.5"), textContext, {
+			apiKey: "secret-key",
+			fetch: fetchMock,
+		}).result();
+
+		expect(result.content).toEqual([{ type: "text", text: "pong" }]);
+		expect(requests).toHaveLength(1);
+		expect(requests[0]!.url).toBe("https://gateway.example.com/openapi/service/v1/chat/completions");
+		expect(requests[0]!.init.headers).toMatchObject({
+			Authorization: "Bearer secret-key",
+			gatewayKey: "secret-key",
+			"Content-Type": "application/json",
+		});
+		expect(JSON.parse(String(requests[0]!.init.body))).not.toHaveProperty("gatewayKey");
+	});
+
 	it("round trips through a local OpenAI-compatible gateway over fetch", async () => {
-		const requests: Array<{ url: string; authorization?: string; contentType: string; body: unknown }> = [];
+		const requests: Array<{
+			url: string;
+			authorization?: string;
+			gatewayKey?: string | string[];
+			contentType: string;
+			body: unknown;
+		}> = [];
 		const server = createServer((req, res) => {
 			let body = "";
 			req.setEncoding("utf8");
@@ -218,6 +255,7 @@ describe("bosch-llmfarm provider", () => {
 				requests.push({
 					url: req.url ?? "",
 					authorization: req.headers.authorization,
+					gatewayKey: req.headers.gatewaykey,
 					contentType: String(req.headers["content-type"] ?? ""),
 					body: JSON.parse(body),
 				});
@@ -250,24 +288,20 @@ describe("bosch-llmfarm provider", () => {
 
 			const result = await streamBoschLlmFarm(model, textContext, {
 				apiKey: "secret-key",
-				metadata: {
-					boschLlmFarm: {
-						keyPlacement: "header-query-body",
-					},
-				},
 			}).result();
 
 			expect(result.content).toEqual([{ type: "text", text: "local pong" }]);
 			expect(result.usage.totalTokens).toBe(7);
 			expect(requests).toHaveLength(1);
-			expect(requests[0]?.url).toBe("/openapi/service/v1/chat/completions?gatewayKey=secret-key");
+			expect(requests[0]?.url).toBe("/openapi/service/v1/chat/completions");
 			expect(requests[0]?.authorization).toBe("Bearer secret-key");
+			expect(requests[0]?.gatewayKey).toBe("secret-key");
 			expect(requests[0]?.contentType).toContain("application/json");
 			expect(requests[0]?.body).toMatchObject({
 				model: "alpha",
-				gatewayKey: "secret-key",
 				stream: false,
 			});
+			expect(requests[0]?.body).not.toHaveProperty("gatewayKey");
 		} finally {
 			await new Promise<void>((resolve, reject) => {
 				server.close((error) => (error ? reject(error) : resolve()));
