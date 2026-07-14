@@ -13,6 +13,13 @@ export function getCompatibleMethodKinds(
 	return ASCET_CREATE_METHOD_KIND_COMPATIBILITY[componentKind];
 }
 
+export function getDefaultCreateMethodKind(
+	componentKind: AscetCreateMethodComponentKind,
+): AscetCreateMethodKind | undefined {
+	const compatibleKinds = getCompatibleMethodKinds(componentKind);
+	return compatibleKinds.length === 1 ? compatibleKinds[0] : undefined;
+}
+
 export function validateCreateMethodKindCompatibility(params: {
 	componentKind?: AscetCreateMethodComponentKind;
 	methodKind?: AscetCreateMethodKind;

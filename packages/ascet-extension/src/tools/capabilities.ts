@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { Type } from "typebox";
+import { ASCET_CREATE_METHOD_KIND_COMPATIBILITY } from "../method-kind-compatibility.ts";
 import { type AscetCliCoverageCategory, classifyAscetCliCommand } from "../routing/coverage.ts";
 import { createAscetStatusReport } from "../status.ts";
 
@@ -146,7 +147,7 @@ export function runAscetCapabilities(
 					risk: command.risk,
 					summary: command.summary,
 					objectKinds: command.objectKinds,
-					methodKindCompatibility: detailedCommand.methodKindCompatibility,
+					methodKindCompatibility: resolveMethodKindCompatibility(detailedCommand),
 					lane: command.lane,
 					hostEligible: command.hostEligible,
 					supportsBatch: command.supportsBatch,
@@ -201,6 +202,21 @@ function loadCommandDetails(contractsRoot: string, command: AscetCapabilityComma
 	}
 }
 
+function resolveMethodKindCompatibility(command: AscetCapabilityCommand): Record<string, string[]> | undefined {
+	if (command.methodKindCompatibility) {
+		return command.methodKindCompatibility;
+	}
+	if (command.id === "AscetCreateMethod" || command.operation === "create_method") {
+		return Object.fromEntries(
+			Object.entries(ASCET_CREATE_METHOD_KIND_COMPATIBILITY).map(([componentKind, methodKinds]) => [
+				componentKind,
+				[...methodKinds],
+			]),
+		);
+	}
+	return undefined;
+}
+
 function extractArgumentEnums(command: AscetCapabilityCommand): Record<string, string[]> | undefined {
 	const argumentEnums = Object.fromEntries(
 		(command.args ?? [])
@@ -208,6 +224,13 @@ function extractArgumentEnums(command: AscetCapabilityCommand): Record<string, s
 			.map((arg) => [arg.name ?? "argument", arg.enumValues ?? []]),
 	);
 	return Object.keys(argumentEnums).length > 0 ? argumentEnums : undefined;
+}
+
+function formatStringValues(values: unknown): string {
+	if (Array.isArray(values)) {
+		return values.filter((value): value is string => typeof value === "string" && value.length > 0).join("|");
+	}
+	return typeof values === "string" ? values : "";
 }
 
 export function formatAscetCapabilitiesResult(result: AscetCapabilitiesResult): string {
@@ -222,12 +245,16 @@ export function formatAscetCapabilitiesResult(result: AscetCapabilitiesResult): 
 				: ` (${match.coverageCategory ?? "unclassified"})`;
 			const enumText = match.argumentEnums
 				? `; valid values: ${Object.entries(match.argumentEnums)
-						.map(([name, values]) => `${name}=${values.join("|")}`)
+						.map(([name, values]) => [name, formatStringValues(values)] as const)
+						.filter(([, values]) => values.length > 0)
+						.map(([name, values]) => `${name}=${values}`)
 						.join(", ")}`
 				: "";
 			const compatibilityText = match.methodKindCompatibility
 				? `; method kinds: ${Object.entries(match.methodKindCompatibility)
-						.map(([kind, values]) => `${kind}=${values.join("|")}`)
+						.map(([kind, values]) => [kind, formatStringValues(values)] as const)
+						.filter(([, values]) => values.length > 0)
+						.map(([kind, values]) => `${kind}=${values}`)
 						.join(", ")}`
 				: "";
 			return `- ${match.operation ?? match.id}: ${match.summary ?? ""}${route}${enumText}${compatibilityText}`;

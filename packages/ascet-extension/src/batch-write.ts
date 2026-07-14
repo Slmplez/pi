@@ -8,6 +8,12 @@ import {
 	runAscetCliJson,
 } from "./cli.ts";
 import { type AscetToolOutcome, createPreflightOutcome } from "./core/results.ts";
+import {
+	type AscetCreateMethodComponentKind,
+	type AscetCreateMethodKind,
+	getDefaultCreateMethodKind,
+	validateCreateMethodKindCompatibility,
+} from "./method-kind-compatibility.ts";
 import { createAscetStatusReport } from "./status.ts";
 import { type AscetWriteApprovalContext, requestAscetWriteApproval } from "./write-policy.ts";
 
@@ -63,7 +69,7 @@ const createComponentRequest = Type.Object(
 	{
 		componentPath: Type.String({ minLength: 1 }),
 		kind: Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")]),
-		language: Type.Optional(Type.Union([Type.Literal("ESDL"), Type.Literal("C")])),
+		language: Type.Optional(Type.Union([Type.Literal("ESDL"), Type.Literal("BDE"), Type.Literal("C")])),
 		ifExists: Type.Optional(
 			Type.Union([Type.Literal("fail"), Type.Literal("return-existing"), Type.Literal("overwrite")]),
 		),
@@ -76,6 +82,9 @@ const createMethodRequest = Type.Object(
 	{
 		componentPath: Type.String({ minLength: 1 }),
 		methodName: Type.String({ minLength: 1 }),
+		componentKind: Type.Optional(
+			Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")]),
+		),
 		methodKind: Type.Optional(
 			Type.Union([
 				Type.Literal("abstract"),
@@ -220,26 +229,77 @@ function formatBatchRequestValidationPath(
 	return basePath ? `requests.${index}.${basePath}` : `requests.${index}`;
 }
 
-export function validateAscetBatchWriteParams(params: AscetBatchWriteParams): AscetBatchWriteParams {
-	const requestSchema = requestSchemaByToolOperation[params.operation];
-	if (!requestSchema || !Array.isArray(params.requests)) {
+function normalizeBatchRequest(
+	operation: AscetBatchWriteOperation,
+	request: Record<string, unknown>,
+): Record<string, unknown> {
+	if (
+		operation === "batch_create_component" &&
+		(request.kind === "class" || request.kind === "module") &&
+		request.language === undefined
+	) {
+		return { ...request, language: "ESDL" };
+	}
+	if (operation === "batch_create_method" && !request.methodKind && typeof request.componentKind === "string") {
+		const defaultMethodKind = getDefaultCreateMethodKind(request.componentKind as AscetCreateMethodComponentKind);
+		if (defaultMethodKind) {
+			return { ...request, methodKind: defaultMethodKind };
+		}
+	}
+	return request;
+}
+
+export function normalizeAscetBatchWriteParams(params: AscetBatchWriteParams): AscetBatchWriteParams {
+	if (!Array.isArray(params.requests)) {
 		return params;
 	}
+	return {
+		...params,
+		requests: params.requests.map((request) => normalizeBatchRequest(params.operation, request)),
+	};
+}
+
+function validateBatchCreateMethodSemantics(request: Record<string, unknown>, index: number, errors: string[]): void {
+	const componentKind = request.componentKind as AscetCreateMethodComponentKind | undefined;
+	const methodKind = request.methodKind as AscetCreateMethodKind | undefined;
+	if (!methodKind) {
+		if (componentKind === "statemachine") {
+			errors.push(`requests.${index}.methodKind: requires methodKind for statemachine targets`);
+			return;
+		}
+		errors.push(`requests.${index}.methodKind: requires methodKind or componentKind for default inference`);
+		return;
+	}
+	const compatibility = validateCreateMethodKindCompatibility({ componentKind, methodKind });
+	if (compatibility) {
+		errors.push(`requests.${index}.methodKind: ${compatibility.message}`);
+	}
+}
+
+export function validateAscetBatchWriteParams(params: AscetBatchWriteParams): AscetBatchWriteParams {
+	const normalizedParams = normalizeAscetBatchWriteParams(params);
+	const requestSchema = requestSchemaByToolOperation[normalizedParams.operation];
+	if (!requestSchema || !Array.isArray(normalizedParams.requests)) {
+		return normalizedParams;
+	}
 	const errors: string[] = [];
-	for (const [index, request] of params.requests.entries()) {
+	for (const [index, request] of normalizedParams.requests.entries()) {
 		for (const error of Value.Errors(requestSchema, request)) {
 			errors.push(`${formatBatchRequestValidationPath(index, error)}: ${error.message}`);
+		}
+		if (normalizedParams.operation === "batch_create_method") {
+			validateBatchCreateMethodSemantics(request, index, errors);
 		}
 	}
 	if (errors.length > 0) {
 		throw new Error(
 			[
-				`Validation failed for batch operation "${params.operation}":`,
+				`Validation failed for batch operation "${normalizedParams.operation}":`,
 				...errors.map((error) => `  - ${error}`),
 			].join("\n"),
 		);
 	}
-	return params;
+	return normalizedParams;
 }
 
 function createBatchPayload(params: AscetBatchWriteParams): string {
@@ -258,16 +318,18 @@ export function buildBatchWriteArgs(params: AscetBatchWriteParams): string[] {
 }
 
 export function createBatchWriteSummary(params: AscetBatchWriteParams): string {
-	const preview = params.requests
+	const normalizedParams = normalizeAscetBatchWriteParams(params);
+	const preview = normalizedParams.requests
 		.slice(0, 5)
 		.map((request, index) => `request ${index + 1}: ${JSON.stringify(request)}`)
 		.join("\n");
-	const more = params.requests.length > 5 ? `\n... ${params.requests.length - 5} more request(s)` : "";
+	const more =
+		normalizedParams.requests.length > 5 ? `\n... ${normalizedParams.requests.length - 5} more request(s)` : "";
 	return [
 		"ASCET batch write request:",
-		`operation: ${params.operation}`,
-		`cliOperation: ${cliOperationByToolOperation[params.operation]}`,
-		`requestCount: ${params.requests.length}`,
+		`operation: ${normalizedParams.operation}`,
+		`cliOperation: ${cliOperationByToolOperation[normalizedParams.operation]}`,
+		`requestCount: ${normalizedParams.requests.length}`,
 		preview,
 		more,
 	]
@@ -309,12 +371,12 @@ export async function runAscetBatchWrite(
 	params: AscetBatchWriteParams,
 	options: RunAscetBatchWriteOptions,
 ): Promise<AscetBatchWriteResult> {
-	validateAscetBatchWriteParams(params);
-	return runAscetCliJson(buildBatchWriteArgs(params), {
+	const normalizedParams = validateAscetBatchWriteParams(params);
+	return runAscetCliJson(buildBatchWriteArgs(normalizedParams), {
 		...options,
-		stdin: createBatchPayload(params),
+		stdin: createBatchPayload(normalizedParams),
 		acceptedExitCodes: [0, 2],
-		commandId: `batch_${cliOperationByToolOperation[params.operation]}`,
+		commandId: `batch_${cliOperationByToolOperation[normalizedParams.operation]}`,
 		toolName: "ascet_batch_write",
 		jobKind: "write",
 	});
@@ -325,12 +387,12 @@ export async function runApprovedAscetBatchWrite(
 	options: RunAscetBatchWriteOptions,
 	ctx: AscetWriteApprovalContext,
 ): Promise<AscetBatchWriteResult> {
-	validateAscetBatchWriteParams(params);
+	const normalizedParams = validateAscetBatchWriteParams(params);
 	const approval = await requestAscetWriteApproval(
 		{
-			executeWrite: params.executeWrite,
+			executeWrite: normalizedParams.executeWrite,
 			title: "Confirm ASCET batch write",
-			message: createBatchWriteSummary(params),
+			message: createBatchWriteSummary(normalizedParams),
 			signal: options.signal,
 		},
 		ctx,
@@ -338,14 +400,14 @@ export async function runApprovedAscetBatchWrite(
 
 	if (!approval.approved) {
 		return createBlockedBatchWriteResult(
-			params,
+			normalizedParams,
 			options,
 			approval.code ?? "ascet_write_rejected",
 			approval.message ?? "ASCET batch write was not approved.",
 		);
 	}
 
-	return runAscetBatchWrite(params, options);
+	return runAscetBatchWrite(normalizedParams, options);
 }
 
 function asRecord(value: unknown): Record<string, unknown> | undefined {

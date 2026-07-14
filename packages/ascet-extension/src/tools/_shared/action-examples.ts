@@ -613,7 +613,10 @@ export const ascetActionExamples = [
 		tool: "ascet_batch_write",
 		action: "batch_create_method",
 		intent: "batch methods",
-		args: { operation: "batch_create_method", requests: [{ componentPath: "D\\P", methodName: "calc2" }] },
+		args: {
+			operation: "batch_create_method",
+			requests: [{ componentPath: "D\\P", componentKind: "class", methodName: "calc2" }],
+		},
 	}),
 	defineExample({
 		tool: "ascet_batch_write",

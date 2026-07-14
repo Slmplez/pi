@@ -12,6 +12,7 @@ import {
 	ascetBatchWriteParameters,
 	buildBatchWriteArgs,
 	createBatchWriteOutcome,
+	createBatchWriteSummary,
 	runApprovedAscetBatchWrite,
 } from "../../ascet-extension/src/batch-write.ts";
 import type { AscetCliRequest } from "../../ascet-extension/src/cli.ts";
@@ -552,6 +553,38 @@ describe("ASCET guarded write PI tools", () => {
 		expect(missingKindForExecution.details.error?.message).toContain("inspect the target");
 	});
 
+	it("defaults create_method methodKind from componentKind before execution when unambiguous", async () => {
+		let observedArgs: string[] | undefined;
+		const result = await runAscetWrite(
+			{
+				action: "create_method",
+				componentPath: "DEMO\\PID",
+				componentKind: "class",
+				methodName: "calc2",
+				executeWrite: true,
+			} as never,
+			{
+				cwd: repoRoot,
+				executeCli: async (request) => {
+					observedArgs = request.args;
+					return {
+						exitCode: 0,
+						stdout: JSON.stringify({ ok: true, result: { operation: "create_method" } }),
+						stderr: "",
+						timedOut: false,
+						request,
+					};
+				},
+			},
+			{ hasUI: true, ui: { confirm: async () => true } },
+		);
+
+		expect(result.details.outcome.status).toBe("ok");
+		expect(observedArgs).toEqual(
+			expect.arrayContaining(["exec", "create_method", "--method-kind", "abstract", "--json"]),
+		);
+	});
+
 	it("preserves create_component expected default scaffold as an unverified hint", async () => {
 		const result = await runAscetWrite(
 			{
@@ -756,6 +789,66 @@ describe("ASCET guarded write PI tools", () => {
 				},
 			],
 		});
+	});
+
+	it("normalizes batch create defaults before producing the CLI payload", async () => {
+		const componentResult = await runApprovedAscetBatchWrite(
+			{
+				operation: "batch_create_component",
+				requests: [
+					{ componentPath: "DEMO\\BatchClass", kind: "class" },
+					{ componentPath: "DEMO\\BatchState", kind: "statemachine" },
+				],
+				executeWrite: false,
+			},
+			{ cwd: repoRoot },
+			{ hasUI: true, ui: { confirm: async () => true } },
+		);
+		const methodResult = await runApprovedAscetBatchWrite(
+			{
+				operation: "batch_create_method",
+				requests: [
+					{ componentPath: "DEMO\\BatchClass", componentKind: "class", methodName: "calc2" },
+					{ componentPath: "DEMO\\BatchModule", componentKind: "module", methodName: "process2" },
+				],
+				executeWrite: false,
+			},
+			{ cwd: repoRoot },
+			{ hasUI: true, ui: { confirm: async () => true } },
+		);
+
+		expect(JSON.parse(componentResult.request.stdin ?? "{}")).toMatchObject({
+			requests: [
+				{ operation: "create_component", args: { componentPath: "DEMO\\BatchClass", language: "ESDL" } },
+				{ operation: "create_component", args: { componentPath: "DEMO\\BatchState" } },
+			],
+		});
+		expect(JSON.parse(methodResult.request.stdin ?? "{}")).toMatchObject({
+			requests: [
+				{ operation: "create_method", args: { componentKind: "class", methodKind: "abstract" } },
+				{ operation: "create_method", args: { componentKind: "module", methodKind: "process" } },
+			],
+		});
+		expect(
+			createBatchWriteSummary({
+				operation: "batch_create_component",
+				requests: [{ componentPath: "D\\C", kind: "class" }],
+			}),
+		).toContain('"language":"ESDL"');
+	});
+
+	it("rejects ambiguous batch create_method defaults before CLI execution", async () => {
+		await expect(
+			runApprovedAscetBatchWrite(
+				{
+					operation: "batch_create_method",
+					requests: [{ componentPath: "DEMO\\BatchState", componentKind: "statemachine", methodName: "entry" }],
+					executeWrite: false,
+				},
+				{ cwd: repoRoot },
+				{ hasUI: true, ui: { confirm: async () => true } },
+			),
+		).rejects.toThrow("requires methodKind for statemachine targets");
 	});
 
 	it("uses OpenAI-compatible object schema for batch writes", () => {

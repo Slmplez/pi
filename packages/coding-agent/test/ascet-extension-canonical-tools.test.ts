@@ -445,6 +445,7 @@ describe("ASCET canonical PI tools", () => {
 			canonicalAction: undefined,
 		});
 		expect(stateMachineResult.ok).toBe(true);
+		const formattedStateMachineCapabilities = formatAscetCapabilitiesResult(stateMachineResult);
 		expect(
 			stateMachineResult.data.matches.find((match) => match.operation === "set_state_machine_code"),
 		).toMatchObject({
@@ -454,7 +455,29 @@ describe("ASCET canonical PI tools", () => {
 			canonicalTool: "ascet_write",
 			canonicalAction: "set_state_machine_code",
 		});
-		expect(formatAscetCapabilitiesResult(stateMachineResult)).toContain("operation=set-method|set-state-entry-esdl");
+		expect(formattedStateMachineCapabilities).toContain("operation=set-method|set-state-entry-esdl");
+	});
+
+	it("formats ASCET capabilities defensively when enum metadata is malformed", () => {
+		expect(() =>
+			formatAscetCapabilitiesResult({
+				ok: true,
+				data: {
+					mode: "test",
+					catalogPath: "cli-catalog.json",
+					totalMatches: 1,
+					matches: [
+						{
+							operation: "set_state_machine_code",
+							summary: "Write state machine behavior",
+							canonicalTool: "ascet_write",
+							canonicalAction: "set_state_machine_code",
+							argumentEnums: { operation: {} as never },
+						},
+					],
+				},
+			}),
+		).not.toThrow();
 	});
 
 	it("reports create_method method-kind compatibility by component kind", () => {

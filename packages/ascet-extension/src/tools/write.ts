@@ -12,6 +12,7 @@ import { runApprovedAscetDeleteFolder } from "../delete-folder.ts";
 import { runApprovedAscetDeleteMethod } from "../delete-method.ts";
 import {
 	type AscetCreateMethodComponentKind,
+	getDefaultCreateMethodKind,
 	validateCreateMethodKindCompatibility,
 } from "../method-kind-compatibility.ts";
 import { runApprovedAscetSetElementDependency } from "../set-element-dependency.ts";
@@ -35,7 +36,7 @@ export type AscetWriteParams =
 			action: "create_component";
 			componentPath: string;
 			kind: "class" | "module" | "statemachine";
-			language?: "ESDL" | "C";
+			language?: "ESDL" | "BDE" | "C";
 			ifExists?: "fail" | "return-existing";
 			verifyReadback?: boolean;
 			rollbackOnFailure?: boolean;
@@ -46,7 +47,7 @@ export type AscetWriteParams =
 			componentPath: string;
 			componentKind?: AscetCreateMethodComponentKind;
 			methodName: string;
-			methodKind: "abstract" | "process" | "action" | "condition" | "trigger";
+			methodKind?: "abstract" | "process" | "action" | "condition" | "trigger";
 			ifExists?: "fail" | "return-existing";
 			verifyReadback?: boolean;
 			executeWrite?: boolean;
@@ -212,7 +213,7 @@ export const ascetWriteParameters = Type.Object({
 	componentKind: Type.Optional(
 		Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")]),
 	),
-	language: Type.Optional(Type.Union([Type.Literal("ESDL"), Type.Literal("C")])),
+	language: Type.Optional(Type.Union([Type.Literal("ESDL"), Type.Literal("BDE"), Type.Literal("C")])),
 	methodName: Type.Optional(Type.String({ minLength: 1 })),
 	elementName: Type.Optional(Type.String({ minLength: 1 })),
 	dependency: Type.Optional(Type.Union([Type.Literal("dependent"), Type.Literal("independent")])),
@@ -320,6 +321,19 @@ export async function runAscetWrite(
 }
 
 function normalizeAscetWriteParams(params: AscetWriteParams): AscetWriteParams {
+	if (
+		params.action === "create_component" &&
+		!params.language &&
+		(params.kind === "class" || params.kind === "module")
+	) {
+		return { ...params, language: "ESDL" };
+	}
+	if (params.action === "create_method" && !params.methodKind && params.componentKind) {
+		const defaultMethodKind = getDefaultCreateMethodKind(params.componentKind);
+		if (defaultMethodKind) {
+			return { ...params, methodKind: defaultMethodKind };
+		}
+	}
 	if (params.action === "set_module_code" && !params.operation && params.section) {
 		return { ...params, operation: params.section };
 	}
@@ -370,6 +384,16 @@ function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | 
 					code: "ascet_write_missing_component_kind",
 					message:
 						"create_method with executeWrite=true requires componentKind; inspect the target first so methodKind can be validated before ASCET ToolAPI execution.",
+				},
+			};
+		}
+		if (params.executeWrite && !params.methodKind) {
+			return {
+				status: "error",
+				error: {
+					code: "ascet_write_missing_method_kind",
+					message:
+						"create_method requires methodKind for statemachine targets; inspect the target and choose action, condition, or trigger.",
 				},
 			};
 		}
@@ -444,7 +468,10 @@ async function dispatchWrite(
 		case "create_component":
 			return runApprovedAscetCreateComponent(params, options, ctx);
 		case "create_method":
-			return runApprovedAscetCreateMethod(params, options, ctx);
+			if (!params.methodKind) {
+				throw new Error("create_method requires methodKind after validation.");
+			}
+			return runApprovedAscetCreateMethod({ ...params, methodKind: params.methodKind }, options, ctx);
 		case "set_method_signature":
 			return runApprovedAscetSetMethodSignature(params, options, ctx);
 		case "delete_component":
