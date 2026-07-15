@@ -391,6 +391,7 @@ npm pack --workspace @zeerke/ascet-copilot-extension --dry-run
 
 以下内容必须在 Bosch 企业网络或等价 VPN/代理环境中验证，当前本地环境不能证明完成：
 
+- 公司网络验证记录模板见 `docs/bosch-llmfarm-company-validation.md`。
 - 真实 Bosch gateway TLS 握手不再报 `UNABLE_TO_VERIFY_LEAF_SIGNATURE`。
 - 不依赖 `NODE_TLS_REJECT_UNAUTHORIZED=0`。
 - 最终验收不依赖 `NODE_OPTIONS=--use-system-ca`。
