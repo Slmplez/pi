@@ -36,6 +36,8 @@ Configure Bosch LLM Farm with:
 
 or select `Use a subscription`, then choose `Bosch LLM Farm`.
 
+The Bosch provider only contacts the gateway after you select `/model bosch-llmfarm/<model-id>` and send a message. Before that real request, it merges Node's default CA set with the operating system trusted CA set so Bosch enterprise TLS certificates can be verified on Windows. Do not use `NODE_TLS_REJECT_UNAUTHORIZED=0`; `NODE_OPTIONS=--use-system-ca` is only a temporary workaround for old extension builds.
+
 ## Update
 
 ```powershell

@@ -4,6 +4,9 @@
 	"description": "ASCET Copilot tool extension for Pi.",
 	"type": "module",
 	"main": "./src/index.ts",
+	"engines": {
+		"node": "^22.19.0 || >=24.5.0"
+	},
 	"exports": {
 		".": "./src/index.ts"
 	},

@@ -130,6 +130,10 @@ After login, select a configured model:
 /model bosch-llmfarm/<model-id>
 ```
 
+When the provider sends a real Bosch request, it merges the Node default CA set with the operating system trusted CA set before the first `fetch`. This supports Bosch enterprise TLS inspection or internal root CA chains on Windows without disabling certificate verification. `/login bosch-llmfarm` only stores configuration and does not contact the gateway.
+
+Do not use `NODE_TLS_REJECT_UNAUTHORIZED=0`. For old extension builds, `NODE_OPTIONS=--use-system-ca` can be used as a temporary workaround, but the provider-level system CA merge is the intended path.
+
 Requests are sent as OpenAI-compatible chat completions:
 
 ```text
@@ -145,6 +149,7 @@ Company-network validation checklist:
 - Enter one or more model IDs from Bosch Digital Assets.
 - Select `/model bosch-llmfarm/<model-id>`.
 - Send a text-only message and verify a normal response.
+- Verify the request works without `NODE_TLS_REJECT_UNAUTHORIZED=0` and without relying on `NODE_OPTIONS=--use-system-ca`.
 - Ask for an ASCET action and verify OpenAI-style tool calling works through the gateway.
 - If using a vision model, verify image input.
 - If the gateway supports SSE, set streaming support to `true` for one test model and verify streaming separately.

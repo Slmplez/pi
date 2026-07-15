@@ -11,6 +11,7 @@ import {
 	applyBoschConfiguredModels,
 	BOSCH_LLMFARM_PROVIDER_ID,
 	buildBoschChatCompletionsUrl,
+	formatBoschRequestError,
 	loginBoschLlmFarm,
 	normalizeBoschBaseUrl,
 	streamBoschLlmFarm,
@@ -457,6 +458,41 @@ describe("bosch-llmfarm provider", () => {
 		expect(result.stopReason).toBe("error");
 		expect(result.errorMessage).toContain("[REDACTED]");
 		expect(result.errorMessage).not.toContain("secret-key");
+	});
+
+	it("formats TLS certificate errors from nested fetch causes", () => {
+		const cause = Object.assign(new Error("unable to verify the first certificate"), {
+			code: "UNABLE_TO_VERIFY_LEAF_SIGNATURE",
+		});
+		const error = new TypeError("fetch failed", { cause });
+
+		expect(formatBoschRequestError(error)).toBe(
+			"Bosch LLM Farm TLS certificate verification failed (UNABLE_TO_VERIFY_LEAF_SIGNATURE): unable to verify the first certificate",
+		);
+	});
+
+	it("keeps nested non-TLS fetch causes visible", () => {
+		const error = new TypeError("fetch failed", {
+			cause: new Error("proxy connection closed"),
+		});
+
+		expect(formatBoschRequestError(error)).toBe("fetch failed: proxy connection closed");
+	});
+
+	it("redacts gatewayKey from nested provider errors", async () => {
+		const fetchMock = vi.fn(async () => {
+			throw new TypeError("fetch failed secret-key", {
+				cause: new Error("proxy rejected secret-key"),
+			});
+		});
+
+		const result = await streamBoschLlmFarm(createModel("alpha"), textContext, {
+			apiKey: "secret-key",
+			fetch: fetchMock,
+		}).result();
+
+		expect(result.stopReason).toBe("error");
+		expect(result.errorMessage).toBe("fetch failed [REDACTED]: proxy rejected [REDACTED]");
 	});
 
 	it("registers Bosch provider and exposes login-configured models after registry refresh", async () => {

@@ -14,6 +14,7 @@ import type {
 } from "@earendil-works/pi-ai";
 import { createAssistantMessageEventStream } from "@earendil-works/pi-ai";
 import type { OAuthCredentials, OAuthLoginCallbacks } from "@earendil-works/pi-ai/oauth";
+import { ensureBoschSystemCa } from "./bosch-llmfarm-tls.ts";
 import type { AscetExtensionAPI } from "./core/tool.ts";
 
 export const BOSCH_LLMFARM_PROVIDER_ID = "bosch-llmfarm";
@@ -23,6 +24,13 @@ const DEFAULT_BASE_URL = "https://apiroutecccn.apac.bosch.com/openapi/aigatewayp
 const FAR_FUTURE_EXPIRES = 4102444800000;
 const INTERNAL_KEY_PLACEMENT_HEADER = "x-bosch-llmfarm-key-placement";
 const INTERNAL_STREAM_HEADER = "x-bosch-llmfarm-stream";
+const TLS_CERTIFICATE_ERROR_CODES = new Set([
+	"UNABLE_TO_VERIFY_LEAF_SIGNATURE",
+	"SELF_SIGNED_CERT_IN_CHAIN",
+	"DEPTH_ZERO_SELF_SIGNED_CERT",
+	"UNABLE_TO_GET_ISSUER_CERT",
+	"UNABLE_TO_GET_ISSUER_CERT_LOCALLY",
+]);
 
 export type BoschGatewayKeyPlacement =
 	| "authorization-gateway-header"
@@ -515,6 +523,31 @@ function redactSecret(text: string, secret: string): string {
 	return text.split(secret).join("[REDACTED]");
 }
 
+function getErrorCode(error: Error): string | undefined {
+	if (!("code" in error) || typeof error.code !== "string") {
+		return undefined;
+	}
+	return error.code;
+}
+
+export function formatBoschRequestError(error: unknown): string {
+	if (!(error instanceof Error)) {
+		return String(error);
+	}
+
+	const cause = error.cause;
+	if (!(cause instanceof Error)) {
+		return error.message;
+	}
+
+	const causeCode = getErrorCode(cause);
+	if (causeCode && TLS_CERTIFICATE_ERROR_CODES.has(causeCode)) {
+		return `Bosch LLM Farm TLS certificate verification failed (${causeCode}): ${cause.message}`;
+	}
+
+	return `${error.message}: ${cause.message}`;
+}
+
 async function responseError(response: Response, gatewayKey: string): Promise<Error> {
 	const body = await response.text().catch(() => "");
 	return new Error(redactSecret(`Bosch LLM Farm request failed: ${response.status} ${body}`, gatewayKey));
@@ -741,7 +774,11 @@ export function streamBoschLlmFarm(
 			const nextPayload = await options?.onPayload?.(payload, model);
 			const requestPayload = nextPayload ?? payload;
 			const requestFetch = options?.fetch ?? fetch;
-			const response = await requestFetch(buildBoschChatCompletionsUrl(model.baseUrl, gatewayKey, keyPlacement), {
+			const requestUrl = buildBoschChatCompletionsUrl(model.baseUrl, gatewayKey, keyPlacement);
+			if (!options?.fetch && new URL(requestUrl).protocol === "https:") {
+				ensureBoschSystemCa();
+			}
+			const response = await requestFetch(requestUrl, {
 				method: "POST",
 				headers: buildRequestHeaders(gatewayKey, keyPlacement, options),
 				body: JSON.stringify(requestPayload),
@@ -761,10 +798,7 @@ export function streamBoschLlmFarm(
 			}
 		} catch (error) {
 			output.stopReason = options?.signal?.aborted ? "aborted" : "error";
-			output.errorMessage = redactSecret(
-				error instanceof Error ? error.message : String(error),
-				options?.apiKey ?? "",
-			);
+			output.errorMessage = redactSecret(formatBoschRequestError(error), options?.apiKey ?? "");
 			stream.push({
 				type: "error",
 				reason: output.stopReason,
