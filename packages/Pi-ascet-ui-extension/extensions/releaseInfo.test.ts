@@ -83,24 +83,24 @@ test("createReleaseRows renders concise release and update text", () => {
 		createReleaseRows({ status: "checking" }, ASCET_COPILOT_RELEASE),
 		[
 			"Release",
-			"0.1.15 - Bosch LLM Farm system CA",
-			"Corporate CA TLS support",
-			"LLM Farm provider trust refresh",
+			"0.1.16 - ASCET dependent chain read action",
+			"Element dependency tooling refresh",
+			"Element spec prompt guidance",
 			"Checking updates...",
 		],
 	);
 	assert.deepEqual(
-		createReleaseRows({ status: "available", latestVersion: "0.1.16" }, ASCET_COPILOT_RELEASE),
-		["Update available", "0.1.15 -> 0.1.16", "pi update npm:@zeerke/ascet-copilot"],
+		createReleaseRows({ status: "available", latestVersion: "0.1.17" }, ASCET_COPILOT_RELEASE),
+		["Update available", "0.1.16 -> 0.1.17", "pi update npm:@zeerke/ascet-copilot"],
 	);
 	assert.deepEqual(
-		createReleaseRows({ status: "current", latestVersion: "0.1.15" }, ASCET_COPILOT_RELEASE),
+		createReleaseRows({ status: "current", latestVersion: "0.1.16" }, ASCET_COPILOT_RELEASE),
 		[
 			"Release",
-			"0.1.15 - Up to date",
-			"Bosch LLM Farm system CA",
-			"Corporate CA TLS support",
-			"LLM Farm provider trust refresh",
+			"0.1.16 - Up to date",
+			"ASCET dependent chain read action",
+			"Element dependency tooling refresh",
+			"Element spec prompt guidance",
 		],
 	);
 });
