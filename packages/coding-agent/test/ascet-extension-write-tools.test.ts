@@ -638,6 +638,8 @@ describe("ASCET guarded write PI tools", () => {
 		expect(ascetWritePrompt.promptGuidelines.join("\n")).not.toContain(
 			"Calibration is not an apply_element_spec field",
 		);
+		expect(ascetWritePrompt.promptGuidelines.join("\n")).not.toContain("legacy top-level min/max");
+		expect(ascetWritePrompt.promptGuidelines.join("\n")).not.toContain("impl.min/impl.max");
 		const promptGuidelinesText = ascetWritePrompt.promptGuidelines.join("\n");
 		expect(promptGuidelinesText).toContain('{"elements"');
 		expect(promptGuidelinesText).toContain('"modelType":"cont"');
@@ -647,6 +649,23 @@ describe("ASCET guarded write PI tools", () => {
 		expect(promptGuidelinesText).toContain('"formula":"ident"');
 		expect(promptGuidelinesText).toContain('"calibration":true');
 		expect(promptGuidelinesText).toContain('"limitAssignments":true');
+		expect(promptGuidelinesText).toContain(
+			"For apply_element_spec, treat specFile as a structured ASCET element-spec JSON artifact, not just a file path.",
+		);
+		expect(promptGuidelinesText).toContain(
+			"Before creating an apply_element_spec specFile, derive element metadata from read_element_catalog, search_elements, preview_children, or explicit user requirements.",
+		);
+		expect(promptGuidelinesText).toContain("Do not guess modelType, scope");
+		expect(promptGuidelinesText).toContain(
+			"For apply_element_spec primitive elements, variable/parameter/array specs must include name, kind, modelType, and scope.",
+		);
+		expect(promptGuidelinesText).toContain('scope:"imported"');
+		expect(promptGuidelinesText).toContain(
+			"Do not invent data.value, impl, physicalRange, calibration, memory, or dependency fields for imported parameters.",
+		);
+		expect(promptGuidelinesText).toContain(
+			"If the exported counterpart is unknown, ambiguous, or not found, stop at preflight",
+		);
 		expect(promptGuidelinesText).toContain("Calibration is an apply_element_spec primitive field");
 		expect(promptGuidelinesText).toContain("Dependency is not part of apply_element_spec");
 		expect(promptGuidelinesText).toContain(
