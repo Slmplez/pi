@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { runAscetListComponents } from "../../ascet-extension/src/list-components.ts";
-import { runAscetPlanElementDependency } from "../../ascet-extension/src/plan-element-dependency.ts";
+import { runAscetReadDependentChain } from "../../ascet-extension/src/read-dependent-chain.ts";
 import {
 	acquireAscetCliLock,
 	clearStaleAscetCliLock,
@@ -196,13 +196,13 @@ describe("ASCET scheduler diagnostics", () => {
 		expect(scheduler.getSnapshot().recentJobs.at(-1)?.commandId).toBe("list_components");
 	});
 
-	it("routes dependency plan and dependency dry-run writes through the scheduler", async () => {
+	it("routes dependent-chain reads and dependency dry-run writes through the scheduler", async () => {
 		const env = tempRuntimeEnv();
 		const scheduler = createAscetScheduler();
 		const seenLocks: boolean[] = [];
 
-		const plan = await runAscetPlanElementDependency(
-			{ targetPath: "DEMO\\DiscreteRiccatiSolver", elementName: "B01", targetKind: "component" },
+		const chain = await runAscetReadDependentChain(
+			{ componentPath: "DEMO\\DiscreteRiccatiSolver", dependentElement: "B01" },
 			{
 				cwd: repoRoot,
 				env,
@@ -211,7 +211,7 @@ describe("ASCET scheduler diagnostics", () => {
 					seenLocks.push((await getAscetCliLockSnapshot({ env })).locked);
 					return {
 						exitCode: 0,
-						stdout: JSON.stringify({ ok: true, result: { count: 1 } }),
+						stdout: JSON.stringify({ ok: true, result: { complete: true, inputs: [] } }),
 						stderr: "",
 						timedOut: false,
 						request,
@@ -260,12 +260,12 @@ describe("ASCET scheduler diagnostics", () => {
 			{ hasUI: true, ui: { confirm: async () => true } },
 		);
 
-		expect(plan.ok).toBe(true);
+		expect(chain.ok).toBe(true);
 		expect(write.ok).toBe(true);
 		expect(seenLocks).toEqual([true, true]);
 		expect((await getAscetCliLockSnapshot({ env })).locked).toBe(false);
 		expect(scheduler.getSnapshot().recentJobs.map((job) => job.commandId)).toEqual([
-			"plan_element_dependency",
+			"read_dependent_chain",
 			"set_element_dependency",
 		]);
 	});

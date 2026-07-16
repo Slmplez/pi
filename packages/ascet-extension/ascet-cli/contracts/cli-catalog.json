@@ -157,6 +157,33 @@
                                               }
                      },
                      {
+                         "id":  "AscetBatchCreateFolder",
+                         "family":  "write",
+                         "summary":  "Batch create multiple ASCET folders in a single ToolAPI session",
+                         "risk":  "write",
+                         "objectKinds":  [
+                                             "generic"
+                                         ],
+                         "supportsJson":  true,
+                         "requiresSerialLiveAccess":  false,
+                         "hiddenFromModel":  false,
+                         "operation":  "batch_create_folder",
+                         "lane":  "serial_write",
+                         "hostEligible":  false,
+                         "supportsBatch":  true,
+                         "execution":  {
+                                           "kind":  "unified_cli",
+                                           "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+                                           "subcommand":  "batch",
+                                           "operation":  "create_folder"
+                                       },
+                         "executionProfile":  {
+                                                  "hostSafety":  "write",
+                                                  "hostPolicy":  "force_one_shot",
+                                                  "timeoutClass":  "write"
+                                              }
+                     },
+                     {
                          "id":  "AscetBatchCreateMethod",
                          "family":  "write",
                          "summary":  "Batch create multiple ASCET methods in a single ToolAPI session",
@@ -182,33 +209,6 @@
                          "executionProfile":  {
                                                   "hostSafety":  "write",
                                                   "hostPolicy":  "prefer_host",
-                                                  "timeoutClass":  "write"
-                                              }
-                     },
-                     {
-                         "id":  "AscetBatchCreateFolder",
-                         "family":  "write",
-                         "summary":  "Batch create multiple ASCET folders in a single ToolAPI session",
-                         "risk":  "write",
-                         "objectKinds":  [
-                                             "generic"
-                                         ],
-                         "supportsJson":  true,
-                         "requiresSerialLiveAccess":  false,
-                         "hiddenFromModel":  false,
-                         "operation":  "batch_create_folder",
-                         "lane":  "serial_write",
-                         "hostEligible":  false,
-                         "supportsBatch":  true,
-                         "execution":  {
-                                           "kind":  "unified_cli",
-                                           "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                                           "subcommand":  "batch",
-                                           "operation":  "create_folder"
-                                       },
-                         "executionProfile":  {
-                                                  "hostSafety":  "write",
-                                                  "hostPolicy":  "force_one_shot",
                                                   "timeoutClass":  "write"
                                               }
                      },
@@ -242,6 +242,33 @@
                                               }
                      },
                      {
+                         "id":  "AscetBatchDeleteFolder",
+                         "family":  "write",
+                         "summary":  "Batch delete multiple empty ASCET folders in a single ToolAPI session",
+                         "risk":  "destructive",
+                         "objectKinds":  [
+                                             "generic"
+                                         ],
+                         "supportsJson":  true,
+                         "requiresSerialLiveAccess":  false,
+                         "hiddenFromModel":  false,
+                         "operation":  "batch_delete_folder",
+                         "lane":  "serial_write",
+                         "hostEligible":  false,
+                         "supportsBatch":  true,
+                         "execution":  {
+                                           "kind":  "unified_cli",
+                                           "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+                                           "subcommand":  "batch",
+                                           "operation":  "delete_folder"
+                                       },
+                         "executionProfile":  {
+                                                  "hostSafety":  "write",
+                                                  "hostPolicy":  "force_one_shot",
+                                                  "timeoutClass":  "write"
+                                              }
+                     },
+                     {
                          "id":  "AscetBatchDeleteMethod",
                          "family":  "write",
                          "summary":  "Batch delete multiple ASCET methods in a single ToolAPI session",
@@ -263,33 +290,6 @@
                                            "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
                                            "subcommand":  "batch",
                                            "operation":  "delete_method"
-                                       },
-                         "executionProfile":  {
-                                                  "hostSafety":  "write",
-                                                  "hostPolicy":  "force_one_shot",
-                                                  "timeoutClass":  "write"
-                                              }
-                     },
-                     {
-                         "id":  "AscetBatchDeleteFolder",
-                         "family":  "write",
-                         "summary":  "Batch delete multiple empty ASCET folders in a single ToolAPI session",
-                         "risk":  "destructive",
-                         "objectKinds":  [
-                                             "generic"
-                                         ],
-                         "supportsJson":  true,
-                         "requiresSerialLiveAccess":  false,
-                         "hiddenFromModel":  false,
-                         "operation":  "batch_delete_folder",
-                         "lane":  "serial_write",
-                         "hostEligible":  false,
-                         "supportsBatch":  true,
-                         "execution":  {
-                                           "kind":  "unified_cli",
-                                           "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                                           "subcommand":  "batch",
-                                           "operation":  "delete_folder"
                                        },
                          "executionProfile":  {
                                                   "hostSafety":  "write",
@@ -1155,6 +1155,106 @@
                                               }
                      },
                      {
+                         "id":  "AscetReadDependentChain",
+                         "family":  "read",
+                         "summary":  "Read the forward dependent parameter chain from a local dependent parameter to its imported and exported provider parameter.",
+                         "usage":  "\u003ccomponent\u003e \u003cdependent-element\u003e [--exporter \u003cexporter-component\u003e] [--provider-scope \u003cscope-path\u003e] [--max-candidates \u003cn\u003e] [--json]",
+                         "execution":  {
+                                           "kind":  "unified_cli",
+                                           "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+                                           "subcommand":  "exec",
+                                           "operation":  "read_dependent_chain"
+                                       },
+                         "supportsJson":  true,
+                         "defaultOutputMode":  "json",
+                         "risk":  "read",
+                         "requiresSerialLiveAccess":  false,
+                         "objectKinds":  [
+                                             "class",
+                                             "module"
+                                         ],
+                         "args":  [
+                                      {
+                                          "name":  "component",
+                                          "kind":  "positional",
+                                          "type":  "string",
+                                          "required":  true,
+                                          "description":  "Consuming ASCET component path containing the local dependent parameter."
+                                      },
+                                      {
+                                          "name":  "dependent-element",
+                                          "kind":  "positional",
+                                          "type":  "string",
+                                          "required":  true,
+                                          "description":  "Local dependent parameter name to analyze."
+                                      },
+                                      {
+                                          "name":  "--exporter",
+                                          "kind":  "option",
+                                          "type":  "string",
+                                          "required":  false,
+                                          "description":  "Optional exporter/provider component path used as a verification constraint."
+                                      },
+                                      {
+                                          "name":  "--provider-scope",
+                                          "kind":  "option",
+                                          "type":  "string",
+                                          "required":  false,
+                                          "description":  "Optional folder or scope path used to bound provider discovery."
+                                      },
+                                      {
+                                          "name":  "--max-candidates",
+                                          "kind":  "option",
+                                          "type":  "integer",
+                                          "required":  false,
+                                          "description":  "Maximum provider candidates to inspect during discovery."
+                                      },
+                                      {
+                                          "name":  "--json",
+                                          "kind":  "flag",
+                                          "type":  "boolean",
+                                          "required":  false,
+                                          "description":  "Emit JSON output."
+                                      }
+                                  ],
+                         "preconditions":  [
+                                               "ASCET ToolAPI session must be available.",
+                                               "The consuming component path must resolve to a code component.",
+                                               "The dependent element must exist in the consuming component export XML for a complete chain."
+                                           ],
+                         "failureModes":  [
+                                              "toolapi_unavailable",
+                                              "target_not_found",
+                                              "dependent_element_not_found",
+                                              "export_not_found",
+                                              "export_ambiguous"
+                                          ],
+                         "examples":  [
+                                          {
+                                              "description":  "Discover the provider/exported parameter automatically",
+                                              "command":  "AscetCli.exe exec read_dependent_chain \u003ccomponent\u003e \u003cdependent-element\u003e [--json]"
+                                          },
+                                          {
+                                              "description":  "Verify against a known exporter component",
+                                              "command":  "AscetCli.exe exec read_dependent_chain \u003ccomponent\u003e \u003cdependent-element\u003e --exporter \u003cexporter-component\u003e [--json]"
+                                          }
+                                      ],
+                         "pitfalls":  [
+                                          "Do not require users to know the exporter component path before calling this command.",
+                                          "Treat complete=false and issues[] as diagnostic evidence."
+                                      ],
+                         "operation":  "read_dependent_chain",
+                         "lane":  "legacy_read",
+                         "hostEligible":  false,
+                         "supportsBatch":  false,
+                         "executionProfile":  {
+                                                  "hostSafety":  "fragile",
+                                                  "hostPolicy":  "force_one_shot",
+                                                  "timeoutClass":  "expensive_read"
+                                              },
+                         "hiddenFromModel":  false
+                     },
+                     {
                          "id":  "AscetReadDomainDeepCheck",
                          "family":  "verify",
                          "summary":  "Run deep live domain diagnostics",
@@ -1279,62 +1379,6 @@
                                            "kind":  "standalone",
                                            "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetReadHost.exe"
                                        }
-                     },
-                     {
-                         "id":  "AscetReadImportExportMatch",
-                         "family":  "read",
-                         "summary":  "Read the exported counterpart for one imported element",
-                         "risk":  "read",
-                         "objectKinds":  [
-                                             "class",
-                                             "module"
-                                         ],
-                         "supportsJson":  true,
-                         "requiresSerialLiveAccess":  false,
-                         "hiddenFromModel":  false,
-                         "operation":  "read_import_export_match",
-                         "lane":  "legacy_read",
-                         "hostEligible":  false,
-                         "supportsBatch":  false,
-                         "execution":  {
-                                           "kind":  "unified_cli",
-                                           "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                                           "subcommand":  "exec",
-                                           "operation":  "read_import_export_match"
-                                       },
-                         "executionProfile":  {
-                                                  "hostSafety":  "fragile",
-                                                  "hostPolicy":  "force_one_shot",
-                                                  "timeoutClass":  "expensive_read"
-                                              }
-                     },
-                     {
-                         "id":  "AscetReadImportExportMatches",
-                         "family":  "read",
-                         "summary":  "Read import/export counterparts between two components",
-                         "risk":  "read",
-                         "objectKinds":  [
-                                             "class",
-                                             "module"
-                                         ],
-                         "supportsJson":  true,
-                         "requiresSerialLiveAccess":  false,
-                         "hiddenFromModel":  false,
-                         "operation":  "read_import_export_matches",
-                         "lane":  "legacy_read",
-                         "hostEligible":  false,
-                         "supportsBatch":  false,
-                         "execution":  {
-                                           "kind":  "unified_cli",
-                                           "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                                           "subcommand":  "exec",
-                                           "operation":  "read_import_export_matches"
-                                       },
-                         "executionProfile":  {
-                                                  "hostSafety":  "fragile",
-                                                  "hostPolicy":  "force_one_shot",
-                                                  "timeoutClass":  "expensive_read"
-                                              }
                      },
                      {
                          "id":  "AscetReadImplementation",
@@ -1514,36 +1558,6 @@
                          "lane":  "legacy_read",
                          "hostEligible":  false,
                          "supportsBatch":  false,
-                         "executionProfile":  {
-                                                  "hostSafety":  "fragile",
-                                                  "hostPolicy":  "force_one_shot",
-                                                  "timeoutClass":  "expensive_read"
-                                              }
-                     },
-                     {
-                         "id":  "AscetPlanElementDependency",
-                         "family":  "read",
-                         "summary":  "Plan supported element dependency changes for a component or folder",
-                         "risk":  "read",
-                         "objectKinds":  [
-                                             "class",
-                                             "module",
-                                             "folder",
-                                             "project"
-                                         ],
-                         "supportsJson":  true,
-                         "requiresSerialLiveAccess":  false,
-                         "hiddenFromModel":  false,
-                         "operation":  "plan_element_dependency",
-                         "lane":  "legacy_read",
-                         "hostEligible":  false,
-                         "supportsBatch":  false,
-                         "execution":  {
-                                           "kind":  "unified_cli",
-                                           "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                                           "subcommand":  "exec",
-                                           "operation":  "plan_element_dependency"
-                                       },
                          "executionProfile":  {
                                                   "hostSafety":  "fragile",
                                                   "hostPolicy":  "force_one_shot",
@@ -1875,30 +1889,31 @@
                                               }
                      },
                      {
-                         "id":  "AscetSetMethodSignature",
+                         "id":  "AscetSetElementDependency",
                          "family":  "write",
-                         "summary":  "Patch primitive method signature return and arguments",
+                         "summary":  "Set supported element dependency state with optional readback",
                          "risk":  "write",
                          "objectKinds":  [
                                              "class",
-                                             "module"
+                                             "module",
+                                             "folder"
                                          ],
                          "supportsJson":  true,
                          "requiresSerialLiveAccess":  true,
                          "hiddenFromModel":  false,
+                         "operation":  "set_element_dependency",
+                         "lane":  "serial_write",
+                         "hostEligible":  false,
+                         "supportsBatch":  false,
                          "execution":  {
                                            "kind":  "unified_cli",
                                            "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
                                            "subcommand":  "exec",
-                                           "operation":  "set_method_signature"
+                                           "operation":  "set_element_dependency"
                                        },
-                         "operation":  "set_method_signature",
-                         "lane":  "serial_write",
-                         "hostEligible":  true,
-                         "supportsBatch":  false,
                          "executionProfile":  {
                                                   "hostSafety":  "write",
-                                                  "hostPolicy":  "prefer_host",
+                                                  "hostPolicy":  "force_one_shot",
                                                   "timeoutClass":  "write"
                                               }
                      },
@@ -1932,31 +1947,30 @@
                                               }
                      },
                      {
-                         "id":  "AscetSetElementDependency",
+                         "id":  "AscetSetMethodSignature",
                          "family":  "write",
-                         "summary":  "Set supported element dependency state with optional readback",
+                         "summary":  "Patch primitive method signature return and arguments",
                          "risk":  "write",
                          "objectKinds":  [
                                              "class",
-                                             "module",
-                                             "folder"
+                                             "module"
                                          ],
                          "supportsJson":  true,
                          "requiresSerialLiveAccess":  true,
                          "hiddenFromModel":  false,
-                         "operation":  "set_element_dependency",
-                         "lane":  "serial_write",
-                         "hostEligible":  false,
-                         "supportsBatch":  false,
                          "execution":  {
                                            "kind":  "unified_cli",
                                            "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
                                            "subcommand":  "exec",
-                                           "operation":  "set_element_dependency"
+                                           "operation":  "set_method_signature"
                                        },
+                         "operation":  "set_method_signature",
+                         "lane":  "serial_write",
+                         "hostEligible":  true,
+                         "supportsBatch":  false,
                          "executionProfile":  {
                                                   "hostSafety":  "write",
-                                                  "hostPolicy":  "force_one_shot",
+                                                  "hostPolicy":  "prefer_host",
                                                   "timeoutClass":  "write"
                                               }
                      },

@@ -57,9 +57,7 @@ An empty block diagram is not automatically a design defect. Store valid empty g
 
 Parameter mapping evidence must use the canonical tool calls:
 
-- `ascet_read` action `read_import_export_matches`
-- `ascet_read` action `read_import_export_match`
-- `ascet_read` action `plan_element_dependency`
+- `ascet_read` action `read_dependent_chain`
 
 Do not use `ascet_write.set_element_dependency` in full-check.
 
@@ -79,15 +77,14 @@ Do not use `ascet_write.set_element_dependency` in full-check.
 
 Use this flow when `parameter-mapping` or `semantic.parameter-name-consistency` is in scope:
 
-1. Collect `component_refs` for candidate components and derive importer/exporter component pairs.
-2. Record an evidence gap when no importer/exporter relation can be established for a scoped component.
-3. Collect `children` with `ascet_explore` action `preview_children` and `group="parameters"` for importer and exporter components; fall back to `group="all"` only when parameter-only evidence is unavailable.
-4. For each importer/exporter pair, collect `import_export_matches`.
-5. For each mapped or suspicious element, collect `import_export_match`.
-6. For each local parameter candidate, collect `element_dependency_plan`.
-7. For unmapped imported parameters, collect `occurrences`; collect `component_code` only when code context is required.
-8. Apply `special.dt-parameter-exemption` before normal parameter mapping rules.
-9. Emit findings to `findings/parameter-mapping.jsonl` and evidence gaps to the run evidence files.
+1. Collect `component_refs` for candidate components and derive likely consumer/provider component relations.
+2. Record an evidence gap when no consumer/provider relation can be established for a scoped component.
+3. Collect `children` with `ascet_explore` action `preview_children` and `group="parameters"` for consumer and provider components; fall back to `group="all"` only when parameter-only evidence is unavailable.
+4. For each local dependent parameter candidate in a consuming component, collect `dependent_chain` with `ascet_read.read_dependent_chain`.
+5. For unmapped imported parameters, collect `occurrences`; collect `component_code` only when code context is required.
+6. Use `read_dependent_chain` result issues such as `export_not_found` and `export_ambiguous` as evidence gaps or mapping findings.
+7. Run the dT exemption policy before normal parameter mapping rules.
+8. Emit findings to `findings/parameter-mapping.jsonl` and evidence gaps to the run evidence files.
 
 ## ASCET Scheduler Use
 

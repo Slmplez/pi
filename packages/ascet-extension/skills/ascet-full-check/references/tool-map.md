@@ -40,16 +40,14 @@ If `read_block_diagram` returns a valid empty graph, keep it as empty `block_dia
 
 ## Parameter Mapping Evidence
 
-- `import_export_matches`: `ascet_read` action `read_import_export_matches`
-- `import_export_match`: `ascet_read` action `read_import_export_match`
-- `element_dependency_plan`: `ascet_read` action `plan_element_dependency`
+- `dependent_chain`: `ascet_read` action `read_dependent_chain`
 - `parameter_children`: collect `children` with `group="parameters"` when parameter-only evidence is needed
 - `parameter_occurrences`: `occurrences` filtered to the parameter element under inspection
 - `parameter_code_context`: `component_code` or `method_code` only when the rule needs code context
 
 Parameter mapping checks may use only read, explore, reference, and search evidence. Do not use `ascet_write.set_element_dependency` in full-check.
 
-Project-level `element_dependency_plan` enumerates code components and aggregates component dependency candidates. If the ASCET ToolAPI surface does not expose a supported project enumeration method, record `project_component_enumeration_unavailable` as an evidence gap instead of inventing dependency candidates.
+Use `dependent_chain` to read Local Parameter -> Imported Parameter -> Exported Parameter evidence from the consuming component. If provider discovery is ambiguous or unsupported, record the returned issue such as `export_ambiguous`, `export_not_found`, or `provider_candidate_limit_exceeded` as an evidence gap instead of inventing dependency candidates.
 
 ## Diff and Verify
 

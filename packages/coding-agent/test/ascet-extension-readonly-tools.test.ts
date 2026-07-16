@@ -9,10 +9,6 @@ import { buildListComponentsArgs, runAscetListComponents } from "../../ascet-ext
 import { buildListDiagramsArgs, runAscetListDiagrams } from "../../ascet-extension/src/list-diagrams.ts";
 import { buildListFoldersArgs, runAscetListFolders } from "../../ascet-extension/src/list-folders.ts";
 import { buildListMethodsArgs, runAscetListMethods } from "../../ascet-extension/src/list-methods.ts";
-import {
-	buildPlanElementDependencyArgs,
-	runAscetPlanElementDependency,
-} from "../../ascet-extension/src/plan-element-dependency.ts";
 import { buildReadBlockDiagramArgs, runAscetReadBlockDiagram } from "../../ascet-extension/src/read-block-diagram.ts";
 import {
 	buildReadComponentChildrenArgs,
@@ -31,13 +27,12 @@ import {
 	buildReadComponentUsedByArgs,
 	runAscetReadComponentUsedBy,
 } from "../../ascet-extension/src/read-component-used-by.ts";
+import {
+	buildReadDependentChainArgs,
+	runAscetReadDependentChain,
+} from "../../ascet-extension/src/read-dependent-chain.ts";
 import { buildReadElementRefsArgs, runAscetReadElementRefs } from "../../ascet-extension/src/read-element-refs.ts";
 import { buildReadImplementationArgs } from "../../ascet-extension/src/read-implementation.ts";
-import {
-	buildReadImportExportMatchArgs,
-	buildReadImportExportMatchesArgs,
-	runAscetReadImportExportMatch,
-} from "../../ascet-extension/src/read-import-export-match.ts";
 import { buildReadMethodCodeArgs, runAscetReadMethodCode } from "../../ascet-extension/src/read-method-code.ts";
 import {
 	buildReadMethodSignatureArgs,
@@ -682,63 +677,47 @@ describe("ASCET read-only PI tools", () => {
 		]);
 	});
 
-	it("builds JSON import/export and dependency plan invocations", () => {
+	it("builds JSON dependent-chain invocations", () => {
 		expect(
-			buildReadImportExportMatchArgs({
-				importerComponentPath: "DEMO/Class_ESDL_1",
-				exporterComponentPath: "DEMO/Class_ESDL_2",
-				elementName: "speed",
+			buildReadDependentChainArgs({
+				componentPath: "FeatureA/Consumer",
+				dependentElement: "C_K_Effective",
+			}),
+		).toEqual(["exec", "read_dependent_chain", "FeatureA\\Consumer", "C_K_Effective", "--json"]);
+		expect(
+			buildReadDependentChainArgs({
+				componentPath: "FeatureA/Consumer",
+				dependentElement: "C_K_Effective",
+				exporterComponentPath: "FeatureA/ParameterProvider",
+				providerScopePath: "FeatureA",
+				maxCandidates: 25,
 			}),
 		).toEqual([
 			"exec",
-			"read_import_export_match",
-			"DEMO\\Class_ESDL_1",
+			"read_dependent_chain",
+			"FeatureA\\Consumer",
+			"C_K_Effective",
 			"--exporter",
-			"DEMO\\Class_ESDL_2",
-			"speed",
-			"--json",
-		]);
-		expect(
-			buildReadImportExportMatchesArgs({
-				importerComponentPath: "DEMO/Class_ESDL_1",
-				exporterComponentPath: "DEMO/Class_ESDL_2",
-			}),
-		).toEqual([
-			"exec",
-			"read_import_export_matches",
-			"DEMO\\Class_ESDL_1",
-			"--exporter",
-			"DEMO\\Class_ESDL_2",
-			"--json",
-		]);
-		expect(
-			buildPlanElementDependencyArgs({
-				targetPath: "DEMO/DiscreteRiccatiSolver",
-				elementName: "B01",
-				targetKind: "component",
-			}),
-		).toEqual([
-			"exec",
-			"plan_element_dependency",
-			"DEMO\\DiscreteRiccatiSolver",
-			"B01",
-			"--target-kind",
-			"component",
+			"FeatureA\\ParameterProvider",
+			"--provider-scope",
+			"FeatureA",
+			"--max-candidates",
+			"25",
 			"--json",
 		]);
 	});
 
-	it("runs import/export and dependency plan actions through canonical ascet_read", async () => {
+	it("runs dependent-chain action through canonical ascet_read", async () => {
 		const ascetExtension = await loadAscetExtension();
 		const tool = ascetExtension?.tools.get("ascet_read")?.definition;
 
-		const matchResult = await tool?.execute(
-			"test-read-import-export-match",
+		const chainResult = await tool?.execute(
+			"test-read-dependent-chain",
 			{
-				action: "read_import_export_match",
-				importerComponentPath: "DEMO\\Class_ESDL_1",
-				exporterComponentPath: "DEMO\\Class_ESDL_2",
-				elementName: "speed",
+				action: "read_dependent_chain",
+				componentPath: "FeatureA\\Consumer",
+				dependentElement: "C_K_Effective",
+				providerScopePath: "FeatureA",
 			},
 			new AbortController().signal,
 			undefined,
@@ -748,7 +727,12 @@ describe("ASCET read-only PI tools", () => {
 					exitCode: 0,
 					stdout: JSON.stringify({
 						ok: true,
-						result: { importer: "DEMO\\Class_ESDL_1", exporter: "DEMO\\Class_ESDL_2", element: "speed" },
+						result: {
+							component: "FeatureA\\Consumer",
+							dependent: { name: "C_K_Effective" },
+							complete: true,
+							inputs: [],
+						},
 					}),
 					stderr: "",
 					timedOut: false,
@@ -756,91 +740,37 @@ describe("ASCET read-only PI tools", () => {
 				}),
 			} as never,
 		);
-		const planResult = await tool?.execute(
-			"test-plan-element-dependency",
-			{
-				action: "plan_element_dependency",
-				targetPath: "DEMO\\DiscreteRiccatiSolver",
-				elementName: "B01",
-				targetKind: "component",
-			},
-			new AbortController().signal,
-			undefined,
-			{
-				cwd: repoRoot,
-				executeCli: async (request: { args: string[] }) => ({
-					exitCode: 0,
-					stdout: JSON.stringify({ ok: true, result: { target: "DEMO\\DiscreteRiccatiSolver", count: 1 } }),
-					stderr: "",
-					timedOut: false,
-					request,
-				}),
-			} as never,
-		);
 
-		const matchDetails = matchResult?.details as CliRequestDetails | undefined;
-		const planDetails = planResult?.details as CliRequestDetails | undefined;
-		expect(matchDetails).toMatchObject({
+		const chainDetails = chainResult?.details as CliRequestDetails | undefined;
+		expect(chainDetails).toMatchObject({
 			ok: true,
 			tool: "ascet_read",
-			action: "read_import_export_match",
+			action: "read_dependent_chain",
 			command: {
-				logicalCommandId: "AscetReadImportExportMatch",
-				operation: "read_import_export_match",
+				logicalCommandId: "AscetReadDependentChain",
+				operation: "read_dependent_chain",
 			},
 		});
-		expect(matchDetails?.diagnostics.request.args).toEqual([
+		expect(chainDetails?.diagnostics.request.args).toEqual([
 			"exec",
-			"read_import_export_match",
-			"DEMO\\Class_ESDL_1",
-			"--exporter",
-			"DEMO\\Class_ESDL_2",
-			"speed",
-			"--json",
-		]);
-		expect(planDetails).toMatchObject({
-			ok: true,
-			tool: "ascet_read",
-			action: "plan_element_dependency",
-			command: {
-				logicalCommandId: "AscetPlanElementDependency",
-				operation: "plan_element_dependency",
-			},
-		});
-		expect(planDetails?.diagnostics.request.args).toEqual([
-			"exec",
-			"plan_element_dependency",
-			"DEMO\\DiscreteRiccatiSolver",
-			"B01",
-			"--target-kind",
-			"component",
+			"read_dependent_chain",
+			"FeatureA\\Consumer",
+			"C_K_Effective",
+			"--provider-scope",
+			"FeatureA",
 			"--json",
 		]);
 
-		const direct = await runAscetReadImportExportMatch(
+		const direct = await runAscetReadDependentChain(
 			{
-				importerComponentPath: "DEMO\\Class_ESDL_1",
-				exporterComponentPath: "DEMO\\Class_ESDL_2",
-				elementName: "speed",
+				componentPath: "FeatureA\\Consumer",
+				dependentElement: "C_K_Effective",
 			},
 			{
 				cwd: repoRoot,
 				executeCli: async (request) => ({
 					exitCode: 0,
-					stdout: JSON.stringify({ ok: true, result: { element: "speed" } }),
-					stderr: "",
-					timedOut: false,
-					request,
-				}),
-			},
-		);
-		const directPlan = await runAscetPlanElementDependency(
-			{ targetPath: "DEMO\\DiscreteRiccatiSolver" },
-			{
-				cwd: repoRoot,
-				executeCli: async (request) => ({
-					exitCode: 0,
-					stdout: JSON.stringify({ ok: true, result: { count: 2 } }),
+					stdout: JSON.stringify({ ok: true, result: { complete: false, issues: ["export_not_found:K_Base"] } }),
 					stderr: "",
 					timedOut: false,
 					request,
@@ -848,46 +778,11 @@ describe("ASCET read-only PI tools", () => {
 			},
 		);
 		expect(direct.ok).toBe(true);
-		expect(directPlan.request.args).toEqual([
+		expect(direct.request.args).toEqual([
 			"exec",
-			"plan_element_dependency",
-			"DEMO\\DiscreteRiccatiSolver",
-			"--json",
-		]);
-	});
-
-	it("accepts componentPath as a compatibility alias for plan_element_dependency targetPath", async () => {
-		const ascetExtension = await loadAscetExtension();
-		const tool = ascetExtension?.tools.get("ascet_read")?.definition;
-
-		const result = await tool?.execute(
-			"test-plan-element-dependency-component-path",
-			{
-				action: "plan_element_dependency",
-				componentPath: "ETAS_SystemLib\\Nonlinears\\Limiter",
-				targetKind: "component",
-			},
-			new AbortController().signal,
-			undefined,
-			{
-				cwd: repoRoot,
-				executeCli: async (request: unknown) => ({
-					exitCode: 0,
-					stdout: JSON.stringify({ ok: true, result: { target: "ETAS_SystemLib\\Nonlinears\\Limiter" } }),
-					stderr: "",
-					timedOut: false,
-					request,
-				}),
-			} as never,
-		);
-
-		const details = result?.details as { diagnostics: { request: { args: string[] } } } | undefined;
-		expect(details?.diagnostics.request.args).toEqual([
-			"exec",
-			"plan_element_dependency",
-			"ETAS_SystemLib\\Nonlinears\\Limiter",
-			"--target-kind",
-			"component",
+			"read_dependent_chain",
+			"FeatureA\\Consumer",
+			"C_K_Effective",
 			"--json",
 		]);
 	});

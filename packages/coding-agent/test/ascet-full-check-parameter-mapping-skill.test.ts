@@ -77,7 +77,7 @@ describe("ascet-full-check parameter mapping skill", () => {
 				expect.arrayContaining([
 					expect.objectContaining({
 						tool: "ascet_read",
-						action: "read_import_export_matches",
+						action: "read_dependent_chain",
 					}),
 				]),
 			);
@@ -104,8 +104,7 @@ describe("ascet-full-check parameter mapping skill", () => {
 		);
 		const evidenceAgent = readFileSync(join(repoRoot, "packages/ascet-extension/agents/ascet-evidence.md"), "utf8");
 
-		expect(parameterMappingReference).toContain("read_import_export_matches");
-		expect(parameterMappingReference).toContain("plan_element_dependency");
+		expect(parameterMappingReference).toContain("read_dependent_chain");
 		expect(parameterMappingReference).toContain("special.dt-parameter-exemption");
 		expect(parameterMappingReference).toContain("Do not use `ascet_write.set_element_dependency`");
 		expect(workflow).toContain("empty block diagram");
@@ -113,8 +112,8 @@ describe("ascet-full-check parameter mapping skill", () => {
 		expect(toolMap).toContain("diff_component_snapshot");
 		expect(toolMap).toContain("quick snapshot");
 		expect(toolMap).toContain("ascet_diff` action `diff` with `objectKind`");
-		expect(toolMap).toContain("aggregates component dependency candidates");
-		expect(toolMap).toContain("project_component_enumeration_unavailable");
+		expect(toolMap).toContain("Local Parameter -> Imported Parameter -> Exported Parameter");
+		expect(toolMap).toContain("provider_candidate_limit_exceeded");
 		expect(evidenceAgent).toContain("Store empty block diagrams");
 		expect(evidenceAgent).toContain("diff_component_snapshot");
 		expect(reportContract).toContain("Parameter Mapping Findings");

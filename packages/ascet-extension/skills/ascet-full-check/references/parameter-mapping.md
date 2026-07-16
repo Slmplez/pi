@@ -12,9 +12,7 @@ Parameter mapping checks are read-only. Use these tools only through the canonic
 
 - `ascet_reference` action `component_refs`
 - `ascet_explore` action `preview_children`
-- `ascet_read` action `read_import_export_matches`
-- `ascet_read` action `read_import_export_match`
-- `ascet_read` action `plan_element_dependency`
+- `ascet_read` action `read_dependent_chain`
 - `ascet_search` action `search_occurrences`
 - `ascet_read` action `read_code` only when code context is required
 
@@ -32,16 +30,15 @@ Use the bundled fixture under `fixtures/parameter-mapping/evidence/` as the smok
 
 1. Resolve scoped components.
 2. Collect `component_refs` for each scoped component.
-3. Derive importer/exporter component pairs from reference evidence.
-4. If no importer/exporter pair can be established, write a `parameter_mapping_relation_gap` evidence record.
-5. Collect `children` with `preview_children` and `group="parameters"` for importer and exporter components. Fall back to `group="all"` only when parameter-only evidence is unavailable.
-6. Call `read_import_export_matches` for each importer/exporter pair.
-7. Call `read_import_export_match` for mapped elements, missing endpoints, dT candidates, and semantic-name suspects.
-8. Call `plan_element_dependency` for local parameter candidates to determine dependent/independent state and multiple dependency risk.
-9. Call `search_occurrences` for unmapped imported parameters before reporting unused state.
-10. Call `read_code` only when occurrence evidence is ambiguous or semantic consistency needs code context.
-11. Run the dT exemption policy before normal rule evaluation.
-12. Emit findings to `findings/parameter-mapping.jsonl`.
+3. Derive likely consumer/provider component relations from reference evidence.
+4. If no consumer/provider relation can be established, write a `parameter_mapping_relation_gap` evidence record.
+5. Collect `children` with `preview_children` and `group="parameters"` for consumer and provider components. Fall back to `group="all"` only when parameter-only evidence is unavailable.
+6. Call `read_dependent_chain` for each local dependent parameter candidate in the consuming component.
+7. Use the returned Local Parameter -> Imported Parameter -> Exported Parameter relation to check missing endpoints, dT candidates, semantic-name suspects, and multiple dependency risk.
+8. Call `search_occurrences` for unmapped imported parameters before reporting unused state.
+9. Call `read_code` only when occurrence evidence is ambiguous or semantic consistency needs code context.
+10. Run the dT exemption policy before normal rule evaluation.
+11. Emit findings to `findings/parameter-mapping.jsonl`.
 
 All live calls must pass through the ASCET scheduler. The report must retain evidence IDs so every finding can be traced back to the tool/action that produced it.
 
@@ -100,9 +97,9 @@ Do not report a parameter mapping defect from name similarity alone. Name-based 
 Record evidence gaps when:
 
 - No importer/exporter relation can be derived from `component_refs`.
-- `read_import_export_matches` is unsupported or fails for a component pair.
+- `read_dependent_chain` is unsupported or fails for a local dependent parameter candidate.
 - `children` payload does not expose enough element metadata to classify a parameter.
-- `plan_element_dependency` cannot inspect a local parameter candidate.
+- `read_dependent_chain` reports no exported provider, ambiguous exported providers, or an incomplete dependency chain.
 - `search_occurrences` cannot confirm whether an unmapped imported parameter is used.
 
 Evidence gaps should appear in the final report, not as silent omissions.

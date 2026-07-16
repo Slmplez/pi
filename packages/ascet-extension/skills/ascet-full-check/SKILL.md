@@ -75,7 +75,7 @@ Parallel ASCET evidence collection is allowed. The ASCET scheduler coordinates l
 
 - Do not use `ascet_write` or `ascet_batch_write`.
 - Do not modify the ASCET database.
-- Parameter mapping checks are read-only. They may use `ascet_read` actions `read_import_export_matches`, `read_import_export_match`, and `plan_element_dependency`, but must never use `ascet_write.set_element_dependency`.
+- Parameter mapping checks are read-only. They may use `ascet_read` action `read_dependent_chain`, but must never use `ascet_write.set_element_dependency`.
 - Preserve exact ASCET paths, method names, diagram names, signal names, tool names, and error strings.
 - Treat runtime truth as authoritative. If tool success contradicts returned data, investigate before reporting success.
 - Keep new checks extensible: add rules to `rule-index.yaml`, tool mapping to `tool-map.md`, and complex logic to a focused subagent.

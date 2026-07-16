@@ -213,30 +213,12 @@ export const ascetActionExamples = [
 	}),
 	defineExample({
 		tool: "ascet_read",
-		action: "read_import_export_match",
-		intent: "one import match",
+		action: "read_dependent_chain",
+		intent: "discover dependent chain",
 		args: {
-			action: "read_import_export_match",
-			importerComponentPath: "D\\A",
-			exporterComponentPath: "D\\B",
-			elementName: "x",
-		},
-	}),
-	defineExample({
-		tool: "ascet_read",
-		action: "read_import_export_matches",
-		intent: "all import matches",
-		args: { action: "read_import_export_matches", importerComponentPath: "D\\A", exporterComponentPath: "D\\B" },
-	}),
-	defineExample({
-		tool: "ascet_read",
-		action: "plan_element_dependency",
-		intent: "plan dependency",
-		args: {
-			action: "plan_element_dependency",
-			targetPath: "DEMO\\PID",
-			elementName: "pid_kp",
-			targetKind: "component",
+			action: "read_dependent_chain",
+			componentPath: "FeatureA\\Consumer",
+			dependentElement: "C_K_Effective",
 		},
 	}),
 	defineExample({
@@ -582,10 +564,12 @@ export const ascetActionExamples = [
 		intent: "preflight dependency",
 		args: {
 			action: "set_element_dependency",
-			targetPath: "D\\P",
-			elementName: "kp",
+			targetPath: "FeatureB\\Consumer",
+			elementName: "C_K_Effective",
 			dependency: "dependent",
+			targetKind: "component",
 			match: "exact",
+			verifyReadback: true,
 		},
 	}),
 	defineExample({

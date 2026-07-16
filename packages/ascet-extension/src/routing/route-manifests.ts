@@ -167,23 +167,9 @@ export const ascetRouteManifestEntries = [
 	},
 	{
 		toolName: "ascet_read",
-		action: "read_import_export_match",
-		logicalCommandId: "AscetReadImportExportMatch",
-		operation: "read_import_export_match",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_read",
-		action: "read_import_export_matches",
-		logicalCommandId: "AscetReadImportExportMatches",
-		operation: "read_import_export_matches",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_read",
-		action: "plan_element_dependency",
-		logicalCommandId: "AscetPlanElementDependency",
-		operation: "plan_element_dependency",
+		action: "read_dependent_chain",
+		logicalCommandId: "AscetReadDependentChain",
+		operation: "read_dependent_chain",
 		category: "domain",
 	},
 

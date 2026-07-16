@@ -154,17 +154,15 @@ Company-network validation checklist:
 - If using a vision model, verify image input.
 - If the gateway supports SSE, set streaming support to `true` for one test model and verify streaming separately.
 
-## Import/Export And Dependency Actions
+## Dependent Chain And Dependency Actions
 
 `ascet_read` includes these ASCET ToolAPI-backed actions:
 
-- `read_import_export_match`: resolve one imported element in an importer component against an exporter component.
-- `read_import_export_matches`: inspect all imported elements in an importer component against an exporter component.
-- `plan_element_dependency`: find dependency candidates for an element in a component, folder, or project.
+- `read_dependent_chain`: read a local dependent parameter chain from the consuming component through its imported parameter to the exported parameter/provider component. The provider can be discovered automatically, or constrained with `exporterComponentPath` / `providerScopePath`.
 
 `ascet_write` includes `set_element_dependency` for dependency flag changes. It uses the same guarded write contract as other write actions: preflight by default, interactive approval when `executeWrite=true`, optional `dryRun`, optional `backupDir`, and readback verification. Folder writes require `match="all"` so multi-component changes are explicit.
 
-All four actions call `runAscetCliJson`, enter the ASCET scheduler, and execute under the shared `ascet.toolapi.global` resource.
+These actions call `runAscetCliJson`, enter the ASCET scheduler, and execute under the shared `ascet.toolapi.global` resource.
 
 ## Scheduler Diagnostics
 

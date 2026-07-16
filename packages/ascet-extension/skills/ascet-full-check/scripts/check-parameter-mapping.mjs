@@ -175,40 +175,39 @@ function firstRecordByKindAndComponent(records, kinds) {
 	return byComponent;
 }
 
-function matchPayloads(records) {
+function dependentChainRows(records) {
 	const rows = [];
 	for (const record of records) {
-		if (!["import_export_matches", "import_export_match"].includes(record?.kind)) continue;
+		if (record?.kind !== "dependent_chain") continue;
 		if (record.ok === false) continue;
 		const data = payload(record);
-		const importer = scalar(record.importer_component_path ?? data.importer ?? data.importerComponentPath);
-		const exporter = scalar(record.exporter_component_path ?? data.exporter ?? data.exporterComponentPath);
-		const matches = record.kind === "import_export_match" ? [data] : arrayFrom(data.matches);
-		for (const match of matches) {
+		const consumer = scalar(record.component_path ?? record.componentPath ?? data.component ?? data.componentPath);
+		const dependent = data.dependent && typeof data.dependent === "object" ? data.dependent : {};
+		const localName = normalizeName(dependent.name ?? dependent.element ?? record.element_name ?? record.elementName);
+		for (const input of arrayFrom(data.inputs)) {
+			const value = input?.value && typeof input.value === "object" ? input.value : {};
+			const exported = input?.export && typeof input.export === "object" ? input.export : {};
 			const importedName = normalizeName(
-				match?.importedName ?? match?.imported?.name ?? match?.import?.name ?? match?.elementName ?? match?.element,
-			);
-			const localName = normalizeName(
-				match?.localName ??
-					match?.local?.name ??
-					match?.match?.name ??
-					match?.exportedName ??
-					match?.exported?.name ??
-					match?.elementName ??
-					match?.element,
+				value.name ?? input?.importedName ?? input?.imported?.name ?? input?.formal?.name ?? input?.elementName,
 			);
 			if (!importedName && !localName) continue;
 			rows.push({
 				record,
-				data: match,
-				importer: importer || scalar(match?.importer),
-				exporter: exporter || scalar(match?.exporter),
+				data: input,
+				importer: consumer,
+				exporter: scalar(record.exporter_component_path ?? record.exporterComponentPath ?? exported.owner ?? data.exporter),
+				localComponent: consumer,
 				importedName,
 				localName,
-				importedAttributes: match?.imported ?? match?.import ?? {},
-				localAttributes: match?.local ?? match?.match ?? match?.exported ?? {},
-				expectedName: normalizeName(match?.expectedName ?? match?.expected?.name),
-				semanticMismatch: match?.semanticMismatch === true || match?.semantic_mismatch === true,
+				importedAttributes: value,
+				localAttributes: dependent,
+				exportedAttributes: exported,
+				expectedName: normalizeName(input?.expectedName ?? input?.expected?.name ?? data.expectedName),
+				semanticMismatch:
+					input?.semanticMismatch === true ||
+					input?.semantic_mismatch === true ||
+					data.semanticMismatch === true ||
+					data.semantic_mismatch === true,
 			});
 		}
 	}
@@ -218,14 +217,13 @@ function matchPayloads(records) {
 function dependencyRecords(records) {
 	const byElement = new Map();
 	for (const record of records) {
-		if (record?.kind !== "element_dependency_plan" || record.ok === false) continue;
+		if (record?.kind !== "dependent_chain" || record.ok === false) continue;
 		const data = payload(record);
-		const target = scalar(record.component_path ?? data.target ?? data.component);
-		for (const match of arrayFrom(data.matches)) {
-			const name = normalizeName(match.element ?? match.name ?? record.element_name);
-			if (!target || !name) continue;
-			byElement.set(`${target}::${keyName(name)}`, { record, data: match });
-		}
+		const target = scalar(record.component_path ?? record.componentPath ?? data.component ?? data.componentPath);
+		const dependent = data.dependent && typeof data.dependent === "object" ? data.dependent : {};
+		const name = normalizeName(dependent.name ?? dependent.element ?? record.element_name ?? record.elementName);
+		if (!target || !name) continue;
+		byElement.set(`${target}::${keyName(name)}`, { record, data: dependent });
 	}
 	return byElement;
 }
@@ -333,7 +331,7 @@ function isLocalConstant(parameter) {
 function run(records) {
 	const findings = [];
 	const params = collectParameters(records);
-	const rows = matchPayloads(records);
+	const rows = dependentChainRows(records);
 	const deps = dependencyRecords(records);
 	const childEvidence = firstRecordByKindAndComponent(records, ["children", "parameter_children"]);
 	const componentRefEvidence = firstRecordByKindAndComponent(records, ["component_refs"]);
@@ -377,9 +375,10 @@ function run(records) {
 	const localToImports = new Map();
 	for (const row of rows) {
 		const importerParams = params.get(row.importer) ?? new Map();
-		const exporterParams = params.get(row.exporter) ?? new Map();
+		const localComponent = row.localComponent || row.exporter;
+		const localParams = params.get(localComponent) ?? new Map();
 		const imported = importerParams.get(keyName(row.importedName)) ?? row.importedAttributes;
-		const local = exporterParams.get(keyName(row.localName)) ?? row.localAttributes;
+		const local = localParams.get(keyName(row.localName)) ?? row.localAttributes;
 		const importedIsDt = isDtElement({ ...imported, name: row.importedName });
 		const localIsDt = isDtElement({ ...local, name: row.localName });
 
@@ -389,13 +388,13 @@ function run(records) {
 			mappedImportsByImporter.set(row.importer, set);
 		}
 		if (row.exporter && row.localName) {
-			const set = mappedLocalsByExporter.get(row.exporter) ?? new Set();
+			const set = mappedLocalsByExporter.get(localComponent) ?? new Set();
 			set.add(keyName(row.localName));
-			mappedLocalsByExporter.set(row.exporter, set);
-			const dep = deps.get(`${row.exporter}::${keyName(row.localName)}`);
+			mappedLocalsByExporter.set(localComponent, set);
+			const dep = deps.get(`${localComponent}::${keyName(row.localName)}`);
 			const depState = scalar(dep?.data?.dependency).toLowerCase();
 			if (depState === "dependent") {
-				const groupKey = `${row.exporter}::${keyName(row.localName)}`;
+				const groupKey = `${localComponent}::${keyName(row.localName)}`;
 				const group = localToImports.get(groupKey) ?? { row, imports: [], dep };
 				group.imports.push(row.importedName);
 				localToImports.set(groupKey, group);
@@ -433,14 +432,14 @@ function run(records) {
 			);
 		}
 
-		if (row.localName && !exporterParams.has(keyName(row.localName))) {
+		if (row.localName && !localParams.has(keyName(row.localName))) {
 			findings.push(
 				finding(
 					row,
 					"parameter.mapping-missing-local",
 					"high",
 					row.localName,
-					`Mapping references local/exported parameter '${row.localName}' but it is not present in ${row.exporter}.`,
+					`Mapping references local parameter '${row.localName}' but it is not present in ${localComponent}.`,
 					"Create the local/exported parameter or remap to an existing parameter.",
 					{ confidence: "high", tool_evidence: rowSupportEvidence(row) },
 				),
@@ -448,7 +447,7 @@ function run(records) {
 		}
 
 		const mismatches = compareAttributes(imported, local);
-		if (mismatches.length > 0 && importerParams.has(keyName(row.importedName)) && exporterParams.has(keyName(row.localName))) {
+		if (mismatches.length > 0 && importerParams.has(keyName(row.importedName)) && localParams.has(keyName(row.localName))) {
 			findings.push(
 				finding(
 					row,
