@@ -1,6 +1,6 @@
 {
 	"name": "@zeerke/ascet-copilot-extension",
-	"version": "0.1.16",
+	"version": "0.1.17",
 	"description": "ASCET Copilot tool extension for Pi.",
 	"type": "module",
 	"main": "./src/index.ts",
