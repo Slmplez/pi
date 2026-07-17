@@ -1,8 +1,8 @@
 ﻿{
     "id":  "AscetSetElementDependency",
     "family":  "write",
-    "summary":  "Set supported element dependency state with optional readback",
-    "usage":  "\u003ctarget-path\u003e \u003celement-name\u003e \u003cdependent|independent\u003e [--target-kind auto|component|project|folder] [--match exact|all] [--dry-run] [--backup-dir \u003cdir\u003e] [--verify-readback] [--json]",
+    "summary":  "Set supported element dependency state and dependency formula with optional readback",
+    "usage":  "\u003ctarget-path\u003e \u003celement-name\u003e \u003cdependent|independent\u003e [--formula \u003cexpr\u003e] [--mapping \u003cformal=imported\u003e] [--clear-formula] [--target-kind auto|component|project|folder] [--match exact|all] [--dry-run] [--backup-dir \u003cdir\u003e] [--verify-readback] [--json]",
     "execution":  {
                       "kind":  "unified_cli",
                       "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
@@ -39,6 +39,27 @@
                      "type":  "string",
                      "required":  true,
                      "description":  "Positional argument: dependent|independent"
+                 },
+                 {
+                     "name":  "--formula",
+                     "kind":  "option",
+                     "type":  "string",
+                     "required":  false,
+                     "description":  "Option value for --formula"
+                 },
+                 {
+                     "name":  "--mapping",
+                     "kind":  "option",
+                     "type":  "string",
+                     "required":  false,
+                     "description":  "Option value for --mapping"
+                 },
+                 {
+                     "name":  "--clear-formula",
+                     "kind":  "flag",
+                     "type":  "boolean",
+                     "required":  false,
+                     "description":  "Flag --clear-formula"
                  },
                  {
                      "name":  "--target-kind",
@@ -106,7 +127,7 @@
     "examples":  [
                      {
                          "description":  "Basic usage",
-                         "command":  "AscetCli.exe exec set_element_dependency \u003ctarget-path\u003e \u003celement-name\u003e \u003cdependent|independent\u003e [--target-kind auto|component|project|folder] [--match exact|all] [--dry-run] [--backup-dir \u003cdir\u003e] [--verify-readback] [--json]"
+                         "command":  "AscetCli.exe exec set_element_dependency \u003ctarget-path\u003e \u003celement-name\u003e \u003cdependent|independent\u003e [--formula \u003cexpr\u003e] [--mapping \u003cformal=imported\u003e] [--clear-formula] [--target-kind auto|component|project|folder] [--match exact|all] [--dry-run] [--backup-dir \u003cdir\u003e] [--verify-readback] [--json]"
                      }
                  ],
     "pitfalls":  [

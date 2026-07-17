@@ -15,6 +15,9 @@ export interface AscetSetElementDependencyParams extends AscetWriteControlParams
 	targetPath: string;
 	elementName: string;
 	dependency: "dependent" | "independent";
+	dependencyFormula?: string;
+	dependencyMappings?: Record<string, string>;
+	clearDependencyFormula?: boolean;
 	targetKind?: "auto" | "component" | "folder" | "project";
 	match?: "exact" | "all";
 	dryRun?: boolean;
@@ -28,6 +31,24 @@ export const ascetSetElementDependencyParameters = Type.Object({
 	targetPath: Type.String({ description: "ASCET target component or folder path.", minLength: 1 }),
 	elementName: Type.String({ description: "Element name whose dependency flag should be changed.", minLength: 1 }),
 	dependency: Type.Union([Type.Literal("dependent"), Type.Literal("independent")]),
+	dependencyFormula: Type.Optional(
+		Type.String({
+			description: "Dependency expression stored on the local dependent parameter, emitted as --formula.",
+			minLength: 1,
+		}),
+	),
+	dependencyMappings: Type.Optional(
+		Type.Record(
+			Type.String({ minLength: 1 }),
+			Type.String({
+				description: "Map a formula formal/reference name to an existing imported parameter name.",
+				minLength: 1,
+			}),
+		),
+	),
+	clearDependencyFormula: Type.Optional(
+		Type.Boolean({ description: "When true, explicitly clear the stored dependency formula." }),
+	),
 	targetKind: Type.Optional(
 		Type.Union([Type.Literal("auto"), Type.Literal("component"), Type.Literal("folder"), Type.Literal("project")]),
 	),
@@ -46,6 +67,17 @@ export function buildSetElementDependencyArgs(params: AscetSetElementDependencyP
 		params.elementName,
 		params.dependency,
 	];
+	if (params.dependencyFormula) {
+		args.push("--formula", params.dependencyFormula);
+	}
+	if (params.dependencyMappings) {
+		for (const [formal, imported] of Object.entries(params.dependencyMappings)) {
+			args.push("--mapping", `${formal}=${imported}`);
+		}
+	}
+	if (params.clearDependencyFormula) {
+		args.push("--clear-formula");
+	}
 	if (params.targetKind) {
 		args.push("--target-kind", params.targetKind);
 	}
@@ -66,6 +98,9 @@ export function createSetElementDependencySummary(params: AscetSetElementDepende
 		targetPath: params.targetPath,
 		elementName: params.elementName,
 		dependency: params.dependency,
+		dependencyFormula: params.dependencyFormula ?? "",
+		dependencyMappings: params.dependencyMappings ?? {},
+		clearDependencyFormula: params.clearDependencyFormula === true,
 		targetKind: params.targetKind ?? "",
 		match: params.match ?? "",
 		dryRun: params.dryRun === true,

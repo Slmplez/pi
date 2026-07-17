@@ -1157,7 +1157,7 @@
                      {
                          "id":  "AscetReadDependentChain",
                          "family":  "read",
-                         "summary":  "Read the forward dependent parameter chain from a local dependent parameter to its imported and exported provider parameter.",
+                         "summary":  "Read a local dependent parameter formula, imported-parameter mappings, and exported-provider chain.",
                          "usage":  "\u003ccomponent\u003e \u003cdependent-element\u003e [--exporter \u003cexporter-component\u003e] [--provider-scope \u003cscope-path\u003e] [--max-candidates \u003cn\u003e] [--json]",
                          "execution":  {
                                            "kind":  "unified_cli",
@@ -1891,7 +1891,7 @@
                      {
                          "id":  "AscetSetElementDependency",
                          "family":  "write",
-                         "summary":  "Set supported element dependency state with optional readback",
+                         "summary":  "Set supported element dependency state and dependency formula with optional readback",
                          "risk":  "write",
                          "objectKinds":  [
                                              "class",

@@ -567,6 +567,8 @@ export const ascetActionExamples = [
 			targetPath: "FeatureB\\Consumer",
 			elementName: "C_K_Effective",
 			dependency: "dependent",
+			dependencyFormula: "K_Base",
+			dependencyMappings: { K_Base: "K_Base" },
 			targetKind: "component",
 			match: "exact",
 			verifyReadback: true,

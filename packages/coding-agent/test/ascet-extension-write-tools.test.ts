@@ -284,6 +284,8 @@ describe("ASCET guarded write PI tools", () => {
 				targetPath: "DEMO/DiscreteRiccatiSolver",
 				elementName: "B01",
 				dependency: "dependent",
+				dependencyFormula: "K_Factor",
+				dependencyMappings: { K_Factor: "K_Factor" },
 				targetKind: "component",
 				match: "exact",
 				verifyReadback: true,
@@ -294,6 +296,10 @@ describe("ASCET guarded write PI tools", () => {
 			"DEMO\\DiscreteRiccatiSolver",
 			"B01",
 			"dependent",
+			"--formula",
+			"K_Factor",
+			"--mapping",
+			"K_Factor=K_Factor",
 			"--target-kind",
 			"component",
 			"--match",
@@ -429,6 +435,8 @@ describe("ASCET guarded write PI tools", () => {
 				targetPath: "DEMO\\DiscreteRiccatiSolver",
 				elementName: "B01",
 				dependency: "dependent",
+				dependencyFormula: "K_Factor",
+				dependencyMappings: { K_Factor: "K_Factor" },
 				targetKind: "component",
 				match: "exact",
 				verifyReadback: true,
@@ -474,6 +482,10 @@ describe("ASCET guarded write PI tools", () => {
 			"DEMO\\DiscreteRiccatiSolver",
 			"B01",
 			"dependent",
+			"--formula",
+			"K_Factor",
+			"--mapping",
+			"K_Factor=K_Factor",
 			"--target-kind",
 			"component",
 			"--match",
@@ -668,6 +680,10 @@ describe("ASCET guarded write PI tools", () => {
 		);
 		expect(promptGuidelinesText).toContain("Calibration is an apply_element_spec primitive field");
 		expect(promptGuidelinesText).toContain("Dependency is not part of apply_element_spec");
+		expect(promptGuidelinesText).toContain(
+			"dependencyFormula is the expression stored on the dependent local parameter",
+		);
+		expect(promptGuidelinesText).toContain("Use dependencyMappings to map formula formal/reference names");
 		expect(promptGuidelinesText).toContain(
 			'apply_element_spec:preflight spec->ascet_write({action:"apply_element_spec"',
 		);

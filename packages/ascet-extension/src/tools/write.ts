@@ -154,6 +154,9 @@ export type AscetWriteParams =
 			componentPath?: string;
 			elementName: string;
 			dependency: "dependent" | "independent";
+			dependencyFormula?: string;
+			dependencyMappings?: Record<string, string>;
+			clearDependencyFormula?: boolean;
 			targetKind?: "auto" | "component" | "folder" | "project";
 			match?: "exact" | "all";
 			dryRun?: boolean;
@@ -217,6 +220,9 @@ export const ascetWriteParameters = Type.Object({
 	methodName: Type.Optional(Type.String({ minLength: 1 })),
 	elementName: Type.Optional(Type.String({ minLength: 1 })),
 	dependency: Type.Optional(Type.Union([Type.Literal("dependent"), Type.Literal("independent")])),
+	dependencyFormula: Type.Optional(Type.String({ minLength: 1 })),
+	dependencyMappings: Type.Optional(Type.Record(Type.String({ minLength: 1 }), Type.String({ minLength: 1 }))),
+	clearDependencyFormula: Type.Optional(Type.Boolean()),
 	returnType: Type.Optional(primitiveSignatureTypeSchema),
 	arguments: Type.Optional(Type.Array(methodSignatureArgumentSchema)),
 	targetKind: Type.Optional(
@@ -372,6 +378,33 @@ function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | 
 				error: {
 					code: "ascet_write_missing_parameter",
 					message: "set_element_dependency requires dependency.",
+				},
+			};
+		}
+		if (params.dependency === "independent" && params.dependencyFormula) {
+			return {
+				status: "error",
+				error: {
+					code: "ascet_write_invalid_parameter",
+					message: 'set_element_dependency dependencyFormula is only valid with dependency="dependent".',
+				},
+			};
+		}
+		if (params.dependencyFormula && params.clearDependencyFormula) {
+			return {
+				status: "error",
+				error: {
+					code: "ascet_write_invalid_parameter",
+					message: "set_element_dependency dependencyFormula and clearDependencyFormula cannot be used together.",
+				},
+			};
+		}
+		if (params.dependencyMappings && Object.keys(params.dependencyMappings).length > 0 && !params.dependencyFormula) {
+			return {
+				status: "error",
+				error: {
+					code: "ascet_write_invalid_parameter",
+					message: "set_element_dependency dependencyMappings requires dependencyFormula.",
 				},
 			};
 		}
