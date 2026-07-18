@@ -23,7 +23,6 @@ export type AscetReadParams =
 			action: "read_block_diagram";
 			componentPath: string;
 			diagramName?: string;
-			detailLevel?: "summary" | "full";
 			timeoutMs?: number;
 	  }
 	| {
@@ -65,7 +64,6 @@ export const ascetReadParameters = Type.Object({
 	),
 	implementationName: Type.Optional(Type.String()),
 	diagramName: Type.Optional(Type.String()),
-	detailLevel: Type.Optional(Type.Union([Type.Literal("summary"), Type.Literal("full")])),
 	traceDepth: Type.Optional(Type.Number({ minimum: 0 })),
 	maxCandidates: Type.Optional(Type.Number({ minimum: 1 })),
 	timeoutMs: Type.Optional(

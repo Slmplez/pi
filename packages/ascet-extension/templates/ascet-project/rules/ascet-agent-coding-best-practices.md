@@ -46,6 +46,7 @@ Do not collapse all of these back into a generic "read, write, verify everything
 - the target is exact
 - the task needs summary, snapshot, code, implementation, block diagram, or state-machine-flow content
 - the agent needs exact current structure before a mutation
+- for BDE/block diagram analysis, `read_block_diagram` returns the default semantic graph for signal flow, dependencies, node relations, operations, and rule checks
 
 ### Use `AscetReferenceTool` When
 
@@ -107,6 +108,7 @@ Do not use `AscetVerifyTool` for routine browsing, discovery, or pre-write analy
 ### Module BDE
 
 - Treat BDE as structured model state, not free-form text.
+- Use `read_block_diagram` as the block-level semantic graph source for agent analysis.
 - Do not force a graph edit down a text-edit path just because text is easier to reach.
 
 ### State Machine

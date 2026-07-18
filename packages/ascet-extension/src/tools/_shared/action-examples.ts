@@ -203,7 +203,7 @@ export const ascetActionExamples = [
 		tool: "ascet_read",
 		action: "read_block_diagram",
 		intent: "read BDE",
-		args: { action: "read_block_diagram", componentPath: "DEMO\\PID", diagramName: "Main", detailLevel: "summary" },
+		args: { action: "read_block_diagram", componentPath: "DEMO\\PID", diagramName: "Main" },
 	}),
 	defineExample({
 		tool: "ascet_read",
