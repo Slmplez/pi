@@ -34,11 +34,11 @@ const UPDATE_CACHE_PATH = join(getAgentDir(), "ascet-copilot", "update-cache.jso
 
 export const ASCET_COPILOT_RELEASE: ReleaseInfo = {
 	packageName: "@zeerke/ascet-copilot",
-	version: "0.1.17",
+	version: "0.1.18",
 	highlights: [
-		"Dependent local parameter formulas",
-		"set_element_dependency formula writes",
-		"read_dependent_chain verification loop",
+		"Dependent formula bug fixes",
+		"Packaged dependency CLI refresh",
+		"read/write dependency loop fixes",
 	],
 	updateCommand: "pi update npm:@zeerke/ascet-copilot",
 };

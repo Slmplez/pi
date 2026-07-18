@@ -83,24 +83,24 @@ test("createReleaseRows renders concise release and update text", () => {
 		createReleaseRows({ status: "checking" }, ASCET_COPILOT_RELEASE),
 		[
 			"Release",
-			"0.1.17 - Dependent local parameter formulas",
-			"set_element_dependency formula writes",
-			"read_dependent_chain verification loop",
+			"0.1.18 - Dependent formula bug fixes",
+			"Packaged dependency CLI refresh",
+			"read/write dependency loop fixes",
 			"Checking updates...",
 		],
 	);
 	assert.deepEqual(
-		createReleaseRows({ status: "available", latestVersion: "0.1.18" }, ASCET_COPILOT_RELEASE),
-		["Update available", "0.1.17 -> 0.1.18", "pi update npm:@zeerke/ascet-copilot"],
+		createReleaseRows({ status: "available", latestVersion: "0.1.19" }, ASCET_COPILOT_RELEASE),
+		["Update available", "0.1.18 -> 0.1.19", "pi update npm:@zeerke/ascet-copilot"],
 	);
 	assert.deepEqual(
-		createReleaseRows({ status: "current", latestVersion: "0.1.17" }, ASCET_COPILOT_RELEASE),
+		createReleaseRows({ status: "current", latestVersion: "0.1.18" }, ASCET_COPILOT_RELEASE),
 		[
 			"Release",
-			"0.1.17 - Up to date",
-			"Dependent local parameter formulas",
-			"set_element_dependency formula writes",
-			"read_dependent_chain verification loop",
+			"0.1.18 - Up to date",
+			"Dependent formula bug fixes",
+			"Packaged dependency CLI refresh",
+			"read/write dependency loop fixes",
 		],
 	);
 });
