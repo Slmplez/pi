@@ -91,33 +91,35 @@ type BoschChatPayload = {
 	stream: boolean;
 	temperature?: number;
 	max_tokens?: number;
+	reasoning_effort?: string;
 	tools?: BoschToolDefinition[];
 	tool_choice?: "auto";
 	gatewayKey?: string;
 };
 
-type BoschNonStreamingResponse = {
-	id?: string;
-	model?: string;
-	choices?: Array<{
-		message?: {
-			content?: string | null;
-			tool_calls?: BoschToolCall[];
-		};
-		finish_reason?: string | null;
-	}>;
-	usage?: {
-		prompt_tokens?: number;
-		completion_tokens?: number;
-		total_tokens?: number;
+type BoschUsage = {
+	prompt_tokens?: number;
+	completion_tokens?: number;
+	total_tokens?: number;
+	completion_tokens_details?: {
+		reasoning_tokens?: number;
+	};
+	output_tokens_details?: {
+		reasoning_tokens?: number;
+		thinking_tokens?: number;
 	};
 };
 
 type BoschStreamingChunk = {
+	id?: string;
 	model?: string;
 	choices?: Array<{
 		delta?: {
 			content?: string | null;
+			reasoning_content?: string | null;
+			reasoning?: string | null;
+			reasoning_text?: string | null;
+			thinking?: string | null;
 			tool_calls?: Array<{
 				index?: number;
 				id?: string;
@@ -129,13 +131,15 @@ type BoschStreamingChunk = {
 		};
 		finish_reason?: string | null;
 	}>;
-	usage?: BoschNonStreamingResponse["usage"];
+	usage?: BoschUsage;
 };
 
 type StreamingToolCall = ToolCall & {
 	streamIndex: number;
 	partialArguments: string;
 };
+
+const BOSCH_REASONING_DELTA_FIELDS = ["reasoning_content", "reasoning", "reasoning_text", "thinking"] as const;
 
 export function normalizeBoschBaseUrl(input: string): { baseUrl: string; gatewayKey?: string } {
 	const trimmed = input.trim();
@@ -173,18 +177,6 @@ function parsePositiveInteger(value: string, fieldName: string): number {
 		throw new Error(`${fieldName} must be a positive integer.`);
 	}
 	return parsed;
-}
-
-function parseBoolean(value: string): boolean {
-	return ["true", "yes", "y", "1"].includes(value.trim().toLowerCase());
-}
-
-function parseInputModes(value: string): ("text" | "image")[] {
-	const normalized = value.trim().toLowerCase();
-	if (normalized === "text+image" || normalized === "image" || normalized === "vision") {
-		return ["text", "image"];
-	}
-	return ["text"];
 }
 
 async function promptWithDefault(callbacks: OAuthLoginCallbacks, message: string, fallback: string): Promise<string> {
@@ -247,10 +239,15 @@ export async function loginBoschLlmFarm(callbacks: OAuthLoginCallbacks): Promise
 			await promptWithDefault(callbacks, `Max output tokens for ${modelId}:`, "8192"),
 			`Max output tokens for ${modelId}`,
 		);
-		const input = parseInputModes(await promptWithDefault(callbacks, `Input support for ${modelId}:`, "text"));
-		const reasoning = parseBoolean(await promptWithDefault(callbacks, `Reasoning support for ${modelId}:`, "false"));
-		const streaming = parseBoolean(await promptWithDefault(callbacks, `Streaming support for ${modelId}:`, "false"));
-		models.push({ id: modelId, name: modelId, contextWindow, maxTokens, input, reasoning, streaming });
+		models.push({
+			id: modelId,
+			name: modelId,
+			contextWindow,
+			maxTokens,
+			input: ["text", "image"],
+			reasoning: true,
+			streaming: true,
+		});
 	}
 
 	callbacks.onProgress?.(`Configured ${models.length} Bosch LLM Farm model(s).`);
@@ -287,14 +284,14 @@ export function applyBoschConfiguredModels(models: Model<Api>[], credentials: OA
 		api: BOSCH_LLMFARM_API,
 		provider: BOSCH_LLMFARM_PROVIDER_ID,
 		baseUrl: credentials.baseUrl,
-		reasoning: model.reasoning,
-		input: model.input,
+		reasoning: true,
+		input: ["text", "image"],
 		cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
 		contextWindow: model.contextWindow,
 		maxTokens: model.maxTokens,
 		headers: {
 			[INTERNAL_KEY_PLACEMENT_HEADER]: credentials.keyPlacement,
-			[INTERNAL_STREAM_HEADER]: String(model.streaming === true),
+			[INTERNAL_STREAM_HEADER]: "true",
 		},
 	}));
 	return [...otherModels, ...boschModels];
@@ -451,16 +448,16 @@ function getKeyPlacement(model: Model<Api>, options?: BoschStreamOptions): Bosch
 	return "authorization-gateway-header";
 }
 
-function getStreamingEnabled(model: Model<Api>, options?: BoschStreamOptions): boolean {
-	if (options?.metadata?.boschLlmFarmStream === true) {
-		return true;
+function getReasoningEffort(model: Model<Api>, options?: BoschStreamOptions): string | undefined {
+	if (!model.reasoning) {
+		return undefined;
 	}
-	const optionsStream = options?.headers?.[INTERNAL_STREAM_HEADER];
-	if (optionsStream === "true") {
-		return true;
+	const requested = options?.reasoning ?? "medium";
+	const mapped = model.thinkingLevelMap?.[requested];
+	if (mapped === null) {
+		return undefined;
 	}
-	const modelStream = model.headers?.[INTERNAL_STREAM_HEADER];
-	return modelStream === "true";
+	return mapped ?? requested;
 }
 
 function createPayload(
@@ -473,11 +470,15 @@ function createPayload(
 	const payload: BoschChatPayload = {
 		model: model.id,
 		messages: convertMessages(context),
-		stream: getStreamingEnabled(model, options),
+		stream: true,
 		temperature: options?.temperature,
 		max_tokens: options?.maxTokens ?? model.maxTokens,
 		tools: convertTools(context.tools),
 	};
+	const reasoningEffort = getReasoningEffort(model, options);
+	if (reasoningEffort) {
+		payload.reasoning_effort = reasoningEffort;
+	}
 	if (payload.tools && payload.tools.length > 0) {
 		payload.tool_choice = "auto";
 	}
@@ -485,6 +486,13 @@ function createPayload(
 		payload.gatewayKey = gatewayKey;
 	}
 	return payload;
+}
+
+function enforceStreamingPayload(payload: unknown): BoschChatPayload {
+	if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+		throw new Error("Bosch LLM Farm payload must be an object.");
+	}
+	return { ...(payload as BoschChatPayload), stream: true };
 }
 
 function buildRequestHeaders(
@@ -553,7 +561,7 @@ async function responseError(response: Response, gatewayKey: string): Promise<Er
 	return new Error(redactSecret(`Bosch LLM Farm request failed: ${response.status} ${body}`, gatewayKey));
 }
 
-function updateUsageFromProvider(output: AssistantMessage, usage?: BoschNonStreamingResponse["usage"]): void {
+function updateUsageFromProvider(output: AssistantMessage, usage?: BoschUsage): void {
 	if (!usage) {
 		return;
 	}
@@ -562,6 +570,13 @@ function updateUsageFromProvider(output: AssistantMessage, usage?: BoschNonStrea
 		usage.completion_tokens ?? 0,
 		usage.total_tokens ?? (usage.prompt_tokens ?? 0) + (usage.completion_tokens ?? 0),
 	);
+	const reasoningTokens =
+		usage.completion_tokens_details?.reasoning_tokens ??
+		usage.output_tokens_details?.reasoning_tokens ??
+		usage.output_tokens_details?.thinking_tokens;
+	if (reasoningTokens !== undefined) {
+		output.usage.reasoning = reasoningTokens;
+	}
 }
 
 function mapFinishReason(reason: string | null | undefined): "stop" | "length" | "toolUse" {
@@ -574,64 +589,71 @@ function mapFinishReason(reason: string | null | undefined): "stop" | "length" |
 	return "stop";
 }
 
-function pushText(output: AssistantMessage, stream: AssistantMessageEventStream, text: string): void {
-	if (!text) {
+function parseSseDataLine(line: string): string | undefined {
+	const trimmed = line.trim();
+	if (!trimmed.startsWith("data:")) {
+		return undefined;
+	}
+	return trimmed.slice("data:".length).trim();
+}
+
+async function* readSseLines(response: Response): AsyncGenerator<string> {
+	const body = response.body;
+	if (!body) {
+		const text = await response.text();
+		for (const line of text.split(/\r?\n/)) {
+			const data = parseSseDataLine(line);
+			if (data !== undefined) {
+				yield data;
+			}
+		}
 		return;
 	}
-	const contentIndex = output.content.length;
-	output.content.push({ type: "text", text });
-	stream.push({ type: "text_start", contentIndex, partial: output });
-	stream.push({ type: "text_delta", contentIndex, delta: text, partial: output });
-	stream.push({ type: "text_end", contentIndex, content: text, partial: output });
-}
 
-function pushToolCall(output: AssistantMessage, stream: AssistantMessageEventStream, toolCall: BoschToolCall): void {
-	const contentIndex = output.content.length;
-	let parsedArguments: Record<string, unknown> = {};
+	const reader = body.getReader();
+	const decoder = new TextDecoder();
+	let buffer = "";
 	try {
-		const parsed = JSON.parse(toolCall.function.arguments);
-		if (typeof parsed === "object" && parsed !== null && !Array.isArray(parsed)) {
-			parsedArguments = parsed as Record<string, unknown>;
+		while (true) {
+			const { value, done } = await reader.read();
+			if (done) {
+				break;
+			}
+			buffer += decoder.decode(value, { stream: true });
+			const lines = buffer.split(/\r?\n/);
+			buffer = lines.pop() ?? "";
+			for (const line of lines) {
+				const data = parseSseDataLine(line);
+				if (data !== undefined) {
+					yield data;
+				}
+			}
 		}
-	} catch {}
-	const block: ToolCall = {
-		type: "toolCall",
-		id: toolCall.id,
-		name: toolCall.function.name,
-		arguments: parsedArguments,
-	};
-	output.content.push(block);
-	stream.push({ type: "toolcall_start", contentIndex, partial: output });
-	stream.push({ type: "toolcall_end", contentIndex, toolCall: block, partial: output });
-}
-
-async function handleNonStreamingResponse(
-	response: Response,
-	output: AssistantMessage,
-	stream: AssistantMessageEventStream,
-): Promise<void> {
-	const data = (await response.json()) as BoschNonStreamingResponse;
-	const choice = data.choices?.[0];
-	output.responseId = data.id;
-	output.responseModel = data.model;
-	updateUsageFromProvider(output, data.usage);
-	stream.push({ type: "start", partial: output });
-	pushText(output, stream, choice?.message?.content ?? "");
-	for (const toolCall of choice?.message?.tool_calls ?? []) {
-		pushToolCall(output, stream, toolCall);
+		buffer += decoder.decode();
+		for (const line of buffer.split(/\r?\n/)) {
+			const data = parseSseDataLine(line);
+			if (data !== undefined) {
+				yield data;
+			}
+		}
+	} finally {
+		reader.releaseLock();
 	}
-	output.stopReason = mapFinishReason(choice?.finish_reason);
-	stream.push({ type: "done", reason: output.stopReason, message: output });
-	stream.end();
 }
 
-async function readSseLines(response: Response): Promise<string[]> {
-	const text = await response.text();
-	return text
-		.split(/\r?\n/)
-		.map((line) => line.trim())
-		.filter((line) => line.startsWith("data:"))
-		.map((line) => line.slice("data:".length).trim());
+function getReasoningDelta(
+	fields: Record<string, unknown> | undefined,
+): { field: (typeof BOSCH_REASONING_DELTA_FIELDS)[number]; delta: string } | undefined {
+	if (!fields) {
+		return undefined;
+	}
+	for (const field of BOSCH_REASONING_DELTA_FIELDS) {
+		const value = fields[field];
+		if (typeof value === "string" && value.length > 0) {
+			return { field, delta: value };
+		}
+	}
+	return undefined;
 }
 
 function getStreamingToolCall(
@@ -670,13 +692,17 @@ async function handleStreamingResponse(
 ): Promise<void> {
 	stream.push({ type: "start", partial: output });
 	let textIndex: number | undefined;
+	let thinkingIndex: number | undefined;
 	const toolCalls = new Map<number, StreamingToolCall>();
 
-	for (const line of await readSseLines(response)) {
+	for await (const line of readSseLines(response)) {
 		if (line === "[DONE]") {
 			break;
 		}
 		const chunk = JSON.parse(line) as BoschStreamingChunk;
+		if (chunk.id) {
+			output.responseId ||= chunk.id;
+		}
 		updateUsageFromProvider(output, chunk.usage);
 		if (chunk.model) {
 			output.responseModel = chunk.model;
@@ -695,6 +721,24 @@ async function handleStreamingResponse(
 			if (block?.type === "text") {
 				block.text += choice.delta.content;
 				stream.push({ type: "text_delta", contentIndex: textIndex, delta: choice.delta.content, partial: output });
+			}
+		}
+		const reasoning = getReasoningDelta(choice.delta as Record<string, unknown> | undefined);
+		if (reasoning) {
+			if (thinkingIndex === undefined) {
+				thinkingIndex = output.content.length;
+				output.content.push({ type: "thinking", thinking: "", thinkingSignature: reasoning.field });
+				stream.push({ type: "thinking_start", contentIndex: thinkingIndex, partial: output });
+			}
+			const block = output.content[thinkingIndex];
+			if (block?.type === "thinking") {
+				block.thinking += reasoning.delta;
+				stream.push({
+					type: "thinking_delta",
+					contentIndex: thinkingIndex,
+					delta: reasoning.delta,
+					partial: output,
+				});
 			}
 		}
 		for (const deltaToolCall of choice.delta?.tool_calls ?? []) {
@@ -723,10 +767,13 @@ async function handleStreamingResponse(
 		}
 	}
 
-	if (textIndex !== undefined) {
-		const block = output.content[textIndex];
-		if (block?.type === "text") {
-			stream.push({ type: "text_end", contentIndex: textIndex, content: block.text, partial: output });
+	for (let contentIndex = 0; contentIndex < output.content.length; contentIndex++) {
+		const block = output.content[contentIndex];
+		if (contentIndex === thinkingIndex && block?.type === "thinking") {
+			stream.push({ type: "thinking_end", contentIndex, content: block.thinking, partial: output });
+		}
+		if (contentIndex === textIndex && block?.type === "text") {
+			stream.push({ type: "text_end", contentIndex, content: block.text, partial: output });
 		}
 	}
 	for (const block of toolCalls.values()) {
@@ -772,7 +819,7 @@ export function streamBoschLlmFarm(
 			const keyPlacement = getKeyPlacement(model, options);
 			const payload = createPayload(model, context, gatewayKey, keyPlacement, options);
 			const nextPayload = await options?.onPayload?.(payload, model);
-			const requestPayload = nextPayload ?? payload;
+			const requestPayload = enforceStreamingPayload(nextPayload ?? payload);
 			const requestFetch = options?.fetch ?? fetch;
 			const requestUrl = buildBoschChatCompletionsUrl(model.baseUrl, gatewayKey, keyPlacement);
 			if (!options?.fetch && new URL(requestUrl).protocol === "https:") {
@@ -791,11 +838,7 @@ export function streamBoschLlmFarm(
 			if (!response.ok) {
 				throw await responseError(response, gatewayKey);
 			}
-			if ((requestPayload as BoschChatPayload).stream) {
-				await handleStreamingResponse(response, output, stream);
-			} else {
-				await handleNonStreamingResponse(response, output, stream);
-			}
+			await handleStreamingResponse(response, output, stream);
 		} catch (error) {
 			output.stopReason = options?.signal?.aborted ? "aborted" : "error";
 			output.errorMessage = redactSecret(formatBoschRequestError(error), options?.apiKey ?? "");
@@ -816,8 +859,8 @@ const placeholderModel: BoschModelConfig = {
 	name: "Configure Bosch LLM Farm first",
 	contextWindow: 8192,
 	maxTokens: 1024,
-	input: ["text"],
-	reasoning: false,
+	input: ["text", "image"],
+	reasoning: true,
 };
 
 export function registerBoschLlmFarmProvider(pi: AscetExtensionAPI): void {

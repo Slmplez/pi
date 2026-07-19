@@ -158,7 +158,7 @@ Run only after text completion passes.
 
 ### Streaming
 
-Configure one model with streaming support enabled, then send a short prompt.
+Streaming is mandatory for Bosch LLM Farm in this extension. Send a short prompt and confirm text appears normally.
 
 Record:
 
@@ -168,9 +168,21 @@ Pass/Fail:
 Error text, if any:
 ```
 
+### Reasoning / Thinking
+
+Reasoning is enabled by default for Bosch LLM Farm models in the extension. Send a prompt that requires brief reasoning and verify thinking output is visible.
+
+Record:
+
+```text
+Reasoning model:
+Thinking visible in UI:
+Error text, if any:
+```
+
 ### Vision
 
-Use a model configured with image input support and send an image URL or base64 image.
+Image input is enabled by default for Bosch LLM Farm models in the extension. Send an image URL or base64 image.
 
 Record:
 

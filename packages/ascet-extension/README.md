@@ -102,7 +102,9 @@ During login, enter:
 - Gateway key.
 - Gateway key placement.
 - One or more model IDs, comma-separated.
-- Per-model context window, max output tokens, input support, reasoning support, and streaming support.
+- Per-model context window and max output tokens.
+
+Streaming, reasoning, text input, and image input are enabled by default for every configured Bosch LLM Farm model and are not prompted during login.
 
 The endpoint can be entered as either the base URL or the chat-completions URL. These forms normalize to the same base URL:
 
@@ -134,13 +136,13 @@ When the provider sends a real Bosch request, it merges the Node default CA set 
 
 Do not use `NODE_TLS_REJECT_UNAUTHORIZED=0`. For old extension builds, `NODE_OPTIONS=--use-system-ca` can be used as a temporary workaround, but the provider-level system CA merge is the intended path.
 
-Requests are sent as OpenAI-compatible chat completions:
+Requests are sent as OpenAI-compatible streaming chat completions:
 
 ```text
 POST <baseUrl>/chat/completions
 ```
 
-with `model`, `messages`, optional `temperature`, `max_tokens`, optional OpenAI-style `tools`, and the configured gateway-key placement. Non-streaming requests are the default until the real Bosch gateway is validated on the company network. Streaming SSE parsing exists in the provider adapter and can be enabled per model during login after confirming the gateway supports `stream: true`.
+with `model`, `messages`, `stream: true`, optional `temperature`, `max_tokens`, default `reasoning_effort`, optional OpenAI-style `tools`, and the configured gateway-key placement. Bosch LLM Farm requests are always sent as SSE streaming requests. The provider parses text deltas, tool-call deltas, usage chunks, and OpenAI-compatible reasoning fields such as `reasoning_content`, `reasoning`, `reasoning_text`, and `thinking`.
 
 Company-network validation checklist:
 
@@ -151,8 +153,9 @@ Company-network validation checklist:
 - Send a text-only message and verify a normal response.
 - Verify the request works without `NODE_TLS_REJECT_UNAUTHORIZED=0` and without relying on `NODE_OPTIONS=--use-system-ca`.
 - Ask for an ASCET action and verify OpenAI-style tool calling works through the gateway.
-- If using a vision model, verify image input.
-- If the gateway supports SSE, set streaming support to `true` for one test model and verify streaming separately.
+- Verify image input.
+- Verify SSE text streaming on at least one configured model.
+- Verify thinking output appears in the UI.
 
 ## Dependent Chain And Dependency Actions
 

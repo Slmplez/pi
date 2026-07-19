@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import type { OAuthLoginCallbacks } from "../../ai/src/oauth.ts";
 import { getOAuthProvider } from "../../ai/src/oauth.ts";
-import type { Context, Model } from "../../ai/src/types.ts";
+import type { AssistantMessageEvent, Context, Model } from "../../ai/src/types.ts";
 import type { BoschLlmFarmCredentials } from "../../ascet-extension/src/bosch-llmfarm-provider.ts";
 import {
 	applyBoschConfiguredModels,
@@ -49,8 +49,8 @@ function createModel(id = "bosch-chat"): Model<"bosch-llmfarm-api"> {
 		api: "bosch-llmfarm-api",
 		provider: BOSCH_LLMFARM_PROVIDER_ID,
 		baseUrl: "https://gateway.example.com/openapi/service/v1",
-		reasoning: false,
-		input: ["text"],
+		reasoning: true,
+		input: ["text", "image"],
 		cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
 		contextWindow: 64000,
 		maxTokens: 4096,
@@ -61,6 +61,23 @@ const textContext: Context = {
 	systemPrompt: "You are a helpful assistant.",
 	messages: [{ role: "user", content: "Say ping", timestamp: 0 }],
 };
+
+function createBoschSseResponse(chunks: unknown[]): Response {
+	return new Response([...chunks.map((chunk) => `data: ${JSON.stringify(chunk)}`), "data: [DONE]", ""].join("\n"), {
+		status: 200,
+		headers: { "content-type": "text/event-stream" },
+	});
+}
+
+async function waitForCondition(predicate: () => boolean, timeoutMs = 500): Promise<void> {
+	const started = Date.now();
+	while (!predicate()) {
+		if (Date.now() - started > timeoutMs) {
+			throw new Error("Timed out waiting for condition");
+		}
+		await new Promise((resolve) => setTimeout(resolve, 5));
+	}
+}
 
 describe("bosch-llmfarm provider", () => {
 	it("normalizes Bosch endpoint variants to the v1 base URL and extracts query gatewayKey", () => {
@@ -86,14 +103,8 @@ describe("bosch-llmfarm provider", () => {
 				"alpha, beta",
 				"128000",
 				"8192",
-				"text",
-				"false",
-				"false",
 				"200000",
 				"16384",
-				"text+image",
-				"true",
-				"true",
 			]),
 		)) as BoschLlmFarmCredentials;
 
@@ -109,9 +120,9 @@ describe("bosch-llmfarm provider", () => {
 					name: "alpha",
 					contextWindow: 128000,
 					maxTokens: 8192,
-					input: ["text"],
-					reasoning: false,
-					streaming: false,
+					input: ["text", "image"],
+					reasoning: true,
+					streaming: true,
 				},
 				{
 					id: "beta",
@@ -154,6 +165,11 @@ describe("bosch-llmfarm provider", () => {
 			baseUrl: "https://gateway.example.com/openapi/service/v1",
 			contextWindow: 128000,
 			maxTokens: 8192,
+			headers: {
+				"x-bosch-llmfarm-stream": "true",
+			},
+			input: ["text", "image"],
+			reasoning: true,
 		});
 	});
 
@@ -169,17 +185,16 @@ describe("bosch-llmfarm provider", () => {
 		);
 	});
 
-	it("sends gatewayKey in query, bearer header, and body, then emits non-streaming text", async () => {
+	it("sends gatewayKey in query, bearer header, and body, then emits streaming text", async () => {
 		const requests: Array<{ url: string; init: RequestInit }> = [];
 		const fetchMock = vi.fn(async (url: string | URL | Request, init?: RequestInit) => {
 			requests.push({ url: String(url), init: init ?? {} });
-			return new Response(
-				JSON.stringify({
-					choices: [{ message: { role: "assistant", content: "pong" }, finish_reason: "stop" }],
+			return createBoschSseResponse([
+				{
+					choices: [{ delta: { content: "pong" }, finish_reason: "stop" }],
 					usage: { prompt_tokens: 3, completion_tokens: 1, total_tokens: 4 },
-				}),
-				{ status: 200, headers: { "content-type": "application/json" } },
-			);
+				},
+			]);
 		});
 
 		const stream = streamBoschLlmFarm(createModel("alpha"), textContext, {
@@ -206,7 +221,7 @@ describe("bosch-llmfarm provider", () => {
 		expect(JSON.parse(String(requests[0]!.init.body))).toMatchObject({
 			model: "alpha",
 			gatewayKey: "secret-key",
-			stream: false,
+			stream: true,
 		});
 	});
 
@@ -214,12 +229,7 @@ describe("bosch-llmfarm provider", () => {
 		const requests: Array<{ url: string; init: RequestInit }> = [];
 		const fetchMock = vi.fn(async (url: string | URL | Request, init?: RequestInit) => {
 			requests.push({ url: String(url), init: init ?? {} });
-			return new Response(
-				JSON.stringify({
-					choices: [{ message: { role: "assistant", content: "pong" }, finish_reason: "stop" }],
-				}),
-				{ status: 200, headers: { "content-type": "application/json" } },
-			);
+			return createBoschSseResponse([{ choices: [{ delta: { content: "pong" }, finish_reason: "stop" }] }]);
 		});
 
 		const result = await streamBoschLlmFarm(createModel("gpt-5.5"), textContext, {
@@ -235,6 +245,7 @@ describe("bosch-llmfarm provider", () => {
 			gatewayKey: "secret-key",
 			"Content-Type": "application/json",
 		});
+		expect(JSON.parse(String(requests[0]!.init.body))).toMatchObject({ stream: true });
 		expect(JSON.parse(String(requests[0]!.init.body))).not.toHaveProperty("gatewayKey");
 	});
 
@@ -260,15 +271,17 @@ describe("bosch-llmfarm provider", () => {
 					contentType: String(req.headers["content-type"] ?? ""),
 					body: JSON.parse(body),
 				});
-				res.writeHead(200, { "content-type": "application/json" });
-				res.end(
-					JSON.stringify({
+				res.writeHead(200, { "content-type": "text/event-stream" });
+				res.write(
+					`data: ${JSON.stringify({
 						id: "chatcmpl-local",
 						model: "alpha",
-						choices: [{ message: { content: "local pong" }, finish_reason: "stop" }],
+						choices: [{ delta: { content: "local pong" }, finish_reason: "stop" }],
 						usage: { prompt_tokens: 5, completion_tokens: 2, total_tokens: 7 },
-					}),
+					})}\n\n`,
 				);
+				res.write("data: [DONE]\n\n");
+				res.end();
 			});
 		});
 
@@ -300,7 +313,7 @@ describe("bosch-llmfarm provider", () => {
 			expect(requests[0]?.contentType).toContain("application/json");
 			expect(requests[0]?.body).toMatchObject({
 				model: "alpha",
-				stream: false,
+				stream: true,
 			});
 			expect(requests[0]?.body).not.toHaveProperty("gatewayKey");
 		} finally {
@@ -314,10 +327,7 @@ describe("bosch-llmfarm provider", () => {
 		const requests: Array<{ url: string; init: RequestInit }> = [];
 		const fetchMock = vi.fn(async (url: string | URL | Request, init?: RequestInit) => {
 			requests.push({ url: String(url), init: init ?? {} });
-			return new Response(JSON.stringify({ choices: [{ message: { content: "pong" }, finish_reason: "stop" }] }), {
-				status: 200,
-				headers: { "content-type": "application/json" },
-			});
+			return createBoschSseResponse([{ choices: [{ delta: { content: "pong" }, finish_reason: "stop" }] }]);
 		});
 		const model = { ...createModel("alpha"), maxTokens: 1234 };
 
@@ -339,10 +349,7 @@ describe("bosch-llmfarm provider", () => {
 		const requests: Array<{ url: string; init: RequestInit }> = [];
 		const fetchMock = vi.fn(async (url: string | URL | Request, init?: RequestInit) => {
 			requests.push({ url: String(url), init: init ?? {} });
-			return new Response(JSON.stringify({ choices: [{ message: { content: "pong" }, finish_reason: "stop" }] }), {
-				status: 200,
-				headers: { "content-type": "application/json" },
-			});
+			return createBoschSseResponse([{ choices: [{ delta: { content: "pong" }, finish_reason: "stop" }] }]);
 		});
 		const seenPayloads: unknown[] = [];
 		const seenModels: string[] = [];
@@ -352,24 +359,25 @@ describe("bosch-llmfarm provider", () => {
 			onPayload: (payload, model) => {
 				seenPayloads.push(payload);
 				seenModels.push(model.id);
-				return { ...(payload as Record<string, unknown>), temperature: 0.25 };
+				return { ...(payload as Record<string, unknown>), stream: false, temperature: 0.25 };
 			},
 			fetch: fetchMock,
 		}).result();
 
 		expect(seenModels).toEqual(["alpha"]);
-		expect(seenPayloads[0]).toMatchObject({ model: "alpha", max_tokens: 4096 });
-		expect(JSON.parse(String(requests[0]!.init.body))).toMatchObject({ model: "alpha", temperature: 0.25 });
+		expect(seenPayloads[0]).toMatchObject({ model: "alpha", max_tokens: 4096, stream: true });
+		expect(JSON.parse(String(requests[0]!.init.body))).toMatchObject({
+			model: "alpha",
+			stream: true,
+			temperature: 0.25,
+		});
 	});
 
 	it("uses key placement from registry request headers in the real streamSimple path", async () => {
 		const requests: Array<{ url: string; init: RequestInit }> = [];
 		const fetchMock = vi.fn(async (url: string | URL | Request, init?: RequestInit) => {
 			requests.push({ url: String(url), init: init ?? {} });
-			return new Response(JSON.stringify({ choices: [{ message: { content: "pong" }, finish_reason: "stop" }] }), {
-				status: 200,
-				headers: { "content-type": "application/json" },
-			});
+			return createBoschSseResponse([{ choices: [{ delta: { content: "pong" }, finish_reason: "stop" }] }]);
 		});
 
 		const result = await streamBoschLlmFarm(createModel("alpha"), textContext, {
@@ -389,10 +397,7 @@ describe("bosch-llmfarm provider", () => {
 		const requests: Array<{ url: string; init: RequestInit }> = [];
 		const fetchMock = vi.fn(async (url: string | URL | Request, init?: RequestInit) => {
 			requests.push({ url: String(url), init: init ?? {} });
-			return new Response(JSON.stringify({ choices: [{ message: { content: "pong" }, finish_reason: "stop" }] }), {
-				status: 200,
-				headers: { "content-type": "application/json" },
-			});
+			return createBoschSseResponse([{ choices: [{ delta: { content: "pong" }, finish_reason: "stop" }] }]);
 		});
 
 		await streamBoschLlmFarm(createModel("alpha"), textContext, {
@@ -415,7 +420,7 @@ describe("bosch-llmfarm provider", () => {
 		expect(requests[0]!.init.headers).not.toHaveProperty("x-bosch-llmfarm-stream");
 	});
 
-	it("parses Bosch streaming SSE text when streaming is enabled", async () => {
+	it("parses Bosch streaming SSE text by default", async () => {
 		const requests: Array<{ url: string; init: RequestInit }> = [];
 		const fetchMock = vi.fn(async (url: string | URL | Request, init?: RequestInit) => {
 			requests.push({ url: String(url), init: init ?? {} });
@@ -433,7 +438,6 @@ describe("bosch-llmfarm provider", () => {
 		const result = await streamBoschLlmFarm(createModel("alpha"), textContext, {
 			apiKey: "secret-key",
 			metadata: {
-				boschLlmFarmStream: true,
 				boschLlmFarm: { keyPlacement: "header-only" },
 			},
 			fetch: fetchMock,
@@ -443,6 +447,94 @@ describe("bosch-llmfarm provider", () => {
 		expect(result.usage.totalTokens).toBe(3);
 		expect(JSON.parse(String(requests[0]!.init.body))).toMatchObject({ stream: true });
 		expect(requests[0]!.url).toBe("https://gateway.example.com/openapi/service/v1/chat/completions");
+	});
+
+	it("emits Bosch reasoning SSE fields as thinking content", async () => {
+		const requests: Array<{ url: string; init: RequestInit }> = [];
+		const fetchMock = vi.fn(async (url: string | URL | Request, init?: RequestInit) => {
+			requests.push({ url: String(url), init: init ?? {} });
+			return createBoschSseResponse([
+				{
+					id: "chatcmpl-reasoning",
+					model: "alpha",
+					choices: [{ delta: { reasoning_content: "think " }, finish_reason: null }],
+				},
+				{
+					choices: [{ delta: { content: "answer" }, finish_reason: "stop" }],
+					usage: {
+						prompt_tokens: 4,
+						completion_tokens: 5,
+						total_tokens: 9,
+						completion_tokens_details: { reasoning_tokens: 2 },
+					},
+				},
+			]);
+		});
+		const events: AssistantMessageEvent[] = [];
+		const stream = streamBoschLlmFarm(createModel("alpha"), textContext, {
+			apiKey: "secret-key",
+			fetch: fetchMock,
+		});
+
+		for await (const event of stream) {
+			events.push(event);
+		}
+		const result = await stream.result();
+
+		expect(result.responseId).toBe("chatcmpl-reasoning");
+		expect(result.responseModel).toBe("alpha");
+		expect(result.content).toEqual([
+			{ type: "thinking", thinking: "think ", thinkingSignature: "reasoning_content" },
+			{ type: "text", text: "answer" },
+		]);
+		expect(result.usage.reasoning).toBe(2);
+		expect(events.map((event) => event.type)).toContain("thinking_delta");
+		expect(JSON.parse(String(requests[0]!.init.body))).toMatchObject({
+			model: "alpha",
+			stream: true,
+			reasoning_effort: "medium",
+		});
+	});
+
+	it("emits SSE text deltas before the response body closes", async () => {
+		let controller!: ReadableStreamDefaultController<Uint8Array>;
+		const body = new ReadableStream<Uint8Array>({
+			start(nextController) {
+				controller = nextController;
+			},
+		});
+		const fetchMock = vi.fn(async () => {
+			return new Response(body, { status: 200, headers: { "content-type": "text/event-stream" } });
+		});
+		const events: AssistantMessageEvent[] = [];
+		const stream = streamBoschLlmFarm(createModel("alpha"), textContext, {
+			apiKey: "secret-key",
+			fetch: fetchMock,
+		});
+		const collect = (async () => {
+			for await (const event of stream) {
+				events.push(event);
+			}
+		})();
+
+		await waitForCondition(() => events.some((event) => event.type === "start"));
+		controller.enqueue(
+			new TextEncoder().encode('data: {"choices":[{"delta":{"content":"pin"},"finish_reason":null}]}\n\n'),
+		);
+		await waitForCondition(() => events.some((event) => event.type === "text_delta"));
+		expect(events.some((event) => event.type === "done")).toBe(false);
+
+		controller.enqueue(
+			new TextEncoder().encode('data: {"choices":[{"delta":{"content":"g"},"finish_reason":"stop"}]}\n\n'),
+		);
+		controller.enqueue(new TextEncoder().encode("data: [DONE]\n\n"));
+		controller.close();
+		await collect;
+
+		expect(await stream.result()).toMatchObject({
+			content: [{ type: "text", text: "ping" }],
+			stopReason: "stop",
+		});
 	});
 
 	it("redacts gatewayKey from provider errors", async () => {
@@ -519,14 +611,8 @@ describe("bosch-llmfarm provider", () => {
 					"alpha, beta",
 					"64000",
 					"4096",
-					"text",
-					"false",
-					"false",
 					"128000",
 					"8192",
-					"text+image",
-					"true",
-					"true",
 				]),
 			);
 			registry.refresh();
@@ -538,6 +624,11 @@ describe("bosch-llmfarm provider", () => {
 				baseUrl: "https://gateway.example.com/openapi/service/v1",
 				contextWindow: 64000,
 				maxTokens: 4096,
+				input: ["text", "image"],
+				reasoning: true,
+				headers: {
+					"x-bosch-llmfarm-stream": "true",
+				},
 			});
 			expect(await registry.getApiKeyForProvider(BOSCH_LLMFARM_PROVIDER_ID)).toBe("secret-key");
 		} finally {
@@ -586,7 +677,7 @@ describe("bosch-llmfarm provider", () => {
 		}
 	});
 
-	it("uses per-model streaming support from registry request headers", async () => {
+	it("forces streaming even when legacy registry request headers disable it", async () => {
 		const requests: Array<{ url: string; init: RequestInit }> = [];
 		const fetchMock = vi.fn(async (url: string | URL | Request, init?: RequestInit) => {
 			requests.push({ url: String(url), init: init ?? {} });
@@ -597,7 +688,7 @@ describe("bosch-llmfarm provider", () => {
 			apiKey: "secret-key",
 			headers: {
 				"x-bosch-llmfarm-key-placement": "header-only",
-				"x-bosch-llmfarm-stream": "true",
+				"x-bosch-llmfarm-stream": "false",
 			},
 			fetch: fetchMock,
 		}).result();
