@@ -83,24 +83,24 @@ test("createReleaseRows renders concise release and update text", () => {
 		createReleaseRows({ status: "checking" }, ASCET_COPILOT_RELEASE),
 		[
 			"Release",
-			"0.1.19 - Read block diagram semantics",
-			"Block diagram read clarity",
-			"ASCET diagram analysis refinements",
+			"0.1.20 - Bosch LLM Farm streaming",
+			"LLM Farm provider payload hooks",
+			"Bosch provider docs refresh",
 			"Checking updates...",
 		],
 	);
 	assert.deepEqual(
-		createReleaseRows({ status: "available", latestVersion: "0.1.20" }, ASCET_COPILOT_RELEASE),
-		["Update available", "0.1.19 -> 0.1.20", "pi update npm:@zeerke/ascet-copilot"],
+		createReleaseRows({ status: "available", latestVersion: "0.1.21" }, ASCET_COPILOT_RELEASE),
+		["Update available", "0.1.20 -> 0.1.21", "pi update npm:@zeerke/ascet-copilot"],
 	);
 	assert.deepEqual(
-		createReleaseRows({ status: "current", latestVersion: "0.1.19" }, ASCET_COPILOT_RELEASE),
+		createReleaseRows({ status: "current", latestVersion: "0.1.20" }, ASCET_COPILOT_RELEASE),
 		[
 			"Release",
-			"0.1.19 - Up to date",
-			"Read block diagram semantics",
-			"Block diagram read clarity",
-			"ASCET diagram analysis refinements",
+			"0.1.20 - Up to date",
+			"Bosch LLM Farm streaming",
+			"LLM Farm provider payload hooks",
+			"Bosch provider docs refresh",
 		],
 	);
 });
