@@ -19,11 +19,19 @@ import type { AscetExtensionAPI } from "./core/tool.ts";
 
 export const BOSCH_LLMFARM_PROVIDER_ID = "bosch-llmfarm";
 export const BOSCH_LLMFARM_API = "bosch-llmfarm-api";
+const OPENAI_COMPLETIONS_API = "openai-completions";
 
 const DEFAULT_BASE_URL = "https://apiroutecccn.apac.bosch.com/openapi/aigatewayprod/bdo-llmfarm-llm/v1";
 const FAR_FUTURE_EXPIRES = 4102444800000;
 const INTERNAL_KEY_PLACEMENT_HEADER = "x-bosch-llmfarm-key-placement";
 const INTERNAL_STREAM_HEADER = "x-bosch-llmfarm-stream";
+const BOSCH_OPENAI_COMPLETIONS_COMPAT = {
+	supportsStore: false,
+	supportsDeveloperRole: false,
+	supportsUsageInStreaming: false,
+	maxTokensField: "max_tokens",
+	supportsStrictMode: false,
+} as const;
 const TLS_CERTIFICATE_ERROR_CODES = new Set([
 	"UNABLE_TO_VERIFY_LEAF_SIGNATURE",
 	"SELF_SIGNED_CERT_IN_CHAIN",
@@ -190,9 +198,9 @@ async function selectKeyPlacement(callbacks: OAuthLoginCallbacks): Promise<Bosch
 		message: "Gateway key placement:",
 		options: [
 			{ id: "authorization-gateway-header", label: "authorization + gatewayKey header" },
+			{ id: "header-body", label: "header + body" },
 			{ id: "header-query-body", label: "header + query + body" },
 			{ id: "header-only", label: "header only" },
-			{ id: "header-body", label: "header + body" },
 			{ id: "header-query", label: "header + query" },
 		],
 	});
@@ -273,15 +281,30 @@ function isBoschCredentials(credentials: OAuthCredentials): credentials is Bosch
 	);
 }
 
+function usesOpenAICompletionsProvider(keyPlacement: BoschGatewayKeyPlacement): boolean {
+	return keyPlacement === "authorization-gateway-header";
+}
+
+function createBoschModelHeaders(keyPlacement: BoschGatewayKeyPlacement): Record<string, string> {
+	if (usesOpenAICompletionsProvider(keyPlacement)) {
+		return { Accept: "text/event-stream" };
+	}
+	return {
+		[INTERNAL_KEY_PLACEMENT_HEADER]: keyPlacement,
+		[INTERNAL_STREAM_HEADER]: "true",
+	};
+}
+
 export function applyBoschConfiguredModels(models: Model<Api>[], credentials: OAuthCredentials): Model<Api>[] {
 	const otherModels = models.filter((model) => model.provider !== BOSCH_LLMFARM_PROVIDER_ID);
 	if (!isBoschCredentials(credentials)) {
 		return models;
 	}
+	const useOpenAICompletions = usesOpenAICompletionsProvider(credentials.keyPlacement);
 	const boschModels: Model<Api>[] = credentials.models.map((model) => ({
 		id: model.id,
 		name: model.name || model.id,
-		api: BOSCH_LLMFARM_API,
+		api: useOpenAICompletions ? OPENAI_COMPLETIONS_API : BOSCH_LLMFARM_API,
 		provider: BOSCH_LLMFARM_PROVIDER_ID,
 		baseUrl: credentials.baseUrl,
 		reasoning: true,
@@ -289,10 +312,8 @@ export function applyBoschConfiguredModels(models: Model<Api>[], credentials: OA
 		cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
 		contextWindow: model.contextWindow,
 		maxTokens: model.maxTokens,
-		headers: {
-			[INTERNAL_KEY_PLACEMENT_HEADER]: credentials.keyPlacement,
-			[INTERNAL_STREAM_HEADER]: "true",
-		},
+		headers: createBoschModelHeaders(credentials.keyPlacement),
+		...(useOpenAICompletions ? { compat: BOSCH_OPENAI_COMPLETIONS_COMPAT } : {}),
 	}));
 	return [...otherModels, ...boschModels];
 }
@@ -501,24 +522,32 @@ function buildRequestHeaders(
 	options?: BoschStreamOptions,
 ): Record<string, string> {
 	const headers: Record<string, string> = {};
+	let hasAcceptHeader = false;
 	for (const [name, value] of Object.entries(options?.headers ?? {})) {
 		if (value === null || value === undefined) {
 			continue;
 		}
-		if (name.toLowerCase() === INTERNAL_KEY_PLACEMENT_HEADER) {
+		const lowerName = name.toLowerCase();
+		if (lowerName === INTERNAL_KEY_PLACEMENT_HEADER) {
 			continue;
 		}
-		if (name.toLowerCase() === INTERNAL_STREAM_HEADER) {
+		if (lowerName === INTERNAL_STREAM_HEADER) {
 			continue;
 		}
-		if (name.toLowerCase() === "authorization" || name.toLowerCase() === "content-type") {
+		if (lowerName === "authorization" || lowerName === "content-type") {
 			continue;
+		}
+		if (lowerName === "accept") {
+			hasAcceptHeader = true;
 		}
 		headers[name] = value;
 	}
 	headers.Authorization = `Bearer ${gatewayKey}`;
 	if (shouldIncludeGatewayKeyHeader(keyPlacement)) {
 		headers.gatewayKey = gatewayKey;
+	}
+	if (!hasAcceptHeader) {
+		headers.Accept = "text/event-stream";
 	}
 	headers["Content-Type"] = "application/json";
 	return headers;
@@ -854,6 +883,54 @@ export function streamBoschLlmFarm(
 	return stream;
 }
 
+type BoschBeforeProviderRequestContext = {
+	model?: { provider: string; api?: string; baseUrl?: string };
+	modelRegistry: { getApiKeyForProvider(provider: string): Promise<string | undefined> };
+};
+
+type BoschBeforeProviderHeadersContext = {
+	model?: { provider: string; api?: string; baseUrl?: string };
+	modelRegistry: { getApiKeyForProvider(provider: string): Promise<string | undefined> };
+};
+
+function isHttpsUrl(value: string | undefined): boolean {
+	if (!value) {
+		return false;
+	}
+	try {
+		return new URL(value).protocol === "https:";
+	} catch {
+		return false;
+	}
+}
+
+export async function handleBoschBeforeProviderRequest(
+	_event: { type: "before_provider_request"; payload: unknown },
+	ctx: BoschBeforeProviderRequestContext,
+): Promise<unknown | undefined> {
+	if (ctx.model?.provider !== BOSCH_LLMFARM_PROVIDER_ID || ctx.model.api !== OPENAI_COMPLETIONS_API) {
+		return undefined;
+	}
+	if (isHttpsUrl(ctx.model.baseUrl)) {
+		ensureBoschSystemCa();
+	}
+	return undefined;
+}
+
+export async function handleBoschBeforeProviderHeaders(
+	event: { type: "before_provider_headers"; headers: Record<string, string | null | undefined> },
+	ctx: BoschBeforeProviderHeadersContext,
+): Promise<void> {
+	if (ctx.model?.provider !== BOSCH_LLMFARM_PROVIDER_ID || ctx.model.api !== OPENAI_COMPLETIONS_API) {
+		return;
+	}
+	const gatewayKey = await ctx.modelRegistry.getApiKeyForProvider(BOSCH_LLMFARM_PROVIDER_ID);
+	if (!gatewayKey) {
+		return;
+	}
+	event.headers.gatewayKey = gatewayKey;
+	event.headers.Accept ??= "text/event-stream";
+}
 const placeholderModel: BoschModelConfig = {
 	id: "configure-first",
 	name: "Configure Bosch LLM Farm first",
@@ -864,6 +941,9 @@ const placeholderModel: BoschModelConfig = {
 };
 
 export function registerBoschLlmFarmProvider(pi: AscetExtensionAPI): void {
+	pi.on?.("before_provider_request", handleBoschBeforeProviderRequest);
+	pi.on?.("before_provider_headers", handleBoschBeforeProviderHeaders);
+
 	if (!pi.registerProvider) {
 		return;
 	}

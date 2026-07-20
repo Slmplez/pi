@@ -3,6 +3,7 @@ import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it, vi } from "vitest";
+import { streamSimple as streamSimpleCompat } from "../../ai/src/compat.ts";
 import type { OAuthLoginCallbacks } from "../../ai/src/oauth.ts";
 import { getOAuthProvider } from "../../ai/src/oauth.ts";
 import type { AssistantMessageEvent, Context, Model } from "../../ai/src/types.ts";
@@ -12,6 +13,8 @@ import {
 	BOSCH_LLMFARM_PROVIDER_ID,
 	buildBoschChatCompletionsUrl,
 	formatBoschRequestError,
+	handleBoschBeforeProviderHeaders,
+	handleBoschBeforeProviderRequest,
 	loginBoschLlmFarm,
 	normalizeBoschBaseUrl,
 	streamBoschLlmFarm,
@@ -143,7 +146,7 @@ describe("bosch-llmfarm provider", () => {
 			refresh: "",
 			expires: farFuture,
 			baseUrl: "https://gateway.example.com/openapi/service/v1",
-			keyPlacement: "header-query-body",
+			keyPlacement: "authorization-gateway-header",
 			models: [
 				{
 					id: "alpha",
@@ -161,16 +164,54 @@ describe("bosch-llmfarm provider", () => {
 			id: "alpha",
 			name: "Alpha",
 			provider: BOSCH_LLMFARM_PROVIDER_ID,
-			api: "bosch-llmfarm-api",
+			api: "openai-completions",
 			baseUrl: "https://gateway.example.com/openapi/service/v1",
 			contextWindow: 128000,
 			maxTokens: 8192,
 			headers: {
-				"x-bosch-llmfarm-stream": "true",
+				Accept: "text/event-stream",
+			},
+			compat: {
+				maxTokensField: "max_tokens",
+				supportsDeveloperRole: false,
+				supportsUsageInStreaming: false,
+				supportsStore: false,
+				supportsStrictMode: false,
 			},
 			input: ["text", "image"],
 			reasoning: true,
 		});
+	});
+
+	it("keeps legacy key placements on the custom Bosch transport", () => {
+		const models = applyBoschConfiguredModels([createModel("configure-first")], {
+			access: "secret",
+			refresh: "",
+			expires: farFuture,
+			baseUrl: "https://gateway.example.com/openapi/service/v1",
+			keyPlacement: "header-body",
+			models: [
+				{
+					id: "alpha",
+					name: "Alpha",
+					contextWindow: 128000,
+					maxTokens: 8192,
+					input: ["text"],
+					reasoning: false,
+				},
+			],
+		});
+
+		expect(models[0]).toMatchObject({
+			id: "alpha",
+			provider: BOSCH_LLMFARM_PROVIDER_ID,
+			api: "bosch-llmfarm-api",
+			headers: {
+				"x-bosch-llmfarm-key-placement": "header-body",
+				"x-bosch-llmfarm-stream": "true",
+			},
+		});
+		expect(models[0]).not.toHaveProperty("compat");
 	});
 
 	it("builds the chat completions URL with gatewayKey query only when configured", () => {
@@ -216,6 +257,7 @@ describe("bosch-llmfarm provider", () => {
 		);
 		expect(requests[0]!.init.headers).toMatchObject({
 			Authorization: "Bearer secret-key",
+			Accept: "text/event-stream",
 			"Content-Type": "application/json",
 		});
 		expect(JSON.parse(String(requests[0]!.init.body))).toMatchObject({
@@ -243,6 +285,7 @@ describe("bosch-llmfarm provider", () => {
 		expect(requests[0]!.init.headers).toMatchObject({
 			Authorization: "Bearer secret-key",
 			gatewayKey: "secret-key",
+			Accept: "text/event-stream",
 			"Content-Type": "application/json",
 		});
 		expect(JSON.parse(String(requests[0]!.init.body))).toMatchObject({ stream: true });
@@ -413,6 +456,7 @@ describe("bosch-llmfarm provider", () => {
 
 		expect(requests[0]!.init.headers).toMatchObject({
 			Authorization: "Bearer secret-key",
+			Accept: "text/event-stream",
 			"Content-Type": "application/json",
 			"x-correlation-id": "trace-123",
 		});
@@ -620,14 +664,21 @@ describe("bosch-llmfarm provider", () => {
 			const boschModels = registry.getAll().filter((model) => model.provider === BOSCH_LLMFARM_PROVIDER_ID);
 			expect(boschModels.map((model) => model.id)).toEqual(["alpha", "beta"]);
 			expect(boschModels[0]).toMatchObject({
-				api: "bosch-llmfarm-api",
+				api: "openai-completions",
 				baseUrl: "https://gateway.example.com/openapi/service/v1",
 				contextWindow: 64000,
 				maxTokens: 4096,
 				input: ["text", "image"],
 				reasoning: true,
 				headers: {
-					"x-bosch-llmfarm-stream": "true",
+					Accept: "text/event-stream",
+				},
+				compat: {
+					maxTokensField: "max_tokens",
+					supportsDeveloperRole: false,
+					supportsUsageInStreaming: false,
+					supportsStore: false,
+					supportsStrictMode: false,
 				},
 			});
 			expect(await registry.getApiKeyForProvider(BOSCH_LLMFARM_PROVIDER_ID)).toBe("secret-key");
@@ -638,6 +689,215 @@ describe("bosch-llmfarm provider", () => {
 		}
 	});
 
+	it("sends default Bosch requests through Pi openai-completions with gatewayKey header", async () => {
+		const requests: Array<{
+			url: string;
+			authorization?: string;
+			accept?: string;
+			gatewayKey?: string | string[];
+			contentType?: string;
+			body: Record<string, unknown>;
+		}> = [];
+		const server = createServer((req, res) => {
+			let body = "";
+			req.setEncoding("utf8");
+			req.on("data", (chunk) => {
+				body += chunk;
+			});
+			req.on("end", () => {
+				requests.push({
+					url: req.url ?? "",
+					authorization: req.headers.authorization,
+					accept: req.headers.accept,
+					gatewayKey: req.headers.gatewaykey,
+					contentType: String(req.headers["content-type"] ?? ""),
+					body: JSON.parse(body) as Record<string, unknown>,
+				});
+				res.writeHead(200, { "content-type": "text/event-stream" });
+				res.write(
+					`data: ${JSON.stringify({
+						id: "chatcmpl-openai-path",
+						model: "alpha",
+						choices: [{ delta: { content: "pong" }, finish_reason: "stop" }],
+						usage: { prompt_tokens: 1, completion_tokens: 1, total_tokens: 2 },
+					})}\n\n`,
+				);
+				res.write("data: [DONE]\n\n");
+				res.end();
+			});
+		});
+
+		await new Promise<void>((resolve, reject) => {
+			server.once("error", reject);
+			server.listen(0, "127.0.0.1", () => {
+				server.off("error", reject);
+				resolve();
+			});
+		});
+
+		try {
+			const address = server.address();
+			if (typeof address !== "object" || !address?.port) {
+				throw new Error("Local gateway smoke server did not listen on a TCP port.");
+			}
+			const model = applyBoschConfiguredModels([], {
+				access: "secret-key",
+				refresh: "",
+				expires: farFuture,
+				baseUrl: `http://127.0.0.1:${address.port}/openapi/service/v1`,
+				keyPlacement: "authorization-gateway-header",
+				models: [
+					{
+						id: "alpha",
+						name: "Alpha",
+						contextWindow: 128000,
+						maxTokens: 1234,
+						input: ["text"],
+						reasoning: true,
+					},
+				],
+			})[0] as Model<"openai-completions">;
+			const headers = { ...(model.headers ?? {}) };
+			await handleBoschBeforeProviderHeaders(
+				{ type: "before_provider_headers", headers },
+				{
+					model,
+					modelRegistry: { getApiKeyForProvider: vi.fn(async () => "secret-key") },
+				},
+			);
+
+			const result = await streamSimpleCompat(model, textContext, {
+				apiKey: "secret-key",
+				headers,
+				onPayload: (payload) =>
+					handleBoschBeforeProviderRequest(
+						{ type: "before_provider_request", payload },
+						{
+							model,
+							modelRegistry: { getApiKeyForProvider: vi.fn(async () => "secret-key") },
+						},
+					),
+			}).result();
+
+			expect(result.content).toEqual([{ type: "text", text: "pong" }]);
+			expect(requests).toHaveLength(1);
+			expect(requests[0]).toMatchObject({
+				url: "/openapi/service/v1/chat/completions",
+				authorization: "Bearer secret-key",
+				gatewayKey: "secret-key",
+				contentType: expect.stringContaining("application/json"),
+			});
+			expect(requests[0]?.accept).toContain("text/event-stream");
+			expect(requests[0]?.body).toMatchObject({
+				model: "alpha",
+				stream: true,
+				max_tokens: 1234,
+			});
+			expect(requests[0]?.body).not.toHaveProperty("gatewayKey");
+			expect(requests[0]?.body).not.toHaveProperty("max_completion_tokens");
+			expect(requests[0]?.body).not.toHaveProperty("stream_options");
+		} finally {
+			await new Promise<void>((resolve, reject) => {
+				server.close((error) => (error ? reject(error) : resolve()));
+			});
+		}
+	});
+	it("keeps Bosch OpenAI-compatible provider payloads unchanged", async () => {
+		const getApiKeyForProvider = vi.fn(async () => "secret-key");
+
+		const result = await handleBoschBeforeProviderRequest(
+			{ type: "before_provider_request", payload: { model: "alpha", stream: true } },
+			{
+				model: {
+					provider: BOSCH_LLMFARM_PROVIDER_ID,
+					api: "openai-completions",
+					baseUrl: "http://gateway.example.com/openapi/service/v1",
+				},
+				modelRegistry: { getApiKeyForProvider },
+			},
+		);
+
+		expect(result).toBeUndefined();
+		expect(getApiKeyForProvider).not.toHaveBeenCalled();
+	});
+
+	it("injects gatewayKey into Bosch OpenAI-compatible provider headers", async () => {
+		const getApiKeyForProvider = vi.fn(async () => "secret-key");
+		const headers: Record<string, string> = {};
+
+		await handleBoschBeforeProviderHeaders(
+			{ type: "before_provider_headers", headers },
+			{
+				model: {
+					provider: BOSCH_LLMFARM_PROVIDER_ID,
+					api: "openai-completions",
+					baseUrl: "http://gateway.example.com/openapi/service/v1",
+				},
+				modelRegistry: { getApiKeyForProvider },
+			},
+		);
+
+		expect(headers).toEqual({ gatewayKey: "secret-key", Accept: "text/event-stream" });
+		expect(getApiKeyForProvider).toHaveBeenCalledWith(BOSCH_LLMFARM_PROVIDER_ID);
+	});
+
+	it("does not modify non-Bosch or non-object provider payloads", async () => {
+		const getApiKeyForProvider = vi.fn(async () => "secret-key");
+
+		await expect(
+			handleBoschBeforeProviderRequest(
+				{ type: "before_provider_request", payload: { model: "alpha" } },
+				{
+					model: { provider: "openai", api: "openai-completions", baseUrl: "http://gateway.example.com/v1" },
+					modelRegistry: { getApiKeyForProvider },
+				},
+			),
+		).resolves.toBeUndefined();
+		expect(getApiKeyForProvider).not.toHaveBeenCalled();
+
+		await expect(
+			handleBoschBeforeProviderRequest(
+				{ type: "before_provider_request", payload: { model: "alpha" } },
+				{
+					model: {
+						provider: BOSCH_LLMFARM_PROVIDER_ID,
+						api: "bosch-llmfarm-api",
+						baseUrl: "http://gateway.example.com/v1",
+					},
+					modelRegistry: { getApiKeyForProvider },
+				},
+			),
+		).resolves.toBeUndefined();
+		expect(getApiKeyForProvider).not.toHaveBeenCalled();
+
+		await expect(
+			handleBoschBeforeProviderRequest(
+				{ type: "before_provider_request", payload: "not-object" },
+				{
+					model: {
+						provider: BOSCH_LLMFARM_PROVIDER_ID,
+						api: "openai-completions",
+						baseUrl: "http://gateway.example.com/v1",
+					},
+					modelRegistry: { getApiKeyForProvider },
+				},
+			),
+		).resolves.toBeUndefined();
+	});
+	it("registers Bosch provider request and header hooks", () => {
+		const on = vi.fn();
+
+		ascetExtension({
+			registerTool: vi.fn(),
+			sendUserMessage: vi.fn(),
+			registerCommand: vi.fn(),
+			registerProvider: vi.fn(),
+			on,
+		});
+
+		expect(on).toHaveBeenCalledWith("before_provider_request", handleBoschBeforeProviderRequest);
+		expect(on).toHaveBeenCalledWith("before_provider_headers", handleBoschBeforeProviderHeaders);
+	});
 	it("exposes Bosch LLM Farm as a real /login provider option after extension registration", () => {
 		const tempDir = join(
 			tmpdir(),

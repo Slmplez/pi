@@ -115,14 +115,14 @@ https://apiroutecccn.apac.bosch.com/openapi/aigatewayprod/bdo-llmfarm-llm/v1/cha
 https://apiroutecccn.apac.bosch.com/openapi/aigatewayprod/bdo-llmfarm-llm/v1/chat/completions?gatewayKey=...
 ```
 
-The default gateway-key placement is `authorization + gatewayKey header`, matching the verified Bosch OpenAI SDK call shape:
+The default gateway-key placement is `authorization + gatewayKey header`, matching the live-validated Bosch gateway shape:
 
 ```http
 Authorization: Bearer <gatewayKey>
 gatewayKey: <gatewayKey>
 ```
 
-With the default placement, the gateway key is not added to the URL query string or JSON body. Legacy placements are still available during login for gateways that expect `gatewayKey` in the query string, request body, or both.
+With the default placement, Bosch models use Pi's built-in `openai-completions` streaming provider. Legacy placements are still available during login for gateways that expect `gatewayKey` in the request body or query string; those placements keep using the Bosch custom transport fallback.
 
 If the gateway only requires a bearer token, choose `header only` during login. The selected placement is stored with the model configuration and applied to later `/model bosch-llmfarm/<model-id>` requests.
 
@@ -132,7 +132,7 @@ After login, select a configured model:
 /model bosch-llmfarm/<model-id>
 ```
 
-When the provider sends a real Bosch request, it merges the Node default CA set with the operating system trusted CA set before the first `fetch`. This supports Bosch enterprise TLS inspection or internal root CA chains on Windows without disabling certificate verification. `/login bosch-llmfarm` only stores configuration and does not contact the gateway.
+When the provider sends a real Bosch HTTPS request, it merges the Node default CA set with the operating system trusted CA set before the provider transport runs. This supports Bosch enterprise TLS inspection or internal root CA chains on Windows without disabling certificate verification. `/login bosch-llmfarm` only stores configuration and does not contact the gateway.
 
 Do not use `NODE_TLS_REJECT_UNAUTHORIZED=0`. For old extension builds, `NODE_OPTIONS=--use-system-ca` can be used as a temporary workaround, but the provider-level system CA merge is the intended path.
 
@@ -142,9 +142,31 @@ Requests are sent as OpenAI-compatible streaming chat completions:
 POST <baseUrl>/chat/completions
 ```
 
-with `model`, `messages`, `stream: true`, optional `temperature`, `max_tokens`, default `reasoning_effort`, optional OpenAI-style `tools`, and the configured gateway-key placement. Bosch LLM Farm requests are always sent as SSE streaming requests. The provider parses text deltas, tool-call deltas, usage chunks, and OpenAI-compatible reasoning fields such as `reasoning_content`, `reasoning`, `reasoning_text`, and `thinking`.
+with `model`, `messages`, `stream: true`, optional `temperature`, `max_tokens`, default `reasoning_effort`, optional OpenAI-style `tools`, `Accept: text/event-stream`, and default `gatewayKey` header. It does not request OpenAI `stream_options` by default. Bosch LLM Farm requests are always sent as SSE streaming requests. The default path reuses Pi OpenAI completions streaming; legacy key placements use the Bosch custom transport fallback.
 
 Company-network validation checklist:
+
+Run a text streaming live smoke from the repo root when Bosch network access and a gateway key are available:
+
+```powershell
+$env:BOSCH_LLMFARM_BASE_URL = "https://.../v1"
+$env:BOSCH_LLMFARM_GATEWAY_KEY = "..."
+$env:BOSCH_LLMFARM_MODEL = "..."
+npm run smoke:bosch-llmfarm
+```
+
+Optional live smoke inputs: `BOSCH_LLMFARM_PROMPT`, `BOSCH_LLMFARM_IMAGE_BASE64`, `BOSCH_LLMFARM_IMAGE_MIME`, `BOSCH_LLMFARM_TOOL_SMOKE=1`, `BOSCH_LLMFARM_TIMEOUT_MS`, `BOSCH_LLMFARM_CONTEXT_WINDOW`, and `BOSCH_LLMFARM_MAX_TOKENS`.
+
+The default smoke uses the live-validated `authorization-gateway-header` placement. To compare with the Python-style body placement without changing saved Pi login state:
+
+```powershell
+$env:BOSCH_LLMFARM_KEY_PLACEMENT = "header-body"
+npm run smoke:bosch-llmfarm
+```
+
+Supported smoke placements are `authorization-gateway-header`, `header-body`, `header-query-body`, `header-only`, and `header-query`. The default is `authorization-gateway-header`, which reuses Pi's OpenAI completions provider. Non-default placements use the Bosch custom transport fallback for live compatibility checks.
+
+Manual validation checklist:
 
 - Run `/login bosch-llmfarm` directly, or run `/login`, choose `Use a subscription`, then select `Bosch LLM Farm`.
 - Enter the real endpoint and gateway key.

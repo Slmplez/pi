@@ -21,6 +21,7 @@
 		"check:ts-imports": "node scripts/check-ts-relative-imports.mjs",
 		"smoke:ascet-extension": "tsx scripts/ascet-extension-live-smoke.ts",
 		"smoke:ascet-extension:write": "tsx scripts/ascet-extension-write-smoke.ts",
+		"smoke:bosch-llmfarm": "tsx scripts/bosch-llmfarm-live-smoke.ts",
 		"profile:tui": "node scripts/profile-coding-agent-node.mjs --mode tui",
 		"profile:rpc": "node scripts/profile-coding-agent-node.mjs --mode rpc",
 		"test": "npm run test --workspaces --if-present",

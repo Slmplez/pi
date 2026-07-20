@@ -64,10 +64,20 @@ export interface AscetExtensionAPI {
 		handler: (
 			event: { type: "before_provider_request"; payload: unknown },
 			ctx: {
-				model?: { provider: string };
+				model?: { provider: string; api?: string; baseUrl?: string };
 				modelRegistry: { getApiKeyForProvider(provider: string): Promise<string | undefined> };
 			},
 		) => Promise<unknown | undefined> | unknown | undefined,
+	): void;
+	on?(
+		event: "before_provider_headers",
+		handler: (
+			event: { type: "before_provider_headers"; headers: Record<string, string | null | undefined> },
+			ctx: {
+				model?: { provider: string; api?: string; baseUrl?: string };
+				modelRegistry: { getApiKeyForProvider(provider: string): Promise<string | undefined> };
+			},
+		) => Promise<void> | void,
 	): void;
 }
 
