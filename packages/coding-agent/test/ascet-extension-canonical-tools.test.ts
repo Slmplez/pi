@@ -171,6 +171,7 @@ describe("ASCET canonical PI tools", () => {
 
 	it("keeps explore/search public schemas aligned with model-facing semantics", () => {
 		const exploreGuidelines = ascetExploreTool.promptGuidelines?.join("\n") ?? "";
+		const searchSnippet = ascetSearchTool.promptSnippet ?? "";
 		const searchGuidelines = ascetSearchTool.promptGuidelines?.join("\n") ?? "";
 
 		expect(Value.Check(ascetExploreParameters, { action: "resolve_target", query: "PID" })).toBe(false);
@@ -185,6 +186,13 @@ describe("ASCET canonical PI tools", () => {
 		expect(exploreGuidelines).not.toContain("resolve_target");
 		expect(exploreGuidelines).toContain("ascet_search.resolve_component");
 
+		expect(searchSnippet).toContain("resolve_component");
+		expect(searchGuidelines).toContain("Use resolve_component");
+		expect(searchGuidelines).toContain("truncated=true");
+		expect(searchGuidelines).toContain("nextCursor");
+		expect(searchGuidelines).toContain("searchComplete=true");
+		expect(searchGuidelines).toContain("not exhaustive");
+		expect(searchGuidelines).toContain("Do not claim");
 		expect(
 			Value.Check(ascetSearchParameters, {
 				action: "search_occurrences",
