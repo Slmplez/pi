@@ -673,7 +673,7 @@ describe("ASCET guarded write PI tools", () => {
 		);
 		expect(promptGuidelinesText).toContain('scope:"imported"');
 		expect(promptGuidelinesText).toContain(
-			"Do not invent data.value, impl, physicalRange, calibration, memory, or dependency fields for imported parameters.",
+			"Do not set data.value, impl, physicalRange, impl.implementationRange, impl.limitAssignments, calibration, memory, or dependency fields for imported parameters.",
 		);
 		expect(promptGuidelinesText).toContain(
 			"If the exported counterpart is unknown, ambiguous, or not found, stop at preflight",
