@@ -1,0 +1,81 @@
+import assert from "node:assert/strict";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { describe, test } from "node:test";
+import { type AscetCliJsonResult, formatAscetCliJsonResult } from "../../cli.ts";
+import { createAscetCliToolDetails } from "./envelope.ts";
+
+function makeResult(data: unknown): AscetCliJsonResult {
+	return {
+		ok: true,
+		data,
+		request: {
+			cwd: process.cwd(),
+			cliPath: "AscetCli.exe",
+			args: ["exec", "read_block_diagram", "DEMO\\Controller", "Main", "--json"],
+		},
+		stdout: JSON.stringify(data),
+		stderr: "",
+		exitCode: 0,
+		timedOut: false,
+	};
+}
+
+describe("createAscetCliToolDetails", () => {
+	test("omits full data and stdout after formatter persists a large output artifact", () => {
+		const artifactRoot = mkdtempSync(join(tmpdir(), "pi-ascet-details-artifacts-"));
+		const previousRoot = process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT;
+		process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT = artifactRoot;
+		try {
+			const result = makeResult({
+				summary: "Large block diagram.",
+				counts: { elements: 120, pins: 320 },
+				detail: {
+					nodes: Array.from({ length: 120 }, (_, index) => ({
+						id: `N${index}`,
+						pins: Array.from({ length: 8 }, (_, pinIndex) => `p${pinIndex}`),
+					})),
+				},
+			});
+
+			formatAscetCliJsonResult("read_block_diagram", result);
+			const details = createAscetCliToolDetails("ascet_read", "read_block_diagram", result) as Record<
+				string,
+				unknown
+			>;
+
+			assert.equal(details.ok, true);
+			assert.equal(details.tool, "ascet_read");
+			assert.equal(details.action, "read_block_diagram");
+			assert.deepEqual(details.omittedFields, ["data", "stdout"]);
+			assert.ok(!Object.hasOwn(details, "data"));
+			assert.ok(!Object.hasOwn(details, "stdout"));
+			assert.match(String((details.artifact as { path?: unknown }).path), /read_block_diagram-/);
+			assert.match(String((details.artifact as { searchHint?: unknown }).searchHint), /rg -n '<pattern>'/);
+			assert.deepEqual(details.counts, { elements: 120, pins: 320 });
+		} finally {
+			if (previousRoot === undefined) {
+				delete process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT;
+			} else {
+				process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT = previousRoot;
+			}
+			rmSync(artifactRoot, { recursive: true, force: true });
+		}
+	});
+
+	test("preserves full data and stdout when formatter keeps small output inline", () => {
+		const result = makeResult({
+			summary: "Small summary.",
+			counts: { elements: 1 },
+		});
+
+		formatAscetCliJsonResult("read_block_diagram", result);
+		const details = createAscetCliToolDetails("ascet_read", "read_block_diagram", result) as Record<string, unknown>;
+
+		assert.deepEqual(details.data, result.data);
+		assert.equal(details.stdout, result.stdout);
+		assert.ok(!Object.hasOwn(details, "artifact"));
+		assert.ok(!Object.hasOwn(details, "omittedFields"));
+	});
+});

@@ -60,6 +60,17 @@ export interface AscetCliJsonResult {
 		code: string;
 		message: string;
 	};
+	formattedOutputArtifact?: AscetFormattedOutputArtifact;
+}
+
+export interface AscetFormattedOutputArtifact {
+	operation: string;
+	path: string;
+	sizeBytes: number;
+	thresholdBytes: number;
+	summary: string;
+	counts?: Record<string, number>;
+	searchHint: string;
 }
 
 const DEFAULT_FORMAT_ARTIFACT_THRESHOLD_BYTES = 4096;
@@ -156,17 +167,35 @@ function formatCounts(counts: Record<string, number> | undefined): string | unde
 		.join(", ")}`;
 }
 
-function formatPersistedSuccess(operation: string, result: AscetCliJsonResult, formatted: string): string {
-	const persisted = persistFormattedOutput(operation, formatted);
-	const summary = extractStructuredSummary(result.data) ?? `${operation} returned large ASCET JSON output.`;
+function formatPersistedArtifactMessage(artifact: AscetFormattedOutputArtifact): string {
 	return [
-		summary,
-		formatCounts(extractCounts(result.data)),
-		`Stored full ASCET output for ${operation} at ${persisted.path} (${persisted.sizeBytes} bytes).`,
-		buildArtifactSearchHint(persisted.path),
+		artifact.summary,
+		formatCounts(artifact.counts),
+		`Stored full ASCET output for ${artifact.operation} at ${artifact.path} (${artifact.sizeBytes} bytes).`,
+		artifact.searchHint,
 	]
 		.filter(Boolean)
 		.join("\n");
+}
+
+function formatPersistedSuccess(operation: string, result: AscetCliJsonResult, formatted: string): string {
+	if (result.formattedOutputArtifact?.operation === operation) {
+		return formatPersistedArtifactMessage(result.formattedOutputArtifact);
+	}
+
+	const persisted = persistFormattedOutput(operation, formatted);
+	const summary = extractStructuredSummary(result.data) ?? `${operation} returned large ASCET JSON output.`;
+	const artifact = {
+		operation,
+		path: persisted.path,
+		sizeBytes: persisted.sizeBytes,
+		thresholdBytes: getFormatArtifactThresholdBytes(),
+		summary,
+		counts: extractCounts(result.data),
+		searchHint: buildArtifactSearchHint(persisted.path),
+	} satisfies AscetFormattedOutputArtifact;
+	result.formattedOutputArtifact = artifact;
+	return formatPersistedArtifactMessage(artifact);
 }
 
 export function getProcessTreeKillCommand(
@@ -485,7 +514,7 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 
 export function formatAscetCliJsonResult(operation: string, result: AscetCliJsonResult): string {
 	if (result.ok) {
-		const formatted = JSON.stringify(result.data, null, 2);
+		const formatted = JSON.stringify(result.data, null, 2) ?? "null";
 		if (Buffer.byteLength(formatted, "utf8") <= getFormatArtifactThresholdBytes()) {
 			return formatted;
 		}
