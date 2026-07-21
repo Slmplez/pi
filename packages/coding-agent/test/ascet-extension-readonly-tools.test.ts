@@ -31,6 +31,10 @@ import {
 	buildReadDependentChainArgs,
 	runAscetReadDependentChain,
 } from "../../ascet-extension/src/read-dependent-chain.ts";
+import {
+	buildReadElementDependencyArgs,
+	runAscetReadElementDependency,
+} from "../../ascet-extension/src/read-element-dependency.ts";
 import { buildReadElementRefsArgs, runAscetReadElementRefs } from "../../ascet-extension/src/read-element-refs.ts";
 import { buildReadImplementationArgs } from "../../ascet-extension/src/read-implementation.ts";
 import { buildReadMethodCodeArgs, runAscetReadMethodCode } from "../../ascet-extension/src/read-method-code.ts";
@@ -705,6 +709,27 @@ describe("ASCET read-only PI tools", () => {
 			"25",
 			"--json",
 		]);
+		expect(
+			buildReadElementDependencyArgs({
+				componentPath: "FeatureA/Consumer",
+				elementName: "C_K_Effective",
+				targetKind: "component",
+			}),
+		).toEqual([
+			"exec",
+			"read_element_dependency",
+			"FeatureA\\Consumer",
+			"C_K_Effective",
+			"--target-kind",
+			"component",
+			"--json",
+		]);
+		expect(
+			buildReadElementDependencyArgs({
+				targetPath: "FeatureA/Consumer",
+				elementName: "C_K_Effective",
+			}),
+		).toEqual(["exec", "read_element_dependency", "FeatureA\\Consumer", "C_K_Effective", "--json"]);
 	});
 
 	it("runs dependent-chain action through canonical ascet_read", async () => {
@@ -781,6 +806,85 @@ describe("ASCET read-only PI tools", () => {
 		expect(direct.request.args).toEqual([
 			"exec",
 			"read_dependent_chain",
+			"FeatureA\\Consumer",
+			"C_K_Effective",
+			"--json",
+		]);
+	});
+
+	it("runs element-dependency action through canonical ascet_read", async () => {
+		const ascetExtension = await loadAscetExtension();
+		const tool = ascetExtension?.tools.get("ascet_read")?.definition;
+
+		const readResult = await tool?.execute(
+			"test-read-element-dependency",
+			{
+				action: "read_element_dependency",
+				componentPath: "FeatureA\\Consumer",
+				elementName: "C_K_Effective",
+				targetKind: "component",
+			},
+			new AbortController().signal,
+			undefined,
+			{
+				cwd: repoRoot,
+				executeCli: async (request: { args: string[] }) => ({
+					exitCode: 0,
+					stdout: JSON.stringify({
+						ok: true,
+						result: {
+							targetPath: "FeatureA\\Consumer",
+							elementName: "C_K_Effective",
+							dependency: "dependent",
+						},
+					}),
+					stderr: "",
+					timedOut: false,
+					request,
+				}),
+			} as never,
+		);
+
+		const details = readResult?.details as CliRequestDetails | undefined;
+		expect(details).toMatchObject({
+			ok: true,
+			tool: "ascet_read",
+			action: "read_element_dependency",
+			command: {
+				logicalCommandId: "AscetReadElementDependency",
+				operation: "read_element_dependency",
+			},
+		});
+		expect(details?.diagnostics.request.args).toEqual([
+			"exec",
+			"read_element_dependency",
+			"FeatureA\\Consumer",
+			"C_K_Effective",
+			"--target-kind",
+			"component",
+			"--json",
+		]);
+
+		const direct = await runAscetReadElementDependency(
+			{
+				targetPath: "FeatureA\\Consumer",
+				elementName: "C_K_Effective",
+			},
+			{
+				cwd: repoRoot,
+				executeCli: async (request) => ({
+					exitCode: 0,
+					stdout: JSON.stringify({ ok: true, result: { dependency: "independent" } }),
+					stderr: "",
+					timedOut: false,
+					request,
+				}),
+			},
+		);
+		expect(direct.ok).toBe(true);
+		expect(direct.request.args).toEqual([
+			"exec",
+			"read_element_dependency",
 			"FeatureA\\Consumer",
 			"C_K_Effective",
 			"--json",

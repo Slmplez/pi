@@ -19,4 +19,20 @@ describe("ascet_read schema", () => {
 		};
 		assert.equal(request.action, "read_block_diagram");
 	});
+
+	test("accepts read_element_dependency as a read action", () => {
+		const actionSchema = (ascetReadParameters as { properties?: { action?: { anyOf?: Array<{ const?: string }> } } })
+			.properties?.action;
+		const actions = actionSchema?.anyOf?.map((entry) => entry.const) ?? [];
+
+		assert.ok(actions.includes("read_element_dependency"));
+
+		const request: AscetReadParams = {
+			action: "read_element_dependency",
+			targetPath: "FeatureA\\Consumer",
+			elementName: "C_K_Effective",
+			targetKind: "component",
+		};
+		assert.equal(request.action, "read_element_dependency");
+	});
 });

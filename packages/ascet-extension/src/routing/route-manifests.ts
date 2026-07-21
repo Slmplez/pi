@@ -172,6 +172,13 @@ export const ascetRouteManifestEntries = [
 		operation: "read_dependent_chain",
 		category: "domain",
 	},
+	{
+		toolName: "ascet_read",
+		action: "read_element_dependency",
+		logicalCommandId: "AscetReadElementDependency",
+		operation: "read_element_dependency",
+		category: "domain",
+	},
 
 	{
 		toolName: "ascet_reference",

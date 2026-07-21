@@ -15,6 +15,7 @@
                        "AscetReadElementCatalog",
                        "AscetReadProjectFormulas",
                        "AscetReadDependentChain",
+                       "AscetReadElementDependency",
                        "AscetReadClassSummary",
                        "AscetReadClassSnapshot",
                        "AscetReadModuleSummary",

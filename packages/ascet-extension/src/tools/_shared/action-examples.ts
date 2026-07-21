@@ -222,6 +222,17 @@ export const ascetActionExamples = [
 		},
 	}),
 	defineExample({
+		tool: "ascet_read",
+		action: "read_element_dependency",
+		intent: "read dependency state",
+		args: {
+			action: "read_element_dependency",
+			componentPath: "FeatureA\\Consumer",
+			elementName: "C_K_Effective",
+			targetKind: "component",
+		},
+	}),
+	defineExample({
 		tool: "ascet_reference",
 		action: "component_refs",
 		intent: "outbound refs",

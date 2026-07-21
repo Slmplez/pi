@@ -1,5 +1,7 @@
 import { type ChildProcess, spawn } from "node:child_process";
-import { existsSync } from "node:fs";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { AscetCliLockTimeoutError, acquireAscetCliLock } from "./scheduler/cli-lock.ts";
 import {
 	AscetSchedulerCancelledError,
@@ -58,6 +60,113 @@ export interface AscetCliJsonResult {
 		code: string;
 		message: string;
 	};
+}
+
+const DEFAULT_FORMAT_ARTIFACT_THRESHOLD_BYTES = 4096;
+let formatArtifactCounter = 0;
+
+function getFormatArtifactThresholdBytes(): number {
+	const configured = Number(process.env.PI_ASCET_EXTENSION_OUTPUT_THRESHOLD_BYTES);
+	return Number.isFinite(configured) && configured > 0 ? configured : DEFAULT_FORMAT_ARTIFACT_THRESHOLD_BYTES;
+}
+
+function getFormatArtifactRoot(): string {
+	return process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT ?? join(tmpdir(), "pi-ascet-extension", "artifacts");
+}
+
+function safeArtifactName(value: string): string {
+	const safe = value.replace(/[^A-Za-z0-9_.-]+/g, "_").replace(/^_+|_+$/g, "");
+	return safe.length > 0 ? safe.slice(0, 80) : "ascet_cli";
+}
+
+function quotePowerShellArg(value: string): string {
+	return `'${value.replace(/'/g, "''")}'`;
+}
+
+function buildArtifactSearchHint(artifactPath: string): string {
+	const quotedPath = quotePowerShellArg(artifactPath);
+	return `Search locally with rg -n '<pattern>' ${quotedPath}; preview with Get-Content -Path ${quotedPath} -TotalCount 120.`;
+}
+
+function persistFormattedOutput(operation: string, formatted: string): { path: string; sizeBytes: number } {
+	const root = getFormatArtifactRoot();
+	mkdirSync(root, { recursive: true });
+	const artifactPath = join(
+		root,
+		`${safeArtifactName(operation)}-${process.pid}-${Date.now()}-${formatArtifactCounter++}.json`,
+	);
+	const content = formatted.endsWith("\n") ? formatted : `${formatted}\n`;
+	writeFileSync(artifactPath, content, "utf8");
+	return {
+		path: artifactPath,
+		sizeBytes: Buffer.byteLength(content, "utf8"),
+	};
+}
+
+function asRecord(value: unknown): Record<string, unknown> | undefined {
+	return value !== null && typeof value === "object" && !Array.isArray(value)
+		? (value as Record<string, unknown>)
+		: undefined;
+}
+
+function asNonEmptyString(value: unknown): string | undefined {
+	return typeof value === "string" && value.trim().length > 0 ? value.trim() : undefined;
+}
+
+function stripEmbeddedJsonTail(summary: string): string {
+	return summary.replace(/\s+(Readback|Verify):\s*[{[][\s\S]*$/u, "").trim();
+}
+
+function extractStructuredSummary(value: unknown): string | undefined {
+	const record = asRecord(value);
+	if (!record) {
+		return undefined;
+	}
+	const directSummary = asNonEmptyString(record.summary);
+	if (directSummary) {
+		return stripEmbeddedJsonTail(directSummary);
+	}
+	return extractStructuredSummary(record.result);
+}
+
+function extractCounts(value: unknown): Record<string, number> | undefined {
+	const record = asRecord(value);
+	if (!record) {
+		return undefined;
+	}
+	const counts = asRecord(record.counts) ?? extractCounts(record.result);
+	if (!counts) {
+		return undefined;
+	}
+	const numericCounts: Record<string, number> = {};
+	for (const [key, entry] of Object.entries(counts)) {
+		if (typeof entry === "number" && Number.isFinite(entry)) {
+			numericCounts[key] = entry;
+		}
+	}
+	return Object.keys(numericCounts).length > 0 ? numericCounts : undefined;
+}
+
+function formatCounts(counts: Record<string, number> | undefined): string | undefined {
+	if (!counts) {
+		return undefined;
+	}
+	return `counts: ${Object.entries(counts)
+		.map(([key, value]) => `${key}=${value}`)
+		.join(", ")}`;
+}
+
+function formatPersistedSuccess(operation: string, result: AscetCliJsonResult, formatted: string): string {
+	const persisted = persistFormattedOutput(operation, formatted);
+	const summary = extractStructuredSummary(result.data) ?? `${operation} returned large ASCET JSON output.`;
+	return [
+		summary,
+		formatCounts(extractCounts(result.data)),
+		`Stored full ASCET output for ${operation} at ${persisted.path} (${persisted.sizeBytes} bytes).`,
+		buildArtifactSearchHint(persisted.path),
+	]
+		.filter(Boolean)
+		.join("\n");
 }
 
 export function getProcessTreeKillCommand(
@@ -214,7 +323,9 @@ async function executeScheduledAscetCli(
 	});
 }
 
-function parseJson(text: string): { ok: true; data: unknown } | { ok: false; message: string } {
+type ParseJsonResult = { ok: true; data: unknown } | { ok: false; message: string };
+
+function parseJson(text: string): ParseJsonResult {
 	const trimmed = text.trim();
 	if (!trimmed) {
 		return { ok: false, message: "ASCET CLI produced empty stdout; expected JSON." };
@@ -225,6 +336,30 @@ function parseJson(text: string): { ok: true; data: unknown } | { ok: false; mes
 		const message = error instanceof Error ? error.message : String(error);
 		return { ok: false, message: `ASCET CLI produced invalid JSON: ${message}` };
 	}
+}
+
+function isParseJsonFailure(value: ParseJsonResult): value is { ok: false; message: string } {
+	return value.ok === false;
+}
+
+function buildCliFailureMessage(params: {
+	aborted: boolean;
+	processOk: boolean;
+	parsed: ParseJsonResult;
+	execution: AscetCliExecutionResult;
+}): string {
+	const parsed = params.parsed;
+	if (params.aborted) {
+		return "ASCET CLI execution was aborted.";
+	}
+	if (params.processOk && isParseJsonFailure(parsed)) {
+		return parsed.message;
+	}
+	return (
+		params.execution.stderr.trim() ||
+		params.execution.stdout.trim() ||
+		`ASCET CLI exited with ${params.execution.exitCode}`
+	);
 }
 
 export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOptions): Promise<AscetCliJsonResult> {
@@ -338,20 +473,23 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 							: processOk
 								? "ascet_cli_invalid_json"
 								: "ascet_cli_failed",
-					message: aborted
-						? "ASCET CLI execution was aborted."
-						: processOk && !parsed.ok
-							? parsed.message
-							: execution.stderr.trim() ||
-								execution.stdout.trim() ||
-								`ASCET CLI exited with ${execution.exitCode}`,
+					message: buildCliFailureMessage({
+						aborted,
+						processOk,
+						parsed,
+						execution,
+					}),
 				},
 	};
 }
 
 export function formatAscetCliJsonResult(operation: string, result: AscetCliJsonResult): string {
 	if (result.ok) {
-		return JSON.stringify(result.data, null, 2);
+		const formatted = JSON.stringify(result.data, null, 2);
+		if (Buffer.byteLength(formatted, "utf8") <= getFormatArtifactThresholdBytes()) {
+			return formatted;
+		}
+		return formatPersistedSuccess(operation, result, formatted);
 	}
 	const message = sanitizeCliFailureText(result.error?.message ?? "");
 	const stderr = sanitizeCliFailureText(result.stderr);

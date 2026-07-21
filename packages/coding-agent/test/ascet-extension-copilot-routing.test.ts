@@ -4,7 +4,16 @@ import { listAscetRoutes, routeAscetAction } from "../../ascet-extension/src/rou
 const EXPECTED_ACTIONS = {
 	ascet_explore: ["list_components", "list_diagrams", "inspect_target", "preview_children"],
 	ascet_search: ["search_components", "resolve_component", "search_elements", "search_occurrences"],
-	ascet_read: ["read", "read_code", "read_implementation", "read_block_diagram", "read_state_machine_flow"],
+	ascet_read: [
+		"read",
+		"read_code",
+		"read_method_signature",
+		"read_implementation",
+		"read_block_diagram",
+		"read_state_machine_flow",
+		"read_dependent_chain",
+		"read_element_dependency",
+	],
 	ascet_reference: ["component_refs", "used_by", "element_refs"],
 	ascet_diff: [
 		"diff",
@@ -60,6 +69,14 @@ describe("ASCET Copilot-aligned routing", () => {
 			logicalCommandId: "AscetReadCode",
 			backendCommandId: "AscetReadTextCode",
 			operation: "read_code",
+		});
+	});
+
+	it("routes read_element_dependency to the dedicated dependency reader", () => {
+		expect(routeAscetAction({ toolName: "ascet_read", action: "read_element_dependency" })).toMatchObject({
+			logicalCommandId: "AscetReadElementDependency",
+			backendCommandId: "AscetReadElementDependency",
+			operation: "read_element_dependency",
 		});
 	});
 

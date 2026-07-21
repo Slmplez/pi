@@ -3,6 +3,7 @@ import { defineSequentialAscetTool } from "../../core/tool.ts";
 import { formatReadBlockDiagramResult, runAscetReadBlockDiagram } from "../../read-block-diagram.ts";
 import { formatReadComponentSummaryResult, runAscetReadComponentSummary } from "../../read-component-summary.ts";
 import { formatReadDependentChainResult, runAscetReadDependentChain } from "../../read-dependent-chain.ts";
+import { formatReadElementDependencyResult, runAscetReadElementDependency } from "../../read-element-dependency.ts";
 import { formatReadImplementationResult, runAscetReadImplementation } from "../../read-implementation.ts";
 import { formatReadMethodCodeResult, runAscetReadMethodCode } from "../../read-method-code.ts";
 import { formatReadMethodSignatureResult, runAscetReadMethodSignature } from "../../read-method-signature.ts";
@@ -71,6 +72,8 @@ async function runAscetRead(params: AscetReadParams, options: RunOptions): Promi
 			);
 		case "read_dependent_chain":
 			return runAscetReadDependentChain(params, options);
+		case "read_element_dependency":
+			return runAscetReadElementDependency(params, options);
 	}
 }
 
@@ -97,6 +100,8 @@ function formatAscetReadResult(params: AscetReadParams, result: AscetCliJsonResu
 			return formatReadStateMachineFlowResult(result);
 		case "read_dependent_chain":
 			return formatReadDependentChainResult(result);
+		case "read_element_dependency":
+			return formatReadElementDependencyResult(result);
 	}
 }
 

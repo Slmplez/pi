@@ -1,4 +1,5 @@
 import { Type } from "typebox";
+import type { AscetReadElementDependencyTargetKind } from "../../read-element-dependency.ts";
 
 export type AscetReadParams =
 	| { action: "read"; componentPath: string; methodName?: string }
@@ -38,6 +39,13 @@ export type AscetReadParams =
 			exporterComponentPath?: string;
 			providerScopePath?: string;
 			maxCandidates?: number;
+	  }
+	| {
+			action: "read_element_dependency";
+			targetPath?: string;
+			componentPath?: string;
+			elementName: string;
+			targetKind?: AscetReadElementDependencyTargetKind;
 	  };
 
 export const ascetReadParameters = Type.Object({
@@ -49,13 +57,18 @@ export const ascetReadParameters = Type.Object({
 		Type.Literal("read_block_diagram"),
 		Type.Literal("read_state_machine_flow"),
 		Type.Literal("read_dependent_chain"),
+		Type.Literal("read_element_dependency"),
 	]),
 	componentPath: Type.Optional(Type.String({ minLength: 1 })),
+	targetPath: Type.Optional(Type.String({ minLength: 1 })),
 	exporterComponentPath: Type.Optional(Type.String({ minLength: 1 })),
 	providerScopePath: Type.Optional(Type.String({ minLength: 1 })),
 	methodName: Type.Optional(Type.String()),
 	elementName: Type.Optional(Type.String()),
 	dependentElement: Type.Optional(Type.String({ minLength: 1 })),
+	targetKind: Type.Optional(
+		Type.Union([Type.Literal("auto"), Type.Literal("component"), Type.Literal("folder"), Type.Literal("project")]),
+	),
 	section: Type.Optional(
 		Type.Union([Type.Literal("header"), Type.Literal("external-c"), Type.Literal("all"), Type.Literal("body")]),
 	),
