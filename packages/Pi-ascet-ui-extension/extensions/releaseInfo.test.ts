@@ -83,24 +83,24 @@ test("createReleaseRows renders concise release and update text", () => {
 		createReleaseRows({ status: "checking" }, ASCET_COPILOT_RELEASE),
 		[
 			"Release",
-			"0.1.23 - Bosch LLM Farm prompt refresh",
-			"ASCET search pagination guidance",
-			"Tool action examples cleanup",
+			"0.1.24 - ASCET artifact metadata",
+			"Configurable output threshold",
+			"Failure detail preservation",
 			"Checking updates...",
 		],
 	);
 	assert.deepEqual(
-		createReleaseRows({ status: "available", latestVersion: "0.1.24" }, ASCET_COPILOT_RELEASE),
-		["Update available", "0.1.23 -> 0.1.24", "pi update npm:@zeerke/ascet-copilot"],
+		createReleaseRows({ status: "available", latestVersion: "0.1.25" }, ASCET_COPILOT_RELEASE),
+		["Update available", "0.1.24 -> 0.1.25", "pi update npm:@zeerke/ascet-copilot"],
 	);
 	assert.deepEqual(
-		createReleaseRows({ status: "current", latestVersion: "0.1.23" }, ASCET_COPILOT_RELEASE),
+		createReleaseRows({ status: "current", latestVersion: "0.1.24" }, ASCET_COPILOT_RELEASE),
 		[
 			"Release",
-			"0.1.23 - Up to date",
-			"Bosch LLM Farm prompt refresh",
-			"ASCET search pagination guidance",
-			"Tool action examples cleanup",
+			"0.1.24 - Up to date",
+			"ASCET artifact metadata",
+			"Configurable output threshold",
+			"Failure detail preservation",
 		],
 	);
 });

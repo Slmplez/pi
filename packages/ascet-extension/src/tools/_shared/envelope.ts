@@ -62,7 +62,7 @@ export function createAscetCliToolDetails(
 		},
 		diagnostics: createArtifactDiagnostics(result),
 	};
-	if (result.formattedOutputArtifact) {
+	if (result.ok && result.formattedOutputArtifact) {
 		return {
 			ok: result.ok,
 			...base,

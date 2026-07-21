@@ -22,6 +22,26 @@ function makeResult(data: unknown): AscetCliJsonResult {
 	};
 }
 
+function makeFailureResult(): AscetCliJsonResult {
+	return {
+		ok: false,
+		data: null,
+		request: {
+			cwd: process.cwd(),
+			cliPath: "AscetCli.exe",
+			args: ["exec", "read_block_diagram", "DEMO\\Controller", "Main", "--json"],
+		},
+		stdout: '{"ok":false}',
+		stderr: "ASCET failed",
+		exitCode: 1,
+		timedOut: false,
+		error: {
+			code: "ascet_cli_failed",
+			message: "ASCET command failed.",
+		},
+	};
+}
+
 describe("createAscetCliToolDetails", () => {
 	test("omits full data and stdout after formatter persists a large output artifact", () => {
 		const artifactRoot = mkdtempSync(join(tmpdir(), "pi-ascet-details-artifacts-"));
@@ -75,6 +95,28 @@ describe("createAscetCliToolDetails", () => {
 
 		assert.deepEqual(details.data, result.data);
 		assert.equal(details.stdout, result.stdout);
+		assert.ok(!Object.hasOwn(details, "artifact"));
+		assert.ok(!Object.hasOwn(details, "omittedFields"));
+	});
+
+	test("preserves full failure details even if stale artifact metadata is present", () => {
+		const result = makeFailureResult();
+		result.formattedOutputArtifact = {
+			operation: "read_block_diagram",
+			path: "C:\\tmp\\stale.json",
+			sizeBytes: 10000,
+			thresholdBytes: 4096,
+			summary: "Stale success summary.",
+			searchHint: "Search locally.",
+		};
+
+		const details = createAscetCliToolDetails("ascet_read", "read_block_diagram", result) as Record<string, unknown>;
+
+		assert.equal(details.ok, false);
+		assert.deepEqual(details.data, null);
+		assert.equal(details.stdout, result.stdout);
+		assert.equal(details.stderr, result.stderr);
+		assert.deepEqual(details.error, result.error);
 		assert.ok(!Object.hasOwn(details, "artifact"));
 		assert.ok(!Object.hasOwn(details, "omittedFields"));
 	});
