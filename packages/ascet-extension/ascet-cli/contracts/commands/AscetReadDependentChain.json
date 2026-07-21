@@ -97,9 +97,10 @@
     "hostEligible":  false,
     "supportsBatch":  false,
     "executionProfile":  {
-                             "hostSafety":  "fragile",
+                             "hostSafety":  "expensive_scan",
                              "hostPolicy":  "force_one_shot",
-                             "timeoutClass":  "expensive_read"
+                             "timeoutClass":  "scan",
+                             "pageBudget":  200
                          },
     "hiddenFromModel":  false
 }

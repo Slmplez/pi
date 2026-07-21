@@ -183,6 +183,7 @@ Manual validation checklist:
 
 `ascet_read` includes these ASCET ToolAPI-backed actions:
 
+- `read_element_dependency`: read one element's current dependency flag, stored formula, supported status, and write-plan evidence before or after `set_element_dependency`.
 - `read_dependent_chain`: read a local dependent parameter chain from the consuming component through its imported parameter to the exported parameter/provider component. The provider can be discovered automatically, or constrained with `exporterComponentPath` / `providerScopePath`.
 
 `ascet_write` includes `set_element_dependency` for dependency flag changes. It uses the same guarded write contract as other write actions: preflight by default, interactive approval when `executeWrite=true`, optional `dryRun`, optional `backupDir`, and readback verification. Folder writes require `match="all"` so multi-component changes are explicit.
