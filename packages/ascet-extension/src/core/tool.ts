@@ -79,6 +79,14 @@ export interface AscetExtensionAPI {
 			},
 		) => Promise<void> | void,
 	): void;
+	on?(
+		event: "before_agent_start",
+		handler: (event: {
+			type: "before_agent_start";
+			prompt: string;
+			systemPrompt: string;
+		}) => { systemPrompt?: string } | undefined | Promise<{ systemPrompt?: string } | undefined>,
+	): void;
 }
 
 export interface AscetToolContext {
