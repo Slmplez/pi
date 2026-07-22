@@ -1,4 +1,4 @@
-import { appendAscetImplementationRoutingPrompt, isAscetImplementationRoutingRequest } from "./agent-routing.ts";
+import { appendAscetImplementationRoutingPrompt } from "./agent-routing.ts";
 import { executeAscetDesignCommand } from "./ascet-design.ts";
 import { executeAscetInitCommand } from "./ascet-init.ts";
 import { registerBoschLlmFarmProvider } from "./bosch-llmfarm-provider.ts";
@@ -40,7 +40,6 @@ export default function ascetExtension(pi: AscetExtensionAPI) {
 	}
 
 	pi.on?.("before_agent_start", (event) => {
-		if (!isAscetImplementationRoutingRequest(event.prompt)) return undefined;
 		return {
 			systemPrompt: appendAscetImplementationRoutingPrompt(event.systemPrompt),
 		};
