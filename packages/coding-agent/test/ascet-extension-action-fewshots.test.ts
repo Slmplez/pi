@@ -14,7 +14,6 @@ import { ascetReadParameters } from "../../ascet-extension/src/tools/read/schema
 import { ascetRecoverParameters } from "../../ascet-extension/src/tools/recover/schema.ts";
 import { ascetReferenceParameters } from "../../ascet-extension/src/tools/reference/schema.ts";
 import { canonicalAscetToolNames } from "../../ascet-extension/src/tools/registry.ts";
-import { ascetRequirementsParameters } from "../../ascet-extension/src/tools/requirements/schema.ts";
 import { ascetSchedulerStatusParameters } from "../../ascet-extension/src/tools/scheduler-status/schema.ts";
 import { ascetSearchParameters } from "../../ascet-extension/src/tools/search/schema.ts";
 import { ascetStatusParameters } from "../../ascet-extension/src/tools/status/schema.ts";
@@ -26,7 +25,6 @@ const schemaByTool = {
 	ascet_capabilities: ascetCapabilitiesParameters,
 	ascet_recover: ascetRecoverParameters,
 	ascet_scheduler_status: ascetSchedulerStatusParameters,
-	ascet_requirements: ascetRequirementsParameters,
 	ascet_explore: ascetExploreParameters,
 	ascet_search: ascetSearchParameters,
 	ascet_read: ascetReadParameters,
@@ -142,6 +140,12 @@ describe("ASCET action few-shot examples", () => {
 			false,
 		);
 		expect(compactExamplesForTool("ascet_write").join("\n")).not.toContain("set_class_method_code");
+	});
+
+	it("does not expose hidden requirements-tool examples", () => {
+		expect(canonicalAscetToolNames).not.toContain("ascet_requirements");
+		expect(ascetActionExamples.some((example) => example.tool === "ascet_requirements")).toBe(false);
+		expect(compactExamplesForTool("ascet_requirements")).toEqual([]);
 	});
 
 	it("does not teach class create_method examples with non-abstract method kinds", () => {

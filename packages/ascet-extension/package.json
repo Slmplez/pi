@@ -17,19 +17,15 @@
 		"extensions": [
 			"src/index.ts"
 		],
-		"skills": [
-			"skills"
-		],
 		"subagents": {
 			"agents": [
-				"agents"
+				"agents/ascet-implementation.md"
 			]
 		}
 	},
 	"files": [
 		"src",
-		"agents",
-		"skills",
+		"agents/ascet-implementation.md",
 		"templates",
 		"ascet-cli",
 		"README.md",

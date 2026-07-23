@@ -5,7 +5,6 @@ import { ascetExploreTool } from "./explore/index.ts";
 import { ascetReadTool } from "./read/index.ts";
 import { ascetRecoverTool } from "./recover/index.ts";
 import { ascetReferenceTool } from "./reference/index.ts";
-import { ascetRequirementsTool } from "./requirements/index.ts";
 import { ascetSchedulerStatusTool } from "./scheduler-status/index.ts";
 import { ascetSearchTool } from "./search/index.ts";
 import { ascetStatusTool } from "./status/index.ts";
@@ -20,7 +19,6 @@ export const canonicalOpsTools = [
 ] as const;
 
 export const canonicalDomainTools = [
-	ascetRequirementsTool,
 	ascetExploreTool,
 	ascetSearchTool,
 	ascetReadTool,
@@ -36,7 +34,6 @@ export const canonicalAscetToolNames = [
 	"ascet_capabilities",
 	"ascet_recover",
 	"ascet_scheduler_status",
-	"ascet_requirements",
 	"ascet_explore",
 	"ascet_search",
 	"ascet_read",

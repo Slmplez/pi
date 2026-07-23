@@ -22,7 +22,6 @@ const CANONICAL_ASCET_TOOLS = [
 	"ascet_capabilities",
 	"ascet_recover",
 	"ascet_scheduler_status",
-	"ascet_requirements",
 	"ascet_explore",
 	"ascet_search",
 	"ascet_read",
@@ -38,7 +37,6 @@ const CANONICAL_ASCET_TOOL_MODULES = [
 	["ascet_capabilities", "capabilities"],
 	["ascet_recover", "recover"],
 	["ascet_scheduler_status", "scheduler-status"],
-	["ascet_requirements", "requirements"],
 	["ascet_explore", "explore"],
 	["ascet_search", "search"],
 	["ascet_read", "read"],
@@ -50,6 +48,7 @@ const CANONICAL_ASCET_TOOL_MODULES = [
 ] as const;
 
 const REMOVED_FINE_GRAINED_TOOLS = [
+	"ascet_requirements",
 	"ascet_list_components",
 	"ascet_list_folders",
 	"ascet_contract_catalog",

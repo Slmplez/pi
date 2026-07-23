@@ -29,8 +29,6 @@ Follow this order unless the user explicitly narrows the task to a read-only rev
 8. Implementation configuration
 9. Code simulation, test, validation, and review
 
-Excel requirements are optional. Use `ascet_requirements` only when the user provides or asks to use a workbook or when requirement risk context is explicitly needed. Do not require an Excel table before ordinary ASCET implementation work.
-
 ## Architecture And ESDL Boundaries
 
 Use Block Diagram primarily to express architecture:

@@ -86,48 +86,6 @@ export const ascetActionExamples = [
 		args: { action: "recover", format: "text" },
 	}),
 	defineExample({
-		tool: "ascet_requirements",
-		action: "status",
-		intent: "requirements ready",
-		args: { action: "status", sourceFile: "req.xlsx" },
-	}),
-	defineExample({
-		tool: "ascet_requirements",
-		action: "index",
-		intent: "index workbook",
-		args: { action: "index", sourceFile: "req.xlsx" },
-	}),
-	defineExample({
-		tool: "ascet_requirements",
-		action: "search",
-		intent: "search req",
-		args: { action: "search", query: "wheel speed", sourceFile: "req.xlsx", limit: 5 },
-	}),
-	defineExample({
-		tool: "ascet_requirements",
-		action: "get_record",
-		intent: "get req",
-		args: { action: "get_record", requirementId: "REQ-1", sourceFile: "req.xlsx" },
-	}),
-	defineExample({
-		tool: "ascet_requirements",
-		action: "relation_leads",
-		intent: "find related",
-		args: { action: "relation_leads", requirementId: "REQ-1", sourceFile: "req.xlsx" },
-	}),
-	defineExample({
-		tool: "ascet_requirements",
-		action: "risk_context",
-		intent: "design gate",
-		args: { action: "risk_context", query: "pid control", sourceFile: "req.xlsx" },
-	}),
-	defineExample({
-		tool: "ascet_requirements",
-		action: "risk_details",
-		intent: "risk page",
-		args: { action: "risk_details", requirementId: "REQ-1", sourceFile: "req.xlsx", offset: 0, limit: 10 },
-	}),
-	defineExample({
 		tool: "ascet_explore",
 		action: "list_components",
 		intent: "browse folder",
