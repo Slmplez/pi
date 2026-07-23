@@ -16,6 +16,7 @@ import {
 	validateCreateMethodKindCompatibility,
 } from "../method-kind-compatibility.ts";
 import { runApprovedAscetSetElementDependency } from "../set-element-dependency.ts";
+import { runApprovedAscetSetEnumerators } from "../set-enumerators.ts";
 import { runApprovedAscetSetMethodCode } from "../set-method-code.ts";
 import { runApprovedAscetSetMethodSignature } from "../set-method-signature.ts";
 import { runApprovedAscetSetModuleCode } from "../set-module-code.ts";
@@ -35,7 +36,7 @@ export type AscetWriteParams =
 	| {
 			action: "create_component";
 			componentPath: string;
-			kind: "class" | "module" | "statemachine";
+			kind: "class" | "module" | "statemachine" | "enumeration";
 			language?: "ESDL" | "BDE" | "C";
 			ifExists?: "fail" | "return-existing";
 			verifyReadback?: boolean;
@@ -129,6 +130,13 @@ export type AscetWriteParams =
 			executeWrite?: boolean;
 	  } & CodeSource)
 	| {
+			action: "set_enumerators";
+			componentPath: string;
+			enumerators: string[];
+			verifyReadback?: boolean;
+			executeWrite?: boolean;
+	  }
+	| {
 			action: "apply_element_spec";
 			componentPath: string;
 			specFile: string;
@@ -202,6 +210,7 @@ export const ascetWriteParameters = Type.Object({
 		Type.Literal("set_method_code"),
 		Type.Literal("set_module_code"),
 		Type.Literal("set_state_machine_code"),
+		Type.Literal("set_enumerators"),
 		Type.Literal("apply_element_spec"),
 		Type.Literal("apply_project_formula"),
 		Type.Literal("set_element_dependency"),
@@ -212,7 +221,14 @@ export const ascetWriteParameters = Type.Object({
 	stateMachinePath: Type.Optional(Type.String({ minLength: 1 })),
 	projectPath: Type.Optional(Type.String({ minLength: 1 })),
 	targetPath: Type.Optional(Type.String({ minLength: 1 })),
-	kind: Type.Optional(Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")])),
+	kind: Type.Optional(
+		Type.Union([
+			Type.Literal("class"),
+			Type.Literal("module"),
+			Type.Literal("statemachine"),
+			Type.Literal("enumeration"),
+		]),
+	),
 	componentKind: Type.Optional(
 		Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")]),
 	),
@@ -263,6 +279,7 @@ export const ascetWriteParameters = Type.Object({
 	sourceState: Type.Optional(Type.String()),
 	targetState: Type.Optional(Type.String()),
 	priority: Type.Optional(Type.Number()),
+	enumerators: Type.Optional(Type.Array(Type.String({ minLength: 1 }), { minItems: 1 })),
 	specFile: Type.Optional(Type.String({ minLength: 1 })),
 	mode: Type.Optional(Type.Literal("restore")),
 	deleteMissing: Type.Optional(Type.Boolean()),
@@ -465,6 +482,15 @@ function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | 
 			},
 		};
 	}
+	if (params.action === "set_enumerators" && params.enumerators.length === 0) {
+		return {
+			status: "error",
+			error: {
+				code: "ascet_write_missing_parameter",
+				message: "set_enumerators requires at least one enumerator.",
+			},
+		};
+	}
 	if (
 		params.action === "set_method_signature" &&
 		!params.returnType &&
@@ -528,6 +554,8 @@ async function dispatchWrite(
 				);
 			}
 			return runApprovedAscetSetStateMachineCode(params, options, ctx);
+		case "set_enumerators":
+			return runApprovedAscetSetEnumerators(params, options, ctx);
 		case "apply_element_spec":
 			return runApprovedAscetApplyElementSpec(params, options, ctx);
 		case "apply_project_formula":

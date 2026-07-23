@@ -597,6 +597,62 @@ describe("ASCET guarded write PI tools", () => {
 		);
 	});
 
+	it("accepts and dispatches enumeration writes through ascet_write", async () => {
+		const enumerators = ["EngineStallStatus_NO_RISK", "EngineStallStatus_WARNING", "EngineStallStatus_IMMINENT"];
+		let observedArgs: string[] | undefined;
+
+		expect(
+			Value.Check(ascetWriteParameters, {
+				action: "set_enumerators",
+				componentPath: "DEMO\\Enums\\EngineStallStatus",
+				enumerators,
+				verifyReadback: true,
+			}),
+		).toBe(true);
+
+		const result = await runAscetWrite(
+			{
+				action: "set_enumerators",
+				componentPath: "DEMO\\Enums\\EngineStallStatus",
+				enumerators,
+				verifyReadback: true,
+				executeWrite: true,
+			},
+			{
+				cwd: repoRoot,
+				executeCli: async (request) => {
+					observedArgs = request.args;
+					return {
+						exitCode: 0,
+						stdout: JSON.stringify({
+							ok: true,
+							result: {
+								componentPath: "DEMO\\Enums\\EngineStallStatus",
+								enumerators,
+								readbackVerified: true,
+							},
+						}),
+						stderr: "",
+						timedOut: false,
+						request,
+					};
+				},
+			},
+			{ hasUI: true, ui: { confirm: async () => true } },
+		);
+
+		expect(result.details.outcome.status).toBe("ok");
+		expect(observedArgs).toEqual([
+			"exec",
+			"set_enumerators",
+			"DEMO\\Enums\\EngineStallStatus",
+			"--items",
+			"EngineStallStatus_NO_RISK,EngineStallStatus_WARNING,EngineStallStatus_IMMINENT",
+			"--verify-readback",
+			"--json",
+		]);
+	});
+
 	it("preserves create_component expected default scaffold as an unverified hint", async () => {
 		const result = await runAscetWrite(
 			{
@@ -661,6 +717,9 @@ describe("ASCET guarded write PI tools", () => {
 		expect(promptGuidelinesText).toContain('"formula":"ident"');
 		expect(promptGuidelinesText).toContain('"calibration":true');
 		expect(promptGuidelinesText).toContain('"limitAssignments":true');
+		expect(promptGuidelinesText).toContain("kind may be class, module, statemachine, or enumeration");
+		expect(promptGuidelinesText).toContain("For set_enumerators, pass componentPath and ordered enumerators");
+		expect(promptGuidelinesText).toContain("first item is value 0");
 		expect(promptGuidelinesText).toContain(
 			"For apply_element_spec, treat specFile as a structured ASCET element-spec JSON artifact, not just a file path.",
 		);

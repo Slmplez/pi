@@ -12,6 +12,7 @@
     "AscetSetMethodCode",
     "AscetSetClassMethodCode",
     "AscetSetMethodSignature",
+    "AscetSetEnumerators",
     "AscetSetModuleCode",
     "AscetSetStateMachineCode",
     "AscetSetElementDependency",

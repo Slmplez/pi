@@ -264,6 +264,17 @@ export const ascetActionExamples = [
 	}),
 	defineExample({
 		tool: "ascet_write",
+		action: "set_enumerators",
+		intent: "preflight enum values",
+		args: {
+			action: "set_enumerators",
+			componentPath: "D\\E",
+			enumerators: ["E_OFF", "E_ON"],
+			verifyReadback: true,
+		},
+	}),
+	defineExample({
+		tool: "ascet_write",
 		action: "create_method",
 		intent: "preflight method",
 		args: {

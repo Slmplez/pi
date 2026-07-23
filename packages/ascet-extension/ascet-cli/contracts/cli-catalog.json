@@ -2066,6 +2066,33 @@
                                               }
                      },
                      {
+                         "id":  "AscetSetEnumerators",
+                         "family":  "write",
+                         "summary":  "Set enumerator names for an ASCET Enumeration",
+                         "risk":  "write",
+                         "objectKinds":  [
+                                             "enumeration"
+                                         ],
+                         "supportsJson":  true,
+                         "requiresSerialLiveAccess":  true,
+                         "hiddenFromModel":  false,
+                         "operation":  "set_enumerators",
+                         "lane":  "serial_write",
+                         "hostEligible":  false,
+                         "supportsBatch":  false,
+                         "execution":  {
+                                           "kind":  "unified_cli",
+                                           "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+                                           "subcommand":  "exec",
+                                           "operation":  "set_enumerators"
+                                       },
+                         "executionProfile":  {
+                                                  "hostSafety":  "write",
+                                                  "hostPolicy":  "force_one_shot",
+                                                  "timeoutClass":  "write"
+                                              }
+                     },
+                     {
                          "id":  "AscetSetModuleCode",
                          "family":  "write",
                          "summary":  "Write module code or text sections",
@@ -2180,4 +2207,3 @@
                      }
                  ]
 }
-

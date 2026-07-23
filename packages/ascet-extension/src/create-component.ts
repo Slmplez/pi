@@ -11,7 +11,7 @@ import { type AscetWriteApprovalContext, requestAscetWriteApproval } from "./wri
 
 export interface AscetCreateComponentParams {
 	componentPath: string;
-	kind: "class" | "module" | "statemachine";
+	kind: "class" | "module" | "statemachine" | "enumeration";
 	language?: "ESDL" | "BDE" | "C";
 	ifExists?: "fail" | "return-existing";
 	verifyReadback?: boolean;
@@ -32,7 +32,12 @@ export type AscetCreateComponentResult = AscetCliJsonResult;
 export const ascetCreateComponentParameters = Type.Object(
 	{
 		componentPath: Type.String({ description: "ASCET component path to create.", minLength: 1 }),
-		kind: Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")]),
+		kind: Type.Union([
+			Type.Literal("class"),
+			Type.Literal("module"),
+			Type.Literal("statemachine"),
+			Type.Literal("enumeration"),
+		]),
 		language: Type.Optional(Type.Union([Type.Literal("ESDL"), Type.Literal("BDE"), Type.Literal("C")])),
 		ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("return-existing")])),
 		verifyReadback: Type.Optional(
