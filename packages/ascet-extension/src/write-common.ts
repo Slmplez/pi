@@ -6,7 +6,9 @@ import {
 	formatAscetCliJsonResult,
 	runAscetCliJson,
 } from "./cli.ts";
+import { normalizeAscetPath } from "./core/path.ts";
 import type { AscetScheduler } from "./scheduler/scheduler.ts";
+import { type AscetSearchIndexPartition, invalidateAscetSearchIndexPartitions } from "./search-index-store.ts";
 import { createAscetStatusReport } from "./status.ts";
 import { type AscetWriteApprovalContext, requestAscetWriteApproval } from "./write-policy.ts";
 
@@ -23,6 +25,26 @@ export interface AscetWriteControlParams {
 	verifyReadback?: boolean;
 	executeWrite?: boolean;
 }
+
+export interface WriteImpact {
+	action: string;
+	affectedComponents: string[];
+	affectedMethods: Array<{ component: string; method: string }>;
+	affectedElements: Array<{ component: string; name: string }>;
+	stale: AscetSearchIndexPartition[];
+}
+
+export type WriteImpactParams = {
+	action: string;
+	componentPath?: string;
+	modulePath?: string;
+	stateMachinePath?: string;
+	folderPath?: string;
+	projectPath?: string;
+	targetPath?: string;
+	methodName?: string;
+	elementName?: string;
+};
 
 export const ifMissingSchema = Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")]));
 
@@ -110,4 +132,64 @@ export async function runApprovedAscetWriteOperation<TParams extends AscetWriteC
 
 export function formatWriteOperationResult(operation: string, result: AscetCliJsonResult): string {
 	return formatAscetCliJsonResult(operation, result);
+}
+
+export function createWriteImpact(params: WriteImpactParams): WriteImpact {
+	const component = getPrimaryWriteComponent(params);
+	const method = component && params.methodName ? [{ component, method: params.methodName }] : [];
+	const element = component && params.elementName ? [{ component, name: params.elementName }] : [];
+	const stale = getStalePartitionsForWrite(params.action);
+	return {
+		action: params.action,
+		affectedComponents: component ? [component] : [],
+		affectedMethods: method,
+		affectedElements: element,
+		stale,
+	};
+}
+
+export function applyWriteImpactToSearchIndex(impact: WriteImpact, reason = `write_succeeded:${impact.action}`): void {
+	const affected = [...new Set(impact.stale)];
+	if (affected.length === 0) {
+		return;
+	}
+	invalidateAscetSearchIndexPartitions(affected, reason);
+}
+
+function getPrimaryWriteComponent(params: WriteImpactParams): string | undefined {
+	const raw =
+		params.componentPath ??
+		params.modulePath ??
+		params.stateMachinePath ??
+		params.targetPath ??
+		params.folderPath ??
+		params.projectPath;
+	return raw ? normalizeAscetPath(raw).replace(/\\/g, "/") : undefined;
+}
+
+function getStalePartitionsForWrite(action: string): AscetSearchIndexPartition[] {
+	switch (action) {
+		case "create_component":
+		case "create_folder":
+			return ["components"];
+		case "create_method":
+		case "set_method_signature":
+			return ["element_decls"];
+		case "set_method_code":
+		case "set_module_code":
+		case "set_state_machine_code":
+			return ["text_code"];
+		case "delete_method":
+			return ["element_decls", "text_code"];
+		case "delete_component":
+		case "delete_folder":
+		case "apply_project_formula":
+			return ["components", "element_decls", "text_code"];
+		case "apply_element_spec":
+		case "set_element_dependency":
+		case "set_enumerators":
+			return ["element_decls", "text_code"];
+		default:
+			return [];
+	}
 }

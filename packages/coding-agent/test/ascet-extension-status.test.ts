@@ -15,8 +15,14 @@ interface StatusDetails {
 }
 
 interface CapabilitiesDetails {
-	ok: boolean;
-	data: { totalMatches: number };
+	result: { total: number };
+}
+
+interface CapabilitiesPayload {
+	activeProfile: string;
+	activeTools: string[];
+	total: number;
+	items: Array<{ operation?: string; family?: string }>;
 }
 
 describe("ASCET extension status diagnostics", () => {
@@ -83,14 +89,15 @@ describe("ASCET extension status diagnostics", () => {
 		const report = await createAscetRuntimeStatusReport({
 			cwd: repoRoot,
 			env: {},
-			probe: async () => ({
+			warmSearchIndex: async () => ({
 				ok: false,
-				data: null,
-				request: {
-					cwd: repoRoot,
-					cliPath: resolve(repoRoot, "packages/ascet-extension/ascet-cli/bin/AscetCli.exe"),
-					args: ["exec", "list_folders", "--depth", "0", "--json"],
-				},
+				commandId: "warm_search_index",
+				databaseName: "",
+				databasePath: "",
+				entryCount: 0,
+				elapsedMs: 0,
+				scanComplete: false,
+				fromCache: false,
 				stdout: "",
 				stderr: "ASCET ToolAPI unavailable",
 				exitCode: 1,
@@ -107,7 +114,7 @@ describe("ASCET extension status diagnostics", () => {
 		expect(report.ok).toBe(false);
 		expect(report.summary).toContain("ASCET installation: ready");
 		expect(report.summary).toContain("ASCET runtime: not ready");
-		expect(report.summary).toContain("ASCET runtime probe: FAILED (ascet_cli_failed)");
+		expect(report.summary).toContain("ASCET quick-search index: FAILED (ascet_cli_failed)");
 		expect(report.summary).toContain("Next step: start ASCET GUI with ToolAPI enabled");
 	});
 
@@ -115,15 +122,16 @@ describe("ASCET extension status diagnostics", () => {
 		const report = await createAscetRuntimeStatusReport({
 			cwd: repoRoot,
 			env: {},
-			probe: async () => ({
+			warmSearchIndex: async () => ({
 				ok: true,
-				data: { items: [] },
-				request: {
-					cwd: repoRoot,
-					cliPath: resolve(repoRoot, "packages/ascet-extension/ascet-cli/bin/AscetCli.exe"),
-					args: ["exec", "list_folders", "--depth", "0", "--json"],
-				},
-				stdout: '{"items":[]}',
+				commandId: "warm_search_index",
+				databaseName: "DemoDb",
+				databasePath: "C:\\ASCET\\DemoDb",
+				entryCount: 2,
+				elapsedMs: 7,
+				scanComplete: true,
+				fromCache: false,
+				stdout: '{"entries":[]}',
 				stderr: "",
 				exitCode: 0,
 				timedOut: false,
@@ -133,7 +141,7 @@ describe("ASCET extension status diagnostics", () => {
 		expect(report.installationOk).toBe(true);
 		expect(report.runtimeOk).toBe(true);
 		expect(report.ok).toBe(true);
-		expect(report.summary).toContain("ASCET runtime probe: OK");
+		expect(report.summary).toContain("ASCET quick-search index: ready");
 	});
 
 	it("loads the project-local ASCET extension and registers the status command plus tool", async () => {
@@ -203,15 +211,16 @@ describe("ASCET extension status diagnostics", () => {
 		expect(tool).toBeDefined();
 		const response = await tool?.execute("test-call", {}, new AbortController().signal, undefined, {
 			cwd: repoRoot,
-			ascetStatusProbe: async () => ({
+			ascetStatusWarmSearchIndex: async () => ({
 				ok: true,
-				data: { items: [] },
-				request: {
-					cwd: repoRoot,
-					cliPath: resolve(repoRoot, "packages/ascet-extension/ascet-cli/bin/AscetCli.exe"),
-					args: ["exec", "list_folders", "--depth", "0", "--json"],
-				},
-				stdout: '{"items":[]}',
+				commandId: "warm_search_index",
+				databaseName: "DemoDb",
+				databasePath: "C:\\ASCET\\DemoDb",
+				entryCount: 2,
+				elapsedMs: 7,
+				scanComplete: true,
+				fromCache: false,
+				stdout: '{"entries":[]}',
 				stderr: "",
 				exitCode: 0,
 				timedOut: false,
@@ -226,7 +235,7 @@ describe("ASCET extension status diagnostics", () => {
 		expect(details?.installationOk).toBe(true);
 		expect(details?.runtimeOk).toBe(true);
 		expect(details?.runtime).toMatchObject({
-			commandId: "list_folders",
+			commandId: "warm_search_index",
 		});
 		expect(details?.paths.mode).toBe("bundle");
 		expect(details?.paths.cliPath).toBe(resolve(repoRoot, "packages/ascet-extension/ascet-cli/bin/AscetCli.exe"));
@@ -249,12 +258,17 @@ describe("ASCET extension status diagnostics", () => {
 			{ cwd: repoRoot } as never,
 		);
 
-		expect(response?.content[0]).toMatchObject({
-			type: "text",
-			text: expect.stringContaining("ASCET capabilities:"),
-		});
+		const content = response?.content[0];
+		expect(content).toMatchObject({ type: "text" });
+		if (content?.type !== "text") {
+			throw new Error("Expected ASCET capabilities content to be text.");
+		}
+		const payload = JSON.parse(content.text) as CapabilitiesPayload;
+		expect(payload.activeProfile).toBe("base");
+		expect(payload.activeTools).toContain("ascet_read");
+		expect(payload.total).toBeGreaterThan(0);
+		expect(payload.items.some((item) => item.family === "read")).toBe(true);
 		const details = response?.details as CapabilitiesDetails | undefined;
-		expect(details?.ok).toBe(true);
-		expect(details?.data.totalMatches).toBeGreaterThan(0);
+		expect(details?.result.total).toBeGreaterThan(0);
 	});
 });

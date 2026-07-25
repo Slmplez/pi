@@ -29,7 +29,10 @@ async function runAscetExplore(params: AscetExploreParams, options: RunOptions):
 		case "list_diagrams":
 			return runAscetListDiagrams(params, options);
 		case "inspect_target":
-			return runAscetReadComponentSummary({ componentPath: params.componentPath }, options);
+			return runAscetReadComponentSummary(
+				{ componentPath: params.componentPath, detailLevel: params.detailLevel },
+				options,
+			);
 		case "preview_children":
 			return runAscetReadComponentChildren({ componentPath: params.componentPath, group: params.group }, options);
 	}

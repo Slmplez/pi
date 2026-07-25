@@ -65,7 +65,7 @@ describe("createAscetCliToolDetails", () => {
 				unknown
 			>;
 
-			assert.equal(details.ok, true);
+			assert.ok(!Object.hasOwn(details, "ok"));
 			assert.equal(details.tool, "ascet_read");
 			assert.equal(details.action, "read_block_diagram");
 			assert.deepEqual(details.omittedFields, ["data", "stdout"]);
@@ -84,22 +84,34 @@ describe("createAscetCliToolDetails", () => {
 		}
 	});
 
-	test("preserves full data and stdout when formatter keeps small output inline", () => {
+	test("uses compact business data and omits stdout when formatter keeps small output inline", () => {
 		const result = makeResult({
-			summary: "Small summary.",
-			counts: { elements: 1 },
+			ok: true,
+			result: {
+				summary: "Small summary.",
+				counts: { elements: 1 },
+				componentPath: "DEMO\\Controller",
+			},
+			error: null,
+			meta: { mode: "exec", operation: "read_block_diagram" },
 		});
 
 		formatAscetCliJsonResult("read_block_diagram", result);
 		const details = createAscetCliToolDetails("ascet_read", "read_block_diagram", result) as Record<string, unknown>;
 
-		assert.deepEqual(details.data, result.data);
-		assert.equal(details.stdout, result.stdout);
+		assert.ok(!Object.hasOwn(details, "ok"));
+		assert.ok(!Object.hasOwn(details, "stdout"));
+		assert.deepEqual(details.data, {
+			summary: "Small summary.",
+			counts: { elements: 1 },
+			component: "DEMO/Controller",
+		});
 		assert.ok(!Object.hasOwn(details, "artifact"));
 		assert.ok(!Object.hasOwn(details, "omittedFields"));
+		assert.doesNotMatch(JSON.stringify(details), /"meta"|"mode"|"error":null|"ok":true/);
 	});
 
-	test("preserves full failure details even if stale artifact metadata is present", () => {
+	test("returns structured failure details even if stale artifact metadata is present", () => {
 		const result = makeFailureResult();
 		result.formattedOutputArtifact = {
 			operation: "read_block_diagram",
@@ -112,11 +124,19 @@ describe("createAscetCliToolDetails", () => {
 
 		const details = createAscetCliToolDetails("ascet_read", "read_block_diagram", result) as Record<string, unknown>;
 
-		assert.equal(details.ok, false);
-		assert.deepEqual(details.data, null);
-		assert.equal(details.stdout, result.stdout);
-		assert.equal(details.stderr, result.stderr);
-		assert.deepEqual(details.error, result.error);
+		assert.ok(!Object.hasOwn(details, "ok"));
+		assert.ok(!Object.hasOwn(details, "data"));
+		assert.ok(!Object.hasOwn(details, "stdout"));
+		assert.ok(!Object.hasOwn(details, "stderr"));
+		assert.deepEqual(details.error, {
+			code: "ascet_cli_failed",
+			message: "ASCET command failed.",
+			details: {
+				stderr: "ASCET failed",
+				stdout: '{"ok":false}',
+				exitCode: 1,
+			},
+		});
 		assert.ok(!Object.hasOwn(details, "artifact"));
 		assert.ok(!Object.hasOwn(details, "omittedFields"));
 	});

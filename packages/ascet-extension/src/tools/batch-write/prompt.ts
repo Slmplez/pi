@@ -10,6 +10,6 @@ export const ascetBatchWritePrompt = {
 		"For batch_create_method, provide componentKind when omitting methodKind. componentKind=class defaults to abstract and componentKind=module defaults to process; statemachine targets require explicit action, condition, or trigger.",
 		"For batch_set_element_spec/apply_element_spec requests, follow the same element-spec contract as ascet_write: physicalRange and impl.implementationRange are mutually exclusive, exported/local parameter range writes require impl.limitAssignments=true, and imported parameters must not include data, physicalRange, or impl settings.",
 		"Batch writes may return partial success. Inspect per-request failures and verify exact touched targets before claiming the whole batch succeeded.",
-		...compactExamplesForTool("ascet_batch_write"),
+		...compactExamplesForTool("ascet_batch_write", { includeHidden: true }),
 	],
 } as const;

@@ -1,11 +1,11 @@
 import { Value } from "typebox/value";
 import { describe, expect, it } from "vitest";
-import { listAscetRoutes } from "../../ascet-extension/src/routing/router.ts";
 import {
 	type AscetActionExample,
 	ascetActionExamples,
 	compactExamplesForTool,
 } from "../../ascet-extension/src/tools/_shared/action-examples.ts";
+import { listActionDescriptors } from "../../ascet-extension/src/tools/actions/descriptors.ts";
 import { ascetBatchWriteParameters } from "../../ascet-extension/src/tools/batch-write/schema.ts";
 import { ascetCapabilitiesParameters } from "../../ascet-extension/src/tools/capabilities/schema.ts";
 import { ascetComponentEditableParameters } from "../../ascet-extension/src/tools/component-editable/schema.ts";
@@ -14,7 +14,7 @@ import { ascetExploreParameters } from "../../ascet-extension/src/tools/explore/
 import { ascetReadParameters } from "../../ascet-extension/src/tools/read/schema.ts";
 import { ascetRecoverParameters } from "../../ascet-extension/src/tools/recover/schema.ts";
 import { ascetReferenceParameters } from "../../ascet-extension/src/tools/reference/schema.ts";
-import { canonicalAscetToolNames } from "../../ascet-extension/src/tools/registry.ts";
+import { allAscetToolNames, canonicalAscetToolNames } from "../../ascet-extension/src/tools/registry.ts";
 import { ascetSchedulerStatusParameters } from "../../ascet-extension/src/tools/scheduler-status/schema.ts";
 import { ascetSearchParameters } from "../../ascet-extension/src/tools/search/schema.ts";
 import { ascetStatusParameters } from "../../ascet-extension/src/tools/status/schema.ts";
@@ -38,7 +38,7 @@ const schemaByTool = {
 } as const;
 
 function stringLiterals(schema: unknown): string[] {
-	const node = schema as { const?: unknown; anyOf?: unknown[] } | undefined;
+	const node = schema as { const?: unknown; anyOf?: unknown[]; anyOfReadonly?: unknown[] } | undefined;
 	if (!node) {
 		return [];
 	}
@@ -51,6 +51,31 @@ function stringLiterals(schema: unknown): string[] {
 	return [];
 }
 
+function actionSchemas(
+	schema: unknown,
+): Array<{ properties?: { action?: unknown; operation?: unknown; mode?: unknown } }> {
+	const node = schema as
+		| {
+				anyOf?: Array<{ properties?: { action?: unknown; operation?: unknown; mode?: unknown } }>;
+				properties?: { action?: unknown; operation?: unknown; mode?: unknown };
+		  }
+		| undefined;
+	if (!node) {
+		return [];
+	}
+	if (Array.isArray(node.anyOf)) {
+		return node.anyOf;
+	}
+	return node.properties ? [node] : [];
+}
+
+function schemaForAction(
+	schema: unknown,
+	action: string,
+): { properties?: { action?: unknown; operation?: unknown; mode?: unknown } } | undefined {
+	return actionSchemas(schema).find((entry) => stringLiterals(entry.properties?.action).includes(action));
+}
+
 function exampleKey(example: Pick<AscetActionExample, "tool" | "action" | "variant">): string {
 	return example.variant
 		? `${example.tool}.${example.action}.${example.variant}`
@@ -59,22 +84,17 @@ function exampleKey(example: Pick<AscetActionExample, "tool" | "action" | "varia
 
 function expectedExampleKeys(): Set<string> {
 	const expected = new Set<string>();
-	for (const route of listAscetRoutes()) {
-		expected.add(`${route.toolName}.${route.action}`);
-	}
-	for (const tool of canonicalAscetToolNames) {
-		const schema = schemaByTool[tool] as {
-			properties?: {
-				action?: unknown;
-				operation?: unknown;
-			};
-		};
-		for (const action of stringLiterals(schema.properties?.action)) {
-			expected.add(`${tool}.${action}`);
-		}
-		if (tool === "ascet_batch_write") {
-			for (const operation of stringLiterals(schema.properties?.operation)) {
-				expected.add(`${tool}.${operation}`);
+	expected.add("ascet_status.status");
+	for (const tool of allAscetToolNames) {
+		const schemas = actionSchemas(schemaByTool[tool]);
+		for (const schema of schemas) {
+			const actionDiscriminators = stringLiterals(schema.properties?.action);
+			const discriminators =
+				actionDiscriminators.length > 0
+					? actionDiscriminators
+					: [...stringLiterals(schema.properties?.operation), ...stringLiterals(schema.properties?.mode)];
+			for (const action of discriminators) {
+				expected.add(`${tool}.${action}`);
 			}
 		}
 	}
@@ -83,15 +103,44 @@ function expectedExampleKeys(): Set<string> {
 	for (const operation of ["set-method", "set-header", "set-external-c-code"]) {
 		expected.add(`ascet_write.set_module_code.${operation}`);
 	}
-	for (const operation of stringLiterals(
-		(ascetWriteParameters as { properties: { operation: unknown } }).properties.operation,
-	).filter((operation) => !["set-header", "set-external-c-code"].includes(operation))) {
+	const stateMachineSchema = schemaForAction(ascetWriteParameters, "set_state_machine_code");
+	for (const operation of stringLiterals(stateMachineSchema?.properties?.operation).filter(
+		(operation) => !["set-header", "set-external-c-code"].includes(operation),
+	)) {
 		expected.add(`ascet_write.set_state_machine_code.${operation}`);
 	}
 	return expected;
 }
 
+function catalogExampleKeys(options: { publicOnly?: boolean } = {}): Set<string> {
+	const keys = new Set<string>();
+	for (const descriptor of listActionDescriptors() as Array<{
+		id: string;
+		tool: string;
+		action: string;
+		visibility: string;
+		prompt?: { fewShots?: Array<{ variant?: string }> };
+	}>) {
+		if (options.publicOnly && descriptor.visibility !== "public") {
+			continue;
+		}
+		for (const fewShot of descriptor.prompt?.fewShots ?? []) {
+			keys.add(fewShot.variant ? `${descriptor.tool}.${descriptor.action}.${fewShot.variant}` : descriptor.id);
+		}
+	}
+	return keys;
+}
+
 describe("ASCET action few-shot examples", () => {
+	it("stores every action few-shot in the action catalog", () => {
+		const expected = expectedExampleKeys();
+		const catalogKeys = catalogExampleKeys();
+		const projectedKeys = new Set(ascetActionExamples.map(exampleKey));
+
+		expect(catalogKeys).toEqual(expected);
+		expect(projectedKeys).toEqual(catalogKeys);
+	});
+
 	it("covers every model-facing action and operation variant exactly once", () => {
 		const expected = expectedExampleKeys();
 		const actual = new Set(ascetActionExamples.map(exampleKey));
@@ -105,7 +154,7 @@ describe("ASCET action few-shot examples", () => {
 		const seen = new Set<string>();
 		for (const example of ascetActionExamples) {
 			const key = exampleKey(example);
-			expect(canonicalAscetToolNames, key).toContain(example.tool as (typeof canonicalAscetToolNames)[number]);
+			expect(allAscetToolNames, key).toContain(example.tool as (typeof allAscetToolNames)[number]);
 			expect(seen.has(key), key).toBe(false);
 			seen.add(key);
 			expect(example.intent.trim(), key).toBe(example.intent);
@@ -132,7 +181,7 @@ describe("ASCET action few-shot examples", () => {
 		const allGuidelines = canonicalAscetToolNames.flatMap((tool) => compactExamplesForTool(tool));
 		const totalCharacters = allGuidelines.reduce((sum, guideline) => sum + guideline.length + 1, 0);
 
-		expect(allGuidelines).toHaveLength(expectedExampleKeys().size);
+		expect(allGuidelines).toHaveLength(catalogExampleKeys({ publicOnly: true }).size);
 		expect(totalCharacters).toBeLessThanOrEqual(11_000);
 		for (const guideline of allGuidelines) {
 			expect(guideline.length, guideline).toBeLessThanOrEqual(180);

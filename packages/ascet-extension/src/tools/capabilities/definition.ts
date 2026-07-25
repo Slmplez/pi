@@ -1,6 +1,6 @@
 import { defineSequentialAscetTool } from "../../core/tool.ts";
 import { routeAscetAction } from "../../routing/router.ts";
-import { formatAscetCapabilitiesResult, runAscetCapabilities } from "../capabilities.ts";
+import { formatAscetCapabilitiesResult, runAscetCapabilities, toAscetCapabilitiesPayload } from "../capabilities.ts";
 import { ascetCapabilitiesPrompt } from "./prompt.ts";
 import { type AscetCapabilitiesParams, ascetCapabilitiesParameters } from "./schema.ts";
 import { renderCall, renderResult } from "./ui.ts";
@@ -21,13 +21,14 @@ export const ascetCapabilitiesTool = defineSequentialAscetTool({
 		ctx: { cwd: string },
 	) {
 		const result = runAscetCapabilities(params, { cwd: ctx.cwd });
+		const action = params.action ?? "search";
 		const route = routeAscetAction({ toolName: "ascet_capabilities", action: "search" });
 		return {
 			content: [{ type: "text", text: formatAscetCapabilitiesResult(result) }],
 			details: {
-				...result,
+				result: toAscetCapabilitiesPayload(result),
 				tool: "ascet_capabilities",
-				action: "search",
+				action,
 				command: {
 					logicalCommandId: route.logicalCommandId,
 					backendCommandId: route.backendCommandId,

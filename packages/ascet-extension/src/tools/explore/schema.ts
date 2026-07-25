@@ -14,58 +14,68 @@ export type AscetExploreParams =
 			componentPath: string;
 			diagramKind?: "all" | "block" | "block_diagram" | "state" | "state_machine" | "sequence" | "unknown";
 	  }
-	| { action: "inspect_target"; componentPath: string; detailLevel?: "summary" | "detailed" }
+	| { action: "inspect_target"; componentPath: string; detailLevel?: "summary" | "topology" }
 	| {
 			action: "preview_children";
 			componentPath: string;
 			group?: "all" | "methods" | "elements" | "components" | "arrays" | "parameters" | "variables" | "diagrams";
 	  };
 
-export const ascetExploreParameters = Type.Object({
-	action: Type.Union([
-		Type.Literal("list_components"),
-		Type.Literal("list_diagrams"),
-		Type.Literal("inspect_target"),
-		Type.Literal("preview_children"),
+const diagramKindSchema = Type.Optional(
+	Type.Union([
+		Type.Literal("all"),
+		Type.Literal("block"),
+		Type.Literal("block_diagram"),
+		Type.Literal("state"),
+		Type.Literal("state_machine"),
+		Type.Literal("sequence"),
+		Type.Literal("unknown"),
 	]),
-	folderPath: Type.Optional(Type.String()),
-	componentPath: Type.Optional(Type.String({ minLength: 1 })),
-	query: Type.Optional(Type.String({ minLength: 1 })),
-	scopePath: Type.Optional(Type.String()),
-	kind: Type.Optional(
-		Type.Union([
-			Type.Literal("class"),
-			Type.Literal("module"),
-			Type.Literal("statemachine"),
-			Type.Literal("folder"),
-			Type.Literal("all"),
-		]),
-	),
-	match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("glob"), Type.Literal("contains")])),
-	limit: Type.Optional(Type.Number({ minimum: 1, maximum: 500 })),
-	recursive: Type.Optional(Type.Boolean()),
-	diagramKind: Type.Optional(
-		Type.Union([
-			Type.Literal("all"),
-			Type.Literal("block"),
-			Type.Literal("block_diagram"),
-			Type.Literal("state"),
-			Type.Literal("state_machine"),
-			Type.Literal("sequence"),
-			Type.Literal("unknown"),
-		]),
-	),
-	detailLevel: Type.Optional(Type.Union([Type.Literal("summary"), Type.Literal("detailed")])),
-	group: Type.Optional(
-		Type.Union([
-			Type.Literal("methods"),
-			Type.Literal("elements"),
-			Type.Literal("components"),
-			Type.Literal("arrays"),
-			Type.Literal("parameters"),
-			Type.Literal("variables"),
-			Type.Literal("diagrams"),
-			Type.Literal("all"),
-		]),
-	),
-});
+);
+
+const previewChildrenGroupSchema = Type.Optional(
+	Type.Union([
+		Type.Literal("methods"),
+		Type.Literal("elements"),
+		Type.Literal("components"),
+		Type.Literal("arrays"),
+		Type.Literal("parameters"),
+		Type.Literal("variables"),
+		Type.Literal("diagrams"),
+		Type.Literal("all"),
+	]),
+);
+
+export const ascetExploreParameters = Type.Union([
+	Type.Object({
+		action: Type.Literal("list_components"),
+		folderPath: Type.String({ minLength: 1 }),
+		kind: Type.Optional(
+			Type.Union([
+				Type.Literal("class"),
+				Type.Literal("module"),
+				Type.Literal("statemachine"),
+				Type.Literal("folder"),
+				Type.Literal("all"),
+			]),
+		),
+		query: Type.Optional(Type.String({ minLength: 1 })),
+		limit: Type.Optional(Type.Number({ minimum: 1, maximum: 500 })),
+		recursive: Type.Optional(Type.Boolean()),
+	}),
+	Type.Object({
+		action: Type.Literal("list_diagrams"),
+		componentPath: Type.String({ minLength: 1 }),
+		diagramKind: diagramKindSchema,
+	}),
+	Type.Object({
+		action: Type.Literal("inspect_target"),
+		componentPath: Type.String({ minLength: 1 }),
+		detailLevel: Type.Optional(Type.Union([Type.Literal("summary"), Type.Literal("topology")])),
+	}),
+	Type.Object({
+		action: Type.Literal("preview_children"),
+		componentPath: Type.String({ minLength: 1 }),
+		group: previewChildrenGroupSchema,
+	}),
+]);

@@ -26,7 +26,6 @@ export const canonicalDomainTools = [
 	ascetReferenceTool,
 	ascetDiffTool,
 	ascetWriteTool,
-	ascetBatchWriteTool,
 	ascetComponentEditableTool,
 	ascetVerifyTool,
 ] as const;
@@ -42,12 +41,15 @@ export const canonicalAscetToolNames = [
 	"ascet_reference",
 	"ascet_diff",
 	"ascet_write",
-	"ascet_batch_write",
 	"ascet_component_editable",
 	"ascet_verify",
 ] as const;
 
 export const canonicalAscetTools = [...canonicalOpsTools, ...canonicalDomainTools] as const;
+export const hiddenAscetTools = [ascetBatchWriteTool] as const;
+export const allAscetTools = [...canonicalAscetTools, ...hiddenAscetTools] as const;
+export const allAscetToolNames = [...canonicalAscetToolNames, "ascet_batch_write"] as const;
+export const allAscetToolNameSet = new Set<string>(allAscetToolNames);
 
 for (const [index, tool] of canonicalAscetTools.entries()) {
 	if (tool.name !== canonicalAscetToolNames[index]) {

@@ -1,6 +1,7 @@
 import { defineSequentialAscetTool } from "../../core/tool.ts";
 import { routeAscetAction } from "../../routing/router.ts";
 import { createAscetSchedulerStatusReport } from "../../scheduler/status.ts";
+import { toToolSuccessPayload } from "../../tool-response-contract.ts";
 import { ascetSchedulerStatusPrompt } from "./prompt.ts";
 import { type AscetSchedulerStatusParams, ascetSchedulerStatusParameters } from "./schema.ts";
 import { renderCall, renderResult } from "./ui.ts";
@@ -21,7 +22,7 @@ export const ascetSchedulerStatusTool = defineSequentialAscetTool({
 		_ctx: { cwd: string },
 	) {
 		const report = await createAscetSchedulerStatusReport(params.action ?? "status");
-		const text = params.format === "json" ? JSON.stringify(report, null, 2) : report.summary;
+		const text = params.format === "text" ? report.summary : JSON.stringify(toToolSuccessPayload(report), null, 2);
 		const action = params.action ?? "status";
 		const route = routeAscetAction({ toolName: "ascet_scheduler_status", action });
 		return {

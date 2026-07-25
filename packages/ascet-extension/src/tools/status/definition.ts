@@ -18,12 +18,12 @@ export const ascetStatusTool = defineSequentialAscetTool({
 		_params: AscetStatusParams,
 		_signal: AbortSignal,
 		_onUpdate: unknown,
-		ctx: { cwd: string; ascetStatusProbe?: AscetRuntimeStatusOptions["probe"] },
+		ctx: { cwd: string; ascetStatusWarmSearchIndex?: AscetRuntimeStatusOptions["warmSearchIndex"] },
 	) {
 		const report = await createAscetRuntimeStatusReport({
 			cwd: ctx.cwd,
 			signal: _signal,
-			probe: ctx.ascetStatusProbe,
+			warmSearchIndex: ctx.ascetStatusWarmSearchIndex,
 		});
 		const route = routeAscetAction({ toolName: "ascet_status", action: "status" });
 		return {

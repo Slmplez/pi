@@ -1,6 +1,12 @@
 import type { Api, AssistantMessageEventStream, Context, Model, SimpleStreamOptions } from "@earendil-works/pi-ai";
 import type { OAuthCredentials, OAuthLoginCallbacks } from "@earendil-works/pi-ai/oauth";
 import { renderAscetToolCall, renderAscetToolResult } from "../rendering.ts";
+import {
+	AscetActionUnavailableError,
+	assertActionActive,
+	createActionUnavailableToolResult,
+	extractToolAction,
+} from "../tools/actions/guard.ts";
 
 type AscetProviderModelConfig = {
 	id: string;
@@ -38,6 +44,9 @@ type AscetProviderConfig = {
 
 export interface AscetExtensionAPI {
 	registerTool(tool: unknown): void;
+	getActiveTools?(): string[];
+	getAllTools?(): Array<{ name: string; description?: string; promptGuidelines?: string[] }>;
+	setActiveTools?(toolNames: string[]): void;
 	sendUserMessage(
 		content: string,
 		options?: {
@@ -102,6 +111,7 @@ type AscetRenderableTool = {
 	executionMode?: "sequential" | "parallel";
 	renderCall?: typeof renderAscetToolCall;
 	renderResult?: typeof renderAscetToolResult;
+	execute?: (...args: any[]) => Promise<unknown> | unknown;
 };
 
 export function defineSequentialAscetTool<T extends AscetRenderableTool>(
@@ -111,8 +121,22 @@ export function defineSequentialAscetTool<T extends AscetRenderableTool>(
 	renderCall: typeof renderAscetToolCall;
 	renderResult: typeof renderAscetToolResult;
 } {
+	const execute = tool.execute
+		? async (...args: Parameters<NonNullable<T["execute"]>>) => {
+				try {
+					assertActionActive(tool.name, extractToolAction(tool.name, args[1]));
+				} catch (error) {
+					if (error instanceof AscetActionUnavailableError) {
+						return createActionUnavailableToolResult(error);
+					}
+					throw error;
+				}
+				return tool.execute!(...args);
+			}
+		: undefined;
 	return {
 		...tool,
+		...(execute ? { execute } : {}),
 		executionMode: "sequential",
 		renderCall: tool.renderCall ?? renderAscetToolCall,
 		renderResult: tool.renderResult ?? renderAscetToolResult,

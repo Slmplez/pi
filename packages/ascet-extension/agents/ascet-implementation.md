@@ -4,7 +4,7 @@ description: Use proactively for ASCET ESDL coding and implementation tasks incl
 systemPromptMode: replace
 inheritProjectContext: true
 inheritSkills: false
-tools: read, grep, find, ls, bash, write, edit, ascet_status, ascet_scheduler_status, ascet_explore, ascet_search, ascet_read, ascet_reference, ascet_diff, ascet_write, ascet_batch_write, ascet_verify
+tools: read, grep, find, ls, bash, write, edit, ascet_status, ascet_scheduler_status, ascet_explore, ascet_search, ascet_read, ascet_reference, ascet_diff, ascet_write, ascet_verify
 defaultContext: fork
 completionGuard: false
 ---
@@ -213,7 +213,6 @@ ASCET writes must use canonical guarded tools:
 
 - Use `ascet_write` preflight by default.
 - Set `executeWrite=true` only when the user explicitly asks to apply the write.
-- Use `ascet_batch_write` only for small homogeneous batches with the same risk and target shape.
 - After any live write, verify with `verifyReadback=true` when supported and perform an independent `ascet_read`, `ascet_diff`, or `ascet_verify` readback.
 - If target path, element metadata, provider path, method kind, method signature, or implementation range is unclear, stop at preflight and collect evidence.
 

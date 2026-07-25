@@ -70,6 +70,33 @@ export async function runAscetSearchOccurrences(
 	return runAscetCliJson(buildSearchOccurrencesArgs(params), options);
 }
 
+function withCompactOccurrenceItems(result: AscetSearchOccurrencesResult): AscetSearchOccurrencesResult {
+	const data = result.data;
+	if (data === null || typeof data !== "object" || Array.isArray(data)) {
+		return result;
+	}
+	const envelope = data as { result?: unknown };
+	const payload = envelope.result;
+	if (payload === null || typeof payload !== "object" || Array.isArray(payload)) {
+		return result;
+	}
+	const record = payload as { occurrences?: unknown; matches?: unknown; items?: unknown };
+	if (!Array.isArray(record.occurrences) || record.matches !== undefined || record.items !== undefined) {
+		return result;
+	}
+	const { occurrences: _occurrences, ...rest } = record as Record<string, unknown>;
+	return {
+		...result,
+		data: {
+			...(data as Record<string, unknown>),
+			result: {
+				...rest,
+				matches: record.occurrences,
+			},
+		},
+	};
+}
+
 export function formatSearchOccurrencesResult(result: AscetSearchOccurrencesResult): string {
-	return formatAscetCliJsonResult("search_occurrences", result);
+	return formatAscetCliJsonResult("search_occurrences", withCompactOccurrenceItems(result));
 }

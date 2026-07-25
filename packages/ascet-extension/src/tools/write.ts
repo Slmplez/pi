@@ -24,7 +24,9 @@ import {
 	ASCET_SET_STATE_MACHINE_CODE_OPERATIONS,
 	runApprovedAscetSetStateMachineCode,
 } from "../set-state-machine-code.ts";
+import { compactObject, toToolFailurePayload, unwrapToolSuccessPayload } from "../tool-response-contract.ts";
 import type { RunAscetWriteOperationOptions } from "../write-common.ts";
+import { applyWriteImpactToSearchIndex, createWriteImpact, type WriteImpact } from "../write-common.ts";
 import type { AscetWriteApprovalContext } from "../write-policy.ts";
 
 type CodeSource = { code?: string; codeFile?: string };
@@ -178,6 +180,7 @@ export interface AscetWriteResult {
 	details: {
 		outcome: AscetToolOutcome;
 		raw?: AscetCliJsonResult;
+		impact?: WriteImpact;
 		error?: { code: string; message: string };
 	};
 }
@@ -197,103 +200,166 @@ const methodSignatureArgumentSchema = Type.Object({
 	type: primitiveSignatureTypeSchema,
 	ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("keep"), Type.Literal("replace")])),
 });
-
-export const ascetWriteParameters = Type.Object({
-	action: Type.Union([
-		Type.Literal("create_folder"),
-		Type.Literal("create_component"),
-		Type.Literal("create_method"),
-		Type.Literal("set_method_signature"),
-		Type.Literal("delete_component"),
-		Type.Literal("delete_method"),
-		Type.Literal("delete_folder"),
-		Type.Literal("set_method_code"),
-		Type.Literal("set_module_code"),
-		Type.Literal("set_state_machine_code"),
-		Type.Literal("set_enumerators"),
-		Type.Literal("apply_element_spec"),
-		Type.Literal("apply_project_formula"),
-		Type.Literal("set_element_dependency"),
-	]),
-	folderPath: Type.Optional(Type.String({ minLength: 1 })),
-	componentPath: Type.Optional(Type.String({ minLength: 1 })),
-	modulePath: Type.Optional(Type.String({ minLength: 1 })),
-	stateMachinePath: Type.Optional(Type.String({ minLength: 1 })),
-	projectPath: Type.Optional(Type.String({ minLength: 1 })),
-	targetPath: Type.Optional(Type.String({ minLength: 1 })),
-	kind: Type.Optional(
-		Type.Union([
-			Type.Literal("class"),
-			Type.Literal("module"),
-			Type.Literal("statemachine"),
-			Type.Literal("enumeration"),
-		]),
-	),
-	componentKind: Type.Optional(
-		Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")]),
-	),
-	language: Type.Optional(Type.Union([Type.Literal("ESDL"), Type.Literal("BDE"), Type.Literal("C")])),
-	methodName: Type.Optional(Type.String({ minLength: 1 })),
-	elementName: Type.Optional(Type.String({ minLength: 1 })),
-	dependency: Type.Optional(Type.Union([Type.Literal("dependent"), Type.Literal("independent")])),
-	dependencyFormula: Type.Optional(Type.String({ minLength: 1 })),
-	dependencyMappings: Type.Optional(Type.Record(Type.String({ minLength: 1 }), Type.String({ minLength: 1 }))),
-	clearDependencyFormula: Type.Optional(Type.Boolean()),
-	returnType: Type.Optional(primitiveSignatureTypeSchema),
-	arguments: Type.Optional(Type.Array(methodSignatureArgumentSchema)),
-	targetKind: Type.Optional(
-		Type.Union([Type.Literal("auto"), Type.Literal("component"), Type.Literal("folder"), Type.Literal("project")]),
-	),
-	match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("all")])),
-	methodKind: Type.Optional(
-		Type.Union([
-			Type.Literal("abstract"),
-			Type.Literal("process"),
-			Type.Literal("action"),
-			Type.Literal("condition"),
-			Type.Literal("trigger"),
-		]),
-	),
-	operation: Type.Optional(
-		Type.Union([
-			Type.Literal("set-method"),
-			Type.Literal("set-header"),
-			Type.Literal("set-external-c-code"),
-			Type.Literal("set-state-entry-esdl"),
-			Type.Literal("set-state-exit-esdl"),
-			Type.Literal("set-state-static-esdl"),
-			Type.Literal("bind-state-entry-method"),
-			Type.Literal("bind-state-exit-method"),
-			Type.Literal("bind-state-static-method"),
-			Type.Literal("set-transition-condition-esdl"),
-			Type.Literal("set-transition-action-esdl"),
-			Type.Literal("bind-transition-condition-method"),
-			Type.Literal("bind-transition-action-method"),
-			Type.Literal("set-start-state"),
-		]),
-	),
-	section: Type.Optional(
-		Type.Union([Type.Literal("set-method"), Type.Literal("set-header"), Type.Literal("set-external-c-code")]),
-	),
-	stateName: Type.Optional(Type.String()),
-	sourceState: Type.Optional(Type.String()),
-	targetState: Type.Optional(Type.String()),
-	priority: Type.Optional(Type.Number()),
-	enumerators: Type.Optional(Type.Array(Type.String({ minLength: 1 }), { minItems: 1 })),
-	specFile: Type.Optional(Type.String({ minLength: 1 })),
-	mode: Type.Optional(Type.Literal("restore")),
-	deleteMissing: Type.Optional(Type.Boolean()),
-	recreateIncompatible: Type.Optional(Type.Boolean()),
-	dryRun: Type.Optional(Type.Boolean()),
-	backupDir: Type.Optional(Type.String({ minLength: 1 })),
-	ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("return-existing")])),
-	ifReturnExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("keep"), Type.Literal("replace")])),
-	ifMissing: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")])),
-	rollbackOnFailure: Type.Optional(Type.Boolean()),
-	...codeSourceSchema,
+const writeControlSchema = {
 	verifyReadback: Type.Optional(Type.Boolean()),
 	executeWrite: Type.Optional(Type.Boolean()),
-});
+};
+const componentKindSchema = Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")]);
+const writeComponentKindSchema = Type.Union([
+	Type.Literal("class"),
+	Type.Literal("module"),
+	Type.Literal("statemachine"),
+	Type.Literal("enumeration"),
+]);
+const methodKindSchema = Type.Union([
+	Type.Literal("abstract"),
+	Type.Literal("process"),
+	Type.Literal("action"),
+	Type.Literal("condition"),
+	Type.Literal("trigger"),
+]);
+const stateMachineOperationSchema = Type.Union([
+	Type.Literal("set-method"),
+	Type.Literal("set-state-entry-esdl"),
+	Type.Literal("set-state-exit-esdl"),
+	Type.Literal("set-state-static-esdl"),
+	Type.Literal("bind-state-entry-method"),
+	Type.Literal("bind-state-exit-method"),
+	Type.Literal("bind-state-static-method"),
+	Type.Literal("set-transition-condition-esdl"),
+	Type.Literal("set-transition-action-esdl"),
+	Type.Literal("bind-transition-condition-method"),
+	Type.Literal("bind-transition-action-method"),
+	Type.Literal("set-start-state"),
+]);
+const moduleCodeOperationSchema = Type.Union([
+	Type.Literal("set-method"),
+	Type.Literal("set-header"),
+	Type.Literal("set-external-c-code"),
+]);
+
+export const ascetWriteParameters = Type.Union([
+	Type.Object({
+		action: Type.Literal("create_folder"),
+		folderPath: Type.String({ minLength: 1 }),
+		...writeControlSchema,
+	}),
+	Type.Object({
+		action: Type.Literal("create_component"),
+		componentPath: Type.String({ minLength: 1 }),
+		kind: writeComponentKindSchema,
+		language: Type.Optional(Type.Union([Type.Literal("ESDL"), Type.Literal("BDE"), Type.Literal("C")])),
+		ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("return-existing")])),
+		rollbackOnFailure: Type.Optional(Type.Boolean()),
+		...writeControlSchema,
+	}),
+	Type.Object({
+		action: Type.Literal("create_method"),
+		componentPath: Type.String({ minLength: 1 }),
+		componentKind: Type.Optional(componentKindSchema),
+		methodName: Type.String({ minLength: 1 }),
+		methodKind: Type.Optional(methodKindSchema),
+		ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("return-existing")])),
+		...writeControlSchema,
+	}),
+	Type.Object({
+		action: Type.Literal("set_method_signature"),
+		componentPath: Type.String({ minLength: 1 }),
+		methodName: Type.String({ minLength: 1 }),
+		returnType: Type.Optional(primitiveSignatureTypeSchema),
+		arguments: Type.Optional(Type.Array(methodSignatureArgumentSchema)),
+		ifReturnExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("keep"), Type.Literal("replace")])),
+		...writeControlSchema,
+	}),
+	Type.Object({
+		action: Type.Literal("delete_component"),
+		componentPath: Type.String({ minLength: 1 }),
+		ifMissing: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")])),
+		...writeControlSchema,
+	}),
+	Type.Object({
+		action: Type.Literal("delete_method"),
+		componentPath: Type.String({ minLength: 1 }),
+		methodName: Type.String({ minLength: 1 }),
+		ifMissing: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")])),
+		...writeControlSchema,
+	}),
+	Type.Object({
+		action: Type.Literal("delete_folder"),
+		folderPath: Type.String({ minLength: 1 }),
+		ifMissing: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")])),
+		...writeControlSchema,
+	}),
+	Type.Object({
+		action: Type.Literal("set_method_code"),
+		componentPath: Type.String({ minLength: 1 }),
+		methodName: Type.String({ minLength: 1 }),
+		...codeSourceSchema,
+		...writeControlSchema,
+	}),
+	Type.Object({
+		action: Type.Literal("set_module_code"),
+		modulePath: Type.String({ minLength: 1 }),
+		operation: Type.Optional(moduleCodeOperationSchema),
+		section: Type.Optional(moduleCodeOperationSchema),
+		methodName: Type.Optional(Type.String({ minLength: 1 })),
+		...codeSourceSchema,
+		...writeControlSchema,
+	}),
+	Type.Object({
+		action: Type.Literal("set_state_machine_code"),
+		stateMachinePath: Type.String({ minLength: 1 }),
+		operation: stateMachineOperationSchema,
+		stateName: Type.Optional(Type.String()),
+		sourceState: Type.Optional(Type.String()),
+		targetState: Type.Optional(Type.String()),
+		priority: Type.Optional(Type.Number()),
+		methodName: Type.Optional(Type.String({ minLength: 1 })),
+		...codeSourceSchema,
+		...writeControlSchema,
+	}),
+	Type.Object({
+		action: Type.Literal("set_enumerators"),
+		componentPath: Type.String({ minLength: 1 }),
+		enumerators: Type.Array(Type.String({ minLength: 1 }), { minItems: 1 }),
+		...writeControlSchema,
+	}),
+	Type.Object({
+		action: Type.Literal("apply_element_spec"),
+		componentPath: Type.String({ minLength: 1 }),
+		specFile: Type.String({ minLength: 1 }),
+		projectPath: Type.Optional(Type.String({ minLength: 1 })),
+		mode: Type.Optional(Type.Literal("restore")),
+		deleteMissing: Type.Optional(Type.Boolean()),
+		recreateIncompatible: Type.Optional(Type.Boolean()),
+		...writeControlSchema,
+	}),
+	Type.Object({
+		action: Type.Literal("apply_project_formula"),
+		projectPath: Type.String({ minLength: 1 }),
+		specFile: Type.String({ minLength: 1 }),
+		mode: Type.Optional(Type.Literal("restore")),
+		deleteMissing: Type.Optional(Type.Boolean()),
+		...writeControlSchema,
+	}),
+	Type.Object({
+		action: Type.Literal("set_element_dependency"),
+		targetPath: Type.Optional(Type.String({ minLength: 1 })),
+		componentPath: Type.Optional(Type.String({ minLength: 1 })),
+		elementName: Type.String({ minLength: 1 }),
+		dependency: Type.Union([Type.Literal("dependent"), Type.Literal("independent")]),
+		dependencyFormula: Type.Optional(Type.String({ minLength: 1 })),
+		dependencyMappings: Type.Optional(Type.Record(Type.String({ minLength: 1 }), Type.String({ minLength: 1 }))),
+		clearDependencyFormula: Type.Optional(Type.Boolean()),
+		targetKind: Type.Optional(
+			Type.Union([Type.Literal("auto"), Type.Literal("component"), Type.Literal("folder"), Type.Literal("project")]),
+		),
+		match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("all")])),
+		dryRun: Type.Optional(Type.Boolean()),
+		backupDir: Type.Optional(Type.String({ minLength: 1 })),
+		...writeControlSchema,
+	}),
+]);
 
 function outcomeFromCliResult(result: AscetCliJsonResult): AscetToolOutcome {
 	if (result.ok) {
@@ -307,15 +373,29 @@ function outcomeFromCliResult(result: AscetCliJsonResult): AscetToolOutcome {
 	return { status: "error", error: { code, message } };
 }
 
-function asResponse(outcome: AscetToolOutcome, raw?: AscetCliJsonResult): AscetWriteResult {
+function asResponse(outcome: AscetToolOutcome, raw?: AscetCliJsonResult, impact?: WriteImpact): AscetWriteResult {
 	return {
-		content: [{ type: "text", text: JSON.stringify(outcome, null, 2) }],
+		content: [{ type: "text", text: formatWriteOutcomeContent(outcome) }],
 		details: {
 			outcome,
 			raw,
+			impact,
 			error: outcome.status === "error" ? outcome.error : undefined,
 		},
 	};
+}
+
+function formatWriteOutcomeContent(outcome: AscetToolOutcome): string {
+	if (outcome.status === "ok") {
+		return JSON.stringify(compactObject(outcome.data) ?? {}, null, 2);
+	}
+	if (outcome.status === "error") {
+		return JSON.stringify(toToolFailurePayload(outcome.error), null, 2);
+	}
+	if (outcome.status === "blocked") {
+		return JSON.stringify(toToolFailurePayload({ code: outcome.code, message: outcome.message }), null, 2);
+	}
+	return JSON.stringify(compactObject(outcome) ?? {}, null, 2);
 }
 
 async function withWriteCode<T>(
@@ -340,7 +420,39 @@ export async function runAscetWrite(
 	}
 
 	const raw = await dispatchWrite(normalizedParams, options, ctx);
-	return asResponse(outcomeFromCliResult(raw), raw);
+	if (!raw.ok) {
+		return asResponse(outcomeFromCliResult(raw), raw);
+	}
+	const impact = createWriteImpact(normalizedParams);
+	applyWriteImpactToSearchIndex(impact);
+	return asResponse(createSuccessfulWriteOutcome(raw, impact), raw, impact);
+}
+
+function createSuccessfulWriteOutcome(raw: AscetCliJsonResult, impact: WriteImpact): AscetToolOutcome {
+	const payload = unwrapToolSuccessPayload(raw.data);
+	const record = asRecord(payload);
+	const readback = record?.readback ?? record?.verify ?? record?.verification;
+	const changed = record ? omitKeys(record, ["readback", "verify", "verification"]) : payload;
+	return {
+		status: "ok",
+		data: {
+			changed,
+			readback,
+			index: impact,
+		},
+		warnings: [],
+	};
+}
+
+function asRecord(value: unknown): Record<string, unknown> | undefined {
+	return value !== null && typeof value === "object" && !Array.isArray(value)
+		? (value as Record<string, unknown>)
+		: undefined;
+}
+
+function omitKeys(record: Record<string, unknown>, keys: readonly string[]): Record<string, unknown> {
+	const omit = new Set(keys);
+	return Object.fromEntries(Object.entries(record).filter(([key]) => !omit.has(key)));
 }
 
 function normalizeAscetWriteParams(params: AscetWriteParams): AscetWriteParams {

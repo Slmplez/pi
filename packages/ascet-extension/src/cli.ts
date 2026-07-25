@@ -13,6 +13,7 @@ import { getGlobalAscetOperationHealthStore } from "./scheduler/operation-health
 import type { AscetScheduler } from "./scheduler/scheduler.ts";
 import type { AscetJobKind } from "./scheduler/types.ts";
 import { createAscetStatusReport } from "./status.ts";
+import { toToolFailurePayload, toToolSuccessPayload } from "./tool-response-contract.ts";
 
 export interface AscetCliRequest {
 	cwd: string;
@@ -34,6 +35,7 @@ export interface AscetCliExecutionResult {
 
 export interface RunAscetCliJsonOptions {
 	cwd: string;
+	cliPath?: string;
 	env?: Record<string, string | undefined>;
 	signal?: AbortSignal;
 	timeoutMs?: number;
@@ -394,9 +396,10 @@ function buildCliFailureMessage(params: {
 export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOptions): Promise<AscetCliJsonResult> {
 	const status = createAscetStatusReport({ cwd: options.cwd, env: options.env });
 	const commandId = options.commandId ?? inferCommandId(args);
+	const jobKind = options.jobKind ?? inferJobKind(commandId);
 	const request: AscetCliRequest = {
 		cwd: options.cwd,
-		cliPath: status.paths.cliPath,
+		cliPath: options.cliPath ?? status.paths.cliPath,
 		args,
 		stdin: options.stdin,
 		signal: options.signal,
@@ -437,7 +440,7 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 
 	let execution: AscetCliExecutionResult;
 	try {
-		execution = await executeScheduledAscetCli(request, { ...options, commandId });
+		execution = await executeScheduledAscetCli(request, { ...options, commandId, jobKind });
 	} catch (error) {
 		const errorCode =
 			error instanceof AscetSchedulerQueueTimeoutError
@@ -514,28 +517,33 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 
 export function formatAscetCliJsonResult(operation: string, result: AscetCliJsonResult): string {
 	if (result.ok) {
-		const formatted = JSON.stringify(result.data, null, 2) ?? "null";
+		const payload = toToolSuccessPayload(result.data);
+		const formatted = JSON.stringify(payload, null, 2) ?? "null";
 		if (Buffer.byteLength(formatted, "utf8") <= getFormatArtifactThresholdBytes()) {
 			return formatted;
 		}
 		return formatPersistedSuccess(operation, result, formatted);
 	}
 	const message = sanitizeCliFailureText(result.error?.message ?? "");
-	const stderr = sanitizeCliFailureText(result.stderr);
-	const stdout = sanitizeCliFailureText(result.stdout);
 	const runtimeHint =
 		result.error?.code === "ascet_cli_failed" && /(ToolAPI|stdio streams are unavailable|runtime)/i.test(message)
 			? "hint: ASCET runtime (ToolAPI) is not connected. Start ASCET GUI with ToolAPI enabled, then rerun ascet_status or the ASCET command."
 			: "";
-	return [
-		`ASCET ${operation} failed: ${result.error?.code ?? "unknown"}`,
-		message,
-		runtimeHint,
-		stderr ? `stderr:\n${stderr}` : "",
-		stdout ? `stdout:\n${stdout}` : "",
-	]
-		.filter(Boolean)
-		.join("\n");
+	return JSON.stringify(
+		toToolFailurePayload({
+			code: result.error?.code ?? "unknown",
+			message: sanitizeCliFailureText(result.error?.message ?? ""),
+			details: {
+				hint: runtimeHint,
+				stderr: sanitizeCliFailureText(result.stderr),
+				stdout: sanitizeCliFailureText(result.stdout),
+				exitCode: result.exitCode,
+				timedOut: result.timedOut ? true : undefined,
+			},
+		}),
+		null,
+		2,
+	);
 }
 
 function sanitizeCliFailureText(text: string): string {

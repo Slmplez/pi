@@ -9,7 +9,7 @@ describe("ASCET implementation agent", () => {
 		assert.match(implementationAgent, /name: ascet-implementation/);
 		assert.match(implementationAgent, /Use proactively for ASCET ESDL coding and implementation tasks/);
 		assert.match(implementationAgent, /ascet_write/);
-		assert.match(implementationAgent, /ascet_batch_write/);
+		assert.doesNotMatch(implementationAgent, /ascet_batch_write/);
 		assert.match(implementationAgent, /ascet_verify/);
 	});
 

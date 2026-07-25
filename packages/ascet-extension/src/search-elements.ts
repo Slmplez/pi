@@ -6,6 +6,7 @@ import {
 	formatAscetCliJsonResult,
 	runAscetCliJson,
 } from "./cli.ts";
+import { ensureAscetSearchIndex, getAscetSearchIndexState, queryAscetSearchIndex } from "./search-index.ts";
 import { inferComponentPathFromScope } from "./search-scope.ts";
 
 export interface AscetSearchElementsParams {
@@ -70,10 +71,75 @@ export function buildSearchElementsArgs(params: AscetSearchElementsParams): stri
 	return args;
 }
 
+function toIndexedSearchParams(params: AscetSearchElementsParams): AscetSearchElementsParams {
+	const componentPath = params.componentPath ?? inferComponentPathFromScope(params);
+	if (!componentPath) {
+		return params;
+	}
+	return {
+		...params,
+		componentPath,
+		scopePath: undefined,
+	};
+}
+
+function isSearchIndexDisabled(env: Record<string, string | undefined> | undefined): boolean {
+	return (env?.PI_ASCET_SEARCH_INDEX ?? process.env.PI_ASCET_SEARCH_INDEX) === "0";
+}
+
+function getIndexedMatchCount(result: AscetCliJsonResult): number {
+	const data = result.data;
+	if (data === null || typeof data !== "object" || Array.isArray(data)) {
+		return 0;
+	}
+	const payload = (data as { result?: unknown }).result;
+	if (payload === null || typeof payload !== "object" || Array.isArray(payload)) {
+		return 0;
+	}
+	const matches = (payload as { matches?: unknown }).matches;
+	return Array.isArray(matches) ? matches.length : 0;
+}
+
+function canUseSearchIndexResult(result: AscetCliJsonResult): boolean {
+	const state = getAscetSearchIndexState();
+	if (!result.ok || state.status !== "ready") {
+		return false;
+	}
+	return state.scanComplete || getIndexedMatchCount(result) > 0;
+}
+
 export async function runAscetSearchElements(
 	params: AscetSearchElementsParams,
 	options: RunAscetSearchElementsOptions,
 ): Promise<AscetSearchElementsResult> {
+	const indexedParams = toIndexedSearchParams(params);
+	if (!isSearchIndexDisabled(options.env)) {
+		const indexed = queryAscetSearchIndex(indexedParams, { cwd: options.cwd });
+		if (indexed && canUseSearchIndexResult(indexed)) {
+			return indexed;
+		}
+
+		const warmup = await ensureAscetSearchIndex({
+			cwd: options.cwd,
+			env: options.env,
+			signal: options.signal,
+			timeoutMs: options.timeoutMs,
+			partition: "element_decls",
+			componentPath: indexedParams.componentPath,
+			forceRefresh: Boolean(indexedParams.componentPath),
+			maxComponents: 50,
+			scanTimeoutMs: Math.min(options.timeoutMs ?? 60_000, 15_000),
+			executeCli: options.executeCli,
+			toolName: "ascet_search",
+		});
+		if (warmup.ok) {
+			const warmed = queryAscetSearchIndex(indexedParams, { cwd: options.cwd });
+			if (warmed && canUseSearchIndexResult(warmed)) {
+				return warmed;
+			}
+		}
+	}
+
 	return runAscetCliJson(buildSearchElementsArgs(params), options);
 }
 

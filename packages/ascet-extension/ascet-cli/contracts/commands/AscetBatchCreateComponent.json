@@ -16,7 +16,8 @@
     "objectKinds":  [
                         "class",
                         "module",
-                        "statemachine"
+                        "statemachine",
+                        "enumeration"
                     ],
     "args":  [
                  {

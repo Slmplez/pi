@@ -5,6 +5,7 @@ import { Type } from "typebox";
 import { clearStaleAscetCliLock } from "../scheduler/cli-lock.ts";
 import { createAscetSchedulerStatusReport } from "../scheduler/status.ts";
 import { type AscetRuntimeStatusReport, createAscetRuntimeStatusReport } from "../status-runtime.ts";
+import { toToolSuccessPayload } from "../tool-response-contract.ts";
 
 export type AscetRecoverParams =
 	| { action: "status" }
@@ -98,13 +99,13 @@ export async function runAscetRecover(
 
 export function formatAscetRecoverResult(result: AscetRecoverResult): string {
 	if (result.action === "status") {
-		return result.data.status?.summary ?? "ASCET recover status unavailable.";
+		return JSON.stringify(toToolSuccessPayload(result.data.status ?? {}), null, 2);
 	}
 	if (result.action === "scheduler_status" || result.action === "scheduler_recover") {
-		return result.data.schedulerStatus?.summary ?? "ASCET scheduler status unavailable.";
+		return JSON.stringify(toToolSuccessPayload(result.data.schedulerStatus ?? {}), null, 2);
 	}
 	if (result.action === "clear_stale_cli_lock") {
-		return result.data.staleLockCleared ? "ASCET stale CLI lock cleared." : "ASCET stale CLI lock not found.";
+		return JSON.stringify(toToolSuccessPayload({ staleLockCleared: result.data.staleLockCleared }), null, 2);
 	}
-	return `ASCET extension temp cleared: ${result.data.tempRoot}`;
+	return JSON.stringify(toToolSuccessPayload({ path: result.data.tempRoot, cleared: result.data.cleared }), null, 2);
 }

@@ -1,5 +1,6 @@
 import type { AscetCliJsonResult, AscetFormattedOutputArtifact } from "../../cli.ts";
 import { routeAscetAction } from "../../routing/router.ts";
+import { compactObject, toToolFailurePayload, toToolSuccessPayload } from "../../tool-response-contract.ts";
 
 export interface AscetCommandEnvelope {
 	logicalCommandId: string;
@@ -26,23 +27,32 @@ export function createAscetToolEnvelope<TData>(params: AscetToolEnvelope<TData>)
 	return params;
 }
 
-function createArtifactDiagnostics(result: AscetCliJsonResult) {
-	return {
+function createSuccessDiagnostics(result: AscetCliJsonResult) {
+	return compactObject({
+		request: result.request,
+		exitCode: result.exitCode,
+		timedOut: result.timedOut,
+	});
+}
+
+function createFailureDiagnostics(result: AscetCliJsonResult) {
+	return compactObject({
 		request: result.request,
 		exitCode: result.exitCode,
 		timedOut: result.timedOut,
 		stderr: result.stderr,
-	};
+		stdout: result.stdout,
+	});
 }
 
 function createArtifactDetails(artifact: AscetFormattedOutputArtifact) {
-	return {
+	return compactObject({
 		operation: artifact.operation,
 		path: artifact.path,
 		sizeBytes: artifact.sizeBytes,
 		thresholdBytes: artifact.thresholdBytes,
 		searchHint: artifact.searchHint,
-	};
+	});
 }
 
 export function createAscetCliToolDetails(
@@ -60,21 +70,39 @@ export function createAscetCliToolDetails(
 			backendCommandId: route.backendCommandId,
 			operation: route.operation,
 		},
-		diagnostics: createArtifactDiagnostics(result),
 	};
 	if (result.ok && result.formattedOutputArtifact) {
 		return {
-			ok: result.ok,
 			...base,
 			summary: result.formattedOutputArtifact.summary,
 			counts: result.formattedOutputArtifact.counts,
 			artifact: createArtifactDetails(result.formattedOutputArtifact),
 			omittedFields: ["data", "stdout"],
+			diagnostics: createSuccessDiagnostics(result),
 		};
 	}
 
+	if (result.ok) {
+		return {
+			...base,
+			data: toToolSuccessPayload(result.data),
+			diagnostics: createSuccessDiagnostics(result),
+		};
+	}
+
+	const failure = toToolFailurePayload({
+		code: result.error?.code ?? "unknown",
+		message: result.error?.message ?? "",
+		details: {
+			stderr: result.stderr,
+			stdout: result.stdout,
+			exitCode: result.exitCode,
+			timedOut: result.timedOut ? true : undefined,
+		},
+	});
 	return {
-		...result,
 		...base,
+		...failure,
+		diagnostics: createFailureDiagnostics(result),
 	};
 }

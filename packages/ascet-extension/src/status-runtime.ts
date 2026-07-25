@@ -1,11 +1,20 @@
-import type { AscetCliJsonResult } from "./cli.ts";
-import { runAscetCliJson } from "./cli.ts";
+import {
+	type AscetSearchIndexWarmupOptions,
+	type AscetSearchIndexWarmupResult,
+	ensureAscetSearchIndex,
+} from "./search-index.ts";
 import { type AscetStatusPathOptions, type AscetStatusReport, createAscetStatusReport } from "./status.ts";
 
 export interface AscetRuntimeProbeReport {
 	ok: boolean;
-	commandId: "list_folders";
+	commandId: "warm_search_index";
 	description: string;
+	databaseName: string;
+	databasePath: string;
+	entryCount: number;
+	elapsedMs: number;
+	scanComplete: boolean;
+	fromCache: boolean;
 	error?: {
 		code: string;
 		message: string;
@@ -27,24 +36,38 @@ export interface AscetRuntimeStatusReport extends Omit<AscetStatusReport, "ok" |
 export interface AscetRuntimeStatusOptions extends AscetStatusPathOptions {
 	signal?: AbortSignal;
 	timeoutMs?: number;
-	probe?: (options: {
-		cwd: string;
-		env?: Record<string, string | undefined>;
-		signal?: AbortSignal;
-		timeoutMs: number;
-	}) => Promise<AscetCliJsonResult>;
+	warmSearchIndex?: (options: AscetRuntimeProbeOptions) => Promise<AscetSearchIndexWarmupResult>;
 }
 
-const RUNTIME_PROBE_DESCRIPTION = "ASCET ToolAPI live probe: AscetCli.exe exec list_folders --depth 0 --json";
+type AscetRuntimeProbeOptions = Pick<AscetSearchIndexWarmupOptions, "cwd" | "env" | "signal"> & {
+	timeoutMs: number;
+	partition: "components";
+	forceRefresh: true;
+	scanTimeoutMs: number;
+	toolName: "ascet_status";
+};
+
+const RUNTIME_PROBE_DESCRIPTION =
+	"ASCET quick-search index warmup: AscetCli.exe exec warm_search_index --partition components --force --json";
 const RUNTIME_FAILURE_NEXT_STEP =
 	"Next step: start ASCET GUI with ToolAPI enabled, then rerun ascet_status or the ASCET command. If ASCET is already open, verify the ToolAPI connection/profile.";
 
 function formatRuntimeProbe(report: AscetRuntimeProbeReport): string {
 	if (report.ok) {
-		return `ASCET runtime probe: OK\n  ${RUNTIME_PROBE_DESCRIPTION}`;
+		return [
+			"ASCET quick-search index: ready",
+			`  ${RUNTIME_PROBE_DESCRIPTION}`,
+			`  database: ${report.databaseName || "(unknown)"}`,
+			`  entries: ${report.entryCount}`,
+			`  scanComplete: ${report.scanComplete}`,
+			`  elapsedMs: ${report.elapsedMs}`,
+			report.fromCache ? "  source: memory cache" : null,
+		]
+			.filter((line): line is string => line !== null)
+			.join("\n");
 	}
 	return [
-		`ASCET runtime probe: FAILED (${report.error?.code ?? "unknown"})`,
+		`ASCET quick-search index: FAILED (${report.error?.code ?? "unknown"})`,
 		`  ${RUNTIME_PROBE_DESCRIPTION}`,
 		report.error?.message ? `  ${report.error.message}` : null,
 		report.timedOut ? "  timed out: true" : null,
@@ -68,11 +91,17 @@ function createRuntimeSummary(installation: AscetStatusReport, runtime: AscetRun
 		.join("\n");
 }
 
-function toRuntimeProbeReport(result: AscetCliJsonResult): AscetRuntimeProbeReport {
+function toRuntimeProbeReport(result: AscetSearchIndexWarmupResult): AscetRuntimeProbeReport {
 	return {
 		ok: result.ok,
-		commandId: "list_folders",
+		commandId: "warm_search_index",
 		description: RUNTIME_PROBE_DESCRIPTION,
+		databaseName: result.databaseName,
+		databasePath: result.databasePath,
+		entryCount: result.entryCount,
+		elapsedMs: result.elapsedMs,
+		scanComplete: result.scanComplete,
+		fromCache: result.fromCache,
 		error: result.error,
 		exitCode: result.exitCode,
 		timedOut: result.timedOut,
@@ -81,39 +110,53 @@ function toRuntimeProbeReport(result: AscetCliJsonResult): AscetRuntimeProbeRepo
 	};
 }
 
-async function defaultRuntimeProbe(options: {
+function createRuntimeProbeOptions(options: {
 	cwd: string;
 	env?: Record<string, string | undefined>;
 	signal?: AbortSignal;
 	timeoutMs: number;
-}): Promise<AscetCliJsonResult> {
-	return runAscetCliJson(["exec", "list_folders", "--depth", "0", "--json"], {
+}): AscetRuntimeProbeOptions {
+	return {
 		cwd: options.cwd,
 		env: options.env,
 		signal: options.signal,
 		timeoutMs: options.timeoutMs,
-		commandId: "status_runtime_probe",
+		partition: "components",
+		forceRefresh: true,
+		scanTimeoutMs: Math.min(options.timeoutMs, 15_000),
 		toolName: "ascet_status",
-		jobKind: "read",
-		queueTimeoutMs: Math.min(options.timeoutMs, 15_000),
-	});
+	};
+}
+
+async function defaultRuntimeProbe(options: AscetRuntimeProbeOptions): Promise<AscetSearchIndexWarmupResult> {
+	return ensureAscetSearchIndex(options);
 }
 
 export async function createAscetRuntimeStatusReport(
 	options: AscetRuntimeStatusOptions,
 ): Promise<AscetRuntimeStatusReport> {
 	const installation = createAscetStatusReport(options);
-	const timeoutMs = options.timeoutMs ?? 20_000;
-	const probe = options.probe ?? defaultRuntimeProbe;
+	const timeoutMs = options.timeoutMs ?? 60_000;
+	const warmSearchIndex = options.warmSearchIndex ?? defaultRuntimeProbe;
 	const runtime = installation.ok
-		? toRuntimeProbeReport(await probe({ cwd: options.cwd, env: options.env, signal: options.signal, timeoutMs }))
+		? toRuntimeProbeReport(
+				await warmSearchIndex(
+					createRuntimeProbeOptions({ cwd: options.cwd, env: options.env, signal: options.signal, timeoutMs }),
+				),
+			)
 		: {
 				ok: false,
-				commandId: "list_folders" as const,
+				commandId: "warm_search_index" as const,
 				description: RUNTIME_PROBE_DESCRIPTION,
+				databaseName: "",
+				databasePath: "",
+				entryCount: 0,
+				elapsedMs: 0,
+				scanComplete: false,
+				fromCache: false,
 				error: {
 					code: "ascet_installation_not_ready",
-					message: "ASCET CLI executable or contract catalog is missing; runtime probe was skipped.",
+					message: "ASCET CLI executable or contract catalog is missing; quick-search index warmup was skipped.",
 				},
 				exitCode: null,
 				timedOut: false,

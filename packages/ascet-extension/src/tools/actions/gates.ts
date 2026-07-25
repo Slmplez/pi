@@ -1,0 +1,56 @@
+import { getAscetExposureMetadata } from "../exposure/state.ts";
+import type { AscetActionActivationState, AscetActionDescriptor } from "./descriptors.ts";
+
+export interface ActionActivationContext {
+	env?: Record<string, string | undefined>;
+	activeProfile?: string;
+	activeTools?: readonly string[];
+}
+
+const ascetToolNameSet = new Set([
+	"ascet_status",
+	"ascet_capabilities",
+	"ascet_recover",
+	"ascet_scheduler_status",
+	"ascet_explore",
+	"ascet_search",
+	"ascet_read",
+	"ascet_reference",
+	"ascet_diff",
+	"ascet_write",
+	"ascet_component_editable",
+	"ascet_verify",
+	"ascet_batch_write",
+]);
+
+function isFeatureEnabled(featureFlag: string | undefined, env: Record<string, string | undefined>): boolean {
+	if (!featureFlag) {
+		return true;
+	}
+	return env[featureFlag] === "1" || env[featureFlag] === "true";
+}
+
+export function isAscetToolName(tool: string): boolean {
+	return ascetToolNameSet.has(tool);
+}
+
+export function resolveActionActivation(
+	descriptor: AscetActionDescriptor,
+	context: ActionActivationContext = {},
+): AscetActionActivationState {
+	const exposure = getAscetExposureMetadata();
+	const env = context.env ?? process.env;
+	const activeProfile = context.activeProfile ?? exposure.profile;
+	const activeTools = context.activeTools ?? exposure.activeTools;
+
+	if (!isFeatureEnabled(descriptor.featureFlag, env)) {
+		return "feature_disabled";
+	}
+	if (descriptor.visibility === "internal") {
+		return "hidden";
+	}
+	if (!descriptor.profiles.includes(activeProfile as never) || !activeTools.includes(descriptor.tool)) {
+		return "inactive";
+	}
+	return "active";
+}

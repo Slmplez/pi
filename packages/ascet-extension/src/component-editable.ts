@@ -8,6 +8,7 @@ import {
 import { normalizeAscetPath } from "./core/path.ts";
 import type { AscetScheduler } from "./scheduler/scheduler.ts";
 import { createAscetStatusReport } from "./status.ts";
+import { toToolSuccessPayload } from "./tool-response-contract.ts";
 import { type AscetWriteApprovalContext, requestAscetWriteApproval } from "./write-policy.ts";
 
 export type AscetComponentEditableMode = "check" | "set";
@@ -160,7 +161,7 @@ export function formatAscetComponentEditableResult(
 	params?: AscetComponentEditableParams,
 ): string {
 	if (result.ok && typeof result.data === "boolean") {
-		return result.data ? "true" : "false";
+		return JSON.stringify(toToolSuccessPayload({ editable: result.data }), null, 2);
 	}
 	return formatAscetCliJsonResult(
 		params ? getAscetComponentEditableOperation(params.mode) : "component_editable",

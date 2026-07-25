@@ -1,14 +1,13 @@
 import type { AscetCliExecutionResult, AscetCliJsonResult, AscetCliRequest } from "../../cli.ts";
 import { defineSequentialAscetTool } from "../../core/tool.ts";
 import { formatReadBlockDiagramResult, runAscetReadBlockDiagram } from "../../read-block-diagram.ts";
-import { formatReadComponentSummaryResult, runAscetReadComponentSummary } from "../../read-component-summary.ts";
 import { formatReadDependentChainResult, runAscetReadDependentChain } from "../../read-dependent-chain.ts";
 import { formatReadElementDependencyResult, runAscetReadElementDependency } from "../../read-element-dependency.ts";
 import { formatReadImplementationResult, runAscetReadImplementation } from "../../read-implementation.ts";
-import { formatReadMethodCodeResult, runAscetReadMethodCode } from "../../read-method-code.ts";
 import { formatReadMethodSignatureResult, runAscetReadMethodSignature } from "../../read-method-signature.ts";
 import { formatReadStateMachineFlowResult, runAscetReadStateMachineFlow } from "../../read-state-machine-flow.ts";
 import { formatReadTextCodeResult, runAscetReadTextCode } from "../../read-text-code.ts";
+import { createHashSummary } from "../../tool-response-contract.ts";
 import { createAscetCliToolDetails } from "../_shared/envelope.ts";
 import { ascetReadPrompt } from "./prompt.ts";
 import { type AscetReadParams, ascetReadParameters } from "./schema.ts";
@@ -26,16 +25,8 @@ const READ_BLOCK_DIAGRAM_DEFAULT_TIMEOUT_MS = 60_000;
 
 async function runAscetRead(params: AscetReadParams, options: RunOptions): Promise<AscetCliJsonResult> {
 	switch (params.action) {
-		case "read":
-			if (params.methodName) {
-				return runAscetReadMethodCode(
-					{ componentPath: params.componentPath, methodName: params.methodName },
-					options,
-				);
-			}
-			return runAscetReadComponentSummary({ componentPath: params.componentPath }, options);
 		case "read_code":
-			return runAscetReadTextCode(params, options);
+			return applyReadCodeDetailLevel(params.detailLevel, await runAscetReadTextCode(params, options));
 		case "read_method_signature":
 			return runAscetReadMethodSignature(
 				{ componentPath: params.componentPath, methodName: params.methodName },
@@ -66,7 +57,7 @@ async function runAscetRead(params: AscetReadParams, options: RunOptions): Promi
 				{
 					componentPath: params.componentPath,
 					traceDepth: params.traceDepth,
-					detailLevel: params.detailLevel,
+					detailLevel: params.detailLevel === "topology" ? "summary" : params.detailLevel,
 				},
 				options,
 			);
@@ -86,8 +77,6 @@ function normalizeTimeoutMs(timeoutMs: number | undefined): number | undefined {
 
 function formatAscetReadResult(params: AscetReadParams, result: AscetCliJsonResult): string {
 	switch (params.action) {
-		case "read":
-			return params.methodName ? formatReadMethodCodeResult(result) : formatReadComponentSummaryResult(result);
 		case "read_code":
 			return formatReadTextCodeResult(result);
 		case "read_method_signature":
@@ -105,10 +94,55 @@ function formatAscetReadResult(params: AscetReadParams, result: AscetCliJsonResu
 	}
 }
 
+function applyReadCodeDetailLevel(
+	detailLevel: "summary" | "topology" | "full" | undefined,
+	result: AscetCliJsonResult,
+): AscetCliJsonResult {
+	if (detailLevel === undefined || detailLevel === "full" || !result.ok) {
+		return result;
+	}
+	const data = trimFullText(result.data, detailLevel);
+	return {
+		...result,
+		data,
+		stdout: JSON.stringify(data),
+	};
+}
+
+function trimFullText(data: unknown, detailLevel: "summary" | "topology"): unknown {
+	if (data === null || typeof data !== "object" || Array.isArray(data)) {
+		return data;
+	}
+	const envelope = data as Record<string, unknown>;
+	const result = envelope.result;
+	if (result === null || typeof result !== "object" || Array.isArray(result)) {
+		return data;
+	}
+	return {
+		...envelope,
+		result: trimObjectText(result as Record<string, unknown>, detailLevel),
+	};
+}
+
+function trimObjectText(
+	payload: Record<string, unknown>,
+	detailLevel: "summary" | "topology",
+): Record<string, unknown> {
+	const { text: _text, fullText: _fullText, code: _code, ...rest } = payload;
+	const text = typeof payload.text === "string" ? payload.text : typeof payload.code === "string" ? payload.code : "";
+	const language = typeof payload.language === "string" ? payload.language : undefined;
+	const summary = createHashSummary({ text, language });
+	return {
+		...rest,
+		...(detailLevel === "topology" ? { detailLevel } : {}),
+		...summary,
+	};
+}
+
 export const ascetReadTool = defineSequentialAscetTool({
 	name: "ascet_read",
 	label: "ASCET read",
-	description: "Read ASCET summaries, method/code text, implementations, block diagrams, and state-machine flows.",
+	description: "Read live ASCET code text, implementations, block diagrams, and state-machine flows.",
 	...ascetReadPrompt,
 	parameters: ascetReadParameters,
 	renderCall,

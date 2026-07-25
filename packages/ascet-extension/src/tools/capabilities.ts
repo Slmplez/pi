@@ -4,6 +4,12 @@ import { Type } from "typebox";
 import { ASCET_CREATE_METHOD_KIND_COMPATIBILITY } from "../method-kind-compatibility.ts";
 import { type AscetCliCoverageCategory, classifyAscetCliCommand } from "../routing/coverage.ts";
 import { createAscetStatusReport } from "../status.ts";
+import { toToolFailurePayload, toToolSuccessPayload } from "../tool-response-contract.ts";
+import { compactExamplesForAction } from "./_shared/action-examples.ts";
+import { type AscetActionVisibility, listActionDescriptors } from "./actions/descriptors.ts";
+import { resolveActionActivation } from "./actions/gates.ts";
+import { type AscetProfile, isAscetProfile } from "./exposure/profiles.ts";
+import { activateAscetExposureProfile, getAscetExposureMetadata } from "./exposure/state.ts";
 
 interface AscetCapabilityCommand {
 	id?: string;
@@ -30,12 +36,15 @@ interface AscetCliCatalog {
 }
 
 export interface AscetCapabilitiesParams {
+	action?: "search" | "activate_profile";
+	profile?: AscetProfile;
 	family?: "explore" | "search" | "read" | "refs" | "diff" | "write" | "verify" | "ops";
 	risk?: "read" | "diff" | "write";
 	objectKind?: string;
 	operationQuery?: string;
 	limit?: number;
 	includeHidden?: boolean;
+	detailLevel?: "summary" | "full";
 }
 
 export interface RunAscetCapabilitiesOptions {
@@ -60,6 +69,19 @@ export interface AscetCapabilityMatch {
 	canonicalAction?: string;
 	logicalCommandId?: string;
 	argumentEnums?: Record<string, string[]>;
+	actionInstructions?: string[];
+}
+
+export interface AscetCapabilityActionStatus {
+	tool: string;
+	name: string;
+	state: string;
+	visibility?: AscetActionVisibility;
+	replacement?: string;
+	featureFlag?: string;
+	requiresPartitions?: string[];
+	instruction?: string;
+	example?: string;
 }
 
 export interface AscetCapabilitiesResult {
@@ -67,6 +89,10 @@ export interface AscetCapabilitiesResult {
 	data: {
 		mode: string;
 		catalogPath: string;
+		activeProfile: AscetProfile;
+		activeTools: string[];
+		batchWriteEnabled: boolean;
+		actions: AscetCapabilityActionStatus[];
 		matches: AscetCapabilityMatch[];
 		totalMatches: number;
 	};
@@ -77,6 +103,20 @@ export interface AscetCapabilitiesResult {
 }
 
 export const ascetCapabilitiesParameters = Type.Object({
+	action: Type.Optional(Type.Union([Type.Literal("search"), Type.Literal("activate_profile")])),
+	profile: Type.Optional(
+		Type.Union([
+			Type.Literal("base"),
+			Type.Literal("advanced-read"),
+			Type.Literal("reference"),
+			Type.Literal("diff"),
+			Type.Literal("verify"),
+			Type.Literal("write-preflight"),
+			Type.Literal("batch-write"),
+			Type.Literal("component-edit"),
+			Type.Literal("ops"),
+		]),
+	),
 	family: Type.Optional(
 		Type.Union([
 			Type.Literal("explore"),
@@ -94,6 +134,7 @@ export const ascetCapabilitiesParameters = Type.Object({
 	operationQuery: Type.Optional(Type.String()),
 	limit: Type.Optional(Type.Number({ minimum: 1, maximum: 200 })),
 	includeHidden: Type.Optional(Type.Boolean()),
+	detailLevel: Type.Optional(Type.Union([Type.Literal("summary"), Type.Literal("full")])),
 });
 
 function stripBom(text: string): string {
@@ -105,15 +146,62 @@ export function runAscetCapabilities(
 	options: RunAscetCapabilitiesOptions,
 ): AscetCapabilitiesResult {
 	const status = createAscetStatusReport(options);
+	const exposure = getAscetExposureMetadata();
+	if (params.action === "activate_profile") {
+		if (!isAscetProfile(params.profile)) {
+			return {
+				ok: false,
+				data: createCapabilitiesData(
+					status.paths.mode,
+					status.paths.catalogPath,
+					exposure,
+					[],
+					0,
+					params,
+					options.env,
+				),
+				error: {
+					code: "ascet_capabilities_invalid_profile",
+					message: "action=activate_profile requires a valid profile.",
+				},
+			};
+		}
+		const updated = activateAscetExposureProfile(params.profile);
+		if (!updated) {
+			return {
+				ok: false,
+				data: createCapabilitiesData(
+					status.paths.mode,
+					status.paths.catalogPath,
+					exposure,
+					[],
+					0,
+					params,
+					options.env,
+				),
+				error: {
+					code: "ascet_capabilities_activation_unavailable",
+					message: "ASCET profile activation is not available in this runtime.",
+				},
+			};
+		}
+		return {
+			ok: true,
+			data: createCapabilitiesData(status.paths.mode, status.paths.catalogPath, updated, [], 0, params, options.env),
+		};
+	}
 	if (!existsSync(status.paths.catalogPath)) {
 		return {
 			ok: false,
-			data: {
-				mode: status.paths.mode,
-				catalogPath: status.paths.catalogPath,
-				matches: [],
-				totalMatches: 0,
-			},
+			data: createCapabilitiesData(
+				status.paths.mode,
+				status.paths.catalogPath,
+				exposure,
+				[],
+				0,
+				params,
+				options.env,
+			),
 			error: {
 				code: "ascet_capabilities_catalog_missing",
 				message: `cli-catalog.json not found: ${status.paths.catalogPath}`,
@@ -157,34 +245,132 @@ export function runAscetCapabilities(
 					canonicalAction: coverage?.action,
 					logicalCommandId: coverage?.logicalCommandId,
 					argumentEnums: extractArgumentEnums(detailedCommand),
+					actionInstructions:
+						params.detailLevel === "full"
+							? compactExamplesForAction(coverage?.toolName, coverage?.action)
+							: undefined,
 				};
 			});
 		const limit = params.limit ?? 50;
+		const limitedMatches = matches.slice(0, limit);
 
 		return {
 			ok: true,
-			data: {
-				mode: status.paths.mode,
-				catalogPath: status.paths.catalogPath,
-				matches: matches.slice(0, limit),
-				totalMatches: matches.length,
-			},
+			data: createCapabilitiesData(
+				status.paths.mode,
+				status.paths.catalogPath,
+				exposure,
+				limitedMatches,
+				matches.length,
+				params,
+				options.env,
+			),
 		};
 	} catch (error) {
 		return {
 			ok: false,
-			data: {
-				mode: status.paths.mode,
-				catalogPath: status.paths.catalogPath,
-				matches: [],
-				totalMatches: 0,
-			},
+			data: createCapabilitiesData(
+				status.paths.mode,
+				status.paths.catalogPath,
+				exposure,
+				[],
+				0,
+				params,
+				options.env,
+			),
 			error: {
 				code: "ascet_capabilities_catalog_invalid",
 				message: error instanceof Error ? error.message : String(error),
 			},
 		};
 	}
+}
+
+function createCapabilitiesData(
+	mode: string,
+	catalogPath: string,
+	exposure: ReturnType<typeof getAscetExposureMetadata>,
+	matches: AscetCapabilityMatch[],
+	totalMatches: number,
+	params: AscetCapabilitiesParams = {},
+	env: Record<string, string | undefined> = process.env,
+): AscetCapabilitiesResult["data"] {
+	return {
+		mode,
+		catalogPath,
+		activeProfile: exposure.profile,
+		activeTools: exposure.activeTools,
+		batchWriteEnabled: exposure.batchWriteEnabled,
+		actions: collectActionStatuses(params, exposure, env),
+		matches,
+		totalMatches,
+	};
+}
+
+function resolveToolFamily(tool: string): AscetCapabilitiesParams["family"] | undefined {
+	if (tool.includes("search") || tool.includes("reference")) {
+		return "search";
+	}
+	if (tool.includes("read") || tool.includes("explore")) {
+		return "read";
+	}
+	if (tool.includes("diff")) {
+		return "diff";
+	}
+	if (tool.includes("write") || tool.includes("component_editable")) {
+		return "write";
+	}
+	if (tool.includes("verify")) {
+		return "verify";
+	}
+	if (tool.includes("status") || tool.includes("recover") || tool.includes("capabilities")) {
+		return "ops";
+	}
+	return undefined;
+}
+
+function collectActionStatuses(
+	params: AscetCapabilitiesParams,
+	exposure: ReturnType<typeof getAscetExposureMetadata>,
+	env: Record<string, string | undefined>,
+): AscetCapabilityActionStatus[] {
+	const query = params.operationQuery?.toLowerCase();
+	const includeHidden = params.includeHidden === true || params.detailLevel === "full";
+	const limit = params.limit ?? 50;
+	return listActionDescriptors()
+		.filter((descriptor) => includeHidden || descriptor.visibility === "public")
+		.filter((descriptor) => !params.family || resolveToolFamily(descriptor.tool) === params.family)
+		.filter((descriptor) => {
+			if (!query) {
+				return true;
+			}
+			return [descriptor.id, descriptor.tool, descriptor.action, descriptor.prompt?.summary].some((value) =>
+				value?.toLowerCase().includes(query),
+			);
+		})
+		.map((descriptor) => {
+			const state = resolveActionActivation(descriptor, {
+				env,
+				activeProfile: exposure.profile,
+				activeTools: exposure.activeTools,
+			});
+			return {
+				tool: descriptor.tool,
+				name: descriptor.action,
+				state,
+				visibility: includeHidden ? descriptor.visibility : undefined,
+				replacement: descriptor.deprecatedBy,
+				featureFlag: includeHidden ? descriptor.featureFlag : undefined,
+				requiresPartitions: descriptor.requiresPartitions ? [...descriptor.requiresPartitions] : undefined,
+				instruction: params.detailLevel === "full" ? descriptor.prompt?.summary : undefined,
+				example:
+					params.detailLevel === "full"
+						? compactExamplesForAction(descriptor.tool, descriptor.action, { includeHidden: true })[0]
+						: undefined,
+			};
+		})
+		.filter((item) => includeHidden || item.state === "active")
+		.slice(0, limit);
 }
 
 function loadCommandDetails(contractsRoot: string, command: AscetCapabilityCommand): AscetCapabilityCommand {
@@ -226,38 +412,23 @@ function extractArgumentEnums(command: AscetCapabilityCommand): Record<string, s
 	return Object.keys(argumentEnums).length > 0 ? argumentEnums : undefined;
 }
 
-function formatStringValues(values: unknown): string {
-	if (Array.isArray(values)) {
-		return values.filter((value): value is string => typeof value === "string" && value.length > 0).join("|");
+export function toAscetCapabilitiesPayload(result: AscetCapabilitiesResult): unknown {
+	if (!result.ok) {
+		return toToolFailurePayload({
+			code: result.error?.code ?? "ascet_capabilities_failed",
+			message: result.error?.message ?? "ASCET capabilities failed.",
+		});
 	}
-	return typeof values === "string" ? values : "";
+	return toToolSuccessPayload({
+		activeProfile: result.data.activeProfile,
+		activeTools: result.data.activeTools,
+		batchWriteEnabled: result.data.batchWriteEnabled,
+		actions: result.data.actions,
+		totalMatches: result.data.totalMatches,
+		matches: result.data.matches,
+	});
 }
 
 export function formatAscetCapabilitiesResult(result: AscetCapabilitiesResult): string {
-	if (!result.ok) {
-		return `ASCET capabilities failed: ${result.error?.code ?? "unknown"}\n${result.error?.message ?? ""}`;
-	}
-	return [
-		`ASCET capabilities: ${result.data.matches.length}/${result.data.totalMatches} matches`,
-		...result.data.matches.map((match) => {
-			const route = match.canonicalTool
-				? ` via ${match.canonicalTool}.${match.canonicalAction ?? "unknown"}`
-				: ` (${match.coverageCategory ?? "unclassified"})`;
-			const enumText = match.argumentEnums
-				? `; valid values: ${Object.entries(match.argumentEnums)
-						.map(([name, values]) => [name, formatStringValues(values)] as const)
-						.filter(([, values]) => values.length > 0)
-						.map(([name, values]) => `${name}=${values}`)
-						.join(", ")}`
-				: "";
-			const compatibilityText = match.methodKindCompatibility
-				? `; method kinds: ${Object.entries(match.methodKindCompatibility)
-						.map(([kind, values]) => [kind, formatStringValues(values)] as const)
-						.filter(([, values]) => values.length > 0)
-						.map(([kind, values]) => `${kind}=${values}`)
-						.join(", ")}`
-				: "";
-			return `- ${match.operation ?? match.id}: ${match.summary ?? ""}${route}${enumText}${compatibilityText}`;
-		}),
-	].join("\n");
+	return JSON.stringify(toAscetCapabilitiesPayload(result), null, 2);
 }

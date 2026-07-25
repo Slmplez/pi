@@ -122,6 +122,13 @@ export const ascetRouteManifestEntries = [
 		operation: "search_occurrences",
 		category: "domain",
 	},
+	{
+		toolName: "ascet_search",
+		action: "search_text_code",
+		logicalCommandId: "PiAscetSearchTextCode",
+		operation: "search_text_code",
+		category: "domain",
+	},
 
 	{
 		toolName: "ascet_read",
