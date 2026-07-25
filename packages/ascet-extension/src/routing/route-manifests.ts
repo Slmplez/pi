@@ -402,6 +402,21 @@ export const ascetRouteManifestEntries = [
 	},
 
 	{
+		toolName: "ascet_component_editable",
+		action: "check",
+		logicalCommandId: "AscetComponentEditableCheck",
+		operation: "component_editable_check",
+		category: "domain",
+	},
+	{
+		toolName: "ascet_component_editable",
+		action: "set",
+		logicalCommandId: "AscetComponentEditableSet",
+		operation: "component_editable_set",
+		category: "domain",
+	},
+
+	{
 		toolName: "ascet_verify",
 		action: "readback",
 		logicalCommandId: "AscetReadComponentSummary",

@@ -614,6 +614,18 @@ export const ascetActionExamples = [
 		args: { operation: "batch_delete_folder", requests: [{ folderPath: "D\\Old" }] },
 	}),
 	defineExample({
+		tool: "ascet_component_editable",
+		action: "check",
+		intent: "check editable",
+		args: { mode: "check", componentPath: "DEMO\\PID" },
+	}),
+	defineExample({
+		tool: "ascet_component_editable",
+		action: "set",
+		intent: "lock component",
+		args: { mode: "set", componentPath: "DEMO\\PID", executeWrite: true },
+	}),
+	defineExample({
 		tool: "ascet_verify",
 		action: "readback",
 		intent: "verify class",

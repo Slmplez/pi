@@ -8,6 +8,7 @@ import {
 } from "../../ascet-extension/src/tools/_shared/action-examples.ts";
 import { ascetBatchWriteParameters } from "../../ascet-extension/src/tools/batch-write/schema.ts";
 import { ascetCapabilitiesParameters } from "../../ascet-extension/src/tools/capabilities/schema.ts";
+import { ascetComponentEditableParameters } from "../../ascet-extension/src/tools/component-editable/schema.ts";
 import { ascetDiffParameters } from "../../ascet-extension/src/tools/diff/schema.ts";
 import { ascetExploreParameters } from "../../ascet-extension/src/tools/explore/schema.ts";
 import { ascetReadParameters } from "../../ascet-extension/src/tools/read/schema.ts";
@@ -32,6 +33,7 @@ const schemaByTool = {
 	ascet_diff: ascetDiffParameters,
 	ascet_write: ascetWriteParameters,
 	ascet_batch_write: ascetBatchWriteParameters,
+	ascet_component_editable: ascetComponentEditableParameters,
 	ascet_verify: ascetVerifyParameters,
 } as const;
 
@@ -117,6 +119,8 @@ describe("ASCET action few-shot examples", () => {
 			if (example.tool !== "ascet_status" && example.tool !== "ascet_capabilities") {
 				if (example.tool === "ascet_batch_write") {
 					expect((example.args as { operation?: string }).operation, key).toBe(example.action);
+				} else if (example.tool === "ascet_component_editable") {
+					expect((example.args as { mode?: string }).mode, key).toBe(example.action);
 				} else {
 					expect((example.args as { action?: string }).action, key).toBe(example.action);
 				}

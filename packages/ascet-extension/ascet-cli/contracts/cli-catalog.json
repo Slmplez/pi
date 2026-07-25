@@ -135,7 +135,8 @@
                          "objectKinds":  [
                                              "class",
                                              "module",
-                                             "statemachine"
+                                             "statemachine",
+                                             "enumeration"
                                          ],
                          "supportsJson":  true,
                          "requiresSerialLiveAccess":  false,
@@ -355,7 +356,8 @@
                          "objectKinds":  [
                                              "class",
                                              "module",
-                                             "statemachine"
+                                             "statemachine",
+                                             "enumeration"
                                          ],
                          "supportsJson":  true,
                          "requiresSerialLiveAccess":  true,
@@ -373,6 +375,66 @@
                          "executionProfile":  {
                                                   "hostSafety":  "write",
                                                   "hostPolicy":  "prefer_host",
+                                                  "timeoutClass":  "write"
+                                              }
+                     },
+                     {
+                         "id":  "AscetComponentEditableCheck",
+                         "family":  "verify",
+                         "summary":  "Check whether an ASCET component is editable",
+                         "risk":  "read",
+                         "objectKinds":  [
+                                             "class",
+                                             "module",
+                                             "statemachine",
+                                             "enumeration"
+                                         ],
+                         "supportsJson":  true,
+                         "requiresSerialLiveAccess":  false,
+                         "hiddenFromModel":  true,
+                         "operation":  "component_editable_check",
+                         "lane":  "legacy_read",
+                         "hostEligible":  false,
+                         "supportsBatch":  false,
+                         "execution":  {
+                                           "kind":  "unified_cli",
+                                           "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+                                           "subcommand":  "exec",
+                                           "operation":  "component_editable_check"
+                                       },
+                         "executionProfile":  {
+                                                  "hostSafety":  "fragile",
+                                                  "hostPolicy":  "force_one_shot",
+                                                  "timeoutClass":  "expensive_read"
+                                              }
+                     },
+                     {
+                         "id":  "AscetComponentEditableSet",
+                         "family":  "write",
+                         "summary":  "Request an ASCET SCM lock so a component becomes editable",
+                         "risk":  "write",
+                         "objectKinds":  [
+                                             "class",
+                                             "module",
+                                             "statemachine",
+                                             "enumeration"
+                                         ],
+                         "supportsJson":  true,
+                         "requiresSerialLiveAccess":  true,
+                         "hiddenFromModel":  true,
+                         "operation":  "component_editable_set",
+                         "lane":  "serial_write",
+                         "hostEligible":  false,
+                         "supportsBatch":  false,
+                         "execution":  {
+                                           "kind":  "unified_cli",
+                                           "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+                                           "subcommand":  "exec",
+                                           "operation":  "component_editable_set"
+                                       },
+                         "executionProfile":  {
+                                                  "hostSafety":  "write",
+                                                  "hostPolicy":  "force_one_shot",
                                                   "timeoutClass":  "write"
                                               }
                      },
@@ -1904,6 +1966,34 @@
                                               }
                      },
                      {
+                         "id":  "AscetWarmSearchIndex",
+                         "family":  "search",
+                         "summary":  "Warm the ASCET quick-search element index for the current database",
+                         "risk":  "read",
+                         "objectKinds":  [
+                                             "generic"
+                                         ],
+                         "supportsJson":  true,
+                         "requiresSerialLiveAccess":  false,
+                         "hiddenFromModel":  false,
+                         "execution":  {
+                                           "kind":  "unified_cli",
+                                           "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+                                           "subcommand":  "exec",
+                                           "operation":  "warm_search_index"
+                                       },
+                         "operation":  "warm_search_index",
+                         "lane":  "pooled_read",
+                         "hostEligible":  true,
+                         "supportsBatch":  false,
+                         "executionProfile":  {
+                                                  "hostSafety":  "stable",
+                                                  "hostPolicy":  "prefer_host",
+                                                  "timeoutClass":  "scan",
+                                                  "pageBudget":  200
+                                              }
+                     },
+                     {
                          "id":  "AscetSearchOccurrences",
                          "family":  "search",
                          "summary":  "Bounded mixed component and element occurrence search",
@@ -2038,6 +2128,33 @@
                                               }
                      },
                      {
+                         "id":  "AscetSetEnumerators",
+                         "family":  "write",
+                         "summary":  "Set enumerator names for an ASCET Enumeration",
+                         "risk":  "write",
+                         "objectKinds":  [
+                                             "enumeration"
+                                         ],
+                         "supportsJson":  true,
+                         "requiresSerialLiveAccess":  true,
+                         "hiddenFromModel":  false,
+                         "operation":  "set_enumerators",
+                         "lane":  "serial_write",
+                         "hostEligible":  false,
+                         "supportsBatch":  false,
+                         "execution":  {
+                                           "kind":  "unified_cli",
+                                           "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+                                           "subcommand":  "exec",
+                                           "operation":  "set_enumerators"
+                                       },
+                         "executionProfile":  {
+                                                  "hostSafety":  "write",
+                                                  "hostPolicy":  "force_one_shot",
+                                                  "timeoutClass":  "write"
+                                              }
+                     },
+                     {
                          "id":  "AscetSetMethodSignature",
                          "family":  "write",
                          "summary":  "Patch primitive method signature return and arguments",
@@ -2062,33 +2179,6 @@
                          "executionProfile":  {
                                                   "hostSafety":  "write",
                                                   "hostPolicy":  "prefer_host",
-                                                  "timeoutClass":  "write"
-                                              }
-                     },
-                     {
-                         "id":  "AscetSetEnumerators",
-                         "family":  "write",
-                         "summary":  "Set enumerator names for an ASCET Enumeration",
-                         "risk":  "write",
-                         "objectKinds":  [
-                                             "enumeration"
-                                         ],
-                         "supportsJson":  true,
-                         "requiresSerialLiveAccess":  true,
-                         "hiddenFromModel":  false,
-                         "operation":  "set_enumerators",
-                         "lane":  "serial_write",
-                         "hostEligible":  false,
-                         "supportsBatch":  false,
-                         "execution":  {
-                                           "kind":  "unified_cli",
-                                           "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                                           "subcommand":  "exec",
-                                           "operation":  "set_enumerators"
-                                       },
-                         "executionProfile":  {
-                                                  "hostSafety":  "write",
-                                                  "hostPolicy":  "force_one_shot",
                                                   "timeoutClass":  "write"
                                               }
                      },
@@ -2207,3 +2297,4 @@
                      }
                  ]
 }
+

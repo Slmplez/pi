@@ -8,6 +8,7 @@ Use canonical PI ASCET tools only.
 - Read evidence: `ascet_read`
 - Diff: `ascet_diff`
 - Write: `ascet_write`, `ascet_batch_write`
+- Editable state: `ascet_component_editable`
 - Verify: `ascet_verify`
 
 Do not use legacy CamelCase ASCET Copilot tool identifiers. Use only the canonical PI `ascet_*` tools listed above.

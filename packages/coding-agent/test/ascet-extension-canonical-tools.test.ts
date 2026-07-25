@@ -29,6 +29,7 @@ const CANONICAL_ASCET_TOOLS = [
 	"ascet_diff",
 	"ascet_write",
 	"ascet_batch_write",
+	"ascet_component_editable",
 	"ascet_verify",
 ] as const;
 
@@ -44,6 +45,7 @@ const CANONICAL_ASCET_TOOL_MODULES = [
 	["ascet_diff", "diff"],
 	["ascet_write", "write"],
 	["ascet_batch_write", "batch-write"],
+	["ascet_component_editable", "component-editable"],
 	["ascet_verify", "verify"],
 ] as const;
 
@@ -162,6 +164,16 @@ describe("ASCET canonical PI tools", () => {
 			backendCommandId: "AscetResolveComponent",
 			operation: "resolve_component",
 		});
+		expect(routeAscetAction({ toolName: "ascet_component_editable", action: "check" })).toMatchObject({
+			logicalCommandId: "AscetComponentEditableCheck",
+			backendCommandId: "AscetComponentEditableCheck",
+			operation: "component_editable_check",
+		});
+		expect(routeAscetAction({ toolName: "ascet_component_editable", action: "set" })).toMatchObject({
+			logicalCommandId: "AscetComponentEditableSet",
+			backendCommandId: "AscetComponentEditableSet",
+			operation: "component_editable_set",
+		});
 		expect(() => routeAscetAction({ toolName: "ascet_explore", action: "resolve_target" })).toThrow(
 			"Unsupported ASCET route: ascet_explore/resolve_target",
 		);
@@ -199,6 +211,14 @@ describe("ASCET canonical PI tools", () => {
 				target: "code",
 			}),
 		).toBe(false);
+		expect(
+			Value.Check(ascetSearchParameters, {
+				action: "search_elements",
+				query: "pid_kp",
+				kind: "CalibrationParameter",
+				match: "exact",
+			}),
+		).toBe(true);
 		expect(searchGuidelines).not.toContain("target=code");
 	});
 
@@ -528,8 +548,14 @@ describe("ASCET canonical PI tools", () => {
 						},
 						runtime: {
 							ok: true,
-							commandId: "list_folders",
+							commandId: "warm_search_index",
 							description: "probe",
+							databaseName: "DemoDb",
+							databasePath: "C:\\ASCET\\DemoDb",
+							entryCount: 2,
+							elapsedMs: 7,
+							scanComplete: true,
+							fromCache: false,
 							exitCode: 0,
 							timedOut: false,
 							stdout: "{}",

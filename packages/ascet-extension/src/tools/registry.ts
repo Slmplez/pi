@@ -1,5 +1,6 @@
 import { ascetBatchWriteTool } from "./batch-write/index.ts";
 import { ascetCapabilitiesTool } from "./capabilities/index.ts";
+import { ascetComponentEditableTool } from "./component-editable/index.ts";
 import { ascetDiffTool } from "./diff/index.ts";
 import { ascetExploreTool } from "./explore/index.ts";
 import { ascetReadTool } from "./read/index.ts";
@@ -26,6 +27,7 @@ export const canonicalDomainTools = [
 	ascetDiffTool,
 	ascetWriteTool,
 	ascetBatchWriteTool,
+	ascetComponentEditableTool,
 	ascetVerifyTool,
 ] as const;
 
@@ -41,6 +43,7 @@ export const canonicalAscetToolNames = [
 	"ascet_diff",
 	"ascet_write",
 	"ascet_batch_write",
+	"ascet_component_editable",
 	"ascet_verify",
 ] as const;
 
