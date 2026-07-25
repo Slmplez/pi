@@ -42,6 +42,24 @@ type AscetProviderConfig = {
 	};
 };
 
+type AscetSettingsDefaults = {
+	providerOverrides?: Record<
+		string,
+		{
+			retry?: {
+				enabled?: boolean;
+				maxRetries?: number;
+				baseDelayMs?: number;
+				provider?: {
+					timeoutMs?: number;
+					maxRetries?: number;
+					maxRetryDelayMs?: number;
+				};
+			};
+		}
+	>;
+};
+
 export interface AscetExtensionAPI {
 	registerTool(tool: unknown): void;
 	getActiveTools?(): string[];
@@ -68,6 +86,7 @@ export interface AscetExtensionAPI {
 		},
 	): void;
 	registerProvider?(name: string, config: AscetProviderConfig): void;
+	applySettingsDefaults?(defaults: AscetSettingsDefaults): void;
 	on?(
 		event: "before_provider_request",
 		handler: (

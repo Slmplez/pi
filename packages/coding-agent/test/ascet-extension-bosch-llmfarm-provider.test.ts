@@ -11,6 +11,7 @@ import type { BoschLlmFarmCredentials } from "../../ascet-extension/src/bosch-ll
 import {
 	applyBoschConfiguredModels,
 	BOSCH_LLMFARM_PROVIDER_ID,
+	BOSCH_LLMFARM_PROVIDER_RETRY_DEFAULTS,
 	buildBoschChatCompletionsUrl,
 	formatBoschRequestError,
 	handleBoschBeforeProviderHeaders,
@@ -898,6 +899,27 @@ describe("bosch-llmfarm provider", () => {
 		expect(on).toHaveBeenCalledWith("before_provider_request", handleBoschBeforeProviderRequest);
 		expect(on).toHaveBeenCalledWith("before_provider_headers", handleBoschBeforeProviderHeaders);
 	});
+
+	it("registers Bosch provider-scoped retry defaults without changing global retry settings", () => {
+		const applySettingsDefaults = vi.fn();
+
+		ascetExtension({
+			registerTool: vi.fn(),
+			sendUserMessage: vi.fn(),
+			registerCommand: vi.fn(),
+			registerProvider: vi.fn(),
+			applySettingsDefaults,
+		});
+
+		expect(applySettingsDefaults).toHaveBeenCalledWith({
+			providerOverrides: {
+				[BOSCH_LLMFARM_PROVIDER_ID]: {
+					retry: BOSCH_LLMFARM_PROVIDER_RETRY_DEFAULTS,
+				},
+			},
+		});
+	});
+
 	it("exposes Bosch LLM Farm as a real /login provider option after extension registration", () => {
 		const tempDir = join(
 			tmpdir(),

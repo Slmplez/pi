@@ -20,6 +20,15 @@ import type { AscetExtensionAPI } from "./core/tool.ts";
 export const BOSCH_LLMFARM_PROVIDER_ID = "bosch-llmfarm";
 export const BOSCH_LLMFARM_API = "bosch-llmfarm-api";
 const OPENAI_COMPLETIONS_API = "openai-completions";
+export const BOSCH_LLMFARM_PROVIDER_RETRY_DEFAULTS = {
+	maxRetries: 5,
+	baseDelayMs: 5000,
+	provider: {
+		timeoutMs: 900000,
+		maxRetries: 0,
+		maxRetryDelayMs: 120000,
+	},
+} as const;
 
 const DEFAULT_BASE_URL = "https://apiroutecccn.apac.bosch.com/openapi/aigatewayprod/bdo-llmfarm-llm/v1";
 const FAR_FUTURE_EXPIRES = 4102444800000;
@@ -941,6 +950,13 @@ const placeholderModel: BoschModelConfig = {
 };
 
 export function registerBoschLlmFarmProvider(pi: AscetExtensionAPI): void {
+	pi.applySettingsDefaults?.({
+		providerOverrides: {
+			[BOSCH_LLMFARM_PROVIDER_ID]: {
+				retry: BOSCH_LLMFARM_PROVIDER_RETRY_DEFAULTS,
+			},
+		},
+	});
 	pi.on?.("before_provider_request", handleBoschBeforeProviderRequest);
 	pi.on?.("before_provider_headers", handleBoschBeforeProviderHeaders);
 

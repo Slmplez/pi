@@ -121,6 +121,8 @@ POST <baseUrl>/chat/completions
 
 with `model`, `messages`, `stream: true`, optional `temperature`, `max_tokens`, default `reasoning_effort`, optional OpenAI-style `tools`, `Accept: text/event-stream`, and default `gatewayKey` header. It does not request OpenAI `stream_options` by default. Bosch LLM Farm requests are always sent as SSE streaming requests. The default path reuses Pi OpenAI completions streaming; legacy key placements use the Bosch custom transport fallback.
 
+The extension also declares Bosch provider-scoped retry defaults for hosts that support extension settings defaults, so long-context first-token latency does not require raising global retry budgets. These defaults are low priority and can be overridden in `settings.json` with `providerOverrides["bosch-llmfarm"].retry`.
+
 Company-network validation checklist:
 
 Run a text streaming live smoke from the repo root when Bosch network access and a gateway key are available:
