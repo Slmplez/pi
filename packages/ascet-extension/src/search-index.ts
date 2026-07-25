@@ -5,6 +5,9 @@ import {
 	type RunAscetCliJsonOptions,
 	runAscetCliJson,
 } from "./cli.ts";
+
+export type { AscetFullElementCacheEntry } from "./search-index-store.ts";
+
 import {
 	type AscetComponentSearchIndexEntry,
 	type AscetDiagramMetadataIndexEntry,
@@ -42,6 +45,7 @@ export type {
 	AscetTextCodeSearchIndexEntry,
 } from "./search-index-store.ts";
 export {
+	getAscetFullElement,
 	getAscetSearchIndexPartitionState,
 	getAscetSearchIndexState,
 	invalidateAscetSearchIndex,
@@ -50,12 +54,16 @@ export {
 	queryAscetComponentReferenceIndex,
 	queryAscetDiagramMetadataIndex,
 	queryAscetElementReferenceIndex,
+	queryAscetFullElements,
 	queryAscetMessageIndex,
 	queryAscetMethodDeclarationIndex,
 	queryAscetMethodProcessElementIndex,
+	queryAscetProjectIndex,
 	queryAscetSearchIndex,
 	queryAscetTextCodeIndex,
 	resetAscetSearchIndexForTest,
+	upsertAscetElementDeclarations,
+	upsertAscetFullElements,
 } from "./search-index-store.ts";
 
 export interface AscetSearchIndexWarmupOptions {
@@ -318,21 +326,23 @@ function parseComponents(value: unknown): AscetComponentSearchIndexEntry[] {
 		if (!isRecord(item)) {
 			continue;
 		}
-		const path = asString(item.path);
-		const name = asString(item.name);
+		const path = asString(item.path) || asString(item.componentPath) || asString(item.projectPath);
+		const name = asString(item.name) || path.replace(/\//g, "\\").split("\\").filter(Boolean).at(-1) || "";
 		if (!path || !name) {
 			continue;
 		}
+		const objectKind = asString(item.objectKind) || asString(item.targetKind);
+		const kind = asString(item.kind) || objectKind;
 		components.push({
 			path,
 			name,
-			kind: asString(item.kind),
+			kind,
 			languageKind: asString(item.languageKind),
 			displayName: asString(item.displayName) || name,
 			parentPath: asString(item.parentPath),
 			ownerKind: asString(item.ownerKind),
 			targetKind: asString(item.targetKind),
-			objectKind: asString(item.objectKind),
+			objectKind,
 		});
 	}
 	return components;
@@ -514,6 +524,8 @@ function parseLegacyTextCodeEntries(value: unknown): AscetTextCodeSearchIndexEnt
 function buildInputFromPayload(payload: Record<string, unknown>): AscetSearchIndexBuildInput | undefined {
 	const rawEntries = payload.entries;
 	const rawComponents = payload.components;
+	const rawObjects = payload.objects;
+	const rawProjects = payload.projects;
 	const entries = parseEntries(rawEntries);
 	const methodDeclarations = parseMethodDeclarations(payload.methodDeclarations);
 	const methodProcessElements = parseMethodProcessElements(payload.methodProcessElements);
@@ -524,6 +536,8 @@ function buildInputFromPayload(payload: Record<string, unknown>): AscetSearchInd
 	if (
 		!Array.isArray(rawEntries) &&
 		!Array.isArray(rawComponents) &&
+		!Array.isArray(rawObjects) &&
+		!Array.isArray(rawProjects) &&
 		methodDeclarations.length === 0 &&
 		methodProcessElements.length === 0 &&
 		componentRefs.length === 0 &&
@@ -552,7 +566,16 @@ function buildInputFromPayload(payload: Record<string, unknown>): AscetSearchInd
 			Array.isArray(payload.textCode) ||
 			textCodeEntries.length > 0,
 		textCodeScanComplete: asBoolean(payload.textCodeScanComplete, false),
-		components: parseComponents(payload.components),
+		components: [
+			...parseComponents(rawComponents),
+			...parseComponents(rawObjects),
+			...parseComponents(rawProjects).map((entry) => ({
+				...entry,
+				kind: entry.kind || "project",
+				objectKind: entry.objectKind || "project",
+				targetKind: entry.targetKind || "project",
+			})),
+		],
 		textCodeEntries,
 		entries,
 		methodDeclarations,

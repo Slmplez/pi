@@ -33,6 +33,22 @@ export const ascetSearchInstructions = [
 		tags: ["component", "routing"],
 	},
 	{
+		id: "ascet_search.search_projects",
+		tool: "ascet_search",
+		action: "search_projects",
+		profiles: ["base", "reference", "write-preflight"],
+		summary: "Find Project targets by name or folder scope before project formula reads, diffs, or writes.",
+		rules: [
+			"Use search_projects when the user needs project formulas but did not provide a projectPath.",
+			"Project paths are served from the components/object index and returned with kind=project.",
+			"Use cursor paging for broad project searches.",
+		],
+		fewShots: [
+			'search_projects: ascet_search({action:"search_projects",query:"AEB",scopePath:"PlatformLibrary/Package",match:"contains",limit:10})',
+		],
+		tags: ["project", "formula", "index"],
+	},
+	{
 		id: "ascet_search.search_elements",
 		tool: "ascet_search",
 		action: "search_elements",

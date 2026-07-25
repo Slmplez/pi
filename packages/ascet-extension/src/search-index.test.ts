@@ -6,15 +6,20 @@ import { afterEach, describe, test } from "node:test";
 import type { AscetCliExecutionResult, AscetCliRequest } from "./cli.ts";
 import {
 	type AscetComponentSearchIndexEntry,
+	type AscetFullElementCacheEntry,
 	type AscetSearchIndexEntry,
 	type AscetTextCodeSearchIndexEntry,
 	ensureAscetSearchIndex,
+	getAscetFullElement,
 	getAscetSearchIndexPartitionState,
 	getAscetSearchIndexState,
 	queryAscetComponentIndex,
+	queryAscetFullElements,
 	queryAscetSearchIndex,
 	queryAscetTextCodeIndex,
 	resetAscetSearchIndexForTest,
+	upsertAscetElementDeclarations,
+	upsertAscetFullElements,
 } from "./search-index.ts";
 
 function createReadyEnv(): { cwd: string; env: Record<string, string | undefined>; cleanup: () => void } {
@@ -155,6 +160,99 @@ afterEach(() => {
 });
 
 describe("ASCET search index warmup", () => {
+	test("stores and replaces full element cache entries", () => {
+		const first: AscetFullElementCacheEntry = {
+			componentPath: "A/Provider",
+			name: "K",
+			kind: "parameter",
+			type: "cont",
+			scope: "Exported",
+			path: "A/Provider/K",
+			source: "live_readback",
+			updatedAtMs: 1,
+			data: { name: "K", scope: "Exported", modelType: "cont" },
+		};
+		const replacement: AscetFullElementCacheEntry = {
+			...first,
+			updatedAtMs: 2,
+			data: { name: "K", scope: "Exported", modelType: "sdisc" },
+		};
+
+		upsertAscetFullElements([first]);
+		assert.equal(getAscetFullElement({ componentPath: "A\\Provider", name: "K", scope: "Exported" })?.type, "cont");
+
+		upsertAscetFullElements([replacement]);
+		assert.deepEqual(getAscetFullElement({ componentPath: "A/Provider", name: "K", scope: "Exported" })?.data, {
+			name: "K",
+			scope: "Exported",
+			modelType: "sdisc",
+		});
+		assert.equal(queryAscetFullElements({ name: "K" }).length, 1);
+
+		resetAscetSearchIndexForTest();
+		assert.equal(getAscetFullElement({ componentPath: "A/Provider", name: "K", scope: "Exported" }), undefined);
+	});
+
+	test("upserts element declarations without dropping unrelated ready entries", () => {
+		resetAscetSearchIndexForTest({
+			databaseName: "DemoDb",
+			databasePath: "C:\\ASCET\\DemoDb",
+			entries: warmupPayload().entries,
+			generatedAtMs: Date.now(),
+			elapsedMs: 7,
+			scanComplete: true,
+		});
+
+		upsertAscetElementDeclarations([
+			{
+				group: "primitive",
+				componentPath: "AEB/Controller",
+				componentKind: "module",
+				componentLanguageKind: "ESDL",
+				elementName: "P_AEB_IB_MaxVelocityDrop_Curve",
+				elementKind: "parameter",
+				displayType: "sdisc",
+				displayScope: "exported",
+				referencedComponentPath: "",
+				path: "AEB/Controller/P_AEB_IB_MaxVelocityDrop_Curve",
+			},
+			{
+				group: "primitive",
+				componentPath: "AEB/Controller",
+				componentKind: "module",
+				componentLanguageKind: "ESDL",
+				elementName: "K_New",
+				elementKind: "parameter",
+				displayType: "cont",
+				displayScope: "Imported",
+				referencedComponentPath: "",
+				path: "AEB/Controller/K_New",
+			},
+		]);
+
+		const state = getAscetSearchIndexState();
+		assert.equal(state.status, "ready");
+		if (state.status !== "ready") {
+			return;
+		}
+		assert.equal(state.entries.length, 3);
+		assert.equal(state.counts.entries, 3);
+		assert.equal(state.byExactName.get("k_new")?.length, 1);
+		assert.equal(state.byExactName.get("vehiclespeedcurve")?.length, 1);
+		assert.equal(getAscetSearchIndexPartitionState("element_decls")?.status, "ready");
+
+		const indexed = queryAscetSearchIndex(
+			{ query: "P_AEB_IB_MaxVelocityDrop_Curve", componentPath: "AEB/Controller", match: "exact", limit: 20 },
+			{ cwd: process.cwd() },
+		);
+		const envelope = indexed?.data as {
+			result?: { matches?: Array<{ displayType?: string; displayScope?: string }> };
+		};
+		assert.equal(indexed?.ok, true);
+		assert.equal(envelope.result?.matches?.[0]?.displayType, "sdisc");
+		assert.equal(envelope.result?.matches?.[0]?.displayScope, "exported");
+	});
+
 	test("builds an in-memory index from warm_search_index output and serves exact queries", async () => {
 		const fixture = createReadyEnv();
 		let calls = 0;

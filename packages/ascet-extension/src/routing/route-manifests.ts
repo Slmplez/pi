@@ -103,6 +103,13 @@ export const ascetRouteManifestEntries = [
 	},
 	{
 		toolName: "ascet_search",
+		action: "search_projects",
+		logicalCommandId: "AscetSearchComponents",
+		operation: "search_projects",
+		category: "domain",
+	},
+	{
+		toolName: "ascet_search",
 		action: "resolve_component",
 		logicalCommandId: "AscetResolveComponent",
 		operation: "resolve_component",
@@ -156,6 +163,13 @@ export const ascetRouteManifestEntries = [
 		action: "read_implementation",
 		logicalCommandId: "AscetReadImplementation",
 		operation: "read_implementation",
+		category: "domain",
+	},
+	{
+		toolName: "ascet_read",
+		action: "read_project_formulas",
+		logicalCommandId: "AscetReadProjectFormulas",
+		operation: "read_project_formulas",
 		category: "domain",
 	},
 	{

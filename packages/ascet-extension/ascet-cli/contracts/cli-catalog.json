@@ -1974,7 +1974,7 @@
                                              "generic"
                                          ],
                          "supportsJson":  true,
-                         "requiresSerialLiveAccess":  true,
+                         "requiresSerialLiveAccess":  false,
                          "hiddenFromModel":  false,
                          "execution":  {
                                            "kind":  "unified_cli",
@@ -1983,7 +1983,7 @@
                                            "operation":  "warm_search_index"
                                        },
                          "operation":  "warm_search_index",
-                         "lane":  "serial_write",
+                         "lane":  "pooled_read",
                          "hostEligible":  true,
                          "supportsBatch":  false,
                          "executionProfile":  {

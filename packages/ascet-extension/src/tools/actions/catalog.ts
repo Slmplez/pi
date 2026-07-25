@@ -86,6 +86,74 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 		},
 		result: { shape: "codeText", fields: ["component", "name", "section", "text"] },
 	},
+	"ascet_read.read_project_formulas": {
+		compact: "read live Project formulas for a known projectPath",
+		intent: "Read current Project formula definitions from a resolved ASCET Project target.",
+		useWhen: ["Need Project formulas and already have the exact projectPath."],
+		avoidWhen: ["Need to find the projectPath first; use ascet_search.search_projects."],
+		aliases: ["project formulas", "read formula", "read project formula", "project formula metadata"],
+		nextActions: ["ascet_search.search_projects", "ascet_diff.diff_project_formulas"],
+		schema: {
+			required: ["action", "projectPath"],
+			optional: [],
+			enums: {
+				action: ["read_project_formulas"],
+			},
+		},
+		result: { shape: "projectFormulas", fields: ["project", "formulas"] },
+	},
+	"ascet_read.read_dependent_chain": {
+		compact:
+			"Index-first dependency provider resolver; returns exported provider path and full provider element data",
+		intent:
+			"Resolve Local Parameter -> Imported Parameter -> Exported Parameter evidence and return full provider element catalog data.",
+		useWhen: [
+			"Need to know which scope=Exported provider backs a local dependent parameter.",
+			"Need full exported provider element metadata before creating or updating an analogous dependent parameter.",
+		],
+		avoidWhen: [
+			"Need only the dependency flag or formula for one element; use ascet_read.read_element_dependency.",
+			"Need to create or modify dependency state; use ascet_write.apply_element_spec then ascet_write.set_element_dependency.",
+		],
+		aliases: [
+			"dependent chain",
+			"dependency provider",
+			"exported parameter provider",
+			"local imported exported parameter",
+			"full provider element",
+		],
+		nextActions: ["ascet_write.apply_element_spec", "ascet_write.set_element_dependency"],
+		schema: {
+			required: ["action", "componentPath", "dependentElement"],
+			optional: ["exporterComponentPath", "providerScopePath", "maxCandidates", "detailLevel", "fallback"],
+			enums: {
+				action: ["read_dependent_chain"],
+				detailLevel: ["summary", "full"],
+				fallback: ["none", "legacy_live"],
+			},
+		},
+		result: {
+			shape: "dependentChain",
+			fields: ["consumer", "provider", "element.data", "total", "items", "issues"],
+		},
+	},
+	"ascet_search.search_projects": {
+		compact: "find Project paths from the warm object index",
+		intent: "Find ASCET Project targets before reading, diffing, or writing project formulas.",
+		useWhen: ["User mentions Project formulas but did not provide an exact projectPath."],
+		avoidWhen: ["Need ordinary class/module/state-machine components; use search_components."],
+		aliases: ["project path", "find project", "search projects", "project target", "where is project"],
+		nextActions: ["ascet_read.read_project_formulas", "ascet_diff.diff_project_formulas"],
+		schema: {
+			required: ["action", "query"],
+			optional: ["scopePath", "match", "limit", "cursor"],
+			enums: {
+				action: ["search_projects"],
+				match: ["exact", "glob", "contains"],
+			},
+		},
+		result: { shape: "projectCandidates", fields: ["total", "items", "nextCursor", "searchComplete"] },
+	},
 	"ascet_search.text_in_code": {
 		compact: "search indexed ESDL/C snippets; not complete live code",
 		intent: "Find where text appears in indexed ESDL or C code and return snippet evidence.",
@@ -137,6 +205,51 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 		aliases: ["write method code", "set method body", "update method code", "modify code"],
 		nextActions: ["ascet_verify.readback", "ascet_read.read_code"],
 		result: { shape: "writePreflightOrResult", fields: ["status", "component", "name", "diff"] },
+	},
+	"ascet_write.set_element_dependency": {
+		compact:
+			"set dependency flag/formula on an existing local parameter only; successful writes refresh element_decls/full element cache",
+		intent: "Set or clear dependency state and formula for an existing local parameter through guarded write flow.",
+		useWhen: [
+			"The local parameter already exists and the user wants dependency=dependent or dependency=independent applied.",
+			"Need to set the local dependent parameter formula after local/imported elements were created with apply_element_spec.",
+		],
+		avoidWhen: [
+			"Need to create local, imported, or exported elements; use apply_element_spec first.",
+			"Need to discover provider evidence before writing; use read_dependent_chain first.",
+		],
+		aliases: [
+			"set dependency",
+			"dependent parameter write",
+			"dependency formula",
+			"make local parameter dependent",
+			"clear dependency",
+		],
+		nextActions: ["ascet_read.read_element_dependency", "ascet_read.read_dependent_chain"],
+		schema: {
+			required: ["action", "targetPath", "elementName", "dependency"],
+			optional: [
+				"dependencyFormula",
+				"dependencyMappings",
+				"clearDependencyFormula",
+				"targetKind",
+				"match",
+				"dryRun",
+				"backupDir",
+				"verifyReadback",
+				"executeWrite",
+			],
+			enums: {
+				action: ["set_element_dependency"],
+				dependency: ["dependent", "independent"],
+				targetKind: ["auto", "component", "folder", "project"],
+				match: ["exact", "all"],
+			},
+		},
+		result: {
+			shape: "writeResult",
+			fields: ["changed", "readback", "index.updated", "index.stale", "index.issues"],
+		},
 	},
 	"ascet_verify.readback": {
 		aliases: ["verify write result", "readback", "verify current state", "check live state"],

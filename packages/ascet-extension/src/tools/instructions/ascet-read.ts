@@ -48,6 +48,19 @@ export const ascetReadInstructions = [
 		tags: ["diagram", "live-read"],
 	},
 	{
+		id: "ascet_read.read_project_formulas",
+		tool: "ascet_read",
+		action: "read_project_formulas",
+		profiles: ["base", "advanced-read", "write-preflight"],
+		summary: "Read project formulas live from ASCET for one resolved Project target.",
+		rules: [
+			"Use search_projects first when projectPath is unknown.",
+			"Use read_project_formulas only for Project targets; it is not element dependency formula readback.",
+		],
+		fewShots: ['read_project_formulas: ascet_read({action:"read_project_formulas",projectPath:"DEMO/Project"})'],
+		tags: ["project", "formula", "live-read"],
+	},
+	{
 		id: "ascet_read.read_state_machine_flow",
 		tool: "ascet_read",
 		action: "read_state_machine_flow",
@@ -70,8 +83,9 @@ export const ascetReadInstructions = [
 		rules: [
 			"Use read_dependent_chain when the user asks which exported or global parameter a local dependent parameter depends on.",
 			"Use read_dependent_chain to analyze a Local Parameter -> Imported Parameter -> Exported Parameter chain.",
+			"read_dependent_chain is index-first: it resolves provider candidates from element_decls and returns full live read_element_catalog data for the exported provider.",
 			"The formula reported by read_dependent_chain is the local dependent parameter expression. It is not an implementation conversion formula and is not a project formula.",
-			"Dependent parameter provider discovery is a coordinated workflow: first call read_dependent_chain with componentPath/dependentElement and a bounded providerScopePath when known; if provider discovery is incomplete or ambiguous, coordinate ascet_search and ascet_explore before concluding.",
+			"Dependent parameter provider discovery starts with read_dependent_chain using componentPath/dependentElement and a bounded providerScopePath when known; if provider discovery is incomplete or ambiguous, coordinate ascet_search and ascet_explore before concluding.",
 			"The Imported Parameter in the consuming component and the Exported Parameter in the provider component must have the same name. Search provider candidates by the Imported Parameter name, not by the Local Dependent Parameter name unless they are identical.",
 			"Only scope=Exported elements are valid provider candidates. Local or Imported same-name elements may be diagnostic clues, but they are not exported-provider evidence.",
 			"If read_dependent_chain reports export_not_found, export_ambiguous, provider_candidate_limit_exceeded, or complete=false, treat that as evidence requiring scoped recursive provider discovery.",

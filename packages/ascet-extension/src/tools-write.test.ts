@@ -5,6 +5,7 @@ import { join } from "node:path";
 import { afterEach, describe, test } from "node:test";
 import type { AscetCliExecutionResult, AscetCliRequest } from "./cli.ts";
 import {
+	getAscetFullElement,
 	getAscetSearchIndexPartitionState,
 	queryAscetSearchIndex,
 	queryAscetTextCodeIndex,
@@ -199,6 +200,224 @@ describe("ascet_write WriteImpact", () => {
 			assert.deepEqual(JSON.parse(result.content[0]?.text ?? "{}"), {
 				error: { code: "ascet_cli_failed", message: "write failed" },
 			});
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("successful set_element_dependency refreshes target element index from live catalog", async () => {
+		seedReadyIndex();
+		const fixture = createReadyEnv();
+		const calls: string[][] = [];
+		try {
+			const result = await runAscetWrite(
+				{
+					action: "set_element_dependency",
+					targetPath: "AEB\\Controller",
+					elementName: "P_AEB_IB_MaxVelocityDrop_Curve",
+					dependency: "dependent",
+					verifyReadback: true,
+					executeWrite: true,
+				},
+				{
+					cwd: fixture.cwd,
+					env: fixture.env,
+					timeoutMs: 1000,
+					executeCli: async (request) => {
+						calls.push(request.args);
+						if (request.args[1] === "read_element_catalog") {
+							return {
+								exitCode: 0,
+								stdout: JSON.stringify({
+									ok: true,
+									result: {
+										elements: [
+											{
+												name: "P_AEB_IB_MaxVelocityDrop_Curve",
+												kind: "parameter",
+												modelType: "cont",
+												scope: "Local",
+												calibration: true,
+											},
+										],
+									},
+									error: null,
+								}),
+								stderr: "",
+								timedOut: false,
+								request,
+							};
+						}
+						return makeExecution(request);
+					},
+				},
+				approvingContext,
+			);
+
+			const payload = JSON.parse(result.content[0]?.text ?? "{}");
+			assert.deepEqual(payload.index.updated, ["element_decls", "full_element_cache"]);
+			assert.deepEqual(payload.index.stale, ["text_code"]);
+			assert.equal(payload.index.elements[0].component, "AEB/Controller");
+			assert.equal(
+				calls.some((args) => args[1] === "read_element_catalog"),
+				true,
+			);
+			assert.equal(
+				getAscetFullElement({
+					componentPath: "AEB/Controller",
+					name: "P_AEB_IB_MaxVelocityDrop_Curve",
+					scope: "Local",
+				})?.data.calibration,
+				true,
+			);
+			assert.equal(getAscetSearchIndexPartitionState("element_decls")?.status, "ready");
+			assert.equal(getAscetSearchIndexPartitionState("text_code")?.status, "stale");
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("set_element_dependency dryRun does not refresh or stale the index", async () => {
+		seedReadyIndex();
+		const fixture = createReadyEnv();
+		const calls: string[][] = [];
+		try {
+			await runAscetWrite(
+				{
+					action: "set_element_dependency",
+					targetPath: "AEB\\Controller",
+					elementName: "P_AEB_IB_MaxVelocityDrop_Curve",
+					dependency: "dependent",
+					dryRun: true,
+					executeWrite: true,
+				},
+				{
+					cwd: fixture.cwd,
+					env: fixture.env,
+					timeoutMs: 1000,
+					executeCli: async (request) => {
+						calls.push(request.args);
+						return makeExecution(request);
+					},
+				},
+				approvingContext,
+			);
+
+			assert.equal(
+				calls.some((args) => args[1] === "read_element_catalog"),
+				false,
+			);
+			assert.equal(getAscetSearchIndexPartitionState("element_decls")?.status, "ready");
+			assert.equal(getAscetSearchIndexPartitionState("text_code")?.status, "ready");
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("successful write reports stale recovery when catalog refresh fails", async () => {
+		seedReadyIndex();
+		const fixture = createReadyEnv();
+		try {
+			const result = await runAscetWrite(
+				{
+					action: "set_element_dependency",
+					targetPath: "AEB\\Controller",
+					elementName: "P_AEB_IB_MaxVelocityDrop_Curve",
+					dependency: "dependent",
+					executeWrite: true,
+				},
+				{
+					cwd: fixture.cwd,
+					env: fixture.env,
+					timeoutMs: 1000,
+					executeCli: async (request) => {
+						if (request.args[1] === "read_element_catalog") {
+							return { ...makeExecution(request, false), stdout: "" };
+						}
+						return makeExecution(request);
+					},
+				},
+				approvingContext,
+			);
+
+			const payload = JSON.parse(result.content[0]?.text ?? "{}");
+			assert.deepEqual(payload.index.updated ?? [], []);
+			assert.deepEqual(payload.index.stale, ["element_decls", "text_code"]);
+			assert.equal(payload.index.issues[0].code, "indexReadbackFailed");
+			assert.equal(getAscetSearchIndexPartitionState("element_decls")?.status, "stale");
+			assert.equal(getAscetSearchIndexPartitionState("text_code")?.status, "stale");
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("successful apply_element_spec refreshes new element names from spec file", async () => {
+		seedReadyIndex();
+		const fixture = createReadyEnv();
+		const specFile = join(fixture.cwd, "elements.json");
+		writeFileSync(
+			specFile,
+			JSON.stringify({
+				elements: [
+					{ name: "K_Local", scope: "Local" },
+					{ name: "K_Imported", scope: "Imported" },
+				],
+			}),
+			"utf8",
+		);
+		try {
+			const result = await runAscetWrite(
+				{
+					action: "apply_element_spec",
+					componentPath: "AEB\\Controller",
+					specFile,
+					mode: "restore",
+					verifyReadback: true,
+					executeWrite: true,
+				},
+				{
+					cwd: fixture.cwd,
+					env: fixture.env,
+					timeoutMs: 1000,
+					executeCli: async (request) => {
+						if (request.args[1] === "read_element_catalog") {
+							return {
+								exitCode: 0,
+								stdout: JSON.stringify({
+									ok: true,
+									result: {
+										elements: [
+											{ name: "K_Local", kind: "parameter", modelType: "cont", scope: "Local" },
+											{ name: "K_Imported", kind: "parameter", modelType: "cont", scope: "Imported" },
+											{ name: "Other", kind: "parameter", modelType: "cont", scope: "Local" },
+										],
+									},
+									error: null,
+								}),
+								stderr: "",
+								timedOut: false,
+								request,
+							};
+						}
+						return makeExecution(request);
+					},
+				},
+				approvingContext,
+			);
+
+			const payload = JSON.parse(result.content[0]?.text ?? "{}");
+			assert.deepEqual(
+				payload.index.elements.map((entry: { name: string }) => entry.name),
+				["K_Local", "K_Imported"],
+			);
+			assert.equal(
+				getAscetFullElement({ componentPath: "AEB/Controller", name: "K_Local", scope: "Local" })?.type,
+				"cont",
+			);
+			assert.equal(
+				getAscetFullElement({ componentPath: "AEB/Controller", name: "K_Imported", scope: "Imported" })?.type,
+				"cont",
+			);
 		} finally {
 			fixture.cleanup();
 		}

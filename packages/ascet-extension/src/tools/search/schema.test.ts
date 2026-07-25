@@ -13,6 +13,7 @@ describe("ascet_search public schema", () => {
 		const actions = getActionLiterals();
 
 		assert.ok(actions.includes("search_components"));
+		assert.ok(actions.includes("search_projects"));
 		assert.ok(actions.includes("resolve_component"));
 		assert.ok(actions.includes("search_elements"));
 		assert.ok(actions.includes("declarations_of_element"));
@@ -33,7 +34,92 @@ describe("ascet_search public schema", () => {
 		assert.ok(!schemaFor(schemas, "references_to_component")?.properties?.methodName);
 		assert.ok(!schemaFor(schemas, "text_in_code")?.properties?.group);
 		assert.ok(!schemaFor(schemas, "declarations_of_element")?.properties?.methodName);
+		assert.ok(!schemaFor(schemas, "search_projects")?.properties?.kind);
 		assert.ok(schemaFor(schemas, "declarations_of_method_process_element")?.properties?.methodName);
+	});
+
+	test("serves search_projects from the components object index", async () => {
+		resetAscetSearchIndexForTest({
+			databaseName: "DemoDb",
+			databasePath: "C:\\ASCET\\DemoDb",
+			generatedAtMs: Date.parse("2026-07-25T00:00:00.000Z"),
+			elapsedMs: 3,
+			scanComplete: true,
+			entries: [],
+			components: [
+				{
+					path: "PlatformLibrary\\Package\\AEB\\AEB_Project",
+					name: "AEB_Project",
+					kind: "project",
+					languageKind: "",
+					displayName: "AEB_Project",
+					parentPath: "PlatformLibrary\\Package\\AEB",
+					ownerKind: "",
+					targetKind: "project",
+					objectKind: "project",
+				},
+				{
+					path: "PlatformLibrary\\Package\\AEB\\AEB_Controller",
+					name: "AEB_Controller",
+					kind: "class",
+					languageKind: "ESDL",
+					displayName: "AEB_Controller",
+					parentPath: "PlatformLibrary\\Package\\AEB",
+					ownerKind: "",
+					targetKind: "component",
+					objectKind: "class",
+				},
+			],
+		});
+
+		const result = await runAscetSearch(
+			{
+				action: "search_projects",
+				query: "AEB",
+				scopePath: "PlatformLibrary/Package",
+				match: "contains",
+				limit: 10,
+			},
+			{ cwd: process.cwd() },
+		);
+		const formatted = formatAscetSearchResult({ action: "search_projects", query: "AEB" }, result);
+		const parsed = JSON.parse(formatted);
+
+		assert.equal(parsed.total, 1);
+		assert.equal(parsed.items[0].path, "PlatformLibrary/Package/AEB/AEB_Project");
+		assert.equal(parsed.items[0].name, "AEB_Project");
+		assert.equal(parsed.items[0].kind, "project");
+		assert.equal(parsed.items[0].language, undefined);
+	});
+
+	test("maps search_projects to project-kind component fallback when index is disabled", async () => {
+		const requests: AscetCliRequest[] = [];
+
+		await runAscetSearch(
+			{
+				action: "search_projects",
+				query: "AEB",
+				scopePath: "PlatformLibrary",
+				match: "contains",
+				limit: 10,
+			},
+			{ cwd: process.cwd(), env: { PI_ASCET_SEARCH_INDEX: "0" }, executeCli: captureOk(requests) },
+		);
+
+		assert.deepEqual(requests[0]?.args, [
+			"exec",
+			"search_components",
+			"AEB",
+			"--kind",
+			"project",
+			"--scope",
+			"PlatformLibrary",
+			"--match",
+			"contains",
+			"--limit",
+			"10",
+			"--json",
+		]);
 	});
 
 	test("maps declarations_of_element to indexed element declaration search", async () => {

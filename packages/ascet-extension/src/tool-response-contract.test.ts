@@ -15,6 +15,9 @@ describe("tool response contract", () => {
 		assert.deepEqual(compactObject({ componentPath: "AEB\\Private\\Controller" }), {
 			component: "AEB/Private/Controller",
 		});
+		assert.deepEqual(compactObject({ projectPath: "AEB\\Private\\Project" }), {
+			project: "AEB/Private/Project",
+		});
 	});
 
 	test("compacts successful CLI envelopes into business JSON", () => {

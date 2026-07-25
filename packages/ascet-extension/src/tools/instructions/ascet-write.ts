@@ -102,9 +102,11 @@ export const ascetWriteInstructions = [
 			"Imported Parameters are bridge elements and normally require no independent implementation configuration. Do not invent implementation range, formula, calibration, or limits for Imported Parameters unless project rules explicitly require it.",
 			"Do not create an exported parameter inside the consuming component merely to satisfy a dependency relationship.",
 			"Use set_element_dependency to set or clear the dependency flag of an existing local parameter and to set that local parameter's dependency formula.",
+			"set_element_dependency does not create local, imported, or exported elements. Use apply_element_spec first when any of those elements are missing.",
 			"dependencyFormula is the expression stored on the dependent local parameter. It is not an implementation conversion formula and is not a project formula.",
 			'When dependencyFormula is provided, pass dependency="dependent". Do not pass dependencyFormula together with dependency="independent".',
 			"Referenced imported parameters must already exist in the consuming component. Do not create imported parameters, exported parameters, or provider components inside set_element_dependency.",
+			"After a successful executed set_element_dependency write, PI refreshes element_decls and full_element_cache from live read_element_catalog readback; if refresh fails, follow index.issues.",
 		],
 		fewShots: [
 			'set_element_dependency: ascet_write({action:"set_element_dependency",targetPath:"F/C",elementName:"K",dependency:"dependent",verifyReadback:true})',

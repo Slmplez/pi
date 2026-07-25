@@ -12,7 +12,7 @@
     "supportsJson":  true,
     "defaultOutputMode":  "json",
     "risk":  "read",
-    "requiresSerialLiveAccess":  true,
+    "requiresSerialLiveAccess":  false,
     "objectKinds":  [
                         "generic"
                     ],
@@ -87,8 +87,7 @@
                  }
              ],
     "preconditions":  [
-                          "ASCET ToolAPI session must be available.",
-                          "Live ASCET access must run through the serial executor."
+                          "ASCET ToolAPI session must be available."
                       ],
     "failureModes":  [
                          "toolapi_unavailable",
@@ -101,10 +100,10 @@
                      }
                  ],
     "pitfalls":  [
-                     "Live ASCET ToolAPI access is serial-only."
+
                  ],
     "operation":  "warm_search_index",
-    "lane":  "serial_write",
+    "lane":  "pooled_read",
     "hostEligible":  true,
     "supportsBatch":  false,
     "executionProfile":  {

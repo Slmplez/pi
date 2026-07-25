@@ -141,6 +141,18 @@ export interface AscetDiagramMetadataIndexEntry {
 	supportsReadBlockDiagram: boolean;
 }
 
+export interface AscetFullElementCacheEntry {
+	componentPath: string;
+	name: string;
+	kind: string;
+	type?: string;
+	scope?: string;
+	path: string;
+	source: "live_readback";
+	updatedAtMs: number;
+	data: Record<string, unknown>;
+}
+
 export interface AscetSearchIndexCounts {
 	entries: number;
 	components: number;
@@ -243,6 +255,14 @@ export interface AscetComponentIndexQueryParams {
 	cursor?: string;
 }
 
+export interface AscetProjectIndexQueryParams {
+	query: string;
+	scopePath?: string;
+	match?: AscetSearchIndexMatchMode;
+	limit?: number;
+	cursor?: string;
+}
+
 export interface AscetTextCodeIndexQueryParams {
 	query: string;
 	componentPath?: string;
@@ -305,6 +325,7 @@ const ALL_INDEX_PARTITIONS: readonly Exclude<AscetSearchIndexPartition, "all">[]
 ];
 let state: AscetSearchIndexState = { status: "empty" };
 const partitionStates = new Map<AscetSearchIndexPartition, AscetSearchIndexPartitionLifecycleState>();
+const fullElementCache = new Map<string, AscetFullElementCacheEntry>();
 
 function normalizePartition(partition: AscetSearchIndexPartition): AscetSearchIndexPartition {
 	return partition === "all" ? "all" : partition;
@@ -377,6 +398,29 @@ function normalizePathForMatching(value: string): string {
 function normalizeAscetPath(value: string | undefined): string {
 	const normalized = (value ?? "").trim().replace(/\//g, "\\");
 	return normalized.replace(/^\\+|\\+$/g, "");
+}
+
+function normalizeOutputPath(value: string): string {
+	return value
+		.trim()
+		.replace(/\\/g, "/")
+		.replace(/^\/+|\/+$/g, "");
+}
+
+function fullElementCacheKey(params: { componentPath?: string; name: string; scope?: string }): string {
+	return [
+		normalizeAscetPath(params.componentPath).toLowerCase(),
+		params.name.trim().toLowerCase(),
+		(params.scope ?? "").trim().toLowerCase(),
+	].join("\0");
+}
+
+function elementDeclarationKey(entry: AscetSearchIndexEntry): string {
+	return [
+		normalizeAscetPath(entry.componentPath).toLowerCase(),
+		entry.elementName.trim().toLowerCase(),
+		entry.displayScope.trim().toLowerCase(),
+	].join("\0");
 }
 
 function isPartitionScopedToComponent(
@@ -582,6 +626,10 @@ function componentKindMatches(entry: AscetComponentSearchIndexEntry, kind: strin
 	return entry.kind.toLowerCase() === normalized || entry.objectKind.toLowerCase() === normalized;
 }
 
+function isProjectObject(entry: AscetComponentSearchIndexEntry): boolean {
+	return componentKindMatches(entry, "project");
+}
+
 function methodNameMatches(entry: AscetTextCodeSearchIndexEntry, methodName: string | undefined): boolean {
 	const normalized = methodName?.trim().toLowerCase() ?? "";
 	if (!normalized) {
@@ -779,6 +827,23 @@ function buildComponentSearchArgs(params: AscetComponentIndexQueryParams): strin
 	return args;
 }
 
+function buildProjectSearchArgs(params: AscetProjectIndexQueryParams): string[] {
+	const args = ["index", "search_projects", params.query];
+	if (params.scopePath) {
+		args.push("--scope", params.scopePath);
+	}
+	if (params.match) {
+		args.push("--match", params.match);
+	}
+	if (params.limit !== undefined) {
+		args.push("--limit", String(params.limit));
+	}
+	if (params.cursor) {
+		args.push("--cursor", params.cursor);
+	}
+	return args;
+}
+
 function buildTextCodeSearchArgs(params: AscetTextCodeIndexQueryParams): string[] {
 	const args = ["index", "search_text_code", params.query];
 	if (params.componentPath) {
@@ -943,6 +1008,106 @@ export function getAscetSearchIndexPartitionState(
 	partition: AscetSearchIndexPartition,
 ): AscetSearchIndexPartitionLifecycleState | undefined {
 	return partitionStates.get(normalizePartition(partition));
+}
+
+export function getAscetFullElement(params: {
+	componentPath: string;
+	name: string;
+	scope?: string;
+}): AscetFullElementCacheEntry | undefined {
+	const direct = fullElementCache.get(fullElementCacheKey(params));
+	if (direct) {
+		return cloneFullElement(direct);
+	}
+	if (params.scope !== undefined) {
+		return undefined;
+	}
+	const matches = queryAscetFullElements(params);
+	return matches.length === 1 ? matches[0] : undefined;
+}
+
+export function queryAscetFullElements(params: {
+	componentPath?: string;
+	name: string;
+	scope?: string;
+}): AscetFullElementCacheEntry[] {
+	const componentPath = normalizeAscetPath(params.componentPath).toLowerCase();
+	const name = params.name.trim().toLowerCase();
+	const scope = (params.scope ?? "").trim().toLowerCase();
+	const result: AscetFullElementCacheEntry[] = [];
+	for (const entry of fullElementCache.values()) {
+		if (componentPath && normalizeAscetPath(entry.componentPath).toLowerCase() !== componentPath) {
+			continue;
+		}
+		if (entry.name.trim().toLowerCase() !== name) {
+			continue;
+		}
+		if (scope && (entry.scope ?? "").trim().toLowerCase() !== scope) {
+			continue;
+		}
+		result.push(cloneFullElement(entry));
+	}
+	return result;
+}
+
+export function upsertAscetFullElements(entries: readonly AscetFullElementCacheEntry[]): void {
+	for (const entry of entries) {
+		if (!entry.name.trim()) {
+			continue;
+		}
+		const normalized = cloneFullElement({
+			...entry,
+			componentPath: normalizeOutputPath(entry.componentPath),
+			path: normalizeOutputPath(entry.path),
+		});
+		fullElementCache.set(fullElementCacheKey(normalized), normalized);
+	}
+}
+
+export function upsertAscetElementDeclarations(entries: readonly AscetSearchIndexEntry[]): void {
+	if (state.status !== "ready" || entries.length === 0) {
+		return;
+	}
+	const normalizedEntries = entries.map((entry) => ({
+		...entry,
+		componentPath: normalizeOutputPath(entry.componentPath),
+		referencedComponentPath: normalizeOutputPath(entry.referencedComponentPath),
+		path: normalizeOutputPath(entry.path),
+	}));
+	const merged = mergeByKey(state.entries, normalizedEntries, elementDeclarationKey);
+	const warmedAtMs = Date.now();
+	state = {
+		...state,
+		warmedAtMs,
+		entries: merged,
+		byExactName: buildByExactName(merged),
+		counts: computeCounts(
+			merged,
+			state.components,
+			state.textCodeEntries,
+			state.methodDeclarations,
+			state.methodProcessElements,
+			state.componentRefs,
+			state.elementRefs,
+			state.messages,
+			state.diagramMetadata,
+			undefined,
+		),
+	};
+	partitionStates.set("element_decls", {
+		partition: "element_decls",
+		status: "ready",
+		warmedAtMs,
+		generatedAtMs: state.generatedAtMs,
+		scanComplete: state.scanComplete,
+	});
+}
+
+function cloneFullElement(entry: AscetFullElementCacheEntry): AscetFullElementCacheEntry {
+	return {
+		...entry,
+		data: { ...entry.data },
+	};
 }
 
 export function markAscetSearchIndexWarming(
@@ -1110,6 +1275,7 @@ export function invalidateAscetSearchIndexPartitions(
 
 export function resetAscetSearchIndexForTest(seed?: AscetSearchIndexBuildInput): void {
 	partitionStates.clear();
+	fullElementCache.clear();
 	if (seed) {
 		installAscetSearchIndex(seed);
 		return;
@@ -1192,6 +1358,74 @@ export function queryAscetComponentIndex(
 			cwd: options.cwd ?? process.cwd(),
 			cliPath: "quick_search_index",
 			args: buildComponentSearchArgs(params),
+		},
+		stdout: JSON.stringify(data),
+		stderr: "",
+		exitCode: 0,
+		timedOut: false,
+	};
+}
+
+export function queryAscetProjectIndex(
+	params: AscetProjectIndexQueryParams,
+	options: AscetSearchIndexQueryOptions = {},
+): AscetCliJsonResult | undefined {
+	if (state.status !== "ready" || !isPartitionReady("components")) {
+		return undefined;
+	}
+
+	const query = params.query.trim();
+	const matchMode = normalizeMatchMode(params.match);
+	const limit = normalizeLimit(params.limit);
+	const cursor = normalizeCursor(params.cursor);
+	const scopePath = normalizeAscetPath(params.scopePath);
+	const candidates = state.components.filter(isProjectObject);
+	const filtered = candidates.filter(
+		(entry) => componentScopeMatches(entry, scopePath) && matchesComponentQuery(entry, query, matchMode),
+	);
+	const page = filtered.slice(cursor, cursor + limit);
+	const nextCursor = Math.min(cursor + page.length, filtered.length);
+	const pageComplete = nextCursor >= filtered.length;
+	const searchComplete = state.scanComplete && pageComplete;
+	const payload = {
+		total: filtered.length,
+		items: page.map((entry) => ({
+			path: entry.path,
+			name: entry.name,
+			kind: "project",
+		})),
+		nextCursor: String(nextCursor),
+		searchComplete,
+		truncated: !searchComplete,
+		truncationReason: searchComplete ? "" : state.scanComplete ? "result_limit" : "partial_index",
+		index: {
+			databaseName: state.databaseName,
+			databasePath: state.databasePath,
+			generatedAtUtc: new Date(state.generatedAtMs).toISOString(),
+			ageMs: Math.max(0, Date.now() - state.generatedAtMs),
+			projectCount: candidates.length,
+			scanComplete: state.scanComplete,
+			elapsedMs: state.elapsedMs,
+		},
+	};
+	const data = {
+		ok: true,
+		result: payload,
+		error: null,
+		meta: {
+			mode: "index",
+			operation: "search_projects",
+			source: "quick_search_index",
+		},
+	};
+
+	return {
+		ok: true,
+		data,
+		request: {
+			cwd: options.cwd ?? process.cwd(),
+			cliPath: "quick_search_index",
+			args: buildProjectSearchArgs(params),
 		},
 		stdout: JSON.stringify(data),
 		stderr: "",

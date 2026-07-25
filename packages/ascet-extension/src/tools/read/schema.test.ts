@@ -8,6 +8,7 @@ describe("ascet_read schema", () => {
 
 		assert.ok(!actions.includes("read"));
 		assert.ok(actions.includes("read_code"));
+		assert.ok(actions.includes("read_project_formulas"));
 	});
 
 	test("read_code supports practical detail levels", () => {
@@ -66,6 +67,23 @@ describe("ascet_read schema", () => {
 			targetKind: "component",
 		};
 		assert.equal(request.action, "read_element_dependency");
+	});
+
+	test("accepts read_project_formulas as a project read action", () => {
+		const readProjectFormulasSchema = getActionSchema("read_project_formulas") as
+			| { properties?: Record<string, unknown> }
+			| undefined;
+		const properties = readProjectFormulasSchema?.properties ?? {};
+
+		assert.ok(Object.hasOwn(properties, "projectPath"));
+		assert.ok(!Object.hasOwn(properties, "componentPath"));
+		assert.ok(!Object.hasOwn(properties, "methodName"));
+
+		const request: AscetReadParams = {
+			action: "read_project_formulas",
+			projectPath: "DEMO\\Project",
+		};
+		assert.equal(request.action, "read_project_formulas");
 	});
 });
 

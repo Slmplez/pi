@@ -23,7 +23,9 @@ describe("ASCET prompt coordination", () => {
 		const search = guidelineText(ascetSearchPrompt);
 		const explore = guidelineText(ascetExplorePrompt);
 
-		assert.match(read, /coordinated workflow/);
+		assert.match(read, /index-first/);
+		assert.match(read, /element_decls/);
+		assert.match(read, /read_element_catalog/);
 		assert.match(read, /scope=Exported/);
 		assert.match(read, /same-named Exported Parameter/);
 		assert.match(search, /_Calibration/);
@@ -40,6 +42,8 @@ describe("ASCET prompt coordination", () => {
 		assert.match(write, /Do not bind to a provider candidate unless the matching element is scope=Exported/);
 		assert.match(write, /Imported Parameter and Exported Parameter must have the same name/);
 		assert.match(write, /align metadata from the Exported Parameter, not from the Imported Parameter/);
+		assert.match(write, /does not create local, imported, or exported elements/);
+		assert.match(write, /full_element_cache/);
 	});
 
 	test("search prompt examples do not expose redesigned search_occurrences", () => {
@@ -98,6 +102,7 @@ describe("ASCET prompt coordination", () => {
 		assert.match(capabilities, /ASCET action guide/);
 		assert.match(capabilities, /search_actions/);
 		assert.match(capabilities, /ascet_read\.read_code: read complete live code/);
+		assert.match(capabilities, /ascet_read\.read_dependent_chain: Index-first dependency provider resolver/);
 		assert.match(capabilities, /ascet_search\.text_in_code: search indexed ESDL\/C snippets/);
 		assert.doesNotMatch(capabilities, /\bascet_batch_write\b/);
 		assert.doesNotMatch(capabilities, /\bsearch_occurrences\b/);

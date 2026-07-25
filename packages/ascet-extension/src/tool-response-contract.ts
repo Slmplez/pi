@@ -30,6 +30,7 @@ function shouldNormalizeStringAsPath(key: string): boolean {
 	return (
 		key === "path" ||
 		key === "component" ||
+		key === "project" ||
 		key === "source" ||
 		key === "target" ||
 		lower.endsWith("path") ||
@@ -66,6 +67,9 @@ function normalizeContractKey(key: string, record: JsonRecord): string | undefin
 	}
 	if (normalizedInputKey === "componentPath" || normalizedInputKey === "canonicalComponentPath") {
 		return "component";
+	}
+	if (normalizedInputKey === "projectPath" || normalizedInputKey === "canonicalProjectPath") {
+		return "project";
 	}
 	if (normalizedInputKey === "componentKind") {
 		return "kind";

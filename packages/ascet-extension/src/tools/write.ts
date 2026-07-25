@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { Type } from "typebox";
 import { runApprovedAscetApplyElementSpec } from "../apply-element-spec.ts";
 import { runApprovedAscetApplyProjectFormula } from "../apply-project-formula.ts";
@@ -10,11 +11,13 @@ import { runApprovedAscetCreateMethod } from "../create-method.ts";
 import { runApprovedAscetDeleteComponent } from "../delete-component.ts";
 import { runApprovedAscetDeleteFolder } from "../delete-folder.ts";
 import { runApprovedAscetDeleteMethod } from "../delete-method.ts";
+import { type AscetElementIndexWritebackResult, refreshElementsFromLiveCatalog } from "../element-index-writeback.ts";
 import {
 	type AscetCreateMethodComponentKind,
 	getDefaultCreateMethodKind,
 	validateCreateMethodKindCompatibility,
 } from "../method-kind-compatibility.ts";
+import { invalidateAscetSearchIndexPartitions } from "../search-index.ts";
 import { runApprovedAscetSetElementDependency } from "../set-element-dependency.ts";
 import { runApprovedAscetSetEnumerators } from "../set-enumerators.ts";
 import { runApprovedAscetSetMethodCode } from "../set-method-code.ts";
@@ -184,6 +187,8 @@ export interface AscetWriteResult {
 		error?: { code: string; message: string };
 	};
 }
+
+type AscetWriteIndexUpdate = WriteImpact | AscetElementIndexWritebackResult;
 
 const codeSourceSchema = {
 	code: Type.Optional(Type.String()),
@@ -424,11 +429,96 @@ export async function runAscetWrite(
 		return asResponse(outcomeFromCliResult(raw), raw);
 	}
 	const impact = createWriteImpact(normalizedParams);
-	applyWriteImpactToSearchIndex(impact);
-	return asResponse(createSuccessfulWriteOutcome(raw, impact), raw, impact);
+	const indexUpdate = await applySuccessfulWriteIndexUpdate(normalizedParams, raw, options, impact);
+	return asResponse(createSuccessfulWriteOutcome(raw, impact, indexUpdate), raw, impact);
 }
 
-function createSuccessfulWriteOutcome(raw: AscetCliJsonResult, impact: WriteImpact): AscetToolOutcome {
+async function applySuccessfulWriteIndexUpdate(
+	params: AscetWriteParams,
+	_raw: AscetCliJsonResult,
+	options: RunAscetWriteOperationOptions,
+	impact: WriteImpact,
+): Promise<AscetWriteIndexUpdate> {
+	if (params.action === "set_element_dependency") {
+		if (params.dryRun) {
+			return { ...impact, stale: [] };
+		}
+		const update = await refreshElementsFromLiveCatalog(
+			{
+				componentPath: params.targetPath ?? params.componentPath ?? "",
+				names: [params.elementName],
+				scopes: ["Local"],
+				reason: `write_succeeded:${params.action}`,
+				stale: ["text_code"],
+			},
+			options,
+		);
+		applyTargetedWritebackImpact(update, impact);
+		return update.issues && update.issues.length > 0 ? { ...update, stale: impact.stale } : update;
+	}
+	if (params.action === "apply_element_spec") {
+		const selectors = extractElementSelectorsFromSpecFile(params.specFile);
+		const names = uniqueStrings(selectors.map((entry) => entry.name));
+		const scopes = uniqueStrings(selectors.map((entry) => entry.scope).filter((entry) => entry !== undefined));
+		const update = await refreshElementsFromLiveCatalog(
+			{
+				componentPath: params.componentPath,
+				names: names.length > 0 ? names : undefined,
+				scopes: scopes.length > 0 ? scopes : undefined,
+				reason: `write_succeeded:${params.action}`,
+				stale: ["text_code"],
+			},
+			options,
+		);
+		applyTargetedWritebackImpact(update, impact);
+		return update.issues && update.issues.length > 0 ? { ...update, stale: impact.stale } : update;
+	}
+	applyWriteImpactToSearchIndex(impact);
+	return impact;
+}
+
+function applyTargetedWritebackImpact(update: AscetElementIndexWritebackResult, fallbackImpact: WriteImpact): void {
+	if (update.issues && update.issues.length > 0) {
+		invalidateAscetSearchIndexPartitions(fallbackImpact.stale, `write_succeeded:${fallbackImpact.action}`);
+		return;
+	}
+	if (update.stale.length > 0) {
+		invalidateAscetSearchIndexPartitions(update.stale, `write_succeeded:${fallbackImpact.action}`);
+	}
+}
+
+function extractElementSelectorsFromSpecFile(specFile: string): Array<{ name: string; scope?: string }> {
+	try {
+		const parsed = JSON.parse(readFileSync(specFile, "utf8"));
+		if (!isJsonRecord(parsed) || !Array.isArray(parsed.elements)) {
+			return [];
+		}
+		return parsed.elements.filter(isJsonRecord).flatMap((entry) => {
+			const name = typeof entry.name === "string" ? entry.name.trim() : "";
+			if (!name) {
+				return [];
+			}
+			const scope = typeof entry.scope === "string" && entry.scope.trim() ? entry.scope.trim() : undefined;
+			return [{ name, scope }];
+		});
+	} catch {
+		return [];
+	}
+}
+
+function uniqueStrings(values: readonly string[]): string[] {
+	return [...new Set(values.map((entry) => entry.trim()).filter(Boolean))];
+}
+
+function isJsonRecord(value: unknown): value is Record<string, unknown> {
+	return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function createSuccessfulWriteOutcome(
+	raw: AscetCliJsonResult,
+	_impact: WriteImpact,
+	indexUpdate: AscetWriteIndexUpdate,
+): AscetToolOutcome {
 	const payload = unwrapToolSuccessPayload(raw.data);
 	const record = asRecord(payload);
 	const readback = record?.readback ?? record?.verify ?? record?.verification;
@@ -438,7 +528,7 @@ function createSuccessfulWriteOutcome(raw: AscetCliJsonResult, impact: WriteImpa
 		data: {
 			changed,
 			readback,
-			index: impact,
+			index: indexUpdate,
 		},
 		warnings: [],
 	};

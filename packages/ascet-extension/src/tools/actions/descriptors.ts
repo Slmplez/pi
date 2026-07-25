@@ -176,6 +176,26 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["component", "index", "provider-discovery"],
 		}),
 	}),
+	descriptor("ascet_search", "search_projects", "public", ALL_SEARCH_PROFILES, {
+		requiresPartitions: ["components"],
+		prompt: prompt("Find Project targets by name or folder scope before project formula reads, diffs, or writes.", {
+			rules: [
+				...searchPagingRules,
+				"Use search_projects when the user needs project formulas but did not provide a projectPath.",
+				"Project paths are served from the components/object index and returned with kind=project.",
+			],
+			fewShots: [
+				shot("search projects", {
+					action: "search_projects",
+					query: "AEB",
+					scopePath: "PlatformLibrary/Package",
+					match: "contains",
+					limit: 10,
+				}),
+			],
+			tags: ["project", "formula", "index"],
+		}),
+	}),
 	descriptor("ascet_search", "resolve_component", "public", ALL_SEARCH_PROFILES, {
 		requiresPartitions: ["components"],
 		prompt: prompt("Resolve one concrete componentPath for later read, reference, diff, verify, or write actions.", {
@@ -420,6 +440,21 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["implementation", "live-read"],
 		}),
 	}),
+	descriptor("ascet_read", "read_project_formulas", "public", READ_PROFILES, {
+		prompt: prompt("Read project formulas live from ASCET for one resolved Project target.", {
+			rules: [
+				"Use search_projects first when projectPath is unknown.",
+				"Use read_project_formulas only for Project targets; it is not element dependency formula readback.",
+			],
+			fewShots: [
+				shot("read project formulas", {
+					action: "read_project_formulas",
+					projectPath: "DEMO/Project",
+				}),
+			],
+			tags: ["project", "formula", "live-read"],
+		}),
+	}),
 	descriptor("ascet_read", "read_block_diagram", "public", READ_PROFILES, {
 		prompt: prompt("Read a BDE/block-diagram surface for resolved class or module targets.", {
 			rules: [
@@ -453,25 +488,31 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 		}),
 	}),
 	descriptor("ascet_read", "read_dependent_chain", "public", READ_PROFILES, {
-		prompt: prompt("Analyze Local Parameter -> Imported Parameter -> Exported Parameter dependency chains.", {
-			rules: [
-				"Use read_dependent_chain when the user asks which exported or global parameter a local dependent parameter depends on.",
-				"The formula reported by read_dependent_chain is the local dependent parameter expression, not an implementation conversion formula or project formula.",
-				"Dependent parameter provider discovery is a coordinated workflow: call read_dependent_chain first, then coordinate ascet_search and ascet_explore if discovery is incomplete.",
-				"The Imported Parameter in the consuming component and the Exported Parameter in the provider component must have the same name.",
-				"Only scope=Exported elements are valid provider candidates.",
-				"If provider discovery is incomplete or ambiguous, coordinate ascet_search and ascet_explore before concluding.",
-				"After selecting a provider candidate, call read_dependent_chain again with exporterComponentPath as a verification constraint.",
-			],
-			fewShots: [
-				shot("dependent chain", {
-					action: "read_dependent_chain",
-					componentPath: "FeatureA/Consumer",
-					dependentElement: "C_K_Effective",
-				}),
-			],
-			tags: ["dependency", "provider-discovery", "live-read"],
-		}),
+		prompt: prompt(
+			"Index-first dependency provider resolver for Local Parameter -> Imported Parameter -> Exported Parameter chains.",
+			{
+				rules: [
+					"Use read_dependent_chain when the user asks which exported or global parameter a local dependent parameter depends on.",
+					"Provider discovery is index-first from element_decls; scope=Exported is required for a valid provider.",
+					"Returned element.data is full live read_element_catalog data for the exported provider when detailLevel=full.",
+					"The formula reported by read_dependent_chain is the local dependent parameter expression, not an implementation conversion formula or project formula.",
+					"Dependent parameter provider discovery is a coordinated workflow: call read_dependent_chain first, then coordinate ascet_search and ascet_explore if discovery is incomplete.",
+					"The Imported Parameter in the consuming component and the Exported Parameter in the provider component must have the same name.",
+					"Only scope=Exported elements are valid provider candidates.",
+					"The Local Dependent Parameter may have a different name; use formula or mapping references to find imported parameter names.",
+					"If provider discovery is incomplete or ambiguous, coordinate ascet_search and ascet_explore before concluding.",
+					"After selecting a provider candidate, call read_dependent_chain again with exporterComponentPath as a verification constraint.",
+				],
+				fewShots: [
+					shot("dependent chain", {
+						action: "read_dependent_chain",
+						componentPath: "FeatureA/Consumer",
+						dependentElement: "C_K_Effective",
+					}),
+				],
+				tags: ["dependency", "provider-discovery", "live-read"],
+			},
+		),
 	}),
 	descriptor("ascet_read", "read_element_dependency", "public", READ_PROFILES, {
 		prompt: prompt("Read dependency flag and formula for one existing element.", {
@@ -1036,7 +1077,13 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 	}),
 	descriptor("ascet_write", "set_element_dependency", "public", WRITE_PROFILES, {
 		prompt: prompt("Set or clear dependency state for an existing element.", {
-			rules: [...writePreflightRules, ...dependencyRules],
+			rules: [
+				...writePreflightRules,
+				...dependencyRules,
+				"set_element_dependency does not create local, imported, or exported elements; use apply_element_spec first for new elements.",
+				"Successful executed writes refreshes element_decls and full_element_cache from live read_element_catalog readback.",
+				"If index refresh fails after a successful write, follow index.issues; the write result can still be valid.",
+			],
 			fewShots: [
 				shot("set dependency", {
 					action: "set_element_dependency",
@@ -1044,6 +1091,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					elementName: "K",
 					dependency: "dependent",
 					verifyReadback: true,
+					executeWrite: true,
 				}),
 			],
 			tags: ["write", "dependency", "provider-discovery"],

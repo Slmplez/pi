@@ -1,5 +1,10 @@
 import { Type } from "typebox";
-import type { AscetCliExecutionResult, AscetCliJsonResult, AscetCliRequest } from "../cli.ts";
+import {
+	type AscetCliExecutionResult,
+	type AscetCliJsonResult,
+	type AscetCliRequest,
+	runAscetCliJson,
+} from "../cli.ts";
 import { formatResolveComponentResult, runAscetResolveComponent } from "../resolve-component.ts";
 import { formatSearchComponentsResult, runAscetSearchComponents } from "../search-components.ts";
 import { formatSearchElementsResult, runAscetSearchElements } from "../search-elements.ts";
@@ -12,6 +17,7 @@ import {
 	queryAscetMessageIndex,
 	queryAscetMethodDeclarationIndex,
 	queryAscetMethodProcessElementIndex,
+	queryAscetProjectIndex,
 } from "../search-index.ts";
 import { formatSearchOccurrencesResult, runAscetSearchOccurrences } from "../search-occurrences.ts";
 import { formatSearchTextCodeResult, runAscetSearchTextCode } from "../search-text-code.ts";
@@ -22,6 +28,14 @@ export type AscetSearchParams =
 			query: string;
 			scopePath?: string;
 			kind?: "class" | "module" | "statemachine";
+			match?: "exact" | "glob" | "contains";
+			limit?: number;
+			cursor?: string;
+	  }
+	| {
+			action: "search_projects";
+			query: string;
+			scopePath?: string;
 			match?: "exact" | "glob" | "contains";
 			limit?: number;
 			cursor?: string;
@@ -144,6 +158,14 @@ export const ascetSearchParameters = Type.Union([
 		query: querySchema,
 		scopePath: scopePathSchema,
 		kind: Type.Optional(Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")])),
+		match: matchSchema,
+		limit: limitSchema,
+		cursor: cursorSchema,
+	}),
+	Type.Object({
+		action: Type.Literal("search_projects"),
+		query: querySchema,
+		scopePath: scopePathSchema,
 		match: matchSchema,
 		limit: limitSchema,
 		cursor: cursorSchema,
@@ -292,7 +314,11 @@ function getIndexedMatchCount(result: AscetCliJsonResult): number {
 		return 0;
 	}
 	const matches = (payload as { matches?: unknown }).matches;
-	return Array.isArray(matches) ? matches.length : 0;
+	if (Array.isArray(matches)) {
+		return matches.length;
+	}
+	const items = (payload as { items?: unknown }).items;
+	return Array.isArray(items) ? items.length : 0;
 }
 
 function canUsePartitionResult(result: AscetCliJsonResult, partition: AscetSearchIndexPartition): boolean {
@@ -301,6 +327,10 @@ function canUsePartitionResult(result: AscetCliJsonResult, partition: AscetSearc
 		return false;
 	}
 	return partitionState.scanComplete || getIndexedMatchCount(result) > 0;
+}
+
+function isSearchIndexDisabled(env: Record<string, string | undefined> | undefined): boolean {
+	return (env?.PI_ASCET_SEARCH_INDEX ?? process.env.PI_ASCET_SEARCH_INDEX) === "0";
 }
 
 async function runPartitionBackedSearch(
@@ -346,6 +376,55 @@ async function runPartitionBackedSearch(
 	return fallback();
 }
 
+function buildSearchProjectsFallbackArgs(params: Extract<AscetSearchParams, { action: "search_projects" }>): string[] {
+	const args = ["exec", "search_components", params.query, "--kind", "project"];
+	if (params.scopePath) {
+		args.push("--scope", params.scopePath);
+	}
+	if (params.match) {
+		args.push("--match", params.match);
+	}
+	if (params.limit !== undefined) {
+		args.push("--limit", String(params.limit));
+	}
+	if (params.cursor) {
+		args.push("--cursor", params.cursor);
+	}
+	args.push("--json");
+	return args;
+}
+
+async function runAscetSearchProjects(
+	params: Extract<AscetSearchParams, { action: "search_projects" }>,
+	options: RunAscetSearchOptions,
+): Promise<AscetCliJsonResult> {
+	if (!isSearchIndexDisabled(options.env)) {
+		const indexed = queryAscetProjectIndex(params, { cwd: options.cwd });
+		if (indexed && canUsePartitionResult(indexed, "components")) {
+			return indexed;
+		}
+
+		const warmup = await ensureAscetSearchIndex({
+			cwd: options.cwd,
+			env: options.env,
+			signal: options.signal,
+			timeoutMs: options.timeoutMs,
+			partition: "components",
+			scanTimeoutMs: Math.min(options.timeoutMs ?? 60_000, 15_000),
+			executeCli: options.executeCli,
+			toolName: "ascet_search",
+		});
+		if (warmup.ok) {
+			const warmed = queryAscetProjectIndex(params, { cwd: options.cwd });
+			if (warmed && canUsePartitionResult(warmed, "components")) {
+				return warmed;
+			}
+		}
+	}
+
+	return runAscetCliJson(buildSearchProjectsFallbackArgs(params), options);
+}
+
 export async function runAscetSearch(
 	params: AscetSearchParams,
 	options: RunAscetSearchOptions,
@@ -353,6 +432,8 @@ export async function runAscetSearch(
 	switch (params.action) {
 		case "search_components":
 			return runAscetSearchComponents(params, options);
+		case "search_projects":
+			return runAscetSearchProjects(params, options);
 		case "resolve_component":
 			return runAscetResolveComponent(params, options);
 		case "search_elements":
@@ -415,6 +496,7 @@ export async function runAscetSearch(
 export function formatAscetSearchResult(params: AscetSearchParams, result: AscetCliJsonResult): string {
 	switch (params.action) {
 		case "search_components":
+		case "search_projects":
 			return formatSearchComponentsResult(result);
 		case "resolve_component":
 			return formatResolveComponentResult(result);

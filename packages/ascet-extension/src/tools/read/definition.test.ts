@@ -114,4 +114,40 @@ describe("ascet_read tool", () => {
 
 		assert.match(result.content[0]?.text ?? "", /out = in;/);
 	});
+
+	test("read_project_formulas reads project formulas through the live CLI", async () => {
+		let observedArgs: string[] | undefined;
+		const result = await ascetReadTool.execute(
+			"call-1",
+			{ action: "read_project_formulas", projectPath: "DEMO\\Project" },
+			new AbortController().signal,
+			undefined,
+			{
+				cwd: process.cwd(),
+				executeCli: async (request) => {
+					observedArgs = request.args;
+					return {
+						exitCode: 0,
+						stdout: JSON.stringify({
+							ok: true,
+							result: {
+								projectPath: "DEMO\\Project",
+								formulas: [{ name: "K", formula: "1.0" }],
+							},
+							error: null,
+							meta: { mode: "exec", operation: "read_project_formulas" },
+						}),
+						stderr: "",
+						timedOut: false,
+						request,
+					};
+				},
+			},
+		);
+
+		assert.deepEqual(observedArgs, ["exec", "read_project_formulas", "DEMO\\Project", "--json"]);
+		const payload = JSON.parse(result.content[0]?.text ?? "");
+		assert.equal(payload.project, "DEMO/Project");
+		assert.equal(payload.formulas[0].name, "K");
+	});
 });
