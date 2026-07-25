@@ -8,7 +8,7 @@ export interface ActionUnavailablePayload {
 	};
 	recover: {
 		tool: "ascet_capabilities";
-		action: "search";
+		action: "search_actions";
 		query: string;
 	};
 	tool: string;
@@ -76,7 +76,7 @@ export function assertActionActive(
 				},
 				recover: {
 					tool: "ascet_capabilities",
-					action: "search",
+					action: "search_actions",
 					query: action,
 				},
 				tool,

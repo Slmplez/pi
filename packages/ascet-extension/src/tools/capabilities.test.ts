@@ -183,6 +183,76 @@ describe("runAscetCapabilities", () => {
 		});
 	});
 
+	test("search_actions returns full action details from ActionCatalog", () => {
+		const harness = createPiHarness();
+		createAscetExposureController(harness.pi, { env: {} }).activateProfile("base");
+
+		withCatalog((cwd) => {
+			const result = runAscetCapabilities(
+				{ action: "search_actions", query: "complete code", limit: 1 } as Parameters<
+					typeof runAscetCapabilities
+				>[0],
+				{ cwd, env: {} },
+			);
+
+			assert.equal(result.ok, true);
+			assert.equal(result.actionSearch?.items.length, 1);
+			assert.equal(result.actionSearch?.items[0]?.tool, "ascet_read");
+			assert.equal(result.actionSearch?.items[0]?.action, "read_code");
+			assert.deepEqual(result.actionSearch?.items[0]?.schema?.required, ["action", "componentPath"]);
+			assert.ok((result.actionSearch?.items[0]?.rules ?? []).length > 0);
+			assert.ok((result.actionSearch?.items[0]?.fewShots ?? []).length > 0);
+			assert.equal(result.actionSearch?.items[0]?.result?.shape, "codeText");
+		});
+	});
+
+	test("search_actions tool payload is result-only compact JSON", async () => {
+		const harness = createPiHarness();
+		createAscetExposureController(harness.pi, { env: {} }).activateProfile("base");
+
+		await withCatalog(async (cwd) => {
+			const result = await ascetCapabilitiesTool.execute(
+				"call-1",
+				{ action: "search_actions", query: "code search", limit: 1 },
+				new AbortController().signal,
+				undefined,
+				{ cwd },
+			);
+			const text = result.content[0]?.text ?? "";
+			const payload = JSON.parse(text) as {
+				total?: number;
+				items?: Array<{
+					tool?: string;
+					action?: string;
+					schema?: unknown;
+					rules?: unknown;
+					fewShots?: Array<{ args?: Record<string, unknown> }>;
+				}>;
+				activeProfile?: string;
+				ok?: boolean;
+				error?: unknown;
+				meta?: unknown;
+			};
+
+			assert.equal(payload.activeProfile, undefined);
+			assert.equal(payload.ok, undefined);
+			assert.equal(payload.error, undefined);
+			assert.equal(payload.meta, undefined);
+			assert.equal(payload.items?.length, 1);
+			assert.equal(payload.items?.[0]?.tool, "ascet_search");
+			assert.equal(payload.items?.[0]?.action, "text_in_code");
+			assert.ok(payload.items?.[0]?.schema);
+			assert.ok(payload.items?.[0]?.rules);
+			assert.ok(payload.items?.[0]?.fewShots);
+			assert.deepEqual(Object.keys(payload.items?.[0]?.fewShots?.[0]?.args ?? {}).sort(), [
+				"action",
+				"componentPath",
+				"limit",
+				"query",
+			]);
+		});
+	});
+
 	test("adds compact action instructions only at full detail", () => {
 		const harness = createPiHarness();
 		createAscetExposureController(harness.pi, { env: {} }).activateProfile("base");

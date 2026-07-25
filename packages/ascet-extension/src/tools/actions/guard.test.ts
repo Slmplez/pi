@@ -55,13 +55,17 @@ describe("ASCET action runtime guard", () => {
 		};
 		assert.equal(details.error?.code, "ascet_action_unavailable");
 		assert.equal(details.replacement, "ascet_search.text_in_code");
-		assert.deepEqual(details.recover, { tool: "ascet_capabilities", action: "search", query: "search_text_code" });
+		assert.deepEqual(details.recover, {
+			tool: "ascet_capabilities",
+			action: "search_actions",
+			query: "search_text_code",
+		});
 		assert.deepEqual(JSON.parse(result.content[0]?.text ?? "{}"), {
 			error: {
 				code: "ascet_action_unavailable",
 				message: "ASCET action ascet_search.search_text_code is not active. Use ascet_search.text_in_code.",
 			},
-			recover: { tool: "ascet_capabilities", action: "search", query: "search_text_code" },
+			recover: { tool: "ascet_capabilities", action: "search_actions", query: "search_text_code" },
 		});
 	});
 });

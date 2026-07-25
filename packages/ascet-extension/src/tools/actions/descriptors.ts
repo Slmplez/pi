@@ -129,14 +129,24 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["ops", "status", "index"],
 		}),
 	}),
-	descriptor("ascet_capabilities", "search", "public", ALL_PROFILES, {
-		prompt: prompt("Search active ASCET tools, actions, profiles, and backend operations.", {
+	descriptor("ascet_capabilities", "search_actions", "public", ALL_PROFILES, {
+		prompt: prompt("Search ASCET tool actions and return full schema, rules, fewShot, and result shape.", {
 			rules: [
-				"Use ascet_capabilities when selecting the right ASCET operation for an unfamiliar task.",
-				"Prefer family and operationQuery filters instead of dumping the full catalog.",
+				"Use search_actions when action choice, parameters, result shape, or usage rules are unclear.",
+				"search_actions searches ActionCatalog, not ASCET model contents or CLI backend commands.",
 			],
-			fewShots: [shot("find read ops", { family: "read", operationQuery: "code", limit: 5 })],
-			tags: ["ops", "capability"],
+			fewShots: [shot("find action schema", { action: "search_actions", query: "complete code", limit: 3 })],
+			tags: ["ops", "capability", "action-search"],
+		}),
+	}),
+	descriptor("ascet_capabilities", "search", "public", ALL_PROFILES, {
+		prompt: prompt("Legacy backend operation search; prefer search_actions for tool action choice.", {
+			rules: [
+				"Use search only when backend CLI operation metadata is needed.",
+				"Use search_actions for model-facing ASCET tool action schema, rules, and fewShot.",
+			],
+			fewShots: [shot("find backend ops", { action: "search", family: "read", operationQuery: "code", limit: 5 })],
+			tags: ["ops", "capability", "backend"],
 		}),
 	}),
 	descriptor("ascet_capabilities", "activate_profile", "public", ALL_PROFILES, {

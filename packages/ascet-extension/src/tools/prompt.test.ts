@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import { ascetActionExamples, compactExamplesForTool } from "./_shared/action-examples.ts";
+import { ascetCapabilitiesPrompt } from "./capabilities/prompt.ts";
 import { ascetExplorePrompt } from "./explore/prompt.ts";
 import {
 	actionInstructionIds,
@@ -89,6 +90,17 @@ describe("ASCET prompt coordination", () => {
 		assert.match(textCode, /text_in_code: ascet_search/);
 		assert.match(liveCode, /live ToolAPI read/);
 		assert.match(liveCode, /read_code: ascet_read/);
+	});
+
+	test("capabilities prompt injects the compact ASCET action guide", () => {
+		const capabilities = guidelineText(ascetCapabilitiesPrompt);
+
+		assert.match(capabilities, /ASCET action guide/);
+		assert.match(capabilities, /search_actions/);
+		assert.match(capabilities, /ascet_read\.read_code: read complete live code/);
+		assert.match(capabilities, /ascet_search\.text_in_code: search indexed ESDL\/C snippets/);
+		assert.doesNotMatch(capabilities, /\bascet_batch_write\b/);
+		assert.doesNotMatch(capabilities, /\bsearch_occurrences\b/);
 	});
 
 	test("hidden action and hidden tool instructions are excluded from public prompt assembly", () => {

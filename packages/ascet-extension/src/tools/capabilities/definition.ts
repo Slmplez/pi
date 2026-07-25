@@ -8,7 +8,7 @@ import { renderCall, renderResult } from "./ui.ts";
 export const ascetCapabilitiesTool = defineSequentialAscetTool({
 	name: "ascet_capabilities",
 	label: "ASCET capabilities",
-	description: "Search bundled ASCET operations by family, risk, object kind, or operation name.",
+	description: "Search ASCET tool actions or bundled backend operations.",
 	...ascetCapabilitiesPrompt,
 	parameters: ascetCapabilitiesParameters,
 	renderCall,

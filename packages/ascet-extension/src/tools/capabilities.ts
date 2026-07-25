@@ -8,6 +8,12 @@ import { toToolFailurePayload, toToolSuccessPayload } from "../tool-response-con
 import { compactExamplesForAction } from "./_shared/action-examples.ts";
 import { type AscetActionVisibility, listActionDescriptors } from "./actions/descriptors.ts";
 import { resolveActionActivation } from "./actions/gates.ts";
+import {
+	type SearchActionParams,
+	type SearchActionResult,
+	searchActionCatalog,
+	toActionSearchPayload,
+} from "./actions/search.ts";
 import { type AscetProfile, isAscetProfile } from "./exposure/profiles.ts";
 import { activateAscetExposureProfile, getAscetExposureMetadata } from "./exposure/state.ts";
 
@@ -36,12 +42,15 @@ interface AscetCliCatalog {
 }
 
 export interface AscetCapabilitiesParams {
-	action?: "search" | "activate_profile";
+	action?: "search" | "search_actions" | "activate_profile";
 	profile?: AscetProfile;
 	family?: "explore" | "search" | "read" | "refs" | "diff" | "write" | "verify" | "ops";
 	risk?: "read" | "diff" | "write";
 	objectKind?: string;
 	operationQuery?: string;
+	query?: string;
+	tool?: string;
+	name?: string;
 	limit?: number;
 	includeHidden?: boolean;
 	detailLevel?: "summary" | "full";
@@ -100,42 +109,59 @@ export interface AscetCapabilitiesResult {
 		code: string;
 		message: string;
 	};
+	actionSearch?: SearchActionResult;
 }
 
-export const ascetCapabilitiesParameters = Type.Object({
-	action: Type.Optional(Type.Union([Type.Literal("search"), Type.Literal("activate_profile")])),
-	profile: Type.Optional(
-		Type.Union([
-			Type.Literal("base"),
-			Type.Literal("advanced-read"),
-			Type.Literal("reference"),
-			Type.Literal("diff"),
-			Type.Literal("verify"),
-			Type.Literal("write-preflight"),
-			Type.Literal("batch-write"),
-			Type.Literal("component-edit"),
-			Type.Literal("ops"),
-		]),
-	),
-	family: Type.Optional(
-		Type.Union([
-			Type.Literal("explore"),
-			Type.Literal("search"),
-			Type.Literal("read"),
-			Type.Literal("refs"),
-			Type.Literal("diff"),
-			Type.Literal("write"),
-			Type.Literal("verify"),
-			Type.Literal("ops"),
-		]),
-	),
-	risk: Type.Optional(Type.Union([Type.Literal("read"), Type.Literal("diff"), Type.Literal("write")])),
-	objectKind: Type.Optional(Type.String()),
-	operationQuery: Type.Optional(Type.String()),
-	limit: Type.Optional(Type.Number({ minimum: 1, maximum: 200 })),
-	includeHidden: Type.Optional(Type.Boolean()),
-	detailLevel: Type.Optional(Type.Union([Type.Literal("summary"), Type.Literal("full")])),
-});
+const ascetProfileParameter = Type.Union([
+	Type.Literal("base"),
+	Type.Literal("advanced-read"),
+	Type.Literal("reference"),
+	Type.Literal("diff"),
+	Type.Literal("verify"),
+	Type.Literal("write-preflight"),
+	Type.Literal("batch-write"),
+	Type.Literal("component-edit"),
+	Type.Literal("ops"),
+]);
+
+const capabilitiesFamilyParameter = Type.Union([
+	Type.Literal("explore"),
+	Type.Literal("search"),
+	Type.Literal("read"),
+	Type.Literal("refs"),
+	Type.Literal("diff"),
+	Type.Literal("write"),
+	Type.Literal("verify"),
+	Type.Literal("ops"),
+]);
+
+const capabilitiesDetailLevelParameter = Type.Union([Type.Literal("summary"), Type.Literal("full")]);
+
+export const ascetCapabilitiesParameters = Type.Union([
+	Type.Object({
+		action: Type.Literal("search_actions"),
+		query: Type.Optional(Type.String()),
+		tool: Type.Optional(Type.String()),
+		name: Type.Optional(Type.String()),
+		limit: Type.Optional(Type.Number({ minimum: 1, maximum: 50 })),
+		includeHidden: Type.Optional(Type.Boolean()),
+		detailLevel: Type.Optional(capabilitiesDetailLevelParameter),
+	}),
+	Type.Object({
+		action: Type.Literal("activate_profile"),
+		profile: ascetProfileParameter,
+	}),
+	Type.Object({
+		action: Type.Optional(Type.Literal("search")),
+		family: Type.Optional(capabilitiesFamilyParameter),
+		risk: Type.Optional(Type.Union([Type.Literal("read"), Type.Literal("diff"), Type.Literal("write")])),
+		objectKind: Type.Optional(Type.String()),
+		operationQuery: Type.Optional(Type.String()),
+		limit: Type.Optional(Type.Number({ minimum: 1, maximum: 200 })),
+		includeHidden: Type.Optional(Type.Boolean()),
+		detailLevel: Type.Optional(capabilitiesDetailLevelParameter),
+	}),
+]);
 
 function stripBom(text: string): string {
 	return text.charCodeAt(0) === 0xfeff ? text.slice(1) : text;
@@ -147,6 +173,22 @@ export function runAscetCapabilities(
 ): AscetCapabilitiesResult {
 	const status = createAscetStatusReport(options);
 	const exposure = getAscetExposureMetadata();
+	if (params.action === "search_actions") {
+		const actionSearch = searchActionCatalog(toSearchActionParams(params));
+		return {
+			ok: true,
+			data: createCapabilitiesData(
+				status.paths.mode,
+				status.paths.catalogPath,
+				exposure,
+				[],
+				0,
+				params,
+				options.env,
+			),
+			actionSearch,
+		};
+	}
 	if (params.action === "activate_profile") {
 		if (!isAscetProfile(params.profile)) {
 			return {
@@ -286,6 +328,17 @@ export function runAscetCapabilities(
 	}
 }
 
+function toSearchActionParams(params: AscetCapabilitiesParams): SearchActionParams {
+	return {
+		query: params.query ?? params.operationQuery,
+		tool: params.tool,
+		name: params.name,
+		limit: params.limit,
+		includeHidden: params.includeHidden,
+		detailLevel: params.detailLevel,
+	};
+}
+
 function createCapabilitiesData(
 	mode: string,
 	catalogPath: string,
@@ -418,6 +471,9 @@ export function toAscetCapabilitiesPayload(result: AscetCapabilitiesResult): unk
 			code: result.error?.code ?? "ascet_capabilities_failed",
 			message: result.error?.message ?? "ASCET capabilities failed.",
 		});
+	}
+	if (result.actionSearch) {
+		return toActionSearchPayload(result.actionSearch);
 	}
 	return toToolSuccessPayload({
 		activeProfile: result.data.activeProfile,
