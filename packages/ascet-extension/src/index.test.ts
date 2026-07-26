@@ -51,9 +51,15 @@ describe("ASCET extension agent routing hook", () => {
 			"non_ascet_tool",
 			"ascet_status",
 			"ascet_capabilities",
+			"ascet_recover",
+			"ascet_scheduler_status",
 			"ascet_explore",
 			"ascet_search",
 			"ascet_read",
+			"ascet_diff",
+			"ascet_write",
+			"ascet_component_editable",
+			"ascet_verify",
 		]);
 	});
 

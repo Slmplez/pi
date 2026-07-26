@@ -28,7 +28,7 @@ function createPiHarness(initialActive: string[] = ["non_ascet_tool"]) {
 }
 
 describe("ASCET exposure controller", () => {
-	test("activates base profile without exposing batch write", () => {
+	test("activates base profile with all canonical tools except batch write", () => {
 		const harness = createPiHarness();
 		const exposure = createAscetExposureController(harness.pi, { env: {} });
 
@@ -38,9 +38,15 @@ describe("ASCET exposure controller", () => {
 			"non_ascet_tool",
 			"ascet_status",
 			"ascet_capabilities",
+			"ascet_recover",
+			"ascet_scheduler_status",
 			"ascet_explore",
 			"ascet_search",
 			"ascet_read",
+			"ascet_diff",
+			"ascet_write",
+			"ascet_component_editable",
+			"ascet_verify",
 		]);
 		assert.equal(
 			harness.registered.some((tool) => tool.name === "ascet_batch_write"),
