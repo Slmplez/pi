@@ -12,11 +12,13 @@ import {
 	type AscetSearchIndexPartition,
 	ensureAscetSearchIndex,
 	getAscetSearchIndexPartitionState,
+	isUsableSqliteSearchResult,
 	queryAscetComponentReferenceIndex,
 	queryAscetElementReferenceIndex,
 	queryAscetMessageIndex,
 	queryAscetMethodDeclarationIndex,
 	queryAscetMethodProcessElementIndex,
+	queryAscetProjectFormulaIndex,
 	queryAscetProjectIndex,
 } from "../search-index.ts";
 import { formatSearchOccurrencesResult, runAscetSearchOccurrences } from "../search-occurrences.ts";
@@ -132,6 +134,15 @@ export type AscetSearchParams =
 			scopePath?: string;
 			methodName?: string;
 			section?: "auto" | "body" | "all" | "header" | "external-c";
+			match?: "exact" | "glob" | "contains";
+			limit?: number;
+			cursor?: string;
+	  }
+	| {
+			action: "search_project_formulas";
+			query: string;
+			projectPath?: string;
+			scopePath?: string;
 			match?: "exact" | "glob" | "contains";
 			limit?: number;
 			cursor?: string;
@@ -281,6 +292,15 @@ const ascetSearchActionSchemas = [
 		limit: limitSchema,
 		cursor: cursorSchema,
 	}),
+	Type.Object({
+		action: Type.Literal("search_project_formulas"),
+		query: querySchema,
+		projectPath: Type.Optional(Type.String()),
+		scopePath: scopePathSchema,
+		match: matchSchema,
+		limit: limitSchema,
+		cursor: cursorSchema,
+	}),
 ] as const;
 
 export const ascetSearchParameters = openAiObjectUnionSchema<AscetSearchParams>(ascetSearchActionSchemas);
@@ -325,6 +345,9 @@ function getIndexedMatchCount(result: AscetCliJsonResult): number {
 }
 
 function canUsePartitionResult(result: AscetCliJsonResult, partition: AscetSearchIndexPartition): boolean {
+	if (isUsableSqliteSearchResult(result)) {
+		return true;
+	}
 	const partitionState = getAscetSearchIndexPartitionState(partition);
 	if (!result.ok || partitionState?.status !== "ready") {
 		return false;
@@ -428,6 +451,71 @@ async function runAscetSearchProjects(
 	return runAscetCliJson(buildSearchProjectsFallbackArgs(params), options);
 }
 
+function buildIndexUnavailableResult(
+	action: string,
+	params: Extract<AscetSearchParams, { action: "search_project_formulas" }>,
+	options: RunAscetSearchOptions,
+): AscetCliJsonResult {
+	const data = {
+		ok: false,
+		result: null,
+		error: {
+			code: "search_index_unavailable",
+			message: `${action} requires a ready ASCET SQLite P0 search index.`,
+		},
+		meta: {
+			mode: "index",
+			operation: action,
+		},
+	};
+	return {
+		ok: false,
+		data,
+		request: {
+			cwd: options.cwd,
+			cliPath: "quick_search_index",
+			args: ["index", action, params.query],
+			signal: options.signal,
+			timeoutMs: options.timeoutMs,
+		},
+		stdout: JSON.stringify(data),
+		stderr: "",
+		exitCode: null,
+		timedOut: false,
+		error: data.error,
+	};
+}
+
+async function runAscetSearchProjectFormulas(
+	params: Extract<AscetSearchParams, { action: "search_project_formulas" }>,
+	options: RunAscetSearchOptions,
+): Promise<AscetCliJsonResult> {
+	if (!isSearchIndexDisabled(options.env)) {
+		const indexed = queryAscetProjectFormulaIndex(params, { cwd: options.cwd });
+		if (indexed?.ok) {
+			return indexed;
+		}
+		const warmup = await ensureAscetSearchIndex({
+			cwd: options.cwd,
+			env: options.env,
+			signal: options.signal,
+			timeoutMs: options.timeoutMs,
+			partition: "all",
+			includeTextCode: true,
+			scanTimeoutMs: Math.min(options.timeoutMs ?? 90_000, 90_000),
+			executeCli: options.executeCli,
+			toolName: "ascet_search",
+		});
+		if (warmup.ok) {
+			const warmed = queryAscetProjectFormulaIndex(params, { cwd: options.cwd });
+			if (warmed?.ok) {
+				return warmed;
+			}
+		}
+	}
+	return buildIndexUnavailableResult("search_project_formulas", params, options);
+}
+
 export async function runAscetSearch(
 	params: AscetSearchParams,
 	options: RunAscetSearchOptions,
@@ -493,6 +581,8 @@ export async function runAscetSearch(
 			);
 		case "text_in_code":
 			return runAscetSearchTextCode(params, options);
+		case "search_project_formulas":
+			return runAscetSearchProjectFormulas(params, options);
 	}
 }
 
@@ -515,5 +605,7 @@ export function formatAscetSearchResult(params: AscetSearchParams, result: Ascet
 			return formatSearchOccurrencesResult(result);
 		case "text_in_code":
 			return formatSearchTextCodeResult(result);
+		case "search_project_formulas":
+			return formatSearchComponentsResult(result);
 	}
 }

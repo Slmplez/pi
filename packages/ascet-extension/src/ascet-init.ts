@@ -1,28 +1,33 @@
-import { writeAscetInitArtifacts } from "./ascet-init-artifacts.ts";
-import { type AscetInitProgressEvent, runAscetInitIndex } from "./ascet-init-index.ts";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { type AscetInitScope, parseAscetInitArgs } from "./ascet-init-scope.ts";
 import {
 	ensureRepoAscetRulesScaffold,
 	loadAscetInitRuleBundle,
 	renderAscetInitRulesPrompt,
 } from "./ascet-project-rules.ts";
-import type { AscetSearchIndexWarmupOptions, AscetSearchIndexWarmupResult } from "./search-index.ts";
 
 export const ASCET_AGENT_SECTION_TITLE = "## ASCET Workspace Overview";
 
 export interface AscetInitCommandContext {
 	cwd: string;
-	env?: Record<string, string | undefined>;
-	warmSearchIndex?: (options: AscetSearchIndexWarmupOptions) => Promise<AscetSearchIndexWarmupResult>;
 	isIdle(): boolean;
 	sendUserMessage?: (content: string, options?: { deliverAs?: "steer" | "followUp" }) => void | Promise<void>;
 	ui: {
 		notify(message: string, level?: "info" | "warning" | "error"): void;
-		setStatus?: (key: string, text: string | undefined) => void;
 	};
 }
 
 type ValidAscetInitScope = Exclude<AscetInitScope, { ok: false }>;
+
+interface RepoContextFile {
+	path: string;
+	content: string;
+	truncated: boolean;
+}
+
+const REPO_CONTEXT_FILES = ["AGENTS.md", "agent.md", "README.md"] as const;
+const MAX_REPO_CONTEXT_CHARS = 8_000;
 
 function renderScopePrompt(scope: ValidAscetInitScope): string {
 	if (scope.kind === "auto-detect") {
@@ -34,129 +39,90 @@ function renderScopePrompt(scope: ValidAscetInitScope): string {
 	return `Explicit scope from command args: ${scope.kind} ${scope.value}`;
 }
 
-const ASCET_INIT_PROMPT = `Create or update an ASCET model-engineering onboarding section for this PI project.
+function truncateRepoContext(content: string): { content: string; truncated: boolean } {
+	if (content.length <= MAX_REPO_CONTEXT_CHARS) {
+		return { content, truncated: false };
+	}
+	return { content: content.slice(0, MAX_REPO_CONTEXT_CHARS), truncated: true };
+}
 
-This command is for ASCET model-based engineering onboarding, not generic repository onboarding.
+async function loadRepoContextFile(cwd: string, path: string): Promise<RepoContextFile | undefined> {
+	try {
+		const loaded = await readFile(join(cwd, path), "utf8");
+		const truncated = truncateRepoContext(loaded);
+		return { path, content: truncated.content, truncated: truncated.truncated };
+	} catch {
+		return undefined;
+	}
+}
 
-Deterministic ASCET initialization has already run before this prompt. Use the generated artifacts first:
-- .ascet/index/manifest.json
-- .ascet/ascet-workspace-summary.json
+async function loadRepoContext(cwd: string): Promise<RepoContextFile[]> {
+	const files = await Promise.all(REPO_CONTEXT_FILES.map((path) => loadRepoContextFile(cwd, path)));
+	return files.filter((file): file is RepoContextFile => file !== undefined);
+}
 
-Use indexed ASCET tools for discovery. Use live reads only for representative confirmation:
-- ascet_search.* for indexed component, element, reference, message, and text-code discovery
-- ascet_explore.* for navigation and diagram metadata
-- ascet_read.read_code only when complete current live code is needed
+function renderRepoContext(files: readonly RepoContextFile[]): string {
+	if (files.length === 0) {
+		return "Repository context files checked: AGENTS.md, agent.md, README.md. None were present.";
+	}
 
-Do not rebuild the index, do not exhaustively scan the database, and do not paste raw JSON payloads into markdown.
+	const lines = [
+		"Repository context files loaded for this command.",
+		"Use them as constraints and project-local guidance before editing ASCET-related docs or code.",
+		"",
+	];
+	for (const file of files) {
+		lines.push(`<repo-file: ${file.path}${file.truncated ? " truncated" : ""}>`);
+		lines.push(file.content.trimEnd());
+		lines.push("");
+	}
+	return lines.join("\n").trimEnd();
+}
 
-Read only the context files needed to safely update project guidance:
-- README.md
-- AGENTS.md
-- agent.md
-- .ascet/index/manifest.json
-- .ascet/ascet-workspace-summary.json
-- the scaffolded .ascet/rules default entrypoints created by /ascet-init
+const ASCET_INIT_PROMPT = `You are working in an ASCET Copilot workspace.
 
-Update target rules:
-- If agent.md already exists, update agent.md.
-- Otherwise update AGENTS.md.
-- If neither file exists, create AGENTS.md.
-- Use this exact section title unless the user explicitly requested another one: ${ASCET_AGENT_SECTION_TITLE}
-- Replace or append only that ASCET section; preserve manual edits outside it.
+This initialization does not build or refresh indexes. The P0 SQLite search index is maintained by startup/background infrastructure and reported by ascet_status and the TUI footer.
 
-The final ASCET section must be concise, reusable, onboarding-oriented, scoped to the analyzed database/folder/project, and useful to future agents deciding where to explore next.
+Use this workflow for subsequent ASCET coding or analysis tasks:
 
-Include:
-- Engineering layout and analyzed scope
-- Assembly entry points
-- Signal and interface path
-- Parameter and data semantics
-- Scheduling and execution notes
-- Recommended navigation path
-- Known limitations
+1. First run ascet_status to check whether the ASCET index is ready, stale, refreshing, failed, or missing.
+2. Prefer ascet_search for indexed discovery:
+   - components
+   - declarations_of_element
+   - declarations_of_method_process
+   - references_to_component
+   - references_to_element
+   - text_in_code
+3. Use ascet_explore for navigation and scoped structure inspection.
+4. Use ascet_read only when exact current live ASCET data or complete code content is needed.
+5. Use ascet_write for all ASCET writes. After a write, inspect the result index status and pay attention to stale/refresh state before trusting broad search results.
+6. Do not perform ad hoc full-database live scans. Do not call broad ToolAPI GetAll loops from the agent path when indexed search can answer the question.
+7. If the index is stale, you may use indexed results as approximate context, but confirm critical current data with ascet_read or wait for refresh.
+
+When updating project guidance, use this section title unless the user explicitly asks for another title: ${ASCET_AGENT_SECTION_TITLE}
+
+Keep future ASCET guidance concise and operational:
+- engineering layout and analyzed scope
+- assembly entry points
+- signal and interface paths
+- parameter and data semantics
+- scheduling and execution notes
+- recommended navigation/search path
+- known limitations and stale-index cautions
 `;
 
 export function buildAscetInitPrompt(options: {
 	scope: ValidAscetInitScope;
 	projectRulesPrompt?: string;
-	artifacts?: { manifest: string; summary: string };
+	repoContextPrompt?: string;
 }): string {
-	const requestedScope = `${renderScopePrompt(options.scope)}\n\n`;
-	const artifacts = options.artifacts
-		? `ASCET init artifacts:\n- manifest: ${options.artifacts.manifest}\n- summary: ${options.artifacts.summary}\n\n`
-		: "";
-	const prompt = `${requestedScope}${artifacts}${ASCET_INIT_PROMPT}`;
-	return options.projectRulesPrompt ? `${options.projectRulesPrompt}\n\n${prompt}` : prompt;
-}
-
-const ASCET_INIT_STATUS_KEY = "ascet-init";
-const ASCET_INIT_SPINNER_FRAMES = ["|", "/", "-", "\\"];
-
-function formatElapsed(elapsedMs: number): string {
-	const totalSeconds = Math.max(0, Math.floor(elapsedMs / 1000));
-	const minutes = Math.floor(totalSeconds / 60);
-	const seconds = totalSeconds % 60;
-	return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-}
-
-function createAscetInitStatus(ui: AscetInitCommandContext["ui"]) {
-	if (!ui.setStatus) {
-		return {
-			progress(_event: AscetInitProgressEvent) {},
-			finish(status: string, elapsedMs: number) {
-				ui.notify(`ASCET init ${status} in ${formatElapsed(elapsedMs)}.`, status === "failed" ? "error" : "info");
-			},
-			dispose() {},
-		};
-	}
-
-	let current: AscetInitProgressEvent | undefined;
-	let frame = 0;
-	const startedAtMs = Date.now();
-	const render = () => {
-		const elapsedMs = Date.now() - startedAtMs;
-		const spinner = ASCET_INIT_SPINNER_FRAMES[frame % ASCET_INIT_SPINNER_FRAMES.length];
-		frame += 1;
-		if (!current) {
-			ui.setStatus?.(ASCET_INIT_STATUS_KEY, `ASCET init ${spinner} ${formatElapsed(elapsedMs)} preparing`);
-			return;
-		}
-		if (current.phase === "partition_start") {
-			ui.setStatus?.(
-				ASCET_INIT_STATUS_KEY,
-				`ASCET init ${spinner} ${formatElapsed(elapsedMs)} [${current.index}/${current.total}] ${current.partition}`,
-			);
-			return;
-		}
-		if (current.phase === "partition_done") {
-			const count = typeof current.count === "number" ? ` count:${current.count}` : "";
-			const cache = current.fromCache ? " cache" : "";
-			ui.setStatus?.(
-				ASCET_INIT_STATUS_KEY,
-				`ASCET init ${spinner} ${formatElapsed(elapsedMs)} [${current.index}/${current.total}] ${current.partition} ${current.status}${count}${cache}`,
-			);
-			return;
-		}
-		ui.setStatus?.(ASCET_INIT_STATUS_KEY, `ASCET init ${spinner} ${formatElapsed(elapsedMs)} warming index`);
-	};
-	const interval = setInterval(render, 250);
-	render();
-
-	return {
-		progress(event: AscetInitProgressEvent) {
-			current = event;
-			render();
-		},
-		finish(status: string, elapsedMs: number) {
-			ui.setStatus?.(
-				ASCET_INIT_STATUS_KEY,
-				`ASCET init ${status === "failed" ? "!" : "ok"} ${formatElapsed(elapsedMs)} ${status}`,
-			);
-		},
-		dispose() {
-			clearInterval(interval);
-		},
-	};
+	const sections = [
+		renderScopePrompt(options.scope),
+		options.projectRulesPrompt,
+		options.repoContextPrompt,
+		ASCET_INIT_PROMPT,
+	].filter((section): section is string => Boolean(section?.trim()));
+	return sections.join("\n\n");
 }
 
 export async function executeAscetInitCommand(args: string, ctx: AscetInitCommandContext): Promise<void> {
@@ -166,74 +132,26 @@ export async function executeAscetInitCommand(args: string, ctx: AscetInitComman
 		return;
 	}
 
-	ctx.ui.notify("ASCET init started: preparing rules and search index.", "info");
-	const status = createAscetInitStatus(ctx.ui);
-	let statusDisposed = false;
-	const disposeStatus = () => {
-		if (!statusDisposed) {
-			status.dispose();
-			statusDisposed = true;
-		}
-	};
-	let indexElapsedMs = 0;
-	try {
-		const { rulesDir } = await ensureRepoAscetRulesScaffold(ctx.cwd);
-		const entrypoints = await loadAscetInitRuleBundle(rulesDir);
-		const projectRulesPrompt = renderAscetInitRulesPrompt(entrypoints);
-		const index = await runAscetInitIndex({
-			cwd: ctx.cwd,
-			env: ctx.env,
-			indexMode: parsed.indexMode,
-			forceRefresh: parsed.forceRefresh,
-			warmSearchIndex: ctx.warmSearchIndex,
-			onProgress(event) {
-				indexElapsedMs = event.elapsedMs;
-				status.progress(event);
-			},
-		});
-		if (index.error && index.index.status === "failed") {
-			status.finish("failed", index.index.elapsedMs ?? indexElapsedMs);
-			disposeStatus();
-			ctx.ui.notify(`${index.error.message}\n${index.error.recover.join("\n")}`, "error");
-			return;
-		}
-		const artifacts = parsed.writeSummary
-			? await writeAscetInitArtifacts({
-					cwd: ctx.cwd,
-					scope: parsed.scope,
-					index,
-				})
-			: undefined;
-		const prompt = buildAscetInitPrompt({ scope: parsed.scope, projectRulesPrompt, artifacts });
-		const partitionCount = index.index.partitions?.length ?? 0;
+	const { rulesDir } = await ensureRepoAscetRulesScaffold(ctx.cwd);
+	const entrypoints = await loadAscetInitRuleBundle(rulesDir);
+	const projectRulesPrompt = renderAscetInitRulesPrompt(entrypoints);
+	const repoContextPrompt = renderRepoContext(await loadRepoContext(ctx.cwd));
+	const prompt = buildAscetInitPrompt({ scope: parsed.scope, projectRulesPrompt, repoContextPrompt });
+
+	if (!ctx.sendUserMessage) {
 		ctx.ui.notify(
-			`ASCET init index ${index.index.status}: ${partitionCount} partition(s)${
-				artifacts ? `; wrote ${artifacts.manifest} and ${artifacts.summary}` : ""
-			}`,
-			index.error ? "warning" : "info",
+			"ASCET init prompt could not be sent because the extension message bridge is unavailable.",
+			"error",
 		);
-		status.finish(index.index.status, index.index.elapsedMs ?? indexElapsedMs);
-		disposeStatus();
-
-		if (!ctx.sendUserMessage) {
-			ctx.ui.notify(
-				"ASCET init prompt could not be sent because the extension message bridge is unavailable.",
-				"error",
-			);
-			return;
-		}
-
-		if (ctx.isIdle()) {
-			await ctx.sendUserMessage(prompt);
-			return;
-		}
-
-		await ctx.sendUserMessage(prompt, { deliverAs: "followUp" });
-		ctx.ui.notify("Queued ASCET init as a follow-up.", "info");
-	} catch (error) {
-		status.finish("failed", indexElapsedMs);
-		throw error;
-	} finally {
-		disposeStatus();
+		return;
 	}
+
+	if (ctx.isIdle()) {
+		await ctx.sendUserMessage(prompt);
+		ctx.ui.notify("ASCET init prompt sent.", "info");
+		return;
+	}
+
+	await ctx.sendUserMessage(prompt, { deliverAs: "followUp" });
+	ctx.ui.notify("Queued ASCET init prompt as a follow-up.", "info");
 }

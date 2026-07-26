@@ -1,8 +1,11 @@
-import {
+﻿import {
 	type AscetSearchIndexWarmupOptions,
 	type AscetSearchIndexWarmupResult,
 	ensureAscetSearchIndex,
 } from "./search-index.ts";
+import { ASCET_REQUIRED_P0_INDEX_AREAS } from "./search-index-sqlite/schema.ts";
+import { getAscetSqliteIndexStatus } from "./search-index-sqlite/status.ts";
+import type { AscetSqliteIndexStatus } from "./search-index-sqlite/types.ts";
 import { type AscetStatusPathOptions, type AscetStatusReport, createAscetStatusReport } from "./status.ts";
 
 export interface AscetRuntimeProbeReport {
@@ -30,6 +33,7 @@ export interface AscetRuntimeStatusReport extends Omit<AscetStatusReport, "ok" |
 	installationOk: boolean;
 	runtimeOk: boolean;
 	runtime: AscetRuntimeProbeReport;
+	index: AscetSqliteIndexStatus;
 	summary: string;
 }
 
@@ -41,27 +45,50 @@ export interface AscetRuntimeStatusOptions extends AscetStatusPathOptions {
 
 type AscetRuntimeProbeOptions = Pick<AscetSearchIndexWarmupOptions, "cwd" | "env" | "signal"> & {
 	timeoutMs: number;
-	partition: "components";
-	forceRefresh: true;
+	partition: "p0";
+	forceRefresh: false;
+	includeTextCode: true;
 	scanTimeoutMs: number;
 	toolName: "ascet_status";
 };
 
-const RUNTIME_PROBE_DESCRIPTION =
-	"ASCET quick-search index warmup: AscetCli.exe exec warm_search_index --partition components --force --json";
+const RUNTIME_PROBE_DESCRIPTION = "ASCET quick-search P0 index: SQLite active generation";
 const RUNTIME_FAILURE_NEXT_STEP =
-	"Next step: start ASCET GUI with ToolAPI enabled, then rerun ascet_status or the ASCET command. If ASCET is already open, verify the ToolAPI connection/profile.";
+	"Next step: open the target database in ASCET GUI, wait for the startup index refresh, then rerun ascet_status.";
+const REQUIRED_P0_AREAS = new Set<string>(ASCET_REQUIRED_P0_INDEX_AREAS);
 
-function formatRuntimeProbe(report: AscetRuntimeProbeReport): string {
+function formatAreaStatus(index: AscetSqliteIndexStatus): string[] {
+	const rows = index.areas
+		.filter((area) => REQUIRED_P0_AREAS.has(area.area))
+		.map((area) => {
+			const marker =
+				area.status === "ready"
+					? "[ok]"
+					: area.status === "building"
+						? "[..]"
+						: area.status === "missing"
+							? "[ ]"
+							: "[x]";
+			const suffix =
+				area.status === "failed" || area.status === "stale"
+					? ` ${area.errorCode || area.status}${area.errorMessage ? `: ${area.errorMessage}` : ""}`
+					: "";
+			return `${marker} ${area.area.padEnd(22)} ${area.itemCount}${suffix}`;
+		});
+	return rows;
+}
+
+function formatRuntimeProbe(report: AscetRuntimeProbeReport, index: AscetSqliteIndexStatus): string {
 	if (report.ok) {
 		return [
-			"ASCET quick-search index: ready",
+			`ASCET quick-search index: ${index.status === "stale" ? "stale" : "ready"}`,
 			`  ${RUNTIME_PROBE_DESCRIPTION}`,
 			`  database: ${report.databaseName || "(unknown)"}`,
 			`  entries: ${report.entryCount}`,
 			`  scanComplete: ${report.scanComplete}`,
 			`  elapsedMs: ${report.elapsedMs}`,
-			report.fromCache ? "  source: memory cache" : null,
+			`  storage: sqlite`,
+			...formatAreaStatus(index),
 		]
 			.filter((line): line is string => line !== null)
 			.join("\n");
@@ -73,18 +100,23 @@ function formatRuntimeProbe(report: AscetRuntimeProbeReport): string {
 		report.timedOut ? "  timed out: true" : null,
 		report.stderr.trim() ? `  stderr: ${report.stderr.trim()}` : null,
 		report.stdout.trim() ? `  stdout: ${report.stdout.trim()}` : null,
+		...formatAreaStatus(index),
 	]
 		.filter((line): line is string => line !== null)
 		.join("\n");
 }
 
-function createRuntimeSummary(installation: AscetStatusReport, runtime: AscetRuntimeProbeReport): string {
+function createRuntimeSummary(
+	installation: AscetStatusReport,
+	runtime: AscetRuntimeProbeReport,
+	index: AscetSqliteIndexStatus,
+): string {
 	return [
 		`ASCET status: ${installation.ok && runtime.ok ? "ready" : "not ready"}`,
 		`ASCET installation: ${installation.ok ? "ready" : "not ready"}`,
 		`ASCET runtime: ${runtime.ok ? "ready" : "not ready"}`,
 		...installation.summary.split("\n").slice(1),
-		formatRuntimeProbe(runtime),
+		formatRuntimeProbe(runtime, index),
 		installation.ok && !runtime.ok ? RUNTIME_FAILURE_NEXT_STEP : null,
 	]
 		.filter((line): line is string => line !== null)
@@ -110,6 +142,57 @@ function toRuntimeProbeReport(result: AscetSearchIndexWarmupResult): AscetRuntim
 	};
 }
 
+function runtimeProbeReportFromSqliteStatus(index: AscetSqliteIndexStatus): AscetRuntimeProbeReport {
+	const ready = index.status === "ready";
+	const usable = ready || index.status === "stale";
+	return {
+		ok: usable,
+		commandId: "warm_search_index",
+		description: RUNTIME_PROBE_DESCRIPTION,
+		databaseName: index.databaseName,
+		databasePath: index.databasePath,
+		entryCount: index.areas.reduce((total, area) => total + area.itemCount, 0),
+		elapsedMs: index.elapsedMs,
+		scanComplete: index.areas.length > 0 && index.areas.every((area) => area.scanComplete),
+		fromCache: true,
+		error: usable
+			? undefined
+			: {
+					code: index.status === "missing" ? "search_index_missing" : `search_index_${index.status}`,
+					message:
+						index.status === "missing"
+							? "ASCET SQLite P0 quick-search index is missing."
+							: `ASCET SQLite P0 quick-search index is ${index.status}.`,
+				},
+		exitCode: null,
+		timedOut: false,
+		stdout: "",
+		stderr: "",
+	};
+}
+
+function disabledRuntimeProbeReport(): AscetRuntimeProbeReport {
+	return {
+		ok: false,
+		commandId: "warm_search_index",
+		description: RUNTIME_PROBE_DESCRIPTION,
+		databaseName: "",
+		databasePath: "",
+		entryCount: 0,
+		elapsedMs: 0,
+		scanComplete: false,
+		fromCache: false,
+		error: {
+			code: "search_index_disabled",
+			message: "ASCET quick-search index warmup is disabled by PI_ASCET_SEARCH_INDEX=0.",
+		},
+		exitCode: null,
+		timedOut: false,
+		stdout: "",
+		stderr: "",
+	};
+}
+
 function createRuntimeProbeOptions(options: {
 	cwd: string;
 	env?: Record<string, string | undefined>;
@@ -121,9 +204,10 @@ function createRuntimeProbeOptions(options: {
 		env: options.env,
 		signal: options.signal,
 		timeoutMs: options.timeoutMs,
-		partition: "components",
-		forceRefresh: true,
-		scanTimeoutMs: Math.min(options.timeoutMs, 15_000),
+		partition: "p0",
+		forceRefresh: false,
+		includeTextCode: true,
+		scanTimeoutMs: Math.min(options.timeoutMs, 90_000),
 		toolName: "ascet_status",
 	};
 }
@@ -138,12 +222,17 @@ export async function createAscetRuntimeStatusReport(
 	const installation = createAscetStatusReport(options);
 	const timeoutMs = options.timeoutMs ?? 60_000;
 	const warmSearchIndex = options.warmSearchIndex ?? defaultRuntimeProbe;
+	const index = getAscetSqliteIndexStatus(options.cwd);
 	const runtime = installation.ok
-		? toRuntimeProbeReport(
-				await warmSearchIndex(
-					createRuntimeProbeOptions({ cwd: options.cwd, env: options.env, signal: options.signal, timeoutMs }),
-				),
-			)
+		? options.warmSearchIndex
+			? toRuntimeProbeReport(
+					await warmSearchIndex(
+						createRuntimeProbeOptions({ cwd: options.cwd, env: options.env, signal: options.signal, timeoutMs }),
+					),
+				)
+			: (options.env?.PI_ASCET_SEARCH_INDEX ?? process.env.PI_ASCET_SEARCH_INDEX) === "0"
+				? disabledRuntimeProbeReport()
+				: runtimeProbeReportFromSqliteStatus(index)
 		: {
 				ok: false,
 				commandId: "warm_search_index" as const,
@@ -170,6 +259,7 @@ export async function createAscetRuntimeStatusReport(
 		installationOk: installation.ok,
 		runtimeOk: runtime.ok,
 		runtime,
-		summary: createRuntimeSummary(installation, runtime),
+		index,
+		summary: createRuntimeSummary(installation, runtime, index),
 	};
 }

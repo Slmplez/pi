@@ -11,6 +11,7 @@ export type AscetIndexPartition =
 	| "component_refs"
 	| "element_refs"
 	| "messages"
+	| "project_formulas"
 	| "text_code"
 	| "all";
 
@@ -173,6 +174,27 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					query: "AEB",
 					scopePath: "PlatformLibrary/Package",
 					match: "contains",
+					limit: 10,
+				}),
+			],
+			tags: ["project", "formula", "index"],
+		}),
+	}),
+	descriptor("ascet_search", "search_project_formulas", "public", ALL_SEARCH_PROFILES, {
+		requiresPartitions: ["project_formulas"],
+		prompt: prompt("Find Project formula declarations from the SQLite P0 index.", {
+			rules: [
+				...searchPagingRules,
+				"Use search_project_formulas when the user asks where a Project formula is declared or whether a formula exists.",
+				"Use projectPath when already known; otherwise call search_projects first.",
+				"Use ascet_read.read_project_formulas for complete live formula definitions after selecting a projectPath.",
+			],
+			fewShots: [
+				shot("search project formula", {
+					action: "search_project_formulas",
+					query: "RPM",
+					projectPath: "PlatformLibrary/Package/AEB/AEB_Project",
+					match: "exact",
 					limit: 10,
 				}),
 			],

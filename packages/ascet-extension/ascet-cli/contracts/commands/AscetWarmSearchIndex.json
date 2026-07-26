@@ -2,7 +2,7 @@
     "id":  "AscetWarmSearchIndex",
     "family":  "search",
     "summary":  "Warm the ASCET quick-search element index for the current database",
-    "usage":  "[--partition \u003cpartition\u003e] [--component \u003ccomponent-path\u003e] [--force] [--json] [--max-components \u003cn\u003e] [--include-text-code] [--max-text-chars \u003cn\u003e] [--timeout-ms \u003cms\u003e]",
+    "usage":  "[--partition \u003cpartition\u003e] [--component \u003ccomponent-path\u003e] [--force] [--json] [--max-components \u003cn\u003e] [--include-text-code] [--max-text-chars \u003cn\u003e] [--timeout-ms \u003cms\u003e] [--progress-file \u003cpath\u003e]",
     "execution":  {
                       "kind":  "unified_cli",
                       "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
@@ -24,6 +24,7 @@
                      "required":  false,
                      "description":  "Index partition to warm.",
                      "enumValues":  [
+                                        "p0",
                                         "components",
                                         "element_decls",
                                         "method_decls",
@@ -84,6 +85,13 @@
                      "type":  "integer",
                      "required":  false,
                      "description":  "Maximum scan time budget in milliseconds; 0 means unbounded."
+                 },
+                 {
+                     "name":  "--progress-file",
+                     "kind":  "option",
+                     "type":  "string",
+                     "required":  false,
+                     "description":  "Optional status sidecar path for UI progress."
                  }
              ],
     "preconditions":  [
@@ -96,7 +104,7 @@
     "examples":  [
                      {
                          "description":  "Basic usage",
-                         "command":  "AscetCli.exe exec warm_search_index [--partition \u003cpartition\u003e] [--component \u003ccomponent-path\u003e] [--force] [--json] [--max-components \u003cn\u003e] [--include-text-code] [--max-text-chars \u003cn\u003e] [--timeout-ms \u003cms\u003e]"
+                         "command":  "AscetCli.exe exec warm_search_index [--partition \u003cpartition\u003e] [--component \u003ccomponent-path\u003e] [--force] [--json] [--max-components \u003cn\u003e] [--include-text-code] [--max-text-chars \u003cn\u003e] [--timeout-ms \u003cms\u003e] [--progress-file \u003cpath\u003e]"
                      }
                  ],
     "pitfalls":  [

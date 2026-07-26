@@ -23,10 +23,13 @@ export const ascetCapabilitiesTool = defineSequentialAscetTool({
 		const result = runAscetCapabilities(params, { cwd: ctx.cwd });
 		const action = params.action ?? "search_actions";
 		const route = routeAscetAction({ toolName: "ascet_capabilities", action: "search_actions" });
+		const payload = toAscetCapabilitiesPayload(result);
 		return {
 			content: [{ type: "text", text: formatAscetCapabilitiesResult(result) }],
 			details: {
-				result: toAscetCapabilitiesPayload(result),
+				ok: result.ok,
+				data: result.ok ? { result: payload } : undefined,
+				result: payload,
 				tool: "ascet_capabilities",
 				action,
 				command: {
@@ -34,6 +37,7 @@ export const ascetCapabilitiesTool = defineSequentialAscetTool({
 					backendCommandId: route.backendCommandId,
 					operation: route.operation,
 				},
+				error: result.error,
 			},
 		};
 	},

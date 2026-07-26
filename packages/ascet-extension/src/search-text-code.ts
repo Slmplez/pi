@@ -5,7 +5,12 @@ import {
 	formatAscetCliJsonResult,
 	runAscetCliJson,
 } from "./cli.ts";
-import { ensureAscetSearchIndex, getAscetSearchIndexState, queryAscetTextCodeIndex } from "./search-index.ts";
+import {
+	ensureAscetSearchIndex,
+	getAscetSearchIndexState,
+	isUsableSqliteSearchResult,
+	queryAscetTextCodeIndex,
+} from "./search-index.ts";
 
 export interface AscetSearchTextCodeParams {
 	query: string;
@@ -81,6 +86,9 @@ function getIndexedMatchCount(result: AscetCliJsonResult): number {
 }
 
 function canUseTextCodeIndexResult(result: AscetCliJsonResult): boolean {
+	if (isUsableSqliteSearchResult(result)) {
+		return true;
+	}
 	const state = getAscetSearchIndexState();
 	if (!result.ok || state.status !== "ready") {
 		return false;

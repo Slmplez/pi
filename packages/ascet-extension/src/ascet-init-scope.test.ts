@@ -3,41 +3,33 @@ import { describe, test } from "node:test";
 import { parseAscetInitArgs } from "./ascet-init-scope.ts";
 
 describe("parseAscetInitArgs", () => {
-	test("keeps legacy scope parsing and defaults to core index", () => {
+	test("parses only scope arguments", () => {
 		assert.deepEqual(parseAscetInitArgs(""), {
 			ok: true,
 			scope: { ok: true, kind: "auto-detect" },
-			indexMode: "core",
-			forceRefresh: false,
-			writeSummary: true,
 		});
-		assert.deepEqual(parseAscetInitArgs("--index all"), {
+		assert.deepEqual(parseAscetInitArgs("database"), {
 			ok: true,
-			scope: { ok: true, kind: "auto-detect" },
-			indexMode: "all",
-			forceRefresh: false,
-			writeSummary: true,
+			scope: { ok: true, kind: "database" },
 		});
-		assert.deepEqual(parseAscetInitArgs("folder Platform/Package --index core --force"), {
+		assert.deepEqual(parseAscetInitArgs("folder Platform/Package"), {
 			ok: true,
 			scope: { ok: true, kind: "folder", value: "Platform/Package" },
-			indexMode: "core",
-			forceRefresh: true,
-			writeSummary: true,
 		});
-		assert.deepEqual(parseAscetInitArgs("project AEB --index=none --no-write-summary"), {
+		assert.deepEqual(parseAscetInitArgs("project AEB"), {
 			ok: true,
 			scope: { ok: true, kind: "project", value: "AEB" },
-			indexMode: "none",
-			forceRefresh: false,
-			writeSummary: false,
 		});
 	});
 
-	test("rejects invalid init flags", () => {
-		const badIndex = parseAscetInitArgs("--index fast");
+	test("rejects all init flags", () => {
+		const badIndex = parseAscetInitArgs("--index all");
 		assert.equal(badIndex.ok, false);
-		assert.match(badIndex.ok ? "" : badIndex.reason, /--index requires/);
+		assert.match(badIndex.ok ? "" : badIndex.reason, /unknown option '--index'/);
+
+		const force = parseAscetInitArgs("--force");
+		assert.equal(force.ok, false);
+		assert.match(force.ok ? "" : force.reason, /unknown option '--force'/);
 
 		const unknown = parseAscetInitArgs("--background");
 		assert.equal(unknown.ok, false);

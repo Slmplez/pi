@@ -192,7 +192,7 @@ npx tsx --test packages/ascet-extension/src/tools/capabilities.test.ts
 4. Assert these partition mappings:
    - `ascet_status.default -> components`
    - `search_components -> components`
-   - `list_diagrams -> diagram_metadata`
+   - `list_diagrams -> no quick-search index; live ascet_explore navigation`
    - `declarations_of_element -> element_decls`
    - `declarations_of_method_process -> method_decls`
    - `declarations_of_method_process_element -> method_process_elements`

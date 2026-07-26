@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, unlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { afterEach, describe, test } from "node:test";
+import { afterEach, beforeEach, describe, test } from "node:test";
 import type { AscetCliExecutionResult, AscetCliRequest } from "./cli.ts";
 import {
 	type AscetComponentSearchIndexEntry,
@@ -21,6 +21,20 @@ import {
 	upsertAscetElementDeclarations,
 	upsertAscetFullElements,
 } from "./search-index.ts";
+
+const originalSearchIndexStorage = process.env.PI_ASCET_SEARCH_INDEX_STORAGE;
+
+beforeEach(() => {
+	process.env.PI_ASCET_SEARCH_INDEX_STORAGE = "memory";
+});
+
+afterEach(() => {
+	if (originalSearchIndexStorage === undefined) {
+		delete process.env.PI_ASCET_SEARCH_INDEX_STORAGE;
+	} else {
+		process.env.PI_ASCET_SEARCH_INDEX_STORAGE = originalSearchIndexStorage;
+	}
+});
 
 function createReadyEnv(): { cwd: string; env: Record<string, string | undefined>; cleanup: () => void } {
 	const root = mkdtempSync(join(tmpdir(), "pi-ascet-search-index-"));
@@ -257,13 +271,23 @@ describe("ASCET search index warmup", () => {
 		const fixture = createReadyEnv();
 		let calls = 0;
 		try {
+			fixture.env.PI_ASCET_SEARCH_INDEX_STORAGE = "memory";
 			const warmup = await ensureAscetSearchIndex({
 				cwd: fixture.cwd,
 				env: fixture.env,
 				timeoutMs: 1000,
 				executeCli: async (request) => {
 					calls += 1;
-					assert.deepEqual(request.args, ["exec", "warm_search_index", "--json"]);
+					assert.deepEqual(request.args, [
+						"exec",
+						"warm_search_index",
+						"--partition",
+						"p0",
+						"--json",
+						"--include-text-code",
+						"--progress-file",
+						join(fixture.cwd, ".ascet", "index", "status.json"),
+					]);
 					return makeExecution(request, warmupPayload());
 				},
 			});
@@ -313,6 +337,52 @@ describe("ASCET search index warmup", () => {
 			assert.equal(textCodeResult?.ok, true);
 			assert.equal(textCodeEnvelope.result?.source, "quick_search_index");
 			assert.equal(textCodeEnvelope.result?.matches?.length, 1);
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("writes footer status sidecar when serving a ready SQLite cache", async () => {
+		const fixture = createReadyEnv();
+		const statusPath = join(fixture.cwd, ".ascet", "index", "status.json");
+		let calls = 0;
+		try {
+			fixture.env.PI_ASCET_SEARCH_INDEX_STORAGE = "sqlite";
+			const first = await ensureAscetSearchIndex({
+				cwd: fixture.cwd,
+				env: fixture.env,
+				timeoutMs: 1000,
+				executeCli: async (request) => {
+					calls += 1;
+					return makeExecution(request, warmupPayload());
+				},
+			});
+			assert.equal(first.ok, true);
+			assert.equal(first.fromCache, false);
+			assert.equal(existsSync(statusPath), true);
+
+			unlinkSync(statusPath);
+			const second = await ensureAscetSearchIndex({
+				cwd: fixture.cwd,
+				env: fixture.env,
+				timeoutMs: 1000,
+				executeCli: async (request) => {
+					calls += 1;
+					return makeExecution(request, warmupPayload());
+				},
+			});
+			assert.equal(second.ok, true);
+			assert.equal(second.fromCache, true);
+			assert.equal(calls, 1);
+			const status = JSON.parse(readFileSync(statusPath, "utf8")) as {
+				state?: unknown;
+				totalDocs?: unknown;
+				areas?: Record<string, { status?: unknown; itemCount?: unknown }>;
+			};
+			assert.equal(status.state, "ready");
+			assert.equal(status.totalDocs, second.entryCount);
+			assert.equal(status.areas?.components?.status, "ready");
+			assert.equal(status.areas?.components?.itemCount, 2);
 		} finally {
 			fixture.cleanup();
 		}
@@ -436,10 +506,14 @@ describe("ASCET search index warmup", () => {
 			assert.deepEqual(observedArgs, [
 				"exec",
 				"warm_search_index",
+				"--partition",
+				"p0",
 				"--json",
 				"--include-text-code",
 				"--max-text-chars",
 				"12345",
+				"--progress-file",
+				join(fixture.cwd, ".ascet", "index", "status.json"),
 			]);
 		} finally {
 			fixture.cleanup();
@@ -470,6 +544,8 @@ describe("ASCET search index warmup", () => {
 				"components",
 				"--force",
 				"--json",
+				"--progress-file",
+				join(fixture.cwd, ".ascet", "index", "status.json"),
 			]);
 		} finally {
 			fixture.cleanup();

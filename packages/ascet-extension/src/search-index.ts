@@ -8,40 +8,98 @@ import {
 
 export type { AscetFullElementCacheEntry } from "./search-index-store.ts";
 
+import { ingestAscetSearchIndexSqlite } from "./search-index-sqlite/ingest.ts";
 import {
+	queryAscetComponentIndexSqlite,
+	queryAscetComponentReferenceIndexSqlite,
+	queryAscetElementReferenceIndexSqlite,
+	queryAscetMessageIndexSqlite,
+	queryAscetMethodDeclarationIndexSqlite,
+	queryAscetProjectFormulaIndexSqlite,
+	queryAscetProjectIndexSqlite,
+	queryAscetSearchIndexSqlite,
+	queryAscetTextCodeIndexSqlite,
+} from "./search-index-sqlite/query.ts";
+import { getAscetSqliteIndexStatus } from "./search-index-sqlite/status.ts";
+import { getAscetIndexStatusFilePath, writeAscetIndexStatusFile } from "./search-index-sqlite/status-file.ts";
+import type { AscetSqliteSearchIndexBuildInput } from "./search-index-sqlite/types.ts";
+import {
+	type AscetComponentIndexQueryParams,
 	type AscetComponentSearchIndexEntry,
+	type AscetDbItemDependencyIndexEntry,
 	type AscetDiagramMetadataIndexEntry,
+	type AscetDiagramMetadataIndexQueryParams,
+	type AscetFolderIndexEntry,
+	type AscetFolderItemIndexEntry,
 	type AscetMessageIndexEntry,
+	type AscetMessageIndexQueryParams,
 	type AscetMethodDeclarationIndexEntry,
+	type AscetMethodDeclarationIndexQueryParams,
 	type AscetMethodProcessElementIndexEntry,
+	type AscetMethodProcessElementIndexQueryParams,
+	type AscetProjectFormulaIndexEntry,
+	type AscetProjectFormulaIndexQueryParams,
+	type AscetProjectIndexQueryParams,
+	type AscetProjectItemIndexEntry,
 	type AscetReferenceIndexEntry,
-	type AscetSearchIndexBuildInput,
+	type AscetReferenceIndexQueryParams,
 	type AscetSearchIndexCounts,
 	type AscetSearchIndexEntry,
 	type AscetSearchIndexPartition,
+	type AscetSearchIndexQueryOptions,
+	type AscetSearchIndexQueryParams,
+	type AscetTextCodeIndexQueryParams,
 	type AscetTextCodeSearchIndexEntry,
 	getAscetSearchIndexPartitionState,
 	getAscetSearchIndexState,
 	installAscetSearchIndex,
 	markAscetSearchIndexFailed,
 	markAscetSearchIndexWarming,
+	queryAscetComponentIndex as queryAscetComponentIndexMemory,
+	queryAscetComponentReferenceIndex as queryAscetComponentReferenceIndexMemory,
+	queryAscetDiagramMetadataIndex as queryAscetDiagramMetadataIndexMemory,
+	queryAscetElementReferenceIndex as queryAscetElementReferenceIndexMemory,
+	queryAscetMessageIndex as queryAscetMessageIndexMemory,
+	queryAscetMethodDeclarationIndex as queryAscetMethodDeclarationIndexMemory,
+	queryAscetMethodProcessElementIndex as queryAscetMethodProcessElementIndexMemory,
+	queryAscetProjectIndex as queryAscetProjectIndexMemory,
+	queryAscetSearchIndex as queryAscetSearchIndexMemory,
+	queryAscetTextCodeIndex as queryAscetTextCodeIndexMemory,
 } from "./search-index-store.ts";
 
 const DEFAULT_SEARCH_INDEX_TTL_MS = 10 * 60 * 1000;
 
+export type AscetSearchIndexWarmupPartition = AscetSearchIndexPartition | "p0";
+
 export type {
+	AscetComponentIndexQueryParams,
 	AscetComponentSearchIndexEntry,
+	AscetDbItemDependencyIndexEntry,
 	AscetDiagramMetadataIndexEntry,
+	AscetDiagramMetadataIndexQueryParams,
+	AscetFolderIndexEntry,
+	AscetFolderItemIndexEntry,
 	AscetMessageIndexEntry,
+	AscetMessageIndexQueryParams,
 	AscetMethodDeclarationIndexEntry,
+	AscetMethodDeclarationIndexQueryParams,
 	AscetMethodProcessElementIndexEntry,
+	AscetMethodProcessElementIndexQueryParams,
+	AscetProjectFormulaIndexEntry,
+	AscetProjectFormulaIndexQueryParams,
+	AscetProjectIndexQueryParams,
+	AscetProjectItemIndexEntry,
 	AscetReferenceIndexEntry,
+	AscetReferenceIndexQueryParams,
 	AscetSearchIndexCounts,
 	AscetSearchIndexEntry,
 	AscetSearchIndexGroup,
 	AscetSearchIndexPartition,
 	AscetSearchIndexPartitionLifecycleState,
+	AscetSearchIndexQueryOptions,
+	AscetSearchIndexQueryParams,
 	AscetSearchIndexState,
+	AscetTextCodeIndexQueryParams,
 	AscetTextCodeSearchIndexEntry,
 } from "./search-index-store.ts";
 export {
@@ -50,17 +108,7 @@ export {
 	getAscetSearchIndexState,
 	invalidateAscetSearchIndex,
 	invalidateAscetSearchIndexPartitions,
-	queryAscetComponentIndex,
-	queryAscetComponentReferenceIndex,
-	queryAscetDiagramMetadataIndex,
-	queryAscetElementReferenceIndex,
 	queryAscetFullElements,
-	queryAscetMessageIndex,
-	queryAscetMethodDeclarationIndex,
-	queryAscetMethodProcessElementIndex,
-	queryAscetProjectIndex,
-	queryAscetSearchIndex,
-	queryAscetTextCodeIndex,
 	resetAscetSearchIndexForTest,
 	upsertAscetElementDeclarations,
 	upsertAscetFullElements,
@@ -71,17 +119,7 @@ export interface AscetSearchIndexWarmupOptions {
 	env?: Record<string, string | undefined>;
 	signal?: AbortSignal;
 	timeoutMs?: number;
-	partition?:
-		| "components"
-		| "element_decls"
-		| "method_decls"
-		| "method_process_elements"
-		| "component_refs"
-		| "element_refs"
-		| "messages"
-		| "diagram_metadata"
-		| "text_code"
-		| "all";
+	partition?: AscetSearchIndexWarmupPartition;
 	forceRefresh?: boolean;
 	componentPath?: string;
 	maxComponents?: number;
@@ -91,6 +129,15 @@ export interface AscetSearchIndexWarmupOptions {
 	executeCli?: (request: AscetCliRequest) => Promise<AscetCliExecutionResult>;
 	scheduler?: RunAscetCliJsonOptions["scheduler"];
 	toolName?: string;
+}
+
+export interface AscetSearchIndexBackgroundRefreshOptions
+	extends Pick<
+		AscetSearchIndexWarmupOptions,
+		"cwd" | "env" | "signal" | "timeoutMs" | "executeCli" | "scheduler" | "scanTimeoutMs"
+	> {
+	reason?: string;
+	delayMs?: number;
 }
 
 export interface AscetSearchIndexWarmupResult {
@@ -113,6 +160,7 @@ export interface AscetSearchIndexWarmupResult {
 }
 
 const inFlightWarmups = new Map<string, Promise<AscetSearchIndexWarmupResult>>();
+const scheduledBackgroundRefreshes = new Set<string>();
 
 function getEnvValue(env: Record<string, string | undefined> | undefined, key: string): string | undefined {
 	return env?.[key] ?? process.env[key];
@@ -130,26 +178,36 @@ function isTextCodeWarmupEnabled(env: Record<string, string | undefined> | undef
 	return getEnvValue(env, "PI_ASCET_SEARCH_INDEX_INCLUDE_TEXT") === "1";
 }
 
-function normalizeWarmupPartition(
-	options: Pick<AscetSearchIndexWarmupOptions, "partition" | "includeTextCode">,
-): AscetSearchIndexPartition {
-	return options.partition ?? "all";
+function isSqliteStorageEnabled(env: Record<string, string | undefined> | undefined): boolean {
+	return getEnvValue(env, "PI_ASCET_SEARCH_INDEX_STORAGE") !== "memory";
 }
 
-function partitionsForWarmup(partition: AscetSearchIndexPartition): AscetSearchIndexPartition[] {
-	return partition === "all"
-		? [
-				"components",
-				"element_decls",
-				"method_decls",
-				"method_process_elements",
-				"component_refs",
-				"element_refs",
-				"messages",
-				"diagram_metadata",
-				"text_code",
-			]
-		: [partition];
+function isBackgroundRefreshEnabled(
+	env: Record<string, string | undefined> | undefined,
+	scheduler: AscetSearchIndexWarmupOptions["scheduler"],
+): boolean {
+	const configured = getEnvValue(env, "PI_ASCET_SEARCH_INDEX_BACKGROUND_REFRESH");
+	if (configured === "0") {
+		return false;
+	}
+	if (configured === "1") {
+		return true;
+	}
+	return scheduler !== undefined;
+}
+
+function normalizeWarmupPartition(
+	options: Pick<AscetSearchIndexWarmupOptions, "partition" | "includeTextCode">,
+): AscetSearchIndexWarmupPartition {
+	return options.partition ?? "p0";
+}
+
+function partitionsForWarmup(partition: AscetSearchIndexWarmupPartition): AscetSearchIndexPartition[] {
+	return partition === "p0"
+		? ["components", "element_decls", "method_decls", "component_refs", "element_refs", "text_code"]
+		: partition === "all"
+			? ["components", "element_decls", "method_decls", "component_refs", "element_refs", "messages", "text_code"]
+			: [partition];
 }
 
 function getSearchIndexTtlMs(env: Record<string, string | undefined> | undefined): number {
@@ -186,6 +244,47 @@ function asBoolean(value: unknown, fallback: boolean): boolean {
 	return typeof value === "boolean" ? value : fallback;
 }
 
+function indexStatusAreasFromInput(
+	input: AscetSqliteSearchIndexBuildInput,
+): Record<string, { status: "ready"; count: number }> {
+	return {
+		components: { status: "ready", count: input.components?.length ?? 0 },
+		folders: { status: "ready", count: input.folders?.length ?? 0 },
+		folder_items: { status: "ready", count: input.folderItems?.length ?? 0 },
+		elements: { status: "ready", count: input.entries?.length ?? 0 },
+		methods: { status: "ready", count: input.methodDeclarations?.length ?? 0 },
+		project_items: { status: "ready", count: input.projectItems?.length ?? 0 },
+		component_refs: { status: "ready", count: input.componentRefs?.length ?? 0 },
+		element_refs: { status: "ready", count: input.elementRefs?.length ?? 0 },
+		dbitem_dependencies: { status: "ready", count: input.dbItemDependencies?.length ?? 0 },
+		code_blocks: { status: "ready", count: input.textCodeEntries?.length ?? 0 },
+		code_terms: { status: "ready", count: input.textCodeEntries?.length ?? 0 },
+	};
+}
+
+function writeSqliteCacheStatusFile(cwd: string, sqliteStatus: ReturnType<typeof getAscetSqliteIndexStatus>): void {
+	writeAscetIndexStatusFile(cwd, {
+		state: sqliteStatus.status === "stale" ? "stale" : "ready",
+		phase: "p0",
+		elapsedMs: sqliteStatus.elapsedMs,
+		totalDocs: sqliteStatus.areas.reduce((total, area) => total + area.itemCount, 0),
+		staleAreas: sqliteStatus.areas.filter((area) => area.status === "stale").map((area) => area.area),
+		areas: Object.fromEntries(
+			sqliteStatus.areas.map((area) => [
+				area.area,
+				{
+					status: area.status,
+					count: area.itemCount,
+					itemCount: area.itemCount,
+					elapsedMs: area.elapsedMs,
+					errorCode: area.errorCode,
+					errorMessage: area.errorMessage,
+				},
+			]),
+		),
+	});
+}
+
 function normalizeComponentPathForCache(value: string | undefined): string {
 	return (value ?? "")
 		.trim()
@@ -199,7 +298,7 @@ function normalizeCwdForWarmupKey(value: string): string {
 }
 
 function createWarmupInFlightKey(
-	partition: AscetSearchIndexPartition,
+	partition: AscetSearchIndexWarmupPartition,
 	options: Pick<
 		AscetSearchIndexWarmupOptions,
 		"componentPath" | "cwd" | "env" | "includeTextCode" | "maxComponents" | "maxTextChars"
@@ -514,6 +613,133 @@ function parseDiagramMetadata(value: unknown): AscetDiagramMetadataIndexEntry[] 
 	return entries;
 }
 
+function parseFolders(value: unknown): AscetFolderIndexEntry[] {
+	if (!Array.isArray(value)) {
+		return [];
+	}
+	const entries: AscetFolderIndexEntry[] = [];
+	for (const item of value) {
+		if (!isRecord(item)) {
+			continue;
+		}
+		const path = asString(item.path) || asString(item.folderPath);
+		if (!path) {
+			continue;
+		}
+		entries.push({
+			path,
+			name: asString(item.name) || path.replace(/\//g, "\\").split("\\").filter(Boolean).at(-1) || "",
+			parentPath: asString(item.parentPath),
+		});
+	}
+	return entries;
+}
+
+function parseFolderItems(value: unknown): AscetFolderItemIndexEntry[] {
+	if (!Array.isArray(value)) {
+		return [];
+	}
+	const entries: AscetFolderItemIndexEntry[] = [];
+	for (const item of value) {
+		if (!isRecord(item)) {
+			continue;
+		}
+		const folderPath = asString(item.folderPath) || asString(item.parentPath);
+		const itemPath = asString(item.itemPath) || asString(item.path) || asString(item.componentPath);
+		if (!folderPath || !itemPath) {
+			continue;
+		}
+		entries.push({
+			folderPath,
+			itemPath,
+			itemName:
+				asString(item.itemName) ||
+				asString(item.name) ||
+				itemPath.replace(/\//g, "\\").split("\\").filter(Boolean).at(-1) ||
+				"",
+			itemKind: asString(item.itemKind) || asString(item.kind) || asString(item.objectKind),
+		});
+	}
+	return entries;
+}
+
+function parseProjectFormulas(value: unknown): AscetProjectFormulaIndexEntry[] {
+	if (!Array.isArray(value)) {
+		return [];
+	}
+	const entries: AscetProjectFormulaIndexEntry[] = [];
+	for (const item of value) {
+		if (!isRecord(item)) {
+			continue;
+		}
+		const projectPath = asString(item.projectPath) || asString(item.componentPath) || asString(item.ownerPath);
+		const name = asString(item.name) || asString(item.formulaName);
+		if (!projectPath || !name) {
+			continue;
+		}
+		entries.push({
+			projectPath,
+			name,
+			path: asString(item.path),
+			runtimeType: asString(item.runtimeType) || asString(item.type),
+			sourceApi: asString(item.sourceApi) || "Project.GetAllFormulas",
+		});
+	}
+	return entries;
+}
+
+function parseProjectItems(value: unknown): AscetProjectItemIndexEntry[] {
+	if (!Array.isArray(value)) {
+		return [];
+	}
+	const entries: AscetProjectItemIndexEntry[] = [];
+	for (const item of value) {
+		if (!isRecord(item)) {
+			continue;
+		}
+		const projectPath = asString(item.projectPath) || asString(item.componentPath) || asString(item.ownerPath);
+		const name = asString(item.name) || asString(item.itemName);
+		const itemKind = asString(item.itemKind) || asString(item.kind);
+		if (!projectPath || !name || !itemKind) {
+			continue;
+		}
+		entries.push({
+			projectPath,
+			name,
+			itemKind,
+			runtimeType: asString(item.runtimeType) || asString(item.type),
+			sourceApi: asString(item.sourceApi),
+		});
+	}
+	return entries;
+}
+
+function parseDbItemDependencies(value: unknown): AscetDbItemDependencyIndexEntry[] {
+	if (!Array.isArray(value)) {
+		return [];
+	}
+	const entries: AscetDbItemDependencyIndexEntry[] = [];
+	for (const item of value) {
+		if (!isRecord(item)) {
+			continue;
+		}
+		const sourcePath =
+			asString(item.sourcePath) || asString(item.sourceComponentPath) || asString(item.componentPath);
+		const targetPath = asString(item.targetPath) || asString(item.targetComponentPath);
+		if (!sourcePath || !targetPath) {
+			continue;
+		}
+		entries.push({
+			sourcePath,
+			targetPath,
+			targetName: asString(item.targetName) || asString(item.targetComponentName),
+			targetKind: asString(item.targetKind) || asString(item.targetComponentKind),
+			sourceApi: asString(item.sourceApi) || "GetAllReferecedDataBaseItems",
+		});
+	}
+	return entries;
+}
+
 function parseLegacyTextCodeEntries(value: unknown): AscetTextCodeSearchIndexEntry[] {
 	if (!Array.isArray(value)) {
 		return [];
@@ -521,7 +747,7 @@ function parseLegacyTextCodeEntries(value: unknown): AscetTextCodeSearchIndexEnt
 	return parseTextCodeEntries(value.filter((item) => isRecord(item) && item.group === "text_code"));
 }
 
-function buildInputFromPayload(payload: Record<string, unknown>): AscetSearchIndexBuildInput | undefined {
+function buildInputFromPayload(payload: Record<string, unknown>): AscetSqliteSearchIndexBuildInput | undefined {
 	const rawEntries = payload.entries;
 	const rawComponents = payload.components;
 	const rawObjects = payload.objects;
@@ -533,6 +759,30 @@ function buildInputFromPayload(payload: Record<string, unknown>): AscetSearchInd
 	const elementRefs = parseReferences(payload.elementRefs);
 	const messages = parseMessages(payload.messages);
 	const diagramMetadata = parseDiagramMetadata(payload.diagramMetadata);
+	const folders = parseFolders(payload.folders);
+	const folderItems = parseFolderItems(payload.folderItems ?? payload.folder_items);
+	const projectFormulas = parseProjectFormulas(payload.projectFormulas ?? payload.formulas);
+	const projectItems = [
+		...parseProjectItems(payload.projectItems),
+		...parseProjectItems(payload.globals).map((entry) => ({
+			...entry,
+			itemKind: entry.itemKind || "global",
+			sourceApi: entry.sourceApi || "Project.GetAllGlobals",
+		})),
+		...parseProjectItems(payload.modules).map((entry) => ({
+			...entry,
+			itemKind: entry.itemKind || "module",
+			sourceApi: entry.sourceApi || "Project.GetAllModules",
+		})),
+		...parseProjectItems(payload.tasks).map((entry) => ({
+			...entry,
+			itemKind: entry.itemKind || "task",
+			sourceApi: entry.sourceApi || "Project.GetAllTasks",
+		})),
+	];
+	const dbItemDependencies = parseDbItemDependencies(
+		payload.dbItemDependencies ?? payload.databaseItemDependencies ?? payload.dbitemDependencies,
+	);
 	if (
 		!Array.isArray(rawEntries) &&
 		!Array.isArray(rawComponents) &&
@@ -544,6 +794,11 @@ function buildInputFromPayload(payload: Record<string, unknown>): AscetSearchInd
 		elementRefs.length === 0 &&
 		messages.length === 0 &&
 		diagramMetadata.length === 0 &&
+		folders.length === 0 &&
+		folderItems.length === 0 &&
+		projectFormulas.length === 0 &&
+		projectItems.length === 0 &&
+		dbItemDependencies.length === 0 &&
 		!Array.isArray(payload.textCodeEntries) &&
 		!Array.isArray(payload.textCode)
 	) {
@@ -584,18 +839,32 @@ function buildInputFromPayload(payload: Record<string, unknown>): AscetSearchInd
 		elementRefs,
 		messages,
 		diagramMetadata,
+		folders,
+		folderItems,
+		projectFormulas,
+		projectItems,
+		dbItemDependencies,
 		counts: parseCounts(payload.counts),
 	};
 }
 
 function countPartitionEntries(
 	state: ReturnType<typeof getAscetSearchIndexState>,
-	partition: AscetSearchIndexPartition,
+	partition: AscetSearchIndexWarmupPartition,
 ): number {
 	if (state.status !== "ready") {
 		return 0;
 	}
 	switch (partition) {
+		case "p0":
+			return (
+				state.components.length +
+				state.entries.length +
+				state.methodDeclarations.length +
+				state.componentRefs.length +
+				state.elementRefs.length +
+				state.textCodeEntries.length
+			);
 		case "components":
 			return state.components.length;
 		case "element_decls":
@@ -631,13 +900,71 @@ function countPartitionEntries(
 
 function readyResultFromCache(
 	env: Record<string, string | undefined> | undefined,
+	cwd: string,
 	requiresTextCode: boolean,
 	forceRefresh: boolean,
-	partition: AscetSearchIndexPartition,
+	partition: AscetSearchIndexWarmupPartition,
 	componentPath?: string,
 ): AscetSearchIndexWarmupResult | undefined {
 	if (forceRefresh || isForceWarmup(env)) {
 		return undefined;
+	}
+	if (isSqliteStorageEnabled(env)) {
+		const sqliteStatus = getAscetSqliteIndexStatus(cwd);
+		if (sqliteStatus.status === "ready" || sqliteStatus.status === "stale") {
+			const requiredAreas =
+				partition === "p0"
+					? [
+							"components",
+							"folders",
+							"folder_items",
+							"elements",
+							"methods",
+							"project_items",
+							"component_refs",
+							"element_refs",
+							"dbitem_dependencies",
+							"code_blocks",
+							"code_terms",
+						]
+					: partition === "all"
+						? ["components", "elements", "methods", "component_refs", "element_refs", "code_blocks", "code_terms"]
+						: partition === "components"
+							? ["components"]
+							: partition === "element_decls"
+								? ["elements"]
+								: partition === "method_decls"
+									? ["methods"]
+									: partition === "component_refs"
+										? ["component_refs"]
+										: partition === "element_refs"
+											? ["element_refs"]
+											: partition === "text_code"
+												? ["code_blocks", "code_terms"]
+												: [];
+			const areaReady = requiredAreas.every((area) => {
+				const status = sqliteStatus.areas.find((entry) => entry.area === area);
+				return status?.status === "ready" || status?.status === "stale";
+			});
+			const hasText = sqliteStatus.areas.find((entry) => entry.area === "code_blocks")?.itemCount ?? 0;
+			if (areaReady && (!requiresTextCode || hasText > 0 || partition !== "text_code")) {
+				writeSqliteCacheStatusFile(cwd, sqliteStatus);
+				return {
+					ok: true,
+					commandId: "warm_search_index",
+					databaseName: sqliteStatus.databaseName,
+					databasePath: sqliteStatus.databasePath,
+					entryCount: sqliteStatus.areas.reduce((total, area) => total + area.itemCount, 0),
+					elapsedMs: sqliteStatus.elapsedMs,
+					scanComplete: sqliteStatus.areas.every((area) => area.scanComplete),
+					fromCache: true,
+					exitCode: 0,
+					timedOut: false,
+					stdout: "",
+					stderr: "",
+				};
+			}
+		}
 	}
 	const state = getAscetSearchIndexState();
 	if (state.status !== "ready") {
@@ -685,7 +1012,7 @@ function readyResultFromCache(
 	};
 }
 
-function disabledResult(partition: AscetSearchIndexPartition): AscetSearchIndexWarmupResult {
+function disabledResult(partition: AscetSearchIndexWarmupPartition): AscetSearchIndexWarmupResult {
 	const error = {
 		code: "search_index_disabled",
 		message: "ASCET quick-search index warmup is disabled by PI_ASCET_SEARCH_INDEX=0.",
@@ -710,7 +1037,7 @@ function disabledResult(partition: AscetSearchIndexPartition): AscetSearchIndexW
 
 function failureResult(
 	result: AscetCliJsonResult,
-	partition: AscetSearchIndexPartition,
+	partition: AscetSearchIndexWarmupPartition,
 	code?: string,
 	message?: string,
 ): AscetSearchIndexWarmupResult {
@@ -738,9 +1065,10 @@ function failureResult(
 
 function successResult(
 	result: AscetCliJsonResult,
-	input: AscetSearchIndexBuildInput,
-	partition: AscetSearchIndexPartition,
+	input: AscetSqliteSearchIndexBuildInput,
+	partition: AscetSearchIndexWarmupPartition,
 	componentScoped: boolean,
+	options: Pick<AscetSearchIndexWarmupOptions, "cwd" | "env">,
 ): AscetSearchIndexWarmupResult {
 	const effectiveInput = componentScoped
 		? {
@@ -750,6 +1078,49 @@ function successResult(
 			}
 		: input;
 	const ready = installAscetSearchIndex(effectiveInput, partitionsForWarmup(partition));
+	if ((partition === "all" || partition === "p0") && !componentScoped && isSqliteStorageEnabled(options.env)) {
+		try {
+			writeAscetIndexStatusFile(options.cwd, {
+				state: "writing",
+				phase: partition,
+				elapsedMs: effectiveInput.elapsedMs,
+				totalDocs: countPartitionEntries(ready, partition),
+			});
+			ingestAscetSearchIndexSqlite(options.cwd, effectiveInput, partitionsForWarmup(partition));
+		} catch (error) {
+			markAscetSearchIndexFailed(
+				{
+					code: "sqlite_search_index_ingest_failed",
+					message:
+						error instanceof Error ? error.message : "Failed to persist ASCET quick-search index to SQLite.",
+				},
+				Date.now(),
+				partitionsForWarmup(partition),
+			);
+		}
+	}
+	if (partition === "all" || partition === "p0") {
+		writeAscetIndexStatusFile(options.cwd, {
+			state: "ready",
+			phase: partition,
+			elapsedMs: ready.status === "ready" ? ready.elapsedMs : effectiveInput.elapsedMs,
+			totalDocs: countPartitionEntries(ready, partition),
+			areas: indexStatusAreasFromInput(effectiveInput),
+		});
+	} else if (isSqliteStorageEnabled(options.env)) {
+		const sqliteStatus = getAscetSqliteIndexStatus(options.cwd);
+		if (sqliteStatus.status === "ready" || sqliteStatus.status === "stale") {
+			writeSqliteCacheStatusFile(options.cwd, sqliteStatus);
+		}
+	} else {
+		writeAscetIndexStatusFile(options.cwd, {
+			state: "ready",
+			phase: partition,
+			elapsedMs: ready.status === "ready" ? ready.elapsedMs : effectiveInput.elapsedMs,
+			totalDocs: countPartitionEntries(ready, partition),
+			areas: indexStatusAreasFromInput(effectiveInput),
+		});
+	}
 	return {
 		ok: true,
 		commandId: "warm_search_index",
@@ -769,10 +1140,17 @@ function successResult(
 async function warmSearchIndex(options: AscetSearchIndexWarmupOptions): Promise<AscetSearchIndexWarmupResult> {
 	const partition = normalizeWarmupPartition(options);
 	markAscetSearchIndexWarming(Date.now(), partitionsForWarmup(partition));
+	writeAscetIndexStatusFile(options.cwd, {
+		state: options.forceRefresh ? "refreshing" : "building",
+		phase: partition,
+		currentArea: partition,
+		startedAt: new Date().toISOString(),
+		elapsedMs: 0,
+	});
 	const timeoutMs = options.timeoutMs ?? 60_000;
 	const args = ["exec", "warm_search_index"];
-	if (options.partition) {
-		args.push("--partition", options.partition);
+	if (partition !== "all" || options.partition) {
+		args.push("--partition", partition);
 	}
 	if (options.forceRefresh) {
 		args.push("--force");
@@ -784,7 +1162,11 @@ async function warmSearchIndex(options: AscetSearchIndexWarmupOptions): Promise<
 	if (options.maxComponents !== undefined) {
 		args.push("--max-components", String(options.maxComponents));
 	}
-	const includeTextCode = options.includeTextCode === true || isTextCodeWarmupEnabled(options.env);
+	const includeTextCode =
+		partition === "p0" ||
+		partition === "all" ||
+		options.includeTextCode === true ||
+		isTextCodeWarmupEnabled(options.env);
 	if (includeTextCode) {
 		args.push("--include-text-code");
 	}
@@ -795,6 +1177,7 @@ async function warmSearchIndex(options: AscetSearchIndexWarmupOptions): Promise<
 	if (options.scanTimeoutMs !== undefined) {
 		args.push("--timeout-ms", String(options.scanTimeoutMs));
 	}
+	args.push("--progress-file", getAscetIndexStatusFilePath(options.cwd));
 	const result = await runAscetCliJson(args, {
 		cwd: options.cwd,
 		env: options.env,
@@ -809,12 +1192,24 @@ async function warmSearchIndex(options: AscetSearchIndexWarmupOptions): Promise<
 	});
 
 	if (!result.ok) {
+		writeAscetIndexStatusFile(options.cwd, {
+			state: "failed",
+			phase: partition,
+			currentArea: partition,
+			error: result.error,
+		});
 		return failureResult(result, partition);
 	}
 
 	const payload = unwrapPayload(result.data);
 	const input = payload ? buildInputFromPayload(payload) : undefined;
 	if (!input) {
+		writeAscetIndexStatusFile(options.cwd, {
+			state: "failed",
+			phase: partition,
+			currentArea: partition,
+			error: { code: "invalid_search_index_payload", message: "warm_search_index returned invalid JSON shape." },
+		});
 		return failureResult(
 			result,
 			partition,
@@ -823,7 +1218,7 @@ async function warmSearchIndex(options: AscetSearchIndexWarmupOptions): Promise<
 		);
 	}
 
-	return successResult(result, input, partition, Boolean(options.componentPath));
+	return successResult(result, input, partition, Boolean(options.componentPath), options);
 }
 
 export async function ensureAscetSearchIndex(
@@ -836,7 +1231,11 @@ export async function ensureAscetSearchIndex(
 
 	const cached = readyResultFromCache(
 		options.env,
-		options.includeTextCode === true || isTextCodeWarmupEnabled(options.env),
+		options.cwd,
+		partition === "p0" ||
+			partition === "all" ||
+			options.includeTextCode === true ||
+			isTextCodeWarmupEnabled(options.env),
 		options.forceRefresh === true,
 		partition,
 		options.componentPath,
@@ -858,4 +1257,163 @@ export async function ensureAscetSearchIndex(
 	} finally {
 		inFlightWarmups.delete(inFlightKey);
 	}
+}
+
+export function scheduleAscetSearchIndexBackgroundRefresh(options: AscetSearchIndexBackgroundRefreshOptions): boolean {
+	if (isSearchIndexDisabled(options.env) || !isBackgroundRefreshEnabled(options.env, options.scheduler)) {
+		return false;
+	}
+	const refreshKey = `${normalizeCwdForWarmupKey(options.cwd)}:p0`;
+	if (scheduledBackgroundRefreshes.has(refreshKey)) {
+		return false;
+	}
+	scheduledBackgroundRefreshes.add(refreshKey);
+	writeAscetIndexStatusFile(options.cwd, {
+		state: "refreshing",
+		phase: "p0",
+		currentArea: "p0",
+		startedAt: new Date().toISOString(),
+		elapsedMs: 0,
+		staleAreas: [],
+		error: options.reason ? { code: "index_refresh_scheduled", message: options.reason } : undefined,
+	});
+	const timer = setTimeout(() => {
+		void ensureAscetSearchIndex({
+			cwd: options.cwd,
+			env: options.env,
+			signal: options.signal,
+			timeoutMs: options.timeoutMs ?? 120_000,
+			partition: "p0",
+			forceRefresh: true,
+			includeTextCode: true,
+			scanTimeoutMs: options.scanTimeoutMs ?? 90_000,
+			executeCli: options.executeCli,
+			scheduler: options.scheduler,
+			toolName: "ascet_index_refresh",
+		}).finally(() => {
+			scheduledBackgroundRefreshes.delete(refreshKey);
+		});
+	}, options.delayMs ?? 250);
+	timer.unref?.();
+	return true;
+}
+
+function shouldQuerySqlite(): boolean {
+	return process.env.PI_ASCET_SEARCH_INDEX_STORAGE !== "memory";
+}
+
+export function isUsableSqliteSearchResult(result: AscetCliJsonResult): boolean {
+	if (!result.ok) {
+		return false;
+	}
+	const data = result.data;
+	if (data === null || typeof data !== "object" || Array.isArray(data)) {
+		return false;
+	}
+	const payload = (data as { result?: unknown }).result;
+	if (payload === null || typeof payload !== "object" || Array.isArray(payload)) {
+		return false;
+	}
+	const index = (payload as { index?: unknown }).index;
+	if (index === null || typeof index !== "object" || Array.isArray(index)) {
+		return false;
+	}
+	const sqliteIndex = index as { storage?: unknown; scanComplete?: unknown };
+	return sqliteIndex.storage === "sqlite" && sqliteIndex.scanComplete !== false;
+}
+
+export function queryAscetComponentIndex(
+	params: AscetComponentIndexQueryParams,
+	options: AscetSearchIndexQueryOptions = {},
+): AscetCliJsonResult | undefined {
+	return shouldQuerySqlite()
+		? (queryAscetComponentIndexSqlite(params, options) ?? queryAscetComponentIndexMemory(params, options))
+		: queryAscetComponentIndexMemory(params, options);
+}
+
+export function queryAscetProjectIndex(
+	params: AscetProjectIndexQueryParams,
+	options: AscetSearchIndexQueryOptions = {},
+): AscetCliJsonResult | undefined {
+	return shouldQuerySqlite()
+		? (queryAscetProjectIndexSqlite(params, options) ?? queryAscetProjectIndexMemory(params, options))
+		: queryAscetProjectIndexMemory(params, options);
+}
+
+export function queryAscetSearchIndex(
+	params: AscetSearchIndexQueryParams,
+	options: AscetSearchIndexQueryOptions = {},
+): AscetCliJsonResult | undefined {
+	return shouldQuerySqlite()
+		? (queryAscetSearchIndexSqlite(params, options) ?? queryAscetSearchIndexMemory(params, options))
+		: queryAscetSearchIndexMemory(params, options);
+}
+
+export function queryAscetMethodDeclarationIndex(
+	params: AscetMethodDeclarationIndexQueryParams,
+	options: AscetSearchIndexQueryOptions = {},
+): AscetCliJsonResult | undefined {
+	return shouldQuerySqlite()
+		? (queryAscetMethodDeclarationIndexSqlite(params, options) ??
+				queryAscetMethodDeclarationIndexMemory(params, options))
+		: queryAscetMethodDeclarationIndexMemory(params, options);
+}
+
+export function queryAscetMethodProcessElementIndex(
+	params: AscetMethodProcessElementIndexQueryParams,
+	options: AscetSearchIndexQueryOptions = {},
+): AscetCliJsonResult | undefined {
+	return queryAscetMethodProcessElementIndexMemory(params, options);
+}
+
+export function queryAscetComponentReferenceIndex(
+	params: AscetReferenceIndexQueryParams,
+	options: AscetSearchIndexQueryOptions = {},
+): AscetCliJsonResult | undefined {
+	return shouldQuerySqlite()
+		? (queryAscetComponentReferenceIndexSqlite(params, options) ??
+				queryAscetComponentReferenceIndexMemory(params, options))
+		: queryAscetComponentReferenceIndexMemory(params, options);
+}
+
+export function queryAscetElementReferenceIndex(
+	params: AscetReferenceIndexQueryParams,
+	options: AscetSearchIndexQueryOptions = {},
+): AscetCliJsonResult | undefined {
+	return shouldQuerySqlite()
+		? (queryAscetElementReferenceIndexSqlite(params, options) ??
+				queryAscetElementReferenceIndexMemory(params, options))
+		: queryAscetElementReferenceIndexMemory(params, options);
+}
+
+export function queryAscetMessageIndex(
+	params: AscetMessageIndexQueryParams,
+	options: AscetSearchIndexQueryOptions = {},
+): AscetCliJsonResult | undefined {
+	return shouldQuerySqlite()
+		? (queryAscetMessageIndexSqlite(params, options) ?? queryAscetMessageIndexMemory(params, options))
+		: queryAscetMessageIndexMemory(params, options);
+}
+
+export function queryAscetDiagramMetadataIndex(
+	params: AscetDiagramMetadataIndexQueryParams,
+	options: AscetSearchIndexQueryOptions = {},
+): AscetCliJsonResult | undefined {
+	return queryAscetDiagramMetadataIndexMemory(params, options);
+}
+
+export function queryAscetTextCodeIndex(
+	params: AscetTextCodeIndexQueryParams,
+	options: AscetSearchIndexQueryOptions = {},
+): AscetCliJsonResult | undefined {
+	return shouldQuerySqlite()
+		? (queryAscetTextCodeIndexSqlite(params, options) ?? queryAscetTextCodeIndexMemory(params, options))
+		: queryAscetTextCodeIndexMemory(params, options);
+}
+
+export function queryAscetProjectFormulaIndex(
+	params: AscetProjectFormulaIndexQueryParams,
+	options: AscetSearchIndexQueryOptions = {},
+): AscetCliJsonResult | undefined {
+	return shouldQuerySqlite() ? queryAscetProjectFormulaIndexSqlite(params, options) : undefined;
 }

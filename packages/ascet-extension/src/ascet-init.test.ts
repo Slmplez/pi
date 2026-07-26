@@ -1,127 +1,135 @@
 import assert from "node:assert/strict";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, test } from "node:test";
 import { buildAscetInitPrompt, executeAscetInitCommand } from "./ascet-init.ts";
-import type { AscetSearchIndexWarmupOptions, AscetSearchIndexWarmupResult } from "./search-index.ts";
 
-function createReadyEnv(): { cwd: string; env: Record<string, string | undefined>; cleanup: () => void } {
-	const root = mkdtempSync(join(tmpdir(), "pi-ascet-init-command-"));
-	const contractsRoot = join(root, "contracts");
-	mkdirSync(contractsRoot, { recursive: true });
-	writeFileSync(join(root, "AscetCli.exe"), "", "utf8");
-	writeFileSync(join(contractsRoot, "cli-catalog.json"), "{}", "utf8");
+function createTempProject(): { cwd: string; cleanup: () => void } {
+	const cwd = mkdtempSync(join(tmpdir(), "pi-ascet-init-command-"));
 	return {
-		cwd: root,
-		env: {
-			ASCET_CLI_PATH: join(root, "AscetCli.exe"),
-			ASCET_CONTRACTS_PATH: contractsRoot,
-		},
-		cleanup: () => rmSync(root, { recursive: true, force: true }),
-	};
-}
-
-function warmupResult(options: AscetSearchIndexWarmupOptions): AscetSearchIndexWarmupResult {
-	return {
-		ok: true,
-		commandId: "warm_search_index",
-		databaseName: "DemoDb",
-		databasePath: "C:\\ASCET\\DemoDb",
-		entryCount: options.partition === "text_code" ? 3 : 2,
-		elapsedMs: 7,
-		scanComplete: true,
-		fromCache: false,
-		exitCode: 0,
-		timedOut: false,
-		stdout: "",
-		stderr: "",
+		cwd,
+		cleanup: () => rmSync(cwd, { recursive: true, force: true }),
 	};
 }
 
 describe("buildAscetInitPrompt", () => {
-	test("uses artifacts and no longer asks the model to rebuild the index", () => {
+	test("guides the agent to use status, indexed search, precise reads, and writes", () => {
 		const prompt = buildAscetInitPrompt({
 			scope: { ok: true, kind: "database" },
-			artifacts: {
-				manifest: ".ascet/index/manifest.json",
-				summary: ".ascet/ascet-workspace-summary.json",
-			},
+			projectRulesPrompt: "ASCET project rules loaded.",
+			repoContextPrompt: "<repo-file: AGENTS.md>\nUse the local controlled workflow.",
 		});
 
-		assert.match(prompt, /\.ascet\/index\/manifest\.json/);
-		assert.match(prompt, /Deterministic ASCET initialization has already run/);
-		assert.match(prompt, /Do not rebuild the index/);
-		assert.doesNotMatch(prompt, /Run bounded ASCET model exploration/);
+		assert.match(prompt, /ASCET project rules loaded/);
+		assert.match(prompt, /<repo-file: AGENTS\.md>/);
+		assert.match(prompt, /This initialization does not build or refresh indexes/);
+		assert.match(prompt, /First run ascet_status/);
+		assert.match(prompt, /Prefer ascet_search/);
+		assert.match(prompt, /Use ascet_read only when exact current live ASCET data or complete code content is needed/);
+		assert.match(prompt, /Use ascet_write for all ASCET writes/);
+		assert.match(prompt, /Do not perform ad hoc full-database live scans/);
+		assert.doesNotMatch(prompt, /\.ascet\/index\/manifest\.json/);
+		assert.doesNotMatch(prompt, /Deterministic ASCET initialization has already run/);
+		assert.doesNotMatch(prompt, /warm/i);
 	});
 });
 
 describe("executeAscetInitCommand", () => {
-	test("warms the requested index, writes artifacts, and sends a synthesis prompt", async () => {
-		const fixture = createReadyEnv();
+	test("scaffolds rules, reads repo context, and sends an init prompt", async () => {
+		const fixture = createTempProject();
 		const messages: string[] = [];
 		const notifications: string[] = [];
-		const statuses: Array<{ key: string; text: string | undefined }> = [];
-		const calls: AscetSearchIndexWarmupOptions[] = [];
 		try {
-			await executeAscetInitCommand("database --index core", {
+			writeFileSync(join(fixture.cwd, "AGENTS.md"), "Use AGENTS constraints.", "utf8");
+			writeFileSync(join(fixture.cwd, "agent.md"), "Use agent guidance.", "utf8");
+			writeFileSync(join(fixture.cwd, "README.md"), "Project readme.", "utf8");
+
+			await executeAscetInitCommand("database", {
 				cwd: fixture.cwd,
-				env: fixture.env,
 				isIdle: () => true,
 				sendUserMessage(content) {
 					messages.push(content);
-				},
-				warmSearchIndex: async (options) => {
-					calls.push(options);
-					return warmupResult(options);
 				},
 				ui: {
 					notify(message) {
 						notifications.push(message);
 					},
-					setStatus(key, text) {
-						statuses.push({ key, text });
-					},
 				},
 			});
 
-			assert.equal(calls.length, 5);
 			assert.equal(messages.length, 1);
-			assert.match(messages[0] ?? "", /\.ascet\/ascet-workspace-summary\.json/);
-			assert.match(notifications.join("\n"), /ASCET init started/);
-			assert.match(notifications.join("\n"), /ASCET init index ready/);
-			assert.equal(
-				statuses.every((status) => status.key === "ascet-init"),
-				true,
-			);
-			assert.match(statuses.map((status) => status.text).join("\n"), /\[1\/5\] components/);
-			assert.match(statuses.at(-1)?.text ?? "", /ASCET init ok 0:00 ready/);
+			assert.match(messages[0] ?? "", /Explicit scope from command args: database/);
+			assert.match(messages[0] ?? "", /ASCET project rules loaded for this command only/);
+			assert.match(messages[0] ?? "", /<repo-file: AGENTS\.md>/);
+			assert.match(messages[0] ?? "", /<repo-file: agent\.md>/);
+			assert.match(messages[0] ?? "", /<repo-file: README\.md>/);
+			assert.match(messages[0] ?? "", /First run ascet_status/);
+			assert.match(messages[0] ?? "", /Prefer ascet_search/);
+			assert.match(messages[0] ?? "", /Use ascet_read/);
+			assert.match(messages[0] ?? "", /Use ascet_write/);
+			assert.match(notifications.join("\n"), /ASCET init prompt sent/);
+			assert.doesNotMatch(notifications.join("\n"), /index/i);
+			assert.equal(existsSync(join(fixture.cwd, ".ascet", "rules", "manifest.yaml")), true);
 		} finally {
 			fixture.cleanup();
 		}
 	});
 
-	test("index none skips warmup and can skip artifact writes", async () => {
-		const fixture = createReadyEnv();
-		let calls = 0;
-		let message = "";
+	test("queues the init prompt as a follow-up when the agent is busy", async () => {
+		const fixture = createTempProject();
+		const messages: Array<{ content: string; options?: { deliverAs?: "steer" | "followUp" } }> = [];
+		const notifications: string[] = [];
 		try {
-			await executeAscetInitCommand("--index none --no-write-summary", {
+			await executeAscetInitCommand("project AEB", {
 				cwd: fixture.cwd,
-				env: fixture.env,
-				isIdle: () => true,
-				sendUserMessage(content) {
-					message = content;
+				isIdle: () => false,
+				sendUserMessage(content, options) {
+					messages.push({ content, options });
 				},
-				warmSearchIndex: async (options) => {
-					calls += 1;
-					return warmupResult(options);
+				ui: {
+					notify(message) {
+						notifications.push(message);
+					},
 				},
-				ui: { notify() {} },
 			});
 
-			assert.equal(calls, 0);
-			assert.doesNotMatch(message, /ASCET init artifacts:/);
+			assert.equal(messages.length, 1);
+			assert.match(messages[0]?.content ?? "", /Explicit scope from command args: project AEB/);
+			assert.deepEqual(messages[0]?.options, { deliverAs: "followUp" });
+			assert.match(notifications.join("\n"), /Queued ASCET init prompt as a follow-up/);
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("rejects malformed args before scaffolding or sending a prompt", async () => {
+		const fixture = createTempProject();
+		const messages: string[] = [];
+		const notifications: Array<{ message: string; level?: "info" | "warning" | "error" }> = [];
+		try {
+			await executeAscetInitCommand("folder", {
+				cwd: fixture.cwd,
+				isIdle: () => true,
+				sendUserMessage(content) {
+					messages.push(content);
+				},
+				ui: {
+					notify(message, level) {
+						notifications.push({ message, level });
+					},
+				},
+			});
+
+			assert.deepEqual(messages, []);
+			assert.deepEqual(notifications, [
+				{
+					message:
+						"Usage: /ascet-init [database|folder <path>|project <name-or-path>]\nfolder scope requires a path",
+					level: "warning",
+				},
+			]);
+			assert.equal(existsSync(join(fixture.cwd, ".ascet", "rules", "manifest.yaml")), false);
 		} finally {
 			fixture.cleanup();
 		}

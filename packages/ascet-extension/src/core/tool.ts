@@ -1,6 +1,8 @@
 import type { Api, AssistantMessageEventStream, Context, Model, SimpleStreamOptions } from "@earendil-works/pi-ai";
 import type { OAuthCredentials, OAuthLoginCallbacks } from "@earendil-works/pi-ai/oauth";
+import type { AscetCliExecutionResult, AscetCliRequest } from "../cli.ts";
 import { renderAscetToolCall, renderAscetToolResult } from "../rendering.ts";
+import type { AscetScheduler } from "../scheduler/scheduler.ts";
 import {
 	AscetActionUnavailableError,
 	assertActionActive,
@@ -122,6 +124,9 @@ export interface AscetExtensionAPI {
 
 export interface AscetToolContext {
 	cwd: string;
+	env?: Record<string, string | undefined>;
+	executeCli?: (request: AscetCliRequest) => Promise<AscetCliExecutionResult>;
+	scheduler?: Pick<AscetScheduler, "submit" | "getSnapshot">;
 	hasUI?: boolean;
 	ui?: {
 		confirm(title: string, message: string, opts?: { signal?: AbortSignal; timeout?: number }): Promise<boolean>;

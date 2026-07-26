@@ -33,7 +33,18 @@ export const ascetBatchWriteTool = defineSequentialAscetTool({
 		_onUpdate: unknown,
 		ctx: AscetToolContext,
 	) {
-		const result = await runApprovedAscetBatchWrite(params, { cwd: ctx.cwd, signal, timeoutMs: 120_000 }, ctx);
+		const result = await runApprovedAscetBatchWrite(
+			params,
+			{
+				cwd: ctx.cwd,
+				env: ctx.env,
+				signal,
+				timeoutMs: 120_000,
+				executeCli: ctx.executeCli,
+				scheduler: ctx.scheduler,
+			},
+			ctx,
+		);
 		const outcome = createBatchWriteOutcome(result);
 		return {
 			content: [{ type: "text", text: JSON.stringify(outcome, null, 2) }],

@@ -1,11 +1,27 @@
 import assert from "node:assert/strict";
-import { afterEach, describe, test } from "node:test";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { afterEach, beforeEach, describe, test } from "node:test";
 import type { AscetCliExecutionResult, AscetCliRequest } from "../../cli.ts";
 import { resetAscetSearchIndexForTest } from "../../search-index.ts";
+import { ingestAscetSearchIndexSqlite } from "../../search-index-sqlite/ingest.ts";
+import type { AscetSearchIndexBuildInput } from "../../search-index-store.ts";
 import { ascetSearchParameters, formatAscetSearchResult, runAscetSearch } from "../search.ts";
+
+const originalSearchIndexStorage = process.env.PI_ASCET_SEARCH_INDEX_STORAGE;
+
+beforeEach(() => {
+	process.env.PI_ASCET_SEARCH_INDEX_STORAGE = "memory";
+});
 
 afterEach(() => {
 	resetAscetSearchIndexForTest();
+	if (originalSearchIndexStorage === undefined) {
+		delete process.env.PI_ASCET_SEARCH_INDEX_STORAGE;
+	} else {
+		process.env.PI_ASCET_SEARCH_INDEX_STORAGE = originalSearchIndexStorage;
+	}
 });
 
 describe("ascet_search public schema", () => {
@@ -14,6 +30,7 @@ describe("ascet_search public schema", () => {
 
 		assert.ok(actions.includes("search_components"));
 		assert.ok(actions.includes("search_projects"));
+		assert.ok(actions.includes("search_project_formulas"));
 		assert.ok(actions.includes("resolve_component"));
 		assert.ok(actions.includes("search_elements"));
 		assert.ok(actions.includes("declarations_of_element"));
@@ -35,7 +52,156 @@ describe("ascet_search public schema", () => {
 		assert.ok(!schemaFor(schemas, "text_in_code")?.properties?.group);
 		assert.ok(!schemaFor(schemas, "declarations_of_element")?.properties?.methodName);
 		assert.ok(!schemaFor(schemas, "search_projects")?.properties?.kind);
+		assert.ok(schemaFor(schemas, "search_project_formulas")?.properties?.projectPath);
+		assert.ok(!schemaFor(schemas, "search_project_formulas")?.properties?.componentPath);
 		assert.ok(schemaFor(schemas, "declarations_of_method_process_element")?.properties?.methodName);
+	});
+
+	test("serves P0 searches from SQLite without an in-memory warm state", async () => {
+		const cwd = mkdtempSync(join(tmpdir(), "pi-ascet-search-formulas-"));
+		try {
+			const seed: AscetSearchIndexBuildInput = {
+				databaseName: "DemoDb",
+				databasePath: "C:\\ASCET\\DemoDb",
+				generatedAtMs: Date.parse("2026-07-25T00:00:00.000Z"),
+				elapsedMs: 3,
+				scanComplete: true,
+				textCodeIncluded: true,
+				textCodeScanComplete: true,
+				components: [
+					{
+						path: "PlatformLibrary\\Package\\AEB\\AEB_Controller",
+						name: "AEB_Controller",
+						kind: "class",
+						languageKind: "ESDL",
+						displayName: "AEB_Controller",
+						parentPath: "PlatformLibrary\\Package\\AEB",
+						ownerKind: "folder",
+						targetKind: "component",
+						objectKind: "class",
+					},
+				],
+				folders: [],
+				folderItems: [],
+				entries: [
+					{
+						group: "primitive",
+						componentPath: "PlatformLibrary\\Package\\AEB\\AEB_Controller",
+						componentKind: "class",
+						componentLanguageKind: "ESDL",
+						elementName: "P_AEB_IB_MaxVelocityDrop_Curve",
+						elementKind: "cont",
+						displayType: "OneDTableElement",
+						displayScope: "exported",
+						referencedComponentPath: "",
+						path: "PlatformLibrary\\Package\\AEB\\AEB_Controller::P_AEB_IB_MaxVelocityDrop_Curve",
+					},
+				],
+				methodDeclarations: [],
+				componentRefs: [
+					{
+						sourceComponentPath: "PlatformLibrary\\Package\\AEB\\AEB_Controller",
+						sourceElementName: "HoldReq",
+						sourceElementKind: "ScalarElement",
+						sourceElementScope: "local",
+						targetComponentPath: "PlatformLibrary\\Package\\CSM_HoldReq",
+						targetComponentName: "CSM_HoldReq",
+						targetComponentKind: "enumeration",
+						targetLanguageKind: "",
+						resolved: true,
+						path: "PlatformLibrary\\Package\\AEB\\AEB_Controller::HoldReq->PlatformLibrary\\Package\\CSM_HoldReq",
+					},
+				],
+				elementRefs: [],
+				dbItemDependencies: [],
+				projectFormulas: [
+					{
+						projectPath: "PlatformLibrary\\Package\\AEB\\AEB_Project",
+						name: "RPM",
+						runtimeType: "Formula",
+					},
+				],
+				projectItems: [],
+				textCodeEntries: [
+					{
+						componentPath: "PlatformLibrary\\Package\\AEB\\AEB_Controller",
+						componentKind: "class",
+						componentLanguageKind: "ESDL",
+						section: "body",
+						methodName: "calc",
+						methodKind: "AbstractMethod",
+						text: "C_AEB_IB_MaxVelocityDrop_Curve.getAt(AEB_v_Init);",
+						path: "PlatformLibrary\\Package\\AEB\\AEB_Controller::calc#body",
+					},
+				],
+				messages: [],
+				diagramMetadata: [],
+			};
+			ingestAscetSearchIndexSqlite(cwd, seed);
+			process.env.PI_ASCET_SEARCH_INDEX_STORAGE = "sqlite";
+			const executeCli = async (request: AscetCliRequest) => {
+				throw new Error(`Unexpected live CLI call: ${request.args.join(" ")}`);
+			};
+
+			const result = await runAscetSearch(
+				{
+					action: "search_project_formulas",
+					query: "RPM",
+					projectPath: "PlatformLibrary/Package/AEB/AEB_Project",
+					match: "exact",
+					limit: 10,
+				},
+				{
+					cwd,
+					executeCli,
+				},
+			);
+			const data = result.data as { result?: { matches?: Array<{ name?: string; projectPath?: string }> } };
+
+			assert.equal(result.ok, true);
+			assert.equal(data.result?.matches?.[0]?.name, "RPM");
+			assert.equal(data.result?.matches?.[0]?.projectPath, "PlatformLibrary/Package/AEB/AEB_Project");
+			for (const params of [
+				{
+					action: "declarations_of_element" as const,
+					query: "P_AEB_IB_MaxVelocityDrop_Curve",
+					match: "exact" as const,
+				},
+				{ action: "text_in_code" as const, query: "getAt", match: "contains" as const },
+				{ action: "references_to_component" as const, query: "CSM_HoldReq", match: "contains" as const },
+			]) {
+				const indexed = await runAscetSearch(params, { cwd, executeCli });
+				const payload = indexed.data as { result?: { matches?: unknown[] } };
+				assert.equal(indexed.ok, true);
+				assert.ok((payload.result?.matches?.length ?? 0) > 0);
+			}
+			const concurrentParams = Array.from({ length: 20 }, (_, index) => {
+				const actionIndex = index % 4;
+				if (actionIndex === 0) {
+					return {
+						action: "declarations_of_element" as const,
+						query: "P_AEB_IB_MaxVelocityDrop_Curve",
+						match: "exact" as const,
+					};
+				}
+				if (actionIndex === 1) {
+					return { action: "search_project_formulas" as const, query: "RPM", match: "contains" as const };
+				}
+				if (actionIndex === 2) {
+					return { action: "text_in_code" as const, query: "getAt", match: "contains" as const };
+				}
+				return { action: "references_to_component" as const, query: "CSM_HoldReq", match: "contains" as const };
+			});
+			const concurrentResults = await Promise.all(
+				concurrentParams.map((params) => runAscetSearch(params, { cwd, executeCli })),
+			);
+			assert.equal(
+				concurrentResults.every((indexed) => indexed.ok),
+				true,
+			);
+		} finally {
+			rmSync(cwd, { recursive: true, force: true });
+		}
 	});
 
 	test("serves search_projects from the components object index", async () => {

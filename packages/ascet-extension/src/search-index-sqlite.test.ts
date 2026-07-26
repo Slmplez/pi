@@ -1,0 +1,272 @@
+import assert from "node:assert/strict";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { afterEach, describe, test } from "node:test";
+import { ingestAscetSearchIndexSqlite } from "./search-index-sqlite/ingest.ts";
+import {
+	queryAscetComponentIndexSqlite,
+	queryAscetComponentReferenceIndexSqlite,
+	queryAscetElementReferenceIndexSqlite,
+	queryAscetMethodDeclarationIndexSqlite,
+	queryAscetProjectFormulaIndexSqlite,
+	queryAscetSearchIndexSqlite,
+	queryAscetTextCodeIndexSqlite,
+} from "./search-index-sqlite/query.ts";
+import { getAscetSqliteIndexStatus, markAscetSqliteIndexAreasStale } from "./search-index-sqlite/status.ts";
+import type { AscetSearchIndexBuildInput } from "./search-index-store.ts";
+
+function createTempCwd(): { cwd: string; cleanup: () => void } {
+	const cwd = mkdtempSync(join(tmpdir(), "pi-ascet-sqlite-index-"));
+	return {
+		cwd,
+		cleanup: () => rmSync(cwd, { recursive: true, force: true }),
+	};
+}
+
+function matches(result: unknown): Record<string, unknown>[] {
+	const envelope = result as { data?: { result?: { matches?: unknown } } };
+	const resultMatches = envelope.data?.result?.matches;
+	return Array.isArray(resultMatches) ? (resultMatches as Record<string, unknown>[]) : [];
+}
+
+function fixtureInput(): AscetSearchIndexBuildInput {
+	return {
+		databaseName: "AEB",
+		databasePath: "d:/ETASData/ASCET6.4/Database",
+		generatedAtMs: 1_725_000_000_000,
+		elapsedMs: 1234,
+		scanComplete: true,
+		textCodeIncluded: true,
+		textCodeScanComplete: true,
+		components: [
+			{
+				path: "PlatformLibrary\\AEB\\AEB_pDriverIBooster",
+				name: "AEB_pDriverIBooster",
+				kind: "class",
+				languageKind: "ESDL",
+				displayName: "AEB_pDriverIBooster",
+				parentPath: "PlatformLibrary\\AEB",
+				ownerKind: "folder",
+				targetKind: "component",
+				objectKind: "class",
+			},
+			{
+				path: "PlatformLibrary\\AEB\\AEB_Project",
+				name: "AEB_Project",
+				kind: "project",
+				languageKind: "",
+				displayName: "AEB_Project",
+				parentPath: "PlatformLibrary\\AEB",
+				ownerKind: "folder",
+				targetKind: "project",
+				objectKind: "project",
+			},
+		],
+		folders: [{ path: "PlatformLibrary\\AEB", name: "AEB", parentPath: "PlatformLibrary" }],
+		folderItems: [
+			{
+				folderPath: "PlatformLibrary\\AEB",
+				itemPath: "PlatformLibrary\\AEB\\AEB_pDriverIBooster",
+				itemName: "AEB_pDriverIBooster",
+				itemKind: "class",
+			},
+		],
+		entries: [
+			{
+				group: "primitive",
+				componentPath: "PlatformLibrary\\AEB\\AEB_pDriverIBooster",
+				componentKind: "class",
+				componentLanguageKind: "ESDL",
+				elementName: "P_AEB_IB_MaxVelocityDrop_Curve",
+				elementKind: "cont",
+				displayType: "OneDTableElement",
+				displayScope: "exported",
+				referencedComponentPath: "",
+				path: "PlatformLibrary\\AEB\\AEB_pDriverIBooster::P_AEB_IB_MaxVelocityDrop_Curve",
+			},
+		],
+		methodDeclarations: [
+			{
+				group: "method",
+				componentPath: "PlatformLibrary\\AEB\\AEB_pDriverIBooster",
+				componentKind: "class",
+				componentLanguageKind: "ESDL",
+				methodName: "calc",
+				methodKind: "AbstractMethod",
+				path: "PlatformLibrary\\AEB\\AEB_pDriverIBooster::calc",
+			},
+		],
+		componentRefs: [
+			{
+				sourceComponentPath: "PlatformLibrary\\AEB\\AEB_pDriverIBooster",
+				sourceElementName: "AEB_SSMReqOut",
+				sourceElementKind: "ScalarElement",
+				sourceElementScope: "local",
+				targetComponentPath: "PlatformLibrary\\Package\\CSM_HoldReq",
+				targetComponentName: "CSM_HoldReq",
+				targetComponentKind: "enumeration",
+				targetLanguageKind: "",
+				resolved: true,
+				path: "PlatformLibrary\\AEB\\AEB_pDriverIBooster::AEB_SSMReqOut->PlatformLibrary\\Package\\CSM_HoldReq",
+			},
+		],
+		elementRefs: [
+			{
+				sourceComponentPath: "PlatformLibrary\\AEB\\AEB_pDriverIBooster",
+				sourceElementName: "AEB_SSMReqOut",
+				sourceElementKind: "ScalarElement",
+				sourceElementScope: "local",
+				targetComponentPath: "PlatformLibrary\\Package\\CSM_HoldReq",
+				targetComponentName: "CSM_HoldReq",
+				targetComponentKind: "enumeration",
+				targetLanguageKind: "",
+				resolved: true,
+				path: "PlatformLibrary\\AEB\\AEB_pDriverIBooster::AEB_SSMReqOut->PlatformLibrary\\Package\\CSM_HoldReq",
+				elementName: "AEB_SSMReqOut",
+			},
+		],
+		projectFormulas: [
+			{
+				projectPath: "PlatformLibrary\\AEB\\AEB_Project",
+				name: "RPM",
+				runtimeType: "Formula",
+			},
+		],
+		projectItems: [
+			{
+				projectPath: "PlatformLibrary\\AEB\\AEB_Project",
+				name: "dT",
+				itemKind: "global",
+				runtimeType: "DeltaTElement",
+				sourceApi: "Project.GetAllGlobals",
+			},
+		],
+		dbItemDependencies: [
+			{
+				sourcePath: "PlatformLibrary\\AEB\\AEB_pDriverIBooster",
+				targetPath: "PlatformLibrary\\Package\\CSM_HoldReq",
+				targetName: "CSM_HoldReq",
+				targetKind: "enumeration",
+			},
+		],
+		textCodeEntries: [
+			{
+				componentPath: "PlatformLibrary\\AEB\\AEB_pDriverIBooster",
+				componentKind: "class",
+				componentLanguageKind: "ESDL",
+				section: "body",
+				methodName: "calc",
+				methodKind: "AbstractMethod",
+				text: "C_AEB_IB_MaxVelocityDrop_Curve.getAt(AEB_v_Init);",
+				path: "PlatformLibrary\\AEB\\AEB_pDriverIBooster::calc#body",
+			},
+		],
+		messages: [],
+		diagramMetadata: [],
+	};
+}
+
+describe("ASCET SQLite search index", () => {
+	let cleanup = () => {};
+
+	afterEach(() => {
+		cleanup();
+		cleanup = () => {};
+	});
+
+	test("ingests a P0 generation and serves indexed searches", () => {
+		const temp = createTempCwd();
+		cleanup = temp.cleanup;
+		const input = fixtureInput();
+		const ingest = ingestAscetSearchIndexSqlite(temp.cwd, input);
+		assert.equal(ingest.areas.length, 12);
+		const status = getAscetSqliteIndexStatus(temp.cwd);
+		assert.equal(status.status, "ready");
+		assert.equal(status.areas.map((area) => area.area).includes("method_process_elements" as never), false);
+		assert.equal(status.areas.find((area) => area.area === "project_formulas")?.itemCount, 1);
+		assert.equal(
+			matches(queryAscetComponentIndexSqlite({ query: "AEB_pDriver", match: "contains" }, { cwd: temp.cwd })).length,
+			1,
+		);
+		assert.equal(
+			matches(
+				queryAscetSearchIndexSqlite({ query: "P_AEB_IB_MaxVelocityDrop_Curve", match: "exact" }, { cwd: temp.cwd }),
+			).length,
+			1,
+		);
+		assert.equal(
+			matches(queryAscetMethodDeclarationIndexSqlite({ query: "calc", match: "exact" }, { cwd: temp.cwd })).length,
+			1,
+		);
+		assert.equal(
+			matches(queryAscetComponentReferenceIndexSqlite({ query: "CSM_HoldReq", match: "exact" }, { cwd: temp.cwd }))
+				.length,
+			2,
+		);
+		assert.equal(
+			matches(queryAscetElementReferenceIndexSqlite({ query: "getAt", match: "contains" }, { cwd: temp.cwd }))
+				.length,
+			1,
+		);
+		assert.equal(
+			matches(queryAscetTextCodeIndexSqlite({ query: "getAt", match: "contains" }, { cwd: temp.cwd })).length,
+			1,
+		);
+		assert.equal(
+			matches(queryAscetProjectFormulaIndexSqlite({ query: "RPM", match: "exact" }, { cwd: temp.cwd })).length,
+			1,
+		);
+	});
+
+	test("marks active SQLite areas stale after write invalidation", () => {
+		const temp = createTempCwd();
+		cleanup = temp.cleanup;
+		ingestAscetSearchIndexSqlite(temp.cwd, fixtureInput());
+		markAscetSqliteIndexAreasStale(
+			temp.cwd,
+			["elements", "code_blocks", "code_terms"],
+			"write_succeeded:set_method_code",
+		);
+		const status = getAscetSqliteIndexStatus(temp.cwd);
+		assert.equal(status.status, "stale");
+		assert.equal(status.areas.find((area) => area.area === "elements")?.status, "stale");
+		assert.equal(status.areas.find((area) => area.area === "code_terms")?.errorCode, "invalidated");
+		const result = queryAscetSearchIndexSqlite(
+			{ query: "P_AEB_IB_MaxVelocityDrop_Curve", match: "exact" },
+			{ cwd: temp.cwd },
+		);
+		assert.ok(result);
+		const envelope = result.data as { result?: { indexStatus?: string; staleAreas?: string[]; warning?: string } };
+		assert.equal(envelope.result?.indexStatus, "stale");
+		assert.deepEqual(envelope.result?.staleAreas, ["code_blocks", "code_terms", "elements"]);
+		assert.match(envelope.result?.warning ?? "", /stale ASCET SQLite search index/);
+		assert.equal(matches(result).length, 1);
+	});
+
+	test("serves concurrent readers from the active SQLite generation", async () => {
+		const temp = createTempCwd();
+		cleanup = temp.cleanup;
+		ingestAscetSearchIndexSqlite(temp.cwd, fixtureInput());
+
+		const results = await Promise.all([
+			Promise.resolve(
+				queryAscetComponentIndexSqlite({ query: "AEB_pDriver", match: "contains" }, { cwd: temp.cwd }),
+			),
+			Promise.resolve(
+				queryAscetSearchIndexSqlite({ query: "P_AEB_IB_MaxVelocityDrop_Curve", match: "exact" }, { cwd: temp.cwd }),
+			),
+			Promise.resolve(queryAscetMethodDeclarationIndexSqlite({ query: "calc", match: "exact" }, { cwd: temp.cwd })),
+			Promise.resolve(
+				queryAscetComponentReferenceIndexSqlite({ query: "CSM_HoldReq", match: "exact" }, { cwd: temp.cwd }),
+			),
+			Promise.resolve(queryAscetTextCodeIndexSqlite({ query: "getAt", match: "contains" }, { cwd: temp.cwd })),
+			Promise.resolve(queryAscetProjectFormulaIndexSqlite({ query: "RPM", match: "exact" }, { cwd: temp.cwd })),
+		]);
+
+		assert.deepEqual(
+			results.map((result) => matches(result).length),
+			[1, 1, 1, 2, 1, 1],
+		);
+	});
+});

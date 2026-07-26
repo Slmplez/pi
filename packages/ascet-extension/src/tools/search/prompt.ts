@@ -3,7 +3,7 @@ import { buildToolPromptGuidelines } from "../instructions/registry.ts";
 
 export const ascetSearchPrompt = {
 	promptSnippet:
-		"Search ASCET with bounded actions: search_components, search_projects, resolve_component, search_elements, references_to_component, references_to_element, or text_in_code.",
+		"Search ASCET with bounded actions: search_components, search_projects, search_project_formulas, resolve_component, search_elements, references_to_component, references_to_element, or text_in_code.",
 	promptGuidelines: buildToolPromptGuidelines({
 		tool: "ascet_search",
 		extraGuidelines: [

@@ -86,8 +86,9 @@ describe("runAscetCapabilities", () => {
 				"query",
 			]);
 			assert.doesNotMatch(text, /"ok"|error|null|"meta"|"mode"|"operation":\s*"search"/);
-			assert.equal(Object.hasOwn(result.details, "ok"), false);
-			assert.equal(Object.hasOwn(result.details, "error"), false);
+			assert.equal(result.details.ok, true);
+			assert.equal(result.details.error, undefined);
+			assert.deepEqual(result.details.data, { result: result.details.result });
 		});
 	});
 

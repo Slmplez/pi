@@ -15,10 +15,6 @@ import {
 	renderAscetInitRulesPrompt,
 } from "../../ascet-extension/src/ascet-project-rules.ts";
 import ascetExtension from "../../ascet-extension/src/index.ts";
-import type {
-	AscetSearchIndexWarmupOptions,
-	AscetSearchIndexWarmupResult,
-} from "../../ascet-extension/src/search-index.ts";
 import { loadAscetExtension } from "./ascet-extension-test-helpers.ts";
 
 function createTempProject(): string {
@@ -27,34 +23,6 @@ function createTempProject(): string {
 
 function removeTempProject(projectRoot: string): void {
 	rmSync(projectRoot, { recursive: true, force: true });
-}
-
-function createReadyEnv(projectRoot: string): Record<string, string | undefined> {
-	const contractsRoot = join(projectRoot, "contracts");
-	mkdirSync(contractsRoot, { recursive: true });
-	writeFileSync(join(projectRoot, "AscetCli.exe"), "", "utf8");
-	writeFileSync(join(contractsRoot, "cli-catalog.json"), "{}", "utf8");
-	return {
-		ASCET_CLI_PATH: join(projectRoot, "AscetCli.exe"),
-		ASCET_CONTRACTS_PATH: contractsRoot,
-	};
-}
-
-function warmupResult(options: AscetSearchIndexWarmupOptions): AscetSearchIndexWarmupResult {
-	return {
-		ok: true,
-		commandId: "warm_search_index",
-		databaseName: "DemoDb",
-		databasePath: "C:\\ASCET\\DemoDb",
-		entryCount: options.partition === "text_code" ? 3 : 2,
-		elapsedMs: 7,
-		scanComplete: true,
-		fromCache: false,
-		exitCode: 0,
-		timedOut: false,
-		stdout: "",
-		stderr: "",
-	};
 }
 
 describe("ASCET init prompt", () => {
@@ -66,15 +34,19 @@ describe("ASCET init prompt", () => {
 
 		expect(prompt).toContain("ASCET project rules loaded.");
 		expect(prompt).toContain("No explicit scope was provided. Start with ASCET engineering layout detection.");
+		expect(prompt).toContain("ascet_status");
 		expect(prompt).toContain("ascet_explore");
 		expect(prompt).toContain("ascet_search");
 		expect(prompt).toContain("ascet_read");
+		expect(prompt).toContain("ascet_write");
 		expect(prompt).toContain(ASCET_AGENT_SECTION_TITLE);
-		expect(prompt).toContain("Engineering layout");
-		expect(prompt).toContain("Assembly entry points");
-		expect(prompt).toContain("Signal and interface path");
-		expect(prompt).toContain("Parameter and data semantics");
-		expect(prompt).toContain("Scheduling and execution notes");
+		expect(prompt).toContain("engineering layout");
+		expect(prompt).toContain("assembly entry points");
+		expect(prompt).toContain("signal and interface paths");
+		expect(prompt).toContain("parameter and data semantics");
+		expect(prompt).toContain("scheduling and execution notes");
+		expect(prompt).toContain("Do not perform ad hoc full-database live scans");
+		expect(prompt).not.toContain(".ascet/index/manifest.json");
 		expect(prompt).not.toMatch(/\bAscet[A-Za-z]+Tool\b/);
 	});
 
@@ -234,14 +206,16 @@ describe("ASCET init command", () => {
 				},
 			} as never);
 
-			await commands.get("ascet-init")?.handler("--index none --no-write-summary", {
+			await commands.get("ascet-init")?.handler("", {
 				cwd: projectRoot,
 				isIdle: () => true,
 				ui: { notify() {} },
 			});
 
 			expect(sentMessages).toHaveLength(1);
-			expect(sentMessages[0].content).toContain("ASCET model-engineering onboarding");
+			expect(sentMessages[0].content).toContain("You are working in an ASCET Copilot workspace");
+			expect(sentMessages[0].content).toContain("First run ascet_status");
+			expect(sentMessages[0].content).toContain("Prefer ascet_search");
 			expect(sentMessages[0].options).toBeUndefined();
 		} finally {
 			removeTempProject(projectRoot);
@@ -270,7 +244,7 @@ describe("ASCET init command", () => {
 			expect(notifications).toEqual([
 				{
 					message:
-						"Usage: /ascet-init [database|folder <path>|project <name-or-path>] [--index all|core|none] [--force] [--write-summary|--no-write-summary]\nfolder scope requires a path",
+						"Usage: /ascet-init [database|folder <path>|project <name-or-path>]\nfolder scope requires a path",
 					level: "warning",
 				},
 			]);
@@ -288,12 +262,10 @@ describe("ASCET init command", () => {
 
 			await executeAscetInitCommand("folder DEMO", {
 				cwd: projectRoot,
-				env: createReadyEnv(projectRoot),
 				isIdle: () => true,
 				sendUserMessage: (content, options) => {
 					sentMessages.push({ content, options });
 				},
-				warmSearchIndex: async (options) => warmupResult(options),
 				ui: { notify: (message: string) => notifications.push(message) },
 			});
 
@@ -303,8 +275,7 @@ describe("ASCET init command", () => {
 			expect(sentMessages[0].content).toContain("tasks/init.md");
 			expect(sentMessages[0].content).toContain("tools/pi-ascet-tools.md");
 			expect(sentMessages[0].options).toBeUndefined();
-			expect(notifications[0]).toContain("ASCET init started");
-			expect(notifications.join("\n")).toContain("ASCET init index");
+			expect(notifications).toEqual(["ASCET init prompt sent."]);
 		} finally {
 			removeTempProject(projectRoot);
 		}
@@ -318,12 +289,10 @@ describe("ASCET init command", () => {
 
 			await executeAscetInitCommand("project PID", {
 				cwd: projectRoot,
-				env: createReadyEnv(projectRoot),
 				isIdle: () => false,
 				sendUserMessage: (content, options) => {
 					sentMessages.push({ content, options });
 				},
-				warmSearchIndex: async (options) => warmupResult(options),
 				ui: {
 					notify: (message: string, level?: "info" | "warning" | "error") =>
 						notifications.push({ message, level }),
@@ -336,8 +305,7 @@ describe("ASCET init command", () => {
 			expect(sentMessages[0].content).toContain("tasks/init.md");
 			expect(sentMessages[0].content).toContain("tools/pi-ascet-tools.md");
 			expect(sentMessages[0].options).toEqual({ deliverAs: "followUp" });
-			expect(notifications.map((item) => item.message).join("\n")).toContain("ASCET init started");
-			expect(notifications.at(-1)).toEqual({ message: "Queued ASCET init as a follow-up.", level: "info" });
+			expect(notifications).toEqual([{ message: "Queued ASCET init prompt as a follow-up.", level: "info" }]);
 		} finally {
 			removeTempProject(projectRoot);
 		}

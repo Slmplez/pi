@@ -42,7 +42,18 @@ export const ascetWriteTool = defineSequentialAscetTool({
 		_onUpdate: unknown,
 		ctx: AscetToolContext,
 	) {
-		const result = await runAscetWrite(params, { cwd: ctx.cwd, signal, timeoutMs: 120_000 }, ctx);
+		const result = await runAscetWrite(
+			params,
+			{
+				cwd: ctx.cwd,
+				env: ctx.env,
+				signal,
+				timeoutMs: 120_000,
+				executeCli: ctx.executeCli,
+				scheduler: ctx.scheduler,
+			},
+			ctx,
+		);
 		const route = routeAscetAction({ toolName: "ascet_write", action: params.action });
 		return {
 			content: [{ type: "text", text: formatAscetWriteResult(result) }],

@@ -1115,9 +1115,9 @@ Example `text_in_code` result:
 | `list_components` | Query `components` partition |
 | `preview_children` with `group=elements` | Ensure/query `element_decls` |
 | `preview_children` with `group=methods` | Ensure/query `method_decls` |
-| `preview_children` with `group=diagrams` | Ensure/query diagram metadata from `method_decls` |
+| `preview_children` with `group=diagrams` | Live/navigation only; no quick-search partition |
 | `inspect_target` | Lightweight index summary only |
-| `list_diagrams` | Ensure/query diagram metadata |
+| `list_diagrams` | Live `list_diagrams`; no quick-search partition |
 
 `ascet_explore` must not:
 
@@ -1619,7 +1619,7 @@ Tasks:
 - [x] Convert schema to action-specific discriminated union.
 - [x] `preview_children(elements)` uses `element_decls`.
 - [x] `preview_children(methods)` uses `method_decls`.
-- [x] `list_diagrams` uses diagram metadata partition.
+- [x] `list_diagrams` remains live navigation and does not warm quick-search index.
 - [x] `inspect_target` returns lightweight index summary only.
 
 Acceptance:
@@ -1833,8 +1833,7 @@ Non-live regression:
 Live smoke:
 
 - `ascet_status` used the startup host/components probe and returned `runtimeOk=true`, `entryCount=140`, `scanComplete=true`, `elapsedMs=1` against `d:/ETASData/ASCET6.4/Database/AEB`.
-- Direct `AscetCli.exe exec warm_search_index --partition diagram_metadata --component ... --json` returned `componentPath`, `database.path`, and `diagramMetadata[].path` with `/`; `hasBackslash=false`.
-- `list_diagrams` for `PlatformLibrary/Package/AEB_AutomaticEmergencyBrake/Private/AEB_Core/AEB_pDriverIBooster` returned `source=quick_search_index`, `index.elapsedMs=58`, `diagramCount=1`, and `Main` from the scoped `diagram_metadata` partition. The top-level payload carries `component`; each diagram item keeps only its own fields.
+- Historical note: `diagram_metadata` was tested as a scoped warm-search partition, but this was later removed from quick-search indexing because it is not part of ASCET's quick-search menu and made `/ascet-init` do unnecessary work. `list_diagrams` is live `ascet_explore` navigation.
 - `declarations_of_element` found `P_AEB_IB_MaxVelocityDrop_Curve` from `element_decls`.
 - `declarations_of_method_process` found `calc` for `PlatformLibrary/Package/AEB_AutomaticEmergencyBrake/Private/AEB_Core/AEB_pDriverIBooster`.
 - `declarations_of_method_process_element` found `AEB_pDriver/return`.

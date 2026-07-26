@@ -153,6 +153,43 @@ export interface AscetFullElementCacheEntry {
 	data: Record<string, unknown>;
 }
 
+export interface AscetFolderIndexEntry {
+	path: string;
+	name: string;
+	parentPath: string;
+}
+
+export interface AscetFolderItemIndexEntry {
+	folderPath: string;
+	itemPath: string;
+	itemName: string;
+	itemKind: string;
+}
+
+export interface AscetProjectFormulaIndexEntry {
+	projectPath: string;
+	name: string;
+	path?: string;
+	runtimeType?: string;
+	sourceApi?: string;
+}
+
+export interface AscetProjectItemIndexEntry {
+	projectPath: string;
+	name: string;
+	itemKind: string;
+	runtimeType?: string;
+	sourceApi?: string;
+}
+
+export interface AscetDbItemDependencyIndexEntry {
+	sourcePath: string;
+	targetPath: string;
+	targetName?: string;
+	targetKind?: string;
+	sourceApi?: string;
+}
+
 export interface AscetSearchIndexCounts {
 	entries: number;
 	components: number;
@@ -232,6 +269,11 @@ export interface AscetSearchIndexBuildInput {
 	elementRefs?: readonly AscetReferenceIndexEntry[];
 	messages?: readonly AscetMessageIndexEntry[];
 	diagramMetadata?: readonly AscetDiagramMetadataIndexEntry[];
+	folders?: readonly AscetFolderIndexEntry[];
+	folderItems?: readonly AscetFolderItemIndexEntry[];
+	projectFormulas?: readonly AscetProjectFormulaIndexEntry[];
+	projectItems?: readonly AscetProjectItemIndexEntry[];
+	dbItemDependencies?: readonly AscetDbItemDependencyIndexEntry[];
 	counts?: Partial<AscetSearchIndexCounts>;
 }
 
@@ -261,6 +303,10 @@ export interface AscetProjectIndexQueryParams {
 	match?: AscetSearchIndexMatchMode;
 	limit?: number;
 	cursor?: string;
+}
+
+export interface AscetProjectFormulaIndexQueryParams extends AscetProjectIndexQueryParams {
+	projectPath?: string;
 }
 
 export interface AscetTextCodeIndexQueryParams {

@@ -4,6 +4,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, test } from "node:test";
 import type { AscetCliExecutionResult, AscetCliRequest } from "./cli.ts";
+import type { AscetScheduler } from "./scheduler/scheduler.ts";
+import type { AscetJob } from "./scheduler/types.ts";
 import {
 	getAscetFullElement,
 	getAscetSearchIndexPartitionState,
@@ -92,6 +94,78 @@ function makeExecution(request: AscetCliRequest, ok = true): AscetCliExecutionRe
 	};
 }
 
+function makeWarmSearchIndexExecution(request: AscetCliRequest): AscetCliExecutionResult {
+	return {
+		exitCode: 0,
+		stdout: JSON.stringify({
+			ok: true,
+			result: {
+				database: { name: "DemoDb", path: "C:\\ASCET\\DemoDb" },
+				generatedAtUtc: new Date().toISOString(),
+				elapsedMs: 1,
+				scanComplete: true,
+				textCodeIncluded: true,
+				textCodeScanComplete: true,
+				components: [],
+				folders: [],
+				folderItems: [],
+				entries: [],
+				methodDeclarations: [],
+				componentRefs: [],
+				elementRefs: [],
+				dbItemDependencies: [],
+				textCodeEntries: [],
+				counts: {},
+			},
+			error: null,
+			meta: { mode: "exec", operation: "warm_search_index" },
+		}),
+		stderr: "",
+		timedOut: false,
+		request,
+	};
+}
+
+type RecordedSchedulerSubmission = Pick<AscetJob<unknown>, "toolName" | "commandId" | "kind">;
+
+function createRecordingScheduler(
+	submissions: RecordedSchedulerSubmission[],
+): Pick<AscetScheduler, "submit" | "getSnapshot"> {
+	return {
+		async submit<T>(job: AscetJob<T>): Promise<T> {
+			submissions.push({ toolName: job.toolName, commandId: job.commandId, kind: job.kind });
+			return job.run();
+		},
+		getSnapshot() {
+			return {
+				hostState: "healthy",
+				runningJob: null,
+				queuedJobs: [],
+				recentJobs: [],
+				pendingByAgent: {},
+				activeCount: 0,
+				resource: {
+					key: "ascet.toolapi.global",
+					active: 0,
+					queued: 0,
+					concurrency: 1,
+					runningJob: null,
+				},
+			};
+		},
+	};
+}
+
+async function waitFor(predicate: () => boolean, timeoutMs = 1000): Promise<void> {
+	const startedAt = Date.now();
+	while (!predicate()) {
+		if (Date.now() - startedAt > timeoutMs) {
+			throw new Error("Timed out waiting for condition.");
+		}
+		await new Promise((resolve) => setTimeout(resolve, 10));
+	}
+}
+
 const approvingContext: AscetWriteApprovalContext = {
 	hasUI: true,
 	ui: {
@@ -104,7 +178,7 @@ afterEach(() => {
 });
 
 describe("ascet_write WriteImpact", () => {
-	test("successful set_method_code returns compact impact and stales only text_code", async () => {
+	test("successful set_method_code returns compact impact and stales element declarations, element refs, and text_code", async () => {
 		seedReadyIndex();
 		const fixture = createReadyEnv();
 		try {
@@ -130,25 +204,79 @@ describe("ascet_write WriteImpact", () => {
 				action: "set_method_code",
 				affectedComponents: ["AEB/Controller"],
 				affectedMethods: [{ component: "AEB/Controller", method: "calc" }],
-				stale: ["text_code"],
+				stale: ["element_decls", "element_refs", "text_code"],
 			});
 			assert.deepEqual(payload.readback, { hash: "sha256:abc", lineCount: 1 });
 			assert.equal(result.details.impact?.action, "set_method_code");
 			const textCodePartition = getAscetSearchIndexPartitionState("text_code");
 			assert.ok(textCodePartition && textCodePartition.status === "stale");
 			assert.equal(textCodePartition.invalidatedReason, "write_succeeded:set_method_code");
-			assert.equal(getAscetSearchIndexPartitionState("element_decls")?.status, "ready");
+			assert.equal(getAscetSearchIndexPartitionState("element_decls")?.status, "stale");
+			assert.equal(getAscetSearchIndexPartitionState("element_refs")?.status, "stale");
 			assert.equal(
 				queryAscetSearchIndex(
 					{ query: "P_AEB_IB_MaxVelocityDrop_Curve", componentPath: "AEB\\Controller", match: "exact", limit: 20 },
 					{ cwd: fixture.cwd },
-				)?.ok,
-				true,
+				),
+				undefined,
 			);
 			assert.equal(
 				queryAscetTextCodeIndex({ query: "speed - drop", match: "contains", limit: 20 }, { cwd: fixture.cwd }),
 				undefined,
 			);
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("successful set_method_code schedules one background P0 refresh when scheduler is available", async () => {
+		seedReadyIndex();
+		const fixture = createReadyEnv();
+		const submissions: RecordedSchedulerSubmission[] = [];
+		const scheduler = createRecordingScheduler(submissions);
+		try {
+			const options = {
+				cwd: fixture.cwd,
+				env: fixture.env,
+				timeoutMs: 1000,
+				scheduler,
+				executeCli: async (request: AscetCliRequest) =>
+					request.args[1] === "warm_search_index" ? makeWarmSearchIndexExecution(request) : makeExecution(request),
+			};
+			const [first, second] = await Promise.all([
+				runAscetWrite(
+					{
+						action: "set_method_code",
+						componentPath: "AEB\\Controller",
+						methodName: "calc",
+						code: "out = in;",
+						executeWrite: true,
+					},
+					options,
+					approvingContext,
+				),
+				runAscetWrite(
+					{
+						action: "set_method_code",
+						componentPath: "AEB\\Controller",
+						methodName: "calc",
+						code: "out = in + 1;",
+						executeWrite: true,
+					},
+					options,
+					approvingContext,
+				),
+			]);
+
+			assert.equal(first.details.outcome.status, "ok");
+			assert.equal(second.details.outcome.status, "ok");
+			await waitFor(() => submissions.some((entry) => entry.toolName === "ascet_index_refresh"));
+			await new Promise((resolve) => setTimeout(resolve, 25));
+			const refreshJobs = submissions.filter((entry) => entry.toolName === "ascet_index_refresh");
+			assert.deepEqual(refreshJobs, [
+				{ toolName: "ascet_index_refresh", commandId: "warm_search_index", kind: "read" },
+			]);
+			assert.equal(getAscetSearchIndexPartitionState("text_code")?.status, "ready");
 		} finally {
 			fixture.cleanup();
 		}
@@ -342,7 +470,7 @@ describe("ascet_write WriteImpact", () => {
 
 			const payload = JSON.parse(result.content[0]?.text ?? "{}");
 			assert.deepEqual(payload.index.updated ?? [], []);
-			assert.deepEqual(payload.index.stale, ["element_decls", "text_code"]);
+			assert.deepEqual(payload.index.stale, ["element_decls", "element_refs", "text_code"]);
 			assert.equal(payload.index.issues[0].code, "indexReadbackFailed");
 			assert.equal(getAscetSearchIndexPartitionState("element_decls")?.status, "stale");
 			assert.equal(getAscetSearchIndexPartitionState("text_code")?.status, "stale");

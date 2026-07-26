@@ -5,20 +5,14 @@ export type AscetInitScope =
 	| { ok: true; kind: "project"; value: string }
 	| { ok: false; usage: string; reason: string };
 
-export type AscetInitIndexMode = "all" | "core" | "none";
-
 export type AscetInitArgs =
 	| {
 			ok: true;
 			scope: Exclude<AscetInitScope, { ok: false }>;
-			indexMode: AscetInitIndexMode;
-			forceRefresh: boolean;
-			writeSummary: boolean;
 	  }
 	| { ok: false; usage: string; reason: string };
 
-export const ASCET_INIT_USAGE =
-	"Usage: /ascet-init [database|folder <path>|project <name-or-path>] [--index all|core|none] [--force] [--write-summary|--no-write-summary]";
+export const ASCET_INIT_USAGE = "Usage: /ascet-init [database|folder <path>|project <name-or-path>]";
 
 export function parseAscetInitScopeArgs(args: string): AscetInitScope {
 	const trimmed = args.trim();
@@ -55,51 +49,16 @@ export function parseAscetInitScopeArgs(args: string): AscetInitScope {
 
 export function parseAscetInitArgs(args: string): AscetInitArgs {
 	const tokens = args.trim().split(/\s+/).filter(Boolean);
-	const scopeTokens: string[] = [];
-	let indexMode: AscetInitIndexMode = "core";
-	let forceRefresh = false;
-	let writeSummary = true;
 
-	for (let index = 0; index < tokens.length; index += 1) {
-		const token = tokens[index];
-		if (token === "--force") {
-			forceRefresh = true;
-			continue;
-		}
-		if (token === "--write-summary") {
-			writeSummary = true;
-			continue;
-		}
-		if (token === "--no-write-summary") {
-			writeSummary = false;
-			continue;
-		}
-		if (token === "--index") {
-			const value = tokens[index + 1];
-			if (value !== "all" && value !== "core" && value !== "none") {
-				return { ok: false, usage: ASCET_INIT_USAGE, reason: "--index requires all, core, or none" };
-			}
-			indexMode = value;
-			index += 1;
-			continue;
-		}
-		if (token.startsWith("--index=")) {
-			const value = token.slice("--index=".length);
-			if (value !== "all" && value !== "core" && value !== "none") {
-				return { ok: false, usage: ASCET_INIT_USAGE, reason: "--index requires all, core, or none" };
-			}
-			indexMode = value;
-			continue;
-		}
+	for (const token of tokens) {
 		if (token.startsWith("--")) {
 			return { ok: false, usage: ASCET_INIT_USAGE, reason: `unknown option '${token}'` };
 		}
-		scopeTokens.push(token);
 	}
 
-	const scope = parseAscetInitScopeArgs(scopeTokens.join(" "));
+	const scope = parseAscetInitScopeArgs(args);
 	if (scope.ok === false) {
 		return scope;
 	}
-	return { ok: true, scope, indexMode, forceRefresh, writeSummary };
+	return { ok: true, scope };
 }

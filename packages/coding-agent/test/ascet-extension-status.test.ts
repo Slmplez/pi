@@ -15,14 +15,14 @@ interface StatusDetails {
 }
 
 interface CapabilitiesDetails {
-	result: { total: number };
+	ok: boolean;
+	result: CapabilitiesPayload;
+	data?: { result?: CapabilitiesPayload };
 }
 
 interface CapabilitiesPayload {
-	activeProfile: string;
-	activeTools: string[];
 	total: number;
-	items: Array<{ operation?: string; family?: string }>;
+	items: Array<{ tool?: string; action?: string }>;
 }
 
 describe("ASCET extension status diagnostics", () => {
@@ -252,7 +252,7 @@ describe("ASCET extension status diagnostics", () => {
 		expect(tool?.executionMode).toBe("sequential");
 		const response = await tool?.execute(
 			"test-capabilities",
-			{ family: "read" },
+			{ action: "search_actions", query: "complete code", limit: 5 },
 			new AbortController().signal,
 			undefined,
 			{ cwd: repoRoot } as never,
@@ -264,11 +264,11 @@ describe("ASCET extension status diagnostics", () => {
 			throw new Error("Expected ASCET capabilities content to be text.");
 		}
 		const payload = JSON.parse(content.text) as CapabilitiesPayload;
-		expect(payload.activeProfile).toBe("base");
-		expect(payload.activeTools).toContain("ascet_read");
 		expect(payload.total).toBeGreaterThan(0);
-		expect(payload.items.some((item) => item.family === "read")).toBe(true);
+		expect(payload.items.some((item) => item.tool === "ascet_read" && item.action === "read_code")).toBe(true);
 		const details = response?.details as CapabilitiesDetails | undefined;
+		expect(details?.ok).toBe(true);
 		expect(details?.result.total).toBeGreaterThan(0);
+		expect(details?.data?.result).toEqual(details?.result);
 	});
 });

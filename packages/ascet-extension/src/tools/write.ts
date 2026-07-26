@@ -456,7 +456,7 @@ async function applySuccessfulWriteIndexUpdate(
 			},
 			options,
 		);
-		applyTargetedWritebackImpact(update, impact);
+		applyTargetedWritebackImpact(update, impact, options);
 		return update.issues && update.issues.length > 0 ? { ...update, stale: impact.stale } : update;
 	}
 	if (params.action === "apply_element_spec") {
@@ -473,20 +473,30 @@ async function applySuccessfulWriteIndexUpdate(
 			},
 			options,
 		);
-		applyTargetedWritebackImpact(update, impact);
+		applyTargetedWritebackImpact(update, impact, options);
 		return update.issues && update.issues.length > 0 ? { ...update, stale: impact.stale } : update;
 	}
-	applyWriteImpactToSearchIndex(impact);
+	applyWriteImpactToSearchIndex(impact, `write_succeeded:${params.action}`, options);
 	return impact;
 }
 
-function applyTargetedWritebackImpact(update: AscetElementIndexWritebackResult, fallbackImpact: WriteImpact): void {
+function applyTargetedWritebackImpact(
+	update: AscetElementIndexWritebackResult,
+	fallbackImpact: WriteImpact,
+	options: RunAscetWriteOperationOptions,
+): void {
 	if (update.issues && update.issues.length > 0) {
 		invalidateAscetSearchIndexPartitions(fallbackImpact.stale, `write_succeeded:${fallbackImpact.action}`);
+		applyWriteImpactToSearchIndex(fallbackImpact, `write_succeeded:${fallbackImpact.action}`, options);
 		return;
 	}
 	if (update.stale.length > 0) {
 		invalidateAscetSearchIndexPartitions(update.stale, `write_succeeded:${fallbackImpact.action}`);
+		applyWriteImpactToSearchIndex(
+			{ ...fallbackImpact, stale: update.stale },
+			`write_succeeded:${fallbackImpact.action}`,
+			options,
+		);
 	}
 }
 

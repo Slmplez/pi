@@ -154,6 +154,24 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 		},
 		result: { shape: "projectCandidates", fields: ["total", "items", "nextCursor", "searchComplete"] },
 	},
+	"ascet_search.search_project_formulas": {
+		compact: "find Project formula declarations from the SQLite P0 index",
+		intent:
+			"Find indexed ASCET Project formula declarations by name before reading or editing the live project formula catalog.",
+		useWhen: ["Need to search formulas across Projects or within a known projectPath."],
+		avoidWhen: ["Need complete formula contents; use ascet_read.read_project_formulas after resolving projectPath."],
+		aliases: ["search project formula", "find formula", "formula declaration", "project formula search"],
+		nextActions: ["ascet_read.read_project_formulas", "ascet_diff.diff_project_formulas"],
+		schema: {
+			required: ["action", "query"],
+			optional: ["projectPath", "scopePath", "match", "limit", "cursor"],
+			enums: {
+				action: ["search_project_formulas"],
+				match: ["exact", "glob", "contains"],
+			},
+		},
+		result: { shape: "projectFormulaCandidates", fields: ["matches", "nextCursor", "searchComplete"] },
+	},
 	"ascet_search.text_in_code": {
 		compact: "search indexed ESDL/C snippets; not complete live code",
 		intent: "Find where text appears in indexed ESDL or C code and return snippet evidence.",
@@ -193,7 +211,7 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 		result: { shape: "methodProcessElements", fields: ["total", "items", "nextCursor", "searchComplete"] },
 	},
 	"ascet_explore.list_diagrams": {
-		aliases: ["list diagrams", "diagram metadata", "available diagrams", "diagram list"],
+		aliases: ["list diagrams", "available diagrams", "diagram list"],
 		nextActions: ["ascet_read.read_block_diagram"],
 		result: { shape: "diagramList", fields: ["component", "total", "items"] },
 	},

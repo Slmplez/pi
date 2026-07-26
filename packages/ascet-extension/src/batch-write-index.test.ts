@@ -5,6 +5,8 @@ import { join } from "node:path";
 import { afterEach, describe, test } from "node:test";
 import { runApprovedAscetBatchWrite } from "./batch-write.ts";
 import type { AscetCliExecutionResult, AscetCliRequest } from "./cli.ts";
+import type { AscetScheduler } from "./scheduler/scheduler.ts";
+import type { AscetJob } from "./scheduler/types.ts";
 import { getAscetSearchIndexPartitionState, resetAscetSearchIndexForTest } from "./search-index.ts";
 import type { AscetWriteApprovalContext } from "./write-policy.ts";
 
@@ -92,6 +94,78 @@ function okBatchExecution(request: AscetCliRequest): AscetCliExecutionResult {
 	};
 }
 
+function makeWarmSearchIndexExecution(request: AscetCliRequest): AscetCliExecutionResult {
+	return {
+		exitCode: 0,
+		stdout: JSON.stringify({
+			ok: true,
+			result: {
+				database: { name: "DemoDb", path: "C:\\ASCET\\DemoDb" },
+				generatedAtUtc: new Date().toISOString(),
+				elapsedMs: 1,
+				scanComplete: true,
+				textCodeIncluded: true,
+				textCodeScanComplete: true,
+				components: [],
+				folders: [],
+				folderItems: [],
+				entries: [],
+				methodDeclarations: [],
+				componentRefs: [],
+				elementRefs: [],
+				dbItemDependencies: [],
+				textCodeEntries: [],
+				counts: {},
+			},
+			error: null,
+			meta: { mode: "exec", operation: "warm_search_index" },
+		}),
+		stderr: "",
+		timedOut: false,
+		request,
+	};
+}
+
+type RecordedSchedulerSubmission = Pick<AscetJob<unknown>, "toolName" | "commandId" | "kind">;
+
+function createRecordingScheduler(
+	submissions: RecordedSchedulerSubmission[],
+): Pick<AscetScheduler, "submit" | "getSnapshot"> {
+	return {
+		async submit<T>(job: AscetJob<T>): Promise<T> {
+			submissions.push({ toolName: job.toolName, commandId: job.commandId, kind: job.kind });
+			return job.run();
+		},
+		getSnapshot() {
+			return {
+				hostState: "healthy",
+				runningJob: null,
+				queuedJobs: [],
+				recentJobs: [],
+				pendingByAgent: {},
+				activeCount: 0,
+				resource: {
+					key: "ascet.toolapi.global",
+					active: 0,
+					queued: 0,
+					concurrency: 1,
+					runningJob: null,
+				},
+			};
+		},
+	};
+}
+
+async function waitFor(predicate: () => boolean, timeoutMs = 1000): Promise<void> {
+	const startedAt = Date.now();
+	while (!predicate()) {
+		if (Date.now() - startedAt > timeoutMs) {
+			throw new Error("Timed out waiting for condition.");
+		}
+		await new Promise((resolve) => setTimeout(resolve, 10));
+	}
+}
+
 const approvingContext: AscetWriteApprovalContext = {
 	hasUI: true,
 	ui: {
@@ -104,7 +178,7 @@ afterEach(() => {
 });
 
 describe("ascet_batch_write index impact", () => {
-	test("successful batch_set_method_code stales text_code only", async () => {
+	test("successful batch_set_method_code stales element declarations, element refs, and text_code", async () => {
 		seedReadyIndex();
 		const fixture = createReadyEnv();
 		try {
@@ -131,10 +205,11 @@ describe("ascet_batch_write index impact", () => {
 
 			assert.equal(result.ok, true);
 			const payload = result.data as { result?: { index?: { stale?: string[]; affectedMethods?: unknown[] } } };
-			assert.deepEqual(payload.result?.index?.stale, ["text_code"]);
+			assert.deepEqual(payload.result?.index?.stale, ["element_decls", "element_refs", "text_code"]);
 			assert.deepEqual(payload.result?.index?.affectedMethods, [{ component: "AEB/Controller", method: "calc" }]);
 			assert.equal(getAscetSearchIndexPartitionState("text_code")?.status, "stale");
-			assert.equal(getAscetSearchIndexPartitionState("element_decls")?.status, "ready");
+			assert.equal(getAscetSearchIndexPartitionState("element_decls")?.status, "stale");
+			assert.equal(getAscetSearchIndexPartitionState("element_refs")?.status, "stale");
 			assert.equal(getAscetSearchIndexPartitionState("components")?.status, "ready");
 		} finally {
 			fixture.cleanup();
@@ -173,6 +248,59 @@ describe("ascet_batch_write index impact", () => {
 			assert.equal(getAscetSearchIndexPartitionState("components")?.status, "stale");
 			assert.equal(getAscetSearchIndexPartitionState("element_decls")?.status, "ready");
 			assert.equal(getAscetSearchIndexPartitionState("text_code")?.status, "ready");
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("successful batch_set_method_code schedules refresh without changing batch result envelope", async () => {
+		seedReadyIndex();
+		const fixture = createReadyEnv();
+		const submissions: RecordedSchedulerSubmission[] = [];
+		const scheduler = createRecordingScheduler(submissions);
+		try {
+			const result = await runApprovedAscetBatchWrite(
+				{
+					operation: "batch_set_method_code",
+					requests: [
+						{
+							componentPath: "AEB\\Controller",
+							methodName: "calc",
+							codeFile: join(fixture.cwd, "calc.esdl"),
+						},
+						{
+							componentPath: "AEB\\Controller",
+							methodName: "calc",
+							codeFile: join(fixture.cwd, "calc2.esdl"),
+						},
+					],
+					executeWrite: true,
+				},
+				{
+					cwd: fixture.cwd,
+					env: fixture.env,
+					timeoutMs: 1000,
+					scheduler,
+					executeCli: async (request) =>
+						request.args[1] === "warm_search_index"
+							? makeWarmSearchIndexExecution(request)
+							: okBatchExecution(request),
+				},
+				approvingContext,
+			);
+
+			assert.equal(result.ok, true);
+			const payload = result.data as {
+				result?: { results?: unknown[]; index?: { stale?: string[]; requestCount?: number } };
+			};
+			assert.deepEqual(payload.result?.results, [{ id: "req-1", ok: true }]);
+			assert.deepEqual(payload.result?.index?.stale, ["element_decls", "element_refs", "text_code"]);
+			assert.equal(payload.result?.index?.requestCount, 2);
+			await waitFor(() => submissions.some((entry) => entry.toolName === "ascet_index_refresh"));
+			const refreshJobs = submissions.filter((entry) => entry.toolName === "ascet_index_refresh");
+			assert.deepEqual(refreshJobs, [
+				{ toolName: "ascet_index_refresh", commandId: "warm_search_index", kind: "read" },
+			]);
 		} finally {
 			fixture.cleanup();
 		}

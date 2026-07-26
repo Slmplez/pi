@@ -14,6 +14,7 @@ import {
 	getDefaultCreateMethodKind,
 	validateCreateMethodKindCompatibility,
 } from "./method-kind-compatibility.ts";
+import type { AscetScheduler } from "./scheduler/scheduler.ts";
 import { createAscetStatusReport } from "./status.ts";
 import { openAiObjectSchema } from "./tools/_shared/openai-schema.ts";
 import {
@@ -47,6 +48,7 @@ export interface RunAscetBatchWriteOptions {
 	signal?: AbortSignal;
 	timeoutMs?: number;
 	executeCli?: (request: AscetCliRequest) => Promise<AscetCliExecutionResult>;
+	scheduler?: Pick<AscetScheduler, "submit" | "getSnapshot">;
 }
 
 export type AscetBatchWriteResult = AscetCliJsonResult;
@@ -423,7 +425,7 @@ export async function runApprovedAscetBatchWrite(
 	const result = await runAscetBatchWrite(normalizedParams, options);
 	if (result.ok) {
 		const impact = createBatchWriteIndexImpact(normalizedParams);
-		applyWriteImpactToSearchIndex(impact);
+		applyWriteImpactToSearchIndex(impact, `write_succeeded:${impact.action}`, options);
 		result.data = attachBatchWriteIndexImpact(result.data, impact);
 	}
 	return result;

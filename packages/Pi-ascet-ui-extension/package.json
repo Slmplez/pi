@@ -24,6 +24,7 @@
   },
   "files": [
     "extensions/AscetHeader.ts",
+    "extensions/AscetIndexFooterStatus.ts",
     "extensions/index.ts",
     "extensions/logo.ts",
     "extensions/recentSessions.ts",

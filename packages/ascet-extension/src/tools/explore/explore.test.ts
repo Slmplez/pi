@@ -1,9 +1,13 @@
 import assert from "node:assert/strict";
-import { afterEach, describe, test } from "node:test";
+import { afterEach, beforeEach, describe, test } from "node:test";
 import type { AscetCliExecutionResult, AscetCliRequest } from "../../cli.ts";
 import { resetAscetSearchIndexForTest } from "../../search-index.ts";
 import { ascetExploreTool } from "./definition.ts";
 import { ascetExploreParameters } from "./schema.ts";
+
+beforeEach(() => {
+	resetAscetSearchIndexForTest();
+});
 
 afterEach(() => {
 	resetAscetSearchIndexForTest();
@@ -15,7 +19,8 @@ describe("ascet_explore phase 5 navigation redesign", () => {
 			(ascetExploreParameters as { anyOf?: Array<{ properties?: Record<string, unknown> }> }).anyOf ?? [];
 		const byAction = new Map<string, Record<string, unknown>>();
 		for (const variant of variants) {
-			const action = (variant.properties?.action as { const?: string } | undefined)?.const;
+			const actionSchema = variant.properties?.action as { const?: string; enum?: string[] } | undefined;
+			const action = actionSchema?.const ?? actionSchema?.enum?.[0];
 			if (action) {
 				byAction.set(action, variant.properties ?? {});
 			}
@@ -60,7 +65,7 @@ describe("ascet_explore phase 5 navigation redesign", () => {
 		assert.doesNotMatch(rendered, /fullCode/);
 	});
 
-	test("list_diagrams uses the diagram metadata partition without live fallback", async () => {
+	test("list_diagrams uses live list_diagrams without warming quick-search index", async () => {
 		const requests: AscetCliRequest[] = [];
 
 		const result = await ascetExploreTool.execute(
@@ -73,19 +78,15 @@ describe("ascet_explore phase 5 navigation redesign", () => {
 
 		assert.deepEqual(
 			requests.map((request) => request.args[1]),
-			["warm_search_index"],
+			["list_diagrams"],
 		);
-		assert.equal(requests[0]?.args[requests[0].args.indexOf("--partition") + 1], "diagram_metadata");
+		assert.deepEqual(requests[0]?.args, ["exec", "list_diagrams", "DEMO\\PID", "--diagram-kind", "all", "--json"]);
 		const rendered = result.content[0]?.text ?? "";
-		assert.match(rendered, /quick_search_index/);
 		assert.match(rendered, /Main/);
-		assert.doesNotMatch(rendered, /live_fallback/);
-		const payload = JSON.parse(rendered) as { component?: string; items?: Array<Record<string, unknown>> };
-		assert.equal(payload.component, "DEMO/PID");
-		assert.equal(payload.items?.[0]?.component, undefined);
+		assert.doesNotMatch(rendered, /quick_search_index/);
 	});
 
-	test("list_diagrams reuses scoped diagram metadata index for the same component", async () => {
+	test("list_diagrams does not cache through quick-search index", async () => {
 		const requests: AscetCliRequest[] = [];
 
 		await ascetExploreTool.execute(
@@ -105,10 +106,10 @@ describe("ascet_explore phase 5 navigation redesign", () => {
 
 		assert.deepEqual(
 			requests.map((request) => request.args[1]),
-			["warm_search_index"],
+			["list_diagrams", "list_diagrams"],
 		);
-		assert.match(result.content[0]?.text ?? "", /quick_search_index/);
 		assert.match(result.content[0]?.text ?? "", /Main/);
+		assert.doesNotMatch(result.content[0]?.text ?? "", /quick_search_index/);
 	});
 });
 
@@ -118,9 +119,14 @@ function makeExploreExecution(requests: AscetCliRequest[]) {
 		if (request.args[1] === "warm_search_index") {
 			return okExecution(request, warmupPayload());
 		}
+		if (request.args[1] === "list_diagrams") {
+			return okExecution(request, {
+				componentPath: "DEMO\\PID",
+				diagrams: [{ name: "Main", kind: "block_diagram" }],
+			});
+		}
 		return okExecution(request, {
 			componentPath: "DEMO\\PID",
-			diagrams: [{ name: "block", kind: "block_diagram" }],
 			fullCode: "this must not appear in inspect_target",
 		});
 	};
@@ -175,16 +181,6 @@ function warmupPayload() {
 		components,
 		entries,
 		counts: { entries: entries.length, components: components.length },
-		diagramMetadata: [
-			{
-				componentPath: "DEMO\\PID",
-				name: "Main",
-				kind: "block_diagram",
-				path: "DEMO\\PID::Main",
-				isDefault: true,
-				supportsReadBlockDiagram: true,
-			},
-		],
 	};
 }
 
