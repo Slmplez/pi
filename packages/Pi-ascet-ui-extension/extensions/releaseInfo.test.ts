@@ -83,24 +83,24 @@ test("createReleaseRows renders concise release and update text", () => {
 		createReleaseRows({ status: "checking" }, ASCET_COPILOT_RELEASE),
 		[
 			"Release",
-			"0.1.26 - ASCET ESDL coding agent design",
-			"Implementation subagent routing",
-			"Design-first ESDL workflow",
+			"0.1.27 - Deterministic /ascet-init indexing",
+			"Compact ASCET action search",
+			"Dependent chain and write tools",
 			"Checking updates...",
 		],
 	);
 	assert.deepEqual(
-		createReleaseRows({ status: "available", latestVersion: "0.1.27" }, ASCET_COPILOT_RELEASE),
-		["Update available", "0.1.26 -> 0.1.27", "pi update npm:@zeerke/ascet-copilot"],
+		createReleaseRows({ status: "available", latestVersion: "0.1.28" }, ASCET_COPILOT_RELEASE),
+		["Update available", "0.1.27 -> 0.1.28", "pi update npm:@zeerke/ascet-copilot"],
 	);
 	assert.deepEqual(
-		createReleaseRows({ status: "current", latestVersion: "0.1.26" }, ASCET_COPILOT_RELEASE),
+		createReleaseRows({ status: "current", latestVersion: "0.1.27" }, ASCET_COPILOT_RELEASE),
 		[
 			"Release",
-			"0.1.26 - Up to date",
-			"ASCET ESDL coding agent design",
-			"Implementation subagent routing",
-			"Design-first ESDL workflow",
+			"0.1.27 - Up to date",
+			"Deterministic /ascet-init indexing",
+			"Compact ASCET action search",
+			"Dependent chain and write tools",
 		],
 	);
 });
