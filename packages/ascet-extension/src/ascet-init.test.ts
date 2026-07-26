@@ -61,35 +61,41 @@ describe("executeAscetInitCommand", () => {
 		const fixture = createReadyEnv();
 		const messages: string[] = [];
 		const notifications: string[] = [];
+		const statuses: Array<{ key: string; text: string | undefined }> = [];
 		const calls: AscetSearchIndexWarmupOptions[] = [];
 		try {
-			await executeAscetInitCommand(
-				"database --index core",
-				{
-					cwd: fixture.cwd,
-					env: fixture.env,
-					isIdle: () => true,
-					warmSearchIndex: async (options) => {
-						calls.push(options);
-						return warmupResult(options);
+			await executeAscetInitCommand("database --index core", {
+				cwd: fixture.cwd,
+				env: fixture.env,
+				isIdle: () => true,
+				sendUserMessage(content) {
+					messages.push(content);
+				},
+				warmSearchIndex: async (options) => {
+					calls.push(options);
+					return warmupResult(options);
+				},
+				ui: {
+					notify(message) {
+						notifications.push(message);
 					},
-					ui: {
-						notify(message) {
-							notifications.push(message);
-						},
+					setStatus(key, text) {
+						statuses.push({ key, text });
 					},
 				},
-				{
-					sendUserMessage(content) {
-						messages.push(content);
-					},
-				},
-			);
+			});
 
 			assert.equal(calls.length, 5);
 			assert.equal(messages.length, 1);
 			assert.match(messages[0] ?? "", /\.ascet\/ascet-workspace-summary\.json/);
+			assert.match(notifications.join("\n"), /ASCET init started/);
 			assert.match(notifications.join("\n"), /ASCET init index ready/);
+			assert.equal(
+				statuses.every((status) => status.key === "ascet-init"),
+				true,
+			);
+			assert.match(statuses.map((status) => status.text).join("\n"), /\[1\/5\] components/);
+			assert.match(statuses.at(-1)?.text ?? "", /ASCET init ok 0:00 ready/);
 		} finally {
 			fixture.cleanup();
 		}
@@ -100,24 +106,19 @@ describe("executeAscetInitCommand", () => {
 		let calls = 0;
 		let message = "";
 		try {
-			await executeAscetInitCommand(
-				"--index none --no-write-summary",
-				{
-					cwd: fixture.cwd,
-					env: fixture.env,
-					isIdle: () => true,
-					warmSearchIndex: async (options) => {
-						calls += 1;
-						return warmupResult(options);
-					},
-					ui: { notify() {} },
+			await executeAscetInitCommand("--index none --no-write-summary", {
+				cwd: fixture.cwd,
+				env: fixture.env,
+				isIdle: () => true,
+				sendUserMessage(content) {
+					message = content;
 				},
-				{
-					sendUserMessage(content) {
-						message = content;
-					},
+				warmSearchIndex: async (options) => {
+					calls += 1;
+					return warmupResult(options);
 				},
-			);
+				ui: { notify() {} },
+			});
 
 			assert.equal(calls, 0);
 			assert.doesNotMatch(message, /ASCET init artifacts:/);

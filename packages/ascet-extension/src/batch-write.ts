@@ -15,6 +15,13 @@ import {
 	validateCreateMethodKindCompatibility,
 } from "./method-kind-compatibility.ts";
 import { createAscetStatusReport } from "./status.ts";
+import { openAiObjectSchema } from "./tools/_shared/openai-schema.ts";
+import {
+	applyWriteImpactToSearchIndex,
+	createWriteImpact,
+	type WriteImpact,
+	type WriteImpactParams,
+} from "./write-common.ts";
 import { type AscetWriteApprovalContext, requestAscetWriteApproval } from "./write-policy.ts";
 
 export type AscetBatchWriteOperation =
@@ -43,6 +50,10 @@ export interface RunAscetBatchWriteOptions {
 }
 
 export type AscetBatchWriteResult = AscetCliJsonResult;
+
+export interface AscetBatchWriteIndexImpact extends WriteImpact {
+	requestCount: number;
+}
 
 const batchCommonOptions = {
 	executeWrite: Type.Optional(
@@ -170,23 +181,25 @@ const batchRequestSchema = Type.Union([
 	deleteFolderRequest,
 ]);
 
-export const ascetBatchWriteParameters = Type.Object(
-	{
-		operation: Type.Union([
-			Type.Literal("batch_set_method_code"),
-			Type.Literal("batch_set_element_spec"),
-			Type.Literal("batch_create_component"),
-			Type.Literal("batch_create_method"),
-			Type.Literal("batch_set_project_formula"),
-			Type.Literal("batch_delete_component"),
-			Type.Literal("batch_delete_method"),
-			Type.Literal("batch_create_folder"),
-			Type.Literal("batch_delete_folder"),
-		]),
-		requests: Type.Array(batchRequestSchema, batchRequestArrayOptions),
-		...batchCommonOptions,
-	},
-	{ additionalProperties: false },
+export const ascetBatchWriteParameters = openAiObjectSchema<AscetBatchWriteParams>(
+	Type.Object(
+		{
+			operation: Type.Union([
+				Type.Literal("batch_set_method_code"),
+				Type.Literal("batch_set_element_spec"),
+				Type.Literal("batch_create_component"),
+				Type.Literal("batch_create_method"),
+				Type.Literal("batch_set_project_formula"),
+				Type.Literal("batch_delete_component"),
+				Type.Literal("batch_delete_method"),
+				Type.Literal("batch_create_folder"),
+				Type.Literal("batch_delete_folder"),
+			]),
+			requests: Type.Array(batchRequestSchema, batchRequestArrayOptions),
+			...batchCommonOptions,
+		},
+		{ additionalProperties: false },
+	),
 );
 
 const cliOperationByToolOperation: Record<AscetBatchWriteOperation, string> = {
@@ -407,7 +420,91 @@ export async function runApprovedAscetBatchWrite(
 		);
 	}
 
-	return runAscetBatchWrite(normalizedParams, options);
+	const result = await runAscetBatchWrite(normalizedParams, options);
+	if (result.ok) {
+		const impact = createBatchWriteIndexImpact(normalizedParams);
+		applyWriteImpactToSearchIndex(impact);
+		result.data = attachBatchWriteIndexImpact(result.data, impact);
+	}
+	return result;
+}
+
+export function createBatchWriteIndexImpact(params: AscetBatchWriteParams): AscetBatchWriteIndexImpact {
+	const normalizedParams = normalizeAscetBatchWriteParams(params);
+	const requestImpacts = normalizedParams.requests.map((request) =>
+		createWriteImpact(toWriteImpactParams(normalizedParams.operation, request)),
+	);
+	return {
+		action: normalizedParams.operation,
+		affectedComponents: uniqueStrings(requestImpacts.flatMap((impact) => impact.affectedComponents)),
+		affectedMethods: uniqueMethodImpacts(requestImpacts.flatMap((impact) => impact.affectedMethods)),
+		affectedElements: uniqueElementImpacts(requestImpacts.flatMap((impact) => impact.affectedElements)),
+		stale: uniqueStrings(requestImpacts.flatMap((impact) => impact.stale)) as AscetBatchWriteIndexImpact["stale"],
+		requestCount: normalizedParams.requests.length,
+	};
+}
+
+function toWriteImpactParams(operation: AscetBatchWriteOperation, request: Record<string, unknown>): WriteImpactParams {
+	const action = cliOperationByToolOperation[operation];
+	return {
+		action,
+		componentPath: stringValue(request.componentPath),
+		modulePath: stringValue(request.modulePath),
+		stateMachinePath: stringValue(request.stateMachinePath),
+		folderPath: stringValue(request.folderPath),
+		projectPath: stringValue(request.projectPath),
+		targetPath: stringValue(request.targetPath),
+		methodName: stringValue(request.methodName),
+		elementName: stringValue(request.elementName),
+	};
+}
+
+function attachBatchWriteIndexImpact(data: unknown, impact: AscetBatchWriteIndexImpact): unknown {
+	const root = asRecord(data);
+	if (!root) {
+		return { result: data, index: impact };
+	}
+	const result = asRecord(root.result);
+	if (result) {
+		return { ...root, result: { ...result, index: impact } };
+	}
+	return { ...root, index: impact };
+}
+
+function stringValue(value: unknown): string | undefined {
+	return typeof value === "string" && value.trim() ? value : undefined;
+}
+
+function uniqueStrings<T extends string>(values: readonly T[]): T[] {
+	return [...new Set(values.filter(Boolean))];
+}
+
+function uniqueMethodImpacts(
+	values: readonly WriteImpact["affectedMethods"][number][],
+): WriteImpact["affectedMethods"] {
+	const seen = new Set<string>();
+	return values.filter((value) => {
+		const key = `${value.component}\0${value.method}`;
+		if (seen.has(key)) {
+			return false;
+		}
+		seen.add(key);
+		return true;
+	});
+}
+
+function uniqueElementImpacts(
+	values: readonly WriteImpact["affectedElements"][number][],
+): WriteImpact["affectedElements"] {
+	const seen = new Set<string>();
+	return values.filter((value) => {
+		const key = `${value.component}\0${value.name}`;
+		if (seen.has(key)) {
+			return false;
+		}
+		seen.add(key);
+		return true;
+	});
 }
 
 function asRecord(value: unknown): Record<string, unknown> | undefined {

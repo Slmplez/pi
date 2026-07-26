@@ -41,6 +41,21 @@ export interface AscetInitIndexResult {
 	};
 }
 
+export type AscetInitProgressEvent =
+	| { phase: "start"; total: number; elapsedMs: number }
+	| { phase: "partition_start"; index: number; total: number; partition: AscetInitIndexPartition; elapsedMs: number }
+	| {
+			phase: "partition_done";
+			index: number;
+			total: number;
+			partition: AscetInitIndexPartition;
+			status: "ready" | "failed";
+			count?: number;
+			fromCache?: boolean;
+			elapsedMs: number;
+	  }
+	| { phase: "done"; status: AscetInitIndexResult["index"]["status"]; elapsedMs: number };
+
 export interface AscetInitIndexOptions {
 	cwd: string;
 	env?: Record<string, string | undefined>;
@@ -50,6 +65,7 @@ export interface AscetInitIndexOptions {
 	indexMode: AscetInitIndexMode;
 	forceRefresh?: boolean;
 	warmSearchIndex?: (options: AscetSearchIndexWarmupOptions) => Promise<AscetSearchIndexWarmupResult>;
+	onProgress?: (event: AscetInitProgressEvent) => void;
 }
 
 export const ASCET_INIT_CORE_PARTITIONS: readonly AscetInitIndexPartition[] = [
@@ -140,8 +156,16 @@ export async function runAscetInitIndex(options: AscetInitIndexOptions): Promise
 	const reports: AscetInitIndexPartitionReport[] = [];
 	let databaseName = "";
 	let databasePath = "";
+	options.onProgress?.({ phase: "start", total: partitions.length, elapsedMs: 0 });
 
-	for (const partition of partitions) {
+	for (const [partitionIndex, partition] of partitions.entries()) {
+		options.onProgress?.({
+			phase: "partition_start",
+			index: partitionIndex + 1,
+			total: partitions.length,
+			partition,
+			elapsedMs: Date.now() - startedAt,
+		});
 		const result = await warmSearchIndex({
 			cwd: options.cwd,
 			env: options.env,
@@ -159,7 +183,18 @@ export async function runAscetInitIndex(options: AscetInitIndexOptions): Promise
 		if (result.databasePath) {
 			databasePath = normalizeApiPath(result.databasePath);
 		}
-		reports.push(partitionReport(partition, result));
+		const report = partitionReport(partition, result);
+		reports.push(report);
+		options.onProgress?.({
+			phase: "partition_done",
+			index: partitionIndex + 1,
+			total: partitions.length,
+			partition,
+			status: report.status === "failed" ? "failed" : "ready",
+			count: report.count,
+			fromCache: report.fromCache,
+			elapsedMs: Date.now() - startedAt,
+		});
 	}
 
 	const failed = reports.find((report) => report.status === "failed");
@@ -167,6 +202,7 @@ export async function runAscetInitIndex(options: AscetInitIndexOptions): Promise
 	const fromCache = readyReports.length > 0 && readyReports.every((report) => report.fromCache === true);
 	const elapsedMs = Date.now() - startedAt;
 	const status = failed ? (readyReports.length > 0 ? "partial" : "failed") : "ready";
+	options.onProgress?.({ phase: "done", status, elapsedMs });
 	return {
 		database:
 			databaseName || databasePath

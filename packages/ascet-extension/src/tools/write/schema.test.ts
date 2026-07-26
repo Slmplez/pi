@@ -31,5 +31,16 @@ function schemaFor(
 	schemas: Array<{ properties?: Record<string, unknown> }>,
 	action: string,
 ): { properties?: Record<string, unknown> } | undefined {
-	return schemas.find((entry) => (entry.properties?.action as { const?: string } | undefined)?.const === action);
+	return schemas.find((entry) => actionName(entry.properties?.action) === action);
+}
+
+function actionName(schema: unknown): string | undefined {
+	if (schema === null || typeof schema !== "object") {
+		return undefined;
+	}
+	const action = schema as { const?: string; enum?: unknown[] };
+	if (typeof action.const === "string") {
+		return action.const;
+	}
+	return Array.isArray(action.enum) && typeof action.enum[0] === "string" ? action.enum[0] : undefined;
 }

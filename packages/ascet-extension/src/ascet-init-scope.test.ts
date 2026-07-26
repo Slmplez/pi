@@ -3,8 +3,15 @@ import { describe, test } from "node:test";
 import { parseAscetInitArgs } from "./ascet-init-scope.ts";
 
 describe("parseAscetInitArgs", () => {
-	test("keeps legacy scope parsing and defaults to full index", () => {
+	test("keeps legacy scope parsing and defaults to core index", () => {
 		assert.deepEqual(parseAscetInitArgs(""), {
+			ok: true,
+			scope: { ok: true, kind: "auto-detect" },
+			indexMode: "core",
+			forceRefresh: false,
+			writeSummary: true,
+		});
+		assert.deepEqual(parseAscetInitArgs("--index all"), {
 			ok: true,
 			scope: { ok: true, kind: "auto-detect" },
 			indexMode: "all",

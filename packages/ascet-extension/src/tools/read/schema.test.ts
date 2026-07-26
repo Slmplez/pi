@@ -89,14 +89,23 @@ describe("ascet_read schema", () => {
 
 function getActionLiterals(): string[] {
 	const anyOf =
-		(ascetReadParameters as { anyOf?: Array<{ properties?: { action?: { const?: string } } }> }).anyOf ?? [];
+		(ascetReadParameters as { anyOf?: Array<{ properties?: { action?: { const?: string; enum?: unknown[] } } }> })
+			.anyOf ?? [];
 	return anyOf
-		.map((entry) => entry.properties?.action?.const)
+		.map((entry) => actionName(entry.properties?.action))
 		.filter((value): value is string => typeof value === "string");
 }
 
 function getActionSchema(action: string): unknown {
 	const anyOf =
-		(ascetReadParameters as { anyOf?: Array<{ properties?: { action?: { const?: string } } }> }).anyOf ?? [];
-	return anyOf.find((entry) => entry.properties?.action?.const === action);
+		(ascetReadParameters as { anyOf?: Array<{ properties?: { action?: { const?: string; enum?: unknown[] } } }> })
+			.anyOf ?? [];
+	return anyOf.find((entry) => actionName(entry.properties?.action) === action);
+}
+
+function actionName(schema: { const?: string; enum?: unknown[] } | undefined): string | undefined {
+	if (typeof schema?.const === "string") {
+		return schema.const;
+	}
+	return Array.isArray(schema?.enum) && typeof schema.enum[0] === "string" ? schema.enum[0] : undefined;
 }

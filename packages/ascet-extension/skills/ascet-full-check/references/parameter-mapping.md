@@ -10,7 +10,7 @@ Check only business Imported/Exported Parameter mapping chains. The workflow mus
 
 Parameter mapping checks are read-only. Use these tools only through the canonical ASCET extension tools and scheduler:
 
-- `ascet_reference` action `component_refs`
+- `ascet_search` action `references_to_component`
 - `ascet_explore` action `preview_children`
 - `ascet_read` action `read_dependent_chain`
 - `ascet_search` action `search_occurrences`

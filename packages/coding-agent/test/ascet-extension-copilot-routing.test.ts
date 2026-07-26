@@ -14,7 +14,6 @@ const EXPECTED_ACTIONS = {
 		"read_dependent_chain",
 		"read_element_dependency",
 	],
-	ascet_reference: ["component_refs", "used_by", "element_refs"],
 	ascet_diff: [
 		"diff",
 		"diff_method",

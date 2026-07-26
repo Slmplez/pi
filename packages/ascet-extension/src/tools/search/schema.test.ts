@@ -452,12 +452,19 @@ function getActionLiterals(): string[] {
 }
 
 type JsonSchema = { properties?: Record<string, unknown> };
-type ActionConstSchema = { const?: string };
+type ActionConstSchema = { const?: string; enum?: unknown[] };
 
 function actionConst(schema: JsonSchema): string | undefined {
 	const action = schema.properties?.action;
-	return action !== null && typeof action === "object" && "const" in action
-		? (action as ActionConstSchema).const
+	if (action === null || typeof action !== "object") {
+		return undefined;
+	}
+	const actionSchema = action as ActionConstSchema;
+	if (typeof actionSchema.const === "string") {
+		return actionSchema.const;
+	}
+	return Array.isArray(actionSchema.enum) && typeof actionSchema.enum[0] === "string"
+		? actionSchema.enum[0]
 		: undefined;
 }
 

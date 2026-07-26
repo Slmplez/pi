@@ -4,7 +4,7 @@ description: Collect reusable live ASCET evidence for ascet-full-check runs
 systemPromptMode: replace
 inheritProjectContext: true
 inheritSkills: false
-tools: read, grep, find, ls, bash, ascet_status, ascet_scheduler_status, ascet_explore, ascet_search, ascet_read, ascet_reference, ascet_diff
+tools: read, grep, find, ls, bash, ascet_status, ascet_scheduler_status, ascet_explore, ascet_search, ascet_read, ascet_diff
 defaultContext: fork
 completionGuard: false
 ---

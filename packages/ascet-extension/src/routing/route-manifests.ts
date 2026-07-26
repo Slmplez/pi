@@ -24,7 +24,7 @@ export const ascetRouteManifestEntries = [
 	},
 	{
 		toolName: "ascet_capabilities",
-		action: "search",
+		action: "search_actions",
 		logicalCommandId: "PiAscetCapabilities",
 		operation: "capabilities",
 		category: "ops",
@@ -198,28 +198,6 @@ export const ascetRouteManifestEntries = [
 		action: "read_element_dependency",
 		logicalCommandId: "AscetReadElementDependency",
 		operation: "read_element_dependency",
-		category: "domain",
-	},
-
-	{
-		toolName: "ascet_reference",
-		action: "component_refs",
-		logicalCommandId: "AscetReadComponentRefs",
-		operation: "read_component_refs",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_reference",
-		action: "used_by",
-		logicalCommandId: "AscetReadComponentUsedBy",
-		operation: "read_component_used_by",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_reference",
-		action: "element_refs",
-		logicalCommandId: "AscetReadElementRefs",
-		operation: "read_element_refs",
 		category: "domain",
 	},
 

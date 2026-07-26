@@ -31,6 +31,7 @@ import { compactObject, toToolFailurePayload, unwrapToolSuccessPayload } from ".
 import type { RunAscetWriteOperationOptions } from "../write-common.ts";
 import { applyWriteImpactToSearchIndex, createWriteImpact, type WriteImpact } from "../write-common.ts";
 import type { AscetWriteApprovalContext } from "../write-policy.ts";
+import { openAiObjectUnionSchema } from "./_shared/openai-schema.ts";
 
 type CodeSource = { code?: string; codeFile?: string };
 const VALID_STATE_MACHINE_OPERATIONS = new Set<string>(ASCET_SET_STATE_MACHINE_CODE_OPERATIONS);
@@ -243,7 +244,7 @@ const moduleCodeOperationSchema = Type.Union([
 	Type.Literal("set-external-c-code"),
 ]);
 
-export const ascetWriteParameters = Type.Union([
+const ascetWriteActionSchemas = [
 	Type.Object({
 		action: Type.Literal("create_folder"),
 		folderPath: Type.String({ minLength: 1 }),
@@ -364,7 +365,9 @@ export const ascetWriteParameters = Type.Union([
 		backupDir: Type.Optional(Type.String({ minLength: 1 })),
 		...writeControlSchema,
 	}),
-]);
+] as const;
+
+export const ascetWriteParameters = openAiObjectUnionSchema<AscetWriteParams>(ascetWriteActionSchemas);
 
 function outcomeFromCliResult(result: AscetCliJsonResult): AscetToolOutcome {
 	if (result.ok) {

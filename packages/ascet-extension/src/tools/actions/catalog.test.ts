@@ -28,8 +28,12 @@ describe("ASCET action catalog", () => {
 		const publicIds = listActionCatalogEntries().map((entry) => entry.id);
 		const allIds = listActionCatalogEntries({ includeHidden: true }).map((entry) => entry.id);
 
+		assert.equal(publicIds.includes("ascet_capabilities.search"), false);
+		assert.equal(publicIds.includes("ascet_capabilities.activate_profile"), false);
 		assert.equal(publicIds.includes("ascet_search.search_occurrences"), false);
 		assert.equal(publicIds.includes("ascet_search.search_text_code"), false);
+		assert.equal(allIds.includes("ascet_capabilities.search"), false);
+		assert.equal(allIds.includes("ascet_capabilities.activate_profile"), false);
 		assert.equal(allIds.includes("ascet_search.search_occurrences"), true);
 		assert.equal(allIds.includes("ascet_batch_write.batch_set_method_code"), true);
 	});

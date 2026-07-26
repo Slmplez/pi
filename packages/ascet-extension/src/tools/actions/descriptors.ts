@@ -139,23 +139,6 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["ops", "capability", "action-search"],
 		}),
 	}),
-	descriptor("ascet_capabilities", "search", "public", ALL_PROFILES, {
-		prompt: prompt("Legacy backend operation search; prefer search_actions for tool action choice.", {
-			rules: [
-				"Use search only when backend CLI operation metadata is needed.",
-				"Use search_actions for model-facing ASCET tool action schema, rules, and fewShot.",
-			],
-			fewShots: [shot("find backend ops", { action: "search", family: "read", operationQuery: "code", limit: 5 })],
-			tags: ["ops", "capability", "backend"],
-		}),
-	}),
-	descriptor("ascet_capabilities", "activate_profile", "public", ALL_PROFILES, {
-		prompt: prompt("Switch the active ASCET profile and visible ASCET tools.", {
-			rules: ["Activate the narrowest profile that exposes the needed action family."],
-			fewShots: [shot("enable diff tools", { action: "activate_profile", profile: "diff" })],
-			tags: ["ops", "profile"],
-		}),
-	}),
 	descriptor("ascet_search", "search_components", "public", ALL_SEARCH_PROFILES, {
 		requiresPartitions: ["components"],
 		prompt: prompt("Find component candidates by name or folder scope before exact reads or writes.", {
@@ -599,47 +582,6 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 				}),
 			],
 			tags: ["navigation", "provider-discovery"],
-		}),
-	}),
-	descriptor("ascet_reference", "component_refs", "public", ["reference"], {
-		prompt: prompt("Inspect outbound component dependency relations.", {
-			rules: ["Use component_refs for outbound or bidirectional component dependency inspection."],
-			fewShots: [
-				shot("outbound refs", {
-					action: "component_refs",
-					componentPath: "DEMO/PID",
-					direction: "out",
-					depth: 1,
-				}),
-			],
-			tags: ["reference", "component"],
-		}),
-	}),
-	descriptor("ascet_reference", "used_by", "public", ["reference"], {
-		prompt: prompt("Inspect reverse component usage within a bounded scope.", {
-			rules: ["Use used_by with a bounded scopePath for reverse dependency checks."],
-			fewShots: [
-				shot("reverse refs", {
-					action: "used_by",
-					componentPath: "DEMO/PID",
-					scopePath: "DEMO",
-					limit: 20,
-				}),
-			],
-			tags: ["reference", "component"],
-		}),
-	}),
-	descriptor("ascet_reference", "element_refs", "public", ["reference"], {
-		prompt: prompt("Inspect references to one known element inside a component.", {
-			rules: ["Use element_refs for references to one known element inside a component."],
-			fewShots: [
-				shot("element refs", {
-					action: "element_refs",
-					componentPath: "DEMO/PID",
-					elementName: "pid_kp",
-				}),
-			],
-			tags: ["reference", "element"],
 		}),
 	}),
 	descriptor("ascet_diff", "diff", "public", ["diff"], {

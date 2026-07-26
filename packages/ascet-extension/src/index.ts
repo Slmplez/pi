@@ -41,7 +41,10 @@ export default function ascetExtension(pi: AscetExtensionAPI) {
 	pi.registerCommand("ascet-init", {
 		description: "Create or update an ASCET workspace onboarding section",
 		handler: async (args, ctx) => {
-			await executeAscetInitCommand(args, ctx, pi);
+			await executeAscetInitCommand(args, {
+				...ctx,
+				sendUserMessage: (content, options) => pi.sendUserMessage(content, options),
+			});
 		},
 	});
 }

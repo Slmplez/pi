@@ -1,5 +1,6 @@
 import { Type } from "typebox";
 import type { AscetReadElementDependencyTargetKind } from "../../read-element-dependency.ts";
+import { openAiObjectUnionSchema } from "../_shared/openai-schema.ts";
 
 export type AscetReadParams =
 	| {
@@ -62,7 +63,7 @@ const targetKindSchema = Type.Optional(
 	Type.Union([Type.Literal("auto"), Type.Literal("component"), Type.Literal("folder"), Type.Literal("project")]),
 );
 
-export const ascetReadParameters = Type.Union([
+const ascetReadActionSchemas = [
 	Type.Object({
 		action: Type.Literal("read_code"),
 		componentPath: componentPathSchema,
@@ -123,4 +124,6 @@ export const ascetReadParameters = Type.Union([
 		elementName: Type.String({ minLength: 1 }),
 		targetKind: targetKindSchema,
 	}),
-]);
+] as const;
+
+export const ascetReadParameters = openAiObjectUnionSchema<AscetReadParams>(ascetReadActionSchemas);

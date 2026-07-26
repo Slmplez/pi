@@ -80,7 +80,10 @@ export interface AscetExtensionAPI {
 				ctx: {
 					cwd: string;
 					isIdle(): boolean;
-					ui: { notify(message: string, level?: "info" | "warning" | "error"): void };
+					ui: {
+						notify(message: string, level?: "info" | "warning" | "error"): void;
+						setStatus?(key: string, text: string | undefined): void;
+					};
 				},
 			) => void;
 		},

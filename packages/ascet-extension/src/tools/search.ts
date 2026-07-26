@@ -21,6 +21,7 @@ import {
 } from "../search-index.ts";
 import { formatSearchOccurrencesResult, runAscetSearchOccurrences } from "../search-occurrences.ts";
 import { formatSearchTextCodeResult, runAscetSearchTextCode } from "../search-text-code.ts";
+import { openAiObjectUnionSchema } from "./_shared/openai-schema.ts";
 
 export type AscetSearchParams =
 	| {
@@ -152,7 +153,7 @@ const scopePathSchema = Type.Optional(Type.String());
 const componentPathSchema = Type.Optional(Type.String());
 const elementKindSchema = Type.Optional(Type.String({ description: "Element-kind substring filter." }));
 
-export const ascetSearchParameters = Type.Union([
+const ascetSearchActionSchemas = [
 	Type.Object({
 		action: Type.Literal("search_components"),
 		query: querySchema,
@@ -280,7 +281,9 @@ export const ascetSearchParameters = Type.Union([
 		limit: limitSchema,
 		cursor: cursorSchema,
 	}),
-]);
+] as const;
+
+export const ascetSearchParameters = openAiObjectUnionSchema<AscetSearchParams>(ascetSearchActionSchemas);
 
 function toElementDeclarationParams(
 	params:

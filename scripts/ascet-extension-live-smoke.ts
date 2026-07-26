@@ -108,7 +108,11 @@ if (!status.details.ok) {
 }
 
 const schedulerBefore = await callTool("ascet_scheduler_status", { format: "json" });
-const capabilities = await callTool("ascet_capabilities", { family: "read", operationQuery: "component_code" });
+const capabilities = await callTool("ascet_capabilities", {
+	action: "search_actions",
+	query: "complete code",
+	limit: 3,
+});
 const components = await callTool("ascet_explore", { action: "list_components", folderPath: "DEMO", limit: 2 });
 const componentSearch = await callTool("ascet_search", {
 	action: "search_components",
@@ -154,7 +158,12 @@ if (!blockDiagram.ok && blockDiagram.error?.code !== "ascet_block_diagram_surfac
 		`ascet_read.read_block_diagram expected ok or unsupported text ESDL surface, got: ${blockDiagram.error?.code ?? "ok"}`,
 	);
 }
-const refs = await callTool("ascet_reference", { action: "element_refs", componentPath: "DEMO\\PID", elementName: "pid_kp" });
+const refs = await callTool("ascet_search", {
+	action: "references_to_element",
+	componentPath: "DEMO\\PID",
+	query: "pid_kp",
+	limit: 10,
+});
 const diff = await callTool("ascet_diff", {
 	action: "diff_component_snapshot",
 	leftPath: "DEMO\\PID",
@@ -207,7 +216,7 @@ console.log(
 					cliLock: schedulerBefore.cliLock,
 					operationHealth: schedulerBefore.operationHealth,
 				},
-				ascet_capabilities: { matches: capabilities.matches?.length, totalMatches: capabilities.totalMatches },
+				ascet_capabilities: { items: capabilities.items?.length, total: capabilities.total },
 				ascet_explore_components: { counts: components.counts },
 				ascet_search_components: { counts: componentSearch.counts },
 				ascet_search_elements: { counts: search.counts },
@@ -222,7 +231,7 @@ console.log(
 					ok: blockDiagram.ok,
 					error: blockDiagram.error,
 				},
-				ascet_reference: { counts: refs.counts, summary: refs.summary },
+				ascet_search_element_refs: { counts: refs.counts, summary: refs.summary },
 				ascet_diff: { counts: diff.counts },
 				ascet_verify: { counts: verify.counts, summary: verify.summary },
 				ascet_read_import_export_match: {

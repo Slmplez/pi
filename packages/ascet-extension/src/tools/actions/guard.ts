@@ -43,7 +43,7 @@ export function extractToolAction(tool: string, params: unknown): string {
 		}
 	}
 	if (tool === "ascet_capabilities") {
-		return "search";
+		return "search_actions";
 	}
 	if (tool === "ascet_scheduler_status") {
 		return "status";

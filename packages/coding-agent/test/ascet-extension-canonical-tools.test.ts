@@ -15,7 +15,6 @@ import { resolveProfileTools } from "../../ascet-extension/src/tools/exposure/pr
 import { setAscetExposureRuntime } from "../../ascet-extension/src/tools/exposure/state.ts";
 import { ascetReadTool } from "../../ascet-extension/src/tools/read/index.ts";
 import { runAscetRecover } from "../../ascet-extension/src/tools/recover.ts";
-import { ascetReferenceTool } from "../../ascet-extension/src/tools/reference/index.ts";
 import { ascetSearchTool } from "../../ascet-extension/src/tools/search/index.ts";
 import { ascetSearchParameters } from "../../ascet-extension/src/tools/search/schema.ts";
 import { loadAscetExtension, repoRoot } from "./ascet-extension-test-helpers.ts";
@@ -28,7 +27,6 @@ const CANONICAL_ASCET_TOOLS = [
 	"ascet_explore",
 	"ascet_search",
 	"ascet_read",
-	"ascet_reference",
 	"ascet_diff",
 	"ascet_write",
 	"ascet_component_editable",
@@ -45,7 +43,6 @@ const CANONICAL_ASCET_TOOL_MODULES = [
 	["ascet_explore", "explore"],
 	["ascet_search", "search"],
 	["ascet_read", "read"],
-	["ascet_reference", "reference"],
 	["ascet_diff", "diff"],
 	["ascet_write", "write"],
 	["ascet_component_editable", "component-editable"],
@@ -98,10 +95,8 @@ function isOpenAiCompatibleObjectSchema(parameters: unknown): boolean {
 	if (!parameters || typeof parameters !== "object") {
 		return false;
 	}
-	const schema = parameters as { type?: unknown; anyOf?: Array<{ type?: unknown }> };
-	return (
-		schema.type === "object" || (Array.isArray(schema.anyOf) && schema.anyOf.every((item) => item.type === "object"))
-	);
+	const schema = parameters as { type?: unknown };
+	return schema.type === "object";
 }
 
 function expectCliArgs(response: unknown, args: string[]): void {
@@ -311,27 +306,6 @@ describe("ASCET canonical PI tools", () => {
 		expectCliArgs(
 			await ascetSearchTool.execute(
 				"tool-call",
-				{ action: "search_elements", query: "pid_kp", componentPath: "DEMO\\PID", match: "exact", limit: 5 },
-				signal,
-				undefined,
-				ctx,
-			),
-			[
-				"exec",
-				"search_elements",
-				"pid_kp",
-				"--component",
-				"DEMO\\PID",
-				"--match",
-				"exact",
-				"--limit",
-				"5",
-				"--json",
-			],
-		);
-		expectCliArgs(
-			await ascetSearchTool.execute(
-				"tool-call",
 				{ action: "resolve_component", query: "PID", scopePath: "DEMO", match: "exact" },
 				signal,
 				undefined,
@@ -378,18 +352,6 @@ describe("ASCET canonical PI tools", () => {
 				ctx,
 			),
 			["exec", "read_method_signature", "DEMO\\PID", "calc", "--json"],
-		);
-
-		activateTestProfile("reference");
-		expectCliArgs(
-			await ascetReferenceTool.execute(
-				"tool-call",
-				{ action: "component_refs", componentPath: "DEMO/PID", direction: "out", depth: 1 },
-				signal,
-				undefined,
-				ctx,
-			),
-			["exec", "read_component_refs", "DEMO\\PID", "--direction", "out", "--depth", "1", "--json"],
 		);
 
 		activateTestProfile("diff");
@@ -487,89 +449,66 @@ describe("ASCET canonical PI tools", () => {
 		);
 	});
 
-	it("searches ASCET capabilities from the bundled catalog", () => {
-		const result = runAscetCapabilities({ family: "read", operationQuery: "component_code" }, { cwd: repoRoot });
+	it("searches ASCET tool actions from the action catalog", () => {
+		const result = runAscetCapabilities(
+			{ action: "search_actions", query: "complete code", limit: 1 },
+			{ cwd: repoRoot },
+		);
 		const stateMachineResult = runAscetCapabilities(
-			{ family: "write", operationQuery: "state_machine", includeHidden: true },
+			{ action: "search_actions", query: "state machine code", includeHidden: true, limit: 3 },
 			{ cwd: repoRoot },
 		);
 
 		expect(result.ok).toBe(true);
-		expect(result.data.matches.some((match) => match.operation === "read_component_code")).toBe(true);
-		expect(result.data.matches.find((match) => match.operation === "read_component_code")).toMatchObject({
-			coverageCategory: "unsupported_with_reason",
-			canonicalTool: undefined,
-			canonicalAction: undefined,
+		expect(result.actionSearch?.items[0]).toMatchObject({
+			tool: "ascet_read",
+			action: "read_code",
+			result: { shape: "codeText" },
 		});
 		expect(stateMachineResult.ok).toBe(true);
 		const formattedStateMachineCapabilities = formatAscetCapabilitiesResult(stateMachineResult);
 		expect(
-			stateMachineResult.data.matches.find((match) => match.operation === "set_state_machine_code"),
+			stateMachineResult.actionSearch?.items.find((item) => item.action === "set_state_machine_code"),
 		).toMatchObject({
-			argumentEnums: {
-				operation: expect.arrayContaining(["set-method", "set-state-entry-esdl", "set-start-state"]),
-			},
-			canonicalTool: "ascet_write",
-			canonicalAction: "set_state_machine_code",
+			tool: "ascet_write",
+			action: "set_state_machine_code",
 		});
 		const formattedPayload = JSON.parse(formattedStateMachineCapabilities) as {
-			items?: Array<{ operation?: string; argumentEnums?: { operation?: string[] } }>;
+			items?: Array<{ tool?: string; action?: string; schema?: { required?: string[] } }>;
 		};
-		expect(
-			formattedPayload.items?.find((match) => match.operation === "set_state_machine_code")?.argumentEnums
-				?.operation,
-		).toEqual(expect.arrayContaining(["set-method", "set-state-entry-esdl"]));
+		expect(formattedPayload.items?.find((item) => item.action === "set_state_machine_code")).toMatchObject({
+			tool: "ascet_write",
+		});
 	});
 
-	it("formats ASCET capabilities defensively when enum metadata is malformed", () => {
+	it("formats ASCET capabilities defensively when action search is empty", () => {
 		expect(() =>
 			formatAscetCapabilitiesResult({
 				ok: true,
-				data: {
-					mode: "test",
-					catalogPath: "cli-catalog.json",
-					activeProfile: "base",
-					activeTools: [],
-					batchWriteEnabled: false,
-					actions: [],
-					totalMatches: 1,
-					matches: [
-						{
-							operation: "set_state_machine_code",
-							summary: "Write state machine behavior",
-							canonicalTool: "ascet_write",
-							canonicalAction: "set_state_machine_code",
-							argumentEnums: { operation: {} as never },
-						},
-					],
-				},
+				actionSearch: { total: 0, items: [] },
 			}),
 		).not.toThrow();
 	});
 
 	it("reports create_method method-kind compatibility by component kind", () => {
-		const result = runAscetCapabilities({ family: "write", operationQuery: "create_method" }, { cwd: repoRoot });
-		const createMethod = result.data.matches.find((match) => match.operation === "create_method");
+		const result = runAscetCapabilities(
+			{ action: "search_actions", query: "create method", limit: 5 },
+			{ cwd: repoRoot },
+		);
+		const createMethod = result.actionSearch?.items.find((item) => item.action === "create_method");
 
 		expect(result.ok).toBe(true);
 		expect(createMethod).toMatchObject({
-			canonicalTool: "ascet_write",
-			canonicalAction: "create_method",
-			methodKindCompatibility: {
-				class: ["abstract"],
-				module: ["process"],
-				statemachine: ["action", "condition", "trigger"],
-			},
+			tool: "ascet_write",
+			action: "create_method",
+			schema: expect.objectContaining({ required: expect.arrayContaining(["action"]) }),
 		});
 		const formattedPayload = JSON.parse(formatAscetCapabilitiesResult(result)) as {
-			items?: Array<{ operation?: string; methodKindCompatibility?: Record<string, string[]> }>;
+			items?: Array<{ tool?: string; action?: string; schema?: { required?: string[] } }>;
 		};
-		expect(formattedPayload.items?.find((match) => match.operation === "create_method")).toMatchObject({
-			methodKindCompatibility: {
-				class: ["abstract"],
-				module: ["process"],
-				statemachine: ["action", "condition", "trigger"],
-			},
+		expect(formattedPayload.items?.find((item) => item.action === "create_method")).toMatchObject({
+			tool: "ascet_write",
+			schema: expect.objectContaining({ required: expect.arrayContaining(["action"]) }),
 		});
 	});
 

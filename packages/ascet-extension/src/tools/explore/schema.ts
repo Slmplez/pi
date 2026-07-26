@@ -1,4 +1,5 @@
 import { Type } from "typebox";
+import { openAiObjectUnionSchema } from "../_shared/openai-schema.ts";
 
 export type AscetExploreParams =
 	| {
@@ -46,7 +47,7 @@ const previewChildrenGroupSchema = Type.Optional(
 	]),
 );
 
-export const ascetExploreParameters = Type.Union([
+const ascetExploreActionSchemas = [
 	Type.Object({
 		action: Type.Literal("list_components"),
 		folderPath: Type.String({ minLength: 1 }),
@@ -78,4 +79,6 @@ export const ascetExploreParameters = Type.Union([
 		componentPath: Type.String({ minLength: 1 }),
 		group: previewChildrenGroupSchema,
 	}),
-]);
+] as const;
+
+export const ascetExploreParameters = openAiObjectUnionSchema<AscetExploreParams>(ascetExploreActionSchemas);

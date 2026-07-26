@@ -356,7 +356,6 @@ Phase 1 must include all public actions currently exposed by registry:
 ```text
 ascet_status.default
 ascet_capabilities.search_actions
-ascet_capabilities.activate_profile
 ascet_explore.list_components
 ascet_explore.list_diagrams
 ascet_explore.inspect_target
@@ -539,46 +538,29 @@ packages/ascet-extension/src/tools/capabilities/definition.ts
 ### 8.1 Parameters
 
 ```ts
-export type AscetCapabilitiesParams =
-  | {
-      action: "search_actions";
-      query?: string;
-      tool?: string;
-      name?: string;
-      family?: AscetActionFamily;
-      risk?: AscetActionRisk;
-      tags?: string[];
-      includeHidden?: boolean;
-      limit?: number;
-    }
-  | {
-      action: "activate_profile";
-      profile: AscetProfile;
-    }
-  | {
-      action?: "search";
-      operationQuery?: string;
-      family?: "explore" | "search" | "read" | "refs" | "diff" | "write" | "verify" | "ops";
-      risk?: "read" | "diff" | "write";
-      objectKind?: string;
-      limit?: number;
-      includeHidden?: boolean;
-      detailLevel?: "summary" | "full";
-    };
+export interface AscetCapabilitiesParams {
+  action: "search_actions";
+  query?: string;
+  tool?: string;
+  name?: string;
+  includeHidden?: boolean;
+  limit?: number;
+  detailLevel?: "summary" | "full";
+}
 ```
 
 Compatibility:
 
 ```text
-action omitted -> old search behavior for one release, but internally prefer search_actions when query/action-style input exists
-operationQuery -> search_actions.query when it looks like an action intent
+No legacy capabilities action compatibility.
+Do not expose backend CLI catalog search through ascet_capabilities.
+Do not expose activate_profile through ascet_capabilities.
 ```
 
 Recommended final:
 
 ```text
-search_actions is the default capabilities action
-old CLI catalog search moves to action: "search_backend_commands"
+search_actions is the only ascet_capabilities action
 ```
 
 ### 8.2 Search Actions Output
@@ -1069,8 +1051,8 @@ search_actions exact id returns one high-score item
 search_actions query returns full schema/rules/fewShots
 search_actions excludes hidden by default
 search_actions includeHidden includes hidden/internal entries
-operationQuery compatibility still works or returns deprecation-compatible output
-activate_profile still works
+operationQuery is not exposed
+activate_profile is not exposed
 ```
 
 ### 13.5 Prompt Integration

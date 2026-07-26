@@ -14,7 +14,7 @@ export type AscetQuickSearchUiMode =
 export type AscetQuickSearchCoverage = "index" | "api_fallback";
 
 export interface AscetQuickSearchPreferredAction {
-	tool: "ascet_search" | "ascet_reference" | "ascet_read" | "ascet_explore";
+	tool: "ascet_search" | "ascet_read" | "ascet_explore";
 	action: string;
 	indexFastPath: boolean;
 }

@@ -34,8 +34,8 @@ If `read_block_diagram` returns a valid empty graph, keep it as empty `block_dia
 
 ## Reference Evidence
 
-- `component_refs`: `ascet_reference` action `component_refs`
-- `element_refs`: `ascet_reference` action `element_refs`
+- `component_refs`: `ascet_search` action `references_to_component`
+- `element_refs`: `ascet_search` action `references_to_element`
 - `occurrences`: `ascet_search` action `search_occurrences`
 
 ## Parameter Mapping Evidence

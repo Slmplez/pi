@@ -33,7 +33,7 @@ The main agent decides what counts as a check item based on target type and rule
 
 ### Live ASCET Dispatch Gate
 
-Live ASCET evidence work is any task that must call `ascet_status`, `ascet_scheduler_status`, `ascet_explore`, `ascet_search`, `ascet_read`, `ascet_reference`, `ascet_diff`, or `ascet_verify`.
+Live ASCET evidence work is any task that must call `ascet_status`, `ascet_scheduler_status`, `ascet_explore`, `ascet_search`, `ascet_read`, `ascet_diff`, or `ascet_verify`.
 
 Only these agent profiles may receive live ASCET evidence work:
 

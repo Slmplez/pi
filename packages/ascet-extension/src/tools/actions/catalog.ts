@@ -1,7 +1,7 @@
 import { compactExamplesForAction } from "../_shared/action-examples.ts";
 import { type AscetActionDescriptor, listActionDescriptors } from "./descriptors.ts";
 
-export type AscetActionFamily = "ops" | "explore" | "search" | "read" | "reference" | "diff" | "write" | "verify";
+export type AscetActionFamily = "ops" | "explore" | "search" | "read" | "diff" | "write" | "verify";
 export type AscetActionRisk = "read" | "diff" | "write" | "ops";
 
 export interface AscetActionCatalogEntry {
@@ -266,9 +266,6 @@ function resolveFamily(tool: string): AscetActionFamily {
 	}
 	if (tool === "ascet_read") {
 		return "read";
-	}
-	if (tool === "ascet_reference") {
-		return "reference";
 	}
 	if (tool === "ascet_diff") {
 		return "diff";

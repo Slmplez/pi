@@ -4,7 +4,7 @@ description: Use proactively for ASCET ESDL coding and implementation tasks incl
 systemPromptMode: replace
 inheritProjectContext: true
 inheritSkills: false
-tools: read, grep, find, ls, bash, write, edit, ascet_status, ascet_scheduler_status, ascet_explore, ascet_search, ascet_read, ascet_reference, ascet_diff, ascet_write, ascet_verify
+tools: read, grep, find, ls, bash, write, edit, ascet_status, ascet_scheduler_status, ascet_explore, ascet_search, ascet_read, ascet_diff, ascet_write, ascet_verify
 defaultContext: fork
 completionGuard: false
 ---

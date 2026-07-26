@@ -56,7 +56,7 @@ export function parseAscetInitScopeArgs(args: string): AscetInitScope {
 export function parseAscetInitArgs(args: string): AscetInitArgs {
 	const tokens = args.trim().split(/\s+/).filter(Boolean);
 	const scopeTokens: string[] = [];
-	let indexMode: AscetInitIndexMode = "all";
+	let indexMode: AscetInitIndexMode = "core";
 	let forceRefresh = false;
 	let writeSummary = true;
 

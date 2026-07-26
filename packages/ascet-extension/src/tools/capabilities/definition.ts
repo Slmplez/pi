@@ -21,8 +21,8 @@ export const ascetCapabilitiesTool = defineSequentialAscetTool({
 		ctx: { cwd: string },
 	) {
 		const result = runAscetCapabilities(params, { cwd: ctx.cwd });
-		const action = params.action ?? "search";
-		const route = routeAscetAction({ toolName: "ascet_capabilities", action: "search" });
+		const action = params.action ?? "search_actions";
+		const route = routeAscetAction({ toolName: "ascet_capabilities", action: "search_actions" });
 		return {
 			content: [{ type: "text", text: formatAscetCapabilitiesResult(result) }],
 			details: {

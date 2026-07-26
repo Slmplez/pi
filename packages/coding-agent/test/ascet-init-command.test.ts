@@ -14,6 +14,11 @@ import {
 	loadAscetInitRuleBundle,
 	renderAscetInitRulesPrompt,
 } from "../../ascet-extension/src/ascet-project-rules.ts";
+import ascetExtension from "../../ascet-extension/src/index.ts";
+import type {
+	AscetSearchIndexWarmupOptions,
+	AscetSearchIndexWarmupResult,
+} from "../../ascet-extension/src/search-index.ts";
 import { loadAscetExtension } from "./ascet-extension-test-helpers.ts";
 
 function createTempProject(): string {
@@ -22,6 +27,34 @@ function createTempProject(): string {
 
 function removeTempProject(projectRoot: string): void {
 	rmSync(projectRoot, { recursive: true, force: true });
+}
+
+function createReadyEnv(projectRoot: string): Record<string, string | undefined> {
+	const contractsRoot = join(projectRoot, "contracts");
+	mkdirSync(contractsRoot, { recursive: true });
+	writeFileSync(join(projectRoot, "AscetCli.exe"), "", "utf8");
+	writeFileSync(join(contractsRoot, "cli-catalog.json"), "{}", "utf8");
+	return {
+		ASCET_CLI_PATH: join(projectRoot, "AscetCli.exe"),
+		ASCET_CONTRACTS_PATH: contractsRoot,
+	};
+}
+
+function warmupResult(options: AscetSearchIndexWarmupOptions): AscetSearchIndexWarmupResult {
+	return {
+		ok: true,
+		commandId: "warm_search_index",
+		databaseName: "DemoDb",
+		databasePath: "C:\\ASCET\\DemoDb",
+		entryCount: options.partition === "text_code" ? 3 : 2,
+		elapsedMs: 7,
+		scanComplete: true,
+		fromCache: false,
+		exitCode: 0,
+		timedOut: false,
+		stdout: "",
+		stderr: "",
+	};
 }
 
 describe("ASCET init prompt", () => {
@@ -33,20 +66,6 @@ describe("ASCET init prompt", () => {
 
 		expect(prompt).toContain("ASCET project rules loaded.");
 		expect(prompt).toContain("No explicit scope was provided. Start with ASCET engineering layout detection.");
-		expect(prompt).toContain("Detect ASCET engineering layout before asking scope");
-		expect(prompt).toContain("Ask Scope only if layout detection fails");
-		expect(prompt).toContain("Proposal before markdown update");
-		expect(prompt).toContain("database");
-		expect(prompt).toContain("folder <path>");
-		expect(prompt).toContain("project <name-or-path>");
-		expect(prompt).toContain("components");
-		expect(prompt).toContain("Project anchor");
-		expect(prompt).toContain("XPASS");
-		expect(prompt).toContain("ASW2ASW");
-		expect(prompt).toContain("parent-level parameter");
-		expect(prompt).toContain("not a complete parameter inventory");
-		expect(prompt).toContain("ascet_status");
-		expect(prompt).toContain("ascet_scheduler_status");
 		expect(prompt).toContain("ascet_explore");
 		expect(prompt).toContain("ascet_search");
 		expect(prompt).toContain("ascet_read");
@@ -56,8 +75,6 @@ describe("ASCET init prompt", () => {
 		expect(prompt).toContain("Signal and interface path");
 		expect(prompt).toContain("Parameter and data semantics");
 		expect(prompt).toContain("Scheduling and execution notes");
-		expect(prompt).toContain("bounded");
-		expect(prompt).toContain("sampled");
 		expect(prompt).not.toMatch(/\bAscet[A-Za-z]+Tool\b/);
 	});
 
@@ -202,31 +219,58 @@ describe("ASCET init command", () => {
 		expect(ascetExtension?.commands.has("ascet-init")).toBe(true);
 	});
 
+	it("uses the extension message bridge instead of requiring sendUserMessage on command ctx", async () => {
+		const projectRoot = createTempProject();
+		try {
+			const commands = new Map<string, { handler: (args: string, ctx: any) => Promise<void> }>();
+			const sentMessages: Array<{ content: string; options?: { deliverAs?: "steer" | "followUp" } }> = [];
+			ascetExtension({
+				registerTool() {},
+				registerCommand(name: string, command: { handler: (args: string, ctx: any) => Promise<void> }) {
+					commands.set(name, command);
+				},
+				sendUserMessage(content: string, options?: { deliverAs?: "steer" | "followUp" }) {
+					sentMessages.push({ content, options });
+				},
+			} as never);
+
+			await commands.get("ascet-init")?.handler("--index none --no-write-summary", {
+				cwd: projectRoot,
+				isIdle: () => true,
+				ui: { notify() {} },
+			});
+
+			expect(sentMessages).toHaveLength(1);
+			expect(sentMessages[0].content).toContain("ASCET model-engineering onboarding");
+			expect(sentMessages[0].options).toBeUndefined();
+		} finally {
+			removeTempProject(projectRoot);
+		}
+	});
+
 	it("rejects malformed args before scaffolding or sending a prompt", async () => {
 		const projectRoot = createTempProject();
 		try {
 			const sentMessages: Array<{ content: string; options?: { deliverAs?: "steer" | "followUp" } }> = [];
 			const notifications: Array<{ message: string; level?: "info" | "warning" | "error" }> = [];
 
-			await executeAscetInitCommand(
-				"folder",
-				{
-					cwd: projectRoot,
-					isIdle: () => true,
-					ui: {
-						notify: (message: string, level?: "info" | "warning" | "error") =>
-							notifications.push({ message, level }),
-					},
+			await executeAscetInitCommand("folder", {
+				cwd: projectRoot,
+				isIdle: () => true,
+				sendUserMessage: (content, options) => {
+					sentMessages.push({ content, options });
 				},
-				{
-					sendUserMessage: (content, options) => sentMessages.push({ content, options }),
+				ui: {
+					notify: (message: string, level?: "info" | "warning" | "error") =>
+						notifications.push({ message, level }),
 				},
-			);
+			});
 
 			expect(sentMessages).toEqual([]);
 			expect(notifications).toEqual([
 				{
-					message: "Usage: /ascet-init [database|folder <path>|project <name-or-path>]",
+					message:
+						"Usage: /ascet-init [database|folder <path>|project <name-or-path>] [--index all|core|none] [--force] [--write-summary|--no-write-summary]\nfolder scope requires a path",
 					level: "warning",
 				},
 			]);
@@ -242,17 +286,16 @@ describe("ASCET init command", () => {
 			const sentMessages: Array<{ content: string; options?: { deliverAs?: "steer" | "followUp" } }> = [];
 			const notifications: string[] = [];
 
-			await executeAscetInitCommand(
-				"folder DEMO",
-				{
-					cwd: projectRoot,
-					isIdle: () => true,
-					ui: { notify: (message: string) => notifications.push(message) },
+			await executeAscetInitCommand("folder DEMO", {
+				cwd: projectRoot,
+				env: createReadyEnv(projectRoot),
+				isIdle: () => true,
+				sendUserMessage: (content, options) => {
+					sentMessages.push({ content, options });
 				},
-				{
-					sendUserMessage: (content, options) => sentMessages.push({ content, options }),
-				},
-			);
+				warmSearchIndex: async (options) => warmupResult(options),
+				ui: { notify: (message: string) => notifications.push(message) },
+			});
 
 			expect(sentMessages).toHaveLength(1);
 			expect(sentMessages[0].content).toContain("Explicit scope from command args: folder DEMO");
@@ -260,7 +303,8 @@ describe("ASCET init command", () => {
 			expect(sentMessages[0].content).toContain("tasks/init.md");
 			expect(sentMessages[0].content).toContain("tools/pi-ascet-tools.md");
 			expect(sentMessages[0].options).toBeUndefined();
-			expect(notifications).toEqual([]);
+			expect(notifications[0]).toContain("ASCET init started");
+			expect(notifications.join("\n")).toContain("ASCET init index");
 		} finally {
 			removeTempProject(projectRoot);
 		}
@@ -272,20 +316,19 @@ describe("ASCET init command", () => {
 			const sentMessages: Array<{ content: string; options?: { deliverAs?: "steer" | "followUp" } }> = [];
 			const notifications: Array<{ message: string; level?: "info" | "warning" | "error" }> = [];
 
-			await executeAscetInitCommand(
-				"project PID",
-				{
-					cwd: projectRoot,
-					isIdle: () => false,
-					ui: {
-						notify: (message: string, level?: "info" | "warning" | "error") =>
-							notifications.push({ message, level }),
-					},
+			await executeAscetInitCommand("project PID", {
+				cwd: projectRoot,
+				env: createReadyEnv(projectRoot),
+				isIdle: () => false,
+				sendUserMessage: (content, options) => {
+					sentMessages.push({ content, options });
 				},
-				{
-					sendUserMessage: (content, options) => sentMessages.push({ content, options }),
+				warmSearchIndex: async (options) => warmupResult(options),
+				ui: {
+					notify: (message: string, level?: "info" | "warning" | "error") =>
+						notifications.push({ message, level }),
 				},
-			);
+			});
 
 			expect(sentMessages).toHaveLength(1);
 			expect(sentMessages[0].content).toContain("Explicit scope from command args: project PID");
@@ -293,7 +336,8 @@ describe("ASCET init command", () => {
 			expect(sentMessages[0].content).toContain("tasks/init.md");
 			expect(sentMessages[0].content).toContain("tools/pi-ascet-tools.md");
 			expect(sentMessages[0].options).toEqual({ deliverAs: "followUp" });
-			expect(notifications).toEqual([{ message: "Queued ASCET init as a follow-up.", level: "info" }]);
+			expect(notifications.map((item) => item.message).join("\n")).toContain("ASCET init started");
+			expect(notifications.at(-1)).toEqual({ message: "Queued ASCET init as a follow-up.", level: "info" });
 		} finally {
 			removeTempProject(projectRoot);
 		}

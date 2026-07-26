@@ -6,6 +6,7 @@ import { clearStaleAscetCliLock } from "../scheduler/cli-lock.ts";
 import { createAscetSchedulerStatusReport } from "../scheduler/status.ts";
 import { type AscetRuntimeStatusReport, createAscetRuntimeStatusReport } from "../status-runtime.ts";
 import { toToolSuccessPayload } from "../tool-response-contract.ts";
+import { openAiObjectSchema } from "./_shared/openai-schema.ts";
 
 export type AscetRecoverParams =
 	| { action: "status" }
@@ -33,15 +34,17 @@ export interface AscetRecoverResult {
 	};
 }
 
-export const ascetRecoverParameters = Type.Object({
-	action: Type.Union([
-		Type.Literal("status"),
-		Type.Literal("clear_extension_temp"),
-		Type.Literal("scheduler_status"),
-		Type.Literal("scheduler_recover"),
-		Type.Literal("clear_stale_cli_lock"),
-	]),
-});
+export const ascetRecoverParameters = openAiObjectSchema<AscetRecoverParams>(
+	Type.Object({
+		action: Type.Union([
+			Type.Literal("status"),
+			Type.Literal("clear_extension_temp"),
+			Type.Literal("scheduler_status"),
+			Type.Literal("scheduler_recover"),
+			Type.Literal("clear_stale_cli_lock"),
+		]),
+	}),
+);
 
 function getExtensionTempRoot(options: RunAscetRecoverOptions): string {
 	return options.tempRoot ?? resolve(tmpdir(), "pi-ascet-extension");

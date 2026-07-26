@@ -13,7 +13,6 @@ import { ascetDiffParameters } from "../../ascet-extension/src/tools/diff/schema
 import { ascetExploreParameters } from "../../ascet-extension/src/tools/explore/schema.ts";
 import { ascetReadParameters } from "../../ascet-extension/src/tools/read/schema.ts";
 import { ascetRecoverParameters } from "../../ascet-extension/src/tools/recover/schema.ts";
-import { ascetReferenceParameters } from "../../ascet-extension/src/tools/reference/schema.ts";
 import { allAscetToolNames, canonicalAscetToolNames } from "../../ascet-extension/src/tools/registry.ts";
 import { ascetSchedulerStatusParameters } from "../../ascet-extension/src/tools/scheduler-status/schema.ts";
 import { ascetSearchParameters } from "../../ascet-extension/src/tools/search/schema.ts";
@@ -29,7 +28,6 @@ const schemaByTool = {
 	ascet_explore: ascetExploreParameters,
 	ascet_search: ascetSearchParameters,
 	ascet_read: ascetReadParameters,
-	ascet_reference: ascetReferenceParameters,
 	ascet_diff: ascetDiffParameters,
 	ascet_write: ascetWriteParameters,
 	ascet_batch_write: ascetBatchWriteParameters,
@@ -38,12 +36,17 @@ const schemaByTool = {
 } as const;
 
 function stringLiterals(schema: unknown): string[] {
-	const node = schema as { const?: unknown; anyOf?: unknown[]; anyOfReadonly?: unknown[] } | undefined;
+	const node = schema as
+		| { const?: unknown; enum?: unknown[]; anyOf?: unknown[]; anyOfReadonly?: unknown[] }
+		| undefined;
 	if (!node) {
 		return [];
 	}
 	if (typeof node.const === "string") {
 		return [node.const];
+	}
+	if (Array.isArray(node.enum)) {
+		return node.enum.filter((item): item is string => typeof item === "string");
 	}
 	if (Array.isArray(node.anyOf)) {
 		return node.anyOf.flatMap(stringLiterals);

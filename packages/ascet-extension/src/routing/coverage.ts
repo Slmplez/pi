@@ -115,7 +115,7 @@ const unsupportedCoverage: Record<string, Omit<AscetCliCoverageEntry, "commandId
 	},
 	AscetReadReferences: {
 		category: "unsupported_with_reason",
-		reason: "Reference flows use ascet_reference component_refs, used_by, and element_refs actions.",
+		reason: "Reference flows use ascet_search references_to_component and references_to_element actions.",
 	},
 	AscetReadStateMachine: {
 		category: "unsupported_with_reason",

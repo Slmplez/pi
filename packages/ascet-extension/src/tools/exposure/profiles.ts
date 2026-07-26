@@ -11,10 +11,24 @@ export type AscetProfile =
 
 export const DEFAULT_ASCET_PROFILE: AscetProfile = "base";
 
+const DEFAULT_ACTIVE_TOOLS = [
+	"ascet_status",
+	"ascet_capabilities",
+	"ascet_recover",
+	"ascet_scheduler_status",
+	"ascet_explore",
+	"ascet_search",
+	"ascet_read",
+	"ascet_diff",
+	"ascet_write",
+	"ascet_component_editable",
+	"ascet_verify",
+] as const;
+
 export const profileTools: Record<AscetProfile, readonly string[]> = {
-	base: ["ascet_status", "ascet_capabilities", "ascet_explore", "ascet_search", "ascet_read"],
+	base: DEFAULT_ACTIVE_TOOLS,
 	"advanced-read": ["ascet_status", "ascet_capabilities", "ascet_explore", "ascet_search", "ascet_read"],
-	reference: ["ascet_status", "ascet_capabilities", "ascet_explore", "ascet_search", "ascet_read", "ascet_reference"],
+	reference: ["ascet_status", "ascet_capabilities", "ascet_explore", "ascet_search", "ascet_read"],
 	diff: ["ascet_status", "ascet_capabilities", "ascet_explore", "ascet_search", "ascet_read", "ascet_diff"],
 	verify: [
 		"ascet_status",

@@ -104,6 +104,8 @@ describe("ASCET prompt coordination", () => {
 		assert.match(capabilities, /ascet_read\.read_code: read complete live code/);
 		assert.match(capabilities, /ascet_read\.read_dependent_chain: Index-first dependency provider resolver/);
 		assert.match(capabilities, /ascet_search\.text_in_code: search indexed ESDL\/C snippets/);
+		assert.doesNotMatch(capabilities, /\bactivate_profile\b/);
+		assert.doesNotMatch(capabilities, /\boperationQuery\b/);
 		assert.doesNotMatch(capabilities, /\bascet_batch_write\b/);
 		assert.doesNotMatch(capabilities, /\bsearch_occurrences\b/);
 	});
