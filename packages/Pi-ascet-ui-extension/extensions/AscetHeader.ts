@@ -6,14 +6,10 @@ import {
 	BRAND_NAME,
 	COMPACT_BRAND_LOGO,
 	centerLine,
-	gradientEscape,
 	gradientLogo,
-	gradientRule,
 	INTRO_MS,
 	INTRO_TICK_MS,
-	introGradientPhase,
 	introLogoFrame,
-	introRuleFrame,
 	nextLogoColorScheme,
 	restingLogoFrame,
 	visibleWidth,
@@ -122,13 +118,10 @@ export class AscetHeader implements Component {
 	private renderDashboard(width: number, progress: number): string[] {
 		const innerWidth = width - 2;
 		const rightWidth = Math.max(20, innerWidth - LEFT_WIDTH - 1);
-		const phase = this.animating ? introGradientPhase(progress) : 0;
 		const logo = this.animating ? introLogoFrame(progress, this.colorScheme) : restingLogoFrame(this.colorScheme);
 		const modelName = this.options.model?.name || this.options.model?.id || "Model not selected";
 		const provider = this.options.model?.provider || "";
-		const rightRule = this.animating
-			? introRuleFrame(Math.max(0, rightWidth - 2), progress, this.colorScheme)
-			: gradientRule(Math.max(0, rightWidth - 2), this.colorScheme);
+		const rightRule = this.rule(Math.max(0, rightWidth - 2));
 
 		const leftRows = [
 			"",
@@ -156,13 +149,13 @@ export class AscetHeader implements Component {
 		];
 
 		const rowCount = Math.max(leftRows.length, rightRows.length);
-		const rows: string[] = [this.renderTopBorder(innerWidth, phase)];
+		const rows: string[] = [this.renderTopBorder(innerWidth)];
 		for (let i = 0; i < rowCount; i++) {
 			const left = centerCell(leftRows[i] ?? "", LEFT_WIDTH);
 			const right = padCell(rightRows[i] ?? "", rightWidth);
-			rows.push(`${this.border("│", 0)}${left}${this.border("│", 0.45)}${right}${this.border("│", 0.8)}`);
+			rows.push(`${this.border("│")}${left}${this.border("│")}${right}${this.border("│")}`);
 		}
-		rows.push(this.renderBottomBorder(LEFT_WIDTH, rightWidth, phase));
+		rows.push(this.renderBottomBorder(LEFT_WIDTH, rightWidth));
 		rows.push(padCell(this.renderStartupTip(width), width));
 		return rows;
 	}
@@ -178,7 +171,7 @@ export class AscetHeader implements Component {
 						strength: this.animating ? (1 - progress) ** 1.5 : 0,
 						pos: progress,
 					});
-		const rule = this.animating ? introRuleFrame(width, progress, this.colorScheme) : gradientRule(width, this.colorScheme);
+		const rule = this.rule(width);
 		return [
 			...logo.map((line) => centerLine(line, width)),
 			centerLine(title, width),
@@ -188,24 +181,18 @@ export class AscetHeader implements Component {
 		];
 	}
 
-	private renderTopBorder(innerWidth: number, phase: number): string {
+	private renderTopBorder(innerWidth: number): string {
 		const title = ` ASCET COPILOT v${VERSION} `;
 		const prefix = "───";
 		const label = `${prefix}${title}`;
 		const ruleWidth = Math.max(0, innerWidth - visibleWidth(label));
-		return `${this.border("╭", 0)}${this.border(prefix, phase)}${this.theme.bold(this.theme.fg("accent", title))}${gradientRule(
+		return `${this.border("╭")}${this.border(prefix)}${this.theme.bold(this.theme.fg("accent", title))}${this.rule(
 			ruleWidth,
-			this.colorScheme,
-			phase,
-		)}${this.border("╮", 0.85)}`;
+		)}${this.border("╮")}`;
 	}
 
-	private renderBottomBorder(leftWidth: number, rightWidth: number, phase: number): string {
-		return `${this.border("╰", 0)}${gradientRule(leftWidth, this.colorScheme, phase)}${this.border("┴", 0.45)}${gradientRule(
-			rightWidth,
-			this.colorScheme,
-			phase,
-		)}${this.border("╯", 0.85)}`;
+	private renderBottomBorder(leftWidth: number, rightWidth: number): string {
+		return `${this.border("╰")}${this.rule(leftWidth)}${this.border("┴")}${this.rule(rightWidth)}${this.border("╯")}`;
 	}
 
 	private renderStartupTip(width: number): string {
@@ -280,8 +267,12 @@ export class AscetHeader implements Component {
 		];
 	}
 
-	private border(text: string, t: number): string {
-		return gradientRuleText(text, this.colorScheme, t);
+	private rule(width: number): string {
+		return this.border("─".repeat(Math.max(0, width)));
+	}
+
+	private border(text: string): string {
+		return this.theme.fg("borderMuted", text);
 	}
 }
 
@@ -303,18 +294,6 @@ function centerCell(text: string, width: number): string {
 
 function italic(text: string): string {
 	return `\x1b[3m${text}\x1b[23m`;
-}
-
-function gradientRuleText(text: string, scheme: Parameters<typeof gradientRule>[1], phase: number): string {
-	let result = "";
-	const width = Math.max(1, visibleWidth(text));
-	let x = 0;
-	for (const char of text) {
-		const t = x / width + phase;
-		result += `${gradientEscape(t, scheme)}${char}\x1b[0m`;
-		x += visibleWidth(char);
-	}
-	return result;
 }
 
 function rainbowText(text: string, phase: number): string {
