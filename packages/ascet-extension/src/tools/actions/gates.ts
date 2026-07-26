@@ -48,7 +48,13 @@ export function resolveActionActivation(
 	if (descriptor.visibility === "internal") {
 		return "hidden";
 	}
-	if (!descriptor.profiles.includes(activeProfile as never) || !activeTools.includes(descriptor.tool)) {
+	if (!activeTools.includes(descriptor.tool)) {
+		return "inactive";
+	}
+	if (activeProfile === "base") {
+		return "active";
+	}
+	if (!descriptor.profiles.includes(activeProfile as never)) {
 		return "inactive";
 	}
 	return "active";

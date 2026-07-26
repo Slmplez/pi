@@ -8,7 +8,7 @@ function activateBaseProfile() {
 	const pi = {
 		registerTool(_tool: unknown) {},
 		getActiveTools() {
-			return ["ascet_status", "ascet_capabilities", "ascet_explore", "ascet_search", "ascet_read"];
+			return [];
 		},
 		setActiveTools(_toolNames: string[]) {},
 	};
@@ -28,6 +28,9 @@ describe("ASCET action runtime guard", () => {
 
 		const descriptor = assertActionActive("ascet_search", "search_components");
 		assert.equal(descriptor?.id, "ascet_search.search_components");
+
+		const componentEditable = assertActionActive("ascet_component_editable", "check");
+		assert.equal(componentEditable?.id, "ascet_component_editable.check");
 
 		assert.throws(
 			() => assertActionActive("ascet_search", "search_occurrences"),
