@@ -134,7 +134,21 @@ describe("ascet_search public schema", () => {
 						path: "PlatformLibrary\\Package\\AEB\\AEB_Controller::calc#body",
 					},
 				],
-				messages: [],
+				messages: [
+					{
+						group: "primitive",
+						componentPath: "PlatformLibrary\\Package\\AEB\\AEB_Controller",
+						componentKind: "class",
+						componentLanguageKind: "ESDL",
+						elementName: "Msg_Brake",
+						elementKind: "SendMessageElement",
+						displayType: "SendMessageElement",
+						displayScope: "local",
+						referencedComponentPath: "",
+						messageDirection: "sender",
+						path: "PlatformLibrary\\Package\\AEB\\AEB_Controller::Msg_Brake",
+					},
+				],
 				diagramMetadata: [],
 			};
 			ingestAscetSearchIndexSqlite(cwd, seed);
@@ -173,7 +187,7 @@ describe("ascet_search public schema", () => {
 			]) {
 				const indexed = await runAscetSearch(params, { cwd, executeCli });
 				const payload = indexed.data as { result?: { matches?: unknown[] } };
-				assert.equal(indexed.ok, true);
+				assert.equal(indexed.ok, true, params.action);
 				assert.ok((payload.result?.matches?.length ?? 0) > 0);
 			}
 			const concurrentParams = Array.from({ length: 20 }, (_, index) => {
@@ -424,6 +438,8 @@ describe("ascet_search public schema", () => {
 			"50",
 			"--timeout-ms",
 			"15000",
+			"--progress-file",
+			join(process.cwd(), ".ascet", "index", "status.json"),
 		]);
 		assert.deepEqual(requests[1]?.args, [
 			"exec",

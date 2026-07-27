@@ -194,6 +194,7 @@ function staleSqliteAreasForWrite(
 			case "element_decls":
 				areas.add("elements");
 				areas.add("element_refs");
+				areas.add("messages");
 				break;
 			case "method_decls":
 				areas.add("methods");
@@ -205,7 +206,7 @@ function staleSqliteAreasForWrite(
 				areas.add("element_refs");
 				break;
 			case "messages":
-				areas.add("elements");
+				areas.add("messages");
 				break;
 			case "text_code":
 				areas.add("code_blocks");

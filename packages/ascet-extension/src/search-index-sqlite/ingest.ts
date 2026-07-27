@@ -718,7 +718,7 @@ values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 			insertDocument(
 				doc,
 				runId,
-				"element_refs",
+				"messages",
 				"message_sender",
 				entry.elementName,
 				path,
@@ -739,7 +739,7 @@ values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 			insertDocument(
 				doc,
 				runId,
-				"element_refs",
+				"messages",
 				"message_receiver",
 				entry.elementName,
 				path,
@@ -834,7 +834,7 @@ values (?, ?, ?, ?, ?, ?, ?, 'building', 0, ?, ?, 0, ?, '')
 		const referenceCounts = insertReferences(db, runId, input.componentRefs, input.elementRefs);
 		const dbItemDependencyCount = insertDbItemDependencies(db, runId, input.dbItemDependencies);
 		const codeCounts = insertCodeBlocks(db, runId, input);
-		insertMessages(db, runId, input.messages);
+		const messageCount = insertMessages(db, runId, input.messages);
 		const areas = [
 			area("components", componentCount, input.scanComplete),
 			area("folders", folderCount, input.scanComplete),
@@ -845,6 +845,7 @@ values (?, ?, ?, ?, ?, ?, ?, 'building', 0, ?, ?, 0, ?, '')
 			area("project_items", projectItemCount, input.scanComplete),
 			area("component_refs", referenceCounts.componentRefs, input.scanComplete),
 			area("element_refs", referenceCounts.elementRefs, input.scanComplete),
+			area("messages", messageCount, input.scanComplete),
 			area("dbitem_dependencies", dbItemDependencyCount, input.scanComplete),
 			area("code_blocks", codeCounts.blocks, input.textCodeScanComplete ?? input.scanComplete),
 			area("code_terms", codeCounts.terms, input.textCodeScanComplete ?? input.scanComplete),

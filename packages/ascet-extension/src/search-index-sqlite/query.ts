@@ -846,7 +846,7 @@ export function queryAscetMessageIndexSqlite(
 		})),
 		filtered.length,
 		run,
-		activeAreaScanComplete(options.cwd ?? process.cwd(), asString(run.id), ["elements"]),
+		activeAreaScanComplete(options.cwd ?? process.cwd(), asString(run.id), ["messages"]),
 		{ messageCount: rows.length },
 		options,
 	);

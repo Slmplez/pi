@@ -92,6 +92,8 @@ function compactAreaName(value: string | undefined): string {
 		case "element_refs":
 		case "dbitem_dependencies":
 			return "refs";
+		case "messages":
+			return "msg";
 		case "code_blocks":
 		case "code_terms":
 		case "text_code":

@@ -1,4 +1,4 @@
-export const ASCET_SEARCH_SQLITE_SCHEMA_VERSION = 1;
+export const ASCET_SEARCH_SQLITE_SCHEMA_VERSION = 2;
 
 export const ASCET_P0_INDEX_AREAS = [
 	"components",
@@ -10,6 +10,7 @@ export const ASCET_P0_INDEX_AREAS = [
 	"project_items",
 	"component_refs",
 	"element_refs",
+	"messages",
 	"dbitem_dependencies",
 	"code_blocks",
 	"code_terms",
@@ -23,9 +24,11 @@ export const ASCET_REQUIRED_P0_INDEX_AREAS = [
 	"folder_items",
 	"elements",
 	"methods",
+	"project_formulas",
 	"project_items",
 	"component_refs",
 	"element_refs",
+	"messages",
 	"dbitem_dependencies",
 	"code_blocks",
 	"code_terms",

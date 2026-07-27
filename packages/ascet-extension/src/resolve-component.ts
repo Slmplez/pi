@@ -6,7 +6,12 @@ import {
 	formatAscetCliJsonResult,
 	runAscetCliJson,
 } from "./cli.ts";
-import { ensureAscetSearchIndex, getAscetSearchIndexState, queryAscetComponentIndex } from "./search-index.ts";
+import {
+	ensureAscetSearchIndex,
+	getAscetSearchIndexState,
+	isUsableSqliteSearchResult,
+	queryAscetComponentIndex,
+} from "./search-index.ts";
 
 export interface AscetResolveComponentParams {
 	query: string;
@@ -70,6 +75,9 @@ function getIndexedMatchCount(result: AscetCliJsonResult): number {
 }
 
 function canUseComponentIndexResult(result: AscetCliJsonResult): boolean {
+	if (isUsableSqliteSearchResult(result)) {
+		return true;
+	}
 	const state = getAscetSearchIndexState();
 	if (!result.ok || state.status !== "ready") {
 		return false;

@@ -204,7 +204,7 @@ function normalizeWarmupPartition(
 
 function partitionsForWarmup(partition: AscetSearchIndexWarmupPartition): AscetSearchIndexPartition[] {
 	return partition === "p0"
-		? ["components", "element_decls", "method_decls", "component_refs", "element_refs", "text_code"]
+		? ["components", "element_decls", "method_decls", "component_refs", "element_refs", "messages", "text_code"]
 		: partition === "all"
 			? ["components", "element_decls", "method_decls", "component_refs", "element_refs", "messages", "text_code"]
 			: [partition];
@@ -253,9 +253,11 @@ function indexStatusAreasFromInput(
 		folder_items: { status: "ready", count: input.folderItems?.length ?? 0 },
 		elements: { status: "ready", count: input.entries?.length ?? 0 },
 		methods: { status: "ready", count: input.methodDeclarations?.length ?? 0 },
+		project_formulas: { status: "ready", count: input.projectFormulas?.length ?? 0 },
 		project_items: { status: "ready", count: input.projectItems?.length ?? 0 },
 		component_refs: { status: "ready", count: input.componentRefs?.length ?? 0 },
 		element_refs: { status: "ready", count: input.elementRefs?.length ?? 0 },
+		messages: { status: "ready", count: input.messages?.length ?? 0 },
 		dbitem_dependencies: { status: "ready", count: input.dbItemDependencies?.length ?? 0 },
 		code_blocks: { status: "ready", count: input.textCodeEntries?.length ?? 0 },
 		code_terms: { status: "ready", count: input.textCodeEntries?.length ?? 0 },
@@ -920,15 +922,27 @@ function readyResultFromCache(
 							"folder_items",
 							"elements",
 							"methods",
+							"project_formulas",
 							"project_items",
 							"component_refs",
 							"element_refs",
+							"messages",
 							"dbitem_dependencies",
 							"code_blocks",
 							"code_terms",
 						]
 					: partition === "all"
-						? ["components", "elements", "methods", "component_refs", "element_refs", "code_blocks", "code_terms"]
+						? [
+								"components",
+								"elements",
+								"methods",
+								"project_formulas",
+								"component_refs",
+								"element_refs",
+								"messages",
+								"code_blocks",
+								"code_terms",
+							]
 						: partition === "components"
 							? ["components"]
 							: partition === "element_decls"

@@ -8,6 +8,7 @@ import {
 	queryAscetComponentIndexSqlite,
 	queryAscetComponentReferenceIndexSqlite,
 	queryAscetElementReferenceIndexSqlite,
+	queryAscetMessageIndexSqlite,
 	queryAscetMethodDeclarationIndexSqlite,
 	queryAscetProjectFormulaIndexSqlite,
 	queryAscetSearchIndexSqlite,
@@ -162,7 +163,21 @@ function fixtureInput(): AscetSearchIndexBuildInput {
 				path: "PlatformLibrary\\AEB\\AEB_pDriverIBooster::calc#body",
 			},
 		],
-		messages: [],
+		messages: [
+			{
+				group: "primitive",
+				componentPath: "PlatformLibrary\\AEB\\AEB_pDriverIBooster",
+				componentKind: "class",
+				componentLanguageKind: "ESDL",
+				elementName: "Msg_Brake",
+				elementKind: "SendReceiveMessageElement",
+				displayType: "SendReceiveMessageElement",
+				displayScope: "exported",
+				referencedComponentPath: "",
+				path: "PlatformLibrary\\AEB\\AEB_pDriverIBooster::Msg_Brake",
+				messageDirection: "send_receive",
+			},
+		],
 		diagramMetadata: [],
 	};
 }
@@ -180,11 +195,12 @@ describe("ASCET SQLite search index", () => {
 		cleanup = temp.cleanup;
 		const input = fixtureInput();
 		const ingest = ingestAscetSearchIndexSqlite(temp.cwd, input);
-		assert.equal(ingest.areas.length, 12);
+		assert.equal(ingest.areas.length, 13);
 		const status = getAscetSqliteIndexStatus(temp.cwd);
 		assert.equal(status.status, "ready");
 		assert.equal(status.areas.map((area) => area.area).includes("method_process_elements" as never), false);
 		assert.equal(status.areas.find((area) => area.area === "project_formulas")?.itemCount, 1);
+		assert.equal(status.areas.find((area) => area.area === "messages")?.itemCount, 1);
 		assert.equal(
 			matches(queryAscetComponentIndexSqlite({ query: "AEB_pDriver", match: "contains" }, { cwd: temp.cwd })).length,
 			1,
@@ -215,6 +231,24 @@ describe("ASCET SQLite search index", () => {
 		);
 		assert.equal(
 			matches(queryAscetProjectFormulaIndexSqlite({ query: "RPM", match: "exact" }, { cwd: temp.cwd })).length,
+			1,
+		);
+		assert.equal(
+			matches(
+				queryAscetMessageIndexSqlite(
+					{ query: "Msg_Brake", match: "exact", direction: "sender" },
+					{ cwd: temp.cwd },
+				),
+			).length,
+			1,
+		);
+		assert.equal(
+			matches(
+				queryAscetMessageIndexSqlite(
+					{ query: "Msg_Brake", match: "exact", direction: "receiver" },
+					{ cwd: temp.cwd },
+				),
+			).length,
 			1,
 		);
 	});
