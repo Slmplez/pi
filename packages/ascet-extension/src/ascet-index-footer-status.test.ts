@@ -1,12 +1,12 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { formatAscetIndexFooterStatus } from "./AscetIndexFooterStatus.ts";
+import { formatAscetIndexFooterStatus, formatAscetIndexFooterStatusForTheme } from "./ascet-index-footer-status.ts";
 
 test("formatAscetIndexFooterStatus renders checking without a status file", () => {
-	assert.equal(formatAscetIndexFooterStatus(undefined), "ASCET index: checking");
+	assert.equal(formatAscetIndexFooterStatus(undefined), "ASCET Index ● checking");
 });
 
-test("formatAscetIndexFooterStatus renders compact building progress", () => {
+test("formatAscetIndexFooterStatus renders one-lamp building progress", () => {
 	assert.equal(
 		formatAscetIndexFooterStatus({
 			state: "building",
@@ -22,7 +22,7 @@ test("formatAscetIndexFooterStatus renders compact building progress", () => {
 				code_blocks: { status: "pending" },
 			},
 		}),
-		"ASCET index: P0 8.4s [ok]cmp [ok]tree [..]elem [ ]meth [ ]refs [ ]code",
+		"ASCET Index ● building p0 8.4s",
 	);
 });
 
@@ -32,7 +32,7 @@ test("formatAscetIndexFooterStatus renders stale and refreshing states", () => {
 			state: "stale",
 			staleAreas: ["element_decls", "element_refs", "text_code"],
 		}),
-		"ASCET index: stale [x]elem [x]refs [x]code",
+		"ASCET Index ● stale elem,refs,code",
 	);
 	assert.equal(
 		formatAscetIndexFooterStatus({
@@ -40,14 +40,14 @@ test("formatAscetIndexFooterStatus renders stale and refreshing states", () => {
 			refreshingArea: "text_code",
 			elapsedMs: 2_100,
 		}),
-		"ASCET index: refreshing code 2.1s",
+		"ASCET Index ● refreshing code 2.1s",
 	);
 });
 
 test("formatAscetIndexFooterStatus renders ready and failed states", () => {
 	assert.equal(
 		formatAscetIndexFooterStatus({ state: "ready", totalDocs: 6300, elapsedMs: 15100 }),
-		"ASCET index: ready 6.3k docs 15.1s",
+		"ASCET Index ● ready 6.3k 15.1s",
 	);
 	assert.equal(
 		formatAscetIndexFooterStatus({
@@ -55,6 +55,30 @@ test("formatAscetIndexFooterStatus renders ready and failed states", () => {
 			currentArea: "element_decls",
 			error: { code: "timeout" },
 		}),
-		"ASCET index: failed elem timeout",
+		"ASCET Index ● failed elem timeout",
+	);
+});
+
+test("formatAscetIndexFooterStatusForTheme colors only the lamp state", () => {
+	const theme = {
+		fg: (color: string, text: string) => `<${color}>${text}</${color}>`,
+	};
+	assert.equal(
+		formatAscetIndexFooterStatusForTheme({ state: "ready", totalDocs: 6300, elapsedMs: 15100 }, theme),
+		"ASCET Index <success>● ready</success> 6.3k 15.1s",
+	);
+	assert.equal(
+		formatAscetIndexFooterStatusForTheme(
+			{ state: "stale", staleAreas: ["element_decls", "element_refs", "text_code"] },
+			theme,
+		),
+		"ASCET Index <warning>● stale</warning> elem,refs,code",
+	);
+	assert.equal(
+		formatAscetIndexFooterStatusForTheme(
+			{ state: "failed", currentArea: "element_decls", error: { code: "timeout" } },
+			theme,
+		),
+		"ASCET Index <error>● failed</error> elem timeout",
 	);
 });

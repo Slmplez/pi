@@ -6,12 +6,7 @@ import {
 	formatAscetCliJsonResult,
 	runAscetCliJson,
 } from "./cli.ts";
-import {
-	ensureAscetSearchIndex,
-	getAscetSearchIndexState,
-	isUsableSqliteSearchResult,
-	queryAscetComponentIndex,
-} from "./search-index.ts";
+import { getAscetSearchIndexState, isUsableSqliteSearchResult, queryAscetComponentIndex } from "./search-index.ts";
 
 export interface AscetSearchComponentsParams {
 	query: string;
@@ -90,6 +85,41 @@ function canUseComponentIndexResult(result: AscetCliJsonResult): boolean {
 	return state.scanComplete || getIndexedMatchCount(result) > 0;
 }
 
+function buildSearchIndexUnavailableResult(
+	params: AscetSearchComponentsParams,
+	options: RunAscetSearchComponentsOptions,
+): AscetCliJsonResult {
+	const error = {
+		code: "search_index_unavailable",
+		message: "search_components requires a ready ASCET SQLite P0 search index.",
+	};
+	const data = {
+		ok: false,
+		result: null,
+		error,
+		meta: {
+			mode: "index",
+			operation: "search_components",
+		},
+	};
+	return {
+		ok: false,
+		data,
+		request: {
+			cwd: options.cwd,
+			cliPath: "quick_search_index",
+			args: ["index", "search_components", params.query],
+			signal: options.signal,
+			timeoutMs: options.timeoutMs,
+		},
+		stdout: JSON.stringify(data),
+		stderr: "",
+		exitCode: null,
+		timedOut: false,
+		error,
+	};
+}
+
 export async function runAscetSearchComponents(
 	params: AscetSearchComponentsParams,
 	options: RunAscetSearchComponentsOptions,
@@ -100,23 +130,7 @@ export async function runAscetSearchComponents(
 			return indexed;
 		}
 
-		const warmup = await ensureAscetSearchIndex({
-			cwd: options.cwd,
-			env: options.env,
-			signal: options.signal,
-			timeoutMs: options.timeoutMs,
-			partition: "components",
-			maxComponents: 50,
-			scanTimeoutMs: Math.min(options.timeoutMs ?? 60_000, 15_000),
-			executeCli: options.executeCli,
-			toolName: "ascet_search",
-		});
-		if (warmup.ok) {
-			const warmed = queryAscetComponentIndex(params, { cwd: options.cwd });
-			if (warmed && canUseComponentIndexResult(warmed)) {
-				return warmed;
-			}
-		}
+		return buildSearchIndexUnavailableResult(params, options);
 	}
 
 	return runAscetCliJson(buildSearchComponentsArgs(params), options);

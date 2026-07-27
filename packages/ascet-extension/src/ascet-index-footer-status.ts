@@ -1,8 +1,9 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { ExtensionContext } from "@earendil-works/pi-coding-agent";
 
 const STATUS_KEY = "00-ascet-index";
+const STATUS_LABEL = "ASCET Index";
+const STATUS_LAMP = "●";
 const ACTIVE_POLL_MS = 500;
 const IDLE_POLL_MS = 4_000;
 
@@ -18,7 +19,7 @@ interface StatusArea {
 }
 
 interface IndexStatusFile {
-	state?: "checking" | "building" | "writing" | "ready" | "stale" | "refreshing" | "failed" | "disabled";
+	state?: "checking" | "building" | "writing" | "ready" | "stale" | "refreshing" | "failed" | "missing" | "disabled";
 	phase?: string;
 	currentArea?: string;
 	refreshingArea?: string;
@@ -32,6 +33,25 @@ interface IndexStatusFile {
 export interface AscetIndexFooterHandle {
 	stop(): void;
 	refreshNow(): void;
+}
+
+export interface AscetIndexFooterContext {
+	cwd?: string;
+	hasUI?: boolean;
+	mode?: string;
+	sessionManager?: {
+		getCwd(): string;
+	};
+	ui?: {
+		setStatus?(key: string, text: string | undefined): void;
+		theme?: FooterTheme;
+	};
+}
+
+type FooterThemeColor = "accent" | "success" | "warning" | "error" | "dim" | "muted";
+
+interface FooterTheme {
+	fg?(color: FooterThemeColor | string, text: string): string;
 }
 
 function formatElapsed(ms: unknown): string {
@@ -52,49 +72,6 @@ function formatCount(value: unknown): string {
 		return `${(value / 1_000).toFixed(1)}k`;
 	}
 	return String(Math.round(value));
-}
-
-function areaStatus(status: IndexStatusFile, names: string[]): AreaStatus | undefined {
-	for (const name of names) {
-		const value = status.areas?.[name]?.status;
-		if (value === "failed" || value === "stale" || value === "refreshing" || value === "building") {
-			return value;
-		}
-	}
-	for (const name of names) {
-		const value = status.areas?.[name]?.status;
-		if (value === "ready") {
-			return "ready";
-		}
-	}
-	return undefined;
-}
-
-function marker(status: AreaStatus | undefined): string {
-	switch (status) {
-		case "ready":
-			return "[ok]";
-		case "building":
-		case "refreshing":
-			return "[..]";
-		case "stale":
-		case "failed":
-			return "[x]";
-		default:
-			return "[ ]";
-	}
-}
-
-function formatAreaMarkers(status: IndexStatusFile): string {
-	const groups: Array<[string, string[]]> = [
-		["cmp", ["components"]],
-		["tree", ["folders", "folder_items", "project_items"]],
-		["elem", ["elements", "element_decls"]],
-		["meth", ["methods", "method_decls"]],
-		["refs", ["component_refs", "element_refs", "dbitem_dependencies"]],
-		["code", ["code_blocks", "code_terms", "text_code"]],
-	];
-	return groups.map(([label, names]) => `${marker(areaStatus(status, names))}${label}`).join(" ");
 }
 
 function compactAreaName(value: string | undefined): string {
@@ -124,45 +101,86 @@ function compactAreaName(value: string | undefined): string {
 	}
 }
 
-export function formatAscetIndexFooterStatus(status: IndexStatusFile | undefined): string {
+function displayState(status: IndexStatusFile | undefined): string {
 	if (!status) {
-		return "ASCET index: checking";
+		return "checking";
 	}
+	return status.state === "disabled" ? "off" : (status.state ?? "checking");
+}
 
+function formatStatusDetail(status: IndexStatusFile | undefined): string {
+	if (!status) {
+		return "";
+	}
 	const elapsed = formatElapsed(status.elapsedMs);
-	const elapsedSuffix = elapsed ? ` ${elapsed}` : "";
 	const state = status.state ?? "checking";
 	if (state === "ready") {
 		const docs = formatCount(status.totalDocs);
-		return `ASCET index: ready${docs ? ` ${docs} docs` : ""}${elapsedSuffix}`;
+		return [docs, elapsed].filter(Boolean).join(" ");
 	}
 	if (state === "stale") {
 		const stale = status.staleAreas?.map(compactAreaName).filter(Boolean) ?? [];
 		const unique = [...new Set(stale)];
-		return unique.length > 0
-			? `ASCET index: stale ${unique.map((area) => `[x]${area}`).join(" ")}`
-			: `ASCET index: stale ${formatAreaMarkers(status)}`;
+		return unique.join(",");
 	}
 	if (state === "refreshing") {
 		const area = compactAreaName(status.refreshingArea ?? status.currentArea);
-		return `ASCET index: refreshing${area ? ` ${area}` : ""}${elapsedSuffix}`;
+		return [area, elapsed].filter(Boolean).join(" ");
 	}
 	if (state === "building") {
-		return `ASCET index: ${(status.phase ?? "P0").toUpperCase()}${elapsedSuffix} ${formatAreaMarkers(status)}`;
+		return [status.phase?.toLowerCase() ?? "p0", elapsed].filter(Boolean).join(" ");
 	}
 	if (state === "writing") {
 		const docs = formatCount(status.totalDocs);
-		return `ASCET index: writing SQLite${docs ? ` ${docs} docs` : ""}`;
+		return docs;
 	}
 	if (state === "failed") {
 		const failedArea = compactAreaName(status.currentArea);
 		const code = status.error?.code ?? status.areas?.[status.currentArea ?? ""]?.errorCode ?? "";
-		return `ASCET index: failed${failedArea ? ` ${failedArea}` : ""}${code ? ` ${code}` : ""}`;
+		return [failedArea, code].filter(Boolean).join(" ");
 	}
-	if (state === "disabled") {
-		return "ASCET index: off";
+	return "";
+}
+
+function colorForState(state: string): FooterThemeColor {
+	switch (state) {
+		case "ready":
+			return "success";
+		case "stale":
+			return "warning";
+		case "building":
+		case "refreshing":
+		case "writing":
+			return "accent";
+		case "failed":
+			return "error";
+		default:
+			return "dim";
 	}
-	return "ASCET index: checking";
+}
+
+function colorize(theme: FooterTheme | undefined, color: FooterThemeColor, text: string): string {
+	try {
+		return theme?.fg?.(color, text) ?? text;
+	} catch {
+		return text;
+	}
+}
+
+export function formatAscetIndexFooterStatus(status: IndexStatusFile | undefined): string {
+	const state = displayState(status);
+	const detail = formatStatusDetail(status);
+	return `${STATUS_LABEL} ${STATUS_LAMP} ${state}${detail ? ` ${detail}` : ""}`;
+}
+
+export function formatAscetIndexFooterStatusForTheme(
+	status: IndexStatusFile | undefined,
+	theme: FooterTheme | undefined,
+): string {
+	const state = displayState(status);
+	const detail = formatStatusDetail(status);
+	const lampState = colorize(theme, colorForState(state), `${STATUS_LAMP} ${state}`);
+	return `${STATUS_LABEL} ${lampState}${detail ? ` ${detail}` : ""}`;
 }
 
 function readStatusFile(path: string): IndexStatusFile | undefined {
@@ -177,18 +195,23 @@ function readStatusFile(path: string): IndexStatusFile | undefined {
 	}
 }
 
-export function installAscetIndexFooterStatus(ctx: ExtensionContext): AscetIndexFooterHandle {
+function getContextCwd(ctx: AscetIndexFooterContext): string | undefined {
+	return ctx.sessionManager?.getCwd() ?? ctx.cwd;
+}
+
+export function installAscetIndexFooterStatus(ctx: AscetIndexFooterContext): AscetIndexFooterHandle {
 	let timer: ReturnType<typeof setTimeout> | undefined;
 	let stopped = false;
 	let lastText = "";
-	const statusPath = join(ctx.sessionManager.getCwd(), ".ascet", "index", "status.json");
+	const cwd = getContextCwd(ctx);
+	const statusPath = cwd ? join(cwd, ".ascet", "index", "status.json") : undefined;
 
 	const refreshNow = () => {
-		if (stopped || !ctx.hasUI || ctx.mode !== "tui") {
+		if (stopped || !ctx.hasUI || ctx.mode !== "tui" || !ctx.ui?.setStatus || !statusPath) {
 			return;
 		}
 		const status = readStatusFile(statusPath);
-		const text = formatAscetIndexFooterStatus(status);
+		const text = formatAscetIndexFooterStatusForTheme(status, ctx.ui.theme);
 		if (text !== lastText) {
 			ctx.ui.setStatus(STATUS_KEY, text);
 			lastText = text;
@@ -207,7 +230,7 @@ export function installAscetIndexFooterStatus(ctx: ExtensionContext): AscetIndex
 				clearTimeout(timer);
 				timer = undefined;
 			}
-			if (ctx.hasUI && ctx.mode === "tui") {
+			if (ctx.hasUI && ctx.mode === "tui" && ctx.ui?.setStatus) {
 				ctx.ui.setStatus(STATUS_KEY, undefined);
 			}
 		},

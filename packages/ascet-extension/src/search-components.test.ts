@@ -25,42 +25,6 @@ function createReadyEnv(): { cwd: string; env: Record<string, string | undefined
 	};
 }
 
-function makeWarmSearchIndexResult(request: AscetCliRequest, scanComplete: boolean): AscetCliExecutionResult {
-	return {
-		exitCode: 0,
-		stdout: JSON.stringify({
-			ok: true,
-			result: {
-				operation: "warm_search_index",
-				database: { name: "DemoDb", path: "C:\\ASCET\\DemoDb" },
-				generatedAtUtc: "2026-07-25T00:00:00.000Z",
-				elapsedMs: 15_000,
-				scanComplete,
-				components: [
-					{
-						path: "AEB\\Controller",
-						name: "Controller",
-						kind: "module",
-						languageKind: "ESDL",
-						displayName: "Controller",
-						parentPath: "AEB",
-						ownerKind: "folder",
-						targetKind: "component",
-						objectKind: "module",
-					},
-				],
-				entries: [],
-				counts: { entries: 0, components: 1 },
-			},
-			error: null,
-			meta: { mode: "exec", operation: "warm_search_index" },
-		}),
-		stderr: "",
-		timedOut: false,
-		request,
-	};
-}
-
 function makeSearchComponentsResult(request: AscetCliRequest): AscetCliExecutionResult {
 	return {
 		exitCode: 0,
@@ -86,6 +50,7 @@ afterEach(() => {
 
 describe("runAscetSearchComponents index fast path", () => {
 	test("returns ready-index hits without invoking the CLI", async () => {
+		const fixture = createReadyEnv();
 		resetAscetSearchIndexForTest({
 			databaseName: "DemoDb",
 			databasePath: "C:\\ASCET\\DemoDb",
@@ -111,7 +76,8 @@ describe("runAscetSearchComponents index fast path", () => {
 		const result = await runAscetSearchComponents(
 			{ query: "Controller", match: "exact", limit: 20 },
 			{
-				cwd: process.cwd(),
+				cwd: fixture.cwd,
+				env: { ...fixture.env, PI_ASCET_SEARCH_INDEX_STORAGE: "memory" },
 				executeCli: async () => {
 					throw new Error("CLI should not be invoked for an indexed component hit.");
 				},
@@ -125,35 +91,34 @@ describe("runAscetSearchComponents index fast path", () => {
 			envelope.result?.matches?.map((match) => match.path),
 			["AEB\\Controller"],
 		);
+		fixture.cleanup();
 	});
 
-	test("warms once and then returns indexed component hits", async () => {
+	test("does not start a live warmup when the SQLite P0 index is unavailable", async () => {
 		const fixture = createReadyEnv();
 		try {
+			let executeCount = 0;
 			const result = await runAscetSearchComponents(
 				{ query: "Controller", match: "exact", limit: 20 },
 				{
 					cwd: fixture.cwd,
 					env: fixture.env,
-					executeCli: async (request) => {
-						if (request.args[1] === "warm_search_index") {
-							return makeWarmSearchIndexResult(request, true);
-						}
-						throw new Error("search_components fallback should not run after indexed warmup hit.");
+					executeCli: async () => {
+						executeCount += 1;
+						throw new Error("search_components must not access live ASCET while P0 is unavailable.");
 					},
 				},
 			);
 
-			const envelope = result.data as { result?: { source?: unknown; matches?: unknown[] } };
-			assert.equal(result.ok, true);
-			assert.equal(envelope.result?.source, "quick_search_index");
-			assert.equal(envelope.result?.matches?.length, 1);
+			assert.equal(result.ok, false);
+			assert.equal(result.error?.code, "search_index_unavailable");
+			assert.equal(executeCount, 0);
 		} finally {
 			fixture.cleanup();
 		}
 	});
 
-	test("falls back to search_components CLI when a partial index misses", async () => {
+	test("uses the live CLI only when the index is explicitly disabled", async () => {
 		let capturedRequest: AscetCliRequest | undefined;
 		const fixture = createReadyEnv();
 		try {
@@ -161,11 +126,8 @@ describe("runAscetSearchComponents index fast path", () => {
 				{ query: "Missing", match: "exact", limit: 20 },
 				{
 					cwd: fixture.cwd,
-					env: fixture.env,
+					env: { ...fixture.env, PI_ASCET_SEARCH_INDEX: "0" },
 					executeCli: async (request) => {
-						if (request.args[1] === "warm_search_index") {
-							return makeWarmSearchIndexResult(request, false);
-						}
 						capturedRequest = request;
 						return makeSearchComponentsResult(request);
 					},

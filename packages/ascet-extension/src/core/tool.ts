@@ -120,6 +120,26 @@ export interface AscetExtensionAPI {
 			systemPrompt: string;
 		}) => { systemPrompt?: string } | undefined | Promise<{ systemPrompt?: string } | undefined>,
 	): void;
+	on?(
+		event: "session_start" | "session_shutdown",
+		handler: (
+			event: { type: "session_start" | "session_shutdown" },
+			ctx: {
+				cwd?: string;
+				hasUI?: boolean;
+				mode?: string;
+				sessionManager?: {
+					getCwd(): string;
+				};
+				ui?: {
+					setStatus?(key: string, text: string | undefined): void;
+					theme?: {
+						fg?(color: string, text: string): string;
+					};
+				};
+			},
+		) => void | Promise<void>,
+	): void;
 }
 
 export interface AscetToolContext {

@@ -1,4 +1,5 @@
 import { appendAscetImplementationRoutingPrompt } from "./agent-routing.ts";
+import { type AscetIndexFooterHandle, installAscetIndexFooterStatus } from "./ascet-index-footer-status.ts";
 import { executeAscetInitCommand } from "./ascet-init.ts";
 import { registerBoschLlmFarmProvider } from "./bosch-llmfarm-provider.ts";
 import type { AscetExtensionAPI } from "./core/tool.ts";
@@ -6,6 +7,8 @@ import { executeAscetSchedulerStatusCommand } from "./scheduler/status.ts";
 import { type AscetRuntimeStatusReport, createAscetRuntimeStatusReport } from "./status-runtime.ts";
 import { createAscetExposureController } from "./tools/exposure/controller.ts";
 import { canonicalAscetTools } from "./tools/index.ts";
+
+let indexFooterStatus: AscetIndexFooterHandle | undefined;
 
 export default function ascetExtension(pi: AscetExtensionAPI) {
 	registerBoschLlmFarmProvider(pi);
@@ -20,6 +23,16 @@ export default function ascetExtension(pi: AscetExtensionAPI) {
 		return {
 			systemPrompt: appendAscetImplementationRoutingPrompt(event.systemPrompt),
 		};
+	});
+
+	pi.on?.("session_start", (_event, ctx) => {
+		indexFooterStatus?.stop();
+		indexFooterStatus = installAscetIndexFooterStatus(ctx);
+	});
+
+	pi.on?.("session_shutdown", () => {
+		indexFooterStatus?.stop();
+		indexFooterStatus = undefined;
 	});
 
 	pi.registerCommand("ascet-status", {

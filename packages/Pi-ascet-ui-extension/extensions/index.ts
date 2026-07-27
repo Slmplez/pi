@@ -2,7 +2,6 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { getAgentDir, type ExtensionAPI, type ExtensionContext } from "@earendil-works/pi-coding-agent";
 import { AscetHeader } from "./AscetHeader.ts";
-import { installAscetIndexFooterStatus, type AscetIndexFooterHandle } from "./AscetIndexFooterStatus.ts";
 
 let quietStartupSynced = false;
 const TERMINAL_TITLE = "ASCET COPILOT";
@@ -12,7 +11,6 @@ const TITLE_SETTLE_DELAYS_MS = [0, 50, 150, 350, 700];
 let titleSpinnerTimer: ReturnType<typeof setInterval> | undefined;
 let titleSettleTimers: ReturnType<typeof setTimeout>[] = [];
 let titleSpinnerFrame = 0;
-let indexFooterStatus: AscetIndexFooterHandle | undefined;
 
 function setTerminalTitle(ctx: ExtensionContext, suffix?: string): void {
 	if (!ctx.hasUI) return;
@@ -71,12 +69,6 @@ function installHeader(ctx: ExtensionContext): void {
 	);
 }
 
-function installIndexFooterStatus(ctx: ExtensionContext): void {
-	if (!ctx.hasUI || ctx.mode !== "tui") return;
-	indexFooterStatus?.stop();
-	indexFooterStatus = installAscetIndexFooterStatus(ctx);
-}
-
 function ensureQuietStartup(): void {
 	if (quietStartupSynced) return;
 	quietStartupSynced = true;
@@ -107,7 +99,6 @@ export default function vmStartupExtension(pi: ExtensionAPI) {
 		setTerminalTitle(ctx);
 		scheduleTerminalTitle(ctx);
 		installHeader(ctx);
-		installIndexFooterStatus(ctx);
 	});
 
 	pi.on("session_info_changed", async (_event, ctx) => {
@@ -125,8 +116,6 @@ export default function vmStartupExtension(pi: ExtensionAPI) {
 	pi.on("session_shutdown", async (_event, ctx) => {
 		stopTitleSpinner();
 		clearScheduledTerminalTitles();
-		indexFooterStatus?.stop();
-		indexFooterStatus = undefined;
 		if (ctx.hasUI && ctx.mode === "tui") {
 			ctx.ui.setHeader(undefined);
 		}

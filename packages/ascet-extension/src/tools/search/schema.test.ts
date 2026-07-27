@@ -162,6 +162,7 @@ describe("ascet_search public schema", () => {
 			assert.equal(data.result?.matches?.[0]?.name, "RPM");
 			assert.equal(data.result?.matches?.[0]?.projectPath, "PlatformLibrary/Package/AEB/AEB_Project");
 			for (const params of [
+				{ action: "resolve_component" as const, query: "AEB_Controller", match: "exact" as const },
 				{
 					action: "declarations_of_element" as const,
 					query: "P_AEB_IB_MaxVelocityDrop_Curve",
