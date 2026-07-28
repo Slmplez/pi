@@ -1,11 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import {
-	type AscetMutationParams,
-	getAscetEditActionId,
-	resolveAscetEditInvocation,
-	runAscetEdit,
-} from "./service.ts";
+import { type AscetMutationParams, getAscetEditActionId, resolveAscetEditInvocation, runAscetEdit } from "./service.ts";
 
 describe("ASCET edit service", () => {
 	test("uses action or mode as the canonical edit action id", () => {
@@ -28,7 +23,12 @@ describe("ASCET edit service", () => {
 			mode: "check",
 		});
 		assert.deepEqual(
-			resolveAscetEditInvocation({ action: "apply_project_formula", projectPath: "DEMO/P", specFile: "spec.json", mode: "restore" }),
+			resolveAscetEditInvocation({
+				action: "apply_project_formula",
+				projectPath: "DEMO/P",
+				specFile: "spec.json",
+				mode: "restore",
+			}),
 			{ kind: "mutation", action: "apply_project_formula" },
 		);
 	});

@@ -44,6 +44,7 @@ describe("component index consumers", () => {
 				"--timeout-ms",
 				"15000",
 			]);
+			assert.deepEqual(requests[0]?.args.slice(9), ["--progress-file", join(cwd, ".ascet", "index", "status.json")]);
 			assert.match(JSON.stringify(result.data), /quick_search_index/);
 			assert.match(JSON.stringify(result.data), /DEMO\\\\PID/);
 		} finally {

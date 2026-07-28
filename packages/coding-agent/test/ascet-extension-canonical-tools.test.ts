@@ -22,14 +22,14 @@ import { loadAscetExtension, repoRoot } from "./ascet-extension-test-helpers.ts"
 const CANONICAL_ASCET_TOOLS = [
 	"ascet_status",
 	"ascet_capabilities",
+	"ascet_index",
 	"ascet_recover",
 	"ascet_scheduler_status",
 	"ascet_explore",
 	"ascet_search",
 	"ascet_read",
 	"ascet_diff",
-	"ascet_write",
-	"ascet_component_editable",
+	"ascet_edit",
 	"ascet_verify",
 ] as const;
 
@@ -38,14 +38,14 @@ const HIDDEN_ASCET_TOOLS = ["ascet_batch_write"] as const;
 const CANONICAL_ASCET_TOOL_MODULES = [
 	["ascet_status", "status"],
 	["ascet_capabilities", "capabilities"],
+	["ascet_index", "index"],
 	["ascet_recover", "recover"],
 	["ascet_scheduler_status", "scheduler-status"],
 	["ascet_explore", "explore"],
 	["ascet_search", "search"],
 	["ascet_read", "read"],
 	["ascet_diff", "diff"],
-	["ascet_write", "write"],
-	["ascet_component_editable", "component-editable"],
+	["ascet_edit", "edit"],
 	["ascet_verify", "verify"],
 	["ascet_batch_write", "batch-write"],
 ] as const;
@@ -201,12 +201,12 @@ describe("ASCET canonical PI tools", () => {
 			backendCommandId: "AscetResolveComponent",
 			operation: "resolve_component",
 		});
-		expect(routeAscetAction({ toolName: "ascet_component_editable", action: "check" })).toMatchObject({
+		expect(routeAscetAction({ toolName: "ascet_edit", action: "check" })).toMatchObject({
 			logicalCommandId: "AscetComponentEditableCheck",
 			backendCommandId: "AscetComponentEditableCheck",
 			operation: "component_editable_check",
 		});
-		expect(routeAscetAction({ toolName: "ascet_component_editable", action: "set" })).toMatchObject({
+		expect(routeAscetAction({ toolName: "ascet_edit", action: "set" })).toMatchObject({
 			logicalCommandId: "AscetComponentEditableSet",
 			backendCommandId: "AscetComponentEditableSet",
 			operation: "component_editable_set",
@@ -460,14 +460,14 @@ describe("ASCET canonical PI tools", () => {
 		expect(
 			stateMachineResult.actionSearch?.items.find((item) => item.action === "set_state_machine_code"),
 		).toMatchObject({
-			tool: "ascet_write",
+			tool: "ascet_edit",
 			action: "set_state_machine_code",
 		});
 		const formattedPayload = JSON.parse(formattedStateMachineCapabilities) as {
 			items?: Array<{ tool?: string; action?: string; schema?: { required?: string[] } }>;
 		};
 		expect(formattedPayload.items?.find((item) => item.action === "set_state_machine_code")).toMatchObject({
-			tool: "ascet_write",
+			tool: "ascet_edit",
 		});
 	});
 
@@ -489,7 +489,7 @@ describe("ASCET canonical PI tools", () => {
 
 		expect(result.ok).toBe(true);
 		expect(createMethod).toMatchObject({
-			tool: "ascet_write",
+			tool: "ascet_edit",
 			action: "create_method",
 			schema: expect.objectContaining({ required: expect.arrayContaining(["action"]) }),
 		});
@@ -497,7 +497,7 @@ describe("ASCET canonical PI tools", () => {
 			items?: Array<{ tool?: string; action?: string; schema?: { required?: string[] } }>;
 		};
 		expect(formattedPayload.items?.find((item) => item.action === "create_method")).toMatchObject({
-			tool: "ascet_write",
+			tool: "ascet_edit",
 			schema: expect.objectContaining({ required: expect.arrayContaining(["action"]) }),
 		});
 	});

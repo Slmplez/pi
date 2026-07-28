@@ -430,10 +430,7 @@ export function resolveAscetEditInvocation(params: unknown): AscetEditInvocation
 		}
 		if (
 			Object.hasOwn(params, "mode") &&
-			!(
-				params.mode === "restore" &&
-				(action.id === "apply_element_spec" || action.id === "apply_project_formula")
-			)
+			!(params.mode === "restore" && (action.id === "apply_element_spec" || action.id === "apply_project_formula"))
 		) {
 			return undefined;
 		}
