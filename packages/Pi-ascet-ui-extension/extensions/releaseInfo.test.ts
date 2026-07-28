@@ -83,24 +83,24 @@ test("createReleaseRows renders concise release and update text", () => {
 		createReleaseRows({ status: "checking" }, ASCET_COPILOT_RELEASE),
 		[
 			"Release",
-			"0.1.29 - Canonical ascet_edit surface",
-			"ASCET index policy routing",
-			"Index progress status output",
+			"0.1.30 - Startup search index refresh",
+			"Editability gate before writes",
+			"Safer ASCET edit workflow",
 			"Checking updates...",
 		],
 	);
 	assert.deepEqual(
-		createReleaseRows({ status: "available", latestVersion: "0.1.30" }, ASCET_COPILOT_RELEASE),
-		["Update available", "0.1.29 -> 0.1.30", "pi update npm:@zeerke/ascet-copilot"],
+		createReleaseRows({ status: "available", latestVersion: "0.1.31" }, ASCET_COPILOT_RELEASE),
+		["Update available", "0.1.30 -> 0.1.31", "pi update npm:@zeerke/ascet-copilot"],
 	);
 	assert.deepEqual(
-		createReleaseRows({ status: "current", latestVersion: "0.1.29" }, ASCET_COPILOT_RELEASE),
+		createReleaseRows({ status: "current", latestVersion: "0.1.30" }, ASCET_COPILOT_RELEASE),
 		[
 			"Release",
-			"0.1.29 - Up to date",
-			"Canonical ascet_edit surface",
-			"ASCET index policy routing",
-			"Index progress status output",
+			"0.1.30 - Up to date",
+			"Startup search index refresh",
+			"Editability gate before writes",
+			"Safer ASCET edit workflow",
 		],
 	);
 });
