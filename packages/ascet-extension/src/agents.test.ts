@@ -41,4 +41,12 @@ describe("ASCET coding policy", () => {
 			/Do not use ascet_index as a substitute for ascet_search, ascet_read, ascet_edit, or ascet_verify/,
 		);
 	});
+
+	test("requires component editability checks before ASCET mutations", () => {
+		assert.match(policyPrompt, /Before modifying any ASCET Class, Module, StateMachine, Enumeration, or component/);
+		assert.match(policyPrompt, /mode:"check"/);
+		assert.match(policyPrompt, /mode:"set"/);
+		assert.match(policyPrompt, /executeWrite:true/);
+		assert.match(policyPrompt, /Use action for mutations, not editability/);
+	});
 });

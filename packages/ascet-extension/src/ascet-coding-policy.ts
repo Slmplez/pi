@@ -18,7 +18,7 @@ Workflow:
 4. Prefer ascet_search for indexed discovery and ascet_explore for scoped structure inspection. If the required index area is stale or missing, use ascet_index.refresh or confirm critical data with ascet_read.
 5. Use ascet_read for exact live ASCET content, complete code, signatures, element catalogs, implementation data, and dependency chains.
 6. Do not start by writing ESDL. Before writing ESDL, produce a method plan, element plan, execution order, parameter plan, and implementation configuration.
-7. Use ${editToolName} for all ASCET writes. Default to preflight. Execute writes only when the user explicitly asks to apply them.
+7. Before modifying any ASCET Class, Module, StateMachine, Enumeration, or component, check editability with ${editToolName}({mode:"check", componentPath}); if not editable, use ${editToolName}({mode:"set", componentPath, executeWrite:true}) only with explicit user approval. Use action for mutations, not editability; mutation writes default to preflight and execute only when explicitly asked.
 8. After writes, verify with verifyReadback when supported, inspect returned index impact, and use ascet_index.status or ascet_index.refresh before trusting broad search results if areas are stale.
 
 Index lifecycle rules:
