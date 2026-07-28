@@ -16,16 +16,10 @@
 	"pi": {
 		"extensions": [
 			"src/index.ts"
-		],
-		"subagents": {
-			"agents": [
-				"agents/ascet-implementation.md"
-			]
-		}
+		]
 	},
 	"files": [
 		"src",
-		"agents/ascet-implementation.md",
 		"templates",
 		"ascet-cli",
 		"README.md",

@@ -1,16 +1,8 @@
-const ASCET_IMPLEMENTATION_ROUTING_PROMPT = `
-ASCET implementation policy:
-- For ASCET implementation tasks, prefer the package subagent \`ascet-implementation\` when available.
-- Use it for ESDL coding, class/module/method design, Return Methods, parameter chains, Calibration/Constant providers, Implementation configuration, formulas, Block Diagrams, and validation plans.
-- If subagent delegation is unavailable, handle inline with the same design-first order.
-`.trim();
+import { type AscetCodingPolicyOptions, buildAscetCodingPolicyPrompt } from "./ascet-coding-policy.ts";
 
-export function appendAscetImplementationRoutingPrompt(systemPrompt: string): string {
-	if (
-		systemPrompt.includes("ASCET implementation policy:") ||
-		systemPrompt.includes("ASCET implementation subagent routing:")
-	) {
+export function appendAscetCodingPolicyPrompt(systemPrompt: string, options: AscetCodingPolicyOptions = {}): string {
+	if (systemPrompt.includes("ASCET coding policy:")) {
 		return systemPrompt;
 	}
-	return `${systemPrompt}\n\n${ASCET_IMPLEMENTATION_ROUTING_PROMPT}`;
+	return `${systemPrompt}\n\n${buildAscetCodingPolicyPrompt(options)}`;
 }

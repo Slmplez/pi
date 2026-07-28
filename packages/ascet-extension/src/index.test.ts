@@ -63,7 +63,7 @@ describe("ASCET extension agent routing hook", () => {
 		]);
 	});
 
-	test("adds implementation routing guidance without relying on prompt keyword prefiltering", async () => {
+	test("adds inline ASCET coding policy without relying on prompt keyword prefiltering", async () => {
 		let beforeAgentStart:
 			| ((event: {
 					type: "before_agent_start";
@@ -94,6 +94,7 @@ describe("ASCET extension agent routing hook", () => {
 			systemPrompt: "Base system prompt.",
 		});
 
-		assert.match(result?.systemPrompt ?? "", /ascet-implementation/);
+		assert.match(result?.systemPrompt ?? "", /ASCET coding policy:/);
+		assert.doesNotMatch(result?.systemPrompt ?? "", /ascet-implementation/);
 	});
 });

@@ -1,4 +1,4 @@
-import { appendAscetImplementationRoutingPrompt } from "./agent-routing.ts";
+import { appendAscetCodingPolicyPrompt } from "./agent-routing.ts";
 import { type AscetIndexFooterHandle, installAscetIndexFooterStatus } from "./ascet-index-footer-status.ts";
 import { executeAscetInitCommand } from "./ascet-init.ts";
 import { registerBoschLlmFarmProvider } from "./bosch-llmfarm-provider.ts";
@@ -9,6 +9,10 @@ import { createAscetExposureController } from "./tools/exposure/controller.ts";
 import { canonicalAscetTools } from "./tools/index.ts";
 
 let indexFooterStatus: AscetIndexFooterHandle | undefined;
+
+function resolveAscetEditToolName(): string {
+	return canonicalAscetTools.some((tool) => tool.name === "ascet_edit") ? "ascet_edit" : "ascet_write";
+}
 
 export default function ascetExtension(pi: AscetExtensionAPI) {
 	registerBoschLlmFarmProvider(pi);
@@ -21,7 +25,7 @@ export default function ascetExtension(pi: AscetExtensionAPI) {
 	pi.on?.("before_agent_start", (event) => {
 		exposure.activateProfile(exposure.getProfile());
 		return {
-			systemPrompt: appendAscetImplementationRoutingPrompt(event.systemPrompt),
+			systemPrompt: appendAscetCodingPolicyPrompt(event.systemPrompt, { editToolName: resolveAscetEditToolName() }),
 		};
 	});
 
