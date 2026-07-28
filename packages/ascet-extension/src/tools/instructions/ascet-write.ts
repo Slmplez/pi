@@ -74,7 +74,7 @@ export const ascetWriteInstructions = [
 		summary: "Apply structured primitive element specs from evidence, not guesses.",
 		rules: [
 			"For apply_element_spec, treat specFile as a structured ASCET element-spec JSON artifact, not just a file path.",
-			"Before creating an apply_element_spec specFile, derive element metadata from read_element_catalog, search_elements, preview_children, or explicit user requirements. Do not guess modelType, scope, range, implementation type, formula, calibration, or dependency.",
+			"Before creating an apply_element_spec specFile, derive element metadata from read_element_catalog, search_elements, or explicit user requirements. Do not guess modelType, scope, range, implementation type, formula, calibration, or dependency.",
 			"For apply_element_spec primitive elements, variable/parameter/array specs must include name, kind, modelType, and scope. Use concrete modelType values such as cont, log, sdisc, or udisc; do not use ambiguous disc.",
 			"For apply_element_spec, mode=restore updates/restores the supplied spec but does not remove missing elements unless deleteMissing=true is set.",
 			"For apply_element_spec, physicalRange and impl.implementationRange are mutually exclusive. Choose exactly one range source per element; do not put both in the same spec element.",

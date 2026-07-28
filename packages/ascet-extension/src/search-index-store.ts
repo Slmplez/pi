@@ -157,6 +157,8 @@ export interface AscetFolderIndexEntry {
 	path: string;
 	name: string;
 	parentPath: string;
+	ordinal?: number;
+	payload?: Record<string, unknown>;
 }
 
 export interface AscetFolderItemIndexEntry {
@@ -164,6 +166,9 @@ export interface AscetFolderItemIndexEntry {
 	itemPath: string;
 	itemName: string;
 	itemKind: string;
+	languageKind?: string;
+	ordinal?: number;
+	payload?: Record<string, unknown>;
 }
 
 export interface AscetProjectFormulaIndexEntry {

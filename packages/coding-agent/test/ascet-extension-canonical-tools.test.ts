@@ -232,7 +232,7 @@ describe("ASCET canonical PI tools", () => {
 				componentPath: "DEMO\\PID",
 				group: "parameters",
 			}),
-		).toBe(true);
+		).toBe(false);
 		expect(exploreGuidelines).not.toContain("resolve_target");
 		expect(exploreGuidelines).toContain("ascet_search.resolve_component");
 
@@ -291,7 +291,7 @@ describe("ASCET canonical PI tools", () => {
 			request,
 		});
 		const signal = new AbortController().signal;
-		const ctx = { cwd: repoRoot, executeCli };
+		const ctx = { cwd: repoRoot, env: { PI_ASCET_SEARCH_INDEX: "0" }, executeCli };
 
 		expectCliArgs(
 			await ascetExploreTool.execute(
@@ -312,16 +312,6 @@ describe("ASCET canonical PI tools", () => {
 				ctx,
 			),
 			["exec", "resolve_component", "PID", "--scope", "DEMO", "--match", "exact", "--json"],
-		);
-		expectCliArgs(
-			await ascetExploreTool.execute(
-				"tool-call",
-				{ action: "inspect_target", componentPath: "DEMO\\PID" },
-				signal,
-				undefined,
-				ctx,
-			),
-			["exec", "read_component_summary", "DEMO\\PID", "--json"],
 		);
 		expectCliArgs(
 			await ascetReadTool.execute(

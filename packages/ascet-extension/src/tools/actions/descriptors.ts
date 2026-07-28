@@ -539,15 +539,15 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 	descriptor("ascet_read", "read", "internal", READ_PROFILES, {
 		deprecatedBy: "ascet_read.read_code",
 		prompt: prompt("Legacy internal summary read route.", {
-			rules: ["Hidden legacy action; use read_code, inspect_target, preview_children, or verify readback instead."],
+			rules: ["Hidden legacy action; use read_code, explicit ascet_read actions, or verify readback instead."],
 			tags: ["hidden", "legacy"],
 			hidden: true,
 		}),
 	}),
 	descriptor("ascet_explore", "list_components", "public", READ_PROFILES, {
-		prompt: prompt("Browse ASCET folders after a scope is known.", {
+		prompt: prompt("Browse ASCET folders and typed database items after a scope is known.", {
 			rules: [
-				"Use list_components to browse folder contents.",
+				"Use list_components to browse direct or recursive folder contents and filter by component kind or languageKind.",
 				"For dependent-parameter provider discovery, use list_components recursively from the feature scope when parameter classes may be nested under _Calibration, _Constant, or other parameter folders.",
 			],
 			fewShots: [
@@ -559,51 +559,6 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 				}),
 			],
 			tags: ["navigation", "component"],
-		}),
-	}),
-	descriptor("ascet_explore", "list_diagrams", "public", READ_PROFILES, {
-		prompt: prompt("List available diagrams for a resolved component before diagram reads.", {
-			rules: ["Use list_diagrams before read_block_diagram when the diagram name or diagram kind is unclear."],
-			fewShots: [
-				shot("list diagrams", {
-					action: "list_diagrams",
-					componentPath: "DEMO/PID",
-					diagramKind: "all",
-				}),
-			],
-			tags: ["diagram", "navigation"],
-		}),
-	}),
-	descriptor("ascet_explore", "inspect_target", "public", READ_PROFILES, {
-		prompt: prompt("Inspect a resolved target before choosing deeper read, reference, diff, or write actions.", {
-			rules: [
-				"Use ascet_search.resolve_component when the user gives a component name but not a full path.",
-				"Use inspect_target before passing a discovered provider path as exporterComponentPath to read_dependent_chain.",
-			],
-			fewShots: [
-				shot("inspect target", {
-					action: "inspect_target",
-					componentPath: "DEMO/PID",
-					detailLevel: "summary",
-				}),
-			],
-			tags: ["navigation", "read-before-write"],
-		}),
-	}),
-	descriptor("ascet_explore", "preview_children", "public", READ_PROFILES, {
-		prompt: prompt("Preview children of one resolved component without reading full implementation.", {
-			rules: [
-				"Use preview_children before selecting exact read, reference, diff, or write actions.",
-				"Provider class names are only container hints; a provider is valid only when it contains the same-named Exported Parameter.",
-			],
-			fewShots: [
-				shot("preview methods", {
-					action: "preview_children",
-					componentPath: "DEMO/PID",
-					group: "methods",
-				}),
-			],
-			tags: ["navigation", "provider-discovery"],
 		}),
 	}),
 	descriptor("ascet_diff", "diff", "public", ["diff"], {

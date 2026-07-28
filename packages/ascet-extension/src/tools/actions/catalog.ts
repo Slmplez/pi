@@ -210,11 +210,6 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 		aliases: ["method local variables", "process arguments", "method process element", "local elements"],
 		result: { shape: "methodProcessElements", fields: ["total", "items", "nextCursor", "searchComplete"] },
 	},
-	"ascet_explore.list_diagrams": {
-		aliases: ["list diagrams", "available diagrams", "diagram list"],
-		nextActions: ["ascet_read.read_block_diagram"],
-		result: { shape: "diagramList", fields: ["component", "total", "items"] },
-	},
 	"ascet_read.read_block_diagram": {
 		aliases: ["read block diagram", "BDE", "diagram content", "block diagram"],
 		result: { shape: "blockDiagram", fields: ["component", "name", "items", "counts"] },

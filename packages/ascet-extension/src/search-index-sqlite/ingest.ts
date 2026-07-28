@@ -175,8 +175,8 @@ values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 function insertFolders(db: DatabaseSync, runId: string, folders: readonly AscetFolderIndexEntry[] | undefined): number {
 	const insert = db.prepare(`
 insert into ascet_folders
-(id, run_id, path, path_norm, name, name_norm, parent_path, payload_json)
-values (?, ?, ?, ?, ?, ?, ?, ?)
+(id, run_id, path, path_norm, name, name_norm, parent_path, parent_path_norm, ordinal, payload_json)
+values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `);
 	const doc = db.prepare(`
 insert into ascet_search_documents
@@ -194,7 +194,9 @@ values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 			name,
 			normalizeName(name),
 			outputPath(entry.parentPath),
-			bindPayload({ ...entry, path }),
+			normalizePath(entry.parentPath),
+			entry.ordinal ?? 0,
+			bindPayload({ ...entry, path, payload: entry.payload }),
 		);
 		insertDocument(
 			doc,
@@ -225,8 +227,8 @@ function insertFolderItems(
 ): number {
 	const insert = db.prepare(`
 insert into ascet_folder_items
-(id, run_id, folder_path, folder_path_norm, item_path, item_path_norm, item_name, item_name_norm, item_kind, payload_json)
-values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+(id, run_id, folder_path, folder_path_norm, item_path, item_path_norm, item_name, item_name_norm, item_kind, language_kind, ordinal, payload_json)
+values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `);
 	const doc = db.prepare(`
 insert into ascet_search_documents
@@ -247,7 +249,9 @@ values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 			itemName,
 			normalizeName(itemName),
 			entry.itemKind,
-			bindPayload({ ...entry, folderPath, itemPath }),
+			entry.languageKind ?? "",
+			entry.ordinal ?? 0,
+			bindPayload({ ...entry, folderPath, itemPath, payload: entry.payload }),
 		);
 		insertDocument(
 			doc,
@@ -259,7 +263,7 @@ values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 			folderPath,
 			"",
 			entry.itemKind,
-			"",
+			entry.languageKind ?? "",
 			"folder.GetAllDataBaseItems",
 			60,
 			{ ...entry, folderPath, itemPath },

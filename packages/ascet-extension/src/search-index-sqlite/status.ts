@@ -1,12 +1,13 @@
 import { existsSync } from "node:fs";
 import { openAscetSearchSqlite } from "./connection.ts";
 import { getAscetSearchIndexSqlitePath } from "./paths.ts";
-import { ASCET_P0_INDEX_AREAS, type AscetP0IndexArea } from "./schema.ts";
+import { ASCET_P0_INDEX_AREAS, ASCET_SEARCH_SQLITE_SCHEMA_VERSION, type AscetP0IndexArea } from "./schema.ts";
 import { writeAscetIndexStatusFile } from "./status-file.ts";
 import type { AscetSqliteAreaStatus, AscetSqliteIndexStatus } from "./types.ts";
 
 interface RunRow {
 	id?: unknown;
+	schema_version?: unknown;
 	database_name?: unknown;
 	database_path?: unknown;
 	status?: unknown;
@@ -76,13 +77,16 @@ export function getAscetSqliteIndexStatus(cwd: string): AscetSqliteIndexStatus {
 	try {
 		const run = connection.db
 			.prepare(`
-select id, database_name, database_path, status, generated_at_ms, completed_at_ms, elapsed_ms
+select id, schema_version, database_name, database_path, status, generated_at_ms, completed_at_ms, elapsed_ms
 from ascet_index_runs
 where active = 1
 limit 1
 `)
 			.get() as RunRow | undefined;
 		if (!run) {
+			return missingStatus();
+		}
+		if (asNumber(run.schema_version) !== ASCET_SEARCH_SQLITE_SCHEMA_VERSION) {
 			return missingStatus();
 		}
 		const runId = asString(run.id);

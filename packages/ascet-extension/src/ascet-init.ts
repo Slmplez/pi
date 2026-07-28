@@ -93,7 +93,7 @@ Use this workflow for subsequent ASCET coding or analysis tasks:
    - references_to_component
    - references_to_element
    - text_in_code
-3. Use ascet_explore for navigation and scoped structure inspection.
+3. Use ascet_explore.list_components only for folder-tree browsing; use ascet_read for component structure and diagram content.
 4. Use ascet_read only when exact current live ASCET data or complete code content is needed.
 5. Use ascet_write for all ASCET writes. After a write, inspect the result index status and pay attention to stale/refresh state before trusting broad search results.
 6. Do not perform ad hoc full-database live scans. Do not call broad ToolAPI GetAll loops from the agent path when indexed search can answer the question.

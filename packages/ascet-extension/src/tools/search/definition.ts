@@ -18,10 +18,15 @@ export const ascetSearchTool = defineSequentialAscetTool({
 		params: AscetSearchParams,
 		signal: AbortSignal,
 		_onUpdate: unknown,
-		ctx: { cwd: string; executeCli?: Parameters<typeof runAscetSearch>[1]["executeCli"] },
+		ctx: {
+			cwd: string;
+			env?: Record<string, string | undefined>;
+			executeCli?: Parameters<typeof runAscetSearch>[1]["executeCli"];
+		},
 	) {
 		const result = await runAscetSearch(params, {
 			cwd: ctx.cwd,
+			env: ctx.env,
 			signal,
 			timeoutMs: 60_000,
 			executeCli: ctx.executeCli,

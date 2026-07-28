@@ -73,28 +73,6 @@ export const ascetRouteManifestEntries = [
 		category: "domain",
 	},
 	{
-		toolName: "ascet_explore",
-		action: "list_diagrams",
-		logicalCommandId: "AscetListDiagrams",
-		operation: "list_diagrams",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_explore",
-		action: "inspect_target",
-		logicalCommandId: "AscetReadComponentSummary",
-		operation: "read_component_summary",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_explore",
-		action: "preview_children",
-		logicalCommandId: "AscetReadComponentChildren",
-		operation: "read_component_children",
-		category: "domain",
-	},
-
-	{
 		toolName: "ascet_search",
 		action: "search_components",
 		logicalCommandId: "AscetSearchComponents",

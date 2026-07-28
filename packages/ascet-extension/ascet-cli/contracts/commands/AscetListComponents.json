@@ -1,8 +1,8 @@
 ﻿{
     "id":  "AscetListComponents",
     "family":  "explore",
-    "summary":  "List components in a folder",
-    "usage":  "\u003cfolder-path\u003e [--kind \u003cclass|module|statemachine\u003e] [--query \u003ctext\u003e] [--limit \u003cn\u003e] [--recursive] [--json]",
+    "summary":  "List database items and folders in a folder",
+    "usage":  "\u003cfolder-path\u003e [--kind \u003call|folder|class|module|statemachine\u003e] [--language-kind \u003call|BDE|ESDL|C|Unknown\u003e] [--query \u003ctext\u003e] [--limit \u003cn\u003e] [--recursive] [--json]",
     "execution":  {
                       "kind":  "unified_cli",
                       "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
@@ -22,42 +22,63 @@
                      "kind":  "positional",
                      "type":  "string",
                      "required":  true,
-                     "description":  "Positional argument: folder-path"
+                     "description":  "Folder path, or an empty path for the database root."
                  },
                  {
                      "name":  "--kind",
                      "kind":  "option",
-                     "type":  "string",
+                     "type":  "enum",
                      "required":  false,
-                     "description":  "Option value for --kind"
+                     "description":  "Database item kind filter.",
+                     "enumValues":  [
+                                        "all",
+                                        "folder",
+                                        "class",
+                                        "module",
+                                        "statemachine"
+                                    ]
+                 },
+                 {
+                     "name":  "--language-kind",
+                     "kind":  "option",
+                     "type":  "enum",
+                     "required":  false,
+                     "description":  "Component language filter. Folders have no language kind.",
+                     "enumValues":  [
+                                        "all",
+                                        "BDE",
+                                        "ESDL",
+                                        "C",
+                                        "Unknown"
+                                    ]
                  },
                  {
                      "name":  "--query",
                      "kind":  "option",
                      "type":  "string",
                      "required":  false,
-                     "description":  "Option value for --query"
+                     "description":  "Case-insensitive name or path filter."
                  },
                  {
                      "name":  "--limit",
                      "kind":  "option",
-                     "type":  "string",
+                     "type":  "integer",
                      "required":  false,
-                     "description":  "Option value for --limit"
+                     "description":  "Maximum number of matching entries. Zero returns all matches."
                  },
                  {
                      "name":  "--recursive",
                      "kind":  "flag",
                      "type":  "boolean",
                      "required":  false,
-                     "description":  "Flag --recursive"
+                     "description":  "Traverse descendant folders depth first."
                  },
                  {
                      "name":  "--json",
                      "kind":  "flag",
                      "type":  "boolean",
                      "required":  false,
-                     "description":  "Flag --json"
+                     "description":  "Emit JSON."
                  }
              ],
     "preconditions":  [
@@ -70,7 +91,7 @@
     "examples":  [
                      {
                          "description":  "Basic usage",
-                         "command":  "AscetCli.exe exec list_components \u003cfolder-path\u003e [--kind \u003cclass|module|statemachine\u003e] [--query \u003ctext\u003e] [--limit \u003cn\u003e] [--recursive] [--json]"
+                         "command":  "AscetCli.exe exec list_components \u003cfolder-path\u003e [--kind \u003call|folder|class|module|statemachine\u003e] [--language-kind \u003call|BDE|ESDL|C|Unknown\u003e] [--query \u003ctext\u003e] [--limit \u003cn\u003e] [--recursive] [--json]"
                      }
                  ],
     "pitfalls":  [

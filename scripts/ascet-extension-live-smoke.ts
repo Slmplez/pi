@@ -97,6 +97,12 @@ function findFirstComponentPath(value: unknown): string | undefined {
 	return undefined;
 }
 
+function parentFolderPath(componentPath: string): string | undefined {
+	const normalized = componentPath.replaceAll("/", "\\").replace(/^\\+|\\+$/g, "");
+	const separator = normalized.lastIndexOf("\\");
+	return separator > 0 ? normalized.slice(0, separator) : undefined;
+}
+
 async function findSmokeComponentPath(): Promise<{ query: string; path: string; result: unknown }> {
 	for (const query of ["AEB", "PID", "Class", "_", "a"]) {
 		const result = await callTool("ascet_search", {
@@ -139,8 +145,8 @@ const status = (await statusTool.execute(
 	undefined,
 	{ cwd: repoRoot },
 )) as ToolResponse;
-if (!status.details.ok) {
-	throw new Error("ascet_status reported unavailable ASCET runtime");
+if (!status.details.installationOk) {
+	throw new Error(`ascet_status reported unavailable ASCET installation: ${JSON.stringify(status.details)}`);
 }
 
 const schedulerBefore = await callTool("ascet_scheduler_status", { format: "json" });
@@ -149,6 +155,7 @@ const capabilities = await callTool("ascet_capabilities", {
 	query: "complete code",
 	limit: 3,
 });
+await callTool("ascet_explore", { action: "list_components", folderPath: "PlatformLibrary", limit: 1 });
 const componentProbe = await findSmokeComponentPath();
 const componentPath = componentProbe.path;
 const resolved = await callTool("ascet_search", {
@@ -157,9 +164,21 @@ const resolved = await callTool("ascet_search", {
 	match: "exact",
 	limit: 10,
 });
-const summary = await callTool("ascet_explore", { action: "inspect_target", componentPath });
-const children = await callTool("ascet_explore", { action: "preview_children", componentPath, group: "all" });
-const diagrams = await callTool("ascet_explore", { action: "list_diagrams", componentPath });
+const folderPath = parentFolderPath(componentPath);
+if (!folderPath) {
+	throw new Error(`Cannot derive a parent folder from smoke component '${componentPath}'.`);
+}
+const folderItems = await callTool("ascet_explore", { action: "list_components", folderPath, limit: 20 });
+const indexedStatus = (await statusTool.execute(
+	"ascet-live-smoke-status-indexed",
+	{},
+	new AbortController().signal,
+	undefined,
+	{ cwd: repoRoot },
+)) as ToolResponse;
+if (!indexedStatus.details.ok) {
+	throw new Error(`ascet_status did not become ready after list_components: ${JSON.stringify(indexedStatus.details)}`);
+}
 const blockDiagram = await callToolAllowingError("ascet_read", {
 	action: "read_block_diagram",
 	componentPath,
@@ -194,7 +213,7 @@ console.log(
 		{
 			ok: true,
 			tools: {
-				ascet_status: { mode: status.details.paths.mode, cliPath: status.details.paths.cliPath },
+				ascet_status: { mode: indexedStatus.details.paths.mode, cliPath: indexedStatus.details.paths.cliPath },
 				ascet_scheduler_status_before: {
 					scheduler: schedulerBefore.scheduler,
 					cliLock: schedulerBefore.cliLock,
@@ -207,9 +226,7 @@ console.log(
 					counts: (componentProbe.result as { counts?: unknown }).counts,
 				},
 				ascet_search_resolve: { component: resolved.component },
-				ascet_explore_summary: { counts: summary.counts, summary: summary.summary },
-				ascet_explore_children: { selectedGroup: children.selectedGroup, counts: children.counts },
-				ascet_explore_diagrams: { items: diagrams.items, filters: diagrams.filters },
+				ascet_explore_list_components: { folderPath, counts: folderItems.counts, items: folderItems.items },
 				ascet_read_block_diagram: {
 					ok: !blockDiagram.error,
 					error: blockDiagram.error,

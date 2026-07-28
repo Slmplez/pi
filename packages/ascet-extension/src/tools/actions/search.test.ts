@@ -27,7 +27,6 @@ describe("ASCET action search", () => {
 	test("semantic queries prefer the intended actions", () => {
 		assert.equal(searchActionCatalog({ query: "complete code", limit: 1 }).items[0]?.action, "read_code");
 		assert.equal(searchActionCatalog({ query: "code search", limit: 1 }).items[0]?.action, "text_in_code");
-		assert.equal(searchActionCatalog({ query: "list diagrams", limit: 1 }).items[0]?.action, "list_diagrams");
 		assert.equal(
 			searchActionCatalog({ query: "read block diagram", limit: 1 }).items[0]?.action,
 			"read_block_diagram",

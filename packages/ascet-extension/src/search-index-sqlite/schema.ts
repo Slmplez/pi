@@ -1,4 +1,4 @@
-export const ASCET_SEARCH_SQLITE_SCHEMA_VERSION = 2;
+export const ASCET_SEARCH_SQLITE_SCHEMA_VERSION = 3;
 
 export const ASCET_P0_INDEX_AREAS = [
 	"components",
@@ -105,6 +105,8 @@ create table if not exists ascet_folders (
   name text not null,
   name_norm text not null,
   parent_path text not null default '',
+  parent_path_norm text not null default '',
+  ordinal integer not null default 0,
   payload_json text not null default '{}'
 );
 
@@ -118,6 +120,8 @@ create table if not exists ascet_folder_items (
   item_name text not null,
   item_name_norm text not null,
   item_kind text not null default '',
+  language_kind text not null default '',
+  ordinal integer not null default 0,
   payload_json text not null default '{}'
 );
 
@@ -242,6 +246,9 @@ create index if not exists idx_docs_run_path on ascet_search_documents(run_id, p
 create index if not exists idx_docs_run_partition on ascet_search_documents(run_id, partition);
 create index if not exists idx_components_run_name on ascet_components(run_id, name_norm);
 create index if not exists idx_components_run_path on ascet_components(run_id, path_norm);
+create index if not exists idx_folders_run_parent_order on ascet_folders(run_id, parent_path_norm, ordinal);
+create index if not exists idx_folder_items_run_folder_order on ascet_folder_items(run_id, folder_path_norm, ordinal);
+create index if not exists idx_folder_items_run_kind_language on ascet_folder_items(run_id, item_kind, language_kind);
 create index if not exists idx_elements_run_name on ascet_elements(run_id, name_norm);
 create index if not exists idx_elements_run_owner on ascet_elements(run_id, owner_path_norm);
 create index if not exists idx_methods_run_name on ascet_methods(run_id, name_norm);

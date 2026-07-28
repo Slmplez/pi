@@ -81,7 +81,7 @@ const unsupportedCoverage: Record<string, Omit<AscetCliCoverageEntry, "commandId
 	},
 	AscetListMethods: {
 		category: "unsupported_with_reason",
-		reason: "Method discovery is covered through ascet_explore preview_children and ascet_read flows.",
+		reason: "Method discovery is covered through ascet_search declarations and ascet_read flows.",
 	},
 	AscetReadClassSnapshot: {
 		category: "unsupported_with_reason",
@@ -97,7 +97,7 @@ const unsupportedCoverage: Record<string, Omit<AscetCliCoverageEntry, "commandId
 	},
 	AscetReadElementCatalog: {
 		category: "unsupported_with_reason",
-		reason: "Element inventory is covered through ascet_explore preview_children or ascet_search search_elements.",
+		reason: "Element inventory is covered through ascet_search search_elements.",
 	},
 	AscetReadModuleClosure: {
 		category: "unsupported_with_reason",
