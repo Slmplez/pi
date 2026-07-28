@@ -10,10 +10,6 @@ import { canonicalAscetTools } from "./tools/index.ts";
 
 let indexFooterStatus: AscetIndexFooterHandle | undefined;
 
-function resolveAscetEditToolName(): string {
-	return canonicalAscetTools.some((tool) => tool.name === "ascet_edit") ? "ascet_edit" : "ascet_write";
-}
-
 export default function ascetExtension(pi: AscetExtensionAPI) {
 	registerBoschLlmFarmProvider(pi);
 	const exposure = createAscetExposureController(pi);
@@ -25,7 +21,7 @@ export default function ascetExtension(pi: AscetExtensionAPI) {
 	pi.on?.("before_agent_start", (event) => {
 		exposure.activateProfile(exposure.getProfile());
 		return {
-			systemPrompt: appendAscetCodingPolicyPrompt(event.systemPrompt, { editToolName: resolveAscetEditToolName() }),
+			systemPrompt: appendAscetCodingPolicyPrompt(event.systemPrompt),
 		};
 	});
 

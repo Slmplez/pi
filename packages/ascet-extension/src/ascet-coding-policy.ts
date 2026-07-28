@@ -3,7 +3,7 @@ export interface AscetCodingPolicyOptions {
 }
 
 export function buildAscetCodingPolicyPrompt(options: AscetCodingPolicyOptions = {}): string {
-	const editToolName = options.editToolName ?? "ascet_write";
+	const editToolName = options.editToolName ?? "ascet_edit";
 	return `
 ASCET coding policy:
 
@@ -14,12 +14,18 @@ Handle ASCET coding inline. Do not delegate ASCET coding, implementation design,
 Workflow:
 1. Understand the requirement, target component, expected inputs, outputs, states, parameters, and safety defaults.
 2. Resolve exact ASCET paths before editing.
-3. Use ascet_status when runtime or index state is uncertain.
-4. Prefer ascet_search for indexed discovery and ascet_explore for scoped structure inspection.
+3. Use ascet_status when runtime availability is uncertain; use ascet_index.status when index freshness or footer state is uncertain.
+4. Prefer ascet_search for indexed discovery and ascet_explore for scoped structure inspection. If the required index area is stale or missing, use ascet_index.refresh or confirm critical data with ascet_read.
 5. Use ascet_read for exact live ASCET content, complete code, signatures, element catalogs, implementation data, and dependency chains.
 6. Do not start by writing ESDL. Before writing ESDL, produce a method plan, element plan, execution order, parameter plan, and implementation configuration.
 7. Use ${editToolName} for all ASCET writes. Default to preflight. Execute writes only when the user explicitly asks to apply them.
-8. After writes, verify with verifyReadback when supported and with independent ascet_read, ascet_diff, or ascet_verify evidence.
+8. After writes, verify with verifyReadback when supported, inspect returned index impact, and use ascet_index.status or ascet_index.refresh before trusting broad search results if areas are stale.
+
+Index lifecycle rules:
+- Use ascet_index.status when search freshness, footer status, stale areas, or per-area index counts are uncertain.
+- Use ascet_index.refresh when indexed search data must reflect live ASCET; use ascet_index.mark_stale only after confirmed external ASCET changes when refresh is not immediate.
+- Use ascet_index.repair_status_file only after status or evaluate shows SQLite is ready but .ascet/index/status.json or the footer is wrong; use ascet_index.evaluate for diagnostics, smoke, count, and sidecar checks.
+- Do not call raw warm_search_index directly. Do not use ascet_index as a substitute for ascet_search, ascet_read, ascet_edit, or ascet_verify.
 
 Method signature rules:
 - Treat method/process signatures and ESDL bodies as separate ASCET structures.

@@ -5,13 +5,15 @@ import { appendAscetCodingPolicyPrompt } from "./agent-routing.ts";
 describe("ASCET coding policy routing", () => {
 	test("appends inline coding guidance once", () => {
 		const base = "Base system prompt.";
-		const routed = appendAscetCodingPolicyPrompt(base, { editToolName: "ascet_edit" });
+		const routed = appendAscetCodingPolicyPrompt(base);
 		const appendedPolicy = routed.slice(base.length).trim();
 		const policyLines = appendedPolicy.split("\n").filter(Boolean);
 
 		assert.match(routed, /ASCET coding policy:/);
 		assert.doesNotMatch(routed, /ascet-implementation/);
 		assert.match(routed, /Handle ASCET coding inline/);
+		assert.match(routed, /ascet_edit/);
+		assert.doesNotMatch(routed, /ascet_write/);
 		assert.match(routed, /set_method_code/);
 		assert.match(
 			routed,
