@@ -98,7 +98,7 @@ describe("ASCET extension agent routing hook", () => {
 		assert.doesNotMatch(result?.systemPrompt ?? "", /ascet-implementation/);
 	});
 
-	test("schedules startup P0 warmup without forcing a rebuild", async () => {
+	test("schedules startup P0 refresh so stale ASCET edits are picked up", async () => {
 		const observed = await new Promise<{
 			cwd?: string;
 			partition?: string;
@@ -142,7 +142,7 @@ describe("ASCET extension agent routing hook", () => {
 
 		assert.equal(observed.cwd, "E:\\Rep\\DemoFromSession");
 		assert.equal(observed.partition, "p0");
-		assert.equal(observed.forceRefresh, false);
+		assert.equal(observed.forceRefresh, true);
 		assert.equal(observed.includeTextCode, true);
 		assert.equal(observed.toolName, "ascet_status");
 		assert.equal(typeof observed.scheduler, "object");

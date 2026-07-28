@@ -54,7 +54,7 @@ export function scheduleStartupAscetSearchIndexWarmup(
 			env: deps.env,
 			timeoutMs: 120_000,
 			partition: "p0",
-			forceRefresh: false,
+			forceRefresh: true,
 			includeTextCode: true,
 			scanTimeoutMs: 90_000,
 			scheduler: getGlobalAscetScheduler(),
