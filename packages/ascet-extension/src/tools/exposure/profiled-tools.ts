@@ -47,9 +47,7 @@ const profileGuidelines: Record<AscetProfile, Partial<Record<string, readonly st
 		ascet_edit: ["Use component editable actions only when the user explicitly asks to change editability."],
 	},
 	ops: {
-		ascet_index: [
-			"Use ascet_index.status before repair_status_file when the footer index state looks wrong.",
-		],
+		ascet_index: ["Use ascet_index.status before repair_status_file when the footer index state looks wrong."],
 		ascet_recover: [
 			"Use ascet_recover and ascet_scheduler_status for runtime, queue, lock, or recovery diagnostics.",
 		],

@@ -1126,7 +1126,7 @@ function successResult(
 	if (partition === "all" || partition === "p0") {
 		const sqliteStatus = isSqliteStorageEnabled(options.env) ? getAscetSqliteIndexStatus(options.cwd) : undefined;
 		if (sqliteStatus?.status === "ready" || sqliteStatus?.status === "stale") {
-			writeSqliteCacheStatusFile(options.cwd, sqliteStatus, countPartitionEntries(ready, partition));
+			writeSqliteCacheStatusFile(options.cwd, sqliteStatus);
 		} else {
 			writeAscetIndexStatusFile(options.cwd, {
 				state: "ready",
@@ -1319,9 +1319,11 @@ export function scheduleAscetSearchIndexBackgroundRefresh(options: AscetSearchIn
 			executeCli: options.executeCli,
 			scheduler: options.scheduler,
 			toolName: "ascet_index_refresh",
-		}).finally(() => {
-			scheduledBackgroundRefreshes.delete(refreshKey);
-		});
+		})
+			.catch(() => undefined)
+			.finally(() => {
+				scheduledBackgroundRefreshes.delete(refreshKey);
+			});
 	}, options.delayMs ?? 250);
 	timer.unref?.();
 	return true;

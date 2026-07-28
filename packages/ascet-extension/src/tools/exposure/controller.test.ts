@@ -38,6 +38,7 @@ describe("ASCET exposure controller", () => {
 			"non_ascet_tool",
 			"ascet_status",
 			"ascet_capabilities",
+			"ascet_index",
 			"ascet_recover",
 			"ascet_scheduler_status",
 			"ascet_explore",
@@ -100,6 +101,7 @@ describe("ASCET exposure controller", () => {
 			activeTools: [
 				"ascet_status",
 				"ascet_capabilities",
+				"ascet_index",
 				"ascet_explore",
 				"ascet_search",
 				"ascet_read",

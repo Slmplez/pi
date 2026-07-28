@@ -1,9 +1,9 @@
+import { ascetIndexTool } from "./ascet-index/index.ts";
 import { ascetBatchWriteTool } from "./batch-write/index.ts";
 import { ascetCapabilitiesTool } from "./capabilities/index.ts";
 import { ascetDiffTool } from "./diff/index.ts";
 import { ascetEditTool } from "./edit/index.ts";
 import { ascetExploreTool } from "./explore/index.ts";
-import { ascetIndexTool } from "./ascet-index/index.ts";
 import { ascetReadTool } from "./read/index.ts";
 import { ascetRecoverTool } from "./recover/index.ts";
 import { ascetSchedulerStatusTool } from "./scheduler-status/index.ts";

@@ -6,6 +6,7 @@ import {
 	compactExamplesForTool,
 } from "../../ascet-extension/src/tools/_shared/action-examples.ts";
 import { listActionDescriptors } from "../../ascet-extension/src/tools/actions/descriptors.ts";
+import { ascetIndexParameters } from "../../ascet-extension/src/tools/ascet-index/schema.ts";
 import { ascetBatchWriteParameters } from "../../ascet-extension/src/tools/batch-write/schema.ts";
 import { ascetCapabilitiesParameters } from "../../ascet-extension/src/tools/capabilities/schema.ts";
 import { ascetDiffParameters } from "../../ascet-extension/src/tools/diff/schema.ts";
@@ -22,6 +23,7 @@ import { ascetVerifyParameters } from "../../ascet-extension/src/tools/verify/sc
 const schemaByTool = {
 	ascet_status: ascetStatusParameters,
 	ascet_capabilities: ascetCapabilitiesParameters,
+	ascet_index: ascetIndexParameters,
 	ascet_recover: ascetRecoverParameters,
 	ascet_scheduler_status: ascetSchedulerStatusParameters,
 	ascet_explore: ascetExploreParameters,

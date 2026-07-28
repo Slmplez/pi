@@ -140,6 +140,60 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["ops", "capability", "action-search"],
 		}),
 	}),
+	descriptor("ascet_index", "status", "public", ALL_PROFILES, {
+		prompt: prompt("Inspect ASCET SQLite index readiness, per-area counts, stale areas, and footer sync.", {
+			rules: [
+				"Use ascet_index.status when the footer index state looks wrong or when search freshness is uncertain.",
+				"status is local SQLite/status-file inspection and does not call live ASCET ToolAPI.",
+				"Use detailLevel=areas for per-area counts; use detailLevel=full with includeScheduler=true for diagnostics.",
+			],
+			fewShots: [shot("index status", { action: "status", detailLevel: "areas" })],
+			tags: ["ops", "index", "sqlite", "status"],
+		}),
+	}),
+	descriptor("ascet_index", "refresh", "public", ALL_PROFILES, {
+		prompt: prompt("Refresh one or more ASCET SQLite index areas through the serial live scheduler.", {
+			rules: [
+				"Use refresh when indexed search data must reflect current live ASCET state.",
+				"Live refreshes are serial scheduler jobs; do not call raw warm_search_index directly.",
+				'Use areas=["elements"] for declarations of element, areas=["code"] for text_in_code, and areas=["p0"] for complete startup index rebuild.',
+			],
+			fewShots: [
+				shot("refresh elements", { action: "refresh", areas: ["elements"], mode: "foreground", force: true }),
+			],
+			tags: ["ops", "index", "refresh", "scheduler"],
+		}),
+	}),
+	descriptor("ascet_index", "mark_stale", "public", ALL_PROFILES, {
+		prompt: prompt("Mark selected SQLite index areas stale after manual ASCET UI edits or external changes.", {
+			rules: [
+				"Use mark_stale when the user confirms data changed outside PI and a live refresh is not being run immediately.",
+				"mark_stale is local SQLite/status-file mutation and does not call live ASCET ToolAPI.",
+			],
+			fewShots: [shot("manual code edit", { action: "mark_stale", areas: ["code"], reason: "external_edit" })],
+			tags: ["ops", "index", "stale"],
+		}),
+	}),
+	descriptor("ascet_index", "repair_status_file", "public", ALL_PROFILES, {
+		prompt: prompt("Repair .ascet/index/status.json from the active SQLite generation.", {
+			rules: [
+				"Use repair_status_file when SQLite is ready but the footer status is stale, checking, failed, or has a wrong totalDocs count.",
+				"repair_status_file is local and does not rebuild live ASCET data.",
+			],
+			fewShots: [shot("repair footer", { action: "repair_status_file" })],
+			tags: ["ops", "index", "footer"],
+		}),
+	}),
+	descriptor("ascet_index", "evaluate", "public", ALL_PROFILES, {
+		prompt: prompt("Run local ASCET SQLite index health checks and optional search smoke checks.", {
+			rules: [
+				"Use evaluate for test and diagnostics of index state; local checks do not call live ASCET.",
+				"Use ascet_index.refresh for live rebuilds after evaluate reports stale or missing data.",
+			],
+			fewShots: [shot("evaluate index", { action: "evaluate", checks: ["status", "counts", "sidecar"] })],
+			tags: ["ops", "index", "test"],
+		}),
+	}),
 	descriptor("ascet_search", "search_components", "public", ALL_SEARCH_PROFILES, {
 		requiresPartitions: ["components"],
 		prompt: prompt("Find component candidates by name or folder scope before exact reads or writes.", {

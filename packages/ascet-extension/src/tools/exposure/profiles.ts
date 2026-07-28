@@ -27,9 +27,24 @@ const DEFAULT_ACTIVE_TOOLS = [
 
 export const profileTools: Record<AscetProfile, readonly string[]> = {
 	base: DEFAULT_ACTIVE_TOOLS,
-	"advanced-read": ["ascet_status", "ascet_capabilities", "ascet_index", "ascet_explore", "ascet_search", "ascet_read"],
+	"advanced-read": [
+		"ascet_status",
+		"ascet_capabilities",
+		"ascet_index",
+		"ascet_explore",
+		"ascet_search",
+		"ascet_read",
+	],
 	reference: ["ascet_status", "ascet_capabilities", "ascet_index", "ascet_explore", "ascet_search", "ascet_read"],
-	diff: ["ascet_status", "ascet_capabilities", "ascet_index", "ascet_explore", "ascet_search", "ascet_read", "ascet_diff"],
+	diff: [
+		"ascet_status",
+		"ascet_capabilities",
+		"ascet_index",
+		"ascet_explore",
+		"ascet_search",
+		"ascet_read",
+		"ascet_diff",
+	],
 	verify: [
 		"ascet_status",
 		"ascet_capabilities",

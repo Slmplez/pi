@@ -379,8 +379,12 @@ describe("ASCET search index warmup", () => {
 				totalDocs?: unknown;
 				areas?: Record<string, { status?: unknown; itemCount?: unknown }>;
 			};
+			const areaTotal = Object.values(status.areas ?? {}).reduce(
+				(total, area) => total + (typeof area.itemCount === "number" ? area.itemCount : 0),
+				0,
+			);
 			assert.equal(status.state, "ready");
-			assert.equal(status.totalDocs, second.entryCount);
+			assert.equal(status.totalDocs, areaTotal);
 			assert.equal(status.areas?.components?.status, "ready");
 			assert.equal(status.areas?.components?.itemCount, 2);
 		} finally {
