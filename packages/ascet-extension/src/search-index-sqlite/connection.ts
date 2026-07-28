@@ -1,6 +1,6 @@
 import { DatabaseSync } from "node:sqlite";
 import { ensureAscetSearchIndexSqliteDir, getAscetSearchIndexSqlitePath } from "./paths.ts";
-import { ASCET_SEARCH_SQLITE_SCHEMA_SQL } from "./schema.ts";
+import { ASCET_SEARCH_SQLITE_SCHEMA_SQL, ASCET_SEARCH_SQLITE_SCHEMA_VERSION } from "./schema.ts";
 
 export type AscetSearchSqliteConnectionMode = "reader" | "writer";
 
@@ -52,5 +52,42 @@ export function openAscetSearchSqlite(cwd: string, mode: AscetSearchSqliteConnec
 }
 
 export function migrateAscetSearchSqlite(db: DatabaseSync): void {
+	if (requiresSchemaReset(db)) {
+		db.exec(`
+drop table if exists ascet_code_terms;
+drop table if exists ascet_code_blocks;
+drop table if exists ascet_dbitem_dependencies;
+drop table if exists ascet_element_refs;
+drop table if exists ascet_project_items;
+drop table if exists ascet_project_formulas;
+drop table if exists ascet_methods;
+drop table if exists ascet_elements;
+drop table if exists ascet_folder_items;
+drop table if exists ascet_folders;
+drop table if exists ascet_components;
+drop table if exists ascet_search_documents;
+drop table if exists ascet_index_areas;
+drop table if exists ascet_index_runs;
+`);
+	}
 	db.exec(ASCET_SEARCH_SQLITE_SCHEMA_SQL);
+}
+
+function requiresSchemaReset(db: DatabaseSync): boolean {
+	try {
+		const run = db.prepare("select max(schema_version) as schema_version from ascet_index_runs").get() as
+			| { schema_version?: unknown }
+			| undefined;
+		const schemaVersion = typeof run?.schema_version === "number" ? run.schema_version : 0;
+		const folderColumns = db.prepare("pragma table_info(ascet_folders)").all() as Array<{ name?: unknown }>;
+		const folderItemColumns = db.prepare("pragma table_info(ascet_folder_items)").all() as Array<{ name?: unknown }>;
+		const hasFolderTreeColumns =
+			folderColumns.some((column) => column.name === "parent_path_norm") &&
+			folderColumns.some((column) => column.name === "ordinal") &&
+			folderItemColumns.some((column) => column.name === "language_kind") &&
+			folderItemColumns.some((column) => column.name === "ordinal");
+		return schemaVersion > 0 && (schemaVersion !== ASCET_SEARCH_SQLITE_SCHEMA_VERSION || !hasFolderTreeColumns);
+	} catch {
+		return false;
+	}
 }

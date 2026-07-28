@@ -13,6 +13,7 @@ import {
 	queryAscetComponentIndexSqlite,
 	queryAscetComponentReferenceIndexSqlite,
 	queryAscetElementReferenceIndexSqlite,
+	queryAscetListComponentsIndexSqlite,
 	queryAscetMessageIndexSqlite,
 	queryAscetMethodDeclarationIndexSqlite,
 	queryAscetProjectFormulaIndexSqlite,
@@ -264,12 +265,16 @@ function indexStatusAreasFromInput(
 	};
 }
 
-function writeSqliteCacheStatusFile(cwd: string, sqliteStatus: ReturnType<typeof getAscetSqliteIndexStatus>): void {
+function writeSqliteCacheStatusFile(
+	cwd: string,
+	sqliteStatus: ReturnType<typeof getAscetSqliteIndexStatus>,
+	totalDocs = sqliteStatus.areas.reduce((total, area) => total + area.itemCount, 0),
+): void {
 	writeAscetIndexStatusFile(cwd, {
 		state: sqliteStatus.status === "stale" ? "stale" : "ready",
 		phase: "p0",
 		elapsedMs: sqliteStatus.elapsedMs,
-		totalDocs: sqliteStatus.areas.reduce((total, area) => total + area.itemCount, 0),
+		totalDocs,
 		staleAreas: sqliteStatus.areas.filter((area) => area.status === "stale").map((area) => area.area),
 		areas: Object.fromEntries(
 			sqliteStatus.areas.map((area) => [
@@ -632,6 +637,8 @@ function parseFolders(value: unknown): AscetFolderIndexEntry[] {
 			path,
 			name: asString(item.name) || path.replace(/\//g, "\\").split("\\").filter(Boolean).at(-1) || "",
 			parentPath: asString(item.parentPath),
+			ordinal: typeof item.ordinal === "number" ? asNumber(item.ordinal) : entries.length,
+			payload: isRecord(item.payload) ? item.payload : undefined,
 		});
 	}
 	return entries;
@@ -648,7 +655,7 @@ function parseFolderItems(value: unknown): AscetFolderItemIndexEntry[] {
 		}
 		const folderPath = asString(item.folderPath) || asString(item.parentPath);
 		const itemPath = asString(item.itemPath) || asString(item.path) || asString(item.componentPath);
-		if (!folderPath || !itemPath) {
+		if (!itemPath) {
 			continue;
 		}
 		entries.push({
@@ -660,6 +667,9 @@ function parseFolderItems(value: unknown): AscetFolderItemIndexEntry[] {
 				itemPath.replace(/\//g, "\\").split("\\").filter(Boolean).at(-1) ||
 				"",
 			itemKind: asString(item.itemKind) || asString(item.kind) || asString(item.objectKind),
+			languageKind: asString(item.languageKind),
+			ordinal: typeof item.ordinal === "number" ? asNumber(item.ordinal) : entries.length,
+			payload: isRecord(item.payload) ? item.payload : undefined,
 		});
 	}
 	return entries;
@@ -1114,13 +1124,18 @@ function successResult(
 		}
 	}
 	if (partition === "all" || partition === "p0") {
-		writeAscetIndexStatusFile(options.cwd, {
-			state: "ready",
-			phase: partition,
-			elapsedMs: ready.status === "ready" ? ready.elapsedMs : effectiveInput.elapsedMs,
-			totalDocs: countPartitionEntries(ready, partition),
-			areas: indexStatusAreasFromInput(effectiveInput),
-		});
+		const sqliteStatus = isSqliteStorageEnabled(options.env) ? getAscetSqliteIndexStatus(options.cwd) : undefined;
+		if (sqliteStatus?.status === "ready" || sqliteStatus?.status === "stale") {
+			writeSqliteCacheStatusFile(options.cwd, sqliteStatus, countPartitionEntries(ready, partition));
+		} else {
+			writeAscetIndexStatusFile(options.cwd, {
+				state: "ready",
+				phase: partition,
+				elapsedMs: ready.status === "ready" ? ready.elapsedMs : effectiveInput.elapsedMs,
+				totalDocs: countPartitionEntries(ready, partition),
+				areas: indexStatusAreasFromInput(effectiveInput),
+			});
+		}
 	} else if (isSqliteStorageEnabled(options.env)) {
 		const sqliteStatus = getAscetSqliteIndexStatus(options.cwd);
 		if (sqliteStatus.status === "ready" || sqliteStatus.status === "stale") {
@@ -1343,6 +1358,13 @@ export function queryAscetComponentIndex(
 	return shouldQuerySqlite()
 		? (queryAscetComponentIndexSqlite(params, options) ?? queryAscetComponentIndexMemory(params, options))
 		: queryAscetComponentIndexMemory(params, options);
+}
+
+export function queryAscetListComponentsIndex(
+	params: import("./search-index-sqlite/query.ts").AscetListComponentsIndexQueryParams,
+	options: AscetSearchIndexQueryOptions = {},
+): AscetCliJsonResult | undefined {
+	return shouldQuerySqlite() ? queryAscetListComponentsIndexSqlite(params, options) : undefined;
 }
 
 export function queryAscetProjectIndex(

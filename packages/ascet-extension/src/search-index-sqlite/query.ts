@@ -12,9 +12,11 @@ import type {
 import { openAscetSearchSqlite } from "./connection.ts";
 import { getAscetSearchIndexSqlitePath } from "./paths.ts";
 import { runAscetSqliteReadQuery } from "./read-pool.ts";
+import { ASCET_SEARCH_SQLITE_SCHEMA_VERSION } from "./schema.ts";
 
 interface RunRow {
 	id?: unknown;
+	schema_version?: unknown;
 	database_name?: unknown;
 	database_path?: unknown;
 	status?: unknown;
@@ -69,6 +71,33 @@ interface DbItemDependencyRow {
 	payload_json?: unknown;
 }
 
+interface FolderRow {
+	path?: unknown;
+	name?: unknown;
+	parent_path?: unknown;
+	ordinal?: unknown;
+	payload_json?: unknown;
+}
+
+interface FolderItemRow {
+	folder_path?: unknown;
+	item_path?: unknown;
+	item_name?: unknown;
+	item_kind?: unknown;
+	language_kind?: unknown;
+	ordinal?: unknown;
+	payload_json?: unknown;
+}
+
+export interface AscetListComponentsIndexQueryParams {
+	folderPath: string;
+	kind?: "all" | "folder" | "class" | "module" | "statemachine";
+	languageKind?: "all" | "BDE" | "ESDL" | "C" | "Unknown";
+	query?: string;
+	limit?: number;
+	recursive?: boolean;
+}
+
 const DEFAULT_LIMIT = 20;
 
 function asString(value: unknown): string {
@@ -77,6 +106,12 @@ function asString(value: unknown): string {
 
 function asNumber(value: unknown): number {
 	return typeof value === "number" && Number.isFinite(value) ? value : 0;
+}
+
+function asRecord(value: unknown): Record<string, unknown> {
+	return value !== null && typeof value === "object" && !Array.isArray(value)
+		? (value as Record<string, unknown>)
+		: {};
 }
 
 function normalizeMatchMode(value: string | undefined): AscetSearchIndexMatchMode {
@@ -186,11 +221,12 @@ function activeRun(cwd: string): RunRow | undefined {
 	return runAscetSqliteReadQuery(() => {
 		const connection = openAscetSearchSqlite(cwd, "reader");
 		try {
-			return connection.db
+			const run = connection.db
 				.prepare(
-					"select id, database_name, database_path, status, generated_at_ms, elapsed_ms from ascet_index_runs where active = 1 and status in ('ready', 'stale') limit 1",
+					"select id, schema_version, database_name, database_path, status, generated_at_ms, elapsed_ms from ascet_index_runs where active = 1 and status in ('ready', 'stale') limit 1",
 				)
 				.get() as RunRow | undefined;
+			return asNumber(run?.schema_version) === ASCET_SEARCH_SQLITE_SCHEMA_VERSION ? run : undefined;
 		} catch {
 			return undefined;
 		} finally {
@@ -350,6 +386,269 @@ function activeAreaScanComplete(cwd: string, runId: string, areas: readonly stri
 			connection.close();
 		}
 	});
+}
+
+function loadTreeFolders(cwd: string, runId: string): FolderRow[] {
+	return runAscetSqliteReadQuery(() => {
+		const connection = openAscetSearchSqlite(cwd, "reader");
+		try {
+			return connection.db
+				.prepare(
+					"select path, name, parent_path, ordinal, payload_json from ascet_folders where run_id = ? order by ordinal asc, path_norm asc",
+				)
+				.all(runId) as FolderRow[];
+		} finally {
+			connection.close();
+		}
+	});
+}
+
+function loadTreeFolderItems(cwd: string, runId: string): FolderItemRow[] {
+	return runAscetSqliteReadQuery(() => {
+		const connection = openAscetSearchSqlite(cwd, "reader");
+		try {
+			return connection.db
+				.prepare(
+					"select folder_path, item_path, item_name, item_kind, language_kind, ordinal, payload_json from ascet_folder_items where run_id = ? order by ordinal asc, item_path_norm asc",
+				)
+				.all(runId) as FolderItemRow[];
+		} finally {
+			connection.close();
+		}
+	});
+}
+
+function folderToTreeItem(row: FolderRow): Record<string, unknown> {
+	const entry = parsePayload(row.payload_json);
+	const payload = asRecord(entry.payload);
+	const path = asString(payload.path) || asString(row.path);
+	const name = asString(payload.name) || asString(row.name) || path.split(/[\\/]/).filter(Boolean).at(-1) || "";
+	const parentPath = asString(payload.parentPath) || asString(row.parent_path);
+	return {
+		path: normalizeOutputPath(path),
+		name,
+		kind: asString(payload.kind) || "folder",
+		languageKind: asString(payload.languageKind) || "Unknown",
+		displayName: asString(payload.displayName) || name,
+		parentPath: normalizeOutputPath(parentPath),
+		ownerKind: asString(payload.ownerKind) || (parentPath ? "folder" : "unknown"),
+		targetKind: asString(payload.targetKind) || "container",
+		objectKind: asString(payload.objectKind) || "folder",
+	};
+}
+
+function folderItemToTreeItem(row: FolderItemRow): Record<string, unknown> {
+	const entry = parsePayload(row.payload_json);
+	const payload = asRecord(entry.payload);
+	const path = asString(payload.path) || asString(row.item_path);
+	const name = asString(payload.name) || asString(row.item_name) || path.split(/[\\/]/).filter(Boolean).at(-1) || "";
+	const parentPath = asString(payload.parentPath) || asString(row.folder_path);
+	return {
+		path: normalizeOutputPath(path),
+		name,
+		kind: asString(payload.kind) || asString(row.item_kind),
+		languageKind: asString(payload.languageKind) || asString(row.language_kind) || "Unknown",
+		displayName: asString(payload.displayName) || name,
+		parentPath: normalizeOutputPath(parentPath),
+		ownerKind: asString(payload.ownerKind) || (parentPath ? "folder" : "unknown"),
+		targetKind: asString(payload.targetKind) || "component",
+		objectKind: asString(payload.objectKind) || asString(payload.kind) || asString(row.item_kind),
+	};
+}
+
+function normalizeTreeKind(value: string | undefined): string {
+	const normalized = (value ?? "all").trim().toLowerCase();
+	return normalized === "all" ||
+		normalized === "folder" ||
+		normalized === "class" ||
+		normalized === "module" ||
+		normalized === "statemachine"
+		? normalized
+		: "all";
+}
+
+function matchesTreeItem(item: Record<string, unknown>, kind: string, languageKind: string, query: string): boolean {
+	const itemKind = asString(item.kind).toLowerCase();
+	if (kind !== "all" && itemKind !== kind) {
+		return false;
+	}
+	if (languageKind !== "all" && asString(item.languageKind).toLowerCase() !== languageKind.toLowerCase()) {
+		return false;
+	}
+	return matchesNamePath(asString(item.name), asString(item.path), query, "contains", asString(item.displayName));
+}
+
+function buildTreeCounts(items: readonly Record<string, unknown>[]): Record<string, number> {
+	const counts: Record<string, number> = {
+		items: items.length,
+		classes: 0,
+		modules: 0,
+		stateMachines: 0,
+		projects: 0,
+		continuousTimeBlocks: 0,
+		enumerations: 0,
+		records: 0,
+		icons: 0,
+		signals: 0,
+		containers: 0,
+		folders: 0,
+	};
+	for (const item of items) {
+		switch (asString(item.kind)) {
+			case "class":
+				counts.classes++;
+				break;
+			case "module":
+				counts.modules++;
+				break;
+			case "stateMachine":
+				counts.stateMachines++;
+				break;
+			case "project":
+				counts.projects++;
+				break;
+			case "continuousTimeBlock":
+				counts.continuousTimeBlocks++;
+				break;
+			case "enumeration":
+				counts.enumerations++;
+				break;
+			case "record":
+				counts.records++;
+				break;
+			case "icon":
+				counts.icons++;
+				break;
+			case "signal":
+				counts.signals++;
+				break;
+			case "container":
+				counts.containers++;
+				break;
+			case "folder":
+				counts.folders++;
+				break;
+		}
+	}
+	return counts;
+}
+
+export function queryAscetListComponentsIndexSqlite(
+	params: AscetListComponentsIndexQueryParams,
+	options: AscetSearchIndexQueryOptions = {},
+): AscetCliJsonResult | undefined {
+	const cwd = options.cwd ?? process.cwd();
+	const run = activeRun(cwd);
+	if (!run?.id || asString(run.status) !== "ready") {
+		return undefined;
+	}
+	const runId = asString(run.id);
+	if (!activeAreaScanComplete(cwd, runId, ["folders", "folder_items"])) {
+		return undefined;
+	}
+
+	const requestedFolderPath = normalizeAscetPath(params.folderPath);
+	const folders = loadTreeFolders(cwd, runId).map(folderToTreeItem);
+	const folderItems = loadTreeFolderItems(cwd, runId).map(folderItemToTreeItem);
+	const foldersByParent = new Map<string, Record<string, unknown>[]>();
+	const itemsByFolder = new Map<string, Record<string, unknown>[]>();
+	const foldersByPath = new Map<string, Record<string, unknown>>();
+	for (const folder of folders) {
+		const pathKey = lowerPath(asString(folder.path));
+		foldersByPath.set(pathKey, folder);
+		const parentKey = lowerPath(asString(folder.parentPath));
+		const children = foldersByParent.get(parentKey) ?? [];
+		children.push(folder);
+		foldersByParent.set(parentKey, children);
+	}
+	for (const item of folderItems) {
+		const folderKey = lowerPath(asString(item.parentPath));
+		const children = itemsByFolder.get(folderKey) ?? [];
+		children.push(item);
+		itemsByFolder.set(folderKey, children);
+	}
+	if (requestedFolderPath && !foldersByPath.has(lowerPath(requestedFolderPath))) {
+		return undefined;
+	}
+
+	const kind = normalizeTreeKind(params.kind);
+	const languageKind = params.languageKind?.trim() || "all";
+	const query = params.query?.trim() ?? "";
+	const limit =
+		Number.isFinite(params.limit) && (params.limit ?? 0) > 0
+			? Math.floor(params.limit ?? 0)
+			: Number.MAX_SAFE_INTEGER;
+	const recursive = params.recursive === true;
+	const items: Record<string, unknown>[] = [];
+	const add = (item: Record<string, unknown>) => {
+		if (items.length < limit && matchesTreeItem(item, kind, languageKind, query)) {
+			items.push(item);
+		}
+	};
+	const visitFolderContents = (folderPath: string) => {
+		if (items.length >= limit) {
+			return;
+		}
+		for (const item of itemsByFolder.get(lowerPath(folderPath)) ?? []) {
+			add(item);
+			if (items.length >= limit) {
+				return;
+			}
+		}
+		for (const child of foldersByParent.get(lowerPath(folderPath)) ?? []) {
+			add(child);
+			if (items.length >= limit) {
+				return;
+			}
+			if (recursive) {
+				visitFolderContents(asString(child.path));
+				if (items.length >= limit) {
+					return;
+				}
+			}
+		}
+	};
+	if (!requestedFolderPath) {
+		for (const topFolder of foldersByParent.get("") ?? []) {
+			add(topFolder);
+			if (items.length >= limit) {
+				break;
+			}
+			visitFolderContents(asString(topFolder.path));
+			if (items.length >= limit) {
+				break;
+			}
+		}
+	} else {
+		visitFolderContents(requestedFolderPath);
+	}
+
+	const payload = {
+		folderPath: normalizeOutputPath(requestedFolderPath),
+		filters: { kind, languageKind, query, limit: params.limit ?? 0, recursive },
+		counts: buildTreeCounts(items),
+		items,
+		source: "quick_search_index",
+		indexStatus: "ready",
+		staleAreas: [],
+		warning: "",
+		index: makeIndexMeta(run, true, { folderCount: folders.length, folderItemCount: folderItems.length }),
+	};
+	const data = {
+		ok: true,
+		result: payload,
+		error: null,
+		meta: { mode: "index", operation: "list_components", source: "quick_search_index" },
+	};
+	return {
+		ok: true,
+		data,
+		request: { cwd, cliPath: "quick_search_index", args: ["index", "list_components", requestedFolderPath] },
+		stdout: JSON.stringify(data),
+		stderr: "",
+		exitCode: 0,
+		timedOut: false,
+	};
 }
 
 function documentToComponent(row: DocumentRow): Record<string, unknown> {

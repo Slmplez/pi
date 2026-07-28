@@ -8,6 +8,7 @@ import {
 	queryAscetComponentIndexSqlite,
 	queryAscetComponentReferenceIndexSqlite,
 	queryAscetElementReferenceIndexSqlite,
+	queryAscetListComponentsIndexSqlite,
 	queryAscetMessageIndexSqlite,
 	queryAscetMethodDeclarationIndexSqlite,
 	queryAscetProjectFormulaIndexSqlite,
@@ -64,13 +65,81 @@ function fixtureInput(): AscetSearchIndexBuildInput {
 				objectKind: "project",
 			},
 		],
-		folders: [{ path: "PlatformLibrary\\AEB", name: "AEB", parentPath: "PlatformLibrary" }],
+		folders: [
+			{
+				path: "PlatformLibrary",
+				name: "PlatformLibrary",
+				parentPath: "",
+				ordinal: 0,
+				payload: {
+					path: "PlatformLibrary",
+					name: "PlatformLibrary",
+					kind: "folder",
+					languageKind: "Unknown",
+					parentPath: "",
+				},
+			},
+			{
+				path: "PlatformLibrary\\AEB",
+				name: "AEB",
+				parentPath: "PlatformLibrary",
+				ordinal: 1,
+				payload: {
+					path: "PlatformLibrary\\AEB",
+					name: "AEB",
+					kind: "folder",
+					languageKind: "Unknown",
+					parentPath: "PlatformLibrary",
+				},
+			},
+			{
+				path: "PlatformLibrary\\AEB\\Private",
+				name: "Private",
+				parentPath: "PlatformLibrary\\AEB",
+				ordinal: 3,
+				payload: {
+					path: "PlatformLibrary\\AEB\\Private",
+					name: "Private",
+					kind: "folder",
+					languageKind: "Unknown",
+					parentPath: "PlatformLibrary\\AEB",
+				},
+			},
+		],
 		folderItems: [
 			{
 				folderPath: "PlatformLibrary\\AEB",
 				itemPath: "PlatformLibrary\\AEB\\AEB_pDriverIBooster",
 				itemName: "AEB_pDriverIBooster",
 				itemKind: "class",
+				languageKind: "BDE",
+				ordinal: 2,
+				payload: {
+					path: "PlatformLibrary\\AEB\\AEB_pDriverIBooster",
+					name: "AEB_pDriverIBooster",
+					kind: "class",
+					languageKind: "BDE",
+					displayName: "AEB_pDriverIBooster",
+					parentPath: "PlatformLibrary\\AEB",
+					ownerKind: "folder",
+					targetKind: "component",
+					objectKind: "class",
+				},
+			},
+			{
+				folderPath: "PlatformLibrary\\AEB\\Private",
+				itemPath: "PlatformLibrary\\AEB\\Private\\AEB_Helper",
+				itemName: "AEB_Helper",
+				itemKind: "module",
+				languageKind: "ESDL",
+				ordinal: 4,
+				payload: {
+					path: "PlatformLibrary\\AEB\\Private\\AEB_Helper",
+					name: "AEB_Helper",
+					kind: "module",
+					languageKind: "ESDL",
+					parentPath: "PlatformLibrary\\AEB\\Private",
+				},
 			},
 		],
 		entries: [
@@ -276,6 +345,44 @@ describe("ASCET SQLite search index", () => {
 		assert.deepEqual(envelope.result?.staleAreas, ["code_blocks", "code_terms", "elements"]);
 		assert.match(envelope.result?.warning ?? "", /stale ASCET SQLite search index/);
 		assert.equal(matches(result).length, 1);
+	});
+
+	test("lists the P0 folder tree with live ordering and typed filters", () => {
+		const temp = createTempCwd();
+		cleanup = temp.cleanup;
+		ingestAscetSearchIndexSqlite(temp.cwd, fixtureInput());
+
+		const direct = queryAscetListComponentsIndexSqlite(
+			{ folderPath: "PlatformLibrary\\AEB", kind: "all", recursive: false },
+			{ cwd: temp.cwd },
+		);
+		const directPayload = (direct?.data as { result?: { items?: Array<{ name?: string }> } }).result;
+		assert.deepEqual(
+			directPayload?.items?.map((item) => item.name),
+			["AEB_pDriverIBooster", "Private"],
+		);
+
+		const recursive = queryAscetListComponentsIndexSqlite(
+			{
+				folderPath: "PlatformLibrary\\AEB",
+				kind: "class",
+				languageKind: "BDE",
+				recursive: true,
+			},
+			{ cwd: temp.cwd },
+		);
+		const recursivePayload = (recursive?.data as { result?: { items?: Array<Record<string, unknown>> } }).result;
+		assert.deepEqual(
+			recursivePayload?.items?.map((item) => item.name),
+			["AEB_pDriverIBooster"],
+		);
+		assert.equal(recursivePayload?.items?.[0]?.languageKind, "BDE");
+
+		markAscetSqliteIndexAreasStale(temp.cwd, ["folder_items"], "write_succeeded:create_component");
+		assert.equal(
+			queryAscetListComponentsIndexSqlite({ folderPath: "PlatformLibrary\\AEB" }, { cwd: temp.cwd }),
+			undefined,
+		);
 	});
 
 	test("serves concurrent readers from the active SQLite generation", async () => {

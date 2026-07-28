@@ -1,9 +1,6 @@
 import type { AscetCliExecutionResult, AscetCliJsonResult, AscetCliRequest } from "../../cli.ts";
 import { defineSequentialAscetTool } from "../../core/tool.ts";
 import { formatListComponentsResult, runAscetListComponents } from "../../list-components.ts";
-import { formatListDiagramsResult, runAscetListDiagrams } from "../../list-diagrams.ts";
-import { formatReadComponentChildrenResult, runAscetReadComponentChildren } from "../../read-component-children.ts";
-import { formatReadComponentSummaryResult, runAscetReadComponentSummary } from "../../read-component-summary.ts";
 import { createAscetCliToolDetails } from "../_shared/envelope.ts";
 import { ascetExplorePrompt } from "./prompt.ts";
 import { type AscetExploreParams, ascetExploreParameters } from "./schema.ts";
@@ -18,43 +15,17 @@ interface RunOptions {
 }
 
 async function runAscetExplore(params: AscetExploreParams, options: RunOptions): Promise<AscetCliJsonResult> {
-	switch (params.action) {
-		case "list_components": {
-			const { kind, ...listParams } = params;
-			return runAscetListComponents(
-				{ ...listParams, kind: kind === "all" || kind === "folder" ? undefined : kind },
-				options,
-			);
-		}
-		case "list_diagrams":
-			return runAscetListDiagrams(params, options);
-		case "inspect_target":
-			return runAscetReadComponentSummary(
-				{ componentPath: params.componentPath, detailLevel: params.detailLevel },
-				options,
-			);
-		case "preview_children":
-			return runAscetReadComponentChildren({ componentPath: params.componentPath, group: params.group }, options);
-	}
+	return runAscetListComponents(params, options);
 }
 
-function formatAscetExploreResult(params: AscetExploreParams, result: AscetCliJsonResult): string {
-	switch (params.action) {
-		case "list_components":
-			return formatListComponentsResult(result);
-		case "list_diagrams":
-			return formatListDiagramsResult(result);
-		case "inspect_target":
-			return formatReadComponentSummaryResult(result);
-		case "preview_children":
-			return formatReadComponentChildrenResult(result);
-	}
+function formatAscetExploreResult(_params: AscetExploreParams, result: AscetCliJsonResult): string {
+	return formatListComponentsResult(result);
 }
 
 export const ascetExploreTool = defineSequentialAscetTool({
 	name: "ascet_explore",
 	label: "ASCET explore",
-	description: "Explore ASCET folders, component candidates, diagrams, target summaries, and children.",
+	description: "Browse ASCET folder trees and database items from the quick-search index.",
 	...ascetExplorePrompt,
 	parameters: ascetExploreParameters,
 	renderCall,
