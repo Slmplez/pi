@@ -1,9 +1,9 @@
 import type { AscetActionInstruction } from "./types.ts";
 
-export const ascetWriteInstructions = [
+export const ascetEditInstructions = [
 	{
-		id: "ascet_write.preflight",
-		tool: "ascet_write",
+		id: "ascet_edit.preflight",
+		tool: "ascet_edit",
 		action: "preflight",
 		profiles: ["write-preflight"],
 		summary: "Default write behavior is preflight; execute only when explicitly requested.",
@@ -13,12 +13,12 @@ export const ascetWriteInstructions = [
 			"Use verifyReadback=true unless the user explicitly asks to skip readback.",
 			"When component kind is unknown, inspect the target before executeWrite=true.",
 		],
-		fewShots: ['preflight: ascet_write({action:"create_folder",folderPath:"DEMO/New",verifyReadback:true})'],
+		fewShots: ['preflight: ascet_edit({action:"create_folder",folderPath:"DEMO/New",verifyReadback:true})'],
 		tags: ["write", "preflight", "safety"],
 	},
 	{
-		id: "ascet_write.create_component",
-		tool: "ascet_write",
+		id: "ascet_edit.create_component",
+		tool: "ascet_edit",
 		action: "create_component",
 		profiles: ["write-preflight"],
 		summary: "Create folder/component targets with kind-specific defaults and readback.",
@@ -27,13 +27,13 @@ export const ascetWriteInstructions = [
 			'For create_component, kind may be class, module, statemachine, or enumeration. Only class and module need language; enumeration uses ASCET intrinsic language and usually reads back languageKind="Unknown".',
 		],
 		fewShots: [
-			'create_component: ascet_write({action:"create_component",componentPath:"DEMO/C",kind:"class",language:"ESDL",verifyReadback:true})',
+			'create_component: ascet_edit({action:"create_component",componentPath:"DEMO/C",kind:"class",language:"ESDL",verifyReadback:true})',
 		],
 		tags: ["write", "component"],
 	},
 	{
-		id: "ascet_write.method_edit",
-		tool: "ascet_write",
+		id: "ascet_edit.method_edit",
+		tool: "ascet_edit",
 		action: "method_edit",
 		profiles: ["write-preflight"],
 		summary: "Create and edit methods according to component kind and signature requirements.",
@@ -45,13 +45,13 @@ export const ascetWriteInstructions = [
 			"Use set_method_signature.arguments for primitive method inputs before writing ESDL code that references them, and verify readback.",
 		],
 		fewShots: [
-			'set_method_signature: ascet_write({action:"set_method_signature",componentPath:"DEMO/PID",methodName:"calc",returnType:"cont",arguments:[{name:"u",type:"cont",ifExists:"replace"}]})',
+			'set_method_signature: ascet_edit({action:"set_method_signature",componentPath:"DEMO/PID",methodName:"calc",returnType:"cont",arguments:[{name:"u",type:"cont",ifExists:"replace"}]})',
 		],
 		tags: ["write", "method", "signature"],
 	},
 	{
-		id: "ascet_write.code_edit",
-		tool: "ascet_write",
+		id: "ascet_edit.code_edit",
+		tool: "ascet_edit",
 		action: "code_edit",
 		profiles: ["write-preflight"],
 		summary: "Write method, module, or state-machine code only through the matching action surface.",
@@ -62,13 +62,13 @@ export const ascetWriteInstructions = [
 			"For set_state_machine_code, use one of: set-method, set-state-entry-esdl, set-state-exit-esdl, set-state-static-esdl, bind-state-entry-method, bind-state-exit-method, bind-state-static-method, set-transition-condition-esdl, set-transition-action-esdl, bind-transition-condition-method, bind-transition-action-method, set-start-state.",
 		],
 		fewShots: [
-			'set_method_code: ascet_write({action:"set_method_code",componentPath:"DEMO/PID",methodName:"calc",codeFile:"calc.esdl",verifyReadback:true})',
+			'set_method_code: ascet_edit({action:"set_method_code",componentPath:"DEMO/PID",methodName:"calc",codeFile:"calc.esdl",verifyReadback:true})',
 		],
 		tags: ["write", "code"],
 	},
 	{
-		id: "ascet_write.apply_element_spec",
-		tool: "ascet_write",
+		id: "ascet_edit.apply_element_spec",
+		tool: "ascet_edit",
 		action: "apply_element_spec",
 		profiles: ["write-preflight"],
 		summary: "Apply structured primitive element specs from evidence, not guesses.",
@@ -84,19 +84,20 @@ export const ascetWriteInstructions = [
 			"If required primitive fields are unknown, stop at preflight and inspect the live component or ask for the missing field; do not write a partial specFile.",
 		],
 		fewShots: [
-			'apply_element_spec: ascet_write({action:"apply_element_spec",componentPath:"DEMO/PID",specFile:"spec.json",mode:"restore",verifyReadback:true})',
+			'apply_element_spec: ascet_edit({action:"apply_element_spec",componentPath:"DEMO/PID",specFile:"spec.json",mode:"restore",verifyReadback:true})',
 		],
 		tags: ["write", "element"],
 	},
 	{
-		id: "ascet_write.dependent_parameter",
-		tool: "ascet_write",
+		id: "ascet_edit.dependent_parameter",
+		tool: "ascet_edit",
 		action: "dependent_parameter",
 		profiles: ["write-preflight"],
 		summary: "Write dependent local parameters only after exported-provider evidence is resolved.",
 		rules: [
 			"Before creating or updating a dependent Local Parameter, resolve the authoritative same-named Exported Parameter provider with read_dependent_chain or the coordinated read/search/explore workflow.",
 			"Do not bind to a provider candidate unless the matching element is scope=Exported.",
+			"If the exported counterpart is unknown, ambiguous, or not found, stop at preflight and gather provider evidence before writing.",
 			"The Imported Parameter and Exported Parameter must have the same name. The Local Dependent Parameter may differ, but its formula mapping must resolve through Imported Parameter names.",
 			"When creating a dependent Local Parameter from an Exported Parameter, align metadata from the Exported Parameter, not from the Imported Parameter, unless the user explicitly requests a transform.",
 			"Imported Parameters are bridge elements and normally require no independent implementation configuration. Do not invent implementation range, formula, calibration, or limits for Imported Parameters unless project rules explicitly require it.",
@@ -109,7 +110,7 @@ export const ascetWriteInstructions = [
 			"After a successful executed set_element_dependency write, PI refreshes element_decls and full_element_cache from live read_element_catalog readback; if refresh fails, follow index.issues.",
 		],
 		fewShots: [
-			'set_element_dependency: ascet_write({action:"set_element_dependency",targetPath:"F/C",elementName:"K",dependency:"dependent",verifyReadback:true})',
+			'set_element_dependency: ascet_edit({action:"set_element_dependency",targetPath:"F/C",elementName:"K",dependency:"dependent",verifyReadback:true})',
 		],
 		tags: ["write", "dependency", "provider-discovery"],
 	},

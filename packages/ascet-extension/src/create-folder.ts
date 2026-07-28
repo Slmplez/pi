@@ -6,8 +6,8 @@ import {
 	formatAscetCliJsonResult,
 	runAscetCliJson,
 } from "./cli.ts";
+import { type AscetEditApprovalContext, requestAscetEditApproval } from "./edit/approval.ts";
 import { createAscetStatusReport } from "./status.ts";
-import { type AscetWriteApprovalContext, requestAscetWriteApproval } from "./write-policy.ts";
 
 export interface AscetCreateFolderParams {
 	folderPath: string;
@@ -44,7 +44,7 @@ export function buildCreateFolderArgs(params: AscetCreateFolderParams): string[]
 
 export function createCreateFolderSummary(params: AscetCreateFolderParams): string {
 	return [
-		"ASCET write request:",
+		"ASCET edit request:",
 		"operation: create_folder",
 		`folderPath: ${params.folderPath}`,
 		`verifyReadback: ${params.verifyReadback === true}`,
@@ -84,15 +84,20 @@ export async function runAscetCreateFolder(
 	params: AscetCreateFolderParams,
 	options: RunAscetCreateFolderOptions,
 ): Promise<AscetCreateFolderResult> {
-	return runAscetCliJson(buildCreateFolderArgs(params), options);
+	return runAscetCliJson(buildCreateFolderArgs(params), {
+		...options,
+		toolName: "ascet_edit",
+		commandId: "create_folder",
+		jobKind: "write",
+	});
 }
 
 export async function runApprovedAscetCreateFolder(
 	params: AscetCreateFolderParams,
 	options: RunAscetCreateFolderOptions,
-	ctx: AscetWriteApprovalContext,
+	ctx: AscetEditApprovalContext,
 ): Promise<AscetCreateFolderResult> {
-	const approval = await requestAscetWriteApproval(
+	const approval = await requestAscetEditApproval(
 		{
 			executeWrite: params.executeWrite,
 			title: "Confirm ASCET folder creation",
@@ -106,8 +111,8 @@ export async function runApprovedAscetCreateFolder(
 		return createBlockedWriteResult(
 			params,
 			options,
-			approval.code ?? "ascet_write_rejected",
-			approval.message ?? "ASCET write was not approved.",
+			approval.code ?? "ascet_edit_rejected",
+			approval.message ?? "ASCET edit was not approved.",
 		);
 	}
 

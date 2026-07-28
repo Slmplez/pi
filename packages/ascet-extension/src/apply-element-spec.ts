@@ -1,17 +1,17 @@
 import { Type } from "typebox";
 import { type AscetCliJsonResult, runAscetCliJson } from "./cli.ts";
 import { normalizeAscetPath } from "./core/path.ts";
+import type { AscetEditApprovalContext } from "./edit/approval.ts";
 import {
-	type AscetWriteControlParams,
+	type AscetEditControlParams,
 	appendVerifyAndJson,
-	createWriteSummary,
-	formatWriteOperationResult,
-	type RunAscetWriteOperationOptions,
-	runApprovedAscetWriteOperation,
-} from "./write-common.ts";
-import type { AscetWriteApprovalContext } from "./write-policy.ts";
+	createAscetEditSummary,
+	formatAscetEditOperationResult,
+	type RunAscetEditOperationOptions,
+	runApprovedAscetEditOperation,
+} from "./edit/common.ts";
 
-export interface AscetApplyElementSpecParams extends AscetWriteControlParams {
+export interface AscetApplyElementSpecParams extends AscetEditControlParams {
 	componentPath: string;
 	specFile: string;
 	projectPath?: string;
@@ -20,7 +20,7 @@ export interface AscetApplyElementSpecParams extends AscetWriteControlParams {
 	recreateIncompatible?: boolean;
 }
 
-export type RunAscetApplyElementSpecOptions = RunAscetWriteOperationOptions;
+export type RunAscetApplyElementSpecOptions = RunAscetEditOperationOptions;
 export type AscetApplyElementSpecResult = AscetCliJsonResult;
 
 export const ascetApplyElementSpecParameters = Type.Object({
@@ -52,7 +52,7 @@ export function buildApplyElementSpecArgs(params: AscetApplyElementSpecParams): 
 }
 
 export function createApplyElementSpecSummary(params: AscetApplyElementSpecParams): string {
-	return createWriteSummary("apply_element_spec", {
+	return createAscetEditSummary("apply_element_spec", {
 		componentPath: params.componentPath,
 		specFile: params.specFile,
 		projectPath: params.projectPath ?? "",
@@ -73,9 +73,9 @@ export async function runAscetApplyElementSpec(
 export async function runApprovedAscetApplyElementSpec(
 	params: AscetApplyElementSpecParams,
 	options: RunAscetApplyElementSpecOptions,
-	ctx: AscetWriteApprovalContext,
+	ctx: AscetEditApprovalContext,
 ): Promise<AscetApplyElementSpecResult> {
-	return runApprovedAscetWriteOperation(
+	return runApprovedAscetEditOperation(
 		"apply_element_spec",
 		params,
 		options,
@@ -86,5 +86,5 @@ export async function runApprovedAscetApplyElementSpec(
 }
 
 export function formatApplyElementSpecResult(result: AscetApplyElementSpecResult): string {
-	return formatWriteOperationResult("apply_element_spec", result);
+	return formatAscetEditOperationResult("apply_element_spec", result);
 }

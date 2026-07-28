@@ -17,6 +17,6 @@ Store empty block diagrams from `ascet_read.read_block_diagram` as valid empty `
 
 Use `ascet_diff.diff` with `objectKind` for detailed semantic comparison. Use `diff_component_snapshot` only for quick snapshot evidence about child presence or absence, not for method code or element signature decisions.
 
-For parameter mapping checks, collect evidence in this order: component references via `ascet_search.references_to_component`, child structure, `read_dependent_chain`, element/code references via `ascet_search.references_to_element` or `ascet_search.text_in_code`, and `ascet_read.read_code` only when full live code context is required. Use `read_dependent_chain` to analyze Local Parameter -> Imported Parameter -> Exported Parameter relations. Write importer/exporter relation gaps as evidence records. Never call `ascet_write.set_element_dependency`.
+For parameter mapping checks, collect evidence in this order: component references via `ascet_search.references_to_component`, child structure, `read_dependent_chain`, element/code references via `ascet_search.references_to_element` or `ascet_search.text_in_code`, and `ascet_read.read_code` only when full live code context is required. Use `read_dependent_chain` to analyze Local Parameter -> Imported Parameter -> Exported Parameter relations. Write importer/exporter relation gaps as evidence records. Never call `ascet_edit.set_element_dependency`.
 
 Do not decide rule outcomes unless explicitly asked. Your main output is evidence JSONL.

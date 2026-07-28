@@ -29,8 +29,8 @@ describe("ASCET action runtime guard", () => {
 		const descriptor = assertActionActive("ascet_search", "search_components");
 		assert.equal(descriptor?.id, "ascet_search.search_components");
 
-		const componentEditable = assertActionActive("ascet_component_editable", "check");
-		assert.equal(componentEditable?.id, "ascet_component_editable.check");
+		const componentEditable = assertActionActive("ascet_edit", "check");
+		assert.equal(componentEditable?.id, "ascet_edit.check");
 
 		assert.throws(
 			() => assertActionActive("ascet_search", "search_occurrences"),

@@ -8,6 +8,13 @@ import {
 	runAscetCliJson,
 } from "./cli.ts";
 import { type AscetToolOutcome, createPreflightOutcome } from "./core/results.ts";
+import { type AscetEditApprovalContext, requestAscetEditApproval } from "./edit/approval.ts";
+import {
+	type AscetEditImpact,
+	type AscetEditImpactParams,
+	applyAscetEditImpactToSearchIndex,
+	createAscetEditImpact,
+} from "./edit/common.ts";
 import {
 	type AscetCreateMethodComponentKind,
 	type AscetCreateMethodKind,
@@ -17,13 +24,6 @@ import {
 import type { AscetScheduler } from "./scheduler/scheduler.ts";
 import { createAscetStatusReport } from "./status.ts";
 import { openAiObjectSchema } from "./tools/_shared/openai-schema.ts";
-import {
-	applyWriteImpactToSearchIndex,
-	createWriteImpact,
-	type WriteImpact,
-	type WriteImpactParams,
-} from "./write-common.ts";
-import { type AscetWriteApprovalContext, requestAscetWriteApproval } from "./write-policy.ts";
 
 export type AscetBatchWriteOperation =
 	| "batch_set_method_code"
@@ -53,7 +53,7 @@ export interface RunAscetBatchWriteOptions {
 
 export type AscetBatchWriteResult = AscetCliJsonResult;
 
-export interface AscetBatchWriteIndexImpact extends WriteImpact {
+export interface AscetBatchWriteIndexImpact extends AscetEditImpact {
 	requestCount: number;
 }
 
@@ -400,15 +400,16 @@ export async function runAscetBatchWrite(
 export async function runApprovedAscetBatchWrite(
 	params: AscetBatchWriteParams,
 	options: RunAscetBatchWriteOptions,
-	ctx: AscetWriteApprovalContext,
+	ctx: AscetEditApprovalContext,
 ): Promise<AscetBatchWriteResult> {
 	const normalizedParams = validateAscetBatchWriteParams(params);
-	const approval = await requestAscetWriteApproval(
+	const approval = await requestAscetEditApproval(
 		{
 			executeWrite: normalizedParams.executeWrite,
 			title: "Confirm ASCET batch write",
 			message: createBatchWriteSummary(normalizedParams),
 			signal: options.signal,
+			errorPrefix: "ascet_batch_write",
 		},
 		ctx,
 	);
@@ -417,7 +418,7 @@ export async function runApprovedAscetBatchWrite(
 		return createBlockedBatchWriteResult(
 			normalizedParams,
 			options,
-			approval.code ?? "ascet_write_rejected",
+			approval.code ?? "ascet_batch_write_rejected",
 			approval.message ?? "ASCET batch write was not approved.",
 		);
 	}
@@ -425,7 +426,7 @@ export async function runApprovedAscetBatchWrite(
 	const result = await runAscetBatchWrite(normalizedParams, options);
 	if (result.ok) {
 		const impact = createBatchWriteIndexImpact(normalizedParams);
-		applyWriteImpactToSearchIndex(impact, `write_succeeded:${impact.action}`, options);
+		applyAscetEditImpactToSearchIndex(impact, `batch_write_succeeded:${impact.action}`, options);
 		result.data = attachBatchWriteIndexImpact(result.data, impact);
 	}
 	return result;
@@ -434,7 +435,7 @@ export async function runApprovedAscetBatchWrite(
 export function createBatchWriteIndexImpact(params: AscetBatchWriteParams): AscetBatchWriteIndexImpact {
 	const normalizedParams = normalizeAscetBatchWriteParams(params);
 	const requestImpacts = normalizedParams.requests.map((request) =>
-		createWriteImpact(toWriteImpactParams(normalizedParams.operation, request)),
+		createAscetEditImpact(toEditImpactParams(normalizedParams.operation, request)),
 	);
 	return {
 		action: normalizedParams.operation,
@@ -446,7 +447,10 @@ export function createBatchWriteIndexImpact(params: AscetBatchWriteParams): Asce
 	};
 }
 
-function toWriteImpactParams(operation: AscetBatchWriteOperation, request: Record<string, unknown>): WriteImpactParams {
+function toEditImpactParams(
+	operation: AscetBatchWriteOperation,
+	request: Record<string, unknown>,
+): AscetEditImpactParams {
 	const action = cliOperationByToolOperation[operation];
 	return {
 		action,
@@ -482,8 +486,8 @@ function uniqueStrings<T extends string>(values: readonly T[]): T[] {
 }
 
 function uniqueMethodImpacts(
-	values: readonly WriteImpact["affectedMethods"][number][],
-): WriteImpact["affectedMethods"] {
+	values: readonly AscetEditImpact["affectedMethods"][number][],
+): AscetEditImpact["affectedMethods"] {
 	const seen = new Set<string>();
 	return values.filter((value) => {
 		const key = `${value.component}\0${value.method}`;
@@ -496,8 +500,8 @@ function uniqueMethodImpacts(
 }
 
 function uniqueElementImpacts(
-	values: readonly WriteImpact["affectedElements"][number][],
-): WriteImpact["affectedElements"] {
+	values: readonly AscetEditImpact["affectedElements"][number][],
+): AscetEditImpact["affectedElements"] {
 	const seen = new Set<string>();
 	return values.filter((value) => {
 		const key = `${value.component}\0${value.name}`;
@@ -541,10 +545,10 @@ export function createBatchWriteOutcome(result: AscetBatchWriteResult): AscetToo
 	}
 	const code = result.error?.code ?? "ascet_batch_write_failed";
 	const message = result.error?.message ?? "ASCET batch write failed.";
-	if (code === "ascet_write_preflight_required") {
+	if (code === "ascet_batch_write_preflight_required") {
 		return createPreflightOutcome((asRecord(result.data) ?? { message }) as Record<string, unknown>);
 	}
-	if (code === "ascet_write_ui_required" || code === "ascet_write_rejected") {
+	if (code === "ascet_batch_write_ui_required" || code === "ascet_batch_write_rejected") {
 		return { status: "blocked", code, message };
 	}
 	return { status: "error", error: { code, message } };

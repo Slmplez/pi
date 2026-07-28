@@ -37,7 +37,7 @@ Canonical Copilot-aligned tools:
 - `ascet_search`
 - `ascet_read`
 - `ascet_diff`
-- `ascet_write`
+- `ascet_edit`
 - `ascet_batch_write`
 - `ascet_verify`
 
@@ -45,7 +45,19 @@ Old fine-grained tools are not registered as model tools or legacy aliases. Thei
 
 The requirements Excel tool is temporarily hidden from the registered model-facing tool surface.
 
-Guarded write tools are preflight-only by default and require explicit interactive approval before CLI execution. Canonical `ascet_write` returns a non-error `status: "preflight"` outcome when `executeWrite` is false. `ascet_batch_write` uses operation-specific request schemas and reports partial completion as `status: "partial"` when the ASCET batch backend returns item failures.
+Guarded write tools are preflight-only by default and require explicit interactive approval before CLI execution. Canonical `ascet_edit` returns a non-error `status: "preflight"` outcome when `executeWrite` is false. `ascet_batch_write` uses operation-specific request schemas and reports partial completion as `status: "partial"` when the ASCET batch backend returns item failures.
+
+## 0.2.0 Migration
+
+This release replaces the two former edit tool names with one canonical surface:
+
+```text
+ascet_write(...)              -> ascet_edit(...)
+ascet_component_editable(...) -> ascet_edit(...)
+ascet_write_* errors          -> ascet_edit_* errors
+```
+
+Mutation arguments keep their `action` discriminator. Component editability keeps `mode: "check" | "set"`. ASCET backend logical command IDs and CLI operations are unchanged.
 
 ## Bosch LLM Farm Provider
 
@@ -164,7 +176,7 @@ Manual validation checklist:
 - `read_element_dependency`: read one element's current dependency flag, stored formula, supported status, and write-plan evidence before or after `set_element_dependency`.
 - `read_dependent_chain`: read a local dependent parameter chain from the consuming component through its imported parameter to the exported parameter/provider component. The provider can be discovered automatically, or constrained with `exporterComponentPath` / `providerScopePath`.
 
-`ascet_write` includes `set_element_dependency` for dependency flag changes. It uses the same guarded write contract as other write actions: preflight by default, interactive approval when `executeWrite=true`, optional `dryRun`, optional `backupDir`, and readback verification. Folder writes require `match="all"` so multi-component changes are explicit.
+`ascet_edit` includes `set_element_dependency` for dependency flag changes. It uses the same guarded write contract as other write actions: preflight by default, interactive approval when `executeWrite=true`, optional `dryRun`, optional `backupDir`, and readback verification. Folder writes require `match="all"` so multi-component changes are explicit.
 
 These actions call `runAscetCliJson`, enter the ASCET scheduler, and execute under the shared `ascet.toolapi.global` resource.
 
@@ -233,9 +245,27 @@ Default disposable target:
 
 When enabled, setup, write, readback, and verify all run through canonical PI tools:
 
-- `ascet_write`
+- `ascet_edit`
 - `ascet_read`
 - `ascet_verify`
+
+For `apply_project_formula`, provide an explicitly created disposable Project in the ASCET `TEST` folder. The smoke first proves guarded preflight, then applies an identity formula with readback verification:
+
+```powershell
+$env:ASCET_SMOKE_CWD = "E:\Rep\AscetAgent"
+$env:ASCET_PROJECT_FORMULA_SMOKE = "1"
+$env:ASCET_PROJECT_FORMULA_SMOKE_PROJECT = "TEST\PI_EDIT_MIGRATION_<run-id>\PiSmokeProject"
+npm run smoke:ascet-extension:project-formula
+```
+
+After the result is recorded, remove the disposable Project and its parent folder through the same canonical edit tool:
+
+```powershell
+$env:ASCET_PROJECT_FORMULA_SMOKE_CLEANUP_ONLY = "1"
+npm run smoke:ascet-extension:project-formula
+```
+
+The script does not create Projects: a fixture must be explicitly provisioned by the test environment. It rejects missing Project paths and performs no writes unless `ASCET_PROJECT_FORMULA_SMOKE=1` is set.
 
 ## Environment Overrides
 
@@ -247,3 +277,7 @@ When enabled, setup, write, readback, and verify all run through canonical PI to
 - `ASCET_WRITE_SMOKE`
 - `ASCET_WRITE_SMOKE_COMPONENT`
 - `ASCET_WRITE_SMOKE_METHOD`
+- `ASCET_PROJECT_FORMULA_SMOKE`
+- `ASCET_PROJECT_FORMULA_SMOKE_PROJECT`
+- `ASCET_PROJECT_FORMULA_SMOKE_FORMULA`
+- `ASCET_PROJECT_FORMULA_SMOKE_CLEANUP_ONLY`

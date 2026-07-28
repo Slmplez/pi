@@ -13,6 +13,7 @@ import {
 	buildBatchWriteArgs,
 	createBatchWriteOutcome,
 	createBatchWriteSummary,
+	formatBatchWriteResult,
 	runApprovedAscetBatchWrite,
 } from "../../ascet-extension/src/batch-write.ts";
 import type { AscetCliRequest } from "../../ascet-extension/src/cli.ts";
@@ -26,6 +27,8 @@ import { buildCreateMethodArgs, runApprovedAscetCreateMethod } from "../../ascet
 import { buildDeleteComponentArgs } from "../../ascet-extension/src/delete-component.ts";
 import { buildDeleteFolderArgs } from "../../ascet-extension/src/delete-folder.ts";
 import { buildDeleteMethodArgs } from "../../ascet-extension/src/delete-method.ts";
+import { requestAscetEditApproval } from "../../ascet-extension/src/edit/approval.ts";
+import { runAscetEdit } from "../../ascet-extension/src/edit/service.ts";
 import {
 	buildSetElementDependencyArgs,
 	runApprovedAscetSetElementDependency,
@@ -38,10 +41,10 @@ import {
 } from "../../ascet-extension/src/set-method-signature.ts";
 import { buildSetModuleCodeArgs } from "../../ascet-extension/src/set-module-code.ts";
 import { buildSetStateMachineCodeArgs } from "../../ascet-extension/src/set-state-machine-code.ts";
-import { ascetWriteTool } from "../../ascet-extension/src/tools/write/index.ts";
-import { ascetWritePrompt } from "../../ascet-extension/src/tools/write/prompt.ts";
-import { ascetWriteParameters, runAscetWrite } from "../../ascet-extension/src/tools/write.ts";
-import { requestAscetWriteApproval } from "../../ascet-extension/src/write-policy.ts";
+import { ascetBatchWriteTool } from "../../ascet-extension/src/tools/batch-write/index.ts";
+import { ascetEditTool } from "../../ascet-extension/src/tools/edit/index.ts";
+import { ascetEditPrompt } from "../../ascet-extension/src/tools/edit/prompt.ts";
+import { ascetEditParameters } from "../../ascet-extension/src/tools/edit/schema.ts";
 import { loadAscetExtension, repoRoot } from "./ascet-extension-test-helpers.ts";
 
 describe("ASCET guarded write PI tools", () => {
@@ -335,7 +338,7 @@ describe("ASCET guarded write PI tools", () => {
 	});
 
 	it("guards set_element_dependency with preflight, confirmation, and folder match-all validation", async () => {
-		const preflight = await runAscetWrite(
+		const preflight = await runAscetEdit(
 			{
 				action: "set_element_dependency",
 				targetPath: "DEMO\\DiscreteRiccatiSolver",
@@ -345,7 +348,7 @@ describe("ASCET guarded write PI tools", () => {
 			{ cwd: repoRoot },
 			{ hasUI: true, ui: { confirm: async () => true } },
 		);
-		const invalidFolder = await runAscetWrite(
+		const invalidFolder = await runAscetEdit(
 			{
 				action: "set_element_dependency",
 				targetPath: "DEMO\\Folder",
@@ -375,14 +378,14 @@ describe("ASCET guarded write PI tools", () => {
 		expect(preflight.details.error).toBeUndefined();
 		expect(JSON.stringify(preflight.details.outcome)).toContain('"action":"set_element_dependency"');
 		expect(invalidFolder.details.outcome.status).toBe("error");
-		expect(invalidFolder.details.error?.code).toBe("ascet_write_invalid_scope");
+		expect(invalidFolder.details.error?.code).toBe("ascet_edit_invalid_scope");
 		expect(invalidFolder.details.error?.message).toContain('match="all"');
 		expect(rejected.ok).toBe(false);
-		expect(rejected.error?.code).toBe("ascet_write_rejected");
+		expect(rejected.error?.code).toBe("ascet_edit_rejected");
 	});
 
 	it("returns a structured set_element_dependency validation error when target path is missing", async () => {
-		const result = await runAscetWrite(
+		const result = await runAscetEdit(
 			{
 				action: "set_element_dependency",
 				elementName: "aw_gain",
@@ -396,14 +399,14 @@ describe("ASCET guarded write PI tools", () => {
 		expect(result.details.outcome).toEqual({
 			status: "error",
 			error: {
-				code: "ascet_write_missing_parameter",
+				code: "ascet_edit_missing_parameter",
 				message: "set_element_dependency requires targetPath or componentPath.",
 			},
 		});
 	});
 
 	it("uses componentPath as the set_element_dependency targetPath compatibility alias", async () => {
-		const result = await runAscetWrite(
+		const result = await runAscetEdit(
 			{
 				action: "set_element_dependency",
 				componentPath: "DEMO/PID",
@@ -495,8 +498,8 @@ describe("ASCET guarded write PI tools", () => {
 		]);
 	});
 
-	it("represents canonical ascet_write preflight as a non-error outcome", async () => {
-		const result = await runAscetWrite(
+	it("represents canonical ascet_edit preflight as a non-error outcome", async () => {
+		const result = await runAscetEdit(
 			{ action: "create_folder", folderPath: "DEMO\\X", executeWrite: false },
 			{ cwd: repoRoot },
 			{ hasUI: true, ui: { confirm: async () => true } },
@@ -508,7 +511,7 @@ describe("ASCET guarded write PI tools", () => {
 
 	it("rejects create_method method kinds that are incompatible with the component kind before execution", async () => {
 		expect(
-			Value.Check(ascetWriteParameters, {
+			Value.Check(ascetEditParameters, {
 				action: "create_method",
 				componentPath: "DEMO\\PID",
 				componentKind: "class",
@@ -518,7 +521,7 @@ describe("ASCET guarded write PI tools", () => {
 			}),
 		).toBe(true);
 
-		const invalidClassMethod = await runAscetWrite(
+		const invalidClassMethod = await runAscetEdit(
 			{
 				action: "create_method",
 				componentPath: "DEMO\\PID",
@@ -530,7 +533,7 @@ describe("ASCET guarded write PI tools", () => {
 			{ cwd: repoRoot },
 			{ hasUI: true, ui: { confirm: async () => true } },
 		);
-		const invalidModuleMethod = await runAscetWrite(
+		const invalidModuleMethod = await runAscetEdit(
 			{
 				action: "create_method",
 				componentPath: "DEMO\\Module_Block_Diagram",
@@ -542,7 +545,7 @@ describe("ASCET guarded write PI tools", () => {
 			{ cwd: repoRoot },
 			{ hasUI: true, ui: { confirm: async () => true } },
 		);
-		const missingKindForExecution = await runAscetWrite(
+		const missingKindForExecution = await runAscetEdit(
 			{
 				action: "create_method",
 				componentPath: "DEMO\\PID",
@@ -555,19 +558,19 @@ describe("ASCET guarded write PI tools", () => {
 		);
 
 		expect(invalidClassMethod.details.outcome.status).toBe("error");
-		expect(invalidClassMethod.details.error?.code).toBe("ascet_write_incompatible_method_kind");
+		expect(invalidClassMethod.details.error?.code).toBe("ascet_edit_incompatible_method_kind");
 		expect(invalidClassMethod.details.error?.message).toContain("Class method creation supports only abstract");
 		expect(invalidModuleMethod.details.outcome.status).toBe("error");
-		expect(invalidModuleMethod.details.error?.code).toBe("ascet_write_incompatible_method_kind");
+		expect(invalidModuleMethod.details.error?.code).toBe("ascet_edit_incompatible_method_kind");
 		expect(invalidModuleMethod.details.error?.message).toContain("Module method creation supports only process");
 		expect(missingKindForExecution.details.outcome.status).toBe("error");
-		expect(missingKindForExecution.details.error?.code).toBe("ascet_write_missing_component_kind");
+		expect(missingKindForExecution.details.error?.code).toBe("ascet_edit_missing_component_kind");
 		expect(missingKindForExecution.details.error?.message).toContain("inspect the target");
 	});
 
 	it("defaults create_method methodKind from componentKind before execution when unambiguous", async () => {
 		let observedArgs: string[] | undefined;
-		const result = await runAscetWrite(
+		const result = await runAscetEdit(
 			{
 				action: "create_method",
 				componentPath: "DEMO\\PID",
@@ -597,12 +600,12 @@ describe("ASCET guarded write PI tools", () => {
 		);
 	});
 
-	it("accepts and dispatches enumeration writes through ascet_write", async () => {
+	it("accepts and dispatches enumeration writes through ascet_edit", async () => {
 		const enumerators = ["EngineStallStatus_NO_RISK", "EngineStallStatus_WARNING", "EngineStallStatus_IMMINENT"];
 		let observedArgs: string[] | undefined;
 
 		expect(
-			Value.Check(ascetWriteParameters, {
+			Value.Check(ascetEditParameters, {
 				action: "set_enumerators",
 				componentPath: "DEMO\\Enums\\EngineStallStatus",
 				enumerators,
@@ -610,7 +613,7 @@ describe("ASCET guarded write PI tools", () => {
 			}),
 		).toBe(true);
 
-		const result = await runAscetWrite(
+		const result = await runAscetEdit(
 			{
 				action: "set_enumerators",
 				componentPath: "DEMO\\Enums\\EngineStallStatus",
@@ -654,7 +657,7 @@ describe("ASCET guarded write PI tools", () => {
 	});
 
 	it("preserves create_component expected default scaffold as an unverified hint", async () => {
-		const result = await runAscetWrite(
+		const result = await runAscetEdit(
 			{
 				action: "create_component",
 				componentPath: "DEMO\\ScaffoldProbe",
@@ -689,7 +692,7 @@ describe("ASCET guarded write PI tools", () => {
 		expect(result.details.outcome).toMatchObject({
 			status: "ok",
 			data: {
-				result: {
+				changed: {
 					payload: {
 						expectedDefaultScaffold: {
 							verified: false,
@@ -700,56 +703,38 @@ describe("ASCET guarded write PI tools", () => {
 				},
 			},
 		});
-		expect(ascetWritePrompt.promptGuidelines).toContain(
+		expect(ascetEditPrompt.promptGuidelines).toContain(
 			"After create_component, inspect expectedDefaultScaffold.defaultEntryMethod as an unverified hint for the likely initial method.",
 		);
-		expect(ascetWritePrompt.promptGuidelines.join("\n")).not.toContain(
+		expect(ascetEditPrompt.promptGuidelines.join("\n")).not.toContain(
 			"Calibration is not an apply_element_spec field",
 		);
-		expect(ascetWritePrompt.promptGuidelines.join("\n")).not.toContain("legacy top-level min/max");
-		expect(ascetWritePrompt.promptGuidelines.join("\n")).not.toContain("impl.min/impl.max");
-		const promptGuidelinesText = ascetWritePrompt.promptGuidelines.join("\n");
-		expect(promptGuidelinesText).toContain('{"elements"');
-		expect(promptGuidelinesText).toContain('"modelType":"cont"');
-		expect(promptGuidelinesText).toContain('"scope":"exported"');
-		expect(promptGuidelinesText).toContain('"physicalRange":{"min":0,"max":8000');
-		expect(promptGuidelinesText).toContain('"implementationRange":{"min":0,"max":8000');
-		expect(promptGuidelinesText).toContain('"formula":"ident"');
-		expect(promptGuidelinesText).toContain('"calibration":true');
-		expect(promptGuidelinesText).toContain('"limitAssignments":true');
+		expect(ascetEditPrompt.promptGuidelines.join("\n")).not.toContain("legacy top-level min/max");
+		expect(ascetEditPrompt.promptGuidelines.join("\n")).not.toContain("impl.min/impl.max");
+		const promptGuidelinesText = ascetEditPrompt.promptGuidelines.join("\n");
 		expect(promptGuidelinesText).toContain("kind may be class, module, statemachine, or enumeration");
-		expect(promptGuidelinesText).toContain("For set_enumerators, pass componentPath and ordered enumerators");
-		expect(promptGuidelinesText).toContain("first item is value 0");
 		expect(promptGuidelinesText).toContain(
 			"For apply_element_spec, treat specFile as a structured ASCET element-spec JSON artifact, not just a file path.",
 		);
 		expect(promptGuidelinesText).toContain(
-			"Before creating an apply_element_spec specFile, derive element metadata from read_element_catalog, search_elements, preview_children, or explicit user requirements.",
+			"Before creating an apply_element_spec specFile, derive element metadata from read_element_catalog, search_elements, or explicit user requirements.",
 		);
 		expect(promptGuidelinesText).toContain("Do not guess modelType, scope");
 		expect(promptGuidelinesText).toContain(
 			"For apply_element_spec primitive elements, variable/parameter/array specs must include name, kind, modelType, and scope.",
 		);
-		expect(promptGuidelinesText).toContain('scope:"imported"');
-		expect(promptGuidelinesText).toContain(
-			"Do not set data.value, impl, physicalRange, impl.implementationRange, impl.limitAssignments, calibration, memory, or dependency fields for imported parameters.",
-		);
 		expect(promptGuidelinesText).toContain(
 			"If the exported counterpart is unknown, ambiguous, or not found, stop at preflight",
 		);
-		expect(promptGuidelinesText).toContain("Calibration is an apply_element_spec primitive field");
 		expect(promptGuidelinesText).toContain("Dependency is not part of apply_element_spec");
 		expect(promptGuidelinesText).toContain(
 			"dependencyFormula is the expression stored on the dependent local parameter",
 		);
-		expect(promptGuidelinesText).toContain("Use dependencyMappings to map formula formal/reference names");
-		expect(promptGuidelinesText).toContain(
-			'apply_element_spec:preflight spec->ascet_write({action:"apply_element_spec"',
-		);
+		expect(promptGuidelinesText).toContain('apply_element_spec: ascet_edit({action:"apply_element_spec"');
 	});
 
 	it("returns friendly validation for missing module/state-machine write selectors", async () => {
-		const missingModuleSection = await runAscetWrite(
+		const missingModuleSection = await runAscetEdit(
 			{
 				action: "set_module_code",
 				modulePath: "DEMO\\Module",
@@ -759,7 +744,7 @@ describe("ASCET guarded write PI tools", () => {
 			{ cwd: repoRoot },
 			{},
 		);
-		const missingStateMachineOperation = await runAscetWrite(
+		const missingStateMachineOperation = await runAscetEdit(
 			{
 				action: "set_state_machine_code",
 				stateMachinePath: "DEMO\\SM",
@@ -770,7 +755,7 @@ describe("ASCET guarded write PI tools", () => {
 			{ cwd: repoRoot },
 			{},
 		);
-		const invalidStateMachineOperation = await runAscetWrite(
+		const invalidStateMachineOperation = await runAscetEdit(
 			{
 				action: "set_state_machine_code",
 				stateMachinePath: "DEMO\\SM",
@@ -781,7 +766,7 @@ describe("ASCET guarded write PI tools", () => {
 			{ cwd: repoRoot },
 			{},
 		);
-		const moduleSectionAlias = await runAscetWrite(
+		const moduleSectionAlias = await runAscetEdit(
 			{
 				action: "set_module_code",
 				modulePath: "DEMO\\Module",
@@ -798,7 +783,7 @@ describe("ASCET guarded write PI tools", () => {
 			"Valid values: set-method, set-state-entry-esdl",
 		);
 		expect(invalidStateMachineOperation.details.outcome.status).toBe("error");
-		expect(invalidStateMachineOperation.details.error?.code).toBe("ascet_write_invalid_operation");
+		expect(invalidStateMachineOperation.details.error?.code).toBe("ascet_edit_invalid_operation");
 		expect(invalidStateMachineOperation.details.error?.message).toContain(
 			"Unknown state-machine write operation 'add_state'",
 		);
@@ -810,7 +795,7 @@ describe("ASCET guarded write PI tools", () => {
 		const toolCall: ToolCall = {
 			type: "toolCall",
 			id: "tool-1",
-			name: "ascet_write",
+			name: "ascet_edit",
 			arguments: {
 				action: "set_state_machine_code",
 				stateMachinePath: "DEMO\\SM",
@@ -820,12 +805,10 @@ describe("ASCET guarded write PI tools", () => {
 			},
 		};
 
-		expect(() => ascetWriteTool.prepareArguments?.(toolCall.arguments)).toThrow(
+		expect(() => ascetEditTool.prepareArguments?.(toolCall.arguments)).toThrow(
 			"Invalid operation for set_state_machine_code: 'add_state'. Valid values: set-method, set-state-entry-esdl",
 		);
-		expect(() => validateToolArguments(ascetWriteTool, toolCall)).toThrow(
-			"operation: must be one of: set-method, set-header, set-external-c-code, set-state-entry-esdl",
-		);
+		expect(() => validateToolArguments(ascetEditTool, toolCall)).toThrow('Validation failed for tool "ascet_edit"');
 	});
 
 	it("cleans up inline code temp files on success and failure", async () => {
@@ -872,7 +855,7 @@ describe("ASCET guarded write PI tools", () => {
 		);
 
 		expect(result.ok).toBe(false);
-		expect(result.error?.code).toBe("ascet_write_preflight_required");
+		expect(result.error?.code).toBe("ascet_batch_write_preflight_required");
 		expect(result.request.args).toEqual(["batch", "create_folder"]);
 		expect(JSON.parse(result.request.stdin ?? "{}")).toEqual({
 			requests: [
@@ -955,9 +938,9 @@ describe("ASCET guarded write PI tools", () => {
 		).toBe(true);
 	});
 
-	it("accepts method signature argument patches in ascet_write schema", async () => {
+	it("accepts method signature argument patches in ascet_edit schema", async () => {
 		expect(
-			Value.Check(ascetWriteParameters, {
+			Value.Check(ascetEditParameters, {
 				action: "set_method_signature",
 				componentPath: "DEMO\\PiSmoke",
 				methodName: "calc",
@@ -966,7 +949,7 @@ describe("ASCET guarded write PI tools", () => {
 			}),
 		).toBe(true);
 
-		const result = await runAscetWrite(
+		const result = await runAscetEdit(
 			{
 				action: "set_method_signature",
 				componentPath: "DEMO\\PiSmoke",
@@ -976,45 +959,35 @@ describe("ASCET guarded write PI tools", () => {
 			{ hasUI: true, ui: { confirm: async () => true } },
 		);
 		expect(result.details.outcome.status).toBe("error");
-		expect(result.details.error?.code).toBe("ascet_write_missing_parameter");
+		expect(result.details.error?.code).toBe("ascet_edit_missing_parameter");
 	});
 
 	it("represents canonical ascet_batch_write preflight as a non-error outcome", async () => {
-		const ascetExtension = await loadAscetExtension();
-		const tool = ascetExtension?.tools.get("ascet_batch_write")?.definition;
-		const result = (await tool?.execute?.(
-			"tool-call",
+		const result = await runApprovedAscetBatchWrite(
 			{
 				operation: "batch_create_folder",
 				requests: [{ folderPath: "DEMO\\Batch", ifExists: "ignore", verifyReadback: true }],
 				executeWrite: false,
 			},
-			new AbortController().signal,
-			undefined,
-			{ cwd: repoRoot, hasUI: true, ui: { confirm: async () => true } } as never,
-		)) as {
-			content: Array<{ type: "text"; text: string }>;
-			details: { outcome: { status: string }; rawContent: string };
-		};
-		const content = JSON.parse(result.content[0]?.text ?? "{}");
+			{ cwd: repoRoot },
+			{ hasUI: true, ui: { confirm: async () => true } },
+		);
+		const outcome = createBatchWriteOutcome(result);
 
-		expect(result.details.outcome.status).toBe("preflight");
-		expect(content).toMatchObject({
+		expect(outcome.status).toBe("preflight");
+		expect(outcome).toMatchObject({
 			status: "preflight",
 			plan: {
 				operation: "batch_create_folder",
 				preflightOnly: true,
 			},
 		});
-		expect(result.details.rawContent).toContain("ASCET batch_write failed: ascet_write_preflight_required");
+		expect(formatBatchWriteResult(result)).toContain("ascet_batch_write_preflight_required");
 	});
 
 	it("reports only operation-specific request validation errors for batch writes", async () => {
-		const ascetExtension = await loadAscetExtension();
-		const tool = ascetExtension?.tools.get("ascet_batch_write")?.definition;
-
 		expect(() =>
-			tool?.prepareArguments?.({
+			ascetBatchWriteTool.prepareArguments?.({
 				operation: "batch_set_method_code",
 				requests: [
 					{
@@ -1027,7 +1000,7 @@ describe("ASCET guarded write PI tools", () => {
 			}),
 		).toThrow(/requests\.0\.codeFile: must not have fewer than 1 characters/);
 		expect(() =>
-			tool?.prepareArguments?.({
+			ascetBatchWriteTool.prepareArguments?.({
 				operation: "batch_set_method_code",
 				requests: [
 					{
@@ -1079,7 +1052,7 @@ describe("ASCET guarded write PI tools", () => {
 	});
 
 	it("requires executeWrite before asking for interactive confirmation", async () => {
-		const approval = await requestAscetWriteApproval(
+		const approval = await requestAscetEditApproval(
 			{
 				executeWrite: false,
 				title: "Confirm ASCET write",
@@ -1095,7 +1068,7 @@ describe("ASCET guarded write PI tools", () => {
 
 		expect(approval).toMatchObject({
 			approved: false,
-			code: "ascet_write_preflight_required",
+			code: "ascet_edit_preflight_required",
 		});
 	});
 
@@ -1127,12 +1100,12 @@ describe("ASCET guarded write PI tools", () => {
 		);
 
 		expect(setCodeResult.ok).toBe(false);
-		expect(setCodeResult.error?.code).toBe("ascet_write_ui_required");
+		expect(setCodeResult.error?.code).toBe("ascet_edit_ui_required");
 		expect(setCodeResult.request.args).toContain("--verify-readback");
 		expect(createFolderResult.ok).toBe(false);
-		expect(createFolderResult.error?.code).toBe("ascet_write_ui_required");
+		expect(createFolderResult.error?.code).toBe("ascet_edit_ui_required");
 		expect(batchWriteResult.ok).toBe(false);
-		expect(batchWriteResult.error?.code).toBe("ascet_write_ui_required");
+		expect(batchWriteResult.error?.code).toBe("ascet_batch_write_ui_required");
 	});
 
 	it("runs the write command only after interactive confirmation", async () => {
@@ -1352,14 +1325,15 @@ describe("ASCET guarded write PI tools", () => {
 		expect(result.data).toBeNull();
 	});
 
-	it("registers the write tool as sequential", async () => {
+	it("registers ascet_edit and keeps batch write hidden by default", async () => {
 		const ascetExtension = await loadAscetExtension();
 
-		expect(ascetExtension?.tools.get("ascet_write")?.definition).toMatchObject({
-			name: "ascet_write",
+		expect(ascetExtension?.tools.get("ascet_edit")?.definition).toMatchObject({
+			name: "ascet_edit",
 			executionMode: "sequential",
 		});
-		expect(ascetExtension?.tools.get("ascet_batch_write")?.definition).toMatchObject({
+		expect(ascetExtension?.tools.get("ascet_batch_write")?.definition).toBeUndefined();
+		expect(ascetBatchWriteTool).toMatchObject({
 			name: "ascet_batch_write",
 			executionMode: "sequential",
 		});

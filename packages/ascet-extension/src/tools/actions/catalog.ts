@@ -74,7 +74,7 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 		useWhen: ["Need complete live code for a known component, method, C header, or external C section."],
 		avoidWhen: ["Need global occurrence search; use ascet_search.text_in_code."],
 		aliases: ["complete code", "full code", "method body", "live code", "read code", "open code"],
-		nextActions: ["ascet_write.set_method_code", "ascet_diff.diff_method"],
+		nextActions: ["ascet_edit.set_method_code", "ascet_diff.diff_method"],
 		schema: {
 			required: ["action", "componentPath"],
 			optional: ["methodName", "section", "detailLevel"],
@@ -113,7 +113,7 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 		],
 		avoidWhen: [
 			"Need only the dependency flag or formula for one element; use ascet_read.read_element_dependency.",
-			"Need to create or modify dependency state; use ascet_write.apply_element_spec then ascet_write.set_element_dependency.",
+			"Need to create or modify dependency state; use ascet_edit.apply_element_spec then ascet_edit.set_element_dependency.",
 		],
 		aliases: [
 			"dependent chain",
@@ -122,7 +122,7 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 			"local imported exported parameter",
 			"full provider element",
 		],
-		nextActions: ["ascet_write.apply_element_spec", "ascet_write.set_element_dependency"],
+		nextActions: ["ascet_edit.apply_element_spec", "ascet_edit.set_element_dependency"],
 		schema: {
 			required: ["action", "componentPath", "dependentElement"],
 			optional: ["exporterComponentPath", "providerScopePath", "maxCandidates", "detailLevel", "fallback"],
@@ -214,12 +214,12 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 		aliases: ["read block diagram", "BDE", "diagram content", "block diagram"],
 		result: { shape: "blockDiagram", fields: ["component", "name", "items", "counts"] },
 	},
-	"ascet_write.set_method_code": {
+	"ascet_edit.set_method_code": {
 		aliases: ["write method code", "set method body", "update method code", "modify code"],
 		nextActions: ["ascet_verify.readback", "ascet_read.read_code"],
 		result: { shape: "writePreflightOrResult", fields: ["status", "component", "name", "diff"] },
 	},
-	"ascet_write.set_element_dependency": {
+	"ascet_edit.set_element_dependency": {
 		compact:
 			"set dependency flag/formula on an existing local parameter only; successful writes refresh element_decls/full element cache",
 		intent: "Set or clear dependency state and formula for an existing local parameter through guarded write flow.",
@@ -283,7 +283,7 @@ function resolveFamily(tool: string): AscetActionFamily {
 	if (tool === "ascet_diff") {
 		return "diff";
 	}
-	if (tool === "ascet_write" || tool === "ascet_component_editable" || tool === "ascet_batch_write") {
+	if (tool === "ascet_edit" || tool === "ascet_batch_write") {
 		return "write";
 	}
 	if (tool === "ascet_verify") {
@@ -334,7 +334,7 @@ function inferResult(descriptor: AscetActionDescriptor): AscetActionCatalogEntry
 	if (descriptor.tool === "ascet_read") {
 		return { shape: "liveRead", fields: ["component", "items"] };
 	}
-	if (descriptor.tool === "ascet_write") {
+	if (descriptor.tool === "ascet_edit") {
 		return { shape: "writePreflightOrResult", fields: ["status", "component", "diff"] };
 	}
 	if (descriptor.tool === "ascet_diff") {

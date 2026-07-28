@@ -10,6 +10,7 @@ type AscetToolDefinition = (typeof allAscetTools)[number];
 const profileGuidelines: Record<AscetProfile, Partial<Record<string, readonly string[]>>> = {
 	base: {
 		ascet_status: ["Use ascet_status first when ASCET runtime availability is unknown."],
+		ascet_index: ["Use ascet_index for SQLite index status, refresh, stale marking, and footer repair."],
 		ascet_search: ["Use ascet_search to locate components, declarations, references, messages, and text hits."],
 		ascet_read: ["Use ascet_read only for live reads of exact targets; resolve paths with search/explore first."],
 	},
@@ -32,22 +33,23 @@ const profileGuidelines: Record<AscetProfile, Partial<Record<string, readonly st
 		ascet_verify: ["Use ascet_verify after writes or when runtime readback evidence is required."],
 	},
 	"write-preflight": {
-		ascet_write: [
-			"Use ascet_write without executeWrite for preflight unless the user explicitly asks to apply a live write.",
+		ascet_edit: [
+			"Use ascet_edit without executeWrite for preflight unless the user explicitly asks to apply a live write.",
 			"After live writes, prefer verifyReadback=true and inspect the returned readback/index impact.",
 		],
 	},
 	"batch-write": {
-		ascet_write: [
-			"Batch write remains hidden by default; use ascet_write single-operation flow unless explicitly enabled.",
+		ascet_edit: [
+			"Batch write remains hidden by default; use ascet_edit single-operation flow unless explicitly enabled.",
 		],
 	},
 	"component-edit": {
-		ascet_component_editable: [
-			"Use component editable actions only when the user explicitly asks to change editability.",
-		],
+		ascet_edit: ["Use component editable actions only when the user explicitly asks to change editability."],
 	},
 	ops: {
+		ascet_index: [
+			"Use ascet_index.status before repair_status_file when the footer index state looks wrong.",
+		],
 		ascet_recover: [
 			"Use ascet_recover and ascet_scheduler_status for runtime, queue, lock, or recovery diagnostics.",
 		],

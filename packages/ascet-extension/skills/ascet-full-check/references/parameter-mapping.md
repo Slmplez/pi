@@ -16,7 +16,7 @@ Parameter mapping checks are read-only. Use these tools only through the canonic
 - `ascet_search` action `search_occurrences`
 - `ascet_read` action `read_code` only when code context is required
 
-Do not use `ascet_write.set_element_dependency` in full-check.
+Do not use `ascet_edit.set_element_dependency` in full-check.
 
 For deterministic offline evaluation of collected evidence, run:
 

@@ -247,7 +247,7 @@ describe("formatAscetCliJsonResult", () => {
 });
 
 describe("runAscetCliJson write semantics", () => {
-	test("does not mutate search-index partitions; ascet_write owns WriteImpact invalidation", async () => {
+	test("does not mutate search-index partitions; ascet_edit owns WriteImpact invalidation", async () => {
 		resetAscetSearchIndexForTest({
 			databaseName: "DemoDb",
 			databasePath: "C:\\ASCET\\DemoDb",

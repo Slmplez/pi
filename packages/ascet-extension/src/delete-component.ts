@@ -1,23 +1,23 @@
 import { Type } from "typebox";
 import { type AscetCliJsonResult, runAscetCliJson } from "./cli.ts";
 import { normalizeAscetPath } from "./core/path.ts";
+import type { AscetEditApprovalContext } from "./edit/approval.ts";
 import {
-	type AscetWriteControlParams,
+	type AscetEditControlParams,
 	appendVerifyAndJson,
-	createWriteSummary,
-	formatWriteOperationResult,
+	createAscetEditSummary,
+	formatAscetEditOperationResult,
 	ifMissingSchema,
-	type RunAscetWriteOperationOptions,
-	runApprovedAscetWriteOperation,
-} from "./write-common.ts";
-import type { AscetWriteApprovalContext } from "./write-policy.ts";
+	type RunAscetEditOperationOptions,
+	runApprovedAscetEditOperation,
+} from "./edit/common.ts";
 
-export interface AscetDeleteComponentParams extends AscetWriteControlParams {
+export interface AscetDeleteComponentParams extends AscetEditControlParams {
 	componentPath: string;
 	ifMissing?: "fail" | "ignore";
 }
 
-export type RunAscetDeleteComponentOptions = RunAscetWriteOperationOptions;
+export type RunAscetDeleteComponentOptions = RunAscetEditOperationOptions;
 export type AscetDeleteComponentResult = AscetCliJsonResult;
 
 export const ascetDeleteComponentParameters = Type.Object({
@@ -36,7 +36,7 @@ export function buildDeleteComponentArgs(params: AscetDeleteComponentParams): st
 }
 
 export function createDeleteComponentSummary(params: AscetDeleteComponentParams): string {
-	return createWriteSummary("delete_component", {
+	return createAscetEditSummary("delete_component", {
 		componentPath: params.componentPath,
 		ifMissing: params.ifMissing ?? "fail",
 		verifyReadback: params.verifyReadback === true,
@@ -53,9 +53,9 @@ export async function runAscetDeleteComponent(
 export async function runApprovedAscetDeleteComponent(
 	params: AscetDeleteComponentParams,
 	options: RunAscetDeleteComponentOptions,
-	ctx: AscetWriteApprovalContext,
+	ctx: AscetEditApprovalContext,
 ): Promise<AscetDeleteComponentResult> {
-	return runApprovedAscetWriteOperation(
+	return runApprovedAscetEditOperation(
 		"delete_component",
 		params,
 		options,
@@ -67,5 +67,5 @@ export async function runApprovedAscetDeleteComponent(
 }
 
 export function formatDeleteComponentResult(result: AscetDeleteComponentResult): string {
-	return formatWriteOperationResult("delete_component", result);
+	return formatAscetEditOperationResult("delete_component", result);
 }

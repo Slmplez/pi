@@ -4,10 +4,20 @@ import { join, resolve } from "node:path";
 import { loadExtensions } from "../packages/coding-agent/src/core/extensions/loader.ts";
 
 const repoRoot = resolve(process.cwd());
+// Keep the extension under test separate from the ASCET project/runtime it targets.
+const ascetCwd = resolve(process.env.ASCET_SMOKE_CWD ?? repoRoot);
 const enabled = process.env.ASCET_WRITE_SMOKE === "1";
+const cleanupOnly = process.env.ASCET_WRITE_SMOKE_CLEANUP_ONLY === "1";
+const skipStateMachine = process.env.ASCET_WRITE_SMOKE_SKIP_STATE_MACHINE === "1";
+const testEditabilitySet = process.env.ASCET_WRITE_SMOKE_TEST_EDITABILITY_SET === "1";
 const componentPath = process.env.ASCET_WRITE_SMOKE_COMPONENT ?? "DEMO\\__pi_write_smoke__\\PiSmoke";
 const folderPath = componentPath.split("\\").slice(0, -1).join("\\");
 const methodName = process.env.ASCET_WRITE_SMOKE_METHOD ?? "calc";
+const enumerationPath = `${folderPath}\\PiSmokeEnum`;
+const modulePath = `${folderPath}\\PiSmokeModule`;
+const stateMachinePath = `${folderPath}\\PiSmokeStateMachine`;
+const moduleMethodName = "process";
+const stateMachineMethodName = "trigger";
 
 if (!enabled) {
 	console.log(
@@ -16,6 +26,7 @@ if (!enabled) {
 				ok: true,
 				skipped: true,
 				reason: "Set ASCET_WRITE_SMOKE=1 to run the disposable ASCET write smoke.",
+				ascetCwd,
 				componentPath,
 				methodName,
 			},
@@ -28,7 +39,15 @@ if (!enabled) {
 
 const tempDir = mkdtempSync(join(tmpdir(), "pi-ascet-write-smoke-"));
 const codeFile = join(tempDir, `${methodName}.esdl`);
-writeFileSync(codeFile, "// PI ASCET write smoke\nreturn;\n", "utf8");
+const elementSpecFile = join(tempDir, "elements.json");
+writeFileSync(codeFile, "// PI ASCET write smoke\nreturn 0.0;\n", "utf8");
+writeFileSync(
+	elementSpecFile,
+	JSON.stringify({
+		elements: [{ name: "P_Smoke", kind: "parameter", modelType: "cont", scope: "local", data: { value: 0 } }],
+	}),
+	"utf8",
+);
 
 async function withStage<T>(stage: string, fn: () => Promise<T>): Promise<T> {
 	try {
@@ -61,16 +80,16 @@ const loadResult = await withStage("load_extension", async () => {
 });
 
 const extension = loadResult.extensions.find((entry) => entry.path.replaceAll("\\", "/").endsWith("ascet/index.ts"));
-const writeTool = extension?.tools.get("ascet_write")?.definition;
+const editTool = extension?.tools.get("ascet_edit")?.definition;
 const readTool = extension?.tools.get("ascet_read")?.definition;
 const verifyTool = extension?.tools.get("ascet_verify")?.definition;
-if (!writeTool || !readTool || !verifyTool) {
-	throw new Error("ASCET write/read/verify tools are not registered");
+if (!editTool || !readTool || !verifyTool) {
+	throw new Error("ASCET edit/read/verify tools are not registered");
 }
 
 const signal = new AbortController().signal;
 const writeContext = {
-	cwd: repoRoot,
+	cwd: ascetCwd,
 	hasUI: true,
 	ui: {
 		confirm: async () => true,
@@ -90,19 +109,64 @@ async function executeTool(toolName: string, params: Record<string, unknown>, ct
 		}
 		return response;
 	}
-	if (!response.details.ok) {
+	if (response.details.ok === false || response.details.error || response.details.data === undefined) {
 		throw new Error(`${toolName} failed: ${response.details.error?.message ?? "unknown"}`);
 	}
 	return response;
 }
 
+function toolData(response: { details: { outcome?: { data?: unknown }; data?: { result?: unknown } } }) {
+	return response.details.outcome?.data ?? response.details.data?.result ?? response.details.data;
+}
+
+async function cleanupSmokeArtifacts() {
+	const cleanup = [];
+	for (const [action, params] of [
+		["delete_method", { componentPath, methodName, ifMissing: "ignore" }],
+		["delete_method", { componentPath: modulePath, methodName: moduleMethodName, ifMissing: "ignore" }],
+		[
+			"delete_method",
+			{ componentPath: stateMachinePath, methodName: stateMachineMethodName, ifMissing: "ignore" },
+		],
+		["delete_component", { componentPath: stateMachinePath, ifMissing: "ignore" }],
+		["delete_component", { componentPath: modulePath, ifMissing: "ignore" }],
+		["delete_component", { componentPath: enumerationPath, ifMissing: "ignore" }],
+		["delete_component", { componentPath, ifMissing: "ignore" }],
+	] as const) {
+		try {
+			const response = await executeTool(
+				"ascet_edit",
+				{ action, ...params, verifyReadback: true, executeWrite: true },
+				writeContext,
+			);
+			cleanup.push({ action, outcome: response.details.outcome });
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			if (!message.includes("component_not_found")) {
+				throw error;
+			}
+			cleanup.push({ action, skipped: "component_not_found" });
+		}
+	}
+	return {
+		operations: cleanup,
+		preservedParentFolder: folderPath,
+	};
+}
+
+if (cleanupOnly) {
+	const cleanup = await withStage("cleanup", cleanupSmokeArtifacts);
+	console.log(JSON.stringify({ ok: true, cleanupOnly: true, ascetCwd, componentPath, methodName, cleanup }, null, 2));
+	process.exit(0);
+}
+
 const createFolderResponse = await withStage("create_folder", () => executeTool(
-	"ascet_write",
+	"ascet_edit",
 	{ action: "create_folder", folderPath, verifyReadback: true, executeWrite: true },
 	writeContext,
 ));
 const createComponentResponse = await withStage("create_component", () => executeTool(
-	"ascet_write",
+	"ascet_edit",
 	{
 		action: "create_component",
 		componentPath,
@@ -114,11 +178,17 @@ const createComponentResponse = await withStage("create_component", () => execut
 	},
 	writeContext,
 ));
+const editabilitySetResponse = testEditabilitySet ? await withStage("component_editable_set", () => executeTool(
+	"ascet_edit",
+	{ mode: "set", componentPath, executeWrite: true },
+	writeContext,
+)) : undefined;
 const createMethodResponse = await withStage("create_method", () => executeTool(
-	"ascet_write",
+	"ascet_edit",
 	{
 		action: "create_method",
 		componentPath,
+		componentKind: "class",
 		methodName,
 		methodKind: "abstract",
 		ifExists: "return-existing",
@@ -127,55 +197,197 @@ const createMethodResponse = await withStage("create_method", () => executeTool(
 	},
 	writeContext,
 ));
-
-const writeResponse = await withStage("set_class_method_code", () => executeTool(
-	"ascet_write",
-	{ action: "set_class_method_code", classPath: componentPath, methodName, codeFile, verifyReadback: true, executeWrite: true },
+const signatureResponse = await withStage("set_method_signature", () => executeTool(
+	"ascet_edit",
+	{
+		action: "set_method_signature",
+		componentPath,
+		methodName,
+		returnType: "cont",
+		arguments: [{ name: "input", type: "cont", ifExists: "replace" }],
+		ifReturnExists: "replace",
+		verifyReadback: true,
+		executeWrite: true,
+	},
+	writeContext,
+));
+const elementSpecResponse = await withStage("apply_element_spec", () => executeTool(
+	"ascet_edit",
+	{
+		action: "apply_element_spec",
+		componentPath,
+		specFile: elementSpecFile,
+		verifyReadback: true,
+		executeWrite: true,
+	},
+	writeContext,
+));
+const dependencyResponse = await withStage("set_element_dependency", () => executeTool(
+	"ascet_edit",
+	{
+		action: "set_element_dependency",
+		targetPath: componentPath,
+		elementName: "P_Smoke",
+		dependency: "dependent",
+		targetKind: "component",
+		verifyReadback: true,
+		executeWrite: true,
+	},
+	writeContext,
+));
+const dependencyReadback = await withStage("read_element_dependency", () =>
+	executeTool(
+		"ascet_read",
+		{ action: "read_element_dependency", targetPath: componentPath, elementName: "P_Smoke", targetKind: "component" },
+		{ cwd: ascetCwd },
+	),
+);
+const createEnumerationResponse = await withStage("create_enumeration", () => executeTool(
+	"ascet_edit",
+	{
+		action: "create_component",
+		componentPath: enumerationPath,
+		kind: "enumeration",
+		ifExists: "return-existing",
+		verifyReadback: true,
+		executeWrite: true,
+	},
+	writeContext,
+));
+const enumeratorResponse = await withStage("set_enumerators", () => executeTool(
+	"ascet_edit",
+	{
+		action: "set_enumerators",
+		componentPath: enumerationPath,
+		enumerators: ["OFF", "ON"],
+		verifyReadback: true,
+		executeWrite: true,
+	},
+	writeContext,
+));
+const createModuleResponse = await withStage("create_module", () => executeTool(
+	"ascet_edit",
+	{
+		action: "create_component",
+		componentPath: modulePath,
+		kind: "module",
+		language: "ESDL",
+		ifExists: "return-existing",
+		verifyReadback: true,
+		executeWrite: true,
+	},
+	writeContext,
+));
+const createModuleMethodResponse = await withStage("create_module_method", () => executeTool(
+	"ascet_edit",
+	{
+		action: "create_method",
+		componentPath: modulePath,
+		componentKind: "module",
+		methodName: moduleMethodName,
+		methodKind: "process",
+		ifExists: "return-existing",
+		verifyReadback: true,
+		executeWrite: true,
+	},
+	writeContext,
+));
+const moduleCodeResponse = await withStage("set_module_code", () => executeTool(
+	"ascet_edit",
+	{
+		action: "set_module_code",
+		modulePath,
+		operation: "set-method",
+		methodName: moduleMethodName,
+		code: "// PI ASCET module write smoke\n",
+		verifyReadback: true,
+		executeWrite: true,
+	},
+	writeContext,
+));
+const createStateMachineResponse = skipStateMachine ? undefined : await withStage("create_state_machine", () => executeTool(
+	"ascet_edit",
+	{
+		action: "create_component",
+		componentPath: stateMachinePath,
+		kind: "statemachine",
+		language: "ESDL",
+		ifExists: "return-existing",
+		verifyReadback: true,
+		executeWrite: true,
+	},
+	writeContext,
+));
+const createStateMachineMethodResponse = skipStateMachine ? undefined : await withStage("create_state_machine_method", () => executeTool(
+	"ascet_edit",
+	{
+		action: "create_method",
+		componentPath: stateMachinePath,
+		componentKind: "statemachine",
+		methodName: stateMachineMethodName,
+		methodKind: "trigger",
+		ifExists: "return-existing",
+		verifyReadback: true,
+		executeWrite: true,
+	},
+	writeContext,
+));
+const stateMachineCodeResponse = skipStateMachine ? undefined : await withStage("set_state_machine_code", () => executeTool(
+	"ascet_edit",
+	{
+		action: "set_state_machine_code",
+		stateMachinePath,
+		operation: "set-method",
+		methodName: stateMachineMethodName,
+		code: "// PI ASCET state machine write smoke\n",
+		verifyReadback: true,
+		executeWrite: true,
+	},
 	writeContext,
 ));
 
-const readResponse = await withStage("read_method_code", () => readTool.execute(
-	"ascet-write-smoke-read-method-code",
-	{ action: "read_code", componentPath, methodName },
-	signal,
-	undefined,
-	{ cwd: repoRoot },
+const writeResponse = await withStage("set_method_code", () => executeTool(
+	"ascet_edit",
+	{ action: "set_method_code", componentPath, methodName, codeFile, verifyReadback: true, executeWrite: true },
+	writeContext,
 ));
 
-if (!readResponse.details.ok) {
-	throw new Error(`ascet_read_method_code failed: ${readResponse.details.error?.message ?? "unknown"}`);
-}
-
-const verifyResponse = await withStage("verify_readback", () => verifyTool.execute(
-	"ascet-write-smoke-verify-readback",
-	{ action: "readback", objectKind: "class", componentPath },
-	signal,
-	undefined,
-	{ cwd: repoRoot },
-));
-
-if (!verifyResponse.details.ok) {
-	throw new Error(`ascet_verify_readback failed: ${verifyResponse.details.error?.message ?? "unknown"}`);
-}
+const readResponse = await withStage("read_method_code", () =>
+	executeTool("ascet_read", { action: "read_code", componentPath, methodName }, { cwd: ascetCwd }),
+);
+const verifyResponse = await withStage("verify_readback", () =>
+	executeTool("ascet_verify", { action: "readback", objectKind: "class", componentPath }, { cwd: ascetCwd }),
+);
 
 console.log(
 	JSON.stringify(
 		{
 			ok: true,
+			ascetCwd,
 			componentPath,
 			methodName,
 			codeFile,
 			setup: {
 				folder: createFolderResponse.details.outcome,
 				component: createComponentResponse.details.outcome,
+				editabilitySet: editabilitySetResponse?.details.outcome,
 				method: createMethodResponse.details.outcome,
+				signature: signatureResponse.details.outcome,
+				elementSpec: elementSpecResponse.details.outcome,
+				dependency: dependencyResponse.details.outcome,
+				dependencyReadback: toolData(dependencyReadback),
+				enumeration: createEnumerationResponse.details.outcome,
+				enumerators: enumeratorResponse.details.outcome,
+				module: createModuleResponse.details.outcome,
+				moduleMethod: createModuleMethodResponse.details.outcome,
+				moduleCode: moduleCodeResponse.details.outcome,
+				stateMachine: createStateMachineResponse?.details.outcome,
+				stateMachineMethod: createStateMachineMethodResponse?.details.outcome,
+				stateMachineCode: stateMachineCodeResponse?.details.outcome,
 			},
 			write: writeResponse.details.outcome,
-			readback: {
-				methodName: readResponse.details.data?.result?.methodName,
-				code: readResponse.details.data?.result?.code,
-			},
-			verify: verifyResponse.details.data?.result,
+			readback: toolData(readResponse),
+			verify: toolData(verifyResponse),
 		},
 		null,
 		2,

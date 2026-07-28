@@ -6,8 +6,8 @@ import {
 	formatAscetCliJsonResult,
 	runAscetCliJson,
 } from "./cli.ts";
+import { type AscetEditApprovalContext, requestAscetEditApproval } from "./edit/approval.ts";
 import { createAscetStatusReport } from "./status.ts";
-import { type AscetWriteApprovalContext, requestAscetWriteApproval } from "./write-policy.ts";
 
 export interface AscetCreateMethodParams {
 	componentPath: string;
@@ -69,7 +69,7 @@ export function buildCreateMethodArgs(params: AscetCreateMethodParams): string[]
 
 export function createCreateMethodSummary(params: AscetCreateMethodParams): string {
 	return [
-		"ASCET write request:",
+		"ASCET edit request:",
 		"operation: create_method",
 		`componentPath: ${params.componentPath}`,
 		`methodName: ${params.methodName}`,
@@ -114,15 +114,20 @@ export async function runAscetCreateMethod(
 	params: AscetCreateMethodParams,
 	options: RunAscetCreateMethodOptions,
 ): Promise<AscetCreateMethodResult> {
-	return runAscetCliJson(buildCreateMethodArgs(params), options);
+	return runAscetCliJson(buildCreateMethodArgs(params), {
+		...options,
+		toolName: "ascet_edit",
+		commandId: "create_method",
+		jobKind: "write",
+	});
 }
 
 export async function runApprovedAscetCreateMethod(
 	params: AscetCreateMethodParams,
 	options: RunAscetCreateMethodOptions,
-	ctx: AscetWriteApprovalContext,
+	ctx: AscetEditApprovalContext,
 ): Promise<AscetCreateMethodResult> {
-	const approval = await requestAscetWriteApproval(
+	const approval = await requestAscetEditApproval(
 		{
 			executeWrite: params.executeWrite,
 			title: "Confirm ASCET method creation",
@@ -136,8 +141,8 @@ export async function runApprovedAscetCreateMethod(
 		return createBlockedWriteResult(
 			params,
 			options,
-			approval.code ?? "ascet_write_rejected",
-			approval.message ?? "ASCET write was not approved.",
+			approval.code ?? "ascet_edit_rejected",
+			approval.message ?? "ASCET edit was not approved.",
 		);
 	}
 

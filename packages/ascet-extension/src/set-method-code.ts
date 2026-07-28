@@ -1,23 +1,23 @@
 import { Type } from "typebox";
 import { type AscetCliJsonResult, runAscetCliJson } from "./cli.ts";
 import { normalizeAscetPath } from "./core/path.ts";
+import type { AscetEditApprovalContext } from "./edit/approval.ts";
 import {
-	type AscetWriteControlParams,
+	type AscetEditControlParams,
 	appendVerifyAndJson,
-	createWriteSummary,
-	formatWriteOperationResult,
-	type RunAscetWriteOperationOptions,
-	runApprovedAscetWriteOperation,
-} from "./write-common.ts";
-import type { AscetWriteApprovalContext } from "./write-policy.ts";
+	createAscetEditSummary,
+	formatAscetEditOperationResult,
+	type RunAscetEditOperationOptions,
+	runApprovedAscetEditOperation,
+} from "./edit/common.ts";
 
-export interface AscetSetMethodCodeParams extends AscetWriteControlParams {
+export interface AscetSetMethodCodeParams extends AscetEditControlParams {
 	componentPath: string;
 	methodName: string;
 	codeFile: string;
 }
 
-export type RunAscetSetMethodCodeOptions = RunAscetWriteOperationOptions;
+export type RunAscetSetMethodCodeOptions = RunAscetEditOperationOptions;
 export type AscetSetMethodCodeResult = AscetCliJsonResult;
 
 export const ascetSetMethodCodeParameters = Type.Object({
@@ -36,7 +36,7 @@ export function buildSetMethodCodeArgs(params: AscetSetMethodCodeParams): string
 }
 
 export function createSetMethodCodeSummary(params: AscetSetMethodCodeParams): string {
-	return createWriteSummary("set_method_code", {
+	return createAscetEditSummary("set_method_code", {
 		componentPath: params.componentPath,
 		methodName: params.methodName,
 		codeFile: params.codeFile,
@@ -54,9 +54,9 @@ export async function runAscetSetMethodCode(
 export async function runApprovedAscetSetMethodCode(
 	params: AscetSetMethodCodeParams,
 	options: RunAscetSetMethodCodeOptions,
-	ctx: AscetWriteApprovalContext,
+	ctx: AscetEditApprovalContext,
 ): Promise<AscetSetMethodCodeResult> {
-	return runApprovedAscetWriteOperation(
+	return runApprovedAscetEditOperation(
 		"set_method_code",
 		params,
 		options,
@@ -67,5 +67,5 @@ export async function runApprovedAscetSetMethodCode(
 }
 
 export function formatSetMethodCodeResult(result: AscetSetMethodCodeResult): string {
-	return formatWriteOperationResult("set_method_code", result);
+	return formatAscetEditOperationResult("set_method_code", result);
 }

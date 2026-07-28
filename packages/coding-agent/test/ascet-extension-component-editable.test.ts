@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
 import type { AscetCliExecutionResult, AscetCliRequest } from "../../ascet-extension/src/cli.ts";
 import {
-	buildAscetComponentEditableArgs,
-	formatAscetComponentEditableResult,
-	runAscetComponentEditable,
-} from "../../ascet-extension/src/component-editable.ts";
+	buildAscetEditabilityArgs,
+	formatAscetEditabilityResult,
+	runAscetEditability,
+} from "../../ascet-extension/src/edit/editability.ts";
 import { createAscetScheduler, getAscetCliLockSnapshot } from "../../ascet-extension/src/scheduler/index.ts";
-import { ascetComponentEditableTool } from "../../ascet-extension/src/tools/component-editable/index.ts";
+import { ascetEditTool } from "../../ascet-extension/src/tools/edit/index.ts";
 import { loadAscetExtension, repoRoot } from "./ascet-extension-test-helpers.ts";
 
 function tempRuntimeEnv() {
@@ -15,20 +15,20 @@ function tempRuntimeEnv() {
 
 describe("ASCET component editable PI tool", () => {
 	it("builds AscetCli exec check and set invocations with JSON primitive output", () => {
-		expect(buildAscetComponentEditableArgs({ mode: "check", componentPath: "DEMO/PID" })).toEqual([
+		expect(buildAscetEditabilityArgs({ mode: "check", componentPath: "DEMO/PID" })).toEqual([
 			"exec",
 			"component_editable_check",
 			"DEMO\\PID",
 			"--json",
 		]);
-		expect(buildAscetComponentEditableArgs({ mode: "set", componentPath: "\\DEMO\\PID" })).toEqual([
+		expect(buildAscetEditabilityArgs({ mode: "set", componentPath: "\\DEMO\\PID" })).toEqual([
 			"exec",
 			"component_editable_set",
 			"DEMO\\PID",
 			"--json",
 		]);
-		expect(formatAscetComponentEditableResult({ ok: true, data: true } as never)).toBe("true");
-		expect(formatAscetComponentEditableResult({ ok: true, data: false } as never)).toBe("false");
+		expect(JSON.parse(formatAscetEditabilityResult({ ok: true, data: true } as never))).toEqual({ editable: true });
+		expect(JSON.parse(formatAscetEditabilityResult({ ok: true, data: false } as never))).toEqual({ editable: false });
 	});
 
 	it("runs AscetCli exec through the PI scheduler and CLI lock", async () => {
@@ -36,7 +36,7 @@ describe("ASCET component editable PI tool", () => {
 		const scheduler = createAscetScheduler();
 		let sawLock = false;
 
-		const result = await runAscetComponentEditable(
+		const result = await runAscetEditability(
 			{ mode: "check", componentPath: "DEMO\\PID" },
 			{
 				cwd: repoRoot,
@@ -62,7 +62,7 @@ describe("ASCET component editable PI tool", () => {
 		expect(sawLock).toBe(true);
 		expect((await getAscetCliLockSnapshot({ env })).locked).toBe(false);
 		expect(scheduler.getSnapshot().recentJobs.at(-1)).toMatchObject({
-			toolName: "ascet_component_editable",
+			toolName: "ascet_edit",
 			commandId: "component_editable_check",
 			kind: "read",
 		});
@@ -70,7 +70,7 @@ describe("ASCET component editable PI tool", () => {
 
 	it("unwraps the AscetCli exec envelope while preserving bare false output", async () => {
 		const scheduler = createAscetScheduler();
-		const result = await runAscetComponentEditable(
+		const result = await runAscetEditability(
 			{ mode: "set", componentPath: "DEMO\\PID" },
 			{
 				cwd: repoRoot,
@@ -87,9 +87,9 @@ describe("ASCET component editable PI tool", () => {
 
 		expect(result.ok).toBe(true);
 		expect(result.data).toBe(false);
-		expect(formatAscetComponentEditableResult(result)).toBe("false");
+		expect(JSON.parse(formatAscetEditabilityResult(result))).toEqual({ editable: false });
 		expect(scheduler.getSnapshot().recentJobs.at(-1)).toMatchObject({
-			toolName: "ascet_component_editable",
+			toolName: "ascet_edit",
 			commandId: "component_editable_set",
 			kind: "write",
 		});
@@ -97,11 +97,11 @@ describe("ASCET component editable PI tool", () => {
 
 	it("registers the canonical PI tool and returns bare boolean tool content", async () => {
 		const ascetExtension = await loadAscetExtension();
-		const tool = ascetExtension?.tools.get("ascet_component_editable")?.definition;
+		const tool = ascetExtension?.tools.get("ascet_edit")?.definition;
 
-		expect(tool).toMatchObject({ name: "ascet_component_editable", executionMode: "sequential" });
+		expect(tool).toMatchObject({ name: "ascet_edit", executionMode: "sequential" });
 
-		const response = await ascetComponentEditableTool.execute(
+		const response = await ascetEditTool.execute(
 			"editable",
 			{ mode: "check", componentPath: "DEMO\\PID" },
 			new AbortController().signal,
@@ -119,15 +119,15 @@ describe("ASCET component editable PI tool", () => {
 		);
 		const text = response.content[0]?.type === "text" ? response.content[0].text : "";
 
-		expect(text).toBe("true");
+		expect(JSON.parse(text)).toEqual({ editable: true });
 		expect(text).not.toContain('"ok"');
 		expect(text).not.toContain('"action"');
 	});
 
-	it("uses the same executeWrite permission gate as ascet_write for set mode", async () => {
+	it("uses the same executeWrite permission gate as ascet_edit for set mode", async () => {
 		let confirmCalled = false;
 		let executed = false;
-		const response = await ascetComponentEditableTool.execute(
+		const response = await ascetEditTool.execute(
 			"editable",
 			{ mode: "set", componentPath: "DEMO\\PID" },
 			new AbortController().signal,
@@ -157,7 +157,7 @@ describe("ASCET component editable PI tool", () => {
 
 		expect(confirmCalled).toBe(false);
 		expect(executed).toBe(false);
-		expect(text).toContain("ascet_write_preflight_required");
+		expect(text).toContain("ascet_edit_preflight_required");
 		expect(text).not.toContain('"ok"');
 		expect(text).not.toContain('"action"');
 	});
@@ -165,7 +165,7 @@ describe("ASCET component editable PI tool", () => {
 	it("requires confirmation after executeWrite=true for set mode and still returns bare boolean content", async () => {
 		let confirmCalled = false;
 		let executed = false;
-		const response = await ascetComponentEditableTool.execute(
+		const response = await ascetEditTool.execute(
 			"editable",
 			{ mode: "set", componentPath: "DEMO\\PID", executeWrite: true },
 			new AbortController().signal,
@@ -196,7 +196,7 @@ describe("ASCET component editable PI tool", () => {
 
 		expect(confirmCalled).toBe(true);
 		expect(executed).toBe(true);
-		expect(text).toBe("false");
+		expect(JSON.parse(text)).toEqual({ editable: false });
 		expect(text).not.toContain('"ok"');
 		expect(text).not.toContain('"action"');
 	});

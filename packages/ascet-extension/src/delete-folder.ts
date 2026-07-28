@@ -1,23 +1,23 @@
 import { Type } from "typebox";
 import { type AscetCliJsonResult, runAscetCliJson } from "./cli.ts";
 import { normalizeAscetPath } from "./core/path.ts";
+import type { AscetEditApprovalContext } from "./edit/approval.ts";
 import {
-	type AscetWriteControlParams,
+	type AscetEditControlParams,
 	appendVerifyAndJson,
-	createWriteSummary,
-	formatWriteOperationResult,
+	createAscetEditSummary,
+	formatAscetEditOperationResult,
 	ifMissingSchema,
-	type RunAscetWriteOperationOptions,
-	runApprovedAscetWriteOperation,
-} from "./write-common.ts";
-import type { AscetWriteApprovalContext } from "./write-policy.ts";
+	type RunAscetEditOperationOptions,
+	runApprovedAscetEditOperation,
+} from "./edit/common.ts";
 
-export interface AscetDeleteFolderParams extends AscetWriteControlParams {
+export interface AscetDeleteFolderParams extends AscetEditControlParams {
 	folderPath: string;
 	ifMissing?: "fail" | "ignore";
 }
 
-export type RunAscetDeleteFolderOptions = RunAscetWriteOperationOptions;
+export type RunAscetDeleteFolderOptions = RunAscetEditOperationOptions;
 export type AscetDeleteFolderResult = AscetCliJsonResult;
 
 export const ascetDeleteFolderParameters = Type.Object({
@@ -36,7 +36,7 @@ export function buildDeleteFolderArgs(params: AscetDeleteFolderParams): string[]
 }
 
 export function createDeleteFolderSummary(params: AscetDeleteFolderParams): string {
-	return createWriteSummary("delete_folder", {
+	return createAscetEditSummary("delete_folder", {
 		folderPath: params.folderPath,
 		ifMissing: params.ifMissing ?? "fail",
 		verifyReadback: params.verifyReadback === true,
@@ -53,9 +53,9 @@ export async function runAscetDeleteFolder(
 export async function runApprovedAscetDeleteFolder(
 	params: AscetDeleteFolderParams,
 	options: RunAscetDeleteFolderOptions,
-	ctx: AscetWriteApprovalContext,
+	ctx: AscetEditApprovalContext,
 ): Promise<AscetDeleteFolderResult> {
-	return runApprovedAscetWriteOperation(
+	return runApprovedAscetEditOperation(
 		"delete_folder",
 		params,
 		options,
@@ -67,5 +67,5 @@ export async function runApprovedAscetDeleteFolder(
 }
 
 export function formatDeleteFolderResult(result: AscetDeleteFolderResult): string {
-	return formatWriteOperationResult("delete_folder", result);
+	return formatAscetEditOperationResult("delete_folder", result);
 }

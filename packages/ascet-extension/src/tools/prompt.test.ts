@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import { ascetActionExamples, compactExamplesForTool } from "./_shared/action-examples.ts";
 import { ascetCapabilitiesPrompt } from "./capabilities/prompt.ts";
+import { ascetEditPrompt } from "./edit/prompt.ts";
 import { ascetExplorePrompt } from "./explore/prompt.ts";
 import {
 	actionInstructionIds,
@@ -11,7 +12,6 @@ import {
 } from "./instructions/registry.ts";
 import { ascetReadPrompt } from "./read/prompt.ts";
 import { ascetSearchPrompt } from "./search/prompt.ts";
-import { ascetWritePrompt } from "./write/prompt.ts";
 
 function guidelineText(prompt: { promptGuidelines: readonly string[] }): string {
 	return prompt.promptGuidelines.join("\n");
@@ -32,11 +32,10 @@ describe("ASCET prompt coordination", () => {
 		assert.match(search, /_Constant/);
 		assert.match(search, /Imported Parameter and Exported Parameter must be same-named/);
 		assert.match(explore, /list_components recursively/);
-		assert.match(explore, /same-named Exported Parameter/);
 	});
 
 	test("requires exported-provider evidence before dependent local writes", () => {
-		const write = guidelineText(ascetWritePrompt);
+		const write = guidelineText(ascetEditPrompt);
 
 		assert.match(write, /resolve the authoritative same-named Exported Parameter provider/);
 		assert.match(write, /Do not bind to a provider candidate unless the matching element is scope=Exported/);
@@ -44,6 +43,10 @@ describe("ASCET prompt coordination", () => {
 		assert.match(write, /align metadata from the Exported Parameter, not from the Imported Parameter/);
 		assert.match(write, /does not create local, imported, or exported elements/);
 		assert.match(write, /full_element_cache/);
+	});
+
+	test("deduplicates ASCET edit prompt rules and few-shots", () => {
+		assert.equal(new Set(ascetEditPrompt.promptGuidelines).size, ascetEditPrompt.promptGuidelines.length);
 	});
 
 	test("search prompt examples do not expose redesigned search_occurrences", () => {
@@ -67,7 +70,7 @@ describe("ASCET prompt coordination", () => {
 		assert.equal(getActionInstruction("ascet_read.read_code")?.action, "read_code");
 		assert.ok(
 			findActionInstructions({ profile: "write-preflight", tags: ["provider-discovery"] }).some(
-				(instruction) => instruction.id === "ascet_write.set_element_dependency",
+				(instruction) => instruction.id === "ascet_edit.set_element_dependency",
 			),
 		);
 		assert.ok(

@@ -1,24 +1,24 @@
 import { Type } from "typebox";
 import { type AscetCliJsonResult, runAscetCliJson } from "./cli.ts";
 import { normalizeAscetPath } from "./core/path.ts";
+import type { AscetEditApprovalContext } from "./edit/approval.ts";
 import {
-	type AscetWriteControlParams,
+	type AscetEditControlParams,
 	appendVerifyAndJson,
-	createWriteSummary,
-	formatWriteOperationResult,
+	createAscetEditSummary,
+	formatAscetEditOperationResult,
 	ifMissingSchema,
-	type RunAscetWriteOperationOptions,
-	runApprovedAscetWriteOperation,
-} from "./write-common.ts";
-import type { AscetWriteApprovalContext } from "./write-policy.ts";
+	type RunAscetEditOperationOptions,
+	runApprovedAscetEditOperation,
+} from "./edit/common.ts";
 
-export interface AscetDeleteMethodParams extends AscetWriteControlParams {
+export interface AscetDeleteMethodParams extends AscetEditControlParams {
 	componentPath: string;
 	methodName: string;
 	ifMissing?: "fail" | "ignore";
 }
 
-export type RunAscetDeleteMethodOptions = RunAscetWriteOperationOptions;
+export type RunAscetDeleteMethodOptions = RunAscetEditOperationOptions;
 export type AscetDeleteMethodResult = AscetCliJsonResult;
 
 export const ascetDeleteMethodParameters = Type.Object({
@@ -38,7 +38,7 @@ export function buildDeleteMethodArgs(params: AscetDeleteMethodParams): string[]
 }
 
 export function createDeleteMethodSummary(params: AscetDeleteMethodParams): string {
-	return createWriteSummary("delete_method", {
+	return createAscetEditSummary("delete_method", {
 		componentPath: params.componentPath,
 		methodName: params.methodName,
 		ifMissing: params.ifMissing ?? "fail",
@@ -56,9 +56,9 @@ export async function runAscetDeleteMethod(
 export async function runApprovedAscetDeleteMethod(
 	params: AscetDeleteMethodParams,
 	options: RunAscetDeleteMethodOptions,
-	ctx: AscetWriteApprovalContext,
+	ctx: AscetEditApprovalContext,
 ): Promise<AscetDeleteMethodResult> {
-	return runApprovedAscetWriteOperation(
+	return runApprovedAscetEditOperation(
 		"delete_method",
 		params,
 		options,
@@ -70,5 +70,5 @@ export async function runApprovedAscetDeleteMethod(
 }
 
 export function formatDeleteMethodResult(result: AscetDeleteMethodResult): string {
-	return formatWriteOperationResult("delete_method", result);
+	return formatAscetEditOperationResult("delete_method", result);
 }

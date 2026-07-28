@@ -28,16 +28,22 @@ import {
 	runApprovedAscetSetStateMachineCode,
 } from "../set-state-machine-code.ts";
 import { compactObject, toToolFailurePayload, unwrapToolSuccessPayload } from "../tool-response-contract.ts";
-import type { RunAscetWriteOperationOptions } from "../write-common.ts";
-import { applyWriteImpactToSearchIndex, createWriteImpact, type WriteImpact } from "../write-common.ts";
-import type { AscetWriteApprovalContext } from "../write-policy.ts";
-import { openAiObjectUnionSchema } from "./_shared/openai-schema.ts";
+import { openAiObjectUnionSchema } from "../tools/_shared/openai-schema.ts";
+import type { AscetEditApprovalContext } from "./approval.ts";
+import type { RunAscetEditOperationOptions } from "./common.ts";
+import { type AscetEditImpact, applyAscetEditImpactToSearchIndex, createAscetEditImpact } from "./common.ts";
+import { type AscetEditActionId, getAscetEditAction } from "./contract.ts";
+import {
+	type AscetEditabilityParams,
+	formatAscetEditabilityResult,
+	runApprovedAscetEditability,
+} from "./editability.ts";
 
 type CodeSource = { code?: string; codeFile?: string };
 const VALID_STATE_MACHINE_OPERATIONS = new Set<string>(ASCET_SET_STATE_MACHINE_CODE_OPERATIONS);
 const VALID_STATE_MACHINE_OPERATIONS_TEXT = ASCET_SET_STATE_MACHINE_CODE_OPERATIONS.join(", ");
 
-export type AscetWriteParams =
+export type AscetMutationParams =
 	| { action: "create_folder"; folderPath: string; verifyReadback?: boolean; executeWrite?: boolean }
 	| {
 			action: "create_component";
@@ -179,17 +185,23 @@ export type AscetWriteParams =
 			executeWrite?: boolean;
 	  };
 
-export interface AscetWriteResult {
+export type AscetEditParams = AscetMutationParams | AscetEditabilityParams;
+
+export type AscetEditInvocation =
+	| { kind: "mutation"; action: AscetMutationParams["action"] }
+	| { kind: "editability"; mode: AscetEditabilityParams["mode"] };
+
+export interface AscetEditResult {
 	content: Array<{ type: "text"; text: string }>;
 	details: {
 		outcome: AscetToolOutcome;
 		raw?: AscetCliJsonResult;
-		impact?: WriteImpact;
+		impact?: AscetEditImpact;
 		error?: { code: string; message: string };
 	};
 }
 
-type AscetWriteIndexUpdate = WriteImpact | AscetElementIndexWritebackResult;
+type AscetEditIndexUpdate = AscetEditImpact | AscetElementIndexWritebackResult;
 
 const codeSourceSchema = {
 	code: Type.Optional(Type.String()),
@@ -244,7 +256,7 @@ const moduleCodeOperationSchema = Type.Union([
 	Type.Literal("set-external-c-code"),
 ]);
 
-const ascetWriteActionSchemas = [
+export const ascetMutationActionSchemas = [
 	Type.Object({
 		action: Type.Literal("create_folder"),
 		folderPath: Type.String({ minLength: 1 }),
@@ -367,23 +379,23 @@ const ascetWriteActionSchemas = [
 	}),
 ] as const;
 
-export const ascetWriteParameters = openAiObjectUnionSchema<AscetWriteParams>(ascetWriteActionSchemas);
+export const ascetMutationParameters = openAiObjectUnionSchema<AscetMutationParams>(ascetMutationActionSchemas);
 
 function outcomeFromCliResult(result: AscetCliJsonResult): AscetToolOutcome {
 	if (result.ok) {
 		return { status: "ok", data: result.data, warnings: [] };
 	}
-	const code = result.error?.code ?? "ascet_write_failed";
-	const message = result.error?.message ?? "ASCET write failed.";
-	if (code === "ascet_write_ui_required" || code === "ascet_write_rejected") {
+	const code = result.error?.code ?? "ascet_edit_failed";
+	const message = result.error?.message ?? "ASCET edit failed.";
+	if (code === "ascet_edit_ui_required" || code === "ascet_edit_rejected") {
 		return { status: "blocked", code, message };
 	}
 	return { status: "error", error: { code, message } };
 }
 
-function asResponse(outcome: AscetToolOutcome, raw?: AscetCliJsonResult, impact?: WriteImpact): AscetWriteResult {
+function asResponse(outcome: AscetToolOutcome, raw?: AscetCliJsonResult, impact?: AscetEditImpact): AscetEditResult {
 	return {
-		content: [{ type: "text", text: formatWriteOutcomeContent(outcome) }],
+		content: [{ type: "text", text: formatAscetEditOutcomeContent(outcome) }],
 		details: {
 			outcome,
 			raw,
@@ -393,7 +405,7 @@ function asResponse(outcome: AscetToolOutcome, raw?: AscetCliJsonResult, impact?
 	};
 }
 
-function formatWriteOutcomeContent(outcome: AscetToolOutcome): string {
+function formatAscetEditOutcomeContent(outcome: AscetToolOutcome): string {
 	if (outcome.status === "ok") {
 		return JSON.stringify(compactObject(outcome.data) ?? {}, null, 2);
 	}
@@ -406,20 +418,92 @@ function formatWriteOutcomeContent(outcome: AscetToolOutcome): string {
 	return JSON.stringify(compactObject(outcome) ?? {}, null, 2);
 }
 
-async function withWriteCode<T>(
+export function resolveAscetEditInvocation(params: unknown): AscetEditInvocation | undefined {
+	if (!isRecord(params)) {
+		return undefined;
+	}
+	if (Object.hasOwn(params, "action")) {
+		const action =
+			typeof params.action === "string" ? getAscetEditAction(params.action as AscetEditActionId) : undefined;
+		if (!action || action.discriminator.field !== "action") {
+			return undefined;
+		}
+		if (
+			Object.hasOwn(params, "mode") &&
+			!(
+				params.mode === "restore" &&
+				(action.id === "apply_element_spec" || action.id === "apply_project_formula")
+			)
+		) {
+			return undefined;
+		}
+		return { kind: "mutation", action: action.id as AscetMutationParams["action"] };
+	}
+	if (!Object.hasOwn(params, "mode")) {
+		return undefined;
+	}
+	const mode = typeof params.mode === "string" ? getAscetEditAction(params.mode as AscetEditActionId) : undefined;
+	return mode?.discriminator.field === "mode"
+		? { kind: "editability", mode: mode.id as AscetEditabilityParams["mode"] }
+		: undefined;
+}
+
+export function getAscetEditActionId(params: unknown): AscetEditActionId | undefined {
+	const invocation = resolveAscetEditInvocation(params);
+	return invocation?.kind === "mutation" ? invocation.action : invocation?.mode;
+}
+
+export async function runAscetEdit(
+	params: unknown,
+	options: RunAscetEditOperationOptions,
+	ctx: AscetEditApprovalContext,
+): Promise<AscetEditResult> {
+	const invocation = resolveAscetEditInvocation(params);
+	if (!invocation || !isRecord(params)) {
+		return asResponse({
+			status: "error",
+			error: {
+				code: "ascet_edit_invalid_parameter",
+				message:
+					"ascet_edit requires exactly one supported discriminator: action for a mutation, or mode=check/set for editability.",
+			},
+		});
+	}
+	if (invocation.kind === "mutation") {
+		return runAscetMutation(params as AscetMutationParams, options, ctx);
+	}
+
+	const editabilityParams = params as unknown as AscetEditabilityParams;
+	const raw = await runApprovedAscetEditability(editabilityParams, options, ctx);
+	const outcome = outcomeFromCliResult(raw);
+	return {
+		content: [{ type: "text", text: formatAscetEditabilityResult(raw, editabilityParams) }],
+		details: {
+			outcome,
+			raw,
+			error: outcome.status === "error" ? outcome.error : undefined,
+		},
+	};
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+async function withEditCode<T>(
 	params: CodeSource & { action: string },
 	run: (codeFile: string) => Promise<T>,
 ): Promise<T> {
 	return withInlineCodeFile({ code: params.code, codeFile: params.codeFile, prefix: params.action }, run);
 }
 
-export async function runAscetWrite(
-	params: AscetWriteParams,
-	options: RunAscetWriteOperationOptions,
-	ctx: AscetWriteApprovalContext,
-): Promise<AscetWriteResult> {
-	const normalizedParams = normalizeAscetWriteParams(params);
-	const validation = validateAscetWriteParams(normalizedParams);
+export async function runAscetMutation(
+	params: AscetMutationParams,
+	options: RunAscetEditOperationOptions,
+	ctx: AscetEditApprovalContext,
+): Promise<AscetEditResult> {
+	const normalizedParams = normalizeAscetMutationParams(params);
+	const validation = validateAscetMutationParams(normalizedParams);
 	if (validation) {
 		return asResponse(validation);
 	}
@@ -427,21 +511,21 @@ export async function runAscetWrite(
 		return asResponse(createPreflightOutcome({ action: normalizedParams.action, params: normalizedParams }));
 	}
 
-	const raw = await dispatchWrite(normalizedParams, options, ctx);
+	const raw = await dispatchMutation(normalizedParams, options, ctx);
 	if (!raw.ok) {
 		return asResponse(outcomeFromCliResult(raw), raw);
 	}
-	const impact = createWriteImpact(normalizedParams);
-	const indexUpdate = await applySuccessfulWriteIndexUpdate(normalizedParams, raw, options, impact);
-	return asResponse(createSuccessfulWriteOutcome(raw, impact, indexUpdate), raw, impact);
+	const impact = createAscetEditImpact(normalizedParams);
+	const indexUpdate = await applySuccessfulEditIndexUpdate(normalizedParams, raw, options, impact);
+	return asResponse(createSuccessfulEditOutcome(raw, impact, indexUpdate), raw, impact);
 }
 
-async function applySuccessfulWriteIndexUpdate(
-	params: AscetWriteParams,
+async function applySuccessfulEditIndexUpdate(
+	params: AscetMutationParams,
 	_raw: AscetCliJsonResult,
-	options: RunAscetWriteOperationOptions,
-	impact: WriteImpact,
-): Promise<AscetWriteIndexUpdate> {
+	options: RunAscetEditOperationOptions,
+	impact: AscetEditImpact,
+): Promise<AscetEditIndexUpdate> {
 	if (params.action === "set_element_dependency") {
 		if (params.dryRun) {
 			return { ...impact, stale: [] };
@@ -451,12 +535,12 @@ async function applySuccessfulWriteIndexUpdate(
 				componentPath: params.targetPath ?? params.componentPath ?? "",
 				names: [params.elementName],
 				scopes: ["Local"],
-				reason: `write_succeeded:${params.action}`,
+				reason: `edit_succeeded:${params.action}`,
 				stale: ["text_code"],
 			},
 			options,
 		);
-		applyTargetedWritebackImpact(update, impact, options);
+		applyTargetedEditWritebackImpact(update, impact, options);
 		return update.issues && update.issues.length > 0 ? { ...update, stale: impact.stale } : update;
 	}
 	if (params.action === "apply_element_spec") {
@@ -468,33 +552,33 @@ async function applySuccessfulWriteIndexUpdate(
 				componentPath: params.componentPath,
 				names: names.length > 0 ? names : undefined,
 				scopes: scopes.length > 0 ? scopes : undefined,
-				reason: `write_succeeded:${params.action}`,
+				reason: `edit_succeeded:${params.action}`,
 				stale: ["text_code"],
 			},
 			options,
 		);
-		applyTargetedWritebackImpact(update, impact, options);
+		applyTargetedEditWritebackImpact(update, impact, options);
 		return update.issues && update.issues.length > 0 ? { ...update, stale: impact.stale } : update;
 	}
-	applyWriteImpactToSearchIndex(impact, `write_succeeded:${params.action}`, options);
+	applyAscetEditImpactToSearchIndex(impact, `edit_succeeded:${params.action}`, options);
 	return impact;
 }
 
-function applyTargetedWritebackImpact(
+function applyTargetedEditWritebackImpact(
 	update: AscetElementIndexWritebackResult,
-	fallbackImpact: WriteImpact,
-	options: RunAscetWriteOperationOptions,
+	fallbackImpact: AscetEditImpact,
+	options: RunAscetEditOperationOptions,
 ): void {
 	if (update.issues && update.issues.length > 0) {
-		invalidateAscetSearchIndexPartitions(fallbackImpact.stale, `write_succeeded:${fallbackImpact.action}`);
-		applyWriteImpactToSearchIndex(fallbackImpact, `write_succeeded:${fallbackImpact.action}`, options);
+		invalidateAscetSearchIndexPartitions(fallbackImpact.stale, `edit_succeeded:${fallbackImpact.action}`);
+		applyAscetEditImpactToSearchIndex(fallbackImpact, `edit_succeeded:${fallbackImpact.action}`, options);
 		return;
 	}
 	if (update.stale.length > 0) {
-		invalidateAscetSearchIndexPartitions(update.stale, `write_succeeded:${fallbackImpact.action}`);
-		applyWriteImpactToSearchIndex(
+		invalidateAscetSearchIndexPartitions(update.stale, `edit_succeeded:${fallbackImpact.action}`);
+		applyAscetEditImpactToSearchIndex(
 			{ ...fallbackImpact, stale: update.stale },
-			`write_succeeded:${fallbackImpact.action}`,
+			`edit_succeeded:${fallbackImpact.action}`,
 			options,
 		);
 	}
@@ -524,13 +608,13 @@ function uniqueStrings(values: readonly string[]): string[] {
 }
 
 function isJsonRecord(value: unknown): value is Record<string, unknown> {
-	return value !== null && typeof value === "object" && !Array.isArray(value);
+	return isRecord(value);
 }
 
-function createSuccessfulWriteOutcome(
+function createSuccessfulEditOutcome(
 	raw: AscetCliJsonResult,
-	_impact: WriteImpact,
-	indexUpdate: AscetWriteIndexUpdate,
+	_impact: AscetEditImpact,
+	indexUpdate: AscetEditIndexUpdate,
 ): AscetToolOutcome {
 	const payload = unwrapToolSuccessPayload(raw.data);
 	const record = asRecord(payload);
@@ -558,7 +642,7 @@ function omitKeys(record: Record<string, unknown>, keys: readonly string[]): Rec
 	return Object.fromEntries(Object.entries(record).filter(([key]) => !omit.has(key)));
 }
 
-function normalizeAscetWriteParams(params: AscetWriteParams): AscetWriteParams {
+function normalizeAscetMutationParams(params: AscetMutationParams): AscetMutationParams {
 	if (
 		params.action === "create_component" &&
 		!params.language &&
@@ -584,13 +668,13 @@ function normalizeAscetWriteParams(params: AscetWriteParams): AscetWriteParams {
 	return params;
 }
 
-function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | undefined {
+function validateAscetMutationParams(params: AscetMutationParams): AscetToolOutcome | undefined {
 	if (params.action === "set_element_dependency") {
 		if (!params.targetPath && !params.componentPath) {
 			return {
 				status: "error",
 				error: {
-					code: "ascet_write_missing_parameter",
+					code: "ascet_edit_missing_parameter",
 					message: "set_element_dependency requires targetPath or componentPath.",
 				},
 			};
@@ -599,7 +683,7 @@ function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | 
 			return {
 				status: "error",
 				error: {
-					code: "ascet_write_missing_parameter",
+					code: "ascet_edit_missing_parameter",
 					message: "set_element_dependency requires elementName.",
 				},
 			};
@@ -608,7 +692,7 @@ function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | 
 			return {
 				status: "error",
 				error: {
-					code: "ascet_write_missing_parameter",
+					code: "ascet_edit_missing_parameter",
 					message: "set_element_dependency requires dependency.",
 				},
 			};
@@ -617,7 +701,7 @@ function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | 
 			return {
 				status: "error",
 				error: {
-					code: "ascet_write_invalid_parameter",
+					code: "ascet_edit_invalid_parameter",
 					message: 'set_element_dependency dependencyFormula is only valid with dependency="dependent".',
 				},
 			};
@@ -626,7 +710,7 @@ function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | 
 			return {
 				status: "error",
 				error: {
-					code: "ascet_write_invalid_parameter",
+					code: "ascet_edit_invalid_parameter",
 					message: "set_element_dependency dependencyFormula and clearDependencyFormula cannot be used together.",
 				},
 			};
@@ -635,7 +719,7 @@ function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | 
 			return {
 				status: "error",
 				error: {
-					code: "ascet_write_invalid_parameter",
+					code: "ascet_edit_invalid_parameter",
 					message: "set_element_dependency dependencyMappings requires dependencyFormula.",
 				},
 			};
@@ -646,7 +730,7 @@ function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | 
 			return {
 				status: "error",
 				error: {
-					code: "ascet_write_missing_component_kind",
+					code: "ascet_edit_missing_component_kind",
 					message:
 						"create_method with executeWrite=true requires componentKind; inspect the target first so methodKind can be validated before ASCET ToolAPI execution.",
 				},
@@ -656,7 +740,7 @@ function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | 
 			return {
 				status: "error",
 				error: {
-					code: "ascet_write_missing_method_kind",
+					code: "ascet_edit_missing_method_kind",
 					message:
 						"create_method requires methodKind for statemachine targets; inspect the target and choose action, condition, or trigger.",
 				},
@@ -674,7 +758,7 @@ function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | 
 		return {
 			status: "error",
 			error: {
-				code: "ascet_write_missing_parameter",
+				code: "ascet_edit_missing_parameter",
 				message: "section parameter is required for set_module_code",
 			},
 		};
@@ -683,7 +767,7 @@ function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | 
 		return {
 			status: "error",
 			error: {
-				code: "ascet_write_missing_parameter",
+				code: "ascet_edit_missing_parameter",
 				message: `operation parameter is required for set_state_machine_code. Valid values: ${VALID_STATE_MACHINE_OPERATIONS_TEXT}.`,
 			},
 		};
@@ -692,7 +776,7 @@ function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | 
 		return {
 			status: "error",
 			error: {
-				code: "ascet_write_invalid_operation",
+				code: "ascet_edit_invalid_operation",
 				message: `Unknown state-machine write operation '${params.operation}'. Valid values: ${VALID_STATE_MACHINE_OPERATIONS_TEXT}.`,
 			},
 		};
@@ -701,7 +785,7 @@ function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | 
 		return {
 			status: "error",
 			error: {
-				code: "ascet_write_missing_parameter",
+				code: "ascet_edit_missing_parameter",
 				message: "set_enumerators requires at least one enumerator.",
 			},
 		};
@@ -714,7 +798,7 @@ function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | 
 		return {
 			status: "error",
 			error: {
-				code: "ascet_write_missing_parameter",
+				code: "ascet_edit_missing_parameter",
 				message: "set_method_signature requires returnType or at least one argument.",
 			},
 		};
@@ -723,7 +807,7 @@ function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | 
 		return {
 			status: "error",
 			error: {
-				code: "ascet_write_invalid_scope",
+				code: "ascet_edit_invalid_scope",
 				message: 'set_element_dependency folder writes require match="all" to modify multiple candidates.',
 			},
 		};
@@ -731,10 +815,10 @@ function validateAscetWriteParams(params: AscetWriteParams): AscetToolOutcome | 
 	return undefined;
 }
 
-async function dispatchWrite(
-	params: AscetWriteParams,
-	options: RunAscetWriteOperationOptions,
-	ctx: AscetWriteApprovalContext,
+async function dispatchMutation(
+	params: AscetMutationParams,
+	options: RunAscetEditOperationOptions,
+	ctx: AscetEditApprovalContext,
 ): Promise<AscetCliJsonResult> {
 	switch (params.action) {
 		case "create_folder":
@@ -755,16 +839,16 @@ async function dispatchWrite(
 		case "delete_folder":
 			return runApprovedAscetDeleteFolder(params, options, ctx);
 		case "set_method_code":
-			return withWriteCode(params, (codeFile) =>
+			return withEditCode(params, (codeFile) =>
 				runApprovedAscetSetMethodCode({ ...params, codeFile }, options, ctx),
 			);
 		case "set_module_code":
-			return withWriteCode(params, (codeFile) =>
+			return withEditCode(params, (codeFile) =>
 				runApprovedAscetSetModuleCode({ ...params, operation: params.operation!, codeFile }, options, ctx),
 			);
 		case "set_state_machine_code":
 			if (params.code !== undefined || params.codeFile !== undefined) {
-				return withWriteCode(params, (codeFile) =>
+				return withEditCode(params, (codeFile) =>
 					runApprovedAscetSetStateMachineCode({ ...params, codeFile }, options, ctx),
 				);
 			}
@@ -783,6 +867,6 @@ async function dispatchWrite(
 	}
 }
 
-export function formatAscetWriteResult(result: AscetWriteResult): string {
+export function formatAscetEditResult(result: AscetEditResult): string {
 	return result.content[0]?.text ?? "";
 }

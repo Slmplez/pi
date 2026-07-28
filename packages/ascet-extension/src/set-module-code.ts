@@ -1,26 +1,26 @@
 import { Type } from "typebox";
 import { type AscetCliJsonResult, runAscetCliJson } from "./cli.ts";
 import { normalizeAscetPath } from "./core/path.ts";
+import type { AscetEditApprovalContext } from "./edit/approval.ts";
 import {
-	type AscetWriteControlParams,
+	type AscetEditControlParams,
 	appendVerifyAndJson,
-	createWriteSummary,
-	formatWriteOperationResult,
-	type RunAscetWriteOperationOptions,
-	runApprovedAscetWriteOperation,
-} from "./write-common.ts";
-import type { AscetWriteApprovalContext } from "./write-policy.ts";
+	createAscetEditSummary,
+	formatAscetEditOperationResult,
+	type RunAscetEditOperationOptions,
+	runApprovedAscetEditOperation,
+} from "./edit/common.ts";
 
 export type AscetSetModuleCodeOperation = "set-method" | "set-header" | "set-external-c-code";
 
-export interface AscetSetModuleCodeParams extends AscetWriteControlParams {
+export interface AscetSetModuleCodeParams extends AscetEditControlParams {
 	modulePath: string;
 	operation: AscetSetModuleCodeOperation;
 	methodName?: string;
 	codeFile: string;
 }
 
-export type RunAscetSetModuleCodeOptions = RunAscetWriteOperationOptions;
+export type RunAscetSetModuleCodeOptions = RunAscetEditOperationOptions;
 export type AscetSetModuleCodeResult = AscetCliJsonResult;
 
 export const ascetSetModuleCodeParameters = Type.Object({
@@ -42,7 +42,7 @@ export function buildSetModuleCodeArgs(params: AscetSetModuleCodeParams): string
 }
 
 export function createSetModuleCodeSummary(params: AscetSetModuleCodeParams): string {
-	return createWriteSummary("set_module_code", {
+	return createAscetEditSummary("set_module_code", {
 		modulePath: params.modulePath,
 		operation: params.operation,
 		methodName: params.methodName ?? "",
@@ -61,9 +61,9 @@ export async function runAscetSetModuleCode(
 export async function runApprovedAscetSetModuleCode(
 	params: AscetSetModuleCodeParams,
 	options: RunAscetSetModuleCodeOptions,
-	ctx: AscetWriteApprovalContext,
+	ctx: AscetEditApprovalContext,
 ): Promise<AscetSetModuleCodeResult> {
-	return runApprovedAscetWriteOperation(
+	return runApprovedAscetEditOperation(
 		"set_module_code",
 		params,
 		options,
@@ -74,5 +74,5 @@ export async function runApprovedAscetSetModuleCode(
 }
 
 export function formatSetModuleCodeResult(result: AscetSetModuleCodeResult): string {
-	return formatWriteOperationResult("set_module_code", result);
+	return formatAscetEditOperationResult("set_module_code", result);
 }

@@ -24,6 +24,10 @@ interface ToolResponse {
 type JsonRecord = Record<string, unknown>;
 
 const repoRoot = resolve(process.cwd());
+// Keep the extension under test separate from the ASCET project/runtime it targets.
+const ascetCwd = resolve(process.env.ASCET_SMOKE_CWD ?? repoRoot);
+const configuredComponentPath = process.env.ASCET_SMOKE_COMPONENT;
+const preflightFolderPath = process.env.ASCET_SMOKE_PREFLIGHT_FOLDER ?? "__pi_ascet_live_smoke_preflight__";
 const extensionPath = resolve(repoRoot, ".pi/extensions/ascet/index.ts");
 const result = await loadExtensions([extensionPath], repoRoot);
 
@@ -48,7 +52,7 @@ async function callTool(name: string, params: Record<string, unknown>) {
 		params,
 		new AbortController().signal,
 		undefined,
-		{ cwd: repoRoot },
+		{ cwd: ascetCwd },
 	)) as ToolResponse;
 	const outcomeStatus = response.details.outcome?.status;
 	const ok =
@@ -129,7 +133,7 @@ async function callToolAllowingError(name: string, params: Record<string, unknow
 		params,
 		new AbortController().signal,
 		undefined,
-		{ cwd: repoRoot },
+		{ cwd: ascetCwd },
 	)) as ToolResponse;
 	return response.details;
 }
@@ -143,7 +147,7 @@ const status = (await statusTool.execute(
 	{},
 	new AbortController().signal,
 	undefined,
-	{ cwd: repoRoot },
+	{ cwd: ascetCwd },
 )) as ToolResponse;
 if (!status.details.installationOk) {
 	throw new Error(`ascet_status reported unavailable ASCET installation: ${JSON.stringify(status.details)}`);
@@ -156,7 +160,9 @@ const capabilities = await callTool("ascet_capabilities", {
 	limit: 3,
 });
 await callTool("ascet_explore", { action: "list_components", folderPath: "PlatformLibrary", limit: 1 });
-const componentProbe = await findSmokeComponentPath();
+const componentProbe = configuredComponentPath
+	? { query: "configured", path: configuredComponentPath, result: undefined }
+	: await findSmokeComponentPath();
 const componentPath = componentProbe.path;
 const resolved = await callTool("ascet_search", {
 	action: "resolve_component",
@@ -174,7 +180,7 @@ const indexedStatus = (await statusTool.execute(
 	{},
 	new AbortController().signal,
 	undefined,
-	{ cwd: repoRoot },
+	{ cwd: ascetCwd },
 )) as ToolResponse;
 if (!indexedStatus.details.ok) {
 	throw new Error(`ascet_status did not become ready after list_components: ${JSON.stringify(indexedStatus.details)}`);
@@ -189,7 +195,7 @@ if (blockDiagram.error && blockDiagram.error.code !== "ascet_block_diagram_surfa
 		`ascet_read.read_block_diagram expected ok or unsupported text ESDL surface, got: ${blockDiagram.error?.code ?? "ok"}`,
 	);
 }
-const editable = await callTool("ascet_component_editable", { mode: "check", componentPath });
+const editable = await callTool("ascet_edit", { mode: "check", componentPath });
 const diff = await callTool("ascet_diff", {
 	action: "diff_component_snapshot",
 	leftPath: componentPath,
@@ -201,9 +207,9 @@ const verify = await callTool("ascet_verify", {
 	objectKind: "class",
 	componentPath,
 });
-const writePreflight = await callTool("ascet_write", {
+const writePreflight = await callTool("ascet_edit", {
 	action: "create_folder",
-	folderPath: "__pi_ascet_live_smoke_preflight__",
+	folderPath: preflightFolderPath,
 });
 const schedulerAfter = await callTool("ascet_scheduler_status", { format: "json" });
 const schedulerRecover = await callTool("ascet_scheduler_status", { action: "recover", format: "json" });
@@ -212,6 +218,7 @@ console.log(
 	JSON.stringify(
 		{
 			ok: true,
+			ascetCwd,
 			tools: {
 				ascet_status: { mode: indexedStatus.details.paths.mode, cliPath: indexedStatus.details.paths.cliPath },
 				ascet_scheduler_status_before: {
@@ -223,7 +230,7 @@ console.log(
 				ascet_search_components: {
 					query: componentProbe.query,
 					componentPath,
-					counts: (componentProbe.result as { counts?: unknown }).counts,
+					counts: (componentProbe.result as { counts?: unknown } | undefined)?.counts,
 				},
 				ascet_search_resolve: { component: resolved.component },
 				ascet_explore_list_components: { folderPath, counts: folderItems.counts, items: folderItems.items },
@@ -231,10 +238,11 @@ console.log(
 					ok: !blockDiagram.error,
 					error: blockDiagram.error,
 				},
-				ascet_component_editable: { editable },
+				ascet_edit_check: { editable },
 				ascet_diff: { counts: diff.counts },
 				ascet_verify: { counts: verify.counts, summary: verify.summary },
-				ascet_write_preflight: {
+				ascet_edit_preflight: {
+					folderPath: preflightFolderPath,
 					status: (writePreflight as { status?: unknown }).status,
 					nextStep: (writePreflight as { nextStep?: unknown }).nextStep,
 				},

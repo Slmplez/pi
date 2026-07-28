@@ -2,17 +2,17 @@ import { Type } from "typebox";
 import { type AscetCliJsonResult, runAscetCliJson } from "./cli.ts";
 import { normalizeAscetPath } from "./core/path.ts";
 import { withInlineCodeFile } from "./core/temp-files.ts";
+import type { AscetEditApprovalContext } from "./edit/approval.ts";
 import {
-	type AscetWriteControlParams,
+	type AscetEditControlParams,
 	appendVerifyAndJson,
-	createWriteSummary,
-	formatWriteOperationResult,
-	type RunAscetWriteOperationOptions,
-	runApprovedAscetWriteOperation,
-} from "./write-common.ts";
-import type { AscetWriteApprovalContext } from "./write-policy.ts";
+	createAscetEditSummary,
+	formatAscetEditOperationResult,
+	type RunAscetEditOperationOptions,
+	runApprovedAscetEditOperation,
+} from "./edit/common.ts";
 
-export interface AscetSetMethodSignatureParams extends AscetWriteControlParams {
+export interface AscetSetMethodSignatureParams extends AscetEditControlParams {
 	componentPath: string;
 	methodName: string;
 	returnType?: AscetPrimitiveSignatureType;
@@ -20,7 +20,7 @@ export interface AscetSetMethodSignatureParams extends AscetWriteControlParams {
 	arguments?: AscetMethodSignatureArgument[];
 }
 
-export type RunAscetSetMethodSignatureOptions = RunAscetWriteOperationOptions;
+export type RunAscetSetMethodSignatureOptions = RunAscetEditOperationOptions;
 export type AscetSetMethodSignatureResult = AscetCliJsonResult;
 export type AscetPrimitiveSignatureType = "cont" | "sdisc" | "udisc" | "log";
 
@@ -80,7 +80,7 @@ export function createMethodSignatureSpec(params: AscetSetMethodSignatureParams)
 }
 
 export function createSetMethodSignatureSummary(params: AscetSetMethodSignatureParams): string {
-	return createWriteSummary("set_method_signature", {
+	return createAscetEditSummary("set_method_signature", {
 		componentPath: params.componentPath,
 		methodName: params.methodName,
 		returnType: params.returnType ?? "",
@@ -107,7 +107,7 @@ export async function runAscetSetMethodSignature(
 			(signatureJsonFile) =>
 				runAscetCliJson(buildSetMethodSignatureArgs(params, signatureJsonFile), {
 					...options,
-					toolName: "ascet_write",
+					toolName: "ascet_edit",
 					commandId: "set_method_signature",
 					jobKind: "write",
 				}),
@@ -115,7 +115,7 @@ export async function runAscetSetMethodSignature(
 	}
 	return runAscetCliJson(buildSetMethodSignatureArgs(params), {
 		...options,
-		toolName: "ascet_write",
+		toolName: "ascet_edit",
 		commandId: "set_method_signature",
 		jobKind: "write",
 	});
@@ -124,7 +124,7 @@ export async function runAscetSetMethodSignature(
 export async function runApprovedAscetSetMethodSignature(
 	params: AscetSetMethodSignatureParams,
 	options: RunAscetSetMethodSignatureOptions,
-	ctx: AscetWriteApprovalContext,
+	ctx: AscetEditApprovalContext,
 ): Promise<AscetSetMethodSignatureResult> {
 	if (needsSignatureJson(params)) {
 		return withInlineCodeFile(
@@ -133,7 +133,7 @@ export async function runApprovedAscetSetMethodSignature(
 				prefix: "set_method_signature",
 			},
 			(signatureJsonFile) =>
-				runApprovedAscetWriteOperation(
+				runApprovedAscetEditOperation(
 					"set_method_signature",
 					params,
 					options,
@@ -144,7 +144,7 @@ export async function runApprovedAscetSetMethodSignature(
 				),
 		);
 	}
-	return runApprovedAscetWriteOperation(
+	return runApprovedAscetEditOperation(
 		"set_method_signature",
 		params,
 		options,
@@ -156,5 +156,5 @@ export async function runApprovedAscetSetMethodSignature(
 }
 
 export function formatSetMethodSignatureResult(result: AscetSetMethodSignatureResult): string {
-	return formatWriteOperationResult("set_method_signature", result);
+	return formatAscetEditOperationResult("set_method_signature", result);
 }

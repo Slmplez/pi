@@ -1,24 +1,24 @@
 import { Type } from "typebox";
 import { type AscetCliJsonResult, runAscetCliJson } from "./cli.ts";
 import { normalizeAscetPath } from "./core/path.ts";
+import type { AscetEditApprovalContext } from "./edit/approval.ts";
 import {
-	type AscetWriteControlParams,
+	type AscetEditControlParams,
 	appendVerifyAndJson,
-	createWriteSummary,
-	formatWriteOperationResult,
-	type RunAscetWriteOperationOptions,
-	runApprovedAscetWriteOperation,
-} from "./write-common.ts";
-import type { AscetWriteApprovalContext } from "./write-policy.ts";
+	createAscetEditSummary,
+	formatAscetEditOperationResult,
+	type RunAscetEditOperationOptions,
+	runApprovedAscetEditOperation,
+} from "./edit/common.ts";
 
-export interface AscetApplyProjectFormulaParams extends AscetWriteControlParams {
+export interface AscetApplyProjectFormulaParams extends AscetEditControlParams {
 	projectPath: string;
 	specFile: string;
 	mode?: "restore";
 	deleteMissing?: boolean;
 }
 
-export type RunAscetApplyProjectFormulaOptions = RunAscetWriteOperationOptions;
+export type RunAscetApplyProjectFormulaOptions = RunAscetEditOperationOptions;
 export type AscetApplyProjectFormulaResult = AscetCliJsonResult;
 
 export const ascetApplyProjectFormulaParameters = Type.Object({
@@ -42,7 +42,7 @@ export function buildApplyProjectFormulaArgs(params: AscetApplyProjectFormulaPar
 }
 
 export function createApplyProjectFormulaSummary(params: AscetApplyProjectFormulaParams): string {
-	return createWriteSummary("apply_project_formula", {
+	return createAscetEditSummary("apply_project_formula", {
 		projectPath: params.projectPath,
 		specFile: params.specFile,
 		mode: params.mode ?? "",
@@ -61,9 +61,9 @@ export async function runAscetApplyProjectFormula(
 export async function runApprovedAscetApplyProjectFormula(
 	params: AscetApplyProjectFormulaParams,
 	options: RunAscetApplyProjectFormulaOptions,
-	ctx: AscetWriteApprovalContext,
+	ctx: AscetEditApprovalContext,
 ): Promise<AscetApplyProjectFormulaResult> {
-	return runApprovedAscetWriteOperation(
+	return runApprovedAscetEditOperation(
 		"apply_project_formula",
 		params,
 		options,
@@ -74,5 +74,5 @@ export async function runApprovedAscetApplyProjectFormula(
 }
 
 export function formatApplyProjectFormulaResult(result: AscetApplyProjectFormulaResult): string {
-	return formatWriteOperationResult("apply_project_formula", result);
+	return formatAscetEditOperationResult("apply_project_formula", result);
 }

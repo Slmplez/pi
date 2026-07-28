@@ -647,7 +647,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["diff", "project"],
 		}),
 	}),
-	descriptor("ascet_write", "create_folder", "public", WRITE_PROFILES, {
+	descriptor("ascet_edit", "create_folder", "public", WRITE_PROFILES, {
 		prompt: prompt("Create one ASCET folder with guarded preflight/readback behavior.", {
 			rules: writePreflightRules,
 			fewShots: [
@@ -656,7 +656,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["write", "folder", "preflight"],
 		}),
 	}),
-	descriptor("ascet_write", "create_component", "public", WRITE_PROFILES, {
+	descriptor("ascet_edit", "create_component", "public", WRITE_PROFILES, {
 		prompt: prompt("Create one component target with kind-specific defaults and readback.", {
 			rules: [
 				...writePreflightRules,
@@ -675,7 +675,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["write", "component", "preflight"],
 		}),
 	}),
-	descriptor("ascet_write", "create_method", "public", WRITE_PROFILES, {
+	descriptor("ascet_edit", "create_method", "public", WRITE_PROFILES, {
 		prompt: prompt("Create one method/process/action shell compatible with the component kind.", {
 			rules: [...writePreflightRules, ...methodEditRules],
 			fewShots: [
@@ -691,7 +691,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["write", "method", "preflight"],
 		}),
 	}),
-	descriptor("ascet_write", "set_method_signature", "public", WRITE_PROFILES, {
+	descriptor("ascet_edit", "set_method_signature", "public", WRITE_PROFILES, {
 		prompt: prompt("Patch a method signature before writing code that depends on return values or arguments.", {
 			rules: [
 				...writePreflightRules,
@@ -710,7 +710,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["write", "method", "signature"],
 		}),
 	}),
-	descriptor("ascet_write", "delete_component", "public", WRITE_PROFILES, {
+	descriptor("ascet_edit", "delete_component", "public", WRITE_PROFILES, {
 		prompt: prompt("Delete one component through guarded write flow.", {
 			rules: writePreflightRules,
 			fewShots: [
@@ -724,7 +724,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["write", "component", "delete"],
 		}),
 	}),
-	descriptor("ascet_write", "delete_method", "public", WRITE_PROFILES, {
+	descriptor("ascet_edit", "delete_method", "public", WRITE_PROFILES, {
 		prompt: prompt("Delete one method through guarded write flow.", {
 			rules: writePreflightRules,
 			fewShots: [
@@ -739,7 +739,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["write", "method", "delete"],
 		}),
 	}),
-	descriptor("ascet_write", "delete_folder", "public", WRITE_PROFILES, {
+	descriptor("ascet_edit", "delete_folder", "public", WRITE_PROFILES, {
 		prompt: prompt("Delete one folder through guarded write flow.", {
 			rules: writePreflightRules,
 			fewShots: [
@@ -753,7 +753,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["write", "folder", "delete"],
 		}),
 	}),
-	descriptor("ascet_write", "set_method_code", "public", WRITE_PROFILES, {
+	descriptor("ascet_edit", "set_method_code", "public", WRITE_PROFILES, {
 		prompt: prompt("Set one class/module method body.", {
 			rules: [...writePreflightRules, ...codeEditRules],
 			fewShots: [
@@ -768,7 +768,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["write", "code", "method"],
 		}),
 	}),
-	descriptor("ascet_write", "set_module_code", "public", WRITE_PROFILES, {
+	descriptor("ascet_edit", "set_module_code", "public", WRITE_PROFILES, {
 		prompt: prompt("Set module method, header, or external C code surfaces.", {
 			rules: [
 				...writePreflightRules,
@@ -801,7 +801,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["write", "code", "module"],
 		}),
 	}),
-	descriptor("ascet_write", "set_state_machine_code", "public", WRITE_PROFILES, {
+	descriptor("ascet_edit", "set_state_machine_code", "public", WRITE_PROFILES, {
 		prompt: prompt("Set state-machine method, state, transition, binding, or start-state code.", {
 			rules: [
 				...writePreflightRules,
@@ -948,7 +948,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["write", "code", "state-machine"],
 		}),
 	}),
-	descriptor("ascet_write", "set_enumerators", "public", WRITE_PROFILES, {
+	descriptor("ascet_edit", "set_enumerators", "public", WRITE_PROFILES, {
 		prompt: prompt("Set enumeration values for an ASCET enumeration component.", {
 			rules: writePreflightRules,
 			fewShots: [
@@ -962,7 +962,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["write", "enumeration"],
 		}),
 	}),
-	descriptor("ascet_write", "apply_element_spec", "public", WRITE_PROFILES, {
+	descriptor("ascet_edit", "apply_element_spec", "public", WRITE_PROFILES, {
 		prompt: prompt("Apply structured primitive element specs from evidence, not guesses.", {
 			rules: [...writePreflightRules, ...elementSpecRules],
 			fewShots: [
@@ -977,7 +977,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["write", "element"],
 		}),
 	}),
-	descriptor("ascet_write", "apply_project_formula", "public", WRITE_PROFILES, {
+	descriptor("ascet_edit", "apply_project_formula", "public", WRITE_PROFILES, {
 		prompt: prompt("Apply structured project formula specs through guarded write flow.", {
 			rules: [
 				...writePreflightRules,
@@ -994,7 +994,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["write", "project", "formula"],
 		}),
 	}),
-	descriptor("ascet_write", "set_element_dependency", "public", WRITE_PROFILES, {
+	descriptor("ascet_edit", "set_element_dependency", "public", WRITE_PROFILES, {
 		prompt: prompt("Set or clear dependency state for an existing element.", {
 			rules: [
 				...writePreflightRules,
@@ -1031,14 +1031,14 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["verify", "readback"],
 		}),
 	}),
-	descriptor("ascet_component_editable", "check", "public", ["component-edit"], {
+	descriptor("ascet_edit", "check", "public", ["component-edit"], {
 		prompt: prompt("Check whether a source-controlled ASCET component is editable.", {
 			rules: ["Use mode=check before editing a source-controlled ASCET component when editability is uncertain."],
 			fewShots: [shot("check editable", { mode: "check", componentPath: "DEMO/PID" })],
 			tags: ["write", "scm", "preflight"],
 		}),
 	}),
-	descriptor("ascet_component_editable", "set", "public", ["component-edit"], {
+	descriptor("ascet_edit", "set", "public", ["component-edit"], {
 		prompt: prompt("Request an ASCET SCM lock through guarded write flow.", {
 			rules: [
 				"Use mode=set only when the user intends to make the component editable.",

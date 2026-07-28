@@ -3,21 +3,21 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, test } from "node:test";
-import type { AscetCliExecutionResult, AscetCliRequest } from "./cli.ts";
-import type { AscetScheduler } from "./scheduler/scheduler.ts";
-import type { AscetJob } from "./scheduler/types.ts";
+import type { AscetCliExecutionResult, AscetCliRequest } from "../cli.ts";
+import type { AscetScheduler } from "../scheduler/scheduler.ts";
+import type { AscetJob } from "../scheduler/types.ts";
 import {
 	getAscetFullElement,
 	getAscetSearchIndexPartitionState,
 	queryAscetSearchIndex,
 	queryAscetTextCodeIndex,
 	resetAscetSearchIndexForTest,
-} from "./search-index.ts";
-import { runAscetWrite } from "./tools/write.ts";
-import type { AscetWriteApprovalContext } from "./write-policy.ts";
+} from "../search-index.ts";
+import type { AscetEditApprovalContext } from "./approval.ts";
+import { runAscetEdit } from "./service.ts";
 
 function createReadyEnv(): { cwd: string; env: Record<string, string | undefined>; cleanup: () => void } {
-	const root = mkdtempSync(join(tmpdir(), "pi-ascet-write-"));
+	const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-"));
 	const contractsRoot = join(root, "contracts");
 	mkdirSync(contractsRoot, { recursive: true });
 	writeFileSync(join(root, "AscetCli.exe"), "", "utf8");
@@ -85,7 +85,7 @@ function makeExecution(request: AscetCliRequest, ok = true): AscetCliExecutionRe
 						readback: { hash: "sha256:abc", lineCount: 1 },
 					}
 				: null,
-			error: ok ? null : { code: "ascet_write_failed", message: "write failed" },
+			error: ok ? null : { code: "ascet_edit_failed", message: "write failed" },
 			meta: { mode: "exec", operation: "set_method_code" },
 		}),
 		stderr: ok ? "" : "write failed",
@@ -166,7 +166,7 @@ async function waitFor(predicate: () => boolean, timeoutMs = 1000): Promise<void
 	}
 }
 
-const approvingContext: AscetWriteApprovalContext = {
+const approvingContext: AscetEditApprovalContext = {
 	hasUI: true,
 	ui: {
 		confirm: async () => true,
@@ -177,12 +177,12 @@ afterEach(() => {
 	resetAscetSearchIndexForTest();
 });
 
-describe("ascet_write WriteImpact", () => {
+describe("ascet_edit WriteImpact", () => {
 	test("successful set_method_code returns compact impact and stales element declarations, element refs, and text_code", async () => {
 		seedReadyIndex();
 		const fixture = createReadyEnv();
 		try {
-			const result = await runAscetWrite(
+			const result = await runAscetEdit(
 				{
 					action: "set_method_code",
 					componentPath: "AEB\\Controller",
@@ -210,7 +210,7 @@ describe("ascet_write WriteImpact", () => {
 			assert.equal(result.details.impact?.action, "set_method_code");
 			const textCodePartition = getAscetSearchIndexPartitionState("text_code");
 			assert.ok(textCodePartition && textCodePartition.status === "stale");
-			assert.equal(textCodePartition.invalidatedReason, "write_succeeded:set_method_code");
+			assert.equal(textCodePartition.invalidatedReason, "edit_succeeded:set_method_code");
 			assert.equal(getAscetSearchIndexPartitionState("element_decls")?.status, "stale");
 			assert.equal(getAscetSearchIndexPartitionState("element_refs")?.status, "stale");
 			assert.equal(
@@ -244,7 +244,7 @@ describe("ascet_write WriteImpact", () => {
 					request.args[1] === "warm_search_index" ? makeWarmSearchIndexExecution(request) : makeExecution(request),
 			};
 			const [first, second] = await Promise.all([
-				runAscetWrite(
+				runAscetEdit(
 					{
 						action: "set_method_code",
 						componentPath: "AEB\\Controller",
@@ -255,7 +255,7 @@ describe("ascet_write WriteImpact", () => {
 					options,
 					approvingContext,
 				),
-				runAscetWrite(
+				runAscetEdit(
 					{
 						action: "set_method_code",
 						componentPath: "AEB\\Controller",
@@ -284,7 +284,7 @@ describe("ascet_write WriteImpact", () => {
 
 	test("preflight-only write does not update index state", async () => {
 		seedReadyIndex();
-		const result = await runAscetWrite(
+		const result = await runAscetEdit(
 			{
 				action: "set_method_code",
 				componentPath: "AEB\\Controller",
@@ -304,7 +304,7 @@ describe("ascet_write WriteImpact", () => {
 		seedReadyIndex();
 		const fixture = createReadyEnv();
 		try {
-			const result = await runAscetWrite(
+			const result = await runAscetEdit(
 				{
 					action: "set_method_code",
 					componentPath: "AEB\\Controller",
@@ -338,7 +338,7 @@ describe("ascet_write WriteImpact", () => {
 		const fixture = createReadyEnv();
 		const calls: string[][] = [];
 		try {
-			const result = await runAscetWrite(
+			const result = await runAscetEdit(
 				{
 					action: "set_element_dependency",
 					targetPath: "AEB\\Controller",
@@ -410,7 +410,7 @@ describe("ascet_write WriteImpact", () => {
 		const fixture = createReadyEnv();
 		const calls: string[][] = [];
 		try {
-			await runAscetWrite(
+			await runAscetEdit(
 				{
 					action: "set_element_dependency",
 					targetPath: "AEB\\Controller",
@@ -446,7 +446,7 @@ describe("ascet_write WriteImpact", () => {
 		seedReadyIndex();
 		const fixture = createReadyEnv();
 		try {
-			const result = await runAscetWrite(
+			const result = await runAscetEdit(
 				{
 					action: "set_element_dependency",
 					targetPath: "AEB\\Controller",
@@ -494,7 +494,7 @@ describe("ascet_write WriteImpact", () => {
 			"utf8",
 		);
 		try {
-			const result = await runAscetWrite(
+			const result = await runAscetEdit(
 				{
 					action: "apply_element_spec",
 					componentPath: "AEB\\Controller",

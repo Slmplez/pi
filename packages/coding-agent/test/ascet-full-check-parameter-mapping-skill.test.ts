@@ -106,7 +106,7 @@ describe("ascet-full-check parameter mapping skill", () => {
 
 		expect(parameterMappingReference).toContain("read_dependent_chain");
 		expect(parameterMappingReference).toContain("special.dt-parameter-exemption");
-		expect(parameterMappingReference).toContain("Do not use `ascet_write.set_element_dependency`");
+		expect(parameterMappingReference).toContain("Do not use `ascet_edit.set_element_dependency`");
 		expect(workflow).toContain("empty block diagram");
 		expect(workflow).toContain("not automatically a design defect");
 		expect(toolMap).toContain("diff_component_snapshot");

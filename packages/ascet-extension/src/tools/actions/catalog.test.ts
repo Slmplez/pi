@@ -50,7 +50,7 @@ describe("ASCET action catalog", () => {
 	test("defines dependency chain and dependency write boundaries", () => {
 		const entries = new Map(listActionCatalogEntries().map((entry) => [entry.id, entry]));
 		const readChain = entries.get("ascet_read.read_dependent_chain");
-		const writeDependency = entries.get("ascet_write.set_element_dependency");
+		const writeDependency = entries.get("ascet_edit.set_element_dependency");
 
 		assert.match(readChain?.compact ?? "", /Index-first dependency provider resolver/);
 		assert.match(readChain?.result.fields.join("\n") ?? "", /element\.data/);

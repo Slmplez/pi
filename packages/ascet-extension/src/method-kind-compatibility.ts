@@ -23,7 +23,7 @@ export function getDefaultCreateMethodKind(
 export function validateCreateMethodKindCompatibility(params: {
 	componentKind?: AscetCreateMethodComponentKind;
 	methodKind?: AscetCreateMethodKind;
-}): { code: "ascet_write_incompatible_method_kind"; message: string } | undefined {
+}): { code: "ascet_edit_incompatible_method_kind"; message: string } | undefined {
 	if (!params.componentKind || !params.methodKind) {
 		return undefined;
 	}
@@ -32,7 +32,7 @@ export function validateCreateMethodKindCompatibility(params: {
 		return undefined;
 	}
 	return {
-		code: "ascet_write_incompatible_method_kind",
+		code: "ascet_edit_incompatible_method_kind",
 		message: createMethodKindCompatibilityMessage(params.componentKind, compatibleKinds),
 	};
 }

@@ -1,17 +1,17 @@
 import { Type } from "typebox";
 import { type AscetCliJsonResult, runAscetCliJson } from "./cli.ts";
 import { normalizeAscetPath } from "./core/path.ts";
+import type { AscetEditApprovalContext } from "./edit/approval.ts";
 import {
-	type AscetWriteControlParams,
+	type AscetEditControlParams,
 	appendVerifyAndJson,
-	createWriteSummary,
-	formatWriteOperationResult,
-	type RunAscetWriteOperationOptions,
-	runApprovedAscetWriteOperation,
-} from "./write-common.ts";
-import type { AscetWriteApprovalContext } from "./write-policy.ts";
+	createAscetEditSummary,
+	formatAscetEditOperationResult,
+	type RunAscetEditOperationOptions,
+	runApprovedAscetEditOperation,
+} from "./edit/common.ts";
 
-export interface AscetSetElementDependencyParams extends AscetWriteControlParams {
+export interface AscetSetElementDependencyParams extends AscetEditControlParams {
 	targetPath: string;
 	elementName: string;
 	dependency: "dependent" | "independent";
@@ -24,7 +24,7 @@ export interface AscetSetElementDependencyParams extends AscetWriteControlParams
 	backupDir?: string;
 }
 
-export type RunAscetSetElementDependencyOptions = RunAscetWriteOperationOptions;
+export type RunAscetSetElementDependencyOptions = RunAscetEditOperationOptions;
 export type AscetSetElementDependencyResult = AscetCliJsonResult;
 
 export const ascetSetElementDependencyParameters = Type.Object({
@@ -94,7 +94,7 @@ export function buildSetElementDependencyArgs(params: AscetSetElementDependencyP
 }
 
 export function createSetElementDependencySummary(params: AscetSetElementDependencyParams): string {
-	return createWriteSummary("set_element_dependency", {
+	return createAscetEditSummary("set_element_dependency", {
 		targetPath: params.targetPath,
 		elementName: params.elementName,
 		dependency: params.dependency,
@@ -115,7 +115,7 @@ export async function runAscetSetElementDependency(
 ): Promise<AscetSetElementDependencyResult> {
 	return runAscetCliJson(buildSetElementDependencyArgs(params), {
 		...options,
-		toolName: "ascet_write",
+		toolName: "ascet_edit",
 		commandId: "set_element_dependency",
 		jobKind: "write",
 	});
@@ -124,13 +124,13 @@ export async function runAscetSetElementDependency(
 export async function runApprovedAscetSetElementDependency(
 	params: AscetSetElementDependencyParams,
 	options: RunAscetSetElementDependencyOptions,
-	ctx: AscetWriteApprovalContext,
+	ctx: AscetEditApprovalContext,
 ): Promise<AscetSetElementDependencyResult> {
 	const normalized = {
 		...params,
 		verifyReadback: params.verifyReadback ?? (!params.dryRun && params.executeWrite === true),
 	};
-	return runApprovedAscetWriteOperation(
+	return runApprovedAscetEditOperation(
 		"set_element_dependency",
 		normalized,
 		options,
@@ -142,5 +142,5 @@ export async function runApprovedAscetSetElementDependency(
 }
 
 export function formatSetElementDependencyResult(result: AscetSetElementDependencyResult): string {
-	return formatWriteOperationResult("set_element_dependency", result);
+	return formatAscetEditOperationResult("set_element_dependency", result);
 }

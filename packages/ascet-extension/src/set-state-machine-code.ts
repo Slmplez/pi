@@ -1,15 +1,15 @@
 import { Type } from "typebox";
 import { type AscetCliJsonResult, runAscetCliJson } from "./cli.ts";
 import { normalizeAscetPath } from "./core/path.ts";
+import type { AscetEditApprovalContext } from "./edit/approval.ts";
 import {
-	type AscetWriteControlParams,
+	type AscetEditControlParams,
 	appendVerifyAndJson,
-	createWriteSummary,
-	formatWriteOperationResult,
-	type RunAscetWriteOperationOptions,
-	runApprovedAscetWriteOperation,
-} from "./write-common.ts";
-import type { AscetWriteApprovalContext } from "./write-policy.ts";
+	createAscetEditSummary,
+	formatAscetEditOperationResult,
+	type RunAscetEditOperationOptions,
+	runApprovedAscetEditOperation,
+} from "./edit/common.ts";
 
 export type AscetSetStateMachineCodeOperation =
 	| "set-method"
@@ -40,7 +40,7 @@ export const ASCET_SET_STATE_MACHINE_CODE_OPERATIONS = [
 	"set-start-state",
 ] as const satisfies readonly AscetSetStateMachineCodeOperation[];
 
-export interface AscetSetStateMachineCodeParams extends AscetWriteControlParams {
+export interface AscetSetStateMachineCodeParams extends AscetEditControlParams {
 	stateMachinePath: string;
 	operation: AscetSetStateMachineCodeOperation;
 	stateName?: string;
@@ -51,7 +51,7 @@ export interface AscetSetStateMachineCodeParams extends AscetWriteControlParams 
 	codeFile?: string;
 }
 
-export type RunAscetSetStateMachineCodeOptions = RunAscetWriteOperationOptions;
+export type RunAscetSetStateMachineCodeOptions = RunAscetEditOperationOptions;
 export type AscetSetStateMachineCodeResult = AscetCliJsonResult;
 
 const stateMachineOperationSchema = Type.Union(
@@ -89,7 +89,7 @@ export function buildSetStateMachineCodeArgs(params: AscetSetStateMachineCodePar
 }
 
 export function createSetStateMachineCodeSummary(params: AscetSetStateMachineCodeParams): string {
-	return createWriteSummary("set_state_machine_code", {
+	return createAscetEditSummary("set_state_machine_code", {
 		stateMachinePath: params.stateMachinePath,
 		operation: params.operation,
 		stateName: params.stateName ?? "",
@@ -112,9 +112,9 @@ export async function runAscetSetStateMachineCode(
 export async function runApprovedAscetSetStateMachineCode(
 	params: AscetSetStateMachineCodeParams,
 	options: RunAscetSetStateMachineCodeOptions,
-	ctx: AscetWriteApprovalContext,
+	ctx: AscetEditApprovalContext,
 ): Promise<AscetSetStateMachineCodeResult> {
-	return runApprovedAscetWriteOperation(
+	return runApprovedAscetEditOperation(
 		"set_state_machine_code",
 		params,
 		options,
@@ -125,5 +125,5 @@ export async function runApprovedAscetSetStateMachineCode(
 }
 
 export function formatSetStateMachineCodeResult(result: AscetSetStateMachineCodeResult): string {
-	return formatWriteOperationResult("set_state_machine_code", result);
+	return formatAscetEditOperationResult("set_state_machine_code", result);
 }

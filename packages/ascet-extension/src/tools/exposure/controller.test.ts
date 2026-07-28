@@ -44,8 +44,7 @@ describe("ASCET exposure controller", () => {
 			"ascet_search",
 			"ascet_read",
 			"ascet_diff",
-			"ascet_write",
-			"ascet_component_editable",
+			"ascet_edit",
 			"ascet_verify",
 		]);
 		assert.equal(
@@ -60,7 +59,7 @@ describe("ASCET exposure controller", () => {
 
 		exposure.activateProfile("write-preflight");
 
-		assert.equal(harness.active.includes("ascet_write"), true);
+		assert.equal(harness.active.includes("ascet_edit"), true);
 		assert.equal(harness.active.includes("ascet_verify"), true);
 		assert.equal(harness.active.includes("ascet_batch_write"), false);
 	});

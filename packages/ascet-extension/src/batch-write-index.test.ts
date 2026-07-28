@@ -5,10 +5,10 @@ import { join } from "node:path";
 import { afterEach, describe, test } from "node:test";
 import { runApprovedAscetBatchWrite } from "./batch-write.ts";
 import type { AscetCliExecutionResult, AscetCliRequest } from "./cli.ts";
+import type { AscetEditApprovalContext } from "./edit/approval.ts";
 import type { AscetScheduler } from "./scheduler/scheduler.ts";
 import type { AscetJob } from "./scheduler/types.ts";
 import { getAscetSearchIndexPartitionState, resetAscetSearchIndexForTest } from "./search-index.ts";
-import type { AscetWriteApprovalContext } from "./write-policy.ts";
 
 function createReadyEnv(): { cwd: string; env: Record<string, string | undefined>; cleanup: () => void } {
 	const root = mkdtempSync(join(tmpdir(), "pi-ascet-batch-write-"));
@@ -126,15 +126,23 @@ function makeWarmSearchIndexExecution(request: AscetCliRequest): AscetCliExecuti
 	};
 }
 
-type RecordedSchedulerSubmission = Pick<AscetJob<unknown>, "toolName" | "commandId" | "kind">;
+type RecordedSchedulerSubmission = Pick<AscetJob<unknown>, "toolName" | "commandId" | "kind"> & {
+	completed: Promise<void>;
+};
 
 function createRecordingScheduler(
 	submissions: RecordedSchedulerSubmission[],
 ): Pick<AscetScheduler, "submit" | "getSnapshot"> {
 	return {
 		async submit<T>(job: AscetJob<T>): Promise<T> {
-			submissions.push({ toolName: job.toolName, commandId: job.commandId, kind: job.kind });
-			return job.run();
+			const result = Promise.resolve(job.run());
+			submissions.push({
+				toolName: job.toolName,
+				commandId: job.commandId,
+				kind: job.kind,
+				completed: result.then(() => undefined),
+			});
+			return result;
 		},
 		getSnapshot() {
 			return {
@@ -166,7 +174,7 @@ async function waitFor(predicate: () => boolean, timeoutMs = 1000): Promise<void
 	}
 }
 
-const approvingContext: AscetWriteApprovalContext = {
+const approvingContext: AscetEditApprovalContext = {
 	hasUI: true,
 	ui: {
 		confirm: async () => true,
@@ -298,9 +306,11 @@ describe("ascet_batch_write index impact", () => {
 			assert.equal(payload.result?.index?.requestCount, 2);
 			await waitFor(() => submissions.some((entry) => entry.toolName === "ascet_index_refresh"));
 			const refreshJobs = submissions.filter((entry) => entry.toolName === "ascet_index_refresh");
-			assert.deepEqual(refreshJobs, [
-				{ toolName: "ascet_index_refresh", commandId: "warm_search_index", kind: "read" },
-			]);
+			assert.deepEqual(
+				refreshJobs.map(({ toolName, commandId, kind }) => ({ toolName, commandId, kind })),
+				[{ toolName: "ascet_index_refresh", commandId: "warm_search_index", kind: "read" }],
+			);
+			await Promise.all(refreshJobs.map((entry) => entry.completed));
 		} finally {
 			fixture.cleanup();
 		}

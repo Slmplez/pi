@@ -1,21 +1,21 @@
 import { type AscetCliJsonResult, runAscetCliJson } from "./cli.ts";
 import { normalizeAscetPath } from "./core/path.ts";
+import type { AscetEditApprovalContext } from "./edit/approval.ts";
 import {
-	type AscetWriteControlParams,
+	type AscetEditControlParams,
 	appendVerifyAndJson,
-	createWriteSummary,
-	formatWriteOperationResult,
-	type RunAscetWriteOperationOptions,
-	runApprovedAscetWriteOperation,
-} from "./write-common.ts";
-import type { AscetWriteApprovalContext } from "./write-policy.ts";
+	createAscetEditSummary,
+	formatAscetEditOperationResult,
+	type RunAscetEditOperationOptions,
+	runApprovedAscetEditOperation,
+} from "./edit/common.ts";
 
-export interface AscetSetEnumeratorsParams extends AscetWriteControlParams {
+export interface AscetSetEnumeratorsParams extends AscetEditControlParams {
 	componentPath: string;
 	enumerators: string[];
 }
 
-export type RunAscetSetEnumeratorsOptions = RunAscetWriteOperationOptions;
+export type RunAscetSetEnumeratorsOptions = RunAscetEditOperationOptions;
 export type AscetSetEnumeratorsResult = AscetCliJsonResult;
 
 export function buildSetEnumeratorsArgs(params: AscetSetEnumeratorsParams): string[] {
@@ -26,7 +26,7 @@ export function buildSetEnumeratorsArgs(params: AscetSetEnumeratorsParams): stri
 }
 
 export function createSetEnumeratorsSummary(params: AscetSetEnumeratorsParams): string {
-	return createWriteSummary("set_enumerators", {
+	return createAscetEditSummary("set_enumerators", {
 		componentPath: params.componentPath,
 		enumeratorCount: params.enumerators.length,
 		enumerators: params.enumerators.join(","),
@@ -40,7 +40,7 @@ export async function runAscetSetEnumerators(
 ): Promise<AscetSetEnumeratorsResult> {
 	return runAscetCliJson(buildSetEnumeratorsArgs(params), {
 		...options,
-		toolName: "ascet_write",
+		toolName: "ascet_edit",
 		commandId: "set_enumerators",
 		jobKind: "write",
 	});
@@ -49,9 +49,9 @@ export async function runAscetSetEnumerators(
 export async function runApprovedAscetSetEnumerators(
 	params: AscetSetEnumeratorsParams,
 	options: RunAscetSetEnumeratorsOptions,
-	ctx: AscetWriteApprovalContext,
+	ctx: AscetEditApprovalContext,
 ): Promise<AscetSetEnumeratorsResult> {
-	return runApprovedAscetWriteOperation(
+	return runApprovedAscetEditOperation(
 		"set_enumerators",
 		params,
 		options,
@@ -63,5 +63,5 @@ export async function runApprovedAscetSetEnumerators(
 }
 
 export function formatSetEnumeratorsResult(result: AscetSetEnumeratorsResult): string {
-	return formatWriteOperationResult("set_enumerators", result);
+	return formatAscetEditOperationResult("set_enumerators", result);
 }

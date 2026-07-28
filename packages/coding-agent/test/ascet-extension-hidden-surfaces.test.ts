@@ -41,13 +41,13 @@ describe("ASCET extension hidden full-check surfaces", () => {
 		expect(manifest.files ?? []).not.toContain("skills/ascet-full-check");
 	});
 
-	it("does not expose full-check subagents through package resources", () => {
+	it("does not expose ASCET subagents through package resources", () => {
 		const manifest = readAscetExtensionPackageJson();
 		const exposedAgents = manifest.pi?.subagents?.agents ?? [];
 		const packagedFiles = manifest.files ?? [];
 
-		expect(exposedAgents).toEqual(["agents/ascet-implementation.md"]);
-		expect(packagedFiles).toContain("agents/ascet-implementation.md");
+		expect(exposedAgents).toEqual([]);
+		expect(packagedFiles).not.toContain("agents/ascet-implementation.md");
 		expect(packagedFiles).not.toContain("agents");
 		for (const agentPath of FULL_CHECK_AGENT_PATHS) {
 			expect(exposedAgents).not.toContain(agentPath);

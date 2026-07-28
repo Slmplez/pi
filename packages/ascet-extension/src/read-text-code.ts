@@ -67,14 +67,14 @@ function normalizeReadTextCodeResult(
 			error: {
 				code: result.error?.code ?? "ascet_unsupported_code_surface",
 				message:
-					'ESDL module does not support text code sections; use ascet_read with action="read_code", methodName, and section="body", or ascet_write action="set_method_code" instead.',
+					'ESDL module does not support text code sections; use ascet_read with action="read_code", methodName, and section="body", or ascet_edit action="set_method_code" instead.',
 			},
 			data: {
 				componentPath: params.componentPath,
 				methodName: params.methodName,
 				section: params.section,
 				recommendation:
-					'Use ascet_read.read_code with methodName and section="body" for method code, or ascet_write.set_method_code for updates.',
+					'Use ascet_read.read_code with methodName and section="body" for method code, or ascet_edit.set_method_code for updates.',
 			},
 		};
 	}

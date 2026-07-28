@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import type { AscetCliJsonResult } from "../cli.ts";
-import { formatAscetComponentEditableResult } from "../component-editable.ts";
+import { formatAscetEditabilityResult } from "../edit/editability.ts";
 import { createAscetExposureController } from "./exposure/controller.ts";
 import { formatAscetRecoverResult } from "./recover.ts";
 import { ascetSchedulerStatusTool } from "./scheduler-status/definition.ts";
@@ -23,15 +23,18 @@ function createPiHarness() {
 
 describe("ASCET tool Agent-friendly output", () => {
 	test("component editable returns structured JSON instead of a bare boolean", () => {
-		const text = formatAscetComponentEditableResult({
-			ok: true,
-			data: true,
-			request: { cwd: ".", cliPath: "AscetCli.exe", args: [] },
-			stdout: "",
-			stderr: "",
-			exitCode: 0,
-			timedOut: false,
-		} satisfies AscetCliJsonResult);
+		const text = formatAscetEditabilityResult(
+			{
+				ok: true,
+				data: true,
+				request: { cwd: ".", cliPath: "AscetCli.exe", args: [] },
+				stdout: "",
+				stderr: "",
+				exitCode: 0,
+				timedOut: false,
+			} satisfies AscetCliJsonResult,
+			{ mode: "check", componentPath: "DEMO/C" },
+		);
 
 		assert.deepEqual(JSON.parse(text), { editable: true });
 	});

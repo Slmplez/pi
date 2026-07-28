@@ -27,7 +27,7 @@ describe("buildAscetInitPrompt", () => {
 		assert.match(prompt, /First run ascet_status/);
 		assert.match(prompt, /Prefer ascet_search/);
 		assert.match(prompt, /Use ascet_read only when exact current live ASCET data or complete code content is needed/);
-		assert.match(prompt, /Use ascet_write for all ASCET writes/);
+		assert.match(prompt, /Use ascet_edit for all ASCET writes/);
 		assert.match(prompt, /Do not perform ad hoc full-database live scans/);
 		assert.doesNotMatch(prompt, /\.ascet\/index\/manifest\.json/);
 		assert.doesNotMatch(prompt, /Deterministic ASCET initialization has already run/);
@@ -67,7 +67,7 @@ describe("executeAscetInitCommand", () => {
 			assert.match(messages[0] ?? "", /First run ascet_status/);
 			assert.match(messages[0] ?? "", /Prefer ascet_search/);
 			assert.match(messages[0] ?? "", /Use ascet_read/);
-			assert.match(messages[0] ?? "", /Use ascet_write/);
+			assert.match(messages[0] ?? "", /Use ascet_edit/);
 			assert.match(notifications.join("\n"), /ASCET init prompt sent/);
 			assert.doesNotMatch(notifications.join("\n"), /index/i);
 			assert.equal(existsSync(join(fixture.cwd, ".ascet", "rules", "manifest.yaml")), true);

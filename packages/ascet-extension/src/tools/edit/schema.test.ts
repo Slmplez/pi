@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import { ascetWriteParameters } from "./schema.ts";
+import { ascetEditParameters } from "./schema.ts";
 
-describe("ascet_write schema", () => {
+describe("ascet_edit schema", () => {
 	test("uses action-specific schemas so unrelated parameters are not exposed", () => {
 		const schemas = getActionSchemas();
 
@@ -24,7 +24,7 @@ describe("ascet_write schema", () => {
 });
 
 function getActionSchemas(): Array<{ properties?: Record<string, unknown> }> {
-	return (ascetWriteParameters as { anyOf?: Array<{ properties?: Record<string, unknown> }> }).anyOf ?? [];
+	return (ascetEditParameters as { anyOf?: Array<{ properties?: Record<string, unknown> }> }).anyOf ?? [];
 }
 
 function schemaFor(

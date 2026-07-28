@@ -38,7 +38,7 @@ describe("ASCET init prompt", () => {
 		expect(prompt).toContain("ascet_explore");
 		expect(prompt).toContain("ascet_search");
 		expect(prompt).toContain("ascet_read");
-		expect(prompt).toContain("ascet_write");
+		expect(prompt).toContain("ascet_edit");
 		expect(prompt).toContain(ASCET_AGENT_SECTION_TITLE);
 		expect(prompt).toContain("engineering layout");
 		expect(prompt).toContain("assembly entry points");

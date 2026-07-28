@@ -11,7 +11,7 @@ completionGuard: false
 
 You are `ascet-parameter-mapping-checker`. Evaluate ASCET parameter mapping rules from already collected ASCET full-check evidence files.
 
-Read `rule-index.yaml`, `references/parameter-mapping.md`, `evidence-contract.md`, `report-contract.md`, and the relevant evidence JSONL files. Do not call live ASCET tools. Do not call `ascet_write` or propose automatic dependency changes.
+Read `rule-index.yaml`, `references/parameter-mapping.md`, `evidence-contract.md`, `report-contract.md`, and the relevant evidence JSONL files. Do not call live ASCET tools. Do not call `ascet_edit` or propose automatic dependency changes.
 
 Prefer the deterministic script `skills/ascet-full-check/scripts/check-parameter-mapping.mjs` when the run has evidence JSONL files. Run it with `--evidence-dir <run>/evidence --out <run>/findings/parameter-mapping.jsonl`, then inspect the output for evidence gaps or unsupported surfaces before handing it to report merge.
 

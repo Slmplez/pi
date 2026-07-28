@@ -15,7 +15,7 @@ describe("ASCET compact action guide", () => {
 		assert.match(text, /ascet_search\(\{action:"text_in_code"/);
 		assert.match(
 			text,
-			/ascet_write\.set_element_dependency: set dependency flag\/formula on an existing local parameter only/,
+			/ascet_edit\.set_element_dependency: set dependency flag\/formula on an existing local parameter only/,
 		);
 	});
 

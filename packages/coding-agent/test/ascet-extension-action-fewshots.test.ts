@@ -8,8 +8,8 @@ import {
 import { listActionDescriptors } from "../../ascet-extension/src/tools/actions/descriptors.ts";
 import { ascetBatchWriteParameters } from "../../ascet-extension/src/tools/batch-write/schema.ts";
 import { ascetCapabilitiesParameters } from "../../ascet-extension/src/tools/capabilities/schema.ts";
-import { ascetComponentEditableParameters } from "../../ascet-extension/src/tools/component-editable/schema.ts";
 import { ascetDiffParameters } from "../../ascet-extension/src/tools/diff/schema.ts";
+import { ascetEditParameters } from "../../ascet-extension/src/tools/edit/schema.ts";
 import { ascetExploreParameters } from "../../ascet-extension/src/tools/explore/schema.ts";
 import { ascetReadParameters } from "../../ascet-extension/src/tools/read/schema.ts";
 import { ascetRecoverParameters } from "../../ascet-extension/src/tools/recover/schema.ts";
@@ -18,7 +18,6 @@ import { ascetSchedulerStatusParameters } from "../../ascet-extension/src/tools/
 import { ascetSearchParameters } from "../../ascet-extension/src/tools/search/schema.ts";
 import { ascetStatusParameters } from "../../ascet-extension/src/tools/status/schema.ts";
 import { ascetVerifyParameters } from "../../ascet-extension/src/tools/verify/schema.ts";
-import { ascetWriteParameters } from "../../ascet-extension/src/tools/write/schema.ts";
 
 const schemaByTool = {
 	ascet_status: ascetStatusParameters,
@@ -29,9 +28,8 @@ const schemaByTool = {
 	ascet_search: ascetSearchParameters,
 	ascet_read: ascetReadParameters,
 	ascet_diff: ascetDiffParameters,
-	ascet_write: ascetWriteParameters,
+	ascet_edit: ascetEditParameters,
 	ascet_batch_write: ascetBatchWriteParameters,
-	ascet_component_editable: ascetComponentEditableParameters,
 	ascet_verify: ascetVerifyParameters,
 } as const;
 
@@ -101,16 +99,16 @@ function expectedExampleKeys(): Set<string> {
 			}
 		}
 	}
-	expected.delete("ascet_write.set_module_code");
-	expected.delete("ascet_write.set_state_machine_code");
+	expected.delete("ascet_edit.set_module_code");
+	expected.delete("ascet_edit.set_state_machine_code");
 	for (const operation of ["set-method", "set-header", "set-external-c-code"]) {
-		expected.add(`ascet_write.set_module_code.${operation}`);
+		expected.add(`ascet_edit.set_module_code.${operation}`);
 	}
-	const stateMachineSchema = schemaForAction(ascetWriteParameters, "set_state_machine_code");
+	const stateMachineSchema = schemaForAction(ascetEditParameters, "set_state_machine_code");
 	for (const operation of stringLiterals(stateMachineSchema?.properties?.operation).filter(
 		(operation) => !["set-header", "set-external-c-code"].includes(operation),
 	)) {
-		expected.add(`ascet_write.set_state_machine_code.${operation}`);
+		expected.add(`ascet_edit.set_state_machine_code.${operation}`);
 	}
 	return expected;
 }
@@ -150,7 +148,7 @@ describe("ASCET action few-shot examples", () => {
 
 		expect(actual).toEqual(expected);
 		expect(ascetActionExamples).toHaveLength(expected.size);
-		expect(actual.has("ascet_write.set_class_method_code")).toBe(false);
+		expect(actual.has("ascet_edit.set_class_method_code")).toBe(false);
 	});
 
 	it("keeps every example schema-valid and compact", () => {
@@ -171,7 +169,11 @@ describe("ASCET action few-shot examples", () => {
 			if (example.tool !== "ascet_status" && example.tool !== "ascet_capabilities") {
 				if (example.tool === "ascet_batch_write") {
 					expect((example.args as { operation?: string }).operation, key).toBe(example.action);
-				} else if (example.tool === "ascet_component_editable") {
+				} else if (
+					example.tool === "ascet_edit" &&
+					((example.args as { mode?: string }).mode === "check" ||
+						(example.args as { mode?: string }).mode === "set")
+				) {
 					expect((example.args as { mode?: string }).mode, key).toBe(example.action);
 				} else {
 					expect((example.args as { action?: string }).action, key).toBe(example.action);
@@ -192,10 +194,8 @@ describe("ASCET action few-shot examples", () => {
 	});
 
 	it("does not expose the redundant class-specific method body write action", () => {
-		expect(Value.Check(ascetWriteParameters, { action: "set_class_method_code", classPath: "DEMO\\PID" })).toBe(
-			false,
-		);
-		expect(compactExamplesForTool("ascet_write").join("\n")).not.toContain("set_class_method_code");
+		expect(Value.Check(ascetEditParameters, { action: "set_class_method_code", classPath: "DEMO\\PID" })).toBe(false);
+		expect(compactExamplesForTool("ascet_edit").join("\n")).not.toContain("set_class_method_code");
 	});
 
 	it("does not expose hidden requirements-tool examples", () => {
@@ -208,7 +208,7 @@ describe("ASCET action few-shot examples", () => {
 		const classCreateMethodExamples = ascetActionExamples.filter((example) => {
 			const args = example.args as { action?: string; componentKind?: string; componentPath?: string };
 			return (
-				example.tool === "ascet_write" &&
+				example.tool === "ascet_edit" &&
 				example.action === "create_method" &&
 				args.action === "create_method" &&
 				(args.componentKind === "class" || args.componentPath === "DEMO\\PID")

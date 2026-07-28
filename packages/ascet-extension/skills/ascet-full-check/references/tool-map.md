@@ -45,7 +45,7 @@ If `read_block_diagram` returns a valid empty graph, keep it as empty `block_dia
 - `parameter_occurrences`: `occurrences` filtered to the parameter element under inspection
 - `parameter_code_context`: `component_code` or `method_code` only when the rule needs code context
 
-Parameter mapping checks may use only read, explore, reference, and search evidence. Do not use `ascet_write.set_element_dependency` in full-check.
+Parameter mapping checks may use only read, explore, reference, and search evidence. Do not use `ascet_edit.set_element_dependency` in full-check.
 
 Use `dependent_chain` to read Local Parameter -> Imported Parameter -> Exported Parameter evidence from the consuming component. If provider discovery is ambiguous or unsupported, record the returned issue such as `export_ambiguous`, `export_not_found`, or `provider_candidate_limit_exceeded` as an evidence gap instead of inventing dependency candidates.
 

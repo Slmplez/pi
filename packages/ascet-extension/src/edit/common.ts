@@ -5,17 +5,17 @@ import {
 	type AscetCliRequest,
 	formatAscetCliJsonResult,
 	runAscetCliJson,
-} from "./cli.ts";
-import { normalizeAscetPath } from "./core/path.ts";
-import type { AscetScheduler } from "./scheduler/scheduler.ts";
-import { scheduleAscetSearchIndexBackgroundRefresh } from "./search-index.ts";
-import type { AscetP0IndexArea } from "./search-index-sqlite/schema.ts";
-import { markAscetSqliteIndexAreasStale } from "./search-index-sqlite/status.ts";
-import { type AscetSearchIndexPartition, invalidateAscetSearchIndexPartitions } from "./search-index-store.ts";
-import { createAscetStatusReport } from "./status.ts";
-import { type AscetWriteApprovalContext, requestAscetWriteApproval } from "./write-policy.ts";
+} from "../cli.ts";
+import { normalizeAscetPath } from "../core/path.ts";
+import type { AscetScheduler } from "../scheduler/scheduler.ts";
+import { scheduleAscetSearchIndexBackgroundRefresh } from "../search-index.ts";
+import type { AscetP0IndexArea } from "../search-index-sqlite/schema.ts";
+import { markAscetSqliteIndexAreasStale } from "../search-index-sqlite/status.ts";
+import { type AscetSearchIndexPartition, invalidateAscetSearchIndexPartitions } from "../search-index-store.ts";
+import { createAscetStatusReport } from "../status.ts";
+import { type AscetEditApprovalContext, type AscetEditErrorPrefix, requestAscetEditApproval } from "./approval.ts";
 
-export interface RunAscetWriteOperationOptions {
+export interface RunAscetEditOperationOptions {
 	cwd: string;
 	env?: Record<string, string | undefined>;
 	signal?: AbortSignal;
@@ -24,12 +24,12 @@ export interface RunAscetWriteOperationOptions {
 	scheduler?: Pick<AscetScheduler, "submit" | "getSnapshot">;
 }
 
-export interface AscetWriteControlParams {
+export interface AscetEditControlParams {
 	verifyReadback?: boolean;
 	executeWrite?: boolean;
 }
 
-export interface WriteImpact {
+export interface AscetEditImpact {
 	action: string;
 	affectedComponents: string[];
 	affectedMethods: Array<{ component: string; method: string }>;
@@ -37,7 +37,7 @@ export interface WriteImpact {
 	stale: AscetSearchIndexPartition[];
 }
 
-export type WriteImpactParams = {
+export type AscetEditImpactParams = {
 	action: string;
 	componentPath?: string;
 	modulePath?: string;
@@ -59,18 +59,18 @@ export function appendVerifyAndJson(args: string[], verifyReadback?: boolean): s
 	return args;
 }
 
-export function createWriteSummary(operation: string, fields: Record<string, unknown>): string {
+export function createAscetEditSummary(operation: string, fields: Record<string, unknown>): string {
 	return [
-		"ASCET write request:",
+		"ASCET edit request:",
 		`operation: ${operation}`,
 		...Object.entries(fields).map(([key, value]) => `${key}: ${String(value)}`),
 	].join("\n");
 }
 
-function createBlockedWriteResult<TParams>(
+function createBlockedEditResult<TParams>(
 	operation: string,
 	params: TParams,
-	options: RunAscetWriteOperationOptions,
+	options: RunAscetEditOperationOptions,
 	buildArgs: (params: TParams) => string[],
 	summary: string,
 	code: string,
@@ -99,46 +99,48 @@ function createBlockedWriteResult<TParams>(
 	};
 }
 
-export async function runApprovedAscetWriteOperation<TParams extends AscetWriteControlParams>(
+export async function runApprovedAscetEditOperation<TParams extends AscetEditControlParams>(
 	operation: string,
 	params: TParams,
-	options: RunAscetWriteOperationOptions,
-	ctx: AscetWriteApprovalContext,
+	options: RunAscetEditOperationOptions,
+	ctx: AscetEditApprovalContext,
 	buildArgs: (params: TParams) => string[],
 	summary: string,
-	title = "Confirm ASCET write",
+	title = "Confirm ASCET edit",
+	errorPrefix: AscetEditErrorPrefix = "ascet_edit",
 ): Promise<AscetCliJsonResult> {
-	const approval = await requestAscetWriteApproval(
+	const approval = await requestAscetEditApproval(
 		{
 			executeWrite: params.executeWrite,
 			title,
 			message: summary,
 			signal: options.signal,
+			errorPrefix,
 		},
 		ctx,
 	);
 
 	if (!approval.approved) {
-		return createBlockedWriteResult(
+		return createBlockedEditResult(
 			operation,
 			params,
 			options,
 			buildArgs,
 			summary,
-			approval.code ?? "ascet_write_rejected",
-			approval.message ?? "ASCET write was not approved.",
+			approval.code ?? `${errorPrefix}_rejected`,
+			approval.message ?? "ASCET edit was not approved.",
 		);
 	}
 
 	return runAscetCliJson(buildArgs(params), options);
 }
 
-export function formatWriteOperationResult(operation: string, result: AscetCliJsonResult): string {
+export function formatAscetEditOperationResult(operation: string, result: AscetCliJsonResult): string {
 	return formatAscetCliJsonResult(operation, result);
 }
 
-export function createWriteImpact(params: WriteImpactParams): WriteImpact {
-	const component = getPrimaryWriteComponent(params);
+export function createAscetEditImpact(params: AscetEditImpactParams): AscetEditImpact {
+	const component = getPrimaryEditComponent(params);
 	const method = component && params.methodName ? [{ component, method: params.methodName }] : [];
 	const element = component && params.elementName ? [{ component, name: params.elementName }] : [];
 	const stale = getStalePartitionsForWrite(params.action);
@@ -151,12 +153,12 @@ export function createWriteImpact(params: WriteImpactParams): WriteImpact {
 	};
 }
 
-export function applyWriteImpactToSearchIndex(
-	impact: WriteImpact,
-	reason = `write_succeeded:${impact.action}`,
+export function applyAscetEditImpactToSearchIndex(
+	impact: AscetEditImpact,
+	reason = `edit_succeeded:${impact.action}`,
 	options?:
 		| string
-		| Pick<RunAscetWriteOperationOptions, "cwd" | "env" | "signal" | "timeoutMs" | "executeCli" | "scheduler">,
+		| Pick<RunAscetEditOperationOptions, "cwd" | "env" | "signal" | "timeoutMs" | "executeCli" | "scheduler">,
 ): void {
 	const affected = [...new Set(impact.stale)];
 	if (affected.length === 0) {
@@ -236,7 +238,7 @@ function staleSqliteAreasForWrite(
 	return [...areas];
 }
 
-function getPrimaryWriteComponent(params: WriteImpactParams): string | undefined {
+function getPrimaryEditComponent(params: AscetEditImpactParams): string | undefined {
 	const raw =
 		params.componentPath ??
 		params.modulePath ??

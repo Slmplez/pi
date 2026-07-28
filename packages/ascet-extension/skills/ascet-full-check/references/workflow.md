@@ -59,7 +59,7 @@ Parameter mapping evidence must use the canonical tool calls:
 
 - `ascet_read` action `read_dependent_chain`
 
-Do not use `ascet_write.set_element_dependency` in full-check.
+Do not use `ascet_edit.set_element_dependency` in full-check.
 
 ## Standard Flow
 
