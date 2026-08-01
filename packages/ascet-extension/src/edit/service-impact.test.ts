@@ -405,6 +405,90 @@ describe("ascet_edit WriteImpact", () => {
 		}
 	});
 
+	test("successful folder dependency write refreshes every changed component", async () => {
+		seedReadyIndex();
+		const fixture = createReadyEnv();
+		const calls: string[][] = [];
+		try {
+			const result = await runAscetEdit(
+				{
+					action: "set_element_dependency",
+					targetPath: "AEB\\Shared",
+					elementName: "P_AEB_IB_MaxVelocityDrop_Curve",
+					dependency: "dependent",
+					targetKind: "folder",
+					match: "all",
+					executeWrite: true,
+				},
+				{
+					cwd: fixture.cwd,
+					env: fixture.env,
+					timeoutMs: 1000,
+					executeCli: async (request) => {
+						calls.push(request.args);
+						if (request.args[1] === "set_element_dependency") {
+							return {
+								exitCode: 0,
+								stdout: JSON.stringify({
+									ok: true,
+									result: {
+										kind: "folder",
+										plan: {
+											count: 2,
+											matches: [
+												{ component: "AEB\\ControllerA", element: "P_AEB_IB_MaxVelocityDrop_Curve" },
+												{ component: "AEB\\ControllerB", element: "P_AEB_IB_MaxVelocityDrop_Curve" },
+											],
+										},
+									},
+									error: null,
+								}),
+								stderr: "",
+								timedOut: false,
+								request,
+							};
+						}
+						if (request.args[1] === "read_element_catalog") {
+							return {
+								exitCode: 0,
+								stdout: JSON.stringify({
+									ok: true,
+									result: {
+										elements: [
+											{
+												name: "P_AEB_IB_MaxVelocityDrop_Curve",
+												kind: "parameter",
+												modelType: "cont",
+												scope: "Local",
+											},
+										],
+									},
+									error: null,
+								}),
+								stderr: "",
+								timedOut: false,
+								request,
+							};
+						}
+						return makeExecution(request);
+					},
+				},
+				approvingContext,
+			);
+
+			const catalogComponents = calls.filter((args) => args[1] === "read_element_catalog").map((args) => args[2]);
+			assert.deepEqual(catalogComponents, ["AEB\\ControllerA", "AEB\\ControllerB"]);
+			assert.deepEqual(
+				JSON.parse(result.content[0]?.text ?? "{}").index.elements.map(
+					(entry: { component: string }) => entry.component,
+				),
+				["AEB/ControllerA", "AEB/ControllerB"],
+			);
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
 	test("set_element_dependency dryRun does not refresh or stale the index", async () => {
 		seedReadyIndex();
 		const fixture = createReadyEnv();

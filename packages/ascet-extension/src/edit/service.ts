@@ -519,7 +519,7 @@ export async function runAscetMutation(
 
 async function applySuccessfulEditIndexUpdate(
 	params: AscetMutationParams,
-	_raw: AscetCliJsonResult,
+	raw: AscetCliJsonResult,
 	options: RunAscetEditOperationOptions,
 	impact: AscetEditImpact,
 ): Promise<AscetEditIndexUpdate> {
@@ -527,16 +527,22 @@ async function applySuccessfulEditIndexUpdate(
 		if (params.dryRun) {
 			return { ...impact, stale: [] };
 		}
-		const update = await refreshElementsFromLiveCatalog(
-			{
-				componentPath: params.targetPath ?? params.componentPath ?? "",
-				names: [params.elementName],
-				scopes: ["Local"],
-				reason: `edit_succeeded:${params.action}`,
-				stale: ["text_code"],
-			},
-			options,
-		);
+		const updates: AscetElementIndexWritebackResult[] = [];
+		for (const componentPath of getDependencyWritebackComponentPaths(params, raw)) {
+			updates.push(
+				await refreshElementsFromLiveCatalog(
+					{
+						componentPath,
+						names: [params.elementName],
+						scopes: ["Local"],
+						reason: `edit_succeeded:${params.action}`,
+						stale: ["text_code"],
+					},
+					options,
+				),
+			);
+		}
+		const update = mergeElementIndexWritebackResults(updates);
 		applyTargetedEditWritebackImpact(update, impact, options);
 		return update.issues && update.issues.length > 0 ? { ...update, stale: impact.stale } : update;
 	}
@@ -559,6 +565,48 @@ async function applySuccessfulEditIndexUpdate(
 	}
 	applyAscetEditImpactToSearchIndex(impact, `edit_succeeded:${params.action}`, options);
 	return impact;
+}
+
+function getDependencyWritebackComponentPaths(
+	params: Extract<AscetMutationParams, { action: "set_element_dependency" }>,
+	raw: AscetCliJsonResult,
+): string[] {
+	const payload = asRecord(unwrapToolSuccessPayload(raw.data));
+	const plan = asRecord(payload?.plan);
+	const plannedComponents = Array.isArray(plan?.matches)
+		? plan.matches.flatMap((match) =>
+				isRecord(match) && typeof match.component === "string" ? [match.component] : [],
+			)
+		: [];
+	const components = uniqueStrings(plannedComponents);
+	return components.length > 0 ? components : [params.targetPath ?? params.componentPath ?? ""];
+}
+
+function mergeElementIndexWritebackResults(
+	updates: readonly AscetElementIndexWritebackResult[],
+): AscetElementIndexWritebackResult {
+	const updated = new Set<AscetElementIndexWritebackResult["updated"][number]>();
+	const stale = new Set<AscetElementIndexWritebackResult["stale"][number]>();
+	const elements: AscetElementIndexWritebackResult["elements"] = [];
+	const issues: Array<{ code: string; message: string }> = [];
+
+	for (const update of updates) {
+		for (const partition of update.updated) {
+			updated.add(partition);
+		}
+		for (const partition of update.stale) {
+			stale.add(partition);
+		}
+		elements.push(...update.elements);
+		issues.push(...(update.issues ?? []));
+	}
+
+	return {
+		updated: [...updated],
+		stale: [...stale],
+		elements,
+		...(issues.length > 0 ? { issues } : {}),
+	};
 }
 
 function applyTargetedEditWritebackImpact(
