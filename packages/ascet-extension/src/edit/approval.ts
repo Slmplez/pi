@@ -7,6 +7,19 @@ export interface AscetEditApprovalContext {
 
 export type AscetEditErrorPrefix = "ascet_edit" | "ascet_batch_write";
 
+type AscetEditApprovalFailureKind =
+	| "preflight_required"
+	| "ui_required"
+	| "confirmation_not_granted"
+	| "operation_aborted_before_write"
+	| "confirmation_ui_failed";
+
+export type AscetEditApprovalFailure = {
+	approved: false;
+	code: `${AscetEditErrorPrefix}_${AscetEditApprovalFailureKind}`;
+	message: string;
+};
+
 export interface AscetEditApprovalRequest {
 	executeWrite?: boolean;
 	title: string;
@@ -15,10 +28,24 @@ export interface AscetEditApprovalRequest {
 	errorPrefix?: AscetEditErrorPrefix;
 }
 
-export interface AscetEditApprovalResult {
-	approved: boolean;
-	code?: `${AscetEditErrorPrefix}_${"preflight_required" | "ui_required" | "rejected"}`;
-	message?: string;
+export type AscetEditApprovalResult = { approved: true } | AscetEditApprovalFailure;
+
+export function createAscetEditApprovalResultData(approval: AscetEditApprovalFailure): Record<string, unknown> {
+	if (approval.code.endsWith("_preflight_required")) {
+		return { preflightOnly: true };
+	}
+	return {
+		writeExecuted: false,
+		confirmation: { code: approval.code },
+	};
+}
+
+export function isAscetEditApprovalBlockedCode(code: string): boolean {
+	return (
+		code.endsWith("_ui_required") ||
+		code.endsWith("_confirmation_not_granted") ||
+		code.endsWith("_operation_aborted_before_write")
+	);
 }
 
 export async function requestAscetEditApproval(
@@ -42,15 +69,32 @@ export async function requestAscetEditApproval(
 		};
 	}
 
-	const approved = await ctx.ui.confirm(request.title, request.message, {
-		signal: request.signal,
-		timeout: 30_000,
-	});
+	let approved: boolean;
+	try {
+		approved = await ctx.ui.confirm(request.title, request.message, {
+			timeout: 30_000,
+		});
+	} catch (error) {
+		return {
+			approved: false,
+			code: `${errorPrefix}_confirmation_ui_failed`,
+			message: `ASCET edit confirmation UI failed: ${error instanceof Error ? error.message : String(error)}`,
+		};
+	}
+
+	if (request.signal?.aborted) {
+		return {
+			approved: false,
+			code: `${errorPrefix}_operation_aborted_before_write`,
+			message: "ASCET edit was not started because its tool run was cancelled before the write could begin.",
+		};
+	}
+
 	if (!approved) {
 		return {
 			approved: false,
-			code: `${errorPrefix}_rejected`,
-			message: "ASCET edit was rejected by the user.",
+			code: `${errorPrefix}_confirmation_not_granted`,
+			message: "ASCET edit confirmation was not granted.",
 		};
 	}
 

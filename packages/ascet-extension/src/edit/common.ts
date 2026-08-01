@@ -13,7 +13,13 @@ import type { AscetP0IndexArea } from "../search-index-sqlite/schema.ts";
 import { markAscetSqliteIndexAreasStale } from "../search-index-sqlite/status.ts";
 import { type AscetSearchIndexPartition, invalidateAscetSearchIndexPartitions } from "../search-index-store.ts";
 import { createAscetStatusReport } from "../status.ts";
-import { type AscetEditApprovalContext, type AscetEditErrorPrefix, requestAscetEditApproval } from "./approval.ts";
+import {
+	type AscetEditApprovalContext,
+	type AscetEditApprovalFailure,
+	type AscetEditErrorPrefix,
+	createAscetEditApprovalResultData,
+	requestAscetEditApproval,
+} from "./approval.ts";
 
 export interface RunAscetEditOperationOptions {
 	cwd: string;
@@ -73,16 +79,15 @@ function createBlockedEditResult<TParams>(
 	options: RunAscetEditOperationOptions,
 	buildArgs: (params: TParams) => string[],
 	summary: string,
-	code: string,
-	message: string,
+	approval: AscetEditApprovalFailure,
 ): AscetCliJsonResult {
 	const status = createAscetStatusReport({ cwd: options.cwd, env: options.env });
 	return {
 		ok: false,
 		data: {
 			operation,
-			preflightOnly: true,
 			summary,
+			...createAscetEditApprovalResultData(approval),
 		},
 		request: {
 			cwd: options.cwd,
@@ -95,7 +100,7 @@ function createBlockedEditResult<TParams>(
 		stderr: "",
 		exitCode: null,
 		timedOut: false,
-		error: { code, message },
+		error: { code: approval.code, message: approval.message },
 	};
 }
 
@@ -121,15 +126,7 @@ export async function runApprovedAscetEditOperation<TParams extends AscetEditCon
 	);
 
 	if (!approval.approved) {
-		return createBlockedEditResult(
-			operation,
-			params,
-			options,
-			buildArgs,
-			summary,
-			approval.code ?? `${errorPrefix}_rejected`,
-			approval.message ?? "ASCET edit was not approved.",
-		);
+		return createBlockedEditResult(operation, params, options, buildArgs, summary, approval);
 	}
 
 	return runAscetCliJson(buildArgs(params), options);

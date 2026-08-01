@@ -6,7 +6,12 @@ import {
 	formatAscetCliJsonResult,
 	runAscetCliJson,
 } from "./cli.ts";
-import { type AscetEditApprovalContext, requestAscetEditApproval } from "./edit/approval.ts";
+import {
+	type AscetEditApprovalContext,
+	type AscetEditApprovalFailure,
+	createAscetEditApprovalResultData,
+	requestAscetEditApproval,
+} from "./edit/approval.ts";
 import { createAscetStatusReport } from "./status.ts";
 
 export interface AscetCreateComponentParams {
@@ -88,16 +93,15 @@ export function createCreateComponentSummary(params: AscetCreateComponentParams)
 function createBlockedWriteResult(
 	params: AscetCreateComponentParams,
 	options: RunAscetCreateComponentOptions,
-	code: string,
-	message: string,
+	approval: AscetEditApprovalFailure,
 ): AscetCreateComponentResult {
 	const status = createAscetStatusReport({ cwd: options.cwd, env: options.env });
 	return {
 		ok: false,
 		data: {
 			operation: "create_component",
-			preflightOnly: true,
 			summary: createCreateComponentSummary(params),
+			...createAscetEditApprovalResultData(approval),
 		},
 		request: {
 			cwd: options.cwd,
@@ -110,7 +114,7 @@ function createBlockedWriteResult(
 		stderr: "",
 		exitCode: null,
 		timedOut: false,
-		error: { code, message },
+		error: { code: approval.code, message: approval.message },
 	};
 }
 
@@ -142,12 +146,7 @@ export async function runApprovedAscetCreateComponent(
 	);
 
 	if (!approval.approved) {
-		return createBlockedWriteResult(
-			params,
-			options,
-			approval.code ?? "ascet_edit_rejected",
-			approval.message ?? "ASCET edit was not approved.",
-		);
+		return createBlockedWriteResult(params, options, approval);
 	}
 
 	return runAscetCreateComponent(params, options);

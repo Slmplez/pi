@@ -3,7 +3,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, test } from "node:test";
-import { runApprovedAscetBatchWrite } from "./batch-write.ts";
+import { createBatchWriteOutcome, runApprovedAscetBatchWrite } from "./batch-write.ts";
 import type { AscetCliExecutionResult, AscetCliRequest } from "./cli.ts";
 import type { AscetEditApprovalContext } from "./edit/approval.ts";
 import type { AscetScheduler } from "./scheduler/scheduler.ts";
@@ -186,6 +186,42 @@ afterEach(() => {
 });
 
 describe("ascet_batch_write index impact", () => {
+	test("does not label an ungranted batch confirmation as preflight", async () => {
+		const fixture = createReadyEnv();
+		let cliCalls = 0;
+		try {
+			const result = await runApprovedAscetBatchWrite(
+				{
+					operation: "batch_create_folder",
+					requests: [{ folderPath: "AEB\\New" }],
+					executeWrite: true,
+				},
+				{
+					cwd: fixture.cwd,
+					env: fixture.env,
+					executeCli: async (request) => {
+						cliCalls += 1;
+						return okBatchExecution(request);
+					},
+				},
+				{
+					hasUI: true,
+					ui: { confirm: async () => false },
+				},
+			);
+
+			assert.equal(cliCalls, 0);
+			assert.equal(result.error?.code, "ascet_batch_write_confirmation_not_granted");
+			assert.deepEqual((result.data as { confirmation?: unknown }).confirmation, {
+				code: "ascet_batch_write_confirmation_not_granted",
+			});
+			assert.equal((result.data as { preflightOnly?: boolean }).preflightOnly, undefined);
+			assert.equal(createBatchWriteOutcome(result).status, "blocked");
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
 	test("successful batch_set_method_code stales element declarations, element refs, and text_code", async () => {
 		seedReadyIndex();
 		const fixture = createReadyEnv();

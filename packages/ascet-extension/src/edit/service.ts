@@ -29,7 +29,7 @@ import {
 } from "../set-state-machine-code.ts";
 import { compactObject, toToolFailurePayload, unwrapToolSuccessPayload } from "../tool-response-contract.ts";
 import { openAiObjectUnionSchema } from "../tools/_shared/openai-schema.ts";
-import type { AscetEditApprovalContext } from "./approval.ts";
+import { type AscetEditApprovalContext, isAscetEditApprovalBlockedCode } from "./approval.ts";
 import type { RunAscetEditOperationOptions } from "./common.ts";
 import { type AscetEditImpact, applyAscetEditImpactToSearchIndex, createAscetEditImpact } from "./common.ts";
 import { type AscetEditActionId, getAscetEditAction } from "./contract.ts";
@@ -387,7 +387,7 @@ function outcomeFromCliResult(result: AscetCliJsonResult): AscetToolOutcome {
 	}
 	const code = result.error?.code ?? "ascet_edit_failed";
 	const message = result.error?.message ?? "ASCET edit failed.";
-	if (code === "ascet_edit_ui_required" || code === "ascet_edit_rejected") {
+	if (isAscetEditApprovalBlockedCode(code)) {
 		return { status: "blocked", code, message };
 	}
 	return { status: "error", error: { code, message } };
