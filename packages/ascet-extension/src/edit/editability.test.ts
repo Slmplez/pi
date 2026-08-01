@@ -60,7 +60,7 @@ describe("ASCET editability actions", () => {
 		assert.deepEqual(observedArgs, ["exec", "component_editable_check", "DEMO\\PID", "--json"]);
 	});
 
-	test("set uses generic preflight and rejection behavior", async () => {
+	test("set uses generic preflight and confirmation-not-granted behavior", async () => {
 		const preflight = await runApprovedAscetEditability(
 			{ mode: "set", componentPath: "DEMO/PID" },
 			{ cwd: process.cwd() },
@@ -68,7 +68,7 @@ describe("ASCET editability actions", () => {
 		);
 		assert.equal(preflight.error?.code, "ascet_edit_preflight_required");
 
-		const rejected = await runApprovedAscetEditability(
+		const notGranted = await runApprovedAscetEditability(
 			{ mode: "set", componentPath: "DEMO/PID", executeWrite: true },
 			{ cwd: process.cwd() },
 			{
@@ -80,7 +80,43 @@ describe("ASCET editability actions", () => {
 				},
 			},
 		);
-		assert.equal(rejected.error?.code, "ascet_edit_rejected");
+		assert.equal(notGranted.error?.code, "ascet_edit_confirmation_not_granted");
+		assert.deepEqual(notGranted.data, {
+			operation: "component_editable_set",
+			writeExecuted: false,
+			summary: "ASCET editability request:\noperation: component_editable_set\ncomponentPath: DEMO/PID",
+			confirmation: { code: "ascet_edit_confirmation_not_granted" },
+		});
+	});
+
+	test("set never starts its CLI write after the tool run is cancelled during confirmation", async () => {
+		const toolRun = new AbortController();
+		let cliCalls = 0;
+		const resultPromise = runApprovedAscetEditability(
+			{ mode: "set", componentPath: "DEMO/PID", executeWrite: true },
+			{
+				cwd: process.cwd(),
+				signal: toolRun.signal,
+				executeCli: async (request) => {
+					cliCalls += 1;
+					return successfulExecution(request, { ok: true, result: true, error: null });
+				},
+			},
+			{
+				hasUI: true,
+				ui: {
+					async confirm() {
+						toolRun.abort();
+						return true;
+					},
+				},
+			},
+		);
+
+		const result = await resultPromise;
+		assert.equal(cliCalls, 0);
+		assert.equal(result.error?.code, "ascet_edit_operation_aborted_before_write");
+		assert.equal((result.data as { preflightOnly?: boolean } | null)?.preflightOnly, undefined);
 	});
 
 	test("normalizes direct and envelope boolean results to the agent payload", async () => {

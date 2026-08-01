@@ -6,7 +6,12 @@ import {
 	formatAscetCliJsonResult,
 	runAscetCliJson,
 } from "./cli.ts";
-import { type AscetEditApprovalContext, requestAscetEditApproval } from "./edit/approval.ts";
+import {
+	type AscetEditApprovalContext,
+	type AscetEditApprovalFailure,
+	createAscetEditApprovalResultData,
+	requestAscetEditApproval,
+} from "./edit/approval.ts";
 import { createAscetStatusReport } from "./status.ts";
 
 export interface AscetCreateFolderParams {
@@ -54,16 +59,15 @@ export function createCreateFolderSummary(params: AscetCreateFolderParams): stri
 function createBlockedWriteResult(
 	params: AscetCreateFolderParams,
 	options: RunAscetCreateFolderOptions,
-	code: string,
-	message: string,
+	approval: AscetEditApprovalFailure,
 ): AscetCreateFolderResult {
 	const status = createAscetStatusReport({ cwd: options.cwd, env: options.env });
 	return {
 		ok: false,
 		data: {
 			operation: "create_folder",
-			preflightOnly: true,
 			summary: createCreateFolderSummary(params),
+			...createAscetEditApprovalResultData(approval),
 		},
 		request: {
 			cwd: options.cwd,
@@ -76,7 +80,7 @@ function createBlockedWriteResult(
 		stderr: "",
 		exitCode: null,
 		timedOut: false,
-		error: { code, message },
+		error: { code: approval.code, message: approval.message },
 	};
 }
 
@@ -108,12 +112,7 @@ export async function runApprovedAscetCreateFolder(
 	);
 
 	if (!approval.approved) {
-		return createBlockedWriteResult(
-			params,
-			options,
-			approval.code ?? "ascet_edit_rejected",
-			approval.message ?? "ASCET edit was not approved.",
-		);
+		return createBlockedWriteResult(params, options, approval);
 	}
 
 	return runAscetCreateFolder(params, options);

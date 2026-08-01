@@ -9,7 +9,12 @@ import { normalizeAscetPath } from "../core/path.ts";
 import type { AscetScheduler } from "../scheduler/scheduler.ts";
 import { createAscetStatusReport } from "../status.ts";
 import { toToolSuccessPayload } from "../tool-response-contract.ts";
-import { type AscetEditApprovalContext, requestAscetEditApproval } from "./approval.ts";
+import {
+	type AscetEditApprovalContext,
+	type AscetEditApprovalFailure,
+	createAscetEditApprovalResultData,
+	requestAscetEditApproval,
+} from "./approval.ts";
 
 export type AscetEditabilityMode = "check" | "set";
 
@@ -90,13 +95,16 @@ export async function runAscetEditability(
 function createBlockedEditabilityResult(
 	params: AscetEditabilityParams,
 	options: RunAscetEditabilityOptions,
-	code: string,
-	message: string,
+	approval: AscetEditApprovalFailure,
 ): AscetCliJsonResult {
 	const status = createAscetStatusReport({ cwd: options.cwd, env: options.env });
 	return {
 		ok: false,
-		data: null,
+		data: {
+			operation: getAscetEditabilityOperation(params.mode),
+			summary: createSetEditabilitySummary(params),
+			...createAscetEditApprovalResultData(approval),
+		},
 		request: {
 			cwd: options.cwd,
 			cliPath: status.paths.cliPath,
@@ -108,7 +116,7 @@ function createBlockedEditabilityResult(
 		stderr: "",
 		exitCode: null,
 		timedOut: false,
-		error: { code, message },
+		error: { code: approval.code, message: approval.message },
 	};
 }
 
@@ -140,12 +148,7 @@ export async function runApprovedAscetEditability(
 	);
 
 	if (!approval.approved) {
-		return createBlockedEditabilityResult(
-			params,
-			options,
-			approval.code ?? "ascet_edit_rejected",
-			approval.message ?? "ASCET editability request was not approved.",
-		);
+		return createBlockedEditabilityResult(params, options, approval);
 	}
 
 	return runAscetEditability(params, options);

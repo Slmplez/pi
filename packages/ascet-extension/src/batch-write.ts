@@ -8,7 +8,13 @@ import {
 	runAscetCliJson,
 } from "./cli.ts";
 import { type AscetToolOutcome, createPreflightOutcome } from "./core/results.ts";
-import { type AscetEditApprovalContext, requestAscetEditApproval } from "./edit/approval.ts";
+import {
+	type AscetEditApprovalContext,
+	type AscetEditApprovalFailure,
+	createAscetEditApprovalResultData,
+	isAscetEditApprovalBlockedCode,
+	requestAscetEditApproval,
+} from "./edit/approval.ts";
 import {
 	type AscetEditImpact,
 	type AscetEditImpactParams,
@@ -355,16 +361,15 @@ export function createBatchWriteSummary(params: AscetBatchWriteParams): string {
 function createBlockedBatchWriteResult(
 	params: AscetBatchWriteParams,
 	options: RunAscetBatchWriteOptions,
-	code: string,
-	message: string,
+	approval: AscetEditApprovalFailure,
 ): AscetBatchWriteResult {
 	const status = createAscetStatusReport({ cwd: options.cwd, env: options.env });
 	return {
 		ok: false,
 		data: {
 			operation: params.operation,
-			preflightOnly: true,
 			summary: createBatchWriteSummary(params),
+			...createAscetEditApprovalResultData(approval),
 		},
 		request: {
 			cwd: options.cwd,
@@ -378,7 +383,7 @@ function createBlockedBatchWriteResult(
 		stderr: "",
 		exitCode: null,
 		timedOut: false,
-		error: { code, message },
+		error: { code: approval.code, message: approval.message },
 	};
 }
 
@@ -415,12 +420,7 @@ export async function runApprovedAscetBatchWrite(
 	);
 
 	if (!approval.approved) {
-		return createBlockedBatchWriteResult(
-			normalizedParams,
-			options,
-			approval.code ?? "ascet_batch_write_rejected",
-			approval.message ?? "ASCET batch write was not approved.",
-		);
+		return createBlockedBatchWriteResult(normalizedParams, options, approval);
 	}
 
 	const result = await runAscetBatchWrite(normalizedParams, options);
@@ -548,7 +548,7 @@ export function createBatchWriteOutcome(result: AscetBatchWriteResult): AscetToo
 	if (code === "ascet_batch_write_preflight_required") {
 		return createPreflightOutcome((asRecord(result.data) ?? { message }) as Record<string, unknown>);
 	}
-	if (code === "ascet_batch_write_ui_required" || code === "ascet_batch_write_rejected") {
+	if (isAscetEditApprovalBlockedCode(code)) {
 		return { status: "blocked", code, message };
 	}
 	return { status: "error", error: { code, message } };
