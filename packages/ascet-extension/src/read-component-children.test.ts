@@ -1,15 +1,10 @@
 import assert from "node:assert/strict";
-import { afterEach, describe, test } from "node:test";
+import { describe, test } from "node:test";
 import type { AscetCliExecutionResult, AscetCliRequest } from "./cli.ts";
 import { runAscetReadComponentChildren } from "./read-component-children.ts";
-import { resetAscetSearchIndexForTest } from "./search-index.ts";
 
-afterEach(() => {
-	resetAscetSearchIndexForTest();
-});
-
-describe("read_component_children index-backed previews", () => {
-	test("preview_children elements warms and reads element_decls without live fallback", async () => {
+describe("read_component_children direct reads", () => {
+	test("reads element children directly", async () => {
 		const requests: AscetCliRequest[] = [];
 
 		const result = await runAscetReadComponentChildren(
@@ -20,23 +15,20 @@ describe("read_component_children index-backed previews", () => {
 		assert.equal(result.ok, true);
 		assert.deepEqual(
 			requests.map((request) => request.args[1]),
-			["warm_search_index"],
+			["read_component_children"],
 		);
 		assert.deepEqual(requests[0]?.args, [
 			"exec",
-			"warm_search_index",
-			"--partition",
-			"element_decls",
-			"--force",
-			"--component",
+			"read_component_children",
 			"DEMO\\PID",
+			"--group",
+			"elements",
 			"--json",
 		]);
-		assert.match(JSON.stringify(result.data), /quick_search_index/);
 		assert.match(JSON.stringify(result.data), /pidKp/);
 	});
 
-	test("preview_children methods warms method_decls and omits primitive elements", async () => {
+	test("reads method children directly and omits primitive elements", async () => {
 		const requests: AscetCliRequest[] = [];
 
 		const result = await runAscetReadComponentChildren(
@@ -47,16 +39,14 @@ describe("read_component_children index-backed previews", () => {
 		assert.equal(result.ok, true);
 		assert.deepEqual(
 			requests.map((request) => request.args[1]),
-			["warm_search_index"],
+			["read_component_children"],
 		);
 		assert.deepEqual(requests[0]?.args, [
 			"exec",
-			"warm_search_index",
-			"--partition",
-			"method_decls",
-			"--force",
-			"--component",
+			"read_component_children",
 			"DEMO/PID",
+			"--group",
+			"methods",
 			"--json",
 		]);
 		const rendered = JSON.stringify(result.data);
@@ -64,7 +54,7 @@ describe("read_component_children index-backed previews", () => {
 		assert.doesNotMatch(rendered, /pidKp/);
 	});
 
-	test("preview_children methods falls back live when method metadata is empty", async () => {
+	test("reads methods directly when metadata is empty", async () => {
 		const requests: AscetCliRequest[] = [];
 
 		const result = await runAscetReadComponentChildren(
@@ -75,97 +65,29 @@ describe("read_component_children index-backed previews", () => {
 		assert.equal(result.ok, true);
 		assert.deepEqual(
 			requests.map((request) => request.args[1]),
-			["warm_search_index", "read_component_children"],
+			["read_component_children"],
 		);
-		assert.match(JSON.stringify(result.data), /live_fallback/);
+		assert.match(JSON.stringify(result.data), /liveCalc/);
 	});
 });
-
-function makeEmptyMethodExecution(requests: AscetCliRequest[]) {
-	return async (request: AscetCliRequest): Promise<AscetCliExecutionResult> => {
-		requests.push(request);
-		if (request.args[1] === "warm_search_index") {
-			return okExecution(request, {
-				operation: "warm_search_index",
-				database: { name: "DemoDb", path: "C:\\ASCET\\DemoDb" },
-				generatedAtUtc: "2026-07-25T00:00:00.000Z",
-				elapsedMs: 2,
-				scanComplete: true,
-				components: [],
-				entries: [],
-				counts: { entries: 0 },
-			});
-		}
-		return okExecution(request, {
-			componentPath: "DEMO\\NoMethods",
-			group: "methods",
-			items: [{ name: "liveCalc", kind: "method" }],
-		});
-	};
-}
 
 function makeExecution(requests: AscetCliRequest[]) {
 	return async (request: AscetCliRequest): Promise<AscetCliExecutionResult> => {
 		requests.push(request);
-		if (request.args[1] === "warm_search_index") {
-			const partition = request.args[request.args.indexOf("--partition") + 1];
-			const methodDeclarations =
-				partition === "method_decls"
-					? [
-							{
-								group: "method",
-								componentPath: "DEMO\\PID",
-								componentKind: "module",
-								componentLanguageKind: "ESDL",
-								methodName: "calc",
-								methodKind: "Process",
-								path: "DEMO\\PID::calc",
-							},
-						]
-					: [];
-			const entries =
-				partition === "empty" || partition === "method_decls"
-					? []
-					: [
-							{
-								group: "primitive",
-								componentPath: "DEMO\\PID",
-								componentKind: "module",
-								componentLanguageKind: "ESDL",
-								elementName: "pidKp",
-								elementKind: "cont",
-								displayType: "cont",
-								displayScope: "exported",
-								referencedComponentPath: "",
-								path: "DEMO\\PID::pidKp",
-							},
-							{
-								group: "primitive",
-								componentPath: "DEMO\\PID",
-								componentKind: "module",
-								componentLanguageKind: "ESDL",
-								elementName: "calc",
-								elementKind: "process",
-								displayType: "process",
-								displayScope: "local",
-								referencedComponentPath: "",
-								path: "DEMO\\PID::calc",
-							},
-						];
-			return okExecution(request, {
-				operation: "warm_search_index",
-				database: { name: "DemoDb", path: "C:\\ASCET\\DemoDb" },
-				generatedAtUtc: "2026-07-25T00:00:00.000Z",
-				elapsedMs: 2,
-				scanComplete: true,
-				components: [],
-				entries,
-				methodDeclarations,
-				counts: { entries: entries.length, methods: methodDeclarations.length },
-			});
-		}
+		const group = request.args[request.args.indexOf("--group") + 1];
 		return okExecution(request, {
-			componentPath: "DEMO\\NoMethods",
+			componentPath: request.args[2],
+			group,
+			items: group === "methods" ? [{ name: "calc", kind: "method" }] : [{ name: "pidKp", kind: "parameter" }],
+		});
+	};
+}
+
+function makeEmptyMethodExecution(requests: AscetCliRequest[]) {
+	return async (request: AscetCliRequest): Promise<AscetCliExecutionResult> => {
+		requests.push(request);
+		return okExecution(request, {
+			componentPath: request.args[2],
 			group: "methods",
 			items: [{ name: "liveCalc", kind: "method" }],
 		});

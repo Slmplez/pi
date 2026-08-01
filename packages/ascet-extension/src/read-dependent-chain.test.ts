@@ -65,7 +65,7 @@ afterEach(() => {
 	resetAscetSearchIndexForTest();
 });
 
-describe("ASCET read dependent chain index-first resolver", () => {
+describe("ASCET read dependent chain live-mapping-first resolver", () => {
 	test("uses ready element index and full cache without legacy live chain", async () => {
 		seedIndex([
 			element({ componentPath: "A/Consumer", elementName: "K", displayScope: "Local" }),
@@ -255,6 +255,67 @@ describe("ASCET read dependent chain index-first resolver", () => {
 			assert.equal(payload.provider?.component, "A/Provider");
 			assert.equal(payload.provider?.name, "C_K");
 			assert.equal(payload.consumer?.formula?.code, "C_K");
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("live owner mapping wins over an unrelated same-name index provider", async () => {
+		seedIndex([element({ componentPath: "A/IndexedProvider", elementName: "K_Shared", displayScope: "Exported" })]);
+		const fixture = createReadyEnv();
+		const calls: string[][] = [];
+		try {
+			const result = await runAscetReadDependentChain(
+				{ componentPath: "A/Consumer", dependentElement: "K_Effective" },
+				{
+					cwd: fixture.cwd,
+					env: fixture.env,
+					executeCli: async (request) => {
+						calls.push(request.args);
+						if (request.args[1] === "read_dependent_chain") {
+							return makeExecution(request, {
+								component: "A/Consumer",
+								dependent: {
+									name: "K_Effective",
+									scope: "Local",
+									dependency: "dependent",
+									formula: "K_Shared",
+								},
+								dependencyFormula: {
+									code: "K_Shared",
+									references: ["K_Shared"],
+									mappings: [{ formal: "K_Shared", imported: "K_Shared" }],
+								},
+								inputs: [
+									{
+										formal: { name: "K_Shared" },
+										value: { name: "K_Shared", scope: "Imported" },
+										export: { exists: true, name: "K_Shared", scope: "Exported", owner: "A/LiveProvider" },
+									},
+								],
+								complete: true,
+								issues: [],
+							});
+						}
+						return makeExecution(request, {
+							elements: [{ name: "K_Shared", kind: "parameter", modelType: "cont", scope: "Exported" }],
+						});
+					},
+				},
+			);
+
+			const payload = result.data as {
+				provider?: { component?: string };
+				complete?: boolean;
+				issues?: unknown[];
+			};
+			assert.deepEqual(
+				calls.map((args) => args[1]),
+				["read_dependent_chain", "read_element_catalog"],
+			);
+			assert.equal(payload.provider?.component, "A/LiveProvider");
+			assert.equal(payload.complete, true);
+			assert.deepEqual(payload.issues, []);
 		} finally {
 			fixture.cleanup();
 		}

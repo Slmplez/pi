@@ -393,6 +393,39 @@ function outcomeFromCliResult(result: AscetCliJsonResult): AscetToolOutcome {
 	return { status: "error", error: { code, message } };
 }
 
+function validateDependencyWriteResult(raw: AscetCliJsonResult): AscetToolOutcome | undefined {
+	const payload = extractCliOperationPayload(raw.data);
+	const write = asRecord(payload?.write);
+	if (!write) {
+		return {
+			status: "error",
+			error: {
+				code: "ascet_dependency_write_result_missing",
+				message: "set_element_dependency returned no write result.",
+			},
+		};
+	}
+	if (write.succeeded !== true) {
+		return {
+			status: "error",
+			error: {
+				code: "ascet_dependency_write_not_applied",
+				message: "set_element_dependency did not report a successful write.",
+			},
+		};
+	}
+	if (write.readbackVerified !== true) {
+		return {
+			status: "error",
+			error: {
+				code: "ascet_dependency_readback_not_verified",
+				message: "set_element_dependency writeback was not verified by live readback.",
+			},
+		};
+	}
+	return undefined;
+}
+
 function asResponse(outcome: AscetToolOutcome, raw?: AscetCliJsonResult, impact?: AscetEditImpact): AscetEditResult {
 	return {
 		content: [{ type: "text", text: formatAscetEditOutcomeContent(outcome) }],
@@ -512,6 +545,12 @@ export async function runAscetMutation(
 	if (!raw.ok) {
 		return asResponse(outcomeFromCliResult(raw), raw);
 	}
+	if (normalizedParams.action === "set_element_dependency" && !normalizedParams.dryRun) {
+		const dependencyWriteFailure = validateDependencyWriteResult(raw);
+		if (dependencyWriteFailure) {
+			return asResponse(dependencyWriteFailure, raw);
+		}
+	}
 	const impact = createAscetEditImpact(normalizedParams);
 	const indexUpdate = await applySuccessfulEditIndexUpdate(normalizedParams, raw, options, impact);
 	return asResponse(createSuccessfulEditOutcome(raw, impact, indexUpdate), raw, impact);
@@ -519,7 +558,7 @@ export async function runAscetMutation(
 
 async function applySuccessfulEditIndexUpdate(
 	params: AscetMutationParams,
-	_raw: AscetCliJsonResult,
+	raw: AscetCliJsonResult,
 	options: RunAscetEditOperationOptions,
 	impact: AscetEditImpact,
 ): Promise<AscetEditIndexUpdate> {
@@ -527,16 +566,39 @@ async function applySuccessfulEditIndexUpdate(
 		if (params.dryRun) {
 			return { ...impact, stale: [] };
 		}
-		const update = await refreshElementsFromLiveCatalog(
-			{
-				componentPath: params.targetPath ?? params.componentPath ?? "",
-				names: [params.elementName],
-				scopes: ["Local"],
-				reason: `edit_succeeded:${params.action}`,
-				stale: ["text_code"],
-			},
-			options,
-		);
+		const targets = resolveDependencyWritebackTargets(params, raw);
+		if (targets.length === 0) {
+			const update: AscetElementIndexWritebackResult = {
+				updated: [],
+				stale: impact.stale,
+				elements: [],
+				issues: [
+					{
+						code: "index-writeback-targets-missing",
+						message:
+							"set_element_dependency succeeded, but the CLI did not return component targets for index writeback.",
+					},
+				],
+			};
+			applyTargetedEditWritebackImpact(update, impact, options);
+			return update;
+		}
+		const updates: AscetElementIndexWritebackResult[] = [];
+		for (const componentPath of targets) {
+			updates.push(
+				await refreshElementsFromLiveCatalog(
+					{
+						componentPath,
+						names: [params.elementName],
+						scopes: ["Local"],
+						reason: `edit_succeeded:${params.action}`,
+						stale: ["text_code"],
+					},
+					options,
+				),
+			);
+		}
+		const update = mergeElementIndexWritebackResults(updates, impact.stale);
 		applyTargetedEditWritebackImpact(update, impact, options);
 		return update.issues && update.issues.length > 0 ? { ...update, stale: impact.stale } : update;
 	}
@@ -559,6 +621,61 @@ async function applySuccessfulEditIndexUpdate(
 	}
 	applyAscetEditImpactToSearchIndex(impact, `edit_succeeded:${params.action}`, options);
 	return impact;
+}
+
+function resolveDependencyWritebackTargets(
+	params: Extract<AscetMutationParams, { action: "set_element_dependency" }>,
+	raw: AscetCliJsonResult,
+): string[] {
+	const payload = extractCliOperationPayload(raw.data);
+	const plan = asRecord(payload?.plan);
+	const matches = Array.isArray(plan?.matches) ? plan.matches.filter(isRecord) : [];
+	const plannedComponents = uniqueNormalizedPaths(
+		matches
+			.filter((match) => match.supported !== false)
+			.map((match) => (typeof match.component === "string" ? match.component : "")),
+	);
+	const multiTarget =
+		params.match === "all" || params.targetKind === "folder" || params.targetKind === "project" || matches.length > 1;
+	if (multiTarget) {
+		return plannedComponents;
+	}
+	const target = params.targetPath ?? params.componentPath ?? "";
+	return target.trim() ? [target] : [];
+}
+
+function mergeElementIndexWritebackResults(
+	updates: readonly AscetElementIndexWritebackResult[],
+	fallbackStale: readonly AscetEditImpact["stale"][number][],
+): AscetElementIndexWritebackResult {
+	const updated = uniqueStrings(updates.flatMap((update) => update.updated));
+	const elements = updates.flatMap((update) => update.elements);
+	const stale = uniqueStrings(updates.flatMap((update) => update.stale));
+	const issues = updates.flatMap((update) => update.issues ?? []);
+	return {
+		updated: updated as AscetElementIndexWritebackResult["updated"],
+		stale: issues.length > 0 ? [...fallbackStale] : (stale as AscetElementIndexWritebackResult["stale"]),
+		elements,
+		issues: issues.length > 0 ? issues : undefined,
+	};
+}
+
+function uniqueNormalizedPaths(values: readonly string[]): string[] {
+	const result: string[] = [];
+	const seen = new Set<string>();
+	for (const value of values) {
+		const trimmed = value.trim();
+		const key = trimmed
+			.replace(/\\/g, "/")
+			.replace(/^\/+|\/+$/g, "")
+			.toLowerCase();
+		if (!key || seen.has(key)) {
+			continue;
+		}
+		seen.add(key);
+		result.push(trimmed);
+	}
+	return result;
 }
 
 function applyTargetedEditWritebackImpact(
@@ -632,6 +749,12 @@ function asRecord(value: unknown): Record<string, unknown> | undefined {
 	return value !== null && typeof value === "object" && !Array.isArray(value)
 		? (value as Record<string, unknown>)
 		: undefined;
+}
+
+function extractCliOperationPayload(data: unknown): Record<string, unknown> | undefined {
+	const result = asRecord(unwrapToolSuccessPayload(data));
+	const nestedPayload = asRecord(result?.payload);
+	return nestedPayload ?? result;
 }
 
 function omitKeys(record: Record<string, unknown>, keys: readonly string[]): Record<string, unknown> {

@@ -23,7 +23,7 @@ describe("ASCET prompt coordination", () => {
 		const search = guidelineText(ascetSearchPrompt);
 		const explore = guidelineText(ascetExplorePrompt);
 
-		assert.match(read, /index-first/);
+		assert.match(read, /Live-mapping-first/);
 		assert.match(read, /element_decls/);
 		assert.match(read, /read_element_catalog/);
 		assert.match(read, /scope=Exported/);
@@ -105,7 +105,7 @@ describe("ASCET prompt coordination", () => {
 		assert.match(capabilities, /ASCET action guide/);
 		assert.match(capabilities, /search_actions/);
 		assert.match(capabilities, /ascet_read\.read_code: read complete live code/);
-		assert.match(capabilities, /ascet_read\.read_dependent_chain: Index-first dependency provider resolver/);
+		assert.match(capabilities, /ascet_read\.read_dependent_chain: Live-mapping-first dependency provider resolver/);
 		assert.match(capabilities, /ascet_search\.text_in_code: search indexed ESDL\/C snippets/);
 		assert.doesNotMatch(capabilities, /\bactivate_profile\b/);
 		assert.doesNotMatch(capabilities, /\boperationQuery\b/);

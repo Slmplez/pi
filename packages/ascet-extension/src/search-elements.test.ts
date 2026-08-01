@@ -73,20 +73,25 @@ describe("runAscetSearchElements index fast path", () => {
 			],
 		});
 
-		const result = await runAscetSearchElements(
-			{ query: "P_AEB_IB_MaxVelocityDrop_Curve", match: "exact" },
-			{
-				cwd: process.cwd(),
-				executeCli: async () => {
-					throw new Error("CLI should not be invoked for an indexed hit.");
+		const fixture = createReadyEnv();
+		try {
+			const result = await runAscetSearchElements(
+				{ query: "P_AEB_IB_MaxVelocityDrop_Curve", match: "exact" },
+				{
+					cwd: fixture.cwd,
+					executeCli: async () => {
+						throw new Error("CLI should not be invoked for an indexed hit.");
+					},
 				},
-			},
-		);
+			);
 
-		const envelope = result.data as { result?: { source?: unknown; matches?: unknown[] } };
-		assert.equal(result.ok, true);
-		assert.equal(envelope.result?.source, "quick_search_index");
-		assert.equal(envelope.result?.matches?.length, 1);
+			const envelope = result.data as { result?: { source?: unknown; matches?: unknown[] } };
+			assert.equal(result.ok, true);
+			assert.equal(envelope.result?.source, "quick_search_index");
+			assert.equal(envelope.result?.matches?.length, 1);
+		} finally {
+			fixture.cleanup();
+		}
 	});
 
 	test("serves kind and scopePath filters from the ready index", async () => {
@@ -124,23 +129,30 @@ describe("runAscetSearchElements index fast path", () => {
 			],
 		});
 
-		const result = await runAscetSearchElements(
-			{ query: "FallbackElement", scopePath: "AEB", kind: "calibration", match: "exact" },
-			{
-				cwd: process.cwd(),
-				executeCli: async () => {
-					throw new Error("CLI should not be invoked for indexed kind and scopePath filters.");
+		const fixture = createReadyEnv();
+		try {
+			const result = await runAscetSearchElements(
+				{ query: "FallbackElement", scopePath: "AEB", kind: "calibration", match: "exact" },
+				{
+					cwd: fixture.cwd,
+					executeCli: async () => {
+						throw new Error("CLI should not be invoked for indexed kind and scopePath filters.");
+					},
 				},
-			},
-		);
+			);
 
-		const envelope = result.data as { result?: { source?: unknown; matches?: Array<{ componentPath?: string }> } };
-		assert.equal(result.ok, true);
-		assert.equal(envelope.result?.source, "quick_search_index");
-		assert.deepEqual(
-			envelope.result?.matches?.map((match) => match.componentPath),
-			["AEB\\Controller"],
-		);
+			const envelope = result.data as {
+				result?: { source?: unknown; matches?: Array<{ componentPath?: string }> };
+			};
+			assert.equal(result.ok, true);
+			assert.equal(envelope.result?.source, "quick_search_index");
+			assert.deepEqual(
+				envelope.result?.matches?.map((match) => match.componentPath),
+				["AEB\\Controller"],
+			);
+		} finally {
+			fixture.cleanup();
+		}
 	});
 
 	test("falls back to search_elements CLI when warm_search_index fails", async () => {

@@ -73,18 +73,22 @@ function seedReadyIndex(): void {
 }
 
 function makeExecution(request: AscetCliRequest, ok = true): AscetCliExecutionResult {
+	const result =
+		request.args[1] === "set_element_dependency"
+			? {
+					write: { succeeded: true, readbackVerified: true },
+				}
+			: {
+					writeSucceeded: true,
+					componentPath: "AEB\\Controller",
+					methodName: "calc",
+					readback: { hash: "sha256:abc", lineCount: 1 },
+				};
 	return {
 		exitCode: ok ? 0 : 1,
 		stdout: JSON.stringify({
 			ok,
-			result: ok
-				? {
-						writeSucceeded: true,
-						componentPath: "AEB\\Controller",
-						methodName: "calc",
-						readback: { hash: "sha256:abc", lineCount: 1 },
-					}
-				: null,
+			result: ok ? result : null,
 			error: ok ? null : { code: "ascet_edit_failed", message: "write failed" },
 			meta: { mode: "exec", operation: "set_method_code" },
 		}),
@@ -333,6 +337,122 @@ describe("ascet_edit WriteImpact", () => {
 		}
 	});
 
+	test("dependency writes require an applied and live-verified write result", async () => {
+		for (const scenario of [
+			{ code: "ascet_dependency_write_result_missing", write: undefined },
+			{ code: "ascet_dependency_write_not_applied", write: { succeeded: false, readbackVerified: true } },
+			{ code: "ascet_dependency_readback_not_verified", write: { succeeded: true, readbackVerified: false } },
+		]) {
+			seedReadyIndex();
+			const fixture = createReadyEnv();
+			const calls: string[][] = [];
+			try {
+				const result = await runAscetEdit(
+					{
+						action: "set_element_dependency",
+						targetPath: "AEB\\Controller",
+						elementName: "K_Shared",
+						dependency: "dependent",
+						executeWrite: true,
+					},
+					{
+						cwd: fixture.cwd,
+						env: fixture.env,
+						timeoutMs: 1000,
+						executeCli: async (request) => {
+							calls.push(request.args);
+							return {
+								exitCode: 0,
+								stdout: JSON.stringify({
+									ok: true,
+									result: { write: scenario.write },
+									error: null,
+								}),
+								stderr: "",
+								timedOut: false,
+								request,
+							};
+						},
+					},
+					approvingContext,
+				);
+
+				assert.deepEqual(result.details.outcome, {
+					status: "error",
+					error: { code: scenario.code, message: result.details.error?.message },
+				});
+				assert.equal(
+					calls.some((args) => args[1] === "read_element_catalog"),
+					false,
+				);
+				assert.equal(getAscetSearchIndexPartitionState("element_decls")?.status, "ready");
+			} finally {
+				fixture.cleanup();
+			}
+		}
+	});
+
+	test("dependency write validation accepts the live CLI result.payload envelope", async () => {
+		seedReadyIndex();
+		const fixture = createReadyEnv();
+		const calls: string[][] = [];
+		try {
+			const result = await runAscetEdit(
+				{
+					action: "set_element_dependency",
+					targetPath: "DEMO\\Folder\\Controller",
+					elementName: "K",
+					dependency: "dependent",
+					targetKind: "component",
+					executeWrite: true,
+					verifyReadback: true,
+				},
+				{
+					cwd: fixture.cwd,
+					env: fixture.env,
+					timeoutMs: 1000,
+					executeCli: async (request) => {
+						calls.push(request.args);
+						if (request.args[1] === "read_element_catalog") {
+							return {
+								exitCode: 0,
+								stdout: JSON.stringify({ ok: true, result: { elements: [] }, error: null }),
+								stderr: "",
+								timedOut: false,
+								request,
+							};
+						}
+						return {
+							exitCode: 0,
+							stdout: JSON.stringify({
+								ok: true,
+								result: {
+									payload: {
+										write: { succeeded: true, readbackVerified: true },
+										plan: { matches: [{ component: "DEMO\\Folder\\Controller", supported: true }] },
+									},
+									verification: { succeeded: true },
+								},
+								error: null,
+							}),
+							stderr: "",
+							timedOut: false,
+							request,
+						};
+					},
+				},
+				approvingContext,
+			);
+			assert.equal(result.details.outcome?.status, "ok");
+			assert.equal(
+				calls.some((args) => args[1] === "read_element_catalog"),
+				true,
+			);
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
 	test("successful set_element_dependency refreshes target element index from live catalog", async () => {
 		seedReadyIndex();
 		const fixture = createReadyEnv();
@@ -400,6 +520,221 @@ describe("ascet_edit WriteImpact", () => {
 			);
 			assert.equal(getAscetSearchIndexPartitionState("element_decls")?.status, "ready");
 			assert.equal(getAscetSearchIndexPartitionState("text_code")?.status, "stale");
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("successful folder match-all dependency write refreshes every planned component", async () => {
+		seedReadyIndex();
+		const fixture = createReadyEnv();
+		const calls: string[][] = [];
+		const componentPaths = ["AEB\\ControllerA", "AEB\\ControllerB"];
+		try {
+			const result = await runAscetEdit(
+				{
+					action: "set_element_dependency",
+					targetPath: "AEB\\Folder",
+					targetKind: "folder",
+					match: "all",
+					elementName: "K_Shared",
+					dependency: "dependent",
+					executeWrite: true,
+				},
+				{
+					cwd: fixture.cwd,
+					env: fixture.env,
+					timeoutMs: 1000,
+					executeCli: async (request) => {
+						calls.push(request.args);
+						if (request.args[1] === "read_element_catalog") {
+							assert.notEqual(request.args[2], "AEB\\Folder");
+							return {
+								exitCode: 0,
+								stdout: JSON.stringify({
+									ok: true,
+									result: {
+										elements: [
+											{
+												name: "K_Shared",
+												kind: "parameter",
+												modelType: "cont",
+												scope: "Local",
+												component: request.args[2],
+											},
+										],
+									},
+									error: null,
+								}),
+								stderr: "",
+								timedOut: false,
+								request,
+							};
+						}
+						return {
+							exitCode: 0,
+							stdout: JSON.stringify({
+								ok: true,
+								result: {
+									write: { succeeded: true, readbackVerified: true, changed: 2 },
+									plan: {
+										count: 2,
+										matches: componentPaths.map((component) => ({
+											component,
+											element: "K_Shared",
+											supported: true,
+										})),
+									},
+								},
+								error: null,
+							}),
+							stderr: "",
+							timedOut: false,
+							request,
+						};
+					},
+				},
+				approvingContext,
+			);
+
+			const payload = JSON.parse(result.content[0]?.text ?? "{}");
+			assert.deepEqual(
+				calls.filter((args) => args[1] === "read_element_catalog").map((args) => args[2]),
+				componentPaths,
+			);
+			assert.deepEqual(
+				payload.index.elements.map((entry: { component: string }) => entry.component),
+				["AEB/ControllerA", "AEB/ControllerB"],
+			);
+			assert.deepEqual(payload.index.updated, ["element_decls", "full_element_cache"]);
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("multi-target dependency write stales the full impact when one catalog refresh fails", async () => {
+		seedReadyIndex();
+		const fixture = createReadyEnv();
+		try {
+			const result = await runAscetEdit(
+				{
+					action: "set_element_dependency",
+					targetPath: "AEB\\Folder",
+					targetKind: "folder",
+					match: "all",
+					elementName: "K_Shared",
+					dependency: "dependent",
+					executeWrite: true,
+				},
+				{
+					cwd: fixture.cwd,
+					env: fixture.env,
+					timeoutMs: 1000,
+					executeCli: async (request) => {
+						if (request.args[1] === "read_element_catalog" && request.args[2] === "AEB\\ControllerB") {
+							return { ...makeExecution(request, false), stdout: "" };
+						}
+						if (request.args[1] === "read_element_catalog") {
+							return {
+								exitCode: 0,
+								stdout: JSON.stringify({
+									ok: true,
+									result: {
+										elements: [{ name: "K_Shared", kind: "parameter", modelType: "cont", scope: "Local" }],
+									},
+									error: null,
+								}),
+								stderr: "",
+								timedOut: false,
+								request,
+							};
+						}
+						return {
+							exitCode: 0,
+							stdout: JSON.stringify({
+								ok: true,
+								result: {
+									write: { succeeded: true, readbackVerified: true, changed: 2 },
+									plan: {
+										count: 2,
+										matches: [
+											{ component: "AEB\\ControllerA", element: "K_Shared", supported: true },
+											{ component: "AEB\\ControllerB", element: "K_Shared", supported: true },
+										],
+									},
+								},
+								error: null,
+							}),
+							stderr: "",
+							timedOut: false,
+							request,
+						};
+					},
+				},
+				approvingContext,
+			);
+
+			const payload = JSON.parse(result.content[0]?.text ?? "{}");
+			assert.deepEqual(
+				payload.index.elements.map((entry: { component: string }) => entry.component),
+				["AEB/ControllerA"],
+			);
+			assert.deepEqual(payload.index.stale, ["element_decls", "element_refs", "text_code"]);
+			assert.equal(payload.index.issues[0].code, "indexReadbackFailed");
+			assert.equal(getAscetSearchIndexPartitionState("element_decls")?.status, "stale");
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("multi-target dependency write with missing plan components reports writeback recovery state", async () => {
+		seedReadyIndex();
+		const fixture = createReadyEnv();
+		const calls: string[][] = [];
+		try {
+			const result = await runAscetEdit(
+				{
+					action: "set_element_dependency",
+					targetPath: "AEB\\Folder",
+					targetKind: "folder",
+					match: "all",
+					elementName: "K_Shared",
+					dependency: "dependent",
+					executeWrite: true,
+				},
+				{
+					cwd: fixture.cwd,
+					env: fixture.env,
+					timeoutMs: 1000,
+					executeCli: async (request) => {
+						calls.push(request.args);
+						return {
+							exitCode: 0,
+							stdout: JSON.stringify({
+								ok: true,
+								result: {
+									write: { succeeded: true, readbackVerified: true, changed: 1 },
+									plan: { count: 1, matches: [{ element: "K_Shared", supported: true }] },
+								},
+								error: null,
+							}),
+							stderr: "",
+							timedOut: false,
+							request,
+						};
+					},
+				},
+				approvingContext,
+			);
+
+			const payload = JSON.parse(result.content[0]?.text ?? "{}");
+			assert.equal(
+				calls.some((args) => args[1] === "read_element_catalog"),
+				false,
+			);
+			assert.equal(payload.index.issues[0].code, "index-writeback-targets-missing");
+			assert.deepEqual(payload.index.stale, ["element_decls", "element_refs", "text_code"]);
+			assert.equal(getAscetSearchIndexPartitionState("element_decls")?.status, "stale");
 		} finally {
 			fixture.cleanup();
 		}

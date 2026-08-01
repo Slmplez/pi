@@ -82,6 +82,30 @@ export async function runAscetReadDependentChain(
 	params: AscetReadDependentChainParams,
 	options: RunAscetReadDependentChainOptions,
 ): Promise<AscetReadDependentChainResult> {
+	// The live dependency mapping is authoritative.  A same-name index hit is
+	// only a candidate and must not override an explicit live Imported ->
+	// Exported owner relationship.
+	if ((params.fallback ?? "legacy_live") === "legacy_live") {
+		const legacy = await runLegacyAscetReadDependentChain(params, options);
+		if (legacy.ok) {
+			const evidence = extractLegacyEvidence(legacy.data);
+			const liveResolved = await resolveLiveEvidence(params, options, evidence);
+			if (liveResolved) {
+				return liveResolved;
+			}
+
+			const indexReady = await ensureElementDeclarationsReady(options);
+			if (indexReady) {
+				const indexed = await runIndexFirstDependentChain(params, options, evidence);
+				if (indexed) {
+					return indexed;
+				}
+			}
+
+			return legacy;
+		}
+	}
+
 	const indexReady = await ensureElementDeclarationsReady(options);
 	if (indexReady) {
 		const indexed = await runIndexFirstDependentChain(params, options);
@@ -140,37 +164,74 @@ async function ensureElementDeclarationsReady(options: RunAscetReadDependentChai
 async function runIndexFirstDependentChain(
 	params: AscetReadDependentChainParams,
 	options: RunAscetReadDependentChainOptions,
+	legacyEvidence?: LegacyChainEvidence,
 ): Promise<AscetReadDependentChainResult | undefined> {
-	const directNames = [params.dependentElement];
-	const directProviders = findExportedProviders(directNames, params);
+	const directNames = legacyEvidence
+		? uniqueStrings([...legacyEvidence.importedNames, ...legacyEvidence.exportedNames, ...legacyEvidence.references])
+		: [params.dependentElement];
+	const directProviders = findExportedProviders(directNames.length > 0 ? directNames : [params.dependentElement], {
+		...params,
+		exporterComponentPath: params.exporterComponentPath ?? uniqueSingle(legacyEvidence?.exportOwnerPaths ?? []),
+	});
 	if (directProviders.status !== "not_found") {
-		return completeProviderResult(params, options, directProviders, undefined);
+		return completeProviderResult(params, options, directProviders, legacyEvidence);
 	}
 
 	if ((params.fallback ?? "legacy_live") !== "legacy_live") {
 		return createNoProviderResult(params, options, undefined, directNames);
 	}
 
+	if (legacyEvidence) {
+		return createNoProviderResult(params, options, legacyEvidence, directNames);
+	}
 	const legacy = await runLegacyAscetReadDependentChain(params, options);
 	if (!legacy.ok) {
 		return legacy;
 	}
 
-	const legacyEvidence = extractLegacyEvidence(legacy.data);
+	const recoveredEvidence = extractLegacyEvidence(legacy.data);
 	const candidateNames = uniqueStrings([
-		...legacyEvidence.importedNames,
-		...legacyEvidence.exportedNames,
-		...legacyEvidence.references,
+		...recoveredEvidence.importedNames,
+		...recoveredEvidence.exportedNames,
+		...recoveredEvidence.references,
 	]);
 	const names = candidateNames.length > 0 ? candidateNames : directNames;
 	const providers = findExportedProviders(names, {
 		...params,
-		exporterComponentPath: params.exporterComponentPath ?? uniqueSingle(legacyEvidence.exportOwnerPaths),
+		exporterComponentPath: params.exporterComponentPath ?? uniqueSingle(recoveredEvidence.exportOwnerPaths),
 	});
 	if (providers.status !== "not_found") {
-		return completeProviderResult(params, options, providers, legacyEvidence);
+		return completeProviderResult(params, options, providers, recoveredEvidence);
 	}
-	return createNoProviderResult(params, options, legacyEvidence, names);
+	return createNoProviderResult(params, options, recoveredEvidence, names);
+}
+
+async function resolveLiveEvidence(
+	params: AscetReadDependentChainParams,
+	options: RunAscetReadDependentChainOptions,
+	evidence: LegacyChainEvidence,
+): Promise<AscetReadDependentChainResult | undefined> {
+	const ownerPath = uniqueSingle(evidence.exportOwnerPaths);
+	const providerName = uniqueSingle([...evidence.exportedNames, ...evidence.importedNames, ...evidence.references]);
+	if (!ownerPath || !providerName) {
+		return undefined;
+	}
+
+	// Keep the live owner even when the local element_decls index is stale or
+	// does not contain the provider yet.
+	const liveProvider: AscetSearchIndexEntry = {
+		group: "primitive",
+		componentPath: ownerPath,
+		componentKind: "",
+		componentLanguageKind: "",
+		elementName: providerName,
+		elementKind: "parameter",
+		displayType: "",
+		displayScope: "Exported",
+		referencedComponentPath: "",
+		path: `${ownerPath}/${providerName}`,
+	};
+	return completeProviderResult(params, options, { status: "found", item: liveProvider }, evidence);
 }
 
 async function completeProviderResult(
@@ -213,7 +274,8 @@ async function completeProviderResult(
 			provider: "element_decls",
 			element: full.source === "full_element_cache" ? "full_element_cache" : "live",
 		},
-		issues: full.issue ? [full.issue] : undefined,
+		complete: !full.issue && (legacy ? legacy.complete : true),
+		issues: full.issue ? [full.issue] : legacy?.issues.length ? legacy.issues : [],
 	};
 	return createIndexedResult(params, options, payload);
 }
@@ -371,6 +433,8 @@ interface LegacyChainEvidence {
 	exportedNames: string[];
 	references: string[];
 	exportOwnerPaths: string[];
+	complete: boolean;
+	issues: string[];
 }
 
 function extractLegacyEvidence(data: unknown): LegacyChainEvidence {
@@ -384,6 +448,7 @@ function extractLegacyEvidence(data: unknown): LegacyChainEvidence {
 		imported: asString(entry.imported),
 	}));
 	const code = asString(formula?.code) || asString(dependent?.formula);
+	const issues = asStringArray(payload?.issues);
 	return {
 		dependent: {
 			kind: asString(dependent?.kind) || undefined,
@@ -402,6 +467,8 @@ function extractLegacyEvidence(data: unknown): LegacyChainEvidence {
 		exportedNames: uniqueStrings(inputs.map((entry) => asString(asRecord(entry.export)?.name))),
 		references: uniqueStrings([...asStringArray(formula?.references), ...extractFormulaReferences(code)]),
 		exportOwnerPaths: uniqueStrings(inputs.map((entry) => asString(asRecord(entry.export)?.owner))),
+		complete: payload?.complete === true,
+		issues,
 	};
 }
 

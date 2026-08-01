@@ -548,11 +548,11 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 	}),
 	descriptor("ascet_read", "read_dependent_chain", "public", READ_PROFILES, {
 		prompt: prompt(
-			"Index-first dependency provider resolver for Local Parameter -> Imported Parameter -> Exported Parameter chains.",
+			"Live-mapping-first dependency provider resolver for Local Parameter -> Imported Parameter -> Exported Parameter chains.",
 			{
 				rules: [
 					"Use read_dependent_chain when the user asks which exported or global parameter a local dependent parameter depends on.",
-					"Provider discovery is index-first from element_decls; scope=Exported is required for a valid provider.",
+					"Provider discovery first trusts live dependency formula/mapping and explicit export owner; element_decls is the bounded fallback. scope=Exported is required for a valid provider.",
 					"Returned element.data is full live read_element_catalog data for the exported provider when detailLevel=full.",
 					"The formula reported by read_dependent_chain is the local dependent parameter expression, not an implementation conversion formula or project formula.",
 					"Dependent parameter provider discovery is a coordinated workflow: call read_dependent_chain first, then coordinate ascet_search and ascet_explore if discovery is incomplete.",

@@ -104,7 +104,7 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 	},
 	"ascet_read.read_dependent_chain": {
 		compact:
-			"Index-first dependency provider resolver; returns exported provider path and full provider element data",
+			"Live-mapping-first dependency provider resolver; returns exported provider path and full provider element data",
 		intent:
 			"Resolve Local Parameter -> Imported Parameter -> Exported Parameter evidence and return full provider element catalog data.",
 		useWhen: [
