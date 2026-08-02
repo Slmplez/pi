@@ -106,7 +106,12 @@ const codeEditRules = [
 
 const elementSpecRules = [
 	"Treat specFile as a structured ASCET element-spec JSON artifact.",
+	"Start from the element's code role and explicit requirements: determine whether it is a parameter, variable, array, state, or enumeration, how the code reads or writes it, its domain, lifecycle, and initialization intent. That semantic intent drives the target spec; do not let a similarly named element or a read result replace the code-level meaning.",
+	"For new elements, use ascet_search.search_elements or ascet_search.text_in_code for discovery and ascet_read.read_code for complete code; use ascet_read.read_dependent_chain when dependency context matters. Treat live reads as ASCET compatibility and preservation evidence, not as the semantic source. For existing elements, preserve unchanged live fields and emit only the requested patch; Do not copy a sibling's values without semantic equivalence.",
 	"Do not guess modelType, scope, range, implementation type, formula, calibration, or dependency.",
+	"For a new variable, parameter, or array (except an Imported Parameter), include data.value and impl.valueType; for non-logical model types include exactly one range object with both min and max under physicalRange or impl.implementationRange, and ranged parameters require impl.limitAssignments=true.",
+	"For a new enumeration, include enumerationPath and scalar data.value; do not add physicalRange. Existing-element patches may omit unchanged fields.",
+	"If any required create field is unknown, stop at preflight and resolve live metadata with ascet_search.search_elements or ask for the value.",
 	"Dependency is not part of apply_element_spec JSON; use set_element_dependency after the target parameter exists.",
 ] as const;
 
@@ -553,7 +558,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 				rules: [
 					"Use read_dependent_chain when the user asks which exported or global parameter a local dependent parameter depends on.",
 					"Provider discovery first trusts live dependency formula/mapping and explicit export owner; element_decls is the bounded fallback. scope=Exported is required for a valid provider.",
-					"Returned element.data is full live read_element_catalog data for the exported provider when detailLevel=full.",
+					"Returned element.data is full live element metadata for the exported provider when detailLevel=full.",
 					"The formula reported by read_dependent_chain is the local dependent parameter expression, not an implementation conversion formula or project formula.",
 					"Dependent parameter provider discovery is a coordinated workflow: call read_dependent_chain first, then coordinate ascet_search and ascet_explore if discovery is incomplete.",
 					"The Imported Parameter in the consuming component and the Exported Parameter in the provider component must have the same name.",
@@ -1054,7 +1059,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 				...writePreflightRules,
 				...dependencyRules,
 				"set_element_dependency does not create local, imported, or exported elements; use apply_element_spec first for new elements.",
-				"Successful executed writes refreshes element_decls and full_element_cache from live read_element_catalog readback.",
+				"Successful executed writes refreshes element_decls and full_element_cache from live element-catalog readback.",
 				"If index refresh fails after a successful write, follow index.issues; the write result can still be valid.",
 			],
 			fewShots: [

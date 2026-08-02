@@ -59,4 +59,51 @@ describe("ASCET action catalog", () => {
 		assert.match(writeDependency?.rules.join("\n") ?? "", /does not create local, imported, or exported elements/);
 		assert.match(writeDependency?.rules.join("\n") ?? "", /refreshes element_decls and full_element_cache/);
 	});
+
+	test("makes code semantics primary for apply_element_spec", () => {
+		const entries = new Map(listActionCatalogEntries().map((entry) => [entry.id, entry]));
+		const elementSpec = entries.get("ascet_edit.apply_element_spec");
+		const rules = elementSpec?.rules.join("\n") ?? "";
+
+		assert.match(rules, /element's code role and explicit requirements/);
+		assert.match(rules, /semantic intent drives the target spec/);
+		assert.match(rules, /live reads as ASCET compatibility and preservation evidence/);
+		assert.match(rules, /Do not copy a sibling's values without semantic equivalence/);
+	});
+
+	test("derives required fields from real action schemas, including conditional verify variants", () => {
+		const entries = new Map(listActionCatalogEntries().map((entry) => [entry.id, entry]));
+		const methodSignature = entries.get("ascet_read.read_method_signature");
+		assert.deepEqual(methodSignature?.schema.required, ["action", "componentPath", "methodName"]);
+		const elementSpec = entries.get("ascet_edit.apply_element_spec");
+		assert.ok(elementSpec?.schema.required.includes("action"));
+		assert.ok(elementSpec?.schema.required.includes("componentPath"));
+		assert.ok(elementSpec?.schema.required.includes("specFile"));
+		const verify = entries.get("ascet_verify.readback");
+		assert.deepEqual(verify?.schema.required, ["action", "objectKind"]);
+		assert.equal(verify?.schema.variants?.length, 2);
+		assert.ok(verify?.schema.variants?.some((variant) => variant.when?.objectKind?.includes("project")));
+	});
+
+	test("keeps every public few-shot call compatible with its catalog schema", () => {
+		const entries = listActionCatalogEntries();
+		const ids = new Set<string>();
+		for (const entry of entries) {
+			assert.equal(ids.has(entry.id), false, `duplicate catalog id: ${entry.id}`);
+			ids.add(entry.id);
+			for (const example of entry.fewShots) {
+				for (const required of entry.schema.required) {
+					assert.ok(required in example.args, `${entry.id} fewShot is missing required field ${required}`);
+				}
+				for (const [field, values] of Object.entries(entry.schema.enums ?? {})) {
+					if (field in example.args) {
+						assert.ok(
+							values.includes(String(example.args[field])),
+							`${entry.id} has invalid ${field} fewShot value`,
+						);
+					}
+				}
+			}
+		}
+	});
 });

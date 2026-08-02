@@ -25,7 +25,7 @@ describe("ASCET prompt coordination", () => {
 
 		assert.match(read, /Live-mapping-first/);
 		assert.match(read, /element_decls/);
-		assert.match(read, /read_element_catalog/);
+		assert.match(read, /live element catalog/);
 		assert.match(read, /scope=Exported/);
 		assert.match(read, /same-named Exported Parameter/);
 		assert.match(search, /_Calibration/);
@@ -43,6 +43,16 @@ describe("ASCET prompt coordination", () => {
 		assert.match(write, /align metadata from the Exported Parameter, not from the Imported Parameter/);
 		assert.match(write, /does not create local, imported, or exported elements/);
 		assert.match(write, /full_element_cache/);
+	});
+
+	test("makes code semantics primary for element-spec generation", () => {
+		const write = guidelineText(ascetEditPrompt);
+
+		assert.match(write, /element's code role and explicit requirements/);
+		assert.match(write, /semantic intent drives the target spec/);
+		assert.match(write, /live reads as compatibility and preservation evidence/);
+		assert.match(write, /Do not copy a sibling element's values unless semantic equivalence is established/);
+		assert.match(write, /ascet_read\.read_code/);
 	});
 
 	test("deduplicates ASCET edit prompt rules and few-shots", () => {
