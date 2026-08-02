@@ -45,6 +45,16 @@ describe("ASCET prompt coordination", () => {
 		assert.match(write, /full_element_cache/);
 	});
 
+	test("makes code semantics primary for element-spec generation", () => {
+		const write = guidelineText(ascetEditPrompt);
+
+		assert.match(write, /element's code role and explicit requirements/);
+		assert.match(write, /semantic intent drives the target spec/);
+		assert.match(write, /live reads as compatibility and preservation evidence/);
+		assert.match(write, /Do not copy a sibling element's values unless semantic equivalence is established/);
+		assert.match(write, /ascet_read\.read_code/);
+	});
+
 	test("deduplicates ASCET edit prompt rules and few-shots", () => {
 		assert.equal(new Set(ascetEditPrompt.promptGuidelines).size, ascetEditPrompt.promptGuidelines.length);
 	});

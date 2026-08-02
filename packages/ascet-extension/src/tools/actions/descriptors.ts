@@ -106,6 +106,8 @@ const codeEditRules = [
 
 const elementSpecRules = [
 	"Treat specFile as a structured ASCET element-spec JSON artifact.",
+	"Start from the element's code role and explicit requirements: determine whether it is a parameter, variable, array, state, or enumeration, how the code reads or writes it, its domain, lifecycle, and initialization intent. That semantic intent drives the target spec; do not let a similarly named element or a read result replace the code-level meaning.",
+	"For new elements, use ascet_search.search_elements or ascet_search.text_in_code for discovery and ascet_read.read_code for complete code; use ascet_read.read_dependent_chain when dependency context matters. Treat live reads as ASCET compatibility and preservation evidence, not as the semantic source. For existing elements, preserve unchanged live fields and emit only the requested patch; Do not copy a sibling's values without semantic equivalence.",
 	"Do not guess modelType, scope, range, implementation type, formula, calibration, or dependency.",
 	"Dependency is not part of apply_element_spec JSON; use set_element_dependency after the target parameter exists.",
 ] as const;
