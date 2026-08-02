@@ -15,6 +15,9 @@ public static class AscetTestEvidenceService
         string runPath = ResolveArtifactPath(request, "runResultPath", Path.Combine(runDirectory, "run-result.json"));
         Dictionary<string, object> build = ReadJson(buildPath);
         Dictionary<string, object> run = ReadJson(runPath);
+        string exportPath = ResolveArtifactPath(request, "exportResultPath", Path.Combine(runDirectory, "live-export.json"));
+        string projectExportPath = ResolveArtifactPath(request, "projectExportResultPath", Path.Combine(runDirectory, "live-export-project.json"));
+        string manifestPath = ResolveArtifactPath(request, "exportManifestPath", Path.Combine(runDirectory, "export-manifest.json"));
         string xmlPath = run == null ? String.Empty : AscetTestContracts.GetString(run, "gtestXmlPath");
         if (String.IsNullOrWhiteSpace(xmlPath)) xmlPath = Path.Combine(runDirectory, "google-test", "test-results.xml");
         xmlPath = AscetTestContracts.ResolvePath(xmlPath, runDirectory);
@@ -24,10 +27,16 @@ public static class AscetTestEvidenceService
             { "runDirectory", runDirectory },
             { "buildResult", buildPath },
             { "runResult", runPath },
+            { "exportResult", exportPath },
+            { "projectExportResult", projectExportPath },
+            { "exportManifest", manifestPath },
             { "gtestXml", xmlPath }
         };
         evidence["buildResult"] = build;
         evidence["runResult"] = run;
+        evidence["exportResult"] = ReadJson(exportPath);
+        evidence["projectExportResult"] = ReadJson(projectExportPath);
+        evidence["exportManifest"] = ReadJson(manifestPath);
         evidence["gtestXml"] = ReadXml(xmlPath);
         return evidence;
     }

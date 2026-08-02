@@ -244,7 +244,7 @@ public static class AscetTestPipelineService
     {
         List<object> result = new List<object>();
         if (data == null) return result;
-        string[] keys = { "artifactPath", "inspectionPath", "draftPath", "esdlPath", "elementSpecPath", "applyPlanPath", "applyResultPath", "readbackPath", "exportResultPath", "exportManifestPath", "liveExportPath", "buildResultPath", "runResultPath", "verifyResultPath", "compileCommandsPath", "gtestXmlPath", "pipelineStatePath", "reportPath", "reportMarkdownPath", "junitPath" };
+        string[] keys = { "artifactPath", "inspectionPath", "draftPath", "esdlPath", "elementSpecPath", "applyPlanPath", "applyResultPath", "readbackPath", "exportResultPath", "projectExportResultPath", "exportManifestPath", "liveExportPath", "buildResultPath", "runResultPath", "verifyResultPath", "compileCommandsPath", "gtestXmlPath", "pipelineStatePath", "reportPath", "reportMarkdownPath", "junitPath" };
         for (int index = 0; index < keys.Length; index++)
         {
             string value = AscetTestContracts.GetString(data, keys[index]);
@@ -365,7 +365,7 @@ public static class AscetTestPipelineService
     private static void CarryForwardStageArtifacts(string stage, Dictionary<string, object> stageData, Dictionary<string, object> request)
     {
         if (stageData == null) return;
-        string[] keys = { "inspectionPath", "draftPath", "esdlPath", "elementSpecPath", "applyPlanPath", "applyResultPath", "readbackPath", "exportResultPath", "exportManifestPath", "buildResultPath", "runResultPath", "verifyResultPath", "liveExportPath" };
+        string[] keys = { "inspectionPath", "draftPath", "esdlPath", "elementSpecPath", "applyPlanPath", "applyResultPath", "readbackPath", "exportResultPath", "projectExportResultPath", "exportManifestPath", "buildResultPath", "runResultPath", "verifyResultPath", "liveExportPath" };
         for (int index = 0; index < keys.Length; index++)
         {
             string value = AscetTestContracts.GetString(stageData, keys[index]);
@@ -375,6 +375,14 @@ public static class AscetTestPipelineService
         {
             request["readbackVerified"] = AscetTestContracts.GetBoolean(stageData, "readbackVerified", false);
             request["liveWritePerformed"] = AscetTestContracts.GetBoolean(stageData, "liveWritePerformed", false);
+        }
+        if (String.Equals(stage, "export", StringComparison.OrdinalIgnoreCase))
+        {
+            request["exportContext"] = AscetTestContracts.GetString(stageData, "exportContext");
+            request["generatedComponentSource"] = AscetTestContracts.GetString(stageData, "generatedComponentSource");
+            request["standaloneExportResult"] = AscetTestContracts.GetValue(stageData, "standaloneExportResult");
+            request["projectExportResult"] = AscetTestContracts.GetValue(stageData, "projectExportResult");
+            request["projectExportFallbackUsed"] = String.Equals(AscetTestContracts.GetString(stageData, "exportContext"), "project-recursive", StringComparison.OrdinalIgnoreCase);
         }
     }
 

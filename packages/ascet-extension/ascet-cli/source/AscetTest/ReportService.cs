@@ -23,6 +23,9 @@ public static class AscetTestReportService
         Dictionary<string, object> evidence = AscetTestEvidenceService.Collect(request, runDirectory);
         Dictionary<string, object> build = evidence["buildResult"] as Dictionary<string, object>;
         Dictionary<string, object> run = evidence["runResult"] as Dictionary<string, object>;
+        Dictionary<string, object> export = evidence["exportResult"] as Dictionary<string, object>;
+        Dictionary<string, object> projectExport = evidence["projectExportResult"] as Dictionary<string, object>;
+        Dictionary<string, object> manifest = evidence["exportManifest"] as Dictionary<string, object>;
         Dictionary<string, object> xml = evidence["gtestXml"] as Dictionary<string, object>;
         string verifyPath = Path.Combine(runDirectory, "verify-result.json");
         Dictionary<string, object> verify = AscetTestEvidenceService.ReadJson(verifyPath);
@@ -78,7 +81,8 @@ public static class AscetTestReportService
             { "metrics", metrics },
             { "firstFailure", firstFailure },
             { "evidencePaths", paths ?? new Dictionary<string, object>() },
-            { "diagnostics", Diagnostics(request, build, run) }
+            { "export", ExportSummary(request, export, projectExport, manifest, paths) },
+            { "diagnostics", Diagnostics(request, build, run, export, projectExport, manifest) }
         };
         report["hashes"] = Hashes(request, pipelineData, runDirectory);
 
@@ -111,17 +115,55 @@ public static class AscetTestReportService
         };
     }
 
-    private static Dictionary<string, object> Diagnostics(Dictionary<string, object> request, Dictionary<string, object> build, Dictionary<string, object> run)
+    private static Dictionary<string, object> Diagnostics(Dictionary<string, object> request, Dictionary<string, object> build, Dictionary<string, object> run, Dictionary<string, object> export, Dictionary<string, object> projectExport, Dictionary<string, object> manifest)
     {
+        Dictionary<string, object> standalone = AscetTestContracts.GetDictionary(request, "standaloneExportResult");
+        Dictionary<string, object> project = AscetTestContracts.GetDictionary(request, "projectExportResult");
         return new Dictionary<string, object>
         {
             { "liveExecutionStarted", AscetTestContracts.GetBoolean(request, "executeLive", false) },
             { "liveWritePerformed", AscetTestContracts.GetBoolean(request, "liveWritePerformed", false) },
             { "serialOperations", true },
             { "componentKind", AscetTestContracts.GetString(request, "objectKind") },
+            { "exportContext", AscetTestContracts.GetString(request, "exportContext") },
+            { "generatedComponentSource", AscetTestContracts.GetString(request, "generatedComponentSource") },
+            { "projectExportFallbackUsed", AscetTestContracts.GetBoolean(request, "projectExportFallbackUsed", false) },
+            { "standaloneExportObserved", standalone != null || export != null },
+            { "standaloneExportStatus", ExportStatus(standalone) },
+            { "projectExportObserved", project != null || projectExport != null },
+            { "projectExportStatus", ExportStatus(project == null ? projectExport : project) },
+            { "effectiveExportStatus", ExportStatus(export) },
+            { "exportManifestReady", manifest != null && String.Equals(AscetTestContracts.GetString(manifest, "status"), "ready", StringComparison.OrdinalIgnoreCase) },
             { "cCompilerOwnsC", build == null || AscetTestContracts.GetBoolean(AscetTestContracts.GetDictionary(build, "stages"), "cCompile", false) },
             { "googleTestRuntimeObserved", run != null }
         };
+    }
+
+    private static Dictionary<string, object> ExportSummary(Dictionary<string, object> request, Dictionary<string, object> export, Dictionary<string, object> projectExport, Dictionary<string, object> manifest, Dictionary<string, object> paths)
+    {
+        Dictionary<string, object> standalone = AscetTestContracts.GetDictionary(request, "standaloneExportResult");
+        Dictionary<string, object> project = AscetTestContracts.GetDictionary(request, "projectExportResult");
+        return new Dictionary<string, object>
+        {
+            { "context", AscetTestContracts.GetString(request, "exportContext") },
+            { "generatedComponentSource", AscetTestContracts.GetString(request, "generatedComponentSource") },
+            { "standaloneStatus", ExportStatus(standalone == null ? (AscetTestContracts.GetBoolean(request, "projectExportFallbackUsed", false) ? null : export) : standalone) },
+            { "projectStatus", ExportStatus(project == null ? projectExport : project) },
+            { "effectiveStatus", ExportStatus(export) },
+            { "manifestStatus", manifest == null ? String.Empty : AscetTestContracts.GetString(manifest, "status") },
+            { "fallbackUsed", AscetTestContracts.GetBoolean(request, "projectExportFallbackUsed", false) },
+            { "exportResultPath", AscetTestContracts.GetString(paths, "exportResult") },
+            { "projectExportResultPath", AscetTestContracts.GetString(paths, "projectExportResult") },
+            { "manifestPath", AscetTestContracts.GetString(paths, "exportManifest") }
+        };
+    }
+
+    private static string ExportStatus(Dictionary<string, object> result)
+    {
+        if (result == null) return String.Empty;
+        if (AscetTestContracts.GetBoolean(result, "ok", false) || AscetTestContracts.GetBoolean(result, "succeeded", false) || AscetTestContracts.GetBoolean(result, "Succeeded", false)) return "exported";
+        Dictionary<string, object> error = AscetTestContracts.GetDictionary(result, "error");
+        return error == null ? "failed" : "failed";
     }
 
     private static string RenderMarkdown(Dictionary<string, object> report)
@@ -214,6 +256,11 @@ public static class AscetTestReportService
         if (paths == null) return String.Empty;
         if (String.Equals(stage, "build", StringComparison.OrdinalIgnoreCase)) return AscetTestContracts.GetString(paths, "buildResult");
         if (String.Equals(stage, "run", StringComparison.OrdinalIgnoreCase)) return AscetTestContracts.GetString(paths, "runResult");
+        if (String.Equals(stage, "export", StringComparison.OrdinalIgnoreCase))
+        {
+            string exportPath = AscetTestContracts.GetString(paths, "exportResult");
+            return String.IsNullOrWhiteSpace(exportPath) ? AscetTestContracts.GetString(paths, "exportManifest") : exportPath;
+        }
         if (String.Equals(stage, "verify", StringComparison.OrdinalIgnoreCase)) return Path.Combine(AscetTestContracts.GetString(paths, "runDirectory"), "verify-result.json");
         return AscetTestContracts.GetString(paths, "runDirectory");
     }

@@ -20,7 +20,7 @@ $items = @(
   [ordered]@{ id = 'xpass-module'; kind = 'module'; path = 'PlatformLibrary\Package\AEB_AutomaticEmergencyBrake\Component\XPass_BB00000_AEB' },
   [ordered]@{ id = 'aeb-release-class'; kind = 'class'; path = 'PlatformLibrary\Package\AEB_AutomaticEmergencyBrake\Private\AEB_Core\AEB_Release' },
   [ordered]@{ id = 'aeb-engine-stall-class'; kind = 'class'; path = 'PlatformLibrary\Package\AEB_AutomaticEmergencyBrake\Private\AEB_Core\AEB_EngineStall' },
-  [ordered]@{ id = 'aeb-trigger-ba-from-off-class'; kind = 'class'; path = 'PlatformLibrary\Package\AEB_AutomaticEmergencyBrake\Private\AEB_Core\AEB_Trigger_BA_From_Off' }
+  [ordered]@{ id = 'aeb-trigger-ba-from-off-class'; kind = 'class'; path = 'PlatformLibrary\Package\AEB_AutomaticEmergencyBrake\Private\AEB_Core\AEB_Trigger_BA_From_Off'; projectPath = 'PlatformLibrary\Package\AEB_AutomaticEmergencyBrake\Component\AEB_iBooster\AEBiBooster_ECU_CSW_BB00001' }
 )
 
 function Invoke-LiveRead {
@@ -54,6 +54,10 @@ function New-NormalizedInspection {
     [object]$RefsPayload,
     [object]$ImplementationPayload,
     [object]$ExportPayload,
+    [object]$StandaloneExportPayload,
+    [object]$ProjectExportPayload,
+    [string]$ExportContext,
+    [string]$GeneratedComponentSource,
     [bool]$ReadPassed,
     [bool]$ExportReady,
     [string]$Status
@@ -95,9 +99,13 @@ function New-NormalizedInspection {
     warnings = @()
     errors = $readErrors
     cycles = @()
-    raw = [ordered]@{ summary = $Summary; snapshot = $Snapshot; methods = $MethodsPayload; elements = $ElementsPayload; components = $ComponentsPayload; references = $RefsPayload; implementation = $ImplementationPayload; generatedCodeExport = $ExportPayload }
+    raw = [ordered]@{ summary = $Summary; snapshot = $Snapshot; methods = $MethodsPayload; elements = $ElementsPayload; components = $ComponentsPayload; references = $RefsPayload; implementation = $ImplementationPayload; generatedCodeExport = $ExportPayload; standaloneExport = $StandaloneExportPayload; projectExport = $ProjectExportPayload }
     liveExecutionStarted = $true
     exportStatus = if ($ExportReady) { 'ready' } else { 'not_ready' }
+    exportContext = $ExportContext
+    generatedComponentSource = $GeneratedComponentSource
+    standaloneExport = $StandaloneExportPayload
+    projectExport = $ProjectExportPayload
     generatedSources = if ($null -ne $exportManifest) { @($exportManifest.sourceFiles) } else { @() }
     testLevels = if ($ExportReady -and [string]$Summary.languageKind -eq 'ESDL') { @('class_ut', 'component_ct') } elseif ($ExportReady) { @('component_ct') } else { @() }
     unsupportedReasons = if ($Status -eq 'unsupported') { @('resolved_kind_or_language_not_supported') } elseif (-not $ExportReady) { @('generated_code_export_not_ready') } else { @() }
@@ -108,6 +116,7 @@ function New-NormalizedInspection {
 }
 
 $results = @()
+$projectExportCache = @{}
 foreach ($item in $items) {
   # The loop is intentionally serial: ASCET ToolAPI/worker access is a single
   # global resource and this script never starts two live operations together.
@@ -124,10 +133,32 @@ foreach ($item in $items) {
   $export = Invoke-LiveRead $exportExe @($item.path, '--out', $exportRoot, '--no-asam2mc', '--generated-code-recursive', '--json') (Join-Path $itemRoot 'export.json')
 
   $summaryJson = $summary.json
-  $exportJson = $export.json
+  $standaloneExportJson = $export.json
   $resolvedKind = if ($null -ne $summaryJson.kind) { [string]$summaryJson.kind } else { 'unknown' }
   $languageKind = if ($null -ne $summaryJson.languageKind) { [string]$summaryJson.languageKind } else { 'unknown' }
-  $exportReady = $null -ne $exportJson -and $exportJson.succeeded -eq $true -and $exportJson.generatedCodeManifest.status -eq 'ready'
+  $standaloneExportReady = $null -ne $standaloneExportJson -and $standaloneExportJson.succeeded -eq $true -and $standaloneExportJson.generatedCodeManifest.status -eq 'ready'
+  $componentName = ($item.path -split '\\')[-1]
+  $generatedComponentSource = $componentName + 'M.c'
+  $projectExport = $null
+  $projectExportJson = $null
+  $projectExportReady = $false
+  $exportContext = 'standalone'
+  if (-not $standaloneExportReady -and -not [string]::IsNullOrWhiteSpace([string]$item['projectPath'])) {
+    $projectPath = [string]$item.projectPath
+    if (-not $projectExportCache.ContainsKey($projectPath)) {
+      $projectRoot = Join-Path $OutputRoot 'project-context-export'
+      New-Item -ItemType Directory -Force -Path $projectRoot | Out-Null
+      $projectExportCache[$projectPath] = Invoke-LiveRead $exportExe @($projectPath, '--out', $projectRoot, '--no-asam2mc', '--generated-code-recursive', '--json') (Join-Path $projectRoot 'export.json')
+    }
+    $projectExport = $projectExportCache[$projectPath]
+    $projectExportJson = $projectExport.json
+    $projectManifest = if ($null -ne $projectExportJson) { $projectExportJson.generatedCodeManifest } else { $null }
+    $projectSources = if ($null -ne $projectManifest) { @($projectManifest.sourceFiles) } else { @() }
+    $projectExportReady = $null -ne $projectExportJson -and $projectExportJson.succeeded -eq $true -and $projectManifest.status -eq 'ready' -and $projectSources -contains $generatedComponentSource
+    if ($projectExportReady) { $exportContext = 'project-recursive' }
+  }
+  $exportJson = if ($projectExportReady) { $projectExportJson } else { $standaloneExportJson }
+  $exportReady = $standaloneExportReady -or $projectExportReady
   $readExitCodes = @($summary.exitCode, $snapshot.exitCode, $childrenMethods.exitCode, $childrenElements.exitCode, $childrenComponents.exitCode, $refs.exitCode, $implementation.exitCode)
   $readPassed = (@($readExitCodes | Where-Object { $_ -ne 0 }).Count -eq 0)
   $status = if ($readPassed -and $exportReady) { 'passed' } elseif ($readPassed -and $resolvedKind -eq 'unknown') { 'unsupported' } elseif (-not $readPassed) { 'failed' } else { 'blocked' }
@@ -139,8 +170,13 @@ foreach ($item in $items) {
     languageKind = $languageKind
     status = $status
     readExitCodes = $readExitCodes
-    exportExitCode = $export.exitCode
+    exportExitCode = if ($projectExportReady) { $projectExport.exitCode } else { $export.exitCode }
     exportStatus = if ($exportReady) { 'ready' } else { 'not_ready' }
+    exportContext = $exportContext
+    projectPath = if (-not [string]::IsNullOrWhiteSpace([string]$item['projectPath'])) { [string]$item['projectPath'] } else { '' }
+    standaloneExportStatus = if ($standaloneExportReady) { 'ready' } else { 'not_ready' }
+    projectExportStatus = if ($projectExportReady) { 'ready' } elseif ($null -ne $projectExportJson) { 'not_ready' } else { 'not_attempted' }
+    generatedComponentSource = $generatedComponentSource
     methods = if ($null -ne $childrenMethods.json) { @($childrenMethods.json.items).Count } else { 0 }
     implementationElements = if ($null -ne $summaryJson.counts.implementationElements) { [int]$summaryJson.counts.implementationElements } else { 0 }
     references = if ($null -ne $summaryJson.counts.references) { [int]$summaryJson.counts.references } else { 0 }
@@ -149,8 +185,11 @@ foreach ($item in $items) {
     unsupportedReasons = if ($status -eq 'unsupported') { @('resolved_kind_or_language_not_supported') } elseif (-not $exportReady) { @('generated_code_export_not_ready') } else { @() }
     evidenceDirectory = $itemRoot
   }
-  $normalizedInspection = New-NormalizedInspection -Item $item -Summary $summaryJson -Snapshot $snapshot.json -MethodsPayload $childrenMethods.json -ElementsPayload $childrenElements.json -ComponentsPayload $childrenComponents.json -RefsPayload $refs.json -ImplementationPayload $implementation.json -ExportPayload $exportJson -ReadPassed $readPassed -ExportReady $exportReady -Status $status
+  $normalizedInspection = New-NormalizedInspection -Item $item -Summary $summaryJson -Snapshot $snapshot.json -MethodsPayload $childrenMethods.json -ElementsPayload $childrenElements.json -ComponentsPayload $childrenComponents.json -RefsPayload $refs.json -ImplementationPayload $implementation.json -ExportPayload $exportJson -StandaloneExportPayload $standaloneExportJson -ProjectExportPayload $projectExportJson -ExportContext $exportContext -GeneratedComponentSource $generatedComponentSource -ReadPassed $readPassed -ExportReady $exportReady -Status $status
   $normalizedInspection | ConvertTo-Json -Depth 50 | Set-Content -LiteralPath (Join-Path $itemRoot 'inspection.json') -Encoding UTF8
+  if ($projectExportReady) {
+    Copy-Item -LiteralPath (Join-Path $OutputRoot 'project-context-export\export.json') -Destination (Join-Path $itemRoot 'project-export.json') -Force
+  }
   if ($null -ne $exportJson.generatedCodeManifest) {
     $exportJson.generatedCodeManifest | ConvertTo-Json -Depth 50 | Set-Content -LiteralPath (Join-Path $itemRoot 'export-manifest.json') -Encoding UTF8
   }
@@ -159,7 +198,7 @@ foreach ($item in $items) {
 
 $batch = [ordered]@{
   schemaVersion = 'ascet-live-inspection-batch/v1'
-  status = if (@($results | Where-Object status -eq 'failed').Count -eq 0 -and @($results | Where-Object status -eq 'passed').Count -ge 3) { 'passed_with_coverage_gaps' } else { 'failed' }
+  status = if (@($results | Where-Object status -eq 'failed').Count -eq 0 -and @($results | Where-Object status -eq 'passed').Count -ge 3) { if (@($results | Where-Object status -ne 'passed').Count -eq 0) { 'passed' } else { 'passed_with_coverage_gaps' } } else { 'failed' }
   acceptanceGate = if (@($results | Where-Object status -eq 'failed').Count -eq 0 -and @($results | Where-Object status -eq 'passed').Count -ge 3) { 'passed' } else { 'failed' }
   serial = $true
   total = $results.Count

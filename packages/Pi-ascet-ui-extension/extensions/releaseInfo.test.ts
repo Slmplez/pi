@@ -83,24 +83,24 @@ test("createReleaseRows renders concise release and update text", () => {
 		createReleaseRows({ status: "checking" }, ASCET_COPILOT_RELEASE),
 		[
 			"Release",
-			"0.1.34 - ASCET CLI 6.1.4 runtime DLL",
-			"ASCET test apply and batch flow",
-			"Test report diagnostics",
+			"0.1.35 - Dependency bundle refresh",
+			"ASCET Copilot update recovery",
+			"Extension and UI install sync",
 			"Checking updates...",
 		],
 	);
 	assert.deepEqual(
-		createReleaseRows({ status: "available", latestVersion: "0.1.35" }, ASCET_COPILOT_RELEASE),
-		["Update available", "0.1.34 -> 0.1.35", "pi update npm:@zeerke/ascet-copilot"],
+		createReleaseRows({ status: "available", latestVersion: "0.1.36" }, ASCET_COPILOT_RELEASE),
+		["Update available", "0.1.35 -> 0.1.36", "pi update npm:@zeerke/ascet-copilot"],
 	);
 	assert.deepEqual(
-		createReleaseRows({ status: "current", latestVersion: "0.1.34" }, ASCET_COPILOT_RELEASE),
+		createReleaseRows({ status: "current", latestVersion: "0.1.35" }, ASCET_COPILOT_RELEASE),
 		[
 			"Release",
-			"0.1.34 - Up to date",
-			"ASCET CLI 6.1.4 runtime DLL",
-			"ASCET test apply and batch flow",
-			"Test report diagnostics",
+			"0.1.35 - Up to date",
+			"Dependency bundle refresh",
+			"ASCET Copilot update recovery",
+			"Extension and UI install sync",
 		],
 	);
 });

@@ -124,13 +124,41 @@ public static class AscetTestApplyService
             AscetTestValidationIssue issue = Issue("cliPath", "cli_missing", "ASCET CLI was not found: " + cliPath);
             return AscetTestEnvelope.Blocked("export", runId, data, issue.Code, issue.Message, new List<AscetTestValidationIssue> { issue }, new List<AscetTestValidationIssue>(), Diagnostics(true));
         }
+        string componentPath = NormalizePath(AscetTestContracts.GetString(request, "componentPath"));
         string output = AscetTestContracts.GetString(request, "exportDirectory");
         if (String.IsNullOrWhiteSpace(output)) output = AscetTestArtifactWriter.ResolveRunDirectory(request, runId) + Path.DirectorySeparatorChar + "live-export";
         output = AscetTestContracts.ResolvePath(output, Directory.GetCurrentDirectory());
         Directory.CreateDirectory(output);
-        string args = BuildExportArguments(request, NormalizePath(AscetTestContracts.GetString(request, "componentPath")), output, cliPath);
+        string args = BuildExportArguments(request, componentPath, output, cliPath);
         Dictionary<string, object> result = RunCli(cliPath, args, request, "export_generated_code");
+        Dictionary<string, object> standaloneResult = result;
+        Dictionary<string, object> projectResult = null;
+        string exportContext = "standalone";
+        string generatedComponentSource = ComponentSourceName(componentPath);
+        string projectPath = AscetTestContracts.GetString(request, "exportProjectPath");
+        if (String.IsNullOrWhiteSpace(projectPath)) projectPath = AscetTestContracts.GetString(request, "projectPath");
+        string projectExportPath = String.Empty;
+        if (!ExportManifestReadyForTarget(result, generatedComponentSource) && !String.IsNullOrWhiteSpace(projectPath))
+        {
+            string projectOutput = AscetTestArtifactWriter.ResolveRunDirectory(request, runId) + Path.DirectorySeparatorChar + "project-context-export";
+            projectOutput = AscetTestContracts.ResolvePath(projectOutput, Directory.GetCurrentDirectory());
+            Directory.CreateDirectory(projectOutput);
+            projectResult = RunCli(cliPath, BuildExportArguments(request, NormalizePath(projectPath), projectOutput, cliPath), request, "export_generated_code:project_context");
+            projectExportPath = AscetTestArtifactWriter.WriteJson(request, runId, "live-export-project.json", projectResult);
+            if (ExportManifestReadyForTarget(projectResult, generatedComponentSource))
+            {
+                result = projectResult;
+                output = projectOutput;
+                exportContext = "project-recursive";
+            }
+        }
         data["exportResult"] = result;
+        data["standaloneExportResult"] = standaloneResult;
+        data["projectExportResult"] = projectResult;
+        data["exportContext"] = exportContext;
+        data["projectPath"] = projectPath;
+        data["generatedComponentSource"] = generatedComponentSource;
+        data["projectExportResultPath"] = projectExportPath;
         data["exportDirectory"] = output;
         string exportPath = AscetTestArtifactWriter.WriteJson(request, runId, "live-export.json", result);
         data["exportResultPath"] = exportPath;
@@ -254,7 +282,28 @@ public static class AscetTestApplyService
     {
         if (result == null) return false;
         if (result.ContainsKey("ok")) return AscetTestContracts.GetBoolean(result, "ok", false);
-        return GetBooleanAny(result, "WriteSucceeded", "writeSucceeded", "success", "Success");
+        return GetBooleanAny(result, "WriteSucceeded", "writeSucceeded", "success", "Success", "succeeded", "Succeeded");
+    }
+
+    private static bool ExportManifestReadyForTarget(Dictionary<string, object> result, string generatedComponentSource)
+    {
+        if (!ResultSucceeded(result)) return false;
+        Dictionary<string, object> manifest = AscetTestContracts.GetDictionary(result, "generatedCodeManifest");
+        if (manifest == null || !String.Equals(AscetTestContracts.GetString(manifest, "status"), "ready", StringComparison.OrdinalIgnoreCase)) return false;
+        if (String.IsNullOrWhiteSpace(generatedComponentSource)) return true;
+        IList files = AscetTestContracts.GetValue(manifest, "sourceFiles") as IList;
+        if (files == null || files.Count == 0) return false;
+        for (int index = 0; index < files.Count; index++) if (String.Equals(Convert.ToString(files[index]), generatedComponentSource, StringComparison.OrdinalIgnoreCase)) return true;
+        return false;
+    }
+
+    private static string ComponentSourceName(string componentPath)
+    {
+        if (String.IsNullOrWhiteSpace(componentPath)) return String.Empty;
+        string name = componentPath.Replace('/', '\\');
+        int separator = name.LastIndexOf('\\');
+        if (separator >= 0) name = name.Substring(separator + 1);
+        return String.IsNullOrWhiteSpace(name) ? String.Empty : name + "M.c";
     }
 
     private static string ResultErrorCode(Dictionary<string, object> result, string fallback)
