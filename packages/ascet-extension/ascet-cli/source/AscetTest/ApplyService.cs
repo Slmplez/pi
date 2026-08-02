@@ -32,7 +32,7 @@ public static class AscetTestApplyService
         }
 
         string componentPath = NormalizePath(AscetTestContracts.GetString(request, "componentPath"));
-        string cliPath = ResolveCliPath(request);
+        string cliPath = ResolveCliPath(request, "apply_element_spec");
         if (!File.Exists(cliPath))
         {
             AscetTestValidationIssue issue = Issue("cliPath", "cli_missing", "ASCET CLI was not found: " + cliPath);
@@ -41,6 +41,7 @@ public static class AscetTestApplyService
 
         string ledgerPath = String.Empty;
         List<Dictionary<string, object>> ledger = new List<Dictionary<string, object>>();
+        List<Dictionary<string, object>> methodResults = new List<Dictionary<string, object>>();
         Dictionary<string, object> spec = ResolveSpec(request);
         string specPath = AscetTestContracts.GetString(request, "elementSpecPath");
         if (String.IsNullOrWhiteSpace(specPath) && spec != null)
@@ -53,7 +54,7 @@ public static class AscetTestApplyService
             return AscetTestEnvelope.Blocked("apply", runId, data, issue.Code, issue.Message, new List<AscetTestValidationIssue> { issue }, new List<AscetTestValidationIssue>(), Diagnostics(true));
         }
 
-        string applyArgs = "exec apply_element_spec " + Quote(componentPath) + " " + Quote(AscetTestContracts.ResolvePath(specPath, Directory.GetCurrentDirectory())) + " --verify-readback --json";
+        string applyArgs = BuildApplyArguments(request, componentPath, AscetTestContracts.ResolvePath(specPath, Directory.GetCurrentDirectory()), cliPath);
         Dictionary<string, object> applyResult = RunCli(cliPath, applyArgs, request, "apply_element_spec");
         ledger.Add(Ledger("apply_element_spec", applyResult));
         ledgerPath = WriteLedger(request, runId, ledger);
@@ -63,6 +64,8 @@ public static class AscetTestApplyService
         data["readbackVerified"] = readbackVerified;
         data["applyResult"] = applyResult;
         data["ledgerPath"] = ledgerPath;
+        string readbackPath = WriteReadbackArtifact(request, runId, plan, applyResult);
+        data["readbackPath"] = readbackPath;
         if (!writeSucceeded || !readbackVerified)
         {
             string code = !writeSucceeded ? ResultErrorCode(applyResult, "apply_failed") : "readback_not_verified";
@@ -81,8 +84,9 @@ public static class AscetTestApplyService
                 string code = AscetTestContracts.GetString(method, "code");
                 if (String.IsNullOrWhiteSpace(name) || String.IsNullOrWhiteSpace(code)) continue;
                 string codePath = AscetTestArtifactWriter.WriteText(request, runId, "method-" + SafeName(name) + ".esdl", code);
-                Dictionary<string, object> methodResult = RunCli(cliPath, "exec set_method_code " + Quote(componentPath) + " " + Quote(name) + " " + Quote(codePath) + " --verify-readback --json", request, "set_method_code");
+                Dictionary<string, object> methodResult = RunCli(cliPath, BuildMethodArguments(request, componentPath, name, codePath, cliPath), request, "set_method_code");
                 ledger.Add(Ledger("set_method_code:" + name, methodResult));
+                methodResults.Add(new Dictionary<string, object> { { "methodName", name }, { "codePath", codePath }, { "result", methodResult } });
                 ledgerPath = WriteLedger(request, runId, ledger);
                 data["ledgerPath"] = ledgerPath;
                 if (!ResultSucceeded(methodResult) || !GetBooleanAny(methodResult, "ReadbackVerified", "readbackVerified"))
@@ -94,6 +98,9 @@ public static class AscetTestApplyService
             }
         }
 
+        string applyResultPath = WriteApplyResultArtifact(request, runId, componentPath, plan, specPath, applyResult, methodResults, ledgerPath, readbackPath);
+        data["methodResults"] = methodResults;
+        data["applyResultPath"] = applyResultPath;
         data["status"] = "applied";
         return AscetTestEnvelope.Success("apply", runId, "applied", data, new List<AscetTestValidationIssue>(), Diagnostics(true, true));
     }
@@ -111,7 +118,7 @@ public static class AscetTestApplyService
             { "serial", true }
         };
         if (issues.Count > 0) return AscetTestEnvelope.Blocked("export", runId, data, FirstCode(issues, "export_blocked"), "Controlled ASCET export was rejected before live execution.", issues, new List<AscetTestValidationIssue>(), Diagnostics(true));
-        string cliPath = ResolveCliPath(request);
+        string cliPath = ResolveCliPath(request, "export_generated_code");
         if (!File.Exists(cliPath))
         {
             AscetTestValidationIssue issue = Issue("cliPath", "cli_missing", "ASCET CLI was not found: " + cliPath);
@@ -121,12 +128,20 @@ public static class AscetTestApplyService
         if (String.IsNullOrWhiteSpace(output)) output = AscetTestArtifactWriter.ResolveRunDirectory(request, runId) + Path.DirectorySeparatorChar + "live-export";
         output = AscetTestContracts.ResolvePath(output, Directory.GetCurrentDirectory());
         Directory.CreateDirectory(output);
-        string args = "exec export_generated_code " + Quote(NormalizePath(AscetTestContracts.GetString(request, "componentPath"))) + " --out " + Quote(output) + " --generated-code-recursive --json";
+        string args = BuildExportArguments(request, NormalizePath(AscetTestContracts.GetString(request, "componentPath")), output, cliPath);
         Dictionary<string, object> result = RunCli(cliPath, args, request, "export_generated_code");
         data["exportResult"] = result;
         data["exportDirectory"] = output;
         string exportPath = AscetTestArtifactWriter.WriteJson(request, runId, "live-export.json", result);
         data["exportResultPath"] = exportPath;
+        Dictionary<string, object> manifest = AscetTestContracts.GetDictionary(result, "generatedCodeManifest");
+        if (manifest != null)
+        {
+            string manifestPath = AscetTestArtifactWriter.WriteJson(request, runId, "export-manifest.json", manifest);
+            data["exportManifest"] = manifest;
+            data["exportManifestPath"] = manifestPath;
+            data["liveExportPath"] = exportPath;
+        }
         if (!ResultSucceeded(result))
         {
             string code = ResultErrorCode(result, "export_failed");
@@ -264,11 +279,80 @@ public static class AscetTestApplyService
         return false;
     }
 
-    private static string ResolveCliPath(Dictionary<string, object> request)
+    private static string ResolveCliPath(Dictionary<string, object> request, string operation)
     {
-        string path = AscetTestContracts.GetString(request, "cliPath");
+        string specificKey = String.Equals(operation, "apply_element_spec", StringComparison.OrdinalIgnoreCase)
+            ? "applyCliPath"
+            : (String.Equals(operation, "export_generated_code", StringComparison.OrdinalIgnoreCase) ? "exportCliPath" : "methodCliPath");
+        string path = AscetTestContracts.GetString(request, specificKey);
+        if (String.IsNullOrWhiteSpace(path)) path = AscetTestContracts.GetString(request, "cliPath");
+        if (String.IsNullOrWhiteSpace(path))
+        {
+            string bin = AscetTestContracts.GetString(request, "ascetCliBin");
+            if (!String.IsNullOrWhiteSpace(bin))
+            {
+                string executable = String.Equals(operation, "apply_element_spec", StringComparison.OrdinalIgnoreCase)
+                    ? "AscetApplyElementSpec.exe"
+                    : (String.Equals(operation, "export_generated_code", StringComparison.OrdinalIgnoreCase) ? "AscetExportBuildArtifacts.exe" : "AscetSetClassMethodCode.exe");
+                path = Path.Combine(bin, executable);
+            }
+        }
         if (String.IsNullOrWhiteSpace(path)) path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AscetCli.exe");
         return AscetTestContracts.ResolvePath(path, Directory.GetCurrentDirectory());
+    }
+
+    private static string BuildApplyArguments(Dictionary<string, object> request, string componentPath, string specPath, string cliPath)
+    {
+        if (IsDirect(cliPath, "AscetApplyElementSpec.exe")) return Quote(componentPath) + " " + Quote(specPath) + " --verify-readback --json";
+        return "exec apply_element_spec " + Quote(componentPath) + " " + Quote(specPath) + " --verify-readback --json";
+    }
+
+    private static string BuildExportArguments(Dictionary<string, object> request, string componentPath, string output, string cliPath)
+    {
+        if (IsDirect(cliPath, "AscetExportBuildArtifacts.exe")) return Quote(componentPath) + " --out " + Quote(output) + " --no-asam2mc --generated-code-recursive --json";
+        return "exec export_generated_code " + Quote(componentPath) + " --out " + Quote(output) + " --generated-code-recursive --json";
+    }
+
+    private static string BuildMethodArguments(Dictionary<string, object> request, string componentPath, string name, string codePath, string cliPath)
+    {
+        if (IsDirect(cliPath, "AscetSetClassMethodCode.exe")) return Quote(componentPath) + " " + Quote(name) + " " + Quote(codePath) + " --verify-readback --json";
+        if (IsDirect(cliPath, "AscetSetMethodCode.exe")) return Quote(componentPath) + " " + Quote(name) + " " + Quote(codePath) + " --verify-readback";
+        return "exec set_method_code " + Quote(componentPath) + " " + Quote(name) + " " + Quote(codePath) + " --verify-readback --json";
+    }
+
+    private static bool IsDirect(string path, string executable)
+    {
+        return String.Equals(Path.GetFileName(path), executable, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string WriteReadbackArtifact(Dictionary<string, object> request, string runId, Dictionary<string, object> plan, Dictionary<string, object> applyResult)
+    {
+        return AscetTestArtifactWriter.WriteJson(request, runId, "live-readback-after-esdl.json", new Dictionary<string, object>
+        {
+            { "schemaVersion", "ascet-test-live-readback/v1" },
+            { "runId", runId },
+            { "planHash", plan == null ? String.Empty : AscetTestContracts.GetString(plan, "hash") },
+            { "verified", GetBooleanAny(applyResult, "ReadbackVerified", "readbackVerified") },
+            { "result", applyResult }
+        });
+    }
+
+    private static string WriteApplyResultArtifact(Dictionary<string, object> request, string runId, string componentPath, Dictionary<string, object> plan, string specPath, Dictionary<string, object> applyResult, List<Dictionary<string, object>> methodResults, string ledgerPath, string readbackPath)
+    {
+        return AscetTestArtifactWriter.WriteJson(request, runId, "esdl-apply-result.json", new Dictionary<string, object>
+        {
+            { "schemaVersion", "ascet-test-esdl-apply-result/v1" },
+            { "runId", runId },
+            { "componentPath", componentPath },
+            { "planHash", plan == null ? String.Empty : AscetTestContracts.GetString(plan, "hash") },
+            { "elementSpecPath", specPath },
+            { "applyResult", applyResult },
+            { "methodResults", methodResults },
+            { "ledgerPath", ledgerPath },
+            { "readbackPath", readbackPath },
+            { "liveWritePerformed", ResultSucceeded(applyResult) },
+            { "readbackVerified", GetBooleanAny(applyResult, "ReadbackVerified", "readbackVerified") }
+        });
     }
 
     private static string Quote(string value) { return "\"" + (value ?? String.Empty).Replace("\"", "\\\"") + "\""; }

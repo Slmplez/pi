@@ -49,3 +49,22 @@ test("rejects missing ESDL semantics and target mismatch", () => {
 		true,
 	);
 });
+
+test("carries new parameters into a deterministic review-only apply plan", () => {
+	const draft = generateEsdlDraft({
+		runId: "run-002",
+		componentPath: "AEB_Core/AEB_Release",
+		inspection,
+		methodDrafts: [{ methodName: "step", code: "{}" }],
+		elementSpec: {
+			schemaVersion: "ascet-element-spec/v1",
+			componentPath: "AEB_Core/AEB_Release",
+			elements: [{ name: "emergencyThreshold", kind: "parameter", type: "float", defaultValue: 50 }],
+		},
+	});
+	assert.equal(draft.elementSpec?.valid, true);
+	assert.equal(draft.applyPlan?.schemaVersion, "ascet-esdl-apply-plan/v1");
+	assert.equal(draft.applyPlan?.ready, true);
+	assert.equal(draft.applyPlan?.operations[0]?.action, "create");
+	assert.equal(draft.applyPlan?.liveWritePerformed, false);
+});

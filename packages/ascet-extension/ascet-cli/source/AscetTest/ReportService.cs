@@ -38,14 +38,26 @@ public static class AscetTestReportService
                 failedStage = "verify";
             }
         }
+        if (!passed && String.IsNullOrWhiteSpace(failureCode))
+        {
+            Dictionary<string, object> stageFailure = FirstFailedStage(stagesFrom(state, pipelineData));
+            if (stageFailure != null)
+            {
+                failedStage = AscetTestContracts.GetString(stageFailure, "stage");
+                failureCode = AscetTestContracts.GetString(stageFailure, "failureCode");
+                if (String.IsNullOrWhiteSpace(failureCode)) failureCode = "pipeline_stage_failed";
+                failureMessage = "Pipeline stage failed: " + failedStage;
+            }
+        }
         if (!passed && String.IsNullOrWhiteSpace(failureCode)) failureCode = "pipeline_failed";
         if (!passed && String.IsNullOrWhiteSpace(failureMessage)) failureMessage = "C/GoogleTest pipeline failed.";
         if (!passed && String.IsNullOrWhiteSpace(failedStage)) failedStage = InferStage(failureCode);
 
-        IList stages = state == null ? null : AscetTestContracts.GetValue(state, "stages") as IList;
-        if (stages == null && pipelineData != null) stages = AscetTestContracts.GetValue(pipelineData, "stages") as IList;
+        IList stages = stagesFrom(state, pipelineData);
         Dictionary<string, object> paths = evidence["paths"] as Dictionary<string, object>;
         Dictionary<string, object> metrics = Metrics(xml, run, stages);
+        string reportStatus = passed ? "passed" : IsBlockedFailure(failureCode, status) ? "blocked" : "failed";
+        string verdict = passed ? "passed" : reportStatus == "blocked" ? "not_proven" : "failed";
         Dictionary<string, object> firstFailure = passed ? null : new Dictionary<string, object>
         {
             { "stage", failedStage ?? String.Empty },
@@ -59,8 +71,8 @@ public static class AscetTestReportService
             { "schemaVersion", "ascet-test-report/v1" },
             { "runId", runId ?? String.Empty },
             { "componentPath", AscetTestContracts.GetString(request, "componentPath") },
-            { "status", passed ? "passed" : "failed" },
-            { "verdict", passed ? "passed" : "failed" },
+            { "status", reportStatus },
+            { "verdict", verdict },
             { "levels", AscetTestContracts.GetValue(request, "levels") ?? new List<object>() },
             { "stages", stages ?? new List<object>() },
             { "metrics", metrics },
@@ -68,6 +80,7 @@ public static class AscetTestReportService
             { "evidencePaths", paths ?? new Dictionary<string, object>() },
             { "diagnostics", Diagnostics(request, build, run) }
         };
+        report["hashes"] = Hashes(request, pipelineData, runDirectory);
 
         string reportPath = Path.Combine(runDirectory, "report.json");
         string markdownPath = Path.Combine(runDirectory, "report.md");
@@ -92,7 +105,9 @@ public static class AscetTestReportService
             { "testsFailed", xml == null ? 0 : AscetTestContracts.GetInteger(xml, "failures", 0) + AscetTestContracts.GetInteger(xml, "errors", 0) },
             { "testsDisabled", xml == null ? 0 : AscetTestContracts.GetInteger(xml, "disabled", 0) },
             { "exitCode", run == null ? -1 : AscetTestContracts.GetInteger(run, "exitCode", -1) },
-            { "stageCount", stages == null ? 0 : stages.Count }
+            { "stageCount", stages == null ? 0 : stages.Count },
+            { "durationMs", StageDurationMs(stages) },
+            { "gtestXmlValid", xml != null && AscetTestContracts.GetBoolean(xml, "valid", false) }
         };
     }
 
@@ -101,7 +116,9 @@ public static class AscetTestReportService
         return new Dictionary<string, object>
         {
             { "liveExecutionStarted", AscetTestContracts.GetBoolean(request, "executeLive", false) },
-            { "liveWritePerformed", false },
+            { "liveWritePerformed", AscetTestContracts.GetBoolean(request, "liveWritePerformed", false) },
+            { "serialOperations", true },
+            { "componentKind", AscetTestContracts.GetString(request, "objectKind") },
             { "cCompilerOwnsC", build == null || AscetTestContracts.GetBoolean(AscetTestContracts.GetDictionary(build, "stages"), "cCompile", false) },
             { "googleTestRuntimeObserved", run != null }
         };
@@ -116,6 +133,7 @@ public static class AscetTestReportService
         text.AppendLine();
         text.AppendLine("- Run: " + AscetTestContracts.GetString(report, "runId"));
         text.AppendLine("- Component: " + AscetTestContracts.GetString(report, "componentPath"));
+        text.AppendLine("- Status: **" + AscetTestContracts.GetString(report, "status") + "**");
         text.AppendLine("- Verdict: **" + AscetTestContracts.GetString(report, "verdict") + "**");
         text.AppendLine("- GoogleTest tests: " + AscetTestContracts.GetInteger(metrics, "testsRun", 0) + ", failed: " + AscetTestContracts.GetInteger(metrics, "testsFailed", 0));
         if (failure != null)
@@ -198,5 +216,76 @@ public static class AscetTestReportService
         if (String.Equals(stage, "run", StringComparison.OrdinalIgnoreCase)) return AscetTestContracts.GetString(paths, "runResult");
         if (String.Equals(stage, "verify", StringComparison.OrdinalIgnoreCase)) return Path.Combine(AscetTestContracts.GetString(paths, "runDirectory"), "verify-result.json");
         return AscetTestContracts.GetString(paths, "runDirectory");
+    }
+
+    private static IList stagesFrom(Dictionary<string, object> state, Dictionary<string, object> pipelineData)
+    {
+        IList stages = state == null ? null : AscetTestContracts.GetValue(state, "stages") as IList;
+        if (stages == null && pipelineData != null) stages = AscetTestContracts.GetValue(pipelineData, "stages") as IList;
+        return stages;
+    }
+
+    private static Dictionary<string, object> FirstFailedStage(IList stages)
+    {
+        if (stages == null) return null;
+        for (int index = 0; index < stages.Count; index++)
+        {
+            Dictionary<string, object> stage = stages[index] as Dictionary<string, object>;
+            if (stage != null && String.Equals(AscetTestContracts.GetString(stage, "status"), "failed", StringComparison.OrdinalIgnoreCase)) return stage;
+        }
+        return null;
+    }
+
+    private static bool IsBlockedFailure(string code, string status)
+    {
+        if (String.Equals(status, "blocked", StringComparison.OrdinalIgnoreCase)) return true;
+        if (String.IsNullOrWhiteSpace(code)) return false;
+        return code.IndexOf("approval", StringComparison.OrdinalIgnoreCase) >= 0 ||
+               code.IndexOf("baseline", StringComparison.OrdinalIgnoreCase) >= 0 ||
+               code.IndexOf("not_proven", StringComparison.OrdinalIgnoreCase) >= 0 ||
+               code.IndexOf("unsupported", StringComparison.OrdinalIgnoreCase) >= 0 ||
+               code.IndexOf("readback", StringComparison.OrdinalIgnoreCase) >= 0;
+    }
+
+    private static int StageDurationMs(IList stages)
+    {
+        int total = 0;
+        if (stages == null) return total;
+        for (int index = 0; index < stages.Count; index++)
+        {
+            Dictionary<string, object> stage = stages[index] as Dictionary<string, object>;
+            if (stage == null) continue;
+            DateTime started;
+            DateTime finished;
+            if (DateTime.TryParse(AscetTestContracts.GetString(stage, "startedAt"), out started) && DateTime.TryParse(AscetTestContracts.GetString(stage, "finishedAt"), out finished) && finished >= started)
+            {
+                double ms = (finished - started).TotalMilliseconds;
+                if (ms < Int32.MaxValue - total) total += (int)ms;
+            }
+        }
+        return total;
+    }
+
+    private static Dictionary<string, object> Hashes(Dictionary<string, object> request, Dictionary<string, object> pipelineData, string runDirectory)
+    {
+        Dictionary<string, object> result = new Dictionary<string, object>
+        {
+            { "requestHash", AscetTestContracts.GetString(pipelineData, "requestHash") },
+            { "inspectionHash", String.Empty },
+            { "elementSpecHash", String.Empty },
+            { "applyPlanHash", String.Empty },
+            { "exportManifestHash", String.Empty }
+        };
+        string[] files = { "inspection.json", "element-spec.json", "esdl-apply-plan.json", "export-manifest.json" };
+        string[] keys = { "inspectionHash", "elementSpecHash", "applyPlanHash", "exportManifestHash" };
+        for (int index = 0; index < files.Length; index++)
+        {
+            string path = Path.Combine(runDirectory, files[index]);
+            if (File.Exists(path))
+            {
+                try { result[keys[index]] = AscetTestContracts.ComputeSha256(File.ReadAllText(path)); } catch { }
+            }
+        }
+        return result;
     }
 }

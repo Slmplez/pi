@@ -1,6 +1,6 @@
 {
   "name": "@zeerke/ascet-copilot",
-  "version": "0.1.32",
+  "version": "0.1.33",
   "description": "ASCET Copilot package bundle for Pi.",
   "type": "module",
   "license": "MIT",
@@ -15,8 +15,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@zeerke/ascet-copilot-extension": "0.1.32",
-    "@zeerke/ascet-copilot-ui": "0.1.32",
+    "@zeerke/ascet-copilot-extension": "0.1.33",
+    "@zeerke/ascet-copilot-ui": "0.1.33",
     "pi-subagents": "0.34.0",
     "@juicesharp/rpiv-todo": "1.20.0",
     "@juicesharp/rpiv-ask-user-question": "1.20.0",

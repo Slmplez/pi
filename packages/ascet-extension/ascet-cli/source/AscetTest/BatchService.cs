@@ -15,9 +15,10 @@ public static class AscetTestBatchService
         if (rawItems == null || rawItems.Count == 0)
             errors.Add(Issue("items", "batch_items_missing", "At least one manifest-only pipeline item is required."));
         if (errors.Count > 0)
-            return AscetTestEnvelope.Blocked("batch", runId, new Dictionary<string, object>(), errors[0].Code, errors[0].Message, errors, new List<AscetTestValidationIssue>(), Diagnostics());
+            return AscetTestEnvelope.Blocked("batch", runId, new Dictionary<string, object>(), errors[0].Code, errors[0].Message, errors, new List<AscetTestValidationIssue>(), Diagnostics(AscetTestContracts.GetBoolean(request, "serialLive", false)));
 
         List<object> itemResults = new List<object>();
+        bool serialLive = AscetTestContracts.GetBoolean(request, "serialLive", false);
         HashSet<string> runDirectories = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         int passed = 0;
         int failed = 0;
@@ -58,8 +59,11 @@ public static class AscetTestBatchService
             string childRunId = FirstNonEmpty(AscetTestContracts.GetString(item, "runId"), AscetTestContracts.GetString(child, "runId"), itemId);
             string childRunDirectory = FirstNonEmpty(AscetTestContracts.GetString(item, "runDirectory"), AscetTestContracts.GetString(child, "runDirectory"));
             child["runId"] = childRunId;
+            child["batchRunId"] = runId ?? String.Empty;
             if (!String.IsNullOrWhiteSpace(childRunDirectory)) child["runDirectory"] = childRunDirectory;
-            child["executeLive"] = false;
+            IList itemStages = AscetTestContracts.GetValue(item, "stages") as IList;
+            if (itemStages != null && itemStages.Count > 0) child["pipelineStages"] = itemStages;
+            if (!serialLive) child["executeLive"] = false;
             string resolvedRunDirectory;
             try { resolvedRunDirectory = AscetTestArtifactWriter.ResolveRunDirectory(child, childRunId); }
             catch (Exception ex)
@@ -107,14 +111,15 @@ public static class AscetTestBatchService
             { "total", rawItems.Count },
             { "passed", passed },
             { "failed", failed },
+            { "serialLive", serialLive },
             { "items", itemResults }
         };
         if (!allPassed) data["firstFailure"] = new Dictionary<string, object> { { "code", firstFailureCode }, { "message", firstFailureMessage } };
         string resultPath = TryWriteResult(request, runId, data);
         data["batchResultPath"] = resultPath;
         if (!String.IsNullOrWhiteSpace(resultPath)) TryWriteResult(request, runId, data);
-        if (allPassed) return AscetTestEnvelope.Success("batch", runId, "passed", data, new List<AscetTestValidationIssue>(), Diagnostics());
-        return AscetTestEnvelope.Blocked("batch", runId, data, firstFailureCode, firstFailureMessage, new List<AscetTestValidationIssue> { Issue("items", firstFailureCode, firstFailureMessage) }, new List<AscetTestValidationIssue>(), Diagnostics());
+        if (allPassed) return AscetTestEnvelope.Success("batch", runId, "passed", data, new List<AscetTestValidationIssue>(), Diagnostics(serialLive));
+        return AscetTestEnvelope.Blocked("batch", runId, data, firstFailureCode, firstFailureMessage, new List<AscetTestValidationIssue> { Issue("items", firstFailureCode, firstFailureMessage) }, new List<AscetTestValidationIssue>(), Diagnostics(serialLive));
     }
 
     private static Dictionary<string, object> FailedItem(string id, string code, string message)
@@ -135,9 +140,9 @@ public static class AscetTestBatchService
         for (int index = 0; index < values.Length; index++) if (!String.IsNullOrWhiteSpace(values[index])) return values[index];
         return String.Empty;
     }
-    private static Dictionary<string, object> Diagnostics()
+    private static Dictionary<string, object> Diagnostics(bool serialLive)
     {
-        return new Dictionary<string, object> { { "liveExecutionStarted", false }, { "liveWritePerformed", false }, { "serialStages", true }, { "manifestOnly", true } };
+        return new Dictionary<string, object> { { "liveExecutionStarted", serialLive }, { "liveWritePerformed", false }, { "serialStages", true }, { "manifestOnly", !serialLive } };
     }
     private static AscetTestValidationIssue Issue(string path, string code, string message) { return new AscetTestValidationIssue { Path = path, Code = code, Message = message }; }
 }
