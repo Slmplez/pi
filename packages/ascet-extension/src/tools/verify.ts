@@ -1,7 +1,7 @@
 import { Type } from "typebox";
 import type { AscetCliExecutionResult, AscetCliJsonResult, AscetCliRequest } from "../cli.ts";
 import { formatVerifyReadbackResult, runAscetVerifyReadback } from "../verify-readback.ts";
-import { openAiObjectSchema } from "./_shared/openai-schema.ts";
+import { openAiObjectUnionSchema } from "./_shared/openai-schema.ts";
 
 export type AscetVerifyParams =
 	| { action: "readback"; objectKind: "class" | "module" | "statemachine"; componentPath: string }
@@ -15,19 +15,28 @@ export interface RunAscetVerifyOptions {
 	executeCli?: (request: AscetCliRequest) => Promise<AscetCliExecutionResult>;
 }
 
-export const ascetVerifyParameters = openAiObjectSchema<AscetVerifyParams>(
-	Type.Object({
+const componentReadbackSchema = Type.Object(
+	{
 		action: Type.Literal("readback"),
-		objectKind: Type.Union([
-			Type.Literal("class"),
-			Type.Literal("module"),
-			Type.Literal("statemachine"),
-			Type.Literal("project"),
-		]),
-		componentPath: Type.Optional(Type.String({ minLength: 1 })),
-		projectPath: Type.Optional(Type.String({ minLength: 1 })),
-	}),
+		objectKind: Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")]),
+		componentPath: Type.String({ minLength: 1 }),
+	},
+	{ additionalProperties: false },
 );
+
+const projectReadbackSchema = Type.Object(
+	{
+		action: Type.Literal("readback"),
+		objectKind: Type.Literal("project"),
+		projectPath: Type.String({ minLength: 1 }),
+	},
+	{ additionalProperties: false },
+);
+
+export const ascetVerifyParameters = openAiObjectUnionSchema<AscetVerifyParams>([
+	componentReadbackSchema,
+	projectReadbackSchema,
+]);
 
 export async function runAscetVerify(
 	params: AscetVerifyParams,

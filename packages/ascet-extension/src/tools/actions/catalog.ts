@@ -1,4 +1,16 @@
 import { compactExamplesForAction } from "../_shared/action-examples.ts";
+import { ascetIndexParameters } from "../ascet-index/schema.ts";
+import { ascetCapabilitiesParameters } from "../capabilities/schema.ts";
+import { ascetDiffParameters } from "../diff/schema.ts";
+import { ascetEditParameters } from "../edit/schema.ts";
+import { ascetExploreParameters } from "../explore/schema.ts";
+import { ascetReadParameters } from "../read/schema.ts";
+import { ascetRecoverParameters } from "../recover/schema.ts";
+import { ascetRequirementsParameters } from "../requirements/schema.ts";
+import { ascetSchedulerStatusParameters } from "../scheduler-status/schema.ts";
+import { ascetSearchParameters } from "../search/schema.ts";
+import { ascetStatusParameters } from "../status/schema.ts";
+import { ascetVerifyParameters } from "../verify.ts";
 import { type AscetActionDescriptor, listActionDescriptors } from "./descriptors.ts";
 
 export type AscetActionFamily = "ops" | "explore" | "search" | "read" | "diff" | "write" | "verify";
@@ -27,6 +39,11 @@ export interface AscetActionCatalogEntry {
 		required: readonly string[];
 		optional: readonly string[];
 		enums?: Readonly<Record<string, readonly string[]>>;
+		variants?: ReadonlyArray<{
+			required: readonly string[];
+			optional: readonly string[];
+			when?: Readonly<Record<string, readonly string[]>>;
+		}>;
 	};
 	rules: readonly string[];
 	fewShots: ReadonlyArray<{
@@ -104,7 +121,7 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 	},
 	"ascet_read.read_dependent_chain": {
 		compact:
-			"Index-first dependency provider resolver; returns exported provider path and full provider element data",
+			"Live-mapping-first dependency provider resolver; returns exported provider path and full provider element data",
 		intent:
 			"Resolve Local Parameter -> Imported Parameter -> Exported Parameter evidence and return full provider element catalog data.",
 		useWhen: [
@@ -270,6 +287,49 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 	},
 };
 
+// Keep schema resolution lazy. Several action implementations import the
+// catalog for their search path, so eagerly reading a schema that re-exports
+// one of those implementations creates a circular-initialization failure on
+// the first extension import.
+const actionParameterSchemas: Readonly<Record<string, unknown>> = {
+	get ascet_index() {
+		return ascetIndexParameters;
+	},
+	get ascet_capabilities() {
+		return ascetCapabilitiesParameters;
+	},
+	get ascet_diff() {
+		return ascetDiffParameters;
+	},
+	get ascet_edit() {
+		return ascetEditParameters;
+	},
+	get ascet_explore() {
+		return ascetExploreParameters;
+	},
+	get ascet_read() {
+		return ascetReadParameters;
+	},
+	get ascet_recover() {
+		return ascetRecoverParameters;
+	},
+	get ascet_requirements() {
+		return ascetRequirementsParameters;
+	},
+	get ascet_scheduler_status() {
+		return ascetSchedulerStatusParameters;
+	},
+	get ascet_search() {
+		return ascetSearchParameters;
+	},
+	get ascet_status() {
+		return ascetStatusParameters;
+	},
+	get ascet_verify() {
+		return ascetVerifyParameters;
+	},
+};
+
 function resolveFamily(tool: string): AscetActionFamily {
 	if (tool === "ascet_explore") {
 		return "explore";
@@ -313,18 +373,113 @@ function unique(values: readonly string[]): string[] {
 	return [...new Set(values.filter((value) => value.length > 0))];
 }
 
-function inferSchema(descriptor: AscetActionDescriptor): AscetActionCatalogEntry["schema"] {
-	const firstArgs = descriptor.prompt?.fewShots?.[0]?.args ?? {};
-	const keys = Object.keys(firstArgs);
-	if (keys.length === 0) {
+interface JsonSchemaNode {
+	properties?: Record<string, JsonSchemaNode>;
+	required?: string[];
+	anyOf?: JsonSchemaNode[];
+	enum?: unknown[];
+}
+
+function enumValuesFromSchema(schema: JsonSchemaNode | undefined): string[] {
+	if (!schema) {
+		return [];
+	}
+	const direct = Array.isArray(schema.enum) ? schema.enum : [];
+	const nested = Array.isArray(schema.anyOf) ? schema.anyOf.flatMap((variant) => enumValuesFromSchema(variant)) : [];
+	return unique([...direct, ...nested].filter((value): value is string => typeof value === "string"));
+}
+
+function actionNameFromSchema(schema: JsonSchemaNode | undefined): string | undefined {
+	const values = schema?.enum;
+	return Array.isArray(values) && values.length === 1 && typeof values[0] === "string" ? values[0] : undefined;
+}
+
+function fieldsFromSchema(schema: JsonSchemaNode): AscetActionCatalogEntry["schema"] {
+	const properties = schema.properties ?? {};
+	const required = unique(schema.required ?? []);
+	const optional = Object.keys(properties).filter((key) => !required.includes(key));
+	const enums: Record<string, readonly string[]> = {};
+	for (const [key, value] of Object.entries(properties)) {
+		const values = enumValuesFromSchema(value);
+		if (values.length > 0) {
+			enums[key] = values;
+		}
+	}
+	if (required.length === 0 && optional.length === 0) {
 		return { required: [], optional: ["action"] };
 	}
-	const required = keys.includes("action") ? ["action"] : [];
-	const optional = keys.filter((key) => key !== "action");
 	return {
 		required,
 		optional,
+		...(Object.keys(enums).length > 0 ? { enums } : {}),
 	};
+}
+
+function schemaVariantsForAction(schema: JsonSchemaNode, action: string): JsonSchemaNode[] {
+	const variants = Array.isArray(schema.anyOf) ? schema.anyOf : [schema];
+	const matching = variants.filter((variant) => {
+		const variantAction = actionNameFromSchema(variant.properties?.action);
+		return variantAction === action;
+	});
+	if (matching.length > 0) {
+		return matching;
+	}
+	return variants;
+}
+
+function inferSchemaFromRegistry(descriptor: AscetActionDescriptor): AscetActionCatalogEntry["schema"] | undefined {
+	const rawSchema = actionParameterSchemas[descriptor.tool] as JsonSchemaNode | undefined;
+	if (!rawSchema) {
+		return undefined;
+	}
+	const variants = schemaVariantsForAction(rawSchema, descriptor.action);
+	if (variants.length === 0) {
+		return undefined;
+	}
+	const variantSchemas = variants.map(fieldsFromSchema);
+	const required = unique(
+		variantSchemas.length === 1
+			? variantSchemas[0].required
+			: variantSchemas[0].required.filter((field) =>
+					variantSchemas.every((variant) => variant.required.includes(field)),
+				),
+	);
+	const optional = unique(
+		variantSchemas.flatMap((variant) => [...variant.optional]).filter((field) => !required.includes(field)),
+	);
+	const enums: Record<string, readonly string[]> = {};
+	for (const variant of variantSchemas) {
+		for (const [key, values] of Object.entries(variant.enums ?? {})) {
+			enums[key] = unique([...(enums[key] ?? []), ...values]);
+		}
+	}
+	const conditionalVariants =
+		variants.length > 1
+			? variants.map((variant) => {
+					const fields = fieldsFromSchema(variant);
+					const whenValue = enumValuesFromSchema(variant.properties?.objectKind);
+					return {
+						required: fields.required,
+						optional: fields.optional,
+						...(whenValue.length > 0 ? { when: { objectKind: whenValue } } : {}),
+					};
+				})
+			: undefined;
+	return {
+		required,
+		optional,
+		...(Object.keys(enums).length > 0 ? { enums } : {}),
+		...(conditionalVariants ? { variants: conditionalVariants } : {}),
+	};
+}
+
+function inferSchema(descriptor: AscetActionDescriptor): AscetActionCatalogEntry["schema"] {
+	return (
+		inferSchemaFromRegistry(descriptor) ?? {
+			required: descriptor.action ? ["action"] : [],
+			optional: [],
+		}
+	);
 }
 
 function inferResult(descriptor: AscetActionDescriptor): AscetActionCatalogEntry["result"] {

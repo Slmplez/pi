@@ -15,6 +15,21 @@ const area = Type.Union([
 
 const detailLevel = Type.Union([Type.Literal("summary"), Type.Literal("areas"), Type.Literal("full")]);
 const format = Type.Optional(Type.Union([Type.Literal("text"), Type.Literal("json")]));
+const physicalArea = Type.Union([
+	Type.Literal("components"),
+	Type.Literal("folders"),
+	Type.Literal("folder_items"),
+	Type.Literal("elements"),
+	Type.Literal("methods"),
+	Type.Literal("project_formulas"),
+	Type.Literal("project_items"),
+	Type.Literal("component_refs"),
+	Type.Literal("element_refs"),
+	Type.Literal("messages"),
+	Type.Literal("dbitem_dependencies"),
+	Type.Literal("code_blocks"),
+	Type.Literal("code_terms"),
+]);
 
 const statusParams = Type.Object({
 	action: Type.Literal("status"),
@@ -54,6 +69,7 @@ const evaluateParams = Type.Object({
 			Type.Union([
 				Type.Literal("status"),
 				Type.Literal("counts"),
+				Type.Literal("freshness"),
 				Type.Literal("search_smoke"),
 				Type.Literal("sidecar"),
 			]),
@@ -62,6 +78,8 @@ const evaluateParams = Type.Object({
 	live: Type.Optional(Type.Boolean()),
 	query: Type.Optional(Type.String()),
 	componentPath: Type.Optional(Type.String()),
+	requiredAreas: Type.Optional(Type.Array(physicalArea, { minItems: 1 })),
+	requireFreshness: Type.Optional(Type.Boolean()),
 	format,
 });
 
@@ -95,10 +113,26 @@ export type AscetIndexParams =
 	  }
 	| {
 			action: "evaluate";
-			checks?: Array<"status" | "counts" | "search_smoke" | "sidecar">;
+			checks?: Array<"status" | "counts" | "freshness" | "search_smoke" | "sidecar">;
 			live?: boolean;
 			query?: string;
 			componentPath?: string;
+			requiredAreas?: Array<
+				| "components"
+				| "folders"
+				| "folder_items"
+				| "elements"
+				| "methods"
+				| "project_formulas"
+				| "project_items"
+				| "component_refs"
+				| "element_refs"
+				| "messages"
+				| "dbitem_dependencies"
+				| "code_blocks"
+				| "code_terms"
+			>;
+			requireFreshness?: boolean;
 			format?: "text" | "json";
 	  };
 

@@ -85,6 +85,15 @@ describe("ascet_read schema", () => {
 		};
 		assert.equal(request.action, "read_project_formulas");
 	});
+
+	test("exposes bounded implementation traversal controls", () => {
+		const schema = getActionSchema("read_implementation") as { properties?: Record<string, unknown> } | undefined;
+		const properties = schema?.properties ?? {};
+		assert.ok(Object.hasOwn(properties, "detailLevel"));
+		assert.ok(Object.hasOwn(properties, "maxDepth"));
+		assert.ok(Object.hasOwn(properties, "maxElements"));
+		assert.ok(Object.hasOwn(properties, "timeoutMs"));
+	});
 });
 
 function getActionLiterals(): string[] {

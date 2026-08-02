@@ -18,18 +18,18 @@ describe("ASCET index area mapping", () => {
 		assert.equal(plan.requiresP0, false);
 	});
 
-	test("coalesces tree and project to p0 until dedicated partitions exist", () => {
+	test("maps tree and project to dedicated refresh partitions", () => {
 		const plan = planAscetIndexAreas(["tree", "project"]);
-		assert.deepEqual(plan.effectivePartitions, ["p0"]);
-		assert.equal(plan.requiresP0, true);
+		assert.deepEqual(plan.effectivePartitions, ["tree", "project"]);
+		assert.equal(plan.requiresP0, false);
 		assert.equal(plan.sqliteAreas.includes("folders"), true);
 		assert.equal(plan.sqliteAreas.includes("project_items"), true);
-		assert.equal(plan.sqliteAreas.includes("code_terms"), true);
+		assert.equal(plan.sqliteAreas.includes("code_terms"), false);
 	});
 
 	test("maps refs to component and element reference partitions plus dependency SQLite area", () => {
 		const plan = planAscetIndexAreas(["refs"]);
-		assert.deepEqual(plan.effectivePartitions, ["component_refs", "element_refs"]);
+		assert.deepEqual(plan.effectivePartitions, ["refs"]);
 		assert.deepEqual(plan.sqliteAreas, ["component_refs", "element_refs", "dbitem_dependencies"]);
 	});
 

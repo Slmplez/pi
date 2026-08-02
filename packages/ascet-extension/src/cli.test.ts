@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, test } from "node:test";
 import { type AscetCliJsonResult, formatAscetCliJsonResult, runAscetCliJson } from "./cli.ts";
+import { createAscetScheduler } from "./scheduler/scheduler.ts";
 import {
 	getAscetSearchIndexPartitionState,
 	queryAscetSearchIndex,
@@ -87,6 +88,23 @@ describe("formatAscetCliJsonResult", () => {
 				2,
 			),
 		);
+	});
+
+	test("labels empty quick-search results as non-exhaustive", () => {
+		const result = makeResult({
+			source: "quick_search_index",
+			result: {
+				matches: [],
+				searchComplete: false,
+				authoritative: false,
+				source: "quick_search_index",
+			},
+		});
+
+		const formatted = JSON.parse(formatAscetCliJsonResult("search", result)) as {
+			result?: { summary?: string };
+		};
+		assert.equal(formatted.result?.summary, "No indexed matches were returned, but the search is not exhaustive.");
 	});
 
 	test("formats failures as structured error JSON", () => {
@@ -321,6 +339,149 @@ describe("runAscetCliJson write semantics", () => {
 			);
 		} finally {
 			resetAscetSearchIndexForTest();
+			fixture.cleanup();
+		}
+	});
+});
+
+describe("runAscetCliJson scheduler failure semantics", () => {
+	test("records a non-zero CLI exit as a failed scheduler job", async () => {
+		const fixture = createReadyEnv();
+		const scheduler = createAscetScheduler({ generateJobId: () => "scheduler-cli-failure" });
+		try {
+			const result = await runAscetCliJson(["exec", "synthetic_failure", "--json"], {
+				cwd: fixture.cwd,
+				env: fixture.env,
+				scheduler,
+				executeCli: async (request) => ({
+					exitCode: 1,
+					stdout: "",
+					stderr: "synthetic failure",
+					timedOut: false,
+					request,
+				}),
+			});
+
+			assert.equal(result.ok, false);
+			assert.equal(result.error?.code, "ascet_cli_failed");
+			assert.equal(result.operationId, "synthetic_failure");
+			assert.equal(result.stage, "cli_process");
+			assert.equal(result.diagnostics?.retryable, false);
+			assert.equal(scheduler.getSnapshot().recentJobs.at(-1)?.state, "failed");
+			assert.equal(scheduler.getSnapshot().recentJobs.at(-1)?.errorCode, "ascet_cli_failed");
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("records invalid JSON as a failed scheduler job", async () => {
+		const fixture = createReadyEnv();
+		const scheduler = createAscetScheduler({ generateJobId: () => "scheduler-invalid-json" });
+		try {
+			const result = await runAscetCliJson(["exec", "synthetic_invalid_json", "--json"], {
+				cwd: fixture.cwd,
+				env: fixture.env,
+				scheduler,
+				executeCli: async (request) => ({
+					exitCode: 0,
+					stdout: "not-json",
+					stderr: "",
+					timedOut: false,
+					request,
+				}),
+			});
+
+			assert.equal(result.ok, false);
+			assert.equal(result.error?.code, "ascet_cli_invalid_json");
+			assert.equal(result.stage, "json_parse");
+			assert.equal(result.diagnostics?.operationId, "synthetic_invalid_json");
+			assert.equal(scheduler.getSnapshot().recentJobs.at(-1)?.state, "failed");
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("records an ok=false JSON envelope as a failed scheduler job", async () => {
+		const fixture = createReadyEnv();
+		const scheduler = createAscetScheduler({ generateJobId: () => "scheduler-json-failure" });
+		try {
+			const result = await runAscetCliJson(["exec", "synthetic_json_failure", "--json"], {
+				cwd: fixture.cwd,
+				env: fixture.env,
+				scheduler,
+				executeCli: async (request) => ({
+					exitCode: 0,
+					stdout: JSON.stringify({
+						ok: false,
+						result: null,
+						error: { code: "component_not_found", message: "missing" },
+					}),
+					stderr: "",
+					timedOut: false,
+					request,
+				}),
+			});
+
+			assert.equal(result.ok, false);
+			assert.equal(result.error?.code, "ascet_cli_failed");
+			assert.equal(scheduler.getSnapshot().recentJobs.at(-1)?.state, "failed");
+			assert.equal(scheduler.getSnapshot().recentJobs.at(-1)?.errorCode, "ascet_cli_failed");
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("records a child timeout as a failed scheduler job", async () => {
+		const fixture = createReadyEnv();
+		const scheduler = createAscetScheduler({ generateJobId: () => "scheduler-child-timeout" });
+		try {
+			const result = await runAscetCliJson(["exec", "synthetic_timeout", "--json"], {
+				cwd: fixture.cwd,
+				env: fixture.env,
+				scheduler,
+				executeCli: async (request) => ({
+					exitCode: null,
+					stdout: "",
+					stderr: "child timeout",
+					timedOut: true,
+					request,
+				}),
+			});
+
+			assert.equal(result.ok, false);
+			assert.equal(result.error?.code, "ascet_cli_timeout");
+			assert.equal(result.timedOut, true);
+			assert.equal(result.diagnostics?.retryable, true);
+			assert.equal(result.diagnostics?.timedOut, true);
+			assert.equal(scheduler.getSnapshot().recentJobs.at(-1)?.state, "failed");
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("records an aborted child as a failed scheduler job", async () => {
+		const fixture = createReadyEnv();
+		const scheduler = createAscetScheduler({ generateJobId: () => "scheduler-child-aborted" });
+		try {
+			const result = await runAscetCliJson(["exec", "synthetic_aborted", "--json"], {
+				cwd: fixture.cwd,
+				env: fixture.env,
+				scheduler,
+				executeCli: async (request) => ({
+					exitCode: null,
+					stdout: "",
+					stderr: "aborted",
+					timedOut: false,
+					aborted: true,
+					request,
+				}),
+			});
+
+			assert.equal(result.ok, false);
+			assert.equal(result.error?.code, "ascet_cli_aborted");
+			assert.equal(result.diagnostics?.aborted, true);
+			assert.equal(scheduler.getSnapshot().recentJobs.at(-1)?.state, "failed");
+		} finally {
 			fixture.cleanup();
 		}
 	});

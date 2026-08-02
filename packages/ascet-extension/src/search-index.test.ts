@@ -21,6 +21,9 @@ import {
 	upsertAscetElementDeclarations,
 	upsertAscetFullElements,
 } from "./search-index.ts";
+import { queryAscetComponentReferenceIndexSqlite, queryAscetSearchIndexSqlite } from "./search-index-sqlite/query.ts";
+import { getAscetSqliteIndexStatus, markAscetSqliteIndexAreasStale } from "./search-index-sqlite/status.ts";
+import { getAscetIndexStatusFilePath } from "./search-index-sqlite/status-file.ts";
 
 const originalSearchIndexStorage = process.env.PI_ASCET_SEARCH_INDEX_STORAGE;
 
@@ -360,6 +363,8 @@ describe("ASCET search index warmup", () => {
 			assert.equal(first.ok, true);
 			assert.equal(first.fromCache, false);
 			assert.equal(existsSync(statusPath), true);
+			const initialStatus = JSON.parse(readFileSync(statusPath, "utf8")) as { generation?: unknown };
+			assert.equal(typeof initialStatus.generation, "string");
 
 			unlinkSync(statusPath);
 			const second = await ensureAscetSearchIndex({
@@ -551,6 +556,165 @@ describe("ASCET search index warmup", () => {
 				"--progress-file",
 				join(fixture.cwd, ".ascet", "index", "status.json"),
 			]);
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("persists a targeted stale element refresh without requiring a full build", async () => {
+		const fixture = createReadyEnv();
+		const sqliteEnv = { ...fixture.env, PI_ASCET_SEARCH_INDEX_STORAGE: "sqlite" };
+		try {
+			const initial = await ensureAscetSearchIndex({
+				cwd: fixture.cwd,
+				env: sqliteEnv,
+				partition: "p0",
+				forceRefresh: true,
+				executeCli: async (request) => makeExecution(request, warmupPayload()),
+			});
+			assert.equal(initial.ok, true);
+			markAscetSqliteIndexAreasStale(fixture.cwd, ["elements"], "write_succeeded:set_element_spec");
+
+			const replacement = warmupPayload();
+			replacement.entries = [
+				{
+					...replacement.entries[0],
+					elementName: "P_AEB_IB_MaxVelocityDrop_Curve_Updated",
+					path: "AEB\\Controller::P_AEB_IB_MaxVelocityDrop_Curve_Updated",
+				},
+			];
+			const targeted = await ensureAscetSearchIndex({
+				cwd: fixture.cwd,
+				env: sqliteEnv,
+				partition: "element_decls",
+				forceRefresh: true,
+				executeCli: async (request) => makeExecution(request, replacement),
+			});
+
+			assert.equal(targeted.ok, true);
+			const sqliteStatus = getAscetSqliteIndexStatus(fixture.cwd);
+			assert.equal(sqliteStatus.areas.find((area) => area.area === "elements")?.status, "ready");
+			const sidecar = JSON.parse(readFileSync(getAscetIndexStatusFilePath(fixture.cwd), "utf8")) as {
+				generation?: string;
+				generationBefore?: string;
+				generationAfter?: string;
+				transactionCommitted?: boolean;
+				clearedInvalidations?: string[];
+				staleAreas?: string[];
+			};
+			assert.equal(sidecar.generation, sqliteStatus.runId);
+			assert.equal(sidecar.generationBefore?.length, 36);
+			assert.equal(sidecar.generationAfter, sqliteStatus.runId);
+			assert.equal(sidecar.transactionCommitted, true);
+			assert.deepEqual(sidecar.clearedInvalidations, ["elements"]);
+			assert.deepEqual(sidecar.staleAreas, []);
+			assert.equal(
+				(
+					queryAscetSearchIndexSqlite(
+						{ query: "P_AEB_IB_MaxVelocityDrop_Curve_Updated", match: "exact" },
+						{ cwd: fixture.cwd },
+					)?.data as { result?: { matches?: unknown[] } }
+				)?.result?.matches?.length,
+				1,
+			);
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("fails safe when the COW refresh rollout is explicitly disabled", async () => {
+		const fixture = createReadyEnv();
+		const sqliteEnv = { ...fixture.env, PI_ASCET_SEARCH_INDEX_STORAGE: "sqlite" };
+		try {
+			const initial = await ensureAscetSearchIndex({
+				cwd: fixture.cwd,
+				env: sqliteEnv,
+				partition: "p0",
+				forceRefresh: true,
+				executeCli: async (request) => makeExecution(request, warmupPayload()),
+			});
+			assert.equal(initial.ok, true);
+			markAscetSqliteIndexAreasStale(fixture.cwd, ["elements"], "write_succeeded:set_element_spec");
+
+			const result = await ensureAscetSearchIndex({
+				cwd: fixture.cwd,
+				env: { ...sqliteEnv, ASCET_INDEX_COW_REFRESH: "0" },
+				partition: "element_decls",
+				forceRefresh: true,
+				executeCli: async (request) => makeExecution(request, warmupPayload()),
+			});
+
+			assert.equal(result.ok, false);
+			assert.match(result.error?.message ?? "", /run a full p0 build/);
+			const status = getAscetSqliteIndexStatus(fixture.cwd);
+			assert.equal(status.runId.length, 36);
+			assert.equal(status.areas.find((area) => area.area === "elements")?.status, "stale");
+			const sidecar = JSON.parse(readFileSync(getAscetIndexStatusFilePath(fixture.cwd), "utf8")) as {
+				state?: string;
+				error?: { code?: string };
+			};
+			assert.equal(sidecar.state, "stale");
+			assert.equal(sidecar.error?.code, "sqlite_search_index_ingest_failed");
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("persists a targeted component-reference refresh with both reference areas", async () => {
+		const fixture = createReadyEnv();
+		const sqliteEnv = { ...fixture.env, PI_ASCET_SEARCH_INDEX_STORAGE: "sqlite" };
+		const reference = {
+			sourceComponentPath: "AEB\\Controller",
+			sourceElementName: "VehicleSpeedCurve",
+			sourceElementKind: "component",
+			sourceElementScope: "local",
+			targetComponentPath: "Common\\Curve1D",
+			targetComponentName: "Curve1D",
+			targetComponentKind: "class",
+			targetLanguageKind: "ESDL",
+			resolved: true,
+			path: "AEB\\Controller::VehicleSpeedCurve->Common\\Curve1D",
+		};
+		try {
+			const initial = await ensureAscetSearchIndex({
+				cwd: fixture.cwd,
+				env: sqliteEnv,
+				partition: "p0",
+				forceRefresh: true,
+				executeCli: async (request) =>
+					makeExecution(request, { ...warmupPayload(), componentRefs: [reference], elementRefs: [reference] }),
+			});
+			assert.equal(initial.ok, true);
+			markAscetSqliteIndexAreasStale(
+				fixture.cwd,
+				["component_refs", "element_refs"],
+				"write_succeeded:set_element_spec",
+			);
+
+			const replacement = {
+				...reference,
+				targetComponentName: "Curve1DUpdated",
+				path: "AEB\\Controller::VehicleSpeedCurve->Common\\Curve1DUpdated",
+			};
+			const targeted = await ensureAscetSearchIndex({
+				cwd: fixture.cwd,
+				env: sqliteEnv,
+				partition: "component_refs",
+				forceRefresh: true,
+				executeCli: async (request) =>
+					makeExecution(request, { ...warmupPayload(), componentRefs: [replacement], elementRefs: [replacement] }),
+			});
+
+			assert.equal(targeted.ok, true);
+			const status = getAscetSqliteIndexStatus(fixture.cwd);
+			assert.equal(status.areas.find((area) => area.area === "component_refs")?.status, "ready");
+			assert.equal(status.areas.find((area) => area.area === "element_refs")?.status, "ready");
+			const queried = queryAscetComponentReferenceIndexSqlite(
+				{ query: "Curve1DUpdated", match: "exact" },
+				{ cwd: fixture.cwd },
+			);
+			assert.equal(queried?.ok, true);
+			assert.equal(((queried?.data as { result?: { matches?: unknown[] } })?.result?.matches ?? []).length, 1);
 		} finally {
 			fixture.cleanup();
 		}

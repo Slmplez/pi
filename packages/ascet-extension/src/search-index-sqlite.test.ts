@@ -3,7 +3,7 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, test } from "node:test";
-import { ingestAscetSearchIndexSqlite } from "./search-index-sqlite/ingest.ts";
+import { ingestAscetSearchIndexSqlite, refreshAscetSearchIndexSqliteAreas } from "./search-index-sqlite/ingest.ts";
 import {
 	queryAscetComponentIndexSqlite,
 	queryAscetComponentReferenceIndexSqlite,
@@ -340,11 +340,91 @@ describe("ASCET SQLite search index", () => {
 			{ cwd: temp.cwd },
 		);
 		assert.ok(result);
-		const envelope = result.data as { result?: { indexStatus?: string; staleAreas?: string[]; warning?: string } };
+		const envelope = result.data as {
+			result?: {
+				indexStatus?: string;
+				staleAreas?: string[];
+				warning?: string;
+				searchComplete?: boolean;
+				authoritative?: boolean;
+				truncationReason?: string;
+			};
+		};
 		assert.equal(envelope.result?.indexStatus, "stale");
 		assert.deepEqual(envelope.result?.staleAreas, ["code_blocks", "code_terms", "elements"]);
 		assert.match(envelope.result?.warning ?? "", /stale ASCET SQLite search index/);
+		assert.equal(envelope.result?.searchComplete, false);
+		assert.equal(envelope.result?.authoritative, false);
+		assert.equal(envelope.result?.truncationReason, "stale_index");
 		assert.equal(matches(result).length, 1);
+	});
+
+	test("refreshes a stale area into a new generation without rebuilding untouched areas", () => {
+		const temp = createTempCwd();
+		cleanup = temp.cleanup;
+		const original = fixtureInput();
+		ingestAscetSearchIndexSqlite(temp.cwd, original);
+		const before = getAscetSqliteIndexStatus(temp.cwd);
+		markAscetSqliteIndexAreasStale(temp.cwd, ["elements"], "write_succeeded:set_element_spec");
+
+		const replacementEntry = {
+			...(original.entries?.[0] ?? {}),
+			elementName: "P_AEB_IB_MaxVelocityDrop_Curve_Updated",
+			path: "PlatformLibrary\\AEB\\AEB_pDriverIBooster::P_AEB_IB_MaxVelocityDrop_Curve_Updated",
+		};
+		const refreshed = refreshAscetSearchIndexSqliteAreas(temp.cwd, { ...original, entries: [replacementEntry] }, [
+			"elements",
+		]);
+		const after = getAscetSqliteIndexStatus(temp.cwd);
+
+		assert.notEqual(after.runId, before.runId);
+		assert.equal(after.status, "ready");
+		assert.equal(after.areas.find((area) => area.area === "elements")?.status, "ready");
+		assert.equal(after.areas.find((area) => area.area === "elements")?.errorCode, "");
+		assert.equal(refreshed.clearedAreas.includes("elements"), true);
+		assert.equal(refreshed.generationBefore, before.runId);
+		assert.equal(refreshed.generationAfter, after.runId);
+		assert.equal(refreshed.transactionCommitted, true);
+		assert.deepEqual(refreshed.clearedInvalidations, ["elements"]);
+		assert.equal(refreshed.postRefreshState.areas.find((area) => area.area === "elements")?.status, "ready");
+		assert.equal(
+			matches(queryAscetComponentIndexSqlite({ query: "AEB_pDriver", match: "contains" }, { cwd: temp.cwd })).length,
+			1,
+		);
+		assert.equal(
+			matches(
+				queryAscetSearchIndexSqlite(
+					{ query: "P_AEB_IB_MaxVelocityDrop_Curve_Updated", match: "exact" },
+					{ cwd: temp.cwd },
+				),
+			).length,
+			1,
+		);
+		assert.equal(
+			matches(
+				queryAscetSearchIndexSqlite({ query: "P_AEB_IB_MaxVelocityDrop_Curve", match: "exact" }, { cwd: temp.cwd }),
+			).length,
+			0,
+		);
+	});
+
+	test("keeps the stale active generation when a targeted refresh fails", () => {
+		const temp = createTempCwd();
+		cleanup = temp.cleanup;
+		const original = fixtureInput();
+		ingestAscetSearchIndexSqlite(temp.cwd, original);
+		markAscetSqliteIndexAreasStale(temp.cwd, ["elements"], "write_succeeded:set_element_spec");
+		const before = getAscetSqliteIndexStatus(temp.cwd);
+		const invalidEntry = { ...(original.entries?.[0] ?? {}), elementName: null as unknown as string };
+
+		assert.throws(() =>
+			refreshAscetSearchIndexSqliteAreas(temp.cwd, { ...original, entries: [invalidEntry] }, ["elements"]),
+		);
+
+		const after = getAscetSqliteIndexStatus(temp.cwd);
+		assert.equal(after.runId, before.runId);
+		assert.equal(after.status, "stale");
+		assert.equal(after.areas.find((area) => area.area === "elements")?.status, "stale");
 	});
 
 	test("lists the P0 folder tree with live ordering and typed filters", () => {

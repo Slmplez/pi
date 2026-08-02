@@ -116,7 +116,7 @@ export async function refreshAscetIndex(options: RefreshAscetIndexOptions): Prom
 				scanTimeoutMs: options.scanTimeoutMs ?? 90_000,
 				partition,
 				componentPath: options.componentPath,
-				forceRefresh: options.force,
+				forceRefresh: options.force ?? true,
 				includeTextCode: plan.includeTextCode || partition === "text_code",
 				toolName: "ascet_index_refresh",
 			}),

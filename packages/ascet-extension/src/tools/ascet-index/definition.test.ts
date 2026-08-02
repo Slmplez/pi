@@ -52,7 +52,7 @@ describe("ascet_index tool", () => {
 			undefined,
 			{
 				cwd: temp.cwd,
-				env: { ASCET_CLI_PATH: fakeCliPath },
+				env: { ASCET_CLI_PATH: fakeCliPath, PI_ASCET_SEARCH_INDEX_STORAGE: "memory" },
 				async executeCli(request) {
 					observedArgs = request.args;
 					return {
@@ -124,7 +124,7 @@ describe("ascet_index tool", () => {
 			undefined,
 			{
 				cwd: temp.cwd,
-				env: { ASCET_CLI_PATH: fakeCliPath },
+				env: { ASCET_CLI_PATH: fakeCliPath, PI_ASCET_SEARCH_INDEX_STORAGE: "memory" },
 				async executeCli(request) {
 					observedArgs = request.args;
 					return {

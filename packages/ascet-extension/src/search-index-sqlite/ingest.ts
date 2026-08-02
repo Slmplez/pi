@@ -35,6 +35,352 @@ export interface AscetSqliteIngestResult {
 	codeTermCount: number;
 }
 
+export interface AscetSqliteAreaRefreshResult {
+	runId: string;
+	previousRunId: string;
+	path: string;
+	clearedAreas: AscetP0IndexArea[];
+	clearedInvalidations: AscetP0IndexArea[];
+	transactionCommitted: boolean;
+	generationBefore: string;
+	generationAfter: string;
+	postRefreshState: {
+		status: "ready" | "stale";
+		areas: Array<{
+			area: AscetP0IndexArea;
+			status: string;
+			errorCode: string;
+			errorMessage: string;
+		}>;
+	};
+	status: "ready" | "stale";
+}
+
+const CLONE_TABLES = [
+	{ name: "ascet_search_documents", idColumns: ["doc_id"] },
+	{ name: "ascet_components", idColumns: ["id"] },
+	{ name: "ascet_folders", idColumns: ["id"] },
+	{ name: "ascet_folder_items", idColumns: ["id"] },
+	{ name: "ascet_elements", idColumns: ["id"] },
+	{ name: "ascet_methods", idColumns: ["id"] },
+	{ name: "ascet_project_formulas", idColumns: ["id"] },
+	{ name: "ascet_project_items", idColumns: ["id"] },
+	{ name: "ascet_element_refs", idColumns: ["id"] },
+	{ name: "ascet_dbitem_dependencies", idColumns: ["id"] },
+	{ name: "ascet_code_blocks", idColumns: ["id"] },
+	{ name: "ascet_code_terms", idColumns: ["block_id"] },
+] as const;
+
+const REFRESH_AREA_DOCUMENT_PARTITIONS: Record<AscetP0IndexArea, readonly string[]> = {
+	components: ["components"],
+	folders: ["folders"],
+	folder_items: ["folder_items"],
+	elements: ["elements"],
+	methods: ["methods"],
+	project_formulas: ["project_formulas"],
+	project_items: ["project_items"],
+	component_refs: ["component_refs"],
+	element_refs: ["element_refs"],
+	messages: ["messages"],
+	dbitem_dependencies: ["dbitem_dependencies"],
+	code_blocks: ["code_blocks"],
+	code_terms: ["code_terms"],
+};
+
+function cloneRunRows(db: DatabaseSync, sourceRunId: string, targetRunId: string): void {
+	for (const table of CLONE_TABLES) {
+		const columns = (db.prepare(`pragma table_info(${table.name})`).all() as Array<{ name?: unknown }>).map((row) =>
+			typeof row.name === "string" ? row.name : "",
+		);
+		if (columns.length === 0 || !columns.includes("run_id")) {
+			throw new Error(`Cannot clone ASCET index table ${table.name}: run_id column is missing.`);
+		}
+		const parameters: string[] = [];
+		const projection = columns
+			.map((column) => {
+				if (column === "run_id") {
+					parameters.push(targetRunId);
+					return "?";
+				}
+				if (table.idColumns.includes(column as never)) {
+					parameters.push(targetRunId);
+					return `${column} || ?`;
+				}
+				return column;
+			})
+			.join(", ");
+		parameters.push(sourceRunId);
+		db.prepare(
+			`insert into ${table.name} (${columns.join(", ")}) select ${projection} from ${table.name} where run_id = ?`,
+		).run(...parameters);
+	}
+	db.prepare(`
+insert into ascet_index_areas
+(run_id, area, status, item_count, elapsed_ms, scan_complete, error_code, error_message)
+select ?, area, status, item_count, elapsed_ms, scan_complete, error_code, error_message
+from ascet_index_areas
+where run_id = ?
+`).run(targetRunId, sourceRunId);
+}
+
+function deleteAreaRows(db: DatabaseSync, runId: string, area: AscetP0IndexArea): void {
+	const tableByArea: Partial<Record<AscetP0IndexArea, string>> = {
+		components: "ascet_components",
+		folders: "ascet_folders",
+		folder_items: "ascet_folder_items",
+		elements: "ascet_elements",
+		methods: "ascet_methods",
+		project_formulas: "ascet_project_formulas",
+		project_items: "ascet_project_items",
+		dbitem_dependencies: "ascet_dbitem_dependencies",
+		code_blocks: "ascet_code_blocks",
+		code_terms: "ascet_code_terms",
+	};
+	const table = tableByArea[area];
+	if (table) {
+		db.prepare(`delete from ${table} where run_id = ?`).run(runId);
+	}
+	if (area === "component_refs" || area === "element_refs") {
+		db.prepare("delete from ascet_element_refs where run_id = ?").run(runId);
+	}
+	const partitions = REFRESH_AREA_DOCUMENT_PARTITIONS[area];
+	const placeholders = partitions.map(() => "?").join(", ");
+	db.prepare(`delete from ascet_search_documents where run_id = ? and partition in (${placeholders})`).run(
+		runId,
+		...partitions,
+	);
+}
+
+function updateAreaReady(
+	db: DatabaseSync,
+	runId: string,
+	areaName: AscetP0IndexArea,
+	itemCount: number,
+	scanComplete: boolean,
+	elapsedMs: number,
+): void {
+	db.prepare(`
+update ascet_index_areas
+set status = 'ready', item_count = ?, elapsed_ms = ?, scan_complete = ?, error_code = '', error_message = ''
+where run_id = ? and area = ?
+`).run(itemCount, elapsedMs, scanComplete ? 1 : 0, runId, areaName);
+}
+
+function finalizeSelectedAreas(
+	db: DatabaseSync,
+	runId: string,
+	selectedAreas: readonly AscetP0IndexArea[],
+): Array<{ area: AscetP0IndexArea; status: string; errorCode: string; errorMessage: string }> {
+	const rows = db
+		.prepare(
+			`select area, status, error_code, error_message
+from ascet_index_areas
+where run_id = ? and area in (${selectedAreas.map(() => "?").join(", ")})`,
+		)
+		.all(runId, ...selectedAreas) as Array<{
+		area?: unknown;
+		status?: unknown;
+		error_code?: unknown;
+		error_message?: unknown;
+	}>;
+	const byArea = new Map(rows.map((row) => [String(row.area ?? ""), row]));
+	const state = selectedAreas.map((area) => {
+		const row = byArea.get(area);
+		return {
+			area,
+			status: String(row?.status ?? "missing"),
+			errorCode: String(row?.error_code ?? ""),
+			errorMessage: String(row?.error_message ?? ""),
+		};
+	});
+	const invalid = state.filter(
+		(entry) => entry.status !== "ready" || entry.errorCode.length > 0 || entry.errorMessage.length > 0,
+	);
+	if (invalid.length > 0) {
+		throw new Error(
+			`ASCET SQLite area refresh finalizer rejected ${invalid.map((entry) => `${entry.area}:${entry.status}`).join(", ")}.`,
+		);
+	}
+	return state;
+}
+
+function normalizeRefreshAreas(areas: readonly AscetP0IndexArea[]): AscetP0IndexArea[] {
+	const normalized = [...new Set(areas)];
+	if (normalized.includes("component_refs") !== normalized.includes("element_refs")) {
+		throw new Error("ASCET reference area refresh requires component_refs and element_refs together.");
+	}
+	return normalized;
+}
+
+export function refreshAscetSearchIndexSqliteAreas(
+	cwd: string,
+	input: AscetSqliteSearchIndexBuildInput,
+	areas: readonly AscetP0IndexArea[],
+): AscetSqliteAreaRefreshResult {
+	const selectedAreas = normalizeRefreshAreas(areas);
+	if (selectedAreas.length === 0) {
+		throw new Error("ASCET SQLite area refresh requires at least one area.");
+	}
+	const startedAtMs = Date.now();
+	const runId = randomUUID();
+	const connection = openAscetSearchSqlite(cwd, "writer");
+	const db = connection.db;
+	try {
+		db.exec("begin immediate");
+		const activeRun = db.prepare("select id from ascet_index_runs where active = 1 limit 1").get() as
+			| { id?: unknown }
+			| undefined;
+		const previousRunId = typeof activeRun?.id === "string" ? activeRun.id : "";
+		if (!previousRunId) {
+			throw new Error("ASCET SQLite index has no active generation; a full build is required.");
+		}
+		const previousAreaRows = db
+			.prepare("select area, status, error_code from ascet_index_areas where run_id = ?")
+			.all(previousRunId) as Array<{ area?: unknown; status?: unknown; error_code?: unknown }>;
+		const previousAreaState = new Map(
+			previousAreaRows.map((row) => [
+				String(row.area ?? ""),
+				{ status: String(row.status ?? ""), errorCode: String(row.error_code ?? "") },
+			]),
+		);
+		db.prepare(`
+insert into ascet_index_runs
+(id, schema_version, database_name, database_path, api_version, source_fingerprint, component_list_hash, status, active, started_at_ms, generated_at_ms, completed_at_ms, elapsed_ms, error_json)
+select ?, schema_version, ?, ?, api_version, ?, ?, 'building', 0, ?, ?, 0, ?, ''
+from ascet_index_runs
+where id = ?
+`).run(
+			runId,
+			input.databaseName,
+			input.databasePath,
+			sourceFingerprint(input),
+			componentListHash(input),
+			startedAtMs,
+			input.generatedAtMs ?? startedAtMs,
+			input.elapsedMs,
+			previousRunId,
+		);
+		cloneRunRows(db, previousRunId, runId);
+
+		for (const areaName of selectedAreas) {
+			deleteAreaRows(db, runId, areaName);
+		}
+
+		const refreshed = new Map<AscetP0IndexArea, { itemCount: number; scanComplete: boolean }>();
+		if (selectedAreas.includes("components")) {
+			refreshed.set("components", {
+				itemCount: insertComponents(db, runId, input),
+				scanComplete: input.scanComplete,
+			});
+		}
+		if (selectedAreas.includes("folders")) {
+			refreshed.set("folders", {
+				itemCount: insertFolders(db, runId, input.folders),
+				scanComplete: input.scanComplete,
+			});
+		}
+		if (selectedAreas.includes("folder_items")) {
+			refreshed.set("folder_items", {
+				itemCount: insertFolderItems(db, runId, input.folderItems),
+				scanComplete: input.scanComplete,
+			});
+		}
+		if (selectedAreas.includes("elements")) {
+			refreshed.set("elements", {
+				itemCount: insertElements(db, runId, input.entries),
+				scanComplete: input.scanComplete,
+			});
+		}
+		if (selectedAreas.includes("methods")) {
+			refreshed.set("methods", {
+				itemCount: insertMethods(db, runId, input.methodDeclarations),
+				scanComplete: input.scanComplete,
+			});
+		}
+		if (selectedAreas.includes("project_formulas")) {
+			refreshed.set("project_formulas", {
+				itemCount: insertProjectFormulas(db, runId, input.projectFormulas),
+				scanComplete: input.scanComplete,
+			});
+		}
+		if (selectedAreas.includes("project_items")) {
+			refreshed.set("project_items", {
+				itemCount: insertProjectItems(db, runId, input.projectItems),
+				scanComplete: input.scanComplete,
+			});
+		}
+		if (selectedAreas.includes("component_refs") && selectedAreas.includes("element_refs")) {
+			const counts = insertReferences(db, runId, input.componentRefs, input.elementRefs);
+			refreshed.set("component_refs", { itemCount: counts.componentRefs, scanComplete: input.scanComplete });
+			refreshed.set("element_refs", { itemCount: counts.elementRefs, scanComplete: input.scanComplete });
+		}
+		if (selectedAreas.includes("dbitem_dependencies")) {
+			refreshed.set("dbitem_dependencies", {
+				itemCount: insertDbItemDependencies(db, runId, input.dbItemDependencies),
+				scanComplete: input.scanComplete,
+			});
+		}
+		if (selectedAreas.includes("code_blocks") || selectedAreas.includes("code_terms")) {
+			const counts = insertCodeBlocks(db, runId, input);
+			const scanComplete = input.textCodeScanComplete ?? input.scanComplete;
+			if (selectedAreas.includes("code_blocks")) {
+				refreshed.set("code_blocks", { itemCount: counts.blocks, scanComplete });
+			}
+			if (selectedAreas.includes("code_terms")) {
+				refreshed.set("code_terms", { itemCount: counts.terms, scanComplete });
+			}
+		}
+		if (selectedAreas.includes("messages")) {
+			refreshed.set("messages", {
+				itemCount: insertMessages(db, runId, input.messages),
+				scanComplete: input.scanComplete,
+			});
+		}
+
+		for (const [areaName, value] of refreshed) {
+			updateAreaReady(db, runId, areaName, value.itemCount, value.scanComplete, input.elapsedMs);
+		}
+		const selectedAreaState = finalizeSelectedAreas(db, runId, selectedAreas);
+		const remaining = db
+			.prepare("select count(*) as count from ascet_index_areas where run_id = ? and status <> 'ready'")
+			.get(runId) as { count?: unknown } | undefined;
+		const status = Number(remaining?.count ?? 0) === 0 ? "ready" : "stale";
+		const completedAtMs = Date.now();
+		db.prepare("update ascet_index_runs set active = 0 where active = 1").run();
+		db.prepare(`
+update ascet_index_runs
+set active = 1, status = ?, completed_at_ms = ?, elapsed_ms = ?
+where id = ?
+`).run(status, completedAtMs, Math.max(input.elapsedMs, completedAtMs - startedAtMs), runId);
+		db.exec("commit");
+		return {
+			runId,
+			previousRunId,
+			path: connection.path,
+			clearedAreas: [...refreshed.keys()],
+			clearedInvalidations: selectedAreas.filter((area) => {
+				const previous = previousAreaState.get(area);
+				return previous?.status !== "ready" || previous.errorCode.length > 0;
+			}),
+			transactionCommitted: true,
+			generationBefore: previousRunId,
+			generationAfter: runId,
+			postRefreshState: {
+				status,
+				areas: selectedAreaState,
+			},
+			status,
+		};
+	} catch (error) {
+		if (db.isTransaction) {
+			db.exec("rollback");
+		}
+		throw error;
+	} finally {
+		connection.close();
+	}
+}
+
 function normalizeName(value: string | undefined): string {
 	return (value ?? "").trim().toLowerCase();
 }

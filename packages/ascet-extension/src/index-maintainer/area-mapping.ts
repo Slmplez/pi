@@ -1,19 +1,23 @@
 import type { AscetSearchIndexWarmupPartition } from "../search-index.ts";
-import { ASCET_P0_INDEX_AREAS, type AscetP0IndexArea } from "../search-index-sqlite/schema.ts";
+import {
+	ASCET_LOGICAL_INDEX_AREA_MAP,
+	ASCET_P0_INDEX_AREAS,
+	type AscetP0IndexArea,
+} from "../search-index-sqlite/schema.ts";
 import { ASCET_INDEX_PUBLIC_AREAS, type AscetIndexAreaPlan, type AscetIndexPublicArea } from "./types.ts";
 
 const publicAreaSet = new Set<string>(ASCET_INDEX_PUBLIC_AREAS);
 
 const publicAreaSqliteAreas: Record<AscetIndexPublicArea, readonly AscetP0IndexArea[]> = {
-	p0: ASCET_P0_INDEX_AREAS,
-	components: ["components"],
-	tree: ["folders", "folder_items", "components"],
-	elements: ["elements"],
-	methods: ["methods"],
-	refs: ["component_refs", "element_refs", "dbitem_dependencies"],
-	code: ["code_blocks", "code_terms"],
-	messages: ["messages"],
-	project: ["project_items", "project_formulas"],
+	p0: ASCET_LOGICAL_INDEX_AREA_MAP.p0,
+	components: ASCET_LOGICAL_INDEX_AREA_MAP.components,
+	tree: ASCET_LOGICAL_INDEX_AREA_MAP.tree,
+	elements: ASCET_LOGICAL_INDEX_AREA_MAP.elements,
+	methods: ASCET_LOGICAL_INDEX_AREA_MAP.methods,
+	refs: ASCET_LOGICAL_INDEX_AREA_MAP.refs,
+	code: ASCET_LOGICAL_INDEX_AREA_MAP.text_code,
+	messages: ASCET_LOGICAL_INDEX_AREA_MAP.messages,
+	project: ASCET_LOGICAL_INDEX_AREA_MAP.project,
 };
 
 export function isAscetIndexPublicArea(value: string): value is AscetIndexPublicArea {
@@ -49,12 +53,13 @@ export function planAscetIndexAreas(areas: readonly string[] | undefined): Ascet
 	for (const area of requestedAreas) {
 		switch (area) {
 			case "p0":
-			case "tree":
-			case "project":
 				requiresP0 = true;
 				break;
 			case "components":
 				partitionSet.add("components");
+				break;
+			case "tree":
+				partitionSet.add("tree");
 				break;
 			case "elements":
 				partitionSet.add("element_decls");
@@ -63,8 +68,7 @@ export function planAscetIndexAreas(areas: readonly string[] | undefined): Ascet
 				partitionSet.add("method_decls");
 				break;
 			case "refs":
-				partitionSet.add("component_refs");
-				partitionSet.add("element_refs");
+				partitionSet.add("refs");
 				break;
 			case "code":
 				partitionSet.add("text_code");
@@ -72,6 +76,9 @@ export function planAscetIndexAreas(areas: readonly string[] | undefined): Ascet
 				break;
 			case "messages":
 				partitionSet.add("messages");
+				break;
+			case "project":
+				partitionSet.add("project");
 				break;
 		}
 	}

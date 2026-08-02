@@ -12,6 +12,10 @@ export interface AscetReadImplementationParams {
 	componentPath: string;
 	mode?: "list" | "default" | "class-impl" | "impl";
 	implementationName?: string;
+	detailLevel?: "metadata" | "summary" | "elements" | "full";
+	maxDepth?: number;
+	maxElements?: number;
+	timeoutMs?: number;
 }
 
 export interface RunAscetReadImplementationOptions {
@@ -30,6 +34,12 @@ export const ascetReadImplementationParameters = Type.Object({
 		Type.Union([Type.Literal("list"), Type.Literal("default"), Type.Literal("class-impl"), Type.Literal("impl")]),
 	),
 	implementationName: Type.Optional(Type.String({ description: "Implementation name when mode is impl." })),
+	detailLevel: Type.Optional(
+		Type.Union([Type.Literal("metadata"), Type.Literal("summary"), Type.Literal("elements"), Type.Literal("full")]),
+	),
+	maxDepth: Type.Optional(Type.Integer({ minimum: 0, maximum: 1000 })),
+	maxElements: Type.Optional(Type.Integer({ minimum: 1, maximum: 1_000_000 })),
+	timeoutMs: Type.Optional(Type.Integer({ minimum: 1, maximum: 300_000 })),
 });
 
 export function buildReadImplementationArgs(params: AscetReadImplementationParams): string[] {
@@ -43,6 +53,18 @@ export function buildReadImplementationArgs(params: AscetReadImplementationParam
 	} else if (params.mode === "impl") {
 		args.push("--impl", params.implementationName ?? "");
 	}
+	if (params.detailLevel !== undefined) {
+		args.push("--detail-level", params.detailLevel);
+	}
+	if (params.maxDepth !== undefined) {
+		args.push("--max-depth", String(Math.trunc(params.maxDepth)));
+	}
+	if (params.maxElements !== undefined) {
+		args.push("--max-elements", String(Math.trunc(params.maxElements)));
+	}
+	if (params.timeoutMs !== undefined) {
+		args.push("--timeout-ms", String(Math.trunc(params.timeoutMs)));
+	}
 	args.push("--json");
 	return args;
 }
@@ -51,7 +73,16 @@ export async function runAscetReadImplementation(
 	params: AscetReadImplementationParams,
 	options: RunAscetReadImplementationOptions,
 ): Promise<AscetReadImplementationResult> {
-	return runAscetCliJson(buildReadImplementationArgs(params), options);
+	const budgetsEnabled = options.env?.ASCET_IMPLEMENTATION_BUDGETS !== "0";
+	const effectiveParams =
+		!budgetsEnabled &&
+		params.detailLevel === undefined &&
+		params.maxDepth === undefined &&
+		params.maxElements === undefined &&
+		params.timeoutMs === undefined
+			? { ...params, detailLevel: "full" as const }
+			: params;
+	return runAscetCliJson(buildReadImplementationArgs(effectiveParams), options);
 }
 
 export function formatReadImplementationResult(result: AscetReadImplementationResult): string {
