@@ -345,6 +345,53 @@ describe("ASCET search index warmup", () => {
 		}
 	});
 
+	test("honors a call-site memory storage override when the process defaults to SQLite", async () => {
+		const fixture = createReadyEnv();
+		const originalStorage = process.env.PI_ASCET_SEARCH_INDEX_STORAGE;
+		process.env.PI_ASCET_SEARCH_INDEX_STORAGE = "sqlite";
+
+		try {
+			fixture.env.PI_ASCET_SEARCH_INDEX_STORAGE = "sqlite";
+			const warmup = await ensureAscetSearchIndex({
+				cwd: fixture.cwd,
+				env: fixture.env,
+				partition: "p0",
+				executeCli: async (request) => makeExecution(request, warmupPayload()),
+			});
+			assert.equal(warmup.ok, true);
+			upsertAscetElementDeclarations([
+				{
+					group: "primitive",
+					componentPath: "AEB\\Controller",
+					componentKind: "module",
+					componentLanguageKind: "ESDL",
+					elementName: "MemoryOnlyElement",
+					elementKind: "cont",
+					displayType: "cont",
+					displayScope: "exported",
+					referencedComponentPath: "",
+					path: "AEB\\Controller::MemoryOnlyElement",
+				},
+			]);
+			const options = {
+				cwd: fixture.cwd,
+				env: { PI_ASCET_SEARCH_INDEX_STORAGE: "memory" },
+			};
+			const result = queryAscetSearchIndex({ query: "MemoryOnlyElement", match: "exact", limit: 20 }, options);
+			const envelope = result?.data as { result?: { source?: unknown; matches?: unknown[] } };
+			assert.equal(result?.ok, true);
+			assert.equal(envelope.result?.source, "quick_search_index");
+			assert.equal(envelope.result?.matches?.length, 1);
+		} finally {
+			if (originalStorage === undefined) {
+				delete process.env.PI_ASCET_SEARCH_INDEX_STORAGE;
+			} else {
+				process.env.PI_ASCET_SEARCH_INDEX_STORAGE = originalStorage;
+			}
+			fixture.cleanup();
+		}
+	});
+
 	test("writes footer status sidecar when serving a ready SQLite cache", async () => {
 		const fixture = createReadyEnv();
 		const statusPath = join(fixture.cwd, ".ascet", "index", "status.json");

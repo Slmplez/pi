@@ -39,6 +39,7 @@ describe("ASCET text code search", () => {
 				{ query: "speed - drop", match: "contains", limit: 20 },
 				{
 					cwd: fixture.cwd,
+					env: fixture.env,
 					executeCli: async (request) => {
 						calls += 1;
 						return okExecution(request, {});
@@ -97,6 +98,7 @@ describe("ASCET text code search", () => {
 				{ query: "speed - drop", componentPath: "AEB\\Controller", match: "contains", limit: 20 },
 				{
 					cwd: fixture.cwd,
+					env: fixture.env,
 					executeCli: async (request) => {
 						requests.push(request);
 						return okExecution(request, {
@@ -130,6 +132,7 @@ describe("ASCET text code search", () => {
 				{ query: "speed - drop", match: "contains", limit: 20 },
 				{
 					cwd: fixture.cwd,
+					env: fixture.env,
 					executeCli: async (request) => {
 						requests.push(request);
 						return okExecution(request, {
@@ -176,7 +179,7 @@ describe("ASCET text code search", () => {
 	});
 });
 
-function createReadyEnv(): { cwd: string; cleanup: () => void } {
+function createReadyEnv(): { cwd: string; env: Record<string, string | undefined>; cleanup: () => void } {
 	const root = mkdtempSync(join(tmpdir(), "pi-ascet-search-text-code-"));
 	const contractsRoot = join(root, "contracts");
 	mkdirSync(contractsRoot, { recursive: true });
@@ -184,6 +187,13 @@ function createReadyEnv(): { cwd: string; cleanup: () => void } {
 	writeFileSync(join(contractsRoot, "cli-catalog.json"), "{}", "utf8");
 	return {
 		cwd: root,
+		env: {
+			ASCET_CLI_PATH: join(root, "AscetCli.exe"),
+			ASCET_CONTRACTS_PATH: contractsRoot,
+			PI_ASCET_RUNTIME_DIR: join(root, "runtime"),
+			PI_ASCET_OPERATION_HEALTH_PATH: join(root, "operation-health.json"),
+			PI_ASCET_SEARCH_INDEX_STORAGE: "memory",
+		},
 		cleanup: () => rmSync(root, { recursive: true, force: true }),
 	};
 }

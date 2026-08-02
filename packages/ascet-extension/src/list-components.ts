@@ -87,7 +87,7 @@ export async function runAscetListComponents(
 	options: RunAscetListComponentsOptions,
 ): Promise<AscetListComponentsResult> {
 	if (!isSearchIndexDisabled(options.env)) {
-		const indexed = queryAscetListComponentsIndex(params, { cwd: options.cwd });
+		const indexed = queryAscetListComponentsIndex(params, { cwd: options.cwd, env: options.env });
 		if (indexed && isUsableSqliteSearchResult(indexed)) {
 			return indexed;
 		}
@@ -105,7 +105,7 @@ export async function runAscetListComponents(
 			toolName: "ascet_explore",
 		});
 		if (warmup.ok) {
-			const warmed = queryAscetListComponentsIndex(params, { cwd: options.cwd });
+			const warmed = queryAscetListComponentsIndex(params, { cwd: options.cwd, env: options.env });
 			if (warmed && isUsableSqliteSearchResult(warmed)) {
 				return warmed;
 			}
