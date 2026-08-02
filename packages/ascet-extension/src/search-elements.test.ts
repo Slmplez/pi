@@ -20,6 +20,7 @@ function createReadyEnv(): { cwd: string; env: Record<string, string | undefined
 			ASCET_CONTRACTS_PATH: contractsRoot,
 			PI_ASCET_RUNTIME_DIR: join(root, "runtime"),
 			PI_ASCET_OPERATION_HEALTH_PATH: join(root, "operation-health.json"),
+			PI_ASCET_SEARCH_INDEX_STORAGE: "memory",
 		},
 		cleanup: () => rmSync(root, { recursive: true, force: true }),
 	};

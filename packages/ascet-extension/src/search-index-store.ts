@@ -360,6 +360,7 @@ export interface AscetDiagramMetadataIndexQueryParams {
 
 export interface AscetSearchIndexQueryOptions {
 	cwd?: string;
+	env?: Record<string, string | undefined>;
 }
 
 const DEFAULT_LIMIT = 20;

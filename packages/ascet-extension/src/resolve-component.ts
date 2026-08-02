@@ -90,7 +90,7 @@ export async function runAscetResolveComponent(
 	options: RunAscetResolveComponentOptions,
 ): Promise<AscetResolveComponentResult> {
 	if (!isSearchIndexDisabled(options.env)) {
-		const indexed = queryAscetComponentIndex(params, { cwd: options.cwd });
+		const indexed = queryAscetComponentIndex(params, { cwd: options.cwd, env: options.env });
 		if (indexed && canUseComponentIndexResult(indexed)) {
 			return indexed;
 		}
@@ -107,7 +107,7 @@ export async function runAscetResolveComponent(
 			toolName: "ascet_search",
 		});
 		if (warmup.ok) {
-			const warmed = queryAscetComponentIndex(params, { cwd: options.cwd });
+			const warmed = queryAscetComponentIndex(params, { cwd: options.cwd, env: options.env });
 			if (warmed && canUseComponentIndexResult(warmed)) {
 				return warmed;
 			}

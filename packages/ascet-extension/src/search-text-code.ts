@@ -279,7 +279,7 @@ export async function runAscetSearchTextCode(
 	options: RunAscetSearchTextCodeOptions,
 ): Promise<AscetCliJsonResult> {
 	if (!isSearchIndexDisabled(options.env)) {
-		const indexed = queryAscetTextCodeIndex(params, { cwd: options.cwd });
+		const indexed = queryAscetTextCodeIndex(params, { cwd: options.cwd, env: options.env });
 		if (indexed && canUseTextCodeIndexResult(indexed)) {
 			return indexed;
 		}
@@ -297,7 +297,7 @@ export async function runAscetSearchTextCode(
 				toolName: "ascet_search",
 			});
 			if (warmup.ok) {
-				const warmed = queryAscetTextCodeIndex(params, { cwd: options.cwd });
+				const warmed = queryAscetTextCodeIndex(params, { cwd: options.cwd, env: options.env });
 				if (warmed && canUseTextCodeIndexResult(warmed)) {
 					return warmed;
 				}
