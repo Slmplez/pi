@@ -74,12 +74,15 @@ export function createToolHtmlRenderer(deps: ToolHtmlRendererDeps): ToolHtmlRend
 
 	const createRenderContext = (
 		toolCallId: string,
+		toolName: string,
 		lastComponent: Component | undefined,
 		expanded: boolean,
 		isPartial: boolean,
 		isError: boolean,
+		hasResult: boolean,
 	): ToolRenderContext => {
 		return {
+			toolName,
 			args: renderedArgs.get(toolCallId),
 			toolCallId,
 			invalidate: () => {},
@@ -92,6 +95,7 @@ export function createToolHtmlRenderer(deps: ToolHtmlRendererDeps): ToolHtmlRend
 			expanded,
 			showImages: false,
 			isError,
+			hasResult,
 		};
 	};
 
@@ -107,7 +111,15 @@ export function createToolHtmlRenderer(deps: ToolHtmlRendererDeps): ToolHtmlRend
 				const component = toolDef.renderCall(
 					args,
 					theme,
-					createRenderContext(toolCallId, renderedCallComponents.get(toolCallId), false, true, false),
+					createRenderContext(
+						toolCallId,
+						toolName,
+						renderedCallComponents.get(toolCallId),
+						false,
+						true,
+						false,
+						false,
+					),
 				);
 				renderedCallComponents.set(toolCallId, component);
 				const lines = component.render(width);
@@ -144,7 +156,15 @@ export function createToolHtmlRenderer(deps: ToolHtmlRendererDeps): ToolHtmlRend
 					agentToolResult,
 					{ expanded: false, isPartial: false },
 					theme,
-					createRenderContext(toolCallId, renderedResultComponents.get(toolCallId), false, false, isError),
+					createRenderContext(
+						toolCallId,
+						toolName,
+						renderedResultComponents.get(toolCallId),
+						false,
+						false,
+						isError,
+						true,
+					),
 				);
 				renderedResultComponents.set(toolCallId, collapsedComponent);
 				const collapsed = ansiLinesToHtml(trimRenderedResultLines(collapsedComponent.render(width)));
@@ -154,7 +174,15 @@ export function createToolHtmlRenderer(deps: ToolHtmlRendererDeps): ToolHtmlRend
 					agentToolResult,
 					{ expanded: true, isPartial: false },
 					theme,
-					createRenderContext(toolCallId, renderedResultComponents.get(toolCallId), true, false, isError),
+					createRenderContext(
+						toolCallId,
+						toolName,
+						renderedResultComponents.get(toolCallId),
+						true,
+						false,
+						isError,
+						true,
+					),
 				);
 				renderedResultComponents.set(toolCallId, expandedComponent);
 				const expanded = ansiLinesToHtml(trimRenderedResultLines(expandedComponent.render(width)));

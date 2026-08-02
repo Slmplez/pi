@@ -405,6 +405,8 @@ export interface ToolRenderResultOptions {
 
 /** Context passed to tool renderers. */
 export interface ToolRenderContext<TState = any, TArgs = any> {
+	/** Registered tool name used for stable renderer labels. */
+	toolName: string;
 	/** Current tool call arguments. Shared across call/result renders for the same tool call. */
 	args: TArgs;
 	/** Unique id for this tool execution. Stable across call/result renders for the same tool call. */
@@ -429,6 +431,8 @@ export interface ToolRenderContext<TState = any, TArgs = any> {
 	showImages: boolean;
 	/** Whether the current result is an error. */
 	isError: boolean;
+	/** Whether a result (partial or terminal) has been received for this call. */
+	hasResult: boolean;
 }
 
 /**
