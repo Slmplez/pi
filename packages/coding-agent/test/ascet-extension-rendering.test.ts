@@ -40,6 +40,19 @@ describe("ASCET shared renderer", () => {
 		expect(rendered).toContain("Status: QUEUED");
 	});
 
+	test("does not keep the pending status when a host marks the result final", () => {
+		const rendered = lines(
+			renderCall({ action: "list_components", folderPath: "DEMO" }, theme, {
+				toolName: "ascet_list_components",
+				executionStarted: true,
+				isPartial: false,
+				hasResult: undefined,
+			}),
+		);
+
+		expect(rendered).not.toContain("Status: RUNNING");
+	});
+
 	test("renders action, target, and running state while a tool is executing", () => {
 		const rendered = lines(
 			renderCall({ action: "read_code", componentPath: "DEMO\\PID", methodName: "calc" }, theme, {

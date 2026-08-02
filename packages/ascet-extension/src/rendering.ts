@@ -370,7 +370,8 @@ export function renderAscetToolCall(
 	if (target) {
 		lines.push(`Target: ${style(theme, "accent", target)}`);
 	}
-	if (context?.hasResult !== true) {
+	const hasFinalResult = context?.hasResult === true || context?.isPartial === false;
+	if (!hasFinalResult) {
 		const status = getStatus(undefined, { isPartial: true }, context);
 		lines.push(style(theme, statusRole(status), `Status: ${status}`));
 	}
