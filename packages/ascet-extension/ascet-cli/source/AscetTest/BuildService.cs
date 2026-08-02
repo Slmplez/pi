@@ -39,9 +39,21 @@ public static class AscetTestBuildService
             validation.Errors.Add(Issue("runDirectory", "unsafe_path", ex.Message));
         }
 
+        Dictionary<string, object> verification = AscetTestContracts.GetDictionary(request, "verification");
+        string verificationProfile = AscetTestContracts.GetString(verification, "profile");
+        bool requireExportManifest = AscetTestContracts.GetBoolean(verification, "requireExport", false) || String.Equals(verificationProfile, "live", StringComparison.OrdinalIgnoreCase);
+        AscetTestExportManifestValidation manifestValidation = AscetTestExportManifestService.Validate(request, runDirectory, requireExportManifest);
+        for (int manifestErrorIndex = 0; manifestErrorIndex < manifestValidation.Errors.Count; manifestErrorIndex++) validation.Errors.Add(manifestValidation.Errors[manifestErrorIndex]);
+        for (int manifestWarningIndex = 0; manifestWarningIndex < manifestValidation.Warnings.Count; manifestWarningIndex++) validation.Warnings.Add(manifestValidation.Warnings[manifestWarningIndex]);
+        data["exportManifestPath"] = manifestValidation.Path;
+        data["exportManifest"] = manifestValidation.Manifest;
+
         Dictionary<string, object> toolchain = AscetTestContracts.GetDictionary(request, "toolchain");
         ToolchainInfo tools = ValidateToolchain(toolchain, validation);
         List<string> cSources = ResolveSources(request, "generatedCSources", "generatedCPath", ".c", validation);
+        List<string> auxiliaryCSources = ResolveSources(request, "cTestSources", "cTestSourcePath", ".c", validation);
+        for (int auxiliaryIndex = 0; auxiliaryIndex < auxiliaryCSources.Count; auxiliaryIndex++)
+            if (!ContainsPath(cSources, auxiliaryCSources[auxiliaryIndex])) cSources.Add(auxiliaryCSources[auxiliaryIndex]);
         List<string> suppliedCppSources = ResolveSources(request, "testSources", "testSourcePath", ".cpp", validation);
         ValidateAdapterInput(request, validation);
 
@@ -472,7 +484,7 @@ public static class AscetTestBuildService
         {
             FileName = executable,
             Arguments = JoinArguments(arguments),
-            WorkingDirectory = workingDirectory,
+            WorkingDirectory = ResolveCommandWorkingDirectory(executable, workingDirectory),
             UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
@@ -497,6 +509,17 @@ public static class AscetTestBuildService
             stopwatch.Stop();
             return new CommandResult { ExitCode = -1, Stdout = String.Empty, Stderr = ex.Message, DurationMs = stopwatch.ElapsedMilliseconds };
         }
+    }
+
+    private static string ResolveCommandWorkingDirectory(string executable, string fallback)
+    {
+        if (!String.IsNullOrWhiteSpace(executable) && Path.IsPathRooted(executable))
+        {
+            string directory = Path.GetDirectoryName(Path.GetFullPath(executable));
+            if (!String.IsNullOrWhiteSpace(directory) && Directory.Exists(directory)) return directory;
+        }
+
+        return fallback;
     }
 
     private static string ResolveGoogleTestInclude(string root)

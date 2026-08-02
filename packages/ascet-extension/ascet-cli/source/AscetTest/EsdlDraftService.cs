@@ -35,6 +35,16 @@ public static class AscetTestEsdlDraftService
         string inspectionHash = inspection == null ? String.Empty : AscetTestContracts.GetString(inspection, "sourceHash");
         if (String.IsNullOrWhiteSpace(inspectionHash) && inspection != null) inspectionHash = AscetTestContracts.ComputeSha256(AscetTestContracts.Serialize(inspection));
         string text = RenderText(componentPath, methods);
+        ElementBuildResult elementBuild = null;
+        if (AscetTestContracts.GetDictionary(request, "elementSpec") != null || !String.IsNullOrWhiteSpace(AscetTestContracts.GetString(request, "elementSpecPath")))
+        {
+            elementBuild = AscetTestElementSpecService.Build(
+                request,
+                componentPath,
+                inspection,
+                new Dictionary<string, object> { { "sourceInspectionHash", inspectionHash } });
+            issues.AddRange(elementBuild.Issues);
+        }
         Dictionary<string, object> draft = new Dictionary<string, object>
         {
             { "schemaVersion", "ascet-esdl-draft/v1" },
@@ -51,7 +61,9 @@ public static class AscetTestEsdlDraftService
             { "text", text },
             { "valid", issues.Count == 0 },
             { "issues", IssuesToPayload(issues) },
-            { "readbackRequired", true }
+            { "readbackRequired", true },
+            { "elementSpecHash", elementBuild == null ? String.Empty : AscetTestContracts.GetString(elementBuild.Spec, "hash") },
+            { "applyPlanHash", elementBuild == null ? String.Empty : AscetTestContracts.GetString(elementBuild.Plan, "hash") }
         };
 
         string inspectionPath = String.Empty;
@@ -68,8 +80,18 @@ public static class AscetTestEsdlDraftService
             { "inspectionPath", inspectionPath },
             { "draftPath", draftPath },
             { "esdlPath", esdlPath },
+            { "elementSpec", elementBuild == null ? null : elementBuild.Spec },
+            { "applyPlan", elementBuild == null ? null : elementBuild.Plan },
+            { "elementSpecPath", String.Empty },
+            { "applyPlanPath", String.Empty },
             { "liveWritePerformed", false }
         };
+
+        if (elementBuild != null)
+        {
+            data["elementSpecPath"] = AscetTestArtifactWriter.WriteJson(request, runId, "element-spec.json", elementBuild.Spec);
+            data["applyPlanPath"] = AscetTestArtifactWriter.WriteJson(request, runId, "esdl-apply-plan.json", elementBuild.Plan);
+        }
 
         if (issues.Count > 0)
         {

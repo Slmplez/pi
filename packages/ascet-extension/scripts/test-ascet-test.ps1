@@ -170,6 +170,12 @@ $esdlRequest = [ordered]@{
   runDirectory = $esdlRunDirectory
   inspection = $inspectionResponse.data.inspection
   methodDrafts = @([ordered]@{ methodName = 'step'; code = 'brakeRequest = vehicleSpeed > 50;'; operation = 'replace' })
+  elementSpec = [ordered]@{
+    schemaVersion = 'ascet-element-spec/v1'
+    elements = @(
+      [ordered]@{ name = 'emergencyThreshold'; kind = 'parameter'; type = 'float'; defaultValue = 50; min = 0; max = 200; operation = 'create' }
+    )
+  }
 }
 $esdlRequestPath = Write-JsonRequest 'generate-esdl-request.json' $esdlRequest
 $esdlResponsePath = Join-Path $outputRoot 'generate-esdl-response.json'
@@ -178,7 +184,24 @@ if ($LASTEXITCODE -ne 0) { throw "Fixture generate-esdl should return exit code 
 $esdlResponse = Get-Content -LiteralPath $esdlResponsePath -Raw -Encoding UTF8 | ConvertFrom-Json
 if ($esdlResponse.status -ne 'drafted' -or $esdlResponse.ok -ne $true -or $esdlResponse.data.draft.valid -ne $true) { throw 'Fixture generate-esdl response was not valid.' }
 if ($esdlResponse.data.draft.readbackRequired -ne $true -or $esdlResponse.data.liveWritePerformed -ne $false) { throw 'ESDL draft must remain review-only.' }
-foreach ($artifact in @('inspection.json', 'esdl-draft.json', 'esdl-draft.esdl')) { if (-not (Test-Path -LiteralPath (Join-Path $esdlRunDirectory $artifact))) { throw "Missing generate-esdl artifact: $artifact" } }
+if ($esdlResponse.data.elementSpec.schemaVersion -ne 'ascet-element-spec/v1' -or $esdlResponse.data.applyPlan.schemaVersion -ne 'ascet-esdl-apply-plan/v1') { throw 'ESDL element-spec/apply-plan contracts are missing.' }
+if ($esdlResponse.data.applyPlan.operations[0].action -ne 'create' -or $esdlResponse.data.applyPlan.operations[0].element.name -ne 'emergencyThreshold') { throw 'ESDL apply plan did not preserve the new parameter operation.' }
+foreach ($artifact in @('inspection.json', 'esdl-draft.json', 'esdl-draft.esdl', 'element-spec.json', 'esdl-apply-plan.json')) { if (-not (Test-Path -LiteralPath (Join-Path $esdlRunDirectory $artifact))) { throw "Missing generate-esdl artifact: $artifact" } }
+
+# Live ESDL apply must be rejected before any ASCET process starts unless the
+# caller supplies an explicit approval, disposable target and matching baseline.
+$applyRequest = $esdlRequest | ConvertTo-Json -Depth 40 | ConvertFrom-Json
+$applyRequest.runId = 'apply-gate-fixture'
+$applyRequest.runDirectory = (Join-Path $outputRoot 'apply-gate-run')
+$applyRequest | Add-Member -NotePropertyName executeLive -NotePropertyValue $true -Force
+$applyRequest | Add-Member -NotePropertyName applyPlanPath -NotePropertyValue (Join-Path $esdlRunDirectory 'esdl-apply-plan.json') -Force
+$applyRequest | Add-Member -NotePropertyName elementSpecPath -NotePropertyValue (Join-Path $esdlRunDirectory 'element-spec.json') -Force
+$applyRequestPath = Write-JsonRequest 'apply-gate-request.json' $applyRequest
+$applyResponsePath = Join-Path $outputRoot 'apply-gate-response.json'
+& $exePath --action apply --request $applyRequestPath --out $applyResponsePath --json 1>$null
+if ($LASTEXITCODE -ne 2) { throw 'Unapproved live apply should be blocked.' }
+$applyResponse = Get-Content -LiteralPath $applyResponsePath -Raw -Encoding UTF8 | ConvertFrom-Json
+if ($applyResponse.error.code -ne 'approval_missing' -or $applyResponse.diagnostics.liveExecutionStarted -ne $false -or $applyResponse.data.liveWritePerformed -ne $false) { throw 'Live apply gate did not reject before live execution.' }
 
 $casesRequest = [ordered]@{
   schemaVersion = 'ascet-test-request/v1'

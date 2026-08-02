@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ascet-test-run-v1",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "runId",
+    "status",
+    "binary",
+    "exitCode",
+    "gtestXmlPath",
+    "xmlValid",
+    "testsRun",
+    "failures",
+    "errors",
+    "disabled"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "ascet-test-run/v1" },
+    "runId": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["passed", "failed", "timeout", "crashed", "blocked"] },
+    "binary": { "type": "string", "minLength": 1 },
+    "command": { "type": "string" },
+    "exitCode": { "type": "integer" },
+    "durationMs": { "type": "integer", "minimum": 0 },
+    "stdoutPath": { "type": "string" },
+    "stderrPath": { "type": "string" },
+    "gtestXmlPath": { "type": "string", "minLength": 1 },
+    "xmlValid": { "type": "boolean" },
+    "testsRun": { "type": "integer", "minimum": 0 },
+    "failures": { "type": "integer", "minimum": 0 },
+    "errors": { "type": "integer", "minimum": 0 },
+    "disabled": { "type": "integer", "minimum": 0 },
+    "timedOut": { "type": "boolean" },
+    "started": { "type": "boolean" }
+  },
+  "additionalProperties": true
+}

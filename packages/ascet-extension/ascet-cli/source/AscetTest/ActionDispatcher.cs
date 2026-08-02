@@ -24,6 +24,18 @@ public static class AscetTestActionDispatcher
         {
             return AscetTestEsdlDraftService.Execute(request);
         }
+        if (String.Equals(commandLine.Action, "plan", StringComparison.OrdinalIgnoreCase))
+        {
+            return AscetTestElementSpecService.ExecutePlan(request);
+        }
+        if (String.Equals(commandLine.Action, "apply", StringComparison.OrdinalIgnoreCase))
+        {
+            return AscetTestApplyService.Execute(request);
+        }
+        if (String.Equals(commandLine.Action, "export", StringComparison.OrdinalIgnoreCase))
+        {
+            return AscetTestApplyService.ExecuteExport(request);
+        }
         if (String.Equals(commandLine.Action, "generate-cases", StringComparison.OrdinalIgnoreCase))
         {
             return AscetTestCaseGenerationService.Execute(request);
@@ -31,6 +43,22 @@ public static class AscetTestActionDispatcher
         if (String.Equals(commandLine.Action, "build", StringComparison.OrdinalIgnoreCase))
         {
             return AscetTestBuildService.Execute(request);
+        }
+        if (String.Equals(commandLine.Action, "run", StringComparison.OrdinalIgnoreCase))
+        {
+            return AscetTestRunService.Execute(request);
+        }
+        if (String.Equals(commandLine.Action, "verify", StringComparison.OrdinalIgnoreCase))
+        {
+            return AscetTestVerdictService.Execute(request);
+        }
+        if (String.Equals(commandLine.Action, "pipeline", StringComparison.OrdinalIgnoreCase))
+        {
+            return AscetTestPipelineService.Execute(request);
+        }
+        if (String.Equals(commandLine.Action, "batch", StringComparison.OrdinalIgnoreCase))
+        {
+            return AscetTestBatchService.Execute(request);
         }
 
         string runId = AscetTestContracts.GetString(request, "runId");

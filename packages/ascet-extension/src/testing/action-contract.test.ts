@@ -22,6 +22,7 @@ test("defines the internal AscetTest action surface", () => {
 		"run",
 		"verify",
 		"pipeline",
+		"batch",
 		"evidence",
 	]);
 	assert.equal(isAscetTestAction("pipeline"), true);
@@ -39,6 +40,11 @@ test("routes live ASCET actions through the global scheduler resource", () => {
 		jobKind: "write",
 		resourceKey: "ascet.toolapi.global",
 		commandId: "ascet_test_apply",
+	});
+	assert.deepEqual(classifyAscetTestAction("pipeline", { executeLive: true, runId: "live-001" }), {
+		jobKind: "write",
+		resourceKey: "ascet.toolapi.global",
+		commandId: "ascet_test_pipeline",
 	});
 });
 

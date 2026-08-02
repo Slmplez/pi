@@ -16,6 +16,7 @@ public sealed class AscetTestCommandLine
         "run",
         "verify",
         "pipeline",
+        "batch",
         "evidence"
     };
 

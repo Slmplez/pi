@@ -3,6 +3,8 @@ export const ASCET_TEST_CONTRACT_SCHEMA = "ascet-test-contract/v1" as const;
 export const ASCET_INSPECTION_SCHEMA = "ascet-inspection/v1" as const;
 export const ASCET_ESDL_DRAFT_SCHEMA = "ascet-esdl-draft/v1" as const;
 export const ASCET_GENERATED_CASES_SCHEMA = "ascet-generated-cases/v1" as const;
+export const ASCET_TEST_RUN_SCHEMA = "ascet-test-run/v1" as const;
+export const ASCET_TEST_VERIFY_SCHEMA = "ascet-test-verify/v1" as const;
 
 export type AscetTestLevel = "class_ut" | "component_ct";
 export type AscetTestDependencyMode = "stub" | "real";
@@ -136,6 +138,53 @@ export interface AscetToolchainRequest {
 	etasLegacyDirectory?: string;
 }
 
+export type AscetTestRunStatus = "passed" | "failed" | "timeout" | "crashed" | "blocked";
+export type AscetTestVerifyProfile = "offline" | "live";
+
+export interface AscetTestRunOptions {
+	timeoutMs?: number;
+	args?: string[];
+	runtimePath?: string[];
+}
+
+export interface AscetTestVerificationOptions {
+	profile?: AscetTestVerifyProfile;
+	requireEsdlReadback?: boolean;
+	requireExport?: boolean;
+	requireCaseCoverage?: boolean;
+	esdlReadbackPath?: string;
+	exportManifestPath?: string;
+}
+
+export interface AscetTestRunResult {
+	schemaVersion: typeof ASCET_TEST_RUN_SCHEMA;
+	runId: string;
+	status: AscetTestRunStatus;
+	binary: string;
+	exitCode: number;
+	durationMs: number;
+	stdoutPath: string;
+	stderrPath: string;
+	gtestXmlPath: string;
+	xmlValid: boolean;
+	testsRun: number;
+	failures: number;
+	errors: number;
+	disabled: number;
+}
+
+export interface AscetTestVerifyResult {
+	schemaVersion: typeof ASCET_TEST_VERIFY_SCHEMA;
+	runId: string;
+	profile: AscetTestVerifyProfile;
+	status: "verified" | "blocked";
+	verdict: "passed" | "failed";
+	checks: Array<{ id: string; status: "passed" | "failed"; code?: string; message?: string; evidencePath?: string }>;
+	firstFailure: { code: string; message: string; path: string } | null;
+	failureCode: string;
+	evidencePaths: Record<string, string>;
+}
+
 export interface AscetTestRequestDocument {
 	schemaVersion: typeof ASCET_TEST_REQUEST_SCHEMA;
 	runId: string;
@@ -152,6 +201,21 @@ export interface AscetTestRequestDocument {
 	seed?: string;
 	cycles?: number;
 	runDirectory?: string;
+	generatedCSources?: string[];
+	generatedCPath?: string;
+	cTestSources?: string[];
+	cTestSourcePath?: string;
+	adapterSource?: string;
+	adapterSourcePath?: string;
+	testSources?: string[];
+	testSourcePath?: string;
+	exportManifestPath?: string;
+	esdlReadbackPath?: string;
+	buildResultPath?: string;
+	runResultPath?: string;
+	run?: AscetTestRunOptions;
+	verification?: AscetTestVerificationOptions;
+	pipelineStages?: string[];
 	toolchain?: AscetToolchainRequest;
 	cliPath?: string;
 	cliWorkingDirectory?: string;

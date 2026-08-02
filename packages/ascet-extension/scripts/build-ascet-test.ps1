@@ -32,7 +32,8 @@ $arguments = @(
   '/target:exe',
   "/out:$outputPath",
   '/main:AscetTestProgram',
-  "/r:$(Join-Path $frameworkDirectory 'System.Web.Extensions.dll')"
+  "/r:$(Join-Path $frameworkDirectory 'System.Web.Extensions.dll')",
+  "/r:$(Join-Path $frameworkDirectory 'System.Xml.dll')"
 )
 $arguments += Get-ChildItem -LiteralPath $sourceRoot -Filter '*.cs' -File | Sort-Object Name | Select-Object -ExpandProperty FullName
 

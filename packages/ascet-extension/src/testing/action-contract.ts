@@ -12,6 +12,7 @@ export const ASCET_TEST_ACTIONS = [
 	"run",
 	"verify",
 	"pipeline",
+	"batch",
 	"evidence",
 ] as const;
 

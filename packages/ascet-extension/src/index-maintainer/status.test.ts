@@ -265,4 +265,56 @@ describe("ASCET index maintainer status", () => {
 		}
 		assert.deepEqual(requestedPartitions, ["tree", "project", "refs"]);
 	});
+
+	test("reports selected-area readiness separately from the stale overall index", async () => {
+		const temp = createTempCwd();
+		cleanup = temp.cleanup;
+		ingestAscetSearchIndexSqlite(temp.cwd, fixtureInput());
+		markAscetIndexAreasStale(temp.cwd, ["components"], "external_edit");
+
+		const result = await refreshAscetIndex({
+			cwd: temp.cwd,
+			env: { PI_ASCET_SEARCH_INDEX_STORAGE: "sqlite", ASCET_INDEX_COW_REFRESH: "1" },
+			areas: ["code"],
+			force: true,
+			executeCli: async (request: AscetCliRequest) => ({
+				exitCode: 0,
+				stdout: JSON.stringify({
+					ok: true,
+					result: {
+						operation: "warm_search_index",
+						database: { name: "AEB", path: "d:/ETASData/ASCET6.4/Database/AEB" },
+						generatedAtUtc: new Date().toISOString(),
+						elapsedMs: 1,
+						scanComplete: true,
+						textCodeIncluded: true,
+						textCodeScanComplete: true,
+						textCodeEntries: [
+							{
+								group: "text_code",
+								componentPath: "PlatformLibrary\\AEB\\AEB_pDriverIBooster",
+								componentKind: "class",
+								componentLanguageKind: "ESDL",
+								section: "body",
+								methodName: "calc",
+								methodKind: "AbstractMethod",
+								text: "K_Shared",
+							},
+						],
+					},
+					error: null,
+				}),
+				stderr: "",
+				timedOut: false,
+				request,
+			}),
+		});
+
+		assert.equal(result.state, "stale");
+		assert.equal(result.overallState, "stale");
+		assert.equal(result.selectedAreasReady, true);
+		assert.deepEqual(result.staleAreas, ["components"]);
+		assert.deepEqual(result.selectedAreaErrors, []);
+		assert.equal(result.statusFinalizeCompleted, true);
+	});
 });

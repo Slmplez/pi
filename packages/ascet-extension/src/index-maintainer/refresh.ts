@@ -23,6 +23,27 @@ export interface RefreshAscetIndexOptions {
 
 const scheduledRefreshes = new Set<string>();
 
+function selectedAreaErrors(
+	status: ReturnType<typeof readAscetIndexStatus>,
+	plan: AscetIndexAreaPlan,
+): Array<{ area: string; state: string; errorCode?: string; errorMessage?: string }> {
+	const areas = new Map((status.areas ?? []).map((area) => [area.name, area]));
+	return plan.sqliteAreas.flatMap((areaName) => {
+		const area = areas.get(areaName);
+		if (area && area.state === "ready" && !area.errorCode && !area.errorMessage) {
+			return [];
+		}
+		return [
+			{
+				area: areaName,
+				state: area?.state ?? "missing",
+				errorCode: area?.errorCode,
+				errorMessage: area?.errorMessage,
+			},
+		];
+	});
+}
+
 function normalizeCwd(value: string): string {
 	return value.trim().replace(/\\/g, "/").replace(/\/+$/u, "").toLowerCase();
 }
@@ -87,9 +108,14 @@ export async function refreshAscetIndex(options: RefreshAscetIndexOptions): Prom
 		const queued = scheduleSelectedBackgroundRefresh(options, plan);
 		return {
 			state: queued ? "refreshing" : "ready",
+			overallState: queued ? "refreshing" : "ready",
 			mode,
 			requestedAreas: plan.requestedAreas,
 			effectivePartitions: plan.effectivePartitions,
+			selectedAreasReady: false,
+			staleAreas: [],
+			selectedAreaErrors: [],
+			statusFinalizeCompleted: false,
 			queued,
 			jobs: queued
 				? plan.effectivePartitions.map((partition) => ({
@@ -126,6 +152,22 @@ export async function refreshAscetIndex(options: RefreshAscetIndexOptions): Prom
 	const failed = results.find((result) => !result.ok);
 	if (failed) {
 		return {
+			state: "failed",
+			overallState: "failed",
+			mode,
+			requestedAreas: plan.requestedAreas,
+			effectivePartitions: plan.effectivePartitions,
+			selectedAreasReady: false,
+			staleAreas: [],
+			selectedAreaErrors: [
+				{
+					area: plan.sqliteAreas[0] ?? "unknown",
+					state: "failed",
+					errorCode: failed.error?.code ?? "indexRefreshFailed",
+					errorMessage: failed.error?.message ?? "ASCET index refresh failed.",
+				},
+			],
+			statusFinalizeCompleted: false,
 			error: {
 				code: failed.error?.code ?? "indexRefreshFailed",
 				message: failed.error?.message ?? "ASCET index refresh failed.",
@@ -138,11 +180,17 @@ export async function refreshAscetIndex(options: RefreshAscetIndexOptions): Prom
 	}
 
 	const status = readAscetIndexStatus({ cwd: options.cwd, detailLevel: "areas" });
+	const errors = selectedAreaErrors(status, plan);
 	return {
 		state: status.state,
+		overallState: status.state,
 		mode,
 		requestedAreas: plan.requestedAreas,
 		effectivePartitions: plan.effectivePartitions,
+		selectedAreasReady: errors.length === 0,
+		staleAreas: status.staleAreas ?? [],
+		selectedAreaErrors: errors,
+		statusFinalizeCompleted: true,
 		totalDocs: status.totalDocs,
 		areas: status.areas,
 		elapsedMs: results.reduce((total, result) => total + result.elapsedMs, 0),
