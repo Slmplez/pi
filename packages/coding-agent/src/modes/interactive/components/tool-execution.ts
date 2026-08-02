@@ -114,6 +114,7 @@ export class ToolExecutionComponent extends Container {
 
 	private getRenderContext(lastComponent: Component | undefined): ToolRenderContext {
 		return {
+			toolName: this.toolName,
 			args: this.args,
 			toolCallId: this.toolCallId,
 			invalidate: () => {
@@ -129,6 +130,7 @@ export class ToolExecutionComponent extends Container {
 			expanded: this.expanded,
 			showImages: this.showImages,
 			isError: this.result?.isError ?? false,
+			hasResult: this.result !== undefined,
 		};
 	}
 

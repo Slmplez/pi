@@ -179,7 +179,18 @@ describe("ASCET read-only PI tools", () => {
 		expect(tool?.renderCall).toBeTypeOf("function");
 		expect(tool?.renderResult).toBeTypeOf("function");
 
-		const callLines = tool?.renderCall?.({ componentPath: "DEMO\\PID" }, theme as never, {} as never).render(80);
+		const callLines = tool
+			?.renderCall?.(
+				{ action: "read", componentPath: "DEMO\\PID" },
+				theme as never,
+				{
+					toolName: "ascet_read",
+					argsComplete: true,
+					executionStarted: true,
+					hasResult: false,
+				} as never,
+			)
+			.render(80);
 		const resultLines = tool
 			?.renderResult?.(
 				{
@@ -191,12 +202,14 @@ describe("ASCET read-only PI tools", () => {
 				},
 				{ expanded: false, isPartial: false },
 				theme as never,
-				{} as never,
+				{ toolName: "ascet_read", hasResult: true } as never,
 			)
 			.render(80);
 
-		expect(callLines?.[0]).toContain("DEMO\\PID");
-		expect(resultLines?.[0]).toContain("ASCET ok");
+		expect(callLines?.join("\n")).toContain("ASCET Read · read");
+		expect(callLines?.join("\n")).toContain("Target: DEMO\\PID");
+		expect(callLines?.join("\n")).toContain("Status: RUNNING");
+		expect(resultLines?.[0]).toContain("Status: DONE");
 		expect(resultLines?.[0]).toContain("Class PID has 0 references and 1 diagram");
 	});
 

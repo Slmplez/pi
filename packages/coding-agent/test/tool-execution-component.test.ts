@@ -67,6 +67,31 @@ describe("ToolExecutionComponent parity", () => {
 		expect(rendered).toContain("custom result");
 	});
 
+	test("passes stable tool name and result presence to renderers", () => {
+		const toolDefinition: ToolDefinition = {
+			...createBaseToolDefinition("ascet_read"),
+			renderCall: (_args, _theme, context) => new Text(`${context.toolName}:${context.hasResult}`, 0, 0),
+			renderResult: (_result, _options, _theme, context) =>
+				new Text(`${context.toolName}:${context.hasResult}`, 0, 0),
+		};
+
+		const component = new ToolExecutionComponent(
+			"ascet_read",
+			"tool-context-1",
+			{ action: "read", componentPath: "DEMO\\PID" },
+			{},
+			toolDefinition,
+			createFakeTui(),
+			process.cwd(),
+		);
+
+		expect(stripAnsi(component.render(120).join("\n"))).toContain("ascet_read:false");
+
+		component.updateResult({ content: [], details: { ok: true }, isError: false });
+
+		expect(stripAnsi(component.render(120).join("\n"))).toContain("ascet_read:true");
+	});
+
 	test("self-rendered empty tool rows take no layout space", () => {
 		const toolDefinition: ToolDefinition = {
 			...createBaseToolDefinition(),
