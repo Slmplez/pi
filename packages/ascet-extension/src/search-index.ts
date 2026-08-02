@@ -1329,8 +1329,8 @@ export function scheduleAscetSearchIndexBackgroundRefresh(options: AscetSearchIn
 	return true;
 }
 
-function shouldQuerySqlite(): boolean {
-	return process.env.PI_ASCET_SEARCH_INDEX_STORAGE !== "memory";
+function shouldQuerySqlite(env: Record<string, string | undefined> | undefined): boolean {
+	return getEnvValue(env, "PI_ASCET_SEARCH_INDEX_STORAGE") !== "memory";
 }
 
 export function isUsableSqliteSearchResult(result: AscetCliJsonResult): boolean {
@@ -1357,7 +1357,7 @@ export function queryAscetComponentIndex(
 	params: AscetComponentIndexQueryParams,
 	options: AscetSearchIndexQueryOptions = {},
 ): AscetCliJsonResult | undefined {
-	return shouldQuerySqlite()
+	return shouldQuerySqlite(options.env)
 		? (queryAscetComponentIndexSqlite(params, options) ?? queryAscetComponentIndexMemory(params, options))
 		: queryAscetComponentIndexMemory(params, options);
 }
@@ -1366,14 +1366,14 @@ export function queryAscetListComponentsIndex(
 	params: import("./search-index-sqlite/query.ts").AscetListComponentsIndexQueryParams,
 	options: AscetSearchIndexQueryOptions = {},
 ): AscetCliJsonResult | undefined {
-	return shouldQuerySqlite() ? queryAscetListComponentsIndexSqlite(params, options) : undefined;
+	return shouldQuerySqlite(options.env) ? queryAscetListComponentsIndexSqlite(params, options) : undefined;
 }
 
 export function queryAscetProjectIndex(
 	params: AscetProjectIndexQueryParams,
 	options: AscetSearchIndexQueryOptions = {},
 ): AscetCliJsonResult | undefined {
-	return shouldQuerySqlite()
+	return shouldQuerySqlite(options.env)
 		? (queryAscetProjectIndexSqlite(params, options) ?? queryAscetProjectIndexMemory(params, options))
 		: queryAscetProjectIndexMemory(params, options);
 }
@@ -1382,7 +1382,7 @@ export function queryAscetSearchIndex(
 	params: AscetSearchIndexQueryParams,
 	options: AscetSearchIndexQueryOptions = {},
 ): AscetCliJsonResult | undefined {
-	return shouldQuerySqlite()
+	return shouldQuerySqlite(options.env)
 		? (queryAscetSearchIndexSqlite(params, options) ?? queryAscetSearchIndexMemory(params, options))
 		: queryAscetSearchIndexMemory(params, options);
 }
@@ -1391,7 +1391,7 @@ export function queryAscetMethodDeclarationIndex(
 	params: AscetMethodDeclarationIndexQueryParams,
 	options: AscetSearchIndexQueryOptions = {},
 ): AscetCliJsonResult | undefined {
-	return shouldQuerySqlite()
+	return shouldQuerySqlite(options.env)
 		? (queryAscetMethodDeclarationIndexSqlite(params, options) ??
 				queryAscetMethodDeclarationIndexMemory(params, options))
 		: queryAscetMethodDeclarationIndexMemory(params, options);
@@ -1408,7 +1408,7 @@ export function queryAscetComponentReferenceIndex(
 	params: AscetReferenceIndexQueryParams,
 	options: AscetSearchIndexQueryOptions = {},
 ): AscetCliJsonResult | undefined {
-	return shouldQuerySqlite()
+	return shouldQuerySqlite(options.env)
 		? (queryAscetComponentReferenceIndexSqlite(params, options) ??
 				queryAscetComponentReferenceIndexMemory(params, options))
 		: queryAscetComponentReferenceIndexMemory(params, options);
@@ -1418,7 +1418,7 @@ export function queryAscetElementReferenceIndex(
 	params: AscetReferenceIndexQueryParams,
 	options: AscetSearchIndexQueryOptions = {},
 ): AscetCliJsonResult | undefined {
-	return shouldQuerySqlite()
+	return shouldQuerySqlite(options.env)
 		? (queryAscetElementReferenceIndexSqlite(params, options) ??
 				queryAscetElementReferenceIndexMemory(params, options))
 		: queryAscetElementReferenceIndexMemory(params, options);
@@ -1428,7 +1428,7 @@ export function queryAscetMessageIndex(
 	params: AscetMessageIndexQueryParams,
 	options: AscetSearchIndexQueryOptions = {},
 ): AscetCliJsonResult | undefined {
-	return shouldQuerySqlite()
+	return shouldQuerySqlite(options.env)
 		? (queryAscetMessageIndexSqlite(params, options) ?? queryAscetMessageIndexMemory(params, options))
 		: queryAscetMessageIndexMemory(params, options);
 }
@@ -1444,7 +1444,7 @@ export function queryAscetTextCodeIndex(
 	params: AscetTextCodeIndexQueryParams,
 	options: AscetSearchIndexQueryOptions = {},
 ): AscetCliJsonResult | undefined {
-	return shouldQuerySqlite()
+	return shouldQuerySqlite(options.env)
 		? (queryAscetTextCodeIndexSqlite(params, options) ?? queryAscetTextCodeIndexMemory(params, options))
 		: queryAscetTextCodeIndexMemory(params, options);
 }
@@ -1453,5 +1453,5 @@ export function queryAscetProjectFormulaIndex(
 	params: AscetProjectFormulaIndexQueryParams,
 	options: AscetSearchIndexQueryOptions = {},
 ): AscetCliJsonResult | undefined {
-	return shouldQuerySqlite() ? queryAscetProjectFormulaIndexSqlite(params, options) : undefined;
+	return shouldQuerySqlite(options.env) ? queryAscetProjectFormulaIndexSqlite(params, options) : undefined;
 }

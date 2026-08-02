@@ -425,7 +425,7 @@ async function runAscetSearchProjects(
 	options: RunAscetSearchOptions,
 ): Promise<AscetCliJsonResult> {
 	if (!isSearchIndexDisabled(options.env)) {
-		const indexed = queryAscetProjectIndex(params, { cwd: options.cwd });
+		const indexed = queryAscetProjectIndex(params, { cwd: options.cwd, env: options.env });
 		if (indexed && canUsePartitionResult(indexed, "components")) {
 			return indexed;
 		}
@@ -441,7 +441,7 @@ async function runAscetSearchProjects(
 			toolName: "ascet_search",
 		});
 		if (warmup.ok) {
-			const warmed = queryAscetProjectIndex(params, { cwd: options.cwd });
+			const warmed = queryAscetProjectIndex(params, { cwd: options.cwd, env: options.env });
 			if (warmed && canUsePartitionResult(warmed, "components")) {
 				return warmed;
 			}
@@ -491,7 +491,7 @@ async function runAscetSearchProjectFormulas(
 	options: RunAscetSearchOptions,
 ): Promise<AscetCliJsonResult> {
 	if (!isSearchIndexDisabled(options.env)) {
-		const indexed = queryAscetProjectFormulaIndex(params, { cwd: options.cwd });
+		const indexed = queryAscetProjectFormulaIndex(params, { cwd: options.cwd, env: options.env });
 		if (indexed?.ok) {
 			return indexed;
 		}
@@ -507,7 +507,7 @@ async function runAscetSearchProjectFormulas(
 			toolName: "ascet_search",
 		});
 		if (warmup.ok) {
-			const warmed = queryAscetProjectFormulaIndex(params, { cwd: options.cwd });
+			const warmed = queryAscetProjectFormulaIndex(params, { cwd: options.cwd, env: options.env });
 			if (warmed?.ok) {
 				return warmed;
 			}
@@ -536,7 +536,7 @@ export async function runAscetSearch(
 				"method_decls",
 				params,
 				options,
-				() => queryAscetMethodDeclarationIndex(params, { cwd: options.cwd }),
+				() => queryAscetMethodDeclarationIndex(params, { cwd: options.cwd, env: options.env }),
 				() => runAscetSearchElements(toElementDeclarationParams(params), options),
 			);
 		case "declarations_of_method_process_element":
@@ -544,7 +544,7 @@ export async function runAscetSearch(
 				"method_process_elements",
 				params,
 				options,
-				() => queryAscetMethodProcessElementIndex(params, { cwd: options.cwd }),
+				() => queryAscetMethodProcessElementIndex(params, { cwd: options.cwd, env: options.env }),
 				() => runAscetSearchElements(toElementDeclarationParams(params), options),
 			);
 		case "references_to_component":
@@ -552,7 +552,7 @@ export async function runAscetSearch(
 				"component_refs",
 				params,
 				options,
-				() => queryAscetComponentReferenceIndex(params, { cwd: options.cwd }),
+				() => queryAscetComponentReferenceIndex(params, { cwd: options.cwd, env: options.env }),
 				() => runAscetSearchOccurrences({ ...params, target: "component" }, options),
 			);
 		case "references_to_element":
@@ -560,7 +560,7 @@ export async function runAscetSearch(
 				"element_refs",
 				params,
 				options,
-				() => queryAscetElementReferenceIndex(params, { cwd: options.cwd }),
+				() => queryAscetElementReferenceIndex(params, { cwd: options.cwd, env: options.env }),
 				() => runAscetSearchOccurrences({ ...params, target: "element" }, options),
 			);
 		case "senders_of_message":
@@ -568,7 +568,7 @@ export async function runAscetSearch(
 				"messages",
 				params,
 				options,
-				() => queryAscetMessageIndex({ ...params, direction: "sender" }, { cwd: options.cwd }),
+				() => queryAscetMessageIndex({ ...params, direction: "sender" }, { cwd: options.cwd, env: options.env }),
 				() => runAscetSearchOccurrences({ ...params, target: "element" }, options),
 			);
 		case "receivers_of_message":
@@ -576,7 +576,7 @@ export async function runAscetSearch(
 				"messages",
 				params,
 				options,
-				() => queryAscetMessageIndex({ ...params, direction: "receiver" }, { cwd: options.cwd }),
+				() => queryAscetMessageIndex({ ...params, direction: "receiver" }, { cwd: options.cwd, env: options.env }),
 				() => runAscetSearchOccurrences({ ...params, target: "element" }, options),
 			);
 		case "text_in_code":

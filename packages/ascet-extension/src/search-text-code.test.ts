@@ -34,6 +34,7 @@ describe("ASCET text code search", () => {
 			{ query: "speed - drop", match: "contains", limit: 20 },
 			{
 				cwd: process.cwd(),
+				env: { PI_ASCET_SEARCH_INDEX_STORAGE: "memory" },
 				executeCli: async (request) => {
 					calls += 1;
 					return okExecution(request, {});
@@ -85,6 +86,7 @@ describe("ASCET text code search", () => {
 			{ query: "speed - drop", componentPath: "AEB\\Controller", match: "contains", limit: 20 },
 			{
 				cwd: process.cwd(),
+				env: { PI_ASCET_SEARCH_INDEX_STORAGE: "memory" },
 				executeCli: async (request) => {
 					requests.push(request);
 					return okExecution(request, {
@@ -113,6 +115,7 @@ describe("ASCET text code search", () => {
 			{ query: "speed - drop", match: "contains", limit: 20 },
 			{
 				cwd: process.cwd(),
+				env: { PI_ASCET_SEARCH_INDEX_STORAGE: "memory" },
 				executeCli: async (request) => {
 					requests.push(request);
 					return okExecution(request, {

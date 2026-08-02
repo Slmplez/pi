@@ -122,7 +122,7 @@ export async function runAscetSearchElements(
 ): Promise<AscetSearchElementsResult> {
 	const indexedParams = toIndexedSearchParams(params);
 	if (!isSearchIndexDisabled(options.env)) {
-		const indexed = queryAscetSearchIndex(indexedParams, { cwd: options.cwd });
+		const indexed = queryAscetSearchIndex(indexedParams, { cwd: options.cwd, env: options.env });
 		if (indexed && canUseSearchIndexResult(indexed)) {
 			return indexed;
 		}
@@ -141,7 +141,7 @@ export async function runAscetSearchElements(
 			toolName: "ascet_search",
 		});
 		if (warmup.ok) {
-			const warmed = queryAscetSearchIndex(indexedParams, { cwd: options.cwd });
+			const warmed = queryAscetSearchIndex(indexedParams, { cwd: options.cwd, env: options.env });
 			if (warmed && canUseSearchIndexResult(warmed)) {
 				return warmed;
 			}
