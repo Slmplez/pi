@@ -83,7 +83,7 @@ export const ascetReadInstructions = [
 		rules: [
 			"Use read_dependent_chain when the user asks which exported or global parameter a local dependent parameter depends on.",
 			"Use read_dependent_chain to analyze a Local Parameter -> Imported Parameter -> Exported Parameter chain.",
-			"read_dependent_chain is live-mapping-first: it trusts the live dependency formula/mapping and explicit export owner, then uses element_decls as a bounded fallback and returns full live read_element_catalog data for the exported provider.",
+			"read_dependent_chain is live-mapping-first: it trusts the live dependency formula/mapping and explicit export owner, then uses element_decls as a bounded fallback and returns full live element metadata for the exported provider.",
 			"The formula reported by read_dependent_chain is the local dependent parameter expression. It is not an implementation conversion formula and is not a project formula.",
 			"Dependent parameter provider discovery starts with read_dependent_chain using componentPath/dependentElement and a bounded providerScopePath when known; if provider discovery is incomplete or ambiguous, coordinate ascet_search and ascet_explore before concluding.",
 			"The Imported Parameter in the consuming component and the Exported Parameter in the provider component must have the same name. Search provider candidates by the Imported Parameter name, not by the Local Dependent Parameter name unless they are identical.",

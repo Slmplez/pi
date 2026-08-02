@@ -1,6 +1,6 @@
 {
 	"name": "@zeerke/ascet-copilot-extension",
-	"version": "0.1.30",
+	"version": "0.1.31",
 	"description": "ASCET Copilot tool extension for Pi.",
 	"type": "module",
 	"main": "./src/index.ts",
@@ -23,6 +23,8 @@
 		"templates",
 		"ascet-cli",
 		"README.md",
+		"!ascet-cli/internal-bin",
+		"!ascet-cli/source",
 		"!ascet-cli/bin/**/*.log",
 		"!ascet-cli/bin/**/*.out",
 		"!ascet-cli/bin/**/*.err"

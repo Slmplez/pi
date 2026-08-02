@@ -8,7 +8,11 @@ import {
 
 export type { AscetFullElementCacheEntry } from "./search-index-store.ts";
 
-import { ingestAscetSearchIndexSqlite } from "./search-index-sqlite/ingest.ts";
+import {
+	type AscetSqliteAreaRefreshResult,
+	ingestAscetSearchIndexSqlite,
+	refreshAscetSearchIndexSqliteAreas,
+} from "./search-index-sqlite/ingest.ts";
 import {
 	queryAscetComponentIndexSqlite,
 	queryAscetComponentReferenceIndexSqlite,
@@ -21,6 +25,7 @@ import {
 	queryAscetSearchIndexSqlite,
 	queryAscetTextCodeIndexSqlite,
 } from "./search-index-sqlite/query.ts";
+import { ASCET_LOGICAL_INDEX_AREA_MAP, type AscetP0IndexArea } from "./search-index-sqlite/schema.ts";
 import { getAscetSqliteIndexStatus } from "./search-index-sqlite/status.ts";
 import { getAscetIndexStatusFilePath, writeAscetIndexStatusFile } from "./search-index-sqlite/status-file.ts";
 import type { AscetSqliteSearchIndexBuildInput } from "./search-index-sqlite/types.ts";
@@ -70,7 +75,7 @@ import {
 
 const DEFAULT_SEARCH_INDEX_TTL_MS = 10 * 60 * 1000;
 
-export type AscetSearchIndexWarmupPartition = AscetSearchIndexPartition | "p0";
+export type AscetSearchIndexWarmupPartition = AscetSearchIndexPartition | "p0" | "tree" | "project" | "refs";
 
 export type {
 	AscetComponentIndexQueryParams,
@@ -158,6 +163,7 @@ export interface AscetSearchIndexWarmupResult {
 	timedOut: boolean;
 	stdout: string;
 	stderr: string;
+	refresh?: AscetSqliteAreaRefreshResult;
 }
 
 const inFlightWarmups = new Map<string, Promise<AscetSearchIndexWarmupResult>>();
@@ -181,6 +187,10 @@ function isTextCodeWarmupEnabled(env: Record<string, string | undefined> | undef
 
 function isSqliteStorageEnabled(env: Record<string, string | undefined> | undefined): boolean {
 	return getEnvValue(env, "PI_ASCET_SEARCH_INDEX_STORAGE") !== "memory";
+}
+
+function isCowRefreshEnabled(env: Record<string, string | undefined> | undefined): boolean {
+	return getEnvValue(env, "ASCET_INDEX_COW_REFRESH") !== "0";
 }
 
 function isBackgroundRefreshEnabled(
@@ -208,7 +218,11 @@ function partitionsForWarmup(partition: AscetSearchIndexWarmupPartition): AscetS
 		? ["components", "element_decls", "method_decls", "component_refs", "element_refs", "messages", "text_code"]
 		: partition === "all"
 			? ["components", "element_decls", "method_decls", "component_refs", "element_refs", "messages", "text_code"]
-			: [partition];
+			: partition === "tree" || partition === "project"
+				? ["components"]
+				: partition === "refs"
+					? ["component_refs", "element_refs"]
+					: [partition];
 }
 
 function getSearchIndexTtlMs(env: Record<string, string | undefined> | undefined): number {
@@ -269,13 +283,24 @@ function writeSqliteCacheStatusFile(
 	cwd: string,
 	sqliteStatus: ReturnType<typeof getAscetSqliteIndexStatus>,
 	totalDocs = sqliteStatus.areas.reduce((total, area) => total + area.itemCount, 0),
+	refresh?: Pick<
+		AscetSqliteAreaRefreshResult,
+		"generationBefore" | "generationAfter" | "transactionCommitted" | "clearedInvalidations"
+	>,
+	error?: { code: string; message: string },
 ): void {
 	writeAscetIndexStatusFile(cwd, {
-		state: sqliteStatus.status === "stale" ? "stale" : "ready",
+		state: sqliteStatus.status === "missing" ? "failed" : sqliteStatus.status,
+		generation: sqliteStatus.runId || undefined,
+		generationBefore: refresh?.generationBefore,
+		generationAfter: refresh?.generationAfter,
+		transactionCommitted: refresh?.transactionCommitted,
+		clearedInvalidations: refresh?.clearedInvalidations,
 		phase: "p0",
 		elapsedMs: sqliteStatus.elapsedMs,
 		totalDocs,
-		staleAreas: sqliteStatus.areas.filter((area) => area.status === "stale").map((area) => area.area),
+		staleAreas: sqliteStatus.areas.filter((area) => area.status !== "ready").map((area) => area.area),
+		error,
 		areas: Object.fromEntries(
 			sqliteStatus.areas.map((area) => [
 				area.area,
@@ -879,6 +904,12 @@ function countPartitionEntries(
 			);
 		case "components":
 			return state.components.length;
+		case "tree":
+			return state.components.length;
+		case "project":
+			return state.components.length;
+		case "refs":
+			return state.componentRefs.length + state.elementRefs.length;
 		case "element_decls":
 			return state.entries.length;
 		case "method_decls":
@@ -943,29 +974,41 @@ function readyResultFromCache(
 						]
 					: partition === "all"
 						? [
+								"folders",
+								"folder_items",
 								"components",
 								"elements",
 								"methods",
 								"project_formulas",
+								"project_items",
 								"component_refs",
 								"element_refs",
+								"dbitem_dependencies",
 								"messages",
 								"code_blocks",
 								"code_terms",
 							]
 						: partition === "components"
 							? ["components"]
-							: partition === "element_decls"
-								? ["elements"]
-								: partition === "method_decls"
-									? ["methods"]
-									: partition === "component_refs"
-										? ["component_refs"]
-										: partition === "element_refs"
-											? ["element_refs"]
-											: partition === "text_code"
-												? ["code_blocks", "code_terms"]
-												: [];
+							: partition === "tree"
+								? ["components", "folders", "folder_items"]
+								: partition === "element_decls"
+									? ["elements"]
+									: partition === "method_decls"
+										? ["methods"]
+										: partition === "project"
+											? ["project_formulas", "project_items"]
+											: partition === "refs"
+												? ["component_refs", "element_refs", "dbitem_dependencies"]
+												: partition === "component_refs"
+													? ["component_refs"]
+													: partition === "element_refs"
+														? ["element_refs"]
+														: partition === "messages"
+															? ["messages"]
+															: partition === "text_code"
+																? ["code_blocks", "code_terms"]
+																: [];
 			const areaReady = requiredAreas.every((area) => {
 				const status = sqliteStatus.areas.find((entry) => entry.area === area);
 				return status?.status === "ready" || status?.status === "stale";
@@ -1036,6 +1079,10 @@ function readyResultFromCache(
 	};
 }
 
+function sqliteAreasForWarmupPartition(partition: AscetSearchIndexWarmupPartition): AscetP0IndexArea[] {
+	return [...(ASCET_LOGICAL_INDEX_AREA_MAP[partition] ?? [])];
+}
+
 function disabledResult(partition: AscetSearchIndexWarmupPartition): AscetSearchIndexWarmupResult {
 	const error = {
 		code: "search_index_disabled",
@@ -1102,7 +1149,8 @@ function successResult(
 			}
 		: input;
 	const ready = installAscetSearchIndex(effectiveInput, partitionsForWarmup(partition));
-	if ((partition === "all" || partition === "p0") && !componentScoped && isSqliteStorageEnabled(options.env)) {
+	let refreshResult: AscetSqliteAreaRefreshResult | undefined;
+	if (!componentScoped && isSqliteStorageEnabled(options.env)) {
 		try {
 			writeAscetIndexStatusFile(options.cwd, {
 				state: "writing",
@@ -1110,17 +1158,53 @@ function successResult(
 				elapsedMs: effectiveInput.elapsedMs,
 				totalDocs: countPartitionEntries(ready, partition),
 			});
-			ingestAscetSearchIndexSqlite(options.cwd, effectiveInput, partitionsForWarmup(partition));
+			if (partition === "all" || partition === "p0") {
+				ingestAscetSearchIndexSqlite(options.cwd, effectiveInput, partitionsForWarmup(partition));
+			} else {
+				const sqliteAreas = sqliteAreasForWarmupPartition(partition);
+				if (sqliteAreas.length > 0) {
+					const sqliteInput =
+						(partition === "component_refs" || partition === "element_refs") && ready.status === "ready"
+							? {
+									...effectiveInput,
+									entries: ready.entries,
+									components: ready.components,
+									methodDeclarations: ready.methodDeclarations,
+									componentRefs: ready.componentRefs,
+									elementRefs: ready.elementRefs,
+									messages: ready.messages,
+									textCodeEntries: ready.textCodeEntries,
+								}
+							: effectiveInput;
+					if (isCowRefreshEnabled(options.env)) {
+						refreshResult = refreshAscetSearchIndexSqliteAreas(options.cwd, sqliteInput, sqliteAreas);
+					} else {
+						throw new Error(
+							`ASCET_INDEX_COW_REFRESH=0 disables targeted SQLite refresh for '${partition}'; run a full p0 build.`,
+						);
+					}
+				}
+			}
 		} catch (error) {
-			markAscetSearchIndexFailed(
-				{
-					code: "sqlite_search_index_ingest_failed",
-					message:
-						error instanceof Error ? error.message : "Failed to persist ASCET quick-search index to SQLite.",
-				},
-				Date.now(),
-				partitionsForWarmup(partition),
-			);
+			const message =
+				error instanceof Error ? error.message : "Failed to persist ASCET quick-search index to SQLite.";
+			const persistenceFailure = {
+				code: "sqlite_search_index_ingest_failed",
+				message,
+			};
+			markAscetSearchIndexFailed(persistenceFailure, Date.now(), partitionsForWarmup(partition));
+			const sqliteStatus = isSqliteStorageEnabled(options.env) ? getAscetSqliteIndexStatus(options.cwd) : undefined;
+			if (sqliteStatus && sqliteStatus.status !== "missing") {
+				writeSqliteCacheStatusFile(options.cwd, sqliteStatus, undefined, undefined, persistenceFailure);
+			} else {
+				writeAscetIndexStatusFile(options.cwd, {
+					state: "failed",
+					phase: partition,
+					currentArea: partition,
+					error: persistenceFailure,
+				});
+			}
+			return failureResult(result, partition, persistenceFailure.code, persistenceFailure.message);
 		}
 	}
 	if (partition === "all" || partition === "p0") {
@@ -1139,7 +1223,7 @@ function successResult(
 	} else if (isSqliteStorageEnabled(options.env)) {
 		const sqliteStatus = getAscetSqliteIndexStatus(options.cwd);
 		if (sqliteStatus.status === "ready" || sqliteStatus.status === "stale") {
-			writeSqliteCacheStatusFile(options.cwd, sqliteStatus);
+			writeSqliteCacheStatusFile(options.cwd, sqliteStatus, undefined, refreshResult);
 		}
 	} else {
 		writeAscetIndexStatusFile(options.cwd, {
@@ -1163,6 +1247,7 @@ function successResult(
 		timedOut: result.timedOut,
 		stdout: result.stdout,
 		stderr: result.stderr,
+		refresh: refreshResult,
 	};
 }
 

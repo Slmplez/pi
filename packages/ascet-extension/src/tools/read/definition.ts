@@ -39,8 +39,12 @@ async function runAscetRead(params: AscetReadParams, options: RunOptions): Promi
 					componentPath: params.componentPath,
 					mode: params.implementationMode,
 					implementationName: params.implementationName,
+					detailLevel: params.detailLevel,
+					maxDepth: params.maxDepth,
+					maxElements: params.maxElements,
+					timeoutMs: params.timeoutMs,
 				},
-				options,
+				{ ...options, timeoutMs: params.timeoutMs ?? options.timeoutMs },
 			);
 		case "read_project_formulas":
 			return runAscetReadProjectFormulas({ projectPath: params.projectPath }, options);

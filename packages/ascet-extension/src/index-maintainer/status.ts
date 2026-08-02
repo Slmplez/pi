@@ -24,10 +24,11 @@ export function readAscetIndexStatus(options: AscetIndexStatusOptions): AscetInd
 	const sqlite = getAscetSqliteIndexStatus(options.cwd);
 	const footer = readStatusFile(options.cwd);
 	const totalDocs = sqlite.areas.reduce((total, area) => total + area.itemCount, 0);
-	const staleAreas = sqlite.areas.filter((area) => area.status === "stale").map((area) => area.area);
+	const staleAreas = sqlite.areas.filter((area) => area.status !== "ready").map((area) => area.area);
 	const footerInSync =
 		footer !== undefined &&
 		footer.state === sqlite.status &&
+		(footer.generation === undefined || footer.generation === sqlite.runId) &&
 		(footer.totalDocs === undefined || footer.totalDocs === totalDocs);
 
 	const report: AscetIndexStatusReport = {
@@ -41,6 +42,7 @@ export function readAscetIndexStatus(options: AscetIndexStatusOptions): AscetInd
 		staleAreas: staleAreas.length > 0 ? staleAreas : undefined,
 		footer: {
 			inSync: footerInSync,
+			generation: footer?.generation,
 			state: footer?.state,
 			totalDocs: footer?.totalDocs,
 			path: detailLevel === "full" ? getAscetIndexStatusFilePath(options.cwd) : undefined,

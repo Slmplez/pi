@@ -1,6 +1,16 @@
 import assert from "node:assert/strict";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { describe, test } from "node:test";
+import type { AscetCliExecutionResult } from "../cli.ts";
+import type { AscetEditApprovalContext } from "./approval.ts";
 import { type AscetMutationParams, getAscetEditActionId, resolveAscetEditInvocation, runAscetEdit } from "./service.ts";
+
+const approvingContext: AscetEditApprovalContext = {
+	hasUI: true,
+	ui: { confirm: async () => true },
+};
 
 describe("ASCET edit service", () => {
 	test("uses action or mode as the canonical edit action id", () => {
@@ -128,6 +138,52 @@ describe("ASCET edit service", () => {
 			const result = await runAscetEdit(params, { cwd: process.cwd() }, {});
 			assert.equal(result.details.outcome.status, "preflight", params.action);
 			assert.equal(result.details.outcome.plan.action, params.action);
+		}
+	});
+
+	test("classifies apply_element_spec readback failures as partial outcomes", async () => {
+		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-service-"));
+		const contractsRoot = join(root, "contracts");
+		mkdirSync(contractsRoot, { recursive: true });
+		writeFileSync(join(root, "AscetCli.exe"), "", "utf8");
+		writeFileSync(join(contractsRoot, "cli-catalog.json"), "{}", "utf8");
+		const specFile = join(root, "spec.json");
+		writeFileSync(specFile, JSON.stringify({ elements: [] }), "utf8");
+		try {
+			const result = await runAscetEdit(
+				{
+					action: "apply_element_spec",
+					componentPath: "DEMO\\Controller",
+					specFile,
+					executeWrite: true,
+				},
+				{
+					cwd: root,
+					env: {
+						ASCET_CLI_PATH: join(root, "AscetCli.exe"),
+						ASCET_CONTRACTS_PATH: contractsRoot,
+						PI_ASCET_RUNTIME_DIR: join(root, "runtime"),
+						PI_ASCET_OPERATION_HEALTH_PATH: join(root, "operation-health.json"),
+					},
+					executeCli: async (request): Promise<AscetCliExecutionResult> => ({
+						exitCode: 1,
+						stdout: "",
+						stderr:
+							"Exception[0]: AscetReadException\nCode: readback_mismatch\nOperation: verify_apply_element_spec\nMessage: value mismatch",
+						timedOut: false,
+						request,
+					}),
+				},
+				approvingContext,
+			);
+
+			const outcome = result.details.outcome;
+			assert.equal(outcome.status, "partial");
+			if (outcome.status === "partial") {
+				assert.equal(outcome.failures[0]?.code, "readback_mismatch");
+			}
+		} finally {
+			rmSync(root, { recursive: true, force: true });
 		}
 	});
 });

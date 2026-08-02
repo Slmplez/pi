@@ -1,8 +1,11 @@
 import { fauxAssistantMessage, fauxToolCall } from "@earendil-works/pi-ai";
 import { Type } from "typebox";
 import { describe, expect, it } from "vitest";
+import ascetExtension from "../../../../ascet-extension/src/index.ts";
 import type { ExtensionFactory } from "../../../src/index.ts";
 import { createHarness } from "../harness.ts";
+
+const ascetExtensionFactory = ascetExtension as unknown as ExtensionFactory;
 
 describe("extension active tools next-turn refresh", () => {
 	it("applies pi.setActiveTools before the next provider request in the same run", async () => {
@@ -129,6 +132,32 @@ describe("extension active tools next-turn refresh", () => {
 			expect(providerSystemPrompts).toHaveLength(2);
 			expect(providerSystemPrompts[0]).toContain("keep this run override");
 			expect(providerSystemPrompts[1]).toContain("keep this run override");
+		} finally {
+			harness.cleanup();
+		}
+	});
+
+	it("activates the ASCET profile before the first provider request", async () => {
+		const harness = await createHarness({
+			extensionFactories: [ascetExtensionFactory],
+		});
+
+		try {
+			await harness.session.bindExtensions({});
+			const providerSystemPrompts: string[] = [];
+			harness.setResponses([
+				(context) => {
+					providerSystemPrompts.push(context.systemPrompt ?? "");
+					return fauxAssistantMessage("done");
+				},
+			]);
+
+			await harness.session.prompt("create an ASCET element");
+
+			expect(providerSystemPrompts).toHaveLength(1);
+			expect(providerSystemPrompts[0]).toContain("ASCET coding policy:");
+			expect(providerSystemPrompts[0]).toContain("apply_element_spec");
+			expect(harness.session.getActiveToolNames()).toContain("ascet_edit");
 		} finally {
 			harness.cleanup();
 		}

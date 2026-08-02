@@ -8,12 +8,38 @@ export type AscetDiffParams =
 			leftPath: string;
 			rightPath: string;
 			changesOnly?: boolean;
+			timeoutMs?: number;
 	  }
-	| { action: "diff_method"; leftPath: string; rightPath: string; methodName: string; changesOnly?: boolean }
-	| { action: "diff_component_snapshot"; leftPath: string; rightPath: string; changesOnly?: boolean }
-	| { action: "diff_state_machine_domain"; leftPath: string; rightPath: string; changesOnly?: boolean }
-	| { action: "diff_element_spec"; componentPath: string; specFile: string; changesOnly?: boolean }
-	| { action: "diff_project_formulas"; leftPath: string; rightPath: string; changesOnly?: boolean };
+	| {
+			action: "diff_method";
+			leftPath: string;
+			rightPath: string;
+			methodName: string;
+			changesOnly?: boolean;
+			timeoutMs?: number;
+	  }
+	| {
+			action: "diff_component_snapshot";
+			leftPath: string;
+			rightPath: string;
+			changesOnly?: boolean;
+			timeoutMs?: number;
+	  }
+	| {
+			action: "diff_state_machine_domain";
+			leftPath: string;
+			rightPath: string;
+			changesOnly?: boolean;
+			timeoutMs?: number;
+	  }
+	| { action: "diff_element_spec"; componentPath: string; specFile: string; changesOnly?: boolean; timeoutMs?: number }
+	| {
+			action: "diff_project_formulas";
+			leftPath: string;
+			rightPath: string;
+			changesOnly?: boolean;
+			timeoutMs?: number;
+	  };
 
 export const ascetDiffParameters = openAiObjectSchema<AscetDiffParams>(
 	Type.Object({
@@ -34,5 +60,6 @@ export const ascetDiffParameters = openAiObjectSchema<AscetDiffParams>(
 		componentPath: Type.Optional(Type.String({ minLength: 1 })),
 		specFile: Type.Optional(Type.String({ minLength: 1 })),
 		changesOnly: Type.Optional(Type.Boolean()),
+		timeoutMs: Type.Optional(Type.Integer({ minimum: 1, maximum: 300_000 })),
 	}),
 );

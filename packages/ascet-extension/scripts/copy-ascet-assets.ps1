@@ -9,6 +9,7 @@ $contractsSource = Join-Path $AscetAgentRoot 'src\ascetcli\contracts'
 $binSource = Join-Path $AscetAgentRoot 'src\ascetcli\output\ascet-csharp\bin'
 $contractsTarget = Join-Path $packageRoot 'ascet-cli\contracts'
 $binTarget = Join-Path $packageRoot 'ascet-cli\bin'
+$internalBinSource = Join-Path $packageRoot 'ascet-cli\internal-bin'
 
 function Clear-PackageAssetDirectory {
   param(
@@ -41,6 +42,9 @@ Clear-PackageAssetDirectory -Path $binTarget -PackageRoot $packageRoot
 
 Copy-Item -Path (Join-Path $contractsSource '*') -Destination $contractsTarget -Recurse -Force
 Copy-Item -Path (Join-Path $binSource '*') -Destination $binTarget -Recurse -Force
+if (Test-Path -LiteralPath $internalBinSource) {
+  Copy-Item -Path (Join-Path $internalBinSource '*') -Destination $binTarget -Recurse -Force
+}
 Get-ChildItem -Path $binTarget -Recurse -File -Include *.log,*.out,*.err |
   Remove-Item -Force
 

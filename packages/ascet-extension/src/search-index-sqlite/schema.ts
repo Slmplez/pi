@@ -18,6 +18,24 @@ export const ASCET_P0_INDEX_AREAS = [
 
 export type AscetP0IndexArea = (typeof ASCET_P0_INDEX_AREAS)[number];
 
+/** Single source of truth for logical refresh partitions and their SQLite areas. */
+export const ASCET_LOGICAL_INDEX_AREA_MAP: Readonly<Record<string, readonly AscetP0IndexArea[]>> = {
+	p0: ASCET_P0_INDEX_AREAS,
+	all: ASCET_P0_INDEX_AREAS,
+	components: ["components"],
+	tree: ["folders", "folder_items", "components"],
+	element_decls: ["elements"],
+	elements: ["elements"],
+	method_decls: ["methods"],
+	methods: ["methods"],
+	component_refs: ["component_refs", "element_refs"],
+	element_refs: ["component_refs", "element_refs"],
+	refs: ["component_refs", "element_refs", "dbitem_dependencies"],
+	text_code: ["code_blocks", "code_terms"],
+	messages: ["messages"],
+	project: ["project_items", "project_formulas"],
+};
+
 export const ASCET_REQUIRED_P0_INDEX_AREAS = [
 	"components",
 	"folders",

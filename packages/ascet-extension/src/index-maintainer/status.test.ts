@@ -3,9 +3,13 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, test } from "node:test";
+import type { AscetCliRequest } from "../cli.ts";
 import { ingestAscetSearchIndexSqlite } from "../search-index-sqlite/ingest.ts";
 import { writeAscetIndexStatusFile } from "../search-index-sqlite/status-file.ts";
 import type { AscetSqliteSearchIndexBuildInput } from "../search-index-sqlite/types.ts";
+import { resetAscetSearchIndexForTest } from "../search-index-store.ts";
+import { evaluateAscetIndex } from "./evaluate.ts";
+import { refreshAscetIndex } from "./refresh.ts";
 import { repairAscetIndexStatusFile } from "./repair-status-file.ts";
 import { markAscetIndexAreasStale } from "./stale.ts";
 import { readAscetIndexStatus } from "./status.ts";
@@ -90,6 +94,7 @@ describe("ASCET index maintainer status", () => {
 	afterEach(() => {
 		cleanup();
 		cleanup = () => {};
+		resetAscetSearchIndexForTest();
 	});
 
 	test("reads SQLite status and detects footer mismatch", () => {
@@ -127,5 +132,137 @@ describe("ASCET index maintainer status", () => {
 		assert.deepEqual(result.areas, ["code_blocks", "code_terms"]);
 		assert.equal(status.state, "stale");
 		assert.equal(status.areas?.find((area) => area.name === "code_blocks")?.state, "stale");
+	});
+
+	test("does not evaluate a stale SQLite index as passed", () => {
+		const temp = createTempCwd();
+		cleanup = temp.cleanup;
+		ingestAscetSearchIndexSqlite(temp.cwd, fixtureInput());
+		markAscetIndexAreasStale(temp.cwd, ["elements"], "write_succeeded:set_element_spec");
+
+		const result = evaluateAscetIndex({ cwd: temp.cwd, checks: ["status", "counts", "sidecar"] });
+		const checks = result.checks as Array<{ name: string; passed: boolean }>;
+		assert.equal(result.state, "failed");
+		assert.equal(checks.find((check) => check.name === "status")?.passed, false);
+	});
+
+	test("scoped freshness evaluation ignores unrelated stale areas", () => {
+		const temp = createTempCwd();
+		cleanup = temp.cleanup;
+		ingestAscetSearchIndexSqlite(temp.cwd, fixtureInput());
+		markAscetIndexAreasStale(temp.cwd, ["elements"], "write_succeeded:set_element_spec");
+
+		const result = evaluateAscetIndex({
+			cwd: temp.cwd,
+			checks: ["freshness"],
+			requiredAreas: ["components"],
+		});
+		const checks = result.checks as Array<{ name: string; passed: boolean }>;
+		assert.equal(result.state, "passed");
+		assert.equal(checks.find((check) => check.name === "freshness")?.passed, true);
+		assert.deepEqual(result.staleAreas, []);
+	});
+
+	test("freshness evaluation fails when a required area is stale", () => {
+		const temp = createTempCwd();
+		cleanup = temp.cleanup;
+		ingestAscetSearchIndexSqlite(temp.cwd, fixtureInput());
+		markAscetIndexAreasStale(temp.cwd, ["elements"], "write_succeeded:set_element_spec");
+
+		const result = evaluateAscetIndex({
+			cwd: temp.cwd,
+			checks: ["freshness"],
+			requiredAreas: ["elements"],
+		});
+		assert.equal(result.state, "failed");
+		assert.deepEqual(result.staleAreas, ["elements"]);
+		assert.equal(result.authoritative, false);
+	});
+
+	test("foreground refresh forces a warmup instead of accepting a ready cache", async () => {
+		const temp = createTempCwd();
+		cleanup = temp.cleanup;
+		resetAscetSearchIndexForTest({
+			databaseName: "AEB",
+			databasePath: "d:/ETASData/ASCET6.4/Database/AEB",
+			generatedAtMs: Date.now(),
+			elapsedMs: 1,
+			scanComplete: true,
+			entries: fixtureInput().entries,
+		});
+		let calls = 0;
+		const result = await refreshAscetIndex({
+			cwd: temp.cwd,
+			env: { PI_ASCET_SEARCH_INDEX_STORAGE: "memory" },
+			areas: ["elements"],
+			executeCli: async (request: AscetCliRequest) => {
+				calls += 1;
+				return {
+					exitCode: 0,
+					stdout: JSON.stringify({
+						ok: true,
+						result: {
+							operation: "warm_search_index",
+							database: { name: "AEB", path: "d:/ETASData/ASCET6.4/Database/AEB" },
+							generatedAtUtc: new Date().toISOString(),
+							elapsedMs: 1,
+							scanComplete: true,
+							entries: fixtureInput().entries,
+						},
+						error: null,
+					}),
+					stderr: "",
+					timedOut: false,
+					request,
+				};
+			},
+		});
+
+		assert.equal(calls, 1);
+		assert.deepEqual(result.effectivePartitions, ["element_decls"]);
+	});
+
+	test("dedicated tree, project, and refs refreshes do not fall back to p0", async () => {
+		const temp = createTempCwd();
+		cleanup = temp.cleanup;
+		const requestedPartitions: string[] = [];
+		for (const area of ["tree", "project", "refs"] as const) {
+			const result = await refreshAscetIndex({
+				cwd: temp.cwd,
+				env: { PI_ASCET_SEARCH_INDEX_STORAGE: "memory" },
+				areas: [area],
+				force: true,
+				executeCli: async (request: AscetCliRequest) => {
+					requestedPartitions.push(request.args[3] ?? "");
+					return {
+						exitCode: 0,
+						stdout: JSON.stringify({
+							ok: true,
+							result: {
+								operation: "warm_search_index",
+								database: { name: "AEB", path: "d:/ETASData/ASCET6.4/Database/AEB" },
+								generatedAtUtc: new Date().toISOString(),
+								elapsedMs: 1,
+								scanComplete: true,
+								components: fixtureInput().components,
+								folders: fixtureInput().folders,
+								folderItems: fixtureInput().folderItems,
+								projectFormulas: fixtureInput().projectFormulas,
+								projectItems: fixtureInput().projectItems,
+								componentRefs: fixtureInput().componentRefs,
+								elementRefs: fixtureInput().elementRefs,
+								dbItemDependencies: fixtureInput().dbItemDependencies,
+							},
+							error: null,
+						}),
+						stderr: "",
+						timedOut: false,
+						request,
+					};
+				},
+			});
+			assert.deepEqual(result.effectivePartitions, [area]);
+		}
+		assert.deepEqual(requestedPartitions, ["tree", "project", "refs"]);
 	});
 });

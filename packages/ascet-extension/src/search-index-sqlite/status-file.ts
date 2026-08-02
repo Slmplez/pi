@@ -13,6 +13,10 @@ export interface AscetIndexStatusFileArea {
 export interface AscetIndexStatusFile {
 	state: "checking" | "building" | "writing" | "ready" | "stale" | "refreshing" | "failed" | "disabled";
 	generation?: string;
+	generationBefore?: string;
+	generationAfter?: string;
+	transactionCommitted?: boolean;
+	clearedInvalidations?: string[];
 	phase?: string;
 	currentArea?: string;
 	refreshingArea?: string;

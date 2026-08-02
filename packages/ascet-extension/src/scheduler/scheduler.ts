@@ -121,7 +121,7 @@ class InProcessAscetScheduler implements AscetScheduler {
 			pendingByAgent: this.#buildPendingByAgent(),
 			activeCount: runningJob ? 1 : 0,
 			resource: {
-				key: ASCET_SCHEDULER_DEFAULTS.resourceKey,
+				key: runningJob?.resourceKey ?? ASCET_SCHEDULER_DEFAULTS.resourceKey,
 				active: runningJob ? 1 : 0,
 				queued: queuedJobs.length,
 				concurrency: ASCET_SCHEDULER_DEFAULTS.maxActiveAscetCalls,

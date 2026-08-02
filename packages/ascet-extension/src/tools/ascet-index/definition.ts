@@ -100,11 +100,25 @@ export const ascetIndexTool = defineSequentialAscetTool({
 						reason: "ascet_index.evaluate_live",
 					});
 					result = {
-						...evaluateAscetIndex({ cwd: ctx.cwd, checks: params.checks, query: params.query }),
+						...evaluateAscetIndex({
+							cwd: ctx.cwd,
+							checks: params.checks,
+							query: params.query,
+							requiredAreas: params.requiredAreas,
+							requireFreshness: params.requireFreshness,
+							env: ctx.env,
+						}),
 						live: liveRefresh,
 					};
 				} else {
-					result = evaluateAscetIndex({ cwd: ctx.cwd, checks: params.checks, query: params.query });
+					result = evaluateAscetIndex({
+						cwd: ctx.cwd,
+						checks: params.checks,
+						query: params.query,
+						requiredAreas: params.requiredAreas,
+						requireFreshness: params.requireFreshness,
+						env: ctx.env,
+					});
 				}
 				break;
 		}

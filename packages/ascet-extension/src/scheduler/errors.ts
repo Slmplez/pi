@@ -1,3 +1,25 @@
+import type { AscetCliExecutionResult } from "../cli.ts";
+
+export type AscetCliProcessFailureCode =
+	| "ascet_cli_failed"
+	| "ascet_cli_timeout"
+	| "ascet_cli_aborted"
+	| "ascet_cli_invalid_json";
+
+export class AscetCliProcessError extends Error {
+	readonly execution: AscetCliExecutionResult;
+	readonly resultCode: AscetCliProcessFailureCode;
+	readonly code: AscetCliProcessFailureCode;
+
+	constructor(execution: AscetCliExecutionResult, resultCode: AscetCliProcessFailureCode, message: string) {
+		super(message);
+		this.name = "AscetCliProcessError";
+		this.execution = execution;
+		this.resultCode = resultCode;
+		this.code = resultCode;
+	}
+}
+
 export class AscetSchedulerQueueTimeoutError extends Error {
 	readonly code = "ASCET_QUEUE_TIMEOUT";
 	readonly jobId: string;

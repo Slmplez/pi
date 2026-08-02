@@ -113,9 +113,18 @@ where run_id = ?
 				errorMessage: asString(row?.error_message),
 			};
 		});
-		const hasStaleArea = areas.some((area) => area.status === "stale");
+		const hasFailedArea = areas.some((area) => area.status === "failed");
+		const hasBuildingArea = areas.some((area) => area.status === "building");
+		const hasIncompleteArea = areas.some((area) => area.status !== "ready");
+		const normalizedRunStatus = normalizeRunStatus(asString(run.status));
 		return {
-			status: hasStaleArea ? "stale" : normalizeRunStatus(asString(run.status)),
+			status: hasFailedArea
+				? "failed"
+				: hasBuildingArea
+					? "building"
+					: hasIncompleteArea
+						? "stale"
+						: normalizedRunStatus,
 			runId,
 			databaseName: asString(run.database_name),
 			databasePath: asString(run.database_path),
@@ -158,6 +167,7 @@ where run_id = ? and area = ?
 		const staleAreas = [...new Set(areas)];
 		writeAscetIndexStatusFile(cwd, {
 			state: "stale",
+			generation: runId,
 			staleAreas,
 			areas: Object.fromEntries(
 				staleAreas.map((area) => [area, { status: "stale", errorCode: "invalidated", errorMessage: reason }]),

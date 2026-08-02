@@ -65,6 +65,7 @@ function validateAscetDiffParams(params: AscetDiffParams): void {
 
 async function runAscetDiff(params: AscetDiffParams, options: RunOptions): Promise<AscetCliJsonResult> {
 	validateAscetDiffParams(params);
+	const effectiveOptions = params.timeoutMs === undefined ? options : { ...options, timeoutMs: params.timeoutMs };
 	switch (params.action) {
 		case "diff": {
 			const operation = operationForObjectKind(params.objectKind);
@@ -76,7 +77,7 @@ async function runAscetDiff(params: AscetDiffParams, options: RunOptions): Promi
 						rightPath: params.rightPath,
 						changesOnly: params.changesOnly,
 					},
-					options,
+					effectiveOptions,
 				);
 			}
 			return runAscetDiffComponentSnapshot(
@@ -85,7 +86,7 @@ async function runAscetDiff(params: AscetDiffParams, options: RunOptions): Promi
 					rightComponentPath: params.rightPath,
 					changesOnly: params.changesOnly,
 				},
-				options,
+				effectiveOptions,
 			);
 		}
 		case "diff_component_snapshot":
@@ -95,7 +96,7 @@ async function runAscetDiff(params: AscetDiffParams, options: RunOptions): Promi
 					rightComponentPath: params.rightPath,
 					changesOnly: params.changesOnly,
 				},
-				options,
+				effectiveOptions,
 			);
 		case "diff_method":
 			return runAscetDiffMethodCode(
@@ -104,8 +105,9 @@ async function runAscetDiff(params: AscetDiffParams, options: RunOptions): Promi
 					rightComponentPath: params.rightPath,
 					methodName: params.methodName,
 					changesOnly: params.changesOnly,
+					timeoutMs: params.timeoutMs,
 				},
-				options,
+				effectiveOptions,
 			);
 		case "diff_state_machine_domain":
 			return runAscetDiffStateMachineDomain(
@@ -114,7 +116,7 @@ async function runAscetDiff(params: AscetDiffParams, options: RunOptions): Promi
 					rightStateMachinePath: params.rightPath,
 					changesOnly: params.changesOnly,
 				},
-				options,
+				effectiveOptions,
 			);
 		case "diff_element_spec":
 			return runAscetDiffElementSpec(
@@ -123,7 +125,7 @@ async function runAscetDiff(params: AscetDiffParams, options: RunOptions): Promi
 					specFile: params.specFile,
 					changesOnly: params.changesOnly,
 				},
-				options,
+				effectiveOptions,
 			);
 		case "diff_project_formulas":
 			return runAscetDiffProjectFormulas(
@@ -132,7 +134,7 @@ async function runAscetDiff(params: AscetDiffParams, options: RunOptions): Promi
 					rightProjectPath: params.rightPath,
 					changesOnly: params.changesOnly,
 				},
-				options,
+				effectiveOptions,
 			);
 	}
 }

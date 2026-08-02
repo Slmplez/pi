@@ -73,18 +73,20 @@ export default function ascetExtension(pi: AscetExtensionAPI) {
 		pi.registerTool(tool);
 	}
 
-	pi.on?.("before_agent_start", (event) => {
-		exposure.activateProfile(exposure.getProfile());
-		return {
-			systemPrompt: appendAscetCodingPolicyPrompt(event.systemPrompt),
-		};
-	});
-
 	pi.on?.("session_start", (_event, ctx) => {
+		// Activate the selected profile before the first model turn. Profile activation
+		// rebuilds the agent's base system prompt; doing it from before_agent_start
+		// would rebuild from a stale event.systemPrompt and make profile guidance
+		// visible only on a later turn.
+		exposure.activateProfile(exposure.getProfile());
 		indexFooterStatus?.stop();
 		indexFooterStatus = installAscetIndexFooterStatus(ctx);
 		scheduleStartupAscetSearchIndexWarmup(ctx);
 	});
+
+	pi.on?.("before_agent_start", (event) => ({
+		systemPrompt: appendAscetCodingPolicyPrompt(event.systemPrompt),
+	}));
 
 	pi.on?.("session_shutdown", () => {
 		indexFooterStatus?.stop();

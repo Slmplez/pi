@@ -20,6 +20,10 @@ export type AscetReadParams =
 			componentPath: string;
 			implementationMode?: "list" | "default" | "class-impl" | "impl";
 			implementationName?: string;
+			detailLevel?: "metadata" | "summary" | "elements" | "full";
+			maxDepth?: number;
+			maxElements?: number;
+			timeoutMs?: number;
 	  }
 	| {
 			action: "read_project_formulas";
@@ -85,6 +89,17 @@ const ascetReadActionSchemas = [
 			Type.Union([Type.Literal("list"), Type.Literal("default"), Type.Literal("class-impl"), Type.Literal("impl")]),
 		),
 		implementationName: Type.Optional(Type.String()),
+		detailLevel: Type.Optional(
+			Type.Union([
+				Type.Literal("metadata"),
+				Type.Literal("summary"),
+				Type.Literal("elements"),
+				Type.Literal("full"),
+			]),
+		),
+		maxDepth: Type.Optional(Type.Integer({ minimum: 0 })),
+		maxElements: Type.Optional(Type.Integer({ minimum: 1 })),
+		timeoutMs: Type.Optional(Type.Integer({ minimum: 1, maximum: 300_000 })),
 	}),
 	Type.Object({
 		action: Type.Literal("read_project_formulas"),

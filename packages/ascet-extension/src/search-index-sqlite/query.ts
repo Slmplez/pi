@@ -243,7 +243,7 @@ function loadStaleAreas(cwd: string, runId: string): string[] {
 		const connection = openAscetSearchSqlite(cwd, "reader");
 		try {
 			const rows = connection.db
-				.prepare("select area from ascet_index_areas where run_id = ? and status = 'stale' order by area asc")
+				.prepare("select area from ascet_index_areas where run_id = ? and status <> 'ready' order by area asc")
 				.all(runId) as Array<{ area?: unknown }>;
 			return rows.map((row) => asString(row.area)).filter(Boolean);
 		} catch {
@@ -252,6 +252,32 @@ function loadStaleAreas(cwd: string, runId: string): string[] {
 			connection.close();
 		}
 	});
+}
+
+function requiredAreasForOperation(operation: string): readonly string[] | undefined {
+	switch (operation) {
+		case "search_components":
+			return ["components"];
+		case "search_projects":
+			return ["project_items", "project_formulas"];
+		case "search_elements":
+			return ["elements"];
+		case "declarations_of_method_process":
+			return ["methods"];
+		case "references_to_component":
+			return ["component_refs", "dbitem_dependencies"];
+		case "references_to_element":
+			return ["element_refs", "code_blocks", "code_terms"];
+		case "senders_of_message":
+		case "receivers_of_message":
+			return ["messages"];
+		case "search_text_code":
+			return ["code_blocks", "code_terms"];
+		case "search_project_formulas":
+			return ["project_formulas"];
+		default:
+			return undefined;
+	}
 }
 
 function loadDocuments(cwd: string, runId: string, kinds: readonly string[]): DocumentRow[] {
@@ -311,13 +337,16 @@ function makePagedResult(
 	const page = matches.slice(cursor, cursor + limit);
 	const nextCursor = Math.min(cursor + page.length, matches.length);
 	const pageComplete = nextCursor >= matches.length;
-	const searchComplete = scanComplete && pageComplete;
 	const cwd = options.cwd ?? process.cwd();
 	const runId = asString(run.id);
 	const staleAreas = loadStaleAreas(cwd, runId);
+	const requiredAreas = requiredAreasForOperation(operation);
+	const relevantStaleAreas = requiredAreas ? staleAreas.filter((area) => requiredAreas.includes(area)) : staleAreas;
 	const indexStatus = staleAreas.length > 0 || asString(run.status) === "stale" ? "stale" : "ready";
+	const authoritative = relevantStaleAreas.length === 0;
+	const searchComplete = scanComplete && pageComplete && authoritative;
 	const warning =
-		indexStatus === "stale"
+		relevantStaleAreas.length > 0
 			? "Results come from a stale ASCET SQLite search index and may not include the latest writes."
 			: "";
 	const payload = {
@@ -329,7 +358,13 @@ function makePagedResult(
 		nextCursor: String(nextCursor),
 		searchComplete,
 		truncated: !searchComplete,
-		truncationReason: searchComplete ? "" : scanComplete ? "result_limit" : "partial_index",
+		truncationReason: searchComplete
+			? ""
+			: relevantStaleAreas.length > 0
+				? "stale_index"
+				: scanComplete
+					? "result_limit"
+					: "partial_index",
 		filters: {
 			limit,
 		},
@@ -342,6 +377,8 @@ function makePagedResult(
 		source: "quick_search_index",
 		indexStatus,
 		staleAreas,
+		freshness: relevantStaleAreas.length > 0 ? "stale" : "ready",
+		authoritative,
 		warning,
 		index: makeIndexMeta(run, scanComplete, indexCounts),
 	};
@@ -539,7 +576,7 @@ export function queryAscetListComponentsIndexSqlite(
 ): AscetCliJsonResult | undefined {
 	const cwd = options.cwd ?? process.cwd();
 	const run = activeRun(cwd);
-	if (!run?.id || asString(run.status) !== "ready") {
+	if (!run?.id || !["ready", "stale"].includes(asString(run.status))) {
 		return undefined;
 	}
 	const runId = asString(run.id);
@@ -548,6 +585,13 @@ export function queryAscetListComponentsIndexSqlite(
 	}
 
 	const requestedFolderPath = normalizeAscetPath(params.folderPath);
+	const staleAreas = loadStaleAreas(cwd, runId);
+	const requiredAreas = ["folders", "folder_items"];
+	const relevantStaleAreas = staleAreas.filter((area) => requiredAreas.includes(area));
+	const scanComplete = activeAreaScanComplete(cwd, runId, requiredAreas);
+	if (relevantStaleAreas.length > 0) {
+		return undefined;
+	}
 	const folders = loadTreeFolders(cwd, runId).map(folderToTreeItem);
 	const folderItems = loadTreeFolderItems(cwd, runId).map(folderItemToTreeItem);
 	const foldersByParent = new Map<string, Record<string, unknown>[]>();
@@ -629,10 +673,18 @@ export function queryAscetListComponentsIndexSqlite(
 		counts: buildTreeCounts(items),
 		items,
 		source: "quick_search_index",
-		indexStatus: "ready",
-		staleAreas: [],
-		warning: "",
-		index: makeIndexMeta(run, true, { folderCount: folders.length, folderItemCount: folderItems.length }),
+		indexStatus: relevantStaleAreas.length > 0 ? "stale" : "ready",
+		staleAreas,
+		freshness: relevantStaleAreas.length > 0 ? "stale" : "ready",
+		authoritative: relevantStaleAreas.length === 0,
+		searchComplete: scanComplete && relevantStaleAreas.length === 0,
+		truncated: !(scanComplete && relevantStaleAreas.length === 0),
+		truncationReason: relevantStaleAreas.length > 0 ? "stale_index" : scanComplete ? "" : "partial_index",
+		warning:
+			relevantStaleAreas.length > 0
+				? "Results come from a stale ASCET SQLite search index and may not include the latest writes."
+				: "",
+		index: makeIndexMeta(run, scanComplete, { folderCount: folders.length, folderItemCount: folderItems.length }),
 	};
 	const data = {
 		ok: true,
@@ -744,7 +796,7 @@ export function queryAscetProjectIndexSqlite(
 		})),
 		filtered.length,
 		run,
-		activeAreaScanComplete(options.cwd ?? process.cwd(), asString(run.id), ["components"]),
+		activeAreaScanComplete(options.cwd ?? process.cwd(), asString(run.id), ["project_items", "project_formulas"]),
 		{ projectCount: rows.length },
 		options,
 	);
@@ -758,6 +810,11 @@ export function queryAscetProjectIndexSqlite(
 			searchComplete: payload.searchComplete,
 			truncated: payload.truncated,
 			truncationReason: payload.truncationReason,
+			indexStatus: payload.indexStatus,
+			staleAreas: payload.staleAreas,
+			freshness: payload.freshness,
+			authoritative: payload.authoritative,
+			warning: payload.warning,
 			index: payload.index,
 		},
 		error: null,

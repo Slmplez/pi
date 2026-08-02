@@ -18,7 +18,7 @@ export type AscetIndexPublicArea = (typeof ASCET_INDEX_PUBLIC_AREAS)[number];
 export type AscetIndexAction = "status" | "refresh" | "mark_stale" | "repair_status_file" | "evaluate";
 export type AscetIndexDetailLevel = "summary" | "areas" | "full";
 export type AscetIndexRefreshMode = "foreground" | "background";
-export type AscetIndexEvaluateCheck = "status" | "counts" | "search_smoke" | "sidecar";
+export type AscetIndexEvaluateCheck = "status" | "counts" | "freshness" | "search_smoke" | "sidecar";
 
 export interface AscetIndexAreaPlan {
 	requestedAreas: AscetIndexPublicArea[];
@@ -57,6 +57,7 @@ export interface AscetIndexStatusReport {
 	areas?: AscetIndexStatusArea[];
 	footer?: {
 		inSync: boolean;
+		generation?: string;
 		state?: string;
 		totalDocs?: number;
 		path?: string;

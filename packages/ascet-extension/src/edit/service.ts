@@ -381,16 +381,30 @@ export const ascetMutationActionSchemas = [
 
 export const ascetMutationParameters = openAiObjectUnionSchema<AscetMutationParams>(ascetMutationActionSchemas);
 
-function outcomeFromCliResult(result: AscetCliJsonResult): AscetToolOutcome {
+function outcomeFromCliResult(result: AscetCliJsonResult, action?: string): AscetToolOutcome {
 	if (result.ok) {
 		return { status: "ok", data: result.data, warnings: [] };
 	}
 	const code = result.error?.code ?? "ascet_edit_failed";
 	const message = result.error?.message ?? "ASCET edit failed.";
+	const detailedCode = extractAscetReadExceptionCode(message);
+	const readbackCode = code.indexOf("readback_") === 0 ? code : detailedCode;
+	if (action === "apply_element_spec" && readbackCode?.indexOf("readback_") === 0) {
+		return {
+			status: "partial",
+			data: { readback: { verified: false }, error: { code: readbackCode, message } },
+			failures: [{ code: readbackCode, message }],
+		};
+	}
 	if (isAscetEditApprovalBlockedCode(code)) {
 		return { status: "blocked", code, message };
 	}
 	return { status: "error", error: { code, message } };
+}
+
+function extractAscetReadExceptionCode(message: string): string | undefined {
+	const match = message.match(/(?:^|\r?\n)Code:\s*([A-Za-z0-9_.-]+)/u);
+	return match?.[1];
 }
 
 function validateDependencyWriteResult(raw: AscetCliJsonResult): AscetToolOutcome | undefined {
@@ -543,7 +557,7 @@ export async function runAscetMutation(
 
 	const raw = await dispatchMutation(normalizedParams, options, ctx);
 	if (!raw.ok) {
-		return asResponse(outcomeFromCliResult(raw), raw);
+		return asResponse(outcomeFromCliResult(raw, normalizedParams.action), raw);
 	}
 	if (normalizedParams.action === "set_element_dependency" && !normalizedParams.dryRun) {
 		const dependencyWriteFailure = validateDependencyWriteResult(raw);
@@ -553,7 +567,7 @@ export async function runAscetMutation(
 	}
 	const impact = createAscetEditImpact(normalizedParams);
 	const indexUpdate = await applySuccessfulEditIndexUpdate(normalizedParams, raw, options, impact);
-	return asResponse(createSuccessfulEditOutcome(raw, impact, indexUpdate), raw, impact);
+	return asResponse(createSuccessfulEditOutcome(raw, normalizedParams, impact, indexUpdate), raw, impact);
 }
 
 async function applySuccessfulEditIndexUpdate(
@@ -727,6 +741,7 @@ function isJsonRecord(value: unknown): value is Record<string, unknown> {
 
 function createSuccessfulEditOutcome(
 	raw: AscetCliJsonResult,
+	params: AscetMutationParams,
 	_impact: AscetEditImpact,
 	indexUpdate: AscetEditIndexUpdate,
 ): AscetToolOutcome {
@@ -734,6 +749,23 @@ function createSuccessfulEditOutcome(
 	const record = asRecord(payload);
 	const readback = record?.readback ?? record?.verify ?? record?.verification;
 	const changed = record ? omitKeys(record, ["readback", "verify", "verification"]) : payload;
+	const readbackValue = record?.ReadbackVerified ?? record?.readbackVerified;
+	if (
+		params.action === "apply_element_spec" &&
+		params.verifyReadback !== false &&
+		(readbackValue === false || readbackValue === 0)
+	) {
+		return {
+			status: "partial",
+			data: { changed, readback, index: indexUpdate },
+			failures: [
+				{
+					code: "readback_not_verified",
+					message: "apply_element_spec completed without verified live readback.",
+				},
+			],
+		};
+	}
 	return {
 		status: "ok",
 		data: {

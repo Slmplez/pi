@@ -4,7 +4,6 @@ import { normalizeAscetPath } from "./core/path.ts";
 import type { AscetEditApprovalContext } from "./edit/approval.ts";
 import {
 	type AscetEditControlParams,
-	appendVerifyAndJson,
 	createAscetEditSummary,
 	formatAscetEditOperationResult,
 	type RunAscetEditOperationOptions,
@@ -48,7 +47,13 @@ export function buildApplyElementSpecArgs(params: AscetApplyElementSpecParams): 
 	if (params.recreateIncompatible) {
 		args.push("--recreate-incompatible");
 	}
-	return appendVerifyAndJson(args, params.verifyReadback);
+	if (params.verifyReadback === false) {
+		args.push("--no-verify-readback");
+	} else {
+		args.push("--verify-readback");
+	}
+	args.push("--json");
+	return args;
 }
 
 export function createApplyElementSpecSummary(params: AscetApplyElementSpecParams): string {
@@ -59,7 +64,7 @@ export function createApplyElementSpecSummary(params: AscetApplyElementSpecParam
 		mode: params.mode ?? "",
 		deleteMissing: params.deleteMissing === true,
 		recreateIncompatible: params.recreateIncompatible === true,
-		verifyReadback: params.verifyReadback === true,
+		verifyReadback: params.verifyReadback !== false,
 	});
 }
 

@@ -3,9 +3,10 @@ import { describe, test } from "node:test";
 import ascetExtension, { scheduleStartupAscetSearchIndexWarmup } from "./index.ts";
 
 describe("ASCET extension agent routing hook", () => {
-	test("profile activation is deferred until before_agent_start and preserves non-ASCET active tools", async () => {
+	test("activates the profile at session_start and preserves non-ASCET active tools", async () => {
 		let active = ["non_ascet_tool", "ascet_read"];
 		const registered: string[] = [];
+		let sessionStart: ((event: { type: "session_start" }, ctx: { cwd?: string }) => void | Promise<void>) | undefined;
 		let beforeAgentStart:
 			| ((event: {
 					type: "before_agent_start";
@@ -31,6 +32,9 @@ describe("ASCET extension agent routing hook", () => {
 			registerProvider() {},
 			sendUserMessage() {},
 			on(event: string, handler: unknown) {
+				if (event === "session_start") {
+					sessionStart = handler as typeof sessionStart;
+				}
 				if (event === "before_agent_start") {
 					beforeAgentStart = handler as typeof beforeAgentStart;
 				}
@@ -39,6 +43,24 @@ describe("ASCET extension agent routing hook", () => {
 
 		assert.equal(registered.includes("ascet_status"), true);
 		assert.deepEqual(active, ["non_ascet_tool", "ascet_read"]);
+		if (typeof sessionStart !== "function") {
+			assert.fail("session_start hook should be registered.");
+		}
+		await sessionStart({ type: "session_start" }, {});
+		assert.deepEqual(active, [
+			"non_ascet_tool",
+			"ascet_status",
+			"ascet_capabilities",
+			"ascet_index",
+			"ascet_recover",
+			"ascet_scheduler_status",
+			"ascet_explore",
+			"ascet_search",
+			"ascet_read",
+			"ascet_diff",
+			"ascet_edit",
+			"ascet_verify",
+		]);
 		if (typeof beforeAgentStart !== "function") {
 			assert.fail("before_agent_start hook should be registered.");
 		}

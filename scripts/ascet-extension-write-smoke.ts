@@ -44,7 +44,17 @@ writeFileSync(codeFile, "// PI ASCET write smoke\nreturn 0.0;\n", "utf8");
 writeFileSync(
 	elementSpecFile,
 	JSON.stringify({
-		elements: [{ name: "P_Smoke", kind: "parameter", modelType: "cont", scope: "local", data: { value: 0 } }],
+		elements: [
+			{
+				name: "P_Smoke",
+				kind: "parameter",
+				modelType: "cont",
+				scope: "local",
+				data: { value: 0 },
+				physicalRange: { min: -1, max: 1 },
+				impl: { valueType: "real32", limitAssignments: true },
+			},
+		],
 	}),
 	"utf8",
 );

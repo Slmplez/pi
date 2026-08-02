@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { AscetCliLockTimeoutError, acquireAscetCliLock } from "./scheduler/cli-lock.ts";
 import {
+	AscetCliProcessError,
 	AscetSchedulerCancelledError,
 	AscetSchedulerExecutionTimeoutError,
 	AscetSchedulerQueueTimeoutError,
@@ -47,6 +48,8 @@ export interface RunAscetCliJsonOptions {
 	toolName?: string;
 	commandId?: string;
 	jobKind?: AscetJobKind;
+	/** Scheduler resource label. Live ASCET operations should use ascet.toolapi.global. */
+	resourceKey?: string;
 	queueTimeoutMs?: number;
 }
 
@@ -58,11 +61,26 @@ export interface AscetCliJsonResult {
 	stderr: string;
 	exitCode: number | null;
 	timedOut: boolean;
+	aborted?: boolean;
+	operationId?: string;
+	stage?: string;
+	diagnostics?: AscetCliFailureDiagnostics;
 	error?: {
 		code: string;
 		message: string;
 	};
 	formattedOutputArtifact?: AscetFormattedOutputArtifact;
+}
+
+export interface AscetCliFailureDiagnostics {
+	operationId: string;
+	stage: "preflight" | "scheduler_queue" | "scheduler_exec" | "cli_process" | "json_parse" | "result";
+	exitCode: number | null;
+	timedOut: boolean;
+	aborted: boolean;
+	stderrSummary: string;
+	stdoutSummary: string;
+	retryable: boolean;
 }
 
 export interface AscetFormattedOutputArtifact {
@@ -329,6 +347,7 @@ async function executeScheduledAscetCli(
 		toolName,
 		commandId,
 		kind: options.jobKind ?? inferJobKind(commandId),
+		resourceKey: options.resourceKey,
 		queueTimeoutMs: options.queueTimeoutMs ?? 60_000,
 		executionTimeoutMs: (request.timeoutMs ?? 60_000) + 5_000,
 		signal: request.signal,
@@ -346,7 +365,30 @@ async function executeScheduledAscetCli(
 				},
 			);
 			try {
-				return await (options.executeCli ?? executeAscetCli)(request);
+				const execution = await (options.executeCli ?? executeAscetCli)(request);
+				const acceptedExitCodes = options.acceptedExitCodes ?? [0];
+				const aborted = request.signal?.aborted === true || execution.aborted === true;
+				if (aborted) {
+					throw new AscetCliProcessError(execution, "ascet_cli_aborted", "ASCET CLI execution was aborted.");
+				}
+				if (execution.timedOut) {
+					throw new AscetCliProcessError(execution, "ascet_cli_timeout", "ASCET CLI execution timed out.");
+				}
+				if (!acceptedExitCodes.includes(execution.exitCode ?? Number.NaN)) {
+					throw new AscetCliProcessError(
+						execution,
+						"ascet_cli_failed",
+						execution.stderr.trim() || execution.stdout.trim() || `ASCET CLI exited with ${execution.exitCode}`,
+					);
+				}
+				const parsed = parseJson(execution.stdout);
+				if (isParseJsonFailure(parsed)) {
+					throw new AscetCliProcessError(execution, "ascet_cli_invalid_json", parsed.message);
+				}
+				if (isCliFailureEnvelope(parsed.data)) {
+					throw new AscetCliProcessError(execution, "ascet_cli_failed", getCliFailureEnvelopeMessage(parsed.data));
+				}
+				return execution;
 			} finally {
 				await lock.release();
 			}
@@ -373,6 +415,25 @@ function isParseJsonFailure(value: ParseJsonResult): value is { ok: false; messa
 	return value.ok === false;
 }
 
+function isCliFailureEnvelope(value: unknown): boolean {
+	return (
+		value !== null && typeof value === "object" && !Array.isArray(value) && (value as { ok?: unknown }).ok === false
+	);
+}
+
+function getCliFailureEnvelopeMessage(value: unknown): string {
+	if (value !== null && typeof value === "object" && !Array.isArray(value)) {
+		const error = (value as { error?: unknown }).error;
+		if (error !== null && typeof error === "object" && !Array.isArray(error)) {
+			const message = (error as { message?: unknown }).message;
+			if (typeof message === "string" && message.trim().length > 0) {
+				return message.trim();
+			}
+		}
+	}
+	return "ASCET CLI returned ok=false.";
+}
+
 function buildCliFailureMessage(params: {
 	aborted: boolean;
 	processOk: boolean;
@@ -391,6 +452,39 @@ function buildCliFailureMessage(params: {
 		params.execution.stdout.trim() ||
 		`ASCET CLI exited with ${params.execution.exitCode}`
 	);
+}
+
+function summarizeFailureText(value: string, maxLength = 1000): string {
+	const normalized = sanitizeCliFailureText(value);
+	return normalized.length <= maxLength ? normalized : `${normalized.slice(0, maxLength)}...`;
+}
+
+function retryableFailureCode(code: string): boolean {
+	return (
+		code === "ascet_cli_timeout" ||
+		code === "ascet_scheduler_queue_timeout" ||
+		code === "ascet_scheduler_exec_timeout" ||
+		code === "ascet_cli_lock_timeout"
+	);
+}
+
+function buildFailureDiagnostics(params: {
+	operationId: string;
+	stage: AscetCliFailureDiagnostics["stage"];
+	execution?: AscetCliExecutionResult;
+	code: string;
+}): AscetCliFailureDiagnostics {
+	const execution = params.execution;
+	return {
+		operationId: params.operationId,
+		stage: params.stage,
+		exitCode: execution?.exitCode ?? null,
+		timedOut: execution?.timedOut === true || params.code.endsWith("_timeout"),
+		aborted: execution?.aborted === true || params.code === "ascet_cli_aborted",
+		stderrSummary: summarizeFailureText(execution?.stderr ?? ""),
+		stdoutSummary: summarizeFailureText(execution?.stdout ?? ""),
+		retryable: retryableFailureCode(params.code),
+	};
 }
 
 export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOptions): Promise<AscetCliJsonResult> {
@@ -415,6 +509,14 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 			stderr: "",
 			exitCode: null,
 			timedOut: false,
+			aborted: true,
+			operationId: commandId,
+			stage: "preflight",
+			diagnostics: buildFailureDiagnostics({
+				operationId: commandId,
+				stage: "preflight",
+				code: "ascet_cli_aborted",
+			}),
 			error: {
 				code: "ascet_cli_aborted",
 				message: "ASCET CLI execution was aborted before it started.",
@@ -431,6 +533,13 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 			stderr: "",
 			exitCode: null,
 			timedOut: false,
+			operationId: commandId,
+			stage: "preflight",
+			diagnostics: buildFailureDiagnostics({
+				operationId: commandId,
+				stage: "preflight",
+				code: "ascet_cli_missing",
+			}),
 			error: {
 				code: "ascet_cli_missing",
 				message: `ASCET CLI not found: ${request.cliPath}`,
@@ -442,6 +551,36 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 	try {
 		execution = await executeScheduledAscetCli(request, { ...options, commandId, jobKind });
 	} catch (error) {
+		if (error instanceof AscetCliProcessError) {
+			const failedExecution = error.execution;
+			const health = getGlobalAscetOperationHealthStore({ env: options.env });
+			if (error.resultCode === "ascet_cli_timeout") {
+				health.recordFailure({ commandId, reason: "child_command_timeout" });
+			}
+			await health.flush();
+			return {
+				ok: false,
+				data: null,
+				request: failedExecution.request,
+				stdout: failedExecution.stdout,
+				stderr: failedExecution.stderr,
+				exitCode: failedExecution.exitCode,
+				timedOut: failedExecution.timedOut,
+				aborted: failedExecution.aborted === true,
+				operationId: commandId,
+				stage: error.resultCode === "ascet_cli_invalid_json" ? "json_parse" : "cli_process",
+				diagnostics: buildFailureDiagnostics({
+					operationId: commandId,
+					stage: error.resultCode === "ascet_cli_invalid_json" ? "json_parse" : "cli_process",
+					execution: failedExecution,
+					code: error.resultCode,
+				}),
+				error: {
+					code: error.resultCode,
+					message: error.message,
+				},
+			};
+		}
 		const errorCode =
 			error instanceof AscetSchedulerQueueTimeoutError
 				? "ascet_scheduler_queue_timeout"
@@ -468,6 +607,23 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 			stderr: "",
 			exitCode: null,
 			timedOut: error instanceof AscetSchedulerExecutionTimeoutError,
+			operationId: commandId,
+			stage:
+				error instanceof AscetSchedulerQueueTimeoutError
+					? "scheduler_queue"
+					: error instanceof AscetSchedulerExecutionTimeoutError
+						? "scheduler_exec"
+						: "result",
+			diagnostics: buildFailureDiagnostics({
+				operationId: commandId,
+				stage:
+					error instanceof AscetSchedulerQueueTimeoutError
+						? "scheduler_queue"
+						: error instanceof AscetSchedulerExecutionTimeoutError
+							? "scheduler_exec"
+							: "result",
+				code: errorCode,
+			}),
 			error: {
 				code: errorCode,
 				message: error instanceof Error ? error.message : String(error),
@@ -495,6 +651,23 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 		stderr: execution.stderr,
 		exitCode: execution.exitCode,
 		timedOut: execution.timedOut,
+		aborted,
+		operationId: commandId,
+		stage: ok ? undefined : processOk ? "json_parse" : "cli_process",
+		diagnostics: ok
+			? undefined
+			: buildFailureDiagnostics({
+					operationId: commandId,
+					stage: processOk ? "json_parse" : "cli_process",
+					execution,
+					code: aborted
+						? "ascet_cli_aborted"
+						: execution.timedOut
+							? "ascet_cli_timeout"
+							: processOk
+								? "ascet_cli_invalid_json"
+								: "ascet_cli_failed",
+				}),
 		error: ok
 			? undefined
 			: {
@@ -517,7 +690,7 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 
 export function formatAscetCliJsonResult(operation: string, result: AscetCliJsonResult): string {
 	if (result.ok) {
-		const payload = toToolSuccessPayload(result.data);
+		const payload = toToolSuccessPayload(addSearchCompletenessNotice(result.data));
 		const formatted = JSON.stringify(payload, null, 2) ?? "null";
 		if (Buffer.byteLength(formatted, "utf8") <= getFormatArtifactThresholdBytes()) {
 			return formatted;
@@ -529,6 +702,7 @@ export function formatAscetCliJsonResult(operation: string, result: AscetCliJson
 		result.error?.code === "ascet_cli_failed" && /(ToolAPI|stdio streams are unavailable|runtime)/i.test(message)
 			? "hint: ASCET runtime (ToolAPI) is not connected. Start ASCET GUI with ToolAPI enabled, then rerun ascet_status or the ASCET command."
 			: "";
+	const diagnostics = result.diagnostics;
 	return JSON.stringify(
 		toToolFailurePayload({
 			code: result.error?.code ?? "unknown",
@@ -539,11 +713,49 @@ export function formatAscetCliJsonResult(operation: string, result: AscetCliJson
 				stdout: sanitizeCliFailureText(result.stdout),
 				exitCode: result.exitCode,
 				timedOut: result.timedOut ? true : undefined,
+				operationId: diagnostics?.operationId,
+				stage: diagnostics?.stage,
+				aborted: diagnostics?.aborted ? true : undefined,
+				retryable: diagnostics?.retryable,
+				stderrSummary: diagnostics?.stderrSummary,
+				stdoutSummary: diagnostics?.stdoutSummary,
 			},
 		}),
 		null,
 		2,
 	);
+}
+
+function addSearchCompletenessNotice(data: unknown): unknown {
+	if (data === null || typeof data !== "object" || Array.isArray(data)) {
+		return data;
+	}
+	const envelope = data as { result?: unknown; source?: unknown };
+	const result = envelope.result;
+	if (result === null || typeof result !== "object" || Array.isArray(result)) {
+		return data;
+	}
+	const payload = result as Record<string, unknown>;
+	const itemCount = Array.isArray(payload.matches)
+		? payload.matches.length
+		: Array.isArray(payload.items)
+			? payload.items.length
+			: undefined;
+	if (
+		itemCount === 0 &&
+		payload.searchComplete === false &&
+		payload.authoritative === false &&
+		(payload.source === "quick_search_index" || envelope.source === "quick_search_index")
+	) {
+		return {
+			...data,
+			result: {
+				...payload,
+				summary: "No indexed matches were returned, but the search is not exhaustive.",
+			},
+		};
+	}
+	return data;
 }
 
 function sanitizeCliFailureText(text: string): string {
