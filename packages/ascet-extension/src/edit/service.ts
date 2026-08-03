@@ -17,7 +17,8 @@ import {
 	getDefaultCreateMethodKind,
 	validateCreateMethodKindCompatibility,
 } from "../method-kind-compatibility.ts";
-import { invalidateAscetSearchIndexPartitions } from "../search-index.ts";
+import { ensureAscetSearchIndex, invalidateAscetSearchIndexPartitions } from "../search-index.ts";
+import { getAscetSqliteIndexStatus } from "../search-index-sqlite/status.ts";
 import { runApprovedAscetSetElementDependency } from "../set-element-dependency.ts";
 import { runApprovedAscetSetEnumerators } from "../set-enumerators.ts";
 import { runApprovedAscetSetMethodCode } from "../set-method-code.ts";
@@ -542,7 +543,15 @@ async function applySuccessfulEditIndexUpdate(
 				),
 			);
 		}
-		const update = mergeElementIndexWritebackResults(updates);
+		const update = mergeElementIndexWritebackResults(updates, impact.stale);
+		if (!update.issues || update.issues.length === 0) {
+			const refresh = await refreshDependencySearchIndexGeneration(options);
+			if (refresh) {
+				const reconciled = { ...update, stale: [], refresh };
+				applyTargetedEditWritebackImpact(reconciled, impact, options);
+				return reconciled;
+			}
+		}
 		applyTargetedEditWritebackImpact(update, impact, options);
 		return update.issues && update.issues.length > 0 ? { ...update, stale: impact.stale } : update;
 	}
@@ -567,6 +576,66 @@ async function applySuccessfulEditIndexUpdate(
 	return impact;
 }
 
+/**
+ * A dependency mutation changes more than the edited element declaration: it
+ * also changes element/component references and database-item dependencies.
+ * If a SQLite generation already exists, rebuild the complete P0 generation
+ * synchronously after live readback so the result cannot advertise success
+ * while those relationship areas still point at the previous generation.
+ *
+ * When no persisted index exists, or storage is explicitly memory-only, keep
+ * the existing stale/background-refresh behavior. There is no generation to
+ * reconcile in that mode.
+ */
+async function refreshDependencySearchIndexGeneration(
+	options: RunAscetEditOperationOptions,
+): Promise<NonNullable<AscetElementIndexWritebackResult["refresh"]> | undefined> {
+	const storage = options.env?.PI_ASCET_SEARCH_INDEX_STORAGE ?? process.env.PI_ASCET_SEARCH_INDEX_STORAGE;
+	if (storage === "memory") {
+		return undefined;
+	}
+
+	let before: ReturnType<typeof getAscetSqliteIndexStatus>;
+	try {
+		before = getAscetSqliteIndexStatus(options.cwd);
+	} catch {
+		return undefined;
+	}
+	if (before.status !== "ready" && before.status !== "stale") {
+		return undefined;
+	}
+
+	const warmup = await ensureAscetSearchIndex({
+		cwd: options.cwd,
+		env: options.env,
+		signal: options.signal,
+		timeoutMs: options.timeoutMs,
+		executeCli: options.executeCli,
+		scheduler: options.scheduler,
+		partition: "p0",
+		forceRefresh: true,
+		includeTextCode: true,
+		toolName: "ascet_index_refresh",
+	});
+	if (!warmup.ok) {
+		return undefined;
+	}
+
+	try {
+		const after = getAscetSqliteIndexStatus(options.cwd);
+		if (after.status !== "ready" || after.areas.some((area) => area.status !== "ready")) {
+			return undefined;
+		}
+		return {
+			partition: "p0",
+			generation: after.runId,
+			areas: after.areas.map((area) => area.area),
+		};
+	} catch {
+		return undefined;
+	}
+}
+
 function getDependencyWritebackComponentPaths(
 	params: Extract<AscetMutationParams, { action: "set_element_dependency" }>,
 	raw: AscetCliJsonResult,
@@ -584,6 +653,7 @@ function getDependencyWritebackComponentPaths(
 
 function mergeElementIndexWritebackResults(
 	updates: readonly AscetElementIndexWritebackResult[],
+	fallbackStale: readonly AscetEditImpact["stale"][number][],
 ): AscetElementIndexWritebackResult {
 	const updated = new Set<AscetElementIndexWritebackResult["updated"][number]>();
 	const stale = new Set<AscetElementIndexWritebackResult["stale"][number]>();
@@ -603,7 +673,7 @@ function mergeElementIndexWritebackResults(
 
 	return {
 		updated: [...updated],
-		stale: [...stale],
+		stale: issues.length > 0 ? [...fallbackStale] : [...stale],
 		elements,
 		...(issues.length > 0 ? { issues } : {}),
 	};

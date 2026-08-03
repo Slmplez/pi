@@ -8,6 +8,7 @@ import {
 } from "./cli.ts";
 import { normalizeAscetPath } from "./core/path.ts";
 import { refreshElementsFromLiveCatalog } from "./element-index-writeback.ts";
+import { runAscetReadElementDependency } from "./read-element-dependency.ts";
 import type { AscetScheduler } from "./scheduler/scheduler.ts";
 import {
 	type AscetSearchIndexEntry,
@@ -15,6 +16,7 @@ import {
 	getAscetFullElement,
 	getAscetSearchIndexPartitionState,
 	getAscetSearchIndexState,
+	queryAscetSearchIndex,
 } from "./search-index.ts";
 
 export interface AscetReadDependentChainParams {
@@ -82,17 +84,74 @@ export async function runAscetReadDependentChain(
 	params: AscetReadDependentChainParams,
 	options: RunAscetReadDependentChainOptions,
 ): Promise<AscetReadDependentChainResult> {
+	const fallback = params.fallback ?? "legacy_live";
+	// The live dependency mapping is authoritative.  A same-name index hit is
+	// only a candidate and must not override an explicit live Imported ->
+	// Exported owner relationship.
+	if (fallback === "legacy_live") {
+		const legacy = await runLegacyAscetReadDependentChain(params, options);
+		if (legacy.ok) {
+			const evidence = await recoverLegacyEvidence(params, options, extractLegacyEvidence(legacy.data));
+			const liveResolved = await resolveLiveEvidence(params, options, evidence);
+			if (liveResolved) {
+				return liveResolved;
+			}
+			if (params.exporterComponentPath) {
+				const names = uniqueStrings([...evidence.importedNames, ...evidence.exportedNames, ...evidence.references]);
+				if (names.length > 0) {
+					const explicitLive = await findExplicitLiveProvider(names, params, options);
+					if (explicitLive.status !== "not_found") {
+						return completeProviderResult(params, options, explicitLive, evidence);
+					}
+				}
+			}
+
+			const indexReady = await ensureElementDeclarationsReady(options);
+			if (indexReady) {
+				const indexed = await runIndexFirstDependentChain(params, options, evidence);
+				if (indexed) {
+					return indexed;
+				}
+			}
+
+			return legacy;
+		}
+	}
+
+	let dependencyEvidence: LegacyChainEvidence | undefined;
 	const indexReady = await ensureElementDeclarationsReady(options);
 	if (indexReady) {
-		const indexed = await runIndexFirstDependentChain(params, options);
+		if (fallback === "none") {
+			// Preserve the fast path for the common same-name case. Only recover
+			// the dependency formula when the direct index lookup cannot resolve a
+			// provider; the dependent and provider names may differ (for example
+			// K_Effective -> K_Shared).
+			const directProvider = findExportedProviders([params.dependentElement], params, {
+				cwd: options.cwd,
+				env: options.env,
+			});
+			if (directProvider.status !== "not_found") {
+				const indexed = await runIndexFirstDependentChain(params, options);
+				if (indexed) {
+					return indexed;
+				}
+			}
+			dependencyEvidence = await recoverLegacyEvidence(params, options, createEmptyLegacyEvidence());
+		}
+
+		const indexed = await runIndexFirstDependentChain(params, options, dependencyEvidence);
 		if (indexed) {
 			return indexed;
 		}
 	}
-	if ((params.fallback ?? "legacy_live") === "legacy_live") {
+	if (fallback === "none" && !dependencyEvidence) {
+		dependencyEvidence = await recoverLegacyEvidence(params, options, createEmptyLegacyEvidence());
+	}
+	if (fallback === "legacy_live") {
 		return runLegacyAscetReadDependentChain(params, options);
 	}
 	return createIndexedResult(params, options, {
+		consumer: buildConsumerPayload(params, dependencyEvidence),
 		total: 0,
 		items: [],
 		issues: [
@@ -134,43 +193,226 @@ async function ensureElementDeclarationsReady(options: RunAscetReadDependentChai
 		partition: "element_decls",
 		toolName: "ascet_read",
 	});
-	return warmup.ok && getAscetSearchIndexPartitionState("element_decls")?.status === "ready";
+	// SQLite-backed warmups may be served from the persisted cache without
+	// hydrating the process-local memory index. The persisted ready result is
+	// still authoritative for the bounded provider query below.
+	return warmup.ok;
 }
 
 async function runIndexFirstDependentChain(
 	params: AscetReadDependentChainParams,
 	options: RunAscetReadDependentChainOptions,
+	legacyEvidence?: LegacyChainEvidence,
 ): Promise<AscetReadDependentChainResult | undefined> {
-	const directNames = [params.dependentElement];
-	const directProviders = findExportedProviders(directNames, params);
+	const directNames = legacyEvidence
+		? uniqueStrings([...legacyEvidence.importedNames, ...legacyEvidence.exportedNames, ...legacyEvidence.references])
+		: [params.dependentElement];
+	const directProviders = findExportedProviders(
+		directNames.length > 0 ? directNames : [params.dependentElement],
+		{
+			...params,
+			exporterComponentPath: params.exporterComponentPath ?? uniqueSingle(legacyEvidence?.exportOwnerPaths ?? []),
+		},
+		{ cwd: options.cwd },
+	);
 	if (directProviders.status !== "not_found") {
-		return completeProviderResult(params, options, directProviders, undefined);
+		return completeProviderResult(params, options, directProviders, legacyEvidence);
 	}
 
 	if ((params.fallback ?? "legacy_live") !== "legacy_live") {
-		return createNoProviderResult(params, options, undefined, directNames);
+		return createNoProviderResult(params, options, legacyEvidence, directNames);
 	}
 
+	if (legacyEvidence) {
+		if (directNames.length > 0 && params.exporterComponentPath) {
+			const liveProvider = await findExplicitLiveProvider(directNames, params, options);
+			if (liveProvider.status !== "not_found") {
+				return completeProviderResult(params, options, liveProvider, legacyEvidence);
+			}
+		}
+		return createNoProviderResult(params, options, legacyEvidence, directNames);
+	}
 	const legacy = await runLegacyAscetReadDependentChain(params, options);
 	if (!legacy.ok) {
 		return legacy;
 	}
 
-	const legacyEvidence = extractLegacyEvidence(legacy.data);
+	const recoveredEvidence = extractLegacyEvidence(legacy.data);
 	const candidateNames = uniqueStrings([
-		...legacyEvidence.importedNames,
-		...legacyEvidence.exportedNames,
-		...legacyEvidence.references,
+		...recoveredEvidence.importedNames,
+		...recoveredEvidence.exportedNames,
+		...recoveredEvidence.references,
 	]);
 	const names = candidateNames.length > 0 ? candidateNames : directNames;
-	const providers = findExportedProviders(names, {
-		...params,
-		exporterComponentPath: params.exporterComponentPath ?? uniqueSingle(legacyEvidence.exportOwnerPaths),
-	});
+	const providers = findExportedProviders(
+		names,
+		{
+			...params,
+			exporterComponentPath: params.exporterComponentPath ?? uniqueSingle(recoveredEvidence.exportOwnerPaths),
+		},
+		{ cwd: options.cwd },
+	);
 	if (providers.status !== "not_found") {
-		return completeProviderResult(params, options, providers, legacyEvidence);
+		return completeProviderResult(params, options, providers, recoveredEvidence);
 	}
-	return createNoProviderResult(params, options, legacyEvidence, names);
+	if ((params.fallback ?? "legacy_live") === "legacy_live" && names.length > 0 && params.exporterComponentPath) {
+		const liveProvider = await findExplicitLiveProvider(names, params, options);
+		if (liveProvider.status !== "not_found") {
+			return completeProviderResult(params, options, liveProvider, recoveredEvidence);
+		}
+	}
+	return createNoProviderResult(
+		params,
+		options,
+		recoveredEvidence,
+		names.length > 0 ? names : [params.dependentElement],
+	);
+}
+
+async function findExplicitLiveProvider(
+	names: readonly string[],
+	params: AscetReadDependentChainParams,
+	options: RunAscetReadDependentChainOptions,
+): Promise<ProviderResolution> {
+	const componentPath = normalizeOutputPath(params.exporterComponentPath);
+	if (!componentPath) {
+		return { status: "not_found", items: [] };
+	}
+	const maxCandidates = Math.trunc(params.maxCandidates ?? 200);
+	for (const name of names.slice(0, Number.isFinite(maxCandidates) && maxCandidates > 0 ? maxCandidates : 200)) {
+		const candidate: AscetSearchIndexEntry = {
+			group: "primitive",
+			componentPath,
+			componentKind: "",
+			componentLanguageKind: "",
+			elementName: name,
+			elementKind: "parameter",
+			displayType: "",
+			displayScope: "Exported",
+			referencedComponentPath: "",
+			path: `${componentPath}/${name}`,
+		};
+		const full = await readProviderElementData(candidate, options);
+		if (!full.issue) {
+			return { status: "found", item: candidate, lookupSource: "live" };
+		}
+	}
+	return { status: "not_found", items: [] };
+}
+
+async function recoverLegacyEvidence(
+	params: AscetReadDependentChainParams,
+	options: RunAscetReadDependentChainOptions,
+	evidence: LegacyChainEvidence,
+): Promise<LegacyChainEvidence> {
+	if (hasProviderEvidence(evidence)) {
+		return evidence;
+	}
+
+	const dependency = await runAscetReadElementDependency(
+		{
+			targetPath: params.componentPath,
+			elementName: params.dependentElement,
+			targetKind: "component",
+		},
+		options,
+	);
+	if (!dependency.ok) {
+		return evidence;
+	}
+
+	const payload = unwrapPayload(dependency.data);
+	const matches = Array.isArray(payload?.matches) ? payload.matches.filter(isRecord) : [];
+	const matching =
+		matches.find((entry) => {
+			const component = asString(entry.component);
+			const element = asString(entry.element);
+			return (
+				(!component || normalizeForCompare(component) === normalizeForCompare(params.componentPath)) &&
+				(!element || element.trim().toLowerCase() === params.dependentElement.trim().toLowerCase())
+			);
+		}) ?? matches[0];
+	const formulaCode = asString(matching?.formula) || asString(payload?.formula);
+	const references = extractFormulaReferences(formulaCode);
+	if (!formulaCode.trim() && references.length === 0) {
+		return evidence;
+	}
+
+	const recoveredNames = uniqueStrings(references);
+	const recoveredIssues = evidence.issues.filter(
+		(issue) => issue !== "dependency_mapping_not_found" && issue !== "formula_not_found",
+	);
+	const supported = matching?.supported === true;
+	return {
+		...evidence,
+		dependent: {
+			...evidence.dependent,
+			dependency: asString(matching?.dependency) || evidence.dependent.dependency,
+		},
+		formula: {
+			code: formulaCode,
+			references: uniqueStrings([...(evidence.formula?.references ?? []), ...references]),
+			mappings: recoveredNames.map((name) => ({ formal: name, imported: name })),
+		},
+		importedNames: uniqueStrings([...evidence.importedNames, ...recoveredNames]),
+		references: uniqueStrings([...evidence.references, ...references]),
+		complete: evidence.complete || (supported && recoveredNames.length > 0),
+		issues: recoveredIssues,
+	};
+}
+
+function hasProviderEvidence(evidence: LegacyChainEvidence): boolean {
+	return (
+		evidence.importedNames.length > 0 ||
+		evidence.exportedNames.length > 0 ||
+		evidence.references.length > 0 ||
+		Boolean(evidence.formula?.code?.trim())
+	);
+}
+
+function createEmptyLegacyEvidence(): LegacyChainEvidence {
+	return {
+		dependent: {},
+		importedNames: [],
+		exportedNames: [],
+		references: [],
+		exportOwnerPaths: [],
+		complete: false,
+		issues: [],
+	};
+}
+
+async function resolveLiveEvidence(
+	params: AscetReadDependentChainParams,
+	options: RunAscetReadDependentChainOptions,
+	evidence: LegacyChainEvidence,
+): Promise<AscetReadDependentChainResult | undefined> {
+	const ownerPath = uniqueSingle(evidence.exportOwnerPaths);
+	const providerName = uniqueSingle([...evidence.exportedNames, ...evidence.importedNames, ...evidence.references]);
+	if (!ownerPath || !providerName) {
+		return undefined;
+	}
+
+	// Keep the live owner even when the local element_decls index is stale or
+	// does not contain the provider yet.
+	const liveProvider: AscetSearchIndexEntry = {
+		group: "primitive",
+		componentPath: ownerPath,
+		componentKind: "",
+		componentLanguageKind: "",
+		elementName: providerName,
+		elementKind: "parameter",
+		displayType: "",
+		displayScope: "Exported",
+		referencedComponentPath: "",
+		path: `${ownerPath}/${providerName}`,
+	};
+	return completeProviderResult(
+		params,
+		options,
+		{ status: "found", item: liveProvider, lookupSource: "live" },
+		evidence,
+	);
 }
 
 async function completeProviderResult(
@@ -198,8 +440,9 @@ async function completeProviderResult(
 
 	const provider = providers.item;
 	const full = await readProviderElementData(provider, options);
+	const resolvedLegacy = legacy ? resolveLegacyProviderEvidence(legacy, provider) : undefined;
 	const payload = {
-		consumer: buildConsumerPayload(params, legacy),
+		consumer: buildConsumerPayload(params, resolvedLegacy),
 		provider: providerToItem(provider, full.componentPath),
 		element:
 			params.detailLevel === "summary"
@@ -213,7 +456,9 @@ async function completeProviderResult(
 			provider: "element_decls",
 			element: full.source === "full_element_cache" ? "full_element_cache" : "live",
 		},
-		issues: full.issue ? [full.issue] : undefined,
+		providerLookupSource: providers.lookupSource,
+		complete: !full.issue && (resolvedLegacy ? resolvedLegacy.complete : true),
+		issues: full.issue ? [full.issue] : resolvedLegacy?.issues.length ? resolvedLegacy.issues : [],
 	};
 	return createIndexedResult(params, options, payload);
 }
@@ -224,6 +469,7 @@ function createNoProviderResult(
 	legacy: LegacyChainEvidence | undefined,
 	names: readonly string[],
 ): AscetReadDependentChainResult {
+	const searchedNames = uniqueStrings(names);
 	return createIndexedResult(params, options, {
 		consumer: buildConsumerPayload(params, legacy),
 		total: 0,
@@ -231,27 +477,28 @@ function createNoProviderResult(
 		issues: [
 			{
 				code: "exportedProviderNotFound",
-				message: `No same-name scope=Exported provider was found in element_decls for ${names.join(", ")}.`,
+				message: `No same-name scope=Exported provider was found in element_decls for ${searchedNames.length > 0 ? searchedNames.join(", ") : params.dependentElement}.`,
 			},
 		],
 	});
 }
 
 type ProviderResolution =
-	| { status: "found"; item: AscetSearchIndexEntry }
+	| { status: "found"; item: AscetSearchIndexEntry; lookupSource: "index" | "live" }
 	| { status: "ambiguous"; items: AscetSearchIndexEntry[] }
 	| { status: "not_found"; items: [] };
 
-function findExportedProviders(names: readonly string[], params: AscetReadDependentChainParams): ProviderResolution {
+function findExportedProviders(
+	names: readonly string[],
+	params: AscetReadDependentChainParams,
+	options?: Pick<RunAscetReadDependentChainOptions, "cwd" | "env">,
+): ProviderResolution {
 	const state = getAscetSearchIndexState();
-	if (state.status !== "ready") {
-		return { status: "not_found", items: [] };
-	}
 	const nameSet = new Set(names.map((name) => name.trim().toLowerCase()).filter(Boolean));
 	const exporter = normalizeForCompare(params.exporterComponentPath);
 	const providerScope = normalizeForCompare(params.providerScopePath);
 	const maxCandidates = Math.trunc(params.maxCandidates ?? 200);
-	const candidates = state.entries.filter((entry) => {
+	const matches = (entry: AscetSearchIndexEntry): boolean => {
 		if (!nameSet.has(entry.elementName.trim().toLowerCase())) {
 			return false;
 		}
@@ -266,15 +513,92 @@ function findExportedProviders(names: readonly string[], params: AscetReadDepend
 			return false;
 		}
 		return true;
-	});
+	};
+	let candidates = state.status === "ready" ? state.entries.filter(matches) : [];
+	if (candidates.length === 0 && options?.cwd) {
+		candidates = queryExportedProvidersFromSqlite(names, params, options).filter(matches);
+	}
 	const limited = candidates.slice(0, Number.isFinite(maxCandidates) && maxCandidates > 0 ? maxCandidates : 200);
 	if (limited.length === 0) {
 		return { status: "not_found", items: [] };
 	}
 	if (limited.length === 1) {
-		return { status: "found", item: limited[0]! };
+		return { status: "found", item: limited[0]!, lookupSource: "index" };
 	}
 	return { status: "ambiguous", items: limited };
+}
+
+function queryExportedProvidersFromSqlite(
+	names: readonly string[],
+	params: AscetReadDependentChainParams,
+	options: Pick<RunAscetReadDependentChainOptions, "cwd" | "env">,
+): AscetSearchIndexEntry[] {
+	const maxCandidates = Math.trunc(params.maxCandidates ?? 200);
+	const limit = Number.isFinite(maxCandidates) && maxCandidates > 0 ? maxCandidates : 200;
+	const entries: AscetSearchIndexEntry[] = [];
+	for (const name of uniqueStrings(names)) {
+		const result = queryAscetSearchIndex(
+			{
+				query: name,
+				match: "exact",
+				group: "primitive",
+				componentPath: params.exporterComponentPath,
+				scopePath: params.providerScopePath,
+				limit,
+			},
+			{ cwd: options.cwd, env: options.env },
+		);
+		const payload = unwrapPayload(result?.data);
+		const matches = Array.isArray(payload?.matches) ? payload.matches.filter(isRecord) : [];
+		for (const match of matches) {
+			const entry = toSearchIndexEntry(match);
+			if (entry) {
+				entries.push(entry);
+			}
+		}
+	}
+	return [...new Map(entries.map((entry) => [`${entry.componentPath}\u0000${entry.elementName}`, entry])).values()];
+}
+
+function toSearchIndexEntry(value: Record<string, unknown>): AscetSearchIndexEntry | undefined {
+	const componentPath = asString(value.componentPath);
+	const elementName = asString(value.elementName);
+	if (!componentPath || !elementName) {
+		return undefined;
+	}
+	return {
+		group: value.group === "complex" || value.group === "referenced" ? value.group : "primitive",
+		componentPath,
+		componentKind: asString(value.componentKind),
+		componentLanguageKind: asString(value.componentLanguageKind),
+		elementName,
+		elementKind: asString(value.elementKind),
+		displayType: asString(value.displayType),
+		displayScope: asString(value.displayScope),
+		referencedComponentPath: asString(value.referencedComponentPath),
+		path: asString(value.path) || `${componentPath}/${elementName}`,
+	};
+}
+
+function resolveLegacyProviderEvidence(
+	legacy: LegacyChainEvidence,
+	provider: AscetSearchIndexEntry,
+): LegacyChainEvidence {
+	const providerName = provider.elementName.trim().toLowerCase();
+	const referencedNames = uniqueStrings([...legacy.importedNames, ...legacy.exportedNames, ...legacy.references]);
+	const issues = legacy.issues.filter((issue) => {
+		const match = /^export_not_found:(.+)$/u.exec(issue);
+		return !match || match[1]!.trim().toLowerCase() !== providerName;
+	});
+	return {
+		...legacy,
+		complete:
+			legacy.complete ||
+			(referencedNames.length === 1 &&
+				referencedNames[0]!.trim().toLowerCase() === providerName &&
+				issues.length === 0),
+		issues,
+	};
 }
 
 async function readProviderElementData(
@@ -371,6 +695,8 @@ interface LegacyChainEvidence {
 	exportedNames: string[];
 	references: string[];
 	exportOwnerPaths: string[];
+	complete: boolean;
+	issues: string[];
 }
 
 function extractLegacyEvidence(data: unknown): LegacyChainEvidence {
@@ -384,6 +710,7 @@ function extractLegacyEvidence(data: unknown): LegacyChainEvidence {
 		imported: asString(entry.imported),
 	}));
 	const code = asString(formula?.code) || asString(dependent?.formula);
+	const issues = asStringArray(payload?.issues);
 	return {
 		dependent: {
 			kind: asString(dependent?.kind) || undefined,
@@ -402,6 +729,8 @@ function extractLegacyEvidence(data: unknown): LegacyChainEvidence {
 		exportedNames: uniqueStrings(inputs.map((entry) => asString(asRecord(entry.export)?.name))),
 		references: uniqueStrings([...asStringArray(formula?.references), ...extractFormulaReferences(code)]),
 		exportOwnerPaths: uniqueStrings(inputs.map((entry) => asString(asRecord(entry.export)?.owner))),
+		complete: payload?.complete === true,
+		issues,
 	};
 }
 

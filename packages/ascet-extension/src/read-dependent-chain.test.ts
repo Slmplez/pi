@@ -6,6 +6,7 @@ import { afterEach, describe, test } from "node:test";
 import type { AscetCliExecutionResult, AscetCliRequest } from "./cli.ts";
 import { runAscetReadDependentChain } from "./read-dependent-chain.ts";
 import { type AscetSearchIndexEntry, resetAscetSearchIndexForTest, upsertAscetFullElements } from "./search-index.ts";
+import { ingestAscetSearchIndexSqlite } from "./search-index-sqlite/ingest.ts";
 
 function createReadyEnv(): { cwd: string; env: Record<string, string | undefined>; cleanup: () => void } {
 	const root = mkdtempSync(join(tmpdir(), "pi-ascet-read-chain-"));
@@ -65,7 +66,7 @@ afterEach(() => {
 	resetAscetSearchIndexForTest();
 });
 
-describe("ASCET read dependent chain index-first resolver", () => {
+describe("ASCET read dependent chain live-mapping-first resolver", () => {
 	test("uses ready element index and full cache without legacy live chain", async () => {
 		seedIndex([
 			element({ componentPath: "A/Consumer", elementName: "K", displayScope: "Local" }),
@@ -99,9 +100,14 @@ describe("ASCET read dependent chain index-first resolver", () => {
 
 		assert.equal(result.ok, true);
 		assert.equal(calls, 0);
-		const payload = result.data as { provider?: { component?: string }; element?: { source?: string } };
+		const payload = result.data as {
+			provider?: { component?: string };
+			element?: { source?: string };
+			providerLookupSource?: string;
+		};
 		assert.equal(payload.provider?.component, "A/Provider");
 		assert.equal(payload.element?.source, "full_element_cache");
+		assert.equal(payload.providerLookupSource, "index");
 	});
 
 	test("reads provider catalog when full cache misses", async () => {
@@ -255,6 +261,352 @@ describe("ASCET read dependent chain index-first resolver", () => {
 			assert.equal(payload.provider?.component, "A/Provider");
 			assert.equal(payload.provider?.name, "C_K");
 			assert.equal(payload.consumer?.formula?.code, "C_K");
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("live owner mapping wins over an unrelated same-name index provider", async () => {
+		seedIndex([element({ componentPath: "A/IndexedProvider", elementName: "K_Shared", displayScope: "Exported" })]);
+		const fixture = createReadyEnv();
+		const calls: string[][] = [];
+		try {
+			const result = await runAscetReadDependentChain(
+				{ componentPath: "A/Consumer", dependentElement: "K_Effective" },
+				{
+					cwd: fixture.cwd,
+					env: fixture.env,
+					executeCli: async (request) => {
+						calls.push(request.args);
+						if (request.args[1] === "read_dependent_chain") {
+							return makeExecution(request, {
+								component: "A/Consumer",
+								dependent: {
+									name: "K_Effective",
+									scope: "Local",
+									dependency: "dependent",
+									formula: "K_Shared",
+								},
+								dependencyFormula: {
+									code: "K_Shared",
+									references: ["K_Shared"],
+									mappings: [{ formal: "K_Shared", imported: "K_Shared" }],
+								},
+								inputs: [
+									{
+										formal: { name: "K_Shared" },
+										value: { name: "K_Shared", scope: "Imported" },
+										export: { exists: true, name: "K_Shared", scope: "Exported", owner: "A/LiveProvider" },
+									},
+								],
+								complete: true,
+								issues: [],
+							});
+						}
+						return makeExecution(request, {
+							elements: [{ name: "K_Shared", kind: "parameter", modelType: "cont", scope: "Exported" }],
+						});
+					},
+				},
+			);
+
+			const payload = result.data as {
+				provider?: { component?: string };
+				providerLookupSource?: string;
+				complete?: boolean;
+				issues?: unknown[];
+			};
+			assert.deepEqual(
+				calls.map((args) => args[1]),
+				["read_dependent_chain", "read_element_catalog"],
+			);
+			assert.equal(payload.provider?.component, "A/LiveProvider");
+			assert.equal(payload.providerLookupSource, "live");
+			assert.equal(payload.complete, true);
+			assert.deepEqual(payload.issues, []);
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("promotes an indexed provider when legacy resolution reports export_not_found", async () => {
+		seedIndex([element({ componentPath: "A/Provider", elementName: "K_Shared", displayScope: "Exported" })]);
+		const fixture = createReadyEnv();
+		const calls: string[][] = [];
+		try {
+			const result = await runAscetReadDependentChain(
+				{ componentPath: "A/Consumer", dependentElement: "K_Effective" },
+				{
+					cwd: fixture.cwd,
+					env: fixture.env,
+					executeCli: async (request) => {
+						calls.push(request.args);
+						if (request.args[1] === "read_dependent_chain") {
+							return makeExecution(request, {
+								component: "A/Consumer",
+								dependent: {
+									name: "K_Effective",
+									scope: "local",
+									dependency: "dependent",
+									formula: "K_Shared",
+								},
+								dependencyFormula: {
+									code: "K_Shared",
+									references: ["K_Shared"],
+									mappings: [{ formal: "K_Shared", imported: "K_Shared" }],
+								},
+								inputs: [
+									{
+										formal: { name: "K_Shared" },
+										value: { name: "K_Shared", scope: "Imported" },
+										export: { exists: false, discovery: "auto" },
+										issue: "export_not_found",
+									},
+								],
+								complete: false,
+								issues: ["export_not_found:K_Shared"],
+							});
+						}
+						return makeExecution(request, {
+							elements: [{ name: "K_Shared", kind: "parameter", modelType: "cont", scope: "Exported" }],
+						});
+					},
+				},
+			);
+
+			const payload = result.data as { complete?: boolean; issues?: unknown[] };
+			assert.deepEqual(
+				calls.map((args) => args[1]),
+				["read_dependent_chain", "read_element_catalog"],
+			);
+			assert.equal(payload.complete, true);
+			assert.deepEqual(payload.issues, []);
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("recovers the dependency formula when the legacy chain export has no mapping", async () => {
+		seedIndex([element({ componentPath: "A/Provider", elementName: "K_Shared", displayScope: "Exported" })]);
+		const fixture = createReadyEnv();
+		const calls: string[][] = [];
+		try {
+			const result = await runAscetReadDependentChain(
+				{
+					componentPath: "A/Consumer",
+					dependentElement: "K_Effective",
+					exporterComponentPath: "A/Provider",
+				},
+				{
+					cwd: fixture.cwd,
+					env: fixture.env,
+					executeCli: async (request) => {
+						calls.push(request.args);
+						if (request.args[1] === "read_dependent_chain") {
+							return makeExecution(request, {
+								component: "A/Consumer",
+								dependent: { name: "K_Effective", scope: "local", dependency: "dependent" },
+								dependencyFormula: { exists: false, references: [], mappings: [] },
+								inputs: [],
+								complete: false,
+								issues: ["dependency_mapping_not_found"],
+							});
+						}
+						if (request.args[1] === "read_element_dependency") {
+							return makeExecution(request, {
+								target: "A/Consumer",
+								element: "K_Effective",
+								count: 1,
+								matches: [
+									{
+										component: "A/Consumer",
+										element: "K_Effective",
+										dependency: "dependent",
+										formula: "K_Shared",
+										supported: true,
+									},
+								],
+								issues: [],
+							});
+						}
+						return makeExecution(request, {
+							elements: [{ name: "K_Shared", kind: "parameter", modelType: "cont", scope: "Exported" }],
+						});
+					},
+				},
+			);
+
+			const payload = result.data as {
+				provider?: { component?: string; name?: string };
+				consumer?: { formula?: { code?: string } };
+				complete?: boolean;
+				issues?: unknown[];
+			};
+			assert.deepEqual(
+				calls.map((args) => args[1]),
+				["read_dependent_chain", "read_element_dependency", "read_element_catalog"],
+			);
+			assert.equal(payload.provider?.component, "A/Provider");
+			assert.equal(payload.provider?.name, "K_Shared");
+			assert.equal(payload.consumer?.formula?.code, "K_Shared");
+			assert.equal(payload.complete, true);
+			assert.deepEqual(payload.issues, []);
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("uses the explicit exporter as a live fallback when the declaration index has no provider", async () => {
+		const fixture = createReadyEnv();
+		const calls: string[][] = [];
+		try {
+			const result = await runAscetReadDependentChain(
+				{
+					componentPath: "A/Consumer",
+					dependentElement: "K_Effective",
+					exporterComponentPath: "A/Provider",
+				},
+				{
+					cwd: fixture.cwd,
+					env: fixture.env,
+					executeCli: async (request) => {
+						calls.push(request.args);
+						if (request.args[1] === "read_dependent_chain") {
+							return makeExecution(request, {
+								component: "A/Consumer",
+								dependent: { name: "K_Effective", scope: "local", dependency: "dependent" },
+								inputs: [],
+								complete: false,
+								issues: ["dependency_mapping_not_found"],
+							});
+						}
+						if (request.args[1] === "read_element_dependency") {
+							return makeExecution(request, {
+								target: "A/Consumer",
+								element: "K_Effective",
+								matches: [
+									{ component: "A/Consumer", element: "K_Effective", formula: "K_Shared", supported: true },
+								],
+								issues: [],
+							});
+						}
+						return makeExecution(request, {
+							elements: [{ name: "K_Shared", kind: "parameter", modelType: "cont", scope: "Exported" }],
+						});
+					},
+				},
+			);
+
+			const payload = result.data as {
+				provider?: { component?: string; name?: string };
+				providerLookupSource?: string;
+				complete?: boolean;
+			};
+			assert.deepEqual(
+				calls.map((args) => args[1]),
+				["read_dependent_chain", "read_element_dependency", "read_element_catalog"],
+			);
+			assert.equal(payload.provider?.component, "A/Provider");
+			assert.equal(payload.provider?.name, "K_Shared");
+			assert.equal(payload.providerLookupSource, "live");
+			assert.equal(payload.complete, true);
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("recovers the dependency formula before index-only provider lookup", async () => {
+		seedIndex([element({ componentPath: "A/Provider", elementName: "K_Shared", displayScope: "Exported" })]);
+		const fixture = createReadyEnv();
+		const calls: string[][] = [];
+		try {
+			const result = await runAscetReadDependentChain(
+				{ componentPath: "A/Consumer", dependentElement: "K_Effective", fallback: "none" },
+				{
+					cwd: fixture.cwd,
+					env: fixture.env,
+					executeCli: async (request) => {
+						calls.push(request.args);
+						if (request.args[1] === "read_element_dependency") {
+							return makeExecution(request, {
+								target: "A/Consumer",
+								element: "K_Effective",
+								matches: [
+									{
+										component: "A/Consumer",
+										element: "K_Effective",
+										dependency: "dependent",
+										formula: "K_Shared",
+										supported: true,
+									},
+								],
+								issues: [],
+							});
+						}
+						return makeExecution(request, {
+							elements: [{ name: "K_Shared", kind: "parameter", modelType: "log", scope: "Exported" }],
+						});
+					},
+				},
+			);
+
+			const payload = result.data as {
+				provider?: { component?: string; name?: string };
+				complete?: boolean;
+				issues?: unknown[];
+			};
+			assert.deepEqual(
+				calls.map((args) => args[1]),
+				["read_element_dependency", "read_element_catalog"],
+			);
+			assert.equal(payload.provider?.component, "A/Provider");
+			assert.equal(payload.provider?.name, "K_Shared");
+			assert.equal(payload.complete, true);
+			assert.deepEqual(payload.issues, []);
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("uses the persisted declaration index when the process cache is empty", async () => {
+		const fixture = createReadyEnv();
+		ingestAscetSearchIndexSqlite(fixture.cwd, {
+			databaseName: "DemoDb",
+			databasePath: "C:\\ASCET\\DemoDb",
+			generatedAtMs: Date.now(),
+			elapsedMs: 1,
+			scanComplete: true,
+			textCodeIncluded: true,
+			textCodeScanComplete: true,
+			entries: [element({ componentPath: "A/Provider", elementName: "K", displayScope: "Exported" })],
+		});
+		const calls: string[][] = [];
+		try {
+			const result = await runAscetReadDependentChain(
+				{ componentPath: "A/Consumer", dependentElement: "K", fallback: "none" },
+				{
+					cwd: fixture.cwd,
+					env: fixture.env,
+					executeCli: async (request) => {
+						calls.push(request.args);
+						return makeExecution(request, {
+							elements: [{ name: "K", kind: "parameter", modelType: "cont", scope: "Exported" }],
+						});
+					},
+				},
+			);
+
+			const payload = result.data as {
+				provider?: { component?: string; name?: string };
+				complete?: boolean;
+			};
+			assert.deepEqual(
+				calls.map((args) => args[1]),
+				["read_element_catalog"],
+			);
+			assert.equal(payload.provider?.component, "A/Provider");
+			assert.equal(payload.provider?.name, "K");
+			assert.equal(payload.complete, true);
 		} finally {
 			fixture.cleanup();
 		}
