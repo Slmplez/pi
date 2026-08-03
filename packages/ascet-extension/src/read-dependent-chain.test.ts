@@ -6,6 +6,7 @@ import { afterEach, describe, test } from "node:test";
 import type { AscetCliExecutionResult, AscetCliRequest } from "./cli.ts";
 import { runAscetReadDependentChain } from "./read-dependent-chain.ts";
 import { type AscetSearchIndexEntry, resetAscetSearchIndexForTest, upsertAscetFullElements } from "./search-index.ts";
+import { ingestAscetSearchIndexSqlite } from "./search-index-sqlite/ingest.ts";
 
 function createReadyEnv(): { cwd: string; env: Record<string, string | undefined>; cleanup: () => void } {
 	const root = mkdtempSync(join(tmpdir(), "pi-ascet-read-chain-"));
@@ -508,6 +509,103 @@ describe("ASCET read dependent chain live-mapping-first resolver", () => {
 			assert.equal(payload.provider?.component, "A/Provider");
 			assert.equal(payload.provider?.name, "K_Shared");
 			assert.equal(payload.providerLookupSource, "live");
+			assert.equal(payload.complete, true);
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("recovers the dependency formula before index-only provider lookup", async () => {
+		seedIndex([element({ componentPath: "A/Provider", elementName: "K_Shared", displayScope: "Exported" })]);
+		const fixture = createReadyEnv();
+		const calls: string[][] = [];
+		try {
+			const result = await runAscetReadDependentChain(
+				{ componentPath: "A/Consumer", dependentElement: "K_Effective", fallback: "none" },
+				{
+					cwd: fixture.cwd,
+					env: fixture.env,
+					executeCli: async (request) => {
+						calls.push(request.args);
+						if (request.args[1] === "read_element_dependency") {
+							return makeExecution(request, {
+								target: "A/Consumer",
+								element: "K_Effective",
+								matches: [
+									{
+										component: "A/Consumer",
+										element: "K_Effective",
+										dependency: "dependent",
+										formula: "K_Shared",
+										supported: true,
+									},
+								],
+								issues: [],
+							});
+						}
+						return makeExecution(request, {
+							elements: [{ name: "K_Shared", kind: "parameter", modelType: "log", scope: "Exported" }],
+						});
+					},
+				},
+			);
+
+			const payload = result.data as {
+				provider?: { component?: string; name?: string };
+				complete?: boolean;
+				issues?: unknown[];
+			};
+			assert.deepEqual(
+				calls.map((args) => args[1]),
+				["read_element_dependency", "read_element_catalog"],
+			);
+			assert.equal(payload.provider?.component, "A/Provider");
+			assert.equal(payload.provider?.name, "K_Shared");
+			assert.equal(payload.complete, true);
+			assert.deepEqual(payload.issues, []);
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("uses the persisted declaration index when the process cache is empty", async () => {
+		const fixture = createReadyEnv();
+		ingestAscetSearchIndexSqlite(fixture.cwd, {
+			databaseName: "DemoDb",
+			databasePath: "C:\\ASCET\\DemoDb",
+			generatedAtMs: Date.now(),
+			elapsedMs: 1,
+			scanComplete: true,
+			textCodeIncluded: true,
+			textCodeScanComplete: true,
+			entries: [element({ componentPath: "A/Provider", elementName: "K", displayScope: "Exported" })],
+		});
+		const calls: string[][] = [];
+		try {
+			const result = await runAscetReadDependentChain(
+				{ componentPath: "A/Consumer", dependentElement: "K", fallback: "none" },
+				{
+					cwd: fixture.cwd,
+					env: fixture.env,
+					executeCli: async (request) => {
+						calls.push(request.args);
+						return makeExecution(request, {
+							elements: [{ name: "K", kind: "parameter", modelType: "cont", scope: "Exported" }],
+						});
+					},
+				},
+			);
+
+			const payload = result.data as {
+				provider?: { component?: string; name?: string };
+				complete?: boolean;
+			};
+			assert.deepEqual(
+				calls.map((args) => args[1]),
+				["read_element_catalog"],
+			);
+			assert.equal(payload.provider?.component, "A/Provider");
+			assert.equal(payload.provider?.name, "K");
 			assert.equal(payload.complete, true);
 		} finally {
 			fixture.cleanup();

@@ -84,10 +84,11 @@ export async function runAscetReadDependentChain(
 	params: AscetReadDependentChainParams,
 	options: RunAscetReadDependentChainOptions,
 ): Promise<AscetReadDependentChainResult> {
+	const fallback = params.fallback ?? "legacy_live";
 	// The live dependency mapping is authoritative.  A same-name index hit is
 	// only a candidate and must not override an explicit live Imported ->
 	// Exported owner relationship.
-	if ((params.fallback ?? "legacy_live") === "legacy_live") {
+	if (fallback === "legacy_live") {
 		const legacy = await runLegacyAscetReadDependentChain(params, options);
 		if (legacy.ok) {
 			const evidence = await recoverLegacyEvidence(params, options, extractLegacyEvidence(legacy.data));
@@ -117,17 +118,37 @@ export async function runAscetReadDependentChain(
 		}
 	}
 
+	let dependencyEvidence: LegacyChainEvidence | undefined;
 	const indexReady = await ensureElementDeclarationsReady(options);
 	if (indexReady) {
-		const indexed = await runIndexFirstDependentChain(params, options);
+		if (fallback === "none") {
+			// Preserve the fast path for the common same-name case. Only recover
+			// the dependency formula when the direct index lookup cannot resolve a
+			// provider; the dependent and provider names may differ (for example
+			// K_Effective -> K_Shared).
+			const directProvider = findExportedProviders([params.dependentElement], params, { cwd: options.cwd });
+			if (directProvider.status !== "not_found") {
+				const indexed = await runIndexFirstDependentChain(params, options);
+				if (indexed) {
+					return indexed;
+				}
+			}
+			dependencyEvidence = await recoverLegacyEvidence(params, options, createEmptyLegacyEvidence());
+		}
+
+		const indexed = await runIndexFirstDependentChain(params, options, dependencyEvidence);
 		if (indexed) {
 			return indexed;
 		}
 	}
-	if ((params.fallback ?? "legacy_live") === "legacy_live") {
+	if (fallback === "none" && !dependencyEvidence) {
+		dependencyEvidence = await recoverLegacyEvidence(params, options, createEmptyLegacyEvidence());
+	}
+	if (fallback === "legacy_live") {
 		return runLegacyAscetReadDependentChain(params, options);
 	}
 	return createIndexedResult(params, options, {
+		consumer: buildConsumerPayload(params, dependencyEvidence),
 		total: 0,
 		items: [],
 		issues: [
@@ -183,16 +204,20 @@ async function runIndexFirstDependentChain(
 	const directNames = legacyEvidence
 		? uniqueStrings([...legacyEvidence.importedNames, ...legacyEvidence.exportedNames, ...legacyEvidence.references])
 		: [params.dependentElement];
-	const directProviders = findExportedProviders(directNames.length > 0 ? directNames : [params.dependentElement], {
-		...params,
-		exporterComponentPath: params.exporterComponentPath ?? uniqueSingle(legacyEvidence?.exportOwnerPaths ?? []),
-	});
+	const directProviders = findExportedProviders(
+		directNames.length > 0 ? directNames : [params.dependentElement],
+		{
+			...params,
+			exporterComponentPath: params.exporterComponentPath ?? uniqueSingle(legacyEvidence?.exportOwnerPaths ?? []),
+		},
+		{ cwd: options.cwd },
+	);
 	if (directProviders.status !== "not_found") {
 		return completeProviderResult(params, options, directProviders, legacyEvidence);
 	}
 
 	if ((params.fallback ?? "legacy_live") !== "legacy_live") {
-		return createNoProviderResult(params, options, undefined, directNames);
+		return createNoProviderResult(params, options, legacyEvidence, directNames);
 	}
 
 	if (legacyEvidence) {
@@ -216,10 +241,14 @@ async function runIndexFirstDependentChain(
 		...recoveredEvidence.references,
 	]);
 	const names = candidateNames.length > 0 ? candidateNames : directNames;
-	const providers = findExportedProviders(names, {
-		...params,
-		exporterComponentPath: params.exporterComponentPath ?? uniqueSingle(recoveredEvidence.exportOwnerPaths),
-	});
+	const providers = findExportedProviders(
+		names,
+		{
+			...params,
+			exporterComponentPath: params.exporterComponentPath ?? uniqueSingle(recoveredEvidence.exportOwnerPaths),
+		},
+		{ cwd: options.cwd },
+	);
 	if (providers.status !== "not_found") {
 		return completeProviderResult(params, options, providers, recoveredEvidence);
 	}
@@ -336,6 +365,18 @@ function hasProviderEvidence(evidence: LegacyChainEvidence): boolean {
 		evidence.references.length > 0 ||
 		Boolean(evidence.formula?.code?.trim())
 	);
+}
+
+function createEmptyLegacyEvidence(): LegacyChainEvidence {
+	return {
+		dependent: {},
+		importedNames: [],
+		exportedNames: [],
+		references: [],
+		exportOwnerPaths: [],
+		complete: false,
+		issues: [],
+	};
 }
 
 async function resolveLiveEvidence(

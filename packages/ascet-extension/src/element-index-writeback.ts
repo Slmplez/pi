@@ -25,6 +25,17 @@ export interface RefreshElementsFromLiveCatalogParams {
 export interface AscetElementIndexWritebackResult {
 	updated: Array<"element_decls" | "full_element_cache">;
 	stale: AscetSearchIndexPartition[];
+	/**
+	 * Present when a successful dependency write was followed by a complete
+	 * SQLite generation refresh. The generation is the authoritative snapshot
+	 * that contains element declarations, references, dependencies, messages,
+	 * and code areas together.
+	 */
+	refresh?: {
+		partition: "p0";
+		generation: string;
+		areas: string[];
+	};
 	elements: Array<{
 		component: string;
 		name: string;

@@ -13,6 +13,8 @@ import {
 	queryAscetTextCodeIndex,
 	resetAscetSearchIndexForTest,
 } from "../search-index.ts";
+import { ingestAscetSearchIndexSqlite } from "../search-index-sqlite/ingest.ts";
+import { getAscetSqliteIndexStatus } from "../search-index-sqlite/status.ts";
 import type { AscetEditApprovalContext } from "./approval.ts";
 import { runAscetEdit } from "./service.ts";
 
@@ -520,6 +522,93 @@ describe("ascet_edit WriteImpact", () => {
 			);
 			assert.equal(getAscetSearchIndexPartitionState("element_decls")?.status, "ready");
 			assert.equal(getAscetSearchIndexPartitionState("text_code")?.status, "stale");
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("successful dependency write reconciles the complete persisted index generation", async () => {
+		seedReadyIndex();
+		const fixture = createReadyEnv();
+		const calls: string[][] = [];
+		ingestAscetSearchIndexSqlite(fixture.cwd, {
+			databaseName: "DemoDb",
+			databasePath: "C:\\ASCET\\DemoDb",
+			generatedAtMs: Date.now(),
+			elapsedMs: 1,
+			scanComplete: true,
+			textCodeIncluded: true,
+			textCodeScanComplete: true,
+			entries: [],
+			components: [],
+			folders: [],
+			folderItems: [],
+			methodDeclarations: [],
+			methodProcessElements: [],
+			componentRefs: [],
+			elementRefs: [],
+			messages: [],
+			diagramMetadata: [],
+			textCodeEntries: [],
+			projectFormulas: [],
+			projectItems: [],
+			dbItemDependencies: [],
+		});
+		try {
+			const result = await runAscetEdit(
+				{
+					action: "set_element_dependency",
+					targetPath: "AEB\\Controller",
+					elementName: "P_AEB_IB_MaxVelocityDrop_Curve",
+					dependency: "dependent",
+					executeWrite: true,
+				},
+				{
+					cwd: fixture.cwd,
+					env: fixture.env,
+					timeoutMs: 1000,
+					executeCli: async (request) => {
+						calls.push(request.args);
+						if (request.args[1] === "read_element_catalog") {
+							return {
+								exitCode: 0,
+								stdout: JSON.stringify({
+									ok: true,
+									result: {
+										elements: [
+											{
+												name: "P_AEB_IB_MaxVelocityDrop_Curve",
+												kind: "parameter",
+												modelType: "cont",
+												scope: "Local",
+											},
+										],
+									},
+									error: null,
+								}),
+								stderr: "",
+								timedOut: false,
+								request,
+							};
+						}
+						if (request.args[1] === "warm_search_index") {
+							return makeWarmSearchIndexExecution(request);
+						}
+						return makeExecution(request);
+					},
+				},
+				approvingContext,
+			);
+
+			const payload = JSON.parse(result.content[0]?.text ?? "{}");
+			assert.deepEqual(payload.index.stale ?? [], []);
+			assert.equal(payload.index.refresh.partition, "p0");
+			assert.equal(typeof payload.index.refresh.generation, "string");
+			assert.equal(
+				calls.some((args) => args[1] === "warm_search_index"),
+				true,
+			);
+			assert.equal(getAscetSqliteIndexStatus(fixture.cwd).status, "ready");
 		} finally {
 			fixture.cleanup();
 		}
