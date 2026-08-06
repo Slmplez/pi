@@ -626,6 +626,22 @@ async function applySuccessfulEditIndexUpdate(
 		return update.issues && update.issues.length > 0 ? { ...update, stale: impact.stale } : update;
 	}
 	if (params.action === "apply_element_spec") {
+		if (!hasVerifiedApplyElementSpecReadback(raw)) {
+			const update: AscetElementIndexWritebackResult = {
+				updated: [],
+				stale: impact.stale,
+				elements: [],
+				issues: [
+					{
+						code: "index-writeback-readback-unverified",
+						message:
+							"apply_element_spec succeeded without verified live readback; the existing full element cache was retained and marked stale.",
+					},
+				],
+			};
+			applyTargetedEditWritebackImpact(update, impact, options);
+			return update;
+		}
 		const selectors = extractElementSelectorsFromSpecFile(params.specFile);
 		const names = uniqueStrings(selectors.map((entry) => entry.name));
 		const scopes = uniqueStrings(selectors.map((entry) => entry.scope).filter((entry) => entry !== undefined));
@@ -644,6 +660,13 @@ async function applySuccessfulEditIndexUpdate(
 	}
 	applyAscetEditImpactToSearchIndex(impact, `edit_succeeded:${params.action}`, options);
 	return impact;
+}
+
+function hasVerifiedApplyElementSpecReadback(raw: AscetCliJsonResult): boolean {
+	const payload = unwrapToolSuccessPayload(raw.data);
+	const record = asRecord(payload);
+	const value = record?.ReadbackVerified ?? record?.readbackVerified;
+	return value === true || value === 1;
 }
 
 /**

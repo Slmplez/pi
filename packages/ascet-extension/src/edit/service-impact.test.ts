@@ -80,12 +80,18 @@ function makeExecution(request: AscetCliRequest, ok = true): AscetCliExecutionRe
 			? {
 					write: { succeeded: true, readbackVerified: true },
 				}
-			: {
-					writeSucceeded: true,
-					componentPath: "AEB\\Controller",
-					methodName: "calc",
-					readback: { hash: "sha256:abc", lineCount: 1 },
-				};
+			: request.args[1] === "apply_element_spec"
+				? {
+						WriteSucceeded: true,
+						ReadbackVerified: true,
+						componentPath: "AEB\\Controller",
+					}
+				: {
+						writeSucceeded: true,
+						componentPath: "AEB\\Controller",
+						methodName: "calc",
+						readback: { hash: "sha256:abc", lineCount: 1 },
+					};
 	return {
 		exitCode: ok ? 0 : 1,
 		stdout: JSON.stringify({

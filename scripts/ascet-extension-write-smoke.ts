@@ -52,7 +52,7 @@ writeFileSync(
 				scope: "local",
 				data: { value: 0 },
 				physicalRange: { min: -1, max: 1 },
-				impl: { valueType: "real32", limitAssignments: true },
+				impl: { valueType: "real32" },
 			},
 		],
 	}),
