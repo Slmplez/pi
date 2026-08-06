@@ -75,18 +75,24 @@ function seedReadyIndex(): void {
 }
 
 function makeExecution(request: AscetCliRequest, ok = true): AscetCliExecutionResult {
+	const result =
+		request.args[1] === "apply_element_spec"
+			? {
+					WriteSucceeded: true,
+					ReadbackVerified: true,
+					componentPath: "AEB\\Controller",
+				}
+			: {
+					writeSucceeded: true,
+					componentPath: "AEB\\Controller",
+					methodName: "calc",
+					readback: { hash: "sha256:abc", lineCount: 1 },
+				};
 	return {
 		exitCode: ok ? 0 : 1,
 		stdout: JSON.stringify({
 			ok,
-			result: ok
-				? {
-						writeSucceeded: true,
-						componentPath: "AEB\\Controller",
-						methodName: "calc",
-						readback: { hash: "sha256:abc", lineCount: 1 },
-					}
-				: null,
+			result: ok ? result : null,
 			error: ok ? null : { code: "ascet_edit_failed", message: "write failed" },
 			meta: { mode: "exec", operation: "set_method_code" },
 		}),

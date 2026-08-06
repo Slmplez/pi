@@ -1,6 +1,16 @@
 import assert from "node:assert/strict";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { describe, test } from "node:test";
+import type { AscetCliExecutionResult } from "../cli.ts";
+import type { AscetEditApprovalContext } from "./approval.ts";
 import { type AscetMutationParams, getAscetEditActionId, resolveAscetEditInvocation, runAscetEdit } from "./service.ts";
+
+const approvingContext: AscetEditApprovalContext = {
+	hasUI: true,
+	ui: { confirm: async () => true },
+};
 
 describe("ASCET edit service", () => {
 	test("uses action or mode as the canonical edit action id", () => {
@@ -128,6 +138,72 @@ describe("ASCET edit service", () => {
 			const result = await runAscetEdit(params, { cwd: process.cwd() }, {});
 			assert.equal(result.details.outcome.status, "preflight", params.action);
 			assert.equal(result.details.outcome.plan.action, params.action);
+		}
+	});
+
+	test("does not refresh the full element cache when apply_element_spec readback is unverified", async () => {
+		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-service-unverified-"));
+		const contractsRoot = join(root, "contracts");
+		mkdirSync(contractsRoot, { recursive: true });
+		writeFileSync(join(root, "AscetCli.exe"), "", "utf8");
+		writeFileSync(join(contractsRoot, "cli-catalog.json"), "{}", "utf8");
+		const specFile = join(root, "spec.json");
+		writeFileSync(
+			specFile,
+			JSON.stringify({
+				elements: [{ name: "K", kind: "parameter", scope: "exported" }],
+			}),
+			"utf8",
+		);
+		const calls: string[][] = [];
+		try {
+			const result = await runAscetEdit(
+				{
+					action: "apply_element_spec",
+					componentPath: "DEMO\\Controller",
+					specFile,
+					verifyReadback: false,
+					executeWrite: true,
+				},
+				{
+					cwd: root,
+					env: {
+						ASCET_CLI_PATH: join(root, "AscetCli.exe"),
+						ASCET_CONTRACTS_PATH: contractsRoot,
+						PI_ASCET_RUNTIME_DIR: join(root, "runtime"),
+						PI_ASCET_OPERATION_HEALTH_PATH: join(root, "operation-health.json"),
+					},
+					executeCli: async (request): Promise<AscetCliExecutionResult> => {
+						calls.push(request.args);
+						return {
+							exitCode: 0,
+							stdout: JSON.stringify({
+								ok: true,
+								result: { ReadbackVerified: false, ElementResults: [{ name: "K", readbackVerified: false }] },
+								error: null,
+							}),
+							stderr: "",
+							timedOut: false,
+							request,
+						};
+					},
+				},
+				approvingContext,
+			);
+
+			const outcome = result.details.outcome;
+			assert.equal(outcome.status, "ok");
+			assert.equal(
+				calls.some((args) => args[1] === "read_element_catalog"),
+				false,
+			);
+			if (outcome.status === "ok") {
+				const index = (outcome.data as { index: { updated: string[]; stale: string[] } }).index;
+				assert.deepEqual(index.updated, []);
+				assert.deepEqual(index.stale, ["element_decls", "element_refs", "text_code"]);
+			}
+		} finally {
+			rmSync(root, { recursive: true, force: true });
 		}
 	});
 });
