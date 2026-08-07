@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { runAscetContractCatalog } from "../../ascet-extension/src/contract-catalog.ts";
 import { createAscetStatusReport, resolveAscetStatusPaths } from "../../ascet-extension/src/status.ts";
 import { createAscetRuntimeStatusReport } from "../../ascet-extension/src/status-runtime.ts";
-import { ascetAgentRoot, loadAscetExtension, repoRoot } from "./ascet-extension-test-helpers.ts";
+import { loadAscetExtension, repoRoot } from "./ascet-extension-test-helpers.ts";
 
 interface StatusDetails {
 	installationOk: boolean;
@@ -30,7 +30,6 @@ describe("ASCET extension status diagnostics", () => {
 		const paths = resolveAscetStatusPaths({ cwd: repoRoot, env: {} });
 
 		expect(paths.mode).toBe("bundle");
-		expect(paths.ascetAgentRoot).toBe(ascetAgentRoot);
 		expect(paths.extensionRoot).toBe(resolve(repoRoot, "packages/ascet-extension"));
 		expect(paths.contractsRoot).toBe(resolve(repoRoot, "packages/ascet-extension/ascet-cli/contracts"));
 		expect(paths.cliPath).toBe(resolve(repoRoot, "packages/ascet-extension/ascet-cli/bin/AscetCli.exe"));
@@ -89,9 +88,9 @@ describe("ASCET extension status diagnostics", () => {
 		const report = await createAscetRuntimeStatusReport({
 			cwd: repoRoot,
 			env: {},
-			warmSearchIndex: async () => ({
+			liveToolApiProbe: async () => ({
 				ok: false,
-				commandId: "warm_search_index",
+				commandId: "selftest",
 				databaseName: "",
 				databasePath: "",
 				entryCount: 0,
@@ -107,14 +106,14 @@ describe("ASCET extension status diagnostics", () => {
 					message: "ASCET ToolAPI unavailable",
 				},
 			}),
-		});
+		} as never);
 
 		expect(report.installationOk).toBe(true);
 		expect(report.runtimeOk).toBe(false);
 		expect(report.ok).toBe(false);
 		expect(report.summary).toContain("ASCET installation: ready");
-		expect(report.summary).toContain("ASCET runtime: not ready");
-		expect(report.summary).toContain("ASCET quick-search index: FAILED (ascet_cli_failed)");
+		expect(report.summary).toContain("ASCET ToolAPI: FAILED (ascet_cli_failed)");
+		expect(report.summary).toContain("ASCET ToolAPI: FAILED (ascet_cli_failed)");
 		expect(report.summary).toContain("Next step: start ASCET GUI with ToolAPI enabled");
 	});
 
@@ -122,9 +121,9 @@ describe("ASCET extension status diagnostics", () => {
 		const report = await createAscetRuntimeStatusReport({
 			cwd: repoRoot,
 			env: {},
-			warmSearchIndex: async () => ({
+			liveToolApiProbe: async () => ({
 				ok: true,
-				commandId: "warm_search_index",
+				commandId: "selftest",
 				databaseName: "DemoDb",
 				databasePath: "C:\\ASCET\\DemoDb",
 				entryCount: 2,
@@ -141,7 +140,7 @@ describe("ASCET extension status diagnostics", () => {
 		expect(report.installationOk).toBe(true);
 		expect(report.runtimeOk).toBe(true);
 		expect(report.ok).toBe(true);
-		expect(report.summary).toContain("ASCET quick-search index: ready");
+		expect(report.summary).toContain("ASCET ToolAPI: ready");
 	});
 
 	it("loads the project-local ASCET extension and registers the status command plus tool", async () => {
@@ -211,9 +210,9 @@ describe("ASCET extension status diagnostics", () => {
 		expect(tool).toBeDefined();
 		const response = await tool?.execute("test-call", {}, new AbortController().signal, undefined, {
 			cwd: repoRoot,
-			ascetStatusWarmSearchIndex: async () => ({
+			ascetStatusLiveToolApiProbe: async () => ({
 				ok: true,
-				commandId: "warm_search_index",
+				commandId: "selftest",
 				databaseName: "DemoDb",
 				databasePath: "C:\\ASCET\\DemoDb",
 				entryCount: 2,
@@ -235,7 +234,7 @@ describe("ASCET extension status diagnostics", () => {
 		expect(details?.installationOk).toBe(true);
 		expect(details?.runtimeOk).toBe(true);
 		expect(details?.runtime).toMatchObject({
-			commandId: "warm_search_index",
+			commandId: "selftest",
 		});
 		expect(details?.paths.mode).toBe("bundle");
 		expect(details?.paths.cliPath).toBe(resolve(repoRoot, "packages/ascet-extension/ascet-cli/bin/AscetCli.exe"));

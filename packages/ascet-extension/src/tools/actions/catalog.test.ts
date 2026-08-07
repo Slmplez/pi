@@ -2,6 +2,16 @@ import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import { listActionCatalogEntries } from "./catalog.ts";
 
+const getActions = [
+	"tree",
+	"elements",
+	"formulas",
+	"component_refs",
+	"bde_edges",
+	"import_binding",
+	"dbitem_refs",
+] as const;
+
 describe("ASCET action catalog", () => {
 	test("has stable model-facing metadata for every public action", () => {
 		const entries = listActionCatalogEntries();
@@ -13,10 +23,7 @@ describe("ASCET action catalog", () => {
 			assert.ok(entry.family);
 			assert.ok(entry.risk);
 			assert.ok(entry.compact.length > 0);
-			assert.ok(
-				entry.miniFewShot.includes(`${entry.tool}(`),
-				`${entry.id} miniFewShot must include ${entry.tool}(: ${entry.miniFewShot}`,
-			);
+			assert.ok(entry.miniFewShot.includes(`${entry.tool}(`));
 			assert.ok(entry.intent.length > 0);
 			assert.ok(entry.schema.required.length + entry.schema.optional.length > 0);
 			assert.ok(entry.result.shape.length > 0);
@@ -24,40 +31,34 @@ describe("ASCET action catalog", () => {
 		}
 	});
 
-	test("keeps hidden and internal actions out of the public catalog", () => {
-		const publicIds = listActionCatalogEntries().map((entry) => entry.id);
-		const allIds = listActionCatalogEntries({ includeHidden: true }).map((entry) => entry.id);
+	test("publishes the complete public ascet_get action family", () => {
+		const entries = listActionCatalogEntries().filter((entry) => entry.tool === "ascet_get");
 
-		assert.equal(publicIds.includes("ascet_capabilities.search"), false);
-		assert.equal(publicIds.includes("ascet_capabilities.activate_profile"), false);
-		assert.equal(publicIds.includes("ascet_search.search_occurrences"), false);
-		assert.equal(publicIds.includes("ascet_search.search_text_code"), false);
-		assert.equal(allIds.includes("ascet_capabilities.search"), false);
-		assert.equal(allIds.includes("ascet_capabilities.activate_profile"), false);
-		assert.equal(allIds.includes("ascet_search.search_occurrences"), true);
-		assert.equal(allIds.includes("ascet_batch_write.batch_set_method_code"), true);
+		assert.deepEqual(entries.map((entry) => entry.action).sort(), [...getActions].sort());
+		for (const entry of entries) {
+			assert.equal(entry.family, "get");
+			assert.equal(entry.result.shape, "observation");
+		}
 	});
 
-	test("defines the key distinction between live code read and code text search", () => {
+	test("distinguishes bounded Get discovery from exact live code reads", () => {
 		const entries = new Map(listActionCatalogEntries().map((entry) => [entry.id, entry]));
 
+		assert.match(entries.get("ascet_get.tree")?.compact ?? "", /bounded live Folder\/Component tree/);
+		assert.match(entries.get("ascet_get.elements")?.rules.join("\n") ?? "", /result-count limit/);
+		assert.match(entries.get("ascet_get.import_binding")?.rules.join("\n") ?? "", /exact path or OID/);
 		assert.match(entries.get("ascet_read.read_code")?.compact ?? "", /complete live code/);
-		assert.match(entries.get("ascet_read.read_code")?.avoidWhen.join("\n") ?? "", /global occurrence search/);
-		assert.match(entries.get("ascet_search.text_in_code")?.compact ?? "", /snippets/);
-		assert.match(entries.get("ascet_search.text_in_code")?.avoidWhen.join("\n") ?? "", /complete code body/);
 	});
 
-	test("defines dependency chain and dependency write boundaries", () => {
+	test("defines dependency read/write boundaries around on-demand observations", () => {
 		const entries = new Map(listActionCatalogEntries().map((entry) => [entry.id, entry]));
 		const readChain = entries.get("ascet_read.read_dependent_chain");
 		const writeDependency = entries.get("ascet_edit.set_element_dependency");
 
-		assert.match(readChain?.compact ?? "", /Index-first dependency provider resolver/);
-		assert.match(readChain?.result.fields.join("\n") ?? "", /element\.data/);
-		assert.match(readChain?.rules.join("\n") ?? "", /scope=Exported/);
-		assert.match(writeDependency?.compact ?? "", /existing local parameter only/);
+		assert.match(readChain?.rules.join("\n") ?? "", /ascet_get.tree and ascet_get.elements/);
+		assert.match(writeDependency?.compact ?? "", /existing local parameter/);
 		assert.match(writeDependency?.rules.join("\n") ?? "", /does not create local, imported, or exported elements/);
-		assert.match(writeDependency?.rules.join("\n") ?? "", /refreshes element_decls and full_element_cache/);
+		assert.match(writeDependency?.rules.join("\n") ?? "", /invalidate matching on-demand observations/);
 	});
 
 	test("makes code semantics primary for apply_element_spec", () => {
@@ -67,7 +68,7 @@ describe("ASCET action catalog", () => {
 
 		assert.match(rules, /element's code role and explicit requirements/);
 		assert.match(rules, /semantic intent drives the target spec/);
-		assert.match(rules, /live reads as ASCET compatibility and preservation evidence/);
+		assert.match(rules, /ascet_get.tree and ascet_get.elements/);
 		assert.match(rules, /Do not copy a sibling's values without semantic equivalence/);
 	});
 });

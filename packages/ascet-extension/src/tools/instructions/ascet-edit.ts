@@ -1,4 +1,4 @@
-import type { AscetActionInstruction } from "./types.ts";
+﻿import type { AscetActionInstruction } from "./types.ts";
 
 export const ascetEditInstructions = [
 	{
@@ -75,7 +75,7 @@ export const ascetEditInstructions = [
 		rules: [
 			"For apply_element_spec, treat specFile as a structured ASCET element-spec JSON artifact, not just a file path.",
 			"Start from the element's code role and explicit requirements: determine whether it is a parameter, variable, array, state, or enumeration, how the code reads or writes it, its domain, lifecycle, and initialization intent. That semantic intent drives the target spec; do not let a similarly named element or a read result replace the code-level meaning.",
-			"Then use public evidence to resolve the ASCET representation and current state: use ascet_search.search_elements or ascet_search.text_in_code for discovery, ascet_read.read_code for complete code, and ascet_read.read_dependent_chain when dependency context matters. If the action schema or result fields are unclear, call ascet_capabilities.search_actions first. Do not guess modelType, scope, range, implementation type, formula, calibration, or dependency.",
+			"Then use public evidence to resolve the ASCET representation and current state: use ascet_get.tree and ascet_get.elements for bounded discovery, then Pi find/grep/read for stored observations; use ascet_read.read_code for complete code and ascet_read.read_dependent_chain only for exact dependency detail. If the action schema or result fields are unclear, call ascet_capabilities.search_actions first. Do not guess modelType, scope, range, implementation type, formula, calibration, or dependency.",
 			"For a new element, treat code semantics and explicit requirements as the source of desired values; treat live reads as compatibility and preservation evidence. For an existing element, preserve all unchanged live fields and emit only the requested patch. Do not copy a sibling element's values unless semantic equivalence is established.",
 			"For a new variable, parameter, or array (except an Imported Parameter), include name, kind, modelType, scope, data.value, and impl.valueType. For non-logical model types include exactly one range object with both min and max under physicalRange or impl.implementationRange. Ranged parameters with discrete implementations require impl.limitAssignments=true; real32/real64 implementations must omit that option because ASCET does not support it. Existing-element patches may omit unchanged fields.",
 			"For apply_element_spec primitive elements, variable/parameter/array specs must include name, kind, modelType, and scope. Use concrete modelType values such as cont, log, sdisc, or udisc; do not use ambiguous disc.",
@@ -98,7 +98,7 @@ export const ascetEditInstructions = [
 		profiles: ["write-preflight"],
 		summary: "Write dependent local parameters only after exported-provider evidence is resolved.",
 		rules: [
-			"Before creating or updating a dependent Local Parameter, resolve the authoritative same-named Exported Parameter provider with read_dependent_chain or the coordinated read/search/explore workflow.",
+			"Before creating or updating a dependent Local Parameter, resolve the authoritative same-named Exported Parameter provider with ascet_get.tree, ascet_get.elements, ascet_get.component_refs, Pi grep/read, and an exact ascet_get.import_binding check.",
 			"Do not bind to a provider candidate unless the matching element is scope=Exported.",
 			"If the exported counterpart is unknown, ambiguous, or not found, stop at preflight and gather provider evidence before writing.",
 			"The Imported Parameter and Exported Parameter must have the same name. The Local Dependent Parameter may differ, but its formula mapping must resolve through Imported Parameter names.",
@@ -110,7 +110,7 @@ export const ascetEditInstructions = [
 			"dependencyFormula is the expression stored on the dependent local parameter. It is not an implementation conversion formula and is not a project formula.",
 			'When dependencyFormula is provided, pass dependency="dependent". Do not pass dependencyFormula together with dependency="independent".',
 			"Referenced imported parameters must already exist in the consuming component. Do not create imported parameters, exported parameters, or provider components inside set_element_dependency.",
-			"After a successful executed set_element_dependency write, PI refreshes element_decls and full_element_cache from live read_element_catalog readback; if refresh fails, follow index.issues.",
+			"After a successful executed set_element_dependency write, verify the readback and treat previously stored observations for the affected target as invalidated; request a fresh bounded ascet_get result when structure is needed again.",
 		],
 		fewShots: [
 			'set_element_dependency: ascet_edit({action:"set_element_dependency",targetPath:"F/C",elementName:"K",dependency:"dependent",verifyReadback:true})',

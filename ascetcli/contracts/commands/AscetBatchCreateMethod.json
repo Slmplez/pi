@@ -1,0 +1,60 @@
+﻿{
+    "id":  "AscetBatchCreateMethod",
+    "family":  "write",
+    "summary":  "Batch create multiple ASCET methods in a single ToolAPI session",
+    "usage":  "[--json] \u003c requests.json",
+    "execution":  {
+                      "kind":  "unified_cli",
+                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+                      "subcommand":  "batch",
+                      "operation":  "create_method"
+                  },
+    "supportsJson":  true,
+    "defaultOutputMode":  "json",
+    "risk":  "write",
+    "requiresSerialLiveAccess":  false,
+    "objectKinds":  [
+                        "class",
+                        "module",
+                        "statemachine"
+                    ],
+    "args":  [
+                 {
+                     "name":  "--json",
+                     "kind":  "flag",
+                     "type":  "boolean",
+                     "required":  false,
+                     "description":  "Flag --json"
+                 }
+             ],
+    "preconditions":  [
+                          "ASCET ToolAPI session must be available.",
+                          "Live ASCET access must run through the serial executor.",
+                          "Target ASCET path must resolve to the expected object kind."
+                      ],
+    "failureModes":  [
+                         "toolapi_unavailable",
+                         "target_not_found",
+                         "write_failed"
+                     ],
+    "examples":  [
+                     {
+                         "description":  "Basic usage",
+                         "command":  "AscetCli.exe batch create_method [--json] \u003c requests.json"
+                     }
+                 ],
+    "pitfalls":  [
+                     "Live ASCET ToolAPI access is serial-only.",
+                     "Run readback and verify after successful writes."
+                 ],
+    "operation":  "batch_create_method",
+    "lane":  "serial_write",
+    "hostEligible":  true,
+    "supportsBatch":  true,
+    "executionProfile":  {
+                             "hostSafety":  "write",
+                             "hostPolicy":  "prefer_host",
+                             "timeoutClass":  "write"
+                         },
+    "hiddenFromModel":  false
+}

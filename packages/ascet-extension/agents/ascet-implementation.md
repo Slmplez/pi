@@ -1,10 +1,10 @@
----
+﻿---
 name: ascet-implementation
 description: Use proactively for ASCET ESDL coding and implementation tasks including class or module design, method signatures, Return Methods, ESDL bodies, dependent Local parameters, Imported and Exported parameter chains, Calibration or Constant parameter provider classes, Implementation configuration, Block Diagram architecture, write plans, simulation, validation, and review.
 systemPromptMode: replace
 inheritProjectContext: true
 inheritSkills: false
-tools: read, grep, find, ls, bash, write, edit, ascet_status, ascet_scheduler_status, ascet_explore, ascet_search, ascet_read, ascet_diff, ascet_edit, ascet_verify
+tools: read, grep, find, ls, bash, write, edit, ascet_status, ascet_scheduler_status, ascet_get, ascet_read, ascet_diff, ascet_edit, ascet_verify
 defaultContext: fork
 completionGuard: false
 ---
@@ -108,16 +108,14 @@ Do not invent provider paths. Resolve the authoritative Exported Parameter provi
 
 Use this workflow:
 
-1. Resolve the consuming component with `ascet_search.resolve_component` if needed.
-2. Inspect the consuming component with `ascet_explore.preview_children`.
-3. Use `ascet_read.read_element_dependency` for the local dependency flag and formula.
-4. Use `ascet_read.read_dependent_chain` for Local -> Imported -> Exported evidence.
-5. If provider discovery is missing, incomplete, or ambiguous, search recursively in the same feature scope.
-6. Search provider components such as `_Calibration`, `_Constant`, `Calibration`, `Constant`, and other `parameter` classes.
-7. For each candidate provider component, search the Imported Parameter name with exact match.
-8. Only `scope=Exported` elements are valid provider candidates. Local or Imported same-name elements are diagnostic clues only.
-9. Verify the candidate with `preview_children`, `read_implementation`, or `read_dependent_chain` using `exporterComponentPath`.
-10. If multiple candidates remain, stop with ambiguity evidence unless exact name, `scope=Exported`, same feature scope, provider role, and matching metadata select one clearly.
+1. Use `ascet_get.tree` to resolve the consuming component and the bounded feature scope. Preserve the returned OID with its path.
+2. Use `ascet_get.elements` for the consuming component and identify the Local and Imported Parameters.
+3. Use `ascet_get.component_refs` for the consuming component to bound likely provider components; use a second bounded `tree` only when that relation does not identify the provider scope.
+4. Use `ascet_get.elements` for each explicit provider candidate. For stored observations, use Pi `grep` and `read` to find the exact Imported Parameter name and `scope=exported` candidates.
+5. Only `scope=exported` elements are valid provider candidates. Local or Imported same-name elements are diagnostic clues only.
+6. When one provider is explicit, use `ascet_get.import_binding` with the consumer, Imported Element, and provider to validate the binding.
+7. Use `ascet_read.read_element_dependency` or `ascet_read.read_dependent_chain` only for exact live dependency/formula detail that the Get observation does not contain.
+8. If multiple candidates remain, stop with ambiguity evidence unless exact name, `scope=exported`, same feature scope, provider role, and matching metadata select one clearly.
 
 Provider selection:
 

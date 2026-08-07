@@ -2,7 +2,8 @@ import { existsSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { runAscetListComponents } from "../../ascet-extension/src/list-components.ts";
+import type { AscetCliRequest } from "../../ascet-extension/src/cli.ts";
+import { runAscetGet } from "../../ascet-extension/src/get.ts";
 import { runAscetReadDependentChain } from "../../ascet-extension/src/read-dependent-chain.ts";
 import {
 	acquireAscetCliLock,
@@ -15,6 +16,8 @@ import {
 	formatAscetOperationHealthStatus,
 	formatAscetSchedulerSnapshot,
 	getAscetCliLockSnapshot,
+	getGlobalAscetScheduler,
+	resetGlobalAscetSchedulerForTests,
 	resolvePiAscetLockPath,
 	resolvePiAscetOperationHealthPath,
 	resolvePiAscetRuntimeRoot,
@@ -126,11 +129,11 @@ describe("ASCET scheduler diagnostics", () => {
 			persistence: createFileOperationHealthPersistence(path),
 		});
 
-		store.recordFailure({ commandId: "list_components", reason: "child_command_timeout" });
+		store.recordFailure({ commandId: "get_tree", reason: "child_command_timeout" });
 		await store.flush();
 
 		const raw = readFileSync(path, "utf8");
-		expect(raw).toContain("list_components");
+		expect(raw).toContain("get_tree");
 		expect(formatAscetOperationHealthStatus(store.listUnhealthy())).toContain("status=degraded");
 	});
 
@@ -169,31 +172,87 @@ describe("ASCET scheduler diagnostics", () => {
 		expect(recover).toContain("degraded: none");
 	});
 
-	it("routes CLI execution through the scheduler and releases the PI lock", async () => {
+	it("serializes ascet_get tree reads and records get_tree scheduler metadata", async () => {
 		const env = tempRuntimeEnv();
-		const scheduler = createAscetScheduler();
-		const result = await runAscetListComponents(
-			{ folderPath: "DEMO", limit: 2 },
-			{
-				cwd: repoRoot,
-				env,
-				scheduler,
-				executeCli: async (request) => {
-					expect((await getAscetCliLockSnapshot({ env })).locked).toBe(true);
-					return {
-						exitCode: 0,
-						stdout: JSON.stringify({ ok: true, result: [] }),
-						stderr: "",
-						timedOut: false,
-						request,
-					};
-				},
-			},
-		);
+		resetGlobalAscetSchedulerForTests();
+		const scheduler = getGlobalAscetScheduler();
+		let releaseFirst: (() => void) | undefined;
+		let resolveFirstStarted: () => void = () => undefined;
+		const firstStarted = new Promise<void>((resolve) => {
+			resolveFirstStarted = resolve;
+		});
+		let invocationCount = 0;
 
-		expect(result.ok).toBe(true);
-		expect((await getAscetCliLockSnapshot({ env })).locked).toBe(false);
-		expect(scheduler.getSnapshot().recentJobs.at(-1)?.commandId).toBe("list_components");
+		const executeCli = async (request: AscetCliRequest) => {
+			const invocation = invocationCount++;
+			expect((await getAscetCliLockSnapshot({ env })).locked).toBe(true);
+			if (invocation === 0) {
+				resolveFirstStarted();
+				await new Promise<void>((resolve) => {
+					releaseFirst = resolve;
+				});
+			}
+			return {
+				exitCode: 0,
+				stdout: JSON.stringify({ ok: true, result: { items: [] } }),
+				stderr: "",
+				timedOut: false,
+				request,
+			};
+		};
+
+		try {
+			const first = runAscetGet(
+				{ action: "tree", target: { targetPathPrefix: "DEMO" } },
+				{ cwd: repoRoot, env, executeCli },
+			);
+			await firstStarted;
+			const second = runAscetGet(
+				{ action: "tree", target: { targetPathPrefix: "PlatformLibrary\\Package" } },
+				{ cwd: repoRoot, env, executeCli },
+			);
+			await Promise.resolve();
+
+			expect(invocationCount).toBe(1);
+			expect(scheduler.getSnapshot().runningJob).toMatchObject({
+				toolName: "ascet_get",
+				commandId: "get_tree",
+				kind: "read",
+				resourceKey: "ascet.toolapi.global",
+			});
+			expect(scheduler.getSnapshot().queuedJobs).toHaveLength(1);
+			expect(scheduler.getSnapshot().queuedJobs[0]).toMatchObject({
+				toolName: "ascet_get",
+				commandId: "get_tree",
+				kind: "read",
+				resourceKey: "ascet.toolapi.global",
+			});
+
+			if (!releaseFirst) throw new Error("first ascet_get tree read did not start");
+			releaseFirst();
+			const [firstResult, secondResult] = await Promise.all([first, second]);
+
+			expect(firstResult.ok).toBe(true);
+			expect(secondResult.ok).toBe(true);
+			expect(invocationCount).toBe(2);
+			expect((await getAscetCliLockSnapshot({ env })).locked).toBe(false);
+			expect(scheduler.getSnapshot().recentJobs.slice(-2)).toEqual([
+				expect.objectContaining({
+					toolName: "ascet_get",
+					commandId: "get_tree",
+					kind: "read",
+					resourceKey: "ascet.toolapi.global",
+				}),
+				expect.objectContaining({
+					toolName: "ascet_get",
+					commandId: "get_tree",
+					kind: "read",
+					resourceKey: "ascet.toolapi.global",
+				}),
+			]);
+		} finally {
+			resetGlobalAscetSchedulerForTests();
+		}
 	});
 
 	it("routes dependent-chain reads and dependency dry-run writes through the scheduler", async () => {
@@ -328,10 +387,10 @@ describe("ASCET scheduler diagnostics", () => {
 		expect(job?.kind).toBe("write");
 	});
 
-	it("captures timeout failures in operation health", async () => {
+	it("captures get_tree timeout failures in operation health", async () => {
 		const env = tempRuntimeEnv();
-		const result = await runAscetListComponents(
-			{ folderPath: "DEMO", limit: 2 },
+		const result = await runAscetGet(
+			{ action: "tree", target: { targetPathPrefix: "DEMO" } },
 			{
 				cwd: repoRoot,
 				env,
@@ -347,6 +406,6 @@ describe("ASCET scheduler diagnostics", () => {
 		const report = await createAscetSchedulerStatusReport("status", { env });
 
 		expect(result.ok).toBe(false);
-		expect(report.operationHealth.some((state) => state.commandId === "list_components")).toBe(true);
+		expect(report.operationHealth.some((state) => state.commandId === "get_tree")).toBe(true);
 	});
 });

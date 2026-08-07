@@ -11,15 +11,12 @@ export type AscetProfile =
 
 export const DEFAULT_ASCET_PROFILE: AscetProfile = "base";
 
+const ON_DEMAND_DISCOVERY_TOOLS = ["find", "grep", "read", "ascet_get", "ascet_read"] as const;
+const COMMON_ASCET_TOOLS = ["ascet_status", "ascet_capabilities", "ascet_recover", "ascet_scheduler_status"] as const;
+
 const DEFAULT_ACTIVE_TOOLS = [
-	"ascet_status",
-	"ascet_capabilities",
-	"ascet_index",
-	"ascet_recover",
-	"ascet_scheduler_status",
-	"ascet_explore",
-	"ascet_search",
-	"ascet_read",
+	...ON_DEMAND_DISCOVERY_TOOLS,
+	...COMMON_ASCET_TOOLS,
 	"ascet_diff",
 	"ascet_edit",
 	"ascet_verify",
@@ -27,67 +24,34 @@ const DEFAULT_ACTIVE_TOOLS = [
 
 export const profileTools: Record<AscetProfile, readonly string[]> = {
 	base: DEFAULT_ACTIVE_TOOLS,
-	"advanced-read": [
-		"ascet_status",
-		"ascet_capabilities",
-		"ascet_index",
-		"ascet_explore",
-		"ascet_search",
-		"ascet_read",
-	],
-	reference: ["ascet_status", "ascet_capabilities", "ascet_index", "ascet_explore", "ascet_search", "ascet_read"],
-	diff: [
-		"ascet_status",
-		"ascet_capabilities",
-		"ascet_index",
-		"ascet_explore",
-		"ascet_search",
-		"ascet_read",
-		"ascet_diff",
-	],
+	"advanced-read": [...ON_DEMAND_DISCOVERY_TOOLS, "ascet_status", "ascet_capabilities"],
+	reference: [...ON_DEMAND_DISCOVERY_TOOLS, "ascet_status", "ascet_capabilities"],
+	diff: [...ON_DEMAND_DISCOVERY_TOOLS, "ascet_status", "ascet_capabilities", "ascet_diff"],
 	verify: [
+		...ON_DEMAND_DISCOVERY_TOOLS,
 		"ascet_status",
 		"ascet_capabilities",
-		"ascet_index",
-		"ascet_explore",
-		"ascet_search",
-		"ascet_read",
 		"ascet_verify",
 		"ascet_scheduler_status",
 	],
 	"write-preflight": [
+		...ON_DEMAND_DISCOVERY_TOOLS,
 		"ascet_status",
 		"ascet_capabilities",
-		"ascet_index",
-		"ascet_explore",
-		"ascet_search",
-		"ascet_read",
 		"ascet_edit",
 		"ascet_verify",
 		"ascet_scheduler_status",
 	],
 	"batch-write": [
+		...ON_DEMAND_DISCOVERY_TOOLS,
 		"ascet_status",
 		"ascet_capabilities",
-		"ascet_index",
-		"ascet_explore",
-		"ascet_search",
-		"ascet_read",
 		"ascet_edit",
 		"ascet_verify",
 		"ascet_scheduler_status",
 	],
-	"component-edit": [
-		"ascet_status",
-		"ascet_capabilities",
-		"ascet_index",
-		"ascet_explore",
-		"ascet_search",
-		"ascet_read",
-		"ascet_edit",
-		"ascet_verify",
-	],
-	ops: ["ascet_status", "ascet_capabilities", "ascet_index", "ascet_recover", "ascet_scheduler_status"],
+	"component-edit": [...ON_DEMAND_DISCOVERY_TOOLS, "ascet_status", "ascet_capabilities", "ascet_edit", "ascet_verify"],
+	ops: [...ON_DEMAND_DISCOVERY_TOOLS, ...COMMON_ASCET_TOOLS],
 };
 
 export function isAscetProfile(value: string | undefined): value is AscetProfile {

@@ -71,18 +71,6 @@ const parameterizedCanonicalCoverage: Record<string, Omit<AscetCliCoverageEntry,
 };
 
 const unsupportedCoverage: Record<string, Omit<AscetCliCoverageEntry, "commandId">> = {
-	AscetFindElements: {
-		category: "unsupported_with_reason",
-		reason: "Search-facing flows use AscetSearchElements; find_elements is not exposed as a canonical model action.",
-	},
-	AscetListFolders: {
-		category: "unsupported_with_reason",
-		reason: "Copilot-aligned AscetExploreTool intentionally omits list_folders from the model-facing action matrix.",
-	},
-	AscetListMethods: {
-		category: "unsupported_with_reason",
-		reason: "Method discovery is covered through ascet_search declarations and ascet_read flows.",
-	},
 	AscetReadClassSnapshot: {
 		category: "unsupported_with_reason",
 		reason: "Snapshot-specific reads are not part of the canonical Copilot action matrix.",
@@ -95,10 +83,7 @@ const unsupportedCoverage: Record<string, Omit<AscetCliCoverageEntry, "commandId
 		category: "unsupported_with_reason",
 		reason: "Snapshot-specific reads are not part of the canonical Copilot action matrix.",
 	},
-	AscetReadElementCatalog: {
-		category: "unsupported_with_reason",
-		reason: "Element inventory is covered through ascet_search search_elements.",
-	},
+
 	AscetReadModuleClosure: {
 		category: "unsupported_with_reason",
 		reason: "Closure reads are not part of the canonical Copilot action matrix.",
@@ -107,15 +92,11 @@ const unsupportedCoverage: Record<string, Omit<AscetCliCoverageEntry, "commandId
 		category: "unsupported_with_reason",
 		reason: "Snapshot-specific reads are not part of the canonical Copilot action matrix.",
 	},
-	AscetReadProjectFormulas: {
-		category: "exposed_by_canonical_tool",
-		reason: "Covered by ascet_verify readback for project targets.",
-		toolName: "ascet_verify",
-		action: "readback",
-	},
+
 	AscetReadReferences: {
 		category: "unsupported_with_reason",
-		reason: "Reference flows use ascet_search references_to_component and references_to_element actions.",
+		reason:
+			"Reference discovery uses bounded ascet_get component_refs and dbitem_refs actions; exact detail remains ascet_read work.",
 	},
 	AscetReadStateMachine: {
 		category: "unsupported_with_reason",
@@ -127,7 +108,8 @@ const unsupportedCoverage: Record<string, Omit<AscetCliCoverageEntry, "commandId
 	},
 	AscetShowOccurrences: {
 		category: "unsupported_with_reason",
-		reason: "Occurrence flows use ascet_search search_occurrences.",
+		reason:
+			"Occurrence scanning is not a canonical model action; use bounded ascet_get evidence and exact ascet_read operations.",
 	},
 };
 

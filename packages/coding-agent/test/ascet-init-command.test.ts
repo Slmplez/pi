@@ -35,8 +35,9 @@ describe("ASCET init prompt", () => {
 		expect(prompt).toContain("ASCET project rules loaded.");
 		expect(prompt).toContain("No explicit scope was provided. Start with ASCET engineering layout detection.");
 		expect(prompt).toContain("ascet_status");
-		expect(prompt).toContain("ascet_explore");
-		expect(prompt).toContain("ascet_search");
+		expect(prompt).toContain("ascet_get");
+		expect(prompt).toContain("find");
+		expect(prompt).toContain("grep");
 		expect(prompt).toContain("ascet_read");
 		expect(prompt).toContain("ascet_edit");
 		expect(prompt).toContain(ASCET_AGENT_SECTION_TITLE);
@@ -215,7 +216,7 @@ describe("ASCET init command", () => {
 			expect(sentMessages).toHaveLength(1);
 			expect(sentMessages[0].content).toContain("You are working in an ASCET Copilot workspace");
 			expect(sentMessages[0].content).toContain("First run ascet_status");
-			expect(sentMessages[0].content).toContain("Prefer ascet_search");
+			expect(sentMessages[0].content).toContain("Use ascet_get to navigate and retrieve live data on demand:");
 			expect(sentMessages[0].options).toBeUndefined();
 		} finally {
 			removeTempProject(projectRoot);

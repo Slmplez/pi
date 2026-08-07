@@ -15,12 +15,7 @@ import {
 	isAscetEditApprovalBlockedCode,
 	requestAscetEditApproval,
 } from "./edit/approval.ts";
-import {
-	type AscetEditImpact,
-	type AscetEditImpactParams,
-	applyAscetEditImpactToSearchIndex,
-	createAscetEditImpact,
-} from "./edit/common.ts";
+import { type AscetEditObservationTargetParams, invalidateAscetEditObservations } from "./edit/common.ts";
 import {
 	type AscetCreateMethodComponentKind,
 	type AscetCreateMethodKind,
@@ -59,8 +54,8 @@ export interface RunAscetBatchWriteOptions {
 
 export type AscetBatchWriteResult = AscetCliJsonResult;
 
-export interface AscetBatchWriteIndexImpact extends AscetEditImpact {
-	requestCount: number;
+export interface AscetBatchWriteObservationInvalidation {
+	invalidated: string[];
 }
 
 const batchCommonOptions = {
@@ -424,93 +419,63 @@ export async function runApprovedAscetBatchWrite(
 	}
 
 	const result = await runAscetBatchWrite(normalizedParams, options);
-	if (result.ok) {
-		const impact = createBatchWriteIndexImpact(normalizedParams);
-		applyAscetEditImpactToSearchIndex(impact, `batch_write_succeeded:${impact.action}`, options);
-		result.data = attachBatchWriteIndexImpact(result.data, impact);
+	if (isBatchWriteFullySuccessful(result)) {
+		const observations = invalidateBatchWriteObservations(normalizedParams, options);
+		result.data = attachBatchWriteObservations(result.data, observations);
 	}
 	return result;
 }
 
-export function createBatchWriteIndexImpact(params: AscetBatchWriteParams): AscetBatchWriteIndexImpact {
+export function invalidateBatchWriteObservations(
+	params: AscetBatchWriteParams,
+	options: Pick<RunAscetBatchWriteOptions, "env">,
+): AscetBatchWriteObservationInvalidation {
 	const normalizedParams = normalizeAscetBatchWriteParams(params);
-	const requestImpacts = normalizedParams.requests.map((request) =>
-		createAscetEditImpact(toEditImpactParams(normalizedParams.operation, request)),
-	);
-	return {
-		action: normalizedParams.operation,
-		affectedComponents: uniqueStrings(requestImpacts.flatMap((impact) => impact.affectedComponents)),
-		affectedMethods: uniqueMethodImpacts(requestImpacts.flatMap((impact) => impact.affectedMethods)),
-		affectedElements: uniqueElementImpacts(requestImpacts.flatMap((impact) => impact.affectedElements)),
-		stale: uniqueStrings(requestImpacts.flatMap((impact) => impact.stale)) as AscetBatchWriteIndexImpact["stale"],
-		requestCount: normalizedParams.requests.length,
-	};
+	const invalidated = new Set<string>();
+	for (const request of normalizedParams.requests) {
+		const observation = invalidateAscetEditObservations(
+			toObservationTargetParams(normalizedParams.operation, request),
+			options,
+		);
+		for (const resultId of observation.invalidated) {
+			invalidated.add(resultId);
+		}
+	}
+	return { invalidated: [...invalidated] };
 }
 
-function toEditImpactParams(
+function toObservationTargetParams(
 	operation: AscetBatchWriteOperation,
 	request: Record<string, unknown>,
-): AscetEditImpactParams {
-	const action = cliOperationByToolOperation[operation];
+): AscetEditObservationTargetParams {
 	return {
-		action,
+		action: cliOperationByToolOperation[operation],
 		componentPath: stringValue(request.componentPath),
 		modulePath: stringValue(request.modulePath),
 		stateMachinePath: stringValue(request.stateMachinePath),
 		folderPath: stringValue(request.folderPath),
 		projectPath: stringValue(request.projectPath),
 		targetPath: stringValue(request.targetPath),
-		methodName: stringValue(request.methodName),
-		elementName: stringValue(request.elementName),
 	};
 }
 
-function attachBatchWriteIndexImpact(data: unknown, impact: AscetBatchWriteIndexImpact): unknown {
+function attachBatchWriteObservations(data: unknown, observations: AscetBatchWriteObservationInvalidation): unknown {
 	const root = asRecord(data);
 	if (!root) {
-		return { result: data, index: impact };
+		return { result: data, observations };
 	}
 	const result = asRecord(root.result);
 	if (result) {
-		return { ...root, result: { ...result, index: impact } };
+		return { ...root, result: { ...result, observations } };
 	}
-	return { ...root, index: impact };
+	return { ...root, observations };
 }
 
+function isBatchWriteFullySuccessful(result: AscetBatchWriteResult): boolean {
+	return result.ok && result.exitCode !== 2 && findFailures(result.data).length === 0;
+}
 function stringValue(value: unknown): string | undefined {
 	return typeof value === "string" && value.trim() ? value : undefined;
-}
-
-function uniqueStrings<T extends string>(values: readonly T[]): T[] {
-	return [...new Set(values.filter(Boolean))];
-}
-
-function uniqueMethodImpacts(
-	values: readonly AscetEditImpact["affectedMethods"][number][],
-): AscetEditImpact["affectedMethods"] {
-	const seen = new Set<string>();
-	return values.filter((value) => {
-		const key = `${value.component}\0${value.method}`;
-		if (seen.has(key)) {
-			return false;
-		}
-		seen.add(key);
-		return true;
-	});
-}
-
-function uniqueElementImpacts(
-	values: readonly AscetEditImpact["affectedElements"][number][],
-): AscetEditImpact["affectedElements"] {
-	const seen = new Set<string>();
-	return values.filter((value) => {
-		const key = `${value.component}\0${value.name}`;
-		if (seen.has(key)) {
-			return false;
-		}
-		seen.add(key);
-		return true;
-	});
 }
 
 function asRecord(value: unknown): Record<string, unknown> | undefined {

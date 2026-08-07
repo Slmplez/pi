@@ -1,0 +1,135 @@
+﻿{
+    "id":  "AscetSetStateMachineCode",
+    "family":  "write",
+    "summary":  "State machine write entry",
+    "usage":  "\u003cstate-machine-path\u003e \u003coperation\u003e \u003cstate-name?\u003e \u003csource-state?\u003e \u003ctarget-state?\u003e \u003cpriority?\u003e \u003cmethod-name?\u003e \u003ccode-file?\u003e [--verify-readback] [--json]",
+    "execution":  {
+                      "kind":  "unified_cli",
+                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+                      "subcommand":  "exec",
+                      "operation":  "set_state_machine_code"
+                  },
+    "supportsJson":  true,
+    "defaultOutputMode":  "json",
+    "risk":  "write",
+    "requiresSerialLiveAccess":  true,
+    "objectKinds":  [
+                        "statemachine"
+                    ],
+    "args":  [
+                 {
+                     "name":  "state-machine-path",
+                     "kind":  "positional",
+                     "type":  "string",
+                     "required":  true,
+                     "description":  "State machine component path."
+                 },
+                 {
+                     "name":  "operation",
+                     "kind":  "positional",
+                     "type":  "enum",
+                     "required":  true,
+                     "description":  "State-machine write operation.",
+                     "enumValues":  [
+                                        "set-method",
+                                        "set-state-entry-esdl",
+                                        "set-state-exit-esdl",
+                                        "set-state-static-esdl",
+                                        "bind-state-entry-method",
+                                        "bind-state-exit-method",
+                                        "bind-state-static-method",
+                                        "set-transition-condition-esdl",
+                                        "set-transition-action-esdl",
+                                        "bind-transition-condition-method",
+                                        "bind-transition-action-method",
+                                        "set-start-state"
+                                    ]
+                 },
+                 {
+                     "name":  "state-name",
+                     "kind":  "positional",
+                     "type":  "string",
+                     "required":  false,
+                     "description":  "State selector for state-scoped operations."
+                 },
+                 {
+                     "name":  "source-state",
+                     "kind":  "positional",
+                     "type":  "string",
+                     "required":  false,
+                     "description":  "Transition source state for transition-scoped operations."
+                 },
+                 {
+                     "name":  "target-state",
+                     "kind":  "positional",
+                     "type":  "string",
+                     "required":  false,
+                     "description":  "Transition target state for transition-scoped operations."
+                 },
+                 {
+                     "name":  "priority",
+                     "kind":  "positional",
+                     "type":  "integer",
+                     "required":  false,
+                     "description":  "Transition priority for transition-scoped operations."
+                 },
+                 {
+                     "name":  "method-name",
+                     "kind":  "positional",
+                     "type":  "string",
+                     "required":  false,
+                     "description":  "Method name for method writes or method binding operations."
+                 },
+                 {
+                     "name":  "code-file",
+                     "kind":  "positional",
+                     "type":  "string",
+                     "required":  false,
+                     "description":  "Code file for ESDL or method-body write operations."
+                 },
+                 {
+                     "name":  "--verify-readback",
+                     "kind":  "flag",
+                     "type":  "boolean",
+                     "required":  false,
+                     "description":  "Verify write readback."
+                 },
+                 {
+                     "name":  "--json",
+                     "kind":  "flag",
+                     "type":  "boolean",
+                     "required":  false,
+                     "description":  "Emit JSON."
+                 }
+             ],
+    "preconditions":  [
+                          "ASCET ToolAPI session must be available.",
+                          "Live ASCET access must run through the serial executor.",
+                          "Target ASCET path must resolve to the expected object kind."
+                      ],
+    "failureModes":  [
+                         "toolapi_unavailable",
+                         "target_not_found",
+                         "write_failed"
+                     ],
+    "examples":  [
+                     {
+                         "description":  "Basic usage",
+                         "command":  "AscetCli.exe exec set_state_machine_code \u003cstate-machine-path\u003e \u003coperation\u003e \u003cstate-name?\u003e \u003csource-state?\u003e \u003ctarget-state?\u003e \u003cpriority?\u003e \u003cmethod-name?\u003e \u003ccode-file?\u003e [--verify-readback] [--json]"
+                     }
+                 ],
+    "pitfalls":  [
+                     "Live ASCET ToolAPI access is serial-only.",
+                     "Run readback and verify after successful writes."
+                 ],
+    "operation":  "set_state_machine_code",
+    "lane":  "serial_write",
+    "hostEligible":  false,
+    "supportsBatch":  false,
+    "executionProfile":  {
+                             "hostSafety":  "write",
+                             "hostPolicy":  "force_one_shot",
+                             "timeoutClass":  "write"
+                         },
+    "hiddenFromModel":  false
+}

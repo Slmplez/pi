@@ -4,13 +4,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, test } from "node:test";
 import { type AscetCliJsonResult, formatAscetCliJsonResult, runAscetCliJson } from "./cli.ts";
+import { getAscetCliLockSnapshot } from "./scheduler/cli-lock.ts";
 import { createAscetScheduler } from "./scheduler/scheduler.ts";
-import {
-	getAscetSearchIndexPartitionState,
-	queryAscetSearchIndex,
-	queryAscetTextCodeIndex,
-	resetAscetSearchIndexForTest,
-} from "./search-index.ts";
 
 function makeResult(data: unknown): AscetCliJsonResult {
 	return {
@@ -88,23 +83,6 @@ describe("formatAscetCliJsonResult", () => {
 				2,
 			),
 		);
-	});
-
-	test("labels empty quick-search results as non-exhaustive", () => {
-		const result = makeResult({
-			source: "quick_search_index",
-			result: {
-				matches: [],
-				searchComplete: false,
-				authoritative: false,
-				source: "quick_search_index",
-			},
-		});
-
-		const formatted = JSON.parse(formatAscetCliJsonResult("search", result)) as {
-			result?: { summary?: string };
-		};
-		assert.equal(formatted.result?.summary, "No indexed matches were returned, but the search is not exhaustive.");
 	});
 
 	test("formats failures as structured error JSON", () => {
@@ -214,7 +192,7 @@ describe("formatAscetCliJsonResult", () => {
 				values: Array.from({ length: 12 }, (_, index) => `value-${index}`),
 			});
 
-			const text = formatAscetCliJsonResult("list_components", result);
+			const text = formatAscetCliJsonResult("get_tree", result);
 			const files = readdirSync(artifactRoot).filter((file) => file.endsWith(".json"));
 
 			assert.equal(files.length, 1);
@@ -264,86 +242,6 @@ describe("formatAscetCliJsonResult", () => {
 	});
 });
 
-describe("runAscetCliJson write semantics", () => {
-	test("does not mutate search-index partitions; ascet_edit owns WriteImpact invalidation", async () => {
-		resetAscetSearchIndexForTest({
-			databaseName: "DemoDb",
-			databasePath: "C:\\ASCET\\DemoDb",
-			generatedAtMs: Date.now(),
-			elapsedMs: 5,
-			scanComplete: true,
-			entries: [
-				{
-					group: "primitive",
-					componentPath: "AEB\\Controller",
-					componentKind: "module",
-					componentLanguageKind: "ESDL",
-					elementName: "P_AEB_IB_MaxVelocityDrop_Curve",
-					elementKind: "cont",
-					displayType: "cont",
-					displayScope: "exported",
-					referencedComponentPath: "",
-					path: "AEB\\Controller::P_AEB_IB_MaxVelocityDrop_Curve",
-				},
-			],
-			textCodeEntries: [
-				{
-					componentPath: "AEB\\Controller",
-					componentKind: "module",
-					componentLanguageKind: "ESDL",
-					section: "body",
-					methodName: "calc",
-					methodKind: "Process",
-					text: "P_AEB_IB_MaxVelocityDrop_Curve = speed - drop;",
-					path: "AEB\\Controller::calc#body",
-				},
-			],
-			textCodeIncluded: true,
-			textCodeScanComplete: true,
-		});
-		const fixture = createReadyEnv();
-		try {
-			const result = await runAscetCliJson(["exec", "set_method_code", "AEB\\Controller", "calc", "--json"], {
-				cwd: fixture.cwd,
-				env: fixture.env,
-				timeoutMs: 1000,
-				executeCli: async (request) => ({
-					exitCode: 0,
-					stdout: JSON.stringify({
-						ok: true,
-						result: { writeSucceeded: true },
-						error: null,
-						meta: { mode: "exec", operation: "set_method_code" },
-					}),
-					stderr: "",
-					timedOut: false,
-					request,
-				}),
-			});
-
-			assert.equal(result.ok, true);
-			const textCodePartition = getAscetSearchIndexPartitionState("text_code");
-			const declarationPartition = getAscetSearchIndexPartitionState("element_decls");
-			assert.equal(textCodePartition?.status, "ready");
-			assert.equal(declarationPartition?.status, "ready");
-			assert.equal(
-				queryAscetSearchIndex(
-					{ query: "P_AEB_IB_MaxVelocityDrop_Curve", componentPath: "AEB\\Controller", match: "exact", limit: 20 },
-					{ cwd: fixture.cwd },
-				)?.ok,
-				true,
-			);
-			assert.equal(
-				queryAscetTextCodeIndex({ query: "speed - drop", match: "contains", limit: 20 }, { cwd: fixture.cwd })?.ok,
-				true,
-			);
-		} finally {
-			resetAscetSearchIndexForTest();
-			fixture.cleanup();
-		}
-	});
-});
-
 describe("runAscetCliJson scheduler failure semantics", () => {
 	test("records a non-zero CLI exit as a failed scheduler job", async () => {
 		const fixture = createReadyEnv();
@@ -369,6 +267,7 @@ describe("runAscetCliJson scheduler failure semantics", () => {
 			assert.equal(result.diagnostics?.retryable, false);
 			assert.equal(scheduler.getSnapshot().recentJobs.at(-1)?.state, "failed");
 			assert.equal(scheduler.getSnapshot().recentJobs.at(-1)?.errorCode, "ascet_cli_failed");
+			assert.equal((await getAscetCliLockSnapshot({ env: fixture.env })).locked, false);
 		} finally {
 			fixture.cleanup();
 		}
@@ -426,6 +325,7 @@ describe("runAscetCliJson scheduler failure semantics", () => {
 			assert.equal(result.error?.code, "ascet_cli_failed");
 			assert.equal(scheduler.getSnapshot().recentJobs.at(-1)?.state, "failed");
 			assert.equal(scheduler.getSnapshot().recentJobs.at(-1)?.errorCode, "ascet_cli_failed");
+			assert.equal((await getAscetCliLockSnapshot({ env: fixture.env })).locked, false);
 		} finally {
 			fixture.cleanup();
 		}
@@ -454,6 +354,7 @@ describe("runAscetCliJson scheduler failure semantics", () => {
 			assert.equal(result.diagnostics?.retryable, true);
 			assert.equal(result.diagnostics?.timedOut, true);
 			assert.equal(scheduler.getSnapshot().recentJobs.at(-1)?.state, "failed");
+			assert.equal((await getAscetCliLockSnapshot({ env: fixture.env })).locked, false);
 		} finally {
 			fixture.cleanup();
 		}
@@ -481,6 +382,7 @@ describe("runAscetCliJson scheduler failure semantics", () => {
 			assert.equal(result.error?.code, "ascet_cli_aborted");
 			assert.equal(result.diagnostics?.aborted, true);
 			assert.equal(scheduler.getSnapshot().recentJobs.at(-1)?.state, "failed");
+			assert.equal((await getAscetCliLockSnapshot({ env: fixture.env })).locked, false);
 		} finally {
 			fixture.cleanup();
 		}

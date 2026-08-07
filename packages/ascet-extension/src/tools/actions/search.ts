@@ -24,7 +24,6 @@ export interface SearchActionItem {
 	rules?: readonly string[];
 	fewShots?: AscetActionCatalogEntry["fewShots"];
 	result?: AscetActionCatalogEntry["result"];
-	requiresPartitions?: readonly string[];
 	nextActions?: readonly string[];
 	visibility?: AscetActionCatalogEntry["visibility"];
 	replacement?: string;
@@ -100,7 +99,6 @@ function toSearchItem(
 		rules: entry.rules,
 		fewShots: entry.fewShots,
 		result: entry.result,
-		requiresPartitions: entry.requiresPartitions,
 		nextActions: entry.nextActions,
 		visibility: entry.visibility === "public" ? undefined : entry.visibility,
 		replacement: entry.deprecatedBy,

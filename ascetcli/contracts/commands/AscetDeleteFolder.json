@@ -1,0 +1,79 @@
+﻿{
+    "id":  "AscetDeleteFolder",
+    "family":  "write",
+    "summary":  "Delete an empty folder",
+    "usage":  "\u003cfolder-path\u003e [--if-missing \u003cfail|ignore\u003e] [--verify-readback] [--json]",
+    "execution":  {
+                      "kind":  "unified_cli",
+                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+                      "subcommand":  "exec",
+                      "operation":  "delete_folder"
+                  },
+    "supportsJson":  true,
+    "defaultOutputMode":  "json",
+    "risk":  "destructive",
+    "requiresSerialLiveAccess":  true,
+    "objectKinds":  [
+                        "generic"
+                    ],
+    "args":  [
+                 {
+                     "name":  "folder-path",
+                     "kind":  "positional",
+                     "type":  "string",
+                     "required":  true,
+                     "description":  "Positional argument: folder-path"
+                 },
+                 {
+                     "name":  "--if-missing",
+                     "kind":  "option",
+                     "type":  "string",
+                     "required":  false,
+                     "description":  "Option value for --if-missing"
+                 },
+                 {
+                     "name":  "--verify-readback",
+                     "kind":  "flag",
+                     "type":  "boolean",
+                     "required":  false,
+                     "description":  "Flag --verify-readback"
+                 },
+                 {
+                     "name":  "--json",
+                     "kind":  "flag",
+                     "type":  "boolean",
+                     "required":  false,
+                     "description":  "Flag --json"
+                 }
+             ],
+    "preconditions":  [
+                          "ASCET ToolAPI session must be available.",
+                          "Live ASCET access must run through the serial executor."
+                      ],
+    "failureModes":  [
+                         "toolapi_unavailable",
+                         "target_not_found",
+                         "delete_failed"
+                     ],
+    "examples":  [
+                     {
+                         "description":  "Basic usage",
+                         "command":  "AscetCli.exe exec delete_folder \u003cfolder-path\u003e [--if-missing \u003cfail|ignore\u003e] [--verify-readback] [--json]"
+                     }
+                 ],
+    "pitfalls":  [
+                     "Live ASCET ToolAPI access is serial-only.",
+                     "Run readback and verify after successful writes.",
+                     "Confirm the live target before destructive operations."
+                 ],
+    "operation":  "delete_folder",
+    "lane":  "serial_write",
+    "hostEligible":  false,
+    "supportsBatch":  true,
+    "executionProfile":  {
+                             "hostSafety":  "write",
+                             "hostPolicy":  "force_one_shot",
+                             "timeoutClass":  "write"
+                         },
+    "hiddenFromModel":  false
+}

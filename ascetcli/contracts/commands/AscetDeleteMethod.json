@@ -1,0 +1,89 @@
+﻿{
+    "id":  "AscetDeleteMethod",
+    "family":  "write",
+    "summary":  "Delete an existing method",
+    "usage":  "\u003ccomponent-path\u003e \u003cmethod-name\u003e [--if-missing \u003cfail|ignore\u003e] [--verify-readback] [--json]",
+    "execution":  {
+                      "kind":  "unified_cli",
+                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+                      "subcommand":  "exec",
+                      "operation":  "delete_method"
+                  },
+    "supportsJson":  true,
+    "defaultOutputMode":  "json",
+    "risk":  "destructive",
+    "requiresSerialLiveAccess":  true,
+    "objectKinds":  [
+                        "class",
+                        "module",
+                        "statemachine"
+                    ],
+    "args":  [
+                 {
+                     "name":  "component-path",
+                     "kind":  "positional",
+                     "type":  "string",
+                     "required":  true,
+                     "description":  "Positional argument: component-path"
+                 },
+                 {
+                     "name":  "method-name",
+                     "kind":  "positional",
+                     "type":  "string",
+                     "required":  true,
+                     "description":  "Positional argument: method-name"
+                 },
+                 {
+                     "name":  "--if-missing",
+                     "kind":  "option",
+                     "type":  "string",
+                     "required":  false,
+                     "description":  "Option value for --if-missing"
+                 },
+                 {
+                     "name":  "--verify-readback",
+                     "kind":  "flag",
+                     "type":  "boolean",
+                     "required":  false,
+                     "description":  "Flag --verify-readback"
+                 },
+                 {
+                     "name":  "--json",
+                     "kind":  "flag",
+                     "type":  "boolean",
+                     "required":  false,
+                     "description":  "Flag --json"
+                 }
+             ],
+    "preconditions":  [
+                          "ASCET ToolAPI session must be available.",
+                          "Live ASCET access must run through the serial executor.",
+                          "Target ASCET path must resolve to the expected object kind."
+                      ],
+    "failureModes":  [
+                         "toolapi_unavailable",
+                         "target_not_found",
+                         "delete_failed"
+                     ],
+    "examples":  [
+                     {
+                         "description":  "Basic usage",
+                         "command":  "AscetCli.exe exec delete_method \u003ccomponent-path\u003e \u003cmethod-name\u003e [--if-missing \u003cfail|ignore\u003e] [--verify-readback] [--json]"
+                     }
+                 ],
+    "pitfalls":  [
+                     "Live ASCET ToolAPI access is serial-only.",
+                     "Run readback and verify after successful writes.",
+                     "Confirm the live target before destructive operations."
+                 ],
+    "operation":  "delete_method",
+    "lane":  "serial_write",
+    "hostEligible":  false,
+    "supportsBatch":  true,
+    "executionProfile":  {
+                             "hostSafety":  "write",
+                             "hostPolicy":  "force_one_shot",
+                             "timeoutClass":  "write"
+                         },
+    "hiddenFromModel":  false
+}

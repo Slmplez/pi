@@ -1,4 +1,4 @@
-# ASCET PI Extension
+﻿# ASCET PI Extension
 
 ASCET tool extension package for PI. It registers ASCET read, verify, and guarded write tools while keeping all ASCET ToolAPI-backed access sequential.
 
@@ -33,15 +33,13 @@ Canonical Copilot-aligned tools:
 - `ascet_capabilities`
 - `ascet_recover`
 - `ascet_scheduler_status`
-- `ascet_explore`
-- `ascet_search`
+- `ascet_get`
 - `ascet_read`
 - `ascet_diff`
 - `ascet_edit`
-- `ascet_batch_write`
 - `ascet_verify`
 
-Old fine-grained tools are not registered as model tools or legacy aliases. Their low-level runner modules remain available internally for canonical tools.
+Retired discovery, search, and index tools are not registered as model tools and have no compatibility aliases. `ascet_get` is the only ASCET discovery surface.
 
 The requirements Excel tool is temporarily hidden from the registered model-facing tool surface.
 
@@ -169,17 +167,25 @@ Manual validation checklist:
 - Verify SSE text streaming on at least one configured model.
 - Verify thinking output appears in the UI.
 
-## Dependent Chain And Dependency Actions
+## On-Demand Get And Exact Read Actions
 
-`ascet_read` includes these ASCET ToolAPI-backed actions:
+`ascet_get` is the only live discovery surface. Its seven actions are:
 
-- `read_element_dependency`: read one element's current dependency flag, stored formula, supported status, and write-plan evidence before or after `set_element_dependency`.
-- `read_dependent_chain`: read a local dependent parameter chain from the consuming component through its imported parameter to the exported parameter/provider component. The provider can be discovered automatically, or constrained with `exporterComponentPath` / `providerScopePath`.
+- `tree`: bounded Folder, Project, and Component structure; it does not read Elements, references, or code.
+- `elements`: complete Element directory for one selected Component or bounded Folder scope. It has no artificial item-count limit.
+- `formulas`: complete Project formula definitions with formula content and parameter metadata.
+- `component_refs`: outgoing Component references without code or implementation payloads.
+- `bde_edges`: BDE/block-diagram signal edges for one selected Class or Module.
+- `import_binding`: exact Imported Element binding for an explicitly selected provider.
+- `dbitem_refs`: outgoing references for one exact DataBaseItem.
 
-`ascet_edit` includes `set_element_dependency` for dependency flag changes. It uses the same guarded write contract as other write actions: preflight by default, interactive approval when `executeWrite=true`, optional `dryRun`, optional `backupDir`, and readback verification. Folder writes require `match="all"` so multi-component changes are explicit.
+Start with `tree`, then pass an exact returned `path` or stable `oid` to a bounded follow-up action. Small Get results return inline. Large results are stored as an NDJSON observation with a metadata file; use Pi `find`, `grep`, and `read` against the returned paths. Observations are task evidence, not a global database index.
+
+Use `ascet_read` only for exact deep reads after the target is known: complete code, implementation metadata, dependency/formula detail, state-machine flow, or detailed block-diagram data. `read_dependent_chain` and `read_element_dependency` do not replace bounded provider discovery with Get observations.
+
+`ascet_edit` includes `set_element_dependency` for dependency flag changes. It uses the same guarded write contract as other write actions: preflight by default, interactive approval when `executeWrite=true`, optional `dryRun`, optional `backupDir`, and readback verification. Successful writes invalidate affected stored observations; request fresh bounded Get data before relying on prior structure evidence.
 
 These actions call `runAscetCliJson`, enter the ASCET scheduler, and execute under the shared `ascet.toolapi.global` resource.
-
 ## Scheduler Diagnostics
 
 ASCET ToolAPI-backed calls are serialized through the PI extension scheduler resource `ascet.toolapi.global` with concurrency `1`. This protects the ASCET CLI and ToolAPI host from concurrent calls that can otherwise overlap in the same local ASCET database session.

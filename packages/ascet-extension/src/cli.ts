@@ -1,7 +1,7 @@
 import { type ChildProcess, spawn } from "node:child_process";
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
+import { getAscetArtifactRoot, getAscetOutputThresholdBytes, writeAscetFileAtomically } from "./observation-store.ts";
 import { AscetCliLockTimeoutError, acquireAscetCliLock } from "./scheduler/cli-lock.ts";
 import {
 	AscetCliProcessError,
@@ -93,16 +93,14 @@ export interface AscetFormattedOutputArtifact {
 	searchHint: string;
 }
 
-const DEFAULT_FORMAT_ARTIFACT_THRESHOLD_BYTES = 4096;
 let formatArtifactCounter = 0;
 
 function getFormatArtifactThresholdBytes(): number {
-	const configured = Number(process.env.PI_ASCET_EXTENSION_OUTPUT_THRESHOLD_BYTES);
-	return Number.isFinite(configured) && configured > 0 ? configured : DEFAULT_FORMAT_ARTIFACT_THRESHOLD_BYTES;
+	return getAscetOutputThresholdBytes();
 }
 
 function getFormatArtifactRoot(): string {
-	return process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT ?? join(tmpdir(), "pi-ascet-extension", "artifacts");
+	return getAscetArtifactRoot();
 }
 
 function safeArtifactName(value: string): string {
@@ -127,7 +125,7 @@ function persistFormattedOutput(operation: string, formatted: string): { path: s
 		`${safeArtifactName(operation)}-${process.pid}-${Date.now()}-${formatArtifactCounter++}.json`,
 	);
 	const content = formatted.endsWith("\n") ? formatted : `${formatted}\n`;
-	writeFileSync(artifactPath, content, "utf8");
+	writeAscetFileAtomically(artifactPath, content);
 	return {
 		path: artifactPath,
 		sizeBytes: Buffer.byteLength(content, "utf8"),
@@ -690,7 +688,7 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 
 export function formatAscetCliJsonResult(operation: string, result: AscetCliJsonResult): string {
 	if (result.ok) {
-		const payload = toToolSuccessPayload(addSearchCompletenessNotice(result.data));
+		const payload = toToolSuccessPayload(result.data);
 		const formatted = JSON.stringify(payload, null, 2) ?? "null";
 		if (Buffer.byteLength(formatted, "utf8") <= getFormatArtifactThresholdBytes()) {
 			return formatted;
@@ -724,38 +722,6 @@ export function formatAscetCliJsonResult(operation: string, result: AscetCliJson
 		null,
 		2,
 	);
-}
-
-function addSearchCompletenessNotice(data: unknown): unknown {
-	if (data === null || typeof data !== "object" || Array.isArray(data)) {
-		return data;
-	}
-	const envelope = data as { result?: unknown; source?: unknown };
-	const result = envelope.result;
-	if (result === null || typeof result !== "object" || Array.isArray(result)) {
-		return data;
-	}
-	const payload = result as Record<string, unknown>;
-	const itemCount = Array.isArray(payload.matches)
-		? payload.matches.length
-		: Array.isArray(payload.items)
-			? payload.items.length
-			: undefined;
-	if (
-		itemCount === 0 &&
-		payload.searchComplete === false &&
-		payload.authoritative === false &&
-		(payload.source === "quick_search_index" || envelope.source === "quick_search_index")
-	) {
-		return {
-			...data,
-			result: {
-				...payload,
-				summary: "No indexed matches were returned, but the search is not exhaustive.",
-			},
-		};
-	}
-	return data;
 }
 
 function sanitizeCliFailureText(text: string): string {

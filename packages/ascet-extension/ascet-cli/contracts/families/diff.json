@@ -1,4 +1,4 @@
-{
+﻿{
   "family": "diff",
   "summary": "Compare components, methods, element specs, project formulas, and state machines before or after changes.",
   "recommendedTools": ["AscetDiffTool"],

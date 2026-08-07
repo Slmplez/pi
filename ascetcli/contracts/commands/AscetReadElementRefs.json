@@ -1,0 +1,71 @@
+﻿{
+    "id":  "AscetReadElementRefs",
+    "family":  "refs",
+    "summary":  "View refs for one element within a component",
+    "usage":  "\u003ccomponent-path\u003e \u003celement-name\u003e [--json]",
+    "execution":  {
+                      "kind":  "unified_cli",
+                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+                      "subcommand":  "exec",
+                      "operation":  "read_element_refs"
+                  },
+    "supportsJson":  true,
+    "defaultOutputMode":  "json",
+    "risk":  "read",
+    "requiresSerialLiveAccess":  false,
+    "objectKinds":  [
+                        "class",
+                        "module",
+                        "statemachine"
+                    ],
+    "args":  [
+                 {
+                     "name":  "component-path",
+                     "kind":  "positional",
+                     "type":  "string",
+                     "required":  true,
+                     "description":  "Positional argument: component-path"
+                 },
+                 {
+                     "name":  "element-name",
+                     "kind":  "positional",
+                     "type":  "string",
+                     "required":  true,
+                     "description":  "Positional argument: element-name"
+                 },
+                 {
+                     "name":  "--json",
+                     "kind":  "flag",
+                     "type":  "boolean",
+                     "required":  false,
+                     "description":  "Flag --json"
+                 }
+             ],
+    "preconditions":  [
+                          "ASCET ToolAPI session must be available.",
+                          "Target ASCET path must resolve to the expected object kind."
+                      ],
+    "failureModes":  [
+                         "toolapi_unavailable",
+                         "target_not_found"
+                     ],
+    "examples":  [
+                     {
+                         "description":  "Basic usage",
+                         "command":  "AscetCli.exe exec read_element_refs \u003ccomponent-path\u003e \u003celement-name\u003e [--json]"
+                     }
+                 ],
+    "pitfalls":  [
+
+                 ],
+    "operation":  "read_element_refs",
+    "lane":  "legacy_read",
+    "hostEligible":  false,
+    "supportsBatch":  false,
+    "executionProfile":  {
+                             "hostSafety":  "fragile",
+                             "hostPolicy":  "force_one_shot",
+                             "timeoutClass":  "expensive_read"
+                         },
+    "hiddenFromModel":  false
+}

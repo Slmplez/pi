@@ -1,0 +1,18 @@
+{
+  "family": "refs",
+  "summary": "Inspect outgoing or reverse references within bounded scopes.",
+  "recommendedTools": [
+    "AscetReferenceTool"
+  ],
+  "commandIds": [
+    "AscetReadElementRefs",
+    "AscetReadComponentRefs",
+    "AscetReadReferences",
+    "AscetReadComponentUsedBy"
+  ],
+  "routingHints": [
+    "Use component_used_by for bounded reverse-dependency analysis.",
+    "Use AscetGetElements and AscetGetComponentRefs for bounded reference discovery before exact read operations.",
+    "Use element_refs when the task targets one named element inside a known component."
+  ]
+}

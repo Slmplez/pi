@@ -1,4 +1,4 @@
-{
+﻿{
     "id":  "AscetReadMethodSignature",
     "family":  "read",
     "summary":  "Read a method return type and primitive argument signature",

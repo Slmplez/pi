@@ -1,104 +1,22 @@
 import { describe, expect, it } from "vitest";
-import { listAscetRoutes, routeAscetAction } from "../../ascet-extension/src/routing/router.ts";
+import { listAscetRoutesForTool } from "../../ascet-extension/src/routing/router.ts";
 
-const EXPECTED_ACTIONS = {
-	ascet_explore: ["list_components"],
-	ascet_search: ["search_components", "resolve_component", "search_elements", "search_occurrences"],
-	ascet_read: [
-		"read",
-		"read_code",
-		"read_method_signature",
-		"read_implementation",
-		"read_block_diagram",
-		"read_state_machine_flow",
-		"read_dependent_chain",
-		"read_element_dependency",
-	],
-	ascet_diff: [
-		"diff",
-		"diff_method",
-		"diff_component_snapshot",
-		"diff_state_machine_domain",
-		"diff_element_spec",
-		"diff_project_formulas",
-	],
-	ascet_edit: [
-		"create_folder",
-		"delete_folder",
-		"create_component",
-		"create_method",
-		"set_method_signature",
-		"delete_component",
-		"delete_method",
-		"set_method_code",
-		"set_module_code",
-		"set_state_machine_code",
-		"set_enumerators",
-		"apply_element_spec",
-		"apply_project_formula",
-		"set_element_dependency",
-		"check",
-		"set",
-	],
-	ascet_batch_write: [
-		"batch_set_method_code",
-		"batch_set_element_spec",
-		"batch_create_component",
-		"batch_create_method",
-		"batch_set_project_formula",
-		"batch_delete_component",
-		"batch_delete_method",
-		"batch_create_folder",
-		"batch_delete_folder",
-	],
-	ascet_verify: ["readback"],
-} as const;
+const EXPECTED_GET_ACTIONS = [
+	"tree",
+	"elements",
+	"formulas",
+	"component_refs",
+	"bde_edges",
+	"import_binding",
+	"dbitem_refs",
+] as const;
 
-describe("ASCET Copilot-aligned routing", () => {
-	it("covers the Copilot domain action matrix", () => {
-		const routes = listAscetRoutes();
-
-		for (const [toolName, actions] of Object.entries(EXPECTED_ACTIONS)) {
-			expect(
-				routes
-					.filter((route) => route.toolName === toolName)
-					.map((route) => route.action)
-					.filter((action) => actions.includes(action as never)),
-			).toEqual([...actions]);
-		}
-	});
-
-	it("routes read_code through logical AscetReadCode and backend AscetReadTextCode", () => {
-		expect(routeAscetAction({ toolName: "ascet_read", action: "read_code" })).toMatchObject({
-			logicalCommandId: "AscetReadCode",
-			backendCommandId: "AscetReadTextCode",
-			operation: "read_code",
-		});
-	});
-
-	it("routes read_element_dependency to the dedicated dependency reader", () => {
-		expect(routeAscetAction({ toolName: "ascet_read", action: "read_element_dependency" })).toMatchObject({
-			logicalCommandId: "AscetReadElementDependency",
-			backendCommandId: "AscetReadElementDependency",
-			operation: "read_element_dependency",
-		});
-	});
-
-	it("routes generic diff by objectKind when the target kind is known", () => {
-		expect(routeAscetAction({ toolName: "ascet_diff", action: "diff", objectKind: "class" })).toMatchObject({
-			logicalCommandId: "AscetDiffClass",
-			backendCommandId: "AscetDiffClass",
-			operation: "diff_class",
-		});
-		expect(routeAscetAction({ toolName: "ascet_diff", action: "diff", objectKind: "module" })).toMatchObject({
-			logicalCommandId: "AscetDiffModule",
-			backendCommandId: "AscetDiffModule",
-			operation: "diff_module",
-		});
-		expect(routeAscetAction({ toolName: "ascet_diff", action: "diff", objectKind: "statemachine" })).toMatchObject({
-			logicalCommandId: "AscetDiffStateMachine",
-			backendCommandId: "AscetDiffStateMachine",
-			operation: "diff_state_machine",
-		});
+describe("ASCET Copilot routing", () => {
+	it("maps the on-demand discovery surface to get operations", () => {
+		const routes = listAscetRoutesForTool("ascet_get");
+		expect(routes.map((route) => route.action).sort()).toEqual([...EXPECTED_GET_ACTIONS].sort());
+		expect(routes.map((route) => route.operation).sort()).toEqual(
+			EXPECTED_GET_ACTIONS.map((action) => `get_${action}`).sort(),
+		);
 	});
 });

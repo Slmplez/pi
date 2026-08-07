@@ -1,27 +1,23 @@
-import { ascetIndexTool } from "./ascet-index/index.ts";
 import { ascetBatchWriteTool } from "./batch-write/index.ts";
 import { ascetCapabilitiesTool } from "./capabilities/index.ts";
 import { ascetDiffTool } from "./diff/index.ts";
 import { ascetEditTool } from "./edit/index.ts";
-import { ascetExploreTool } from "./explore/index.ts";
+import { ascetGetTool } from "./get/index.ts";
 import { ascetReadTool } from "./read/index.ts";
 import { ascetRecoverTool } from "./recover/index.ts";
 import { ascetSchedulerStatusTool } from "./scheduler-status/index.ts";
-import { ascetSearchTool } from "./search/index.ts";
 import { ascetStatusTool } from "./status/index.ts";
 import { ascetVerifyTool } from "./verify/index.ts";
 
 export const canonicalOpsTools = [
 	ascetStatusTool,
 	ascetCapabilitiesTool,
-	ascetIndexTool,
 	ascetRecoverTool,
 	ascetSchedulerStatusTool,
 ] as const;
 
 export const canonicalDomainTools = [
-	ascetExploreTool,
-	ascetSearchTool,
+	ascetGetTool,
 	ascetReadTool,
 	ascetDiffTool,
 	ascetEditTool,
@@ -31,11 +27,9 @@ export const canonicalDomainTools = [
 export const canonicalAscetToolNames = [
 	"ascet_status",
 	"ascet_capabilities",
-	"ascet_index",
 	"ascet_recover",
 	"ascet_scheduler_status",
-	"ascet_explore",
-	"ascet_search",
+	"ascet_get",
 	"ascet_read",
 	"ascet_diff",
 	"ascet_edit",

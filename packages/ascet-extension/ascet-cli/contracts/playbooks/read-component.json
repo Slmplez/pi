@@ -1,16 +1,24 @@
-{
-  "id": "read-component",
-  "title": "Read a component safely",
-  "appliesTo": ["class", "module", "statemachine"],
-  "steps": [
-    { "kind": "command", "commandId": "AscetResolveComponent" },
-    { "kind": "command", "commandId": "AscetReadComponentSummary" },
-    { "kind": "command", "commandId": "AscetReadComponentChildren" },
-    { "kind": "command", "commandId": "AscetReadComponentSnapshot" }
-  ],
-  "requiredRules": [
-    "live_serial_only",
-    "summary_before_snapshot",
-    "minimum_context_only"
-  ]
+﻿{
+    "id":  "read-component",
+    "title":  "Read a component safely",
+    "appliesTo":  [
+                      "class",
+                      "module",
+                      "statemachine"
+                  ],
+    "steps":  [
+                  {
+                      "kind":  "command",
+                      "commandId":  "AscetGetTree"
+                  },
+                  {
+                      "kind":  "command",
+                      "commandId":  "AscetReadComponentSnapshot"
+                  }
+              ],
+    "requiredRules":  [
+                          "live_serial_only",
+                          "identify_target_before_snapshot",
+                          "minimum_context_only"
+                      ]
 }

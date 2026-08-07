@@ -1,55 +1,58 @@
-# Tool Map
+﻿# Tool Map
 
-Use evidence kinds in rules. Resolve evidence kinds through this map when collecting live ASCET data.
+Use evidence kinds in rules. Collect live ASCET structure and reference evidence with `ascet_get`; it is the only discovery surface.
 
 ## Runtime
 
 - `runtime_status`: `ascet_status`
 - `scheduler_status`: `ascet_scheduler_status`
 
-## Target Discovery
+## Navigation And Directory Evidence
 
-- `components`: `ascet_explore` action `list_components`
-- `target`: `ascet_search` action `resolve_component`
-- `target_inspection`: `ascet_explore` action `inspect_target`
-- `children`: `ascet_explore` action `preview_children`
-- `diagrams`: `ascet_explore` action `list_diagrams`
+- `tree`: `ascet_get` action `tree`
+- `components`: derive from `tree`
+- `target`: select an exact `path` or `oid` from `tree`
+- `children`: `ascet_get` action `elements`
+- `formulas`: `ascet_get` action `formulas`
+- `occurrences`: Pi `grep` and `read` over stored bounded Get observations; use exact `ascet_read.read_code` only when the rule requires live code context
 
-## Code Evidence
+Use `tree` first. Give a known `target.path`, `target.oid`, or bounded `target.targetPathPrefix`; do not request a database-wide discovery scan. When an observation is stored, use Pi `find`, `grep`, and `read` against its NDJSON and metadata files instead of calling a separate ASCET search tool.
 
-- `component_code`: `ascet_read` action `read_code`
-- `method_code`: `ascet_read` action `read_code`
+## Reference And Diagram Evidence
+
+- `component_refs`: `ascet_get` action `component_refs`
+- `element_refs`: `ascet_get` action `dbitem_refs` with the exact Element/DataBaseItem target
+- `dbitem_refs`: `ascet_get` action `dbitem_refs`
+- `import_binding`: `ascet_get` action `import_binding`
+- `bde_edges`: `ascet_get` action `bde_edges`
+- `block_diagram`: derive structural graph evidence from `bde_edges`; use `ascet_read.read_block_diagram` only for required exact detail
+- `diagrams`: derive named diagrams from `bde_edges`
+- `bde_connections`: derive from `bde_edges`
+- `bde_signals`: derive from `bde_edges` and `elements`
+
+`component_refs` and `dbitem_refs` expose outgoing references only. `import_binding` is an exact check, not provider discovery: call it only after `tree`, `elements`, and local observation search identify both the consumer Imported Element and its provider.
+
+## Exact Deep Reads
+
+- `component_code`, `method_code`: `ascet_read` action `read_code`
 - `implementation`: `ascet_read` action `read_implementation`
-- `summary`: `ascet_read` action `read_summary`
+- detailed dependency/formula state: `ascet_read` action `read_element_dependency` or `read_dependent_chain`
+- detailed block-diagram surface: `ascet_read` action `read_block_diagram` only when `bde_edges` is insufficient
 
-## Diagram Evidence
-
-- `block_diagram`: `ascet_read` action `read_block_diagram`
-- `bde_connections`: derive from `block_diagram`
-- `bde_signals`: derive from `block_diagram`, `children`, and `component_code`
-
-Do not use old fine-grained block-diagram tool names. They are not part of the canonical model-facing tool surface.
-
-If `read_block_diagram` returns a valid empty graph, keep it as empty `block_diagram` evidence. If the target surface is unsupported, store the unsupported result and use alternate evidence only when the rule accepts code, implementation, or child evidence.
-
-## Reference Evidence
-
-- `component_refs`: `ascet_search` action `references_to_component`
-- `element_refs`: `ascet_search` action `references_to_element`
-- `occurrences`: `ascet_search` action `search_occurrences`
+Use `ascet_read` for one exact resolved target. It is not a discovery or search substitute.
 
 ## Parameter Mapping Evidence
 
-- `dependent_chain`: `ascet_read` action `read_dependent_chain`
-- `parameter_children`: collect `children` with `group="parameters"` when parameter-only evidence is needed
-- `parameter_occurrences`: `occurrences` filtered to the parameter element under inspection
-- `parameter_code_context`: `component_code` or `method_code` only when the rule needs code context
+1. Use `tree` to bound the consumer and provider feature scope.
+2. Use `elements` to collect the consumer directory and explicit provider candidates.
+3. Use `component_refs` to establish outgoing consumer relations.
+4. Use Pi `grep`/`read` on Get observations to match the Imported Parameter name to `scope=exported` candidates.
+5. Use `import_binding` only for an explicit consumer/imported-element/provider tuple. Derive `import_export_matches` and `import_export_match` evidence from the validated binding.
+6. Use a precise `ascet_read` dependency or code read only when the returned structure is insufficient.
 
-Parameter mapping checks may use only read, explore, reference, and search evidence. Do not use `ascet_edit.set_element_dependency` in full-check.
+Do not use write tools in full-check.
 
-Use `dependent_chain` to read Local Parameter -> Imported Parameter -> Exported Parameter evidence from the consuming component. If provider discovery is ambiguous or unsupported, record the returned issue such as `export_ambiguous`, `export_not_found`, or `provider_candidate_limit_exceeded` as an evidence gap instead of inventing dependency candidates.
-
-## Diff and Verify
+## Diff And Verify
 
 - `component_diff`: `ascet_diff`
 - `method_diff`: `ascet_diff`
@@ -59,4 +62,4 @@ Use `ascet_diff` action `diff` with `objectKind` for detailed semantic component
 
 ## Fallback Rules
 
-If a mapped action is unsupported for a target surface, record the unsupported tool result in evidence and use the next available evidence kind. Do not silently drop missing evidence.
+If a bounded Get action is unsupported for a target surface, store the unsupported result in evidence, then use the mapped exact deep read only when the rule accepts that evidence. Do not silently drop missing evidence.

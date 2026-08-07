@@ -1,17 +1,36 @@
-{
-  "id": "write-method",
-  "title": "Write method code safely",
-  "appliesTo": ["class", "module", "statemachine"],
-  "steps": [
-    { "kind": "command", "commandId": "AscetResolveComponent" },
-    { "kind": "command", "commandId": "AscetListMethods" },
-    { "kind": "command", "commandId": "AscetReadMethodCode" },
-    { "kind": "command", "commandId": "AscetSetMethodCode" },
-    { "kind": "command", "commandId": "AscetReadMethodCode" }
-  ],
-  "requiredRules": [
-    "live_serial_only",
-    "minimum_change_only",
-    "write_then_readback"
-  ]
+﻿{
+    "id":  "write-method",
+    "title":  "Write method code safely",
+    "appliesTo":  [
+                      "class",
+                      "module",
+                      "statemachine"
+                  ],
+    "steps":  [
+                  {
+                      "kind":  "command",
+                      "commandId":  "AscetGetTree"
+                  },
+                  {
+                      "kind":  "command",
+                      "commandId":  "AscetGetElements"
+                  },
+                  {
+                      "kind":  "command",
+                      "commandId":  "AscetReadMethodCode"
+                  },
+                  {
+                      "kind":  "command",
+                      "commandId":  "AscetSetMethodCode"
+                  },
+                  {
+                      "kind":  "command",
+                      "commandId":  "AscetReadMethodCode"
+                  }
+              ],
+    "requiredRules":  [
+                          "live_serial_only",
+                          "minimum_change_only",
+                          "write_then_readback"
+                      ]
 }

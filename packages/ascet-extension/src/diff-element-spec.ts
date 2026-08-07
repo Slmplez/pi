@@ -1,3 +1,4 @@
+import { isAbsolute, resolve } from "node:path";
 import { Type } from "typebox";
 import {
 	type AscetCliExecutionResult,
@@ -30,14 +31,19 @@ export const ascetDiffElementSpecParameters = Type.Object({
 	changesOnly: Type.Optional(Type.Boolean({ description: "Only include changed sections in the diff response." })),
 });
 
-export function buildDiffElementSpecArgs(params: AscetDiffElementSpecParams): string[] {
+export function buildDiffElementSpecArgs(params: AscetDiffElementSpecParams, cwd: string): string[] {
 	if (typeof params.componentPath !== "string" || params.componentPath.length === 0) {
 		throw new Error("componentPath is required for diff_element_spec.");
 	}
 	if (typeof params.specFile !== "string" || params.specFile.length === 0) {
 		throw new Error("specFile is required for diff_element_spec.");
 	}
-	const args = ["exec", "diff_element_spec", normalizeAscetPath(params.componentPath), params.specFile];
+	const args = [
+		"exec",
+		"diff_element_spec",
+		normalizeAscetPath(params.componentPath),
+		isAbsolute(params.specFile) ? params.specFile : resolve(cwd, params.specFile),
+	];
 	if (params.changesOnly) {
 		args.push("--changes-only");
 	}
@@ -49,7 +55,7 @@ export async function runAscetDiffElementSpec(
 	params: AscetDiffElementSpecParams,
 	options: RunAscetDiffElementSpecOptions,
 ): Promise<AscetDiffElementSpecResult> {
-	return runAscetCliJson(buildDiffElementSpecArgs(params), options);
+	return runAscetCliJson(buildDiffElementSpecArgs(params, options.cwd), options);
 }
 
 export function formatDiffElementSpecResult(result: AscetDiffElementSpecResult): string {

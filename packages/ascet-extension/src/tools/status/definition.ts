@@ -8,7 +8,7 @@ import { renderCall, renderResult } from "./ui.ts";
 export const ascetStatusTool = defineSequentialAscetTool({
 	name: "ascet_status",
 	label: "ASCET status",
-	description: "Report ASCET installation paths and verify the live ASCET ToolAPI runtime is reachable.",
+	description: "Report ASCET installation, DLL, live ToolAPI, and scheduler diagnostics.",
 	...ascetStatusPrompt,
 	parameters: ascetStatusParameters,
 	renderCall,
@@ -16,14 +16,14 @@ export const ascetStatusTool = defineSequentialAscetTool({
 	async execute(
 		_toolCallId: string,
 		_params: AscetStatusParams,
-		_signal: AbortSignal,
+		signal: AbortSignal,
 		_onUpdate: unknown,
-		ctx: { cwd: string; ascetStatusWarmSearchIndex?: AscetRuntimeStatusOptions["warmSearchIndex"] },
+		ctx: { cwd: string; ascetStatusLiveToolApiProbe?: AscetRuntimeStatusOptions["liveToolApiProbe"] },
 	) {
 		const report = await createAscetRuntimeStatusReport({
 			cwd: ctx.cwd,
-			signal: _signal,
-			warmSearchIndex: ctx.ascetStatusWarmSearchIndex,
+			signal,
+			liveToolApiProbe: ctx.ascetStatusLiveToolApiProbe,
 		});
 		const route = routeAscetAction({ toolName: "ascet_status", action: "status" });
 		return {

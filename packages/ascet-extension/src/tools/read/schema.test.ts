@@ -3,12 +3,13 @@ import { describe, test } from "node:test";
 import { type AscetReadParams, ascetReadParameters } from "./schema.ts";
 
 describe("ascet_read schema", () => {
-	test("does not expose the generic read action", () => {
+	test("does not expose generic discovery actions", () => {
 		const actions = getActionLiterals();
 
 		assert.ok(!actions.includes("read"));
 		assert.ok(actions.includes("read_code"));
-		assert.ok(actions.includes("read_project_formulas"));
+		assert.ok(!actions.includes("tree"));
+		assert.ok(!actions.includes("elements"));
 	});
 
 	test("read_code supports practical detail levels", () => {
@@ -49,6 +50,26 @@ describe("ascet_read schema", () => {
 		assert.equal(request.action, "read_block_diagram");
 	});
 
+	test("read_dependent_chain exposes only exact live-read targets", () => {
+		const schema = getActionSchema("read_dependent_chain") as { properties?: Record<string, unknown> } | undefined;
+		const properties = schema?.properties ?? {};
+
+		assert.ok(Object.hasOwn(properties, "componentPath"));
+		assert.ok(Object.hasOwn(properties, "dependentElement"));
+		assert.ok(Object.hasOwn(properties, "exporterComponentPath"));
+		assert.ok(!Object.hasOwn(properties, "providerScopePath"));
+		assert.ok(!Object.hasOwn(properties, "maxCandidates"));
+		assert.ok(!Object.hasOwn(properties, "fallback"));
+
+		const request: AscetReadParams = {
+			action: "read_dependent_chain",
+			componentPath: "FeatureA\\Consumer",
+			dependentElement: "C_K_Effective",
+			exporterComponentPath: "FeatureA\\Provider",
+		};
+		assert.equal(request.action, "read_dependent_chain");
+	});
+
 	test("accepts read_element_dependency as a read action", () => {
 		const actions = getActionLiterals();
 
@@ -67,23 +88,6 @@ describe("ascet_read schema", () => {
 			targetKind: "component",
 		};
 		assert.equal(request.action, "read_element_dependency");
-	});
-
-	test("accepts read_project_formulas as a project read action", () => {
-		const readProjectFormulasSchema = getActionSchema("read_project_formulas") as
-			| { properties?: Record<string, unknown> }
-			| undefined;
-		const properties = readProjectFormulasSchema?.properties ?? {};
-
-		assert.ok(Object.hasOwn(properties, "projectPath"));
-		assert.ok(!Object.hasOwn(properties, "componentPath"));
-		assert.ok(!Object.hasOwn(properties, "methodName"));
-
-		const request: AscetReadParams = {
-			action: "read_project_formulas",
-			projectPath: "DEMO\\Project",
-		};
-		assert.equal(request.action, "read_project_formulas");
 	});
 
 	test("exposes bounded implementation traversal controls", () => {

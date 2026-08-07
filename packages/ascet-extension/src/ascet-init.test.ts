@@ -14,7 +14,7 @@ function createTempProject(): { cwd: string; cleanup: () => void } {
 }
 
 describe("buildAscetInitPrompt", () => {
-	test("guides the agent to use status, indexed search, precise reads, and writes", () => {
+	test("guides the agent to use status, on-demand get, precise reads, and writes", () => {
 		const prompt = buildAscetInitPrompt({
 			scope: { ok: true, kind: "database" },
 			projectRulesPrompt: "ASCET project rules loaded.",
@@ -23,12 +23,13 @@ describe("buildAscetInitPrompt", () => {
 
 		assert.match(prompt, /ASCET project rules loaded/);
 		assert.match(prompt, /<repo-file: AGENTS\.md>/);
-		assert.match(prompt, /This initialization does not build or refresh indexes/);
+		assert.match(prompt, /This initialization uses live ASCET data on demand/);
 		assert.match(prompt, /First run ascet_status/);
-		assert.match(prompt, /Prefer ascet_search/);
-		assert.match(prompt, /Use ascet_read only when exact current live ASCET data or complete code content is needed/);
+		assert.match(prompt, /Use ascet_get to navigate and retrieve live data on demand/);
+		assert.match(prompt, /Pi find\/grep\/read/);
+		assert.match(prompt, /Use ascet_read only after the target is located/);
 		assert.match(prompt, /Use ascet_edit for all ASCET writes/);
-		assert.match(prompt, /Do not perform ad hoc full-database live scans/);
+		assert.ok(prompt.includes("Do not perform ad hoc full-database live scans"));
 		assert.doesNotMatch(prompt, /\.ascet\/index\/manifest\.json/);
 		assert.doesNotMatch(prompt, /Deterministic ASCET initialization has already run/);
 		assert.doesNotMatch(prompt, /warm/i);
@@ -65,7 +66,8 @@ describe("executeAscetInitCommand", () => {
 			assert.match(messages[0] ?? "", /<repo-file: agent\.md>/);
 			assert.match(messages[0] ?? "", /<repo-file: README\.md>/);
 			assert.match(messages[0] ?? "", /First run ascet_status/);
-			assert.match(messages[0] ?? "", /Prefer ascet_search/);
+			assert.match(messages[0] ?? "", /Use ascet_get to navigate and retrieve live data on demand/);
+			assert.match(messages[0] ?? "", /Pi find\/grep\/read/);
 			assert.match(messages[0] ?? "", /Use ascet_read/);
 			assert.match(messages[0] ?? "", /Use ascet_edit/);
 			assert.match(notifications.join("\n"), /ASCET init prompt sent/);

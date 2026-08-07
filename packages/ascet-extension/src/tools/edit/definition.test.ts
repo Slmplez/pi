@@ -21,11 +21,9 @@ test("ascet_edit is the sole canonical edit tool", () => {
 	assert.deepEqual(names, [
 		"ascet_status",
 		"ascet_capabilities",
-		"ascet_index",
 		"ascet_recover",
 		"ascet_scheduler_status",
-		"ascet_explore",
-		"ascet_search",
+		"ascet_get",
 		"ascet_read",
 		"ascet_diff",
 		"ascet_edit",

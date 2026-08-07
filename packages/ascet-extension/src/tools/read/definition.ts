@@ -5,7 +5,6 @@ import { formatReadDependentChainResult, runAscetReadDependentChain } from "../.
 import { formatReadElementDependencyResult, runAscetReadElementDependency } from "../../read-element-dependency.ts";
 import { formatReadImplementationResult, runAscetReadImplementation } from "../../read-implementation.ts";
 import { formatReadMethodSignatureResult, runAscetReadMethodSignature } from "../../read-method-signature.ts";
-import { formatReadProjectFormulasResult, runAscetReadProjectFormulas } from "../../read-project-formulas.ts";
 import { formatReadStateMachineFlowResult, runAscetReadStateMachineFlow } from "../../read-state-machine-flow.ts";
 import { formatReadTextCodeResult, runAscetReadTextCode } from "../../read-text-code.ts";
 import { createHashSummary } from "../../tool-response-contract.ts";
@@ -46,8 +45,6 @@ async function runAscetRead(params: AscetReadParams, options: RunOptions): Promi
 				},
 				{ ...options, timeoutMs: params.timeoutMs ?? options.timeoutMs },
 			);
-		case "read_project_formulas":
-			return runAscetReadProjectFormulas({ projectPath: params.projectPath }, options);
 		case "read_block_diagram":
 			return runAscetReadBlockDiagram(
 				{
@@ -90,8 +87,6 @@ function formatAscetReadResult(params: AscetReadParams, result: AscetCliJsonResu
 			return formatReadMethodSignatureResult(result);
 		case "read_implementation":
 			return formatReadImplementationResult(result);
-		case "read_project_formulas":
-			return formatReadProjectFormulasResult(result);
 		case "read_block_diagram":
 			return formatReadBlockDiagramResult(result);
 		case "read_state_machine_flow":

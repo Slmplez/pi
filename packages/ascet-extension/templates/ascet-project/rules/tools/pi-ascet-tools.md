@@ -1,17 +1,16 @@
-# PI ASCET Tool Map
+﻿# PI ASCET Tool Map
 
 Use canonical PI ASCET tools only.
 
-- Runtime/status: `ascet_status`, `ascet_scheduler_status`
-- Exploration: `ascet_explore`
-- Search/resolve: `ascet_search`
-- Read evidence: `ascet_read`
-- Diff: `ascet_diff`
-- Write: `ascet_edit`, `ascet_batch_write`
-- Editable state: `ascet_edit`
-- Verify: `ascet_verify`
+- Runtime/status: `ascet_status`, `ascet_scheduler_status`, `ascet_recover`
+- On-demand structure and references: `ascet_get`
+- Exact deep reads: `ascet_read`
+- Semantic comparison: `ascet_diff`
+- Guarded writes: `ascet_edit`
+- Verification: `ascet_verify`
 
-Do not use legacy CamelCase ASCET Copilot tool identifiers. Use only the canonical PI `ascet_*` tools listed above.
+`ascet_get` is the only discovery surface. Its actions are `tree`, `elements`, `formulas`, `component_refs`, `bde_edges`, `import_binding`, and `dbitem_refs`.
 
-For BDE or block diagram reads, use `ascet_read` with action `read_block_diagram`.
-`read_block_diagram` returns the agent-facing semantic graph by default.
+Start with `tree`, then use exact returned `path` or `oid` for a bounded follow-up action. Small results return inline; for stored observations use Pi `find`, `grep`, and `read` on the returned NDJSON/meta paths. Use `ascet_read` only when a selected target needs detailed code, implementation, dependency, or diagram data.
+
+Do not use legacy CamelCase ASCET Copilot tool identifiers or retired ASCET discovery/search/index tools.

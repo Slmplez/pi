@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import ascetExtension, { scheduleStartupAscetSearchIndexWarmup } from "./index.ts";
+import ascetExtension from "./index.ts";
 
 describe("ASCET extension agent routing hook", () => {
 	test("profile activation is deferred until before_agent_start and preserves non-ASCET active tools", async () => {
@@ -49,14 +49,15 @@ describe("ASCET extension agent routing hook", () => {
 		});
 		assert.deepEqual(active, [
 			"non_ascet_tool",
+			"find",
+			"grep",
+			"read",
+			"ascet_get",
+			"ascet_read",
 			"ascet_status",
 			"ascet_capabilities",
-			"ascet_index",
 			"ascet_recover",
 			"ascet_scheduler_status",
-			"ascet_explore",
-			"ascet_search",
-			"ascet_read",
 			"ascet_diff",
 			"ascet_edit",
 			"ascet_verify",
@@ -96,55 +97,5 @@ describe("ASCET extension agent routing hook", () => {
 
 		assert.match(result?.systemPrompt ?? "", /ASCET coding policy:/);
 		assert.doesNotMatch(result?.systemPrompt ?? "", /ascet-implementation/);
-	});
-
-	test("schedules startup P0 refresh so stale ASCET edits are picked up", async () => {
-		const observed = await new Promise<{
-			cwd?: string;
-			partition?: string;
-			forceRefresh?: boolean;
-			includeTextCode?: boolean;
-			toolName?: string;
-			scheduler?: unknown;
-		}>((resolve) => {
-			const scheduled = scheduleStartupAscetSearchIndexWarmup(
-				{
-					cwd: "E:\\Rep\\Demo",
-					sessionManager: {
-						getCwd() {
-							return "E:\\Rep\\DemoFromSession";
-						},
-					},
-				},
-				{
-					delayMs: 0,
-					warmSearchIndex: async (options) => {
-						resolve(options);
-						return {
-							ok: true,
-							commandId: "warm_search_index",
-							databaseName: "DemoDb",
-							databasePath: "C:\\ASCET\\DemoDb",
-							entryCount: 1,
-							elapsedMs: 1,
-							scanComplete: true,
-							fromCache: true,
-							exitCode: 0,
-							timedOut: false,
-							stdout: "",
-							stderr: "",
-						};
-					},
-				},
-			);
-			assert.equal(scheduled, true);
-		});
-
-		assert.equal(observed.cwd, "E:\\Rep\\DemoFromSession");
-		assert.equal(observed.partition, "p0");
-		assert.equal(observed.forceRefresh, true);
-		assert.equal(observed.includeTextCode, true);
-		assert.equal(observed.toolName, "ascet_status");
-		assert.equal(typeof observed.scheduler, "object");
 	});
 });

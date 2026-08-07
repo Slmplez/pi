@@ -1,0 +1,30 @@
+{
+    "family":  "write",
+    "summary":  "Create, delete, set, or apply live ASCET changes with explicit post-write readback confirmation safeguards.",
+    "recommendedTools":  [
+                             "AscetWriteTool",
+                             "AscetVerifyTool"
+                         ],
+    "commandIds":  [
+                       "AscetCreateFolder",
+                       "AscetDeleteFolder",
+                       "AscetCreateComponent",
+                       "AscetCreateMethod",
+                       "AscetDeleteComponent",
+                       "AscetDeleteMethod",
+                       "AscetSetMethodCode",
+                       "AscetSetClassMethodCode",
+                       "AscetSetMethodSignature",
+                       "AscetSetModuleCode",
+                       "AscetSetStateMachineCode",
+                       "AscetSetElementDependency",
+                       "AscetApplyElementSpec",
+                       "AscetApplyProjectFormula"
+                   ],
+    "routingHints":  [
+                         "All write commands must run through serial live access and follow AscetVerifyTool.readback confirmation.",
+                         "AscetVerifyTool.readback uses the routed class, module, or state-machine summary command.",
+                         "Prefer the most specific write command available for the object kind.",
+                         "Use apply commands for spec-driven restores or synchronization flows, not ad hoc text edits."
+                     ]
+}

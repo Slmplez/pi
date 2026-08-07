@@ -81,23 +81,23 @@ function renderRepoContext(files: readonly RepoContextFile[]): string {
 
 const ASCET_INIT_PROMPT = `You are working in an ASCET Copilot workspace.
 
-This initialization does not build or refresh indexes. The P0 SQLite search index is maintained by startup/background infrastructure and reported by ascet_status and the TUI footer.
+This initialization uses live ASCET data on demand through ascet_get and the Pi file tools when large results are stored as task-local observations.
 
 Use this workflow for subsequent ASCET coding or analysis tasks:
 
-1. First run ascet_status to check whether the ASCET index is ready, stale, refreshing, failed, or missing.
-2. Prefer ascet_search for indexed discovery:
-   - components
-   - declarations_of_element
-   - declarations_of_method_process
-   - references_to_component
-   - references_to_element
-   - text_in_code
-3. Use ascet_explore.list_components only for folder-tree browsing; use ascet_read for component structure and diagram content.
-4. Use ascet_read only when exact current live ASCET data or complete code content is needed.
-5. Use ascet_edit for all ASCET writes. After a write, inspect the result index status and pay attention to stale/refresh state before trusting broad search results.
-6. Do not perform ad hoc full-database live scans. Do not call broad ToolAPI GetAll loops from the agent path when indexed search can answer the question.
-7. If the index is stale, you may use indexed results as approximate context, but confirm critical current data with ascet_read or wait for refresh.
+1. First run ascet_status when ASCET runtime availability is uncertain.
+2. Use ascet_get to navigate and retrieve live data on demand:
+   - tree for folder and component navigation
+   - elements for component element identity and scope
+   - formulas for complete project formula data
+   - component_refs for component-instance relationships
+   - bde_edges for BDE signal-flow connections
+   - import_binding for final Imported/Exported binding validation
+   - dbitem_refs for database-object dependencies
+3. For large Get results, use Pi find/grep/read on the returned task-local NDJSON and metadata files. Do not treat these observations as a persistent database.
+4. Use ascet_read only after the target is located, when exact type, value, implementation, diagram, method, or code detail is needed.
+5. Use ascet_edit for all ASCET writes and re-read the affected live target after a write.
+6. Keep live ToolAPI calls scoped to the required folder, component, project, or reference target. Do not perform ad hoc full-database live scans.
 
 When updating project guidance, use this section title unless the user explicitly asks for another title: ${ASCET_AGENT_SECTION_TITLE}
 
@@ -107,8 +107,8 @@ Keep future ASCET guidance concise and operational:
 - signal and interface paths
 - parameter and data semantics
 - scheduling and execution notes
-- recommended navigation/search path
-- known limitations and stale-index cautions
+- recommended get/read path
+- known live-data and scope limitations
 `;
 
 export function buildAscetInitPrompt(options: {

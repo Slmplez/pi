@@ -1,19 +1,17 @@
+import { ascetGetParameters } from "../../get.ts";
 import { compactExamplesForAction } from "../_shared/action-examples.ts";
-import { ascetIndexParameters } from "../ascet-index/schema.ts";
 import { ascetCapabilitiesParameters } from "../capabilities/schema.ts";
 import { ascetDiffParameters } from "../diff/schema.ts";
 import { ascetEditParameters } from "../edit/schema.ts";
-import { ascetExploreParameters } from "../explore/schema.ts";
 import { ascetReadParameters } from "../read/schema.ts";
 import { ascetRecoverParameters } from "../recover/schema.ts";
 import { ascetRequirementsParameters } from "../requirements/schema.ts";
 import { ascetSchedulerStatusParameters } from "../scheduler-status/schema.ts";
-import { ascetSearchParameters } from "../search/schema.ts";
 import { ascetStatusParameters } from "../status/schema.ts";
 import { ascetVerifyParameters } from "../verify.ts";
 import { type AscetActionDescriptor, listActionDescriptors } from "./descriptors.ts";
 
-export type AscetActionFamily = "ops" | "explore" | "search" | "read" | "diff" | "write" | "verify";
+export type AscetActionFamily = "ops" | "get" | "read" | "diff" | "write" | "verify";
 export type AscetActionRisk = "read" | "diff" | "write" | "ops";
 
 export interface AscetActionCatalogEntry {
@@ -26,7 +24,6 @@ export interface AscetActionCatalogEntry {
 	profiles: readonly string[];
 	featureFlag?: string;
 	deprecatedBy?: string;
-	requiresPartitions?: readonly string[];
 	compact: string;
 	miniFewShot: string;
 	intent: string;
@@ -89,7 +86,7 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 		compact: "read complete live code; not global code search",
 		intent: "Read complete current code text from a resolved ASCET component or method.",
 		useWhen: ["Need complete live code for a known component, method, C header, or external C section."],
-		avoidWhen: ["Need global occurrence search; use ascet_search.text_in_code."],
+		avoidWhen: ["Need offline text filtering over a stored observation; use Pi grep after ascet_get."],
 		aliases: ["complete code", "full code", "method body", "live code", "read code", "open code"],
 		nextActions: ["ascet_edit.set_method_code", "ascet_diff.diff_method"],
 		schema: {
@@ -103,33 +100,16 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 		},
 		result: { shape: "codeText", fields: ["component", "name", "section", "text"] },
 	},
-	"ascet_read.read_project_formulas": {
-		compact: "read live Project formulas for a known projectPath",
-		intent: "Read current Project formula definitions from a resolved ASCET Project target.",
-		useWhen: ["Need Project formulas and already have the exact projectPath."],
-		avoidWhen: ["Need to find the projectPath first; use ascet_search.search_projects."],
-		aliases: ["project formulas", "read formula", "read project formula", "project formula metadata"],
-		nextActions: ["ascet_search.search_projects", "ascet_diff.diff_project_formulas"],
-		schema: {
-			required: ["action", "projectPath"],
-			optional: [],
-			enums: {
-				action: ["read_project_formulas"],
-			},
-		},
-		result: { shape: "projectFormulas", fields: ["project", "formulas"] },
-	},
 	"ascet_read.read_dependent_chain": {
-		compact:
-			"Index-first dependency provider resolver; returns exported provider path and full provider element data",
+		compact: "read one exact local/imported/exported dependency chain; provider path is optional explicit evidence",
 		intent:
-			"Resolve Local Parameter -> Imported Parameter -> Exported Parameter evidence and return full provider element catalog data.",
+			"Read the dependency chain for a known Local Parameter, optionally constrained to one exact provider component.",
 		useWhen: [
-			"Need to know which scope=Exported provider backs a local dependent parameter.",
-			"Need full exported provider element metadata before creating or updating an analogous dependent parameter.",
+			"The consumer component and dependent Element are already known.",
+			"A provider path is known exactly and must be verified as the exporter.",
 		],
 		avoidWhen: [
-			"Need only the dependency flag or formula for one element; use ascet_read.read_element_dependency.",
+			"Need to discover an unknown provider component; use ascet_get.tree and ascet_get.elements first.",
 			"Need to create or modify dependency state; use ascet_edit.apply_element_spec then ascet_edit.set_element_dependency.",
 		],
 		aliases: [
@@ -137,95 +117,14 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 			"dependency provider",
 			"exported parameter provider",
 			"local imported exported parameter",
-			"full provider element",
 		],
-		nextActions: ["ascet_edit.apply_element_spec", "ascet_edit.set_element_dependency"],
+		nextActions: ["ascet_get.elements", "ascet_get.import_binding", "ascet_edit.set_element_dependency"],
 		schema: {
 			required: ["action", "componentPath", "dependentElement"],
-			optional: ["exporterComponentPath", "providerScopePath", "maxCandidates", "detailLevel", "fallback"],
-			enums: {
-				action: ["read_dependent_chain"],
-				detailLevel: ["summary", "full"],
-				fallback: ["none", "legacy_live"],
-			},
+			optional: ["exporterComponentPath"],
+			enums: { action: ["read_dependent_chain"] },
 		},
-		result: {
-			shape: "dependentChain",
-			fields: ["consumer", "provider", "element.data", "total", "items", "issues"],
-		},
-	},
-	"ascet_search.search_projects": {
-		compact: "find Project paths from the warm object index",
-		intent: "Find ASCET Project targets before reading, diffing, or writing project formulas.",
-		useWhen: ["User mentions Project formulas but did not provide an exact projectPath."],
-		avoidWhen: ["Need ordinary class/module/state-machine components; use search_components."],
-		aliases: ["project path", "find project", "search projects", "project target", "where is project"],
-		nextActions: ["ascet_read.read_project_formulas", "ascet_diff.diff_project_formulas"],
-		schema: {
-			required: ["action", "query"],
-			optional: ["scopePath", "match", "limit", "cursor"],
-			enums: {
-				action: ["search_projects"],
-				match: ["exact", "glob", "contains"],
-			},
-		},
-		result: { shape: "projectCandidates", fields: ["total", "items", "nextCursor", "searchComplete"] },
-	},
-	"ascet_search.search_project_formulas": {
-		compact: "find Project formula declarations from the SQLite P0 index",
-		intent:
-			"Find indexed ASCET Project formula declarations by name before reading or editing the live project formula catalog.",
-		useWhen: ["Need to search formulas across Projects or within a known projectPath."],
-		avoidWhen: ["Need complete formula contents; use ascet_read.read_project_formulas after resolving projectPath."],
-		aliases: ["search project formula", "find formula", "formula declaration", "project formula search"],
-		nextActions: ["ascet_read.read_project_formulas", "ascet_diff.diff_project_formulas"],
-		schema: {
-			required: ["action", "query"],
-			optional: ["projectPath", "scopePath", "match", "limit", "cursor"],
-			enums: {
-				action: ["search_project_formulas"],
-				match: ["exact", "glob", "contains"],
-			},
-		},
-		result: { shape: "projectFormulaCandidates", fields: ["matches", "nextCursor", "searchComplete"] },
-	},
-	"ascet_search.text_in_code": {
-		compact: "search indexed ESDL/C snippets; not complete live code",
-		intent: "Find where text appears in indexed ESDL or C code and return snippet evidence.",
-		useWhen: ["Need to find occurrences of a code fragment, method call, symbol, or text across code."],
-		avoidWhen: ["Need the complete code body for one known target; use ascet_read.read_code."],
-		aliases: ["code search", "text in code", "ESDL search", "C code search", "where code appears", "snippet"],
-		nextActions: ["ascet_read.read_code", "ascet_search.references_to_element"],
-		schema: {
-			required: ["action", "query"],
-			optional: ["componentPath", "scopePath", "match", "limit", "cursor", "detailLevel"],
-			enums: {
-				action: ["text_in_code"],
-				match: ["exact", "contains"],
-				detailLevel: ["summary", "topology", "full"],
-			},
-		},
-		result: { shape: "textOccurrences", fields: ["total", "items", "nextCursor", "searchComplete"] },
-	},
-	"ascet_search.declarations_of_element": {
-		aliases: ["element declaration", "declarations of element", "find element", "where element declared"],
-		result: { shape: "elementDeclarations", fields: ["total", "items", "nextCursor", "searchComplete"] },
-	},
-	"ascet_search.references_to_element": {
-		aliases: ["element reference", "references to element", "where element used", "element usage"],
-		result: { shape: "elementReferences", fields: ["total", "items", "nextCursor", "searchComplete"] },
-	},
-	"ascet_search.references_to_component": {
-		aliases: ["component reference", "references to component", "who calls component", "component usage"],
-		result: { shape: "componentReferences", fields: ["total", "items", "nextCursor", "searchComplete"] },
-	},
-	"ascet_search.declarations_of_method_process": {
-		aliases: ["method declaration", "process declaration", "declarations of method", "declarations of process"],
-		result: { shape: "methodDeclarations", fields: ["total", "items", "nextCursor", "searchComplete"] },
-	},
-	"ascet_search.declarations_of_method_process_element": {
-		aliases: ["method local variables", "process arguments", "method process element", "local elements"],
-		result: { shape: "methodProcessElements", fields: ["total", "items", "nextCursor", "searchComplete"] },
+		result: { shape: "dependentChain", fields: ["consumer", "provider", "items", "issues"] },
 	},
 	"ascet_read.read_block_diagram": {
 		aliases: ["read block diagram", "BDE", "diagram content", "block diagram"],
@@ -238,7 +137,7 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 	},
 	"ascet_edit.set_element_dependency": {
 		compact:
-			"set dependency flag/formula on an existing local parameter only; successful writes refresh element_decls/full element cache",
+			"set dependency flag/formula on an existing local parameter only; successful writes invalidate matching observations",
 		intent: "Set or clear dependency state and formula for an existing local parameter through guarded write flow.",
 		useWhen: [
 			"The local parameter already exists and the user wants dependency=dependent or dependency=independent applied.",
@@ -278,7 +177,7 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 		},
 		result: {
 			shape: "writeResult",
-			fields: ["changed", "readback", "index.updated", "index.stale", "index.issues"],
+			fields: ["changed", "readback", "observations.invalidated"],
 		},
 	},
 	"ascet_verify.readback": {
@@ -292,9 +191,6 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 // one of those implementations creates a circular-initialization failure on
 // the first extension import.
 const actionParameterSchemas: Readonly<Record<string, unknown>> = {
-	get ascet_index() {
-		return ascetIndexParameters;
-	},
 	get ascet_capabilities() {
 		return ascetCapabilitiesParameters;
 	},
@@ -304,8 +200,8 @@ const actionParameterSchemas: Readonly<Record<string, unknown>> = {
 	get ascet_edit() {
 		return ascetEditParameters;
 	},
-	get ascet_explore() {
-		return ascetExploreParameters;
+	get ascet_get() {
+		return ascetGetParameters;
 	},
 	get ascet_read() {
 		return ascetReadParameters;
@@ -319,9 +215,6 @@ const actionParameterSchemas: Readonly<Record<string, unknown>> = {
 	get ascet_scheduler_status() {
 		return ascetSchedulerStatusParameters;
 	},
-	get ascet_search() {
-		return ascetSearchParameters;
-	},
 	get ascet_status() {
 		return ascetStatusParameters;
 	},
@@ -331,11 +224,8 @@ const actionParameterSchemas: Readonly<Record<string, unknown>> = {
 };
 
 function resolveFamily(tool: string): AscetActionFamily {
-	if (tool === "ascet_explore") {
-		return "explore";
-	}
-	if (tool === "ascet_search") {
-		return "search";
+	if (tool === "ascet_get") {
+		return "get";
 	}
 	if (tool === "ascet_read") {
 		return "read";
@@ -483,8 +373,8 @@ function inferSchema(descriptor: AscetActionDescriptor): AscetActionCatalogEntry
 }
 
 function inferResult(descriptor: AscetActionDescriptor): AscetActionCatalogEntry["result"] {
-	if (descriptor.tool === "ascet_search") {
-		return { shape: "pagedItems", fields: ["total", "items", "nextCursor"] };
+	if (descriptor.tool === "ascet_get") {
+		return { shape: "observation", fields: ["delivery", "items", "observation", "coverage", "truncated"] };
 	}
 	if (descriptor.tool === "ascet_read") {
 		return { shape: "liveRead", fields: ["component", "items"] };
@@ -527,7 +417,6 @@ function toCatalogEntry(descriptor: AscetActionDescriptor): AscetActionCatalogEn
 		profiles: [...descriptor.profiles],
 		featureFlag: descriptor.featureFlag,
 		deprecatedBy: descriptor.deprecatedBy,
-		requiresPartitions: descriptor.requiresPartitions ? [...descriptor.requiresPartitions] : undefined,
 		compact,
 		miniFewShot,
 		intent: override?.intent ?? descriptor.prompt?.summary ?? descriptor.id,

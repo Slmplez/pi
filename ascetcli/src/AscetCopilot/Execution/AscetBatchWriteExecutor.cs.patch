@@ -1,0 +1,35 @@
+--- Add after ParseDeleteMethodRequest method (around line 341)
+
+    private static DeleteFolderBatchRequest ParseDeleteFolderRequest(IDictionary<string, object> args)
+    {
+        return new DeleteFolderBatchRequest
+        {
+            FolderPath = AscetCreateFolder.NormalizeFolderPath(GetRequiredString(args, "folderPath", "delete_folder")),
+            IgnoreMissing = ParseIfMissing(args, "delete_folder"),
+            VerifyReadback = ParseVerification(args, "delete_folder", true)
+        };
+    }
+
+--- Add after ExecuteDeleteMethod method (around line 434)
+
+    private AscetWriteExecutionResult ExecuteDeleteFolder(IDictionary<string, object> args)
+    {
+        DeleteFolderBatchRequest request = ParseDeleteFolderRequest(args);
+        AscetFolderDeleteResult result = folderDeleter.DeleteFolder(
+            request.FolderPath,
+            request.VerifyReadback,
+            request.IgnoreMissing);
+
+        return new AscetWriteExecutionResult
+        {
+            OperationName = "delete_folder",
+            Succeeded = true,
+            WriteSucceeded = result != null && (result.Deleted || result.AlreadyMissing),
+            Summary = result == null ? String.Empty : (result.Summary ?? String.Empty),
+            Payload = BuildDeleteFolderPayload(result),
+            Verification = BuildVerificationResult(
+                request.VerifyReadback,
+                result != null && result.ReadbackVerified,
+                result == null ? String.Empty : (result.Summary ?? String.Empty))
+        };
+    }

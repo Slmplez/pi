@@ -28,18 +28,14 @@ describe("ASCET coding policy", () => {
 		assert.match(policyPrompt, /UNVERIFIED/);
 	});
 
-	test("guides ascet_index routing without replacing search read edit or verify", () => {
-		assert.match(policyPrompt, /Index lifecycle rules/);
-		assert.match(policyPrompt, /ascet_index\.status/);
-		assert.match(policyPrompt, /ascet_index\.refresh/);
-		assert.match(policyPrompt, /ascet_index\.mark_stale/);
-		assert.match(policyPrompt, /ascet_index\.repair_status_file/);
-		assert.match(policyPrompt, /ascet_index\.evaluate/);
-		assert.match(policyPrompt, /Do not call raw warm_search_index directly/);
-		assert.match(
-			policyPrompt,
-			/Do not use ascet_index as a substitute for ascet_search, ascet_read, ascet_edit, or ascet_verify/,
-		);
+	test("routes bounded discovery through ascet_get observations", () => {
+		assert.match(policyPrompt, /ascet_get\.tree/);
+		assert.match(policyPrompt, /ascet_get\.elements/);
+		assert.match(policyPrompt, /ascet_get\.component_refs/);
+		assert.match(policyPrompt, /ascet_get\.import_binding/);
+		assert.match(policyPrompt, /ascet_get\.formulas/);
+		assert.match(policyPrompt, /Pi find, grep, and read/);
+		assert.match(policyPrompt, /stored observation/);
 	});
 
 	test("requires component editability checks before ASCET mutations", () => {

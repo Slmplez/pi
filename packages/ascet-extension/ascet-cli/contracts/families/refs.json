@@ -1,18 +1,18 @@
-{
+﻿{
   "family": "refs",
-  "summary": "Search elements, inspect outgoing or reverse references, and analyze occurrences within bounded scopes.",
-  "recommendedTools": ["AscetReferenceTool"],
+  "summary": "Inspect outgoing or reverse references within bounded scopes.",
+  "recommendedTools": [
+    "AscetReferenceTool"
+  ],
   "commandIds": [
-    "AscetFindElements",
     "AscetReadElementRefs",
     "AscetReadComponentRefs",
     "AscetReadReferences",
-    "AscetReadComponentUsedBy",
-    "AscetShowOccurrences"
+    "AscetReadComponentUsedBy"
   ],
   "routingHints": [
     "Use component_used_by for bounded reverse-dependency analysis.",
-    "Use find_elements or show_occurrences for signal and element discovery across the database.",
+    "Use AscetGetElements and AscetGetComponentRefs for bounded reference discovery before exact read operations.",
     "Use element_refs when the task targets one named element inside a known component."
   ]
 }

@@ -1,0 +1,15 @@
+{
+  "id": "diff-module",
+  "title": "Diff two modules",
+  "appliesTo": ["module"],
+  "steps": [
+    { "kind": "command", "commandId": "AscetReadModuleSummary" },
+    { "kind": "command", "commandId": "AscetReadModuleSummary" },
+    { "kind": "command", "commandId": "AscetDiffModule" }
+  ],
+  "requiredRules": [
+    "live_serial_only",
+    "read_before_diff",
+    "prefer_changes_only_for_review"
+  ]
+}

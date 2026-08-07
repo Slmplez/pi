@@ -1,6 +1,6 @@
 ﻿{
     "family":  "read",
-    "summary":  "Read code, implementation, snapshots, summaries, semantic views, and project-level formula data.",
+    "summary":  "Read code, implementation, snapshots, summaries, and semantic views.",
     "recommendedTools":  [
                              "AscetReadTool"
                          ],
@@ -13,9 +13,7 @@
                        "AscetReadImplementation",
                        "AscetReadBlockDiagram",
                        "AscetReadElementCatalog",
-                       "AscetReadProjectFormulas",
                        "AscetReadDependentChain",
-                       "AscetReadElementDependency",
                        "AscetReadClassSummary",
                        "AscetReadClassSnapshot",
                        "AscetReadModuleSummary",

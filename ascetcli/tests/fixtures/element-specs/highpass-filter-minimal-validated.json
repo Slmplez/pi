@@ -1,0 +1,34 @@
+{
+  "elements": [
+    {
+      "name": "In",
+      "kind": "variable",
+      "modelType": "cont",
+      "scope": "exported"
+    },
+    {
+      "name": "Out",
+      "kind": "variable",
+      "modelType": "cont",
+      "scope": "exported"
+    },
+    {
+      "name": "Fc",
+      "kind": "parameter",
+      "modelType": "cont",
+      "scope": "local"
+    },
+    {
+      "name": "PrevIn",
+      "kind": "variable",
+      "modelType": "cont",
+      "scope": "local"
+    },
+    {
+      "name": "PrevOut",
+      "kind": "variable",
+      "modelType": "cont",
+      "scope": "local"
+    }
+  ]
+}

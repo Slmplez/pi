@@ -1,4 +1,4 @@
-# Evidence Contract
+﻿# Evidence Contract
 
 Each run writes evidence under:
 
@@ -81,8 +81,8 @@ When importer/exporter relations cannot be established, write an `ok: false` evi
   "evidence_id": "parameter_mapping_relation_gap:DEMO\\Importer",
   "kind": "parameter_mapping_relation_gap",
   "component_path": "DEMO\\Importer",
-  "tool": "ascet_search",
-  "action": "references_to_component",
+  "tool": "ascet_get",
+  "action": "component_refs",
   "target": "DEMO\\Importer",
   "ok": false,
   "payload": null,
@@ -99,4 +99,4 @@ When importer/exporter relations cannot be established, write an `ok: false` evi
 - Store unsupported-surface and not-found responses as evidence with `ok: false`.
 - Reuse evidence records when multiple rules require the same kind and target.
 - Do not require checker agents to read child transcripts to prove findings.
-- Parameter mapping findings must cite `component_refs`, `children`, and the specific import/export or dependency evidence used to decide the rule.
+- Parameter mapping findings must cite `tree`, `elements`, `component_refs`, and the specific import-binding or exact dependency evidence used to decide the rule.

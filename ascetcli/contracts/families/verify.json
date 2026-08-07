@@ -1,0 +1,17 @@
+{
+    "family":  "verify",
+    "summary":  "Run post-write readback confirmation only for ASCET components or projects.",
+    "recommendedTools":  [
+                             "AscetVerifyTool"
+                         ],
+    "commandIds":  [
+                       "AscetReadClassSummary",
+                       "AscetReadModuleSummary",
+                       "AscetReadStateMachineSummary"
+                   ],
+    "routingHints":  [
+                         "Use verify only after a live write when you need structured readback confirmation of what ASCET now contains.",
+                         "Readback uses the routed class, module, or state-machine summary command.",
+                         "Do not position verify as a general summary browser or a general diagnostic shell."
+                     ]
+}

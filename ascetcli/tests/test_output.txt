@@ -1,0 +1,100 @@
+=== ASCET Tool API Concurrency Test Suite ===
+Based on: docs/ASCET_API_并发原理指导文档.md
+
+Log File: E:\ETAS\LogFiles\AscetConcurrencyTest\Cebra
+Program Path: E:\ETAS\ASCET6.4\Cebra
+Database detected: d:\ETASData\ASCET6.4\Database\Tutorial
+All worker threads will use GetCurrentDataBase()
+
+About to run Test 1...
+Running: Test 1: 10-Thread Concurrent Read
+--------------------------------------------------------------------------------
+DEBUG: Starting stopwatch...
+DEBUG: Calling test function...
+DEBUG: Waiting for all tasks to complete...
+Thread 0: Starting
+Thread 6: Starting
+Thread 5: Starting
+Thread 9: Starting
+Thread 0: Ascet object created
+Thread 6: Ascet object created
+Thread 1: Starting
+Thread 7: Starting
+Thread 5: Ascet object created
+Thread 8: Starting
+Thread 4: Starting
+Thread 9: Ascet object created
+Thread 2: Starting
+Thread 3: Starting
+Thread 1: Ascet object created
+Thread 7: Ascet object created
+Thread 8: Ascet object created
+Thread 4: Ascet object created
+Thread 2: Ascet object created
+Thread 3: Ascet object created
+Thread 0: Got current database
+Thread 6: Got current database
+Thread 5: Got current database
+Thread 9: Got current database
+Thread 1: Got current database
+Thread 7: Got current database
+Thread 8: Got current database
+Thread 4: Got current database
+Thread 2: Got current database
+Thread 3: Got current database
+Thread 0: Completed all operations
+Thread 0: Finished
+Thread 9: Completed all operations
+Thread 9: Finished
+Thread 6: Completed all operations
+Thread 6: Finished
+Thread 5: Completed all operations
+Thread 5: Finished
+Thread 1: Completed all operations
+Thread 1: Finished
+Thread 7: Completed all operations
+Thread 7: Finished
+Thread 8: Completed all operations
+Thread 8: Finished
+Thread 4: Completed all operations
+Thread 4: Finished
+Thread 2: Completed all operations
+Thread 2: Finished
+Thread 3: Completed all operations
+Thread 3: Finished
+DEBUG: All tasks completed
+DEBUG: Test function returned
+Status: PASSED
+Duration: 949ms
+Details: Concurrent reads performed as expected (100% success, good throughput)
+Metrics:
+  Total Operations: 100
+  Success Count: 100
+  Failure Count: 0
+  Success Rate: 100.0%
+  Total Time: 948ms
+  Avg Response: 91.7ms
+  Throughput: 105.5 ops/sec
+
+DEBUG: RunTest returning True
+Test 1 completed, allPassed = True
+About to run Test 2...
+Running: Test 2: Read-Write Mix (8 Read + 2 Write)
+--------------------------------------------------------------------------------
+DEBUG: Starting stopwatch...
+DEBUG: Calling test function...
+DEBUG: Test function returned
+Status: PASSED
+Duration: 832ms
+Details: Read-write mix handled correctly
+Metrics:
+  Total Operations: 100
+  Success Rate: 100.0%
+  Throughput: 120.3 ops/sec
+  Total Time: 831ms
+
+DEBUG: RunTest returning True
+Test 2 completed
+
+=== Test Suite Complete ===
+ALL TESTS PASSED

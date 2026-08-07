@@ -1,4 +1,4 @@
-{
+﻿{
   "id": "review-apply-verify",
   "title": "Review, apply, and verify live ASCET changes",
   "appliesTo": ["class", "module", "statemachine", "project"],

@@ -1,7 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import { createAscetExposureController } from "../exposure/controller.ts";
-import { ascetSearchTool } from "../search/index.ts";
 import { AscetActionUnavailableError, assertActionActive, extractToolAction } from "./guard.ts";
 
 function activateBaseProfile() {
@@ -23,52 +22,20 @@ describe("ASCET action runtime guard", () => {
 		assert.equal(extractToolAction("ascet_status", {}), "status");
 	});
 
-	test("allows active public actions and rejects internal replacements", () => {
+	test("allows active Get actions and rejects unknown actions", () => {
 		activateBaseProfile();
 
-		const descriptor = assertActionActive("ascet_search", "search_components");
-		assert.equal(descriptor?.id, "ascet_search.search_components");
-
-		const componentEditable = assertActionActive("ascet_edit", "check");
-		assert.equal(componentEditable?.id, "ascet_edit.check");
+		const descriptor = assertActionActive("ascet_get", "tree");
+		assert.equal(descriptor?.id, "ascet_get.tree");
+		assert.equal(assertActionActive("ascet_edit", "check")?.id, "ascet_edit.check");
 
 		assert.throws(
-			() => assertActionActive("ascet_search", "search_occurrences"),
+			() => assertActionActive("ascet_get", "unknown"),
 			(error) =>
 				error instanceof AscetActionUnavailableError &&
-				error.payload.replacement === "ascet_search.references_to_element",
+				error.payload.tool === "ascet_get" &&
+				error.payload.action === "unknown" &&
+				error.payload.state === "hidden",
 		);
-	});
-
-	test("tool execution returns structured rejection for stale hidden/internal actions", async () => {
-		activateBaseProfile();
-
-		const result = await ascetSearchTool.execute(
-			"call-1",
-			{ action: "search_text_code", query: "needle" } as never,
-			new AbortController().signal,
-			undefined,
-			{ cwd: process.cwd() },
-		);
-
-		const details = result.details as {
-			error?: { code?: string };
-			replacement?: string;
-			recover?: { tool?: string; action?: string };
-		};
-		assert.equal(details.error?.code, "ascet_action_unavailable");
-		assert.equal(details.replacement, "ascet_search.text_in_code");
-		assert.deepEqual(details.recover, {
-			tool: "ascet_capabilities",
-			action: "search_actions",
-			query: "search_text_code",
-		});
-		assert.deepEqual(JSON.parse(result.content[0]?.text ?? "{}"), {
-			error: {
-				code: "ascet_action_unavailable",
-				message: "ASCET action ascet_search.search_text_code is not active. Use ascet_search.text_in_code.",
-			},
-			recover: { tool: "ascet_capabilities", action: "search_actions", query: "search_text_code" },
-		});
 	});
 });

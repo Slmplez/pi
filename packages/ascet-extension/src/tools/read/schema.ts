@@ -26,10 +26,6 @@ export type AscetReadParams =
 			timeoutMs?: number;
 	  }
 	| {
-			action: "read_project_formulas";
-			projectPath: string;
-	  }
-	| {
 			action: "read_block_diagram";
 			componentPath: string;
 			diagramName?: string;
@@ -46,10 +42,6 @@ export type AscetReadParams =
 			componentPath: string;
 			dependentElement: string;
 			exporterComponentPath?: string;
-			providerScopePath?: string;
-			maxCandidates?: number;
-			detailLevel?: "summary" | "full";
-			fallback?: "none" | "legacy_live";
 	  }
 	| {
 			action: "read_element_dependency";
@@ -102,10 +94,6 @@ const ascetReadActionSchemas = [
 		timeoutMs: Type.Optional(Type.Integer({ minimum: 1, maximum: 300_000 })),
 	}),
 	Type.Object({
-		action: Type.Literal("read_project_formulas"),
-		projectPath: Type.String({ minLength: 1 }),
-	}),
-	Type.Object({
 		action: Type.Literal("read_block_diagram"),
 		componentPath: componentPathSchema,
 		diagramName: Type.Optional(Type.String()),
@@ -127,10 +115,6 @@ const ascetReadActionSchemas = [
 		componentPath: componentPathSchema,
 		dependentElement: Type.String({ minLength: 1 }),
 		exporterComponentPath: Type.Optional(Type.String({ minLength: 1 })),
-		providerScopePath: Type.Optional(Type.String({ minLength: 1 })),
-		maxCandidates: Type.Optional(Type.Number({ minimum: 1 })),
-		detailLevel: Type.Optional(Type.Union([Type.Literal("summary"), Type.Literal("full")])),
-		fallback: Type.Optional(Type.Union([Type.Literal("none"), Type.Literal("legacy_live")])),
 	}),
 	Type.Object({
 		action: Type.Literal("read_element_dependency"),

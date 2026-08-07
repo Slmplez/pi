@@ -1,9 +1,9 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import { ascetActionExamples, compactExamplesForTool } from "./_shared/action-examples.ts";
+import { compactExamplesForTool } from "./_shared/action-examples.ts";
 import { ascetCapabilitiesPrompt } from "./capabilities/prompt.ts";
 import { ascetEditPrompt } from "./edit/prompt.ts";
-import { ascetExplorePrompt } from "./explore/prompt.ts";
+import { ascetGetPrompt } from "./get/prompt.ts";
 import {
 	actionInstructionIds,
 	buildToolPromptGuidelines,
@@ -11,27 +11,21 @@ import {
 	getActionInstruction,
 } from "./instructions/registry.ts";
 import { ascetReadPrompt } from "./read/prompt.ts";
-import { ascetSearchPrompt } from "./search/prompt.ts";
 
 function guidelineText(prompt: { promptGuidelines: readonly string[] }): string {
 	return prompt.promptGuidelines.join("\n");
 }
 
 describe("ASCET prompt coordination", () => {
-	test("guides recursive exported-parameter provider discovery", () => {
+	test("guides bounded tree-first Get discovery and exact deep reads", () => {
+		const get = guidelineText(ascetGetPrompt);
 		const read = guidelineText(ascetReadPrompt);
-		const search = guidelineText(ascetSearchPrompt);
-		const explore = guidelineText(ascetExplorePrompt);
 
-		assert.match(read, /index-first/);
-		assert.match(read, /element_decls/);
-		assert.match(read, /read_element_catalog/);
-		assert.match(read, /scope=Exported/);
-		assert.match(read, /same-named Exported Parameter/);
-		assert.match(search, /_Calibration/);
-		assert.match(search, /_Constant/);
-		assert.match(search, /Imported Parameter and Exported Parameter must be same-named/);
-		assert.match(explore, /list_components recursively/);
+		assert.match(get, /tree as the primary navigation action/);
+		assert.match(get, /complete selected Component or Project catalog/);
+		assert.match(get, /Pi find, grep, and read/);
+		assert.match(get, /separate ASCET search tool/);
+		assert.match(read, /does not discover providers across folders or the database/);
 	});
 
 	test("requires exported-provider evidence before dependent local writes", () => {
@@ -42,7 +36,7 @@ describe("ASCET prompt coordination", () => {
 		assert.match(write, /Imported Parameter and Exported Parameter must have the same name/);
 		assert.match(write, /align metadata from the Exported Parameter, not from the Imported Parameter/);
 		assert.match(write, /does not create local, imported, or exported elements/);
-		assert.match(write, /full_element_cache/);
+		assert.match(write, /on-demand observations/);
 	});
 
 	test("makes code semantics primary for element-spec generation", () => {
@@ -59,24 +53,16 @@ describe("ASCET prompt coordination", () => {
 		assert.equal(new Set(ascetEditPrompt.promptGuidelines).size, ascetEditPrompt.promptGuidelines.length);
 	});
 
-	test("search prompt examples do not expose redesigned search_occurrences", () => {
-		const search = guidelineText(ascetSearchPrompt);
-		const examples = compactExamplesForTool("ascet_search").join("\n");
+	test("Get prompt examples cover bounded tree and elements actions", () => {
+		const examples = compactExamplesForTool("ascet_get").join("\n");
 
-		assert.doesNotMatch(search, /\bsearch_occurrences\b/);
-		assert.doesNotMatch(examples, /\bsearch_occurrences\b/);
-		assert.equal(
-			ascetActionExamples.some(
-				(example) => example.tool === "ascet_search" && example.action === "search_occurrences",
-			),
-			false,
-		);
+		assert.match(examples, /action:"tree"/);
+		assert.match(examples, /action:"elements"/);
+		assert.match(examples, /target/);
 	});
 
-	test("action-level registry supports tool, action, profile, and tag lookup", () => {
-		assert.deepEqual(actionInstructionIds({ tool: "ascet_search", action: "text_in_code" }), [
-			"ascet_search.text_in_code",
-		]);
+	test("action-level registry supports Get action and profile lookup", () => {
+		assert.deepEqual(actionInstructionIds({ tool: "ascet_get", action: "elements" }), ["ascet_get.elements"]);
 		assert.equal(getActionInstruction("ascet_read.read_code")?.action, "read_code");
 		assert.ok(
 			findActionInstructions({ profile: "write-preflight", tags: ["provider-discovery"] }).some(
@@ -84,16 +70,16 @@ describe("ASCET prompt coordination", () => {
 			),
 		);
 		assert.ok(
-			findActionInstructions({ tool: "ascet_read", profile: "advanced-read" }).some(
-				(instruction) => instruction.action === "read_block_diagram",
+			findActionInstructions({ tool: "ascet_get", profile: "advanced-read" }).some(
+				(instruction) => instruction.action === "bde_edges",
 			),
 		);
 	});
 
-	test("prompt assembly composes action instructions with tiny few-shots", () => {
-		const textCode = buildToolPromptGuidelines({
-			tool: "ascet_search",
-			actions: ["text_in_code"],
+	test("prompt assembly composes Get action instructions with tiny few-shots", () => {
+		const elements = buildToolPromptGuidelines({
+			tool: "ascet_get",
+			actions: ["elements"],
 			profile: "base",
 		}).join("\n");
 		const liveCode = buildToolPromptGuidelines({
@@ -102,9 +88,9 @@ describe("ASCET prompt coordination", () => {
 			profile: "base",
 		}).join("\n");
 
-		assert.match(textCode, /Search indexed ESDL\/C snippets/);
-		assert.match(textCode, /does not read complete code/);
-		assert.match(textCode, /text_in_code: ascet_search/);
+		assert.match(elements, /complete Element directory/);
+		assert.match(elements, /result-count limit/);
+		assert.match(elements, /elements: ascet_get/);
 		assert.match(liveCode, /live ToolAPI read/);
 		assert.match(liveCode, /read_code: ascet_read/);
 	});
@@ -115,26 +101,16 @@ describe("ASCET prompt coordination", () => {
 		assert.match(capabilities, /ASCET action guide/);
 		assert.match(capabilities, /search_actions/);
 		assert.match(capabilities, /ascet_read\.read_code: read complete live code/);
-		assert.match(capabilities, /ascet_read\.read_dependent_chain: Index-first dependency provider resolver/);
-		assert.match(capabilities, /ascet_search\.text_in_code: search indexed ESDL\/C snippets/);
 		assert.doesNotMatch(capabilities, /\bactivate_profile\b/);
 		assert.doesNotMatch(capabilities, /\boperationQuery\b/);
 		assert.doesNotMatch(capabilities, /\bascet_batch_write\b/);
-		assert.doesNotMatch(capabilities, /\bsearch_occurrences\b/);
 	});
 
-	test("hidden action and hidden tool instructions are excluded from public prompt assembly", () => {
-		const publicSearch = buildToolPromptGuidelines({ tool: "ascet_search" }).join("\n");
-		const publicBatch = buildToolPromptGuidelines({ tool: "ascet_batch_write", profile: "batch-write" }).join("\n");
-		const hiddenSearch = buildToolPromptGuidelines({
-			tool: "ascet_search",
-			actions: ["search_occurrences"],
-			includeHidden: true,
-		}).join("\n");
+	test("public Get instructions are available without hidden actions", () => {
+		const publicGet = buildToolPromptGuidelines({ tool: "ascet_get" }).join("\n");
 
-		assert.doesNotMatch(publicSearch, /\bsearch_occurrences\b/);
-		assert.equal(publicBatch, "");
-		assert.match(hiddenSearch, /\bsearch_occurrences\b/);
+		assert.match(publicGet, /ascet_get/);
+		assert.match(publicGet, /import_binding/);
 		assert.equal(getActionInstruction("ascet_batch_write.batch_set_method_code"), undefined);
 		assert.equal(
 			getActionInstruction("ascet_batch_write.batch_set_method_code", { includeHidden: true })?.hidden,

@@ -1,0 +1,74 @@
+{
+    "id":  "AscetReadMethodSignature",
+    "family":  "read",
+    "summary":  "Read a method return type and primitive argument signature",
+    "usage":  "\u003ccomponent-path\u003e \u003cmethod-name\u003e [--json]",
+    "execution":  {
+                      "kind":  "unified_cli",
+                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+                      "subcommand":  "exec",
+                      "operation":  "read_method_signature"
+                  },
+    "supportsJson":  true,
+    "defaultOutputMode":  "json",
+    "risk":  "read",
+    "requiresSerialLiveAccess":  false,
+    "objectKinds":  [
+                        "class",
+                        "module",
+                        "statemachine"
+                    ],
+    "args":  [
+                 {
+                     "name":  "component-path",
+                     "kind":  "positional",
+                     "type":  "string",
+                     "required":  true,
+                     "description":  "Positional argument: component-path"
+                 },
+                 {
+                     "name":  "method-name",
+                     "kind":  "positional",
+                     "type":  "string",
+                     "required":  true,
+                     "description":  "Positional argument: method-name"
+                 },
+                 {
+                     "name":  "--json",
+                     "kind":  "flag",
+                     "type":  "boolean",
+                     "required":  false,
+                     "description":  "Flag --json"
+                 }
+             ],
+    "preconditions":  [
+                          "ASCET ToolAPI session must be available.",
+                          "Target ASCET path must resolve to the expected object kind.",
+                          "Target method must exist."
+                      ],
+    "failureModes":  [
+                         "toolapi_unavailable",
+                         "target_not_found",
+                         "method_not_found"
+                     ],
+    "examples":  [
+                     {
+                         "description":  "Basic usage",
+                         "command":  "AscetCli.exe exec read_method_signature \u003ccomponent-path\u003e \u003cmethod-name\u003e [--json]"
+                     }
+                 ],
+    "pitfalls":  [
+
+                 ],
+    "operation":  "read_method_signature",
+    "lane":  "pooled_read",
+    "hostEligible":  true,
+    "supportsBatch":  false,
+    "executionProfile":  {
+                             "hostSafety":  "stable",
+                             "hostPolicy":  "prefer_host",
+                             "timeoutClass":  "read"
+                         },
+    "hiddenFromModel":  false
+}
+

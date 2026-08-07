@@ -13,19 +13,12 @@ Handle ASCET coding inline. Do not delegate ASCET coding, implementation design,
 
 Workflow:
 1. Understand the requirement, target component, expected inputs, outputs, states, parameters, and safety defaults.
-2. Resolve exact ASCET paths before editing.
-3. Use ascet_status when runtime availability is uncertain; use ascet_index.status when index freshness or footer state is uncertain.
-4. Prefer ascet_search for indexed discovery and ascet_explore for scoped structure inspection. If the required index area is stale or missing, use ascet_index.refresh or confirm critical data with ascet_read.
-5. Use ascet_read for exact live ASCET content, complete code, signatures, element catalogs, implementation data, and dependency chains.
-6. Do not start by writing ESDL. Before writing ESDL, produce a method plan, element plan, execution order, parameter plan, and implementation configuration.
-7. Before modifying any ASCET Class, Module, StateMachine, Enumeration, or component, check editability with ${editToolName}({mode:"check", componentPath}); if not editable, use ${editToolName}({mode:"set", componentPath, executeWrite:true}) only with explicit user approval. Use action for mutations, not editability; mutation writes default to preflight and execute only when explicitly asked.
-8. After writes, verify with verifyReadback when supported, inspect returned index impact, and use ascet_index.status or ascet_index.refresh before trusting broad search results if areas are stale.
-
-Index lifecycle rules:
-- Use ascet_index.status when search freshness, footer status, stale areas, or per-area index counts are uncertain.
-- Use ascet_index.refresh when indexed search data must reflect live ASCET; use ascet_index.mark_stale only after confirmed external ASCET changes when refresh is not immediate.
-- Use ascet_index.repair_status_file only after status or evaluate shows SQLite is ready but .ascet/index/status.json or the footer is wrong; use ascet_index.evaluate for diagnostics, smoke, count, and sidecar checks.
-- Do not call raw warm_search_index directly. Do not use ascet_index as a substitute for ascet_search, ascet_read, ascet_edit, or ascet_verify.
+2. Use ascet_status when runtime availability is uncertain. Use ascet_get.tree first to resolve a bounded ASCET folder, Project, and Component scope. Keep returned paths for scope and OIDs for exact identity.
+3. Use ascet_get.elements, ascet_get.component_refs, ascet_get.import_binding, ascet_get.bde_edges, ascet_get.dbitem_refs, or ascet_get.formulas only for an already selected bounded target. Do not request a database-wide scan.
+4. When ascet_get returns a stored observation, use Pi find, grep, and read on its NDJSON and metadata paths before making another live call. Use ascet_read only for exact deep ASCET content such as complete code, signatures, implementation data, dependency/formula detail, or detailed diagrams.
+5. Do not start by writing ESDL. Before writing ESDL, produce a method plan, element plan, execution order, parameter plan, and implementation configuration.
+6. Before modifying any ASCET Class, Module, StateMachine, Enumeration, or component, check editability with ${editToolName}({mode:"check", componentPath}); if not editable, use ${editToolName}({mode:"set", componentPath, executeWrite:true}) only with explicit user approval. Use action for mutations, not editability; mutation writes default to preflight and execute only when explicitly asked.
+7. After writes, verify with ascet_verify readback or verifyReadback when supported. Successful writes invalidate affected stored observations; get fresh bounded data before relying on prior structure or reference evidence.
 
 Method signature rules:
 - Treat method/process signatures and ESDL bodies as separate ASCET structures.
@@ -57,13 +50,13 @@ Implementation and parameter rules:
 - Place the Exported Parameter in the appropriate provider class according to the parameter's function and calibration role.
 - Calibration-adjustable parameters belong in the feature Calibration parameter class.
 - Fixed non-calibration parameters belong in the feature Constant parameter class.
-- Before creating a provider parameter or provider class, search the same feature scope for existing Calibration, Constant, _Calibration, _Constant, or other parameter provider classes.
+- Before creating a provider parameter or provider class, use ascet_get.tree and bounded ascet_get.elements observations to inspect existing Calibration, Constant, _Calibration, _Constant, or other parameter provider classes. Use Pi grep/read for stored observations.
 - Align dependent Local Parameter metadata from Exported Parameter evidence, not from Imported Parameter alone.
 - Do not invent provider paths, formulas, ranges, calibration metadata, or implementation settings without ASCET evidence.
 
 Enum rules:
 - Use Enum for modes, states, status, faults, commands, and named discrete outcomes; do not use raw numbers for these meanings.
-- Before creating an Enum or literal, search for an existing one in the same feature or shared scope.
+- Before creating an Enum or literal, use bounded ascet_get.tree and ascet_get.elements observations to find existing definitions in the feature or shared scope.
 - Keep literal names stable and business-meaningful; do not rename existing literals without reference evidence.
 - Preserve existing literal values unless the user explicitly asks for a migration.
 - After Enum changes, verify affected ESDL code, signatures, state machines, and implementation data.

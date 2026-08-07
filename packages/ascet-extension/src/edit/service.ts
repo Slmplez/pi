@@ -1,4 +1,3 @@
-import { readFileSync } from "node:fs";
 import { Type } from "typebox";
 import { runApprovedAscetApplyElementSpec } from "../apply-element-spec.ts";
 import { runApprovedAscetApplyProjectFormula } from "../apply-project-formula.ts";
@@ -11,14 +10,11 @@ import { runApprovedAscetCreateMethod } from "../create-method.ts";
 import { runApprovedAscetDeleteComponent } from "../delete-component.ts";
 import { runApprovedAscetDeleteFolder } from "../delete-folder.ts";
 import { runApprovedAscetDeleteMethod } from "../delete-method.ts";
-import { type AscetElementIndexWritebackResult, refreshElementsFromLiveCatalog } from "../element-index-writeback.ts";
 import {
 	type AscetCreateMethodComponentKind,
 	getDefaultCreateMethodKind,
 	validateCreateMethodKindCompatibility,
 } from "../method-kind-compatibility.ts";
-import { ensureAscetSearchIndex, invalidateAscetSearchIndexPartitions } from "../search-index.ts";
-import { getAscetSqliteIndexStatus } from "../search-index-sqlite/status.ts";
 import { runApprovedAscetSetElementDependency } from "../set-element-dependency.ts";
 import { runApprovedAscetSetEnumerators } from "../set-enumerators.ts";
 import { runApprovedAscetSetMethodCode } from "../set-method-code.ts";
@@ -31,8 +27,11 @@ import {
 import { compactObject, toToolFailurePayload, unwrapToolSuccessPayload } from "../tool-response-contract.ts";
 import { openAiObjectUnionSchema } from "../tools/_shared/openai-schema.ts";
 import { type AscetEditApprovalContext, isAscetEditApprovalBlockedCode } from "./approval.ts";
-import type { RunAscetEditOperationOptions } from "./common.ts";
-import { type AscetEditImpact, applyAscetEditImpactToSearchIndex, createAscetEditImpact } from "./common.ts";
+import {
+	type AscetObservationInvalidation,
+	invalidateAscetEditObservations,
+	type RunAscetEditOperationOptions,
+} from "./common.ts";
 import { type AscetEditActionId, getAscetEditAction } from "./contract.ts";
 import {
 	type AscetEditabilityParams,
@@ -197,12 +196,10 @@ export interface AscetEditResult {
 	details: {
 		outcome: AscetToolOutcome;
 		raw?: AscetCliJsonResult;
-		impact?: AscetEditImpact;
+		observations?: AscetObservationInvalidation;
 		error?: { code: string; message: string };
 	};
 }
-
-type AscetEditIndexUpdate = AscetEditImpact | AscetElementIndexWritebackResult;
 
 const codeSourceSchema = {
 	code: Type.Optional(Type.String()),
@@ -394,13 +391,17 @@ function outcomeFromCliResult(result: AscetCliJsonResult): AscetToolOutcome {
 	return { status: "error", error: { code, message } };
 }
 
-function asResponse(outcome: AscetToolOutcome, raw?: AscetCliJsonResult, impact?: AscetEditImpact): AscetEditResult {
+function asResponse(
+	outcome: AscetToolOutcome,
+	raw?: AscetCliJsonResult,
+	observations?: AscetObservationInvalidation,
+): AscetEditResult {
 	return {
 		content: [{ type: "text", text: formatAscetEditOutcomeContent(outcome) }],
 		details: {
 			outcome,
 			raw,
-			impact,
+			observations,
 			error: outcome.status === "error" ? outcome.error : undefined,
 		},
 	};
@@ -513,246 +514,22 @@ export async function runAscetMutation(
 	if (!raw.ok) {
 		return asResponse(outcomeFromCliResult(raw), raw);
 	}
-	const impact = createAscetEditImpact(normalizedParams);
-	const indexUpdate = await applySuccessfulEditIndexUpdate(normalizedParams, raw, options, impact);
-	return asResponse(createSuccessfulEditOutcome(raw, impact, indexUpdate), raw, impact);
+	const observations = invalidateSuccessfulEditObservations(normalizedParams, options);
+	return asResponse(createSuccessfulEditOutcome(raw, observations), raw, observations);
 }
 
-async function applySuccessfulEditIndexUpdate(
+function invalidateSuccessfulEditObservations(
 	params: AscetMutationParams,
-	raw: AscetCliJsonResult,
 	options: RunAscetEditOperationOptions,
-	impact: AscetEditImpact,
-): Promise<AscetEditIndexUpdate> {
-	if (params.action === "set_element_dependency") {
-		if (params.dryRun) {
-			return { ...impact, stale: [] };
-		}
-		const updates: AscetElementIndexWritebackResult[] = [];
-		for (const componentPath of getDependencyWritebackComponentPaths(params, raw)) {
-			updates.push(
-				await refreshElementsFromLiveCatalog(
-					{
-						componentPath,
-						names: [params.elementName],
-						scopes: ["Local"],
-						reason: `edit_succeeded:${params.action}`,
-						stale: ["text_code"],
-					},
-					options,
-				),
-			);
-		}
-		const update = mergeElementIndexWritebackResults(updates, impact.stale);
-		if (!update.issues || update.issues.length === 0) {
-			const refresh = await refreshDependencySearchIndexGeneration(options);
-			if (refresh) {
-				const reconciled = { ...update, stale: [], refresh };
-				applyTargetedEditWritebackImpact(reconciled, impact, options);
-				return reconciled;
-			}
-		}
-		applyTargetedEditWritebackImpact(update, impact, options);
-		return update.issues && update.issues.length > 0 ? { ...update, stale: impact.stale } : update;
+): AscetObservationInvalidation {
+	if (params.action === "set_element_dependency" && params.dryRun) {
+		return { invalidated: [] };
 	}
-	if (params.action === "apply_element_spec") {
-		if (!hasVerifiedApplyElementSpecReadback(raw)) {
-			const update: AscetElementIndexWritebackResult = {
-				updated: [],
-				stale: impact.stale,
-				elements: [],
-				issues: [
-					{
-						code: "index-writeback-readback-unverified",
-						message:
-							"apply_element_spec succeeded without verified live readback; the existing full element cache was retained and marked stale.",
-					},
-				],
-			};
-			applyTargetedEditWritebackImpact(update, impact, options);
-			return update;
-		}
-		const selectors = extractElementSelectorsFromSpecFile(params.specFile);
-		const names = uniqueStrings(selectors.map((entry) => entry.name));
-		const scopes = uniqueStrings(selectors.map((entry) => entry.scope).filter((entry) => entry !== undefined));
-		const update = await refreshElementsFromLiveCatalog(
-			{
-				componentPath: params.componentPath,
-				names: names.length > 0 ? names : undefined,
-				scopes: scopes.length > 0 ? scopes : undefined,
-				reason: `edit_succeeded:${params.action}`,
-				stale: ["text_code"],
-			},
-			options,
-		);
-		applyTargetedEditWritebackImpact(update, impact, options);
-		return update.issues && update.issues.length > 0 ? { ...update, stale: impact.stale } : update;
-	}
-	applyAscetEditImpactToSearchIndex(impact, `edit_succeeded:${params.action}`, options);
-	return impact;
+	return invalidateAscetEditObservations(params, options);
 }
-
-function hasVerifiedApplyElementSpecReadback(raw: AscetCliJsonResult): boolean {
-	const payload = unwrapToolSuccessPayload(raw.data);
-	const record = asRecord(payload);
-	const value = record?.ReadbackVerified ?? record?.readbackVerified;
-	return value === true || value === 1;
-}
-
-/**
- * A dependency mutation changes more than the edited element declaration: it
- * also changes element/component references and database-item dependencies.
- * If a SQLite generation already exists, rebuild the complete P0 generation
- * synchronously after live readback so the result cannot advertise success
- * while those relationship areas still point at the previous generation.
- *
- * When no persisted index exists, or storage is explicitly memory-only, keep
- * the existing stale/background-refresh behavior. There is no generation to
- * reconcile in that mode.
- */
-async function refreshDependencySearchIndexGeneration(
-	options: RunAscetEditOperationOptions,
-): Promise<NonNullable<AscetElementIndexWritebackResult["refresh"]> | undefined> {
-	const storage = options.env?.PI_ASCET_SEARCH_INDEX_STORAGE ?? process.env.PI_ASCET_SEARCH_INDEX_STORAGE;
-	if (storage === "memory") {
-		return undefined;
-	}
-
-	let before: ReturnType<typeof getAscetSqliteIndexStatus>;
-	try {
-		before = getAscetSqliteIndexStatus(options.cwd);
-	} catch {
-		return undefined;
-	}
-	if (before.status !== "ready" && before.status !== "stale") {
-		return undefined;
-	}
-
-	const warmup = await ensureAscetSearchIndex({
-		cwd: options.cwd,
-		env: options.env,
-		signal: options.signal,
-		timeoutMs: options.timeoutMs,
-		executeCli: options.executeCli,
-		scheduler: options.scheduler,
-		partition: "p0",
-		forceRefresh: true,
-		includeTextCode: true,
-		toolName: "ascet_index_refresh",
-	});
-	if (!warmup.ok) {
-		return undefined;
-	}
-
-	try {
-		const after = getAscetSqliteIndexStatus(options.cwd);
-		if (after.status !== "ready" || after.areas.some((area) => area.status !== "ready")) {
-			return undefined;
-		}
-		return {
-			partition: "p0",
-			generation: after.runId,
-			areas: after.areas.map((area) => area.area),
-		};
-	} catch {
-		return undefined;
-	}
-}
-
-function getDependencyWritebackComponentPaths(
-	params: Extract<AscetMutationParams, { action: "set_element_dependency" }>,
-	raw: AscetCliJsonResult,
-): string[] {
-	const payload = asRecord(unwrapToolSuccessPayload(raw.data));
-	const plan = asRecord(payload?.plan);
-	const plannedComponents = Array.isArray(plan?.matches)
-		? plan.matches.flatMap((match) =>
-				isRecord(match) && typeof match.component === "string" ? [match.component] : [],
-			)
-		: [];
-	const components = uniqueStrings(plannedComponents);
-	return components.length > 0 ? components : [params.targetPath ?? params.componentPath ?? ""];
-}
-
-function mergeElementIndexWritebackResults(
-	updates: readonly AscetElementIndexWritebackResult[],
-	fallbackStale: readonly AscetEditImpact["stale"][number][],
-): AscetElementIndexWritebackResult {
-	const updated = new Set<AscetElementIndexWritebackResult["updated"][number]>();
-	const stale = new Set<AscetElementIndexWritebackResult["stale"][number]>();
-	const elements: AscetElementIndexWritebackResult["elements"] = [];
-	const issues: Array<{ code: string; message: string }> = [];
-
-	for (const update of updates) {
-		for (const partition of update.updated) {
-			updated.add(partition);
-		}
-		for (const partition of update.stale) {
-			stale.add(partition);
-		}
-		elements.push(...update.elements);
-		issues.push(...(update.issues ?? []));
-	}
-
-	return {
-		updated: [...updated],
-		stale: issues.length > 0 ? [...fallbackStale] : [...stale],
-		elements,
-		...(issues.length > 0 ? { issues } : {}),
-	};
-}
-
-function applyTargetedEditWritebackImpact(
-	update: AscetElementIndexWritebackResult,
-	fallbackImpact: AscetEditImpact,
-	options: RunAscetEditOperationOptions,
-): void {
-	if (update.issues && update.issues.length > 0) {
-		invalidateAscetSearchIndexPartitions(fallbackImpact.stale, `edit_succeeded:${fallbackImpact.action}`);
-		applyAscetEditImpactToSearchIndex(fallbackImpact, `edit_succeeded:${fallbackImpact.action}`, options);
-		return;
-	}
-	if (update.stale.length > 0) {
-		invalidateAscetSearchIndexPartitions(update.stale, `edit_succeeded:${fallbackImpact.action}`);
-		applyAscetEditImpactToSearchIndex(
-			{ ...fallbackImpact, stale: update.stale },
-			`edit_succeeded:${fallbackImpact.action}`,
-			options,
-		);
-	}
-}
-
-function extractElementSelectorsFromSpecFile(specFile: string): Array<{ name: string; scope?: string }> {
-	try {
-		const parsed = JSON.parse(readFileSync(specFile, "utf8"));
-		if (!isJsonRecord(parsed) || !Array.isArray(parsed.elements)) {
-			return [];
-		}
-		return parsed.elements.filter(isJsonRecord).flatMap((entry) => {
-			const name = typeof entry.name === "string" ? entry.name.trim() : "";
-			if (!name) {
-				return [];
-			}
-			const scope = typeof entry.scope === "string" && entry.scope.trim() ? entry.scope.trim() : undefined;
-			return [{ name, scope }];
-		});
-	} catch {
-		return [];
-	}
-}
-
-function uniqueStrings(values: readonly string[]): string[] {
-	return [...new Set(values.map((entry) => entry.trim()).filter(Boolean))];
-}
-
-function isJsonRecord(value: unknown): value is Record<string, unknown> {
-	return isRecord(value);
-}
-
 function createSuccessfulEditOutcome(
 	raw: AscetCliJsonResult,
-	_impact: AscetEditImpact,
-	indexUpdate: AscetEditIndexUpdate,
+	observations: AscetObservationInvalidation,
 ): AscetToolOutcome {
 	const payload = unwrapToolSuccessPayload(raw.data);
 	const record = asRecord(payload);
@@ -763,7 +540,7 @@ function createSuccessfulEditOutcome(
 		data: {
 			changed,
 			readback,
-			index: indexUpdate,
+			observations,
 		},
 		warnings: [],
 	};

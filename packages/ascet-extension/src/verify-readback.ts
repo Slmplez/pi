@@ -80,7 +80,7 @@ export function buildVerifyReadbackArgs(params: AscetVerifyReadbackParams): stri
 	}
 
 	if (params.projectPath) {
-		return ["exec", "read_project_formulas", params.projectPath, "--json"];
+		return ["exec", "get_formulas", "--request-json", JSON.stringify({ path: params.projectPath }), "--json"];
 	}
 	return ["exec", "read_component_summary", params.componentPath ?? "", "--json"];
 }

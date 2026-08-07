@@ -1,4 +1,4 @@
-{
+﻿{
   "family": "ops",
   "summary": "Low-level worker and concurrency helpers for diagnostics and runtime plumbing, not normal agent task execution.",
   "recommendedTools": [],

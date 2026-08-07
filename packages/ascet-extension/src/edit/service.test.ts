@@ -141,7 +141,7 @@ describe("ASCET edit service", () => {
 		}
 	});
 
-	test("does not refresh the full element cache when apply_element_spec readback is unverified", async () => {
+	test("does not issue secondary live reads when apply_element_spec readback is unverified", async () => {
 		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-service-unverified-"));
 		const contractsRoot = join(root, "contracts");
 		mkdirSync(contractsRoot, { recursive: true });
@@ -198,9 +198,8 @@ describe("ASCET edit service", () => {
 				false,
 			);
 			if (outcome.status === "ok") {
-				const index = (outcome.data as { index: { updated: string[]; stale: string[] } }).index;
-				assert.deepEqual(index.updated, []);
-				assert.deepEqual(index.stale, ["element_decls", "element_refs", "text_code"]);
+				const observations = (outcome.data as { observations: { invalidated: string[] } }).observations;
+				assert.deepEqual(observations, { invalidated: [] });
 			}
 		} finally {
 			rmSync(root, { recursive: true, force: true });

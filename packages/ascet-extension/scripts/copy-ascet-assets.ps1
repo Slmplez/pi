@@ -1,12 +1,24 @@
 param(
-  [string]$AscetAgentRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..\..')).Path
+  [string]$AscetAgentRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..')).Path
 )
 
 $ErrorActionPreference = 'Stop'
 
 $packageRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
-$contractsSource = Join-Path $AscetAgentRoot 'src\ascetcli\contracts'
-$binSource = Join-Path $AscetAgentRoot 'src\ascetcli\output\ascet-csharp\bin'
+$resolvedAscetAgentRoot = (Resolve-Path $AscetAgentRoot).Path
+$sourceRootCandidates = @(
+  (Join-Path $resolvedAscetAgentRoot 'src\ascetcli'),
+  (Join-Path $resolvedAscetAgentRoot 'ascetcli')
+)
+$ascetCliSourceRoot = $sourceRootCandidates | Where-Object {
+  Test-Path (Join-Path $_ 'contracts\cli-catalog.json')
+} | Select-Object -First 1
+if (-not $ascetCliSourceRoot) {
+  throw "ASCET source root must contain src\ascetcli or ascetcli with contracts\cli-catalog.json: $resolvedAscetAgentRoot"
+}
+
+$contractsSource = Join-Path $ascetCliSourceRoot 'contracts'
+$binSource = Join-Path $ascetCliSourceRoot 'output\ascet-csharp\bin'
 $contractsTarget = Join-Path $packageRoot 'ascet-cli\contracts'
 $binTarget = Join-Path $packageRoot 'ascet-cli\bin'
 
@@ -40,6 +52,11 @@ Clear-PackageAssetDirectory -Path $contractsTarget -PackageRoot $packageRoot
 Clear-PackageAssetDirectory -Path $binTarget -PackageRoot $packageRoot
 
 Copy-Item -Path (Join-Path $contractsSource '*') -Destination $contractsTarget -Recurse -Force
+Get-ChildItem -Path $contractsTarget -Recurse -File | ForEach-Object {
+  $content = [IO.File]::ReadAllText($_.FullName)
+  $normalized = [Text.RegularExpressions.Regex]::Replace($content, "`r?`n", "`r`n")
+  [IO.File]::WriteAllText($_.FullName, $normalized, [Text.UTF8Encoding]::new($true))
+}
 Copy-Item -Path (Join-Path $binSource '*') -Destination $binTarget -Recurse -Force
 Get-ChildItem -Path $binTarget -Recurse -File -Include *.log,*.out,*.err |
   Remove-Item -Force

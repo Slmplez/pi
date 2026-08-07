@@ -3,18 +3,6 @@ import type { AscetProfile } from "../exposure/profiles.ts";
 export type AscetActionVisibility = "public" | "internal" | "hidden";
 export type AscetActionActivationState = "active" | "inactive" | "hidden" | "feature_disabled";
 
-export type AscetIndexPartition =
-	| "components"
-	| "element_decls"
-	| "method_decls"
-	| "method_process_elements"
-	| "component_refs"
-	| "element_refs"
-	| "messages"
-	| "project_formulas"
-	| "text_code"
-	| "all";
-
 export interface AscetActionFewShot {
 	variant?: string;
 	intent: string;
@@ -37,7 +25,6 @@ export interface AscetActionDescriptor {
 	profiles: readonly AscetProfile[];
 	featureFlag?: string;
 	deprecatedBy?: string;
-	requiresPartitions?: readonly AscetIndexPartition[];
 	prompt?: AscetActionPrompt;
 }
 
@@ -56,7 +43,6 @@ const READ_PROFILES: readonly AscetProfile[] = CORE_PROFILES;
 const WRITE_PROFILES: readonly AscetProfile[] = ["write-preflight", "batch-write"];
 const VERIFY_PROFILES: readonly AscetProfile[] = ["verify", "write-preflight", "batch-write", "component-edit"];
 const OPS_PROFILES: readonly AscetProfile[] = ["ops"];
-const ALL_SEARCH_PROFILES: readonly AscetProfile[] = READ_PROFILES;
 
 function descriptor(
 	tool: string,
@@ -83,11 +69,6 @@ function shot(intent: string, args: Record<string, unknown>, variant?: string): 
 	return variant ? { variant, intent, args } : { intent, args };
 }
 
-const searchPagingRules = [
-	"Prefer exact matches and bounded componentPath or scopePath filters.",
-	"Use cursor paging instead of large limits for broad searches; repeat the same action and filters with nextCursor until searchComplete=true.",
-] as const;
-
 const writePreflightRules = [
 	"By default this tool returns a non-error preflight outcome and does not write.",
 	"Set executeWrite=true only when the user explicitly asks to apply the write; PI still requires confirmation.",
@@ -107,11 +88,11 @@ const codeEditRules = [
 const elementSpecRules = [
 	"Treat specFile as a structured ASCET element-spec JSON artifact.",
 	"Start from the element's code role and explicit requirements: determine whether it is a parameter, variable, array, state, or enumeration, how the code reads or writes it, its domain, lifecycle, and initialization intent. That semantic intent drives the target spec; do not let a similarly named element or a read result replace the code-level meaning.",
-	"For new elements, use ascet_search.search_elements or ascet_search.text_in_code for discovery and ascet_read.read_code for complete code; use ascet_read.read_dependent_chain when dependency context matters. Treat live reads as ASCET compatibility and preservation evidence, not as the semantic source. For existing elements, preserve unchanged live fields and emit only the requested patch; Do not copy a sibling's values without semantic equivalence.",
+	"For new elements, use ascet_get.tree and ascet_get.elements for bounded live discovery, Pi grep/read for stored observations, and ascet_read.read_code for complete code. Use ascet_read.read_dependent_chain when dependency context matters. Treat live reads as ASCET compatibility and preservation evidence, not as the semantic source. For existing elements, preserve unchanged live fields and emit only the requested patch; Do not copy a sibling's values without semantic equivalence.",
 	"Do not guess modelType, scope, range, implementation type, formula, calibration, or dependency.",
 	"For a new variable, parameter, or array (except an Imported Parameter), include data.value and impl.valueType; for non-logical model types include exactly one range object with both min and max under physicalRange or impl.implementationRange. Ranged parameters with discrete implementations require impl.limitAssignments=true; real32/real64 implementations must omit that option because ASCET does not support it.",
 	"For a new enumeration, include enumerationPath and scalar data.value; do not add physicalRange. Existing-element patches may omit unchanged fields.",
-	"If any required create field is unknown, stop at preflight and resolve live metadata with ascet_search.search_elements or ask for the value.",
+	"If any required create field is unknown, stop at preflight and resolve live metadata with ascet_get.elements or ask for the value.",
 	"Dependency is not part of apply_element_spec JSON; use set_element_dependency after the target parameter exists.",
 ] as const;
 
@@ -125,14 +106,13 @@ const dependencyRules = [
 
 export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 	descriptor("ascet_status", "status", "public", ALL_PROFILES, {
-		requiresPartitions: ["components"],
 		prompt: prompt("Connect ASCET and warm only the component partition.", {
 			rules: [
 				"Use ascet_status before calling other ASCET tools when runtime availability is uncertain.",
 				"Treat missing ASCET CLI or contract catalog as setup evidence.",
 			],
 			fewShots: [shot("check setup", {})],
-			tags: ["ops", "status", "index"],
+			tags: ["ops", "status", "runtime"],
 		}),
 	}),
 	descriptor("ascet_capabilities", "search_actions", "public", ALL_PROFILES, {
@@ -145,317 +125,78 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["ops", "capability", "action-search"],
 		}),
 	}),
-	descriptor("ascet_index", "status", "public", ALL_PROFILES, {
-		prompt: prompt("Inspect ASCET SQLite index readiness, per-area counts, stale areas, and footer sync.", {
+	descriptor("ascet_get", "tree", "public", READ_PROFILES, {
+		prompt: prompt("Read a bounded live Folder/Component tree before expanding one exact target.", {
 			rules: [
-				"Use ascet_index.status when the footer index state looks wrong or when search freshness is uncertain.",
-				"status is local SQLite/status-file inspection and does not call live ASCET ToolAPI.",
-				"Use detailLevel=areas for per-area counts; use detailLevel=full with includeScheduler=true for diagnostics.",
-			],
-			fewShots: [shot("index status", { action: "status", detailLevel: "areas" })],
-			tags: ["ops", "index", "sqlite", "status"],
-		}),
-	}),
-	descriptor("ascet_index", "refresh", "public", ALL_PROFILES, {
-		prompt: prompt("Refresh one or more ASCET SQLite index areas through the serial live scheduler.", {
-			rules: [
-				"Use refresh when indexed search data must reflect current live ASCET state.",
-				"Live refreshes are serial scheduler jobs; do not call raw warm_search_index directly.",
-				'Use areas=["elements"] for declarations of element, areas=["code"] for text_in_code, and areas=["p0"] for complete startup index rebuild.',
+				"Use tree first for structural discovery. targetPathPrefix accepts a bounded folder scope such as PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation.",
+				"Tree returns metadata only; it does not load Elements, references, methods, implementations, or code.",
 			],
 			fewShots: [
-				shot("refresh elements", { action: "refresh", areas: ["elements"], mode: "foreground", force: true }),
+				shot("expand package", { action: "tree", target: { targetPathPrefix: "PlatformLibrary\\Package" } }),
 			],
-			tags: ["ops", "index", "refresh", "scheduler"],
+			tags: ["navigation", "tree", "live-read"],
 		}),
 	}),
-	descriptor("ascet_index", "mark_stale", "public", ALL_PROFILES, {
-		prompt: prompt("Mark selected SQLite index areas stale after manual ASCET UI edits or external changes.", {
+	descriptor("ascet_get", "elements", "public", READ_PROFILES, {
+		prompt: prompt("Read complete Element directory entries for an exact Component or bounded Folder selection.", {
 			rules: [
-				"Use mark_stale when the user confirms data changed outside PI and a live refresh is not being run immediately.",
-				"mark_stale is local SQLite/status-file mutation and does not call live ASCET ToolAPI.",
+				"Use elements after tree identifies a target. Filter by name or scope only; do not use a result-count limit.",
+				"Element output is concise identity/scope metadata. Use ascet_read only for a precise deep read.",
 			],
-			fewShots: [shot("manual code edit", { action: "mark_stale", areas: ["code"], reason: "external_edit" })],
-			tags: ["ops", "index", "stale"],
+			fewShots: [shot("list component elements", { action: "elements", target: { path: "DEMO\\PID" } })],
+			tags: ["element", "signal", "live-read"],
 		}),
 	}),
-	descriptor("ascet_index", "repair_status_file", "public", ALL_PROFILES, {
-		prompt: prompt("Repair .ascet/index/status.json from the active SQLite generation.", {
+	descriptor("ascet_get", "formulas", "public", READ_PROFILES, {
+		prompt: prompt("Read complete Project Formula definitions for one exact Project.", {
 			rules: [
-				"Use repair_status_file when SQLite is ready but the footer status is stale, checking, failed, or has a wrong totalDocs count.",
-				"repair_status_file is local and does not rebuild live ASCET data.",
+				"Formula contents and parameter details are returned by formulas. Use Pi grep/read for large stored formula observations.",
+				"Do not use formulas to locate an unknown project; navigate with tree first.",
 			],
-			fewShots: [shot("repair footer", { action: "repair_status_file" })],
-			tags: ["ops", "index", "footer"],
+			fewShots: [shot("read project formulas", { action: "formulas", target: { path: "DEMO\\Project" } })],
+			tags: ["project", "formula", "live-read"],
 		}),
 	}),
-	descriptor("ascet_index", "evaluate", "public", ALL_PROFILES, {
-		prompt: prompt("Run local ASCET SQLite index health checks and optional search smoke checks.", {
-			rules: [
-				"Use evaluate for test and diagnostics of index state; local checks do not call live ASCET.",
-				"Use ascet_index.refresh for live rebuilds after evaluate reports stale or missing data.",
-			],
-			fewShots: [shot("evaluate index", { action: "evaluate", checks: ["status", "counts", "sidecar"] })],
-			tags: ["ops", "index", "test"],
+	descriptor("ascet_get", "component_refs", "public", READ_PROFILES, {
+		prompt: prompt("Read outgoing Component references without loading source code.", {
+			rules: ["Use component_refs after selecting an exact component with tree."],
+			fewShots: [shot("read component refs", { action: "component_refs", target: { path: "DEMO\\Consumer" } })],
+			tags: ["reference", "component", "live-read"],
 		}),
 	}),
-	descriptor("ascet_search", "search_components", "public", ALL_SEARCH_PROFILES, {
-		requiresPartitions: ["components"],
-		prompt: prompt("Find component candidates by name or folder scope before exact reads or writes.", {
+	descriptor("ascet_get", "bde_edges", "public", READ_PROFILES, {
+		prompt: prompt("Read BDE signal edges for one resolved component/diagram.", {
 			rules: [
-				...searchPagingRules,
-				"Use scopePath only for folder scopes like DEMO; use componentPath only for concrete components like DEMO/PID.",
-				"Search candidate provider components recursively using bounded queries such as _Calibration, _Constant, Calibration, Constant, and parameter.",
+				"Use bde_edges to understand signal flow; use ascet_read.read_block_diagram for deeper diagram details.",
 			],
 			fewShots: [
-				shot("search components", {
-					action: "search_components",
-					query: "PID",
-					scopePath: "DEMO",
-					match: "contains",
-					limit: 10,
+				shot("read BDE edges", { action: "bde_edges", target: { path: "DEMO\\Controller" }, diagramName: "Main" }),
+			],
+			tags: ["reference", "diagram", "signal-flow"],
+		}),
+	}),
+	descriptor("ascet_get", "import_binding", "public", READ_PROFILES, {
+		prompt: prompt("Verify one Imported Element binding against an explicit provider Component.", {
+			rules: [
+				"Use import_binding only after elements identifies the consumer Imported Element and provider Exported Element.",
+				"Provider identity must be exact path or OID; this action does not perform global provider search.",
+			],
+			fewShots: [
+				shot("verify import binding", {
+					action: "import_binding",
+					target: { path: "DEMO\\Consumer" },
+					elementName: "P_Request",
+					provider: { path: "DEMO\\Provider" },
 				}),
 			],
-			tags: ["component", "index", "provider-discovery"],
+			tags: ["reference", "imported", "exported"],
 		}),
 	}),
-	descriptor("ascet_search", "search_projects", "public", ALL_SEARCH_PROFILES, {
-		requiresPartitions: ["components"],
-		prompt: prompt("Find Project targets by name or folder scope before project formula reads, diffs, or writes.", {
-			rules: [
-				...searchPagingRules,
-				"Use search_projects when the user needs project formulas but did not provide a projectPath.",
-				"Project paths are served from the components/object index and returned with kind=project.",
-			],
-			fewShots: [
-				shot("search projects", {
-					action: "search_projects",
-					query: "AEB",
-					scopePath: "PlatformLibrary/Package",
-					match: "contains",
-					limit: 10,
-				}),
-			],
-			tags: ["project", "formula", "index"],
-		}),
-	}),
-	descriptor("ascet_search", "search_project_formulas", "public", ALL_SEARCH_PROFILES, {
-		requiresPartitions: ["project_formulas"],
-		prompt: prompt("Find Project formula declarations from the SQLite P0 index.", {
-			rules: [
-				...searchPagingRules,
-				"Use search_project_formulas when the user asks where a Project formula is declared or whether a formula exists.",
-				"Use projectPath when already known; otherwise call search_projects first.",
-				"Use ascet_read.read_project_formulas for complete live formula definitions after selecting a projectPath.",
-			],
-			fewShots: [
-				shot("search project formula", {
-					action: "search_project_formulas",
-					query: "RPM",
-					projectPath: "PlatformLibrary/Package/AEB/AEB_Project",
-					match: "exact",
-					limit: 10,
-				}),
-			],
-			tags: ["project", "formula", "index"],
-		}),
-	}),
-	descriptor("ascet_search", "resolve_component", "public", ALL_SEARCH_PROFILES, {
-		requiresPartitions: ["components"],
-		prompt: prompt("Resolve one concrete componentPath for later read, reference, diff, verify, or write actions.", {
-			rules: [
-				"Use resolve_component when a later action needs one concrete componentPath.",
-				"Before broad reference searches, narrow with resolve_component, search_components, componentPath, or scopePath whenever the user gave any component or folder clue.",
-			],
-			fewShots: [
-				shot("resolve component", {
-					action: "resolve_component",
-					query: "PID",
-					scopePath: "DEMO",
-					match: "exact",
-					limit: 5,
-				}),
-			],
-			tags: ["component", "routing"],
-		}),
-	}),
-	descriptor("ascet_search", "search_elements", "public", ALL_SEARCH_PROFILES, {
-		requiresPartitions: ["element_decls"],
-		prompt: prompt("Find element declarations by exact name or bounded contains search.", {
-			rules: [
-				...searchPagingRules,
-				'For each candidate provider component, search_elements with match="exact" using the Imported Parameter name. The Imported Parameter and Exported Parameter must be same-named.',
-				"Only scope=Exported search_elements results are valid provider candidates.",
-				"Do not resolve provider ambiguity by name similarity alone.",
-			],
-			fewShots: [
-				shot("search element", {
-					action: "search_elements",
-					query: "pid_kp",
-					componentPath: "DEMO/PID",
-					match: "exact",
-					limit: 5,
-				}),
-			],
-			tags: ["element", "provider-discovery"],
-		}),
-	}),
-	descriptor("ascet_search", "declarations_of_element", "public", ALL_SEARCH_PROFILES, {
-		requiresPartitions: ["element_decls"],
-		prompt: prompt("Find declarations of a model element.", {
-			rules: [...searchPagingRules, "Use this for the ASCET UI 'Declarations of element' quick-search behavior."],
-			fewShots: [
-				shot("declare element", {
-					action: "declarations_of_element",
-					query: "P_AEB_IB_MaxVelocityDrop_Curve",
-					match: "exact",
-					limit: 10,
-				}),
-			],
-			tags: ["element", "quick-search"],
-		}),
-	}),
-	descriptor("ascet_search", "declarations_of_method_process", "public", ALL_SEARCH_PROFILES, {
-		requiresPartitions: ["method_decls"],
-		prompt: prompt("Find declarations of ASCET methods or processes.", {
-			rules: [
-				...searchPagingRules,
-				"Use this for the ASCET UI 'Declarations of method/process' quick-search behavior.",
-			],
-			fewShots: [
-				shot("declare method", {
-					action: "declarations_of_method_process",
-					query: "calc",
-					componentPath: "DEMO/PID",
-					match: "contains",
-					limit: 10,
-				}),
-			],
-			tags: ["method", "process", "quick-search"],
-		}),
-	}),
-	descriptor("ascet_search", "declarations_of_method_process_element", "public", ALL_SEARCH_PROFILES, {
-		requiresPartitions: ["method_process_elements"],
-		prompt: prompt("Find method/process argument, return, and local element declarations.", {
-			rules: [
-				...searchPagingRules,
-				"Use methodName when the target method/process is already known.",
-				"Use this for the ASCET UI 'Declarations of method/process element' quick-search behavior.",
-			],
-			fewShots: [
-				shot("declare local", {
-					action: "declarations_of_method_process_element",
-					query: "tmp",
-					componentPath: "DEMO/PID",
-					methodName: "calc",
-					limit: 10,
-				}),
-			],
-			tags: ["method", "process", "element", "quick-search"],
-		}),
-	}),
-	descriptor("ascet_search", "references_to_component", "public", ALL_SEARCH_PROFILES, {
-		requiresPartitions: ["component_refs"],
-		prompt: prompt("Search callers or referencing components for one component target.", {
-			rules: [
-				...searchPagingRules,
-				"Use references_to_component for callers of a component.",
-				"Unscoped reference searches can scan only a partial component page; truncated=true or searchComplete=false means the result is not exhaustive.",
-			],
-			fewShots: [
-				shot("component refs", {
-					action: "references_to_component",
-					query: "AEB_pDriverIBooster",
-					match: "exact",
-					limit: 20,
-				}),
-			],
-			tags: ["reference", "component", "index", "quick-search"],
-		}),
-	}),
-	descriptor("ascet_search", "references_to_element", "public", ALL_SEARCH_PROFILES, {
-		requiresPartitions: ["element_refs", "text_code"],
-		prompt: prompt("Search element references using text and diagram reference indexes.", {
-			rules: [
-				...searchPagingRules,
-				"Use references_to_element for references to an element.",
-				"Do not claim an element has no references unless the relevant search result has searchComplete=true for the requested scope.",
-			],
-			fewShots: [
-				shot("element refs", {
-					action: "references_to_element",
-					query: "pid_kp",
-					componentPath: "DEMO/PID",
-					limit: 10,
-				}),
-			],
-			tags: ["reference", "element", "index", "quick-search"],
-		}),
-	}),
-	descriptor("ascet_search", "senders_of_message", "public", ALL_SEARCH_PROFILES, {
-		requiresPartitions: ["messages"],
-		prompt: prompt("Find message sender declarations or references.", {
-			rules: [...searchPagingRules, "Use this for the ASCET UI 'Senders of message' quick-search behavior."],
-			fewShots: [
-				shot("message senders", {
-					action: "senders_of_message",
-					query: "M_Request",
-					scopePath: "DEMO",
-					limit: 10,
-				}),
-			],
-			tags: ["message", "quick-search"],
-		}),
-	}),
-	descriptor("ascet_search", "receivers_of_message", "public", ALL_SEARCH_PROFILES, {
-		requiresPartitions: ["messages"],
-		prompt: prompt("Find message receiver declarations or references.", {
-			rules: [...searchPagingRules, "Use this for the ASCET UI 'Receivers of message' quick-search behavior."],
-			fewShots: [
-				shot("message receivers", {
-					action: "receivers_of_message",
-					query: "M_Request",
-					scopePath: "DEMO",
-					limit: 10,
-				}),
-			],
-			tags: ["message", "quick-search"],
-		}),
-	}),
-	descriptor("ascet_search", "text_in_code", "public", ALL_SEARCH_PROFILES, {
-		requiresPartitions: ["text_code"],
-		prompt: prompt("Search indexed ESDL/C snippets; this does not read complete code.", {
-			rules: [
-				...searchPagingRules,
-				"Use text_in_code for ESDL or C text snippets and occurrence discovery.",
-				"text_in_code returns matching snippets with component, section, line, and snippet evidence; use ascet_read.read_code for complete live code.",
-				"Do not claim no text occurrences unless searchComplete=true for the requested scope.",
-			],
-			fewShots: [
-				shot("search code text", {
-					action: "text_in_code",
-					query: "C_AEB.getAt",
-					componentPath: "DEMO/PID",
-					limit: 10,
-				}),
-			],
-			tags: ["text", "code", "index", "quick-search"],
-		}),
-	}),
-	descriptor("ascet_search", "search_occurrences", "internal", ALL_SEARCH_PROFILES, {
-		deprecatedBy: "ascet_search.references_to_element",
-		prompt: prompt("Legacy internal occurrence search route.", {
-			rules: ["Hidden legacy action; use references_to_component, references_to_element, or text_in_code instead."],
-			tags: ["hidden", "legacy"],
-			hidden: true,
-		}),
-	}),
-	descriptor("ascet_search", "search_text_code", "internal", ALL_SEARCH_PROFILES, {
-		deprecatedBy: "ascet_search.text_in_code",
-		prompt: prompt("Legacy internal text-code search route.", {
-			rules: ["Hidden legacy action; use text_in_code instead."],
-			tags: ["hidden", "legacy"],
-			hidden: true,
+	descriptor("ascet_get", "dbitem_refs", "public", READ_PROFILES, {
+		prompt: prompt("Read outgoing database-item references for one exact object.", {
+			rules: ["Use dbitem_refs for precise object-level relationships not covered by component_refs."],
+			fewShots: [shot("read database refs", { action: "dbitem_refs", target: { path: "DEMO\\Consumer" } })],
+			tags: ["reference", "database-item", "live-read"],
 		}),
 	}),
 	descriptor("ascet_read", "read_code", "public", READ_PROFILES, {
@@ -463,7 +204,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			rules: [
 				'Use read_code when the user explicitly needs live code; it returns complete live text by default. Use detailLevel="summary" only when a hash/count summary is enough.',
 				"Use read_code section=header or external-c only for C module targets; for ESDL class/module method code pass methodName with section=body or all.",
-				"read_code is a live ToolAPI read, not a search-index text lookup.",
+				"read_code is a live ToolAPI read for one exact target; use Pi grep on stored get observations for offline text filtering.",
 			],
 			fewShots: [
 				shot("read code", {
@@ -504,21 +245,6 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["implementation", "live-read"],
 		}),
 	}),
-	descriptor("ascet_read", "read_project_formulas", "public", READ_PROFILES, {
-		prompt: prompt("Read project formulas live from ASCET for one resolved Project target.", {
-			rules: [
-				"Use search_projects first when projectPath is unknown.",
-				"Use read_project_formulas only for Project targets; it is not element dependency formula readback.",
-			],
-			fewShots: [
-				shot("read project formulas", {
-					action: "read_project_formulas",
-					projectPath: "DEMO/Project",
-				}),
-			],
-			tags: ["project", "formula", "live-read"],
-		}),
-	}),
 	descriptor("ascet_read", "read_block_diagram", "public", READ_PROFILES, {
 		prompt: prompt("Read a BDE/block-diagram surface for resolved class or module targets.", {
 			rules: [
@@ -553,19 +279,13 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 	}),
 	descriptor("ascet_read", "read_dependent_chain", "public", READ_PROFILES, {
 		prompt: prompt(
-			"Index-first dependency provider resolver for Local Parameter -> Imported Parameter -> Exported Parameter chains.",
+			"Exact dependency-chain read for a Local Parameter with an optional explicit Exported provider constraint.",
 			{
 				rules: [
-					"Use read_dependent_chain when the user asks which exported or global parameter a local dependent parameter depends on.",
-					"Provider discovery is index-first from element_decls; scope=Exported is required for a valid provider.",
-					"Returned element.data is full live read_element_catalog data for the exported provider when detailLevel=full.",
+					"Use ascet_get.tree and ascet_get.elements to identify the consumer Imported Element and candidate provider Exported Element before calling read_dependent_chain.",
+					"Pass exporterComponentPath only when the provider path is already known exactly.",
 					"The formula reported by read_dependent_chain is the local dependent parameter expression, not an implementation conversion formula or project formula.",
-					"Dependent parameter provider discovery is a coordinated workflow: call read_dependent_chain first, then coordinate ascet_search and ascet_explore if discovery is incomplete.",
 					"The Imported Parameter in the consuming component and the Exported Parameter in the provider component must have the same name.",
-					"Only scope=Exported elements are valid provider candidates.",
-					"The Local Dependent Parameter may have a different name; use formula or mapping references to find imported parameter names.",
-					"If provider discovery is incomplete or ambiguous, coordinate ascet_search and ascet_explore before concluding.",
-					"After selecting a provider candidate, call read_dependent_chain again with exporterComponentPath as a verification constraint.",
 				],
 				fewShots: [
 					shot("dependent chain", {
@@ -601,23 +321,6 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			rules: ["Hidden legacy action; use read_code, explicit ascet_read actions, or verify readback instead."],
 			tags: ["hidden", "legacy"],
 			hidden: true,
-		}),
-	}),
-	descriptor("ascet_explore", "list_components", "public", READ_PROFILES, {
-		prompt: prompt("Browse ASCET folders and typed database items after a scope is known.", {
-			rules: [
-				"Use list_components to browse direct or recursive folder contents and filter by component kind or languageKind.",
-				"For dependent-parameter provider discovery, use list_components recursively from the feature scope when parameter classes may be nested under _Calibration, _Constant, or other parameter folders.",
-			],
-			fewShots: [
-				shot("browse folder", {
-					action: "list_components",
-					folderPath: "DEMO",
-					kind: "all",
-					limit: 20,
-				}),
-			],
-			tags: ["navigation", "component"],
 		}),
 	}),
 	descriptor("ascet_diff", "diff", "public", ["diff"], {
@@ -1059,8 +762,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 				...writePreflightRules,
 				...dependencyRules,
 				"set_element_dependency does not create local, imported, or exported elements; use apply_element_spec first for new elements.",
-				"Successful executed writes refreshes element_decls and full_element_cache from live read_element_catalog readback.",
-				"If index refresh fails after a successful write, follow index.issues; the write result can still be valid.",
+				"Successful executed writes invalidate matching on-demand observations; dry runs and failed writes do not invalidate observations.",
 			],
 			fewShots: [
 				shot("set dependency", {
@@ -1302,7 +1004,6 @@ export function listActionDescriptors(): AscetActionDescriptor[] {
 	return ascetActionCatalog.map((item) => ({
 		...item,
 		profiles: [...item.profiles],
-		requiresPartitions: item.requiresPartitions ? [...item.requiresPartitions] : undefined,
 		prompt: item.prompt
 			? {
 					...item.prompt,

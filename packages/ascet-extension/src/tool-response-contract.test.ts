@@ -37,7 +37,7 @@ describe("tool response contract", () => {
 				],
 			},
 			error: null,
-			meta: { mode: "exec", operation: "warm_search_index" },
+			meta: { mode: "exec", operation: "get_elements" },
 		});
 
 		assert.deepEqual(payload, {

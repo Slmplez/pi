@@ -1,4 +1,4 @@
-# Workflow
+﻿# Workflow
 
 ## Purpose
 
@@ -33,7 +33,7 @@ The main agent decides what counts as a check item based on target type and rule
 
 ### Live ASCET Dispatch Gate
 
-Live ASCET evidence work is any task that must call `ascet_status`, `ascet_scheduler_status`, `ascet_explore`, `ascet_search`, `ascet_read`, `ascet_diff`, or `ascet_verify`.
+Live ASCET evidence work is any task that must call `ascet_status`, `ascet_scheduler_status`, `ascet_get`, `ascet_read`, `ascet_diff`, or `ascet_verify`.
 
 Only these agent profiles may receive live ASCET evidence work:
 
@@ -51,13 +51,11 @@ Before dispatching live ASCET evidence work, preflight the selected agent profil
 
 Never send live ASCET evidence collection to builtin `reviewer`, `worker`, `planner`, `researcher`, or any generic agent. Those agents may review plans or evidence files only when the task does not require live ASCET tools.
 
-BDE and block diagram evidence must use the canonical tool call `ascet_read` with action `read_block_diagram`. Do not use old fine-grained block-diagram tool names.
+BDE structure evidence must use `ascet_get` action `bde_edges` for a resolved Component or diagram. Use `ascet_read.read_block_diagram` only when the rule requires exact deep diagram detail not returned by BDE edges.
 
-An empty block diagram is not automatically a design defect. Store valid empty graph evidence as evidence, and let the specific rule decide whether missing diagram content matters.
+An empty BDE edge result is not automatically a design defect. Store valid empty graph evidence as evidence, and let the specific rule decide whether missing diagram content matters.
 
-Parameter mapping evidence must use the canonical tool calls:
-
-- `ascet_read` action `read_dependent_chain`
+Parameter mapping evidence starts with `ascet_get.tree`, `ascet_get.elements`, and `ascet_get.component_refs`. Use Pi `find`, `grep`, and `read` for stored observations; use `ascet_get.import_binding` only for an explicit provider pair.
 
 Do not use `ascet_edit.set_element_dependency` in full-check.
 
@@ -66,26 +64,28 @@ Do not use `ascet_edit.set_element_dependency` in full-check.
 1. Run `ascet_status`.
 2. Run `ascet_scheduler_status` if runtime state is degraded, locked, stale, or slow.
 3. Write `check-request.json`.
-4. Resolve targets and write `scope-manifest.json`.
+4. Resolve targets with `ascet_get.tree` and write `scope-manifest.json`.
 5. Load `rule-index.yaml` and write `check-plan.json`.
-6. Collect evidence into `evidence/*.jsonl`.
-7. Run inline checks or subagent checks.
-8. Verify high-risk or uncertain findings when enabled.
-9. Merge findings and write final reports.
+6. Collect bounded Get observations into `evidence/*.jsonl`; use Pi `find`, `grep`, and `read` for stored NDJSON.
+7. Make exact `ascet_read` calls only for evidence not present in Get observations.
+8. Run inline checks or subagent checks.
+9. Verify high-risk or uncertain findings when enabled.
+10. Merge findings and write final reports.
 
 ## Parameter Mapping Flow
 
 Use this flow when `parameter-mapping` or `semantic.parameter-name-consistency` is in scope:
 
-1. Collect `component_refs` for candidate components and derive likely consumer/provider component relations.
-2. Record an evidence gap when no consumer/provider relation can be established for a scoped component.
-3. Collect `children` with `ascet_explore` action `preview_children` and `group="parameters"` for consumer and provider components; fall back to `group="all"` only when parameter-only evidence is unavailable.
-4. For each local dependent parameter candidate in a consuming component, collect `dependent_chain` with `ascet_read.read_dependent_chain`.
-5. For unmapped imported parameters, collect `occurrences`; collect `component_code` only when code context is required.
-6. Use `read_dependent_chain` result issues such as `export_not_found` and `export_ambiguous` as evidence gaps or mapping findings.
-7. Run the dT exemption policy before normal parameter mapping rules.
-8. Emit findings to `findings/parameter-mapping.jsonl` and evidence gaps to the run evidence files.
+1. Use `ascet_get.tree` to bound candidate consumer and provider components.
+2. Collect `component_refs` for each consumer and derive likely provider relations.
+3. Collect `elements` for the consumer and explicit provider candidates.
+4. Use Pi `grep`/`read` to match Imported Parameter names to `scope=exported` candidates.
+5. Call `import_binding` only when the consumer, Imported Element, and provider are explicit.
+6. Record an evidence gap when no exact provider pair remains, the binding fails, or a required precise dependency read is unsupported.
+7. Collect `component_code` only when exact code context is required.
+8. Run the dT exemption policy before normal parameter mapping rules.
+9. Emit findings to `findings/parameter-mapping.jsonl` and evidence gaps to the run evidence files.
 
 ## ASCET Scheduler Use
 
-All live ASCET tools go through the ASCET extension scheduler. The scheduler is the ToolAPI safety boundary. The full-check workflow is still responsible for de-duplicating evidence requests, preserving a consistent evidence baseline, and keeping reports traceable.
+All live ASCET tools go through the ASCET extension scheduler. The scheduler is the ToolAPI safety boundary: issue live Get, Read, Diff, and Verify calls strictly one at a time. The full-check workflow is still responsible for de-duplicating observations, preserving a consistent evidence baseline, and keeping reports traceable.

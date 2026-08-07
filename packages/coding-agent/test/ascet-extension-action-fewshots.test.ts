@@ -1,33 +1,29 @@
 import { Value } from "typebox/value";
 import { describe, expect, it } from "vitest";
+import { ascetGetParameters } from "../../ascet-extension/src/get.ts";
 import {
 	type AscetActionExample,
 	ascetActionExamples,
 	compactExamplesForTool,
 } from "../../ascet-extension/src/tools/_shared/action-examples.ts";
 import { listActionDescriptors } from "../../ascet-extension/src/tools/actions/descriptors.ts";
-import { ascetIndexParameters } from "../../ascet-extension/src/tools/ascet-index/schema.ts";
 import { ascetBatchWriteParameters } from "../../ascet-extension/src/tools/batch-write/schema.ts";
 import { ascetCapabilitiesParameters } from "../../ascet-extension/src/tools/capabilities/schema.ts";
 import { ascetDiffParameters } from "../../ascet-extension/src/tools/diff/schema.ts";
 import { ascetEditParameters } from "../../ascet-extension/src/tools/edit/schema.ts";
-import { ascetExploreParameters } from "../../ascet-extension/src/tools/explore/schema.ts";
 import { ascetReadParameters } from "../../ascet-extension/src/tools/read/schema.ts";
 import { ascetRecoverParameters } from "../../ascet-extension/src/tools/recover/schema.ts";
 import { allAscetToolNames, canonicalAscetToolNames } from "../../ascet-extension/src/tools/registry.ts";
 import { ascetSchedulerStatusParameters } from "../../ascet-extension/src/tools/scheduler-status/schema.ts";
-import { ascetSearchParameters } from "../../ascet-extension/src/tools/search/schema.ts";
 import { ascetStatusParameters } from "../../ascet-extension/src/tools/status/schema.ts";
 import { ascetVerifyParameters } from "../../ascet-extension/src/tools/verify/schema.ts";
 
 const schemaByTool = {
 	ascet_status: ascetStatusParameters,
 	ascet_capabilities: ascetCapabilitiesParameters,
-	ascet_index: ascetIndexParameters,
 	ascet_recover: ascetRecoverParameters,
 	ascet_scheduler_status: ascetSchedulerStatusParameters,
-	ascet_explore: ascetExploreParameters,
-	ascet_search: ascetSearchParameters,
+	ascet_get: ascetGetParameters,
 	ascet_read: ascetReadParameters,
 	ascet_diff: ascetDiffParameters,
 	ascet_edit: ascetEditParameters,

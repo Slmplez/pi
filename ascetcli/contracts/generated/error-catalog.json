@@ -1,0 +1,38 @@
+﻿{
+    "version":  1,
+    "generatedAt":  "2026-07-19T12:00:50.0508932Z",
+    "codes":  {
+                  "invalid_argument":  {
+                                           "category":  "invalid_input",
+                                           "recoverable":  true
+                                       },
+                  "folder_not_found":  {
+                                           "category":  "target_not_found",
+                                           "recoverable":  true
+                                       },
+                  "component_not_found":  {
+                                              "category":  "target_not_found",
+                                              "recoverable":  true
+                                          },
+                  "target_is_folder":  {
+                                           "category":  "wrong_target_kind",
+                                           "recoverable":  true
+                                       },
+                  "diagram_not_found":  {
+                                            "category":  "target_not_found",
+                                            "recoverable":  true
+                                        },
+                  "unsupported_component_kind":  {
+                                                     "category":  "wrong_target_kind",
+                                                     "recoverable":  true
+                                                 },
+                  "unsupported_component_kind_for_block_diagram":  {
+                                                                       "category":  "unsupported_surface",
+                                                                       "recoverable":  true
+                                                                   },
+                  "toolapi_busy":  {
+                                       "category":  "toolapi_busy",
+                                       "recoverable":  true
+                                   }
+              }
+}

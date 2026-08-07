@@ -2,7 +2,6 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { describe, test } from "node:test";
 import type { AscetCliExecutionResult, AscetCliRequest } from "../../cli.ts";
-import { resetAscetSearchIndexForTest } from "../../search-index.ts";
 import { ascetReadTool } from "./definition.ts";
 
 function makeReadExecution(request: AscetCliRequest): AscetCliExecutionResult {
@@ -20,31 +19,28 @@ function makeReadExecution(request: AscetCliRequest): AscetCliExecutionResult {
 	};
 }
 
-describe("ascet_read tool", () => {
-	test("read_code defaults to full live text and does not serve from the text-code index", async () => {
-		resetAscetSearchIndexForTest({
-			databaseName: "DemoDb",
-			databasePath: "C:\\ASCET\\DemoDb",
-			entries: [],
-			textCodeEntries: [
-				{
-					componentPath: "DEMO\\PID",
-					componentKind: "class",
-					componentLanguageKind: "ESDL",
-					section: "body",
-					methodName: "calc",
-					methodKind: "Process",
-					text: "stale indexed text",
-					path: "DEMO\\PID::calc#body",
-				},
-			],
-			generatedAtMs: Date.now(),
-			elapsedMs: 1,
-			scanComplete: true,
-			textCodeIncluded: true,
-			textCodeScanComplete: true,
-		});
+function makeDependentChainExecution(request: AscetCliRequest): AscetCliExecutionResult {
+	return {
+		exitCode: 0,
+		stdout: JSON.stringify({
+			ok: true,
+			result: {
+				component: "DEMO\\Consumer",
+				dependent: { name: "K_Effective" },
+				inputs: [],
+				complete: true,
+			},
+			error: null,
+			meta: { mode: "exec", operation: "read_dependent_chain" },
+		}),
+		stderr: "",
+		timedOut: false,
+		request,
+	};
+}
 
+describe("ascet_read tool", () => {
+	test("read_code defaults to full live text", async () => {
 		let observedArgs: string[] | undefined;
 		const result = await ascetReadTool.execute(
 			"call-1",
@@ -115,39 +111,30 @@ describe("ascet_read tool", () => {
 		assert.match(result.content[0]?.text ?? "", /out = in;/);
 	});
 
-	test("read_project_formulas reads project formulas through the live CLI", async () => {
-		let observedArgs: string[] | undefined;
+	test("read_dependent_chain performs one exact live read without provider discovery", async () => {
+		const calls: string[][] = [];
 		const result = await ascetReadTool.execute(
 			"call-1",
-			{ action: "read_project_formulas", projectPath: "DEMO\\Project" },
+			{
+				action: "read_dependent_chain",
+				componentPath: "DEMO\\Consumer",
+				dependentElement: "K_Effective",
+				exporterComponentPath: "DEMO\\Provider",
+			},
 			new AbortController().signal,
 			undefined,
 			{
 				cwd: process.cwd(),
 				executeCli: async (request) => {
-					observedArgs = request.args;
-					return {
-						exitCode: 0,
-						stdout: JSON.stringify({
-							ok: true,
-							result: {
-								projectPath: "DEMO\\Project",
-								formulas: [{ name: "K", formula: "1.0" }],
-							},
-							error: null,
-							meta: { mode: "exec", operation: "read_project_formulas" },
-						}),
-						stderr: "",
-						timedOut: false,
-						request,
-					};
+					calls.push(request.args);
+					return makeDependentChainExecution(request);
 				},
 			},
 		);
 
-		assert.deepEqual(observedArgs, ["exec", "read_project_formulas", "DEMO\\Project", "--json"]);
-		const payload = JSON.parse(result.content[0]?.text ?? "");
-		assert.equal(payload.project, "DEMO/Project");
-		assert.equal(payload.formulas[0].name, "K");
+		assert.deepEqual(calls, [
+			["exec", "read_dependent_chain", "DEMO\\Consumer", "K_Effective", "--exporter", "DEMO\\Provider", "--json"],
+		]);
+		assert.match(result.content[0]?.text ?? "", /DEMO[\\/]Consumer/);
 	});
 });

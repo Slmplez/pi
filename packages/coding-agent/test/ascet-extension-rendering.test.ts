@@ -42,8 +42,8 @@ describe("ASCET shared renderer", () => {
 
 	test("does not keep the pending status when a host marks the result final", () => {
 		const rendered = lines(
-			renderCall({ action: "list_components", folderPath: "DEMO" }, theme, {
-				toolName: "ascet_list_components",
+			renderCall({ action: "tree", target: { targetPathPrefix: "DEMO" } }, theme, {
+				toolName: "ascet_get",
 				executionStarted: true,
 				isPartial: false,
 				hasResult: undefined,

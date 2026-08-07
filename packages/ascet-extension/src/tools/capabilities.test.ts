@@ -44,11 +44,11 @@ describe("runAscetCapabilities", () => {
 		});
 	});
 
-	test("search_actions tool payload is result-only compact JSON with callable fewShot args", async () => {
+	test("search_actions tool payload is result-only compact JSON with callable Get fewShot args", async () => {
 		await withTempCwd(async (cwd) => {
 			const result = await ascetCapabilitiesTool.execute(
 				"call-1",
-				{ action: "search_actions", query: "code search", limit: 1 },
+				{ action: "search_actions", tool: "ascet_get", name: "tree", limit: 1 },
 				new AbortController().signal,
 				undefined,
 				{ cwd },
@@ -74,17 +74,13 @@ describe("runAscetCapabilities", () => {
 			assert.equal(payload.error, undefined);
 			assert.equal(payload.meta, undefined);
 			assert.equal(payload.items?.length, 1);
-			assert.equal(payload.items?.[0]?.tool, "ascet_search");
-			assert.equal(payload.items?.[0]?.action, "text_in_code");
+			assert.equal(payload.items?.[0]?.tool, "ascet_get");
+			assert.equal(payload.items?.[0]?.action, "tree");
 			assert.ok(payload.items?.[0]?.schema);
 			assert.ok(payload.items?.[0]?.rules);
 			assert.ok(payload.items?.[0]?.fewShots);
-			assert.deepEqual(Object.keys(payload.items?.[0]?.fewShots?.[0]?.args ?? {}).sort(), [
-				"action",
-				"componentPath",
-				"limit",
-				"query",
-			]);
+			assert.ok(Object.hasOwn(payload.items?.[0]?.fewShots?.[0]?.args ?? {}, "action"));
+			assert.ok(Object.hasOwn(payload.items?.[0]?.fewShots?.[0]?.args ?? {}, "target"));
 			assert.doesNotMatch(text, /"ok"|error|null|"meta"|"mode"|"operation":\s*"search"/);
 			assert.equal(result.details.ok, true);
 			assert.equal(result.details.error, undefined);
@@ -105,24 +101,17 @@ describe("runAscetCapabilities", () => {
 		});
 	});
 
-	test("search_actions hides internal actions unless includeHidden is explicit", () => {
+	test("search_actions returns public Get actions without a retired discovery tool", () => {
 		withTempCwd((cwd) => {
-			const summary = runAscetCapabilities(
-				{ action: "search_actions", query: "search_occurrences" },
+			const result = runAscetCapabilities(
+				{ action: "search_actions", tool: "ascet_get", name: "import_binding", detailLevel: "full" },
 				{ cwd, env: {} },
-			);
-			assert.equal(
-				summary.actionSearch?.items.some((action) => action.action === "search_occurrences"),
-				false,
 			);
 
-			const full = runAscetCapabilities(
-				{ action: "search_actions", query: "search_occurrences", detailLevel: "full", includeHidden: true },
-				{ cwd, env: {} },
-			);
-			const action = full.actionSearch?.items.find((item) => item.action === "search_occurrences");
-			assert.equal(action?.visibility, "internal");
-			assert.equal(action?.replacement, "ascet_search.references_to_element");
+			assert.equal(result.actionSearch?.total, 1);
+			assert.equal(result.actionSearch?.items[0]?.tool, "ascet_get");
+			assert.equal(result.actionSearch?.items[0]?.action, "import_binding");
+			assert.equal(result.actionSearch?.items[0]?.visibility, undefined);
 		});
 	});
 });

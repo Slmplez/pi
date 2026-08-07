@@ -2,7 +2,7 @@
     "id":  "AscetCreateComponent",
     "family":  "write",
     "summary":  "Create a new component shell",
-    "usage":  "\u003ccomponent-path\u003e --kind \u003cclass|module|statemachine|enumeration\u003e [--language \u003cESDL|BDE|C\u003e] [--if-exists \u003cfail|return-existing\u003e] [--verify-readback] [--rollback-on-failure] [--json]",
+    "usage":  "\u003ccomponent-path\u003e --kind \u003cclass|module|statemachine\u003e [--language \u003cESDL|BDE|C\u003e] [--if-exists \u003cfail|return-existing\u003e] [--verify-readback] [--rollback-on-failure] [--json]",
     "execution":  {
                       "kind":  "unified_cli",
                       "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
@@ -16,8 +16,7 @@
     "objectKinds":  [
                         "class",
                         "module",
-                        "statemachine",
-                        "enumeration"
+                        "statemachine"
                     ],
     "args":  [
                  {
@@ -35,11 +34,11 @@
                      "description":  "Flag --kind"
                  },
                  {
-                     "name":  "class|module|statemachine|enumeration",
+                     "name":  "class|module|statemachine",
                      "kind":  "positional",
                      "type":  "string",
                      "required":  true,
-                     "description":  "Positional argument: class|module|statemachine|enumeration"
+                     "description":  "Positional argument: class|module|statemachine"
                  },
                  {
                      "name":  "--language",
@@ -90,7 +89,7 @@
     "examples":  [
                      {
                          "description":  "Basic usage",
-                         "command":  "AscetCli.exe exec create_component \u003ccomponent-path\u003e --kind \u003cclass|module|statemachine|enumeration\u003e [--language \u003cESDL|BDE|C\u003e] [--if-exists \u003cfail|return-existing\u003e] [--verify-readback] [--rollback-on-failure] [--json]"
+                         "command":  "AscetCli.exe exec create_component \u003ccomponent-path\u003e --kind \u003cclass|module|statemachine\u003e [--language \u003cESDL|BDE|C\u003e] [--if-exists \u003cfail|return-existing\u003e] [--verify-readback] [--rollback-on-failure] [--json]"
                      }
                  ],
     "pitfalls":  [
