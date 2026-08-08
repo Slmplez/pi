@@ -831,7 +831,8 @@
       "objectKinds": [
         "class",
         "module",
-        "statemachine"
+        "statemachine",
+        "folder"
       ],
       "supportsJson": true,
       "requiresSerialLiveAccess": true,

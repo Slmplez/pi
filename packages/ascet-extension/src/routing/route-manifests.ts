@@ -137,6 +137,13 @@ export const ascetRouteManifestEntries = [
 	},
 	{
 		toolName: "ascet_read",
+		action: "read_element",
+		logicalCommandId: "AscetReadElementCatalog",
+		operation: "read_element_catalog",
+		category: "domain",
+	},
+	{
+		toolName: "ascet_read",
 		action: "read_implementation",
 		logicalCommandId: "AscetReadImplementation",
 		operation: "read_implementation",

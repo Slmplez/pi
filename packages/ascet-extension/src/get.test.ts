@@ -79,6 +79,17 @@ test("formats complete formula data inline without index output", () => {
 	assert.equal(JSON.stringify(output).includes("index"), false);
 });
 
+test("preserves componentOid rather than mislabeling it as an Element OID", () => {
+	const output = JSON.parse(
+		formatAscetGetResult(
+			{ action: "elements", target: { path: "DEMO\\Component" }, delivery: "inline" },
+			successfulResult([{ path: "DEMO\\Component::P", componentOid: "component-oid", scope: "local" }]),
+		),
+	) as { items: Array<{ componentOid?: string; oid?: string }> };
+	assert.equal(output.items[0]?.componentOid, "component-oid");
+	assert.equal(output.items[0]?.oid, undefined);
+});
+
 test("stores large observations as NDJSON metadata", () => {
 	const root = mkdtempSync(join(tmpdir(), "pi-ascet-get-test-"));
 	const previousRoot = process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT;
@@ -89,7 +100,7 @@ test("stores large observations as NDJSON metadata", () => {
 		const output = JSON.parse(
 			formatAscetGetResult(
 				{ action: "elements", target: { path: "DEMO\\Component" } },
-				successfulResult([{ path: "DEMO\\Component::P", oid: "component-oid", scope: "local" }]),
+				successfulResult([{ path: "DEMO\\Component::P", componentOid: "component-oid", scope: "local" }]),
 			),
 		) as { delivery: string; observation?: { format?: string; dataPath?: string; metaPath?: string } };
 		assert.equal(output.delivery, "stored");

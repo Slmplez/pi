@@ -1,45 +1,29 @@
-import assert from "node:assert/strict";
+﻿import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import { buildReadImplementationArgs, runAscetReadImplementation } from "./read-implementation.ts";
 
 describe("read_implementation request", () => {
-	test("passes traversal budgets to the CLI contract", () => {
+	test("passes only CLI-supported implementation selection arguments", () => {
 		assert.deepEqual(
 			buildReadImplementationArgs({
 				componentPath: "DEMO/PID",
 				mode: "default",
-				detailLevel: "full",
-				maxDepth: 3,
-				maxElements: 25,
 				timeoutMs: 5000,
 			}),
-			[
-				"exec",
-				"read_implementation",
-				"DEMO\\PID",
-				"--default",
-				"--detail-level",
-				"full",
-				"--max-depth",
-				"3",
-				"--max-elements",
-				"25",
-				"--timeout-ms",
-				"5000",
-				"--json",
-			],
+			["exec", "read_implementation", "DEMO\\PID", "--default", "--json"],
 		);
 	});
 
-	test("supports disabling the budget rollout for an explicit legacy fallback", async () => {
+	test("applies timeout to the CLI process rather than unsupported operation arguments", async () => {
 		let observedArgs: string[] | undefined;
+		let observedTimeoutMs: number | undefined;
 		const result = await runAscetReadImplementation(
-			{ componentPath: "DEMO/PID" },
+			{ componentPath: "DEMO/PID", timeoutMs: 5000 },
 			{
 				cwd: process.cwd(),
-				env: { ASCET_IMPLEMENTATION_BUDGETS: "0", ASCET_CLI_PATH: process.execPath },
 				executeCli: async (request) => {
 					observedArgs = request.args;
+					observedTimeoutMs = request.timeoutMs;
 					return {
 						exitCode: 0,
 						stdout: JSON.stringify({ ok: true, result: {}, error: null }),
@@ -52,6 +36,7 @@ describe("read_implementation request", () => {
 		);
 
 		assert.equal(result.ok, true);
-		assert.deepEqual(observedArgs, ["exec", "read_implementation", "DEMO\\PID", "--detail-level", "full", "--json"]);
+		assert.deepEqual(observedArgs, ["exec", "read_implementation", "DEMO\\PID", "--json"]);
+		assert.equal(observedTimeoutMs, 5000);
 	});
 });

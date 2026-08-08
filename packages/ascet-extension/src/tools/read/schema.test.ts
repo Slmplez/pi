@@ -90,12 +90,27 @@ describe("ascet_read schema", () => {
 		assert.equal(request.action, "read_element_dependency");
 	});
 
-	test("exposes bounded implementation traversal controls", () => {
+	test("read_element exposes one exact component and Element target", () => {
+		const schema = getActionSchema("read_element") as { properties?: Record<string, unknown> } | undefined;
+		const properties = schema?.properties ?? {};
+		assert.ok(Object.hasOwn(properties, "componentPath"));
+		assert.ok(Object.hasOwn(properties, "elementName"));
+		assert.ok(Object.hasOwn(properties, "timeoutMs"));
+
+		const request: AscetReadParams = {
+			action: "read_element",
+			componentPath: "DEMO\\PID",
+			elementName: "pid_kp",
+		};
+		assert.equal(request.action, "read_element");
+	});
+
+	test("does not expose unsupported implementation traversal controls", () => {
 		const schema = getActionSchema("read_implementation") as { properties?: Record<string, unknown> } | undefined;
 		const properties = schema?.properties ?? {};
-		assert.ok(Object.hasOwn(properties, "detailLevel"));
-		assert.ok(Object.hasOwn(properties, "maxDepth"));
-		assert.ok(Object.hasOwn(properties, "maxElements"));
+		assert.ok(!Object.hasOwn(properties, "detailLevel"));
+		assert.ok(!Object.hasOwn(properties, "maxDepth"));
+		assert.ok(!Object.hasOwn(properties, "maxElements"));
 		assert.ok(Object.hasOwn(properties, "timeoutMs"));
 	});
 });

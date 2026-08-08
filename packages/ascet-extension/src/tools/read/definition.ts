@@ -2,6 +2,7 @@ import type { AscetCliExecutionResult, AscetCliJsonResult, AscetCliRequest } fro
 import { defineSequentialAscetTool } from "../../core/tool.ts";
 import { formatReadBlockDiagramResult, runAscetReadBlockDiagram } from "../../read-block-diagram.ts";
 import { formatReadDependentChainResult, runAscetReadDependentChain } from "../../read-dependent-chain.ts";
+import { formatReadElementResult, runAscetReadElement } from "../../read-element.ts";
 import { formatReadElementDependencyResult, runAscetReadElementDependency } from "../../read-element-dependency.ts";
 import { formatReadImplementationResult, runAscetReadImplementation } from "../../read-implementation.ts";
 import { formatReadMethodSignatureResult, runAscetReadMethodSignature } from "../../read-method-signature.ts";
@@ -38,9 +39,15 @@ async function runAscetRead(params: AscetReadParams, options: RunOptions): Promi
 					componentPath: params.componentPath,
 					mode: params.implementationMode,
 					implementationName: params.implementationName,
-					detailLevel: params.detailLevel,
-					maxDepth: params.maxDepth,
-					maxElements: params.maxElements,
+					timeoutMs: params.timeoutMs,
+				},
+				{ ...options, timeoutMs: params.timeoutMs ?? options.timeoutMs },
+			);
+		case "read_element":
+			return runAscetReadElement(
+				{
+					componentPath: params.componentPath,
+					elementName: params.elementName,
 					timeoutMs: params.timeoutMs,
 				},
 				{ ...options, timeoutMs: params.timeoutMs ?? options.timeoutMs },
@@ -87,6 +94,8 @@ function formatAscetReadResult(params: AscetReadParams, result: AscetCliJsonResu
 			return formatReadMethodSignatureResult(result);
 		case "read_implementation":
 			return formatReadImplementationResult(result);
+		case "read_element":
+			return formatReadElementResult(result);
 		case "read_block_diagram":
 			return formatReadBlockDiagramResult(result);
 		case "read_state_machine_flow":

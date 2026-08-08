@@ -232,6 +232,22 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["method", "live-read", "verify"],
 		}),
 	}),
+	descriptor("ascet_read", "read_element", "public", READ_PROFILES, {
+		prompt: prompt("Read complete metadata for one exact resolved Element.", {
+			rules: [
+				"Use read_element after ascet_get.elements identifies one Component and Element name.",
+				"Use this action for exact kind, modelType, scope, value, calibration, range, and implementation metadata; do not use it for folder discovery.",
+			],
+			fewShots: [
+				shot("read element", {
+					action: "read_element",
+					componentPath: "DEMO/PID",
+					elementName: "pid_kp",
+				}),
+			],
+			tags: ["element", "implementation", "live-read", "verify"],
+		}),
+	}),
 	descriptor("ascet_read", "read_implementation", "public", READ_PROFILES, {
 		prompt: prompt("Read implementation metadata for a resolved component.", {
 			rules: ["Use read_implementation when implementation metadata matters more than code text."],

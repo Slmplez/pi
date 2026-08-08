@@ -118,6 +118,22 @@ public sealed class AscetGetService
     private static List<Dictionary<string, object>> GetTree(AscetDataBase database, AscetGetRequest request, AscetGetTraversalState state)
     {
         List<Dictionary<string, object>> items = new List<Dictionary<string, object>>();
+        if (!String.IsNullOrWhiteSpace(request.Oid))
+        {
+            DataBaseItem targetItem = ResolveTargetItem(database, request, "get_tree");
+            string canonicalPath = NormalizePath(SafeGetPath(targetItem));
+            string targetPath = FirstNonEmpty(canonicalPath, request.Path, SafeGetName(targetItem));
+            AscetFolder folderTarget = targetItem as AscetFolder;
+            if (folderTarget != null)
+            {
+                AppendTreeFolder(folderTarget, targetPath, request.Depth, request, state, items, true);
+                return items;
+            }
+
+            AppendTreeItemChildren(targetItem, targetPath, request.Depth, request, state, items, true);
+            return items;
+        }
+
         string requestedPath = FirstNonEmpty(request.TargetPathPrefix, request.Path);
         if (String.IsNullOrWhiteSpace(requestedPath))
         {
@@ -141,15 +157,15 @@ public sealed class AscetGetService
             return items;
         }
 
-        DataBaseItem targetItem = ResolveTargetItem(database, request, "get_tree");
-        AscetFolder folderTarget = targetItem as AscetFolder;
-        if (folderTarget != null)
+        DataBaseItem targetItemByPath = ResolveTargetItem(database, request, "get_tree");
+        AscetFolder folderTargetByPath = targetItemByPath as AscetFolder;
+        if (folderTargetByPath != null)
         {
-            AppendTreeFolder(folderTarget, requestedPath, request.Depth, request, state, items, true);
+            AppendTreeFolder(folderTargetByPath, requestedPath, request.Depth, request, state, items, true);
             return items;
         }
 
-        AppendTreeItemChildren(targetItem, requestedPath, request.Depth, request, state, items, true);
+        AppendTreeItemChildren(targetItemByPath, requestedPath, request.Depth, request, state, items, true);
         return items;
     }
 
@@ -266,7 +282,7 @@ public sealed class AscetGetService
 
                 Dictionary<string, object> item = new Dictionary<string, object>();
                 item["path"] = component.Path + "::" + name;
-                item["oid"] = GetObjectOid(component.Component);
+                item["componentOid"] = GetObjectOid(component.Component);
                 item["scope"] = scope;
                 items.Add(item);
             }
@@ -455,10 +471,18 @@ public sealed class AscetGetService
             }
 
             DataBaseItem item = ResolveTargetItem(database, request, operation);
+            AscetFolder folderTarget = item as AscetFolder;
+            if (folderTarget != null)
+            {
+                string folderPath = FirstNonEmpty(GetItemPath(item, request.Path), request.TargetPathPrefix, SafeGetName(folderTarget));
+                CollectComponents(folderTarget, folderPath, request.Depth, request, state, result);
+                return result;
+            }
+
             CodeComponent component = item as CodeComponent;
             if (component == null)
             {
-                throw new AscetReadException("unsupported_component_kind", operation, "The target must be a code component.");
+                throw new AscetReadException("unsupported_component_kind", operation, "The target must be a code component or folder.");
             }
             state.ComponentsScanned++;
             result.Add(new ComponentTarget(component, GetItemPath(item, request.Path)));

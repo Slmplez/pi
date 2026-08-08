@@ -111,6 +111,121 @@ describe("ascet_read tool", () => {
 		assert.match(result.content[0]?.text ?? "", /out = in;/);
 	});
 
+	test("read_element returns only the exact live catalog entry", async () => {
+		let observedArgs: string[] | undefined;
+		const result = await ascetReadTool.execute(
+			"call-1",
+			{ action: "read_element", componentPath: "DEMO\\PID", elementName: "pid_kp" },
+			new AbortController().signal,
+			undefined,
+			{
+				cwd: process.cwd(),
+				executeCli: async (request) => {
+					observedArgs = request.args;
+					return {
+						exitCode: 0,
+						stdout: JSON.stringify({
+							ok: true,
+							result: {
+								elements: [
+									{ name: "pid_kp", kind: "parameter", scope: "local" },
+									{ name: "pid_ki", kind: "parameter", scope: "local" },
+								],
+							},
+							error: null,
+							meta: { mode: "exec", operation: "read_element_catalog" },
+						}),
+						stderr: "",
+						timedOut: false,
+						request,
+					};
+				},
+			},
+		);
+
+		assert.deepEqual(observedArgs, ["exec", "read_element_catalog", "DEMO\\PID", "--json"]);
+		const text = result.content[0]?.text ?? "";
+		assert.match(text, /pid_kp/);
+		assert.doesNotMatch(text, /pid_ki/);
+	});
+
+	test("read_dependent_chain returns partial direct-read evidence when XML export fails", async () => {
+		const calls: string[][] = [];
+		const result = await ascetReadTool.execute(
+			"call-1",
+			{
+				action: "read_dependent_chain",
+				componentPath: "DEMO\\Consumer",
+				dependentElement: "C_K_Effective",
+			},
+			new AbortController().signal,
+			undefined,
+			{
+				cwd: process.cwd(),
+				executeCli: async (request) => {
+					calls.push(request.args);
+					if (request.args[1] === "read_dependent_chain") {
+						return {
+							exitCode: 2,
+							stdout: JSON.stringify({
+								ok: false,
+								result: null,
+								error: { code: "tool_api_error", message: "ASCET ExportXMLToFile returned false" },
+							}),
+							stderr: "",
+							timedOut: false,
+							request,
+						};
+					}
+					if (request.args[1] === "read_element_catalog") {
+						return {
+							exitCode: 0,
+							stdout: JSON.stringify({
+								ok: true,
+								result: { elements: [{ name: "C_K_Effective", kind: "parameter", scope: "local" }] },
+								error: null,
+							}),
+							stderr: "",
+							timedOut: false,
+							request,
+						};
+					}
+					return {
+						exitCode: 0,
+						stdout: JSON.stringify({
+							ok: true,
+							result: {
+								matches: [
+									{
+										component: "DEMO\\Consumer",
+										element: "C_K_Effective",
+										kind: "parameter",
+										scope: "local",
+										dependency: "dependent",
+										formula: "F_K_Effective",
+									},
+								],
+							},
+							error: null,
+						}),
+						stderr: "",
+						timedOut: false,
+						request,
+					};
+				},
+			},
+		);
+
+		assert.deepEqual(
+			calls.map((args) => args[1]),
+			["read_dependent_chain", "read_element_catalog", "read_element_dependency"],
+		);
+		const text = result.content[0]?.text ?? "";
+		assert.match(text, /"status": "partial"/);
+		assert.match(text, /xml_export_failed/);
+		assert.match(text, /F_K_Effective/);
+	});
+
 	test("read_dependent_chain performs one exact live read without provider discovery", async () => {
 		const calls: string[][] = [];
 		const result = await ascetReadTool.execute(

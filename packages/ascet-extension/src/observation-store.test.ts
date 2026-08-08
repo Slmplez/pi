@@ -71,7 +71,7 @@ describe("AscetObservationStore", () => {
 			const inline = store.create({
 				domain: "elements",
 				target: { componentOid: "component-1", componentPath: "Demo\\Controller" },
-				items: [{ path: "Demo\\Controller::small", oid: "component-1", scope: "local" }],
+				items: [{ path: "Demo\\Controller::small", componentOid: "component-1", scope: "local" }],
 				coverage: { status: "complete_for_scope" },
 			});
 			assert.equal(inline.delivery, "inline");

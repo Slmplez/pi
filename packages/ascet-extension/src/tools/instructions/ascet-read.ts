@@ -68,6 +68,7 @@ export const ascetReadInstructions = [
 		rules: [
 			"Use ascet_get.tree, elements, component_refs, and Pi grep/read to establish the bounded consumer/provider context first.",
 			"Use read_dependent_chain only for precise live dependency/formula detail that is absent from Get observations; do not use it as provider discovery.",
+			"If XML export is unavailable, read_dependent_chain returns partial direct-read evidence. It does not claim that the dependency expression or provider binding was verified.",
 			"The formula reported by read_dependent_chain is the local dependent parameter expression. It is not an implementation conversion formula or a project formula.",
 			"If an exact provider cannot be established from bounded Get evidence, report ambiguity instead of inventing a provider path.",
 		],
@@ -90,6 +91,21 @@ export const ascetReadInstructions = [
 			'read_element_dependency: ascet_read({action:"read_element_dependency",componentPath:"FeatureA\\Consumer",elementName:"C_K_Effective",targetKind:"component"})',
 		],
 		tags: ["dependency", "live-read", "verify"],
+	},
+	{
+		id: "ascet_read.read_element",
+		tool: "ascet_read",
+		action: "read_element",
+		profiles: ["base", "advanced-read", "write-preflight"],
+		summary: "Read complete live metadata for one exact Element in one resolved Component.",
+		rules: [
+			"Use read_element after Get resolves the Component and Element name. It is the authoritative deep read for kind, model type, scope, value, calibration, ranges, and implementation metadata.",
+			"Do not use read_implementation to inspect one Element. Do not use read_element for discovery across folders.",
+		],
+		fewShots: [
+			'read_element: ascet_read({action:"read_element",componentPath:"FeatureA\\Consumer",elementName:"C_K_Effective"})',
+		],
+		tags: ["element", "implementation", "live-read", "verify"],
 	},
 	{
 		id: "ascet_read.read_implementation",

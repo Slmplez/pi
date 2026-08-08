@@ -48,6 +48,7 @@ describe("ASCET action catalog", () => {
 		assert.match(entries.get("ascet_get.elements")?.rules.join("\n") ?? "", /result-count limit/);
 		assert.match(entries.get("ascet_get.import_binding")?.rules.join("\n") ?? "", /exact path or OID/);
 		assert.match(entries.get("ascet_read.read_code")?.compact ?? "", /complete live code/);
+		assert.match(entries.get("ascet_read.read_element")?.compact ?? "", /exact resolved Element/);
 	});
 
 	test("defines dependency read/write boundaries around on-demand observations", () => {
