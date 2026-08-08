@@ -24,12 +24,16 @@ class AscetElementDependencyPrimitiveOutputTest
                 "<Element name=\"P_AEB_IB_pMCDeactThresh\" OID=\"valueOid\"><ElementAttributes><ScalarType>" +
                 "<PrimitiveAttributes kind=\"parameter\" scope=\"imported\" dependent=\"false\" />" +
                 "</ScalarType></ElementAttributes></Element>" +
+                "<Element name=\"C_Calibration\" OID=\"constantOid\"><ElementAttributes><ScalarType>" +
+                "<PrimitiveAttributes kind=\"constant\" scope=\"local\" />" +
+                "</ScalarType></ElementAttributes></Element>" +
                 "</Elements></Component></ComponentMain>");
 
             File.WriteAllText(data,
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                 "<ComponentData xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\"><ds:Signature><ds:SignedInfo /></ds:Signature><DataEntry elementName=\"C_AEB_IB_pMCDeactThresh\" elementOID=\"depOid\">" +
                 "<DataVariant name=\"default\"><ScalarType><Numeric value=\"0.0\" /></ScalarType></DataVariant>" +
+                "<DataVariant name=\"calibration\"><ScalarType><Numeric value=\"1.0\" /></ScalarType></DataVariant>" +
                 "</DataEntry></ComponentData>");
 
             AscetElementDependencyCandidate candidate = AscetElementDependencyXml.FindCandidate(main, "C_AEB_IB_pMCDeactThresh");
@@ -53,7 +57,11 @@ class AscetElementDependencyPrimitiveOutputTest
                 true,
                 "P_AEB_IB_pMCDeactThresh",
                 mappings,
-                false);
+                false,
+                "default",
+                null,
+                String.Empty,
+                null);
 
             string mainXml = File.ReadAllText(main);
             string dataXml = File.ReadAllText(data);
@@ -62,7 +70,7 @@ class AscetElementDependencyPrimitiveOutputTest
                 mainXml.IndexOf("dependent=\"true\"", StringComparison.Ordinal) < 0 ||
                 mainXml.IndexOf("<Formula code=\"P_AEB_IB_pMCDeactThresh\"", StringComparison.Ordinal) < 0 ||
                 dataXml.IndexOf("<Dependency>", StringComparison.Ordinal) < 0 ||
-                dataXml.IndexOf("<ScalarType>", StringComparison.Ordinal) >= 0 ||
+                dataXml.IndexOf("<ScalarType>", StringComparison.Ordinal) < 0 ||
                 dataXml.IndexOf("formalName=\"P_AEB_IB_pMCDeactThresh\"", StringComparison.Ordinal) < 0 ||
                 dataXml.IndexOf("valueName=\"P_AEB_IB_pMCDeactThresh\"", StringComparison.Ordinal) < 0 ||
                 mainXml.IndexOf("Signature", StringComparison.Ordinal) >= 0 ||
@@ -75,6 +83,43 @@ class AscetElementDependencyPrimitiveOutputTest
                 return 2;
             }
 
+            IList<AscetElementDependencyDataVariantState> states = AscetElementDependencyXml.ReadDataVariantStates(data, "C_AEB_IB_pMCDeactThresh");
+            if (states.Count != 2 || states[0].Mappings.Count != 1 || states[1].Mappings.Count != 0 ||
+                !states[0].HasDependency || states[0].HasScalarType ||
+                states[1].HasDependency || !states[1].HasScalarType ||
+                !String.Equals(states[0].VariantName, "default", StringComparison.Ordinal) ||
+                !String.Equals(states[1].VariantName, "calibration", StringComparison.Ordinal))
+            {
+                Console.Error.WriteLine("variantPolicy default modified more than the default DataVariant");
+                return 4;
+            }
+
+            AscetElementDependencyXml.SetMainAmdDependencyAndFormula(
+                main,
+                data,
+                "C_AEB_IB_pMCDeactThresh",
+                true,
+                "P_AEB_IB_pMCDeactThresh",
+                mappings,
+                false,
+                "selected",
+                new List<string> { "calibration" },
+                String.Empty,
+                null);
+
+            states = AscetElementDependencyXml.ReadDataVariantStates(data, "C_AEB_IB_pMCDeactThresh");
+            if (states.Count != 2 || states[0].Mappings.Count != 1 || states[1].Mappings.Count != 1 ||
+                !String.Equals(states[1].Mappings[0].FormalName, "P_AEB_IB_pMCDeactThresh", StringComparison.Ordinal) ||
+                !String.Equals(states[1].Mappings[0].FormalOid, "formalOid", StringComparison.Ordinal) ||
+                !String.Equals(states[1].Mappings[0].ValueName, "P_AEB_IB_pMCDeactThresh", StringComparison.Ordinal) ||
+                !String.Equals(states[1].Mappings[0].ValueOid, "valueOid", StringComparison.Ordinal))
+            {
+                Console.Error.WriteLine("unexpected selected DataVariant dependency readback");
+                return 6;
+            }
+
+            AscetElementDependencyXml.VerifyDataVariantMappings(main, data, "C_AEB_IB_pMCDeactThresh", mappings, "all", null, null);
+
             AscetElementDependencyXml.SetMainAmdDependencyAndFormula(
                 main,
                 data,
@@ -82,7 +127,15 @@ class AscetElementDependencyPrimitiveOutputTest
                 false,
                 String.Empty,
                 null,
-                true);
+                true,
+                "all",
+                null,
+                "explicit",
+                new Dictionary<string, string>
+                {
+                    { "default", "0.0" },
+                    { "calibration", "1.0" }
+                });
 
             mainXml = File.ReadAllText(main);
             if (mainXml.IndexOf("<PrimitiveAttributes", StringComparison.Ordinal) < 0 ||
@@ -92,6 +145,48 @@ class AscetElementDependencyPrimitiveOutputTest
                 Console.Error.WriteLine("unexpected primitive dependency clear formula write");
                 Console.Error.WriteLine(mainXml);
                 return 3;
+            }
+
+            states = AscetElementDependencyXml.ReadDataVariantStates(data, "C_AEB_IB_pMCDeactThresh");
+            if (states.Count != 2 || states[0].HasDependency || states[1].HasDependency ||
+                !states[0].HasScalarType || !states[1].HasScalarType ||
+                states[0].ScalarTypeXml.IndexOf("value=\"0.0\"", StringComparison.Ordinal) < 0 ||
+                states[1].ScalarTypeXml.IndexOf("value=\"1.0\"", StringComparison.Ordinal) < 0)
+            {
+                Console.Error.WriteLine("unexpected primitive independent data variant restoration");
+                return 5;
+            }
+
+            Dictionary<string, Dictionary<string, string>> perVariantMappings =
+                new Dictionary<string, Dictionary<string, string>>(StringComparer.Ordinal);
+            perVariantMappings["default"] = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                { "P_AEB_IB_pMCDeactThresh", "P_AEB_IB_pMCDeactThresh" }
+            };
+            perVariantMappings["calibration"] = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                { "P_AEB_IB_pMCDeactThresh", "C_Calibration" }
+            };
+            AscetElementDependencyXml.SetMainAmdDependencyAndFormula(
+                main,
+                data,
+                "C_AEB_IB_pMCDeactThresh",
+                true,
+                "P_AEB_IB_pMCDeactThresh",
+                null,
+                perVariantMappings,
+                false,
+                "all",
+                null,
+                String.Empty,
+                null);
+            states = AscetElementDependencyXml.ReadDataVariantStates(data, "C_AEB_IB_pMCDeactThresh");
+            if (states.Count != 2 || states[0].Mappings.Count != 1 || states[1].Mappings.Count != 1 ||
+                !String.Equals(states[0].Mappings[0].ValueName, "P_AEB_IB_pMCDeactThresh", StringComparison.Ordinal) ||
+                !String.Equals(states[1].Mappings[0].ValueName, "C_Calibration", StringComparison.Ordinal))
+            {
+                Console.Error.WriteLine("per-DataVariant mappings were not preserved");
+                return 7;
             }
 
             return 0;

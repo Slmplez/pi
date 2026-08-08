@@ -1,3 +1,4 @@
+import { configureParameterDependencyChainTool } from "../configure-parameter-dependency-chain.ts";
 import { ascetBatchWriteTool } from "./batch-write/index.ts";
 import { ascetCapabilitiesTool } from "./capabilities/index.ts";
 import { ascetDiffTool } from "./diff/index.ts";
@@ -22,6 +23,7 @@ export const canonicalDomainTools = [
 	ascetDiffTool,
 	ascetEditTool,
 	ascetVerifyTool,
+	configureParameterDependencyChainTool,
 ] as const;
 
 export const canonicalAscetToolNames = [
@@ -34,6 +36,7 @@ export const canonicalAscetToolNames = [
 	"ascet_diff",
 	"ascet_edit",
 	"ascet_verify",
+	"configure_parameter_dependency_chain",
 ] as const;
 
 export const canonicalAscetTools = [...canonicalOpsTools, ...canonicalDomainTools] as const;

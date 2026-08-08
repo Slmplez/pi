@@ -68,8 +68,19 @@ export interface AscetCliJsonResult {
 	error?: {
 		code: string;
 		message: string;
+		stage?: string;
+		details?: unknown;
+		operation?: string;
 	};
 	formattedOutputArtifact?: AscetFormattedOutputArtifact;
+}
+
+export interface AscetCliStructuredError {
+	code: string;
+	message: string;
+	stage?: string;
+	details?: unknown;
+	operation?: string;
 }
 
 export interface AscetCliFailureDiagnostics {
@@ -372,19 +383,29 @@ async function executeScheduledAscetCli(
 				if (execution.timedOut) {
 					throw new AscetCliProcessError(execution, "ascet_cli_timeout", "ASCET CLI execution timed out.");
 				}
+				const parsed = parseJson(execution.stdout);
+				const structuredError = parsed.ok ? getCliFailureEnvelopeError(parsed.data) : undefined;
 				if (!acceptedExitCodes.includes(execution.exitCode ?? Number.NaN)) {
-					throw new AscetCliProcessError(
+					throw createAscetCliProcessError(
 						execution,
 						"ascet_cli_failed",
-						execution.stderr.trim() || execution.stdout.trim() || `ASCET CLI exited with ${execution.exitCode}`,
+						structuredError?.message ??
+							(execution.stderr.trim() ||
+								execution.stdout.trim() ||
+								`ASCET CLI exited with ${execution.exitCode}`),
+						structuredError,
 					);
 				}
-				const parsed = parseJson(execution.stdout);
 				if (isParseJsonFailure(parsed)) {
 					throw new AscetCliProcessError(execution, "ascet_cli_invalid_json", parsed.message);
 				}
-				if (isCliFailureEnvelope(parsed.data)) {
-					throw new AscetCliProcessError(execution, "ascet_cli_failed", getCliFailureEnvelopeMessage(parsed.data));
+				if (structuredError) {
+					throw createAscetCliProcessError(
+						execution,
+						"ascet_cli_failed",
+						structuredError.message,
+						structuredError,
+					);
 				}
 				return execution;
 			} finally {
@@ -413,23 +434,58 @@ function isParseJsonFailure(value: ParseJsonResult): value is { ok: false; messa
 	return value.ok === false;
 }
 
-function isCliFailureEnvelope(value: unknown): boolean {
-	return (
-		value !== null && typeof value === "object" && !Array.isArray(value) && (value as { ok?: unknown }).ok === false
-	);
+function getCliFailureEnvelopeError(value: unknown): AscetCliStructuredError | undefined {
+	if (value === null || typeof value !== "object" || Array.isArray(value)) {
+		return undefined;
+	}
+	const envelope = value as Record<string, unknown>;
+	if (
+		envelope.ok !== false ||
+		envelope.error === null ||
+		typeof envelope.error !== "object" ||
+		Array.isArray(envelope.error)
+	) {
+		return undefined;
+	}
+	const error = envelope.error as Record<string, unknown>;
+	if (typeof error.code !== "string" || error.code.trim().length === 0) {
+		return undefined;
+	}
+	return {
+		code: error.code.trim(),
+		message:
+			typeof error.message === "string" && error.message.trim().length > 0
+				? error.message.trim()
+				: "ASCET CLI returned ok=false.",
+		stage: typeof error.stage === "string" && error.stage.trim().length > 0 ? error.stage.trim() : undefined,
+		details: error.details,
+		operation:
+			typeof error.operation === "string" && error.operation.trim().length > 0 ? error.operation.trim() : undefined,
+	};
 }
 
-function getCliFailureEnvelopeMessage(value: unknown): string {
-	if (value !== null && typeof value === "object" && !Array.isArray(value)) {
-		const error = (value as { error?: unknown }).error;
-		if (error !== null && typeof error === "object" && !Array.isArray(error)) {
-			const message = (error as { message?: unknown }).message;
-			if (typeof message === "string" && message.trim().length > 0) {
-				return message.trim();
-			}
-		}
+function createAscetCliProcessError(
+	execution: AscetCliExecutionResult,
+	resultCode: "ascet_cli_failed" | "ascet_cli_timeout" | "ascet_cli_aborted" | "ascet_cli_invalid_json",
+	message: string,
+	structuredError?: AscetCliStructuredError,
+): AscetCliProcessError {
+	const processError = new AscetCliProcessError(
+		execution,
+		resultCode,
+		message,
+		structuredError?.code ?? resultCode,
+	) as AscetCliProcessError & {
+		structuredError?: AscetCliStructuredError;
+	};
+	if (structuredError) {
+		processError.structuredError = structuredError;
 	}
-	return "ASCET CLI returned ok=false.";
+	return processError;
+}
+
+function getStructuredCliProcessError(error: AscetCliProcessError): AscetCliStructuredError | undefined {
+	return (error as AscetCliProcessError & { structuredError?: AscetCliStructuredError }).structuredError;
 }
 
 function buildCliFailureMessage(params: {
@@ -551,6 +607,7 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 	} catch (error) {
 		if (error instanceof AscetCliProcessError) {
 			const failedExecution = error.execution;
+			const structuredError = getStructuredCliProcessError(error);
 			const health = getGlobalAscetOperationHealthStore({ env: options.env });
 			if (error.resultCode === "ascet_cli_timeout") {
 				health.recordFailure({ commandId, reason: "child_command_timeout" });
@@ -573,10 +630,18 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 					execution: failedExecution,
 					code: error.resultCode,
 				}),
-				error: {
-					code: error.resultCode,
-					message: error.message,
-				},
+				error: structuredError
+					? {
+							code: structuredError.code,
+							message: structuredError.message,
+							stage: structuredError.stage,
+							details: structuredError.details,
+							operation: structuredError.operation,
+						}
+					: {
+							code: error.resultCode,
+							message: error.message,
+						},
 			};
 		}
 		const errorCode =
@@ -717,6 +782,14 @@ export function formatAscetCliJsonResult(operation: string, result: AscetCliJson
 				retryable: diagnostics?.retryable,
 				stderrSummary: diagnostics?.stderrSummary,
 				stdoutSummary: diagnostics?.stdoutSummary,
+				backend:
+					result.error?.stage || result.error?.operation || result.error?.details !== undefined
+						? {
+								stage: result.error.stage,
+								operation: result.error.operation,
+								details: result.error.details,
+							}
+						: undefined,
 			},
 		}),
 		null,

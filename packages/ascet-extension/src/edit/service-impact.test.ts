@@ -116,7 +116,10 @@ describe("ASCET edit observation invalidation", () => {
 					action: "set_element_dependency",
 					targetPath: "DEMO/Controller",
 					elementName: "P",
-					dependency: "independent",
+					dependency: "dependent",
+					dependencyFormula: "P_Input",
+					dependencyMappings: { P_Input: { kind: "parameter", name: "P_Input" } },
+					variantPolicy: "default",
 					dryRun: true,
 					executeWrite: true,
 				},
@@ -127,7 +130,7 @@ describe("ASCET edit observation invalidation", () => {
 				},
 				approvingContext,
 			);
-			assert.deepEqual(dryRun.details.observations, { invalidated: [] });
+			assert.equal(dryRun.details.observations, undefined);
 
 			const stillStored = new AscetObservationStore({
 				root: environment.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT,

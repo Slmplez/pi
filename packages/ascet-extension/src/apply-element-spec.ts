@@ -1,5 +1,4 @@
-import { Type } from "typebox";
-import { type AscetCliJsonResult, runAscetCliJson } from "./cli.ts";
+﻿import { type AscetCliJsonResult, runAscetCliJson } from "./cli.ts";
 import { normalizeAscetPath } from "./core/path.ts";
 import type { AscetEditApprovalContext } from "./edit/approval.ts";
 import {
@@ -10,29 +9,29 @@ import {
 	type RunAscetEditOperationOptions,
 	runApprovedAscetEditOperation,
 } from "./edit/common.ts";
+import type { AscetElementInput } from "./element-spec-contract.ts";
 
+export type {
+	AscetApplyElementCommitParams,
+	AscetApplyElementPlanParams,
+	AscetElementInput,
+} from "./element-spec-contract.ts";
+export { ascetApplyElementSpecParameters } from "./element-spec-contract.ts";
+
+/** Internal runner parameters. Model-facing calls use the plan/commit schema exported above. */
 export interface AscetApplyElementSpecParams extends AscetEditControlParams {
 	componentPath: string;
 	specFile: string;
 	projectPath?: string;
 	mode?: "restore";
+	intent?: "create" | "patch" | "upsert" | "restore";
+	elements?: AscetElementInput[];
 	deleteMissing?: boolean;
 	recreateIncompatible?: boolean;
 }
 
 export type RunAscetApplyElementSpecOptions = RunAscetEditOperationOptions;
 export type AscetApplyElementSpecResult = AscetCliJsonResult;
-
-export const ascetApplyElementSpecParameters = Type.Object({
-	componentPath: Type.String({ description: "ASCET component path.", minLength: 1 }),
-	specFile: Type.String({ description: "Path to element spec JSON file.", minLength: 1 }),
-	projectPath: Type.Optional(Type.String({ description: "Optional ASCET project path." })),
-	mode: Type.Optional(Type.Literal("restore")),
-	deleteMissing: Type.Optional(Type.Boolean()),
-	recreateIncompatible: Type.Optional(Type.Boolean()),
-	verifyReadback: Type.Optional(Type.Boolean({ description: "Ask the ASCET CLI to verify readback after writing." })),
-	executeWrite: Type.Optional(Type.Boolean({ description: "When true, PI still requires interactive confirmation." })),
-});
 
 export function buildApplyElementSpecArgs(params: AscetApplyElementSpecParams): string[] {
 	const args = ["exec", "apply_element_spec", normalizeAscetPath(params.componentPath), params.specFile];
@@ -54,9 +53,9 @@ export function buildApplyElementSpecArgs(params: AscetApplyElementSpecParams): 
 export function createApplyElementSpecSummary(params: AscetApplyElementSpecParams): string {
 	return createAscetEditSummary("apply_element_spec", {
 		componentPath: params.componentPath,
-		specFile: params.specFile,
+		intent: params.intent ?? (params.mode === "restore" ? "restore" : "internal-spec"),
+		elements: params.elements?.length ?? "resolved from internal spec",
 		projectPath: params.projectPath ?? "",
-		mode: params.mode ?? "",
 		deleteMissing: params.deleteMissing === true,
 		recreateIncompatible: params.recreateIncompatible === true,
 		verifyReadback: params.verifyReadback === true,

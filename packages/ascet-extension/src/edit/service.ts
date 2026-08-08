@@ -1,7 +1,14 @@
-import { Type } from "typebox";
-import { runApprovedAscetApplyElementSpec } from "../apply-element-spec.ts";
+import { type TProperties, Type } from "typebox";
+import { Value } from "typebox/value";
+import {
+	type AscetApplyElementSpecParams,
+	createApplyElementSpecSummary,
+	runApprovedAscetApplyElementSpec,
+	runAscetApplyElementSpec,
+} from "../apply-element-spec.ts";
 import { runApprovedAscetApplyProjectFormula } from "../apply-project-formula.ts";
-import type { AscetCliJsonResult } from "../cli.ts";
+import { type AscetCliJsonResult, runAscetCliJson } from "../cli.ts";
+import { normalizeAscetPath } from "../core/path.ts";
 import { type AscetToolOutcome, createPreflightOutcome } from "../core/results.ts";
 import { withInlineCodeFile } from "../core/temp-files.ts";
 import { runApprovedAscetCreateComponent } from "../create-component.ts";
@@ -11,11 +18,27 @@ import { runApprovedAscetDeleteComponent } from "../delete-component.ts";
 import { runApprovedAscetDeleteFolder } from "../delete-folder.ts";
 import { runApprovedAscetDeleteMethod } from "../delete-method.ts";
 import {
+	type AscetApplyElementCommitParams,
+	type AscetApplyElementPlanParams,
+	ascetApplyElementSpecCommitSchema,
+	ascetApplyElementSpecPlanSchema,
+	type NormalizedElementSpecResult,
+	normalizeAscetElementSpec,
+} from "../element-spec-contract.ts";
+import {
 	type AscetCreateMethodComponentKind,
 	getDefaultCreateMethodKind,
 	validateCreateMethodKindCompatibility,
 } from "../method-kind-compatibility.ts";
-import { runApprovedAscetSetElementDependency } from "../set-element-dependency.ts";
+import { getAscetArtifactRoot } from "../observation-store.ts";
+import {
+	type AscetDependencyMappingTarget,
+	type AscetDependencyRestorationValue,
+	createSetElementDependencySummary,
+	resolveSetElementDependencyMappings,
+	runApprovedAscetSetElementDependency,
+	runAscetSetElementDependency,
+} from "../set-element-dependency.ts";
 import { runApprovedAscetSetEnumerators } from "../set-enumerators.ts";
 import { runApprovedAscetSetMethodCode } from "../set-method-code.ts";
 import { runApprovedAscetSetMethodSignature } from "../set-method-signature.ts";
@@ -26,7 +49,7 @@ import {
 } from "../set-state-machine-code.ts";
 import { compactObject, toToolFailurePayload, unwrapToolSuccessPayload } from "../tool-response-contract.ts";
 import { openAiObjectUnionSchema } from "../tools/_shared/openai-schema.ts";
-import { type AscetEditApprovalContext, isAscetEditApprovalBlockedCode } from "./approval.ts";
+import { type AscetEditApprovalContext, isAscetEditApprovalBlockedCode, requestAscetEditApproval } from "./approval.ts";
 import {
 	type AscetObservationInvalidation,
 	invalidateAscetEditObservations,
@@ -38,6 +61,14 @@ import {
 	formatAscetEditabilityResult,
 	runApprovedAscetEditability,
 } from "./editability.ts";
+import {
+	findElementSpecDocument,
+	fingerprintJson,
+	removeTemporaryElementSpec,
+	writeTemporaryElementSpec,
+} from "./element-spec-plan.ts";
+import { type AscetPlanJsonValue, AscetPlanStore, AscetPlanStoreError, createAscetPlanBinding } from "./plan-store.ts";
+import { recordAscetWriteTelemetry } from "./write-telemetry.ts";
 
 type CodeSource = { code?: string; codeFile?: string };
 const VALID_STATE_MACHINE_OPERATIONS = new Set<string>(ASCET_SET_STATE_MACHINE_CODE_OPERATIONS);
@@ -148,17 +179,8 @@ export type AscetMutationParams =
 			verifyReadback?: boolean;
 			executeWrite?: boolean;
 	  }
-	| {
-			action: "apply_element_spec";
-			componentPath: string;
-			specFile: string;
-			projectPath?: string;
-			mode?: "restore";
-			deleteMissing?: boolean;
-			recreateIncompatible?: boolean;
-			verifyReadback?: boolean;
-			executeWrite?: boolean;
-	  }
+	| (AscetApplyElementPlanParams & { executeWrite?: boolean })
+	| (AscetApplyElementCommitParams & { executeWrite?: boolean })
 	| {
 			action: "apply_project_formula";
 			projectPath: string;
@@ -170,14 +192,25 @@ export type AscetMutationParams =
 	  }
 	| {
 			action: "set_element_dependency";
+			phase?: "plan" | "commit";
+			planId?: string;
 			targetPath?: string;
 			componentPath?: string;
-			elementName: string;
-			dependency: "dependent" | "independent";
+			elementName?: string;
+			dependency?: "dependent" | "independent";
 			dependencyFormula?: string;
-			dependencyMappings?: Record<string, string>;
+			dependencyFormals?: string[];
+			bindingPolicy?: "explicit" | "autoExactName";
+			dependencyMappings?: Record<string, string | AscetDependencyMappingTarget>;
+			variantMappings?: Record<string, Record<string, string | AscetDependencyMappingTarget>>;
+			variantPolicy?: "default" | "selected" | "all";
+			variants?: string[];
+			valueRestoration?: {
+				policy: "fromSnapshot" | "explicit" | "ascetDefault";
+				valuesByVariant?: Record<string, AscetDependencyRestorationValue>;
+			};
 			clearDependencyFormula?: boolean;
-			targetKind?: "auto" | "component" | "folder" | "project";
+			targetKind?: "auto" | "component" | "folder";
 			match?: "exact" | "all";
 			dryRun?: boolean;
 			backupDir?: string;
@@ -201,6 +234,10 @@ export interface AscetEditResult {
 	};
 }
 
+function strictObject<T extends TProperties>(properties: T) {
+	return Type.Object(properties, { additionalProperties: false });
+}
+
 const codeSourceSchema = {
 	code: Type.Optional(Type.String()),
 	codeFile: Type.Optional(Type.String()),
@@ -211,7 +248,7 @@ const primitiveSignatureTypeSchema = Type.Union([
 	Type.Literal("udisc"),
 	Type.Literal("log"),
 ]);
-const methodSignatureArgumentSchema = Type.Object({
+const methodSignatureArgumentSchema = strictObject({
 	name: Type.String({ minLength: 1 }),
 	type: primitiveSignatureTypeSchema,
 	ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("keep"), Type.Literal("replace")])),
@@ -255,12 +292,12 @@ const moduleCodeOperationSchema = Type.Union([
 ]);
 
 export const ascetMutationActionSchemas = [
-	Type.Object({
+	strictObject({
 		action: Type.Literal("create_folder"),
 		folderPath: Type.String({ minLength: 1 }),
 		...writeControlSchema,
 	}),
-	Type.Object({
+	strictObject({
 		action: Type.Literal("create_component"),
 		componentPath: Type.String({ minLength: 1 }),
 		kind: writeComponentKindSchema,
@@ -269,7 +306,7 @@ export const ascetMutationActionSchemas = [
 		rollbackOnFailure: Type.Optional(Type.Boolean()),
 		...writeControlSchema,
 	}),
-	Type.Object({
+	strictObject({
 		action: Type.Literal("create_method"),
 		componentPath: Type.String({ minLength: 1 }),
 		componentKind: Type.Optional(componentKindSchema),
@@ -278,7 +315,7 @@ export const ascetMutationActionSchemas = [
 		ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("return-existing")])),
 		...writeControlSchema,
 	}),
-	Type.Object({
+	strictObject({
 		action: Type.Literal("set_method_signature"),
 		componentPath: Type.String({ minLength: 1 }),
 		methodName: Type.String({ minLength: 1 }),
@@ -287,33 +324,33 @@ export const ascetMutationActionSchemas = [
 		ifReturnExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("keep"), Type.Literal("replace")])),
 		...writeControlSchema,
 	}),
-	Type.Object({
+	strictObject({
 		action: Type.Literal("delete_component"),
 		componentPath: Type.String({ minLength: 1 }),
 		ifMissing: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")])),
 		...writeControlSchema,
 	}),
-	Type.Object({
+	strictObject({
 		action: Type.Literal("delete_method"),
 		componentPath: Type.String({ minLength: 1 }),
 		methodName: Type.String({ minLength: 1 }),
 		ifMissing: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")])),
 		...writeControlSchema,
 	}),
-	Type.Object({
+	strictObject({
 		action: Type.Literal("delete_folder"),
 		folderPath: Type.String({ minLength: 1 }),
 		ifMissing: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")])),
 		...writeControlSchema,
 	}),
-	Type.Object({
+	strictObject({
 		action: Type.Literal("set_method_code"),
 		componentPath: Type.String({ minLength: 1 }),
 		methodName: Type.String({ minLength: 1 }),
 		...codeSourceSchema,
 		...writeControlSchema,
 	}),
-	Type.Object({
+	strictObject({
 		action: Type.Literal("set_module_code"),
 		modulePath: Type.String({ minLength: 1 }),
 		operation: Type.Optional(moduleCodeOperationSchema),
@@ -322,7 +359,7 @@ export const ascetMutationActionSchemas = [
 		...codeSourceSchema,
 		...writeControlSchema,
 	}),
-	Type.Object({
+	strictObject({
 		action: Type.Literal("set_state_machine_code"),
 		stateMachinePath: Type.String({ minLength: 1 }),
 		operation: stateMachineOperationSchema,
@@ -334,23 +371,15 @@ export const ascetMutationActionSchemas = [
 		...codeSourceSchema,
 		...writeControlSchema,
 	}),
-	Type.Object({
+	strictObject({
 		action: Type.Literal("set_enumerators"),
 		componentPath: Type.String({ minLength: 1 }),
 		enumerators: Type.Array(Type.String({ minLength: 1 }), { minItems: 1 }),
 		...writeControlSchema,
 	}),
-	Type.Object({
-		action: Type.Literal("apply_element_spec"),
-		componentPath: Type.String({ minLength: 1 }),
-		specFile: Type.String({ minLength: 1 }),
-		projectPath: Type.Optional(Type.String({ minLength: 1 })),
-		mode: Type.Optional(Type.Literal("restore")),
-		deleteMissing: Type.Optional(Type.Boolean()),
-		recreateIncompatible: Type.Optional(Type.Boolean()),
-		...writeControlSchema,
-	}),
-	Type.Object({
+	ascetApplyElementSpecPlanSchema,
+	ascetApplyElementSpecCommitSchema,
+	strictObject({
 		action: Type.Literal("apply_project_formula"),
 		projectPath: Type.String({ minLength: 1 }),
 		specFile: Type.String({ minLength: 1 }),
@@ -358,22 +387,72 @@ export const ascetMutationActionSchemas = [
 		deleteMissing: Type.Optional(Type.Boolean()),
 		...writeControlSchema,
 	}),
-	Type.Object({
+	strictObject({
 		action: Type.Literal("set_element_dependency"),
+		phase: Type.Optional(Type.Literal("plan")),
 		targetPath: Type.Optional(Type.String({ minLength: 1 })),
 		componentPath: Type.Optional(Type.String({ minLength: 1 })),
 		elementName: Type.String({ minLength: 1 }),
 		dependency: Type.Union([Type.Literal("dependent"), Type.Literal("independent")]),
 		dependencyFormula: Type.Optional(Type.String({ minLength: 1 })),
-		dependencyMappings: Type.Optional(Type.Record(Type.String({ minLength: 1 }), Type.String({ minLength: 1 }))),
-		clearDependencyFormula: Type.Optional(Type.Boolean()),
-		targetKind: Type.Optional(
-			Type.Union([Type.Literal("auto"), Type.Literal("component"), Type.Literal("folder"), Type.Literal("project")]),
+		dependencyFormals: Type.Optional(Type.Array(Type.String({ minLength: 1 }), { minItems: 1, uniqueItems: true })),
+		bindingPolicy: Type.Optional(Type.Union([Type.Literal("explicit"), Type.Literal("autoExactName")])),
+		dependencyMappings: Type.Optional(
+			Type.Record(
+				Type.String({ minLength: 1 }),
+				Type.Union([
+					Type.String({ minLength: 1 }),
+					strictObject({
+						kind: Type.Union([
+							Type.Literal("parameter"),
+							Type.Literal("constant"),
+							Type.Literal("systemConstant"),
+						]),
+						name: Type.String({ minLength: 1 }),
+					}),
+				]),
+			),
 		),
+		variantMappings: Type.Optional(
+			Type.Record(
+				Type.String({ minLength: 1 }),
+				Type.Record(
+					Type.String({ minLength: 1 }),
+					Type.Union([
+						Type.String({ minLength: 1 }),
+						strictObject({
+							kind: Type.Union([
+								Type.Literal("parameter"),
+								Type.Literal("constant"),
+								Type.Literal("systemConstant"),
+							]),
+							name: Type.String({ minLength: 1 }),
+						}),
+					]),
+				),
+			),
+		),
+		variantPolicy: Type.Optional(
+			Type.Union([Type.Literal("default"), Type.Literal("selected"), Type.Literal("all")]),
+		),
+		variants: Type.Optional(Type.Array(Type.String({ minLength: 1 }), { minItems: 1, uniqueItems: true })),
+		valueRestoration: Type.Optional(
+			strictObject({
+				policy: Type.Union([Type.Literal("fromSnapshot"), Type.Literal("explicit"), Type.Literal("ascetDefault")]),
+				valuesByVariant: Type.Optional(
+					Type.Record(Type.String({ minLength: 1 }), Type.Union([Type.String(), Type.Number(), Type.Boolean()])),
+				),
+			}),
+		),
+		clearDependencyFormula: Type.Optional(Type.Boolean()),
+		targetKind: Type.Optional(Type.Union([Type.Literal("auto"), Type.Literal("component"), Type.Literal("folder")])),
 		match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("all")])),
-		dryRun: Type.Optional(Type.Boolean()),
-		backupDir: Type.Optional(Type.String({ minLength: 1 })),
-		...writeControlSchema,
+		verifyReadback: Type.Optional(Type.Boolean()),
+	}),
+	strictObject({
+		action: Type.Literal("set_element_dependency"),
+		phase: Type.Literal("commit"),
+		planId: Type.String({ minLength: 1 }),
 	}),
 ] as const;
 
@@ -502,11 +581,44 @@ export async function runAscetMutation(
 	ctx: AscetEditApprovalContext,
 ): Promise<AscetEditResult> {
 	const normalizedParams = normalizeAscetMutationParams(params);
+	const contractValidation = validateAscetMutationContract(normalizedParams);
+	if (contractValidation) {
+		return asResponse(contractValidation);
+	}
+	if (isPlanManagedCommit(normalizedParams)) {
+		const startedAt = Date.now();
+		const result = await runPlanManagedCommit(normalizedParams, options, ctx);
+		recordManagedWriteTelemetry(
+			normalizedParams.action,
+			"commit",
+			normalizedParams.planId,
+			result,
+			options,
+			startedAt,
+		);
+		return result;
+	}
 	const validation = validateAscetMutationParams(normalizedParams);
 	if (validation) {
 		return asResponse(validation);
 	}
+	const localInputValidation = validateLocalMutationInputs(normalizedParams, options);
+	if (localInputValidation) {
+		return asResponse(localInputValidation);
+	}
+	if (isPlanManagedPlan(normalizedParams)) {
+		const startedAt = Date.now();
+		const result = await runPlanManagedPlan(normalizedParams, options);
+		const planId =
+			result.details.outcome.status === "preflight" ? String(result.details.outcome.plan.planId ?? "") : undefined;
+		recordManagedWriteTelemetry(normalizedParams.action, "plan", planId, result, options, startedAt);
+		return result;
+	}
 	if (!params.executeWrite) {
+		const backendPreflight = await runBackendMutationPreflight(normalizedParams, options);
+		if (backendPreflight) {
+			return asResponse(backendPreflight.outcome, backendPreflight.raw);
+		}
 		return asResponse(createPreflightOutcome({ action: normalizedParams.action, params: normalizedParams }));
 	}
 
@@ -516,6 +628,434 @@ export async function runAscetMutation(
 	}
 	const observations = invalidateSuccessfulEditObservations(normalizedParams, options);
 	return asResponse(createSuccessfulEditOutcome(raw, observations), raw, observations);
+}
+
+function recordManagedWriteTelemetry(
+	operation: string,
+	phase: "plan" | "commit",
+	planId: string | undefined,
+	result: AscetEditResult,
+	options: RunAscetEditOperationOptions,
+	startedAt: number,
+): void {
+	const outcome = result.details.outcome;
+	recordAscetWriteTelemetry(options, {
+		operation,
+		phase,
+		outcome:
+			outcome.status === "preflight"
+				? "plan_ready"
+				: outcome.status === "ok"
+					? "committed"
+					: outcome.status === "blocked"
+						? "blocked"
+						: "error",
+		durationMs: Math.max(0, Date.now() - startedAt),
+		...(outcome.status === "error" ? { errorCode: outcome.error.code } : {}),
+		...(planId ? { planId } : {}),
+	});
+}
+
+type PlanManagedPlanParams =
+	| (AscetApplyElementPlanParams & {
+			phase?: "plan";
+			componentPath: string;
+	  })
+	| (Extract<AscetMutationParams, { action: "set_element_dependency" }> & {
+			phase?: "plan";
+			targetPath: string;
+			elementName: string;
+			dependency: "dependent" | "independent";
+	  });
+type PlanManagedCommitParams =
+	| (AscetApplyElementCommitParams & { executeWrite?: boolean })
+	| (Extract<AscetMutationParams, { action: "set_element_dependency" }> & { phase: "commit"; planId: string });
+
+interface BackendMutationPreflight {
+	outcome: AscetToolOutcome;
+	raw: AscetCliJsonResult;
+	preparedParams?: AscetMutationParams;
+	temporarySpecFile?: string;
+}
+
+function isPlanManagedPlan(params: AscetMutationParams): params is PlanManagedPlanParams {
+	return (
+		(params.action === "apply_element_spec" || params.action === "set_element_dependency") &&
+		params.phase !== "commit"
+	);
+}
+
+function isPlanManagedCommit(params: AscetMutationParams): params is PlanManagedCommitParams {
+	return (
+		(params.action === "apply_element_spec" || params.action === "set_element_dependency") &&
+		params.phase === "commit"
+	);
+}
+
+function toPlanJson(value: unknown): AscetPlanJsonValue {
+	return JSON.parse(JSON.stringify(value)) as AscetPlanJsonValue;
+}
+
+function createPlanStore(options: RunAscetEditOperationOptions): AscetPlanStore {
+	return new AscetPlanStore({ artifactRoot: getAscetArtifactRoot(options.env as NodeJS.ProcessEnv | undefined) });
+}
+
+function planStoreFailure(error: unknown): AscetEditResult {
+	if (error instanceof AscetPlanStoreError) {
+		return asResponse({ status: "error", error: { code: error.code, message: error.message } });
+	}
+	throw error;
+}
+
+function storedCommitParams(params: PlanManagedPlanParams): AscetPlanJsonValue {
+	const stored = { ...params } as Record<string, unknown>;
+	delete stored.phase;
+	delete stored.planId;
+	delete stored.executeWrite;
+	return toPlanJson(stored);
+}
+
+async function runPlanManagedPlan(
+	params: PlanManagedPlanParams,
+	options: RunAscetEditOperationOptions,
+): Promise<AscetEditResult> {
+	const backend = await runBackendMutationPreflight(params, options);
+	if (!backend) {
+		return asResponse({
+			status: "error",
+			error: {
+				code: "plan_preflight_unavailable",
+				message: `${params.action} did not produce a backend preflight.`,
+			},
+		});
+	}
+	if (backend.outcome.status !== "preflight") {
+		try {
+			return asResponse(backend.outcome, backend.raw);
+		} finally {
+			if (backend.temporarySpecFile) removeTemporaryElementSpec(backend.temporarySpecFile);
+		}
+	}
+	const backendPreflight = toPlanJson(backend.outcome.plan.backendPreflight ?? {});
+	try {
+		const record = createPlanStore(options).create({
+			operation: params.action,
+			params: storedCommitParams(params),
+			backendPreflight,
+			binding: createAscetPlanBinding(options),
+		});
+		return asResponse(
+			{
+				status: "preflight",
+				plan: {
+					...backend.outcome.plan,
+					planId: record.planId,
+					fingerprint: record.fingerprint,
+					expiresAt: record.expiresAt,
+				},
+				nextStep: `Call ${params.action} with phase=commit and planId=${record.planId}.`,
+			},
+			backend.raw,
+		);
+	} catch (error) {
+		return planStoreFailure(error);
+	} finally {
+		if (backend.temporarySpecFile) {
+			removeTemporaryElementSpec(backend.temporarySpecFile);
+		}
+	}
+}
+
+async function runPlanManagedCommit(
+	params: PlanManagedCommitParams,
+	options: RunAscetEditOperationOptions,
+	ctx: AscetEditApprovalContext,
+): Promise<AscetEditResult> {
+	const store = createPlanStore(options);
+	let temporarySpecFile: string | undefined;
+	try {
+		const record = store.load(params.planId, createAscetPlanBinding(options));
+		if (record.operation !== params.action || !isRecord(record.params)) {
+			return asResponse({
+				status: "error",
+				error: { code: "plan_operation_mismatch", message: `Plan ${params.planId} is not for ${params.action}.` },
+			});
+		}
+		const planned = normalizeAscetMutationParams(record.params as unknown as AscetMutationParams);
+		if (!isPlanManagedPlan(planned) || planned.action !== params.action) {
+			return asResponse({
+				status: "error",
+				error: { code: "plan_corrupt", message: `Plan ${params.planId} does not contain valid commit parameters.` },
+			});
+		}
+		const contractError = validateAscetMutationContract(planned);
+		const parameterError = validateAscetMutationParams(planned);
+		const localError = validateLocalMutationInputs(planned, options);
+		if (contractError || parameterError || localError) {
+			return asResponse(contractError ?? parameterError ?? localError!);
+		}
+		const backend = await runBackendMutationPreflight(planned, options);
+		temporarySpecFile = backend?.temporarySpecFile;
+		if (!backend || backend.outcome.status !== "preflight") {
+			return backend
+				? asResponse(backend.outcome, backend.raw)
+				: asResponse({
+						status: "error",
+						error: { code: "plan_preflight_unavailable", message: "Commit preflight unavailable." },
+					});
+		}
+		temporarySpecFile = backend.temporarySpecFile;
+		const backendPreflight = toPlanJson(backend.outcome.plan.backendPreflight ?? {});
+		store.verify({
+			planId: params.planId,
+			operation: params.action,
+			params: record.params,
+			backendPreflight,
+			binding: createAscetPlanBinding(options),
+		});
+		const prepared = backend.preparedParams;
+		const summary =
+			planned.action === "apply_element_spec"
+				? createApplyElementSpecSummary(requirePreparedApplyElementParams(prepared))
+				: createSetElementDependencySummary({ ...planned, targetPath: planned.targetPath! });
+		const approval = await requestAscetEditApproval(
+			{
+				executeWrite: true,
+				title: `Confirm ${params.action} plan`,
+				message: `planId: ${params.planId}
+fingerprint: ${record.fingerprint}
+${summary}`,
+				signal: options.signal,
+			},
+			ctx,
+		);
+		if (!approval.approved) {
+			return asResponse({ status: "blocked", code: approval.code, message: approval.message });
+		}
+		store.consume({
+			planId: params.planId,
+			operation: params.action,
+			params: record.params,
+			backendPreflight,
+			binding: createAscetPlanBinding(options),
+		});
+		const raw =
+			planned.action === "apply_element_spec"
+				? await runAscetApplyElementSpec(
+						{
+							...requirePreparedApplyElementParams(prepared),
+							executeWrite: true,
+							verifyReadback: true,
+						},
+						options,
+					)
+				: await runAscetSetElementDependency(
+						{
+							...planned,
+							targetPath: planned.targetPath!,
+							dryRun: false,
+							executeWrite: true,
+							verifyReadback: true,
+						},
+						options,
+					);
+		if (!raw.ok) {
+			return asResponse(outcomeFromCliResult(raw), raw);
+		}
+		const observations = invalidateSuccessfulEditObservations(planned, options);
+		return asResponse(createSuccessfulEditOutcome(raw, observations), raw, observations);
+	} catch (error) {
+		return planStoreFailure(error);
+	} finally {
+		if (temporarySpecFile) {
+			removeTemporaryElementSpec(temporarySpecFile);
+		}
+	}
+}
+
+function hasInternalSpecFile(params: AscetMutationParams): params is AscetMutationParams & {
+	action: "apply_element_spec";
+	specFile: string;
+} {
+	return (
+		params.action === "apply_element_spec" &&
+		typeof (params as unknown as Record<string, unknown>).specFile === "string"
+	);
+}
+
+function requirePreparedApplyElementParams(params: AscetMutationParams | undefined): AscetApplyElementSpecParams {
+	if (!params || params.action !== "apply_element_spec" || !hasInternalSpecFile(params)) {
+		throw new Error("Apply element spec preparation was not retained.");
+	}
+	return params as AscetApplyElementSpecParams;
+}
+
+function validateAscetMutationContract(params: AscetMutationParams): AscetToolOutcome | undefined {
+	const action = params.action;
+	if (Value.Check(ascetMutationParameters, params)) {
+		return undefined;
+	}
+	return {
+		status: "error",
+		error: {
+			code: "ascet_edit_invalid_parameter",
+			message: `Invalid parameters for ascet_edit action '${action}'. Unknown properties and values not accepted by the action contract are rejected.`,
+		},
+	};
+}
+
+function validateLocalMutationInputs(
+	_params: AscetMutationParams,
+	_options: RunAscetEditOperationOptions,
+): AscetToolOutcome | undefined {
+	return undefined;
+}
+
+async function runBackendMutationPreflight(
+	params: AscetMutationParams,
+	options: RunAscetEditOperationOptions,
+): Promise<BackendMutationPreflight | undefined> {
+	if (params.action === "apply_element_spec" && params.phase !== "commit") {
+		if (!params.componentPath || !params.intent || !params.elements) {
+			return undefined;
+		}
+		const catalogRaw = await runAscetCliJson(
+			["exec", "read_element_catalog", normalizeAscetPath(params.componentPath), "--json"],
+			{
+				...options,
+				toolName: "ascet_edit",
+				commandId: "read_element_catalog",
+				jobKind: "read",
+			},
+		);
+		if (!catalogRaw.ok) {
+			return { outcome: outcomeFromCliResult(catalogRaw), raw: catalogRaw };
+		}
+		const catalog = findElementSpecDocument(catalogRaw.data);
+		if (!catalog) {
+			return {
+				outcome: {
+					status: "error",
+					error: {
+						code: "element_catalog_invalid",
+						message: "read_element_catalog did not return a recoverable {elements: []} document.",
+					},
+				},
+				raw: catalogRaw,
+			};
+		}
+		let normalized: NormalizedElementSpecResult;
+		try {
+			normalized = normalizeAscetElementSpec(params.intent, params.elements, catalog.elements);
+		} catch (error) {
+			return {
+				outcome: {
+					status: "error",
+					error: {
+						code: "element_spec_invalid",
+						message: error instanceof Error ? error.message : String(error),
+					},
+				},
+				raw: catalogRaw,
+			};
+		}
+		const specFile = writeTemporaryElementSpec(
+			normalized.spec,
+			getAscetArtifactRoot(options.env as NodeJS.ProcessEnv | undefined),
+		);
+		const raw = await runAscetCliJson(
+			["exec", "diff_element_spec", normalizeAscetPath(params.componentPath), specFile, "--json"],
+			{
+				...options,
+				toolName: "ascet_edit",
+				commandId: "diff_element_spec",
+				jobKind: "read",
+			},
+		);
+		const preparedParams = { ...params, specFile, executeWrite: false } as unknown as AscetMutationParams;
+		if (!raw.ok) {
+			return { outcome: outcomeFromCliResult(raw), raw, preparedParams, temporarySpecFile: specFile };
+		}
+		return {
+			outcome: createPreflightOutcome({
+				action: params.action,
+				params,
+				backendPreflight: {
+					operation: "diff_element_spec",
+					validated: true,
+					liveElementCount: catalog.elements.length,
+					liveSnapshotHash: fingerprintJson(catalog),
+					catalogSnapshot: catalog,
+					catalogIdentity: isRecord(catalog.identity) ? catalog.identity : undefined,
+					normalizedSpecHash: fingerprintJson(normalized.spec),
+					resolvedIntent: normalized.resolvedIntent,
+					resolvedOperations: normalized.resolvedOperations,
+					warnings: normalized.warnings,
+					normalizedSpec: normalized.spec,
+					result: unwrapToolSuccessPayload(raw.data),
+					limitations: [
+						"diff_element_spec validates and plans the spec without applying Data/Implementation writes or readback.",
+						...(params.projectPath
+							? ["projectPath-specific formula validation remains deferred to apply_element_spec commit."]
+							: []),
+					],
+				},
+			}),
+			raw,
+			preparedParams,
+			temporarySpecFile: specFile,
+		};
+	}
+	if (
+		params.action === "set_element_dependency" &&
+		params.phase !== "commit" &&
+		params.targetPath &&
+		params.elementName &&
+		params.dependency
+	) {
+		const raw = await runAscetSetElementDependency(
+			{
+				targetPath: params.targetPath,
+				elementName: params.elementName,
+				dependency: params.dependency,
+				dependencyFormula: params.dependencyFormula,
+				dependencyFormals: params.dependencyFormals,
+				bindingPolicy: params.bindingPolicy,
+				dependencyMappings: params.dependencyMappings,
+				variantPolicy: params.variantPolicy,
+				variants: params.variants,
+				valueRestoration: params.valueRestoration,
+				clearDependencyFormula: params.clearDependencyFormula,
+				targetKind: params.targetKind,
+				match: params.match,
+				dryRun: true,
+				backupDir: params.backupDir,
+				verifyReadback: params.verifyReadback,
+				executeWrite: false,
+			},
+			options,
+		);
+		if (!raw.ok) {
+			return { outcome: outcomeFromCliResult(raw), raw };
+		}
+		return {
+			outcome: createPreflightOutcome({
+				action: params.action,
+				params,
+				backendPreflight: {
+					operation: "set_element_dependency",
+					validated: true,
+					dryRun: true,
+					result: unwrapToolSuccessPayload(raw.data),
+					limitations: [
+						"Preflight uses the existing backend dry-run contract; XML mutation/readback coverage remains owned by that backend implementation.",
+					],
+				},
+			}),
+			raw,
+		};
+	}
+	return undefined;
 }
 
 function invalidateSuccessfulEditObservations(
@@ -574,10 +1114,24 @@ function normalizeAscetMutationParams(params: AscetMutationParams): AscetMutatio
 	if (params.action === "set_module_code" && !params.operation && params.section) {
 		return { ...params, operation: params.section };
 	}
+	if (
+		(params.action === "apply_element_spec" || params.action === "set_element_dependency") &&
+		params.phase === "commit"
+	) {
+		return params;
+	}
+	if (params.action === "apply_element_spec" && params.phase === undefined) {
+		return { ...params, phase: "plan" };
+	}
 	if (params.action === "set_element_dependency") {
 		const targetPath = params.targetPath ?? params.componentPath;
 		if (targetPath) {
-			return { ...params, targetPath };
+			return {
+				...params,
+				phase: params.phase ?? "plan",
+				targetPath,
+				dependencyMappings: resolveSetElementDependencyMappings(params),
+			};
 		}
 	}
 	return params;
@@ -585,6 +1139,20 @@ function normalizeAscetMutationParams(params: AscetMutationParams): AscetMutatio
 
 function validateAscetMutationParams(params: AscetMutationParams): AscetToolOutcome | undefined {
 	if (params.action === "set_element_dependency") {
+		if (
+			params.targetPath &&
+			params.componentPath &&
+			normalizeAscetPath(params.targetPath) !== normalizeAscetPath(params.componentPath)
+		) {
+			return {
+				status: "error",
+				error: {
+					code: "ascet_edit_conflicting_parameter",
+					message:
+						"set_element_dependency targetPath and componentPath must identify the same target when both are provided.",
+				},
+			};
+		}
 		if (!params.targetPath && !params.componentPath) {
 			return {
 				status: "error",
@@ -630,12 +1198,151 @@ function validateAscetMutationParams(params: AscetMutationParams): AscetToolOutc
 				},
 			};
 		}
-		if (params.dependencyMappings && Object.keys(params.dependencyMappings).length > 0 && !params.dependencyFormula) {
+		if (params.bindingPolicy === "autoExactName") {
+			if (!params.dependencyFormula || !params.dependencyFormals?.length) {
+				return {
+					status: "error",
+					error: {
+						code: "dependency_formals_required",
+						message: "bindingPolicy=autoExactName requires dependencyFormula and explicit dependencyFormals.",
+					},
+				};
+			}
+			if (params.variantMappings) {
+				return {
+					status: "error",
+					error: {
+						code: "ascet_edit_invalid_parameter",
+						message: "autoExactName does not combine with per-variant explicit mappings.",
+					},
+				};
+			}
+			const mappings = params.dependencyMappings ?? {};
+			const formals = new Set(params.dependencyFormals);
+			const deterministic =
+				Object.keys(mappings).length === formals.size &&
+				Object.entries(mappings).every(
+					([formal, target]) => formals.has(formal) && typeof target === "string" && target === formal,
+				);
+			if (!deterministic) {
+				return {
+					status: "error",
+					error: {
+						code: "auto_exact_name_mapping_mismatch",
+						message: "autoExactName mappings must be the unique exact-name mapping for every declared formal.",
+					},
+				};
+			}
+		}
+		if (
+			params.dependencyFormula &&
+			params.bindingPolicy !== "autoExactName" &&
+			(!params.dependencyMappings || Object.keys(params.dependencyMappings).length === 0) &&
+			(!params.variantMappings || Object.keys(params.variantMappings).length === 0)
+		) {
+			return {
+				status: "error",
+				error: {
+					code: "dependency_mappings_required",
+					message:
+						"set_element_dependency dependencyFormula requires explicit dependencyMappings, or autoExactName with explicit dependencyFormals; formula token inference is disabled.",
+				},
+			};
+		}
+		if (params.dependencyFormals && params.bindingPolicy !== "autoExactName") {
+			return {
+				status: "error",
+				error: {
+					code: "ascet_edit_invalid_parameter",
+					message: "dependencyFormals is only valid with bindingPolicy=autoExactName.",
+				},
+			};
+		}
+		if (
+			((params.dependencyMappings && Object.keys(params.dependencyMappings).length > 0) ||
+				(params.variantMappings && Object.keys(params.variantMappings).length > 0)) &&
+			!params.dependencyFormula
+		) {
 			return {
 				status: "error",
 				error: {
 					code: "ascet_edit_invalid_parameter",
 					message: "set_element_dependency dependencyMappings requires dependencyFormula.",
+				},
+			};
+		}
+		const writesData = params.dependency === "independent" || params.dependencyFormula !== undefined;
+		if (writesData && !params.variantPolicy) {
+			return {
+				status: "error",
+				error: {
+					code: "data_variant_selection_required",
+					message: "set_element_dependency data writes require explicit variantPolicy: default, selected, or all.",
+				},
+			};
+		}
+		if (params.variantPolicy === "selected" && (!params.variants || params.variants.length === 0)) {
+			return {
+				status: "error",
+				error: {
+					code: "data_variant_selection_required",
+					message: 'set_element_dependency variantPolicy="selected" requires variants.',
+				},
+			};
+		}
+		if (params.variantPolicy !== "selected" && params.variants) {
+			return {
+				status: "error",
+				error: {
+					code: "ascet_edit_invalid_parameter",
+					message: "set_element_dependency variants is only valid with variantPolicy=selected.",
+				},
+			};
+		}
+		if (params.variantMappings && params.variantPolicy !== "selected") {
+			return {
+				status: "error",
+				error: {
+					code: "ascet_edit_invalid_parameter",
+					message: "set_element_dependency variantMappings requires variantPolicy=selected.",
+				},
+			};
+		}
+		if (params.variantMappings && params.variants) {
+			const selected = new Set(params.variants);
+			const mapped = Object.keys(params.variantMappings);
+			if (
+				mapped.some((variant) => !selected.has(variant)) ||
+				params.variants.some((variant) => !params.variantMappings?.[variant])
+			) {
+				return {
+					status: "error",
+					error: {
+						code: "data_variant_mapping_mismatch",
+						message: "variantMappings must define exactly every selected DataVariant.",
+					},
+				};
+			}
+		}
+		if (params.dependency === "independent" && !params.valueRestoration) {
+			return {
+				status: "error",
+				error: {
+					code: "independent_value_restoration_required",
+					message:
+						"set_element_dependency independent conversion requires valueRestoration fromSnapshot, explicit, or ascetDefault.",
+				},
+			};
+		}
+		if (
+			params.valueRestoration?.policy === "explicit" &&
+			(!params.valueRestoration.valuesByVariant || Object.keys(params.valueRestoration.valuesByVariant).length === 0)
+		) {
+			return {
+				status: "error",
+				error: {
+					code: "independent_value_restoration_required",
+					message: "Explicit independent restoration requires valuesByVariant.",
 				},
 			};
 		}
@@ -771,14 +1478,28 @@ async function dispatchMutation(
 		case "set_enumerators":
 			return runApprovedAscetSetEnumerators(params, options, ctx);
 		case "apply_element_spec":
-			return runApprovedAscetApplyElementSpec(params, options, ctx);
+			if (params.phase === "commit") {
+				throw new Error("apply_element_spec commit must be invoked with planId.");
+			}
+			return runApprovedAscetApplyElementSpec(requirePreparedApplyElementParams(params), options, ctx);
 		case "apply_project_formula":
 			return runApprovedAscetApplyProjectFormula(params, options, ctx);
 		case "set_element_dependency":
-			if (!params.targetPath) {
-				throw new Error("set_element_dependency requires targetPath after validation.");
+			if (!params.targetPath || !params.elementName || !params.dependency || params.phase === "commit") {
+				throw new Error(
+					"set_element_dependency requires planned targetPath/elementName/dependency after validation.",
+				);
 			}
-			return runApprovedAscetSetElementDependency({ ...params, targetPath: params.targetPath }, options, ctx);
+			return runApprovedAscetSetElementDependency(
+				{
+					...params,
+					targetPath: params.targetPath,
+					elementName: params.elementName,
+					dependency: params.dependency,
+				},
+				options,
+				ctx,
+			);
 	}
 }
 

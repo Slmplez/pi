@@ -7,7 +7,7 @@ class AscetSetElementDependencyOutputTest
     static int Main()
     {
         AscetSetElementDependencyArguments parsed = AscetSetElementDependency.ParseArguments(
-            new[] { @"/DEMO/DiscreteRiccatiSolver", "B01", "dependent", "--formula", "K_Factor", "--mapping", "K_Factor=K_Factor", "--target-kind", "component", "--match", "all", "--dry-run", "--backup-dir", @"output\backup", "--verify-readback", "--json" });
+            new[] { @"/DEMO/DiscreteRiccatiSolver", "B01", "dependent", "--formula", "K_Factor", "--mapping", "K_Factor=parameter:K_Factor", "--variant-policy", "default", "--target-kind", "component", "--match", "all", "--dry-run", "--backup-dir", @"output\backup", "--verify-readback", "--json" });
 
         if (!String.Equals(parsed.TargetPath, @"DEMO\DiscreteRiccatiSolver", StringComparison.Ordinal) ||
             !String.Equals(parsed.ElementName, "B01", StringComparison.Ordinal) ||
@@ -16,6 +16,8 @@ class AscetSetElementDependencyOutputTest
             parsed.DependencyMappings == null ||
             parsed.DependencyMappings.Count != 1 ||
             !String.Equals(parsed.DependencyMappings["K_Factor"], "K_Factor", StringComparison.Ordinal) ||
+            !String.Equals(parsed.DependencyMappingKinds["K_Factor"], "parameter", StringComparison.Ordinal) ||
+            !String.Equals(parsed.VariantPolicy, "default", StringComparison.Ordinal) ||
             !String.Equals(parsed.TargetKind, "component", StringComparison.Ordinal) ||
             !String.Equals(parsed.MatchMode, "all", StringComparison.Ordinal) ||
             !parsed.DryRun ||
@@ -33,6 +35,12 @@ class AscetSetElementDependencyOutputTest
             TargetKind = "component",
             MatchMode = parsed.MatchMode,
             ElementName = parsed.ElementName,
+            ComponentOid = "componentOid",
+            ElementOid = "elementOid",
+            DefinitionHash = new String('a', 64),
+            DataConfigurationSource = "defaultDataConfiguration",
+            DataConfigurationName = "DefaultData",
+            DataVariantNames = new List<string> { "default" },
             RequestedDependency = parsed.RequestedDependency,
             DryRun = false,
             WriteSucceeded = true,
@@ -45,12 +53,31 @@ class AscetSetElementDependencyOutputTest
             BeforeFormula = String.Empty,
             AfterFormula = "K_Factor",
             FormulaChanged = true,
+            BeforeFormulaMappings = new List<AscetDependencyFormulaMappingResult>
+            {
+                new AscetDependencyFormulaMappingResult
+                {
+                    VariantName = "default",
+                    FormalName = "Old",
+                    ValueName = "C_Old",
+                    TargetKind = "constant",
+                    TargetScope = "local",
+                    FormalOid = "oldFormalOid",
+                    ValueOid = "oldValueOid",
+                    Verified = true
+                }
+            },
             FormulaMappings = new List<AscetDependencyFormulaMappingResult>
             {
                 new AscetDependencyFormulaMappingResult
                 {
+                    VariantName = "default",
                     FormalName = "K_Factor",
-                    ImportedParameterName = "K_Factor",
+                    ValueName = "K_Factor",
+                    TargetKind = "parameter",
+                    TargetScope = "imported",
+                    FormalOid = "formalOid",
+                    ValueOid = "valueOid",
                     Verified = true,
                     Issue = String.Empty
                 }
@@ -92,12 +119,17 @@ class AscetSetElementDependencyOutputTest
 
         if (json.IndexOf("\"target\":\"DEMO\\\\DiscreteRiccatiSolver\"", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"match\":\"all\"", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"identity\":{\"componentOID\":\"componentOid\",\"elementOID\":\"elementOid\"}", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"definitionHash\":\"" + new String('a', 64) + "\"", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"dataConfiguration\":{\"source\":\"defaultDataConfiguration\",\"name\":\"DefaultData\"}", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"dataVariants\":[\"default\"]", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"requested\":\"dependent\"", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"succeeded\":true", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"readbackVerified\":true", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"changed\":1", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"formula\":{\"after\":\"K_Factor\",\"changed\":true", StringComparison.Ordinal) < 0 ||
-            json.IndexOf("\"mappings\":[{\"formal\":\"K_Factor\",\"imported\":\"K_Factor\",\"verified\":true", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"beforeMappings\":[{\"formal\":\"Old\",\"valueName\":\"C_Old\",\"targetKind\":\"constant\",\"targetScope\":\"local\",\"verified\":true,\"variant\":\"default\",\"formalOID\":\"oldFormalOid\",\"valueOID\":\"oldValueOid\"}]", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"mappings\":[{\"formal\":\"K_Factor\",\"valueName\":\"K_Factor\",\"targetKind\":\"parameter\",\"targetScope\":\"imported\",\"verified\":true,\"variant\":\"default\",\"formalOID\":\"formalOid\",\"valueOID\":\"valueOid\"", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"plan\":{", StringComparison.Ordinal) < 0)
         {
             Console.Error.WriteLine("unexpected set dependency json output");
@@ -107,14 +139,17 @@ class AscetSetElementDependencyOutputTest
 
         ExpectXmlFormulaWrite();
         ExpectLogFormulaWriteUsesAscetStyleFormalOid();
+        ExpectNativeDependencyValueKinds();
+        ExpectIndirectDependencyCycleRejected();
 
         ExpectInvalid(new[] { @"DEMO\DiscreteRiccatiSolver", "B01" }, "usage:", 4);
         ExpectInvalid(new[] { @"DEMO\DiscreteRiccatiSolver", "B01", "bad" }, "dependent or independent", 5);
         ExpectInvalid(new[] { @"DEMO\DiscreteRiccatiSolver", "B01", "dependent", "--backup-dir" }, "Missing value", 6);
         ExpectInvalid(new[] { @"DEMO\DiscreteRiccatiSolver", "B01", "dependent", "--match", "bad" }, "exact or all", 7);
         ExpectInvalid(new[] { @"DEMO\DiscreteRiccatiSolver", "B01", "independent", "--formula", "K_Factor" }, "only valid when requested dependency is dependent", 8);
-        ExpectInvalid(new[] { @"DEMO\DiscreteRiccatiSolver", "B01", "dependent", "--mapping", "bad" }, "formal=imported", 9);
+        ExpectInvalid(new[] { @"DEMO\DiscreteRiccatiSolver", "B01", "dependent", "--mapping", "bad" }, "formal=value", 9);
         ExpectInvalid(new[] { @"DEMO\DiscreteRiccatiSolver", "B01", "dependent", "--formula", "K_Factor", "--clear-formula" }, "cannot be used together", 10);
+        ExpectInvalid(new[] { @"DEMO\DiscreteRiccatiSolver", "B01", "dependent", "--formula", "max(A,B) * 1e-3" }, "requires at least one explicit", 14);
 
         return 0;
     }
@@ -256,6 +291,26 @@ class AscetSetElementDependencyOutputTest
                 Console.Error.WriteLine(dataXml);
                 Environment.Exit(12);
             }
+
+            AscetElementDependencyXml.SetMainAmdDependencyAndFormula(
+                main,
+                data,
+                "C_ZJR_New",
+                false,
+                String.Empty,
+                null,
+                true,
+                "default",
+                null,
+                "ascetDefault",
+                null);
+            dataXml = File.ReadAllText(data);
+            if (dataXml.IndexOf("<Logic value=\"false\"", StringComparison.Ordinal) < 0 ||
+                dataXml.IndexOf("<Dependency", StringComparison.Ordinal) >= 0)
+            {
+                Console.Error.WriteLine("logical ascetDefault restoration did not use the ASCET logical default");
+                Environment.Exit(15);
+            }
         }
         finally
         {
@@ -263,6 +318,141 @@ class AscetSetElementDependencyOutputTest
             {
                 Directory.Delete(dir, true);
             }
+        }
+    }
+
+    private static void ExpectNativeDependencyValueKinds()
+    {
+        string dir = Path.Combine(Path.GetTempPath(), "ascet-set-dependency-native-values-test-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(dir);
+        try
+        {
+            string main = Path.Combine(dir, "NATIVE.main.amd");
+            string data = Path.Combine(dir, "NATIVE.data.amd");
+
+            File.WriteAllText(main,
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                "<ComponentMain><Component name=\"NATIVE\"><Elements>" +
+                "<Element name=\"P_Result\" OID=\"resultOid\"><ElementAttributes><ScalarType>" +
+                "<ScalarAttributes kind=\"parameter\" scope=\"local\" dependent=\"false\" />" +
+                "</ScalarType></ElementAttributes></Element>" +
+                "<Element name=\"P_Local\" OID=\"parameterOid\"><ElementAttributes><ScalarType>" +
+                "<ScalarAttributes kind=\"parameter\" scope=\"local\" dependent=\"false\" />" +
+                "</ScalarType></ElementAttributes></Element>" +
+                "<Element name=\"C_Gain\" OID=\"constantOid\"><ElementAttributes><ScalarType>" +
+                "<ScalarAttributes kind=\"constant\" scope=\"local\" />" +
+                "</ScalarType></ElementAttributes></Element>" +
+                "<Element name=\"SC_Offset\" OID=\"systemConstantOid\"><ElementAttributes><ScalarType>" +
+                "<ScalarAttributes kind=\"systemConstant\" scope=\"exported\" />" +
+                "</ScalarType></ElementAttributes></Element>" +
+                "</Elements></Component></ComponentMain>");
+
+            File.WriteAllText(data,
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                "<ComponentData><DataEntry elementName=\"P_Result\" elementOID=\"resultOid\">" +
+                "<DataVariant name=\"default\"><ScalarType><Numeric value=\"0.0\" /></ScalarType></DataVariant>" +
+                "</DataEntry></ComponentData>");
+
+            Dictionary<string, string> mappings = new Dictionary<string, string>();
+            mappings["P_Local"] = "P_Local";
+            mappings["C_Gain"] = "C_Gain";
+            mappings["SC_Offset"] = "SC_Offset";
+
+            AscetElementDependencyXml.SetMainAmdDependencyAndFormula(
+                main,
+                data,
+                "P_Result",
+                true,
+                "P_Local + C_Gain + SC_Offset",
+                mappings,
+                false);
+
+            string dataXml = File.ReadAllText(data);
+            if (dataXml.IndexOf("valueName=\"P_Local\" valueOID=\"parameterOid\"", StringComparison.Ordinal) < 0 ||
+                dataXml.IndexOf("valueName=\"C_Gain\" valueOID=\"constantOid\"", StringComparison.Ordinal) < 0 ||
+                dataXml.IndexOf("valueName=\"SC_Offset\" valueOID=\"systemConstantOid\"", StringComparison.Ordinal) < 0)
+            {
+                Console.Error.WriteLine("unexpected native dependency value kind mappings");
+                Console.Error.WriteLine(dataXml);
+                Environment.Exit(13);
+            }
+
+            Dictionary<string, string> targetKinds = new Dictionary<string, string>();
+            targetKinds["P_Local"] = "parameter";
+            targetKinds["C_Gain"] = "constant";
+            targetKinds["SC_Offset"] = "systemConstant";
+            AscetElementDependencyXml.VerifyDataVariantMappings(main, data, "P_Result", mappings, "default", null, targetKinds);
+
+            IList<AscetElementDependencyDataVariantState> states = AscetElementDependencyXml.ReadDataVariantStates(main, data, "P_Result");
+            bool sawParameter = false;
+            bool sawConstant = false;
+            bool sawSystemConstant = false;
+            if (states.Count == 1 && states[0].Mappings != null)
+            {
+                for (int i = 0; i < states[0].Mappings.Count; i++)
+                {
+                    string kind = states[0].Mappings[i].ValueKind ?? String.Empty;
+                    sawParameter = sawParameter || String.Equals(kind, "parameter", StringComparison.Ordinal);
+                    sawConstant = sawConstant || String.Equals(kind, "constant", StringComparison.Ordinal);
+                    sawSystemConstant = sawSystemConstant || String.Equals(kind, "systemconstant", StringComparison.Ordinal);
+                }
+            }
+            if (!sawParameter || !sawConstant || !sawSystemConstant)
+            {
+                Console.Error.WriteLine("dependency target kind readback is missing");
+                Environment.Exit(14);
+            }
+        }
+        finally
+        {
+            if (Directory.Exists(dir))
+            {
+                Directory.Delete(dir, true);
+            }
+        }
+    }
+    private static void ExpectIndirectDependencyCycleRejected()
+    {
+        string dir = Path.Combine(Path.GetTempPath(), "ascet-set-dependency-cycle-test-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(dir);
+        try
+        {
+            string main = Path.Combine(dir, "Cycle.main.amd");
+            string data = Path.Combine(dir, "Cycle.data.amd");
+            File.WriteAllText(main,
+                "<ComponentMain><Component><Elements>" +
+                "<Element name=\"A\" OID=\"oidA\"><ElementAttributes><ScalarType><ScalarAttributes kind=\"parameter\" scope=\"local\" dependent=\"false\" /></ScalarType></ElementAttributes></Element>" +
+                "<Element name=\"B\" OID=\"oidB\"><ElementAttributes><ScalarType><ScalarAttributes kind=\"parameter\" scope=\"local\" dependent=\"true\" /></ScalarType></ElementAttributes></Element>" +
+                "<Element name=\"C\" OID=\"oidC\"><ElementAttributes><ScalarType><ScalarAttributes kind=\"parameter\" scope=\"local\" dependent=\"true\" /></ScalarType></ElementAttributes></Element>" +
+                "</Elements></Component></ComponentMain>");
+            File.WriteAllText(data,
+                "<ComponentData>" +
+                "<DataEntry elementName=\"B\" elementOID=\"oidB\"><DataVariant name=\"default\"><Dependency><Parameter formalName=\"C\" formalOID=\"f1\" valueName=\"C\" valueOID=\"oidC\" /></Dependency></DataVariant></DataEntry>" +
+                "<DataEntry elementName=\"C\" elementOID=\"oidC\"><DataVariant name=\"default\"><Dependency><Parameter formalName=\"A\" formalOID=\"f2\" valueName=\"A\" valueOID=\"oidA\" /></Dependency></DataVariant></DataEntry>" +
+                "</ComponentData>");
+            Dictionary<string, string> mappings = new Dictionary<string, string>();
+            mappings["B"] = "B";
+            try
+            {
+                AscetSetElementDependencyService.ValidateNoDependencyCycle(main, data, "A", mappings, null);
+                Console.Error.WriteLine("indirect dependency cycle was accepted");
+                Environment.Exit(16);
+            }
+            catch (AscetReadException ex)
+            {
+                if (!String.Equals(ex.Code, "dependency_cycle", StringComparison.Ordinal) ||
+                    ex.Message.IndexOf("A", StringComparison.Ordinal) < 0 ||
+                    ex.Message.IndexOf("B", StringComparison.Ordinal) < 0 ||
+                    ex.Message.IndexOf("C", StringComparison.Ordinal) < 0)
+                {
+                    Console.Error.WriteLine("unexpected indirect cycle error: " + ex.Code + " " + ex.Message);
+                    Environment.Exit(17);
+                }
+            }
+        }
+        finally
+        {
+            if (Directory.Exists(dir)) Directory.Delete(dir, true);
         }
     }
 

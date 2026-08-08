@@ -186,8 +186,47 @@ public static class AscetReadElementCatalog
 
     public static string FormatJsonOutput(AscetElementCatalogReadResult catalog)
     {
+        return AscetJsonContract.Serialize(BuildCatalogPayload(catalog));
+    }
+
+    private static Dictionary<string, object> BuildCatalogPayload(AscetElementCatalogReadResult catalog)
+    {
         AscetElementSpecDocument document = catalog == null ? null : catalog.Document;
-        return AscetJsonContract.Serialize(BuildDocumentPayload(document));
+        Dictionary<string, object> payload = BuildDocumentPayload(document);
+        Dictionary<string, object> identity = new Dictionary<string, object>();
+
+        if (catalog != null && !String.IsNullOrWhiteSpace(catalog.ComponentOid))
+        {
+            identity["componentOID"] = catalog.ComponentOid;
+        }
+
+        if (catalog != null && catalog.ElementOids != null && catalog.ElementOids.Count > 0)
+        {
+            Dictionary<string, object> elementOids = new Dictionary<string, object>(StringComparer.Ordinal);
+            List<string> names = new List<string>(catalog.ElementOids.Keys);
+            names.Sort(StringComparer.Ordinal);
+            for (int i = 0; i < names.Count; i++)
+            {
+                string name = names[i];
+                string oid;
+                if (!String.IsNullOrWhiteSpace(name) && catalog.ElementOids.TryGetValue(name, out oid) && !String.IsNullOrWhiteSpace(oid))
+                {
+                    elementOids[name] = oid;
+                }
+            }
+
+            if (elementOids.Count > 0)
+            {
+                identity["elementOIDs"] = elementOids;
+            }
+        }
+
+        if (identity.Count > 0)
+        {
+            payload["identity"] = identity;
+        }
+
+        return payload;
     }
 
     private static Dictionary<string, object> BuildDocumentPayload(AscetElementSpecDocument document)
@@ -283,6 +322,23 @@ public static class AscetReadElementCatalog
             payload["calibration"] = element.Calibration.Value;
         }
 
+        if (element.ConfigurationProvenance != null)
+        {
+            Dictionary<string, object> provenance = new Dictionary<string, object>();
+            if (element.ConfigurationProvenance.DataConfiguration != null)
+            {
+                provenance["dataConfiguration"] = BuildConfigurationProvenancePayload(element.ConfigurationProvenance.DataConfiguration);
+            }
+            if (element.ConfigurationProvenance.ImplementationConfiguration != null)
+            {
+                provenance["implementationConfiguration"] = BuildConfigurationProvenancePayload(element.ConfigurationProvenance.ImplementationConfiguration);
+            }
+            if (provenance.Count > 0)
+            {
+                payload["configurationProvenance"] = provenance;
+            }
+        }
+
         if (element.Data != null)
         {
             Dictionary<string, object> data = new Dictionary<string, object>();
@@ -324,6 +380,15 @@ public static class AscetReadElementCatalog
             }
         }
 
+        return payload;
+    }
+
+    private static Dictionary<string, object> BuildConfigurationProvenancePayload(AscetConfigurationProvenance provenance)
+    {
+        Dictionary<string, object> payload = new Dictionary<string, object>();
+        payload["source"] = provenance == null ? String.Empty : (provenance.Source ?? String.Empty);
+        payload["configurationName"] = provenance == null ? String.Empty : (provenance.ConfigurationName ?? String.Empty);
+        payload["selected"] = provenance != null && provenance.Selected;
         return payload;
     }
 

@@ -85,6 +85,35 @@ describe("formatAscetCliJsonResult", () => {
 		);
 	});
 
+	test("includes backend error stage and details in formatted failures", () => {
+		const result: AscetCliJsonResult = {
+			ok: false,
+			data: null,
+			request: { cwd: process.cwd(), cliPath: "AscetCli.exe", args: [] },
+			stdout: "",
+			stderr: "",
+			exitCode: 1,
+			timedOut: false,
+			error: {
+				code: "invalid_dependency_mapping",
+				message: "Dependency mapping is invalid.",
+				stage: "validate_mapping",
+				details: { formal: "Gain" },
+			},
+		};
+
+		assert.deepEqual(JSON.parse(formatAscetCliJsonResult("set_element_dependency", result)), {
+			error: {
+				code: "invalid_dependency_mapping",
+				message: "Dependency mapping is invalid.",
+				details: {
+					exitCode: 1,
+					backend: { stage: "validate_mapping", details: { formal: "Gain" } },
+				},
+			},
+		});
+	});
+
 	test("formats failures as structured error JSON", () => {
 		const result: AscetCliJsonResult = {
 			ok: false,
@@ -300,7 +329,45 @@ describe("runAscetCliJson scheduler failure semantics", () => {
 		}
 	});
 
-	test("records an ok=false JSON envelope as a failed scheduler job", async () => {
+	test("preserves a structured backend error from a non-zero CLI exit", async () => {
+		const fixture = createReadyEnv();
+		const scheduler = createAscetScheduler({ generateJobId: () => "scheduler-structured-exit" });
+		try {
+			const result = await runAscetCliJson(["exec", "synthetic_structured_failure", "--json"], {
+				cwd: fixture.cwd,
+				env: fixture.env,
+				scheduler,
+				executeCli: async (request) => ({
+					exitCode: 1,
+					stdout: JSON.stringify({
+						ok: false,
+						result: null,
+						error: {
+							code: "imported_parameter_not_found",
+							message: "Imported parameter is missing.",
+							stage: "validate_mapping",
+							details: { formal: "P_Input", target: "P_Input" },
+						},
+					}),
+					stderr: "backend failure",
+					timedOut: false,
+					request,
+				}),
+			});
+
+			assert.equal(result.ok, false);
+			assert.equal(result.error?.code, "imported_parameter_not_found");
+			assert.equal(result.error?.message, "Imported parameter is missing.");
+			assert.equal(result.error?.stage, "validate_mapping");
+			assert.deepEqual(result.error?.details, { formal: "P_Input", target: "P_Input" });
+			assert.equal(result.stage, "cli_process");
+			assert.equal(scheduler.getSnapshot().recentJobs.at(-1)?.errorCode, "imported_parameter_not_found");
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("preserves a structured backend error from an ok=false envelope", async () => {
 		const fixture = createReadyEnv();
 		const scheduler = createAscetScheduler({ generateJobId: () => "scheduler-json-failure" });
 		try {
@@ -322,9 +389,10 @@ describe("runAscetCliJson scheduler failure semantics", () => {
 			});
 
 			assert.equal(result.ok, false);
-			assert.equal(result.error?.code, "ascet_cli_failed");
+			assert.equal(result.error?.code, "component_not_found");
+			assert.equal(result.error?.message, "missing");
 			assert.equal(scheduler.getSnapshot().recentJobs.at(-1)?.state, "failed");
-			assert.equal(scheduler.getSnapshot().recentJobs.at(-1)?.errorCode, "ascet_cli_failed");
+			assert.equal(scheduler.getSnapshot().recentJobs.at(-1)?.errorCode, "component_not_found");
 			assert.equal((await getAscetCliLockSnapshot({ env: fixture.env })).locked, false);
 		} finally {
 			fixture.cleanup();

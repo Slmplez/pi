@@ -61,6 +61,7 @@ describe("ASCET extension agent routing hook", () => {
 			"ascet_diff",
 			"ascet_edit",
 			"ascet_verify",
+			"configure_parameter_dependency_chain",
 		]);
 	});
 

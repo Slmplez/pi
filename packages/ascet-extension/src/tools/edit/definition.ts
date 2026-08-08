@@ -53,6 +53,8 @@ export const ascetEditTool = defineSequentialAscetTool({
 			params,
 			{
 				cwd: ctx.cwd,
+				agentId: ctx.agentId,
+				sessionId: ctx.sessionId,
 				env: ctx.env,
 				signal,
 				timeoutMs: action === "check" ? 60_000 : 120_000,

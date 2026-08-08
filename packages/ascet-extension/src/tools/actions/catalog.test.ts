@@ -71,5 +71,23 @@ describe("ASCET action catalog", () => {
 		assert.match(rules, /semantic intent drives the target spec/);
 		assert.match(rules, /ascet_get.tree and ascet_get.elements/);
 		assert.match(rules, /Do not copy a sibling's values without semantic equivalence/);
+		assert.match(rules, /Provider Exported Parameter creation.*decision groups/);
+		assert.match(rules, /Local Dependent Parameter creation.*decision groups/);
+		assert.match(rules, /Imported Parameters are the exception/);
+		assert.match(rules, /limitAssignments=null/);
+
+		const dependency = entries.get("ascet_edit.set_element_dependency");
+		const dependencyRules = dependency?.rules.join("\n") ?? "";
+		assert.match(dependencyRules, /Parameter, Constant, or System Constant/);
+		assert.match(dependencyRules, /dependencyMappings is mandatory/);
+		assert.match(dependencyRules, /variant selection.*all variants/);
+		assert.match(dependencyRules, /explicit restoration source/);
+
+		const chainPlan = entries.get("configure_parameter_dependency_chain.plan");
+		const chainCommit = entries.get("configure_parameter_dependency_chain.commit");
+		assert.match(chainPlan?.rules.join("\n") ?? "", /role-specific inline element/);
+		assert.match(chainPlan?.rules.join("\n") ?? "", /formals list and mapping keys must match exactly/);
+		assert.doesNotMatch(chainPlan?.miniFewShot ?? "", /specFile/);
+		assert.match(chainCommit?.miniFewShot ?? "", /mode:"commit",planId:/);
 	});
 });

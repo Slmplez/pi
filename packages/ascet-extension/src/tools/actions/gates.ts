@@ -18,6 +18,7 @@ const ascetToolNameSet = new Set([
 	"ascet_edit",
 	"ascet_verify",
 	"ascet_batch_write",
+	"configure_parameter_dependency_chain",
 ]);
 
 function isFeatureEnabled(featureFlag: string | undefined, env: Record<string, string | undefined>): boolean {

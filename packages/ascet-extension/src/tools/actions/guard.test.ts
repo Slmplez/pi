@@ -28,6 +28,10 @@ describe("ASCET action runtime guard", () => {
 		const descriptor = assertActionActive("ascet_get", "tree");
 		assert.equal(descriptor?.id, "ascet_get.tree");
 		assert.equal(assertActionActive("ascet_edit", "check")?.id, "ascet_edit.check");
+		assert.equal(
+			assertActionActive("configure_parameter_dependency_chain", "plan")?.id,
+			"configure_parameter_dependency_chain.plan",
+		);
 
 		assert.throws(
 			() => assertActionActive("ascet_get", "unknown"),

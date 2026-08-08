@@ -1,5 +1,6 @@
 import { Value } from "typebox/value";
 import { describe, expect, it } from "vitest";
+import { configureParameterDependencyChainParameters } from "../../ascet-extension/src/configure-parameter-dependency-chain.ts";
 import { ascetGetParameters } from "../../ascet-extension/src/get.ts";
 import {
 	type AscetActionExample,
@@ -29,6 +30,7 @@ const schemaByTool = {
 	ascet_edit: ascetEditParameters,
 	ascet_batch_write: ascetBatchWriteParameters,
 	ascet_verify: ascetVerifyParameters,
+	configure_parameter_dependency_chain: configureParameterDependencyChainParameters,
 } as const;
 
 function stringLiterals(schema: unknown): string[] {
@@ -159,7 +161,13 @@ describe("ASCET action few-shot examples", () => {
 			expect(example.intent.trim(), key).toBe(example.intent);
 			expect(example.intent.length, key).toBeGreaterThan(0);
 			expect(example.intent.length, key).toBeLessThanOrEqual(36);
-			expect(example.call.length, key).toBeLessThanOrEqual(160);
+			const maxCallLength =
+				example.tool === "configure_parameter_dependency_chain"
+					? 1_200
+					: example.tool === "ascet_edit" && example.action === "apply_element_spec"
+						? 500
+						: 160;
+			expect(example.call.length, key).toBeLessThanOrEqual(maxCallLength);
 			expect(example.call, key).not.toContain("\n");
 			expect(example.call, key).toContain(`${example.tool}(`);
 			const schema = schemaByTool[example.tool as keyof typeof schemaByTool];
@@ -167,6 +175,8 @@ describe("ASCET action few-shot examples", () => {
 			if (example.tool !== "ascet_status" && example.tool !== "ascet_capabilities") {
 				if (example.tool === "ascet_batch_write") {
 					expect((example.args as { operation?: string }).operation, key).toBe(example.action);
+				} else if (example.tool === "configure_parameter_dependency_chain") {
+					expect((example.args as { mode?: string }).mode, key).toBe(example.action);
 				} else if (
 					example.tool === "ascet_edit" &&
 					((example.args as { mode?: string }).mode === "check" ||
@@ -187,7 +197,12 @@ describe("ASCET action few-shot examples", () => {
 		expect(allGuidelines).toHaveLength(catalogExampleKeys({ publicOnly: true }).size);
 		expect(totalCharacters).toBeLessThanOrEqual(11_000);
 		for (const guideline of allGuidelines) {
-			expect(guideline.length, guideline).toBeLessThanOrEqual(180);
+			const maxGuidelineLength = guideline.startsWith("configure_parameter_dependency_chain(")
+				? 1_200
+				: guideline.startsWith('ascet_edit({action:"apply_element_spec"')
+					? 500
+					: 180;
+			expect(guideline.length, guideline).toBeLessThanOrEqual(maxGuidelineLength);
 		}
 	});
 

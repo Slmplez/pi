@@ -371,6 +371,19 @@ public sealed class AscetElementDataSpec
     public object Value { get; set; }
 }
 
+public sealed class AscetConfigurationProvenance
+{
+    public string Source { get; set; }
+    public string ConfigurationName { get; set; }
+    public bool Selected { get; set; }
+}
+
+public sealed class AscetElementConfigurationProvenance
+{
+    public AscetConfigurationProvenance DataConfiguration { get; set; }
+    public AscetConfigurationProvenance ImplementationConfiguration { get; set; }
+}
+
 public sealed class AscetElementImplSpec
 {
     public string MemoryLocation { get; set; }
@@ -403,6 +416,7 @@ public sealed class AscetElementSpec
     public string Unit { get; set; }
     public string Comment { get; set; }
     public bool? Calibration { get; set; }
+    public AscetElementConfigurationProvenance ConfigurationProvenance { get; set; }
     public AscetElementDataSpec Data { get; set; }
     public AscetElementImplSpec Impl { get; set; }
 }
@@ -410,6 +424,80 @@ public sealed class AscetElementSpec
 public sealed class AscetElementSpecDocument
 {
     public IList<AscetElementSpec> Elements { get; set; }
+}
+
+internal static class AscetDependentDataValuePolicy
+{
+    public static IList<string> GetExistingLocalParameterDataValueNames(AscetElementSpecDocument spec, IList<AscetExistingElementState> existingElements)
+    {
+        List<string> result = new List<string>();
+        if (spec == null || spec.Elements == null || existingElements == null)
+        {
+            return result;
+        }
+
+        Dictionary<string, AscetExistingElementState> existing = new Dictionary<string, AscetExistingElementState>(StringComparer.Ordinal);
+        for (int i = 0; i < existingElements.Count; i++)
+        {
+            AscetExistingElementState state = existingElements[i];
+            if (state != null && !String.IsNullOrWhiteSpace(state.Name))
+            {
+                existing[state.Name] = state;
+            }
+        }
+
+        for (int i = 0; i < spec.Elements.Count; i++)
+        {
+            AscetElementSpec element = spec.Elements[i];
+            if (element == null || element.Data == null || String.IsNullOrWhiteSpace(element.Name))
+            {
+                continue;
+            }
+
+            AscetExistingElementState state;
+            if (!existing.TryGetValue(element.Name, out state) || state == null)
+            {
+                continue;
+            }
+
+            if (state.Kind == AscetElementSpecKind.Parameter &&
+                String.Equals(state.Scope, "local", StringComparison.OrdinalIgnoreCase))
+            {
+                result.Add(element.Name);
+            }
+        }
+
+        return result;
+    }
+
+    public static void EnsureExistingLocalParameterDataValuesAreIndependent(IList<string> elementNames, IDictionary<string, bool?> dependencyByName)
+    {
+        if (elementNames == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < elementNames.Count; i++)
+        {
+            string name = elementNames[i] ?? String.Empty;
+            bool? isDependent;
+            if (String.IsNullOrWhiteSpace(name) || dependencyByName == null || !dependencyByName.TryGetValue(name, out isDependent) || !isDependent.HasValue)
+            {
+                throw new AscetReadException(
+                    "dependency_state_unverified",
+                    "apply_element_spec",
+                    "Cannot verify dependency state for existing local Parameter '" + name + "' before applying data.value. Omit data.value or resolve the dependency state first.");
+            }
+
+            if (isDependent.Value)
+            {
+                throw new AscetReadException(
+                    "dependent_data_value_not_allowed",
+                    "apply_element_spec",
+                    "Existing local dependent Parameter '" + name + "' stores a Dependency binding in DataVariant; data.value is not a writable scalar value. Omit data.value, or first make the Parameter independent with set_element_dependency.");
+            }
+        }
+    }
 }
 
 public enum AscetElementApplyMode
@@ -429,6 +517,8 @@ public sealed class AscetElementApplyOptions
 public sealed class AscetElementCatalogReadResult
 {
     public string ComponentPath { get; set; }
+    public string ComponentOid { get; set; }
+    public IDictionary<string, string> ElementOids { get; set; }
     public AscetElementSpecDocument Document { get; set; }
 }
 
@@ -484,6 +574,7 @@ public sealed class AscetElementSpecDiffResult
 public sealed class AscetExistingElementState
 {
     public string Name { get; set; }
+    public string Oid { get; set; }
     public AscetElementSpecKind Kind { get; set; }
     public string ModelType { get; set; }
     public string Scope { get; set; }
@@ -498,6 +589,7 @@ public sealed class AscetExistingElementState
     public string Unit { get; set; }
     public string Comment { get; set; }
     public bool? Calibration { get; set; }
+    public AscetElementConfigurationProvenance ConfigurationProvenance { get; set; }
     public object DataValue { get; set; }
     public string MemoryLocation { get; set; }
     public string ValueType { get; set; }
@@ -587,6 +679,8 @@ public static class AscetElementSpecDocumentParser
             throw new AscetReadException("invalid_element_spec", "parse_element_spec", "Element spec JSON must deserialize into an object.");
         }
 
+        RejectUnknownFields(root, "root", AscetElementWriteContract.RootFields);
+
         object rawElements;
         if (!TryGetValue(root, "elements", out rawElements))
         {
@@ -615,6 +709,7 @@ public static class AscetElementSpecDocumentParser
     {
         string context = "elements[" + index.ToString() + "]";
         RejectForbiddenElementFields(entry, context);
+        RejectUnknownFields(entry, context, AscetElementWriteContract.ElementFields);
         string elementName = RequireString(entry, "name", "Element name must not be empty.");
         ValidateElementSpecName(elementName);
         AscetElementSpec spec = new AscetElementSpec
@@ -683,6 +778,7 @@ public static class AscetElementSpecDocumentParser
         }
 
         IDictionary<string, object> map = AsObjectMap(rawData, context + ".data");
+        RejectUnknownFields(map, context + ".data", AscetElementWriteContract.DataFields);
         object value;
         if (!TryGetValue(map, "value", out value))
         {
@@ -702,6 +798,7 @@ public static class AscetElementSpecDocumentParser
 
         IDictionary<string, object> map = AsObjectMap(rawImpl, context + ".impl");
         RejectForbiddenImplFields(map, context + ".impl");
+        RejectUnknownFields(map, context + ".impl", AscetElementWriteContract.ImplementationFields);
         AscetElementImplSpec spec = new AscetElementImplSpec
         {
             MemoryLocation = ReadOptionalString(map, "memoryLocation"),
@@ -995,6 +1092,7 @@ public static class AscetElementSpecDocumentParser
         }
 
         IDictionary<string, object> range = AsObjectMap(value, context);
+        RejectUnknownFields(range, context, AscetElementWriteContract.RangeFields);
         object minValue;
         object maxValue;
         if (!TryGetValue(range, "min", out minValue) || !TryGetValue(range, "max", out maxValue) || minValue == null || maxValue == null)
@@ -1064,6 +1162,38 @@ public static class AscetElementSpecDocumentParser
         }
 
         throw new AscetReadException("invalid_element_spec", "parse_element_spec", "Property '" + key + "' must be a boolean.");
+    }
+
+    private static void RejectUnknownFields(IDictionary<string, object> map, string context, IList<string> allowedFields)
+    {
+        if (map == null)
+        {
+            return;
+        }
+
+        foreach (KeyValuePair<string, object> pair in map)
+        {
+            bool allowed = false;
+            if (allowedFields != null)
+            {
+                for (int i = 0; i < allowedFields.Count; i++)
+                {
+                    if (String.Equals(pair.Key, allowedFields[i], StringComparison.OrdinalIgnoreCase))
+                    {
+                        allowed = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!allowed)
+            {
+                throw new AscetReadException(
+                    "unknown_element_spec_field",
+                    "parse_element_spec",
+                    "Unknown property '" + context + "." + pair.Key + "'.");
+            }
+        }
     }
 
     private static bool TryGetValue(IDictionary<string, object> map, string key, out object value)
@@ -1212,6 +1342,8 @@ internal static class AscetElementSpecSemanticRules
         }
         ValidateSingleRangeSource(element);
 
+        ValidateImportedParameter(element);
+
         string modelType = NormalizeToken(element.ModelType);
         if (modelType == "log")
         {
@@ -1219,7 +1351,6 @@ internal static class AscetElementSpecSemanticRules
             return;
         }
 
-        ValidateImportedParameter(element);
         ValidateParameterLimitAssignments(element);
         ValidateNonLogicalElement(element, modelType);
     }
@@ -1549,7 +1680,8 @@ internal static class AscetElementCatalogReader
             ReferencedComponentPath = state.ReferencedComponentPath,
             Unit = EmptyToNull(state.Unit),
             Comment = EmptyToNull(state.Comment),
-            Calibration = state.Calibration
+            Calibration = state.Calibration,
+            ConfigurationProvenance = state.ConfigurationProvenance
         };
 
         double minValue;
@@ -1628,10 +1760,16 @@ internal static class AscetElementCatalogReader
             : ReadDataValue(element, defaultData, array != null);
 
         string valueType = boolImpl != null ? SafeGetString(boolImpl, "GetImplType") : SafeGetString(info, "GetImplType");
+        string oid = SafeGetString(element, "GetOID");
+        if (String.IsNullOrWhiteSpace(oid))
+        {
+            oid = SafeGetString(element, "GetOid");
+        }
 
         AscetExistingElementState state = new AscetExistingElementState
         {
             Name = SafeGetString(element, "GetName"),
+            Oid = oid,
             Kind = kind,
             ModelType = SafeGetString(element, "GetModelType"),
             Scope = SafeGetString(element, "GetScope"),
@@ -1645,6 +1783,11 @@ internal static class AscetElementCatalogReader
             Unit = SafeGetString(element, "GetUnit"),
             Comment = SafeGetString(element, "GetComment"),
             Calibration = SafeGetBool(element, "IsCalibration"),
+            ConfigurationProvenance = new AscetElementConfigurationProvenance
+            {
+                DataConfiguration = ResolveDataConfigurationProvenance(element, defaultData),
+                ImplementationConfiguration = ResolveImplementationConfigurationProvenance(element, defaultImplementation, classImplementation)
+            },
             DataValue = dataValue,
             MemoryLocation = SafeGetString(implementation, "GetMemoryLocation"),
             ValueType = valueType,
@@ -1659,9 +1802,15 @@ internal static class AscetElementCatalogReader
     private static AscetExistingElementState BuildComplexState(ComplexModelElement element)
     {
         object represented = InvokeOptional(element, "GetRepresentedClass");
+        string oid = SafeGetString(element, "GetOID");
+        if (String.IsNullOrWhiteSpace(oid))
+        {
+            oid = SafeGetString(element, "GetOid");
+        }
         return new AscetExistingElementState
         {
             Name = SafeGetString(element, "GetName"),
+            Oid = oid,
             Kind = AscetElementSpecKind.Component,
             ReferencedComponentPath = NormalizeComponentPath(SafeGetString(represented, "GetNameWithPath")),
             Unit = SafeGetString(element, "GetUnit"),
@@ -1794,16 +1943,12 @@ internal static class AscetElementCatalogReader
 
     private static OneDTableData ResolveOneDTableData(PrimitiveModelElement element, DataConfiguration defaultData)
     {
-        DataItem item = element == null ? null : element.GetValue();
-        item = item ?? (defaultData == null ? null : defaultData.GetItem(element));
-        return item as OneDTableData;
+        return ResolveDataItemForRead(element, defaultData) as OneDTableData;
     }
 
     private static TwoDTableData ResolveTwoDTableData(PrimitiveModelElement element, DataConfiguration defaultData)
     {
-        DataItem item = element == null ? null : element.GetValue();
-        item = item ?? (defaultData == null ? null : defaultData.GetItem(element));
-        return item as TwoDTableData;
+        return ResolveDataItemForRead(element, defaultData) as TwoDTableData;
     }
 
     private static void TableReadTrace(string message)
@@ -1871,19 +2016,88 @@ internal static class AscetElementCatalogReader
         }
     }
 
-    private static object ReadDataValue(PrimitiveModelElement element, DataConfiguration defaultData, bool isArray)
+    private static DataConfiguration ResolveDataConfigurationForRead(PrimitiveModelElement element, DataConfiguration defaultData)
     {
-        DataConfiguration effectiveData = defaultData;
-        if (element != null && String.Equals(SafeGetString(element, "GetScope"), "exported", StringComparison.OrdinalIgnoreCase))
+        if (element == null || !String.Equals(SafeGetString(element, "GetScope"), "exported", StringComparison.OrdinalIgnoreCase))
         {
-            CodeComponent owner = InvokeOptional(element, "GetOwnerForElement") as CodeComponent;
-            AscetDiscreteComponent discrete = owner as AscetDiscreteComponent;
-            DataConfiguration classData = discrete == null ? null : discrete.GetClassData();
-            effectiveData = classData ?? defaultData;
+            return defaultData;
         }
 
-        DataItem item = effectiveData == null ? null : effectiveData.GetItem(element);
-        item = item ?? (element == null ? null : element.GetValue());
+        CodeComponent owner = InvokeOptional(element, "GetOwnerForElement") as CodeComponent;
+        AscetDiscreteComponent discrete = owner as AscetDiscreteComponent;
+        DataConfiguration classData = discrete == null ? null : discrete.GetClassData();
+        return classData ?? defaultData;
+    }
+
+    private static DataItem ResolveDataItemForRead(PrimitiveModelElement element, DataConfiguration defaultData)
+    {
+        DataConfiguration effectiveData = ResolveDataConfigurationForRead(element, defaultData);
+        DataItem item = effectiveData == null || element == null ? null : effectiveData.GetItem(element);
+        return item ?? (element == null ? null : element.GetValue());
+    }
+
+    private static AscetConfigurationProvenance ResolveDataConfigurationProvenance(
+        PrimitiveModelElement element,
+        DataConfiguration defaultData)
+    {
+        DataConfiguration effective = ResolveDataConfigurationForRead(element, defaultData);
+        DataItem configured = effective == null || element == null ? null : effective.GetItem(element);
+        bool exported = String.Equals(SafeGetString(element, "GetScope"), "exported", StringComparison.OrdinalIgnoreCase);
+        if (configured != null)
+        {
+            return new AscetConfigurationProvenance
+            {
+                Source = exported && !Object.ReferenceEquals(effective, defaultData) ? "classDataConfiguration" : "defaultDataConfiguration",
+                ConfigurationName = SafeGetString(effective, "GetName"),
+                Selected = true
+            };
+        }
+
+        return new AscetConfigurationProvenance
+        {
+            Source = element != null && element.GetValue() != null ? "elementValue" : "unresolved",
+            ConfigurationName = String.Empty,
+            Selected = element != null && element.GetValue() != null
+        };
+    }
+
+    private static AscetConfigurationProvenance ResolveImplementationConfigurationProvenance(
+        PrimitiveModelElement element,
+        ImplConfiguration defaultImplementation,
+        ImplConfiguration classImplementation)
+    {
+        bool exported = String.Equals(SafeGetString(element, "GetScope"), "exported", StringComparison.OrdinalIgnoreCase);
+        ImplConfiguration preferred = exported ? classImplementation : defaultImplementation;
+        ImplConfiguration fallback = exported ? defaultImplementation : classImplementation;
+        if (preferred != null && element != null && preferred.GetItem(element) != null)
+        {
+            return new AscetConfigurationProvenance
+            {
+                Source = exported ? "classImplementationConfiguration" : "defaultImplementationConfiguration",
+                ConfigurationName = SafeGetString(preferred, "GetName"),
+                Selected = true
+            };
+        }
+        if (fallback != null && element != null && fallback.GetItem(element) != null)
+        {
+            return new AscetConfigurationProvenance
+            {
+                Source = exported ? "defaultImplementationConfiguration" : "classImplementationConfiguration",
+                ConfigurationName = SafeGetString(fallback, "GetName"),
+                Selected = true
+            };
+        }
+        return new AscetConfigurationProvenance
+        {
+            Source = element != null && element.GetImplementation() != null ? "elementImplementation" : "unresolved",
+            ConfigurationName = String.Empty,
+            Selected = element != null && element.GetImplementation() != null
+        };
+    }
+
+    private static object ReadDataValue(PrimitiveModelElement element, DataConfiguration defaultData, bool isArray)
+    {
+        DataItem item = ResolveDataItemForRead(element, defaultData);
         if (item == null)
         {
             return null;
@@ -3168,20 +3382,15 @@ public sealed class ComponentElementSyncPlanner
             return;
         }
 
-        if (!HasExplicitData(spec) && !hasDefaultData)
+        bool importedParameter = spec.Kind == AscetElementSpecKind.Parameter &&
+            String.Equals(spec.Scope, "imported", StringComparison.OrdinalIgnoreCase);
+        if (!importedParameter && !HasExplicitData(spec) && !hasDefaultData)
         {
             throw new AscetReadException("default_data_required", "plan_element_sync", "Element '" + spec.Name + "' requires a default data configuration or an explicit data value.");
         }
 
-        if (!AscetElementSyncSpecRules.RequiresImplementation(spec) && !hasDefaultImplementation)
-        {
-            return;
-        }
-
-        if (AscetElementSyncSpecRules.RequiresImplementation(spec) && !hasDefaultImplementation)
-        {
-            throw new AscetReadException("default_implementation_required", "plan_element_sync", "Element '" + spec.Name + "' requires a default implementation or an explicit implementation spec.");
-        }
+        // ComponentElementSyncService creates a default implementation before applying
+        // explicit implementation writes. Planning must not reject that recoverable state.
     }
 
     private bool HasExplicitData(AscetElementSpec spec)
@@ -3445,9 +3654,25 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
             CodeComponent code;
             AscetItemRef resolved = ResolveComponent(session, component.Path, "read_element_catalog", out discrete, out code);
             List<AscetExistingElementState> existing = AscetElementCatalogReader.ReadExistingElements(discrete, code);
+            Dictionary<string, string> elementOids = new Dictionary<string, string>(StringComparer.Ordinal);
+            for (int i = 0; i < existing.Count; i++)
+            {
+                AscetExistingElementState state = existing[i];
+                if (state != null && !String.IsNullOrWhiteSpace(state.Name) && !String.IsNullOrWhiteSpace(state.Oid))
+                {
+                    elementOids[state.Name] = state.Oid;
+                }
+            }
+            string componentOid = SafeGetString(code, "GetOID");
+            if (String.IsNullOrWhiteSpace(componentOid))
+            {
+                componentOid = SafeGetString(code, "GetOid");
+            }
             return new AscetElementCatalogReadResult
             {
                 ComponentPath = resolved.Path,
+                ComponentOid = componentOid,
+                ElementOids = elementOids,
                 Document = AscetElementCatalogReader.BuildSpecDocument(existing)
             };
         });
@@ -3503,6 +3728,7 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
             List<AscetExistingElementState> existing = AscetElementCatalogReader.ReadExistingElements(discrete, code);
             TableDebugStderr("apply:after-read-existing:" + existing.Count.ToString());
             ValidateProjectFormulas(session, resolved, spec, existing, options.ProjectPath);
+            EnsureExistingLocalParameterDataWritesAreIndependent(code, spec, existing);
             TableDebugStderr("apply:after-validate-formulas");
             DataConfiguration defaultData = code.GetDefaultData();
             ImplConfiguration defaultImplementation = discrete.GetDefaultImplementation();
@@ -3662,7 +3888,7 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
             if (verifyReadback && ContainsTableNames(spec, created, updated))
             {
                 TableDebugStderr("verify-in-session:start");
-                VerifyReadbackInCurrentSession(spec, created, updated, discrete, code);
+                VerifyReadbackInCurrentSession(spec, discrete, code);
                 TableDebugStderr("verify-in-session:done");
                 verifiedInSession = true;
             }
@@ -3672,7 +3898,7 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
                 ComponentPath = resolved.Path,
                 ComponentKind = resolved.Kind,
                 LanguageKind = resolved.LanguageKind,
-                ElementResults = BuildElementResults(spec, created, updated, plan.SkippedElements, removed, incompatible, !verifyReadback || verifiedInSession),
+                ElementResults = BuildElementResults(spec, created, updated, plan.SkippedElements, removed, incompatible, verifiedInSession),
                 Summary = BuildElementSummary(created, updated, plan.SkippedElements, removed, incompatible),
                 CreatedElements = created,
                 UpdatedElements = updated,
@@ -3682,7 +3908,7 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
                 Issues = issues,
                 WriteSucceeded = true,
                 VerifyReadbackRequested = verifyReadback,
-                ReadbackVerified = !verifyReadback || verifiedInSession,
+                ReadbackVerified = verifiedInSession,
                 Mode = options.Mode,
                 DeleteMissingRequested = options.DeleteMissing,
                 RecreateIncompatibleRequested = options.RecreateIncompatible
@@ -3691,7 +3917,7 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
 
         if (verifyReadback && !result.ReadbackVerified)
         {
-            VerifyReadback(component.Path, spec, result.CreatedElements, result.UpdatedElements);
+            VerifyReadback(component.Path, spec);
             result.ReadbackVerified = true;
             MarkElementResultsReadbackVerified(result.ElementResults);
         }
@@ -3818,6 +4044,63 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
         }
 
         return fields;
+    }
+
+    private void EnsureExistingLocalParameterDataWritesAreIndependent(CodeComponent code, AscetElementSpecDocument spec, IList<AscetExistingElementState> existing)
+    {
+        IList<string> names = AscetDependentDataValuePolicy.GetExistingLocalParameterDataValueNames(spec, existing);
+        if (names == null || names.Count == 0)
+        {
+            return;
+        }
+
+        string directory = Path.Combine(Path.GetTempPath(), "ascet-apply-element-data-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(directory);
+        try
+        {
+            if (code == null || !code.ExportXMLToFile(directory, false))
+            {
+                throw new AscetReadException(
+                    "dependency_state_unverified",
+                    "apply_element_spec",
+                    "ASCET ExportXMLToFile returned false while validating dependent Parameter data.value writes.");
+            }
+
+            string mainAmdPath = AscetElementDependencyXml.FindMainAmd(directory);
+            if (String.IsNullOrWhiteSpace(mainAmdPath))
+            {
+                throw new AscetReadException(
+                    "dependency_state_unverified",
+                    "apply_element_spec",
+                    "ASCET did not export a component main AMD while validating dependent Parameter data.value writes.");
+            }
+
+            IList<AscetElementDependencyCandidate> candidates = AscetElementDependencyXml.FindCandidates(mainAmdPath, String.Empty);
+            Dictionary<string, bool?> dependencyByName = new Dictionary<string, bool?>(StringComparer.Ordinal);
+            for (int i = 0; i < candidates.Count; i++)
+            {
+                AscetElementDependencyCandidate candidate = candidates[i];
+                if (candidate != null && !String.IsNullOrWhiteSpace(candidate.ElementName))
+                {
+                    dependencyByName[candidate.ElementName] = candidate.IsDependent;
+                }
+            }
+
+            AscetDependentDataValuePolicy.EnsureExistingLocalParameterDataValuesAreIndependent(names, dependencyByName);
+        }
+        finally
+        {
+            try
+            {
+                if (Directory.Exists(directory))
+                {
+                    Directory.Delete(directory, true);
+                }
+            }
+            catch
+            {
+            }
+        }
     }
 
     private void SaveCurrentDatabaseAfterElementWrites(AscetSession session, IList<string> createdNames, IList<string> updatedNames, IList<string> removedNames)
@@ -4420,27 +4703,27 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
         return false;
     }
 
-    private void VerifyReadback(string componentPath, AscetElementSpecDocument spec, IList<string> createdNames, IList<string> updatedNames)
+    private void VerifyReadback(string componentPath, AscetElementSpecDocument spec)
     {
         ExecuteWithSession("verify_apply_element_spec", delegate(AscetSession session)
         {
             AscetDiscreteComponent discrete;
             CodeComponent code;
             ResolveComponent(session, componentPath, "verify_apply_element_spec", out discrete, out code);
-            VerifyReadbackAgainstExisting(spec, createdNames, updatedNames, AscetElementCatalogReader.ReadExistingElements(discrete, code));
+            VerifyReadbackAgainstExisting(spec, AscetElementCatalogReader.ReadExistingElements(discrete, code));
 
             return 0;
         });
     }
 
-    private void VerifyReadbackInCurrentSession(AscetElementSpecDocument spec, IList<string> createdNames, IList<string> updatedNames, AscetDiscreteComponent discrete, CodeComponent code)
+    private void VerifyReadbackInCurrentSession(AscetElementSpecDocument spec, AscetDiscreteComponent discrete, CodeComponent code)
     {
         TableDebugStderr("verify-against-existing:collect");
-        VerifyReadbackAgainstExisting(spec, createdNames, updatedNames, AscetElementCatalogReader.ReadExistingElements(discrete, code));
+        VerifyReadbackAgainstExisting(spec, AscetElementCatalogReader.ReadExistingElements(discrete, code));
         TableDebugStderr("verify-against-existing:collected");
     }
 
-    private void VerifyReadbackAgainstExisting(AscetElementSpecDocument spec, IList<string> createdNames, IList<string> updatedNames, IList<AscetExistingElementState> existingElements)
+    private void VerifyReadbackAgainstExisting(AscetElementSpecDocument spec, IList<AscetExistingElementState> existingElements)
     {
         Dictionary<string, AscetExistingElementState> existing = IndexExisting(existingElements);
         IList<AscetElementSpec> requested = spec == null ? null : spec.Elements;
@@ -4452,7 +4735,7 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
         for (int i = 0; i < requested.Count; i++)
         {
             AscetElementSpec element = requested[i];
-            if (element == null || (!ContainsName(createdNames, element.Name) && !ContainsName(updatedNames, element.Name)))
+            if (element == null)
             {
                 continue;
             }
@@ -4460,7 +4743,7 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
             AscetExistingElementState state;
             if (!existing.TryGetValue(element.Name ?? String.Empty, out state))
             {
-                throw new AscetReadException("readback_mismatch", "verify_apply_element_spec", "Created element '" + element.Name + "' was not found during readback verification.");
+                throw new AscetReadException("readback_mismatch", "verify_apply_element_spec", "Requested element '" + element.Name + "' was not found during readback verification.");
             }
 
             _planner.EnsureReadbackCompatible(element, state);
@@ -5706,8 +5989,8 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
         int xSize = xValues.Count;
         int ySize = yValues.Count;
 
-        // 不调用 SetXSize/SetYSize - 这些调用会导致 COM 对象失效
-        // 大小已经在创建表时通过 SetMaxXSize/SetMaxYSize 设置
+        // ä¸è°ƒç”¨ SetXSize/SetYSize - è¿™äº›è°ƒç”¨ä¼šå¯¼è‡´ COM å¯¹è±¡å¤±æ•ˆ
+        // å¤§å°å·²ç»åœ¨åˆ›å»ºè¡¨æ—¶é€šè¿‡ SetMaxXSize/SetMaxYSize è®¾ç½®
         TableDebugStderr("table2d:data:before-set-xysize:" + spec.Name + ":x=" + xSize.ToString() + ":y=" + ySize.ToString());
         if (!dataItem.SetXSize(xSize))
         {
@@ -5723,7 +6006,7 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
 
         bool writeAxes = AscetElementSyncSpecRules.RequiresCustomTwoDTableAxisWrite(spec.XValues, spec.YValues);
 
-        // 立即设置模式: 获取-修改-立即持久化,避免 COM 对象生命周期问题
+        // ç«‹å³è®¾ç½®æ¨¡å¼: èŽ·å–-ä¿®æ”¹-ç«‹å³æŒä¹…åŒ–,é¿å… COM å¯¹è±¡ç”Ÿå‘½å‘¨æœŸé—®é¢˜
         if (writeAxes)
         {
             TableDebugStderr("table2d:data:before-get-xdist:" + spec.Name);

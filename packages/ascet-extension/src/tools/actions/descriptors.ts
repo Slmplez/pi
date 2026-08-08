@@ -86,21 +86,26 @@ const codeEditRules = [
 ] as const;
 
 const elementSpecRules = [
-	"Treat specFile as a structured ASCET element-spec JSON artifact.",
+	"For model-facing apply_element_spec calls, use inline elements; specFile is internal and must not be supplied by the agent.",
 	"Start from the element's code role and explicit requirements: determine whether it is a parameter, variable, array, state, or enumeration, how the code reads or writes it, its domain, lifecycle, and initialization intent. That semantic intent drives the target spec; do not let a similarly named element or a read result replace the code-level meaning.",
 	"For new elements, use ascet_get.tree and ascet_get.elements for bounded live discovery, Pi grep/read for stored observations, and ascet_read.read_code for complete code. Use ascet_read.read_dependent_chain when dependency context matters. Treat live reads as ASCET compatibility and preservation evidence, not as the semantic source. For existing elements, preserve unchanged live fields and emit only the requested patch; Do not copy a sibling's values without semantic equivalence.",
 	"Do not guess modelType, scope, range, implementation type, formula, calibration, or dependency.",
-	"For a new variable, parameter, or array (except an Imported Parameter), include data.value and impl.valueType; for non-logical model types include exactly one range object with both min and max under physicalRange or impl.implementationRange. Ranged parameters with discrete implementations require impl.limitAssignments=true; real32/real64 implementations must omit that option because ASCET does not support it.",
+	"For Provider Exported Parameter creation, explicitly provide unit, comment, calibration, range, data, and implementation decision groups. Use range.mode=none|physical|implementation, data.mode=explicit|ascetDefault, and implementation.mode=explicit|ascetDefault; omission is invalid and the agent must not guess values.",
+	"For Local Dependent Parameter creation, explicitly provide unit, comment, calibration, range, and implementation decision groups. Local dependent data is forbidden because the value comes from Dependency binding. Imported Parameters are the exception and carry structural compatibility metadata only; do not invent local data, implementation, range, or calibration.",
+	"For explicit implementations, provide valueType, memoryLocation, formula, and limitAssignments. Use an empty formula only to explicitly select no conversion formula, and use limitAssignments=null when the option is not applicable. Ranged discrete Parameters require limitAssignments=true.",
 	"For a new enumeration, include enumerationPath and scalar data.value; do not add physicalRange. Existing-element patches may omit unchanged fields.",
 	"If any required create field is unknown, stop at preflight and resolve live metadata with ascet_get.elements or ask for the value.",
+	"For an existing local dependent Parameter, omit data.value: its DataVariant stores the Dependency binding, not a ScalarType value. apply_element_spec rejects data.value for this state.",
 	"Dependency is not part of apply_element_spec JSON; use set_element_dependency after the target parameter exists.",
 ] as const;
 
 const dependencyRules = [
-	"Before creating or updating a dependent Local Parameter, resolve the authoritative same-named Exported Parameter provider with read_dependent_chain or the coordinated read/search/explore workflow.",
-	"Do not bind to a provider candidate unless the matching element is scope=Exported.",
-	"The Imported Parameter and Exported Parameter must have the same name.",
-	"When creating a dependent Local Parameter from an Exported Parameter, align metadata from the Exported Parameter, not from the Imported Parameter.",
+	"Dependency mappings may target an existing Parameter, Constant, or System Constant. Resolve every target's live kind, scope, name, and OID before writing; do not assume that a mapping target is Imported.",
+	"If a mapping target is an Imported Parameter, additionally resolve the authoritative same-named Exported Parameter provider and verify the Imported/Exported compatibility. Do not apply this provider-chain requirement to Constant or System Constant targets.",
+	"When creating a dependent Local Parameter from an exported provider, align metadata from the authoritative provider, not from the bridge Imported Parameter.",
+	"When dependencyFormula is provided, dependencyMappings is mandatory unless bindingPolicy=autoExactName is paired with explicit dependencyFormals. autoExactName maps only a uniquely resolvable same-named Parameter, Constant, or System Constant; never infer mappings from formula text, never infer formals by tokenizing it, and never use fuzzy matching.",
+	"Select the affected DataVariant set explicitly. Never treat an omitted or ambiguous variant selection as all variants; if the operation cannot express the requested variant scope, stop at preflight rather than write.",
+	"When changing dependent to independent, provide an explicit restoration source for every affected DataVariant: a snapshot, an explicit value, or an explicit ASCET default. Do not silently clear the formula, restore zero, or choose an implicit default.",
 	"Use set_element_dependency only for an existing local parameter and verify readback.",
 ] as const;
 
@@ -744,12 +749,23 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 		prompt: prompt("Apply structured primitive element specs from evidence, not guesses.", {
 			rules: [...writePreflightRules, ...elementSpecRules],
 			fewShots: [
-				shot("apply spec", {
+				shot("plan element creation", {
 					action: "apply_element_spec",
-					componentPath: "DEMO/PID",
-					specFile: "spec.json",
-					mode: "restore",
-					verifyReadback: true,
+					componentPath: "F/C",
+					intent: "create",
+					elements: [
+						{
+							role: "providerExportedParameter",
+							name: "P",
+							modelType: "cont",
+							unit: "",
+							comment: "Provider output",
+							calibration: false,
+							range: { mode: "none" },
+							data: { mode: "ascetDefault" },
+							implementation: { mode: "ascetDefault" },
+						},
+					],
 				}),
 			],
 			tags: ["write", "element"],
@@ -781,16 +797,76 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 				"Successful executed writes invalidate matching on-demand observations; dry runs and failed writes do not invalidate observations.",
 			],
 			fewShots: [
-				shot("set dependency", {
+				shot("plan dependency", {
 					action: "set_element_dependency",
 					targetPath: "F/C",
 					elementName: "K",
 					dependency: "dependent",
-					verifyReadback: true,
-					executeWrite: true,
+					variantPolicy: "default",
 				}),
 			],
 			tags: ["write", "dependency", "provider-discovery"],
+		}),
+	}),
+	descriptor("configure_parameter_dependency_chain", "plan", "public", WRITE_PROFILES, {
+		prompt: prompt("Plan one complete inline Provider/Consumer/Local dependency chain.", {
+			rules: [
+				"Use mode=plan before commit. Do not create or pass specFile artifacts; provide one role-specific inline element for provider, consumer, and local.",
+				"Provider and Local must include every applicable decision group. Imported Parameter is the only lightweight exception and must not contain data, implementation, range, or calibration.",
+				"Provide dependency.formals, bindingPolicy=explicit, mappings, variantPolicy, and verifyReadback=true. The formals list and mapping keys must match exactly.",
+			],
+			fewShots: [
+				shot("plan inline dependency chain", {
+					mode: "plan",
+					provider: {
+						componentPath: "F/Provider",
+						element: {
+							role: "providerExportedParameter",
+							name: "P_Out",
+							modelType: "cont",
+							unit: "",
+							comment: "Provider output",
+							calibration: false,
+							range: { mode: "none" },
+							data: { mode: "ascetDefault" },
+							implementation: { mode: "ascetDefault" },
+						},
+					},
+					consumer: {
+						componentPath: "F/Consumer",
+						element: { role: "consumerImportedParameter", name: "P_In", modelType: "cont" },
+					},
+					local: {
+						componentPath: "F/Consumer",
+						element: {
+							role: "localDependentParameter",
+							name: "P_Local",
+							modelType: "cont",
+							unit: "",
+							comment: "Dependent local",
+							calibration: false,
+							range: { mode: "none" },
+							implementation: { mode: "ascetDefault" },
+						},
+					},
+					dependency: {
+						formula: "P_In",
+						formals: ["P_In"],
+						bindingPolicy: "explicit",
+						mappings: { P_In: { kind: "parameter", name: "P_In" } },
+						variantPolicy: "default",
+					},
+					verifyReadback: true,
+				}),
+			],
+			tags: ["write", "dependency", "inline-element", "provider-discovery"],
+		}),
+	}),
+	descriptor("configure_parameter_dependency_chain", "commit", "public", WRITE_PROFILES, {
+		prompt: prompt("Commit a previously planned dependency chain by planId only.", {
+			rules: ["Pass only mode=commit and the unchanged planId returned by plan."],
+			fewShots: [shot("commit dependency chain", { mode: "commit", planId: "plan-id" })],
+			tags: ["write", "dependency", "commit"],
 		}),
 	}),
 	descriptor("ascet_verify", "readback", "public", VERIFY_PROFILES, {

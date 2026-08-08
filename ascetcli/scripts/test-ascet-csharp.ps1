@@ -10,6 +10,7 @@ $autotestCliDir = Get-RepoPath 'src\AutotestCli'
 $testsDir = Get-RepoPath 'tests'
 $singleExeHostDir = Join-Path $cliDir 'Host'
 $readDomain = Join-Path $coreDir 'AscetReadDomain.cs'
+$elementWriteContract = Join-Path $coreDir 'AscetElementWriteContract.Generated.cs'
 $dbExplorerCommon = Join-Path $cliDir 'AscetDatabaseExplorerCommon.cs'
 $folderReadService = Join-Path $coreDir 'Services\Read\FolderReadService.cs'
 $componentReadService = Join-Path $coreDir 'Services\Read\ComponentReadService.cs'
@@ -66,6 +67,7 @@ $singleExeCommandSupportSources = @(
     (Join-Path $coreDir 'AscetComponentDelete.cs'),
     $classDomain,
     (Join-Path $coreDir 'AscetComponentWriteDomain.cs'),
+    $elementWriteContract,
     (Join-Path $coreDir 'AscetElementSync.cs'),
     $projectFormulaSync,
     $methodCreateDomain,
@@ -101,8 +103,9 @@ $singleExeCommandSupportSources = @(
     (Join-Path $cliDir 'AscetReadDependentChain.cs'),
     (Join-Path $cliDir 'AscetReadElementDependency.cs'),
     (Join-Path $cliDir 'AscetElementDependencyXml.cs'),
+    (Join-Path $cliDir 'AscetElementDependencyOverlay.cs'),
     (Join-Path $cliDir 'AscetElementDependencyPlanSupport.cs'),
-    (Join-Path $cliDir 'AscetSetElementDependency.cs'),
+    (Join-Path $cliDir 'AscetDependencyCycleDetector.cs'), (Join-Path $cliDir 'AscetDependencySnapshotStore.cs'), (Join-Path $cliDir 'AscetSetElementDependency.cs'),
     (Join-Path $cliDir 'AscetReadBlockDiagram.cs'),
     (Join-Path $cliDir 'AscetReadMethodCode.cs'),
     (Join-Path $cliDir 'AscetReadMethodSignature.cs'),
@@ -165,9 +168,15 @@ if ((Test-Path $focusedJsonTest) -and -not (Test-Path $fullSuiteAnchor)) {
         -References (Get-AscetReferences -IncludeWebExtensions)
 
     Invoke-AscetCsc `
+        -OutputPath (Join-Path $testDir 'AscetElementDependencyOverlayOutputTest.exe') `
+        -MainType 'AscetElementDependencyOverlayOutputTest' `
+        -Sources @($readDomain, $elementWriteContract, (Join-Path $coreDir 'AscetElementSync.cs'), (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $cliDir 'AscetElementDependencyOverlay.cs'), (Join-Path $testsDir 'AscetElementDependencyOverlayOutputTest.cs')) `
+        -References (Get-AscetReferences -IncludeWebExtensions)
+
+    Invoke-AscetCsc `
         -OutputPath (Join-Path $testDir 'AscetSetElementDependencyOutputTest.exe') `
         -MainType 'AscetSetElementDependencyOutputTest' `
-        -Sources @($readDomain, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $cliDir 'AscetElementDependencyPlanSupport.cs'), (Join-Path $cliDir 'AscetSetElementDependency.cs'), (Join-Path $testsDir 'AscetSetElementDependencyOutputTest.cs')) `
+        -Sources @($readDomain, $elementWriteContract, (Join-Path $coreDir 'AscetElementSync.cs'), (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $cliDir 'AscetElementDependencyOverlay.cs'), (Join-Path $cliDir 'AscetElementDependencyPlanSupport.cs'), (Join-Path $cliDir 'AscetDependencyCycleDetector.cs'), (Join-Path $cliDir 'AscetDependencySnapshotStore.cs'), (Join-Path $cliDir 'AscetSetElementDependency.cs'), (Join-Path $testsDir 'AscetSetElementDependencyOutputTest.cs')) `
         -References (Get-AscetReferences -IncludeWebExtensions)
 
             Invoke-AscetCsc `
@@ -233,6 +242,7 @@ if ((Test-Path $focusedJsonTest) -and -not (Test-Path $fullSuiteAnchor)) {
     Invoke-CompiledExecutable -Path (Join-Path $testDir 'AscetDependentChainXmlOutputTest.exe')
     Invoke-CompiledExecutable -Path (Join-Path $testDir 'AscetReadDependentChainOutputTest.exe')
     Invoke-CompiledExecutable -Path (Join-Path $testDir 'AscetElementDependencyPlanOutputTest.exe')
+    Invoke-CompiledExecutable -Path (Join-Path $testDir 'AscetElementDependencyOverlayOutputTest.exe')
     Invoke-CompiledExecutable -Path (Join-Path $testDir 'AscetSetElementDependencyOutputTest.exe')
     Invoke-CompiledExecutable -Path (Join-Path $testDir 'AscetSetMethodSignatureOutputTest.exe')
     Invoke-CompiledExecutable -Path (Join-Path $testDir 'AscetReadMethodSignatureOutputTest.exe')
@@ -264,7 +274,7 @@ $moduleDomain = Join-Path $coreDir 'AscetModuleDomain.cs'
 $moduleClosure = Join-Path $coreDir 'AscetModuleClosure.cs'
 $stateMachineDomain = Join-Path $coreDir 'AscetStateMachineDomain.cs'
 $componentWriteDomain = Join-Path $coreDir 'AscetComponentWriteDomain.cs'
-$elementSync = Join-Path $coreDir 'AscetElementSync.cs'
+$elementSync = @($elementWriteContract, (Join-Path $coreDir 'AscetElementSync.cs'))
 $projectFormulaSync = Join-Path $coreDir 'AscetProjectFormulaSync.cs'
 
 Invoke-AscetCsc `
@@ -505,61 +515,97 @@ Invoke-AscetCsc `
 Invoke-AscetCsc `
     -OutputPath (Join-Path $testDir 'AscetApplyElementSpecOutputTest.exe') `
     -MainType 'AscetApplyElementSpecOutputTest' `
-    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetApplyElementSpec.cs'), (Join-Path $testsDir 'AscetApplyElementSpecOutputTest.cs')) `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $cliDir 'AscetApplyElementSpec.cs'), (Join-Path $testsDir 'AscetApplyElementSpecOutputTest.cs')) `
     -References (Get-AscetReferences -IncludeWebExtensions)
 
 Invoke-AscetCsc `
     -OutputPath (Join-Path $testDir 'AscetReadElementCatalogOutputTest.exe') `
     -MainType 'AscetReadElementCatalogOutputTest' `
-    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetReadElementCatalog.cs'), (Join-Path $testsDir 'AscetReadElementCatalogOutputTest.cs')) `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $cliDir 'AscetReadElementCatalog.cs'), (Join-Path $testsDir 'AscetReadElementCatalogOutputTest.cs')) `
     -References (Get-AscetReferences -IncludeWebExtensions)
 
 Invoke-AscetCsc `
     -OutputPath (Join-Path $testDir 'AscetDiffElementSpecOutputTest.exe') `
     -MainType 'AscetDiffElementSpecOutputTest' `
-    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetDiffElementSpec.cs'), (Join-Path $testsDir 'AscetDiffElementSpecOutputTest.cs')) `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $cliDir 'AscetDiffElementSpec.cs'), (Join-Path $testsDir 'AscetDiffElementSpecOutputTest.cs')) `
     -References (Get-AscetReferences -IncludeWebExtensions)
 
 Invoke-AscetCsc `
     -OutputPath (Join-Path $testDir 'ComponentElementSyncPlannerOutputTest.exe') `
     -MainType 'ComponentElementSyncPlannerOutputTest' `
-    -Sources @($readDomain, $elementSync, (Join-Path $testsDir 'ComponentElementSyncPlannerOutputTest.cs')) `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $testsDir 'ComponentElementSyncPlannerOutputTest.cs')) `
+    -References (Get-AscetReferences -IncludeWebExtensions)
+
+Invoke-AscetCsc `
+    -OutputPath (Join-Path $testDir 'AscetElementProvenanceOutputTest.exe') `
+    -MainType 'AscetElementProvenanceOutputTest' `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $cliDir 'AscetReadElementCatalog.cs'), (Join-Path $testsDir 'AscetElementProvenanceOutputTest.cs')) `
+    -References (Get-AscetReferences -IncludeWebExtensions)
+
+Invoke-AscetCsc `
+    -OutputPath (Join-Path $testDir 'AscetDependentDataValuePolicyOutputTest.exe') `
+    -MainType 'AscetDependentDataValuePolicyOutputTest' `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $testsDir 'AscetDependentDataValuePolicyOutputTest.cs')) `
+    -References (Get-AscetReferences -IncludeWebExtensions)
+
+Invoke-AscetCsc `
+    -OutputPath (Join-Path $testDir 'AscetDependencySnapshotStoreOutputTest.exe') `
+    -MainType 'AscetDependencySnapshotStoreOutputTest' `
+    -Sources @($readDomain, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $cliDir 'AscetDependencyCycleDetector.cs'), (Join-Path $cliDir 'AscetDependencySnapshotStore.cs'), (Join-Path $testsDir 'AscetDependencySnapshotStoreOutputTest.cs')) `
+    -References (Get-AscetReferences -IncludeWebExtensions)
+
+Invoke-AscetCsc `
+    -OutputPath (Join-Path $testDir 'AscetElementDependencyPrimitiveOutputTest.exe') `
+    -MainType 'AscetElementDependencyPrimitiveOutputTest' `
+    -Sources @($readDomain, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $testsDir 'AscetElementDependencyPrimitiveOutputTest.cs')) `
+    -References (Get-AscetReferences -IncludeWebExtensions)
+
+Invoke-AscetCsc `
+    -OutputPath (Join-Path $testDir 'AscetDependencyCycleDetectorOutputTest.exe') `
+    -MainType 'AscetDependencyCycleDetectorOutputTest' `
+    -Sources @((Join-Path $cliDir 'AscetDependencyCycleDetector.cs'), (Join-Path $testsDir 'AscetDependencyCycleDetectorOutputTest.cs')) `
+    -References (Get-AscetReferences)
+
+Invoke-AscetCsc `
+    -OutputPath (Join-Path $testDir 'AscetElementWriteOptimizationOutputTest.exe') `
+    -MainType 'AscetElementWriteOptimizationOutputTest' `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $testsDir 'AscetElementWriteOptimizationOutputTest.cs')) `
     -References (Get-AscetReferences -IncludeWebExtensions)
 
 Invoke-AscetCsc `
     -OutputPath (Join-Path $testDir 'AscetElementFormulaValidationOutputTest.exe') `
     -MainType 'AscetElementFormulaValidationOutputTest' `
-    -Sources @($readDomain, $elementSync, (Join-Path $testsDir 'AscetElementFormulaValidationOutputTest.cs')) `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $testsDir 'AscetElementFormulaValidationOutputTest.cs')) `
     -References (Get-AscetReferences -IncludeWebExtensions)
 
 Invoke-AscetCsc `
     -OutputPath (Join-Path $testDir 'AscetElementSpecValidationOutputTest.exe') `
     -MainType 'AscetElementSpecValidationOutputTest' `
-    -Sources @($readDomain, $elementSync, (Join-Path $testsDir 'AscetElementSpecValidationOutputTest.cs')) `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $testsDir 'AscetElementSpecValidationOutputTest.cs')) `
     -References (Get-AscetReferences -IncludeWebExtensions)
 
 Invoke-AscetCsc `
     -OutputPath (Join-Path $testDir 'AscetElementEnumSpecValidationOutputTest.exe') `
     -MainType 'AscetElementEnumSpecValidationOutputTest' `
-    -Sources @($readDomain, $elementSync, (Join-Path $testsDir 'AscetElementEnumSpecValidationOutputTest.cs')) `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $testsDir 'AscetElementEnumSpecValidationOutputTest.cs')) `
     -References (Get-AscetReferences -IncludeWebExtensions)
 
 Invoke-AscetCsc `
     -OutputPath (Join-Path $testDir 'AscetElementTable1DSpecValidationOutputTest.exe') `
     -MainType 'AscetElementTable1DSpecValidationOutputTest' `
-    -Sources @($readDomain, $elementSync, (Join-Path $testsDir 'AscetElementTable1DSpecValidationOutputTest.cs')) `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $testsDir 'AscetElementTable1DSpecValidationOutputTest.cs')) `
     -References (Get-AscetReferences -IncludeWebExtensions)
 
 Invoke-AscetCsc `
     -OutputPath (Join-Path $testDir 'AscetElementTable2DSpecValidationOutputTest.exe') `
     -MainType 'AscetElementTable2DSpecValidationOutputTest' `
-    -Sources @($readDomain, $elementSync, (Join-Path $testsDir 'AscetElementTable2DSpecValidationOutputTest.cs')) `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $testsDir 'AscetElementTable2DSpecValidationOutputTest.cs')) `
     -References (Get-AscetReferences -IncludeWebExtensions)
 
 Invoke-AscetCsc `
     -OutputPath (Join-Path $testDir 'AscetDiffElementEnumTableOutputTest.exe') `
     -MainType 'AscetDiffElementEnumTableOutputTest' `
-    -Sources @($readDomain, $elementSync, (Join-Path $testsDir 'AscetDiffElementEnumTableOutputTest.cs')) `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $testsDir 'AscetDiffElementEnumTableOutputTest.cs')) `
     -References (Get-AscetReferences -IncludeWebExtensions)
 
 Invoke-AscetCsc `
@@ -571,25 +617,25 @@ Invoke-AscetCsc `
 Invoke-AscetCsc `
     -OutputPath (Join-Path $testDir 'AscetElementReadbackNormalizationOutputTest.exe') `
     -MainType 'AscetElementReadbackNormalizationOutputTest' `
-    -Sources @($readDomain, $elementSync, (Join-Path $testsDir 'AscetElementReadbackNormalizationOutputTest.cs')) `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $testsDir 'AscetElementReadbackNormalizationOutputTest.cs')) `
     -References (Get-AscetReferences -IncludeWebExtensions)
 
 Invoke-AscetCsc `
     -OutputPath (Join-Path $testDir 'AscetElementEnumReadbackOutputTest.exe') `
     -MainType 'AscetElementEnumReadbackOutputTest' `
-    -Sources @($readDomain, $elementSync, (Join-Path $testsDir 'AscetElementEnumReadbackOutputTest.cs')) `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $testsDir 'AscetElementEnumReadbackOutputTest.cs')) `
     -References (Get-AscetReferences -IncludeWebExtensions)
 
 Invoke-AscetCsc `
     -OutputPath (Join-Path $testDir 'AscetElementTable1DReadbackOutputTest.exe') `
     -MainType 'AscetElementTable1DReadbackOutputTest' `
-    -Sources @($readDomain, $elementSync, (Join-Path $testsDir 'AscetElementTable1DReadbackOutputTest.cs')) `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $testsDir 'AscetElementTable1DReadbackOutputTest.cs')) `
     -References (Get-AscetReferences -IncludeWebExtensions)
 
 Invoke-AscetCsc `
     -OutputPath (Join-Path $testDir 'AscetElementTable1DLiveWriteRulesOutputTest.exe') `
     -MainType 'AscetElementTable1DLiveWriteRulesOutputTest' `
-    -Sources @($readDomain, $elementSync, (Join-Path $testsDir 'AscetElementTable1DLiveWriteRulesOutputTest.cs')) `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $testsDir 'AscetElementTable1DLiveWriteRulesOutputTest.cs')) `
     -References (Get-AscetReferences -IncludeWebExtensions)
 
 Invoke-AscetCsc `
@@ -601,7 +647,7 @@ Invoke-AscetCsc `
 Invoke-AscetCsc `
     -OutputPath (Join-Path $testDir 'AscetElementTable2DReadbackOutputTest.exe') `
     -MainType 'AscetElementTable2DReadbackOutputTest' `
-    -Sources @($readDomain, $elementSync, (Join-Path $testsDir 'AscetElementTable2DReadbackOutputTest.cs')) `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $testsDir 'AscetElementTable2DReadbackOutputTest.cs')) `
     -References (Get-AscetReferences -IncludeWebExtensions)
 
 Invoke-AscetCsc `
@@ -613,13 +659,13 @@ Invoke-AscetCsc `
 Invoke-AscetCsc `
     -OutputPath (Join-Path $testDir 'AscetElementTable2DLiveWriteRulesOutputTest.exe') `
     -MainType 'AscetElementTable2DLiveWriteRulesOutputTest' `
-    -Sources @($readDomain, $elementSync, (Join-Path $testsDir 'AscetElementTable2DLiveWriteRulesOutputTest.cs')) `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $testsDir 'AscetElementTable2DLiveWriteRulesOutputTest.cs')) `
     -References (Get-AscetReferences -IncludeWebExtensions)
 
 Invoke-AscetCsc `
     -OutputPath (Join-Path $testDir 'AscetTableDurableWriteArtifactsOutputTest.exe') `
     -MainType 'AscetTableDurableWriteArtifactsOutputTest' `
-    -Sources @($readDomain, $elementSync, (Join-Path $testsDir 'AscetTableDurableWriteArtifactsOutputTest.cs')) `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $testsDir 'AscetTableDurableWriteArtifactsOutputTest.cs')) `
     -References (Get-AscetReferences -IncludeWebExtensions)
 
 Invoke-AscetCsc `
@@ -637,7 +683,7 @@ Invoke-AscetCsc `
 Invoke-AscetCsc `
     -OutputPath (Join-Path $testDir 'AscetElementRestoreOutputTest.exe') `
     -MainType 'AscetElementRestoreOutputTest' `
-    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetApplyElementSpec.cs'), (Join-Path $testsDir 'AscetElementRestoreOutputTest.cs')) `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $cliDir 'AscetApplyElementSpec.cs'), (Join-Path $testsDir 'AscetElementRestoreOutputTest.cs')) `
     -References (Get-AscetReferences -IncludeWebExtensions)
 
 Invoke-AscetCsc `
@@ -698,6 +744,12 @@ Invoke-CompiledExecutable -Path (Join-Path $testDir 'AscetApplyElementSpecOutput
 Invoke-CompiledExecutable -Path (Join-Path $testDir 'AscetReadElementCatalogOutputTest.exe')
 Invoke-CompiledExecutable -Path (Join-Path $testDir 'AscetDiffElementSpecOutputTest.exe')
 Invoke-CompiledExecutable -Path (Join-Path $testDir 'ComponentElementSyncPlannerOutputTest.exe')
+Invoke-CompiledExecutable -Path (Join-Path $testDir 'AscetElementProvenanceOutputTest.exe')
+Invoke-CompiledExecutable -Path (Join-Path $testDir 'AscetDependentDataValuePolicyOutputTest.exe')
+Invoke-CompiledExecutable -Path (Join-Path $testDir 'AscetDependencySnapshotStoreOutputTest.exe')
+Invoke-CompiledExecutable -Path (Join-Path $testDir 'AscetElementDependencyPrimitiveOutputTest.exe')
+Invoke-CompiledExecutable -Path (Join-Path $testDir 'AscetDependencyCycleDetectorOutputTest.exe')
+Invoke-CompiledExecutable -Path (Join-Path $testDir 'AscetElementWriteOptimizationOutputTest.exe')
 Invoke-CompiledExecutable -Path (Join-Path $testDir 'AscetElementFormulaValidationOutputTest.exe')
 Invoke-CompiledExecutable -Path (Join-Path $testDir 'AscetElementSpecValidationOutputTest.exe')
 Invoke-CompiledExecutable -Path (Join-Path $testDir 'AscetElementEnumSpecValidationOutputTest.exe')

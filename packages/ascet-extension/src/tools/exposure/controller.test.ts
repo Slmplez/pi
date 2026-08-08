@@ -48,6 +48,7 @@ describe("ASCET exposure controller", () => {
 			"ascet_diff",
 			"ascet_edit",
 			"ascet_verify",
+			"configure_parameter_dependency_chain",
 		]);
 		assert.equal(
 			harness.registered.some((tool) => tool.name === "ascet_batch_write"),

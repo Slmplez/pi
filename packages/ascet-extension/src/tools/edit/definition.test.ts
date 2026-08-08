@@ -15,7 +15,7 @@ function editableExecution(request: AscetCliRequest, editable: boolean): AscetCl
 	};
 }
 
-test("ascet_edit is the sole canonical edit tool", () => {
+test("ascet_edit remains canonical while the dependency-chain composite is explicitly registered", () => {
 	const names: readonly string[] = canonicalAscetToolNames;
 	assert.equal(ascetEditTool.name, "ascet_edit");
 	assert.deepEqual(names, [
@@ -28,6 +28,7 @@ test("ascet_edit is the sole canonical edit tool", () => {
 		"ascet_diff",
 		"ascet_edit",
 		"ascet_verify",
+		"configure_parameter_dependency_chain",
 	]);
 	assert.deepEqual([...ascetEditManifest.map((route) => route.action)].sort(), [
 		"apply_element_spec",

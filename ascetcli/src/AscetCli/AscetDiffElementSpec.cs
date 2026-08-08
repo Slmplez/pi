@@ -61,10 +61,11 @@ public static class AscetDiffElementSpec
             throw new AscetReadException("invalid_argument", "parse_arguments", "usage: AscetCli.exe exec diff_element_spec <component-path> <spec-file> [--json] [--changes-only]");
         }
 
+        string invocationWorkingDirectory = Environment.CurrentDirectory;
         AscetDiffElementSpecArguments result = new AscetDiffElementSpecArguments
         {
             ComponentPath = NormalizeComponentPath(args[0]),
-            SpecFilePath = String.IsNullOrWhiteSpace(args[1]) ? String.Empty : ResolveSpecFilePath(args[1]),
+            SpecFilePath = String.IsNullOrWhiteSpace(args[1]) ? String.Empty : ResolveSpecFilePath(args[1], invocationWorkingDirectory),
             EmitJson = false,
             ChangesOnly = false
         };
@@ -97,15 +98,31 @@ public static class AscetDiffElementSpec
 
     public static string ResolveSpecFilePath(string specFilePath)
     {
+        return ResolveSpecFilePath(specFilePath, Environment.CurrentDirectory);
+    }
+
+    public static string ResolveSpecFilePath(string specFilePath, string workingDirectory)
+    {
         if (String.IsNullOrWhiteSpace(specFilePath))
         {
             throw new AscetReadException("invalid_argument", "read_spec_file", "Spec file path must not be empty.");
         }
 
+        if (String.IsNullOrWhiteSpace(workingDirectory))
+        {
+            throw new AscetReadException("invalid_argument", "read_spec_file", "Working directory for relative spec file paths must not be empty.");
+        }
+
         try
         {
             string trimmed = specFilePath.Trim();
-            return Path.IsPathRooted(trimmed) ? trimmed : Path.GetFullPath(trimmed);
+            if (Path.IsPathRooted(trimmed))
+            {
+                return Path.GetFullPath(trimmed);
+            }
+
+            string resolvedWorkingDirectory = Path.GetFullPath(workingDirectory);
+            return Path.GetFullPath(Path.Combine(resolvedWorkingDirectory, trimmed));
         }
         catch (Exception ex)
         {

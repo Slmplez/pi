@@ -163,8 +163,10 @@ class InProcessAscetScheduler implements AscetScheduler {
 
 	async #execute<T>(pending: PendingJob<T>): Promise<void> {
 		const { context, job } = pending;
+		const isRecoveryJob = job.kind === "maintenance" && job.commandId === "recover";
+		const hostWasDegraded = this.#hostState === "degraded";
 		this.#runningJob = context;
-		this.#hostState = "busy";
+		this.#hostState = isRecoveryJob ? "recovering" : "busy";
 		context.state = "running";
 		context.startedAt = this.#now();
 		context.queueWaitMs = context.startedAt - context.queuedAt;
@@ -186,23 +188,20 @@ class InProcessAscetScheduler implements AscetScheduler {
 			context.finishedAt = this.#now();
 			context.executionMs = context.finishedAt - context.startedAt;
 			pending.resolve(result);
-			this.#hostState = "healthy";
+			this.#hostState = isRecoveryJob || !hostWasDegraded ? "healthy" : "degraded";
 		} catch (error) {
 			context.finishedAt = this.#now();
 			context.executionMs = context.startedAt ? context.finishedAt - context.startedAt : undefined;
+			const errorCode = getAscetSchedulerErrorCode(error);
 			if (timedOut || error instanceof AscetSchedulerExecutionTimeoutError) {
 				context.state = "exec_timeout";
 				context.errorCode = "ASCET_EXEC_TIMEOUT";
 				this.#hostState = "degraded";
 			} else {
 				context.state = "failed";
-				context.errorCode =
-					error instanceof Error && "code" in error
-						? String((error as { code?: unknown }).code)
-						: error instanceof Error
-							? error.name
-							: "ASCET_JOB_FAILED";
-				this.#hostState = "healthy";
+				context.errorCode = errorCode;
+				this.#hostState =
+					isRecoveryJob || hostWasDegraded || errorCode === "ascet_cli_timeout" ? "degraded" : "healthy";
 			}
 			context.errorMessage = error instanceof Error ? error.message : String(error);
 			pending.reject(error);
@@ -213,8 +212,8 @@ class InProcessAscetScheduler implements AscetScheduler {
 			this.#pendingByJobId.delete(context.jobId);
 			this.#recordRecent(context);
 			this.#runningJob = null;
-			if (this.#hostState === "busy") {
-				this.#hostState = "healthy";
+			if (this.#hostState === "busy" || this.#hostState === "recovering") {
+				this.#hostState = hostWasDegraded ? "degraded" : "healthy";
 			}
 		}
 	}
@@ -311,4 +310,14 @@ class InProcessAscetScheduler implements AscetScheduler {
 		}
 		return pendingByAgent;
 	}
+}
+
+function getAscetSchedulerErrorCode(error: unknown): string {
+	if (error instanceof Error && "code" in error) {
+		const code = (error as { code?: unknown }).code;
+		if (code !== undefined) {
+			return String(code);
+		}
+	}
+	return error instanceof Error ? error.name : "ASCET_JOB_FAILED";
 }

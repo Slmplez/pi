@@ -9,14 +9,19 @@ export type AscetCliProcessFailureCode =
 export class AscetCliProcessError extends Error {
 	readonly execution: AscetCliExecutionResult;
 	readonly resultCode: AscetCliProcessFailureCode;
-	readonly code: AscetCliProcessFailureCode;
+	readonly code: string;
 
-	constructor(execution: AscetCliExecutionResult, resultCode: AscetCliProcessFailureCode, message: string) {
+	constructor(
+		execution: AscetCliExecutionResult,
+		resultCode: AscetCliProcessFailureCode,
+		message: string,
+		code: string = resultCode,
+	) {
 		super(message);
 		this.name = "AscetCliProcessError";
 		this.execution = execution;
 		this.resultCode = resultCode;
-		this.code = resultCode;
+		this.code = code;
 	}
 }
 

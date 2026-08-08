@@ -144,6 +144,8 @@ export interface AscetExtensionAPI {
 
 export interface AscetToolContext {
 	cwd: string;
+	agentId?: string;
+	sessionId?: string;
 	env?: Record<string, string | undefined>;
 	executeCli?: (request: AscetCliRequest) => Promise<AscetCliExecutionResult>;
 	scheduler?: Pick<AscetScheduler, "submit" | "getSnapshot">;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -27,6 +28,26 @@ public sealed class AscetElementDependencyCandidate
     public bool IsDependent { get; set; }
     public bool Supported { get; set; }
     public string UnsupportedReason { get; set; }
+}
+
+public sealed class AscetElementDependencyDataVariantMapping
+{
+    public string VariantName { get; set; }
+    public string FormalName { get; set; }
+    public string FormalOid { get; set; }
+    public string ValueName { get; set; }
+    public string ValueOid { get; set; }
+    public string ValueKind { get; set; }
+    public string ValueScope { get; set; }
+}
+
+public sealed class AscetElementDependencyDataVariantState
+{
+    public string VariantName { get; set; }
+    public bool HasDependency { get; set; }
+    public bool HasScalarType { get; set; }
+    public string ScalarTypeXml { get; set; }
+    public IList<AscetElementDependencyDataVariantMapping> Mappings { get; set; }
 }
 
 public static class AscetElementDependencyXml
@@ -152,7 +173,212 @@ public static class AscetElementDependencyXml
         SetMainAmdDependencyAndFormula(mainAmdPath, String.Empty, elementName, dependent, String.Empty, null, false);
     }
 
+    public static IDictionary<string, string> NormalizeDependencyMappings(string formula, IDictionary<string, string> mappings)
+    {
+        return NormalizeMappings(formula, mappings);
+    }
+
+    public static IList<AscetElementDependencyDataVariantState> ReadDataVariantStates(string dataAmdPath, string elementName)
+    {
+        XmlDocument document = Load(dataAmdPath);
+        XmlElement dataEntry = FindDataEntry(document, elementName);
+        if (dataEntry == null)
+        {
+            throw new AscetReadException("dependency_data_entry_not_found", "read_dependency_data_variants", "No DataEntry for element '" + elementName + "' was found in '" + dataAmdPath + "'.");
+        }
+
+        List<AscetElementDependencyDataVariantState> states = new List<AscetElementDependencyDataVariantState>();
+        IList<XmlElement> variants = FindDirectChildren(dataEntry, "DataVariant");
+        for (int i = 0; i < variants.Count; i++)
+        {
+            XmlElement variant = variants[i];
+            XmlElement dependency = FindDirectChild(variant, "Dependency");
+            IList<XmlElement> parameters = dependency == null ? new List<XmlElement>() : FindDirectChildren(dependency, "Parameter");
+            List<AscetElementDependencyDataVariantMapping> mappings = new List<AscetElementDependencyDataVariantMapping>();
+            for (int j = 0; j < parameters.Count; j++)
+            {
+                XmlElement parameter = parameters[j];
+                mappings.Add(new AscetElementDependencyDataVariantMapping
+                {
+                    VariantName = variant.GetAttribute("name") ?? String.Empty,
+                    FormalName = parameter.GetAttribute("formalName") ?? String.Empty,
+                    FormalOid = parameter.GetAttribute("formalOID") ?? String.Empty,
+                    ValueName = parameter.GetAttribute("valueName") ?? String.Empty,
+                    ValueOid = parameter.GetAttribute("valueOID") ?? String.Empty
+                });
+            }
+
+            states.Add(new AscetElementDependencyDataVariantState
+            {
+                VariantName = variant.GetAttribute("name") ?? String.Empty,
+                HasDependency = dependency != null,
+                HasScalarType = FindDirectChild(variant, "ScalarType") != null,
+                ScalarTypeXml = FindDirectChild(variant, "ScalarType") == null ? String.Empty : FindDirectChild(variant, "ScalarType").OuterXml,
+                Mappings = mappings
+            });
+        }
+
+        return states;
+    }
+
+    public static IList<AscetElementDependencyDataVariantState> ReadDataVariantStates(string mainAmdPath, string dataAmdPath, string elementName)
+    {
+        IList<AscetElementDependencyDataVariantState> states = ReadDataVariantStates(dataAmdPath, elementName);
+        XmlDocument mainDocument = Load(mainAmdPath);
+        for (int i = 0; i < states.Count; i++)
+        {
+            AscetElementDependencyDataVariantState state = states[i];
+            if (state == null || state.Mappings == null)
+            {
+                continue;
+            }
+
+            for (int j = 0; j < state.Mappings.Count; j++)
+            {
+                AscetElementDependencyDataVariantMapping mapping = state.Mappings[j];
+                XmlElement valueElement = mapping == null ? null : FindElement(mainDocument, mapping.ValueName);
+                XmlElement valueAttributes = valueElement == null ? null : FindScalarAttributes(valueElement);
+                if (mapping != null && valueAttributes != null)
+                {
+                    mapping.ValueKind = NormalizeDependencyValueKind(valueAttributes.GetAttribute("kind") ?? String.Empty);
+                    mapping.ValueScope = valueAttributes.GetAttribute("scope") ?? String.Empty;
+                }
+            }
+        }
+
+        return states;
+    }
+
+    public static void VerifyDataVariantMappings(string mainAmdPath, string dataAmdPath, string elementName, IDictionary<string, string> mappings)
+    {
+        VerifyDataVariantMappings(mainAmdPath, dataAmdPath, elementName, mappings, String.Empty, null, null);
+    }
+
+    public static void VerifyDataVariantMappings(
+        string mainAmdPath,
+        string dataAmdPath,
+        string elementName,
+        IDictionary<string, string> mappings,
+        string variantPolicy,
+        IList<string> variantNames,
+        IDictionary<string, string> expectedTargetKinds)
+    {
+        XmlDocument mainDocument = Load(mainAmdPath);
+        XmlElement element = FindElement(mainDocument, elementName);
+        XmlElement attributes = element == null ? null : FindScalarAttributes(element);
+        if (attributes == null)
+        {
+            throw new AscetReadException("element_not_found", "verify_dependency_data_variants", "Element '" + elementName + "' was not found in '" + mainAmdPath + "'.");
+        }
+
+        string formula = ReadFormulaCode(element, attributes);
+        IDictionary<string, string> expectedMappings = NormalizeMappings(formula, mappings);
+        Dictionary<string, string> formalOids = ReadExistingFormalOids(attributes);
+        IList<AscetElementDependencyDataVariantState> states = SelectVariantStates(
+            ReadDataVariantStates(mainAmdPath, dataAmdPath, elementName),
+            variantPolicy,
+            variantNames,
+            "verify_dependency_data_variants");
+        if (states.Count == 0)
+        {
+            throw new AscetReadException("dependency_data_variant_not_found", "verify_dependency_data_variants", "No selected DataVariant for element '" + elementName + "' was found in '" + dataAmdPath + "'.");
+        }
+
+        foreach (AscetElementDependencyDataVariantState state in states)
+        {
+            if (state == null)
+            {
+                continue;
+            }
+
+            if (!state.HasDependency || state.HasScalarType)
+            {
+                throw new AscetReadException("dependency_mapping_readback_mismatch", "verify_dependency_data_variants", "DataVariant '" + state.VariantName + "' must contain Dependency only while dependency mappings are active.");
+            }
+
+            if (state.Mappings == null || state.Mappings.Count != expectedMappings.Count)
+            {
+                throw new AscetReadException("dependency_mapping_readback_mismatch", "verify_dependency_data_variants", "DataVariant '" + state.VariantName + "' contains " + (state.Mappings == null ? 0 : state.Mappings.Count) + " mappings; expected " + expectedMappings.Count + ".");
+            }
+
+            foreach (KeyValuePair<string, string> expected in expectedMappings)
+            {
+                AscetElementDependencyDataVariantMapping actual = FindMapping(state.Mappings, expected.Key);
+                if (actual == null)
+                {
+                    throw new AscetReadException("dependency_mapping_readback_mismatch", "verify_dependency_data_variants", "DataVariant '" + state.VariantName + "' is missing formal '" + expected.Key + "'.");
+                }
+
+                string expectedFormalOid = formalOids.ContainsKey(expected.Key) ? formalOids[expected.Key] : String.Empty;
+                string expectedKind = expectedTargetKinds != null && expectedTargetKinds.ContainsKey(expected.Key)
+                    ? NormalizeDependencyValueKind(expectedTargetKinds[expected.Key])
+                    : String.Empty;
+                if (String.IsNullOrWhiteSpace(actual.FormalName) ||
+                    String.IsNullOrWhiteSpace(actual.FormalOid) ||
+                    (!String.IsNullOrWhiteSpace(expectedFormalOid) && !String.Equals(actual.FormalOid, expectedFormalOid, StringComparison.Ordinal)) ||
+                    !String.Equals(actual.ValueName, expected.Value, StringComparison.Ordinal) ||
+                    String.IsNullOrWhiteSpace(actual.ValueOid) ||
+                    (!String.IsNullOrWhiteSpace(expectedKind) && !String.Equals(actual.ValueKind, expectedKind, StringComparison.Ordinal)))
+                {
+                    throw new AscetReadException("dependency_mapping_readback_mismatch", "verify_dependency_data_variants", "DataVariant '" + state.VariantName + "' mapping for formal '" + expected.Key + "' has formalName='" + actual.FormalName + "' formalOID='" + actual.FormalOid + "' valueName='" + actual.ValueName + "' valueOID='" + actual.ValueOid + "' targetKind='" + actual.ValueKind + "' targetScope='" + actual.ValueScope + "'.");
+                }
+            }
+        }
+    }
+
+    private static AscetElementDependencyDataVariantMapping FindMapping(IList<AscetElementDependencyDataVariantMapping> mappings, string formalName)
+    {
+        if (mappings == null)
+        {
+            return null;
+        }
+
+        for (int i = 0; i < mappings.Count; i++)
+        {
+            AscetElementDependencyDataVariantMapping mapping = mappings[i];
+            if (mapping != null && String.Equals(mapping.FormalName, formalName, StringComparison.Ordinal))
+            {
+                return mapping;
+            }
+        }
+
+        return null;
+    }
+
     public static void SetMainAmdDependencyAndFormula(string mainAmdPath, string dataAmdPath, string elementName, bool dependent, string formula, IDictionary<string, string> mappings, bool clearFormula)
+    {
+        SetMainAmdDependencyAndFormula(mainAmdPath, dataAmdPath, elementName, dependent, formula, mappings, null, clearFormula, String.Empty, null, String.Empty, null);
+    }
+
+    public static void SetMainAmdDependencyAndFormula(
+        string mainAmdPath,
+        string dataAmdPath,
+        string elementName,
+        bool dependent,
+        string formula,
+        IDictionary<string, string> mappings,
+        bool clearFormula,
+        string variantPolicy,
+        IList<string> variantNames,
+        string restorationPolicy,
+        IDictionary<string, string> restorationValues)
+    {
+        SetMainAmdDependencyAndFormula(mainAmdPath, dataAmdPath, elementName, dependent, formula, mappings, null, clearFormula, variantPolicy, variantNames, restorationPolicy, restorationValues);
+    }
+
+    public static void SetMainAmdDependencyAndFormula(
+        string mainAmdPath,
+        string dataAmdPath,
+        string elementName,
+        bool dependent,
+        string formula,
+        IDictionary<string, string> mappings,
+        IDictionary<string, Dictionary<string, string>> variantMappings,
+        bool clearFormula,
+        string variantPolicy,
+        IList<string> variantNames,
+        string restorationPolicy,
+        IDictionary<string, string> restorationValues)
     {
         XmlDocument document = Load(mainAmdPath);
         XmlElement element = FindElement(document, elementName);
@@ -179,7 +405,7 @@ public static class AscetElementDependencyXml
         attributes.SetAttribute("kind", "parameter");
         attributes.SetAttribute("dependent", dependent ? "true" : "false");
 
-        Dictionary<string, string> effectiveMappings = NormalizeMappings(formula, mappings);
+        Dictionary<string, string> effectiveMappings = MergeVariantMappings(formula, mappings, variantMappings);
         Dictionary<string, string> formalOids = ReadExistingFormalOids(attributes);
         if (!String.IsNullOrWhiteSpace(formula) && !dependent)
         {
@@ -205,7 +431,11 @@ public static class AscetElementDependencyXml
 
         if (!String.IsNullOrWhiteSpace(formula) && effectiveMappings.Count > 0)
         {
-            WriteDataMappings(dataAmdPath, elementName, element == null ? String.Empty : (element.GetAttribute("OID") ?? String.Empty), mainAmdPath, effectiveMappings, formalOids);
+            WriteDataMappings(dataAmdPath, elementName, element == null ? String.Empty : (element.GetAttribute("OID") ?? String.Empty), mainAmdPath, mappings, variantMappings, formalOids, variantPolicy, variantNames);
+        }
+        else if (!dependent && !String.IsNullOrWhiteSpace(dataAmdPath))
+        {
+            RestoreIndependentData(mainAmdPath, dataAmdPath, elementName, variantPolicy, variantNames, restorationPolicy, restorationValues);
         }
     }
 
@@ -274,6 +504,33 @@ public static class AscetElementDependencyXml
         };
     }
 
+    private static Dictionary<string, string> MergeVariantMappings(
+        string formula,
+        IDictionary<string, string> mappings,
+        IDictionary<string, Dictionary<string, string>> variantMappings)
+    {
+        Dictionary<string, string> merged = NormalizeMappings(String.Empty, mappings);
+        if (variantMappings != null)
+        {
+            foreach (KeyValuePair<string, Dictionary<string, string>> variant in variantMappings)
+            {
+                Dictionary<string, string> normalized = NormalizeMappings(String.Empty, variant.Value);
+                foreach (KeyValuePair<string, string> mapping in normalized)
+                {
+                    if (!merged.ContainsKey(mapping.Key))
+                    {
+                        merged[mapping.Key] = mapping.Value;
+                    }
+                }
+            }
+        }
+        if (merged.Count == 0 && !String.IsNullOrWhiteSpace(formula))
+        {
+            throw new AscetReadException("dependency_mappings_required", "set_dependency_xml", "Dependency formulas require explicit formal-to-value mappings.");
+        }
+        return merged;
+    }
+
     private static Dictionary<string, string> NormalizeMappings(string formula, IDictionary<string, string> mappings)
     {
         Dictionary<string, string> result = new Dictionary<string, string>(StringComparer.Ordinal);
@@ -285,7 +542,7 @@ public static class AscetElementDependencyXml
                 string imported = mapping.Value == null ? String.Empty : mapping.Value.Trim();
                 if (String.IsNullOrWhiteSpace(formal) || String.IsNullOrWhiteSpace(imported))
                 {
-                    throw new AscetReadException("invalid_argument", "set_dependency_xml", "Dependency formula mappings must use non-empty formal and imported parameter names.");
+                    throw new AscetReadException("invalid_argument", "set_dependency_xml", "Dependency formula mappings must use non-empty formal and value element names.");
                 }
 
                 if (result.ContainsKey(formal))
@@ -299,52 +556,13 @@ public static class AscetElementDependencyXml
 
         if (result.Count == 0 && !String.IsNullOrWhiteSpace(formula))
         {
-            IList<string> references = ExtractFormulaReferences(formula);
-            for (int i = 0; i < references.Count; i++)
-            {
-                if (!result.ContainsKey(references[i]))
-                {
-                    result[references[i]] = references[i];
-                }
-            }
+            throw new AscetReadException(
+                "dependency_mappings_required",
+                "set_dependency_xml",
+                "Dependency formulas require explicit formal-to-value mappings; identifier inference is disabled because ASCET formulas use C syntax.");
         }
 
         return result;
-    }
-
-    private static IList<string> ExtractFormulaReferences(string formula)
-    {
-        List<string> result = new List<string>();
-        if (String.IsNullOrWhiteSpace(formula))
-        {
-            return result;
-        }
-
-        MatchCollection matches = Regex.Matches(formula, "[A-Za-z_][A-Za-z0-9_]*");
-        for (int i = 0; i < matches.Count; i++)
-        {
-            string value = matches[i].Value;
-            if (IsFormulaKeyword(value))
-            {
-                continue;
-            }
-
-            if (!result.Contains(value))
-            {
-                result.Add(value);
-            }
-        }
-
-        return result;
-    }
-
-    private static bool IsFormulaKeyword(string value)
-    {
-        return String.Equals(value, "true", StringComparison.OrdinalIgnoreCase) ||
-            String.Equals(value, "false", StringComparison.OrdinalIgnoreCase) ||
-            String.Equals(value, "and", StringComparison.OrdinalIgnoreCase) ||
-            String.Equals(value, "or", StringComparison.OrdinalIgnoreCase) ||
-            String.Equals(value, "not", StringComparison.OrdinalIgnoreCase);
     }
 
     private static void WriteFormula(XmlDocument document, XmlElement attributes, string formula, IDictionary<string, string> mappings, IDictionary<string, string> formalOids)
@@ -370,7 +588,7 @@ public static class AscetElementDependencyXml
             string formalName = formalNames[i];
             if (formalOids != null && !formalOids.ContainsKey(formalName))
             {
-                formalOids[formalName] = CreateLocalOid(document, formalOids);
+                formalOids[formalName] = CreateLocalOid(document, formalOids, ReadOwningElementName(attributes) + "|" + formalName);
             }
 
             XmlElement formal = document.CreateElement("Formal");
@@ -393,7 +611,7 @@ public static class AscetElementDependencyXml
         }
     }
 
-    private static void WriteDataMappings(string dataAmdPath, string elementName, string elementOid, string mainAmdPath, IDictionary<string, string> mappings, IDictionary<string, string> formalOids)
+    private static void WriteDataMappings(string dataAmdPath, string elementName, string elementOid, string mainAmdPath, IDictionary<string, string> mappings, IDictionary<string, Dictionary<string, string>> variantMappings, IDictionary<string, string> formalOids, string variantPolicy, IList<string> variantNames)
     {
         if (String.IsNullOrWhiteSpace(dataAmdPath) || !File.Exists(dataAmdPath))
         {
@@ -408,22 +626,33 @@ public static class AscetElementDependencyXml
             throw new AscetReadException("dependency_data_entry_not_found", "set_dependency_xml", "No DataEntry for element '" + elementName + "' was found in '" + dataAmdPath + "'.");
         }
 
-        if (!String.IsNullOrWhiteSpace(elementOid) && String.IsNullOrWhiteSpace(dataEntry.GetAttribute("elementOID")))
+        string dataEntryOid = dataEntry.GetAttribute("elementOID") ?? String.Empty;
+        if (!String.IsNullOrWhiteSpace(elementOid) && !String.IsNullOrWhiteSpace(dataEntryOid) && !String.Equals(dataEntryOid, elementOid, StringComparison.Ordinal))
+        {
+            throw new AscetReadException("dependency_data_entry_oid_mismatch", "set_dependency_xml", "DataEntry for element '" + elementName + "' has elementOID='" + dataEntryOid + "' but main AMD element OID is '" + elementOid + "'.");
+        }
+
+        if (!String.IsNullOrWhiteSpace(elementOid) && String.IsNullOrWhiteSpace(dataEntryOid))
         {
             dataEntry.SetAttribute("elementOID", elementOid);
         }
 
-        IList<XmlElement> variants = FindDirectChildren(dataEntry, "DataVariant");
-        if (variants.Count == 0)
-        {
-            XmlElement variant = dataDocument.CreateElement("DataVariant");
-            variant.SetAttribute("name", "default");
-            dataEntry.AppendChild(variant);
-            variants.Add(variant);
-        }
+        IList<XmlElement> variants = SelectVariantElements(dataEntry, variantPolicy, variantNames, "set_dependency_xml");
 
         for (int i = 0; i < variants.Count; i++)
         {
+            string variantName = variants[i].GetAttribute("name") ?? String.Empty;
+            IDictionary<string, string> mappingsForVariant = mappings;
+            if (variantMappings != null && variantMappings.ContainsKey(variantName))
+            {
+                mappingsForVariant = variantMappings[variantName];
+            }
+            Dictionary<string, string> normalizedMappings = NormalizeMappings(String.Empty, mappingsForVariant);
+            if (normalizedMappings.Count == 0)
+            {
+                throw new AscetReadException("dependency_mappings_required", "set_dependency_xml", "Selected DataVariant '" + variantName + "' has no dependency mappings.");
+            }
+
             // A dependent DataVariant is represented by Dependency only. Keeping
             // the old ScalarType payload alongside it makes ASCET reject the AMD
             // import even though main.amd contains a valid formula.
@@ -437,42 +666,48 @@ public static class AscetElementDependencyXml
             }
 
             RemoveChildren(dependency, "Parameter");
-            IList<string> formalNames = SortedKeys(mappings);
+            IList<string> formalNames = SortedKeys(normalizedMappings);
             for (int j = 0; j < formalNames.Count; j++)
             {
                 string formalName = formalNames[j];
-                string importedName = mappings[formalName];
-                XmlElement imported = FindElement(mainDocument, importedName);
-                XmlElement importedAttributes = imported == null ? null : FindScalarAttributes(imported);
-                if (imported == null || importedAttributes == null)
+                string valueName = normalizedMappings[formalName];
+                if (String.Equals(valueName, elementName, StringComparison.Ordinal))
                 {
-                    throw new AscetReadException("imported_parameter_not_found", "set_dependency_xml", "Imported parameter '" + importedName + "' was not found in component XML.");
+                    throw new AscetReadException("dependency_cycle", "set_dependency_xml", "Formal '" + formalName + "' cannot map dependent element '" + elementName + "' to itself.");
                 }
 
-                string scope = importedAttributes.GetAttribute("scope") ?? String.Empty;
-                string kind = importedAttributes.GetAttribute("kind") ?? String.Empty;
-                bool parameterLike = String.Equals(kind, "parameter", StringComparison.OrdinalIgnoreCase) ||
-                    String.Equals(kind, "dependent", StringComparison.OrdinalIgnoreCase);
-                if (!parameterLike || !String.Equals(scope, "imported", StringComparison.OrdinalIgnoreCase))
+                XmlElement valueElement = FindElement(mainDocument, valueName);
+                XmlElement valueAttributes = valueElement == null ? null : FindScalarAttributes(valueElement);
+                if (valueElement == null || valueAttributes == null)
                 {
-                    throw new AscetReadException("invalid_dependency_mapping", "set_dependency_xml", "Mapped value '" + importedName + "' must be an imported parameter.");
+                    throw new AscetReadException("dependency_value_not_found", "set_dependency_xml", "Mapped value '" + valueName + "' was not found in component XML.");
                 }
 
-                string valueOid = imported.GetAttribute("OID") ?? String.Empty;
+                string kind = NormalizeDependencyValueKind(valueAttributes.GetAttribute("kind") ?? String.Empty);
+                bool supportedValue = String.Equals(kind, "parameter", StringComparison.Ordinal) ||
+                    String.Equals(kind, "dependent", StringComparison.Ordinal) ||
+                    String.Equals(kind, "constant", StringComparison.Ordinal) ||
+                    String.Equals(kind, "systemconstant", StringComparison.Ordinal);
+                if (!supportedValue)
+                {
+                    throw new AscetReadException("invalid_dependency_mapping", "set_dependency_xml", "Mapped value '" + valueName + "' must be a Parameter, Constant, or System Constant, but kind is '" + (valueAttributes.GetAttribute("kind") ?? String.Empty) + "'.");
+                }
+
+                string valueOid = valueElement.GetAttribute("OID") ?? String.Empty;
                 if (String.IsNullOrWhiteSpace(valueOid))
                 {
-                    throw new AscetReadException("invalid_dependency_mapping", "set_dependency_xml", "Mapped value '" + importedName + "' must expose an OID.");
+                    throw new AscetReadException("invalid_dependency_mapping", "set_dependency_xml", "Mapped value '" + valueName + "' must expose an OID.");
                 }
 
                 if (formalOids != null && !formalOids.ContainsKey(formalName))
                 {
-                    formalOids[formalName] = CreateLocalOid(mainDocument, formalOids);
+                    formalOids[formalName] = CreateLocalOid(mainDocument, formalOids, elementName + "|" + formalName);
                 }
 
                 XmlElement parameter = dataDocument.CreateElement("Parameter");
                 parameter.SetAttribute("formalName", formalName);
                 parameter.SetAttribute("formalOID", formalOids == null || !formalOids.ContainsKey(formalName) ? String.Empty : formalOids[formalName]);
-                parameter.SetAttribute("valueName", importedName);
+                parameter.SetAttribute("valueName", valueName);
                 parameter.SetAttribute("valueOID", valueOid);
                 dependency.AppendChild(parameter);
             }
@@ -480,6 +715,224 @@ public static class AscetElementDependencyXml
 
         RemoveXmlSignatures(dataDocument);
         Save(dataDocument, dataAmdPath);
+    }
+
+    private static void RestoreIndependentData(
+        string mainAmdPath,
+        string dataAmdPath,
+        string elementName,
+        string variantPolicy,
+        IList<string> variantNames,
+        string restorationPolicy,
+        IDictionary<string, string> restorationValues)
+    {
+        XmlDocument document = Load(dataAmdPath);
+        XmlElement dataEntry = FindDataEntry(document, elementName);
+        if (dataEntry == null)
+        {
+            throw new AscetReadException("dependency_data_entry_not_found", "restore_independent_data", "No DataEntry for element '" + elementName + "' was found in '" + dataAmdPath + "'.");
+        }
+
+        IList<XmlElement> variants = SelectVariantElements(dataEntry, variantPolicy, variantNames, "restore_independent_data");
+        string policy = restorationPolicy == null ? String.Empty : restorationPolicy.Trim();
+        if (String.IsNullOrWhiteSpace(policy))
+        {
+            throw new AscetReadException("independent_value_restoration_required", "restore_independent_data", "Independent conversion requires valueRestoration policy fromSnapshot, explicit, or ascetDefault.");
+        }
+
+        for (int i = 0; i < variants.Count; i++)
+        {
+            XmlElement variant = variants[i];
+            string name = variant.GetAttribute("name") ?? String.Empty;
+            RemoveChildren(variant, "Dependency");
+            RemoveChildren(variant, "ScalarType");
+
+            XmlElement scalar;
+            if (String.Equals(policy, "fromSnapshot", StringComparison.OrdinalIgnoreCase))
+            {
+                string xml = restorationValues != null && restorationValues.ContainsKey(name) ? restorationValues[name] : String.Empty;
+                if (String.IsNullOrWhiteSpace(xml))
+                {
+                    throw new AscetReadException("independent_value_restoration_required", "restore_independent_data", "Snapshot restoration is missing ScalarType XML for DataVariant '" + name + "'.");
+                }
+
+                XmlDocument fragment = new XmlDocument();
+                fragment.LoadXml(xml);
+                if (fragment.DocumentElement == null || !String.Equals(fragment.DocumentElement.Name, "ScalarType", StringComparison.Ordinal))
+                {
+                    throw new AscetReadException("invalid_snapshot", "restore_independent_data", "Snapshot for DataVariant '" + name + "' must contain a ScalarType element.");
+                }
+                scalar = document.ImportNode(fragment.DocumentElement, true) as XmlElement;
+            }
+            else
+            {
+                string value = restorationValues != null && restorationValues.ContainsKey(name) ? restorationValues[name] : String.Empty;
+                if (String.Equals(policy, "explicit", StringComparison.OrdinalIgnoreCase) && String.IsNullOrWhiteSpace(value))
+                {
+                    throw new AscetReadException("independent_value_restoration_required", "restore_independent_data", "Explicit restoration is missing a value for DataVariant '" + name + "'.");
+                }
+                bool ascetDefault = String.Equals(policy, "ascetDefault", StringComparison.OrdinalIgnoreCase);
+                if (!ascetDefault && !String.Equals(policy, "explicit", StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new AscetReadException("invalid_argument", "restore_independent_data", "Unknown restoration policy '" + policy + "'.");
+                }
+
+                scalar = CreateScalarTypeForValue(document, mainAmdPath, elementName, ascetDefault ? null : value);
+            }
+
+            variant.AppendChild(scalar);
+        }
+
+        Save(document, dataAmdPath);
+    }
+
+    private static XmlElement CreateScalarTypeForValue(XmlDocument dataDocument, string mainAmdPath, string elementName, string explicitValue)
+    {
+        XmlDocument mainDocument = Load(mainAmdPath);
+        XmlElement element = FindElement(mainDocument, elementName);
+        XmlElement elementAttributes = element == null ? null : FindDirectChild(element, "ElementAttributes");
+        string basicModelType = elementAttributes == null ? String.Empty : (elementAttributes.GetAttribute("basicModelType") ?? String.Empty);
+        if (String.IsNullOrWhiteSpace(basicModelType) && elementAttributes != null)
+        {
+            basicModelType = elementAttributes.GetAttribute("modelType") ?? String.Empty;
+        }
+        bool logical = String.Equals(basicModelType, "log", StringComparison.OrdinalIgnoreCase) ||
+            String.Equals(basicModelType, "logic", StringComparison.OrdinalIgnoreCase) ||
+            String.Equals(basicModelType, "boolean", StringComparison.OrdinalIgnoreCase);
+
+        XmlElement scalar = dataDocument.CreateElement("ScalarType");
+        XmlElement valueElement = dataDocument.CreateElement(logical ? "Logic" : "Numeric");
+        if (String.IsNullOrWhiteSpace(explicitValue))
+        {
+            valueElement.SetAttribute("value", logical ? "false" : "0.0");
+        }
+        else if (logical)
+        {
+            bool parsed;
+            if (!Boolean.TryParse(explicitValue, out parsed))
+            {
+                throw new AscetReadException("invalid_argument", "restore_independent_data", "Logical explicit restoration value must be true or false.");
+            }
+            valueElement.SetAttribute("value", parsed ? "true" : "false");
+        }
+        else
+        {
+            valueElement.SetAttribute("value", explicitValue);
+        }
+        scalar.AppendChild(valueElement);
+        return scalar;
+    }
+
+    private static IList<XmlElement> SelectVariantElements(XmlElement dataEntry, string variantPolicy, IList<string> variantNames, string stage)
+    {
+        IList<XmlElement> variants = FindDirectChildren(dataEntry, "DataVariant");
+        if (variants.Count == 0)
+        {
+            throw new AscetReadException("dependency_data_variant_not_found", stage, "No DataVariant exists for element '" + (dataEntry == null ? String.Empty : dataEntry.GetAttribute("elementName")) + "'.");
+        }
+
+        string policy = variantPolicy == null ? String.Empty : variantPolicy.Trim().ToLowerInvariant();
+        if (String.IsNullOrWhiteSpace(policy))
+        {
+            if (variants.Count == 1)
+            {
+                return variants;
+            }
+            throw new AscetReadException("data_variant_selection_required", stage, "Multiple DataVariants exist; choose variantPolicy default, selected, or all explicitly.");
+        }
+
+        List<XmlElement> selected = new List<XmlElement>();
+        if (String.Equals(policy, "all", StringComparison.Ordinal))
+        {
+            for (int i = 0; i < variants.Count; i++)
+            {
+                selected.Add(variants[i]);
+            }
+            return selected;
+        }
+
+        if (String.Equals(policy, "default", StringComparison.Ordinal))
+        {
+            for (int i = 0; i < variants.Count; i++)
+            {
+                if (String.Equals(variants[i].GetAttribute("name"), "default", StringComparison.OrdinalIgnoreCase))
+                {
+                    selected.Add(variants[i]);
+                    return selected;
+                }
+            }
+            throw new AscetReadException("data_variant_not_found", stage, "variantPolicy default requires a DataVariant named 'default'.");
+        }
+
+        if (!String.Equals(policy, "selected", StringComparison.Ordinal))
+        {
+            throw new AscetReadException("invalid_argument", stage, "variantPolicy must be default, selected, or all.");
+        }
+        if (variantNames == null || variantNames.Count == 0)
+        {
+            throw new AscetReadException("data_variant_selection_required", stage, "variantPolicy selected requires at least one variant name.");
+        }
+
+        Dictionary<string, XmlElement> byName = new Dictionary<string, XmlElement>(StringComparer.Ordinal);
+        for (int i = 0; i < variants.Count; i++)
+        {
+            byName[variants[i].GetAttribute("name") ?? String.Empty] = variants[i];
+        }
+        for (int i = 0; i < variantNames.Count; i++)
+        {
+            string name = variantNames[i] == null ? String.Empty : variantNames[i].Trim();
+            if (String.IsNullOrWhiteSpace(name) || !byName.ContainsKey(name))
+            {
+                throw new AscetReadException("data_variant_not_found", stage, "Selected DataVariant '" + name + "' does not exist.");
+            }
+            if (!selected.Contains(byName[name]))
+            {
+                selected.Add(byName[name]);
+            }
+        }
+        return selected;
+    }
+
+    private static IList<AscetElementDependencyDataVariantState> SelectVariantStates(
+        IList<AscetElementDependencyDataVariantState> states,
+        string variantPolicy,
+        IList<string> variantNames,
+        string stage)
+    {
+        XmlDocument temporary = new XmlDocument();
+        XmlElement entry = temporary.CreateElement("DataEntry");
+        temporary.AppendChild(entry);
+        Dictionary<string, AscetElementDependencyDataVariantState> byName = new Dictionary<string, AscetElementDependencyDataVariantState>(StringComparer.Ordinal);
+        for (int i = 0; i < states.Count; i++)
+        {
+            AscetElementDependencyDataVariantState state = states[i];
+            XmlElement variant = temporary.CreateElement("DataVariant");
+            variant.SetAttribute("name", state == null ? String.Empty : (state.VariantName ?? String.Empty));
+            entry.AppendChild(variant);
+            if (state != null)
+            {
+                byName[state.VariantName ?? String.Empty] = state;
+            }
+        }
+
+        IList<XmlElement> selectedElements = SelectVariantElements(entry, variantPolicy, variantNames, stage);
+        List<AscetElementDependencyDataVariantState> selected = new List<AscetElementDependencyDataVariantState>();
+        for (int i = 0; i < selectedElements.Count; i++)
+        {
+            string name = selectedElements[i].GetAttribute("name") ?? String.Empty;
+            if (byName.ContainsKey(name))
+            {
+                selected.Add(byName[name]);
+            }
+        }
+        return selected;
+    }
+
+    private static string NormalizeDependencyValueKind(string value)
+    {
+        return String.IsNullOrWhiteSpace(value)
+            ? String.Empty
+            : value.Trim().Replace("-", String.Empty).Replace("_", String.Empty).Replace(" ", String.Empty).ToLowerInvariant();
     }
 
     private static string ReadFormulaCode(XmlElement element, XmlElement attributes)
@@ -537,7 +990,7 @@ public static class AscetElementDependencyXml
         return keys;
     }
 
-    private static string CreateLocalOid(XmlDocument document, IDictionary<string, string> reservedOids)
+    private static string CreateLocalOid(XmlDocument document, IDictionary<string, string> reservedOids, string seed)
     {
         IDictionary<string, bool> used = CollectOids(document);
         if (reservedOids != null)
@@ -554,7 +1007,7 @@ public static class AscetElementDependencyXml
         string prefix = FindAscetOidPrefix(used);
         for (int i = 0; i < 100; i++)
         {
-            string candidate = prefix + CreateBase36Suffix(30 - prefix.Length);
+            string candidate = prefix + CreateDeterministicBase36Suffix(seed, i, 30 - prefix.Length);
             if (!used.ContainsKey(candidate))
             {
                 return candidate;
@@ -562,6 +1015,38 @@ public static class AscetElementDependencyXml
         }
 
         throw new AscetReadException("oid_generation_failed", "set_dependency_xml", "Could not generate a unique ASCET-style formal OID.");
+    }
+
+    private static string ReadOwningElementName(XmlElement node)
+    {
+        XmlNode current = node;
+        while (current != null)
+        {
+            XmlElement element = current as XmlElement;
+            if (element != null && String.Equals(element.Name, "Element", StringComparison.OrdinalIgnoreCase))
+            {
+                return element.GetAttribute("name") ?? String.Empty;
+            }
+            current = current.ParentNode;
+        }
+        return String.Empty;
+    }
+
+    private static string CreateDeterministicBase36Suffix(string seed, int attempt, int length)
+    {
+        const string alphabet = "0123456789abcdefghijklmnopqrstuvwxyz";
+        string input = (seed ?? String.Empty) + "\n" + attempt.ToString();
+        byte[] digest;
+        using (SHA256 algorithm = SHA256.Create())
+        {
+            digest = algorithm.ComputeHash(Encoding.UTF8.GetBytes(input));
+        }
+        StringBuilder builder = new StringBuilder(length);
+        for (int i = 0; builder.Length < length; i++)
+        {
+            builder.Append(alphabet[digest[i % digest.Length] % alphabet.Length]);
+        }
+        return builder.ToString();
     }
 
     private static IDictionary<string, bool> CollectOids(XmlDocument document)
@@ -615,28 +1100,6 @@ public static class AscetElementDependencyXml
 
         return "_040ts";
     }
-
-    private static string CreateBase36Suffix(int length)
-    {
-        const string alphabet = "0123456789abcdefghijklmnopqrstuvwxyz";
-        byte[] bytes = Guid.NewGuid().ToByteArray();
-        StringBuilder builder = new StringBuilder(length);
-        int index = 0;
-        while (builder.Length < length)
-        {
-            if (index >= bytes.Length)
-            {
-                bytes = Guid.NewGuid().ToByteArray();
-                index = 0;
-            }
-
-            builder.Append(alphabet[bytes[index] % alphabet.Length]);
-            index++;
-        }
-
-        return builder.ToString();
-    }
-
     private static XmlElement FindElement(XmlDocument document, string elementName)
     {
         if (document == null || String.IsNullOrWhiteSpace(elementName))

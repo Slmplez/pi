@@ -108,7 +108,8 @@ $stateMachineDomain = Join-Path $coreDir 'AscetStateMachineDomain.cs'
 $componentWriteDomain = Join-Path $coreDir 'AscetComponentWriteDomain.cs'
 $componentCreateDomain = Join-Path $coreDir 'AscetComponentCreate.cs'
 $componentDeleteDomain = Join-Path $coreDir 'AscetComponentDelete.cs'
-$elementSync = Join-Path $coreDir 'AscetElementSync.cs'
+$elementWriteContract = Join-Path $coreDir 'AscetElementWriteContract.Generated.cs'
+$elementSync = @($elementWriteContract, (Join-Path $coreDir 'AscetElementSync.cs'))
 $projectFormulaSync = Join-Path $coreDir 'AscetProjectFormulaSync.cs'
 $dbExplorerCommon = Join-Path $cliDir 'AscetDatabaseExplorerCommon.cs'
 $artifactPathResolver = Join-Path $cliDir 'AscetArtifactPathResolver.cs'
@@ -734,7 +735,7 @@ Invoke-AscetCsc `
 Invoke-AscetCsc `
     -OutputPath (Join-Path $binDir 'AscetSetElementDependency.exe') `
     -MainType 'AscetSetElementDependency' `
-    -Sources @($readDomain, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $cliDir 'AscetElementDependencyPlanSupport.cs'), (Join-Path $cliDir 'AscetSetElementDependency.cs')) `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $cliDir 'AscetElementDependencyOverlay.cs'), (Join-Path $cliDir 'AscetElementDependencyPlanSupport.cs'), (Join-Path $cliDir 'AscetDependencyCycleDetector.cs'), (Join-Path $cliDir 'AscetDependencySnapshotStore.cs'), (Join-Path $cliDir 'AscetSetElementDependency.cs')) `
     -References (Get-AscetReferences -IncludeWebExtensions)
 
 if ($buildLegacyExecutables) {
@@ -747,7 +748,7 @@ Invoke-AscetCsc `
 Invoke-AscetCsc `
     -OutputPath (Join-Path $binDir 'AscetBatchApplyElementSpec.exe') `
     -MainType 'AscetBatchApplyElementSpec' `
-    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetBatchApplyElementSpec.cs')) `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $cliDir 'AscetBatchApplyElementSpec.cs')) `
     -References (Get-AscetReferences -IncludeWebExtensions)
 
 Invoke-AscetCsc `
@@ -784,19 +785,19 @@ Invoke-AscetCsc `
 Invoke-AscetCsc `
     -OutputPath (Join-Path $binDir 'AscetApplyElementSpec.exe') `
     -MainType 'AscetApplyElementSpec' `
-    -Sources @($readDomain, $elementSync, $artifactPathResolver, (Join-Path $cliDir 'AscetApplyElementSpec.cs')) `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), $artifactPathResolver, (Join-Path $cliDir 'AscetApplyElementSpec.cs')) `
     -References (Get-AscetReferences -IncludeWebExtensions)
 
 Invoke-AscetCsc `
     -OutputPath (Join-Path $binDir 'AscetReadElementCatalog.exe') `
     -MainType 'AscetReadElementCatalog' `
-    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetReadElementCatalog.cs')) `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $cliDir 'AscetReadElementCatalog.cs')) `
     -References (Get-AscetReferences -IncludeWebExtensions)
 
 Invoke-AscetCsc `
     -OutputPath (Join-Path $binDir 'AscetDiffElementSpec.exe') `
     -MainType 'AscetDiffElementSpec' `
-    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetDiffElementSpec.cs')) `
+    -Sources @($readDomain, $elementSync, (Join-Path $cliDir 'AscetElementDependencyXml.cs'), (Join-Path $cliDir 'AscetDiffElementSpec.cs')) `
     -References (Get-AscetReferences -IncludeWebExtensions)
 
 Invoke-AscetCsc `
@@ -920,9 +921,10 @@ Invoke-AscetCsc `
         (Join-Path $cliDir 'AscetReadComponentChildren.cs'),
         (Join-Path $cliDir 'AscetReadDependentChain.cs'),
         (Join-Path $cliDir 'AscetElementDependencyXml.cs'),
+        (Join-Path $cliDir 'AscetElementDependencyOverlay.cs'),
         (Join-Path $cliDir 'AscetElementDependencyPlanSupport.cs'),
         (Join-Path $cliDir 'AscetReadElementDependency.cs'),
-        (Join-Path $cliDir 'AscetSetElementDependency.cs'),
+        (Join-Path $cliDir 'AscetDependencyCycleDetector.cs'), (Join-Path $cliDir 'AscetDependencySnapshotStore.cs'), (Join-Path $cliDir 'AscetSetElementDependency.cs'),
         (Join-Path $cliDir 'AscetReadBlockDiagram.cs'),
         (Join-Path $cliDir 'AscetReadMethodCode.cs'),
         (Join-Path $cliDir 'AscetReadMethodSignature.cs'),

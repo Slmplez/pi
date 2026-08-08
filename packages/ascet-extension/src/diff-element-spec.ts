@@ -27,7 +27,11 @@ export type AscetDiffElementSpecResult = AscetCliJsonResult;
 
 export const ascetDiffElementSpecParameters = Type.Object({
 	componentPath: Type.String({ description: "ASCET component path.", minLength: 1 }),
-	specFile: Type.String({ description: "Path to element spec JSON file.", minLength: 1 }),
+	specFile: Type.String({
+		description:
+			"Path to element spec JSON file. Relative paths resolve against the tool invocation working directory.",
+		minLength: 1,
+	}),
 	changesOnly: Type.Optional(Type.Boolean({ description: "Only include changed sections in the diff response." })),
 });
 

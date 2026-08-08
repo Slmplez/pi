@@ -321,6 +321,21 @@ export const ascetRouteManifestEntries = [
 	},
 
 	{
+		toolName: "configure_parameter_dependency_chain",
+		action: "plan",
+		logicalCommandId: "AscetConfigureParameterDependencyChain",
+		operation: "configure_parameter_dependency_chain_plan",
+		category: "domain",
+	},
+	{
+		toolName: "configure_parameter_dependency_chain",
+		action: "commit",
+		logicalCommandId: "AscetConfigureParameterDependencyChain",
+		operation: "configure_parameter_dependency_chain_commit",
+		category: "domain",
+	},
+
+	{
 		toolName: "ascet_batch_write",
 		action: "batch_set_method_code",
 		logicalCommandId: "AscetBatchSetMethodCode",
