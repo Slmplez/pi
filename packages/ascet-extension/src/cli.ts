@@ -260,6 +260,16 @@ function terminateProcess(child: ChildProcess): void {
 }
 
 export async function executeAscetCli(request: AscetCliRequest): Promise<AscetCliExecutionResult> {
+	if (request.signal?.aborted) {
+		return {
+			exitCode: null,
+			stdout: "",
+			stderr: "",
+			timedOut: false,
+			aborted: true,
+			request,
+		};
+	}
 	return new Promise((resolve, reject) => {
 		const child = spawn(request.cliPath, request.args, {
 			cwd: request.cwd,
@@ -360,7 +370,11 @@ async function executeScheduledAscetCli(
 		queueTimeoutMs: options.queueTimeoutMs ?? 60_000,
 		executionTimeoutMs: (request.timeoutMs ?? 60_000) + 5_000,
 		signal: request.signal,
-		async run() {
+		async run(schedulerSignal) {
+			const scheduledRequest: AscetCliRequest = {
+				...request,
+				signal: schedulerSignal,
+			};
 			const lock = await acquireAscetCliLock(
 				{
 					agentId,
@@ -371,12 +385,13 @@ async function executeScheduledAscetCli(
 				{
 					env: options.env,
 					acquireTimeoutMs: Math.min(options.queueTimeoutMs ?? 60_000, 60_000),
+					signal: schedulerSignal,
 				},
 			);
 			try {
-				const execution = await (options.executeCli ?? executeAscetCli)(request);
+				const execution = await (options.executeCli ?? executeAscetCli)(scheduledRequest);
 				const acceptedExitCodes = options.acceptedExitCodes ?? [0];
-				const aborted = request.signal?.aborted === true || execution.aborted === true;
+				const aborted = scheduledRequest.signal?.aborted === true || execution.aborted === true;
 				if (aborted) {
 					throw new AscetCliProcessError(execution, "ascet_cli_aborted", "ASCET CLI execution was aborted.");
 				}

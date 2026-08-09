@@ -1,8 +1,11 @@
 import type { Api, AssistantMessageEventStream, Context, Model, SimpleStreamOptions } from "@earendil-works/pi-ai";
 import type { OAuthCredentials, OAuthLoginCallbacks } from "@earendil-works/pi-ai/oauth";
+import type { TSchema } from "typebox";
 import type { AscetCliExecutionResult, AscetCliRequest } from "../cli.ts";
 import { renderAscetToolCall, renderAscetToolResult } from "../rendering.ts";
 import type { AscetScheduler } from "../scheduler/scheduler.ts";
+import { createInvalidParametersToolResult } from "../tools/_shared/validation.ts";
+import type { ActionActivationContext } from "../tools/actions/gates.ts";
 import {
 	AscetActionUnavailableError,
 	assertActionActive,
@@ -149,6 +152,7 @@ export interface AscetToolContext {
 	env?: Record<string, string | undefined>;
 	executeCli?: (request: AscetCliRequest) => Promise<AscetCliExecutionResult>;
 	scheduler?: Pick<AscetScheduler, "submit" | "getSnapshot">;
+	actionActivationContext?: ActionActivationContext;
 	hasUI?: boolean;
 	ui?: {
 		confirm(title: string, message: string, opts?: { signal?: AbortSignal; timeout?: number }): Promise<boolean>;
@@ -157,11 +161,23 @@ export interface AscetToolContext {
 
 type AscetRenderableTool = {
 	name: string;
+	parameters?: TSchema;
 	executionMode?: "sequential" | "parallel";
 	renderCall?: typeof renderAscetToolCall;
 	renderResult?: typeof renderAscetToolResult;
-	execute?: (...args: any[]) => Promise<unknown> | unknown;
+	execute?: (...args: never[]) => Promise<unknown> | unknown;
 };
+
+function getActionActivationContext(value: unknown): ActionActivationContext {
+	if (value === null || typeof value !== "object" || Array.isArray(value)) {
+		return {};
+	}
+	const context = (value as { actionActivationContext?: unknown }).actionActivationContext;
+	if (context === null || typeof context !== "object" || Array.isArray(context)) {
+		return {};
+	}
+	return context as ActionActivationContext;
+}
 
 export function defineSequentialAscetTool<T extends AscetRenderableTool>(
 	tool: T,
@@ -172,8 +188,18 @@ export function defineSequentialAscetTool<T extends AscetRenderableTool>(
 } {
 	const execute = tool.execute
 		? async (...args: Parameters<NonNullable<T["execute"]>>) => {
+				const invalidParameters = tool.parameters
+					? createInvalidParametersToolResult(tool.name, tool.parameters, args[1])
+					: undefined;
+				if (invalidParameters) {
+					return invalidParameters;
+				}
 				try {
-					assertActionActive(tool.name, extractToolAction(tool.name, args[1]));
+					assertActionActive(
+						tool.name,
+						extractToolAction(tool.name, args[1]),
+						getActionActivationContext(args[4]),
+					);
 				} catch (error) {
 					if (error instanceof AscetActionUnavailableError) {
 						return createActionUnavailableToolResult(error);

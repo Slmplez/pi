@@ -46,13 +46,11 @@ export type AscetReadParams =
 			dependentElement: string;
 			exporterComponentPath?: string;
 	  }
-	| {
+	| ({
 			action: "read_element_dependency";
-			targetPath?: string;
-			componentPath?: string;
 			elementName: string;
 			targetKind?: AscetReadElementDependencyTargetKind;
-	  };
+	  } & ({ targetPath: string; componentPath?: string } | { targetPath?: string; componentPath: string }));
 
 const detailLevelSchema = Type.Optional(
 	Type.Union([Type.Literal("summary"), Type.Literal("topology"), Type.Literal("full")]),
@@ -115,13 +113,26 @@ const ascetReadActionSchemas = [
 		dependentElement: Type.String({ minLength: 1 }),
 		exporterComponentPath: Type.Optional(Type.String({ minLength: 1 })),
 	}),
-	Type.Object({
-		action: Type.Literal("read_element_dependency"),
-		targetPath: Type.Optional(Type.String({ minLength: 1 })),
-		componentPath: Type.Optional(Type.String({ minLength: 1 })),
-		elementName: Type.String({ minLength: 1 }),
-		targetKind: targetKindSchema,
-	}),
+	Type.Object(
+		{
+			action: Type.Literal("read_element_dependency"),
+			targetPath: Type.String({ minLength: 1 }),
+			componentPath: Type.Optional(Type.String({ minLength: 1 })),
+			elementName: Type.String({ minLength: 1 }),
+			targetKind: targetKindSchema,
+		},
+		{ additionalProperties: false },
+	),
+	Type.Object(
+		{
+			action: Type.Literal("read_element_dependency"),
+			targetPath: Type.Optional(Type.String({ minLength: 1 })),
+			componentPath: Type.String({ minLength: 1 }),
+			elementName: Type.String({ minLength: 1 }),
+			targetKind: targetKindSchema,
+		},
+		{ additionalProperties: false },
+	),
 ] as const;
 
 export const ascetReadParameters = openAiObjectUnionSchema<AscetReadParams>(ascetReadActionSchemas);

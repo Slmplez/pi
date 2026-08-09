@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
-import { existsSync } from "node:fs";
-import { mkdir, open, readFile, rm, writeFile } from "node:fs/promises";
+import type { Stats } from "node:fs";
+import { type FileHandle, mkdir, open, readFile, rm, stat } from "node:fs/promises";
 import { dirname } from "node:path";
 import { type PiAscetRuntimePathOptions, resolvePiAscetLockPath } from "./paths.ts";
 
@@ -30,6 +30,14 @@ export type AscetCliLockSnapshot =
 			stale: boolean;
 			ageMs: number;
 			heartbeatAgeMs: number;
+	  }
+	| {
+			locked: true;
+			path: string;
+			corrupt: true;
+			stale: boolean;
+			ageMs: number;
+			heartbeatAgeMs: number;
 	  };
 
 interface AscetCliLockMetadata {
@@ -46,6 +54,7 @@ interface AscetCliLockOptions extends PiAscetRuntimePathOptions {
 	retryDelayMs?: number;
 	staleMs?: number;
 	heartbeatIntervalMs?: number;
+	signal?: AbortSignal;
 	now?: () => number;
 	tokenFactory?: () => string;
 	isPidAlive?: (pid: number) => boolean;
@@ -56,6 +65,36 @@ interface AscetCliLockSnapshotOptions extends PiAscetRuntimePathOptions {
 	staleMs?: number;
 	now?: () => number;
 	isPidAlive?: (pid: number) => boolean;
+}
+
+interface ValidLockFileContents {
+	kind: "valid";
+	owner: AscetCliLockFile;
+	raw: string;
+}
+
+interface CorruptLockFileContents {
+	kind: "corrupt";
+	raw: string;
+}
+
+interface MissingLockFileContents {
+	kind: "missing";
+}
+
+type LockFileContents = ValidLockFileContents | CorruptLockFileContents | MissingLockFileContents;
+
+interface LockFileIdentity {
+	raw: string;
+	dev: number;
+	ino: number;
+	size: number;
+	mtimeMs: number;
+}
+
+interface LockInspection {
+	snapshot: AscetCliLockSnapshot;
+	identity?: LockFileIdentity;
 }
 
 export class AscetCliLockTimeoutError extends Error {
@@ -71,8 +110,34 @@ export class AscetCliLockTimeoutError extends Error {
 	}
 }
 
-function sleep(ms: number): Promise<void> {
-	return new Promise((resolve) => setTimeout(resolve, ms));
+function getAbortReason(signal: AbortSignal): unknown {
+	return signal.reason ?? new Error("ASCET CLI lock acquisition was aborted.");
+}
+
+function throwIfAborted(signal: AbortSignal | undefined): void {
+	if (signal?.aborted) {
+		throw getAbortReason(signal);
+	}
+}
+
+function sleep(ms: number, signal?: AbortSignal): Promise<void> {
+	if (!signal) {
+		return new Promise((resolve) => setTimeout(resolve, ms));
+	}
+	if (signal.aborted) {
+		return Promise.reject(getAbortReason(signal));
+	}
+	return new Promise((resolve, reject) => {
+		const onAbort = () => {
+			clearTimeout(timer);
+			reject(getAbortReason(signal));
+		};
+		const timer = setTimeout(() => {
+			signal.removeEventListener("abort", onAbort);
+			resolve();
+		}, ms);
+		signal.addEventListener("abort", onAbort, { once: true });
+	});
 }
 
 function resolveLockPath(options: AscetCliLockOptions | AscetCliLockSnapshotOptions): string {
@@ -93,8 +158,10 @@ export async function acquireAscetCliLock(
 	const startedAt = now();
 
 	await mkdir(dirname(lockPath), { recursive: true });
+	throwIfAborted(options.signal);
 
 	while (true) {
+		throwIfAborted(options.signal);
 		const timestamp = new Date(now()).toISOString();
 		const lockFile: AscetCliLockFile = {
 			token,
@@ -111,79 +178,67 @@ export async function acquireAscetCliLock(
 			const handle = await open(lockPath, "wx");
 			try {
 				await handle.writeFile(JSON.stringify(lockFile));
-			} finally {
+				await handle.sync();
+				await handle.utimes(new Date(now()), new Date(now()));
+				throwIfAborted(options.signal);
+				return createHeldLock(lockPath, token, handle, options);
+			} catch (error) {
 				await handle.close();
+				await rm(lockPath, { force: true });
+				throw error;
 			}
-			return createHeldLock(lockPath, token, lockFile, options);
 		} catch (error) {
 			if (!isAlreadyExistsError(error)) {
 				throw error;
 			}
 		}
 
-		const snapshot = await getAscetCliLockSnapshot({
+		const inspection = await inspectAscetCliLock({
 			...options,
 			lockPath,
 			staleMs,
 			now,
 			isPidAlive: options.isPidAlive,
 		});
-		if (snapshot.locked && snapshot.stale) {
-			await rm(lockPath, { force: true });
-			continue;
+		if (inspection.snapshot.locked && inspection.snapshot.stale && inspection.identity) {
+			if (await removeLockIfUnchanged(lockPath, inspection.identity)) {
+				continue;
+			}
 		}
 
 		if (now() - startedAt >= acquireTimeoutMs) {
 			throw new AscetCliLockTimeoutError(lockPath, acquireTimeoutMs);
 		}
-		await sleep(retryDelayMs);
+		await sleep(retryDelayMs, options.signal);
 	}
 }
 
 export async function getAscetCliLockSnapshot(
 	options: AscetCliLockSnapshotOptions = {},
 ): Promise<AscetCliLockSnapshot> {
-	const lockPath = resolveLockPath(options);
-	const now = options.now ?? (() => Date.now());
-	const staleMs = options.staleMs ?? 120_000;
-
-	if (!existsSync(lockPath)) {
-		return { locked: false, path: lockPath };
-	}
-
-	const owner = await readLockFile(lockPath);
-	if (!owner) {
-		return { locked: false, path: lockPath };
-	}
-
-	const heartbeatMs = Date.parse(owner.heartbeatAt);
-	const acquiredMs = Date.parse(owner.acquiredAt);
-	const heartbeatAgeMs = Number.isFinite(heartbeatMs) ? Math.max(0, now() - heartbeatMs) : Number.POSITIVE_INFINITY;
-	const ageMs = Number.isFinite(acquiredMs) ? Math.max(0, now() - acquiredMs) : Number.POSITIVE_INFINITY;
-	const pidAlive = (options.isPidAlive ?? isPidAlive)(owner.pid);
-
-	return {
-		locked: true,
-		path: lockPath,
-		owner,
-		stale: !pidAlive || heartbeatAgeMs > staleMs,
-		ageMs,
-		heartbeatAgeMs,
-	};
+	return (await inspectAscetCliLock(options)).snapshot;
 }
 
 export async function clearStaleAscetCliLock(options: AscetCliLockSnapshotOptions = {}): Promise<boolean> {
-	const snapshot = await getAscetCliLockSnapshot(options);
-	if (!snapshot.locked || !snapshot.stale) {
+	const inspection = await inspectAscetCliLock(options);
+	if (!inspection.snapshot.locked || !inspection.snapshot.stale || !inspection.identity) {
 		return false;
 	}
-	await rm(snapshot.path, { force: true });
-	return true;
+	return removeLockIfUnchanged(inspection.snapshot.path, inspection.identity);
 }
 
 export function formatAscetCliLockStatus(snapshot: AscetCliLockSnapshot): string {
 	if (!snapshot.locked) {
 		return ["CLI Lock:", "  owner: none"].join("\n");
+	}
+	if ("corrupt" in snapshot) {
+		return [
+			"CLI Lock:",
+			"  owner: corrupt lock file",
+			`  age: ${formatDuration(snapshot.ageMs)}`,
+			`  heartbeat: ${formatDuration(snapshot.heartbeatAgeMs)} ago`,
+			`  stale: ${snapshot.stale ? "yes" : "no"}`,
+		].join("\n");
 	}
 	return [
 		"CLI Lock:",
@@ -197,26 +252,72 @@ export function formatAscetCliLockStatus(snapshot: AscetCliLockSnapshot): string
 	].join("\n");
 }
 
+async function inspectAscetCliLock(options: AscetCliLockSnapshotOptions): Promise<LockInspection> {
+	const lockPath = resolveLockPath(options);
+	const now = options.now ?? (() => Date.now());
+	const staleMs = options.staleMs ?? 120_000;
+	const contents = await readLockFile(lockPath);
+	if (contents.kind === "missing") {
+		return { snapshot: { locked: false, path: lockPath } };
+	}
+
+	const lockStat = await readLockStat(lockPath);
+	if (!lockStat) {
+		return { snapshot: { locked: false, path: lockPath } };
+	}
+	const heartbeatAgeMs = getAgeMs(now(), lockStat.mtimeMs);
+	const identity = createLockFileIdentity(contents.raw, lockStat);
+	if (contents.kind === "corrupt") {
+		return {
+			snapshot: {
+				locked: true,
+				path: lockPath,
+				corrupt: true,
+				stale: heartbeatAgeMs > staleMs,
+				ageMs: heartbeatAgeMs,
+				heartbeatAgeMs,
+			},
+			identity,
+		};
+	}
+
+	const acquiredMs = Date.parse(contents.owner.acquiredAt);
+	const pidAlive = (options.isPidAlive ?? isPidAlive)(contents.owner.pid);
+	return {
+		snapshot: {
+			locked: true,
+			path: lockPath,
+			owner: contents.owner,
+			stale: !pidAlive || heartbeatAgeMs > staleMs,
+			ageMs: Number.isFinite(acquiredMs) ? getAgeMs(now(), acquiredMs) : Number.POSITIVE_INFINITY,
+			heartbeatAgeMs,
+		},
+		identity,
+	};
+}
+
 async function createHeldLock(
 	lockPath: string,
 	token: string,
-	lockFile: AscetCliLockFile,
+	handle: FileHandle,
 	options: AscetCliLockOptions,
 ): Promise<AscetCliLock> {
 	const heartbeatIntervalMs = options.heartbeatIntervalMs ?? 5_000;
 	const now = options.now ?? (() => Date.now());
 	let released = false;
+	let heartbeatPending = false;
 	const heartbeat = setInterval(() => {
-		if (released) {
+		if (released || heartbeatPending) {
 			return;
 		}
-		void writeFile(
-			lockPath,
-			JSON.stringify({
-				...lockFile,
-				heartbeatAt: new Date(now()).toISOString(),
-			}),
-		).catch(() => {});
+		heartbeatPending = true;
+		const timestamp = new Date(now());
+		void handle
+			.utimes(timestamp, timestamp)
+			.catch(() => {})
+			.finally(() => {
+				heartbeatPending = false;
+			});
 	}, heartbeatIntervalMs);
 
 	return {
@@ -228,34 +329,134 @@ async function createHeldLock(
 			}
 			released = true;
 			clearInterval(heartbeat);
-			const current = await readLockFile(lockPath);
-			if (current?.token === token) {
-				await rm(lockPath, { force: true });
+			try {
+				await removeLockIfOwned(lockPath, token, handle);
+			} finally {
+				await handle.close();
 			}
 		},
 	};
 }
 
-async function readLockFile(lockPath: string): Promise<AscetCliLockFile | null> {
+async function removeLockIfUnchanged(lockPath: string, expected: LockFileIdentity): Promise<boolean> {
+	let handle: FileHandle | undefined;
 	try {
-		const raw = await readFile(lockPath, "utf8");
-		const parsed = JSON.parse(raw) as Partial<AscetCliLockFile>;
+		handle = await open(lockPath, "r");
+		const [contents, handleStat, pathStat] = await Promise.all([
+			readLockFileHandle(handle),
+			handle.stat(),
+			readLockStat(lockPath),
+		]);
 		if (
-			typeof parsed.token !== "string" ||
-			typeof parsed.pid !== "number" ||
-			typeof parsed.agentId !== "string" ||
-			typeof parsed.commandId !== "string" ||
-			typeof parsed.toolName !== "string" ||
-			typeof parsed.processName !== "string" ||
-			typeof parsed.acquiredAt !== "string" ||
-			typeof parsed.heartbeatAt !== "string"
+			!pathStat ||
+			contents.kind === "missing" ||
+			!isSameFile(handleStat, pathStat) ||
+			!isSameLockFileIdentity(createLockFileIdentity(contents.raw, handleStat), expected)
 		) {
-			return null;
+			return false;
 		}
-		return parsed as AscetCliLockFile;
-	} catch {
-		return null;
+		await rm(lockPath, { force: true });
+		return true;
+	} catch (error) {
+		if (isNotFoundError(error)) {
+			return false;
+		}
+		throw error;
+	} finally {
+		await handle?.close();
 	}
+}
+
+async function removeLockIfOwned(lockPath: string, token: string, handle: FileHandle): Promise<boolean> {
+	const [contents, handleStat, pathStat] = await Promise.all([
+		readLockFile(lockPath),
+		handle.stat(),
+		readLockStat(lockPath),
+	]);
+	if (contents.kind !== "valid" || contents.owner.token !== token || !pathStat || !isSameFile(handleStat, pathStat)) {
+		return false;
+	}
+	await rm(lockPath, { force: true });
+	return true;
+}
+
+async function readLockFile(lockPath: string): Promise<LockFileContents> {
+	try {
+		return parseLockFile(await readFile(lockPath, "utf8"));
+	} catch (error) {
+		if (isNotFoundError(error)) {
+			return { kind: "missing" };
+		}
+		throw error;
+	}
+}
+
+async function readLockFileHandle(handle: FileHandle): Promise<LockFileContents> {
+	return parseLockFile(await handle.readFile("utf8"));
+}
+
+function parseLockFile(raw: string): LockFileContents {
+	try {
+		const parsed = JSON.parse(raw) as Partial<AscetCliLockFile>;
+		if (!isValidLockFile(parsed)) {
+			return { kind: "corrupt", raw };
+		}
+		return { kind: "valid", owner: parsed, raw };
+	} catch {
+		return { kind: "corrupt", raw };
+	}
+}
+
+function isValidLockFile(value: Partial<AscetCliLockFile>): value is AscetCliLockFile {
+	return (
+		typeof value.token === "string" &&
+		typeof value.pid === "number" &&
+		typeof value.agentId === "string" &&
+		typeof value.commandId === "string" &&
+		typeof value.toolName === "string" &&
+		typeof value.processName === "string" &&
+		typeof value.acquiredAt === "string" &&
+		typeof value.heartbeatAt === "string"
+	);
+}
+
+async function readLockStat(lockPath: string): Promise<Stats | undefined> {
+	try {
+		return await stat(lockPath);
+	} catch (error) {
+		if (isNotFoundError(error)) {
+			return undefined;
+		}
+		throw error;
+	}
+}
+
+function createLockFileIdentity(raw: string, lockStat: Stats): LockFileIdentity {
+	return {
+		raw,
+		dev: lockStat.dev,
+		ino: lockStat.ino,
+		size: lockStat.size,
+		mtimeMs: lockStat.mtimeMs,
+	};
+}
+
+function isSameLockFileIdentity(left: LockFileIdentity, right: LockFileIdentity): boolean {
+	return (
+		left.raw === right.raw &&
+		left.size === right.size &&
+		left.mtimeMs === right.mtimeMs &&
+		left.dev === right.dev &&
+		left.ino === right.ino
+	);
+}
+
+function isSameFile(left: Stats, right: Stats): boolean {
+	return left.dev === right.dev && left.ino === right.ino;
+}
+
+function getAgeMs(now: number, timestamp: number): number {
+	return Number.isFinite(timestamp) ? Math.max(0, now - timestamp) : Number.POSITIVE_INFINITY;
 }
 
 function formatDuration(ms: number): string {
@@ -269,9 +470,11 @@ function formatDuration(ms: number): string {
 }
 
 function isAlreadyExistsError(error: unknown): boolean {
-	return (
-		typeof error === "object" && error !== null && "code" in error && (error as { code?: unknown }).code === "EEXIST"
-	);
+	return typeof error === "object" && error !== null && "code" in error && error.code === "EEXIST";
+}
+
+function isNotFoundError(error: unknown): boolean {
+	return typeof error === "object" && error !== null && "code" in error && error.code === "ENOENT";
 }
 
 function isPidAlive(pid: number): boolean {

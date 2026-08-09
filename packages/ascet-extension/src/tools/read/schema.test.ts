@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
+import { Value } from "typebox/value";
 import { type AscetReadParams, ascetReadParameters } from "./schema.ts";
 
 describe("ascet_read schema", () => {
@@ -90,6 +91,23 @@ describe("ascet_read schema", () => {
 		assert.equal(request.action, "read_element_dependency");
 	});
 
+	test("requires a target for read_element_dependency", () => {
+		assert.equal(
+			Value.Check(ascetReadParameters, {
+				action: "read_element_dependency",
+				elementName: "Kp",
+			}),
+			false,
+		);
+		assert.equal(
+			Value.Check(ascetReadParameters, {
+				action: "read_element_dependency",
+				componentPath: "DEMO\\PID",
+				elementName: "Kp",
+			}),
+			true,
+		);
+	});
 	test("read_element exposes one exact component and Element target", () => {
 		const schema = getActionSchema("read_element") as { properties?: Record<string, unknown> } | undefined;
 		const properties = schema?.properties ?? {};

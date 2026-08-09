@@ -8,11 +8,12 @@ import {
 	isBatchWriteEnabled,
 	resolveProfileTools,
 } from "./profiles.ts";
-import { type AscetExposureMetadata, setAscetExposureRuntime, updateAscetExposureMetadata } from "./state.ts";
+import type { AscetExposureMetadata } from "./state.ts";
 
 export interface AscetExposureController {
 	getProfile(): AscetProfile;
 	getMetadata(): AscetExposureMetadata;
+	registerProfileTools(profile?: AscetProfile): void;
 	activateProfile(profile: AscetProfile): void;
 }
 
@@ -27,6 +28,7 @@ export function createAscetExposureController(
 ): AscetExposureController {
 	const env = options.env ?? process.env;
 	let activeProfile = options.initialProfile ?? resolveInitialProfile(env);
+	let registeredProfile: AscetProfile | undefined;
 
 	function createMetadata(profile: AscetProfile, activeAscetTools: string[]): AscetExposureMetadata {
 		return {
@@ -36,13 +38,21 @@ export function createAscetExposureController(
 		};
 	}
 
+	function registerProfileTools(profile: AscetProfile = activeProfile): void {
+		if (registeredProfile === profile) {
+			return;
+		}
+		const activeAscetTools = resolveProfileTools(profile, env);
+		for (const tool of buildProfiledAscetTools(profile, activeAscetTools, env)) {
+			pi.registerTool(tool);
+		}
+		registeredProfile = profile;
+	}
+
 	function activateProfile(profile: AscetProfile): void {
 		activeProfile = profile;
 		const activeAscetTools = resolveProfileTools(profile, env);
-		for (const tool of buildProfiledAscetTools(profile, activeAscetTools)) {
-			pi.registerTool(tool);
-		}
-		updateAscetExposureMetadata(createMetadata(profile, activeAscetTools));
+		registerProfileTools(profile);
 		if (!pi.setActiveTools) {
 			return;
 		}
@@ -51,14 +61,10 @@ export function createAscetExposureController(
 		pi.setActiveTools([...new Set([...nonAscet, ...activeAscetTools])]);
 	}
 
-	setAscetExposureRuntime(createMetadata(activeProfile, resolveProfileTools(activeProfile, env)), (profile) => {
-		activateProfile(profile);
-		return createMetadata(profile, resolveProfileTools(profile, env));
-	});
-
 	return {
 		getProfile: () => activeProfile,
 		getMetadata: () => createMetadata(activeProfile, resolveProfileTools(activeProfile, env)),
+		registerProfileTools,
 		activateProfile,
 	};
 }

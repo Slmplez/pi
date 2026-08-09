@@ -138,10 +138,14 @@ function collectIdentityValues(value: unknown, identities: { oids: string[]; pat
 	}
 }
 
-function pathMatches(observedPath: string, requestedPath: string): boolean {
-	const observed = normalizePath(observedPath);
-	const requested = normalizePath(requestedPath);
-	return observed === requested || observed.startsWith(`${requested}\\`);
+function isSameOrDescendant(path: string, ancestor: string): boolean {
+	const normalizedPath = normalizePath(path);
+	const normalizedAncestor = normalizePath(ancestor);
+	return normalizedPath === normalizedAncestor || normalizedPath.startsWith(`${normalizedAncestor}\\`);
+}
+
+function pathsOverlap(left: string, right: string): boolean {
+	return isSameOrDescendant(left, right) || isSameOrDescendant(right, left);
 }
 
 function matchesInvalidationCriteria(target: unknown, criteria: ObservationInvalidationCriteria): boolean {
@@ -158,8 +162,9 @@ function matchesInvalidationCriteria(target: unknown, criteria: ObservationInval
 	const identities: { oids: string[]; paths: string[] } = { oids: [], paths: [] };
 	collectIdentityValues(target, identities);
 	return (
-		requestedOids.some((requested) => identities.oids.includes(requested)) ||
-		requestedPaths.some((requested) => identities.paths.some((observed) => pathMatches(observed, requested)))
+		requestedOids.some((requested) =>
+			identities.oids.some((observed) => observed.toLocaleLowerCase() === requested.toLocaleLowerCase()),
+		) || requestedPaths.some((requested) => identities.paths.some((observed) => pathsOverlap(observed, requested)))
 	);
 }
 

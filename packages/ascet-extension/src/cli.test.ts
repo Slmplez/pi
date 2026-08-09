@@ -3,7 +3,7 @@ import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, 
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, test } from "node:test";
-import { type AscetCliJsonResult, formatAscetCliJsonResult, runAscetCliJson } from "./cli.ts";
+import { type AscetCliJsonResult, executeAscetCli, formatAscetCliJsonResult, runAscetCliJson } from "./cli.ts";
 import { getAscetCliLockSnapshot } from "./scheduler/cli-lock.ts";
 import { createAscetScheduler } from "./scheduler/scheduler.ts";
 
@@ -272,6 +272,20 @@ describe("formatAscetCliJsonResult", () => {
 });
 
 describe("runAscetCliJson scheduler failure semantics", () => {
+	test("does not spawn a CLI process for a pre-aborted request", async () => {
+		const controller = new AbortController();
+		controller.abort(new Error("cancel before spawn"));
+		const result = await executeAscetCli({
+			cwd: process.cwd(),
+			cliPath: "missing-ascet-cli.exe",
+			args: [],
+			signal: controller.signal,
+		});
+
+		assert.equal(result.exitCode, null);
+		assert.equal(result.aborted, true);
+		assert.equal(result.timedOut, false);
+	});
 	test("records a non-zero CLI exit as a failed scheduler job", async () => {
 		const fixture = createReadyEnv();
 		const scheduler = createAscetScheduler({ generateJobId: () => "scheduler-cli-failure" });

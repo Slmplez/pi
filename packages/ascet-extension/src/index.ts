@@ -6,15 +6,11 @@ import { executeAscetSchedulerStatusCommand } from "./scheduler/status.ts";
 import type { AscetRuntimeStatusReport } from "./status-runtime.ts";
 import { createAscetRuntimeStatusReport } from "./status-runtime.ts";
 import { createAscetExposureController } from "./tools/exposure/controller.ts";
-import { canonicalAscetTools } from "./tools/index.ts";
 
 export default function ascetExtension(pi: AscetExtensionAPI) {
 	registerBoschLlmFarmProvider(pi);
 	const exposure = createAscetExposureController(pi);
-
-	for (const tool of canonicalAscetTools) {
-		pi.registerTool(tool);
-	}
+	exposure.registerProfileTools();
 
 	pi.on?.("before_agent_start", (event) => {
 		exposure.activateProfile(exposure.getProfile());

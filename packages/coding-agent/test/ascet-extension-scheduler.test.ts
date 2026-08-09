@@ -99,7 +99,7 @@ describe("ASCET scheduler diagnostics", () => {
 		);
 		const active = await getAscetCliLockSnapshot({ env });
 		expect(active.locked).toBe(true);
-		expect(active.locked ? active.owner.toolName : "").toBe("ascet_test");
+		expect(active.locked && "owner" in active ? active.owner.toolName : "").toBe("ascet_test");
 		await lock.release();
 		expect((await getAscetCliLockSnapshot({ env })).locked).toBe(false);
 

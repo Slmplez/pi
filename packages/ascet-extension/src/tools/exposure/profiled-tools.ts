@@ -6,6 +6,7 @@ type PromptedTool = {
 	promptGuidelines?: readonly string[];
 };
 type AscetToolDefinition = (typeof allAscetTools)[number];
+type ToolExecute = (...args: unknown[]) => unknown;
 
 const profileGuidelines: Record<AscetProfile, Partial<Record<string, readonly string[]>>> = {
 	base: {
@@ -55,15 +56,41 @@ export function getProfileGuidelines(profile: AscetProfile): Partial<Record<stri
 	return profileGuidelines[profile] ?? {};
 }
 
-export function buildProfiledAscetTools(profile: AscetProfile, toolNames: readonly string[]): AscetToolDefinition[] {
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+export function buildProfiledAscetTools(
+	profile: AscetProfile,
+	toolNames: readonly string[],
+	env: Record<string, string | undefined> = process.env,
+): AscetToolDefinition[] {
 	const extraGuidelines = getProfileGuidelines(profile);
 	const activeNames = new Set(toolNames);
 	return allAscetTools
 		.filter((tool) => activeNames.has(tool.name))
 		.map((tool) => {
 			const promptedTool = tool as PromptedTool;
+			const execute = (tool as unknown as { execute?: ToolExecute }).execute;
 			return {
 				...tool,
+				...(execute
+					? {
+							execute: (...args: unknown[]) => {
+								const nextArgs = [...args];
+								const toolContext = isRecord(nextArgs[4]) ? nextArgs[4] : {};
+								nextArgs[4] = {
+									...toolContext,
+									actionActivationContext: {
+										env,
+										activeProfile: profile,
+										activeTools: toolNames,
+									},
+								};
+								return execute(...nextArgs);
+							},
+						}
+					: {}),
 				promptGuidelines: [...(promptedTool.promptGuidelines ?? []), ...(extraGuidelines[tool.name] ?? [])],
 			};
 		}) as AscetToolDefinition[];

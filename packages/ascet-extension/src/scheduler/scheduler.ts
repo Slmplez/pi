@@ -20,6 +20,7 @@ interface PendingJob<T = unknown> {
 	reject: (error: unknown) => void;
 	queueTimer?: ReturnType<typeof setTimeout>;
 	abortListener?: () => void;
+	executionController?: AbortController;
 }
 
 export interface AscetScheduler {
@@ -101,7 +102,7 @@ class InProcessAscetScheduler implements AscetScheduler {
 				reject,
 			};
 			this.#pendingByJobId.set(context.jobId, pending as PendingJob);
-			this.#queue.push(context);
+			this.#enqueue(context);
 			this.#armQueueTimeout(pending as PendingJob);
 			this.#armCancellation(pending as PendingJob);
 		});
@@ -170,14 +171,23 @@ class InProcessAscetScheduler implements AscetScheduler {
 		context.state = "running";
 		context.startedAt = this.#now();
 		context.queueWaitMs = context.startedAt - context.queuedAt;
+		const executionController = new AbortController();
+		pending.executionController = executionController;
+		const onExternalAbort = () => executionController.abort();
+		job.signal?.addEventListener("abort", onExternalAbort, { once: true });
 		let executionTimer: ReturnType<typeof setTimeout> | undefined;
 		let timedOut = false;
+		let hasExecutionError = false;
+		let executionError: unknown;
+		let result: T | undefined;
+		const runPromise = Promise.resolve().then(() => job.run(executionController.signal));
 		try {
-			const result = await Promise.race([
-				job.run(),
+			result = await Promise.race([
+				runPromise,
 				new Promise<T>((_, reject) => {
 					executionTimer = setTimeout(() => {
 						timedOut = true;
+						executionController.abort();
 						reject(
 							new AscetSchedulerExecutionTimeoutError(context.jobId, context.commandId, job.executionTimeoutMs),
 						);
@@ -187,9 +197,10 @@ class InProcessAscetScheduler implements AscetScheduler {
 			context.state = "succeeded";
 			context.finishedAt = this.#now();
 			context.executionMs = context.finishedAt - context.startedAt;
-			pending.resolve(result);
 			this.#hostState = isRecoveryJob || !hostWasDegraded ? "healthy" : "degraded";
 		} catch (error) {
+			hasExecutionError = true;
+			executionError = error;
 			context.finishedAt = this.#now();
 			context.executionMs = context.startedAt ? context.finishedAt - context.startedAt : undefined;
 			const errorCode = getAscetSchedulerErrorCode(error);
@@ -204,10 +215,19 @@ class InProcessAscetScheduler implements AscetScheduler {
 					isRecoveryJob || hostWasDegraded || errorCode === "ascet_cli_timeout" ? "degraded" : "healthy";
 			}
 			context.errorMessage = error instanceof Error ? error.message : String(error);
-			pending.reject(error);
+			if (timedOut) {
+				pending.reject(error);
+			}
 		} finally {
 			if (executionTimer) {
 				clearTimeout(executionTimer);
+			}
+			job.signal?.removeEventListener("abort", onExternalAbort);
+			// Keep the serial resource occupied until the cancelled operation exits.
+			try {
+				await runPromise;
+			} catch {
+				// The operation failure was already reported above.
 			}
 			this.#pendingByJobId.delete(context.jobId);
 			this.#recordRecent(context);
@@ -215,6 +235,24 @@ class InProcessAscetScheduler implements AscetScheduler {
 			if (this.#hostState === "busy" || this.#hostState === "recovering") {
 				this.#hostState = hostWasDegraded ? "degraded" : "healthy";
 			}
+			if (!timedOut) {
+				if (hasExecutionError) {
+					pending.reject(executionError);
+				} else {
+					pending.resolve(result as T);
+				}
+			}
+		}
+	}
+
+	#enqueue(context: AscetJobContext): void {
+		const index = this.#queue.findIndex(
+			(existing) => priorityRank(existing.priority) > priorityRank(context.priority),
+		);
+		if (index < 0) {
+			this.#queue.push(context);
+		} else {
+			this.#queue.splice(index, 0, context);
 		}
 	}
 
@@ -309,6 +347,17 @@ class InProcessAscetScheduler implements AscetScheduler {
 			pendingByAgent[pending.context.agentId] = (pendingByAgent[pending.context.agentId] ?? 0) + 1;
 		}
 		return pendingByAgent;
+	}
+}
+
+function priorityRank(priority: AscetJobContext["priority"]): number {
+	switch (priority) {
+		case "high":
+			return 0;
+		case "normal":
+			return 1;
+		case "low":
+			return 2;
 	}
 }
 

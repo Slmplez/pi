@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
+import type { AscetJob } from "../scheduler/types.ts";
 import { runAscetSetEnumerators } from "../set-enumerators.ts";
 
 describe("ASCET edit mutation runners", () => {
@@ -10,14 +11,9 @@ describe("ASCET edit mutation runners", () => {
 			{
 				cwd: process.cwd(),
 				scheduler: {
-					async submit<T>(job: {
-						toolName: string;
-						commandId: string;
-						kind: string;
-						run(): Promise<T>;
-					}): Promise<T> {
+					async submit<T>(job: AscetJob<T>): Promise<T> {
 						submissions.push(job);
-						return job.run();
+						return job.run(new AbortController().signal);
 					},
 					getSnapshot(): never {
 						throw new Error("getSnapshot is not used by this runner test.");

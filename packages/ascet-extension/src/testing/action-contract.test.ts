@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { createAscetScheduler } from "../scheduler/scheduler.ts";
+import type { AscetJob } from "../scheduler/types.ts";
 import {
 	ASCET_TEST_ACTIONS,
 	classifyAscetTestAction,
@@ -53,20 +54,14 @@ test("keeps offline build and test actions on an isolated test resource label", 
 test("submits internal AscetTest execution to the current scheduler", async () => {
 	let submitted: { resourceKey?: string; toolName: string; commandId: string; kind: string } | undefined;
 	const scheduler = {
-		submit<T>(job: {
-			resourceKey?: string;
-			toolName: string;
-			commandId: string;
-			kind: string;
-			run: () => Promise<T>;
-		}) {
+		submit<T>(job: AscetJob<T>) {
 			submitted = {
 				resourceKey: job.resourceKey,
 				toolName: job.toolName,
 				commandId: job.commandId,
 				kind: job.kind,
 			};
-			return job.run();
+			return job.run(new AbortController().signal);
 		},
 		getSnapshot() {
 			return createAscetScheduler().getSnapshot();

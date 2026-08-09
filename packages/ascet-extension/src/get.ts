@@ -1,4 +1,4 @@
-﻿import { Type } from "typebox";
+import { Type } from "typebox";
 import {
 	type AscetCliExecutionResult,
 	type AscetCliJsonResult,
@@ -24,11 +24,13 @@ export type AscetGetAction =
 	| "import_binding"
 	| "dbitem_refs";
 
-export interface AscetGetTarget {
-	oid?: string;
-	path?: string;
-	targetPathPrefix?: string;
-}
+export type AscetGetTarget =
+	| { oid: string; path?: string; targetPathPrefix?: string }
+	| { oid?: string; path: string; targetPathPrefix?: string }
+	| { oid?: string; path?: string; targetPathPrefix: string };
+
+export type AscetGetIdentityTarget = { oid: string; path?: string } | { oid?: string; path: string };
+export type AscetGetProvider = { oid: string; path?: string } | { oid?: string; path: string };
 
 export interface AscetGetFilters {
 	name?: string;
@@ -48,19 +50,20 @@ interface AscetGetBaseParams {
 	delivery?: AscetObservationDelivery;
 }
 
+type AscetTargetedGetParams = AscetGetBaseParams & { target: AscetGetTarget };
+
 export type AscetGetParams =
 	| (AscetGetBaseParams & { action: "tree" })
-	| (AscetGetBaseParams & { action: "elements"; elementName?: string })
-	| (AscetGetBaseParams & { action: "formulas"; formulaName?: string })
-	| (AscetGetBaseParams & { action: "component_refs" })
-	| (AscetGetBaseParams & { action: "bde_edges"; diagramName?: string })
-	| (AscetGetBaseParams & {
+	| (AscetTargetedGetParams & { action: "elements"; elementName?: string })
+	| (AscetTargetedGetParams & { action: "formulas"; formulaName?: string })
+	| (AscetTargetedGetParams & { action: "component_refs" })
+	| (AscetTargetedGetParams & { action: "bde_edges"; diagramName?: string })
+	| (AscetTargetedGetParams & {
 			action: "import_binding";
 			elementName: string;
-			provider: { oid?: string; path?: string };
+			provider: AscetGetProvider;
 	  })
-	| (AscetGetBaseParams & { action: "dbitem_refs"; target: { oid?: string; path?: string } });
-
+	| (AscetGetBaseParams & { action: "dbitem_refs"; target: AscetGetIdentityTarget });
 export interface RunAscetGetOptions {
 	cwd: string;
 	env?: Record<string, string | undefined>;
@@ -69,70 +72,127 @@ export interface RunAscetGetOptions {
 	executeCli?: (request: AscetCliRequest) => Promise<AscetCliExecutionResult>;
 }
 
-const targetSchema = Type.Object({
-	oid: Type.Optional(Type.String({ minLength: 1 })),
-	path: Type.Optional(Type.String({ minLength: 1 })),
-	targetPathPrefix: Type.Optional(Type.String({ minLength: 1 })),
-});
-const providerSchema = Type.Object({
-	oid: Type.Optional(Type.String({ minLength: 1 })),
-	path: Type.Optional(Type.String({ minLength: 1 })),
-});
-const filtersSchema = Type.Object({
-	name: Type.Optional(Type.String({ minLength: 1 })),
-	scope: Type.Optional(
-		Type.Array(Type.Union([Type.Literal("local"), Type.Literal("imported"), Type.Literal("exported")])),
+const identityTargetSchema = Type.Union([
+	Type.Object(
+		{
+			oid: Type.String({ minLength: 1 }),
+			path: Type.Optional(Type.String({ minLength: 1 })),
+		},
+		{ additionalProperties: false },
 	),
-});
-const traversalSchema = Type.Object({
-	depth: Type.Optional(Type.Number({ minimum: 0 })),
-	maxFolders: Type.Optional(Type.Number({ minimum: 1 })),
-	maxComponents: Type.Optional(Type.Number({ minimum: 1 })),
-});
+	Type.Object(
+		{
+			oid: Type.Optional(Type.String({ minLength: 1 })),
+			path: Type.String({ minLength: 1 }),
+		},
+		{ additionalProperties: false },
+	),
+]);
+const targetSchema = Type.Union([
+	Type.Object(
+		{
+			oid: Type.String({ minLength: 1 }),
+			path: Type.Optional(Type.String({ minLength: 1 })),
+			targetPathPrefix: Type.Optional(Type.String({ minLength: 1 })),
+		},
+		{ additionalProperties: false },
+	),
+	Type.Object(
+		{
+			oid: Type.Optional(Type.String({ minLength: 1 })),
+			path: Type.String({ minLength: 1 }),
+			targetPathPrefix: Type.Optional(Type.String({ minLength: 1 })),
+		},
+		{ additionalProperties: false },
+	),
+	Type.Object(
+		{
+			oid: Type.Optional(Type.String({ minLength: 1 })),
+			path: Type.Optional(Type.String({ minLength: 1 })),
+			targetPathPrefix: Type.String({ minLength: 1 }),
+		},
+		{ additionalProperties: false },
+	),
+]);
+const providerSchema = identityTargetSchema;
+const filtersSchema = Type.Object(
+	{
+		name: Type.Optional(Type.String({ minLength: 1 })),
+		scope: Type.Optional(
+			Type.Array(Type.Union([Type.Literal("local"), Type.Literal("imported"), Type.Literal("exported")])),
+		),
+	},
+	{ additionalProperties: false },
+);
+const traversalSchema = Type.Object(
+	{
+		depth: Type.Optional(Type.Number({ minimum: 0 })),
+		maxFolders: Type.Optional(Type.Number({ minimum: 1 })),
+		maxComponents: Type.Optional(Type.Number({ minimum: 1 })),
+	},
+	{ additionalProperties: false },
+);
 const deliverySchema = Type.Optional(
 	Type.Union([Type.Literal("auto"), Type.Literal("inline"), Type.Literal("stored")]),
 );
-const baseProperties = {
-	target: Type.Optional(targetSchema),
+const commonProperties = {
 	filters: Type.Optional(filtersSchema),
 	traversal: Type.Optional(traversalSchema),
 	delivery: deliverySchema,
 };
+const targetedProperties = {
+	target: targetSchema,
+	...commonProperties,
+};
 
 export const ascetGetParameters = openAiObjectUnionSchema<AscetGetParams>([
-	Type.Object({ action: Type.Literal("tree"), ...baseProperties }),
-	Type.Object({
-		action: Type.Literal("elements"),
-		...baseProperties,
-		elementName: Type.Optional(Type.String({ minLength: 1 })),
-	}),
-	Type.Object({
-		action: Type.Literal("formulas"),
-		...baseProperties,
-		formulaName: Type.Optional(Type.String({ minLength: 1 })),
-	}),
-	Type.Object({ action: Type.Literal("component_refs"), ...baseProperties }),
-	Type.Object({
-		action: Type.Literal("bde_edges"),
-		...baseProperties,
-		diagramName: Type.Optional(Type.String({ minLength: 1 })),
-	}),
-	Type.Object({
-		action: Type.Literal("import_binding"),
-		...baseProperties,
-		elementName: Type.String({ minLength: 1 }),
-		provider: providerSchema,
-	}),
-	Type.Object({
-		action: Type.Literal("dbitem_refs"),
-		...baseProperties,
-		target: Type.Object({
-			oid: Type.Optional(Type.String({ minLength: 1 })),
-			path: Type.Optional(Type.String({ minLength: 1 })),
-		}),
-	}),
+	Type.Object(
+		{ action: Type.Literal("tree"), target: Type.Optional(targetSchema), ...commonProperties },
+		{ additionalProperties: false },
+	),
+	Type.Object(
+		{
+			action: Type.Literal("elements"),
+			...targetedProperties,
+			elementName: Type.Optional(Type.String({ minLength: 1 })),
+		},
+		{ additionalProperties: false },
+	),
+	Type.Object(
+		{
+			action: Type.Literal("formulas"),
+			...targetedProperties,
+			formulaName: Type.Optional(Type.String({ minLength: 1 })),
+		},
+		{ additionalProperties: false },
+	),
+	Type.Object({ action: Type.Literal("component_refs"), ...targetedProperties }, { additionalProperties: false }),
+	Type.Object(
+		{
+			action: Type.Literal("bde_edges"),
+			...targetedProperties,
+			diagramName: Type.Optional(Type.String({ minLength: 1 })),
+		},
+		{ additionalProperties: false },
+	),
+	Type.Object(
+		{
+			action: Type.Literal("import_binding"),
+			...targetedProperties,
+			elementName: Type.String({ minLength: 1 }),
+			provider: providerSchema,
+		},
+		{ additionalProperties: false },
+	),
+	Type.Object(
+		{
+			action: Type.Literal("dbitem_refs"),
+			...commonProperties,
+			target: identityTargetSchema,
+		},
+		{ additionalProperties: false },
+	),
 ]);
-
 function operationForAction(action: AscetGetAction): string {
 	return `get_${action}`;
 }

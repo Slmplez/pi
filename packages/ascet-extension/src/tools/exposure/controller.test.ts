@@ -1,18 +1,26 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
+import type { AscetCliExecutionResult, AscetCliRequest } from "../../cli.ts";
 import { createAscetExposureController } from "./controller.ts";
 
 function createPiHarness(initialActive: string[] = ["non_ascet_tool"]) {
 	const registered: Array<{ name: string; promptGuidelines?: readonly string[] }> = [];
+	const registeredTools: Array<{ name?: string; execute?: (...args: unknown[]) => unknown }> = [];
 	let active = [...initialActive];
 	return {
 		registered,
+		registeredTools,
 		get active() {
 			return active;
 		},
 		pi: {
 			registerTool(tool: unknown) {
-				const candidate = tool as { name?: string; promptGuidelines?: readonly string[] };
+				const candidate = tool as {
+					name?: string;
+					promptGuidelines?: readonly string[];
+					execute?: (...args: unknown[]) => unknown;
+				};
+				registeredTools.push(candidate);
 				if (candidate.name) {
 					registered.push({ name: candidate.name, promptGuidelines: candidate.promptGuidelines });
 				}
@@ -113,5 +121,42 @@ describe("ASCET exposure controller", () => {
 			],
 			batchWriteEnabled: false,
 		});
+	});
+
+	test("isolates action activation between controllers", async () => {
+		const advanced = createPiHarness();
+		createAscetExposureController(advanced.pi, { env: {} }).activateProfile("advanced-read");
+		const advancedRead = [...advanced.registeredTools].reverse().find((tool) => tool.name === "ascet_read");
+		assert.ok(advancedRead?.execute);
+
+		const ops = createPiHarness();
+		createAscetExposureController(ops.pi, { env: {} }).activateProfile("ops");
+		const opsRead = [...ops.registeredTools].reverse().find((tool) => tool.name === "ascet_read");
+		assert.ok(opsRead?.execute);
+
+		let cliCalls = 0;
+		const executeCli = async (request: AscetCliRequest): Promise<AscetCliExecutionResult> => {
+			cliCalls++;
+			return {
+				exitCode: 0,
+				stdout: JSON.stringify({ ok: true, result: { nodes: [] }, error: null }),
+				stderr: "",
+				timedOut: false,
+				request,
+			};
+		};
+		const params = { action: "read_block_diagram", componentPath: "DEMO\\PID" };
+		await advancedRead.execute("call-a", params, new AbortController().signal, undefined, {
+			cwd: process.cwd(),
+			executeCli,
+		});
+		assert.equal(cliCalls, 1);
+
+		const blocked = (await opsRead.execute("call-b", params, new AbortController().signal, undefined, {
+			cwd: process.cwd(),
+			executeCli,
+		})) as { details?: { error?: { code?: string } } };
+		assert.equal(blocked.details?.error?.code, "ascet_action_unavailable");
+		assert.equal(cliCalls, 1);
 	});
 });

@@ -140,7 +140,10 @@ describe("AscetScheduler failure containment", () => {
 			kind: "read",
 			queueTimeoutMs: 1_000,
 			executionTimeoutMs: 10,
-			run: () => new Promise<never>(() => undefined),
+			run: (signal) =>
+				new Promise<never>((_resolve, reject) => {
+					signal.addEventListener("abort", () => reject(new Error("stalled read aborted")), { once: true });
+				}),
 		});
 		const recovery = scheduler.submit({
 			agentId: "system",
@@ -169,6 +172,129 @@ describe("AscetScheduler failure containment", () => {
 				["recover", "succeeded"],
 			],
 		);
+	});
+
+	test("keeps the serial slot occupied until a timed-out job actually settles", async () => {
+		const scheduler = createAscetScheduler();
+		let active = 0;
+		let maxActive = 0;
+		let releaseFirst: (() => void) | undefined;
+		let markFirstStarted: (() => void) | undefined;
+		let secondStarted = false;
+		const firstStarted = new Promise<void>((resolve) => {
+			markFirstStarted = resolve;
+		});
+
+		const first = scheduler.submit({
+			agentId: "agent-a",
+			toolName: "ascet_test",
+			commandId: "slow_timeout",
+			kind: "read",
+			queueTimeoutMs: 1_000,
+			executionTimeoutMs: 10,
+			run: async () => {
+				active++;
+				maxActive = Math.max(maxActive, active);
+				markFirstStarted?.();
+				await new Promise<void>((resolve) => {
+					releaseFirst = () => {
+						active--;
+						resolve();
+					};
+				});
+			},
+		});
+		await firstStarted;
+
+		const second = scheduler.submit({
+			agentId: "agent-b",
+			toolName: "ascet_test",
+			commandId: "following_read",
+			kind: "read",
+			queueTimeoutMs: 1_000,
+			executionTimeoutMs: 1_000,
+			run: async () => {
+				active++;
+				maxActive = Math.max(maxActive, active);
+				secondStarted = true;
+				active--;
+				return "second";
+			},
+		});
+
+		await assert.rejects(first, AscetSchedulerExecutionTimeoutError);
+		assert.equal(scheduler.getSnapshot().activeCount, 1);
+		assert.equal(scheduler.getSnapshot().queuedJobs.length, 1);
+		assert.equal(maxActive, 1);
+
+		await wait(0);
+		assert.equal(secondStarted, false);
+
+		if (!releaseFirst) throw new Error("slow timeout job did not start");
+		releaseFirst();
+		assert.equal(await second, "second");
+		assert.equal(maxActive, 1);
+	});
+
+	test("runs queued jobs by priority and preserves FIFO within each priority", async () => {
+		const scheduler = createAscetScheduler();
+		let releaseFirst: (() => void) | undefined;
+		let markFirstStarted: (() => void) | undefined;
+		const firstStarted = new Promise<void>((resolve) => {
+			markFirstStarted = resolve;
+		});
+		const executionOrder: string[] = [];
+
+		const first = scheduler.submit({
+			agentId: "agent-a",
+			toolName: "ascet_test",
+			commandId: "blocking_read",
+			kind: "read",
+			queueTimeoutMs: 1_000,
+			executionTimeoutMs: 1_000,
+			run: async () => {
+				markFirstStarted?.();
+				await new Promise<void>((resolve) => {
+					releaseFirst = resolve;
+				});
+			},
+		});
+		await firstStarted;
+
+		const queuedJobs = [
+			["low-1", "low"],
+			["normal-1", "normal"],
+			["low-2", "low"],
+			["high-1", "high"],
+			["normal-2", "normal"],
+			["high-2", "high"],
+		] as const;
+		const queued = queuedJobs.map(([commandId, priority]) =>
+			scheduler.submit({
+				agentId: "agent-b",
+				toolName: "ascet_test",
+				commandId,
+				kind: "read",
+				priority,
+				queueTimeoutMs: 1_000,
+				executionTimeoutMs: 1_000,
+				run: async () => {
+					executionOrder.push(commandId);
+					return commandId;
+				},
+			}),
+		);
+
+		assert.deepEqual(
+			scheduler.getSnapshot().queuedJobs.map((job) => job.commandId),
+			["high-1", "high-2", "normal-1", "normal-2", "low-1", "low-2"],
+		);
+		if (!releaseFirst) throw new Error("blocking read did not start");
+		releaseFirst();
+
+		await assert.doesNotReject(first);
+		await Promise.all(queued);
+		assert.deepEqual(executionOrder, ["high-1", "high-2", "normal-1", "normal-2", "low-1", "low-2"]);
 	});
 
 	test("records an injected non-zero CLI exit and drains the following job", async () => {

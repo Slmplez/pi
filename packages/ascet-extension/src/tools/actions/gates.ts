@@ -1,9 +1,10 @@
-import { getAscetExposureMetadata } from "../exposure/state.ts";
+import type { AscetProfile } from "../exposure/profiles.ts";
+import { DEFAULT_ASCET_PROFILE, resolveProfileTools } from "../exposure/profiles.ts";
 import type { AscetActionActivationState, AscetActionDescriptor } from "./descriptors.ts";
 
 export interface ActionActivationContext {
 	env?: Record<string, string | undefined>;
-	activeProfile?: string;
+	activeProfile?: AscetProfile;
 	activeTools?: readonly string[];
 }
 
@@ -36,10 +37,9 @@ export function resolveActionActivation(
 	descriptor: AscetActionDescriptor,
 	context: ActionActivationContext = {},
 ): AscetActionActivationState {
-	const exposure = getAscetExposureMetadata();
 	const env = context.env ?? process.env;
-	const activeProfile = context.activeProfile ?? exposure.profile;
-	const activeTools = context.activeTools ?? exposure.activeTools;
+	const activeProfile = context.activeProfile ?? DEFAULT_ASCET_PROFILE;
+	const activeTools = context.activeTools ?? resolveProfileTools(DEFAULT_ASCET_PROFILE, env);
 
 	if (!isFeatureEnabled(descriptor.featureFlag, env)) {
 		return "feature_disabled";
@@ -53,7 +53,7 @@ export function resolveActionActivation(
 	if (activeProfile === "base") {
 		return "active";
 	}
-	if (!descriptor.profiles.includes(activeProfile as never)) {
+	if (!descriptor.profiles.includes(activeProfile)) {
 		return "inactive";
 	}
 	return "active";

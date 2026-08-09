@@ -202,4 +202,57 @@ describe("AscetObservationStore", () => {
 			rmSync(root, { recursive: true, force: true });
 		}
 	});
+
+	test("invalidates parent scopes after a child mutation without matching sibling prefixes", () => {
+		const root = createRoot();
+		try {
+			let counter = 0;
+			const store = new AscetObservationStore({
+				root,
+				thresholdBytes: 1,
+				generateResultId: () => `scope-${String(++counter)}`,
+			});
+			const parent = store.create({
+				domain: "tree",
+				target: { targetPathPrefix: "DEMO" },
+				items: [{ path: "DEMO\\PID" }],
+				coverage: { status: "complete_for_scope" },
+				delivery: "stored",
+			});
+			const sibling = store.create({
+				domain: "tree",
+				target: { targetPathPrefix: "DEMO2" },
+				items: [{ path: "DEMO2\\PID" }],
+				coverage: { status: "complete_for_scope" },
+				delivery: "stored",
+			});
+			if (parent.delivery !== "stored" || sibling.delivery !== "stored") {
+				throw new Error("Expected stored observations.");
+			}
+
+			assert.deepEqual(store.invalidate({ componentPath: "demo/pid" }), ["scope-1"]);
+			assert.equal(existsSync(parent.observation.metaPath), false);
+			assert.equal(existsSync(sibling.observation.metaPath), true);
+		} finally {
+			rmSync(root, { recursive: true, force: true });
+		}
+	});
+
+	test("matches observation OIDs without case sensitivity", () => {
+		const root = createRoot();
+		try {
+			const store = new AscetObservationStore({ root, thresholdBytes: 1, generateResultId: () => "oid-case" });
+			store.create({
+				domain: "elements",
+				target: { componentOid: "Component-ABC" },
+				items: [{ name: "P" }],
+				coverage: { status: "complete_for_scope" },
+				delivery: "stored",
+			});
+
+			assert.deepEqual(store.invalidate({ componentOid: "component-abc" }), ["oid-case"]);
+		} finally {
+			rmSync(root, { recursive: true, force: true });
+		}
+	});
 });

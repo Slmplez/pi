@@ -42,7 +42,7 @@ export interface AscetJob<T> {
 	queueTimeoutMs: number;
 	executionTimeoutMs: number;
 	signal?: AbortSignal;
-	run: () => Promise<T>;
+	run: (signal: AbortSignal) => Promise<T>;
 }
 
 export interface AscetResourceSnapshot {
