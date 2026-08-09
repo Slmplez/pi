@@ -1,5 +1,6 @@
 import type { AssistantMessage } from "@earendil-works/pi-ai";
 import { describe, expect, test } from "vitest";
+import { markRetryPendingMessage } from "../src/core/retry-presentation.ts";
 import { AssistantMessageComponent } from "../src/modes/interactive/components/assistant-message.ts";
 import { UserMessageComponent } from "../src/modes/interactive/components/user-message.ts";
 import { initTheme } from "../src/modes/interactive/theme/theme.ts";
@@ -11,7 +12,7 @@ const OSC133_ZONE_FINAL = "\x1b]133;C\x07";
 
 function createAssistantMessage(
 	content: AssistantMessage["content"],
-	overrides: Partial<Pick<AssistantMessage, "stopReason">> = {},
+	overrides: Partial<Pick<AssistantMessage, "stopReason" | "errorMessage">> = {},
 ): AssistantMessage {
 	return {
 		role: "assistant",
@@ -28,6 +29,7 @@ function createAssistantMessage(
 			cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, total: 0 },
 		},
 		stopReason: overrides.stopReason ?? "stop",
+		errorMessage: overrides.errorMessage,
 		timestamp: Date.now(),
 	};
 }
@@ -72,6 +74,18 @@ describe("AssistantMessageComponent", () => {
 		expect(rendered).toContain("Thinking...");
 		expect(rendered).toContain("maximum output token limit");
 		expect(rendered).toContain("response may be incomplete");
+	});
+
+	test("hides retry-pending errors until retry is exhausted", () => {
+		initTheme("dark");
+
+		const message = createAssistantMessage([], { stopReason: "error", errorMessage: "503 overloaded" });
+		markRetryPendingMessage(message);
+		const component = new AssistantMessageComponent(message);
+		const rendered = stripAnsi(component.render(80).join("\n"));
+
+		expect(rendered).not.toContain("Error:");
+		expect(rendered).not.toContain("503 overloaded");
 	});
 
 	test("uses configured output padding for text and thinking", () => {

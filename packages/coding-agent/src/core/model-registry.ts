@@ -38,6 +38,7 @@ import {
 	resolveConfigValueUncached,
 	resolveHeadersOrThrow,
 } from "./resolve-config-value.ts";
+import type { RetrySettings } from "./settings-manager.ts";
 
 // Schema for OpenRouter routing preferences
 const PercentileCutoffsSchema = Type.Object({
@@ -793,6 +794,10 @@ export class ModelRegistry {
 	/**
 	 * Get display name for a provider.
 	 */
+	getProviderRetryDefaults(provider: string): RetrySettings | undefined {
+		return this.registeredProviders.get(provider)?.retry;
+	}
+
 	getProviderDisplayName(provider: string): string {
 		const registeredProvider = this.registeredProviders.get(provider);
 		const oauthProvider = this.authStorage.getOAuthProviders().find((p) => p.id === provider);
@@ -988,6 +993,7 @@ export interface ProviderConfigInput {
 	streamSimple?: (model: Model<Api>, context: Context, options?: SimpleStreamOptions) => AssistantMessageEventStream;
 	headers?: Record<string, string>;
 	authHeader?: boolean;
+	retry?: RetrySettings;
 	/** OAuth provider for /login support */
 	oauth?: Omit<OAuthProviderInterface, "id">;
 	models?: Array<{

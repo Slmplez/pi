@@ -13,7 +13,7 @@ import { AuthStorage } from "../src/core/auth-storage.ts";
 import { ModelRegistry } from "../src/core/model-registry.ts";
 import { createAgentSession } from "../src/core/sdk.ts";
 import { SessionManager } from "../src/core/session-manager.ts";
-import { SettingsManager } from "../src/core/settings-manager.ts";
+import { type RetrySettings, type Settings, SettingsManager } from "../src/core/settings-manager.ts";
 
 describe("createAgentSession stream options", () => {
 	let tempDir: string;
@@ -74,8 +74,9 @@ describe("createAgentSession stream options", () => {
 
 	async function captureStreamOptions(
 		api: Api,
-		settings: { httpIdleTimeoutMs?: number; websocketConnectTimeoutMs?: number },
+		settings: Partial<Settings>,
 		requestOptions: SimpleStreamOptions = {},
+		providerRetry?: RetrySettings,
 	): Promise<SimpleStreamOptions | undefined> {
 		const model = createModel(api);
 		const settingsManager = SettingsManager.inMemory(settings);
@@ -87,6 +88,7 @@ describe("createAgentSession stream options", () => {
 
 		modelRegistry.registerProvider(model.provider, {
 			api,
+			retry: providerRetry,
 			streamSimple: (_model, _context, providerOptions) => {
 				capturedOptions = providerOptions;
 				return createDoneStream(api);
@@ -133,6 +135,43 @@ describe("createAgentSession stream options", () => {
 		);
 
 		expect(options?.timeoutMs).toBe(0);
+	});
+
+	it("applies provider-scoped retry defaults when user settings are absent", async () => {
+		const options = await captureStreamOptions(
+			"openai-completions",
+			{},
+			{},
+			{
+				maxRetries: 5,
+				baseDelayMs: 5000,
+				provider: { timeoutMs: 900000, maxRetries: 0, maxRetryDelayMs: 120000 },
+			},
+		);
+
+		expect(options?.timeoutMs).toBe(900000);
+		expect(options?.maxRetries).toBe(0);
+		expect(options?.maxRetryDelayMs).toBe(120000);
+	});
+
+	it("lets provider-specific user overrides win over global and registered defaults", async () => {
+		const options = await captureStreamOptions(
+			"openai-completions",
+			{
+				retry: { provider: { timeoutMs: 600000, maxRetries: 1, maxRetryDelayMs: 60000 } },
+				providerOverrides: {
+					"capture-provider": {
+						retry: { provider: { timeoutMs: 900000, maxRetries: 0, maxRetryDelayMs: 120000 } },
+					},
+				},
+			},
+			{},
+			{ provider: { timeoutMs: 300000, maxRetries: 2, maxRetryDelayMs: 30000 } },
+		);
+
+		expect(options?.timeoutMs).toBe(900000);
+		expect(options?.maxRetries).toBe(0);
+		expect(options?.maxRetryDelayMs).toBe(120000);
 	});
 
 	it("forwards websocketConnectTimeoutMs from settings", async () => {

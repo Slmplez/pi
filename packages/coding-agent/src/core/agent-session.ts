@@ -86,6 +86,7 @@ import type { BashExecutionMessage, CustomMessage } from "./messages.ts";
 import type { ModelRegistry } from "./model-registry.ts";
 import { expandPromptTemplate, type PromptTemplate } from "./prompt-templates.ts";
 import type { ResourceExtensionPaths, ResourceLoader } from "./resource-loader.ts";
+import { markRetryPendingMessage } from "./retry-presentation.ts";
 import type { BranchSummaryEntry, CompactionEntry, SessionEntry, SessionManager } from "./session-manager.ts";
 import { CURRENT_SESSION_VERSION, getLatestCompactionEntry, type SessionHeader } from "./session-manager.ts";
 import type { SettingsManager } from "./settings-manager.ts";
@@ -538,6 +539,16 @@ export class AgentSession {
 		// Emit to extensions first
 		await this._emitExtensionEvent(event);
 
+		if (event.type === "message_end" && event.message.role === "assistant") {
+			const assistantMessage = event.message as AssistantMessage;
+			if (
+				this._willRetryMessage(assistantMessage) ||
+				(assistantMessage.stopReason === "error" && this._retryAttempt > 0)
+			) {
+				markRetryPendingMessage(assistantMessage);
+			}
+		}
+
 		// Notify all listeners
 		this._emit(event.type === "agent_end" ? { ...event, willRetry: this._willRetryAfterAgentEnd(event) } : event);
 
@@ -585,16 +596,21 @@ export class AgentSession {
 		}
 	};
 
-	private _willRetryAfterAgentEnd(event: Extract<AgentEvent, { type: "agent_end" }>): boolean {
-		const settings = this.settingsManager.getRetrySettings();
-		if (!settings.enabled || this._retryAttempt >= settings.maxRetries) {
-			return false;
-		}
+	private _getRetrySettings(provider = this.model?.provider) {
+		const providerDefaults = provider ? this._modelRegistry.getProviderRetryDefaults(provider) : undefined;
+		return this.settingsManager.getRetrySettings(provider, providerDefaults);
+	}
 
+	private _willRetryMessage(message: AssistantMessage): boolean {
+		const settings = this._getRetrySettings(message.provider);
+		return settings.enabled && this._retryAttempt < settings.maxRetries && this._isRetryableError(message);
+	}
+
+	private _willRetryAfterAgentEnd(event: Extract<AgentEvent, { type: "agent_end" }>): boolean {
 		for (let i = event.messages.length - 1; i >= 0; i--) {
 			const message = event.messages[i];
 			if (message.role === "assistant") {
-				return this._isRetryableError(message as AssistantMessage);
+				return this._willRetryMessage(message as AssistantMessage);
 			}
 		}
 		return false;
@@ -2530,6 +2546,12 @@ export class AgentSession {
 	private _isRetryableError(message: AssistantMessage): boolean {
 		// Context overflow is handled by compaction, not retry.
 		if (isContextOverflow(message, this.model?.contextWindow ?? 0)) return false;
+		const hasPartialOutput = message.content.some((content) => {
+			if (content.type === "text") return content.text.length > 0;
+			if (content.type === "thinking") return content.thinking.length > 0;
+			return content.type === "toolCall";
+		});
+		if (hasPartialOutput) return false;
 		return isRetryableAssistantError(message);
 	}
 
@@ -2538,7 +2560,7 @@ export class AgentSession {
 	 * @returns true if the caller should continue the agent, false otherwise
 	 */
 	private async _prepareRetry(message: AssistantMessage): Promise<boolean> {
-		const settings = this.settingsManager.getRetrySettings();
+		const settings = this._getRetrySettings(message.provider);
 		if (!settings.enabled) {
 			return false;
 		}
@@ -2603,7 +2625,7 @@ export class AgentSession {
 
 	/** Whether auto-retry is enabled */
 	get autoRetryEnabled(): boolean {
-		return this.settingsManager.getRetryEnabled();
+		return this._getRetrySettings().enabled;
 	}
 
 	/**

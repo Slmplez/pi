@@ -10,6 +10,7 @@
 
 ### Fixed
 
+- Fixed extension-registered provider retry defaults to apply to SDK timeouts, HTTP idle handling, and agent-level retries; retry-chain errors are now hidden until final failure, and streams with partial output are not transparently replayed.
 - Fixed Xiaomi Token Plan model metadata to follow the upstream models.dev token-plan catalogs, removing unsupported `mimo-v2-omni` variants ([#6204](https://github.com/earendil-works/pi/issues/6204)).
 - Fixed startup model selection to skip unauthenticated saved defaults so configured local custom models can be selected instead ([#6231](https://github.com/earendil-works/pi/issues/6231)).
 - Fixed the question extension example to run question tool calls sequentially so multiple questions in one assistant turn remain answerable ([#6189](https://github.com/earendil-works/pi/issues/6189)).

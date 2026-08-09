@@ -8,8 +8,9 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { AgentSession } from "../src/core/agent-session.ts";
 import { AuthStorage } from "../src/core/auth-storage.ts";
 import { ModelRegistry } from "../src/core/model-registry.ts";
+import { isRetryPendingMessage } from "../src/core/retry-presentation.ts";
 import { SessionManager } from "../src/core/session-manager.ts";
-import { SettingsManager } from "../src/core/settings-manager.ts";
+import { type RetrySettings, SettingsManager } from "../src/core/settings-manager.ts";
 import { createTestResourceLoader } from "./utilities.ts";
 
 class MockAssistantStream extends EventStream<AssistantMessageEvent, AssistantMessage> {
@@ -68,10 +69,18 @@ describe("AgentSession retry", () => {
 		}
 	});
 
-	function createSession(options?: { failCount?: number; maxRetries?: number; delayAssistantMessageEndMs?: number }) {
+	function createSession(options?: {
+		failCount?: number;
+		maxRetries?: number;
+		delayAssistantMessageEndMs?: number;
+		partialErrorText?: string;
+		providerRetryDefaults?: RetrySettings;
+		applyGlobalRetryOverride?: boolean;
+	}) {
 		const failCount = options?.failCount ?? 1;
 		const maxRetries = options?.maxRetries ?? 3;
 		const delayAssistantMessageEndMs = options?.delayAssistantMessageEndMs ?? 0;
+		const partialErrorText = options?.partialErrorText ?? "";
 		let callCount = 0;
 
 		const model = getModel("anthropic", "claude-sonnet-4-5")!;
@@ -83,7 +92,7 @@ describe("AgentSession retry", () => {
 				const stream = new MockAssistantStream();
 				queueMicrotask(() => {
 					if (callCount <= failCount) {
-						const msg = createAssistantMessage("", {
+						const msg = createAssistantMessage(partialErrorText, {
 							stopReason: "error",
 							errorMessage: "overloaded_error",
 						});
@@ -104,7 +113,12 @@ describe("AgentSession retry", () => {
 		const authStorage = AuthStorage.create(join(tempDir, "auth.json"));
 		const modelRegistry = ModelRegistry.create(authStorage, tempDir);
 		authStorage.setRuntimeApiKey("anthropic", "test-key");
-		settingsManager.applyOverrides({ retry: { enabled: true, maxRetries, baseDelayMs: 1 } });
+		if (options?.providerRetryDefaults) {
+			modelRegistry.registerProvider("anthropic", { retry: options.providerRetryDefaults });
+		}
+		if (options?.applyGlobalRetryOverride !== false) {
+			settingsManager.applyOverrides({ retry: { enabled: true, maxRetries, baseDelayMs: 1 } });
+		}
 
 		session = new AgentSession({
 			agent,
@@ -159,6 +173,45 @@ describe("AgentSession retry", () => {
 		expect(events).toContain("start:2");
 		expect(events).toContain("end:success=false");
 		expect(created.session.isRetrying).toBe(false);
+	});
+
+	it("marks retry-chain errors as transient presentation errors", async () => {
+		const created = createSession({ failCount: 99, maxRetries: 2 });
+		const retryPending: boolean[] = [];
+		created.session.subscribe((event) => {
+			if (event.type === "message_end" && event.message.role === "assistant") {
+				retryPending.push(isRetryPendingMessage(event.message));
+			}
+		});
+
+		await created.session.prompt("Test");
+
+		expect(retryPending).toEqual([true, true, true]);
+	});
+
+	it("uses registered provider retry defaults when user settings are absent", async () => {
+		const created = createSession({
+			failCount: 4,
+			applyGlobalRetryOverride: false,
+			providerRetryDefaults: { enabled: true, maxRetries: 5, baseDelayMs: 1 },
+		});
+
+		await created.session.prompt("Test");
+
+		expect(created.getCallCount()).toBe(5);
+	});
+
+	it("does not transparently retry after partial assistant output", async () => {
+		const created = createSession({ failCount: 99, partialErrorText: "partial response" });
+		const retryEvents: string[] = [];
+		created.session.subscribe((event) => {
+			if (event.type === "auto_retry_start") retryEvents.push(`start:${event.attempt}`);
+		});
+
+		await created.session.prompt("Test");
+
+		expect(created.getCallCount()).toBe(1);
+		expect(retryEvents).toEqual([]);
 	});
 
 	it("prompt waits for retry completion even when assistant message_end handling is delayed", async () => {

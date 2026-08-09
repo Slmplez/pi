@@ -13,6 +13,7 @@ export const HTTP_IDLE_TIMEOUT_CHOICES = [
 
 const originalGlobalFetch = globalThis.fetch;
 let installedGlobalFetch: typeof globalThis.fetch | undefined;
+let configuredHttpIdleTimeoutMs: number | undefined;
 
 export function parseHttpIdleTimeoutMs(value: unknown): number | undefined {
 	if (typeof value === "string") {
@@ -76,11 +77,22 @@ function createUndiciOriginDispatcher(origin: string | URL, options: object): un
 	);
 }
 
-export function configureHttpDispatcher(timeoutMs: number = DEFAULT_HTTP_IDLE_TIMEOUT_MS): void {
+function normalizeHttpIdleTimeoutMs(timeoutMs: number): number {
 	const normalizedTimeoutMs = parseHttpIdleTimeoutMs(timeoutMs);
 	if (normalizedTimeoutMs === undefined) {
 		throw new Error(`Invalid HTTP idle timeout: ${String(timeoutMs)}`);
 	}
+	return normalizedTimeoutMs;
+}
+
+export function ensureHttpDispatcher(timeoutMs: number = DEFAULT_HTTP_IDLE_TIMEOUT_MS): void {
+	const normalizedTimeoutMs = normalizeHttpIdleTimeoutMs(timeoutMs);
+	if (configuredHttpIdleTimeoutMs === normalizedTimeoutMs) return;
+	configureHttpDispatcher(normalizedTimeoutMs);
+}
+
+export function configureHttpDispatcher(timeoutMs: number = DEFAULT_HTTP_IDLE_TIMEOUT_MS): void {
+	const normalizedTimeoutMs = normalizeHttpIdleTimeoutMs(timeoutMs);
 	const dispatcher = withUndiciErrorListener(
 		new undici.EnvHttpProxyAgent({
 			allowH2: false,
@@ -103,4 +115,5 @@ export function configureHttpDispatcher(timeoutMs: number = DEFAULT_HTTP_IDLE_TI
 		undici.install?.();
 		installedGlobalFetch = globalThis.fetch;
 	}
+	configuredHttpIdleTimeoutMs = normalizedTimeoutMs;
 }

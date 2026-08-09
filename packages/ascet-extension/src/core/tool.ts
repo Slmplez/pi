@@ -36,6 +36,12 @@ type AscetProviderConfig = {
 	streamSimple?: (model: Model<Api>, context: Context, options?: SimpleStreamOptions) => AssistantMessageEventStream;
 	headers?: Record<string, string>;
 	authHeader?: boolean;
+	retry?: {
+		enabled?: boolean;
+		maxRetries?: number;
+		baseDelayMs?: number;
+		provider?: { timeoutMs?: number; maxRetries?: number; maxRetryDelayMs?: number };
+	};
 	models?: AscetProviderModelConfig[];
 	oauth?: {
 		name: string;

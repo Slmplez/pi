@@ -58,6 +58,7 @@ import type {
 	SessionEntry,
 	SessionManager,
 } from "../session-manager.ts";
+import type { RetrySettings } from "../settings-manager.ts";
 import type { SlashCommandInfo } from "../slash-commands.ts";
 import type { SourceInfo } from "../source-info.ts";
 import type { BuildSystemPromptOptions } from "../system-prompt.ts";
@@ -1415,6 +1416,8 @@ export interface ProviderConfig {
 	headers?: Record<string, string>;
 	/** If true, adds Authorization: Bearer header with the resolved API key. */
 	authHeader?: boolean;
+	/** Low-priority retry defaults for this provider. User settings override these values. */
+	retry?: RetrySettings;
 	/** Models to register. If provided, replaces all existing models for this provider. */
 	models?: ProviderModelConfig[];
 	/** OAuth provider for /login support. The `id` is set automatically from the provider name. */

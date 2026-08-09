@@ -31,6 +31,10 @@ export interface RetrySettings {
 	provider?: ProviderRetrySettings;
 }
 
+export interface ProviderOverrideSettings {
+	retry?: RetrySettings;
+}
+
 export interface TerminalSettings {
 	showImages?: boolean; // default: true (only relevant if terminal supports images)
 	imageWidthCells?: number; // default: 60 (preferred inline image width in terminal cells)
@@ -91,6 +95,7 @@ export interface Settings {
 	compaction?: CompactionSettings;
 	branchSummary?: BranchSummarySettings;
 	retry?: RetrySettings;
+	providerOverrides?: Record<string, ProviderOverrideSettings>;
 	hideThinkingBlock?: boolean;
 	externalEditor?: string; // Command for Ctrl+G external editor; takes precedence over VISUAL/EDITOR
 	shellPath?: string; // Custom shell path (e.g., for Cygwin users on Windows)
@@ -795,8 +800,32 @@ export class SettingsManager {
 		return this.settings.branchSummary?.skipPrompt ?? false;
 	}
 
-	getRetryEnabled(): boolean {
-		return this.settings.retry?.enabled ?? true;
+	private resolveRetrySettings(provider?: string, providerDefaults?: RetrySettings): RetrySettings {
+		const globalRetry = this.settings.retry;
+		const providerOverride = provider ? this.settings.providerOverrides?.[provider]?.retry : undefined;
+		return {
+			enabled: providerOverride?.enabled ?? globalRetry?.enabled ?? providerDefaults?.enabled,
+			maxRetries: providerOverride?.maxRetries ?? globalRetry?.maxRetries ?? providerDefaults?.maxRetries,
+			baseDelayMs: providerOverride?.baseDelayMs ?? globalRetry?.baseDelayMs ?? providerDefaults?.baseDelayMs,
+			provider: {
+				timeoutMs:
+					providerOverride?.provider?.timeoutMs ??
+					globalRetry?.provider?.timeoutMs ??
+					providerDefaults?.provider?.timeoutMs,
+				maxRetries:
+					providerOverride?.provider?.maxRetries ??
+					globalRetry?.provider?.maxRetries ??
+					providerDefaults?.provider?.maxRetries,
+				maxRetryDelayMs:
+					providerOverride?.provider?.maxRetryDelayMs ??
+					globalRetry?.provider?.maxRetryDelayMs ??
+					providerDefaults?.provider?.maxRetryDelayMs,
+			},
+		};
+	}
+
+	getRetryEnabled(provider?: string, providerDefaults?: RetrySettings): boolean {
+		return this.resolveRetrySettings(provider, providerDefaults).enabled ?? true;
 	}
 
 	setRetryEnabled(enabled: boolean): void {
@@ -808,11 +837,15 @@ export class SettingsManager {
 		this.save();
 	}
 
-	getRetrySettings(): { enabled: boolean; maxRetries: number; baseDelayMs: number } {
+	getRetrySettings(
+		provider?: string,
+		providerDefaults?: RetrySettings,
+	): { enabled: boolean; maxRetries: number; baseDelayMs: number } {
+		const retry = this.resolveRetrySettings(provider, providerDefaults);
 		return {
-			enabled: this.getRetryEnabled(),
-			maxRetries: this.settings.retry?.maxRetries ?? 3,
-			baseDelayMs: this.settings.retry?.baseDelayMs ?? 2000,
+			enabled: retry.enabled ?? true,
+			maxRetries: retry.maxRetries ?? 3,
+			baseDelayMs: retry.baseDelayMs ?? 2000,
 		};
 	}
 
@@ -829,11 +862,15 @@ export class SettingsManager {
 		this.save();
 	}
 
-	getProviderRetrySettings(): { timeoutMs?: number; maxRetries?: number; maxRetryDelayMs: number } {
+	getProviderRetrySettings(
+		provider?: string,
+		providerDefaults?: RetrySettings,
+	): { timeoutMs?: number; maxRetries?: number; maxRetryDelayMs: number } {
+		const retry = this.resolveRetrySettings(provider, providerDefaults);
 		return {
-			timeoutMs: this.settings.retry?.provider?.timeoutMs,
-			maxRetries: this.settings.retry?.provider?.maxRetries,
-			maxRetryDelayMs: this.settings.retry?.provider?.maxRetryDelayMs ?? 60000,
+			timeoutMs: retry.provider?.timeoutMs,
+			maxRetries: retry.provider?.maxRetries,
+			maxRetryDelayMs: retry.provider?.maxRetryDelayMs ?? 60000,
 		};
 	}
 

@@ -1,5 +1,6 @@
+import * as undici from "undici";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { applyHttpProxySettings } from "../src/core/http-dispatcher.ts";
+import { applyHttpProxySettings, configureHttpDispatcher, ensureHttpDispatcher } from "../src/core/http-dispatcher.ts";
 
 const PROXY_ENV_KEYS = ["HTTP_PROXY", "HTTPS_PROXY"] as const;
 
@@ -49,5 +50,22 @@ describe("http proxy settings", () => {
 
 		expect(process.env.HTTP_PROXY).toBeUndefined();
 		expect(process.env.HTTPS_PROXY).toBeUndefined();
+	});
+});
+
+describe("http dispatcher configuration", () => {
+	afterEach(() => {
+		configureHttpDispatcher();
+	});
+
+	it("reuses the dispatcher when the effective timeout is unchanged", () => {
+		configureHttpDispatcher(1234);
+		const dispatcher = undici.getGlobalDispatcher();
+
+		ensureHttpDispatcher(1234);
+		expect(undici.getGlobalDispatcher()).toBe(dispatcher);
+
+		ensureHttpDispatcher(5678);
+		expect(undici.getGlobalDispatcher()).not.toBe(dispatcher);
 	});
 });

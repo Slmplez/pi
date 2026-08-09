@@ -21,6 +21,13 @@ const NON_RETRYABLE_PROVIDER_LIMIT_ERROR_PATTERN = buildProviderErrorPattern([
 	"out of budget",
 	"quota exceeded",
 	"billing",
+
+	// TLS trust/configuration failures are persistent until local CA settings change.
+	"TLS certificate verification failed",
+	"UNABLE_TO_VERIFY_LEAF_SIGNATURE",
+	"SELF_SIGNED_CERT_IN_CHAIN",
+	"DEPTH_ZERO_SELF_SIGNED_CERT",
+	"UNABLE_TO_GET_ISSUER_CERT",
 ]);
 
 const RETRYABLE_PROVIDER_ERROR_PATTERN = buildProviderErrorPattern([
@@ -28,6 +35,9 @@ const RETRYABLE_PROVIDER_ERROR_PATTERN = buildProviderErrorPattern([
 	"overloaded",
 	"rate.?limit",
 	"too many requests",
+	"408",
+	"409",
+	"425",
 	"429",
 	"500",
 	"502",

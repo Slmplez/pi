@@ -968,6 +968,7 @@ export function registerBoschLlmFarmProvider(pi: AscetExtensionAPI): void {
 		name: "Bosch LLM Farm",
 		baseUrl: DEFAULT_BASE_URL,
 		api: BOSCH_LLMFARM_API,
+		retry: BOSCH_LLMFARM_PROVIDER_RETRY_DEFAULTS,
 		models: [
 			{
 				...placeholderModel,

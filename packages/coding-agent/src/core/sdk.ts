@@ -8,6 +8,7 @@ import { formatNoModelsAvailableMessage } from "./auth-guidance.ts";
 import { AuthStorage } from "./auth-storage.ts";
 import { DEFAULT_THINKING_LEVEL } from "./defaults.ts";
 import type { ExtensionRunner, LoadExtensionsResult, SessionStartEvent, ToolDefinition } from "./extensions/index.ts";
+import { ensureHttpDispatcher } from "./http-dispatcher.ts";
 import { convertToLlm } from "./messages.ts";
 import { ModelRegistry } from "./model-registry.ts";
 import { findInitialModel } from "./model-resolver.ts";
@@ -305,11 +306,14 @@ export async function createAgentSession(options: CreateAgentSessionOptions = {}
 				throw new Error(auth.error);
 			}
 			const env = auth.env || options?.env ? { ...(auth.env ?? {}), ...(options?.env ?? {}) } : undefined;
-			const providerRetrySettings = settingsManager.getProviderRetrySettings();
+			const providerRetryDefaults = modelRegistry.getProviderRetryDefaults(model.provider);
+			const providerRetrySettings = settingsManager.getProviderRetrySettings(model.provider, providerRetryDefaults);
 			const httpIdleTimeoutMs = settingsManager.getHttpIdleTimeoutMs();
 			// SDKs treat timeout=0 as 0ms (immediate timeout), not "no timeout".
 			// Use max int32 to effectively disable the timeout.
 			const effectiveTimeoutMs = httpIdleTimeoutMs === 0 ? 2147483647 : httpIdleTimeoutMs;
+			const configuredHttpIdleTimeoutMs = options?.timeoutMs ?? providerRetrySettings.timeoutMs ?? httpIdleTimeoutMs;
+			ensureHttpDispatcher(configuredHttpIdleTimeoutMs);
 			const timeoutMs = options?.timeoutMs ?? providerRetrySettings.timeoutMs ?? effectiveTimeoutMs;
 			const websocketConnectTimeoutMs =
 				options?.websocketConnectTimeoutMs ?? settingsManager.getWebSocketConnectTimeoutMs();
@@ -365,7 +369,6 @@ export async function createAgentSession(options: CreateAgentSessionOptions = {}
 		followUpMode: settingsManager.getFollowUpMode(),
 		transport: settingsManager.getTransport(),
 		thinkingBudgets: settingsManager.getThinkingBudgets(),
-		maxRetryDelayMs: settingsManager.getProviderRetrySettings().maxRetryDelayMs,
 	});
 
 	// Restore messages if session has existing data

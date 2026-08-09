@@ -13,6 +13,7 @@
 
 ### Fixed
 
+- Fixed Bosch LLM Farm slow first-token requests to use effective provider-scoped 15-minute timeouts and five agent-level retries without showing intermediate retry errors.
 - Fixed `ascet_get` `component_refs` name and scope filters being ignored.
 
 ### Removed

@@ -31,6 +31,27 @@ describe("provider retry classification", () => {
 		).toBe(true);
 	});
 
+	it("retries transient HTTP timeout and early-data statuses", () => {
+		for (const status of [408, 409, 425]) {
+			expect(
+				isRetryableAssistantError(
+					fauxAssistantMessage("", { stopReason: "error", errorMessage: `${status} status code` }),
+				),
+			).toBe(true);
+		}
+	});
+
+	it("does not retry persistent TLS trust failures", () => {
+		expect(
+			isRetryableAssistantError(
+				fauxAssistantMessage("", {
+					stopReason: "error",
+					errorMessage: "fetch failed: UNABLE_TO_VERIFY_LEAF_SIGNATURE",
+				}),
+			),
+		).toBe(false);
+	});
+
 	it("keeps provider limit errors non-retryable", () => {
 		expect(
 			isRetryableAssistantError(

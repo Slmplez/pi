@@ -1,5 +1,6 @@
 import type { AssistantMessage } from "@earendil-works/pi-ai";
 import { Container, Markdown, type MarkdownTheme, Spacer, Text } from "@earendil-works/pi-tui";
+import { isRetryPendingMessage } from "../../../core/retry-presentation.ts";
 import { getMarkdownTheme, theme } from "../theme/theme.ts";
 
 const OSC133_ZONE_START = "\x1b]133;A\x07";
@@ -156,7 +157,7 @@ export class AssistantMessageComponent extends Container {
 						: "Operation aborted";
 				this.contentContainer.addChild(new Spacer(1));
 				this.contentContainer.addChild(new Text(theme.fg("error", abortMessage), this.outputPad, 0));
-			} else if (message.stopReason === "error") {
+			} else if (message.stopReason === "error" && !isRetryPendingMessage(message)) {
 				const errorMsg = message.errorMessage || "Unknown error";
 				this.contentContainer.addChild(new Spacer(1));
 				this.contentContainer.addChild(new Text(theme.fg("error", `Error: ${errorMsg}`), this.outputPad, 0));

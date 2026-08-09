@@ -145,6 +145,8 @@ When a provider requests a retry delay longer than `retry.provider.maxRetryDelay
 
 Keep `retry.provider.maxRetries` at `0` unless provider-level retries are explicitly needed. Setting it above `0` can make SDK/provider retries handle out-of-usage-limit errors before Pi sees them, which may block the agent until the provider quota resets in some circumstances.
 
+Provider registrations can supply low-priority retry defaults. Override them for one provider without changing global behavior through `providerOverrides.<provider>.retry`. Provider-specific user values take precedence over global retry settings, which take precedence over registered provider defaults.
+
 ```json
 {
   "retry": {
@@ -155,6 +157,24 @@ Keep `retry.provider.maxRetries` at `0` unless provider-level retries are explic
       "timeoutMs": 3600000,
       "maxRetries": 0,
       "maxRetryDelayMs": 60000
+    }
+  }
+}
+```
+
+```json
+{
+  "providerOverrides": {
+    "bosch-llmfarm": {
+      "retry": {
+        "maxRetries": 5,
+        "baseDelayMs": 5000,
+        "provider": {
+          "timeoutMs": 900000,
+          "maxRetries": 0,
+          "maxRetryDelayMs": 120000
+        }
+      }
     }
   }
 }
