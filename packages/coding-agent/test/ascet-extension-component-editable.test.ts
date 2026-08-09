@@ -48,7 +48,7 @@ describe("ASCET component editable PI tool", () => {
 					expect(request.args).toEqual(["exec", "component_editable_check", "DEMO\\PID", "--json"]);
 					return {
 						exitCode: 0,
-						stdout: JSON.stringify({ ok: true, result: true, error: null, meta: { mode: "exec" } }),
+						stdout: JSON.stringify({ ok: true, result: { editable: true }, error: null, meta: { mode: "exec" } }),
 						stderr: "",
 						timedOut: false,
 						request,
@@ -68,7 +68,7 @@ describe("ASCET component editable PI tool", () => {
 		});
 	});
 
-	it("unwraps the AscetBridge exec envelope while preserving bare false output", async () => {
+	it("unwraps the AscetBridge exec envelope with an editable object result", async () => {
 		const scheduler = createAscetScheduler();
 		const result = await runAscetEditability(
 			{ mode: "set", componentPath: "DEMO\\PID" },
@@ -77,7 +77,7 @@ describe("ASCET component editable PI tool", () => {
 				scheduler,
 				executeCli: async (request: AscetCliRequest): Promise<AscetCliExecutionResult> => ({
 					exitCode: 0,
-					stdout: JSON.stringify({ ok: true, result: false, error: null, meta: { mode: "exec" } }),
+					stdout: JSON.stringify({ ok: true, result: { editable: false }, error: null, meta: { mode: "exec" } }),
 					stderr: "",
 					timedOut: false,
 					request,

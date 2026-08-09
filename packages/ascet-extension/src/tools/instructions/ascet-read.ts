@@ -2,6 +2,19 @@
 
 export const ascetReadInstructions = [
 	{
+		id: "ascet_read.read",
+		tool: "ascet_read",
+		action: "read",
+		profiles: ["base", "advanced-read", "write-preflight"],
+		summary: "Read a live component summary for one exact Class, Module, or StateMachine target.",
+		rules: [
+			"Use read after ascet_get.tree resolves the exact component path.",
+			"Use this action for an independent component-state check; use ascet_get.formulas for Project formula checks.",
+		],
+		fewShots: ['read: ascet_read({action:"read",componentPath:"DEMO\\PID"})'],
+		tags: ["component", "summary", "live-read", "verify"],
+	},
+	{
 		id: "ascet_read.read_code",
 		tool: "ascet_read",
 		action: "read_code",

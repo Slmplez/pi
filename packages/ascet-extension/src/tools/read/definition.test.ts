@@ -40,6 +40,36 @@ function makeDependentChainExecution(request: AscetCliRequest): AscetCliExecutio
 }
 
 describe("ascet_read tool", () => {
+	test("read returns a live component summary", async () => {
+		let observedArgs: string[] | undefined;
+		const result = await ascetReadTool.execute(
+			"call-summary",
+			{ action: "read", componentPath: "DEMO\\PID" },
+			new AbortController().signal,
+			undefined,
+			{
+				cwd: process.cwd(),
+				executeCli: async (request) => {
+					observedArgs = request.args;
+					return {
+						exitCode: 0,
+						stdout: JSON.stringify({
+							ok: true,
+							result: { path: "DEMO\\PID", kind: "class", elementCount: 4 },
+							error: null,
+						}),
+						stderr: "",
+						timedOut: false,
+						request,
+					};
+				},
+			},
+		);
+
+		assert.deepEqual(observedArgs, ["exec", "read_component_summary", "DEMO\\PID", "--json"]);
+		assert.match(result.content[0]?.text ?? "", /elementCount/);
+	});
+
 	test("read_code defaults to full live text", async () => {
 		let observedArgs: string[] | undefined;
 		const result = await ascetReadTool.execute(

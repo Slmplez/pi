@@ -65,7 +65,7 @@ public static class AscetCreateComponent
     {
         if (args == null || args.Length < 1)
         {
-            throw new AscetReadException("invalid_argument", "parse_arguments", "usage: AscetCli.exe exec create_component <component-path> --kind <class|module|statemachine> [--language <ESDL|BDE|C>] [--if-exists <fail|return-existing>] [--verify-readback] [--rollback-on-failure] [--json]");
+            throw new AscetReadException("invalid_argument", "parse_arguments", "usage: AscetCli.exe exec create_component <component-path> --kind <class|module|statemachine|enumeration> [--language <ESDL|BDE|C>] [--if-exists <fail|return-existing>] [--verify-readback] [--rollback-on-failure] [--json]");
         }
 
         AscetCreateComponentArguments result = new AscetCreateComponentArguments
@@ -141,7 +141,7 @@ public static class AscetCreateComponent
             throw new AscetReadException("invalid_argument", "parse_arguments", "--kind is required.");
         }
 
-        if (result.ComponentKind != AscetComponentKind.StateMachine && result.LanguageKind == AscetLanguageKind.Unknown)
+        if ((result.ComponentKind == AscetComponentKind.Class || result.ComponentKind == AscetComponentKind.Module) && result.LanguageKind == AscetLanguageKind.Unknown)
         {
             throw new AscetReadException("invalid_argument", "parse_arguments", "--language is required for class and module creation.");
         }

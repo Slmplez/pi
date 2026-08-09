@@ -119,8 +119,8 @@ describe("ASCET editability actions", () => {
 		assert.equal((result.data as { preflightOnly?: boolean } | null)?.preflightOnly, undefined);
 	});
 
-	test("normalizes direct and envelope boolean results to the agent payload", async () => {
-		for (const cliResult of [false, { result: true }]) {
+	test("normalizes direct, object, and envelope results to the agent payload", async () => {
+		for (const cliResult of [false, { editable: true }, { result: false }, { result: { editable: true } }]) {
 			const result = await runAscetEditability(
 				{ mode: "check", componentPath: "DEMO/PID" },
 				{ cwd: process.cwd(), executeCli: async (request) => successfulExecution(request, cliResult) },
@@ -134,7 +134,7 @@ describe("ASCET editability actions", () => {
 	test("returns ascet_edit_invalid_output for non-boolean CLI output", async () => {
 		const result = await runAscetEditability(
 			{ mode: "check", componentPath: "DEMO/PID" },
-			{ cwd: process.cwd(), executeCli: async (request) => successfulExecution(request, { editable: true }) },
+			{ cwd: process.cwd(), executeCli: async (request) => successfulExecution(request, { rawOutput: "false" }) },
 		);
 		assert.equal(result.ok, false);
 		assert.equal(result.error?.code, "ascet_edit_invalid_output");

@@ -356,7 +356,8 @@
       "objectKinds": [
         "class",
         "module",
-        "statemachine"
+        "statemachine",
+        "enumeration"
       ],
       "supportsJson": true,
       "requiresSerialLiveAccess": true,
@@ -1738,6 +1739,35 @@
         "protocolVersion": 1,
         "subcommand": "exec",
         "operation": "set_element_dependency",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
+      },
+      "executionProfile": {
+        "hostSafety": "write",
+        "hostPolicy": "force_one_shot",
+        "timeoutClass": "write"
+      }
+    },
+    {
+      "id": "AscetSetEnumerators",
+      "family": "write",
+      "summary": "Set ordered enumerator names for an ASCET enumeration",
+      "risk": "write",
+      "objectKinds": [
+        "enumeration"
+      ],
+      "supportsJson": true,
+      "requiresSerialLiveAccess": true,
+      "hiddenFromModel": false,
+      "operation": "set_enumerators",
+      "lane": "serial_write",
+      "hostEligible": false,
+      "supportsBatch": false,
+      "execution": {
+        "kind": "bridge",
+        "protocolVersion": 1,
+        "subcommand": "exec",
+        "operation": "set_enumerators",
         "sessionPolicy": "fresh_session",
         "transportPolicy": "one_shot_only"
       },

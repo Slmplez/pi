@@ -4,6 +4,7 @@ import { listActionCatalogEntries } from "./catalog.ts";
 
 const getActions = [
 	"tree",
+	"database_catalog",
 	"elements",
 	"formulas",
 	"component_refs",

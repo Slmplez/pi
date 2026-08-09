@@ -2022,10 +2022,8 @@ public static class AscetSetElementDependency
         write["dryRun"] = result != null && result.DryRun;
         write["succeeded"] = result != null && result.WriteSucceeded;
         write["changed"] = result == null ? 0 : result.MatchesChanged;
-        if (result != null && result.VerifyReadbackRequested)
-        {
-            write["readbackVerified"] = result.ReadbackVerified;
-        }
+        write["verifyReadbackRequested"] = result != null && result.VerifyReadbackRequested;
+        write["readbackVerified"] = result != null && result.ReadbackVerified;
         payload["write"] = write;
 
         Dictionary<string, object> dependency = new Dictionary<string, object>();

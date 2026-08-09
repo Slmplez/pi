@@ -125,6 +125,7 @@ class AscetSetElementDependencyOutputTest
             json.IndexOf("\"dataVariants\":[\"default\"]", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"requested\":\"dependent\"", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"succeeded\":true", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"verifyReadbackRequested\":true", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"readbackVerified\":true", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"changed\":1", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"formula\":{\"after\":\"K_Factor\",\"changed\":true", StringComparison.Ordinal) < 0 ||

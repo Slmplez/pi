@@ -4,6 +4,10 @@ import { openAiObjectUnionSchema } from "../_shared/openai-schema.ts";
 
 export type AscetReadParams =
 	| {
+			action: "read";
+			componentPath: string;
+	  }
+	| {
 			action: "read_code";
 			componentPath: string;
 			methodName?: string;
@@ -61,6 +65,10 @@ const targetKindSchema = Type.Optional(
 );
 
 const ascetReadActionSchemas = [
+	Type.Object({
+		action: Type.Literal("read"),
+		componentPath: componentPathSchema,
+	}),
 	Type.Object({
 		action: Type.Literal("read_code"),
 		componentPath: componentPathSchema,

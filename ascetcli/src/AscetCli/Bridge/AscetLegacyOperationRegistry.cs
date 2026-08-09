@@ -26,6 +26,8 @@ public static class AscetLegacyOperationRegistry
             new Dictionary<string, LegacyOperationEntryPoint>(StringComparer.OrdinalIgnoreCase);
 
         entries["apply_project_formula"] = AscetApplyProjectFormula.Main;
+        entries["component_editable_check"] = AscetComponentEditable.CheckMain;
+        entries["component_editable_set"] = AscetComponentEditable.SetMain;
         entries["create_folder"] = AscetCreateFolder.Main;
         entries["create_method"] = AscetCreateMethod.Main;
         entries["delete_component"] = AscetDeleteComponent.Main;
@@ -60,6 +62,7 @@ public static class AscetLegacyOperationRegistry
         entries["read_state_machine_summary"] = AscetReadStateMachineSummary.Main;
         entries["read_text_code"] = AscetReadTextCode.Main;
         entries["set_class_method_code"] = AscetSetClassMethodCode.Main;
+        entries["set_enumerators"] = AscetSetEnumerators.Main;
         entries["set_method_signature"] = AscetSetMethodSignature.Main;
         entries["set_module_code"] = AscetSetModuleCode.Main;
         entries["set_state_machine_code"] = AscetSetStateMachineCode.Main;

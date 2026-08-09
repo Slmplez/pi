@@ -352,12 +352,14 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["dependency", "live-read", "verify"],
 		}),
 	}),
-	descriptor("ascet_read", "read", "internal", READ_PROFILES, {
-		deprecatedBy: "ascet_read.read_code",
-		prompt: prompt("Legacy internal summary read route.", {
-			rules: ["Hidden legacy action; use read_code, explicit ascet_read actions, or verify readback instead."],
-			tags: ["hidden", "legacy"],
-			hidden: true,
+	descriptor("ascet_read", "read", "public", READ_PROFILES, {
+		prompt: prompt("Read a live summary for one exact resolved Component.", {
+			rules: [
+				"Use read for independent Class, Module, or StateMachine checks after ascet_get.tree resolves componentPath.",
+				"Use ascet_get.formulas instead for Project formula checks.",
+			],
+			fewShots: [shot("read component summary", { action: "read", componentPath: "DEMO/PID" })],
+			tags: ["component", "summary", "live-read", "verify"],
 		}),
 	}),
 	descriptor("ascet_diff", "diff", "public", ["diff"], {

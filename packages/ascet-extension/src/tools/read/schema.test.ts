@@ -4,13 +4,14 @@ import { Value } from "typebox/value";
 import { type AscetReadParams, ascetReadParameters } from "./schema.ts";
 
 describe("ascet_read schema", () => {
-	test("does not expose generic discovery actions", () => {
+	test("exposes exact component summary without generic discovery actions", () => {
 		const actions = getActionLiterals();
 
-		assert.ok(!actions.includes("read"));
+		assert.ok(actions.includes("read"));
 		assert.ok(actions.includes("read_code"));
 		assert.ok(!actions.includes("tree"));
 		assert.ok(!actions.includes("elements"));
+		assert.equal(Value.Check(ascetReadParameters, { action: "read", componentPath: "DEMO\\PID" }), true);
 	});
 
 	test("read_code supports practical detail levels", () => {

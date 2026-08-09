@@ -33,6 +33,8 @@ $retiredCommandIds = @(
   'AscetSelfTest',
   'AscetThreadHarness',
   'AscetWorker',
+  'AscetVerifyTool',
+  'ascet_verify',
   'AscetFindElements',
   'AscetListComponents',
   'AscetListDiagrams',
@@ -64,7 +66,7 @@ $retiredOperations = @(
   'search_occurrences',
   'warm_search_index'
 )
-$obsoleteFamilies = @('search', 'explore', 'index', 'ops')
+$obsoleteFamilies = @('search', 'explore', 'index', 'ops', 'verify')
 $bridgePath = Join-Path $repoRoot 'ascetcli\output\ascet-csharp\bin\AscetBridge.exe'
 if (-not (Test-Path -LiteralPath $bridgePath)) {
   throw "ASCET Bridge is missing for contract validation: $bridgePath"

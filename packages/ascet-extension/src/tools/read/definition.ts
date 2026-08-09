@@ -1,6 +1,7 @@
 import type { AscetCliExecutionResult, AscetCliJsonResult, AscetCliRequest } from "../../cli.ts";
 import { defineSequentialAscetTool } from "../../core/tool.ts";
 import { formatReadBlockDiagramResult, runAscetReadBlockDiagram } from "../../read-block-diagram.ts";
+import { formatReadComponentSummaryResult, runAscetReadComponentSummary } from "../../read-component-summary.ts";
 import { formatReadDependentChainResult, runAscetReadDependentChain } from "../../read-dependent-chain.ts";
 import { formatReadElementResult, runAscetReadElement } from "../../read-element.ts";
 import { formatReadElementDependencyResult, runAscetReadElementDependency } from "../../read-element-dependency.ts";
@@ -26,6 +27,8 @@ const READ_BLOCK_DIAGRAM_DEFAULT_TIMEOUT_MS = 60_000;
 
 async function runAscetRead(params: AscetReadParams, options: RunOptions): Promise<AscetCliJsonResult> {
 	switch (params.action) {
+		case "read":
+			return runAscetReadComponentSummary(params, options);
 		case "read_code":
 			return applyReadCodeDetailLevel(params.detailLevel, await runAscetReadTextCode(params, options));
 		case "read_method_signature":
@@ -88,6 +91,8 @@ function normalizeTimeoutMs(timeoutMs: number | undefined): number | undefined {
 
 function formatAscetReadResult(params: AscetReadParams, result: AscetCliJsonResult): string {
 	switch (params.action) {
+		case "read":
+			return formatReadComponentSummaryResult(result);
 		case "read_code":
 			return formatReadTextCodeResult(result);
 		case "read_method_signature":

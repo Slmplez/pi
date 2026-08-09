@@ -1,0 +1,90 @@
+{
+  "id": "AscetSetEnumerators",
+  "family": "write",
+  "summary": "Set ordered enumerator names for an ASCET enumeration",
+  "usage": "<enumeration-path> (--item <name> | --items <name1,name2,...>) [--verify-readback] [--json]",
+  "execution": {
+    "kind": "bridge",
+    "protocolVersion": 1,
+    "subcommand": "exec",
+    "operation": "set_enumerators",
+    "sessionPolicy": "fresh_session",
+    "transportPolicy": "one_shot_only"
+  },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "write",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": [
+    "enumeration"
+  ],
+  "args": [
+    {
+      "name": "enumeration-path",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "ASCET enumeration path."
+    },
+    {
+      "name": "--item",
+      "kind": "option",
+      "type": "string",
+      "required": false,
+      "description": "One enumerator name. Repeat to preserve explicit order."
+    },
+    {
+      "name": "--items",
+      "kind": "option",
+      "type": "string",
+      "required": false,
+      "description": "Comma- or semicolon-separated enumerator names in ordinal order."
+    },
+    {
+      "name": "--verify-readback",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Verify exact ordered enumerator readback after writing."
+    },
+    {
+      "name": "--json",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Emit JSON."
+    }
+  ],
+  "preconditions": [
+    "ASCET ToolAPI session must be available.",
+    "Live ASCET access must run through the serial executor.",
+    "Target ASCET path must resolve to an enumeration."
+  ],
+  "failureModes": [
+    "toolapi_unavailable",
+    "target_not_found",
+    "unsupported_component_kind",
+    "set_enumerators_failed",
+    "readback_mismatch"
+  ],
+  "examples": [
+    {
+      "description": "Set three ordered enumerators with readback verification",
+      "command": "AscetBridge.exe exec set_enumerators <enumeration-path> --items OFF,ON,ERROR --verify-readback --json"
+    }
+  ],
+  "pitfalls": [
+    "Enumerator names must be non-empty and unique; order defines ordinal values.",
+    "Executed ascet_edit writes always request automatic readback verification."
+  ],
+  "operation": "set_enumerators",
+  "lane": "serial_write",
+  "hostEligible": false,
+  "supportsBatch": false,
+  "executionProfile": {
+    "hostSafety": "write",
+    "hostPolicy": "force_one_shot",
+    "timeoutClass": "write"
+  },
+  "hiddenFromModel": false
+}

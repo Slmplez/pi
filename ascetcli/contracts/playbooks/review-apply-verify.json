@@ -1,16 +1,28 @@
 {
   "id": "review-apply-verify",
-  "title": "Review, apply, and verify live ASCET changes",
-  "appliesTo": ["class", "module", "statemachine", "project"],
+  "title": "Review and apply live ASCET changes with automatic verification",
+  "appliesTo": [
+    "class",
+    "module",
+    "statemachine",
+    "project"
+  ],
   "steps": [
-    { "kind": "tool", "tool": "AscetDiffTool", "action": "review" },
-    { "kind": "tool", "tool": "AscetWriteTool", "action": "apply" },
-    { "kind": "tool", "tool": "AscetVerifyTool", "action": "readback" }
+    {
+      "kind": "tool",
+      "tool": "AscetDiffTool",
+      "action": "review"
+    },
+    {
+      "kind": "tool",
+      "tool": "AscetWriteTool",
+      "action": "apply_with_automatic_verification"
+    }
   ],
   "requiredRules": [
     "live_serial_only",
     "explicit_apply_confirmation",
-    "write_then_readback",
-    "verify_after_apply"
+    "automatic_action_readback",
+    "inspect_verification_feedback"
   ]
 }

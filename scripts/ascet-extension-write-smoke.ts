@@ -1,4 +1,4 @@
-import { mkdtempSync, writeFileSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { loadExtensions } from "../packages/coding-agent/src/core/extensions/loader.ts";
@@ -38,26 +38,9 @@ if (!enabled) {
 }
 
 const tempDir = mkdtempSync(join(tmpdir(), "pi-ascet-write-smoke-"));
+process.once("exit", () => rmSync(tempDir, { recursive: true, force: true }));
 const codeFile = join(tempDir, `${methodName}.esdl`);
-const elementSpecFile = join(tempDir, "elements.json");
 writeFileSync(codeFile, "// PI ASCET write smoke\nreturn 0.0;\n", "utf8");
-writeFileSync(
-	elementSpecFile,
-	JSON.stringify({
-		elements: [
-			{
-				name: "P_Smoke",
-				kind: "parameter",
-				modelType: "cont",
-				scope: "local",
-				data: { value: 0 },
-				physicalRange: { min: -1, max: 1 },
-				impl: { valueType: "real32" },
-			},
-		],
-	}),
-	"utf8",
-);
 
 async function withStage<T>(stage: string, fn: () => Promise<T>): Promise<T> {
 	try {
@@ -112,15 +95,21 @@ async function executeTool(toolName: string, params: Record<string, unknown>, ct
 	}
 	const response = await tool.execute(`ascet-write-smoke-${toolName}`, params, signal, undefined, ctx);
 	const outcome = response.details?.outcome;
-	if (toolName === "ascet_edit" && params.executeWrite === true) {
-		const verification = response.details?.verification as { status?: unknown } | undefined;
-		if (verification?.status !== "passed") {
-			throw new Error(`ascet_edit did not prove automatic readback verification: ${verification?.status ?? "missing"}`);
-		}
-	}
 	if (outcome) {
-		if (outcome.status !== "ok") {
-			throw new Error(`${toolName} failed: ${outcome.error?.message ?? outcome.message ?? outcome.status}`);
+		if (outcome.status !== "ok" && outcome.status !== "preflight") {
+			throw new Error(`${toolName} failed: ${outcome.error?.message ?? outcome.message ?? outcome.status} ${JSON.stringify({ outcome, verification: response.details?.verification })}`);
+		}
+		const executedMutation =
+			toolName === "ascet_edit" &&
+			outcome.status === "ok" &&
+			(params.executeWrite === true || params.phase === "commit");
+		if (executedMutation) {
+			const verification = response.details?.verification as { status?: unknown } | undefined;
+			if (verification?.status !== "passed") {
+				throw new Error(
+					`ascet_edit did not prove automatic readback verification: ${verification?.status ?? "missing"}`,
+				);
+			}
 		}
 		return response;
 	}
@@ -223,17 +212,37 @@ const signatureResponse = await withStage("set_method_signature", () => executeT
 	},
 	writeContext,
 ));
-const elementSpecResponse = await withStage("apply_element_spec", () => executeTool(
+const elementSpecPlanResponse = await withStage("apply_element_spec_plan", () => executeTool(
 	"ascet_edit",
 	{
 		action: "apply_element_spec",
 		componentPath,
-		specFile: elementSpecFile,
-		executeWrite: true,
+		intent: "create",
+		elements: [
+			{
+				role: "standardPrimitive",
+				name: "P_Smoke",
+				kind: "parameter",
+				modelType: "cont",
+				scope: "local",
+				data: { value: 0 },
+				physicalRange: { min: -1, max: 1 },
+				impl: { valueType: "real32" },
+			},
+		],
 	},
 	writeContext,
 ));
-const dependencyResponse = await withStage("set_element_dependency", () => executeTool(
+const elementSpecPlanId = elementSpecPlanResponse.details.outcome?.plan?.planId;
+if (typeof elementSpecPlanId !== "string" || elementSpecPlanId.length === 0) {
+	throw new Error("apply_element_spec plan did not return planId");
+}
+const elementSpecResponse = await withStage("apply_element_spec_commit", () => executeTool(
+	"ascet_edit",
+	{ action: "apply_element_spec", phase: "commit", planId: elementSpecPlanId },
+	writeContext,
+));
+const dependencyPlanResponse = await withStage("set_element_dependency_plan", () => executeTool(
 	"ascet_edit",
 	{
 		action: "set_element_dependency",
@@ -241,8 +250,16 @@ const dependencyResponse = await withStage("set_element_dependency", () => execu
 		elementName: "P_Smoke",
 		dependency: "dependent",
 		targetKind: "component",
-		executeWrite: true,
 	},
+	writeContext,
+));
+const dependencyPlanId = dependencyPlanResponse.details.outcome?.plan?.planId;
+if (typeof dependencyPlanId !== "string" || dependencyPlanId.length === 0) {
+	throw new Error("set_element_dependency plan did not return planId");
+}
+const dependencyResponse = await withStage("set_element_dependency_commit", () => executeTool(
+	"ascet_edit",
+	{ action: "set_element_dependency", phase: "commit", planId: dependencyPlanId },
 	writeContext,
 ));
 const dependencyReadback = await withStage("read_element_dependency", () =>
@@ -252,27 +269,33 @@ const dependencyReadback = await withStage("read_element_dependency", () =>
 		{ cwd: ascetCwd },
 	),
 );
-const createEnumerationResponse = await withStage("create_enumeration", () => executeTool(
-	"ascet_edit",
-	{
-		action: "create_component",
-		componentPath: enumerationPath,
-		kind: "enumeration",
-		ifExists: "return-existing",
-		executeWrite: true,
-	},
-	writeContext,
-));
-const enumeratorResponse = await withStage("set_enumerators", () => executeTool(
-	"ascet_edit",
-	{
-		action: "set_enumerators",
-		componentPath: enumerationPath,
-		enumerators: ["OFF", "ON"],
-		executeWrite: true,
-	},
-	writeContext,
-));
+
+const createEnumerationResponse = await withStage("create_enumeration", () =>
+	executeTool(
+		"ascet_edit",
+		{
+			action: "create_component",
+			componentPath: enumerationPath,
+			kind: "enumeration",
+			ifExists: "return-existing",
+			executeWrite: true,
+		},
+		writeContext,
+	),
+);
+const enumeratorResponse = await withStage("set_enumerators", () =>
+	executeTool(
+		"ascet_edit",
+		{
+			action: "set_enumerators",
+			componentPath: enumerationPath,
+			enumerators: ["OFF", "ON", "ERROR"],
+			executeWrite: true,
+		},
+		writeContext,
+	),
+);
+
 const createModuleResponse = await withStage("create_module", () => executeTool(
 	"ascet_edit",
 	{
@@ -371,7 +394,9 @@ console.log(
 				editabilitySet: editabilitySetResponse?.details.outcome,
 				method: createMethodResponse.details.outcome,
 				signature: signatureResponse.details.outcome,
+				elementSpecPlan: elementSpecPlanResponse.details.outcome,
 				elementSpec: elementSpecResponse.details.outcome,
+				dependencyPlan: dependencyPlanResponse.details.outcome,
 				dependency: dependencyResponse.details.outcome,
 				dependencyReadback: toolData(dependencyReadback),
 				enumeration: createEnumerationResponse.details.outcome,

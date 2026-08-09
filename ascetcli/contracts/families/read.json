@@ -1,33 +1,33 @@
 {
-    "family":  "read",
-    "summary":  "Read code, implementation, snapshots, summaries, and semantic views.",
-    "recommendedTools":  [
-                             "AscetReadTool"
-                         ],
-    "commandIds":  [
-                       "AscetReadComponentSnapshot",
-                       "AscetReadComponentCode",
-                       "AscetReadMethodCode",
-                       "AscetReadMethodSignature",
-                       "AscetReadTextCode",
-                       "AscetReadImplementation",
-                       "AscetReadBlockDiagram",
-                       "AscetReadElementCatalog",
-                       "AscetReadDependentChain",
-                       "AscetReadClassSummary",
-                       "AscetReadClassSnapshot",
-                       "AscetReadModuleSummary",
-                       "AscetReadModuleSnapshot",
-                       "AscetReadModuleClosure",
-                       "AscetReadStateMachineSummary",
-                       "AscetReadStateMachineSnapshot",
-                       "AscetReadStateMachine",
-                       "AscetReadStateMachineFlow"
-                   ],
-    "routingHints":  [
-                         "Prefer exact method or section reads over broad component code reads when the user names a method or code area.",
-                         "Use snapshots when comparing structure across component kinds.",
-                         "Use specialized class/module/state-machine summary or snapshot commands when the object kind is known.",
-                         "Reserve AscetVerifyTool.readback for post-write confirmation only instead of routine reading or summary browsing."
-                     ]
+  "family": "read",
+  "summary": "Read code, implementation, snapshots, summaries, and semantic views.",
+  "recommendedTools": [
+    "AscetReadTool"
+  ],
+  "commandIds": [
+    "AscetReadComponentSnapshot",
+    "AscetReadComponentCode",
+    "AscetReadMethodCode",
+    "AscetReadMethodSignature",
+    "AscetReadTextCode",
+    "AscetReadImplementation",
+    "AscetReadBlockDiagram",
+    "AscetReadElementCatalog",
+    "AscetReadDependentChain",
+    "AscetReadClassSummary",
+    "AscetReadClassSnapshot",
+    "AscetReadModuleSummary",
+    "AscetReadModuleSnapshot",
+    "AscetReadModuleClosure",
+    "AscetReadStateMachineSummary",
+    "AscetReadStateMachineSnapshot",
+    "AscetReadStateMachine",
+    "AscetReadStateMachineFlow"
+  ],
+  "routingHints": [
+    "Prefer exact method or section reads over broad component code reads when the user names a method or code area.",
+    "Use snapshots when comparing structure across component kinds.",
+    "Use specialized class/module/state-machine summary or snapshot commands when the object kind is known.",
+    "Use ascet_read for an explicit independent component check; Project formula checks use ascet_get.formulas."
+  ]
 }

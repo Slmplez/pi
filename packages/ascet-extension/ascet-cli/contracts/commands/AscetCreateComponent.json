@@ -2,7 +2,7 @@
   "id": "AscetCreateComponent",
   "family": "write",
   "summary": "Create a new component shell",
-  "usage": "<component-path> --kind <class|module|statemachine> [--language <ESDL|BDE|C>] [--if-exists <fail|return-existing>] [--verify-readback] [--rollback-on-failure] [--json]",
+  "usage": "<component-path> --kind <class|module|statemachine|enumeration> [--language <ESDL|BDE|C>] [--if-exists <fail|return-existing>] [--verify-readback] [--rollback-on-failure] [--json]",
   "execution": {
     "kind": "bridge",
     "protocolVersion": 1,
@@ -18,7 +18,8 @@
   "objectKinds": [
     "class",
     "module",
-    "statemachine"
+    "statemachine",
+    "enumeration"
   ],
   "args": [
     {
@@ -36,7 +37,7 @@
       "description": "Flag --kind"
     },
     {
-      "name": "class|module|statemachine",
+      "name": "class|module|statemachine|enumeration",
       "kind": "positional",
       "type": "string",
       "required": true,
@@ -91,7 +92,7 @@
   "examples": [
     {
       "description": "Basic usage",
-      "command": "AscetBridge.exe exec create_component <component-path> --kind <class|module|statemachine> [--language <ESDL|BDE|C>] [--if-exists <fail|return-existing>] [--verify-readback] [--rollback-on-failure] [--json]"
+      "command": "AscetBridge.exe exec create_component <component-path> --kind <class|module|statemachine|enumeration> [--language <ESDL|BDE|C>] [--if-exists <fail|return-existing>] [--verify-readback] [--rollback-on-failure] [--json]"
     }
   ],
   "pitfalls": [

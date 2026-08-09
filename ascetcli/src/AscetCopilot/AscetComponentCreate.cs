@@ -166,7 +166,7 @@ public sealed class ComponentCreateService : AscetReadDomainServiceBase, ICompon
                 readbackVerified = resolved != null &&
                     String.Equals(resolved.Path ?? String.Empty, componentPath, StringComparison.Ordinal) &&
                     resolved.Kind == componentKind &&
-                    (componentKind == AscetComponentKind.StateMachine || resolved.LanguageKind == languageKind);
+                    ((componentKind != AscetComponentKind.Class && componentKind != AscetComponentKind.Module) || resolved.LanguageKind == languageKind);
                 if (!readbackVerified)
                 {
                     throw new AscetReadException("readback_mismatch", "create_component", "Readback verification failed for component '" + componentPath + "'.");
@@ -179,7 +179,7 @@ public sealed class ComponentCreateService : AscetReadDomainServiceBase, ICompon
                 FolderPath = parsed.FolderPath,
                 ComponentName = parsed.ItemName,
                 ComponentKind = componentKind,
-                LanguageKind = componentKind == AscetComponentKind.StateMachine && resolved != null ? resolved.LanguageKind : languageKind,
+                LanguageKind = (componentKind == AscetComponentKind.StateMachine || componentKind == AscetComponentKind.Enumeration) && resolved != null ? resolved.LanguageKind : languageKind,
                 Created = created,
                 AlreadyExisted = alreadyExisted,
                 VerifyReadbackRequested = verifyReadback,
@@ -267,7 +267,7 @@ public sealed class ComponentCreateService : AscetReadDomainServiceBase, ICompon
                 readbackVerified = resolved != null &&
                     String.Equals(resolved.Path ?? String.Empty, componentPath, StringComparison.Ordinal) &&
                     resolved.Kind == componentKind &&
-                    (componentKind == AscetComponentKind.StateMachine || resolved.LanguageKind == languageKind);
+                    ((componentKind != AscetComponentKind.Class && componentKind != AscetComponentKind.Module) || resolved.LanguageKind == languageKind);
                 if (!readbackVerified)
                 {
                     throw new AscetReadException("readback_mismatch", "create_component", "Readback verification failed for component '" + componentPath + "'.");
@@ -280,7 +280,7 @@ public sealed class ComponentCreateService : AscetReadDomainServiceBase, ICompon
                 FolderPath = parsed.FolderPath,
                 ComponentName = parsed.ItemName,
                 ComponentKind = componentKind,
-                LanguageKind = componentKind == AscetComponentKind.StateMachine && resolved != null ? resolved.LanguageKind : languageKind,
+                LanguageKind = (componentKind == AscetComponentKind.StateMachine || componentKind == AscetComponentKind.Enumeration) && resolved != null ? resolved.LanguageKind : languageKind,
                 Created = created,
                 AlreadyExisted = alreadyExisted,
                 VerifyReadbackRequested = verifyReadback,
@@ -339,6 +339,7 @@ public sealed class ComponentCreateService : AscetReadDomainServiceBase, ICompon
                 }
                 break;
             case AscetComponentKind.StateMachine:
+            case AscetComponentKind.Enumeration:
                 break;
             default:
                 throw new AscetReadException("invalid_argument", "create_component", "Unsupported component kind for creation.");
@@ -368,6 +369,9 @@ public sealed class ComponentCreateService : AscetReadDomainServiceBase, ICompon
                 break;
             case AscetComponentKind.StateMachine:
                 created = folder.AddStateMachine(componentName);
+                break;
+            case AscetComponentKind.Enumeration:
+                created = folder.AddEnumeration(componentName);
                 break;
             default:
                 throw new AscetReadException("invalid_argument", "create_component", "Unsupported component kind for creation.");
@@ -499,6 +503,11 @@ public sealed class ComponentCreateService : AscetReadDomainServiceBase, ICompon
         if (componentKind == AscetComponentKind.StateMachine)
         {
             return (created ? "Created " : "Resolved ") + "state machine " + componentPath + ".";
+        }
+
+        if (componentKind == AscetComponentKind.Enumeration)
+        {
+            return (created ? "Created " : "Resolved ") + "enumeration " + componentPath + ".";
         }
 
         return (created ? "Created " : "Resolved ")

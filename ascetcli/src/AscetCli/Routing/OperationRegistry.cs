@@ -107,6 +107,8 @@ public static class OperationRegistry
         RegisterTyped(descriptors, "apply_element_spec", ExecutionLane.SerialWrite, false, BatchSupportShape.Write);
         RegisterLegacy(descriptors, "apply_project_formula", ExecutionLane.SerialWrite, false, BatchSupportShape.Write);
         RegisterTyped(descriptors, "capabilities", ExecutionLane.Diagnostic, false, BatchSupportShape.None);
+        RegisterLegacy(descriptors, "component_editable_check", ExecutionLane.LegacyRead, false, BatchSupportShape.None);
+        RegisterLegacy(descriptors, "component_editable_set", ExecutionLane.SerialWrite, false, BatchSupportShape.None);
         RegisterTyped(descriptors, "create_component", ExecutionLane.SerialWrite, true, BatchSupportShape.Write);
         RegisterLegacy(descriptors, "create_folder", ExecutionLane.SerialWrite, false, BatchSupportShape.Write);
         RegisterLegacy(descriptors, "create_method", ExecutionLane.SerialWrite, true, BatchSupportShape.Write);
@@ -166,6 +168,7 @@ public static class OperationRegistry
 
         RegisterLegacy(descriptors, "set_class_method_code", ExecutionLane.SerialWrite, true, BatchSupportShape.None);
         RegisterTyped(descriptors, "set_element_dependency", ExecutionLane.SerialWrite, false, BatchSupportShape.None);
+        RegisterLegacy(descriptors, "set_enumerators", ExecutionLane.SerialWrite, false, BatchSupportShape.None);
         RegisterTyped(descriptors, "set_method_signature", ExecutionLane.SerialWrite, true, BatchSupportShape.None);
         RegisterTyped(descriptors, "set_method_code", ExecutionLane.SerialWrite, true, BatchSupportShape.Write);
         RegisterLegacy(descriptors, "set_module_code", ExecutionLane.SerialWrite, false, BatchSupportShape.None);
@@ -257,6 +260,8 @@ public static class OperationRegistry
 
         switch (operationId ?? String.Empty)
         {
+            case "component_editable_check":
+            case "component_editable_set":
             case "get_database_catalog":
             case "list_diagrams":
             case "list_folders":

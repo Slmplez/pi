@@ -49,9 +49,25 @@ export function buildAscetEditabilityArgs(params: AscetEditabilityParams): strin
 	return ["exec", getAscetEditabilityOperation(params.mode), normalizeComponentPath(params.componentPath), "--json"];
 }
 
-function getEnvelopeResult(data: unknown): unknown {
-	if (data && typeof data === "object" && !Array.isArray(data)) {
-		return (data as { result?: unknown }).result;
+function getEditableBoolean(data: unknown): boolean | undefined {
+	if (typeof data === "boolean") {
+		return data;
+	}
+	if (!data || typeof data !== "object" || Array.isArray(data)) {
+		return undefined;
+	}
+	const candidate = data as { editable?: unknown; result?: unknown };
+	if (typeof candidate.editable === "boolean") {
+		return candidate.editable;
+	}
+	if (typeof candidate.result === "boolean") {
+		return candidate.result;
+	}
+	if (candidate.result && typeof candidate.result === "object" && !Array.isArray(candidate.result)) {
+		const envelopeResult = candidate.result as { editable?: unknown };
+		if (typeof envelopeResult.editable === "boolean") {
+			return envelopeResult.editable;
+		}
 	}
 	return undefined;
 }
@@ -60,12 +76,9 @@ function normalizeBooleanResult(result: AscetCliJsonResult, operation: string): 
 	if (!result.ok) {
 		return result;
 	}
-	if (typeof result.data === "boolean") {
-		return result;
-	}
-	const envelopeResult = getEnvelopeResult(result.data);
-	if (typeof envelopeResult === "boolean") {
-		return { ...result, data: envelopeResult };
+	const editable = getEditableBoolean(result.data);
+	if (editable !== undefined) {
+		return { ...result, data: editable };
 	}
 	return {
 		...result,

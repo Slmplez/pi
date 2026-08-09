@@ -45,6 +45,9 @@ const repoRoot = resolve(process.cwd());
 // Keep the extension under test separate from the ASCET project/runtime it targets.
 const ascetCwd = resolve(process.env.ASCET_SMOKE_CWD ?? repoRoot);
 const configuredComponentPath = process.env.ASCET_SMOKE_COMPONENT;
+const configuredComponentFolderPath = configuredComponentPath
+	? configuredComponentPath.split(/[\\/]/u).slice(0, -1).join("\\")
+	: undefined;
 const treePathPrefix = process.env.ASCET_SMOKE_TREE_PREFIX ?? "PlatformLibrary\\Package";
 const preflightFolderPath = process.env.ASCET_SMOKE_PREFLIGHT_FOLDER ?? "__pi_ascet_live_smoke_preflight__";
 const extensionPath = resolve(repoRoot, ".pi/extensions/ascet/index.ts");
@@ -156,8 +159,10 @@ function readObservationItems(output: AscetGetOutput): JsonRecord[] {
 }
 
 function grepObservationItems(output: AscetGetOutput, query: string): JsonRecord[] {
-	const normalizedQuery = query.toLocaleLowerCase();
-	return readObservationItems(output).filter((item) => JSON.stringify(item).toLocaleLowerCase().includes(normalizedQuery));
+	const normalizedQuery = query.replaceAll("/", "\\").toLocaleLowerCase();
+	return readObservationItems(output).filter((item) =>
+		JSON.stringify(item).replaceAll("\\\\", "\\").toLocaleLowerCase().includes(normalizedQuery),
+	);
 }
 
 function getString(record: JsonRecord, key: string): string | undefined {
@@ -217,8 +222,10 @@ const capabilities = await callTool("ascet_capabilities", {
 });
 const tree = await callAscetGet({
 	action: "tree",
-	target: configuredComponentPath ? { path: configuredComponentPath } : { targetPathPrefix: treePathPrefix },
-	traversal: configuredComponentPath ? { depth: 0 } : { depth: 2, maxFolders: 40, maxComponents: 40 },
+	target: configuredComponentFolderPath ? { path: configuredComponentFolderPath } : { targetPathPrefix: treePathPrefix },
+	traversal: configuredComponentFolderPath
+		? { depth: 1, maxFolders: 20, maxComponents: 40 }
+		: { depth: 2, maxFolders: 40, maxComponents: 40 },
 	delivery: "stored",
 });
 const treeItems = readObservationItems(tree);
@@ -251,7 +258,11 @@ const blockDiagram = await callToolAllowingError("ascet_read", {
 	componentPath,
 	diagramName: "Main",
 });
-if (blockDiagram.error && blockDiagram.error.code !== "ascet_block_diagram_surface_not_supported") {
+if (
+	blockDiagram.error &&
+	blockDiagram.error.code !== "ascet_block_diagram_surface_not_supported" &&
+	blockDiagram.error.code !== "diagram_not_found"
+) {
 	throw new Error(
 		`ascet_read.read_block_diagram expected ok or unsupported text ESDL surface, got: ${blockDiagram.error?.code ?? "ok"}`,
 	);

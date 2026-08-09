@@ -74,6 +74,13 @@ export const ascetRouteManifestEntries = [
 	},
 	{
 		toolName: "ascet_get",
+		action: "database_catalog",
+		logicalCommandId: "AscetGetDatabaseCatalog",
+		operation: "get_database_catalog",
+		category: "domain",
+	},
+	{
+		toolName: "ascet_get",
 		action: "elements",
 		logicalCommandId: "AscetGetElements",
 		operation: "get_elements",
