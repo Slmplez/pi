@@ -1,4 +1,4 @@
-﻿{
+{
     "family":  "verify",
     "summary":  "Run post-write readback confirmation only for ASCET components or projects.",
     "recommendedTools":  [

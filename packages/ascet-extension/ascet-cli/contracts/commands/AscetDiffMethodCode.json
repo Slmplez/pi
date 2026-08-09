@@ -1,86 +1,85 @@
-﻿{
-    "id":  "AscetDiffMethodCode",
-    "family":  "diff",
-    "summary":  "Diff one method between two components",
-    "usage":  "\u003cleft-component-path\u003e \u003cright-component-path\u003e \u003cmethod-name\u003e [--changes-only] [--json]",
-    "execution":  {
-                      "kind":  "unified_cli",
-                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                      "subcommand":  "exec",
-                      "operation":  "diff_method_code"
-                  },
-    "supportsJson":  true,
-    "defaultOutputMode":  "json",
-    "risk":  "diff",
-    "requiresSerialLiveAccess":  false,
-    "objectKinds":  [
-                        "class",
-                        "module",
-                        "statemachine"
-                    ],
-    "args":  [
-                 {
-                     "name":  "left-component-path",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: left-component-path"
-                 },
-                 {
-                     "name":  "right-component-path",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: right-component-path"
-                 },
-                 {
-                     "name":  "method-name",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: method-name"
-                 },
-                 {
-                     "name":  "--changes-only",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --changes-only"
-                 },
-                 {
-                     "name":  "--json",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --json"
-                 }
-             ],
-    "preconditions":  [
-                          "ASCET ToolAPI session must be available.",
-                          "Target ASCET path must resolve to the expected object kind."
-                      ],
-    "failureModes":  [
-                         "toolapi_unavailable",
-                         "target_not_found"
-                     ],
-    "examples":  [
-                     {
-                         "description":  "Basic usage",
-                         "command":  "AscetCli.exe exec diff_method_code \u003cleft-component-path\u003e \u003cright-component-path\u003e \u003cmethod-name\u003e [--changes-only] [--json]"
-                     }
-                 ],
-    "pitfalls":  [
-
-                 ],
-    "operation":  "diff_method_code",
-    "lane":  "legacy_read",
-    "hostEligible":  false,
-    "supportsBatch":  false,
-    "executionProfile":  {
-                             "hostSafety":  "fragile",
-                             "hostPolicy":  "force_one_shot",
-                             "timeoutClass":  "diff"
-                         },
-    "hiddenFromModel":  false
+{
+  "id": "AscetDiffMethodCode",
+  "family": "diff",
+  "summary": "Diff one method between two components",
+  "usage": "<left-component-path> <right-component-path> <method-name> [--changes-only] [--json]",
+  "execution": {
+    "kind": "bridge",
+    "protocolVersion": 1,
+    "subcommand": "exec",
+    "operation": "diff_method_code",
+    "sessionPolicy": "fresh_session",
+    "transportPolicy": "one_shot_only"
+  },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "diff",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": [
+    "class",
+    "module",
+    "statemachine"
+  ],
+  "args": [
+    {
+      "name": "left-component-path",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: left-component-path"
+    },
+    {
+      "name": "right-component-path",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: right-component-path"
+    },
+    {
+      "name": "method-name",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: method-name"
+    },
+    {
+      "name": "--changes-only",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --changes-only"
+    },
+    {
+      "name": "--json",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --json"
+    }
+  ],
+  "preconditions": [
+    "ASCET ToolAPI session must be available.",
+    "Target ASCET path must resolve to the expected object kind."
+  ],
+  "failureModes": [
+    "toolapi_unavailable",
+    "target_not_found"
+  ],
+  "examples": [
+    {
+      "description": "Basic usage",
+      "command": "AscetBridge.exe exec diff_method_code <left-component-path> <right-component-path> <method-name> [--changes-only] [--json]"
+    }
+  ],
+  "pitfalls": [],
+  "operation": "diff_method_code",
+  "lane": "legacy_read",
+  "hostEligible": false,
+  "supportsBatch": false,
+  "executionProfile": {
+    "hostSafety": "fragile",
+    "hostPolicy": "force_one_shot",
+    "timeoutClass": "diff"
+  },
+  "hiddenFromModel": false
 }
-

@@ -1,6 +1,16 @@
-import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, unlinkSync, writeFileSync } from "node:fs";
+import {
+	createReadStream,
+	existsSync,
+	mkdirSync,
+	readdirSync,
+	readFileSync,
+	renameSync,
+	unlinkSync,
+	writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { createInterface } from "node:readline";
 
 export const DEFAULT_ASCET_OUTPUT_THRESHOLD_BYTES = 4096;
 
@@ -18,6 +28,7 @@ export interface AscetObservationMetadata {
 	target: unknown;
 	itemCount: number;
 	coverage: AscetObservationCoverage;
+	truncated?: boolean;
 	source: string;
 	capturedAt: string;
 }
@@ -34,6 +45,7 @@ export interface InlineAscetObservation {
 	itemCount: number;
 	thresholdBytes: number;
 	coverage: AscetObservationCoverage;
+	truncated?: boolean;
 	source: string;
 	capturedAt: string;
 }
@@ -44,6 +56,16 @@ export interface StoredAscetObservationResult {
 	thresholdBytes: number;
 }
 
+export interface StoredAscetObservationDescriptor {
+	metadata: AscetObservationMetadata;
+	dataPath: string;
+	metaPath: string;
+}
+
+export interface ReadAscetObservationResult extends StoredAscetObservationDescriptor {
+	items: unknown[];
+}
+
 export type AscetObservationResult = InlineAscetObservation | StoredAscetObservationResult;
 
 export interface CreateAscetObservationInput {
@@ -51,6 +73,7 @@ export interface CreateAscetObservationInput {
 	target: unknown;
 	items: readonly unknown[];
 	coverage: AscetObservationCoverage;
+	truncated?: boolean;
 	source?: string;
 	capturedAt?: string;
 	delivery?: AscetObservationDelivery;
@@ -177,6 +200,21 @@ function observationFileNames(metadata: AscetObservationMetadata): { dataFileNam
 	};
 }
 
+export async function* readAscetObservationItems(dataPath: string): AsyncGenerator<unknown> {
+	if (!existsSync(dataPath)) {
+		throw new Error(`Stored ASCET observation data '${dataPath}' was not found.`);
+	}
+	const lines = createInterface({
+		input: createReadStream(dataPath, { encoding: "utf8" }),
+		crlfDelay: Number.POSITIVE_INFINITY,
+	});
+	for await (const line of lines) {
+		if (line.length > 0) {
+			yield JSON.parse(line) as unknown;
+		}
+	}
+}
+
 export class AscetObservationStore {
 	private readonly root: string;
 	private readonly thresholdBytes: number;
@@ -202,6 +240,32 @@ export class AscetObservationStore {
 		return this.thresholdBytes;
 	}
 
+	public readStoredMetadata(resultId: string): StoredAscetObservationDescriptor {
+		const safeResultId = safeToken(resultId, "observation");
+		if (safeResultId !== resultId) {
+			throw new Error(`Stored ASCET observation '${resultId}' was not found.`);
+		}
+		const metaPath = join(this.root, `${safeResultId}.meta.json`);
+		if (!existsSync(metaPath)) {
+			throw new Error(`Stored ASCET observation '${resultId}' was not found.`);
+		}
+		const metadata = JSON.parse(readFileSync(metaPath, "utf8")) as AscetObservationMetadata;
+		if (metadata.resultId !== resultId) {
+			throw new Error(`Stored ASCET observation '${resultId}' has inconsistent metadata.`);
+		}
+		const { dataFileName } = observationFileNames(metadata);
+		return { metadata, dataPath: join(this.root, dataFileName), metaPath };
+	}
+
+	public readStored(resultId: string): ReadAscetObservationResult {
+		const descriptor = this.readStoredMetadata(resultId);
+		const items = readFileSync(descriptor.dataPath, "utf8")
+			.split(/\r?\n/u)
+			.filter((line) => line.length > 0)
+			.map((line) => JSON.parse(line) as unknown);
+		return { ...descriptor, items };
+	}
+
 	public create(input: CreateAscetObservationInput): AscetObservationResult {
 		const domain = safeToken(input.domain, "ascet");
 		const source = input.source ?? "live";
@@ -219,6 +283,7 @@ export class AscetObservationStore {
 				itemCount: input.items.length,
 				thresholdBytes: this.thresholdBytes,
 				coverage: input.coverage,
+				truncated: input.truncated,
 				source,
 				capturedAt,
 			};
@@ -230,6 +295,7 @@ export class AscetObservationStore {
 			target: input.target ?? null,
 			itemCount: input.items.length,
 			coverage: input.coverage,
+			...(input.truncated === undefined ? {} : { truncated: input.truncated }),
 			source,
 			capturedAt,
 		};

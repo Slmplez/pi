@@ -1,4 +1,4 @@
-﻿# Tool Map
+# Tool Map
 
 Use evidence kinds in rules. Collect live ASCET structure and reference evidence with `ascet_get`; it is the only discovery surface.
 
@@ -56,7 +56,7 @@ Do not use write tools in full-check.
 
 - `component_diff`: `ascet_diff`
 - `method_diff`: `ascet_diff`
-- `readback_verify`: `ascet_verify`
+- `readback_verify`: exact `ascet_read` summary/code/implementation action, or `ascet_get` action `formulas` for Project formulas
 
 Use `ascet_diff` action `diff` with `objectKind` for detailed semantic component comparison. Use `diff_component_snapshot` only as quick snapshot evidence for child added/removed presence, not for method code, formula, or element signature decisions.
 

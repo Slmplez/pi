@@ -17,7 +17,6 @@ import { ascetRecoverParameters } from "../../ascet-extension/src/tools/recover/
 import { allAscetToolNames, canonicalAscetToolNames } from "../../ascet-extension/src/tools/registry.ts";
 import { ascetSchedulerStatusParameters } from "../../ascet-extension/src/tools/scheduler-status/schema.ts";
 import { ascetStatusParameters } from "../../ascet-extension/src/tools/status/schema.ts";
-import { ascetVerifyParameters } from "../../ascet-extension/src/tools/verify/schema.ts";
 
 const schemaByTool = {
 	ascet_status: ascetStatusParameters,
@@ -29,7 +28,6 @@ const schemaByTool = {
 	ascet_diff: ascetDiffParameters,
 	ascet_edit: ascetEditParameters,
 	ascet_batch_write: ascetBatchWriteParameters,
-	ascet_verify: ascetVerifyParameters,
 	configure_parameter_dependency_chain: configureParameterDependencyChainParameters,
 } as const;
 

@@ -11,7 +11,8 @@
 		".": "./src/index.ts"
 	},
 	"scripts": {
-		"copy-assets": "powershell -ExecutionPolicy Bypass -File scripts/copy-ascet-assets.ps1"
+		"copy-assets": "powershell -ExecutionPolicy Bypass -File scripts/copy-ascet-assets.ps1",
+		"verify-assets": "node scripts/verify-packed-assets.mjs"
 	},
 	"pi": {
 		"extensions": [

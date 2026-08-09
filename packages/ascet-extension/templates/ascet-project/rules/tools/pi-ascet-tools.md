@@ -1,4 +1,4 @@
-﻿# PI ASCET Tool Map
+# PI ASCET Tool Map
 
 Use canonical PI ASCET tools only.
 
@@ -6,8 +6,9 @@ Use canonical PI ASCET tools only.
 - On-demand structure and references: `ascet_get`
 - Exact deep reads: `ascet_read`
 - Semantic comparison: `ascet_diff`
-- Guarded writes: `ascet_edit`
-- Verification: `ascet_verify`
+- Guarded writes with automatic verification: `ascet_edit`
+
+Executed `ascet_edit` writes perform mandatory automatic action-specific readback verification. Inspect the returned verification feedback and do not issue a redundant live read after verification passes. Use `ascet_read` for an explicit independent Component check and `ascet_get.formulas` for Project formulas.
 
 `ascet_get` is the only discovery surface. Its actions are `tree`, `elements`, `formulas`, `component_refs`, `bde_edges`, `import_binding`, and `dbitem_refs`.
 

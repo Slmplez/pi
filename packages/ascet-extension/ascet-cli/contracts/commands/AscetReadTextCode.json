@@ -1,79 +1,78 @@
-﻿{
-    "id":  "AscetReadTextCode",
-    "family":  "read",
-    "summary":  "Read C header and external C code",
-    "usage":  "\u003ccomponent-path\u003e [--section \u003cheader|external-c|all\u003e] [--json]",
-    "execution":  {
-                      "kind":  "unified_cli",
-                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                      "subcommand":  "exec",
-                      "operation":  "read_text_code"
-                  },
-    "supportsJson":  true,
-    "defaultOutputMode":  "json",
-    "risk":  "read",
-    "requiresSerialLiveAccess":  false,
-    "objectKinds":  [
-                        "class",
-                        "module",
-                        "statemachine"
-                    ],
-    "args":  [
-                 {
-                     "name":  "component-path",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Component path."
-                 },
-                 {
-                     "name":  "--method-name",
-                     "kind":  "option",
-                     "type":  "string",
-                     "required":  false,
-                     "description":  "Method name for method-specific code readback."
-                 },
-                 {
-                     "name":  "--section",
-                     "kind":  "option",
-                     "type":  "string",
-                     "required":  false,
-                     "description":  "Code section."
-                 },
-                 {
-                     "name":  "--json",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Emit JSON."
-                 }
-             ],
-    "preconditions":  [
-                          "ASCET ToolAPI session must be available.",
-                          "Target ASCET path must resolve to the expected object kind."
-                      ],
-    "failureModes":  [
-                         "toolapi_unavailable",
-                         "target_not_found"
-                     ],
-    "examples":  [
-                     {
-                         "description":  "Basic usage",
-                         "command":  "AscetCli.exe exec read_text_code \u003ccomponent-path\u003e [--section \u003cheader|external-c|all\u003e] [--json]"
-                     }
-                 ],
-    "pitfalls":  [
-
-                 ],
-    "operation":  "read_text_code",
-    "lane":  "legacy_read",
-    "hostEligible":  false,
-    "supportsBatch":  false,
-    "executionProfile":  {
-                             "hostSafety":  "fragile",
-                             "hostPolicy":  "force_one_shot",
-                             "timeoutClass":  "expensive_read"
-                         },
-    "hiddenFromModel":  false
+{
+  "id": "AscetReadTextCode",
+  "family": "read",
+  "summary": "Read C header and external C code",
+  "usage": "<component-path> [--section <header|external-c|all>] [--json]",
+  "execution": {
+    "kind": "bridge",
+    "protocolVersion": 1,
+    "subcommand": "exec",
+    "operation": "read_text_code",
+    "sessionPolicy": "fresh_session",
+    "transportPolicy": "one_shot_only"
+  },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "read",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": [
+    "class",
+    "module",
+    "statemachine"
+  ],
+  "args": [
+    {
+      "name": "component-path",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Component path."
+    },
+    {
+      "name": "--method-name",
+      "kind": "option",
+      "type": "string",
+      "required": false,
+      "description": "Method name for method-specific code readback."
+    },
+    {
+      "name": "--section",
+      "kind": "option",
+      "type": "string",
+      "required": false,
+      "description": "Code section."
+    },
+    {
+      "name": "--json",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Emit JSON."
+    }
+  ],
+  "preconditions": [
+    "ASCET ToolAPI session must be available.",
+    "Target ASCET path must resolve to the expected object kind."
+  ],
+  "failureModes": [
+    "toolapi_unavailable",
+    "target_not_found"
+  ],
+  "examples": [
+    {
+      "description": "Basic usage",
+      "command": "AscetBridge.exe exec read_text_code <component-path> [--section <header|external-c|all>] [--json]"
+    }
+  ],
+  "pitfalls": [],
+  "operation": "read_text_code",
+  "lane": "legacy_read",
+  "hostEligible": false,
+  "supportsBatch": false,
+  "executionProfile": {
+    "hostSafety": "fragile",
+    "hostPolicy": "force_one_shot",
+    "timeoutClass": "expensive_read"
+  },
+  "hiddenFromModel": false
 }
-

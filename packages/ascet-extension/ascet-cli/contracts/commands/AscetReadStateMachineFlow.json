@@ -1,81 +1,80 @@
-﻿{
-    "id":  "AscetReadStateMachineFlow",
-    "family":  "read",
-    "summary":  "State machine flow read",
-    "usage":  "\u003ccomponent-path\u003e [--trace-depth \u003cn\u003e] [--detail-level summary|full] [--json]",
-    "execution":  {
-                      "kind":  "unified_cli",
-                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                      "subcommand":  "exec",
-                      "operation":  "read_state_machine_flow"
-                  },
-    "supportsJson":  true,
-    "defaultOutputMode":  "json",
-    "risk":  "read",
-    "requiresSerialLiveAccess":  false,
-    "objectKinds":  [
-                        "statemachine"
-                    ],
-    "args":  [
-                 {
-                     "name":  "component-path",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: component-path"
-                 },
-                 {
-                     "name":  "--trace-depth",
-                     "kind":  "option",
-                     "type":  "string",
-                     "required":  false,
-                     "description":  "Option value for --trace-depth"
-                 },
-                 {
-                     "name":  "--detail-level",
-                     "kind":  "option",
-                     "type":  "enum",
-                     "required":  false,
-                     "description":  "Option value for --detail-level",
-                     "enumValues":  [
-                                        "summary",
-                                        "full"
-                                    ]
-                 },
-                 {
-                     "name":  "--json",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --json"
-                 }
-             ],
-    "preconditions":  [
-                          "ASCET ToolAPI session must be available.",
-                          "Target ASCET path must resolve to the expected object kind."
-                      ],
-    "failureModes":  [
-                         "toolapi_unavailable",
-                         "target_not_found"
-                     ],
-    "examples":  [
-                     {
-                         "description":  "Basic usage",
-                         "command":  "AscetCli.exe exec read_state_machine_flow \u003ccomponent-path\u003e [--trace-depth \u003cn\u003e] [--detail-level summary|full] [--json]"
-                     }
-                 ],
-    "pitfalls":  [
-
-                 ],
-    "operation":  "read_state_machine_flow",
-    "lane":  "legacy_read",
-    "hostEligible":  false,
-    "supportsBatch":  false,
-    "executionProfile":  {
-                             "hostSafety":  "fragile",
-                             "hostPolicy":  "force_one_shot",
-                             "timeoutClass":  "expensive_read"
-                         },
-    "hiddenFromModel":  false
+{
+  "id": "AscetReadStateMachineFlow",
+  "family": "read",
+  "summary": "State machine flow read",
+  "usage": "<component-path> [--trace-depth <n>] [--detail-level summary|full] [--json]",
+  "execution": {
+    "kind": "bridge",
+    "protocolVersion": 1,
+    "subcommand": "exec",
+    "operation": "read_state_machine_flow",
+    "sessionPolicy": "fresh_session",
+    "transportPolicy": "one_shot_only"
+  },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "read",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": [
+    "statemachine"
+  ],
+  "args": [
+    {
+      "name": "component-path",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: component-path"
+    },
+    {
+      "name": "--trace-depth",
+      "kind": "option",
+      "type": "string",
+      "required": false,
+      "description": "Option value for --trace-depth"
+    },
+    {
+      "name": "--detail-level",
+      "kind": "option",
+      "type": "enum",
+      "required": false,
+      "description": "Option value for --detail-level",
+      "enumValues": [
+        "summary",
+        "full"
+      ]
+    },
+    {
+      "name": "--json",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --json"
+    }
+  ],
+  "preconditions": [
+    "ASCET ToolAPI session must be available.",
+    "Target ASCET path must resolve to the expected object kind."
+  ],
+  "failureModes": [
+    "toolapi_unavailable",
+    "target_not_found"
+  ],
+  "examples": [
+    {
+      "description": "Basic usage",
+      "command": "AscetBridge.exe exec read_state_machine_flow <component-path> [--trace-depth <n>] [--detail-level summary|full] [--json]"
+    }
+  ],
+  "pitfalls": [],
+  "operation": "read_state_machine_flow",
+  "lane": "legacy_read",
+  "hostEligible": false,
+  "supportsBatch": false,
+  "executionProfile": {
+    "hostSafety": "fragile",
+    "hostPolicy": "force_one_shot",
+    "timeoutClass": "expensive_read"
+  },
+  "hiddenFromModel": false
 }
-

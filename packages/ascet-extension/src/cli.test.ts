@@ -13,7 +13,7 @@ function makeResult(data: unknown): AscetCliJsonResult {
 		data,
 		request: {
 			cwd: process.cwd(),
-			cliPath: "AscetCli.exe",
+			cliPath: "AscetBridge.exe",
 			args: ["exec", "read_block_diagram", "DEMO\\Controller", "Main", "--json"],
 		},
 		stdout: JSON.stringify(data),
@@ -27,12 +27,12 @@ function createReadyEnv(): { cwd: string; env: Record<string, string | undefined
 	const root = mkdtempSync(join(tmpdir(), "pi-ascet-cli-"));
 	const contractsRoot = join(root, "contracts");
 	mkdirSync(contractsRoot, { recursive: true });
-	writeFileSync(join(root, "AscetCli.exe"), "", "utf8");
+	writeFileSync(join(root, "AscetBridge.exe"), "", "utf8");
 	writeFileSync(join(contractsRoot, "cli-catalog.json"), "{}", "utf8");
 	return {
 		cwd: root,
 		env: {
-			ASCET_CLI_PATH: join(root, "AscetCli.exe"),
+			ASCET_BRIDGE_PATH: join(root, "AscetBridge.exe"),
 			ASCET_CONTRACTS_PATH: contractsRoot,
 			PI_ASCET_RUNTIME_DIR: join(root, "runtime"),
 			PI_ASCET_OPERATION_HEALTH_PATH: join(root, "operation-health.json"),
@@ -89,7 +89,7 @@ describe("formatAscetCliJsonResult", () => {
 		const result: AscetCliJsonResult = {
 			ok: false,
 			data: null,
-			request: { cwd: process.cwd(), cliPath: "AscetCli.exe", args: [] },
+			request: { cwd: process.cwd(), cliPath: "AscetBridge.exe", args: [] },
 			stdout: "",
 			stderr: "",
 			exitCode: 1,
@@ -120,7 +120,7 @@ describe("formatAscetCliJsonResult", () => {
 			data: null,
 			request: {
 				cwd: process.cwd(),
-				cliPath: "AscetCli.exe",
+				cliPath: "AscetBridge.exe",
 				args: ["exec", "read_block_diagram", "DEMO\\Controller", "Main", "--json"],
 			},
 			stdout: "",
@@ -465,6 +465,300 @@ describe("runAscetCliJson scheduler failure semantics", () => {
 			assert.equal(result.diagnostics?.aborted, true);
 			assert.equal(scheduler.getSnapshot().recentJobs.at(-1)?.state, "failed");
 			assert.equal((await getAscetCliLockSnapshot({ env: fixture.env })).locked, false);
+		} finally {
+			fixture.cleanup();
+		}
+	});
+});
+
+describe("ASCET Bridge Milestone A transport semantics", () => {
+	test("waits for a timed-out Bridge process to close before resolving", async () => {
+		const result = await executeAscetCli({
+			cwd: process.cwd(),
+			cliPath: process.execPath,
+			args: ["-e", "setInterval(() => {}, 1000)"],
+			timeoutMs: 75,
+		});
+
+		assert.equal(result.timedOut, true);
+		assert.equal(result.aborted, false);
+		assert.equal(result.spawnAttempted, true);
+		assert.equal(result.spawnSucceeded, true);
+		assert.equal(result.requestDispatched, true);
+		assert.equal(result.processClosed, true);
+	});
+
+	test("terminates the full Bridge process tree on Windows", { skip: process.platform !== "win32" }, async () => {
+		const childScript = [
+			"const { spawn } = require('node:child_process');",
+			"const child = spawn(process.execPath, ['-e', 'setInterval(() => {}, 1000)'], { stdio: 'ignore' });",
+			"process.stdout.write(String(child.pid));",
+			"setInterval(() => {}, 1000);",
+		].join(" ");
+		const result = await executeAscetCli({
+			cwd: process.cwd(),
+			cliPath: process.execPath,
+			args: ["-e", childScript],
+			timeoutMs: 250,
+		});
+
+		const childPid = Number.parseInt(result.stdout.trim(), 10);
+		assert.equal(Number.isInteger(childPid) && childPid > 0, true);
+		assert.throws(() => process.kill(childPid, 0));
+		assert.equal(result.timedOut, true);
+		assert.equal(result.processClosed, true);
+	});
+	test("waits for an aborted Bridge process to close before resolving", async () => {
+		const controller = new AbortController();
+		const abortTimer = setTimeout(() => controller.abort(new Error("synthetic abort")), 75);
+		try {
+			const result = await executeAscetCli({
+				cwd: process.cwd(),
+				cliPath: process.execPath,
+				args: ["-e", "setInterval(() => {}, 1000)"],
+				signal: controller.signal,
+			});
+
+			assert.equal(result.timedOut, false);
+			assert.equal(result.aborted, true);
+			assert.equal(result.spawnSucceeded, true);
+			assert.equal(result.processClosed, true);
+		} finally {
+			clearTimeout(abortTimer);
+		}
+	});
+
+	test("terminates a Bridge process whose stderr exceeds the transport limit", async () => {
+		const result = await executeAscetCli({
+			cwd: process.cwd(),
+			cliPath: process.execPath,
+			args: ["-e", "process.stderr.write('x'.repeat(2 * 1024 * 1024 + 1024)); setInterval(() => {}, 1000)"],
+			timeoutMs: 10_000,
+		});
+
+		assert.equal(result.outputLimitExceeded, "stderr");
+		assert.equal(result.processClosed, true);
+		assert.equal(result.stderr.length <= 2 * 1024 * 1024, true);
+	});
+
+	test("rejects JSON that is not a Bridge response envelope from a real process", async () => {
+		const fixture = createReadyEnv();
+		try {
+			const result = await runAscetCliJson(["-e", "process.stdout.write('{}')"], {
+				cwd: fixture.cwd,
+				env: fixture.env,
+				cliPath: process.execPath,
+				timeoutMs: 5_000,
+			});
+
+			assert.equal(result.ok, false);
+			assert.equal(result.error?.code, "ascet_cli_invalid_json");
+			assert.equal(result.stage, "json_parse");
+			assert.match(result.error?.message ?? "", /protocolVersion=1 response envelope/);
+		} finally {
+			fixture.cleanup();
+		}
+	});
+	test("bypasses the live scheduler and ToolAPI lock for control-plane requests", async () => {
+		const fixture = createReadyEnv();
+		const scheduler = createAscetScheduler({ generateJobId: () => "unexpected-control-plane-job" });
+		try {
+			for (const args of [
+				["capabilities", "--json"],
+				["selftest", "offline", "--json"],
+			]) {
+				const result = await runAscetCliJson(args, {
+					cwd: fixture.cwd,
+					env: fixture.env,
+					scheduler,
+					executeCli: async (request) => ({
+						exitCode: 0,
+						stdout: JSON.stringify({ ok: true, result: {} }),
+						stderr: "",
+						timedOut: false,
+						request,
+					}),
+				});
+				assert.equal(result.ok, true);
+			}
+			assert.equal(scheduler.getSnapshot().recentJobs.length, 0);
+			assert.equal((await getAscetCliLockSnapshot({ env: fixture.env })).locked, false);
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("rejects oversized write requests before Bridge spawn", async () => {
+		const fixture = createReadyEnv();
+		try {
+			let executed = false;
+			const result = await runAscetCliJson(["exec", "set_method_code", "x".repeat(16 * 1024 * 1024 + 1)], {
+				cwd: fixture.cwd,
+				env: fixture.env,
+				jobKind: "write",
+				executeCli: async (request) => {
+					executed = true;
+					return { exitCode: 0, stdout: "{}", stderr: "", timedOut: false, request };
+				},
+			});
+			assert.equal(executed, false);
+			assert.equal(result.error?.code, "write_not_started");
+			assert.deepEqual(result.error?.details, {
+				originalCode: "ascet_bridge_request_too_large",
+				retryable: true,
+				requiresReadback: false,
+			});
+		} finally {
+			fixture.cleanup();
+		}
+	});
+	test("records the spawned Bridge PID in the held ToolAPI lock", async () => {
+		const fixture = createReadyEnv();
+		try {
+			let observedBridgePid: number | null = null;
+			const result = await runAscetCliJson(["exec", "synthetic_read", "--json"], {
+				cwd: fixture.cwd,
+				env: fixture.env,
+				executeCli: async (request) => {
+					await request.onSpawn?.(4321);
+					const snapshot = await getAscetCliLockSnapshot({ env: fixture.env });
+					if (snapshot.locked && !("corrupt" in snapshot)) observedBridgePid = snapshot.owner.bridgePid;
+					return {
+						exitCode: 0,
+						stdout: JSON.stringify({ ok: true, result: {} }),
+						stderr: "",
+						timedOut: false,
+						request,
+					};
+				},
+			});
+			assert.equal(result.ok, true);
+			assert.equal(observedBridgePid, 4321);
+		} finally {
+			fixture.cleanup();
+		}
+	});
+	test("distinguishes writes that never spawned from writes dispatched to Bridge", async () => {
+		const fixture = createReadyEnv();
+		try {
+			const notStarted = await runAscetCliJson(["exec", "create_folder", "--json"], {
+				cwd: fixture.cwd,
+				env: fixture.env,
+				cliPath: join(fixture.cwd, "missing-bridge.exe"),
+				jobKind: "write",
+			});
+			assert.equal(notStarted.error?.code, "write_not_started");
+			assert.deepEqual(notStarted.error?.details, {
+				originalCode: "ascet_bridge_missing",
+				retryable: true,
+				requiresReadback: false,
+			});
+			const outcomeUnknown = await runAscetCliJson(["exec", "create_folder", "\\Safe", "--json"], {
+				cwd: fixture.cwd,
+				env: fixture.env,
+				jobKind: "write",
+				executeCli: async (request) => ({
+					exitCode: null,
+					stdout: "",
+					stderr: "Bridge timed out",
+					timedOut: true,
+					spawnAttempted: true,
+					spawnSucceeded: true,
+					requestDispatched: true,
+					processClosed: true,
+					request,
+				}),
+			});
+			assert.equal(outcomeUnknown.error?.code, "write_outcome_unknown");
+			assert.deepEqual(outcomeUnknown.error?.details, {
+				originalCode: "ascet_cli_timeout",
+				retryable: false,
+				requiresReadback: true,
+			});
+			assert.equal(outcomeUnknown.diagnostics?.retryable, false);
+
+			const structuredUnknown = await runAscetCliJson(["exec", "create_folder", "\\Safe", "--json"], {
+				cwd: fixture.cwd,
+				env: fixture.env,
+				jobKind: "write",
+				executeCli: async (request) => ({
+					exitCode: 2,
+					stdout: JSON.stringify({
+						type: "response",
+						protocolVersion: 1,
+						ok: false,
+						result: null,
+						error: { code: "write_failed", message: "write may have started" },
+						meta: {
+							bridgePid: 4321,
+							bridgeGeneration: "test-generation",
+							durationMs: 1,
+							sessionPolicy: "fresh_session",
+							mutationStarted: null,
+						},
+					}),
+					stderr: "",
+					timedOut: false,
+					spawnAttempted: true,
+					spawnSucceeded: true,
+					requestDispatched: true,
+					processClosed: true,
+					request,
+				}),
+			});
+			assert.equal(structuredUnknown.error?.code, "write_outcome_unknown");
+			assert.deepEqual(structuredUnknown.error?.details, {
+				originalCode: "write_failed",
+				retryable: false,
+				requiresReadback: true,
+				backend: { code: "write_failed", stage: undefined, details: undefined, operation: undefined },
+			});
+
+			const structuredNotStarted = await runAscetCliJson(["exec", "create_folder", "\\Safe", "--json"], {
+				cwd: fixture.cwd,
+				env: fixture.env,
+				jobKind: "write",
+				executeCli: async (request) => ({
+					exitCode: 2,
+					stdout: JSON.stringify({
+						type: "response",
+						protocolVersion: 1,
+						ok: false,
+						result: null,
+						error: { code: "invalid_arguments", message: "target missing" },
+						meta: {
+							bridgePid: 4321,
+							bridgeGeneration: "test-generation",
+							durationMs: 1,
+							sessionPolicy: "fresh_session",
+							mutationStarted: false,
+						},
+					}),
+					stderr: "",
+					timedOut: false,
+					spawnAttempted: true,
+					spawnSucceeded: true,
+					requestDispatched: true,
+					processClosed: true,
+					request,
+				}),
+			});
+			assert.equal(structuredNotStarted.error?.code, "invalid_arguments");
+			assert.equal(structuredNotStarted.error?.message, "target missing");
+
+			const invalidEnvelope = await runAscetCliJson(["-e", "process.stdout.write('{}')"], {
+				cwd: fixture.cwd,
+				env: fixture.env,
+				cliPath: process.execPath,
+				jobKind: "write",
+				timeoutMs: 5_000,
+			});
+			assert.equal(invalidEnvelope.error?.code, "write_outcome_unknown");
+			assert.deepEqual(invalidEnvelope.error?.details, {
+				originalCode: "ascet_cli_invalid_json",
+				retryable: false,
+				requiresReadback: true,
+			});
 		} finally {
 			fixture.cleanup();
 		}

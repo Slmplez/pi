@@ -1,78 +1,78 @@
-﻿{
-    "id":  "AscetDiffElementSpec",
-    "family":  "diff",
-    "summary":  "Diff element spec against live component",
-    "usage":  "\u003ccomponent-path\u003e \u003cspec-file\u003e [--json] [--changes-only]",
-    "execution":  {
-                      "kind":  "unified_cli",
-                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                      "subcommand":  "exec",
-                      "operation":  "diff_element_spec"
-                  },
-    "supportsJson":  true,
-    "defaultOutputMode":  "json",
-    "risk":  "diff",
-    "requiresSerialLiveAccess":  false,
-    "objectKinds":  [
-                        "class",
-                        "module",
-                        "statemachine"
-                    ],
-    "args":  [
-                 {
-                     "name":  "component-path",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: component-path"
-                 },
-                 {
-                     "name":  "spec-file",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: spec-file"
-                 },
-                 {
-                     "name":  "--json",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --json"
-                 },
-                 {
-                     "name":  "--changes-only",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --changes-only"
-                 }
-             ],
-    "preconditions":  [
-                          "ASCET ToolAPI session must be available.",
-                          "Target ASCET path must resolve to the expected object kind."
-                      ],
-    "failureModes":  [
-                         "toolapi_unavailable",
-                         "target_not_found"
-                     ],
-    "examples":  [
-                     {
-                         "description":  "Basic usage",
-                         "command":  "AscetCli.exe exec diff_element_spec \u003ccomponent-path\u003e \u003cspec-file\u003e [--json] [--changes-only]"
-                     }
-                 ],
-    "pitfalls":  [
-
-                 ],
-    "operation":  "diff_element_spec",
-    "lane":  "legacy_read",
-    "hostEligible":  false,
-    "supportsBatch":  false,
-    "executionProfile":  {
-                             "hostSafety":  "fragile",
-                             "hostPolicy":  "force_one_shot",
-                             "timeoutClass":  "diff"
-                         },
-    "hiddenFromModel":  false
+{
+  "id": "AscetDiffElementSpec",
+  "family": "diff",
+  "summary": "Diff element spec against live component",
+  "usage": "<component-path> <spec-file> [--json] [--changes-only]",
+  "execution": {
+    "kind": "bridge",
+    "protocolVersion": 1,
+    "subcommand": "exec",
+    "operation": "diff_element_spec",
+    "sessionPolicy": "fresh_session",
+    "transportPolicy": "one_shot_only"
+  },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "diff",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": [
+    "class",
+    "module",
+    "statemachine"
+  ],
+  "args": [
+    {
+      "name": "component-path",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: component-path"
+    },
+    {
+      "name": "spec-file",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: spec-file"
+    },
+    {
+      "name": "--json",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --json"
+    },
+    {
+      "name": "--changes-only",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --changes-only"
+    }
+  ],
+  "preconditions": [
+    "ASCET ToolAPI session must be available.",
+    "Target ASCET path must resolve to the expected object kind."
+  ],
+  "failureModes": [
+    "toolapi_unavailable",
+    "target_not_found"
+  ],
+  "examples": [
+    {
+      "description": "Basic usage",
+      "command": "AscetBridge.exe exec diff_element_spec <component-path> <spec-file> [--json] [--changes-only]"
+    }
+  ],
+  "pitfalls": [],
+  "operation": "diff_element_spec",
+  "lane": "legacy_read",
+  "hostEligible": false,
+  "supportsBatch": false,
+  "executionProfile": {
+    "hostSafety": "fragile",
+    "hostPolicy": "force_one_shot",
+    "timeoutClass": "diff"
+  },
+  "hiddenFromModel": false
 }

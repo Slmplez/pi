@@ -23,6 +23,9 @@ export interface AscetCliRequest {
 	stdin?: string;
 	signal?: AbortSignal;
 	timeoutMs?: number;
+	onSpawn?: (pid: number) => void | Promise<void>;
+	jobKind?: AscetJobKind;
+	mutatesDatabase?: boolean;
 }
 
 export interface AscetCliExecutionResult {
@@ -32,6 +35,14 @@ export interface AscetCliExecutionResult {
 	timedOut: boolean;
 	aborted?: boolean;
 	request: AscetCliRequest;
+
+	spawnAttempted?: boolean;
+	spawnSucceeded?: boolean;
+	requestDispatched?: boolean;
+	acceptedReceived?: boolean;
+	processClosed?: boolean;
+	validResponseReceived?: boolean;
+	outputLimitExceeded?: "stdout" | "stderr";
 }
 
 export interface RunAscetCliJsonOptions {
@@ -103,6 +114,10 @@ export interface AscetFormattedOutputArtifact {
 	counts?: Record<string, number>;
 	searchHint: string;
 }
+
+const MAX_BRIDGE_REQUEST_BYTES = 16 * 1024 * 1024;
+const MAX_BRIDGE_STDOUT_BYTES = 16 * 1024 * 1024;
+const MAX_BRIDGE_STDERR_BYTES = 2 * 1024 * 1024;
 
 let formatArtifactCounter = 0;
 
@@ -240,7 +255,7 @@ export function getProcessTreeKillCommand(
 	return undefined;
 }
 
-function terminateProcess(child: ChildProcess): void {
+async function terminateProcess(child: ChildProcess): Promise<void> {
 	if (child.pid === undefined) {
 		child.kill();
 		return;
@@ -250,12 +265,26 @@ function terminateProcess(child: ChildProcess): void {
 		child.kill();
 		return;
 	}
-	const killer = spawn(processTreeKill.command, processTreeKill.args, {
-		windowsHide: true,
-		stdio: "ignore",
-	});
-	killer.on("error", () => {
-		child.kill();
+	await new Promise<void>((resolve) => {
+		const killer = spawn(processTreeKill.command, processTreeKill.args, {
+			windowsHide: true,
+			stdio: "ignore",
+		});
+		let settled = false;
+		const finish = () => {
+			if (!settled) {
+				settled = true;
+				resolve();
+			}
+		};
+		killer.once("error", () => {
+			child.kill();
+			finish();
+		});
+		killer.once("close", (exitCode) => {
+			if (exitCode !== 0) child.kill();
+			finish();
+		});
 	});
 }
 
@@ -267,69 +296,119 @@ export async function executeAscetCli(request: AscetCliRequest): Promise<AscetCl
 			stderr: "",
 			timedOut: false,
 			aborted: true,
+			spawnAttempted: false,
+			spawnSucceeded: false,
+			requestDispatched: false,
+			acceptedReceived: false,
+			processClosed: true,
+			validResponseReceived: false,
 			request,
 		};
 	}
 	return new Promise((resolve, reject) => {
-		const child = spawn(request.cliPath, request.args, {
-			cwd: request.cwd,
-			windowsHide: true,
-			stdio: request.stdin === undefined ? ["ignore", "pipe", "pipe"] : ["pipe", "pipe", "pipe"],
-		});
+		let child: ChildProcess;
+		try {
+			child = spawn(request.cliPath, request.args, {
+				cwd: request.cwd,
+				windowsHide: true,
+				stdio: request.stdin === undefined ? ["ignore", "pipe", "pipe"] : ["pipe", "pipe", "pipe"],
+			});
+		} catch (error) {
+			reject(error);
+			return;
+		}
 		let stdout = "";
 		let stderr = "";
 		let timedOut = false;
 		let aborted = false;
+		let spawnSucceeded = false;
+		let requestDispatched = false;
+		let launchError: Error | undefined;
+		let outputLimitExceeded: "stdout" | "stderr" | undefined;
+		let stdoutBytes = 0;
+		let stderrBytes = 0;
 		let timeout: NodeJS.Timeout | undefined;
-
+		let terminationPromise: Promise<void> | undefined;
+		let spawnMetadataPromise: Promise<void> | undefined;
+		const startTermination = () => {
+			terminationPromise ??= terminateProcess(child);
+		};
 		if (request.timeoutMs && request.timeoutMs > 0) {
 			timeout = setTimeout(() => {
 				timedOut = true;
-				terminateProcess(child);
+				startTermination();
 			}, request.timeoutMs);
 		}
-
 		const abort = () => {
 			aborted = true;
-			terminateProcess(child);
+			startTermination();
 		};
 		request.signal?.addEventListener("abort", abort, { once: true });
-
-		const stdoutStream = child.stdout;
-		const stderrStream = child.stderr;
-		if (!stdoutStream || !stderrStream) {
-			reject(new Error("ASCET CLI process stdio streams are unavailable."));
-			return;
-		}
-		const stdinStream = child.stdin;
-		if (request.stdin !== undefined && !stdinStream) {
-			reject(new Error("ASCET CLI process stdin stream is unavailable."));
-			return;
-		}
-
-		stdoutStream.setEncoding("utf8");
-		stderrStream.setEncoding("utf8");
-		stdoutStream.on("data", (chunk) => {
-			stdout += chunk;
-		});
-		stderrStream.on("data", (chunk) => {
-			stderr += chunk;
-		});
-		child.on("error", reject);
-		child.on("close", (exitCode) => {
-			if (timeout) {
-				clearTimeout(timeout);
+		child.once("spawn", () => {
+			spawnSucceeded = true;
+			requestDispatched = true;
+			if (child.pid !== undefined && request.onSpawn) {
+				spawnMetadataPromise = Promise.resolve(request.onSpawn(child.pid)).catch((error: unknown) => {
+					launchError = error instanceof Error ? error : new Error(String(error));
+					startTermination();
+				});
 			}
+		});
+		child.stdout?.setEncoding("utf8");
+		child.stderr?.setEncoding("utf8");
+		child.stdout?.on("data", (chunk) => {
+			const text = String(chunk);
+			stdoutBytes += Buffer.byteLength(text, "utf8");
+			if (stdoutBytes > MAX_BRIDGE_STDOUT_BYTES) {
+				outputLimitExceeded = "stdout";
+				startTermination();
+				return;
+			}
+			stdout += text;
+		});
+		child.stderr?.on("data", (chunk) => {
+			const text = String(chunk);
+			stderrBytes += Buffer.byteLength(text, "utf8");
+			if (stderrBytes > MAX_BRIDGE_STDERR_BYTES) {
+				outputLimitExceeded = "stderr";
+				startTermination();
+				return;
+			}
+			stderr += text;
+		});
+		child.once("error", (error) => {
+			launchError = error;
+		});
+		child.once("close", async (exitCode) => {
+			if (timeout) clearTimeout(timeout);
 			request.signal?.removeEventListener("abort", abort);
-			resolve({ exitCode, stdout, stderr, timedOut, aborted, request });
+			await terminationPromise;
+			await spawnMetadataPromise;
+			if (launchError) {
+				stderr = stderr.trim().length > 0 ? `${stderr.trim()}\n${launchError.message}` : launchError.message;
+			}
+			resolve({
+				exitCode,
+				stdout,
+				stderr,
+				timedOut,
+				aborted,
+				spawnAttempted: true,
+				spawnSucceeded,
+				requestDispatched,
+				acceptedReceived: false,
+				processClosed: true,
+				validResponseReceived: false,
+				outputLimitExceeded,
+				request,
+			});
 		});
 		if (request.stdin !== undefined) {
-			stdinStream?.write(request.stdin);
-			stdinStream?.end();
+			child.stdin?.write(request.stdin);
+			child.stdin?.end();
 		}
 	});
 }
-
 function inferCommandId(args: string[]): string {
 	if (args[0] === "exec" && args[1]) {
 		return args[1];
@@ -380,7 +459,7 @@ async function executeScheduledAscetCli(
 					agentId,
 					commandId,
 					toolName,
-					processName: "AscetCli.exe",
+					processName: "AscetBridge.exe",
 				},
 				{
 					env: options.env,
@@ -388,17 +467,30 @@ async function executeScheduledAscetCli(
 					signal: schedulerSignal,
 				},
 			);
+			scheduledRequest.onSpawn = async (pid) => {
+				await lock.setBridgePid(pid);
+				await request.onSpawn?.(pid);
+			};
 			try {
 				const execution = await (options.executeCli ?? executeAscetCli)(scheduledRequest);
 				const acceptedExitCodes = options.acceptedExitCodes ?? [0];
 				const aborted = scheduledRequest.signal?.aborted === true || execution.aborted === true;
+				if (execution.outputLimitExceeded) {
+					throw new AscetCliProcessError(
+						execution,
+						"ascet_cli_failed",
+						`ASCET Bridge ${execution.outputLimitExceeded} exceeded its transport limit.`,
+					);
+				}
 				if (aborted) {
 					throw new AscetCliProcessError(execution, "ascet_cli_aborted", "ASCET CLI execution was aborted.");
 				}
 				if (execution.timedOut) {
 					throw new AscetCliProcessError(execution, "ascet_cli_timeout", "ASCET CLI execution timed out.");
 				}
-				const parsed = parseJson(execution.stdout);
+				const rawParsed = parseJson(execution.stdout);
+				execution.validResponseReceived = rawParsed.ok && isBridgeResponseEnvelope(rawParsed.data);
+				const parsed = requireBridgeResponseEnvelope(rawParsed, options.executeCli === undefined);
 				const structuredError = parsed.ok ? getCliFailureEnvelopeError(parsed.data) : undefined;
 				if (!acceptedExitCodes.includes(execution.exitCode ?? Number.NaN)) {
 					throw createAscetCliProcessError(
@@ -447,6 +539,49 @@ function parseJson(text: string): ParseJsonResult {
 
 function isParseJsonFailure(value: ParseJsonResult): value is { ok: false; message: string } {
 	return value.ok === false;
+}
+
+function isBridgeResponseEnvelope(value: unknown): boolean {
+	if (value === null || typeof value !== "object" || Array.isArray(value)) {
+		return false;
+	}
+	const envelope = value as Record<string, unknown>;
+	if (envelope.type !== "response" || envelope.protocolVersion !== 1 || typeof envelope.ok !== "boolean") {
+		return false;
+	}
+	if (envelope.meta === null || typeof envelope.meta !== "object" || Array.isArray(envelope.meta)) {
+		return false;
+	}
+	const meta = envelope.meta as Record<string, unknown>;
+	return (
+		typeof meta.bridgePid === "number" &&
+		Number.isInteger(meta.bridgePid) &&
+		meta.bridgePid > 0 &&
+		typeof meta.bridgeGeneration === "string" &&
+		meta.bridgeGeneration.length > 0 &&
+		typeof meta.durationMs === "number" &&
+		meta.durationMs >= 0 &&
+		typeof meta.sessionPolicy === "string" &&
+		Object.hasOwn(meta, "mutationStarted") &&
+		(meta.mutationStarted === null || typeof meta.mutationStarted === "boolean")
+	);
+}
+
+function requireBridgeResponseEnvelope(parsed: ParseJsonResult, required: boolean): ParseJsonResult {
+	if (!required || isParseJsonFailure(parsed) || isBridgeResponseEnvelope(parsed.data)) {
+		return parsed;
+	}
+	return { ok: false, message: "ASCET Bridge produced JSON that is not a valid protocolVersion=1 response envelope." };
+}
+
+function getBridgeMutationStarted(execution: AscetCliExecutionResult): boolean | null | undefined {
+	const parsed = parseJson(execution.stdout);
+	if (isParseJsonFailure(parsed) || !isBridgeResponseEnvelope(parsed.data)) {
+		return undefined;
+	}
+	const envelope = parsed.data as Record<string, unknown>;
+	const meta = envelope.meta as Record<string, unknown>;
+	return typeof meta.mutationStarted === "boolean" || meta.mutationStarted === null ? meta.mutationStarted : undefined;
 }
 
 function getCliFailureEnvelopeError(value: unknown): AscetCliStructuredError | undefined {
@@ -528,8 +663,28 @@ function summarizeFailureText(value: string, maxLength = 1000): string {
 	return normalized.length <= maxLength ? normalized : `${normalized.slice(0, maxLength)}...`;
 }
 
+function isControlPlaneRequest(args: string[]): boolean {
+	return args[0] === "capabilities" || (args[0] === "selftest" && args[1]?.toLowerCase() === "offline");
+}
+
+function mapWriteFailure(
+	jobKind: AscetJobKind,
+	originalCode: string,
+	execution?: AscetCliExecutionResult,
+	started?: boolean,
+): { code: string; details?: Record<string, unknown> } {
+	if (jobKind !== "write") return { code: originalCode };
+	const notStarted =
+		started === false ||
+		(started === undefined &&
+			(execution === undefined || execution.spawnSucceeded === false || execution.requestDispatched === false));
+	return notStarted
+		? { code: "write_not_started", details: { originalCode, retryable: true, requiresReadback: false } }
+		: { code: "write_outcome_unknown", details: { originalCode, retryable: false, requiresReadback: true } };
+}
 function retryableFailureCode(code: string): boolean {
 	return (
+		code === "write_not_started" ||
 		code === "ascet_cli_timeout" ||
 		code === "ascet_scheduler_queue_timeout" ||
 		code === "ascet_scheduler_exec_timeout" ||
@@ -567,9 +722,33 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 		stdin: options.stdin,
 		signal: options.signal,
 		timeoutMs: options.timeoutMs,
+		jobKind,
+		mutatesDatabase: jobKind === "write",
 	};
 
+	const requestSizeBytes = Buffer.byteLength(JSON.stringify({ args, stdin: options.stdin ?? null }), "utf8");
+	if (requestSizeBytes > MAX_BRIDGE_REQUEST_BYTES) {
+		const mappedFailure = mapWriteFailure(jobKind, "ascet_bridge_request_too_large", undefined, false);
+		return {
+			ok: false,
+			data: null,
+			request,
+			stdout: "",
+			stderr: "",
+			exitCode: null,
+			timedOut: false,
+			operationId: commandId,
+			stage: "preflight",
+			diagnostics: buildFailureDiagnostics({ operationId: commandId, stage: "preflight", code: mappedFailure.code }),
+			error: {
+				code: mappedFailure.code,
+				message: `ASCET Bridge request exceeded ${MAX_BRIDGE_REQUEST_BYTES} bytes.`,
+				details: mappedFailure.details,
+			},
+		};
+	}
 	if (options.signal?.aborted) {
+		const mappedFailure = mapWriteFailure(jobKind, "ascet_cli_aborted", undefined, false);
 		return {
 			ok: false,
 			data: null,
@@ -584,16 +763,18 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 			diagnostics: buildFailureDiagnostics({
 				operationId: commandId,
 				stage: "preflight",
-				code: "ascet_cli_aborted",
+				code: mappedFailure.code,
 			}),
 			error: {
-				code: "ascet_cli_aborted",
-				message: "ASCET CLI execution was aborted before it started.",
+				code: mappedFailure.code,
+				message: "ASCET Bridge execution was aborted before it started.",
+				details: mappedFailure.details,
 			},
 		};
 	}
 
 	if (!existsSync(request.cliPath)) {
+		const mappedFailure = mapWriteFailure(jobKind, "ascet_bridge_missing", undefined, false);
 		return {
 			ok: false,
 			data: null,
@@ -607,22 +788,44 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 			diagnostics: buildFailureDiagnostics({
 				operationId: commandId,
 				stage: "preflight",
-				code: "ascet_cli_missing",
+				code: mappedFailure.code,
 			}),
 			error: {
-				code: "ascet_cli_missing",
-				message: `ASCET CLI not found: ${request.cliPath}`,
+				code: mappedFailure.code,
+				message: `ASCET Bridge not found: ${request.cliPath}`,
+				details: mappedFailure.details,
 			},
 		};
 	}
 
 	let execution: AscetCliExecutionResult;
 	try {
-		execution = await executeScheduledAscetCli(request, { ...options, commandId, jobKind });
+		execution = isControlPlaneRequest(args)
+			? await (options.executeCli ?? executeAscetCli)(request)
+			: await executeScheduledAscetCli(request, { ...options, commandId, jobKind });
 	} catch (error) {
 		if (error instanceof AscetCliProcessError) {
 			const failedExecution = error.execution;
 			const structuredError = getStructuredCliProcessError(error);
+			const dispatchStarted = failedExecution.spawnSucceeded === true || failedExecution.requestDispatched === true;
+			const preserveStructuredError =
+				structuredError !== undefined &&
+				(jobKind !== "write" || !dispatchStarted || getBridgeMutationStarted(failedExecution) === false);
+			const mappedFailure = preserveStructuredError
+				? { code: structuredError.code, details: structuredError.details }
+				: mapWriteFailure(jobKind, structuredError?.code ?? error.resultCode, failedExecution);
+			const mappedDetails =
+				!preserveStructuredError && structuredError
+					? {
+							...(mappedFailure.details ?? {}),
+							backend: {
+								code: structuredError.code,
+								stage: structuredError.stage,
+								details: structuredError.details,
+								operation: structuredError.operation,
+							},
+						}
+					: mappedFailure.details;
 			const health = getGlobalAscetOperationHealthStore({ env: options.env });
 			if (error.resultCode === "ascet_cli_timeout") {
 				health.recordFailure({ commandId, reason: "child_command_timeout" });
@@ -643,9 +846,9 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 					operationId: commandId,
 					stage: error.resultCode === "ascet_cli_invalid_json" ? "json_parse" : "cli_process",
 					execution: failedExecution,
-					code: error.resultCode,
+					code: mappedFailure.code,
 				}),
-				error: structuredError
+				error: preserveStructuredError
 					? {
 							code: structuredError.code,
 							message: structuredError.message,
@@ -654,8 +857,9 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 							operation: structuredError.operation,
 						}
 					: {
-							code: error.resultCode,
-							message: error.message,
+							code: mappedFailure.code,
+							message: structuredError?.message ?? error.message,
+							details: mappedDetails,
 						},
 			};
 		}
@@ -669,6 +873,12 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 						: error instanceof AscetCliLockTimeoutError
 							? "ascet_cli_lock_timeout"
 							: "ascet_cli_failed";
+		const mappedFailure = mapWriteFailure(
+			jobKind,
+			errorCode,
+			undefined,
+			error instanceof AscetSchedulerExecutionTimeoutError,
+		);
 		const health = getGlobalAscetOperationHealthStore({ env: options.env });
 		if (errorCode === "ascet_scheduler_exec_timeout") {
 			health.recordFailure({ commandId, reason: "scheduler_timeout" });
@@ -700,15 +910,18 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 						: error instanceof AscetSchedulerExecutionTimeoutError
 							? "scheduler_exec"
 							: "result",
-				code: errorCode,
+				code: mappedFailure.code,
 			}),
 			error: {
-				code: errorCode,
+				code: mappedFailure.code,
 				message: error instanceof Error ? error.message : String(error),
+				details: mappedFailure.details,
 			},
 		};
 	}
-	const parsed = parseJson(execution.stdout);
+	const rawParsed = parseJson(execution.stdout);
+	execution.validResponseReceived = rawParsed.ok && isBridgeResponseEnvelope(rawParsed.data);
+	const parsed = requireBridgeResponseEnvelope(rawParsed, options.executeCli === undefined);
 	const aborted = options.signal?.aborted === true || execution.aborted === true;
 	const acceptedExitCodes = options.acceptedExitCodes ?? [0];
 	const processOk = acceptedExitCodes.includes(execution.exitCode ?? Number.NaN) && !execution.timedOut && !aborted;

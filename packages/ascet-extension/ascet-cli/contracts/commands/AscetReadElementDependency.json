@@ -1,90 +1,92 @@
-﻿{
-    "id":  "AscetReadElementDependency",
-    "family":  "read",
-    "summary":  "Read the dependency state and formula for one ASCET element.",
-    "usage":  "\u003ctarget-path\u003e \u003celement-name\u003e [--target-kind auto|component|project|folder] [--json]",
-    "execution":  {
-                      "kind":  "unified_cli",
-                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                      "subcommand":  "exec",
-                      "operation":  "read_element_dependency"
-                  },
-    "supportsJson":  true,
-    "defaultOutputMode":  "json",
-    "risk":  "read",
-    "requiresSerialLiveAccess":  false,
-    "objectKinds":  [
-                        "class",
-                        "module",
-                        "folder",
-                        "project"
-                    ],
-    "args":  [
-                 {
-                     "name":  "target-path",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: target-path"
-                 },
-                 {
-                     "name":  "element-name",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: element-name"
-                 },
-                 {
-                     "name":  "--target-kind",
-                     "kind":  "option",
-                     "type":  "enum",
-                     "required":  false,
-                     "description":  "Option value for --target-kind",
-                     "enumValues":  [
-                                        "auto",
-                                        "component",
-                                        "project",
-                                        "folder"
-                                    ]
-                 },
-                 {
-                     "name":  "--json",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --json"
-                 }
-             ],
-    "preconditions":  [
-                          "ASCET ToolAPI session must be available.",
-                          "The target path must resolve to a component, folder, or project.",
-                          "Folder and project reads export and scan candidate components."
-                      ],
-    "failureModes":  [
-                         "toolapi_unavailable",
-                         "target_not_found",
-                         "element_not_found",
-                         "unsupported_target_kind"
-                     ],
-    "examples":  [
-                     {
-                         "description":  "Basic usage",
-                         "command":  "AscetCli.exe exec read_element_dependency \u003ctarget-path\u003e \u003celement-name\u003e [--target-kind auto|component|project|folder] [--json]"
-                     }
-                 ],
-    "pitfalls":  [
-                     "This command reads the local element dependency flag/formula; use read_dependent_chain when provider discovery is needed.",
-                     "Treat supported=false and issues[] as diagnostic evidence rather than write success."
-                 ],
-    "operation":  "read_element_dependency",
-    "lane":  "legacy_read",
-    "hostEligible":  false,
-    "supportsBatch":  false,
-    "executionProfile":  {
-                             "hostSafety":  "expensive_scan",
-                             "hostPolicy":  "force_one_shot",
-                             "timeoutClass":  "scan",
-                             "pageBudget":  200
-                         },
-    "hiddenFromModel":  false
+{
+  "id": "AscetReadElementDependency",
+  "family": "read",
+  "summary": "Read the dependency state and formula for one ASCET element.",
+  "usage": "<target-path> <element-name> [--target-kind auto|component|project|folder] [--json]",
+  "execution": {
+    "kind": "bridge",
+    "protocolVersion": 1,
+    "subcommand": "exec",
+    "operation": "read_element_dependency",
+    "sessionPolicy": "fresh_session",
+    "transportPolicy": "one_shot_only"
+  },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "read",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": [
+    "class",
+    "module",
+    "folder",
+    "project"
+  ],
+  "args": [
+    {
+      "name": "target-path",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: target-path"
+    },
+    {
+      "name": "element-name",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: element-name"
+    },
+    {
+      "name": "--target-kind",
+      "kind": "option",
+      "type": "enum",
+      "required": false,
+      "description": "Option value for --target-kind",
+      "enumValues": [
+        "auto",
+        "component",
+        "project",
+        "folder"
+      ]
+    },
+    {
+      "name": "--json",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --json"
+    }
+  ],
+  "preconditions": [
+    "ASCET ToolAPI session must be available.",
+    "The target path must resolve to a component, folder, or project.",
+    "Folder and project reads export and scan candidate components."
+  ],
+  "failureModes": [
+    "toolapi_unavailable",
+    "target_not_found",
+    "element_not_found",
+    "unsupported_target_kind"
+  ],
+  "examples": [
+    {
+      "description": "Basic usage",
+      "command": "AscetBridge.exe exec read_element_dependency <target-path> <element-name> [--target-kind auto|component|project|folder] [--json]"
+    }
+  ],
+  "pitfalls": [
+    "This command reads the local element dependency flag/formula; use read_dependent_chain when provider discovery is needed.",
+    "Treat supported=false and issues[] as diagnostic evidence rather than write success."
+  ],
+  "operation": "read_element_dependency",
+  "lane": "legacy_read",
+  "hostEligible": false,
+  "supportsBatch": false,
+  "executionProfile": {
+    "hostSafety": "expensive_scan",
+    "hostPolicy": "force_one_shot",
+    "timeoutClass": "scan",
+    "pageBudget": 200
+  },
+  "hiddenFromModel": false
 }

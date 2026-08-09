@@ -96,7 +96,7 @@ Use this workflow for subsequent ASCET coding or analysis tasks:
    - dbitem_refs for database-object dependencies
 3. For large Get results, use Pi find/grep/read on the returned task-local NDJSON and metadata files. Do not treat these observations as a persistent database.
 4. Use ascet_read only after the target is located, when exact type, value, implementation, diagram, method, or code detail is needed.
-5. Use ascet_edit for all ASCET writes and re-read the affected live target after a write.
+5. Use ascet_edit for all ASCET writes. Executed writes perform mandatory automatic action-specific readback verification; inspect the returned verification feedback and only request a fresh bounded read when verification is partial or new structure evidence is needed.
 6. Keep live ToolAPI calls scoped to the required folder, component, project, or reference target. Do not perform ad hoc full-database live scans.
 
 When updating project guidance, use this section title unless the user explicitly asks for another title: ${ASCET_AGENT_SECTION_TITLE}

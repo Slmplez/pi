@@ -41,4 +41,23 @@ describe("ascet_get schema", () => {
 	test("allows tree without a target", () => {
 		assert.equal(Value.Check(ascetGetParameters, { action: "tree" }), true);
 	});
+	test("uses an independent database_catalog schema branch", () => {
+		const valid = {
+			action: "database_catalog",
+			sourceTreeResultId: "obs-tree-full",
+			include: ["module"],
+			messageDepth: 0,
+			delivery: "stored",
+		};
+		assert.equal(Value.Check(ascetGetParameters, valid), true);
+		assert.equal(Value.Check(ascetGetParameters, { ...valid, include: [] }), false);
+		assert.equal(Value.Check(ascetGetParameters, { ...valid, include: ["module", "module"] }), false);
+		assert.equal(Value.Check(ascetGetParameters, { ...valid, messageDepth: -1 }), false);
+		assert.equal(Value.Check(ascetGetParameters, { ...valid, messageDepth: 1.5 }), false);
+		assert.equal(Value.Check(ascetGetParameters, { ...valid, target: { path: "DB" } }), false);
+		assert.equal(
+			Value.Check(ascetGetParameters, { action: "database_catalog", sourceTreeResultId: "obs-tree-full" }),
+			false,
+		);
+	});
 });

@@ -53,7 +53,7 @@ public static class AscetReadComponentChildren
     {
         if (args == null || args.Length < 1)
         {
-            throw new AscetReadException("invalid_argument", "parse_arguments", "usage: AscetCli.exe exec read_component_children <component-path> [--group <all|methods|elements|components|arrays|parameters|variables|diagrams>] [--json]");
+            throw new AscetReadException("invalid_argument", "parse_arguments", "usage: AscetBridge.exe exec read_component_children <component-path> [--group <all|methods|elements|components|arrays|parameters|variables|diagrams>] [--json]");
         }
 
         AscetReadComponentChildrenArguments result = new AscetReadComponentChildrenArguments();
@@ -327,11 +327,7 @@ public static class AscetReadComponentChildren
 
     private static Dictionary<string, object> LoadDiagrams(string componentPath)
     {
-        return AscetDatabaseExplorerCommon.DeserializeChildJsonObject(
-            AscetDatabaseExplorerCommon.RunSiblingCliExecOrExe(
-                "list_diagrams",
-                "AscetListDiagrams.exe",
-                new List<string> { componentPath, "--json" }));
+        return ExecCommand.BuildListDiagramsPayload(componentPath);
     }
 
     private static Dictionary<string, object> LoadMethods(string componentPath)

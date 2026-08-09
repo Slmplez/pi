@@ -27,7 +27,7 @@ describe("ASCET canonical PI tools", () => {
 			"ascet_read",
 			"ascet_diff",
 			"ascet_edit",
-			"ascet_verify",
+			"configure_parameter_dependency_chain",
 		]);
 	});
 
@@ -53,7 +53,6 @@ describe("ASCET canonical PI tools", () => {
 			"advanced-read",
 			"reference",
 			"diff",
-			"verify",
 			"write-preflight",
 			"batch-write",
 			"component-edit",
@@ -66,7 +65,7 @@ describe("ASCET canonical PI tools", () => {
 
 	it("publishes concise get action catalog entries", () => {
 		const entries = listActionCatalogEntries().filter((entry) => entry.tool === "ascet_get");
-		expect(entries.map((entry) => entry.action).sort()).toEqual([...GET_ACTIONS].sort());
+		expect(entries.map((entry) => entry.action).sort()).toEqual([...GET_ACTIONS, "database_catalog"].sort());
 		for (const entry of entries) {
 			expect(entry.family).toBe("get");
 			expect(entry.result.shape).toBe("observation");

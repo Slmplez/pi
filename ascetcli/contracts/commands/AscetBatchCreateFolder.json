@@ -1,51 +1,51 @@
-﻿{
-    "id":  "AscetBatchCreateFolder",
-    "family":  "write",
-    "summary":  "Batch create multiple ASCET folders in a single ToolAPI session",
-    "usage":  "\u003c requests.json",
-    "execution":  {
-                      "kind":  "unified_cli",
-                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                      "subcommand":  "batch",
-                      "operation":  "create_folder"
-                  },
-    "supportsJson":  true,
-    "defaultOutputMode":  "json",
-    "risk":  "write",
-    "requiresSerialLiveAccess":  false,
-    "objectKinds":  [
-                        "generic"
-                    ],
-    "args":  [
-
-             ],
-    "preconditions":  [
-                          "ASCET ToolAPI session must be available.",
-                          "Live ASCET access must run through the serial executor."
-                      ],
-    "failureModes":  [
-                         "toolapi_unavailable",
-                         "target_not_found",
-                         "write_failed"
-                     ],
-    "examples":  [
-                     {
-                         "description":  "Basic usage",
-                         "command":  "AscetCli.exe batch create_folder \u003c requests.json"
-                     }
-                 ],
-    "pitfalls":  [
-                     "Live ASCET ToolAPI access is serial-only.",
-                     "Run readback and verify after successful writes."
-                 ],
-    "operation":  "batch_create_folder",
-    "lane":  "serial_write",
-    "hostEligible":  false,
-    "supportsBatch":  true,
-    "executionProfile":  {
-                             "hostSafety":  "write",
-                             "hostPolicy":  "force_one_shot",
-                             "timeoutClass":  "write"
-                         },
-    "hiddenFromModel":  false
+{
+  "id": "AscetBatchCreateFolder",
+  "family": "write",
+  "summary": "Batch create multiple ASCET folders in a single ToolAPI session",
+  "usage": "< requests.json",
+  "execution": {
+    "kind": "bridge",
+    "protocolVersion": 1,
+    "subcommand": "batch",
+    "operation": "create_folder",
+    "sessionPolicy": "fresh_session",
+    "transportPolicy": "one_shot_only"
+  },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "write",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": [
+    "generic"
+  ],
+  "args": [],
+  "preconditions": [
+    "ASCET ToolAPI session must be available.",
+    "Live ASCET access must run through the serial executor."
+  ],
+  "failureModes": [
+    "toolapi_unavailable",
+    "target_not_found",
+    "write_failed"
+  ],
+  "examples": [
+    {
+      "description": "Basic usage",
+      "command": "AscetBridge.exe batch create_folder < requests.json"
+    }
+  ],
+  "pitfalls": [
+    "Live ASCET ToolAPI access is serial-only.",
+    "Run readback and verify after successful writes."
+  ],
+  "operation": "batch_create_folder",
+  "lane": "serial_write",
+  "hostEligible": false,
+  "supportsBatch": true,
+  "executionProfile": {
+    "hostSafety": "write",
+    "hostPolicy": "force_one_shot",
+    "timeoutClass": "write"
+  },
+  "hiddenFromModel": false
 }

@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Globalization;
 using System.IO;
-using System.Text;
-using System.Threading;
+
+public delegate int AscetSelfTestEntryPoint();
 
 public static class SelfTestCommand
 {
     private const int ExitCodeStructuredError = 2;
-    private const int DefaultTimeoutMs = 30000;
+    private static readonly object ConsoleCaptureGate = new object();
 
     public static int Run(string[] args)
     {
@@ -19,56 +19,37 @@ public static class SelfTestCommand
             return AscetCliEnvelope.WriteError(ExitCodeStructuredError, parseError);
         }
 
-        string commandName = ResolveCommandName(profile);
-        string executablePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, commandName);
-        if (!File.Exists(executablePath))
+        if (String.Equals(profile, "offline", StringComparison.Ordinal))
         {
-            return AscetCliEnvelope.WriteError(
-                ExitCodeStructuredError,
-                AscetCliEnvelope.Error(
-                    "not_found",
-                    "Self-test executable '" + commandName + "' was not found next to AscetCli.exe.",
-                    "selftest",
-                    profile));
+            return RunOffline();
         }
 
-        ProcessExecutionResult execution;
-        try
+        AscetSelfTestEntryPoint entryPoint = ResolveEntryPoint(profile);
+        SelfTestExecutionResult execution = Execute(entryPoint);
+        if (!String.IsNullOrWhiteSpace(execution.Stderr))
         {
-            execution = Execute(executablePath, DefaultTimeoutMs);
+            Console.Error.Write(execution.Stderr);
         }
-        catch (Exception ex)
+
+        string status = execution.ExitCode == 0 ? "passed" : ClassifyStatus(execution);
+        if (execution.ExitCode != 0)
         {
             return AscetCliEnvelope.WriteError(
                 ExitCodeStructuredError,
                 AscetCliEnvelope.Error(
-                    "selftest_launch_failed",
-                    ex.Message,
+                    MapFailureCode(status),
+                    "selftest profile '" + profile + "' reported status '" + status + "'. " + execution.Stderr.Trim(),
                     "selftest",
                     profile));
         }
 
         Dictionary<string, object> result = new Dictionary<string, object>();
         result["profile"] = profile;
-        result["command"] = commandName;
-        result["passed"] = execution.Passed;
-        result["exitCode"] = execution.ExitCode;
-        result["timedOut"] = execution.TimedOut;
-        result["status"] = ClassifyStatus(execution);
+        result["passed"] = true;
+        result["status"] = status;
         result["stdout"] = execution.Stdout;
         result["stderr"] = execution.Stderr;
-
-        if (!execution.Passed)
-        {
-            string status = ClassifyStatus(execution);
-            return AscetCliEnvelope.WriteError(
-                ExitCodeStructuredError,
-                AscetCliEnvelope.Error(
-                    MapFailureCode(status),
-                    "selftest profile '" + profile + "' reported status '" + status + "'.",
-                    "selftest",
-                    profile));
-        }
+        result["inProcess"] = true;
 
         return AscetCliEnvelope.WriteSuccess(
             AscetCliEnvelope.Success(
@@ -79,7 +60,47 @@ public static class SelfTestCommand
 
     public static string[] GetSupportedProfiles()
     {
-        return new string[] { "quick", "deep", "smoke" };
+        return new string[] { "offline", "quick", "deep", "smoke" };
+    }
+
+    private static int RunOffline()
+    {
+        IList<OperationDescriptor> descriptors = AscetBridgeOperationRegistry.GetAll();
+        int legacyCount = 0;
+        for (int i = 0; i < descriptors.Count; i++)
+        {
+            OperationDescriptor descriptor = descriptors[i];
+            if (descriptor == null || descriptor.Handler == null)
+            {
+                return AscetCliEnvelope.WriteError(
+                    ExitCodeStructuredError,
+                    AscetCliEnvelope.Error(
+                        "registry_handler_missing",
+                        "A Bridge operation is missing its handler.",
+                        "selftest",
+                        "offline"));
+            }
+            if (descriptor.HandlerKind == OperationHandlerKind.LegacyOneShotAdapter)
+            {
+                legacyCount++;
+            }
+        }
+
+        Dictionary<string, object> result = new Dictionary<string, object>();
+        result["profile"] = "offline";
+        result["passed"] = true;
+        result["status"] = "passed";
+        result["operationCount"] = descriptors.Count;
+        result["legacyOneShotCount"] = legacyCount;
+        result["protocolVersion"] = 1;
+        result["inProcess"] = true;
+        result["toolApiConnected"] = false;
+
+        return AscetCliEnvelope.WriteSuccess(
+            AscetCliEnvelope.Success(
+                "selftest",
+                "offline",
+                result));
     }
 
     private static Dictionary<string, object> ParseArguments(string[] args, out string profile)
@@ -99,11 +120,10 @@ public static class SelfTestCommand
                 {
                     return AscetCliEnvelope.Error(
                         "invalid_arguments",
-                        "Unknown selftest profile '" + argument + "'. Expected one of: quick, deep, smoke.",
+                        "Unknown selftest profile '" + argument + "'. Expected one of: offline, quick, deep, smoke.",
                         "selftest",
                         argument);
                 }
-
                 profile = argument.ToLowerInvariant();
                 continue;
             }
@@ -119,187 +139,106 @@ public static class SelfTestCommand
         {
             return AscetCliEnvelope.Error(
                 "invalid_arguments",
-                "selftest mode requires a profile token. Expected one of: quick, deep, smoke.",
+                "selftest mode requires a profile token. Expected one of: offline, quick, deep, smoke.",
                 "selftest",
                 String.Empty);
         }
-
         return null;
     }
 
-    private static bool IsSupportedProfile(string candidate)
+    private static bool IsSupportedProfile(string profile)
     {
-        string[] profiles = GetSupportedProfiles();
-        for (int i = 0; i < profiles.Length; i++)
-        {
-            if (String.Equals(candidate, profiles[i], StringComparison.OrdinalIgnoreCase))
-            {
-                return true;
-            }
-        }
-
-        return false;
+        string normalized = (profile ?? String.Empty).Trim().ToLowerInvariant();
+        return normalized == "offline" || normalized == "quick" || normalized == "deep" || normalized == "smoke";
     }
 
-    private static string ResolveCommandName(string profile)
+    private static AscetSelfTestEntryPoint ResolveEntryPoint(string profile)
     {
-        switch ((profile ?? String.Empty).ToLowerInvariant())
+        switch (profile ?? String.Empty)
         {
             case "quick":
-                return "AscetReadDomainQuickCheck.exe";
+                return AscetReadDomainQuickCheck.Run;
             case "deep":
-                return "AscetReadDomainDeepCheck.exe";
+                return AscetReadDomainDeepCheck.Run;
             case "smoke":
-                return "AscetReadDomainSmoke.exe";
+                return AscetReadDomainSmoke.Run;
             default:
-                throw new InvalidOperationException("Unsupported selftest profile '" + profile + "'.");
+                throw new AscetReadException("invalid_arguments", "selftest", "Unsupported selftest profile '" + profile + "'.");
         }
     }
 
-    private static ProcessExecutionResult Execute(string executablePath, int timeoutMs)
+    private static SelfTestExecutionResult Execute(AscetSelfTestEntryPoint entryPoint)
     {
-        ProcessStartInfo startInfo = new ProcessStartInfo();
-        startInfo.FileName = executablePath;
-        startInfo.WorkingDirectory = Path.GetDirectoryName(executablePath);
-        startInfo.UseShellExecute = false;
-        startInfo.RedirectStandardOutput = true;
-        startInfo.RedirectStandardError = true;
-        startInfo.CreateNoWindow = true;
-
-        using (Process process = new Process())
+        if (entryPoint == null)
         {
-            process.StartInfo = startInfo;
-            if (!process.Start())
+            throw new ArgumentNullException("entryPoint");
+        }
+
+        lock (ConsoleCaptureGate)
+        {
+            TextWriter originalOut = Console.Out;
+            TextWriter originalError = Console.Error;
+            TextReader originalIn = Console.In;
+            string originalDirectory = Environment.CurrentDirectory;
+            CultureInfo originalCulture = CultureInfo.CurrentCulture;
+            CultureInfo originalUiCulture = CultureInfo.CurrentUICulture;
+            StringWriter stdout = new StringWriter(CultureInfo.InvariantCulture);
+            StringWriter stderr = new StringWriter(CultureInfo.InvariantCulture);
+            int exitCode;
+
+            try
             {
-                throw new InvalidOperationException("Failed to start self-test executable '" + executablePath + "'.");
+                Console.SetOut(stdout);
+                Console.SetError(stderr);
+                exitCode = entryPoint();
+            }
+            catch (Exception ex)
+            {
+                exitCode = 1;
+                stderr.WriteLine(ex.GetType().FullName);
+                stderr.WriteLine(ex.Message);
+            }
+            finally
+            {
+                Console.SetOut(originalOut);
+                Console.SetError(originalError);
+                Console.SetIn(originalIn);
+                Environment.CurrentDirectory = originalDirectory;
+                CultureInfo.CurrentCulture = originalCulture;
+                CultureInfo.CurrentUICulture = originalUiCulture;
             }
 
-            StringBuilder stdoutBuilder = new StringBuilder();
-            StringBuilder stderrBuilder = new StringBuilder();
-            Exception stdoutError = null;
-            Exception stderrError = null;
-
-            Thread stdoutThread = new Thread(delegate()
-            {
-                try
-                {
-                    stdoutBuilder.Append(process.StandardOutput.ReadToEnd());
-                }
-                catch (Exception ex)
-                {
-                    stdoutError = ex;
-                }
-            });
-            stdoutThread.IsBackground = true;
-            stdoutThread.Start();
-
-            Thread stderrThread = new Thread(delegate()
-            {
-                try
-                {
-                    stderrBuilder.Append(process.StandardError.ReadToEnd());
-                }
-                catch (Exception ex)
-                {
-                    stderrError = ex;
-                }
-            });
-            stderrThread.IsBackground = true;
-            stderrThread.Start();
-
-            if (!process.WaitForExit(timeoutMs))
-            {
-                try
-                {
-                    process.Kill();
-                }
-                catch
-                {
-                }
-
-                process.WaitForExit();
-                stdoutThread.Join(1000);
-                stderrThread.Join(1000);
-
-                ProcessExecutionResult timedOut = new ProcessExecutionResult();
-                timedOut.ExitCode = -1;
-                timedOut.Passed = false;
-                timedOut.TimedOut = true;
-                timedOut.Stdout = stdoutBuilder.ToString();
-                timedOut.Stderr = stderrBuilder.ToString();
-                return timedOut;
-            }
-
-            stdoutThread.Join(1000);
-            stderrThread.Join(1000);
-
-            if (stdoutError != null)
-            {
-                throw new InvalidOperationException("Failed to read self-test stdout.", stdoutError);
-            }
-
-            if (stderrError != null)
-            {
-                throw new InvalidOperationException("Failed to read self-test stderr.", stderrError);
-            }
-
-            ProcessExecutionResult completed = new ProcessExecutionResult();
-            completed.ExitCode = process.ExitCode;
-            completed.Passed = process.ExitCode == 0;
-            completed.TimedOut = false;
-            completed.Stdout = stdoutBuilder.ToString();
-            completed.Stderr = stderrBuilder.ToString();
-            return completed;
+            SelfTestExecutionResult result = new SelfTestExecutionResult();
+            result.ExitCode = exitCode;
+            result.Stdout = stdout.ToString();
+            result.Stderr = stderr.ToString();
+            return result;
         }
     }
 
-    private static string ClassifyStatus(ProcessExecutionResult execution)
+    private static string ClassifyStatus(SelfTestExecutionResult execution)
     {
-        if (execution == null)
-        {
-            return "unknown";
-        }
-
-        if (execution.TimedOut)
-        {
-            return "timeout";
-        }
-
-        if (execution.Passed)
-        {
-            return "passed";
-        }
-
         string output = (execution.Stdout ?? String.Empty) + Environment.NewLine + (execution.Stderr ?? String.Empty);
         if (output.IndexOf("database_not_open", StringComparison.OrdinalIgnoreCase) >= 0
             || output.IndexOf("tool_connect_failed", StringComparison.OrdinalIgnoreCase) >= 0
-            || output.IndexOf("Failed to connect to ASCET ToolAPI.", StringComparison.OrdinalIgnoreCase) >= 0
+            || output.IndexOf("Failed to connect to ASCET ToolAPI", StringComparison.OrdinalIgnoreCase) >= 0
             || output.IndexOf("No database is open in ASCET GUI", StringComparison.OrdinalIgnoreCase) >= 0)
         {
             return "environment_unavailable";
         }
-
         return "failed";
     }
 
     private static string MapFailureCode(string status)
     {
-        switch (status ?? String.Empty)
-        {
-            case "timeout":
-                return "selftest_timeout";
-            case "environment_unavailable":
-                return "environment_unavailable";
-            default:
-                return "selftest_failed";
-        }
+        return String.Equals(status, "environment_unavailable", StringComparison.Ordinal)
+            ? "environment_unavailable"
+            : "selftest_failed";
     }
 
-    private sealed class ProcessExecutionResult
+    private sealed class SelfTestExecutionResult
     {
         public int ExitCode;
-        public bool Passed;
-        public bool TimedOut;
         public string Stdout;
         public string Stderr;
     }

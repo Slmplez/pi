@@ -162,7 +162,7 @@ export async function createAscetRuntimeStatusReport(
 	if (!installation.ok || !dll.ok) {
 		runtime = unavailableRuntimeProbeReport(
 			!installation.ok
-				? "ASCET CLI executable or contract catalog is missing; live ToolAPI probe was skipped."
+				? "ASCET Bridge executable or contract catalog is missing; live ToolAPI probe was skipped."
 				: "Etas.AscetNET.dll is missing; live ToolAPI probe was skipped.",
 		);
 	} else {

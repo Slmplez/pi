@@ -5,7 +5,6 @@ export const ascetInstructionProfiles = [
 	"advanced-read",
 	"reference",
 	"diff",
-	"verify",
 	"write-preflight",
 	"batch-write",
 	"component-edit",

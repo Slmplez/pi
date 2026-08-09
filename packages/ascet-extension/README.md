@@ -1,4 +1,4 @@
-﻿# ASCET PI Extension
+# ASCET PI Extension
 
 ASCET tool extension package for PI. It registers ASCET read, verify, and guarded write tools while keeping all ASCET ToolAPI-backed access sequential.
 
@@ -6,7 +6,7 @@ ASCET tool extension package for PI. It registers ASCET read, verify, and guarde
 
 The runtime resolver uses these modes:
 
-- `env`: `ASCET_CLI_PATH` or `ASCET_CONTRACTS_PATH` is set.
+- `env`: `ASCET_BRIDGE_PATH` or `ASCET_CONTRACTS_PATH` is set.
 - `bundle`: package assets exist under `ascet-cli/contracts` or `ascet-cli/bin`.
 - `source`: development fallback beside the parent `E:\Rep\AscetAgent` checkout.
 
@@ -23,7 +23,8 @@ npm --workspace @zeerke/ascet-copilot-extension run copy-assets
 Expected bundled paths:
 
 - `packages/ascet-extension/ascet-cli/contracts/cli-catalog.json`
-- `packages/ascet-extension/ascet-cli/bin/AscetCli.exe`
+- `packages/ascet-extension/ascet-cli/bin/AscetBridge.exe`
+- `packages/ascet-extension/ascet-cli/bin/Ascetapidll/Etas.AscetNET.dll`
 
 ## Tools
 
@@ -37,7 +38,6 @@ Canonical Copilot-aligned tools:
 - `ascet_read`
 - `ascet_diff`
 - `ascet_edit`
-- `ascet_verify`
 
 Retired discovery, search, and index tools are not registered as model tools and have no compatibility aliases. `ascet_get` is the only ASCET discovery surface.
 
@@ -183,7 +183,7 @@ Start with `tree`, then pass an exact returned `path` or stable `oid` to a bound
 
 Use `ascet_read` only for exact deep reads after the target is known: complete code, implementation metadata, dependency/formula detail, state-machine flow, or detailed block-diagram data. `read_dependent_chain` and `read_element_dependency` do not replace bounded provider discovery with Get observations.
 
-`ascet_edit` includes `set_element_dependency` for dependency flag changes. It uses the same guarded write contract as other write actions: preflight by default, interactive approval when `executeWrite=true`, optional `dryRun`, optional `backupDir`, and readback verification. Successful writes invalidate affected stored observations; request fresh bounded Get data before relying on prior structure evidence.
+`ascet_edit` includes `set_element_dependency` for dependency flag changes. It uses the same guarded write contract as other write actions: preflight by default, interactive approval when `executeWrite=true`, optional `dryRun`, optional `backupDir`, and mandatory automatic action-specific readback verification. Inspect the returned `verification` feedback and do not issue a redundant live read after verification passes. Use `ascet_read` for an explicit independent Component check and `ascet_get.formulas` for Project formulas. Successful or outcome-unknown writes invalidate affected stored observations; request fresh bounded Get data before relying on prior structure evidence.
 
 These actions call `runAscetCliJson`, enter the ASCET scheduler, and execute under the shared `ascet.toolapi.global` resource.
 ## Scheduler Diagnostics
@@ -249,11 +249,10 @@ Default disposable target:
 - component: `DEMO\__pi_write_smoke__\PiSmoke`
 - method: `calc`
 
-When enabled, setup, write, readback, and verify all run through canonical PI tools:
+When enabled, setup, writes, and exact readback run through canonical PI tools:
 
 - `ascet_edit`
 - `ascet_read`
-- `ascet_verify`
 
 For `apply_project_formula`, provide an explicitly created disposable Project in the ASCET `TEST` folder. The smoke first proves guarded preflight, then applies an identity formula with readback verification:
 
@@ -275,7 +274,7 @@ The script does not create Projects: a fixture must be explicitly provisioned by
 
 ## Environment Overrides
 
-- `ASCET_CLI_PATH`
+- `ASCET_BRIDGE_PATH`
 - `ASCET_CONTRACTS_PATH`
 - `PI_ASCET_RUNTIME_DIR`
 - `PI_ASCET_LOCK_PATH`

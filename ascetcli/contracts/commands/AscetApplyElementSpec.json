@@ -1,125 +1,127 @@
-﻿{
-    "id":  "AscetApplyElementSpec",
-    "family":  "write",
-    "summary":  "Apply element spec",
-    "usage":  "\u003ccomponent-path\u003e \u003cspec-file\u003e [--project-path \u003cproject-path\u003e] [--mode restore] [--delete-missing] [--recreate-incompatible] [--verify-readback] [--json]",
-    "execution":  {
-                      "kind":  "unified_cli",
-                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                      "subcommand":  "exec",
-                      "operation":  "apply_element_spec"
-                  },
-    "supportsJson":  true,
-    "defaultOutputMode":  "json",
-    "risk":  "write",
-    "requiresSerialLiveAccess":  false,
-    "objectKinds":  [
-                        "class",
-                        "module",
-                        "statemachine"
-                    ],
-    "args":  [
-                 {
-                     "name":  "component-path",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: component-path"
-                 },
-                 {
-                     "name":  "spec-file",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: spec-file"
-                 },
-                 {
-                     "name":  "--project-path",
-                     "kind":  "option",
-                     "type":  "string",
-                     "required":  false,
-                     "description":  "Option value for --project-path"
-                 },
-                 {
-                     "name":  "--mode",
-                     "kind":  "option",
-                     "type":  "enum",
-                     "required":  false,
-                     "description":  "Option value for --mode",
-                     "enumValues":  [
-                                        "restore"
-                                    ]
-                 },
-                 {
-                     "name":  "--delete-missing",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --delete-missing"
-                 },
-                 {
-                     "name":  "--recreate-incompatible",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --recreate-incompatible"
-                 },
-                 {
-                     "name":  "--verify-readback",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --verify-readback"
-                 },
-                 {
-                     "name":  "--json",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --json"
-                 }
-             ],
-    "preconditions":  [
-                          "ASCET ToolAPI session must be available.",
-                          "Live ASCET access must run through the serial executor.",
-                          "Target ASCET path must resolve to the expected object kind."
-                      ],
-    "failureModes":  [
-                         "toolapi_unavailable",
-                         "target_not_found",
-                         "write_failed"
-                     ],
-    "examples":  [
-                     {
-                         "description":  "Basic usage",
-                         "command":  "AscetCli.exe exec apply_element_spec \u003ccomponent-path\u003e \u003cspec-file\u003e [--project-path \u003cproject-path\u003e] [--mode restore] [--delete-missing] [--recreate-incompatible] [--verify-readback] [--json]"
-                     }
-                 ],
-    "pitfalls":  [
-                     "Live ASCET ToolAPI access is serial-only.",
-                     "Run readback and verify after successful writes."
-                 ],
-    "operation":  "apply_element_spec",
-    "lane":  "serial_write",
-    "hostEligible":  false,
-    "supportsBatch":  true,
-    "methodKindCompatibility":  {
-                                    "class":  [
-                                                  "abstract"
-                                              ],
-                                    "module":  [
-                                                   "process"
-                                               ],
-                                    "statemachine":  [
-                                                         "action",
-                                                         "condition",
-                                                         "trigger"
-                                                     ]
-                                },
-    "executionProfile":  {
-                             "hostSafety":  "write",
-                             "hostPolicy":  "force_one_shot",
-                             "timeoutClass":  "write"
-                         },
-    "hiddenFromModel":  false
+{
+  "id": "AscetApplyElementSpec",
+  "family": "write",
+  "summary": "Apply element spec",
+  "usage": "<component-path> <spec-file> [--project-path <project-path>] [--mode restore] [--delete-missing] [--recreate-incompatible] [--verify-readback] [--json]",
+  "execution": {
+    "kind": "bridge",
+    "protocolVersion": 1,
+    "subcommand": "exec",
+    "operation": "apply_element_spec",
+    "sessionPolicy": "fresh_session",
+    "transportPolicy": "one_shot_only"
+  },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "write",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": [
+    "class",
+    "module",
+    "statemachine"
+  ],
+  "args": [
+    {
+      "name": "component-path",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: component-path"
+    },
+    {
+      "name": "spec-file",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: spec-file"
+    },
+    {
+      "name": "--project-path",
+      "kind": "option",
+      "type": "string",
+      "required": false,
+      "description": "Option value for --project-path"
+    },
+    {
+      "name": "--mode",
+      "kind": "option",
+      "type": "enum",
+      "required": false,
+      "description": "Option value for --mode",
+      "enumValues": [
+        "restore"
+      ]
+    },
+    {
+      "name": "--delete-missing",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --delete-missing"
+    },
+    {
+      "name": "--recreate-incompatible",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --recreate-incompatible"
+    },
+    {
+      "name": "--verify-readback",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --verify-readback"
+    },
+    {
+      "name": "--json",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --json"
+    }
+  ],
+  "preconditions": [
+    "ASCET ToolAPI session must be available.",
+    "Live ASCET access must run through the serial executor.",
+    "Target ASCET path must resolve to the expected object kind."
+  ],
+  "failureModes": [
+    "toolapi_unavailable",
+    "target_not_found",
+    "write_failed"
+  ],
+  "examples": [
+    {
+      "description": "Basic usage",
+      "command": "AscetBridge.exe exec apply_element_spec <component-path> <spec-file> [--project-path <project-path>] [--mode restore] [--delete-missing] [--recreate-incompatible] [--verify-readback] [--json]"
+    }
+  ],
+  "pitfalls": [
+    "Live ASCET ToolAPI access is serial-only.",
+    "Run readback and verify after successful writes."
+  ],
+  "operation": "apply_element_spec",
+  "lane": "serial_write",
+  "hostEligible": false,
+  "supportsBatch": true,
+  "methodKindCompatibility": {
+    "class": [
+      "abstract"
+    ],
+    "module": [
+      "process"
+    ],
+    "statemachine": [
+      "action",
+      "condition",
+      "trigger"
+    ]
+  },
+  "executionProfile": {
+    "hostSafety": "write",
+    "hostPolicy": "force_one_shot",
+    "timeoutClass": "write"
+  },
+  "hiddenFromModel": false
 }

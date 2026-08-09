@@ -1,111 +1,112 @@
-﻿{
-    "id":  "AscetCreateComponent",
-    "family":  "write",
-    "summary":  "Create a new component shell",
-    "usage":  "\u003ccomponent-path\u003e --kind \u003cclass|module|statemachine\u003e [--language \u003cESDL|BDE|C\u003e] [--if-exists \u003cfail|return-existing\u003e] [--verify-readback] [--rollback-on-failure] [--json]",
-    "execution":  {
-                      "kind":  "unified_cli",
-                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                      "subcommand":  "exec",
-                      "operation":  "create_component"
-                  },
-    "supportsJson":  true,
-    "defaultOutputMode":  "json",
-    "risk":  "write",
-    "requiresSerialLiveAccess":  true,
-    "objectKinds":  [
-                        "class",
-                        "module",
-                        "statemachine"
-                    ],
-    "args":  [
-                 {
-                     "name":  "component-path",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: component-path"
-                 },
-                 {
-                     "name":  "--kind",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  true,
-                     "description":  "Flag --kind"
-                 },
-                 {
-                     "name":  "class|module|statemachine",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: class|module|statemachine"
-                 },
-                 {
-                     "name":  "--language",
-                     "kind":  "option",
-                     "type":  "string",
-                     "required":  false,
-                     "description":  "Option value for --language"
-                 },
-                 {
-                     "name":  "--if-exists",
-                     "kind":  "option",
-                     "type":  "string",
-                     "required":  false,
-                     "description":  "Option value for --if-exists"
-                 },
-                 {
-                     "name":  "--verify-readback",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --verify-readback"
-                 },
-                 {
-                     "name":  "--rollback-on-failure",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --rollback-on-failure"
-                 },
-                 {
-                     "name":  "--json",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --json"
-                 }
-             ],
-    "preconditions":  [
-                          "ASCET ToolAPI session must be available.",
-                          "Live ASCET access must run through the serial executor.",
-                          "Target ASCET path must resolve to the expected object kind."
-                      ],
-    "failureModes":  [
-                         "toolapi_unavailable",
-                         "target_not_found",
-                         "write_failed"
-                     ],
-    "examples":  [
-                     {
-                         "description":  "Basic usage",
-                         "command":  "AscetCli.exe exec create_component \u003ccomponent-path\u003e --kind \u003cclass|module|statemachine\u003e [--language \u003cESDL|BDE|C\u003e] [--if-exists \u003cfail|return-existing\u003e] [--verify-readback] [--rollback-on-failure] [--json]"
-                     }
-                 ],
-    "pitfalls":  [
-                     "Live ASCET ToolAPI access is serial-only.",
-                     "Run readback and verify after successful writes.",
-                     "Newly created supported components may return expectedDefaultScaffold with verified=false, expected generatedItems, and defaultEntryMethod; this is an unverified scaffold hint, not live readback."
-                 ],
-    "operation":  "create_component",
-    "lane":  "serial_write",
-    "hostEligible":  true,
-    "supportsBatch":  true,
-    "executionProfile":  {
-                             "hostSafety":  "write",
-                             "hostPolicy":  "prefer_host",
-                             "timeoutClass":  "write"
-                         },
-    "hiddenFromModel":  false
+{
+  "id": "AscetCreateComponent",
+  "family": "write",
+  "summary": "Create a new component shell",
+  "usage": "<component-path> --kind <class|module|statemachine> [--language <ESDL|BDE|C>] [--if-exists <fail|return-existing>] [--verify-readback] [--rollback-on-failure] [--json]",
+  "execution": {
+    "kind": "bridge",
+    "protocolVersion": 1,
+    "subcommand": "exec",
+    "operation": "create_component",
+    "sessionPolicy": "fresh_session",
+    "transportPolicy": "one_shot_only"
+  },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "write",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": [
+    "class",
+    "module",
+    "statemachine"
+  ],
+  "args": [
+    {
+      "name": "component-path",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: component-path"
+    },
+    {
+      "name": "--kind",
+      "kind": "flag",
+      "type": "boolean",
+      "required": true,
+      "description": "Flag --kind"
+    },
+    {
+      "name": "class|module|statemachine",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: class|module|statemachine"
+    },
+    {
+      "name": "--language",
+      "kind": "option",
+      "type": "string",
+      "required": false,
+      "description": "Option value for --language"
+    },
+    {
+      "name": "--if-exists",
+      "kind": "option",
+      "type": "string",
+      "required": false,
+      "description": "Option value for --if-exists"
+    },
+    {
+      "name": "--verify-readback",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --verify-readback"
+    },
+    {
+      "name": "--rollback-on-failure",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --rollback-on-failure"
+    },
+    {
+      "name": "--json",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --json"
+    }
+  ],
+  "preconditions": [
+    "ASCET ToolAPI session must be available.",
+    "Live ASCET access must run through the serial executor.",
+    "Target ASCET path must resolve to the expected object kind."
+  ],
+  "failureModes": [
+    "toolapi_unavailable",
+    "target_not_found",
+    "write_failed"
+  ],
+  "examples": [
+    {
+      "description": "Basic usage",
+      "command": "AscetBridge.exe exec create_component <component-path> --kind <class|module|statemachine> [--language <ESDL|BDE|C>] [--if-exists <fail|return-existing>] [--verify-readback] [--rollback-on-failure] [--json]"
+    }
+  ],
+  "pitfalls": [
+    "Live ASCET ToolAPI access is serial-only.",
+    "Run readback and verify after successful writes.",
+    "Newly created supported components may return expectedDefaultScaffold with verified=false, expected generatedItems, and defaultEntryMethod; this is an unverified scaffold hint, not live readback."
+  ],
+  "operation": "create_component",
+  "lane": "serial_write",
+  "hostEligible": true,
+  "supportsBatch": true,
+  "executionProfile": {
+    "hostSafety": "write",
+    "hostPolicy": "prefer_host",
+    "timeoutClass": "write"
+  },
+  "hiddenFromModel": false
 }
-

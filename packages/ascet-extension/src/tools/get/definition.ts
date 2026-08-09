@@ -1,4 +1,4 @@
-﻿import { defineSequentialAscetTool } from "../../core/tool.ts";
+import { defineSequentialAscetTool } from "../../core/tool.ts";
 import { type AscetGetParams, ascetGetParameters, formatAscetGetResult, runAscetGet } from "../../get.ts";
 import { createAscetCliToolDetails } from "../_shared/envelope.ts";
 import { ascetGetPrompt } from "./prompt.ts";
@@ -7,7 +7,8 @@ import { renderCall, renderResult } from "./ui.ts";
 export const ascetGetTool = defineSequentialAscetTool({
 	name: "ascet_get",
 	label: "ASCET get",
-	description: "Read live ASCET tree, elements, formulas, references, bindings, and BDE edges on demand.",
+	description:
+		"Read ASCET tree, database catalogs, elements, formulas, references, bindings, and BDE edges on demand.",
 	...ascetGetPrompt,
 	parameters: ascetGetParameters,
 	renderCall,

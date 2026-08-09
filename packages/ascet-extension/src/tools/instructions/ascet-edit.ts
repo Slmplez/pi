@@ -1,4 +1,4 @@
-﻿import type { AscetActionInstruction } from "./types.ts";
+import type { AscetActionInstruction } from "./types.ts";
 
 export const ascetEditInstructions = [
 	{
@@ -10,10 +10,10 @@ export const ascetEditInstructions = [
 		rules: [
 			"By default this tool returns a non-error preflight outcome and does not write.",
 			"Set executeWrite=true only when the user explicitly asks to apply the write; PI still requires confirmation.",
-			"Use verifyReadback=true unless the user explicitly asks to skip readback.",
+			"Executed writes always perform mandatory automatic action-specific readback verification. Inspect the returned verification feedback and do not issue a redundant live read after verification passes.",
 			"When component kind is unknown, inspect the target before executeWrite=true.",
 		],
-		fewShots: ['preflight: ascet_edit({action:"create_folder",folderPath:"DEMO/New",verifyReadback:true})'],
+		fewShots: ['preflight: ascet_edit({action:"create_folder",folderPath:"DEMO/New"})'],
 		tags: ["write", "preflight", "safety"],
 	},
 	{
@@ -21,13 +21,13 @@ export const ascetEditInstructions = [
 		tool: "ascet_edit",
 		action: "create_component",
 		profiles: ["write-preflight"],
-		summary: "Create folder/component targets with kind-specific defaults and readback.",
+		summary: "Create folder/component targets with kind-specific defaults and automatic verification.",
 		rules: [
 			"After create_component, inspect expectedDefaultScaffold.defaultEntryMethod as an unverified hint for the likely initial method.",
 			'For create_component, kind may be class, module, statemachine, or enumeration. Only class and module need language; enumeration uses ASCET intrinsic language and usually reads back languageKind="Unknown".',
 		],
 		fewShots: [
-			'create_component: ascet_edit({action:"create_component",componentPath:"DEMO/C",kind:"class",language:"ESDL",verifyReadback:true})',
+			'create_component: ascet_edit({action:"create_component",componentPath:"DEMO/C",kind:"class",language:"ESDL"})',
 		],
 		tags: ["write", "component"],
 	},
@@ -42,7 +42,7 @@ export const ascetEditInstructions = [
 			"When methodKind is omitted for create_method, componentKind=class defaults to abstract and componentKind=module defaults to process. For statemachine targets, choose action, condition, or trigger explicitly.",
 			"Do not create class methods with methodKind=process/action/condition/trigger. For ESDL Class components, create abstract first, then use set_method_signature for return/arguments and set_method_code for the body. Do not claim the method is concrete unless readback proves MethodKind changed.",
 			"Use set_method_signature after create_method and before method body writes when the method body returns a value or reads method arguments; do not use apply_element_spec for method return or argument declarations.",
-			"Use set_method_signature.arguments for primitive method inputs before writing ESDL code that references them, and verify readback.",
+			"Use set_method_signature.arguments for primitive method inputs before writing ESDL code that references them, then inspect the automatic action-specific readback verification.",
 		],
 		fewShots: [
 			'set_method_signature: ascet_edit({action:"set_method_signature",componentPath:"DEMO/PID",methodName:"calc",returnType:"cont",arguments:[{name:"u",type:"cont",ifExists:"replace"}]})',
@@ -62,7 +62,7 @@ export const ascetEditInstructions = [
 			"For set_state_machine_code, use one of: set-method, set-state-entry-esdl, set-state-exit-esdl, set-state-static-esdl, bind-state-entry-method, bind-state-exit-method, bind-state-static-method, set-transition-condition-esdl, set-transition-action-esdl, bind-transition-condition-method, bind-transition-action-method, set-start-state.",
 		],
 		fewShots: [
-			'set_method_code: ascet_edit({action:"set_method_code",componentPath:"DEMO/PID",methodName:"calc",codeFile:"calc.esdl",verifyReadback:true})',
+			'set_method_code: ascet_edit({action:"set_method_code",componentPath:"DEMO/PID",methodName:"calc",codeFile:"calc.esdl"})',
 		],
 		tags: ["write", "code"],
 	},
@@ -89,7 +89,7 @@ export const ascetEditInstructions = [
 			"Select the affected DataVariant set explicitly. Never treat an omitted or ambiguous variant selection as all variants; if the operation cannot express the requested variant scope, stop at preflight rather than write.",
 			"When changing dependent to independent, provide an explicit restoration source for every affected DataVariant: a snapshot, an explicit value, or an explicit ASCET default. Do not silently clear the formula, restore zero, or choose an implicit default.",
 			"Method return values and method arguments are not apply_element_spec elements. For method return or arguments such as calc/p_CmpF_MC1, use set_method_signature before writing method code.",
-			"Use verifyReadback=true for apply_element_spec unless the user explicitly asks to skip verification.",
+			"Executed apply_element_spec writes always perform mandatory automatic action-specific readback verification. Inspect the returned verification feedback; do not request or skip verification through tool parameters.",
 			"If required create fields are unknown, stop at plan and inspect the live component or ask for the missing value. For intent=patch, provide only the intended changes and let plan merge them with the live snapshot.",
 		],
 		fewShots: [
@@ -120,7 +120,7 @@ export const ascetEditInstructions = [
 			"Referenced Parameters, Constants, and System Constants must already exist and be resolvable in the requested scope. Do not create mapping targets, imported parameters, exported parameters, or provider components inside set_element_dependency.",
 			"Select the affected DataVariant set explicitly; different DataVariants may use different mappings, and omitted selection must not silently mean all.",
 			"When changing dependent to independent, require an explicit restoration source for every affected DataVariant: a snapshot, an explicit value, or an explicit ASCET default. Do not silently clear the formula or restore zero.",
-			"After a successful executed set_element_dependency write, verify the readback and treat previously stored observations for the affected target as invalidated; request a fresh bounded ascet_get result when structure is needed again.",
+			"Executed set_element_dependency writes always perform mandatory automatic action-specific readback verification. After a verified write, do not issue a redundant live read; treat previously stored observations for the affected target as invalidated and request a fresh bounded ascet_get result when structure is needed again.",
 		],
 		fewShots: [
 			'set_element_dependency: ascet_edit({action:"set_element_dependency",targetPath:"F/C",elementName:"K",dependency:"dependent",variantPolicy:"default"})',

@@ -1,72 +1,73 @@
-﻿{
-    "id":  "AscetCreateFolder",
-    "family":  "write",
-    "summary":  "Create a folder path and any missing parent folders",
-    "usage":  "\u003cfolder-path\u003e [--verify-readback] [--json]",
-    "execution":  {
-                      "kind":  "unified_cli",
-                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                      "subcommand":  "exec",
-                      "operation":  "create_folder"
-                  },
-    "supportsJson":  true,
-    "defaultOutputMode":  "json",
-    "risk":  "write",
-    "requiresSerialLiveAccess":  true,
-    "objectKinds":  [
-                        "generic"
-                    ],
-    "args":  [
-                 {
-                     "name":  "folder-path",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: folder-path"
-                 },
-                 {
-                     "name":  "--verify-readback",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --verify-readback"
-                 },
-                 {
-                     "name":  "--json",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --json"
-                 }
-             ],
-    "preconditions":  [
-                          "ASCET ToolAPI session must be available.",
-                          "Live ASCET access must run through the serial executor."
-                      ],
-    "failureModes":  [
-                         "toolapi_unavailable",
-                         "target_not_found",
-                         "write_failed"
-                     ],
-    "examples":  [
-                     {
-                         "description":  "Basic usage",
-                         "command":  "AscetCli.exe exec create_folder \u003cfolder-path\u003e [--verify-readback] [--json]"
-                     }
-                 ],
-    "pitfalls":  [
-                     "Live ASCET ToolAPI access is serial-only.",
-                     "Run readback and verify after successful writes."
-                 ],
-    "operation":  "create_folder",
-    "lane":  "serial_write",
-    "hostEligible":  false,
-    "supportsBatch":  true,
-    "executionProfile":  {
-                             "hostSafety":  "write",
-                             "hostPolicy":  "force_one_shot",
-                             "timeoutClass":  "write"
-                         },
-    "hiddenFromModel":  false
+{
+  "id": "AscetCreateFolder",
+  "family": "write",
+  "summary": "Create a folder path and any missing parent folders",
+  "usage": "<folder-path> [--verify-readback] [--json]",
+  "execution": {
+    "kind": "bridge",
+    "protocolVersion": 1,
+    "subcommand": "exec",
+    "operation": "create_folder",
+    "sessionPolicy": "fresh_session",
+    "transportPolicy": "one_shot_only"
+  },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "write",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": [
+    "generic"
+  ],
+  "args": [
+    {
+      "name": "folder-path",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: folder-path"
+    },
+    {
+      "name": "--verify-readback",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --verify-readback"
+    },
+    {
+      "name": "--json",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --json"
+    }
+  ],
+  "preconditions": [
+    "ASCET ToolAPI session must be available.",
+    "Live ASCET access must run through the serial executor."
+  ],
+  "failureModes": [
+    "toolapi_unavailable",
+    "target_not_found",
+    "write_failed"
+  ],
+  "examples": [
+    {
+      "description": "Basic usage",
+      "command": "AscetBridge.exe exec create_folder <folder-path> [--verify-readback] [--json]"
+    }
+  ],
+  "pitfalls": [
+    "Live ASCET ToolAPI access is serial-only.",
+    "Run readback and verify after successful writes."
+  ],
+  "operation": "create_folder",
+  "lane": "serial_write",
+  "hostEligible": false,
+  "supportsBatch": true,
+  "executionProfile": {
+    "hostSafety": "write",
+    "hostPolicy": "force_one_shot",
+    "timeoutClass": "write"
+  },
+  "hiddenFromModel": false
 }
-

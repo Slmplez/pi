@@ -12,7 +12,7 @@ function makeResult(data: unknown): AscetCliJsonResult {
 		data,
 		request: {
 			cwd: process.cwd(),
-			cliPath: "AscetCli.exe",
+			cliPath: "AscetBridge.exe",
 			args: ["exec", "read_block_diagram", "DEMO\\Controller", "Main", "--json"],
 		},
 		stdout: JSON.stringify(data),
@@ -28,7 +28,7 @@ function makeFailureResult(): AscetCliJsonResult {
 		data: null,
 		request: {
 			cwd: process.cwd(),
-			cliPath: "AscetCli.exe",
+			cliPath: "AscetBridge.exe",
 			args: ["exec", "read_block_diagram", "DEMO\\Controller", "Main", "--json"],
 		},
 		stdout: '{"ok":false}',

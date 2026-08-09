@@ -8,7 +8,7 @@ import { runAscetDiffMethodCode } from "./diff-method-code.ts";
 describe("diff_method local fallback", () => {
 	test("falls back to two successful method reads when the diff backend fails", async () => {
 		const cwd = mkdtempSync(join(tmpdir(), "pi-ascet-diff-fallback-"));
-		const cliPath = join(cwd, "AscetCli.exe");
+		const cliPath = join(cwd, "AscetBridge.exe");
 		const contractsPath = join(cwd, "contracts");
 		mkdirSync(contractsPath, { recursive: true });
 		writeFileSync(cliPath, "", "utf8");
@@ -21,7 +21,7 @@ describe("diff_method local fallback", () => {
 				},
 				{
 					cwd,
-					env: { ASCET_CLI_PATH: cliPath, ASCET_CONTRACTS_PATH: contractsPath },
+					env: { ASCET_BRIDGE_PATH: cliPath, ASCET_CONTRACTS_PATH: contractsPath },
 					executeCli: async (request) => {
 						const operation = request.args[1];
 						if (operation === "diff_method_code") {

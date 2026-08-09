@@ -1,97 +1,98 @@
-﻿{
-    "id":  "AscetApplyProjectFormula",
-    "family":  "write",
-    "summary":  "Apply project formula spec",
-    "usage":  "\u003cproject-path\u003e \u003cspec-file\u003e [--mode restore] [--delete-missing] [--verify-readback] [--json]",
-    "execution":  {
-                      "kind":  "unified_cli",
-                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                      "subcommand":  "exec",
-                      "operation":  "apply_project_formula"
-                  },
-    "supportsJson":  true,
-    "defaultOutputMode":  "json",
-    "risk":  "write",
-    "requiresSerialLiveAccess":  false,
-    "objectKinds":  [
-                        "project"
-                    ],
-    "args":  [
-                 {
-                     "name":  "project-path",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: project-path"
-                 },
-                 {
-                     "name":  "spec-file",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: spec-file"
-                 },
-                 {
-                     "name":  "--mode",
-                     "kind":  "option",
-                     "type":  "enum",
-                     "required":  false,
-                     "description":  "Option value for --mode",
-                     "enumValues":  [
-                                        "restore"
-                                    ]
-                 },
-                 {
-                     "name":  "--delete-missing",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --delete-missing"
-                 },
-                 {
-                     "name":  "--verify-readback",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --verify-readback"
-                 },
-                 {
-                     "name":  "--json",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --json"
-                 }
-             ],
-    "preconditions":  [
-                          "ASCET ToolAPI session must be available.",
-                          "Live ASCET access must run through the serial executor.",
-                          "Target project path must resolve in the live ASCET workspace."
-                      ],
-    "failureModes":  [
-                         "toolapi_unavailable",
-                         "target_not_found",
-                         "write_failed"
-                     ],
-    "examples":  [
-                     {
-                         "description":  "Basic usage",
-                         "command":  "AscetCli.exe exec apply_project_formula \u003cproject-path\u003e \u003cspec-file\u003e [--mode restore] [--delete-missing] [--verify-readback] [--json]"
-                     }
-                 ],
-    "pitfalls":  [
-                     "Live ASCET ToolAPI access is serial-only.",
-                     "Run readback and verify after successful writes."
-                 ],
-    "operation":  "apply_project_formula",
-    "lane":  "serial_write",
-    "hostEligible":  false,
-    "supportsBatch":  true,
-    "executionProfile":  {
-                             "hostSafety":  "write",
-                             "hostPolicy":  "force_one_shot",
-                             "timeoutClass":  "write"
-                         },
-    "hiddenFromModel":  false
+{
+  "id": "AscetApplyProjectFormula",
+  "family": "write",
+  "summary": "Apply project formula spec",
+  "usage": "<project-path> <spec-file> [--mode restore] [--delete-missing] [--verify-readback] [--json]",
+  "execution": {
+    "kind": "bridge",
+    "protocolVersion": 1,
+    "subcommand": "exec",
+    "operation": "apply_project_formula",
+    "sessionPolicy": "fresh_session",
+    "transportPolicy": "one_shot_only"
+  },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "write",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": [
+    "project"
+  ],
+  "args": [
+    {
+      "name": "project-path",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: project-path"
+    },
+    {
+      "name": "spec-file",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: spec-file"
+    },
+    {
+      "name": "--mode",
+      "kind": "option",
+      "type": "enum",
+      "required": false,
+      "description": "Option value for --mode",
+      "enumValues": [
+        "restore"
+      ]
+    },
+    {
+      "name": "--delete-missing",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --delete-missing"
+    },
+    {
+      "name": "--verify-readback",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --verify-readback"
+    },
+    {
+      "name": "--json",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --json"
+    }
+  ],
+  "preconditions": [
+    "ASCET ToolAPI session must be available.",
+    "Live ASCET access must run through the serial executor.",
+    "Target project path must resolve in the live ASCET workspace."
+  ],
+  "failureModes": [
+    "toolapi_unavailable",
+    "target_not_found",
+    "write_failed"
+  ],
+  "examples": [
+    {
+      "description": "Basic usage",
+      "command": "AscetBridge.exe exec apply_project_formula <project-path> <spec-file> [--mode restore] [--delete-missing] [--verify-readback] [--json]"
+    }
+  ],
+  "pitfalls": [
+    "Live ASCET ToolAPI access is serial-only.",
+    "Run readback and verify after successful writes."
+  ],
+  "operation": "apply_project_formula",
+  "lane": "serial_write",
+  "hostEligible": false,
+  "supportsBatch": true,
+  "executionProfile": {
+    "hostSafety": "write",
+    "hostPolicy": "force_one_shot",
+    "timeoutClass": "write"
+  },
+  "hiddenFromModel": false
 }
-

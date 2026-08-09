@@ -11,7 +11,7 @@ describe("ASCET coding policy", () => {
 		assert.doesNotMatch(policyPrompt, /ascet-implementation/);
 		assert.match(policyPrompt, /ascet_edit/);
 		assert.doesNotMatch(policyPrompt, /ascet_write/);
-		assert.match(policyPrompt, /ascet_verify/);
+		assert.doesNotMatch(policyPrompt, /ascet_verify/);
 	});
 
 	test("requires design-first implementation output and dependency evidence", () => {

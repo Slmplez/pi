@@ -2,8 +2,15 @@ import { appendFileSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { getAscetArtifactRoot } from "../observation-store.ts";
 import type { RunAscetEditOperationOptions } from "./common.ts";
+import type { AscetEditMutationStatus, AscetEditVerificationStatus } from "./verification.ts";
 
-export type AscetWriteTelemetryOutcome = "plan_ready" | "committed" | "blocked" | "error";
+export type AscetWriteTelemetryOutcome =
+	| "plan_ready"
+	| "committed"
+	| "committed_unverified"
+	| "outcome_unknown"
+	| "blocked"
+	| "error";
 
 export interface AscetWriteTelemetryEvent {
 	operation: string;
@@ -12,6 +19,8 @@ export interface AscetWriteTelemetryEvent {
 	durationMs: number;
 	errorCode?: string;
 	planId?: string;
+	verificationStatus?: AscetEditVerificationStatus;
+	mutationStatus?: AscetEditMutationStatus;
 }
 
 export function recordAscetWriteTelemetry(

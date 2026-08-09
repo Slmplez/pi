@@ -1,58 +1,60 @@
-﻿{
-    "id":  "AscetBatchApplyProjectFormula",
-    "family":  "write",
-    "summary":  "Batch apply project formula specs to multiple projects in a single ToolAPI session",
-    "usage":  "[--json] \u003c requests.json",
-    "execution":  {
-                      "kind":  "unified_cli",
-                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                      "subcommand":  "batch",
-                      "operation":  "apply_project_formula"
-                  },
-    "supportsJson":  true,
-    "defaultOutputMode":  "json",
-    "risk":  "write",
-    "requiresSerialLiveAccess":  false,
-    "objectKinds":  [
-                        "project"
-                    ],
-    "args":  [
-                 {
-                     "name":  "--json",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --json"
-                 }
-             ],
-    "preconditions":  [
-                          "ASCET ToolAPI session must be available.",
-                          "Live ASCET access must run through the serial executor.",
-                          "Target project path must resolve in the live ASCET workspace."
-                      ],
-    "failureModes":  [
-                         "toolapi_unavailable",
-                         "target_not_found",
-                         "write_failed"
-                     ],
-    "examples":  [
-                     {
-                         "description":  "Basic usage",
-                         "command":  "AscetCli.exe batch apply_project_formula [--json] \u003c requests.json"
-                     }
-                 ],
-    "pitfalls":  [
-                     "Live ASCET ToolAPI access is serial-only.",
-                     "Run readback and verify after successful writes."
-                 ],
-    "operation":  "batch_set_project_formula",
-    "lane":  "serial_write",
-    "hostEligible":  false,
-    "supportsBatch":  true,
-    "executionProfile":  {
-                             "hostSafety":  "write",
-                             "hostPolicy":  "force_one_shot",
-                             "timeoutClass":  "write"
-                         },
-    "hiddenFromModel":  false
+{
+  "id": "AscetBatchApplyProjectFormula",
+  "family": "write",
+  "summary": "Batch apply project formula specs to multiple projects in a single ToolAPI session",
+  "usage": "[--json] < requests.json",
+  "execution": {
+    "kind": "bridge",
+    "protocolVersion": 1,
+    "subcommand": "batch",
+    "operation": "apply_project_formula",
+    "sessionPolicy": "fresh_session",
+    "transportPolicy": "one_shot_only"
+  },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "write",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": [
+    "project"
+  ],
+  "args": [
+    {
+      "name": "--json",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --json"
+    }
+  ],
+  "preconditions": [
+    "ASCET ToolAPI session must be available.",
+    "Live ASCET access must run through the serial executor.",
+    "Target project path must resolve in the live ASCET workspace."
+  ],
+  "failureModes": [
+    "toolapi_unavailable",
+    "target_not_found",
+    "write_failed"
+  ],
+  "examples": [
+    {
+      "description": "Basic usage",
+      "command": "AscetBridge.exe batch apply_project_formula [--json] < requests.json"
+    }
+  ],
+  "pitfalls": [
+    "Live ASCET ToolAPI access is serial-only.",
+    "Run readback and verify after successful writes."
+  ],
+  "operation": "batch_set_project_formula",
+  "lane": "serial_write",
+  "hostEligible": false,
+  "supportsBatch": true,
+  "executionProfile": {
+    "hostSafety": "write",
+    "hostPolicy": "force_one_shot",
+    "timeoutClass": "write"
+  },
+  "hiddenFromModel": false
 }

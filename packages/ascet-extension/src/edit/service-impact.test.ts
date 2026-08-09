@@ -17,12 +17,12 @@ function createEnvironment(): { root: string; env: Record<string, string | undef
 	const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-observation-"));
 	const contractsRoot = join(root, "contracts");
 	mkdirSync(contractsRoot, { recursive: true });
-	writeFileSync(join(root, "AscetCli.exe"), "", "utf8");
+	writeFileSync(join(root, "AscetBridge.exe"), "", "utf8");
 	writeFileSync(join(contractsRoot, "cli-catalog.json"), "{}", "utf8");
 	return {
 		root,
 		env: {
-			ASCET_CLI_PATH: join(root, "AscetCli.exe"),
+			ASCET_BRIDGE_PATH: join(root, "AscetBridge.exe"),
 			ASCET_CONTRACTS_PATH: contractsRoot,
 			PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts"),
 		},
@@ -35,7 +35,14 @@ function createExecution(request: AscetCliRequest, ok: boolean): AscetCliExecuti
 		exitCode: ok ? 0 : 1,
 		stdout: JSON.stringify({
 			ok,
-			result: ok ? { componentPath: "DEMO\\Controller", writeSucceeded: true } : null,
+			result: ok
+				? {
+						componentPath: "DEMO\\Controller",
+						writeSucceeded: true,
+						verifyReadbackRequested: true,
+						readbackVerified: true,
+					}
+				: null,
 			error: ok ? null : { code: "ascet_edit_failed", message: "write failed" },
 			meta: { mode: "exec", operation: request.args[1] },
 		}),
@@ -71,26 +78,34 @@ describe("ASCET edit observation invalidation", () => {
 				{
 					cwd: environment.root,
 					env: environment.env,
-					executeCli: async (request) => createExecution(request, true),
+					executeCli: async (request) => {
+						assert.equal(request.args.includes("--verify-readback"), true);
+						return createExecution(request, true);
+					},
 				},
 				approvingContext,
 			);
 			assert.equal(result.details.outcome.status, "ok");
 			assert.deepEqual(result.details.observations, { invalidated: ["obs-success"] });
 			if (result.details.outcome.status === "ok") {
-				assert.deepEqual(
-					(result.details.outcome.data as { observations: { invalidated: string[] } }).observations,
-					{
-						invalidated: ["obs-success"],
-					},
-				);
+				const data = result.details.outcome.data as {
+					verification: { status: string };
+					observations: { invalidated: string[] };
+				};
+				assert.equal(result.details.outcome.verified, true);
+				assert.equal(data.verification.status, "passed");
+				assert.deepEqual(data.observations, { invalidated: ["obs-success"] });
 			}
+			const content = JSON.parse(result.content[0]?.text ?? "{}") as {
+				verification?: { status?: string };
+			};
+			assert.equal(content.verification?.status, "passed");
 		} finally {
 			environment.cleanup();
 		}
 	});
 
-	test("does not invalidate observations for failed or dry-run writes", async () => {
+	test("invalidates observations for unknown failed writes but not dry-run plans", async () => {
 		const environment = createEnvironment();
 		try {
 			createStoredObservation(environment.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT ?? "", "obs-unchanged");
@@ -109,7 +124,8 @@ describe("ASCET edit observation invalidation", () => {
 				},
 				approvingContext,
 			);
-			assert.equal(failed.details.outcome.status, "error");
+			assert.equal(failed.details.outcome.status, "partial");
+			assert.deepEqual(failed.details.observations, { invalidated: ["obs-unchanged"] });
 
 			const dryRun = await runAscetEdit(
 				{
@@ -135,7 +151,45 @@ describe("ASCET edit observation invalidation", () => {
 			const stillStored = new AscetObservationStore({
 				root: environment.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT,
 			}).invalidate({ componentPath: "DEMO\\Controller" });
-			assert.deepEqual(stillStored, ["obs-unchanged"]);
+			assert.deepEqual(stillStored, []);
+		} finally {
+			environment.cleanup();
+		}
+	});
+	test("does not invalidate observations when the write explicitly did not start", async () => {
+		const environment = createEnvironment();
+		try {
+			createStoredObservation(environment.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT ?? "", "obs-not-started");
+			const result = await runAscetEdit(
+				{
+					action: "set_method_code",
+					componentPath: "DEMO/Controller",
+					methodName: "Main",
+					code: "return;",
+					executeWrite: true,
+				},
+				{
+					cwd: environment.root,
+					env: environment.env,
+					executeCli: async (request) => ({
+						exitCode: 1,
+						stdout: JSON.stringify({
+							ok: false,
+							result: null,
+							error: { code: "write_not_started", message: "write did not start" },
+						}),
+						stderr: "write did not start",
+						timedOut: false,
+						request,
+					}),
+				},
+				approvingContext,
+			);
+			assert.equal(result.details.outcome.status, "error");
+			const stillStored = new AscetObservationStore({
+				root: environment.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT,
+			}).invalidate({ componentPath: "DEMO\\Controller" });
+			assert.deepEqual(stillStored, ["obs-not-started"]);
 		} finally {
 			environment.cleanup();
 		}

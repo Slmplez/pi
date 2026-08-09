@@ -17,12 +17,12 @@ function createEnvironment(): { root: string; env: Record<string, string | undef
 	const root = mkdtempSync(join(tmpdir(), "pi-ascet-batch-observation-"));
 	const contractsRoot = join(root, "contracts");
 	mkdirSync(contractsRoot, { recursive: true });
-	writeFileSync(join(root, "AscetCli.exe"), "", "utf8");
+	writeFileSync(join(root, "AscetBridge.exe"), "", "utf8");
 	writeFileSync(join(contractsRoot, "cli-catalog.json"), "{}", "utf8");
 	return {
 		root,
 		env: {
-			ASCET_CLI_PATH: join(root, "AscetCli.exe"),
+			ASCET_BRIDGE_PATH: join(root, "AscetBridge.exe"),
 			ASCET_CONTRACTS_PATH: contractsRoot,
 			PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts"),
 		},

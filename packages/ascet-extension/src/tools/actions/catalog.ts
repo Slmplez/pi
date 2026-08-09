@@ -8,10 +8,9 @@ import { ascetRecoverParameters } from "../recover/schema.ts";
 import { ascetRequirementsParameters } from "../requirements/schema.ts";
 import { ascetSchedulerStatusParameters } from "../scheduler-status/schema.ts";
 import { ascetStatusParameters } from "../status/schema.ts";
-import { ascetVerifyParameters } from "../verify.ts";
 import { type AscetActionDescriptor, listActionDescriptors } from "./descriptors.ts";
 
-export type AscetActionFamily = "ops" | "get" | "read" | "diff" | "write" | "verify";
+export type AscetActionFamily = "ops" | "get" | "read" | "diff" | "write";
 export type AscetActionRisk = "read" | "diff" | "write" | "ops";
 
 export interface AscetActionCatalogEntry {
@@ -132,8 +131,8 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 	},
 	"ascet_edit.set_method_code": {
 		aliases: ["write method code", "set method body", "update method code", "modify code"],
-		nextActions: ["ascet_verify.readback", "ascet_read.read_code"],
-		result: { shape: "writePreflightOrResult", fields: ["status", "component", "name", "diff"] },
+		nextActions: ["ascet_read.read_code"],
+		result: { shape: "writePreflightOrResult", fields: ["status", "changed", "verification", "observations"] },
 	},
 	"ascet_edit.set_element_dependency": {
 		compact:
@@ -165,7 +164,6 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 				"match",
 				"dryRun",
 				"backupDir",
-				"verifyReadback",
 				"executeWrite",
 			],
 			enums: {
@@ -177,12 +175,8 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 		},
 		result: {
 			shape: "writeResult",
-			fields: ["changed", "readback", "observations.invalidated"],
+			fields: ["changed", "verification", "observations.invalidated"],
 		},
-	},
-	"ascet_verify.readback": {
-		aliases: ["verify write result", "readback", "verify current state", "check live state"],
-		result: { shape: "readback", fields: ["component", "kind", "items"] },
 	},
 };
 
@@ -218,9 +212,6 @@ const actionParameterSchemas: Readonly<Record<string, unknown>> = {
 	get ascet_status() {
 		return ascetStatusParameters;
 	},
-	get ascet_verify() {
-		return ascetVerifyParameters;
-	},
 };
 
 function resolveFamily(tool: string): AscetActionFamily {
@@ -235,9 +226,6 @@ function resolveFamily(tool: string): AscetActionFamily {
 	}
 	if (tool === "ascet_edit" || tool === "ascet_batch_write") {
 		return "write";
-	}
-	if (tool === "ascet_verify") {
-		return "verify";
 	}
 	return "ops";
 }
@@ -380,7 +368,7 @@ function inferResult(descriptor: AscetActionDescriptor): AscetActionCatalogEntry
 		return { shape: "liveRead", fields: ["component", "items"] };
 	}
 	if (descriptor.tool === "ascet_edit") {
-		return { shape: "writePreflightOrResult", fields: ["status", "component", "diff"] };
+		return { shape: "writePreflightOrResult", fields: ["status", "changed", "verification", "observations"] };
 	}
 	if (descriptor.tool === "ascet_diff") {
 		return { shape: "diff", fields: ["left", "right", "items"] };

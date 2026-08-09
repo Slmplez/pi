@@ -6,7 +6,10 @@ import { type PiAscetRuntimePathOptions, resolvePiAscetLockPath } from "./paths.
 
 export interface AscetCliLockFile {
 	token: string;
+	ownerToken: string;
 	pid: number;
+	ownerNodePid: number;
+	bridgePid: number | null;
 	agentId: string;
 	commandId: string;
 	toolName: string;
@@ -18,6 +21,7 @@ export interface AscetCliLockFile {
 export interface AscetCliLock {
 	path: string;
 	token: string;
+	setBridgePid(pid: number): Promise<void>;
 	release(): Promise<void>;
 }
 
@@ -165,7 +169,10 @@ export async function acquireAscetCliLock(
 		const timestamp = new Date(now()).toISOString();
 		const lockFile: AscetCliLockFile = {
 			token,
+			ownerToken: token,
 			pid,
+			ownerNodePid: pid,
+			bridgePid: null,
 			agentId: metadata.agentId,
 			commandId: metadata.commandId,
 			toolName: metadata.toolName,
@@ -181,7 +188,7 @@ export async function acquireAscetCliLock(
 				await handle.sync();
 				await handle.utimes(new Date(now()), new Date(now()));
 				throwIfAborted(options.signal);
-				return createHeldLock(lockPath, token, handle, options);
+				return createHeldLock(lockPath, token, lockFile, handle, options);
 			} catch (error) {
 				await handle.close();
 				await rm(lockPath, { force: true });
@@ -242,7 +249,8 @@ export function formatAscetCliLockStatus(snapshot: AscetCliLockSnapshot): string
 	}
 	return [
 		"CLI Lock:",
-		`  ownerPid: ${snapshot.owner.pid}`,
+		`  ownerNodePid: ${snapshot.owner.ownerNodePid}`,
+		`  bridgePid: ${snapshot.owner.bridgePid ?? "pending"}`,
 		`  command: ${snapshot.owner.toolName}/${snapshot.owner.commandId}`,
 		`  process: ${snapshot.owner.processName}`,
 		`  agent: ${snapshot.owner.agentId}`,
@@ -299,6 +307,7 @@ async function inspectAscetCliLock(options: AscetCliLockSnapshotOptions): Promis
 async function createHeldLock(
 	lockPath: string,
 	token: string,
+	lockFile: AscetCliLockFile,
 	handle: FileHandle,
 	options: AscetCliLockOptions,
 ): Promise<AscetCliLock> {
@@ -323,6 +332,21 @@ async function createHeldLock(
 	return {
 		path: lockPath,
 		token,
+		async setBridgePid(pid: number): Promise<void> {
+			if (released) {
+				throw new Error("Cannot update a released ASCET Bridge lock.");
+			}
+			if (!Number.isInteger(pid) || pid <= 0) {
+				throw new Error(`Invalid ASCET Bridge PID: ${pid}.`);
+			}
+			lockFile.bridgePid = pid;
+			lockFile.heartbeatAt = new Date(now()).toISOString();
+			await handle.truncate(0);
+			await handle.write(JSON.stringify(lockFile), 0, "utf8");
+			await handle.sync();
+			const timestamp = new Date(now());
+			await handle.utimes(timestamp, timestamp);
+		},
 		async release(): Promise<void> {
 			if (released) {
 				return;
@@ -410,7 +434,10 @@ function parseLockFile(raw: string): LockFileContents {
 function isValidLockFile(value: Partial<AscetCliLockFile>): value is AscetCliLockFile {
 	return (
 		typeof value.token === "string" &&
+		typeof value.ownerToken === "string" &&
 		typeof value.pid === "number" &&
+		typeof value.ownerNodePid === "number" &&
+		(value.bridgePid === null || typeof value.bridgePid === "number") &&
 		typeof value.agentId === "string" &&
 		typeof value.commandId === "string" &&
 		typeof value.toolName === "string" &&

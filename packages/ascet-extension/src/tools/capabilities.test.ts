@@ -101,6 +101,18 @@ describe("runAscetCapabilities", () => {
 		});
 	});
 
+	test("search_actions does not return the retired ascet_verify action", () => {
+		withTempCwd((cwd) => {
+			const result = runAscetCapabilities(
+				{ action: "search_actions", tool: "ascet_verify", name: "readback", limit: 5 },
+				{ cwd, env: {} },
+			);
+
+			assert.equal(result.actionSearch?.total, 0);
+			assert.deepEqual(result.actionSearch?.items, []);
+		});
+	});
+
 	test("search_actions returns public Get actions without a retired discovery tool", () => {
 		withTempCwd((cwd) => {
 			const result = runAscetCapabilities(

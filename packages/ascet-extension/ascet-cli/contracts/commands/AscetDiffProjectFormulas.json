@@ -1,77 +1,76 @@
-﻿{
-    "id":  "AscetDiffProjectFormulas",
-    "family":  "diff",
-    "summary":  "Diff project formula spec",
-    "usage":  "\u003cleft-project-path\u003e \u003cright-project-path\u003e [--json] [--changes-only]",
-    "execution":  {
-                      "kind":  "unified_cli",
-                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                      "subcommand":  "exec",
-                      "operation":  "diff_project_formulas"
-                  },
-    "supportsJson":  true,
-    "defaultOutputMode":  "json",
-    "risk":  "diff",
-    "requiresSerialLiveAccess":  false,
-    "objectKinds":  [
-                        "project"
-                    ],
-    "args":  [
-                 {
-                     "name":  "left-project-path",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: left-project-path"
-                 },
-                 {
-                     "name":  "right-project-path",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: right-project-path"
-                 },
-                 {
-                     "name":  "--json",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --json"
-                 },
-                 {
-                     "name":  "--changes-only",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --changes-only"
-                 }
-             ],
-    "preconditions":  [
-                          "ASCET ToolAPI session must be available.",
-                          "Target project path must resolve in the live ASCET workspace."
-                      ],
-    "failureModes":  [
-                         "toolapi_unavailable",
-                         "target_not_found"
-                     ],
-    "examples":  [
-                     {
-                         "description":  "Basic usage",
-                         "command":  "AscetCli.exe exec diff_project_formulas \u003cleft-project-path\u003e \u003cright-project-path\u003e [--json] [--changes-only]"
-                     }
-                 ],
-    "pitfalls":  [
-
-                 ],
-    "operation":  "diff_project_formulas",
-    "lane":  "legacy_read",
-    "hostEligible":  false,
-    "supportsBatch":  false,
-    "executionProfile":  {
-                             "hostSafety":  "fragile",
-                             "hostPolicy":  "force_one_shot",
-                             "timeoutClass":  "diff"
-                         },
-    "hiddenFromModel":  false
+{
+  "id": "AscetDiffProjectFormulas",
+  "family": "diff",
+  "summary": "Diff project formula spec",
+  "usage": "<left-project-path> <right-project-path> [--json] [--changes-only]",
+  "execution": {
+    "kind": "bridge",
+    "protocolVersion": 1,
+    "subcommand": "exec",
+    "operation": "diff_project_formulas",
+    "sessionPolicy": "fresh_session",
+    "transportPolicy": "one_shot_only"
+  },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "diff",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": [
+    "project"
+  ],
+  "args": [
+    {
+      "name": "left-project-path",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: left-project-path"
+    },
+    {
+      "name": "right-project-path",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: right-project-path"
+    },
+    {
+      "name": "--json",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --json"
+    },
+    {
+      "name": "--changes-only",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --changes-only"
+    }
+  ],
+  "preconditions": [
+    "ASCET ToolAPI session must be available.",
+    "Target project path must resolve in the live ASCET workspace."
+  ],
+  "failureModes": [
+    "toolapi_unavailable",
+    "target_not_found"
+  ],
+  "examples": [
+    {
+      "description": "Basic usage",
+      "command": "AscetBridge.exe exec diff_project_formulas <left-project-path> <right-project-path> [--json] [--changes-only]"
+    }
+  ],
+  "pitfalls": [],
+  "operation": "diff_project_formulas",
+  "lane": "legacy_read",
+  "hostEligible": false,
+  "supportsBatch": false,
+  "executionProfile": {
+    "hostSafety": "fragile",
+    "hostPolicy": "force_one_shot",
+    "timeoutClass": "diff"
+  },
+  "hiddenFromModel": false
 }
-

@@ -1,94 +1,95 @@
-﻿{
-    "id":  "AscetSetModuleCode",
-    "family":  "write",
-    "summary":  "Module write entry",
-    "usage":  "\u003cmodule-path\u003e \u003cset-method|set-header|set-external-c-code\u003e \u003cmethod-name?\u003e \u003ccode-file\u003e [--verify-readback] [--json]",
-    "execution":  {
-                      "kind":  "unified_cli",
-                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                      "subcommand":  "exec",
-                      "operation":  "set_module_code"
-                  },
-    "supportsJson":  true,
-    "defaultOutputMode":  "json",
-    "risk":  "write",
-    "requiresSerialLiveAccess":  true,
-    "objectKinds":  [
-                        "module"
-                    ],
-    "args":  [
-                 {
-                     "name":  "module-path",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: module-path"
-                 },
-                 {
-                     "name":  "set-method|set-header|set-external-c-code",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: set-method|set-header|set-external-c-code"
-                 },
-                 {
-                     "name":  "method-name",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  false,
-                     "description":  "Positional argument: method-name"
-                 },
-                 {
-                     "name":  "code-file",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: code-file"
-                 },
-                 {
-                     "name":  "--verify-readback",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --verify-readback"
-                 },
-                 {
-                     "name":  "--json",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --json"
-                 }
-             ],
-    "preconditions":  [
-                          "ASCET ToolAPI session must be available.",
-                          "Live ASCET access must run through the serial executor.",
-                          "Target ASCET path must resolve to the expected object kind."
-                      ],
-    "failureModes":  [
-                         "toolapi_unavailable",
-                         "target_not_found",
-                         "write_failed"
-                     ],
-    "examples":  [
-                     {
-                         "description":  "Basic usage",
-                         "command":  "AscetCli.exe exec set_module_code \u003cmodule-path\u003e \u003cset-method|set-header|set-external-c-code\u003e \u003cmethod-name?\u003e \u003ccode-file\u003e [--verify-readback] [--json]"
-                     }
-                 ],
-    "pitfalls":  [
-                     "Live ASCET ToolAPI access is serial-only.",
-                     "Run readback and verify after successful writes."
-                 ],
-    "operation":  "set_module_code",
-    "lane":  "serial_write",
-    "hostEligible":  false,
-    "supportsBatch":  false,
-    "executionProfile":  {
-                             "hostSafety":  "write",
-                             "hostPolicy":  "force_one_shot",
-                             "timeoutClass":  "write"
-                         },
-    "hiddenFromModel":  false
+{
+  "id": "AscetSetModuleCode",
+  "family": "write",
+  "summary": "Module write entry",
+  "usage": "<module-path> <set-method|set-header|set-external-c-code> <method-name?> <code-file> [--verify-readback] [--json]",
+  "execution": {
+    "kind": "bridge",
+    "protocolVersion": 1,
+    "subcommand": "exec",
+    "operation": "set_module_code",
+    "sessionPolicy": "fresh_session",
+    "transportPolicy": "one_shot_only"
+  },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "write",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": [
+    "module"
+  ],
+  "args": [
+    {
+      "name": "module-path",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: module-path"
+    },
+    {
+      "name": "set-method|set-header|set-external-c-code",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: set-method|set-header|set-external-c-code"
+    },
+    {
+      "name": "method-name",
+      "kind": "positional",
+      "type": "string",
+      "required": false,
+      "description": "Positional argument: method-name"
+    },
+    {
+      "name": "code-file",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: code-file"
+    },
+    {
+      "name": "--verify-readback",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --verify-readback"
+    },
+    {
+      "name": "--json",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --json"
+    }
+  ],
+  "preconditions": [
+    "ASCET ToolAPI session must be available.",
+    "Live ASCET access must run through the serial executor.",
+    "Target ASCET path must resolve to the expected object kind."
+  ],
+  "failureModes": [
+    "toolapi_unavailable",
+    "target_not_found",
+    "write_failed"
+  ],
+  "examples": [
+    {
+      "description": "Basic usage",
+      "command": "AscetBridge.exe exec set_module_code <module-path> <set-method|set-header|set-external-c-code> <method-name?> <code-file> [--verify-readback] [--json]"
+    }
+  ],
+  "pitfalls": [
+    "Live ASCET ToolAPI access is serial-only.",
+    "Run readback and verify after successful writes."
+  ],
+  "operation": "set_module_code",
+  "lane": "serial_write",
+  "hostEligible": false,
+  "supportsBatch": false,
+  "executionProfile": {
+    "hostSafety": "write",
+    "hostPolicy": "force_one_shot",
+    "timeoutClass": "write"
+  },
+  "hiddenFromModel": false
 }
-

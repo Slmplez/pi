@@ -1,4 +1,4 @@
-﻿{
+{
     "family":  "write",
     "summary":  "Create, delete, set, or apply live ASCET changes with explicit post-write readback confirmation safeguards.",
     "recommendedTools":  [

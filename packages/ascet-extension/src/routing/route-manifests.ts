@@ -415,13 +415,6 @@ export const ascetRouteManifestEntries = [
 	},
 
 	{
-		toolName: "ascet_verify",
-		action: "readback",
-		logicalCommandId: "AscetReadComponentSummary",
-		operation: "read_component_summary",
-		category: "domain",
-	},
-	{
 		toolName: "ascet_scheduler_status",
 		action: "status",
 		logicalCommandId: "PiAscetSchedulerStatus",

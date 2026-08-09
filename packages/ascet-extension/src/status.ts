@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+﻿import { existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -28,7 +28,7 @@ export interface AscetStatusReport {
 	summary: string;
 }
 
-const ASCET_CLI_PATH_ENV_VAR = "ASCET_CLI_PATH";
+const ASCET_BRIDGE_PATH_ENV_VAR = "ASCET_BRIDGE_PATH";
 const ASCET_CONTRACTS_PATH_ENV_VAR = "ASCET_CONTRACTS_PATH";
 const defaultExtensionRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -37,16 +37,23 @@ function normalizeOverridePath(value: string | undefined, cwd: string): string |
 	return trimmed ? resolve(cwd, trimmed) : undefined;
 }
 
+function resolveSourceAscetCliRoot(root: string): string | undefined {
+	for (const relativePath of ["ascetcli", "src/ascetcli"]) {
+		const candidate = resolve(root, relativePath);
+		if (existsSync(resolve(candidate, "contracts/cli-catalog.json"))) {
+			return candidate;
+		}
+	}
+	return undefined;
+}
+
 function resolveSourceAscetAgentRoot(cwd: string): string | undefined {
 	const resolvedCwd = resolve(cwd);
-	if (existsSync(resolve(resolvedCwd, "src/ascetcli/contracts/cli-catalog.json"))) {
+	if (resolveSourceAscetCliRoot(resolvedCwd)) {
 		return resolvedCwd;
 	}
 	const parentRoot = resolve(resolvedCwd, "..");
-	if (existsSync(resolve(parentRoot, "src/ascetcli/contracts/cli-catalog.json"))) {
-		return parentRoot;
-	}
-	return undefined;
+	return resolveSourceAscetCliRoot(parentRoot) ? parentRoot : undefined;
 }
 
 export function resolveAscetStatusPaths(options: AscetStatusPathOptions): AscetStatusPaths {
@@ -54,29 +61,29 @@ export function resolveAscetStatusPaths(options: AscetStatusPathOptions): AscetS
 	const env = options.env ?? process.env;
 	const extensionRoot = resolve(options.extensionRoot ?? defaultExtensionRoot);
 	const envContractsRoot = normalizeOverridePath(env[ASCET_CONTRACTS_PATH_ENV_VAR], cwd);
-	const envCliPath = normalizeOverridePath(env[ASCET_CLI_PATH_ENV_VAR], cwd);
+	const envBridgePath = normalizeOverridePath(env[ASCET_BRIDGE_PATH_ENV_VAR], cwd);
 	const bundledContractsRoot = resolve(extensionRoot, "ascet-cli/contracts");
-	const bundledCliPath = resolve(extensionRoot, "ascet-cli/bin/AscetCli.exe");
+	const bundledBridgePath = resolve(extensionRoot, "ascet-cli/bin/AscetBridge.exe");
 	const bundleCatalogExists = existsSync(resolve(bundledContractsRoot, "cli-catalog.json"));
-	const bundleCliExists = existsSync(bundledCliPath);
-	const bundlePresent = bundleCatalogExists || bundleCliExists;
-	const bundleReady = bundleCatalogExists && bundleCliExists;
+	const bundleBridgeExists = existsSync(bundledBridgePath);
+	const bundlePresent = bundleCatalogExists || bundleBridgeExists;
+	const bundleReady = bundleCatalogExists && bundleBridgeExists;
 	const ascetAgentRoot = resolveSourceAscetAgentRoot(cwd);
+	const sourceAscetCliRoot = resolveSourceAscetCliRoot(ascetAgentRoot ?? cwd);
 
-	if (envContractsRoot || envCliPath) {
+	if (envContractsRoot || envBridgePath) {
 		const fallbackContractsRoot =
-			envContractsRoot ??
-			(bundleReady ? bundledContractsRoot : resolve(ascetAgentRoot ?? cwd, "src/ascetcli/contracts"));
-		const fallbackCliPath =
-			envCliPath ??
+			envContractsRoot ?? (bundleReady ? bundledContractsRoot : resolve(sourceAscetCliRoot ?? cwd, "contracts"));
+		const fallbackBridgePath =
+			envBridgePath ??
 			(bundleReady
-				? bundledCliPath
-				: resolve(ascetAgentRoot ?? cwd, "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe"));
+				? bundledBridgePath
+				: resolve(sourceAscetCliRoot ?? cwd, "output/ascet-csharp/bin/AscetBridge.exe"));
 		return {
 			mode: "env",
 			ascetAgentRoot,
 			extensionRoot,
-			cliPath: fallbackCliPath,
+			cliPath: fallbackBridgePath,
 			contractsRoot: fallbackContractsRoot,
 			catalogPath: resolve(fallbackContractsRoot, "cli-catalog.json"),
 		};
@@ -87,7 +94,7 @@ export function resolveAscetStatusPaths(options: AscetStatusPathOptions): AscetS
 			mode: "bundle",
 			ascetAgentRoot,
 			extensionRoot,
-			cliPath: bundledCliPath,
+			cliPath: bundledBridgePath,
 			contractsRoot: bundledContractsRoot,
 			catalogPath: resolve(bundledContractsRoot, "cli-catalog.json"),
 		};
@@ -98,15 +105,15 @@ export function resolveAscetStatusPaths(options: AscetStatusPathOptions): AscetS
 			mode: "bundle",
 			ascetAgentRoot,
 			extensionRoot,
-			cliPath: bundledCliPath,
+			cliPath: bundledBridgePath,
 			contractsRoot: bundledContractsRoot,
 			catalogPath: resolve(bundledContractsRoot, "cli-catalog.json"),
 		};
 	}
 
-	const sourceRoot = ascetAgentRoot ?? resolve(cwd, "..");
-	const contractsRoot = resolve(sourceRoot, "src/ascetcli/contracts");
-	const cliPath = resolve(sourceRoot, "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe");
+	const sourceRoot = sourceAscetCliRoot ?? resolve(cwd, "ascetcli");
+	const contractsRoot = resolve(sourceRoot, "contracts");
+	const cliPath = resolve(sourceRoot, "output/ascet-csharp/bin/AscetBridge.exe");
 
 	return {
 		mode: "source",
@@ -135,7 +142,7 @@ export function createAscetStatusReport(options: AscetStatusPathOptions): AscetS
 		`ASCET mode: ${paths.mode}`,
 		`ASCET extension: ${paths.extensionRoot}`,
 		paths.ascetAgentRoot ? `ASCET source: ${paths.ascetAgentRoot}` : "ASCET source: unresolved",
-		formatCheck("ASCET CLI", checks.cliExists, paths.cliPath),
+		formatCheck("ASCET Bridge", checks.cliExists, paths.cliPath),
 		formatCheck("ASCET contracts", checks.contractsRootExists, paths.contractsRoot),
 		formatCheck("cli-catalog.json", checks.catalogExists, paths.catalogPath),
 	].join("\n");

@@ -1,4 +1,4 @@
-﻿{
+{
   "version": 1,
   "generatedAt": "2026-04-06T00:00:00Z",
   "commands": [
@@ -26,17 +26,19 @@
         ]
       },
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "operation": "apply_element_spec",
       "lane": "serial_write",
       "hostEligible": false,
       "supportsBatch": true,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "apply_element_spec"
+        "operation": "apply_element_spec",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "executionProfile": {
         "hostSafety": "write",
@@ -53,13 +55,15 @@
         "project"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "apply_project_formula"
+        "operation": "apply_project_formula",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "apply_project_formula",
       "lane": "serial_write",
@@ -82,17 +86,19 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "operation": "batch_set_element_spec",
       "lane": "serial_write",
       "hostEligible": false,
       "supportsBatch": true,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "batch",
-        "operation": "apply_element_spec"
+        "operation": "apply_element_spec",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "executionProfile": {
         "hostSafety": "write",
@@ -109,17 +115,19 @@
         "project"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "operation": "batch_set_project_formula",
       "lane": "serial_write",
       "hostEligible": false,
       "supportsBatch": true,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "batch",
-        "operation": "apply_project_formula"
+        "operation": "apply_project_formula",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "executionProfile": {
         "hostSafety": "write",
@@ -138,17 +146,19 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "operation": "batch_create_component",
       "lane": "serial_write",
       "hostEligible": true,
       "supportsBatch": true,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "batch",
-        "operation": "create_component"
+        "operation": "create_component",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "executionProfile": {
         "hostSafety": "write",
@@ -165,17 +175,19 @@
         "generic"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "operation": "batch_create_folder",
       "lane": "serial_write",
       "hostEligible": false,
       "supportsBatch": true,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "batch",
-        "operation": "create_folder"
+        "operation": "create_folder",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "executionProfile": {
         "hostSafety": "write",
@@ -194,17 +206,19 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "operation": "batch_create_method",
       "lane": "serial_write",
       "hostEligible": true,
       "supportsBatch": true,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "batch",
-        "operation": "create_method"
+        "operation": "create_method",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "executionProfile": {
         "hostSafety": "write",
@@ -223,17 +237,19 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "operation": "batch_delete_component",
       "lane": "serial_write",
       "hostEligible": false,
       "supportsBatch": true,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "batch",
-        "operation": "delete_component"
+        "operation": "delete_component",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "executionProfile": {
         "hostSafety": "write",
@@ -250,17 +266,19 @@
         "generic"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "operation": "batch_delete_folder",
       "lane": "serial_write",
       "hostEligible": false,
       "supportsBatch": true,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "batch",
-        "operation": "delete_folder"
+        "operation": "delete_folder",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "executionProfile": {
         "hostSafety": "write",
@@ -279,17 +297,19 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "operation": "batch_delete_method",
       "lane": "serial_write",
       "hostEligible": false,
       "supportsBatch": true,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "batch",
-        "operation": "delete_method"
+        "operation": "delete_method",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "executionProfile": {
         "hostSafety": "write",
@@ -308,13 +328,15 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "batch",
-        "operation": "set_method_code"
+        "operation": "set_method_code",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "batch_set_method_code",
       "lane": "serial_write",
@@ -324,27 +346,6 @@
         "hostSafety": "write",
         "hostPolicy": "prefer_host",
         "timeoutClass": "write"
-      }
-    },
-    {
-      "id": "AscetBenchmark",
-      "family": "ops",
-      "summary": "Invoke benchmark entrypoints through AscetCli.exe",
-      "risk": "diagnostic",
-      "objectKinds": [
-        "generic"
-      ],
-      "supportsJson": true,
-      "requiresSerialLiveAccess": false,
-      "hiddenFromModel": false,
-      "operation": "benchmark",
-      "lane": "diagnostic",
-      "hostEligible": false,
-      "supportsBatch": false,
-      "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-        "subcommand": "benchmark"
       }
     },
     {
@@ -365,10 +366,12 @@
       "hostEligible": true,
       "supportsBatch": true,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "create_component"
+        "operation": "create_component",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "executionProfile": {
         "hostSafety": "write",
@@ -388,10 +391,12 @@
       "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "create_folder"
+        "operation": "create_folder",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "create_folder",
       "lane": "serial_write",
@@ -414,13 +419,15 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "create_method"
+        "operation": "create_method",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "create_method",
       "lane": "serial_write",
@@ -446,10 +453,12 @@
       "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "delete_component"
+        "operation": "delete_component",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "delete_component",
       "lane": "serial_write",
@@ -473,10 +482,12 @@
       "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "delete_folder"
+        "operation": "delete_folder",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "delete_folder",
       "lane": "serial_write",
@@ -502,10 +513,12 @@
       "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "delete_method"
+        "operation": "delete_method",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "delete_method",
       "lane": "serial_write",
@@ -526,13 +539,15 @@
         "class"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "diff_class"
+        "operation": "diff_class",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "diff_class",
       "lane": "legacy_read",
@@ -555,13 +570,15 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "diff_component_snapshot"
+        "operation": "diff_component_snapshot",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "diff_component_snapshot",
       "lane": "legacy_read",
@@ -584,13 +601,15 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "diff_element_spec"
+        "operation": "diff_element_spec",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "diff_element_spec",
       "lane": "legacy_read",
@@ -613,13 +632,15 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "diff_method_code"
+        "operation": "diff_method_code",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "diff_method_code",
       "lane": "legacy_read",
@@ -640,13 +661,15 @@
         "module"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "diff_module"
+        "operation": "diff_module",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "diff_module",
       "lane": "legacy_read",
@@ -667,13 +690,15 @@
         "project"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "diff_project_formulas"
+        "operation": "diff_project_formulas",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "diff_project_formulas",
       "lane": "legacy_read",
@@ -694,13 +719,15 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "diff_state_machine"
+        "operation": "diff_state_machine",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "diff_state_machine",
       "lane": "legacy_read",
@@ -721,13 +748,15 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "diff_state_machine_domain"
+        "operation": "diff_state_machine_domain",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "diff_state_machine_domain",
       "lane": "legacy_read",
@@ -752,10 +781,12 @@
       "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "get_bde_edges"
+        "operation": "get_bde_edges",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "get_bde_edges",
       "lane": "pooled_read",
@@ -781,10 +812,12 @@
       "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "get_component_refs"
+        "operation": "get_component_refs",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "get_component_refs",
       "lane": "pooled_read",
@@ -808,10 +841,12 @@
       "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "get_dbitem_refs"
+        "operation": "get_dbitem_refs",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "get_dbitem_refs",
       "lane": "pooled_read",
@@ -838,10 +873,12 @@
       "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "get_elements"
+        "operation": "get_elements",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "get_elements",
       "lane": "pooled_read",
@@ -865,10 +902,12 @@
       "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "get_formulas"
+        "operation": "get_formulas",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "get_formulas",
       "lane": "pooled_read",
@@ -894,10 +933,12 @@
       "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "get_import_binding"
+        "operation": "get_import_binding",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "get_import_binding",
       "lane": "pooled_read",
@@ -923,10 +964,12 @@
       "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "get_tree"
+        "operation": "get_tree",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "get_tree",
       "lane": "pooled_read",
@@ -939,22 +982,6 @@
       }
     },
     {
-      "id": "AscetOrchestrator",
-      "family": "ops",
-      "summary": "Coordinate legacy multi-process worker runs",
-      "risk": "diagnostic",
-      "objectKinds": [
-        "generic"
-      ],
-      "supportsJson": false,
-      "requiresSerialLiveAccess": false,
-      "hiddenFromModel": true,
-      "execution": {
-        "kind": "standalone",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetOrchestrator.exe"
-      }
-    },
-    {
       "id": "AscetReadBlockDiagram",
       "family": "read",
       "summary": "Read a named block diagram",
@@ -964,13 +991,15 @@
         "module"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "read_block_diagram"
+        "operation": "read_block_diagram",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "read_block_diagram",
       "lane": "legacy_read",
@@ -991,13 +1020,15 @@
         "class"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "read_class_snapshot"
+        "operation": "read_class_snapshot",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "read_class_snapshot",
       "lane": "legacy_read",
@@ -1018,13 +1049,15 @@
         "class"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "read_class_summary"
+        "operation": "read_class_summary",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "read_class_summary",
       "lane": "legacy_read",
@@ -1047,13 +1080,15 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "read_component_code"
+        "operation": "read_component_code",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "read_component_code",
       "lane": "legacy_read",
@@ -1076,13 +1111,15 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "read_component_refs"
+        "operation": "read_component_refs",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "read_component_refs",
       "lane": "legacy_read",
@@ -1105,13 +1142,15 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "read_component_snapshot"
+        "operation": "read_component_snapshot",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "read_component_snapshot",
       "lane": "legacy_read",
@@ -1134,13 +1173,15 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "read_component_used_by"
+        "operation": "read_component_used_by",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "read_component_used_by",
       "lane": "legacy_read",
@@ -1159,15 +1200,17 @@
       "summary": "Read a local dependent parameter formula, imported-parameter mappings, and exported-provider chain.",
       "usage": "<component> <dependent-element> [--exporter <exporter-component>] [--provider-scope <scope-path>] [--max-candidates <n>] [--json]",
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "read_dependent_chain"
+        "operation": "read_dependent_chain",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "supportsJson": true,
       "defaultOutputMode": "json",
       "risk": "read",
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "objectKinds": [
         "class",
         "module"
@@ -1231,11 +1274,11 @@
       "examples": [
         {
           "description": "Discover the provider/exported parameter automatically",
-          "command": "AscetCli.exe exec read_dependent_chain <component> <dependent-element> [--json]"
+          "command": "AscetBridge.exe exec read_dependent_chain <component> <dependent-element> [--json]"
         },
         {
           "description": "Verify against a known exporter component",
-          "command": "AscetCli.exe exec read_dependent_chain <component> <dependent-element> --exporter <exporter-component> [--json]"
+          "command": "AscetBridge.exe exec read_dependent_chain <component> <dependent-element> --exporter <exporter-component> [--json]"
         }
       ],
       "pitfalls": [
@@ -1254,54 +1297,6 @@
       "hiddenFromModel": false
     },
     {
-      "id": "AscetReadDomainDeepCheck",
-      "family": "verify",
-      "summary": "Run deep live domain diagnostics",
-      "risk": "diagnostic",
-      "objectKinds": [
-        "generic"
-      ],
-      "supportsJson": false,
-      "requiresSerialLiveAccess": true,
-      "hiddenFromModel": true,
-      "execution": {
-        "kind": "standalone",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetReadDomainDeepCheck.exe"
-      }
-    },
-    {
-      "id": "AscetReadDomainQuickCheck",
-      "family": "verify",
-      "summary": "Run quick live domain diagnostics",
-      "risk": "diagnostic",
-      "objectKinds": [
-        "generic"
-      ],
-      "supportsJson": false,
-      "requiresSerialLiveAccess": true,
-      "hiddenFromModel": true,
-      "execution": {
-        "kind": "standalone",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetReadDomainQuickCheck.exe"
-      }
-    },
-    {
-      "id": "AscetReadDomainSmoke",
-      "family": "verify",
-      "summary": "Run smoke validation against the live domain",
-      "risk": "diagnostic",
-      "objectKinds": [
-        "generic"
-      ],
-      "supportsJson": false,
-      "requiresSerialLiveAccess": true,
-      "hiddenFromModel": true,
-      "execution": {
-        "kind": "standalone",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetReadDomainSmoke.exe"
-      }
-    },
-    {
       "id": "AscetReadElementCatalog",
       "family": "read",
       "summary": "Read element catalog or element spec view",
@@ -1312,13 +1307,15 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "read_element_catalog"
+        "operation": "read_element_catalog",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "read_element_catalog",
       "lane": "legacy_read",
@@ -1341,13 +1338,15 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "read_element_refs"
+        "operation": "read_element_refs",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "read_element_refs",
       "lane": "legacy_read",
@@ -1357,26 +1356,6 @@
         "hostSafety": "fragile",
         "hostPolicy": "force_one_shot",
         "timeoutClass": "expensive_read"
-      }
-    },
-    {
-      "id": "AscetReadHost",
-      "family": "ops",
-      "summary": "Persistent internal ASCET read host over line-delimited JSON",
-      "risk": "diagnostic",
-      "objectKinds": [
-        "generic"
-      ],
-      "supportsJson": true,
-      "requiresSerialLiveAccess": false,
-      "hiddenFromModel": true,
-      "operation": "host",
-      "lane": "pooled_read",
-      "hostEligible": false,
-      "supportsBatch": false,
-      "execution": {
-        "kind": "standalone",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetReadHost.exe"
       }
     },
     {
@@ -1392,13 +1371,15 @@
         "enumeration"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "read_implementation"
+        "operation": "read_implementation",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "read_implementation",
       "lane": "pooled_read",
@@ -1421,13 +1402,15 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "read_method_code"
+        "operation": "read_method_code",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "read_method_code",
       "lane": "pooled_read",
@@ -1448,13 +1431,15 @@
         "module"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "read_module_closure"
+        "operation": "read_module_closure",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "read_module_closure",
       "lane": "legacy_read",
@@ -1475,13 +1460,15 @@
         "module"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "read_module_snapshot"
+        "operation": "read_module_snapshot",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "read_module_snapshot",
       "lane": "legacy_read",
@@ -1502,13 +1489,15 @@
         "module"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "read_module_summary"
+        "operation": "read_module_summary",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "read_module_summary",
       "lane": "legacy_read",
@@ -1518,22 +1507,6 @@
         "hostSafety": "fragile",
         "hostPolicy": "force_one_shot",
         "timeoutClass": "expensive_read"
-      }
-    },
-    {
-      "id": "AscetReadOnlyExample",
-      "family": "verify",
-      "summary": "Run a minimal read-only example against the current database",
-      "risk": "diagnostic",
-      "objectKinds": [
-        "generic"
-      ],
-      "supportsJson": false,
-      "requiresSerialLiveAccess": true,
-      "hiddenFromModel": true,
-      "execution": {
-        "kind": "standalone",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetReadOnlyExample.exe"
       }
     },
     {
@@ -1547,13 +1520,15 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "read_references"
+        "operation": "read_references",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "read_references",
       "lane": "legacy_read",
@@ -1574,13 +1549,15 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "read_state_machine"
+        "operation": "read_state_machine",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "read_state_machine",
       "lane": "legacy_read",
@@ -1601,13 +1578,15 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "read_state_machine_flow"
+        "operation": "read_state_machine_flow",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "read_state_machine_flow",
       "lane": "legacy_read",
@@ -1628,13 +1607,15 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "read_state_machine_snapshot"
+        "operation": "read_state_machine_snapshot",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "read_state_machine_snapshot",
       "lane": "legacy_read",
@@ -1655,13 +1636,15 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "read_state_machine_summary"
+        "operation": "read_state_machine_summary",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "read_state_machine_summary",
       "lane": "legacy_read",
@@ -1684,13 +1667,15 @@
         "statemachine"
       ],
       "supportsJson": true,
-      "requiresSerialLiveAccess": false,
+      "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "read_text_code"
+        "operation": "read_text_code",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "read_text_code",
       "lane": "legacy_read",
@@ -1700,27 +1685,6 @@
         "hostSafety": "fragile",
         "hostPolicy": "force_one_shot",
         "timeoutClass": "expensive_read"
-      }
-    },
-    {
-      "id": "AscetSelfTest",
-      "family": "verify",
-      "summary": "Invoke unified selftest profiles through AscetCli.exe",
-      "risk": "diagnostic",
-      "objectKinds": [
-        "generic"
-      ],
-      "supportsJson": true,
-      "requiresSerialLiveAccess": true,
-      "hiddenFromModel": false,
-      "operation": "selftest",
-      "lane": "diagnostic",
-      "hostEligible": false,
-      "supportsBatch": false,
-      "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-        "subcommand": "selftest"
       }
     },
     {
@@ -1735,10 +1699,12 @@
       "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "set_class_method_code"
+        "operation": "set_class_method_code",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "set_class_method_code",
       "lane": "serial_write",
@@ -1768,10 +1734,12 @@
       "hostEligible": false,
       "supportsBatch": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "set_element_dependency"
+        "operation": "set_element_dependency",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "executionProfile": {
         "hostSafety": "write",
@@ -1797,10 +1765,12 @@
       "hostEligible": true,
       "supportsBatch": true,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "set_method_code"
+        "operation": "set_method_code",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "executionProfile": {
         "hostSafety": "write",
@@ -1821,10 +1791,12 @@
       "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "set_method_signature"
+        "operation": "set_method_signature",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "set_method_signature",
       "lane": "serial_write",
@@ -1848,10 +1820,12 @@
       "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "set_module_code"
+        "operation": "set_module_code",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "set_module_code",
       "lane": "serial_write",
@@ -1875,10 +1849,12 @@
       "requiresSerialLiveAccess": true,
       "hiddenFromModel": false,
       "execution": {
-        "kind": "unified_cli",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+        "kind": "bridge",
+        "protocolVersion": 1,
         "subcommand": "exec",
-        "operation": "set_state_machine_code"
+        "operation": "set_state_machine_code",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
       },
       "operation": "set_state_machine_code",
       "lane": "serial_write",
@@ -1888,38 +1864,6 @@
         "hostSafety": "write",
         "hostPolicy": "force_one_shot",
         "timeoutClass": "write"
-      }
-    },
-    {
-      "id": "AscetThreadHarness",
-      "family": "ops",
-      "summary": "Run thread-based concurrency validation harness",
-      "risk": "diagnostic",
-      "objectKinds": [
-        "generic"
-      ],
-      "supportsJson": false,
-      "requiresSerialLiveAccess": false,
-      "hiddenFromModel": true,
-      "execution": {
-        "kind": "standalone",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetThreadHarness.exe"
-      }
-    },
-    {
-      "id": "AscetWorker",
-      "family": "ops",
-      "summary": "Run legacy worker helper or job mode",
-      "risk": "diagnostic",
-      "objectKinds": [
-        "generic"
-      ],
-      "supportsJson": false,
-      "requiresSerialLiveAccess": false,
-      "hiddenFromModel": true,
-      "execution": {
-        "kind": "standalone",
-        "executableRelativePath": "src/ascetcli/output/ascet-csharp/bin/AscetWorker.exe"
       }
     }
   ]

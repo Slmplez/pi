@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import type { AscetCliExecutionResult, AscetCliRequest } from "../../cli.ts";
 import { createAscetExposureController } from "./controller.ts";
+import { profileTools } from "./profiles.ts";
 
 function createPiHarness(initialActive: string[] = ["non_ascet_tool"]) {
 	const registered: Array<{ name: string; promptGuidelines?: readonly string[] }> = [];
@@ -55,7 +56,6 @@ describe("ASCET exposure controller", () => {
 			"ascet_scheduler_status",
 			"ascet_diff",
 			"ascet_edit",
-			"ascet_verify",
 			"configure_parameter_dependency_chain",
 		]);
 		assert.equal(
@@ -64,14 +64,20 @@ describe("ASCET exposure controller", () => {
 		);
 	});
 
-	test("write-preflight exposes write and verify but not batch write", () => {
+	test("does not expose retired ascet_verify in any profile", () => {
+		for (const [profile, tools] of Object.entries(profileTools)) {
+			assert.equal(tools.includes("ascet_verify"), false, profile);
+		}
+	});
+
+	test("write-preflight exposes writes but not retired verify or batch write", () => {
 		const harness = createPiHarness();
 		const exposure = createAscetExposureController(harness.pi, { env: {} });
 
 		exposure.activateProfile("write-preflight");
 
 		assert.equal(harness.active.includes("ascet_edit"), true);
-		assert.equal(harness.active.includes("ascet_verify"), true);
+		assert.equal(harness.active.includes("ascet_verify"), false);
 		assert.equal(harness.active.includes("ascet_batch_write"), false);
 	});
 
@@ -104,21 +110,11 @@ describe("ASCET exposure controller", () => {
 		const harness = createPiHarness(["non_ascet_tool", "ascet_read"]);
 		const exposure = createAscetExposureController(harness.pi, { env: {} });
 
-		exposure.activateProfile("verify");
+		exposure.activateProfile("advanced-read");
 
 		assert.deepEqual(exposure.getMetadata(), {
-			profile: "verify",
-			activeTools: [
-				"find",
-				"grep",
-				"read",
-				"ascet_get",
-				"ascet_read",
-				"ascet_status",
-				"ascet_capabilities",
-				"ascet_verify",
-				"ascet_scheduler_status",
-			],
+			profile: "advanced-read",
+			activeTools: ["find", "grep", "read", "ascet_get", "ascet_read", "ascet_status", "ascet_capabilities"],
 			batchWriteEnabled: false,
 		});
 	});

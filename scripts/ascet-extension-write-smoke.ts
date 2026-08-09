@@ -92,9 +92,8 @@ const loadResult = await withStage("load_extension", async () => {
 const extension = loadResult.extensions.find((entry) => entry.path.replaceAll("\\", "/").endsWith("ascet/index.ts"));
 const editTool = extension?.tools.get("ascet_edit")?.definition;
 const readTool = extension?.tools.get("ascet_read")?.definition;
-const verifyTool = extension?.tools.get("ascet_verify")?.definition;
-if (!editTool || !readTool || !verifyTool) {
-	throw new Error("ASCET edit/read/verify tools are not registered");
+if (!editTool || !readTool) {
+	throw new Error("ASCET edit/read tools are not registered");
 }
 
 const signal = new AbortController().signal;
@@ -113,6 +112,12 @@ async function executeTool(toolName: string, params: Record<string, unknown>, ct
 	}
 	const response = await tool.execute(`ascet-write-smoke-${toolName}`, params, signal, undefined, ctx);
 	const outcome = response.details?.outcome;
+	if (toolName === "ascet_edit" && params.executeWrite === true) {
+		const verification = response.details?.verification as { status?: unknown } | undefined;
+		if (verification?.status !== "passed") {
+			throw new Error(`ascet_edit did not prove automatic readback verification: ${verification?.status ?? "missing"}`);
+		}
+	}
 	if (outcome) {
 		if (outcome.status !== "ok") {
 			throw new Error(`${toolName} failed: ${outcome.error?.message ?? outcome.message ?? outcome.status}`);
@@ -146,7 +151,7 @@ async function cleanupSmokeArtifacts() {
 		try {
 			const response = await executeTool(
 				"ascet_edit",
-				{ action, ...params, verifyReadback: true, executeWrite: true },
+				{ action, ...params, executeWrite: true },
 				writeContext,
 			);
 			cleanup.push({ action, outcome: response.details.outcome });
@@ -172,7 +177,7 @@ if (cleanupOnly) {
 
 const createFolderResponse = await withStage("create_folder", () => executeTool(
 	"ascet_edit",
-	{ action: "create_folder", folderPath, verifyReadback: true, executeWrite: true },
+	{ action: "create_folder", folderPath, executeWrite: true },
 	writeContext,
 ));
 const createComponentResponse = await withStage("create_component", () => executeTool(
@@ -183,7 +188,6 @@ const createComponentResponse = await withStage("create_component", () => execut
 		kind: "class",
 		language: "ESDL",
 		ifExists: "return-existing",
-		verifyReadback: true,
 		executeWrite: true,
 	},
 	writeContext,
@@ -202,7 +206,6 @@ const createMethodResponse = await withStage("create_method", () => executeTool(
 		methodName,
 		methodKind: "abstract",
 		ifExists: "return-existing",
-		verifyReadback: true,
 		executeWrite: true,
 	},
 	writeContext,
@@ -216,7 +219,6 @@ const signatureResponse = await withStage("set_method_signature", () => executeT
 		returnType: "cont",
 		arguments: [{ name: "input", type: "cont", ifExists: "replace" }],
 		ifReturnExists: "replace",
-		verifyReadback: true,
 		executeWrite: true,
 	},
 	writeContext,
@@ -227,7 +229,6 @@ const elementSpecResponse = await withStage("apply_element_spec", () => executeT
 		action: "apply_element_spec",
 		componentPath,
 		specFile: elementSpecFile,
-		verifyReadback: true,
 		executeWrite: true,
 	},
 	writeContext,
@@ -240,7 +241,6 @@ const dependencyResponse = await withStage("set_element_dependency", () => execu
 		elementName: "P_Smoke",
 		dependency: "dependent",
 		targetKind: "component",
-		verifyReadback: true,
 		executeWrite: true,
 	},
 	writeContext,
@@ -259,7 +259,6 @@ const createEnumerationResponse = await withStage("create_enumeration", () => ex
 		componentPath: enumerationPath,
 		kind: "enumeration",
 		ifExists: "return-existing",
-		verifyReadback: true,
 		executeWrite: true,
 	},
 	writeContext,
@@ -270,7 +269,6 @@ const enumeratorResponse = await withStage("set_enumerators", () => executeTool(
 		action: "set_enumerators",
 		componentPath: enumerationPath,
 		enumerators: ["OFF", "ON"],
-		verifyReadback: true,
 		executeWrite: true,
 	},
 	writeContext,
@@ -283,7 +281,6 @@ const createModuleResponse = await withStage("create_module", () => executeTool(
 		kind: "module",
 		language: "ESDL",
 		ifExists: "return-existing",
-		verifyReadback: true,
 		executeWrite: true,
 	},
 	writeContext,
@@ -297,7 +294,6 @@ const createModuleMethodResponse = await withStage("create_module_method", () =>
 		methodName: moduleMethodName,
 		methodKind: "process",
 		ifExists: "return-existing",
-		verifyReadback: true,
 		executeWrite: true,
 	},
 	writeContext,
@@ -310,7 +306,6 @@ const moduleCodeResponse = await withStage("set_module_code", () => executeTool(
 		operation: "set-method",
 		methodName: moduleMethodName,
 		code: "// PI ASCET module write smoke\n",
-		verifyReadback: true,
 		executeWrite: true,
 	},
 	writeContext,
@@ -323,7 +318,6 @@ const createStateMachineResponse = skipStateMachine ? undefined : await withStag
 		kind: "statemachine",
 		language: "ESDL",
 		ifExists: "return-existing",
-		verifyReadback: true,
 		executeWrite: true,
 	},
 	writeContext,
@@ -337,7 +331,6 @@ const createStateMachineMethodResponse = skipStateMachine ? undefined : await wi
 		methodName: stateMachineMethodName,
 		methodKind: "trigger",
 		ifExists: "return-existing",
-		verifyReadback: true,
 		executeWrite: true,
 	},
 	writeContext,
@@ -350,7 +343,6 @@ const stateMachineCodeResponse = skipStateMachine ? undefined : await withStage(
 		operation: "set-method",
 		methodName: stateMachineMethodName,
 		code: "// PI ASCET state machine write smoke\n",
-		verifyReadback: true,
 		executeWrite: true,
 	},
 	writeContext,
@@ -358,17 +350,13 @@ const stateMachineCodeResponse = skipStateMachine ? undefined : await withStage(
 
 const writeResponse = await withStage("set_method_code", () => executeTool(
 	"ascet_edit",
-	{ action: "set_method_code", componentPath, methodName, codeFile, verifyReadback: true, executeWrite: true },
+	{ action: "set_method_code", componentPath, methodName, codeFile, executeWrite: true },
 	writeContext,
 ));
 
 const readResponse = await withStage("read_method_code", () =>
 	executeTool("ascet_read", { action: "read_code", componentPath, methodName }, { cwd: ascetCwd }),
 );
-const verifyResponse = await withStage("verify_readback", () =>
-	executeTool("ascet_verify", { action: "readback", objectKind: "class", componentPath }, { cwd: ascetCwd }),
-);
-
 console.log(
 	JSON.stringify(
 		{
@@ -397,7 +385,6 @@ console.log(
 			},
 			write: writeResponse.details.outcome,
 			readback: toolData(readResponse),
-			verify: toolData(verifyResponse),
 		},
 		null,
 		2,

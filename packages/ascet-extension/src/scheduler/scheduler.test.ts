@@ -29,7 +29,7 @@ function createInjectedCliProcessError(code: "ascet_cli_failed" | "ascet_cli_tim
 			timedOut,
 			request: {
 				cwd: "C:\\synthetic",
-				cliPath: "AscetCli.exe",
+				cliPath: "AscetBridge.exe",
 				args: ["exec", "synthetic"],
 			},
 		},
@@ -397,7 +397,10 @@ describe("AscetScheduler failure containment", () => {
 				lockPath,
 				JSON.stringify({
 					token: "stale-lock",
+					ownerToken: "stale-lock",
 					pid: 999_999_999,
+					ownerNodePid: 999_999_999,
+					bridgePid: null,
 					agentId: "synthetic",
 					commandId: "stale",
 					toolName: "ascet_test",

@@ -8,7 +8,6 @@ import { ascetReadTool } from "./read/index.ts";
 import { ascetRecoverTool } from "./recover/index.ts";
 import { ascetSchedulerStatusTool } from "./scheduler-status/index.ts";
 import { ascetStatusTool } from "./status/index.ts";
-import { ascetVerifyTool } from "./verify/index.ts";
 
 export const canonicalOpsTools = [
 	ascetStatusTool,
@@ -22,7 +21,6 @@ export const canonicalDomainTools = [
 	ascetReadTool,
 	ascetDiffTool,
 	ascetEditTool,
-	ascetVerifyTool,
 	configureParameterDependencyChainTool,
 ] as const;
 
@@ -35,7 +33,6 @@ export const canonicalAscetToolNames = [
 	"ascet_read",
 	"ascet_diff",
 	"ascet_edit",
-	"ascet_verify",
 	"configure_parameter_dependency_chain",
 ] as const;
 

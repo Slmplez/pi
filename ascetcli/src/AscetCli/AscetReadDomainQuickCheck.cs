@@ -4,6 +4,11 @@ class AscetReadDomainQuickCheck
 {
     static int Main()
     {
+        return Run();
+    }
+
+    public static int Run()
+    {
         try
         {
             AscetToolApiBootstrap.ConfigureAssemblyResolution();

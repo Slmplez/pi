@@ -14,7 +14,7 @@ function tempRuntimeEnv() {
 }
 
 describe("ASCET component editable PI tool", () => {
-	it("builds AscetCli exec check and set invocations with JSON primitive output", () => {
+	it("builds AscetBridge exec check and set invocations with JSON primitive output", () => {
 		expect(buildAscetEditabilityArgs({ mode: "check", componentPath: "DEMO/PID" })).toEqual([
 			"exec",
 			"component_editable_check",
@@ -31,7 +31,7 @@ describe("ASCET component editable PI tool", () => {
 		expect(JSON.parse(formatAscetEditabilityResult({ ok: true, data: false } as never))).toEqual({ editable: false });
 	});
 
-	it("runs AscetCli exec through the PI scheduler and CLI lock", async () => {
+	it("runs AscetBridge exec through the PI scheduler and CLI lock", async () => {
 		const env = tempRuntimeEnv();
 		const scheduler = createAscetScheduler();
 		let sawLock = false;
@@ -44,7 +44,7 @@ describe("ASCET component editable PI tool", () => {
 				scheduler,
 				executeCli: async (request: AscetCliRequest): Promise<AscetCliExecutionResult> => {
 					sawLock = (await getAscetCliLockSnapshot({ env })).locked;
-					expect(request.cliPath.replaceAll("\\", "/")).toMatch(/ascet-cli\/bin\/AscetCli\.exe$/);
+					expect(request.cliPath.replaceAll("\\", "/")).toMatch(/ascet-cli\/bin\/AscetBridge\.exe$/);
 					expect(request.args).toEqual(["exec", "component_editable_check", "DEMO\\PID", "--json"]);
 					return {
 						exitCode: 0,
@@ -68,7 +68,7 @@ describe("ASCET component editable PI tool", () => {
 		});
 	});
 
-	it("unwraps the AscetCli exec envelope while preserving bare false output", async () => {
+	it("unwraps the AscetBridge exec envelope while preserving bare false output", async () => {
 		const scheduler = createAscetScheduler();
 		const result = await runAscetEditability(
 			{ mode: "set", componentPath: "DEMO\\PID" },

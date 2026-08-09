@@ -14,7 +14,7 @@ function createReadyEnv(includeDll = true): {
 	const root = mkdtempSync(join(tmpdir(), "pi-ascet-status-runtime-"));
 	const contractsRoot = join(root, "contracts");
 	mkdirSync(contractsRoot, { recursive: true });
-	writeFileSync(join(root, "AscetCli.exe"), "", "utf8");
+	writeFileSync(join(root, "AscetBridge.exe"), "", "utf8");
 	if (includeDll) {
 		writeFileSync(join(root, "Etas.AscetNET.dll"), "", "utf8");
 	}
@@ -22,7 +22,7 @@ function createReadyEnv(includeDll = true): {
 	return {
 		cwd: root,
 		env: {
-			ASCET_CLI_PATH: join(root, "AscetCli.exe"),
+			ASCET_BRIDGE_PATH: join(root, "AscetBridge.exe"),
 			ASCET_CONTRACTS_PATH: contractsRoot,
 			PI_ASCET_RUNTIME_DIR: join(root, "runtime"),
 		},
@@ -36,7 +36,7 @@ function liveProbeResult(cwd: string, ok: boolean): AscetCliJsonResult {
 		data: ok ? { profile: "quick" } : null,
 		request: {
 			cwd,
-			cliPath: join(cwd, "AscetCli.exe"),
+			cliPath: join(cwd, "AscetBridge.exe"),
 			args: ["selftest", "quick", "--json"],
 		},
 		stdout: ok ? '{"ok":true}' : "",

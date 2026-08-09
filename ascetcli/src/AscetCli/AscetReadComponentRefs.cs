@@ -61,7 +61,7 @@ public static class AscetReadComponentRefs
     {
         if (args == null || args.Length < 1)
         {
-            throw new AscetReadException("invalid_argument", "parse_arguments", "usage: AscetCli.exe exec read_component_refs <component-path> [--direction <out|both>] [--depth <n>] [--json]");
+            throw new AscetReadException("invalid_argument", "parse_arguments", "usage: AscetBridge.exe exec read_component_refs <component-path> [--direction <out|both>] [--depth <n>] [--json]");
         }
 
         AscetReadComponentRefsArguments result = new AscetReadComponentRefsArguments();
@@ -274,11 +274,10 @@ public static class AscetReadComponentRefs
             return new Dictionary<string, object>();
         }
 
-        return AscetDatabaseExplorerCommon.DeserializeChildJsonObject(
-            AscetDatabaseExplorerCommon.RunSiblingCliExecOrExe(
-                "read_component_used_by",
-                "AscetReadComponentUsedBy.exe",
-                new List<string> { componentPath, "--scope", scopePath, "--json" }));
+        return InProcessLegacyOperationAdapter.InvokeJsonObject(
+            "read_component_used_by",
+            AscetReadComponentUsedBy.Main,
+            new string[] { componentPath, "--scope", scopePath, "--json" });
     }
 
     private static Dictionary<string, object> LoadReferences(string componentPath)

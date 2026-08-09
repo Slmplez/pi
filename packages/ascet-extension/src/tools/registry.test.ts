@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import { allAscetTools, canonicalAscetToolNames, hiddenAscetTools } from "./registry.ts";
+import { allAscetToolNames, allAscetTools, canonicalAscetToolNames, hiddenAscetTools } from "./registry.ts";
 
 function hasConst(value: unknown): boolean {
 	if (Array.isArray(value)) {
@@ -19,6 +19,13 @@ describe("ASCET tool registry", () => {
 			hiddenAscetTools.map((tool) => tool.name),
 			["ascet_batch_write"],
 		);
+	});
+
+	test("does not register retired P0 discovery tools", () => {
+		for (const name of ["ascet_index", "ascet_search", "ascet_explore", "ascet_verify"] as const) {
+			assert.equal(canonicalAscetToolNames.includes(name as never), false, `${name} must not be canonical`);
+			assert.equal(allAscetToolNames.includes(name as never), false, `${name} must not be registered`);
+		}
 	});
 
 	test("exposes OpenAI-compatible object schemas for all ASCET tools", () => {

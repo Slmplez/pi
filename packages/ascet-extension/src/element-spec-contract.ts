@@ -85,7 +85,6 @@ export interface AscetApplyElementPlanParams {
 	implementationTarget?: AscetImplementationTarget;
 	deleteMissing?: boolean;
 	recreateIncompatible?: boolean;
-	verifyReadback?: boolean;
 }
 
 export interface AscetApplyElementCommitParams {
@@ -343,7 +342,6 @@ const planCommonProperties = {
 	implementationTarget: Type.Optional(ascetImplementationTargetSchema),
 	deleteMissing: Type.Optional(Type.Boolean()),
 	recreateIncompatible: Type.Optional(Type.Boolean()),
-	verifyReadback: Type.Optional(Type.Boolean()),
 };
 
 export const ascetApplyElementSpecPlanSchema = Type.Union([

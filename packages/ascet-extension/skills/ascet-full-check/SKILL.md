@@ -36,7 +36,7 @@ Read `references/extension-guide.md` only when adding rules, evidence kinds, age
 11. Before dispatching any subagent task that needs live ASCET evidence, preflight the selected agent profile. Confirm its `tools:` include every required `ascet_*` tool. If any required tool is missing, do not dispatch that task; choose an approved ASCET-aware agent or run inline in the current agent.
 12. Collect evidence through the evidence kinds in `tool-map.md`.
 13. Produce findings that conform to `report-contract.md`.
-14. If live verification is enabled, verify high-severity or uncertain findings with `ascet_verify`, `ascet_read`, or `ascet_diff`.
+14. If live verification is enabled, verify high-severity or uncertain findings with exact `ascet_read` or `ascet_diff` evidence.
 15. Write final Markdown and JSON reports under the run directory.
 
 ## Inline Mode

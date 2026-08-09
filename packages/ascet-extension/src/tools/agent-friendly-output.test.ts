@@ -27,7 +27,7 @@ describe("ASCET tool Agent-friendly output", () => {
 			{
 				ok: true,
 				data: true,
-				request: { cwd: ".", cliPath: "AscetCli.exe", args: [] },
+				request: { cwd: ".", cliPath: "AscetBridge.exe", args: [] },
 				stdout: "",
 				stderr: "",
 				exitCode: 0,

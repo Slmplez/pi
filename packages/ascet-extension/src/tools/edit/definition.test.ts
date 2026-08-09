@@ -27,7 +27,6 @@ test("ascet_edit remains canonical while the dependency-chain composite is expli
 		"ascet_read",
 		"ascet_diff",
 		"ascet_edit",
-		"ascet_verify",
 		"configure_parameter_dependency_chain",
 	]);
 	assert.deepEqual([...ascetEditManifest.map((route) => route.action)].sort(), [
@@ -121,7 +120,7 @@ test("ascet_edit returns a blocked outcome when confirmation is not granted", as
 	}
 	assert.deepEqual(result.details.raw?.data, {
 		operation: "create_folder",
-		summary: "ASCET edit request:\noperation: create_folder\nfolderPath: DEMO/New\nverifyReadback: false",
+		summary: "ASCET edit request:\noperation: create_folder\nfolderPath: DEMO/New\nverifyReadback: true",
 		writeExecuted: false,
 		confirmation: { code: "ascet_edit_confirmation_not_granted" },
 	});
@@ -161,7 +160,7 @@ test("ascet_edit keeps confirmation independent from a cancelled tool run and ne
 	}
 	assert.deepEqual(result.details.raw?.data, {
 		operation: "create_folder",
-		summary: "ASCET edit request:\noperation: create_folder\nfolderPath: DEMO/New\nverifyReadback: false",
+		summary: "ASCET edit request:\noperation: create_folder\nfolderPath: DEMO/New\nverifyReadback: true",
 		writeExecuted: false,
 		confirmation: { code: "ascet_edit_operation_aborted_before_write" },
 	});

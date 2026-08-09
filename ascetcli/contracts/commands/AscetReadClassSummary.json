@@ -1,62 +1,62 @@
-﻿{
-    "id":  "AscetReadClassSummary",
-    "family":  "read",
-    "summary":  "Class summary",
-    "usage":  "\u003cclass-path\u003e [--json]",
-    "execution":  {
-                      "kind":  "unified_cli",
-                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                      "subcommand":  "exec",
-                      "operation":  "read_class_summary"
-                  },
-    "supportsJson":  true,
-    "defaultOutputMode":  "json",
-    "risk":  "read",
-    "requiresSerialLiveAccess":  false,
-    "objectKinds":  [
-                        "class"
-                    ],
-    "args":  [
-                 {
-                     "name":  "class-path",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: class-path"
-                 },
-                 {
-                     "name":  "--json",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --json"
-                 }
-             ],
-    "preconditions":  [
-                          "ASCET ToolAPI session must be available.",
-                          "Target ASCET path must resolve to the expected object kind."
-                      ],
-    "failureModes":  [
-                         "toolapi_unavailable",
-                         "target_not_found"
-                     ],
-    "examples":  [
-                     {
-                         "description":  "Basic usage",
-                         "command":  "AscetCli.exe exec read_class_summary \u003cclass-path\u003e [--json]"
-                     }
-                 ],
-    "pitfalls":  [
-
-                 ],
-    "operation":  "read_class_summary",
-    "lane":  "legacy_read",
-    "hostEligible":  false,
-    "supportsBatch":  false,
-    "executionProfile":  {
-                             "hostSafety":  "fragile",
-                             "hostPolicy":  "force_one_shot",
-                             "timeoutClass":  "expensive_read"
-                         },
-    "hiddenFromModel":  false
+{
+  "id": "AscetReadClassSummary",
+  "family": "read",
+  "summary": "Class summary",
+  "usage": "<class-path> [--json]",
+  "execution": {
+    "kind": "bridge",
+    "protocolVersion": 1,
+    "subcommand": "exec",
+    "operation": "read_class_summary",
+    "sessionPolicy": "fresh_session",
+    "transportPolicy": "one_shot_only"
+  },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "read",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": [
+    "class"
+  ],
+  "args": [
+    {
+      "name": "class-path",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: class-path"
+    },
+    {
+      "name": "--json",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --json"
+    }
+  ],
+  "preconditions": [
+    "ASCET ToolAPI session must be available.",
+    "Target ASCET path must resolve to the expected object kind."
+  ],
+  "failureModes": [
+    "toolapi_unavailable",
+    "target_not_found"
+  ],
+  "examples": [
+    {
+      "description": "Basic usage",
+      "command": "AscetBridge.exe exec read_class_summary <class-path> [--json]"
+    }
+  ],
+  "pitfalls": [],
+  "operation": "read_class_summary",
+  "lane": "legacy_read",
+  "hostEligible": false,
+  "supportsBatch": false,
+  "executionProfile": {
+    "hostSafety": "fragile",
+    "hostPolicy": "force_one_shot",
+    "timeoutClass": "expensive_read"
+  },
+  "hiddenFromModel": false
 }

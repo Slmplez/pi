@@ -1962,11 +1962,16 @@ internal static class AscetElementCatalogReader
         string path = Environment.GetEnvironmentVariable("ASCET_TABLE_TRACE_PATH");
         if (String.IsNullOrWhiteSpace(path))
         {
-            path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AscetElementTableRead.trace.log");
+            path = Path.Combine(Path.GetTempPath(), "pi-ascet", "AscetElementTableRead.trace.log");
         }
 
         try
         {
+            string directory = Path.GetDirectoryName(path);
+            if (!String.IsNullOrWhiteSpace(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
             File.AppendAllText(path, DateTime.Now.ToString("O") + " " + message + Environment.NewLine);
         }
         catch

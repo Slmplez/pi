@@ -1,10 +1,11 @@
-import assert from "node:assert/strict";
+﻿import assert from "node:assert/strict";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 import type { AscetCliJsonResult } from "./cli.ts";
-import { buildAscetGetArgs, formatAscetGetResult } from "./get.ts";
+import { buildAscetGetArgs, formatAscetGetResult, runAscetGet } from "./get.ts";
+import { AscetObservationStore } from "./observation-store.ts";
 
 function successfulResult(items: unknown[]): AscetCliJsonResult {
 	return {
@@ -18,7 +19,7 @@ function successfulResult(items: unknown[]): AscetCliJsonResult {
 				source: "live",
 			},
 		},
-		request: { cwd: process.cwd(), cliPath: "AscetCli.exe", args: [], timeoutMs: 1 },
+		request: { cwd: process.cwd(), cliPath: "AscetBridge.exe", args: [], timeoutMs: 1 },
 		stdout: "",
 		stderr: "",
 		exitCode: 0,
@@ -123,6 +124,124 @@ test("stores large observations as NDJSON metadata", () => {
 		else process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT = previousRoot;
 		if (previousThreshold === undefined) delete process.env.PI_ASCET_EXTENSION_OUTPUT_THRESHOLD_BYTES;
 		else process.env.PI_ASCET_EXTENSION_OUTPUT_THRESHOLD_BYTES = previousThreshold;
+		rmSync(root, { recursive: true, force: true });
+	}
+});
+
+test("builds local Enumeration and Module catalogs without invoking ASCET CLI", async () => {
+	const root = mkdtempSync(join(tmpdir(), "pi-ascet-get-catalog-test-"));
+	const previousRoot = process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT;
+	process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT = root;
+	try {
+		new AscetObservationStore({ root, thresholdBytes: 1 }).create({
+			domain: "tree",
+			resultId: "obs-tree-local-catalog",
+			target: {},
+			items: [
+				{ path: "DB\\Module", oid: "module-1", kind: "module" },
+				{ path: "DB\\Mode", oid: "enum-1", kind: "enumeration" },
+			],
+			coverage: { status: "complete_for_scope" },
+			truncated: false,
+			delivery: "stored",
+		});
+		let cliCalls = 0;
+		const result = await runAscetGet(
+			{
+				action: "database_catalog",
+				sourceTreeResultId: "obs-tree-local-catalog",
+				include: ["module", "enumeration"],
+				delivery: "stored",
+			},
+			{
+				cwd: process.cwd(),
+				executeCli: async (request) => {
+					cliCalls++;
+					return { exitCode: 1, stdout: "", stderr: "unexpected", timedOut: false, request };
+				},
+			},
+		);
+		assert.equal(result.ok, true);
+		assert.equal(cliCalls, 0);
+		const output = JSON.parse(
+			formatAscetGetResult(
+				{
+					action: "database_catalog",
+					sourceTreeResultId: "obs-tree-local-catalog",
+					include: ["module", "enumeration"],
+				},
+				result,
+			),
+		) as { delivery: string; catalog: { artifacts: { modules: { itemCount: number } } } };
+		assert.equal(output.delivery, "stored");
+		assert.equal(output.catalog.artifacts.modules.itemCount, 1);
+	} finally {
+		if (previousRoot === undefined) delete process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT;
+		else process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT = previousRoot;
+		rmSync(root, { recursive: true, force: true });
+	}
+});
+
+test("sends one stdin request for a live Message catalog scan", async () => {
+	const root = mkdtempSync(join(tmpdir(), "pi-ascet-get-catalog-test-"));
+	const previousRoot = process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT;
+	process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT = root;
+	try {
+		new AscetObservationStore({ root, thresholdBytes: 1 }).create({
+			domain: "tree",
+			resultId: "obs-tree-live-catalog",
+			target: {},
+			items: [
+				{ path: "DB\\Project", oid: "project-1", kind: "project" },
+				{ path: "DB\\Module", oid: "module-1", kind: "module" },
+			],
+			coverage: { status: "complete_for_scope" },
+			truncated: false,
+			delivery: "stored",
+		});
+		let cliCalls = 0;
+		const result = await runAscetGet(
+			{
+				action: "database_catalog",
+				sourceTreeResultId: "obs-tree-live-catalog",
+				include: ["message"],
+			},
+			{
+				cwd: process.cwd(),
+				executeCli: async (request) => {
+					cliCalls++;
+					assert.deepEqual(request.args, ["exec", "get_database_catalog", "--request-stdin", "--json"]);
+					const payload = JSON.parse(request.stdin ?? "") as {
+						scanMessages: boolean;
+						modules: Array<{ oid: string }>;
+					};
+					assert.equal(payload.scanMessages, true);
+					assert.deepEqual(
+						payload.modules.map(({ oid }) => oid),
+						["module-1"],
+					);
+					return {
+						exitCode: 0,
+						stdout: JSON.stringify({
+							ok: true,
+							result: {
+								messages: [],
+								moduleMessageEdges: [],
+								coverage: { status: "complete_for_scope" },
+							},
+						}),
+						stderr: "",
+						timedOut: false,
+						request,
+					};
+				},
+			},
+		);
+		assert.equal(result.ok, true);
+		assert.equal(cliCalls, 1);
+	} finally {
+		if (previousRoot === undefined) delete process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT;
+		else process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT = previousRoot;
 		rmSync(root, { recursive: true, force: true });
 	}
 });

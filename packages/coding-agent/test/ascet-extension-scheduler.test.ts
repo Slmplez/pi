@@ -94,7 +94,7 @@ describe("ASCET scheduler diagnostics", () => {
 	it("reports and clears stale PI CLI locks", async () => {
 		const env = tempRuntimeEnv();
 		const lock = await acquireAscetCliLock(
-			{ agentId: "agent", commandId: "read", toolName: "ascet_test", processName: "AscetCli.exe" },
+			{ agentId: "agent", commandId: "read", toolName: "ascet_test", processName: "AscetBridge.exe" },
 			{ env, pid: process.pid, tokenFactory: () => "owned" },
 		);
 		const active = await getAscetCliLockSnapshot({ env });
@@ -108,11 +108,14 @@ describe("ASCET scheduler diagnostics", () => {
 			stalePath,
 			JSON.stringify({
 				token: "stale",
+				ownerToken: "stale",
 				pid: 999999,
+				ownerNodePid: 999999,
+				bridgePid: null,
 				agentId: "agent",
 				commandId: "read",
 				toolName: "ascet_test",
-				processName: "AscetCli.exe",
+				processName: "AscetBridge.exe",
 				acquiredAt: new Date(0).toISOString(),
 				heartbeatAt: new Date(0).toISOString(),
 			}),

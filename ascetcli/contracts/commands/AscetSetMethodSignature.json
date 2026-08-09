@@ -1,112 +1,114 @@
-﻿{
-    "id":  "AscetSetMethodSignature",
-    "family":  "write",
-    "summary":  "Patch primitive method signature return and arguments",
-    "usage":  "\u003ccomponent-path\u003e \u003cmethod-name\u003e ([--return-type \u003ccont|sdisc|udisc|log\u003e [--if-return-exists \u003cfail|keep|replace\u003e]] | [--signature-json \u003cfile\u003e]) [--verify-readback] [--json]",
-    "execution":  {
-                      "kind":  "unified_cli",
-                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                      "subcommand":  "exec",
-                      "operation":  "set_method_signature"
-                  },
-    "supportsJson":  true,
-    "defaultOutputMode":  "json",
-    "risk":  "write",
-    "requiresSerialLiveAccess":  true,
-    "objectKinds":  [
-                        "class",
-                        "module"
-                    ],
-    "args":  [
-                 {
-                     "name":  "component-path",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "ASCET component path."
-                 },
-                 {
-                     "name":  "method-name",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "ASCET method name."
-                 },
-                 {
-                     "name":  "--return-type",
-                     "kind":  "option",
-                     "type":  "enum",
-                     "required":  false,
-                     "description":  "Primitive method return type. Use this for return-only writes, or use --signature-json for return plus arguments.",
-                     "enumValues":  [
-                                        "cont",
-                                        "sdisc",
-                                        "udisc",
-                                        "log"
-                                    ]
-                 },
-                 {
-                     "name":  "--if-return-exists",
-                     "kind":  "option",
-                     "type":  "enum",
-                     "required":  false,
-                     "description":  "Behavior when the method already has a return element.",
-                     "enumValues":  [
-                                        "fail",
-                                        "keep",
-                                        "replace"
-                                    ]
-                 },
-                 {
-                     "name":  "--signature-json",
-                     "kind":  "option",
-                     "type":  "path",
-                     "required":  false,
-                     "description":  "JSON signature patch file containing optional returnType, ifReturnExists, and arguments[]."
-                 },
-                 {
-                     "name":  "--verify-readback",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Verify method signature readback."
-                 },
-                 {
-                     "name":  "--json",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Emit JSON."
-                 }
-             ],
-    "preconditions":  [
-                          "ASCET ToolAPI session must be available.",
-                          "Live ASCET access must run through the serial executor.",
-                          "Target ASCET path must resolve to the expected object kind."
-                      ],
-    "failureModes":  [
-                         "toolapi_unavailable",
-                         "target_not_found",
-                         "write_failed"
-                     ],
-    "examples":  [
-                     {
-                         "description":  "Basic usage",
-                         "command":  "AscetCli.exe exec set_method_signature \u003ccomponent-path\u003e \u003cmethod-name\u003e ([--return-type \u003ccont|sdisc|udisc|log\u003e [--if-return-exists \u003cfail|keep|replace\u003e]] | [--signature-json \u003cfile\u003e]) [--verify-readback] [--json]"
-                     }
-                 ],
-    "pitfalls":  [
-                     "Live ASCET ToolAPI access is serial-only.",
-                     "Run readback and verify after successful writes."
-                 ],
-    "operation":  "set_method_signature",
-    "lane":  "serial_write",
-    "hostEligible":  true,
-    "supportsBatch":  false,
-    "executionProfile":  {
-                             "hostSafety":  "write",
-                             "hostPolicy":  "prefer_host",
-                             "timeoutClass":  "write"
-                         },
-    "hiddenFromModel":  false
+{
+  "id": "AscetSetMethodSignature",
+  "family": "write",
+  "summary": "Patch primitive method signature return and arguments",
+  "usage": "<component-path> <method-name> ([--return-type <cont|sdisc|udisc|log> [--if-return-exists <fail|keep|replace>]] | [--signature-json <file>]) [--verify-readback] [--json]",
+  "execution": {
+    "kind": "bridge",
+    "protocolVersion": 1,
+    "subcommand": "exec",
+    "operation": "set_method_signature",
+    "sessionPolicy": "fresh_session",
+    "transportPolicy": "one_shot_only"
+  },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "write",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": [
+    "class",
+    "module"
+  ],
+  "args": [
+    {
+      "name": "component-path",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "ASCET component path."
+    },
+    {
+      "name": "method-name",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "ASCET method name."
+    },
+    {
+      "name": "--return-type",
+      "kind": "option",
+      "type": "enum",
+      "required": false,
+      "description": "Primitive method return type. Use this for return-only writes, or use --signature-json for return plus arguments.",
+      "enumValues": [
+        "cont",
+        "sdisc",
+        "udisc",
+        "log"
+      ]
+    },
+    {
+      "name": "--if-return-exists",
+      "kind": "option",
+      "type": "enum",
+      "required": false,
+      "description": "Behavior when the method already has a return element.",
+      "enumValues": [
+        "fail",
+        "keep",
+        "replace"
+      ]
+    },
+    {
+      "name": "--signature-json",
+      "kind": "option",
+      "type": "path",
+      "required": false,
+      "description": "JSON signature patch file containing optional returnType, ifReturnExists, and arguments[]."
+    },
+    {
+      "name": "--verify-readback",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Verify method signature readback."
+    },
+    {
+      "name": "--json",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Emit JSON."
+    }
+  ],
+  "preconditions": [
+    "ASCET ToolAPI session must be available.",
+    "Live ASCET access must run through the serial executor.",
+    "Target ASCET path must resolve to the expected object kind."
+  ],
+  "failureModes": [
+    "toolapi_unavailable",
+    "target_not_found",
+    "write_failed"
+  ],
+  "examples": [
+    {
+      "description": "Basic usage",
+      "command": "AscetBridge.exe exec set_method_signature <component-path> <method-name> ([--return-type <cont|sdisc|udisc|log> [--if-return-exists <fail|keep|replace>]] | [--signature-json <file>]) [--verify-readback] [--json]"
+    }
+  ],
+  "pitfalls": [
+    "Live ASCET ToolAPI access is serial-only.",
+    "Run readback and verify after successful writes."
+  ],
+  "operation": "set_method_signature",
+  "lane": "serial_write",
+  "hostEligible": true,
+  "supportsBatch": false,
+  "executionProfile": {
+    "hostSafety": "write",
+    "hostPolicy": "prefer_host",
+    "timeoutClass": "write"
+  },
+  "hiddenFromModel": false
 }

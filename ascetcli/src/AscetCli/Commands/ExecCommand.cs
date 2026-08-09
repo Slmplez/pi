@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Web.Script.Serialization;
 using Ascet = de.etas.cebra.toolAPI.Ascet.Ascet;
@@ -15,6 +14,7 @@ public static class ExecCommand
     private static MethodReadService methodReader = new MethodReadService();
     private static SummaryReadService summaryReader = new SummaryReadService();
     private static AscetGetService getReader = new AscetGetService();
+    private static DatabaseCatalogService databaseCatalogReader = new DatabaseCatalogService();
     private static IExecComponentWriteService componentWriter = new ComponentWriteService();
     private static IExecMethodCodeWriteService methodWriter = new ExecMethodWriteService();
     private static IExecElementSpecWriteService elementSpecWriter = new ElementSpecWriteService();
@@ -41,6 +41,8 @@ public static class ExecCommand
         {
             case "list_folders":
                 return HandleListFolders(AscetCliEnvelope.Slice(args, 1));
+            case "get_database_catalog":
+                return HandleDatabaseCatalog(AscetCliEnvelope.Slice(args, 1));
             case "get_tree":
             case "get_elements":
             case "get_formulas":
@@ -70,11 +72,11 @@ public static class ExecCommand
             case "read_element_dependency":
                 return HandleReadElementDependency(AscetCliEnvelope.Slice(args, 1));
             case "read_code":
-                return HandleLegacyAliasOperation("read_code", "AscetReadTextCode.exe", AscetCliEnvelope.Slice(args, 1));
+                return HandleLegacyAliasOperation("read_code", "read_text_code", AscetCliEnvelope.Slice(args, 1));
             case "read_text_code":
-                return HandleLegacyAliasOperation("read_code", "AscetReadTextCode.exe", AscetCliEnvelope.Slice(args, 1));
+                return HandleLegacyAliasOperation("read_code", "read_text_code", AscetCliEnvelope.Slice(args, 1));
             case "diff":
-                return HandleLegacyAliasOperation("diff", "AscetDiffComponentSnapshot.exe", AscetCliEnvelope.Slice(args, 1));
+                return HandleLegacyAliasOperation("diff", "diff_component_snapshot", AscetCliEnvelope.Slice(args, 1));
             case "create_component":
                 return HandleCreateComponent(AscetCliEnvelope.Slice(args, 1));
             case "set_method_code":
@@ -122,6 +124,65 @@ public static class ExecCommand
         }
     }
 
+    private static int HandleDatabaseCatalog(string[] args)
+    {
+        const string operation = "get_database_catalog";
+        try
+        {
+            Dictionary<string, object> payload = ParseGetPayload(args, operation);
+            AscetToolApiBootstrap.ConfigureAssemblyResolution();
+            Dictionary<string, object> result = null;
+            long sessionOpenMs = 0L;
+            long sessionCloseMs = 0L;
+            ExecuteSuppressingConsoleOut(delegate()
+            {
+                AscetSession session = null;
+                try
+                {
+                    System.Diagnostics.Stopwatch openTimer = System.Diagnostics.Stopwatch.StartNew();
+                    session = (AscetSession)new AscetSessionFactory().OpenCurrentDatabaseSession();
+                    openTimer.Stop();
+                    sessionOpenMs = openTimer.ElapsedMilliseconds;
+                    AscetDataBase database = session.GetCurrentDatabaseHandle();
+                    if (database == null)
+                    {
+                        throw new AscetReadException("database_not_open", operation, "GetCurrentDataBase returned null. Open a database in ASCET first.");
+                    }
+                    AscetDatabaseRef databaseRef = new AscetDatabaseRef();
+                    databaseRef.Name = database.GetName();
+                    Ascet tool = session.GetToolHandle();
+                    databaseRef.Path = tool == null ? String.Empty : (tool.GetDataBasePath() ?? String.Empty);
+                    result = databaseCatalogReader.Execute(payload, database, databaseRef);
+                }
+                finally
+                {
+                    if (session != null)
+                    {
+                        System.Diagnostics.Stopwatch closeTimer = System.Diagnostics.Stopwatch.StartNew();
+                        session.Dispose();
+                        closeTimer.Stop();
+                        sessionCloseMs = closeTimer.ElapsedMilliseconds;
+                    }
+                }
+                return true;
+            });
+            Dictionary<string, object> timings = result == null ? null : result["timings"] as Dictionary<string, object>;
+            if (timings == null)
+            {
+                timings = new Dictionary<string, object>(StringComparer.Ordinal);
+                if (result != null) result["timings"] = timings;
+            }
+            timings["sessionOpenMs"] = sessionOpenMs;
+            timings["sessionCloseMs"] = sessionCloseMs;
+            return AscetCliEnvelope.WriteSuccess(AscetCliEnvelope.Success("exec", operation, result));
+        }
+        catch (Exception ex)
+        {
+            AscetReadException ascet = ex as AscetReadException;
+            string code = ascet == null ? "catalog_live_scan_failed" : (ascet.Code ?? "catalog_live_scan_failed");
+            return AscetCliEnvelope.WriteError(ExitCodeStructuredError, AscetCliEnvelope.Error(code, ex.Message, "exec", operation));
+        }
+    }
     private static Dictionary<string, object> ParseGetPayload(string[] args, string operation)
     {
         Dictionary<string, object> result = new Dictionary<string, object>();
@@ -134,6 +195,12 @@ public static class ExecCommand
             {
                 if (i + 1 >= args.Length) throw new AscetReadException("invalid_argument", operation, "--request-json requires a JSON object.");
                 return AscetJsonContract.DeserializeObject(args[++i]);
+            }
+            if (String.Equals(token, "--request-stdin", StringComparison.OrdinalIgnoreCase))
+            {
+                string requestJson = Console.In.ReadToEnd();
+                if (String.IsNullOrWhiteSpace(requestJson)) throw new AscetReadException("invalid_argument", operation, "--request-stdin requires a JSON object on standard input.");
+                return AscetJsonContract.DeserializeObject(requestJson);
             }
             if (!token.StartsWith("--", StringComparison.Ordinal))
             {
@@ -350,41 +417,21 @@ public static class ExecCommand
         }
     }
 
-    private static int HandleLegacyAliasOperation(string operation, string exeName, string[] args)
+    private static int HandleLegacyAliasOperation(string operation, string targetOperation, string[] args)
     {
-        try
+        LegacyOperationEntryPoint entryPoint;
+        if (!AscetLegacyOperationRegistry.TryResolve(targetOperation, out entryPoint))
         {
-            LegacyProxyProcessResult process = ExecuteLegacyProxy(exeName, args);
-            if (process.ExitCode != 0)
-            {
-                LegacyProxyError legacyError = ParseLegacyProxyError(process, operation, exeName);
-                return AscetCliEnvelope.WriteError(
-                    ExitCodeStructuredError,
-                    AscetCliEnvelope.Error(
-                        legacyError.Code,
-                        legacyError.Message,
-                        "exec",
-                        operation));
-            }
-
-            return AscetCliEnvelope.WriteSuccess(
-                AscetCliEnvelope.Success(
-                    "exec",
-                    operation,
-                    BuildLegacyProxyPayload(exeName, process.Stdout)));
-        }
-        catch (Exception ex)
-        {
-            AscetReadException ascet = ex as AscetReadException;
-            string code = ascet == null ? "unhandled_exception" : (ascet.Code ?? "unhandled_exception");
             return AscetCliEnvelope.WriteError(
                 ExitCodeStructuredError,
                 AscetCliEnvelope.Error(
-                    code,
-                    ex.Message,
+                    "not_implemented",
+                    "Legacy operation '" + targetOperation + "' is not registered for in-process execution.",
                     "exec",
                     operation));
         }
+
+        return InProcessLegacyOperationAdapter.Run(operation, entryPoint, args);
     }
 
     private static int HandleReadComponentChildren(string[] args)
@@ -425,7 +472,7 @@ public static class ExecCommand
         {
             if (args == null || args.Length < 2 || args.Length > 3)
             {
-                throw new AscetReadException("invalid_argument", "parse_arguments", "usage: AscetCli.exe exec " + operation + " <component-path> <diagram-name> [--json]");
+                throw new AscetReadException("invalid_argument", "parse_arguments", "usage: AscetBridge.exe exec " + operation + " <component-path> <diagram-name> [--json]");
             }
 
             string componentPath = AscetReadBlockDiagram.NormalizeComponentPath(args[0]);
@@ -572,6 +619,7 @@ public static class ExecCommand
         folderReader = new FolderReadService();
         methodReader = new MethodReadService();
         summaryReader = new SummaryReadService();
+        databaseCatalogReader = new DatabaseCatalogService();
         componentWriter = new ComponentWriteService();
         methodWriter = new ExecMethodWriteService();
         elementSpecWriter = new ElementSpecWriteService();
@@ -772,7 +820,7 @@ public static class ExecCommand
         return "set " + element + " dependency to " + requested;
     }
 
-    private static Dictionary<string, object> BuildListDiagramsPayload(string componentPath)
+    internal static Dictionary<string, object> BuildListDiagramsPayload(string componentPath)
     {
         return BuildListDiagramsPayload(componentPath, String.Empty);
     }
@@ -821,7 +869,7 @@ public static class ExecCommand
     {
         if (args == null || args.Length < 1)
         {
-            throw new AscetReadException("invalid_argument", "parse_arguments", "usage: AscetCli.exe exec list_diagrams <component-path> [--diagram-kind <all|block|block_diagram|state|state_machine|sequence|unknown>] [--json]");
+            throw new AscetReadException("invalid_argument", "parse_arguments", "usage: AscetBridge.exe exec list_diagrams <component-path> [--diagram-kind <all|block|block_diagram|state|state_machine|sequence|unknown>] [--json]");
         }
 
         ListDiagramsArguments parsed = new ListDiagramsArguments();
@@ -1003,51 +1051,19 @@ public static class ExecCommand
 
     private static int HandleLegacyProxyOperation(string operation, string[] args)
     {
-        string legacyExecutableName;
-        if (!OperationRegistry.TryResolveLegacyProxyExecutable(operation, out legacyExecutableName))
+        LegacyOperationEntryPoint entryPoint;
+        if (!AscetLegacyOperationRegistry.TryResolve(operation, out entryPoint))
         {
             return AscetCliEnvelope.WriteError(
                 ExitCodeStructuredError,
                 AscetCliEnvelope.Error(
                     "not_implemented",
-                    "Operation '" + operation + "' is not implemented in the single-exe router.",
+                    "Operation '" + operation + "' is not registered for in-process execution.",
                     "exec",
                     operation));
         }
 
-        try
-        {
-            LegacyProxyProcessResult process = ExecuteLegacyProxy(legacyExecutableName, args, String.Equals(operation, "diff_element_spec", StringComparison.OrdinalIgnoreCase) ? Environment.CurrentDirectory : null);
-            if (process.ExitCode != 0)
-            {
-                LegacyProxyError legacyError = ParseLegacyProxyError(process, operation, legacyExecutableName);
-                return AscetCliEnvelope.WriteError(
-                    ExitCodeStructuredError,
-                    AscetCliEnvelope.Error(
-                        legacyError.Code,
-                        legacyError.Message,
-                        "exec",
-                        operation));
-            }
-
-            return AscetCliEnvelope.WriteSuccess(
-                AscetCliEnvelope.Success(
-                    "exec",
-                    operation,
-                    BuildLegacyProxyPayload(legacyExecutableName, process.Stdout)));
-        }
-        catch (Exception ex)
-        {
-            AscetReadException ascet = ex as AscetReadException;
-            string code = ascet == null ? "legacy_proxy_failed" : (ascet.Code ?? "legacy_proxy_failed");
-            return AscetCliEnvelope.WriteError(
-                ExitCodeStructuredError,
-                AscetCliEnvelope.Error(
-                    code,
-                    ex.Message,
-                    "exec",
-                    operation));
-        }
+        return InProcessLegacyOperationAdapter.Run(operation, entryPoint, args);
     }
 
     private static int WriteStructuredWriteResult(string operation, AscetWriteExecutionResult result)
@@ -1074,7 +1090,8 @@ public static class ExecCommand
             AscetCliEnvelope.Success(
                 "exec",
                 operation,
-                BuildWriteResultPayload(result)));
+                BuildWriteResultPayload(result),
+                ResolveWriteMutationStarted(result)));
     }
 
     private static int WriteExecException(string operation, Exception ex)
@@ -1098,21 +1115,38 @@ public static class ExecCommand
 
     private static Dictionary<string, object> BuildReadErrorEnvelope(string code, string message, string operation)
     {
-        Dictionary<string, object> envelope = new Dictionary<string, object>(StringComparer.Ordinal);
-        envelope["ok"] = false;
-        envelope["result"] = null;
-
         Dictionary<string, object> error = new Dictionary<string, object>(StringComparer.Ordinal);
         error["code"] = String.IsNullOrWhiteSpace(code) ? "unhandled_exception" : code;
         error["message"] = message ?? String.Empty;
         error["operation"] = operation ?? String.Empty;
-        envelope["error"] = error;
+        return AscetCliEnvelope.Error(error, "exec", operation, false);
+    }
 
-        Dictionary<string, object> meta = new Dictionary<string, object>(StringComparer.Ordinal);
-        meta["mode"] = "exec";
-        meta["operation"] = operation ?? String.Empty;
-        envelope["meta"] = meta;
-        return envelope;
+    private static bool? ResolveWriteMutationStarted(AscetWriteExecutionResult result)
+    {
+        if (result == null)
+        {
+            return null;
+        }
+
+        Dictionary<string, object> payload = result.Payload;
+        object directDryRun;
+        if (payload != null && payload.TryGetValue("dryRun", out directDryRun) && directDryRun is bool && (bool)directDryRun)
+        {
+            return false;
+        }
+
+        object writeValue;
+        Dictionary<string, object> write = payload != null && payload.TryGetValue("write", out writeValue)
+            ? writeValue as Dictionary<string, object>
+            : null;
+        object nestedDryRun;
+        if (write != null && write.TryGetValue("dryRun", out nestedDryRun) && nestedDryRun is bool && (bool)nestedDryRun)
+        {
+            return false;
+        }
+
+        return result.WriteSucceeded ? true : (bool?)null;
     }
 
     private static Dictionary<string, object> BuildWriteResultPayload(AscetWriteExecutionResult result)
@@ -1143,16 +1177,12 @@ public static class ExecCommand
 
     private static Dictionary<string, object> BuildWriteErrorEnvelope(string operation, AscetWriteExecutionResult result)
     {
-        Dictionary<string, object> envelope = new Dictionary<string, object>(StringComparer.Ordinal);
-        envelope["ok"] = false;
-        envelope["result"] = null;
-        envelope["error"] = BuildWriteErrorPayload(operation, result == null ? null : result.Error);
-
-        Dictionary<string, object> meta = new Dictionary<string, object>(StringComparer.Ordinal);
-        meta["mode"] = "exec";
-        meta["operation"] = operation ?? String.Empty;
-        envelope["meta"] = meta;
-        return envelope;
+        bool? mutationStarted = ResolveWriteMutationStarted(result);
+        return AscetCliEnvelope.Error(
+            BuildWriteErrorPayload(operation, result == null ? null : result.Error),
+            "exec",
+            operation,
+            mutationStarted);
     }
 
     private static Dictionary<string, object> BuildWriteErrorPayload(string fallbackOperation, AscetWriteError error)
@@ -1191,16 +1221,11 @@ public static class ExecCommand
             "input",
             ex);
 
-        Dictionary<string, object> envelope = new Dictionary<string, object>(StringComparer.Ordinal);
-        envelope["ok"] = false;
-        envelope["result"] = null;
-        envelope["error"] = BuildWriteErrorPayload(fallbackOperation, error);
-
-        Dictionary<string, object> meta = new Dictionary<string, object>(StringComparer.Ordinal);
-        meta["mode"] = "exec";
-        meta["operation"] = fallbackOperation ?? String.Empty;
-        envelope["meta"] = meta;
-        return envelope;
+        return AscetCliEnvelope.Error(
+            BuildWriteErrorPayload(fallbackOperation, error),
+            "exec",
+            fallbackOperation,
+            null);
     }
 
     private static void NormalizeWritePayload(string operationName, Dictionary<string, object> payload, bool writeSucceeded, WriteVerificationResult verification)
@@ -1249,54 +1274,6 @@ public static class ExecCommand
             {
                 Console.SetOut(originalOut);
             }
-        }
-    }
-
-    private static LegacyProxyProcessResult ExecuteLegacyProxy(string executableName, string[] args)
-    {
-        return ExecuteLegacyProxy(executableName, args, null);
-    }
-
-    private static LegacyProxyProcessResult ExecuteLegacyProxy(string executableName, string[] args, string workingDirectory)
-    {
-        string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-        string executablePath = Path.Combine(baseDirectory, executableName ?? String.Empty);
-        if (!File.Exists(executablePath))
-        {
-            throw new AscetReadException(
-                "tool_not_found",
-                "exec",
-                "Legacy proxy executable '" + (executableName ?? String.Empty) + "' was not found next to AscetCli.exe.");
-        }
-
-        ProcessStartInfo startInfo = new ProcessStartInfo();
-        startInfo.FileName = executablePath;
-        startInfo.WorkingDirectory = String.IsNullOrWhiteSpace(workingDirectory) ? baseDirectory : workingDirectory;
-        startInfo.UseShellExecute = false;
-        startInfo.CreateNoWindow = true;
-        startInfo.RedirectStandardOutput = true;
-        startInfo.RedirectStandardError = true;
-        if (args != null)
-        {
-            for (int i = 0; i < args.Length; i++)
-            {
-                startInfo.Arguments += (i == 0 ? String.Empty : " ") + QuoteArgument(args[i]);
-            }
-        }
-
-        using (Process process = new Process())
-        {
-            process.StartInfo = startInfo;
-            process.Start();
-            string stdout = process.StandardOutput.ReadToEnd();
-            string stderr = process.StandardError.ReadToEnd();
-            process.WaitForExit();
-
-            LegacyProxyProcessResult result = new LegacyProxyProcessResult();
-            result.ExitCode = process.ExitCode;
-            result.Stdout = stdout ?? String.Empty;
-            result.Stderr = stderr ?? String.Empty;
-            return result;
         }
     }
 
@@ -1449,7 +1426,7 @@ public static class ExecCommand
             if (trimmed.StartsWith("StackTrace:", StringComparison.OrdinalIgnoreCase)
                 || trimmed.StartsWith("at ", StringComparison.Ordinal)
                 || trimmed.StartsWith("at\t", StringComparison.Ordinal)
-                || trimmed.StartsWith("�� ", StringComparison.Ordinal))
+                || trimmed.StartsWith("ÃƒÂ¯Ã‚Â¿Ã‚Â½ÃƒÂ¯Ã‚Â¿Ã‚Â½ ", StringComparison.Ordinal))
             {
                 break;
             }

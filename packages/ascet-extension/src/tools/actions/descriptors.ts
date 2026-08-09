@@ -33,7 +33,6 @@ const CORE_PROFILES: readonly AscetProfile[] = [
 	"advanced-read",
 	"reference",
 	"diff",
-	"verify",
 	"write-preflight",
 	"batch-write",
 	"component-edit",
@@ -41,7 +40,6 @@ const CORE_PROFILES: readonly AscetProfile[] = [
 const ALL_PROFILES: readonly AscetProfile[] = [...CORE_PROFILES, "ops"];
 const READ_PROFILES: readonly AscetProfile[] = CORE_PROFILES;
 const WRITE_PROFILES: readonly AscetProfile[] = ["write-preflight", "batch-write"];
-const VERIFY_PROFILES: readonly AscetProfile[] = ["verify", "write-preflight", "batch-write", "component-edit"];
 const OPS_PROFILES: readonly AscetProfile[] = ["ops"];
 
 function descriptor(
@@ -72,7 +70,8 @@ function shot(intent: string, args: Record<string, unknown>, variant?: string): 
 const writePreflightRules = [
 	"By default this tool returns a non-error preflight outcome and does not write.",
 	"Set executeWrite=true only when the user explicitly asks to apply the write; PI still requires confirmation.",
-	"Use verifyReadback=true unless the user explicitly asks to skip readback.",
+	"Executed writes always perform mandatory action-specific readback verification.",
+	"Do not request or disable verification through ascet_edit parameters.",
 ] as const;
 
 const methodEditRules = [
@@ -140,6 +139,23 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 				shot("expand package", { action: "tree", target: { targetPathPrefix: "PlatformLibrary\\Package" } }),
 			],
 			tags: ["navigation", "tree", "live-read"],
+		}),
+	}),
+	descriptor("ascet_get", "database_catalog", "public", READ_PROFILES, {
+		prompt: prompt("Build stored full-database catalogs from a complete Tree observation.", {
+			rules: [
+				"Create a complete unbounded stored tree first, then pass its resultId as sourceTreeResultId.",
+				"Use include to select required object types; Parameter Class and Message requests perform one combined live scan.",
+			],
+			fewShots: [
+				shot("build database catalog", {
+					action: "database_catalog",
+					sourceTreeResultId: "obs-tree-full",
+					include: ["module", "enumeration"],
+					delivery: "stored",
+				}),
+			],
+			tags: ["catalog", "database", "stored-read"],
 		}),
 	}),
 	descriptor("ascet_get", "elements", "public", READ_PROFILES, {
@@ -433,9 +449,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 	descriptor("ascet_edit", "create_folder", "public", WRITE_PROFILES, {
 		prompt: prompt("Create one ASCET folder with guarded preflight/readback behavior.", {
 			rules: writePreflightRules,
-			fewShots: [
-				shot("preflight folder", { action: "create_folder", folderPath: "DEMO/New", verifyReadback: true }),
-			],
+			fewShots: [shot("preflight folder", { action: "create_folder", folderPath: "DEMO/New" })],
 			tags: ["write", "folder", "preflight"],
 		}),
 	}),
@@ -452,7 +466,6 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					componentPath: "DEMO/C",
 					kind: "class",
 					language: "ESDL",
-					verifyReadback: true,
 				}),
 			],
 			tags: ["write", "component", "preflight"],
@@ -468,7 +481,6 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					componentKind: "class",
 					methodName: "calc2",
 					methodKind: "abstract",
-					verifyReadback: true,
 				}),
 			],
 			tags: ["write", "method", "preflight"],
@@ -501,7 +513,6 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					action: "delete_component",
 					componentPath: "DEMO/Old",
 					ifMissing: "fail",
-					verifyReadback: true,
 				}),
 			],
 			tags: ["write", "component", "delete"],
@@ -516,7 +527,6 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					componentPath: "DEMO/PID",
 					methodName: "old",
 					ifMissing: "fail",
-					verifyReadback: true,
 				}),
 			],
 			tags: ["write", "method", "delete"],
@@ -530,7 +540,6 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					action: "delete_folder",
 					folderPath: "DEMO/Old",
 					ifMissing: "fail",
-					verifyReadback: true,
 				}),
 			],
 			tags: ["write", "folder", "delete"],
@@ -545,7 +554,6 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					componentPath: "DEMO/PID",
 					methodName: "calc",
 					codeFile: "calc.esdl",
-					verifyReadback: true,
 				}),
 			],
 			tags: ["write", "code", "method"],
@@ -739,7 +747,6 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					action: "set_enumerators",
 					componentPath: "D/E",
 					enumerators: ["E_OFF", "E_ON"],
-					verifyReadback: true,
 				}),
 			],
 			tags: ["write", "enumeration"],
@@ -869,21 +876,6 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["write", "dependency", "commit"],
 		}),
 	}),
-	descriptor("ascet_verify", "readback", "public", VERIFY_PROFILES, {
-		prompt: prompt("Verify ASCET readback after writes or when checking live state.", {
-			rules: [
-				"Use componentPath for class, module, or state-machine readback; use projectPath only when objectKind=project.",
-			],
-			fewShots: [
-				shot("verify class", {
-					action: "readback",
-					objectKind: "class",
-					componentPath: "DEMO/PID",
-				}),
-			],
-			tags: ["verify", "readback"],
-		}),
-	}),
 	descriptor("ascet_edit", "check", "public", ["component-edit"], {
 		prompt: prompt("Check whether a source-controlled ASCET component is editable.", {
 			rules: ["Use mode=check before editing a source-controlled ASCET component when editability is uncertain."],
@@ -938,7 +930,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["ops", "scheduler", "recover"],
 		}),
 	}),
-	descriptor("ascet_scheduler_status", "status", "public", ["verify", "write-preflight", "batch-write", "ops"], {
+	descriptor("ascet_scheduler_status", "status", "public", ["write-preflight", "batch-write", "ops"], {
 		prompt: prompt("Inspect ASCET runtime scheduler queue, PI CLI lock, and operation health.", {
 			rules: ["Use ascet_scheduler_status when ASCET tools appear stuck, queued, degraded, or timing out."],
 			fewShots: [shot("inspect lock", { action: "status", format: "text" })],

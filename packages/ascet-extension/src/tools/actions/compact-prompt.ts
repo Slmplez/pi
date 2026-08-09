@@ -4,7 +4,7 @@ export interface CompactActionGuideOptions {
 	includeHidden?: boolean;
 }
 
-const familyOrder = ["ops", "explore", "search", "read", "diff", "write", "verify"] as const;
+const familyOrder = ["ops", "explore", "search", "read", "diff", "write"] as const;
 
 function formatEntry(entry: ReturnType<typeof listActionCatalogEntries>[number]): string {
 	return `- ${entry.id}: ${entry.compact}. Ex: ${entry.miniFewShot}`;

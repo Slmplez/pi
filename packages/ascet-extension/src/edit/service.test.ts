@@ -65,6 +65,32 @@ describe("ASCET edit service", () => {
 		}
 	});
 
+	test("rejects model-supplied verifyReadback because executed writes verify automatically", async () => {
+		let dispatches = 0;
+		const result = await runAscetEdit(
+			{
+				action: "create_folder",
+				folderPath: "DEMO/New",
+				verifyReadback: false,
+				executeWrite: true,
+			},
+			{
+				cwd: process.cwd(),
+				executeCli: async () => {
+					dispatches += 1;
+					throw new Error("Invalid public parameters must not dispatch.");
+				},
+			},
+			approvingContext,
+		);
+
+		assert.equal(result.details.outcome.status, "error");
+		if (result.details.outcome.status === "error") {
+			assert.equal(result.details.outcome.error.code, "ascet_edit_invalid_parameter");
+		}
+		assert.equal(dispatches, 0);
+	});
+
 	test("does not dispatch an invalid action even when mode is valid", async () => {
 		let dispatches = 0;
 		const result = await runAscetEdit(
@@ -222,7 +248,7 @@ describe("ASCET edit service", () => {
 		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-spec-preflight-"));
 		const contractsRoot = join(root, "contracts");
 		mkdirSync(contractsRoot, { recursive: true });
-		const cliPath = join(root, "AscetCli.exe");
+		const cliPath = join(root, "AscetBridge.exe");
 		writeFileSync(cliPath, "", "utf8");
 		writeFileSync(join(contractsRoot, "cli-catalog.json"), "{}", "utf8");
 		const calls: string[][] = [];
@@ -239,7 +265,7 @@ describe("ASCET edit service", () => {
 				},
 				{
 					cwd: root,
-					env: { ASCET_CLI_PATH: cliPath, ASCET_CONTRACTS_PATH: contractsRoot },
+					env: { ASCET_BRIDGE_PATH: cliPath, ASCET_CONTRACTS_PATH: contractsRoot },
 					executeCli: async (request) => {
 						calls.push(request.args);
 						if (request.args[1] === "diff_element_spec") {
@@ -278,7 +304,7 @@ describe("ASCET edit service", () => {
 		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-patch-preflight-"));
 		const contractsRoot = join(root, "contracts");
 		mkdirSync(contractsRoot, { recursive: true });
-		writeFileSync(join(root, "AscetCli.exe"), "", "utf8");
+		writeFileSync(join(root, "AscetBridge.exe"), "", "utf8");
 		writeFileSync(join(contractsRoot, "cli-catalog.json"), "{}", "utf8");
 		const calls: string[][] = [];
 		let diffSpec: unknown;
@@ -292,7 +318,7 @@ describe("ASCET edit service", () => {
 				},
 				{
 					cwd: root,
-					env: { ASCET_CLI_PATH: join(root, "AscetCli.exe"), ASCET_CONTRACTS_PATH: contractsRoot },
+					env: { ASCET_BRIDGE_PATH: join(root, "AscetBridge.exe"), ASCET_CONTRACTS_PATH: contractsRoot },
 					executeCli: async (request) => {
 						calls.push(request.args);
 						if (request.args[1] === "diff_element_spec") {
@@ -366,7 +392,7 @@ describe("ASCET edit service", () => {
 		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-dependency-preflight-"));
 		const contractsRoot = join(root, "contracts");
 		mkdirSync(contractsRoot, { recursive: true });
-		const cliPath = join(root, "AscetCli.exe");
+		const cliPath = join(root, "AscetBridge.exe");
 		writeFileSync(cliPath, "", "utf8");
 		writeFileSync(join(contractsRoot, "cli-catalog.json"), "{}", "utf8");
 		const calls: string[][] = [];
@@ -383,7 +409,7 @@ describe("ASCET edit service", () => {
 				},
 				{
 					cwd: root,
-					env: { ASCET_CLI_PATH: cliPath, ASCET_CONTRACTS_PATH: contractsRoot },
+					env: { ASCET_BRIDGE_PATH: cliPath, ASCET_CONTRACTS_PATH: contractsRoot },
 					executeCli: async (request) => {
 						calls.push(request.args);
 						return {
@@ -412,7 +438,7 @@ describe("ASCET edit service", () => {
 		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-auto-binding-"));
 		const contractsRoot = join(root, "contracts");
 		mkdirSync(contractsRoot, { recursive: true });
-		const cliPath = join(root, "AscetCli.exe");
+		const cliPath = join(root, "AscetBridge.exe");
 		writeFileSync(cliPath, "", "utf8");
 		writeFileSync(join(contractsRoot, "cli-catalog.json"), "{}", "utf8");
 		const calls: string[][] = [];
@@ -430,7 +456,7 @@ describe("ASCET edit service", () => {
 				},
 				{
 					cwd: root,
-					env: { ASCET_CLI_PATH: cliPath, ASCET_CONTRACTS_PATH: contractsRoot },
+					env: { ASCET_BRIDGE_PATH: cliPath, ASCET_CONTRACTS_PATH: contractsRoot },
 					executeCli: async (request) => {
 						calls.push(request.args);
 						return {
@@ -483,14 +509,14 @@ describe("ASCET edit service", () => {
 		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-service-unverified-"));
 		const contractsRoot = join(root, "contracts");
 		mkdirSync(contractsRoot, { recursive: true });
-		writeFileSync(join(root, "AscetCli.exe"), "", "utf8");
+		writeFileSync(join(root, "AscetBridge.exe"), "", "utf8");
 		writeFileSync(join(contractsRoot, "cli-catalog.json"), "{}", "utf8");
 		const calls: string[][] = [];
 		try {
 			const options = {
 				cwd: root,
 				env: {
-					ASCET_CLI_PATH: join(root, "AscetCli.exe"),
+					ASCET_BRIDGE_PATH: join(root, "AscetBridge.exe"),
 					ASCET_CONTRACTS_PATH: contractsRoot,
 					PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts"),
 					PI_ASCET_RUNTIME_DIR: join(root, "runtime"),
@@ -522,7 +548,6 @@ describe("ASCET edit service", () => {
 					elements: [
 						{ role: "standardPrimitive", name: "K", kind: "parameter", modelType: "cont", scope: "local" },
 					],
-					verifyReadback: false,
 				},
 				options,
 				{},
@@ -537,7 +562,7 @@ describe("ASCET edit service", () => {
 			);
 
 			const outcome = result.details.outcome;
-			assert.equal(outcome.status, "ok");
+			assert.equal(outcome.status, "partial");
 			assert.deepEqual(
 				calls.map((args) => args[1]),
 				[
@@ -548,9 +573,13 @@ describe("ASCET edit service", () => {
 					"apply_element_spec",
 				],
 			);
-			if (outcome.status === "ok") {
-				const observations = (outcome.data as { observations: { invalidated: string[] } }).observations;
-				assert.deepEqual(observations, { invalidated: [] });
+			if (outcome.status === "partial") {
+				const data = outcome.data as {
+					verification: { status: string };
+					observations: { invalidated: string[] };
+				};
+				assert.equal(data.verification.status, "missing");
+				assert.deepEqual(data.observations, { invalidated: [] });
 			}
 		} finally {
 			rmSync(root, { recursive: true, force: true });
@@ -561,14 +590,14 @@ describe("ASCET edit service", () => {
 		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-dependency-commit-"));
 		const contractsRoot = join(root, "contracts");
 		mkdirSync(contractsRoot, { recursive: true });
-		writeFileSync(join(root, "AscetCli.exe"), "", "utf8");
+		writeFileSync(join(root, "AscetBridge.exe"), "", "utf8");
 		writeFileSync(join(contractsRoot, "cli-catalog.json"), "{}", "utf8");
 		const calls: string[][] = [];
 		try {
 			const options = {
 				cwd: root,
 				env: {
-					ASCET_CLI_PATH: join(root, "AscetCli.exe"),
+					ASCET_BRIDGE_PATH: join(root, "AscetBridge.exe"),
 					ASCET_CONTRACTS_PATH: contractsRoot,
 					PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts"),
 					PI_ASCET_RUNTIME_DIR: join(root, "runtime"),
@@ -582,7 +611,7 @@ describe("ASCET edit service", () => {
 							ok: true,
 							result: dryRun
 								? { dryRun: true, beforeDependency: "independent", beforeFormula: "", mappings: [] }
-								: { writeSucceeded: true, readbackVerified: true },
+								: { writeSucceeded: true, verifyReadbackRequested: true, readbackVerified: true },
 							error: null,
 						}),
 						stderr: "",

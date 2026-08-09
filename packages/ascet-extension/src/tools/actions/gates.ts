@@ -17,7 +17,6 @@ const ascetToolNameSet = new Set([
 	"ascet_read",
 	"ascet_diff",
 	"ascet_edit",
-	"ascet_verify",
 	"ascet_batch_write",
 	"configure_parameter_dependency_chain",
 ]);

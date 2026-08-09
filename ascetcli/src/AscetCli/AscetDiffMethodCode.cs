@@ -63,19 +63,19 @@ public static class AscetDiffMethodCode
     {
         try
         {
-            return AscetDatabaseExplorerCommon.DeserializeChildJsonObject(
-                AscetDatabaseExplorerCommon.RunSiblingCliExecOrExe("read_method_code", "AscetReadMethodCode.exe", new List<string> { componentPath, methodName, "--json" }));
+            AscetMethodCode methodCode = AscetReadMethodCode.ReadMethodCode(componentPath, methodName);
+            return AscetReadMethodCode.BuildPayload(methodCode);
         }
         catch (AscetReadException ex)
         {
-            if (ContainsAscetError(ex.Message, "method_not_found"))
+            if (String.Equals(ex.Code, "method_not_found", StringComparison.OrdinalIgnoreCase)
+                || ContainsAscetError(ex.Message, "method_not_found"))
             {
                 throw new AscetReadException(
                     "method_not_found",
                     "diff_method_code",
                     "Method '" + methodName + "' was not found in component '" + componentPath + "'.");
             }
-
             throw;
         }
     }
@@ -93,7 +93,7 @@ public static class AscetDiffMethodCode
     {
         if (args == null || args.Length < 3)
         {
-            throw new AscetReadException("invalid_argument", "parse_arguments", "usage: AscetCli.exe exec diff_method_code <left-component-path> <right-component-path> <method-name> [--changes-only] [--json]");
+            throw new AscetReadException("invalid_argument", "parse_arguments", "usage: AscetBridge.exe exec diff_method_code <left-component-path> <right-component-path> <method-name> [--changes-only] [--json]");
         }
 
         AscetDiffMethodCodeArguments result = new AscetDiffMethodCodeArguments

@@ -47,7 +47,7 @@ public static class AscetReadComponentSummary
     {
         if (args == null || args.Length < 1)
         {
-            throw new AscetReadException("invalid_argument", "parse_arguments", "usage: AscetCli.exe exec read_component_summary <component-path> [--json]");
+            throw new AscetReadException("invalid_argument", "parse_arguments", "usage: AscetBridge.exe exec read_component_summary <component-path> [--json]");
         }
 
         return AscetDatabaseExplorerCommon.NormalizePath(args[0], "component_path");
@@ -85,8 +85,10 @@ public static class AscetReadComponentSummary
 
         if (UsesSnapshotSummary(normalizedKind))
         {
-            Dictionary<string, object> snapshot = AscetDatabaseExplorerCommon.DeserializeChildJsonObject(
-                AscetDatabaseExplorerCommon.RunSiblingCliExecOrExe("read_component_snapshot", "AscetReadComponentSnapshot.exe", new List<string> { componentPath, "--json" }));
+            Dictionary<string, object> snapshot = InProcessLegacyOperationAdapter.InvokeJsonObject(
+                "read_component_snapshot",
+                AscetReadComponentSnapshot.Main,
+                new string[] { componentPath, "--json" });
             return BuildSnapshotSummaryPayload(snapshot, identity);
         }
 

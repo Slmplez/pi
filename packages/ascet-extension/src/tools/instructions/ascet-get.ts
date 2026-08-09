@@ -1,4 +1,4 @@
-﻿import type { AscetActionInstruction } from "./types.ts";
+import type { AscetActionInstruction } from "./types.ts";
 
 export const ascetGetInstructions = [
 	{
@@ -16,6 +16,23 @@ export const ascetGetInstructions = [
 			'ascet_get({action:"tree",target:{targetPathPrefix:"PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation"},traversal:{depth:2}})',
 		],
 		tags: ["navigation", "tree", "live-read"],
+	},
+	{
+		id: "ascet_get.database_catalog",
+		tool: "ascet_get",
+		action: "database_catalog",
+		profiles: ["base", "advanced-read", "reference", "write-preflight"],
+		summary:
+			"Build a stored full-database Catalog for selected Parameter Class, Enumeration, Module, and Message object types.",
+		rules: [
+			"First create a complete unbounded tree with delivery='stored', then pass its resultId as sourceTreeResultId. Bounded, partial, or truncated Tree observations are rejected.",
+			"The required include array controls both scanning and output types. Enumeration and Module-only requests use the stored Tree locally; Parameter Class and Message requests perform one combined live scan.",
+			"Use Pi find, grep, and read against returned NDJSON artifacts. Use an exact path or OID from the Catalog with ascet_read only when deeper live evidence is required.",
+		],
+		fewShots: [
+			'ascet_get({action:"database_catalog",sourceTreeResultId:"obs-tree-...",include:["module","enumeration"],delivery:"stored"})',
+		],
+		tags: ["catalog", "database", "stored-read"],
 	},
 	{
 		id: "ascet_get.elements",

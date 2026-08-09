@@ -3,7 +3,7 @@ param(
     [string]$OutputZipPath,
     [string]$ReleaseDirectory,
     [string]$PackageRootName = 'ascet-csharp-runtime',
-    [string[]]$KnownLockingProcesses = @('AscetReadComponentSnapshot'),
+    [string[]]$KnownLockingProcesses = @(),
     [switch]$CheckOnlyProcessLocks,
     [switch]$SkipTests,
     [switch]$Force
@@ -22,7 +22,7 @@ $ExitPackagingFailed = 23
 $ExitUnexpectedFailure = 99
 
 function Get-ReleaseRepoRoot {
-    return (Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)))
+    return (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
 }
 
 function Resolve-DefaultOutputZipPath {
@@ -85,8 +85,7 @@ function Copy-DirectoryContents {
 
 function Get-LockingProcessDetails {
     param(
-        [Parameter(Mandatory = $true)]
-        [string[]]$ProcessNames
+        [string[]]$ProcessNames = @()
     )
 
     $details = @()
@@ -188,11 +187,10 @@ function New-ReleaseManifest {
         [Parameter(Mandatory = $true)]
         [bool]$TestsSkipped,
 
-        [Parameter(Mandatory = $true)]
-        [string[]]$HandledLockingProcesses
+        [string[]]$HandledLockingProcesses = @()
     )
 
-    $executables = Get-PackageExecutableInventory -PackageDirectory $PackageDirectory
+    $executables = @(Get-PackageExecutableInventory -PackageDirectory $PackageDirectory)
     $directories = Get-PackageDirectoryInventory -PackageDirectory $PackageDirectory
 
     return [ordered]@{
@@ -231,22 +229,43 @@ function Test-PackageLayout {
         throw "Release directory '$PackageDirectory' was not created."
     }
 
-    $dllDirectory = Join-Path $PackageDirectory 'Ascetapidll'
-    if (-not (Test-Path -LiteralPath $dllDirectory)) {
-        throw "Expected runtime support directory '$dllDirectory' in release package."
-    }
-
-    $dllPath = Join-Path $dllDirectory 'Etas.AscetNET.dll'
-    if (-not (Test-Path -LiteralPath $dllPath)) {
-        throw "Expected runtime support DLL '$dllPath' in release package."
-    }
-
-    $executables = @(Get-ChildItem -LiteralPath $PackageDirectory -Recurse -File -Filter '*.exe')
-    if ($executables.Count -lt 1) {
-        throw "Expected at least one executable in release package '$PackageDirectory'."
+    $expectedFiles = @('AscetBridge.exe', 'Ascetapidll\Etas.AscetNET.dll')
+    $actualFiles = @(
+        Get-ChildItem -LiteralPath $PackageDirectory -Recurse -File | ForEach-Object {
+            $_.FullName.Substring($PackageDirectory.Length).TrimStart('\')
+        } | Sort-Object
+    )
+    $missing = @($expectedFiles | Where-Object { $_ -notin $actualFiles })
+    $unexpected = @($actualFiles | Where-Object { $_ -notin $expectedFiles })
+    if ($actualFiles.Count -ne 2 -or $missing.Count -gt 0 -or $unexpected.Count -gt 0) {
+        throw "Release package must contain exactly AscetBridge.exe and Ascetapidll\Etas.AscetNET.dll. Missing: [$($missing -join ', ')]. Unexpected: [$($unexpected -join ', ')]."
     }
 }
+function Test-ReleaseZipLayout {
+    param(
+        [Parameter(Mandatory = $true)][string]$ZipPath,
+        [Parameter(Mandatory = $true)][string]$PackageRootName
+    )
 
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+    $archive = [IO.Compression.ZipFile]::OpenRead($ZipPath)
+    try {
+        $expected = @(
+            "$PackageRootName\AscetBridge.exe",
+            "$PackageRootName\Ascetapidll\Etas.AscetNET.dll",
+            "$PackageRootName\manifest.json"
+        )
+        $actual = @($archive.Entries | Where-Object { -not [string]::IsNullOrWhiteSpace($_.Name) } | ForEach-Object { $_.FullName } | Sort-Object)
+        $missing = @($expected | Where-Object { $_ -notin $actual })
+        $unexpected = @($actual | Where-Object { $_ -notin $expected })
+        if ($actual.Count -ne 3 -or $missing.Count -gt 0 -or $unexpected.Count -gt 0) {
+            throw "Release zip allowlist mismatch. Missing: [$($missing -join ', ')]. Unexpected: [$($unexpected -join ', ')]."
+        }
+    }
+    finally {
+        $archive.Dispose()
+    }
+}
 $repoRoot = Get-ReleaseRepoRoot
 if ([string]::IsNullOrWhiteSpace($OutputZipPath)) {
     $OutputZipPath = Resolve-DefaultOutputZipPath -RepoRoot $repoRoot
@@ -257,8 +276,8 @@ if ([string]::IsNullOrWhiteSpace($ReleaseDirectory)) {
 }
 
 $buildScriptPath = Join-Path $PSScriptRoot 'build-ascet-csharp.ps1'
-$testScriptPath = Join-Path $PSScriptRoot 'test-ascet-csharp.ps1'
-$sourceBinDirectory = Join-Path $repoRoot 'src\ascetcli\output\ascet-csharp\bin'
+$testScriptPath = Join-Path $PSScriptRoot 'test-ascet-bridge.ps1'
+$sourceBinDirectory = Join-Path $repoRoot 'ascetcli\output\ascet-csharp\bin'
 $manifestPath = Join-Path $ReleaseDirectory 'manifest.json'
 $zipParentDirectory = Split-Path -Parent $OutputZipPath
 
@@ -333,7 +352,7 @@ try {
         -SourceBinDirectory $sourceBinDirectory `
         -OutputZipPath $OutputZipPath `
         -TestsSkipped ([bool]$SkipTests) `
-        -HandledLockingProcesses ($KnownLockingProcesses | Select-Object -Unique)
+        -HandledLockingProcesses @($KnownLockingProcesses | Select-Object -Unique)
     Write-ReleaseManifest -ManifestPath $manifestPath -Manifest $manifest
 
     if ((Test-Path -LiteralPath $OutputZipPath) -and -not $Force) {
@@ -351,6 +370,7 @@ try {
         $stagingPackageDirectory = Join-Path $stagingRoot $PackageRootName
         Copy-Item -LiteralPath $ReleaseDirectory -Destination $stagingPackageDirectory -Recurse -Force
         Compress-Archive -LiteralPath $stagingPackageDirectory -DestinationPath $OutputZipPath -CompressionLevel Optimal -Force
+        Test-ReleaseZipLayout -ZipPath $OutputZipPath -PackageRootName $PackageRootName
     }
     finally {
         if (Test-Path -LiteralPath $stagingRoot) {

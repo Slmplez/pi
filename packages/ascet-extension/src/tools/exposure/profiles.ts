@@ -3,7 +3,6 @@ export type AscetProfile =
 	| "advanced-read"
 	| "reference"
 	| "diff"
-	| "verify"
 	| "write-preflight"
 	| "batch-write"
 	| "component-edit"
@@ -19,7 +18,6 @@ const DEFAULT_ACTIVE_TOOLS = [
 	...COMMON_ASCET_TOOLS,
 	"ascet_diff",
 	"ascet_edit",
-	"ascet_verify",
 	"configure_parameter_dependency_chain",
 ] as const;
 
@@ -28,19 +26,11 @@ export const profileTools: Record<AscetProfile, readonly string[]> = {
 	"advanced-read": [...ON_DEMAND_DISCOVERY_TOOLS, "ascet_status", "ascet_capabilities"],
 	reference: [...ON_DEMAND_DISCOVERY_TOOLS, "ascet_status", "ascet_capabilities"],
 	diff: [...ON_DEMAND_DISCOVERY_TOOLS, "ascet_status", "ascet_capabilities", "ascet_diff"],
-	verify: [
-		...ON_DEMAND_DISCOVERY_TOOLS,
-		"ascet_status",
-		"ascet_capabilities",
-		"ascet_verify",
-		"ascet_scheduler_status",
-	],
 	"write-preflight": [
 		...ON_DEMAND_DISCOVERY_TOOLS,
 		"ascet_status",
 		"ascet_capabilities",
 		"ascet_edit",
-		"ascet_verify",
 		"ascet_scheduler_status",
 		"configure_parameter_dependency_chain",
 	],
@@ -49,7 +39,6 @@ export const profileTools: Record<AscetProfile, readonly string[]> = {
 		"ascet_status",
 		"ascet_capabilities",
 		"ascet_edit",
-		"ascet_verify",
 		"ascet_scheduler_status",
 		"configure_parameter_dependency_chain",
 	],
@@ -58,7 +47,6 @@ export const profileTools: Record<AscetProfile, readonly string[]> = {
 		"ascet_status",
 		"ascet_capabilities",
 		"ascet_edit",
-		"ascet_verify",
 		"configure_parameter_dependency_chain",
 	],
 	ops: [...ON_DEMAND_DISCOVERY_TOOLS, ...COMMON_ASCET_TOOLS],

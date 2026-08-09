@@ -32,23 +32,23 @@ describe("ASCET extension status diagnostics", () => {
 		expect(paths.mode).toBe("bundle");
 		expect(paths.extensionRoot).toBe(resolve(repoRoot, "packages/ascet-extension"));
 		expect(paths.contractsRoot).toBe(resolve(repoRoot, "packages/ascet-extension/ascet-cli/contracts"));
-		expect(paths.cliPath).toBe(resolve(repoRoot, "packages/ascet-extension/ascet-cli/bin/AscetCli.exe"));
+		expect(paths.cliPath).toBe(resolve(repoRoot, "packages/ascet-extension/ascet-cli/bin/AscetBridge.exe"));
 		expect(paths.catalogPath).toBe(
 			resolve(repoRoot, "packages/ascet-extension/ascet-cli/contracts/cli-catalog.json"),
 		);
 	});
 
-	it("prefers explicit ASCET_CLI_PATH and ASCET_CONTRACTS_PATH overrides", () => {
+	it("prefers explicit ASCET_BRIDGE_PATH and ASCET_CONTRACTS_PATH overrides", () => {
 		const paths = resolveAscetStatusPaths({
 			cwd: repoRoot,
 			env: {
-				ASCET_CLI_PATH: "C:/custom/AscetCli.exe",
+				ASCET_BRIDGE_PATH: "C:/custom/AscetBridge.exe",
 				ASCET_CONTRACTS_PATH: "D:/contracts",
 			},
 		});
 
 		expect(paths.mode).toBe("env");
-		expect(paths.cliPath).toBe(resolve("C:/custom/AscetCli.exe"));
+		expect(paths.cliPath).toBe(resolve("C:/custom/AscetBridge.exe"));
 		expect(paths.contractsRoot).toBe(resolve("D:/contracts"));
 		expect(paths.catalogPath).toBe(resolve("D:/contracts/cli-catalog.json"));
 	});
@@ -63,7 +63,7 @@ describe("ASCET extension status diagnostics", () => {
 
 		expect(report.paths.mode).toBe("bundle");
 		expect(report.paths.extensionRoot).toBe(tempExtensionRoot);
-		expect(report.paths.cliPath).toBe(resolve(tempExtensionRoot, "ascet-cli/bin/AscetCli.exe"));
+		expect(report.paths.cliPath).toBe(resolve(tempExtensionRoot, "ascet-cli/bin/AscetBridge.exe"));
 		expect(report.checks.catalogExists).toBe(true);
 		expect(report.checks.cliExists).toBe(false);
 		expect(report.ok).toBe(false);
@@ -78,7 +78,7 @@ describe("ASCET extension status diagnostics", () => {
 			contractsRootExists: existsSync(report.paths.contractsRoot),
 			catalogExists: existsSync(report.paths.catalogPath),
 		});
-		expect(report.summary).toContain("ASCET CLI:");
+		expect(report.summary).toContain("ASCET Bridge:");
 		expect(report.summary).toContain("ASCET mode:");
 		expect(report.summary).toContain("ASCET contracts:");
 		expect(report.summary).toContain("cli-catalog.json:");
@@ -159,7 +159,8 @@ describe("ASCET extension status diagnostics", () => {
 		expect(result.ok).toBe(true);
 		expect(result.data.mode).toBe("bundle");
 		expect(result.data.counts.commands).toBeGreaterThan(40);
-		expect(result.data.counts.families).toBeGreaterThanOrEqual(8);
+		expect(result.data.counts.families).toBeGreaterThanOrEqual(6);
+		expect(result.data.families).not.toContain("ops");
 		expect(result.data.counts.playbooks).toBeGreaterThanOrEqual(4);
 		expect(result.data.families).toContain("read");
 		expect(result.data.families).toContain("write");
@@ -237,7 +238,7 @@ describe("ASCET extension status diagnostics", () => {
 			commandId: "selftest",
 		});
 		expect(details?.paths.mode).toBe("bundle");
-		expect(details?.paths.cliPath).toBe(resolve(repoRoot, "packages/ascet-extension/ascet-cli/bin/AscetCli.exe"));
+		expect(details?.paths.cliPath).toBe(resolve(repoRoot, "packages/ascet-extension/ascet-cli/bin/AscetBridge.exe"));
 		expect(details?.paths.catalogPath).toBe(
 			resolve(repoRoot, "packages/ascet-extension/ascet-cli/contracts/cli-catalog.json"),
 		);

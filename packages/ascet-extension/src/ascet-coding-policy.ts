@@ -18,7 +18,7 @@ Workflow:
 4. When ascet_get returns a stored observation, use Pi find, grep, and read on its NDJSON and metadata paths before making another live call. Use ascet_read only for exact deep ASCET content such as complete code, signatures, implementation data, dependency/formula detail, or detailed diagrams.
 5. Do not start by writing ESDL. Before writing ESDL, produce a method plan, element plan, execution order, parameter plan, and implementation configuration.
 6. Before modifying any ASCET Class, Module, StateMachine, Enumeration, or component, check editability with ${editToolName}({mode:"check", componentPath}); if not editable, use ${editToolName}({mode:"set", componentPath, executeWrite:true}) only with explicit user approval. Use action for mutations, not editability; mutation writes default to preflight and execute only when explicitly asked.
-7. After writes, verify with ascet_verify readback or verifyReadback when supported. Successful writes invalidate affected stored observations; get fresh bounded data before relying on prior structure or reference evidence.
+7. Executed ${editToolName} writes always perform mandatory automatic action-specific readback verification. Inspect the returned verification feedback and do not issue a redundant live read after verification passes. For an explicit independent component check, use ascet_read; for Project formulas, use ascet_get.formulas. Executed writes invalidate affected stored observations; get fresh bounded data before relying on prior structure or reference evidence.
 
 Method signature rules:
 - Treat method/process signatures and ESDL bodies as separate ASCET structures.
@@ -30,7 +30,7 @@ Method signature rules:
 - Do not use apply_element_spec to create method arguments or return values.
 - Do not create same-name overloads. ASCET ESDL method and process names must remain unique.
 - A Return Method must have exactly one explicit return value, an explicit return type, and complete return behavior on all paths.
-- After signature changes, verify with readback before writing dependent ESDL body code.
+- After signature changes, inspect the automatic action-specific readback verification before writing dependent ESDL body code.
 
 ESDL rules:
 - Confirm method, process, and element existence before editing body text.
@@ -59,7 +59,7 @@ Enum rules:
 - Before creating an Enum or literal, use bounded ascet_get.tree and ascet_get.elements observations to find existing definitions in the feature or shared scope.
 - Keep literal names stable and business-meaningful; do not rename existing literals without reference evidence.
 - Preserve existing literal values unless the user explicitly asks for a migration.
-- After Enum changes, verify affected ESDL code, signatures, state machines, and implementation data.
+- After Enum changes, inspect the automatic action-specific readback verification, then re-read affected ESDL code, signatures, state machines, and implementation data when further work depends on them.
 
 Input, output, and timing rules:
 - External inputs need validity handling.

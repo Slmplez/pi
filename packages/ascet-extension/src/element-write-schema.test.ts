@@ -49,6 +49,16 @@ test("apply_element_spec standalone schema rejects unsupported write-control fie
 	);
 	assert.equal(
 		Value.Check(ascetApplyElementSpecParameters, {
+			action: "apply_element_spec",
+			componentPath: "DEMO/PID",
+			intent: "create",
+			elements: [],
+			verifyReadback: true,
+		}),
+		false,
+	);
+	assert.equal(
+		Value.Check(ascetApplyElementSpecParameters, {
 			componentPath: "DEMO/PID",
 			intent: "create",
 			elements: [],
@@ -86,7 +96,6 @@ test("standalone write schemas continue accepting supported requests", () => {
 			componentPath: "DEMO/PID",
 			intent: "create",
 			elements: [{ role: "standardPrimitive", name: "P", kind: "parameter", modelType: "cont", scope: "local" }],
-			verifyReadback: true,
 		}),
 		true,
 	);

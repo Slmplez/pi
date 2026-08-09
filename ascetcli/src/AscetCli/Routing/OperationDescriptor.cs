@@ -1,6 +1,40 @@
 using System;
 using System.Collections.Generic;
 
+public enum RouteVisibility
+{
+    PublicContract,
+    InternalRuntime,
+    DiagnosticOnly
+}
+
+public enum SessionPolicy
+{
+    NoSession,
+    FreshSession,
+    SharedReadSession
+}
+
+public enum TransportPolicy
+{
+    OneShotOnly,
+    PersistentSafe
+}
+
+public enum OperationRetryPolicy
+{
+    Never,
+    FreshSessionReadOnce
+}
+
+public enum OperationHandlerKind
+{
+    Typed,
+    LegacyOneShotAdapter
+}
+
+public delegate int AscetOperationHandler(string[] args);
+
 public sealed class OperationDescriptor
 {
     public OperationDescriptor(string operationId, ExecutionLane lane, bool hostEligible, BatchSupportShape batchSupport)
@@ -14,6 +48,35 @@ public sealed class OperationDescriptor
         bool hostEligible,
         BatchSupportShape batchSupport,
         OperationExecutionProfile executionProfile)
+        : this(
+            operationId,
+            lane,
+            hostEligible,
+            batchSupport,
+            executionProfile,
+            RouteVisibility.PublicContract,
+            lane == ExecutionLane.Diagnostic ? SessionPolicy.NoSession : SessionPolicy.FreshSession,
+            TransportPolicy.OneShotOnly,
+            lane == ExecutionLane.SerialWrite,
+            OperationRetryPolicy.Never,
+            OperationHandlerKind.Typed,
+            null)
+    {
+    }
+
+    public OperationDescriptor(
+        string operationId,
+        ExecutionLane lane,
+        bool hostEligible,
+        BatchSupportShape batchSupport,
+        OperationExecutionProfile executionProfile,
+        RouteVisibility routeVisibility,
+        SessionPolicy sessionPolicy,
+        TransportPolicy transportPolicy,
+        bool mutatesDatabase,
+        OperationRetryPolicy retryPolicy,
+        OperationHandlerKind handlerKind,
+        AscetOperationHandler handler)
     {
         if (String.IsNullOrWhiteSpace(operationId))
         {
@@ -22,8 +85,14 @@ public sealed class OperationDescriptor
 
         EnsureDefinedEnum(lane, "lane");
         EnsureDefinedEnum(batchSupport, "batchSupport");
+        EnsureDefinedEnum(routeVisibility, "routeVisibility");
+        EnsureDefinedEnum(sessionPolicy, "sessionPolicy");
+        EnsureDefinedEnum(transportPolicy, "transportPolicy");
+        EnsureDefinedEnum(retryPolicy, "retryPolicy");
+        EnsureDefinedEnum(handlerKind, "handlerKind");
+
         OperationId = operationId.Trim().ToLowerInvariant();
-        Validate(lane, hostEligible, batchSupport);
+        Validate(lane, hostEligible, batchSupport, sessionPolicy, transportPolicy, mutatesDatabase, retryPolicy, handlerKind);
         Lane = lane;
         HostEligible = hostEligible;
         BatchSupport = batchSupport;
@@ -31,6 +100,13 @@ public sealed class OperationDescriptor
             ? OperationExecutionProfile.FromDescriptorDefaults(Lane, HostEligible)
             : executionProfile;
         ExecutionProfile.ValidateForDescriptor(Lane, HostEligible);
+        RouteVisibility = routeVisibility;
+        SessionPolicy = sessionPolicy;
+        TransportPolicy = transportPolicy;
+        MutatesDatabase = mutatesDatabase;
+        RetryPolicy = retryPolicy;
+        HandlerKind = handlerKind;
+        Handler = handler;
     }
 
     public string OperationId { get; private set; }
@@ -38,9 +114,39 @@ public sealed class OperationDescriptor
     public bool HostEligible { get; private set; }
     public BatchSupportShape BatchSupport { get; private set; }
     public OperationExecutionProfile ExecutionProfile { get; private set; }
+    public RouteVisibility RouteVisibility { get; private set; }
+    public SessionPolicy SessionPolicy { get; private set; }
+    public TransportPolicy TransportPolicy { get; private set; }
+    public bool MutatesDatabase { get; private set; }
+    public OperationRetryPolicy RetryPolicy { get; private set; }
+    public OperationHandlerKind HandlerKind { get; private set; }
+    public AscetOperationHandler Handler { get; private set; }
+
     public bool SupportsBatch
     {
         get { return BatchSupport != BatchSupportShape.None; }
+    }
+
+    public OperationDescriptor WithHandler(AscetOperationHandler handler)
+    {
+        if (handler == null)
+        {
+            throw new ArgumentNullException("handler");
+        }
+
+        return new OperationDescriptor(
+            OperationId,
+            Lane,
+            HostEligible,
+            BatchSupport,
+            ExecutionProfile,
+            RouteVisibility,
+            SessionPolicy,
+            TransportPolicy,
+            MutatesDatabase,
+            RetryPolicy,
+            HandlerKind,
+            handler);
     }
 
     public void ThrowIfNotHostEligible(string failureOperation)
@@ -99,7 +205,62 @@ public sealed class OperationDescriptor
         }
     }
 
-    private static void Validate(ExecutionLane lane, bool hostEligible, BatchSupportShape batchSupport)
+    public string RouteVisibilityId
+    {
+        get
+        {
+            switch (RouteVisibility)
+            {
+                case RouteVisibility.InternalRuntime:
+                    return "internal_runtime";
+                case RouteVisibility.DiagnosticOnly:
+                    return "diagnostic_only";
+                default:
+                    return "public_contract";
+            }
+        }
+    }
+
+    public string SessionPolicyId
+    {
+        get
+        {
+            switch (SessionPolicy)
+            {
+                case SessionPolicy.NoSession:
+                    return "no_session";
+                case SessionPolicy.SharedReadSession:
+                    return "shared_read_session";
+                default:
+                    return "fresh_session";
+            }
+        }
+    }
+
+    public string TransportPolicyId
+    {
+        get { return TransportPolicy == TransportPolicy.PersistentSafe ? "persistent_safe" : "one_shot_only"; }
+    }
+
+    public string RetryPolicyId
+    {
+        get { return RetryPolicy == OperationRetryPolicy.FreshSessionReadOnce ? "fresh_session_read_once" : "never"; }
+    }
+
+    public string HandlerKindId
+    {
+        get { return HandlerKind == OperationHandlerKind.LegacyOneShotAdapter ? "legacy_one_shot_adapter" : "typed"; }
+    }
+
+    private static void Validate(
+        ExecutionLane lane,
+        bool hostEligible,
+        BatchSupportShape batchSupport,
+        SessionPolicy sessionPolicy,
+        TransportPolicy transportPolicy,
+        bool mutatesDatabase,
+        OperationRetryPolicy retryPolicy,
+        OperationHandlerKind handlerKind)
     {
         if (hostEligible && lane != ExecutionLane.PooledRead && lane != ExecutionLane.SerialWrite)
         {
@@ -119,16 +280,15 @@ public sealed class OperationDescriptor
                 {
                     throw new ArgumentException("serial_write operations cannot advertise batch_read support.", "batchSupport");
                 }
+                if (!mutatesDatabase)
+                {
+                    throw new ArgumentException("serial_write operations must declare MutatesDatabase=true.", "mutatesDatabase");
+                }
                 break;
             case ExecutionLane.Diagnostic:
-                if (hostEligible)
+                if (hostEligible || batchSupport != BatchSupportShape.None || sessionPolicy != SessionPolicy.NoSession)
                 {
-                    throw new ArgumentException("diagnostic operations cannot be host eligible.", "hostEligible");
-                }
-
-                if (batchSupport != BatchSupportShape.None)
-                {
-                    throw new ArgumentException("diagnostic operations cannot advertise batch support.", "batchSupport");
+                    throw new ArgumentException("diagnostic operations must be no-session, non-host, and non-batch.", "lane");
                 }
                 break;
             default:
@@ -137,6 +297,16 @@ public sealed class OperationDescriptor
                     throw new ArgumentException("legacy_read operations cannot advertise batch_write support.", "batchSupport");
                 }
                 break;
+        }
+
+        if (mutatesDatabase && retryPolicy != OperationRetryPolicy.Never)
+        {
+            throw new ArgumentException("mutating operations cannot advertise automatic retry.", "retryPolicy");
+        }
+
+        if (handlerKind == OperationHandlerKind.LegacyOneShotAdapter && transportPolicy != TransportPolicy.OneShotOnly)
+        {
+            throw new ArgumentException("legacy adapter handlers must be one-shot only.", "transportPolicy");
         }
     }
 
@@ -243,12 +413,10 @@ public sealed class OperationExecutionProfile
         {
             result["pageBudget"] = PageBudget.Value;
         }
-
         if (CooldownMs.HasValue)
         {
             result["cooldownMs"] = CooldownMs.Value;
         }
-
         return result;
     }
 
@@ -258,7 +426,6 @@ public sealed class OperationExecutionProfile
         {
             throw new ArgumentException(paramName + " is required.", paramName);
         }
-
         return value.Trim();
     }
 }

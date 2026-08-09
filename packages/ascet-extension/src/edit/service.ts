@@ -68,6 +68,12 @@ import {
 	writeTemporaryElementSpec,
 } from "./element-spec-plan.ts";
 import { type AscetPlanJsonValue, AscetPlanStore, AscetPlanStoreError, createAscetPlanBinding } from "./plan-store.ts";
+import {
+	type AscetEditExecutionClassification,
+	type AscetEditMutationStatus,
+	type AscetEditVerification,
+	classifyAscetEditExecution,
+} from "./verification.ts";
 import { recordAscetWriteTelemetry } from "./write-telemetry.ts";
 
 type CodeSource = { code?: string; codeFile?: string };
@@ -75,14 +81,13 @@ const VALID_STATE_MACHINE_OPERATIONS = new Set<string>(ASCET_SET_STATE_MACHINE_C
 const VALID_STATE_MACHINE_OPERATIONS_TEXT = ASCET_SET_STATE_MACHINE_CODE_OPERATIONS.join(", ");
 
 export type AscetMutationParams =
-	| { action: "create_folder"; folderPath: string; verifyReadback?: boolean; executeWrite?: boolean }
+	| { action: "create_folder"; folderPath: string; executeWrite?: boolean }
 	| {
 			action: "create_component";
 			componentPath: string;
 			kind: "class" | "module" | "statemachine" | "enumeration";
 			language?: "ESDL" | "BDE" | "C";
 			ifExists?: "fail" | "return-existing";
-			verifyReadback?: boolean;
 			rollbackOnFailure?: boolean;
 			executeWrite?: boolean;
 	  }
@@ -93,7 +98,6 @@ export type AscetMutationParams =
 			methodName: string;
 			methodKind?: "abstract" | "process" | "action" | "condition" | "trigger";
 			ifExists?: "fail" | "return-existing";
-			verifyReadback?: boolean;
 			executeWrite?: boolean;
 	  }
 	| {
@@ -107,14 +111,12 @@ export type AscetMutationParams =
 				type: "cont" | "sdisc" | "udisc" | "log";
 				ifExists?: "fail" | "keep" | "replace";
 			}>;
-			verifyReadback?: boolean;
 			executeWrite?: boolean;
 	  }
 	| {
 			action: "delete_component";
 			componentPath: string;
 			ifMissing?: "fail" | "ignore";
-			verifyReadback?: boolean;
 			executeWrite?: boolean;
 	  }
 	| {
@@ -122,21 +124,18 @@ export type AscetMutationParams =
 			componentPath: string;
 			methodName: string;
 			ifMissing?: "fail" | "ignore";
-			verifyReadback?: boolean;
 			executeWrite?: boolean;
 	  }
 	| {
 			action: "delete_folder";
 			folderPath: string;
 			ifMissing?: "fail" | "ignore";
-			verifyReadback?: boolean;
 			executeWrite?: boolean;
 	  }
 	| ({
 			action: "set_method_code";
 			componentPath: string;
 			methodName: string;
-			verifyReadback?: boolean;
 			executeWrite?: boolean;
 	  } & CodeSource)
 	| ({
@@ -145,7 +144,6 @@ export type AscetMutationParams =
 			operation?: "set-method" | "set-header" | "set-external-c-code";
 			section?: "set-method" | "set-header" | "set-external-c-code";
 			methodName?: string;
-			verifyReadback?: boolean;
 			executeWrite?: boolean;
 	  } & CodeSource)
 	| ({
@@ -169,14 +167,12 @@ export type AscetMutationParams =
 			targetState?: string;
 			priority?: number;
 			methodName?: string;
-			verifyReadback?: boolean;
 			executeWrite?: boolean;
 	  } & CodeSource)
 	| {
 			action: "set_enumerators";
 			componentPath: string;
 			enumerators: string[];
-			verifyReadback?: boolean;
 			executeWrite?: boolean;
 	  }
 	| (AscetApplyElementPlanParams & { executeWrite?: boolean })
@@ -187,7 +183,6 @@ export type AscetMutationParams =
 			specFile: string;
 			mode?: "restore";
 			deleteMissing?: boolean;
-			verifyReadback?: boolean;
 			executeWrite?: boolean;
 	  }
 	| {
@@ -214,9 +209,13 @@ export type AscetMutationParams =
 			match?: "exact" | "all";
 			dryRun?: boolean;
 			backupDir?: string;
-			verifyReadback?: boolean;
 			executeWrite?: boolean;
 	  };
+
+type ExecutableAscetMutationParams = AscetMutationParams & {
+	executeWrite: true;
+	verifyReadback: true;
+};
 
 export type AscetEditParams = AscetMutationParams | AscetEditabilityParams;
 
@@ -230,6 +229,7 @@ export interface AscetEditResult {
 		outcome: AscetToolOutcome;
 		raw?: AscetCliJsonResult;
 		observations?: AscetObservationInvalidation;
+		verification?: AscetEditVerification;
 		error?: { code: string; message: string };
 	};
 }
@@ -254,7 +254,6 @@ const methodSignatureArgumentSchema = strictObject({
 	ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("keep"), Type.Literal("replace")])),
 });
 const writeControlSchema = {
-	verifyReadback: Type.Optional(Type.Boolean()),
 	executeWrite: Type.Optional(Type.Boolean()),
 };
 const componentKindSchema = Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")]);
@@ -447,7 +446,6 @@ export const ascetMutationActionSchemas = [
 		clearDependencyFormula: Type.Optional(Type.Boolean()),
 		targetKind: Type.Optional(Type.Union([Type.Literal("auto"), Type.Literal("component"), Type.Literal("folder")])),
 		match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("all")])),
-		verifyReadback: Type.Optional(Type.Boolean()),
 	}),
 	strictObject({
 		action: Type.Literal("set_element_dependency"),
@@ -474,6 +472,7 @@ function asResponse(
 	outcome: AscetToolOutcome,
 	raw?: AscetCliJsonResult,
 	observations?: AscetObservationInvalidation,
+	verification?: AscetEditVerification,
 ): AscetEditResult {
 	return {
 		content: [{ type: "text", text: formatAscetEditOutcomeContent(outcome) }],
@@ -481,6 +480,7 @@ function asResponse(
 			outcome,
 			raw,
 			observations,
+			verification,
 			error: outcome.status === "error" ? outcome.error : undefined,
 		},
 	};
@@ -622,12 +622,8 @@ export async function runAscetMutation(
 		return asResponse(createPreflightOutcome({ action: normalizedParams.action, params: normalizedParams }));
 	}
 
-	const raw = await dispatchMutation(normalizedParams, options, ctx);
-	if (!raw.ok) {
-		return asResponse(outcomeFromCliResult(raw), raw);
-	}
-	const observations = invalidateSuccessfulEditObservations(normalizedParams, options);
-	return asResponse(createSuccessfulEditOutcome(raw, observations), raw, observations);
+	const raw = await dispatchMutation(prepareExecutableMutation(normalizedParams), options, ctx);
+	return finalizeAscetMutation({ params: normalizedParams, raw, options });
 }
 
 function recordManagedWriteTelemetry(
@@ -639,6 +635,7 @@ function recordManagedWriteTelemetry(
 	startedAt: number,
 ): void {
 	const outcome = result.details.outcome;
+	const mutationStatus = partialMutationStatus(outcome);
 	recordAscetWriteTelemetry(options, {
 		operation,
 		phase,
@@ -647,12 +644,18 @@ function recordManagedWriteTelemetry(
 				? "plan_ready"
 				: outcome.status === "ok"
 					? "committed"
-					: outcome.status === "blocked"
-						? "blocked"
-						: "error",
+					: outcome.status === "partial"
+						? mutationStatus === "unknown"
+							? "outcome_unknown"
+							: "committed_unverified"
+						: outcome.status === "blocked"
+							? "blocked"
+							: "error",
 		durationMs: Math.max(0, Date.now() - startedAt),
 		...(outcome.status === "error" ? { errorCode: outcome.error.code } : {}),
 		...(planId ? { planId } : {}),
+		...(result.details.verification ? { verificationStatus: result.details.verification.status } : {}),
+		...(mutationStatus ? { mutationStatus } : {}),
 	});
 }
 
@@ -859,11 +862,7 @@ ${summary}`,
 						},
 						options,
 					);
-		if (!raw.ok) {
-			return asResponse(outcomeFromCliResult(raw), raw);
-		}
-		const observations = invalidateSuccessfulEditObservations(planned, options);
-		return asResponse(createSuccessfulEditOutcome(raw, observations), raw, observations);
+		return finalizeAscetMutation({ params: planned, raw, options });
 	} catch (error) {
 		return planStoreFailure(error);
 	} finally {
@@ -1030,7 +1029,6 @@ async function runBackendMutationPreflight(
 				match: params.match,
 				dryRun: true,
 				backupDir: params.backupDir,
-				verifyReadback: params.verifyReadback,
 				executeWrite: false,
 			},
 			options,
@@ -1058,32 +1056,124 @@ async function runBackendMutationPreflight(
 	return undefined;
 }
 
-function invalidateSuccessfulEditObservations(
-	params: AscetMutationParams,
-	options: RunAscetEditOperationOptions,
-): AscetObservationInvalidation {
-	if (params.action === "set_element_dependency" && params.dryRun) {
-		return { invalidated: [] };
-	}
-	return invalidateAscetEditObservations(params, options);
+function prepareExecutableMutation(params: AscetMutationParams): ExecutableAscetMutationParams {
+	return { ...params, executeWrite: true, verifyReadback: true } as ExecutableAscetMutationParams;
 }
-function createSuccessfulEditOutcome(
-	raw: AscetCliJsonResult,
-	observations: AscetObservationInvalidation,
-): AscetToolOutcome {
+
+interface FinalizeAscetMutationInput {
+	params: AscetMutationParams;
+	raw: AscetCliJsonResult;
+	options: RunAscetEditOperationOptions;
+}
+
+function finalizeAscetMutation(input: FinalizeAscetMutationInput): AscetEditResult {
+	const errorCode = input.raw.error?.code;
+	if (
+		errorCode &&
+		(isAscetEditApprovalBlockedCode(errorCode) ||
+			errorCode.endsWith("_confirmation_ui_failed") ||
+			errorCode.endsWith("_preflight_required"))
+	) {
+		return asResponse(outcomeFromCliResult(input.raw), input.raw);
+	}
+
+	const classification = classifyAscetEditExecution(input.raw);
+	if (classification.mutationStatus === "not_started") {
+		return asResponse(outcomeFromCliResult(input.raw), input.raw, undefined, classification.verification);
+	}
+
+	const observations = classification.shouldInvalidateObservations
+		? invalidateAscetEditObservations(input.params, input.options)
+		: { invalidated: [] };
+
+	if (input.raw.ok && classification.verification.status === "passed") {
+		return asResponse(
+			createVerifiedEditOutcome(input.raw, classification.verification, observations),
+			input.raw,
+			observations,
+			classification.verification,
+		);
+	}
+
+	return asResponse(
+		createPartialEditOutcome(input.raw, classification, observations),
+		input.raw,
+		observations,
+		classification.verification,
+	);
+}
+
+const VERIFICATION_RESULT_KEYS = [
+	"readback",
+	"verify",
+	"verification",
+	"verifyReadbackRequested",
+	"VerifyReadbackRequested",
+	"readbackVerified",
+	"ReadbackVerified",
+] as const;
+
+function extractChangedPayload(raw: AscetCliJsonResult): unknown {
 	const payload = unwrapToolSuccessPayload(raw.data);
 	const record = asRecord(payload);
-	const readback = record?.readback ?? record?.verify ?? record?.verification;
-	const changed = record ? omitKeys(record, ["readback", "verify", "verification"]) : payload;
+	return record ? omitKeys(record, VERIFICATION_RESULT_KEYS) : payload;
+}
+
+function createVerifiedEditOutcome(
+	raw: AscetCliJsonResult,
+	verification: AscetEditVerification,
+	observations: AscetObservationInvalidation,
+): AscetToolOutcome {
 	return {
 		status: "ok",
+		verified: true,
 		data: {
-			changed,
-			readback,
+			changed: extractChangedPayload(raw),
+			verification,
 			observations,
 		},
 		warnings: [],
 	};
+}
+
+function createPartialEditOutcome(
+	raw: AscetCliJsonResult,
+	classification: AscetEditExecutionClassification,
+	observations: AscetObservationInvalidation,
+): AscetToolOutcome {
+	const code = raw.error?.code ?? verificationFailureCode(classification.verification.status);
+	const message = raw.error?.message ?? "ASCET write completed without proven automatic readback verification.";
+	return {
+		status: "partial",
+		data: {
+			mutationStatus: classification.mutationStatus,
+			...(raw.ok ? { changed: extractChangedPayload(raw) } : {}),
+			verification: classification.verification,
+			observations,
+		},
+		failures: [{ code, message, retryable: false, requiresFreshRead: true }],
+	};
+}
+
+function verificationFailureCode(status: AscetEditVerification["status"]): string {
+	switch (status) {
+		case "failed":
+			return "ascet_edit_readback_failed";
+		case "missing":
+			return "ascet_edit_verification_evidence_missing";
+		case "unknown":
+			return "ascet_edit_write_outcome_unknown";
+		case "passed":
+			return "ascet_edit_verification_failed";
+	}
+}
+
+function partialMutationStatus(outcome: AscetToolOutcome): AscetEditMutationStatus | undefined {
+	if (outcome.status !== "partial" || !isRecord(outcome.data)) {
+		return undefined;
+	}
+	const status = outcome.data.mutationStatus;
+	return status === "applied" || status === "not_started" || status === "unknown" ? status : undefined;
 }
 
 function asRecord(value: unknown): Record<string, unknown> | undefined {
@@ -1438,7 +1528,7 @@ function validateAscetMutationParams(params: AscetMutationParams): AscetToolOutc
 }
 
 async function dispatchMutation(
-	params: AscetMutationParams,
+	params: ExecutableAscetMutationParams,
 	options: RunAscetEditOperationOptions,
 	ctx: AscetEditApprovalContext,
 ): Promise<AscetCliJsonResult> {

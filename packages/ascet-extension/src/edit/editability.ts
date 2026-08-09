@@ -73,7 +73,7 @@ function normalizeBooleanResult(result: AscetCliJsonResult, operation: string): 
 		data: null,
 		error: {
 			code: "ascet_edit_invalid_output",
-			message: `${operation} expected a JSON boolean result from AscetCli.exe exec.`,
+			message: `${operation} expected a JSON boolean result from AscetBridge.exe exec.`,
 		},
 	};
 }

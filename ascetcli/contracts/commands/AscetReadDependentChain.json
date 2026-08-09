@@ -1,106 +1,106 @@
-﻿{
-    "id":  "AscetReadDependentChain",
-    "family":  "read",
-    "summary":  "Read a local dependent parameter formula, imported-parameter mappings, and exported-provider chain.",
-    "usage":  "\u003ccomponent\u003e \u003cdependent-element\u003e [--exporter \u003cexporter-component\u003e] [--provider-scope \u003cscope-path\u003e] [--max-candidates \u003cn\u003e] [--json] [--keep-temp] [--debug-dir \u003cdir\u003e]",
-    "execution":  {
-                      "kind":  "unified_cli",
-                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                      "subcommand":  "exec",
-                      "operation":  "read_dependent_chain"
-                  },
-    "supportsJson":  true,
-    "defaultOutputMode":  "json",
-    "risk":  "read",
-    "requiresSerialLiveAccess":  false,
-    "objectKinds":  [
-                        "class",
-                        "module"
-                    ],
-    "args":  [
-                 {
-                     "name":  "component",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: component"
-                 },
-                 {
-                     "name":  "dependent-element",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: dependent-element"
-                 },
-                 {
-                     "name":  "--exporter",
-                     "kind":  "option",
-                     "type":  "string",
-                     "required":  false,
-                     "description":  "Option value for --exporter"
-                 },
-                 {
-                     "name":  "--provider-scope",
-                     "kind":  "option",
-                     "type":  "string",
-                     "required":  false,
-                     "description":  "Option value for --provider-scope"
-                 },
-                 {
-                     "name":  "--max-candidates",
-                     "kind":  "option",
-                     "type":  "string",
-                     "required":  false,
-                     "description":  "Option value for --max-candidates"
-                 },
-                 {
-                     "name":  "--json",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --json"
-                 },
-                 {
-                     "name":  "--keep-temp",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --keep-temp"
-                 },
-                 {
-                     "name":  "--debug-dir",
-                     "kind":  "option",
-                     "type":  "string",
-                     "required":  false,
-                     "description":  "Option value for --debug-dir"
-                 }
-             ],
-    "preconditions":  [
-                          "ASCET ToolAPI session must be available.",
-                          "Target ASCET path must resolve to the expected object kind."
-                      ],
-    "failureModes":  [
-                         "toolapi_unavailable",
-                         "target_not_found"
-                     ],
-    "examples":  [
-                     {
-                         "description":  "Basic usage",
-                         "command":  "AscetCli.exe exec read_dependent_chain \u003ccomponent\u003e \u003cdependent-element\u003e [--exporter \u003cexporter-component\u003e] [--provider-scope \u003cscope-path\u003e] [--max-candidates \u003cn\u003e] [--json] [--keep-temp] [--debug-dir \u003cdir\u003e]"
-                     }
-                 ],
-    "pitfalls":  [
-
-                 ],
-    "operation":  "read_dependent_chain",
-    "lane":  "legacy_read",
-    "hostEligible":  false,
-    "supportsBatch":  false,
-    "executionProfile":  {
-                             "hostSafety":  "expensive_scan",
-                             "hostPolicy":  "force_one_shot",
-                             "timeoutClass":  "scan",
-                             "pageBudget":  200
-                         },
-    "hiddenFromModel":  false
+{
+  "id": "AscetReadDependentChain",
+  "family": "read",
+  "summary": "Read a local dependent parameter formula, imported-parameter mappings, and exported-provider chain.",
+  "usage": "<component> <dependent-element> [--exporter <exporter-component>] [--provider-scope <scope-path>] [--max-candidates <n>] [--json] [--keep-temp] [--debug-dir <dir>]",
+  "execution": {
+    "kind": "bridge",
+    "protocolVersion": 1,
+    "subcommand": "exec",
+    "operation": "read_dependent_chain",
+    "sessionPolicy": "fresh_session",
+    "transportPolicy": "one_shot_only"
+  },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "read",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": [
+    "class",
+    "module"
+  ],
+  "args": [
+    {
+      "name": "component",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: component"
+    },
+    {
+      "name": "dependent-element",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: dependent-element"
+    },
+    {
+      "name": "--exporter",
+      "kind": "option",
+      "type": "string",
+      "required": false,
+      "description": "Option value for --exporter"
+    },
+    {
+      "name": "--provider-scope",
+      "kind": "option",
+      "type": "string",
+      "required": false,
+      "description": "Option value for --provider-scope"
+    },
+    {
+      "name": "--max-candidates",
+      "kind": "option",
+      "type": "string",
+      "required": false,
+      "description": "Option value for --max-candidates"
+    },
+    {
+      "name": "--json",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --json"
+    },
+    {
+      "name": "--keep-temp",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --keep-temp"
+    },
+    {
+      "name": "--debug-dir",
+      "kind": "option",
+      "type": "string",
+      "required": false,
+      "description": "Option value for --debug-dir"
+    }
+  ],
+  "preconditions": [
+    "ASCET ToolAPI session must be available.",
+    "Target ASCET path must resolve to the expected object kind."
+  ],
+  "failureModes": [
+    "toolapi_unavailable",
+    "target_not_found"
+  ],
+  "examples": [
+    {
+      "description": "Basic usage",
+      "command": "AscetBridge.exe exec read_dependent_chain <component> <dependent-element> [--exporter <exporter-component>] [--provider-scope <scope-path>] [--max-candidates <n>] [--json] [--keep-temp] [--debug-dir <dir>]"
+    }
+  ],
+  "pitfalls": [],
+  "operation": "read_dependent_chain",
+  "lane": "legacy_read",
+  "hostEligible": false,
+  "supportsBatch": false,
+  "executionProfile": {
+    "hostSafety": "expensive_scan",
+    "hostPolicy": "force_one_shot",
+    "timeoutClass": "scan",
+    "pageBudget": 200
+  },
+  "hiddenFromModel": false
 }

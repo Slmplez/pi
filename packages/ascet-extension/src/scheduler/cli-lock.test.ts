@@ -14,17 +14,20 @@ const metadata = {
 	agentId: "agent-test",
 	commandId: "read_tree",
 	toolName: "ascet_read",
-	processName: "AscetCli.exe",
+	processName: "AscetBridge.exe",
 };
 
 function createLockFile(token: string): string {
 	return JSON.stringify({
 		token,
+		ownerToken: token,
 		pid: 1234,
+		ownerNodePid: 1234,
+		bridgePid: null,
 		agentId: "agent-test",
 		commandId: "read_tree",
 		toolName: "ascet_read",
-		processName: "AscetCli.exe",
+		processName: "AscetBridge.exe",
 		acquiredAt: "2026-01-01T00:00:00.000Z",
 		heartbeatAt: "2026-01-01T00:00:00.000Z",
 	});
@@ -89,6 +92,24 @@ describe("ASCET CLI lock", () => {
 		});
 	});
 
+	test("records the spawned Bridge PID before releasing the lock", async () => {
+		await withLockPath(async (lockPath) => {
+			const lock = await acquireAscetCliLock(metadata, { lockPath, heartbeatIntervalMs: 60_000 });
+			try {
+				await lock.setBridgePid(4321);
+				const snapshot = await getAscetCliLockSnapshot({ lockPath });
+				assert.equal(snapshot.locked, true);
+				assert.equal("corrupt" in snapshot, false);
+				if (snapshot.locked && !("corrupt" in snapshot)) {
+					assert.equal(snapshot.owner.ownerNodePid, process.pid);
+					assert.equal(snapshot.owner.bridgePid, 4321);
+					assert.equal(snapshot.owner.ownerToken, lock.token);
+				}
+			} finally {
+				await lock.release();
+			}
+		});
+	});
 	test("does not expose invalid JSON while heartbeats refresh the lock", async () => {
 		await withLockPath(async (lockPath) => {
 			const lock = await acquireAscetCliLock(metadata, {

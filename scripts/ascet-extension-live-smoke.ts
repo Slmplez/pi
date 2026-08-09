@@ -263,9 +263,8 @@ const diff = await callTool("ascet_diff", {
 	rightPath: componentPath,
 	changesOnly: true,
 });
-const verify = await callTool("ascet_verify", {
-	action: "readback",
-	objectKind: component.kind,
+const summaryReadback = await callTool("ascet_read", {
+	action: "read",
 	componentPath,
 });
 const writePreflight = await callTool("ascet_edit", {
@@ -302,7 +301,7 @@ console.log(
 				},
 				ascet_edit_check: { editable },
 				ascet_diff: { diff },
-				ascet_verify: { verify },
+				ascet_read_summary: { summaryReadback },
 				ascet_edit_preflight: {
 					folderPath: preflightFolderPath,
 					status: (writePreflight as { status?: unknown }).status,

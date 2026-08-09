@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Web.Script.Serialization;
 
 public static class BatchCommand
 {
     private const int ExitCodeStructuredError = 2;
+    internal const int MaxBatchInputCharacters = 16 * 1024 * 1024;
     private static readonly AscetJsonProtocol Protocol = new AscetJsonProtocol();
     private static IAscetBatchReadExecutor batchReadExecutor = new AscetBatchReadExecutor();
     private static IAscetBatchWriteExecutor batchWriteExecutor = new AscetBatchWriteExecutor();
@@ -23,15 +26,21 @@ public static class BatchCommand
 
         try
         {
-            IList<AscetBatchRequestItemDto> requests = ParseRequests(Console.In.ReadToEnd(), invocation.Operation);
+            IList<AscetBatchRequestItemDto> requests = ParseRequests(ReadBatchInput(Console.In), invocation.Operation);
             IList<AscetBatchResultItemDto> results = ExecuteRequests(invocation.Lane, requests);
-            Console.WriteLine(Protocol.Serialize(Protocol.BatchSuccess(invocation.Lane, results)));
-            if (String.Equals(invocation.Lane, "write", StringComparison.OrdinalIgnoreCase) && HasFailures(results))
-            {
-                return ExitCodeStructuredError;
-            }
-
-            return 0;
+            Dictionary<string, object> payload = new Dictionary<string, object>();
+            payload["lane"] = invocation.Lane;
+            payload["results"] = results;
+            int exitCode = String.Equals(invocation.Lane, "write", StringComparison.OrdinalIgnoreCase) && HasFailures(results)
+                ? ExitCodeStructuredError
+                : 0;
+            return AscetCliEnvelope.Write(
+                exitCode,
+                AscetCliEnvelope.Success(
+                    "batch",
+                    invocation.Operation,
+                    payload,
+                    String.Equals(invocation.Lane, "write", StringComparison.OrdinalIgnoreCase)));
         }
         catch (Exception ex)
         {
@@ -39,6 +48,29 @@ public static class BatchCommand
         }
     }
 
+    internal static string ReadBatchInput(TextReader reader)
+    {
+        if (reader == null)
+        {
+            throw new ArgumentNullException("reader");
+        }
+
+        StringBuilder input = new StringBuilder();
+        char[] buffer = new char[8192];
+        int read;
+        while ((read = reader.Read(buffer, 0, buffer.Length)) > 0)
+        {
+            if (input.Length + read > MaxBatchInputCharacters)
+            {
+                throw new AscetReadException(
+                    "request_too_large",
+                    "parse_batch_input",
+                    "Batch request exceeds the maximum supported input size.");
+            }
+            input.Append(buffer, 0, read);
+        }
+        return input.ToString();
+    }
     internal static void SetBatchReadExecutorForTesting(IAscetBatchReadExecutor executor)
     {
         if (executor != null)
@@ -279,8 +311,19 @@ public static class BatchCommand
 
     private static int WriteBatchProtocolError(string lane, Exception ex)
     {
-        Console.WriteLine(Protocol.Serialize(Protocol.BatchError(lane ?? String.Empty, ex)));
-        return ExitCodeStructuredError;
+        AscetStructuredErrorDto mapped = AscetErrorMapper.FromException(ex, "batch");
+        Dictionary<string, object> envelope = AscetCliEnvelope.Error(
+            mapped.code,
+            mapped.message,
+            "batch",
+            mapped.operation,
+            String.Equals(lane, "write", StringComparison.OrdinalIgnoreCase) ? (bool?)null : false);
+        Dictionary<string, object> error = envelope["error"] as Dictionary<string, object>;
+        if (error != null && mapped.details != null)
+        {
+            error["details"] = mapped.details;
+        }
+        return AscetCliEnvelope.WriteError(ExitCodeStructuredError, envelope);
     }
 
     private static bool HasFailures(IList<AscetBatchResultItemDto> results)

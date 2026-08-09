@@ -1,1 +1,65 @@
-﻿{"id":"AscetGetFormulas","family":"get","summary":"Read complete project formula definitions, including contents and parameter metadata.","usage":"--request-json <object> [--json]","execution":{"kind":"unified_cli","executableRelativePath":"src/ascetcli/output/ascet-csharp/bin/AscetCli.exe","subcommand":"exec","operation":"get_formulas"},"supportsJson":true,"defaultOutputMode":"json","risk":"read","requiresSerialLiveAccess":true,"objectKinds":["project"],"args":[{"name":"--request-json","kind":"option","type":"json","required":true,"description":"Serialized request object for the get action."},{"name":"--json","kind":"flag","type":"boolean","required":false,"description":"Emit JSON."}],"preconditions":["ASCET ToolAPI session must be available."],"failureModes":["toolapi_unavailable","target_not_found","invalid_argument"],"examples":[{"description":"JSON request","command":"AscetCli.exe exec get_formulas --request-json <object> --json"}],"pitfalls":["Traversal remains serial inside one live ToolAPI operation.","Large result delivery is handled by the extension observation store, not by this command."],"operation":"get_formulas","lane":"pooled_read","hostEligible":true,"supportsBatch":true,"executionProfile":{"hostSafety":"stable","hostPolicy":"prefer_host","timeoutClass":"read"},"hiddenFromModel":false}
+{
+  "id": "AscetGetFormulas",
+  "family": "get",
+  "summary": "Read complete project formula definitions, including contents and parameter metadata.",
+  "usage": "--request-json <object> [--json]",
+  "execution": {
+    "kind": "bridge",
+    "protocolVersion": 1,
+    "subcommand": "exec",
+    "operation": "get_formulas",
+    "sessionPolicy": "fresh_session",
+    "transportPolicy": "one_shot_only"
+  },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "read",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": [
+    "project"
+  ],
+  "args": [
+    {
+      "name": "--request-json",
+      "kind": "option",
+      "type": "json",
+      "required": true,
+      "description": "Serialized request object for the get action."
+    },
+    {
+      "name": "--json",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Emit JSON."
+    }
+  ],
+  "preconditions": [
+    "ASCET ToolAPI session must be available."
+  ],
+  "failureModes": [
+    "toolapi_unavailable",
+    "target_not_found",
+    "invalid_argument"
+  ],
+  "examples": [
+    {
+      "description": "JSON request",
+      "command": "AscetBridge.exe exec get_formulas --request-json <object> --json"
+    }
+  ],
+  "pitfalls": [
+    "Traversal remains serial inside one live ToolAPI operation.",
+    "Large result delivery is handled by the extension observation store, not by this command."
+  ],
+  "operation": "get_formulas",
+  "lane": "pooled_read",
+  "hostEligible": true,
+  "supportsBatch": true,
+  "executionProfile": {
+    "hostSafety": "stable",
+    "hostPolicy": "prefer_host",
+    "timeoutClass": "read"
+  },
+  "hiddenFromModel": false
+}

@@ -7,16 +7,24 @@ import {
 	runAscetCliJson,
 } from "./cli.ts";
 import {
+	DatabaseCatalogError,
+	type DatabaseCatalogLiveRequest,
+	type DatabaseCatalogRequest,
+	databaseCatalogIncludes,
+	executeDatabaseCatalog,
+} from "./database-catalog/index.ts";
+import {
 	type AscetObservationCoverage,
 	type AscetObservationDelivery,
 	type AscetObservationResult,
 	AscetObservationStore,
 } from "./observation-store.ts";
-import { unwrapToolSuccessPayload } from "./tool-response-contract.ts";
+import { toToolFailurePayload, unwrapToolSuccessPayload } from "./tool-response-contract.ts";
 import { openAiObjectUnionSchema } from "./tools/_shared/openai-schema.ts";
 
 export type AscetGetAction =
 	| "tree"
+	| "database_catalog"
 	| "elements"
 	| "formulas"
 	| "component_refs"
@@ -54,6 +62,7 @@ type AscetTargetedGetParams = AscetGetBaseParams & { target: AscetGetTarget };
 
 export type AscetGetParams =
 	| (AscetGetBaseParams & { action: "tree" })
+	| DatabaseCatalogRequest
 	| (AscetTargetedGetParams & { action: "elements"; elementName?: string })
 	| (AscetTargetedGetParams & { action: "formulas"; formulaName?: string })
 	| (AscetTargetedGetParams & { action: "component_refs" })
@@ -144,10 +153,21 @@ const targetedProperties = {
 	target: targetSchema,
 	...commonProperties,
 };
+const databaseCatalogIncludeSchema = Type.Union(databaseCatalogIncludes.map((include) => Type.Literal(include)));
 
 export const ascetGetParameters = openAiObjectUnionSchema<AscetGetParams>([
 	Type.Object(
 		{ action: Type.Literal("tree"), target: Type.Optional(targetSchema), ...commonProperties },
+		{ additionalProperties: false },
+	),
+	Type.Object(
+		{
+			action: Type.Literal("database_catalog"),
+			sourceTreeResultId: Type.String({ minLength: 1 }),
+			include: Type.Array(databaseCatalogIncludeSchema, { minItems: 1, uniqueItems: true }),
+			messageDepth: Type.Optional(Type.Integer({ minimum: 0 })),
+			delivery: Type.Optional(Type.Literal("stored")),
+		},
 		{ additionalProperties: false },
 	),
 	Type.Object(
@@ -198,7 +218,14 @@ function operationForAction(action: AscetGetAction): string {
 }
 
 function buildPayload(params: AscetGetParams): Record<string, unknown> {
-	const target = params.target ?? {};
+	if (params.action === "database_catalog") {
+		return {
+			sourceTreeResultId: params.sourceTreeResultId,
+			include: [...params.include],
+			messageDepth: params.messageDepth ?? 0,
+		};
+	}
+	const target: { oid?: string; path?: string; targetPathPrefix?: string } = params.target ?? {};
 	const filters = params.filters ?? {};
 	const traversal = params.traversal ?? {};
 	const payload: Record<string, unknown> = {
@@ -232,11 +259,111 @@ function buildPayload(params: AscetGetParams): Record<string, unknown> {
 	return Object.fromEntries(Object.entries(payload).filter(([, value]) => value !== undefined));
 }
 
+function cliArgs(operation: string, payload: unknown): string[] {
+	return ["exec", operation, "--request-json", JSON.stringify(payload), "--json"];
+}
+
 export function buildAscetGetArgs(params: AscetGetParams): string[] {
-	return ["exec", operationForAction(params.action), "--request-json", JSON.stringify(buildPayload(params)), "--json"];
+	return cliArgs(operationForAction(params.action), buildPayload(params));
+}
+
+type JsonRecord = Record<string, unknown>;
+
+function isRecord(value: unknown): value is JsonRecord {
+	return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function syntheticRequest(params: AscetGetParams, options: RunAscetGetOptions): AscetCliRequest {
+	return {
+		cwd: options.cwd,
+		cliPath: "AscetBridge.exe",
+		args: buildAscetGetArgs(params),
+		signal: options.signal,
+		timeoutMs: options.timeoutMs,
+	};
+}
+
+async function runDatabaseCatalog(
+	params: DatabaseCatalogRequest,
+	options: RunAscetGetOptions,
+): Promise<AscetCliJsonResult> {
+	let liveResult: AscetCliJsonResult | undefined;
+	const request = syntheticRequest(params, options);
+	try {
+		const catalog = await executeDatabaseCatalog(params, {
+			scanLive: async (liveRequest: DatabaseCatalogLiveRequest) => {
+				liveResult = await runAscetCliJson(["exec", "get_database_catalog", "--request-stdin", "--json"], {
+					cwd: options.cwd,
+					env: options.env,
+					stdin: JSON.stringify(liveRequest),
+					signal: options.signal,
+					timeoutMs: options.timeoutMs ?? 180_000,
+					executeCli: options.executeCli,
+					toolName: "ascet_get",
+					commandId: "get_database_catalog",
+					jobKind: "read",
+					resourceKey: "ascet.toolapi.global",
+				});
+				if (!liveResult.ok) {
+					throw new DatabaseCatalogError(
+						"catalog_live_scan_failed",
+						liveResult.error?.message ?? "ASCET live Database Catalog scan failed.",
+						liveResult.error?.details,
+					);
+				}
+				const payload = unwrapToolSuccessPayload(liveResult.data);
+				if (!isRecord(payload)) {
+					throw new DatabaseCatalogError(
+						"catalog_live_scan_failed",
+						"ASCET live Database Catalog scan returned no result payload.",
+					);
+				}
+				return payload;
+			},
+		});
+		return {
+			ok: true,
+			data: { ok: true, result: catalog },
+			request: liveResult?.request ?? request,
+			stdout: liveResult?.stdout ?? "",
+			stderr: liveResult?.stderr ?? "",
+			exitCode: liveResult?.exitCode ?? 0,
+			timedOut: liveResult?.timedOut ?? false,
+			aborted: liveResult?.aborted,
+			operationId: liveResult?.operationId,
+			stage: liveResult?.stage,
+		};
+	} catch (error) {
+		const catalogError =
+			error instanceof DatabaseCatalogError
+				? error
+				: new DatabaseCatalogError(
+						"catalog_artifact_write_failed",
+						"Database Catalog execution failed.",
+						error instanceof Error ? error.message : String(error),
+					);
+		return {
+			ok: false,
+			data: toToolFailurePayload({
+				code: catalogError.code,
+				message: catalogError.message,
+				details: catalogError.details,
+			}),
+			request: liveResult?.request ?? request,
+			stdout: liveResult?.stdout ?? "",
+			stderr: liveResult?.stderr ?? "",
+			exitCode: liveResult?.exitCode ?? 1,
+			timedOut: liveResult?.timedOut ?? false,
+			aborted: liveResult?.aborted,
+			error: { code: catalogError.code, message: catalogError.message, details: catalogError.details },
+		};
+	}
 }
 
 export async function runAscetGet(params: AscetGetParams, options: RunAscetGetOptions): Promise<AscetCliJsonResult> {
+	if (params.action === "database_catalog") {
+		return runDatabaseCatalog(params, options);
+	}
 	const defaultTimeoutMs = params.action === "elements" || params.action === "component_refs" ? 180_000 : 120_000;
 	return runAscetCliJson(buildAscetGetArgs(params), {
 		cwd: options.cwd,
@@ -249,12 +376,6 @@ export async function runAscetGet(params: AscetGetParams, options: RunAscetGetOp
 		jobKind: "read",
 		resourceKey: "ascet.toolapi.global",
 	});
-}
-
-type JsonRecord = Record<string, unknown>;
-
-function isRecord(value: unknown): value is JsonRecord {
-	return value !== null && typeof value === "object" && !Array.isArray(value);
 }
 
 function getGetPayload(data: unknown): JsonRecord | undefined {
@@ -291,6 +412,9 @@ function createToolOutput(params: AscetGetParams, result: AscetCliJsonResult): s
 	if (!payload) {
 		return formatAscetCliJsonResult(operationForAction(params.action), result);
 	}
+	if (params.action === "database_catalog") {
+		return JSON.stringify(payload, null, 2);
+	}
 
 	const store = new AscetObservationStore();
 	const observation = store.create({
@@ -298,6 +422,7 @@ function createToolOutput(params: AscetGetParams, result: AscetCliJsonResult): s
 		target: buildPayload(params),
 		items: getItems(payload),
 		coverage: getCoverage(payload),
+		truncated: getTruncated(payload),
 		source: getSource(payload),
 		delivery: params.delivery,
 	});

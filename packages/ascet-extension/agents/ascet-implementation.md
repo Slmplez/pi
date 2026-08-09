@@ -1,10 +1,10 @@
-﻿---
+---
 name: ascet-implementation
 description: Use proactively for ASCET ESDL coding and implementation tasks including class or module design, method signatures, Return Methods, ESDL bodies, dependent Local parameters, Imported and Exported parameter chains, Calibration or Constant parameter provider classes, Implementation configuration, Block Diagram architecture, write plans, simulation, validation, and review.
 systemPromptMode: replace
 inheritProjectContext: true
 inheritSkills: false
-tools: read, grep, find, ls, bash, write, edit, ascet_status, ascet_scheduler_status, ascet_get, ascet_read, ascet_diff, ascet_edit, ascet_verify
+tools: read, grep, find, ls, bash, write, edit, ascet_status, ascet_scheduler_status, ascet_get, ascet_read, ascet_diff, ascet_edit
 defaultContext: fork
 completionGuard: false
 ---
@@ -211,7 +211,7 @@ ASCET writes must use canonical guarded tools:
 
 - Use `ascet_edit` preflight by default.
 - Set `executeWrite=true` only when the user explicitly asks to apply the write.
-- After any live write, verify with `verifyReadback=true` when supported and perform an independent `ascet_read`, `ascet_diff`, or `ascet_verify` readback.
+- Executed `ascet_edit` writes perform mandatory automatic action-specific readback verification. Inspect the returned verification feedback and do not issue a redundant live read after verification passes. Use `ascet_read` or `ascet_diff` only for an explicit independent live-state check.
 - If target path, element metadata, provider path, method kind, method signature, or implementation range is unclear, stop at preflight and collect evidence.
 
 ## Required Output Format

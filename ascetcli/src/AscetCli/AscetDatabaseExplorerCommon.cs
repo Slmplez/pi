@@ -1,14 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Web.Script.Serialization;
 
 public static class AscetDatabaseExplorerCommon
 {
-    private const int SiblingProcessTimeoutMs = 25000;
 
     public static string NormalizePath(string value, string argumentName)
     {
@@ -369,121 +367,6 @@ public static class AscetDatabaseExplorerCommon
         return item;
     }
 
-    public static string RunSiblingExe(string exeName, IList<string> arguments)
-    {
-        return RunSiblingProcess(exeName, arguments);
-    }
-
-    public static string RunSiblingCliExec(string operationId, IList<string> arguments)
-    {
-        if (String.IsNullOrWhiteSpace(operationId))
-        {
-            throw new AscetReadException("invalid_argument", "run_sibling_cli_exec", "operationId must not be empty.");
-        }
-
-        List<string> cliArguments = new List<string>();
-        cliArguments.Add("exec");
-        cliArguments.Add(operationId.Trim());
-        if (arguments != null)
-        {
-            for (int i = 0; i < arguments.Count; i++)
-            {
-                cliArguments.Add(arguments[i] ?? String.Empty);
-            }
-        }
-
-        return RunSiblingProcess("AscetCli.exe", cliArguments);
-    }
-
-    public static string RunSiblingCliExecOrExe(string operationId, string fallbackExeName, IList<string> arguments)
-    {
-        string cliPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AscetCli.exe");
-        if (File.Exists(cliPath))
-        {
-            string cliOutput = RunSiblingCliExec(operationId, arguments);
-            Dictionary<string, object> cliEnvelope = TryParseJsonObject(cliOutput);
-            if (ShouldFallbackToLegacyExe(cliEnvelope, fallbackExeName))
-            {
-                return RunSiblingProcess(fallbackExeName, arguments);
-            }
-
-            return cliOutput;
-        }
-
-        return RunSiblingProcess(fallbackExeName, arguments);
-    }
-
-    private static string RunSiblingProcess(string exeName, IList<string> arguments)
-    {
-        string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, exeName);
-        if (!File.Exists(exePath))
-        {
-            throw new AscetReadException("tool_not_found", "run_sibling_exe", exeName + " was not found at " + exePath + ".");
-        }
-
-        StringBuilder argumentBuilder = new StringBuilder();
-        if (arguments != null)
-        {
-            for (int i = 0; i < arguments.Count; i++)
-            {
-                if (i > 0)
-                {
-                    argumentBuilder.Append(' ');
-                }
-
-                argumentBuilder.Append(QuoteArgument(arguments[i] ?? String.Empty));
-            }
-        }
-
-        ProcessStartInfo startInfo = new ProcessStartInfo
-        {
-            FileName = exePath,
-            Arguments = argumentBuilder.ToString(),
-            UseShellExecute = false,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            CreateNoWindow = true,
-            WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory
-        };
-
-        using (Process process = Process.Start(startInfo))
-        {
-            if (!process.WaitForExit(SiblingProcessTimeoutMs))
-            {
-                try
-                {
-                    process.Kill();
-                }
-                catch
-                {
-                }
-
-                throw new AscetReadException(
-                    "child_command_timeout",
-                    "run_sibling_exe",
-                    exeName + " exceeded the bounded child command budget of " + SiblingProcessTimeoutMs.ToString() + "ms.");
-            }
-
-            string stdout = process.StandardOutput.ReadToEnd();
-            string stderr = process.StandardError.ReadToEnd();
-
-            if (process.ExitCode != 0)
-            {
-                if (TryParseJsonObject(stdout) != null)
-                {
-                    return stdout;
-                }
-
-                throw new AscetReadException(
-                    "child_command_failed",
-                    "run_sibling_exe",
-                    exeName + " failed: " + FirstNonEmpty(stderr, stdout, "unknown error"));
-            }
-
-            return stdout;
-        }
-    }
-
     public static Dictionary<string, object> DeserializeJsonObject(string json)
     {
         return AscetJsonContract.DeserializeObject(json ?? String.Empty);
@@ -680,66 +563,4 @@ public static class AscetDatabaseExplorerCommon
         return result;
     }
 
-    private static Dictionary<string, object> TryParseJsonObject(string raw)
-    {
-        string trimmed = (raw ?? String.Empty).Trim();
-        if (trimmed.Length == 0 || !trimmed.StartsWith("{", StringComparison.Ordinal))
-        {
-            return null;
-        }
-
-        try
-        {
-            return AscetJsonContract.DeserializeObject(trimmed);
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
-    private static bool ShouldFallbackToLegacyExe(Dictionary<string, object> envelope, string fallbackExeName)
-    {
-        if (envelope == null || !envelope.ContainsKey("ok"))
-        {
-            return false;
-        }
-
-        string fallbackPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fallbackExeName ?? String.Empty);
-        if (!File.Exists(fallbackPath))
-        {
-            return false;
-        }
-
-        bool ok = true;
-        if (envelope["ok"] is bool)
-        {
-            ok = (bool)envelope["ok"];
-        }
-        else if (!Boolean.TryParse(Convert.ToString(envelope["ok"]), out ok))
-        {
-            ok = true;
-        }
-
-        if (ok)
-        {
-            return false;
-        }
-
-        Dictionary<string, object> error = envelope["error"] as Dictionary<string, object>;
-        string code = GetString(error, "code");
-        return String.Equals(code, "unsupported_operation", StringComparison.Ordinal)
-            || String.Equals(code, "not_implemented", StringComparison.Ordinal)
-            || String.Equals(code, "tool_not_found", StringComparison.Ordinal);
-    }
-
-    private static string QuoteArgument(string value)
-    {
-        if (value.IndexOf(' ') < 0 && value.IndexOf('\t') < 0 && value.IndexOf('"') < 0)
-        {
-            return value;
-        }
-
-        return "\"" + value.Replace("\"", "\\\"") + "\"";
-    }
 }

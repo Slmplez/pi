@@ -1,79 +1,78 @@
-﻿{
-    "id":  "AscetReadComponentRefs",
-    "family":  "refs",
-    "summary":  "Outgoing refs and trace",
-    "usage":  "\u003ccomponent-path\u003e [--direction \u003cout|both\u003e] [--depth \u003cn\u003e] [--json]",
-    "execution":  {
-                      "kind":  "unified_cli",
-                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                      "subcommand":  "exec",
-                      "operation":  "read_component_refs"
-                  },
-    "supportsJson":  true,
-    "defaultOutputMode":  "json",
-    "risk":  "read",
-    "requiresSerialLiveAccess":  false,
-    "objectKinds":  [
-                        "class",
-                        "module",
-                        "statemachine"
-                    ],
-    "args":  [
-                 {
-                     "name":  "component-path",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: component-path"
-                 },
-                 {
-                     "name":  "--direction",
-                     "kind":  "option",
-                     "type":  "string",
-                     "required":  false,
-                     "description":  "Option value for --direction"
-                 },
-                 {
-                     "name":  "--depth",
-                     "kind":  "option",
-                     "type":  "string",
-                     "required":  false,
-                     "description":  "Option value for --depth"
-                 },
-                 {
-                     "name":  "--json",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --json"
-                 }
-             ],
-    "preconditions":  [
-                          "ASCET ToolAPI session must be available.",
-                          "Target ASCET path must resolve to the expected object kind."
-                      ],
-    "failureModes":  [
-                         "toolapi_unavailable",
-                         "target_not_found"
-                     ],
-    "examples":  [
-                     {
-                         "description":  "Basic usage",
-                         "command":  "AscetCli.exe exec read_component_refs \u003ccomponent-path\u003e [--direction \u003cout|both\u003e] [--depth \u003cn\u003e] [--json]"
-                     }
-                 ],
-    "pitfalls":  [
-
-                 ],
-    "operation":  "read_component_refs",
-    "lane":  "legacy_read",
-    "hostEligible":  false,
-    "supportsBatch":  false,
-    "executionProfile":  {
-                             "hostSafety":  "fragile",
-                             "hostPolicy":  "force_one_shot",
-                             "timeoutClass":  "expensive_read"
-                         },
-    "hiddenFromModel":  false
+{
+  "id": "AscetReadComponentRefs",
+  "family": "refs",
+  "summary": "Outgoing refs and trace",
+  "usage": "<component-path> [--direction <out|both>] [--depth <n>] [--json]",
+  "execution": {
+    "kind": "bridge",
+    "protocolVersion": 1,
+    "subcommand": "exec",
+    "operation": "read_component_refs",
+    "sessionPolicy": "fresh_session",
+    "transportPolicy": "one_shot_only"
+  },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "read",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": [
+    "class",
+    "module",
+    "statemachine"
+  ],
+  "args": [
+    {
+      "name": "component-path",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: component-path"
+    },
+    {
+      "name": "--direction",
+      "kind": "option",
+      "type": "string",
+      "required": false,
+      "description": "Option value for --direction"
+    },
+    {
+      "name": "--depth",
+      "kind": "option",
+      "type": "string",
+      "required": false,
+      "description": "Option value for --depth"
+    },
+    {
+      "name": "--json",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --json"
+    }
+  ],
+  "preconditions": [
+    "ASCET ToolAPI session must be available.",
+    "Target ASCET path must resolve to the expected object kind."
+  ],
+  "failureModes": [
+    "toolapi_unavailable",
+    "target_not_found"
+  ],
+  "examples": [
+    {
+      "description": "Basic usage",
+      "command": "AscetBridge.exe exec read_component_refs <component-path> [--direction <out|both>] [--depth <n>] [--json]"
+    }
+  ],
+  "pitfalls": [],
+  "operation": "read_component_refs",
+  "lane": "legacy_read",
+  "hostEligible": false,
+  "supportsBatch": false,
+  "executionProfile": {
+    "hostSafety": "fragile",
+    "hostPolicy": "force_one_shot",
+    "timeoutClass": "expensive_read"
+  },
+  "hiddenFromModel": false
 }
-

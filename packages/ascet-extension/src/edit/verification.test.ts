@@ -1,0 +1,154 @@
+import assert from "node:assert/strict";
+import { describe, test } from "node:test";
+import type { AscetCliJsonResult } from "../cli.ts";
+import { classifyAscetEditExecution, extractAscetEditVerification } from "./verification.ts";
+
+function createRawResult(overrides: Partial<AscetCliJsonResult>): AscetCliJsonResult {
+	return {
+		ok: false,
+		data: null,
+		request: { cwd: ".", cliPath: "ascet", args: [] },
+		stdout: "",
+		stderr: "",
+		exitCode: 1,
+		timedOut: false,
+		...overrides,
+	};
+}
+
+describe("ASCET edit verification", () => {
+	test("extracts case-insensitive nested readback booleans", () => {
+		assert.deepEqual(
+			extractAscetEditVerification({
+				result: {
+					VerifyReadbackRequested: true,
+					payload: [{ READBACKVERIFIED: true }],
+				},
+			}),
+			{
+				mode: "automatic_readback",
+				source: "write_command",
+				required: true,
+				requested: true,
+				verified: true,
+				status: "passed",
+			},
+		);
+	});
+
+	test("reports failed verification when readback was requested but mismatched", () => {
+		assert.equal(
+			extractAscetEditVerification({ verifyReadbackRequested: true, readbackVerified: false }).status,
+			"failed",
+		);
+	});
+
+	test("reports missing verification evidence when the flags are incomplete", () => {
+		assert.deepEqual(extractAscetEditVerification({ readbackVerified: true }), {
+			mode: "automatic_readback",
+			source: "write_command",
+			required: true,
+			requested: null,
+			verified: true,
+			status: "missing",
+		});
+	});
+
+	test("classifies a verified successful write as applied and invalidating", () => {
+		const classification = classifyAscetEditExecution(
+			createRawResult({
+				ok: true,
+				data: { result: { verifyReadbackRequested: true, readbackVerified: true } },
+				exitCode: 0,
+			}),
+		);
+
+		assert.equal(classification.mutationStatus, "applied");
+		assert.equal(classification.verification.status, "passed");
+		assert.equal(classification.shouldInvalidateObservations, true);
+	});
+
+	test("classifies a successful write with failed readback as applied and failed", () => {
+		const classification = classifyAscetEditExecution(
+			createRawResult({
+				ok: true,
+				data: { result: { verifyReadbackRequested: true, readbackVerified: false } },
+				exitCode: 0,
+			}),
+		);
+
+		assert.equal(classification.mutationStatus, "applied");
+		assert.equal(classification.verification.status, "failed");
+		assert.equal(classification.shouldInvalidateObservations, true);
+	});
+
+	test("classifies a successful write without proof as applied and missing", () => {
+		const classification = classifyAscetEditExecution(
+			createRawResult({ ok: true, data: { result: { writeSucceeded: true } }, exitCode: 0 }),
+		);
+
+		assert.equal(classification.mutationStatus, "applied");
+		assert.equal(classification.verification.status, "missing");
+		assert.equal(classification.shouldInvalidateObservations, true);
+	});
+
+	test("classifies readback mismatch as applied, failed, and invalidating", () => {
+		const classification = classifyAscetEditExecution(
+			createRawResult({
+				error: { code: "readback_mismatch", message: "readback differs" },
+			}),
+		);
+
+		assert.deepEqual(classification, {
+			mutationStatus: "applied",
+			verification: {
+				mode: "automatic_readback",
+				source: "write_command",
+				required: true,
+				requested: true,
+				verified: false,
+				status: "failed",
+			},
+			shouldInvalidateObservations: true,
+		});
+	});
+
+	test("classifies an explicit not-started write without invalidation", () => {
+		const classification = classifyAscetEditExecution(
+			createRawResult({ error: { code: "write_not_started", message: "not started" } }),
+		);
+
+		assert.equal(classification.mutationStatus, "not_started");
+		assert.equal(classification.verification.status, "unknown");
+		assert.equal(classification.shouldInvalidateObservations, false);
+	});
+
+	test("classifies requiresReadback false as not started without invalidation", () => {
+		const classification = classifyAscetEditExecution(
+			createRawResult({
+				error: {
+					code: "ascet_cli_failed",
+					message: "write was not dispatched",
+					details: { nested: { REQUIRESREADBACK: false } },
+				},
+			}),
+		);
+
+		assert.equal(classification.mutationStatus, "not_started");
+		assert.equal(classification.verification.status, "unknown");
+		assert.equal(classification.shouldInvalidateObservations, false);
+	});
+
+	test("classifies unknown write outcomes as unknown and invalidating", () => {
+		for (const error of [
+			{ code: "write_outcome_unknown", message: "outcome unknown" },
+			{ code: "ascet_cli_failed", message: "dispatched", details: { requiresReadback: true } },
+			{ code: "ascet_cli_failed", message: "unexpected failure" },
+		]) {
+			const classification = classifyAscetEditExecution(createRawResult({ error }));
+			assert.equal(classification.mutationStatus, "unknown");
+			assert.equal(classification.verification.status, "unknown");
+			assert.equal(classification.shouldInvalidateObservations, true);
+		}
+	});
+});

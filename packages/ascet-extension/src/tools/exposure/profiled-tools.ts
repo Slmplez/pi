@@ -28,13 +28,9 @@ const profileGuidelines: Record<AscetProfile, Partial<Record<string, readonly st
 	diff: {
 		ascet_diff: ["Use ascet_diff for file, snapshot, method, element-spec, and formula comparisons."],
 	},
-	verify: {
-		ascet_verify: ["Use ascet_verify after writes or when runtime readback evidence is required."],
-	},
 	"write-preflight": {
 		ascet_edit: [
-			"Use ascet_edit without executeWrite for preflight unless the user explicitly asks to apply a live write.",
-			"After live writes, prefer verifyReadback=true and inspect the returned readback and observation invalidation.",
+			"Executed ascet_edit mutations perform mandatory automatic action-specific readback verification. Inspect verification status and returned evidence. Do not issue a redundant read after passed.",
 		],
 	},
 	"batch-write": {

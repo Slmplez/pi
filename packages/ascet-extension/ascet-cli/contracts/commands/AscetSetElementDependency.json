@@ -1,148 +1,201 @@
-﻿{
-    "id":  "AscetSetElementDependency",
-    "family":  "write",
-    "summary":  "Set supported element dependency state and dependency formula with optional readback",
-    "usage":  "\u003ctarget-path\u003e \u003celement-name\u003e \u003cdependent|independent\u003e [--formula \u003cexpr\u003e] [--mapping \u003cformal=imported\u003e] [--clear-formula] [--target-kind auto|component|project|folder] [--match exact|all] [--dry-run] [--backup-dir \u003cdir\u003e] [--verify-readback] [--json]",
-    "execution":  {
-                      "kind":  "unified_cli",
-                      "executableRelativePath":  "src/ascetcli/output/ascet-csharp/bin/AscetCli.exe",
-                      "subcommand":  "exec",
-                      "operation":  "set_element_dependency"
-                  },
-    "supportsJson":  true,
-    "defaultOutputMode":  "json",
-    "risk":  "write",
-    "requiresSerialLiveAccess":  true,
-    "objectKinds":  [
-                        "class",
-                        "module",
-                        "folder"
-                    ],
-    "args":  [
-                 {
-                     "name":  "target-path",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: target-path"
-                 },
-                 {
-                     "name":  "element-name",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: element-name"
-                 },
-                 {
-                     "name":  "dependent|independent",
-                     "kind":  "positional",
-                     "type":  "string",
-                     "required":  true,
-                     "description":  "Positional argument: dependent|independent"
-                 },
-                 {
-                     "name":  "--formula",
-                     "kind":  "option",
-                     "type":  "string",
-                     "required":  false,
-                     "description":  "Option value for --formula"
-                 },
-                 {
-                     "name":  "--mapping",
-                     "kind":  "option",
-                     "type":  "string",
-                     "required":  false,
-                     "description":  "Option value for --mapping"
-                 },
-                 {
-                     "name":  "--clear-formula",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --clear-formula"
-                 },
-                 {
-                     "name":  "--target-kind",
-                     "kind":  "option",
-                     "type":  "enum",
-                     "required":  false,
-                     "description":  "Option value for --target-kind",
-                     "enumValues":  [
-                                        "auto",
-                                        "component",
-                                        "project",
-                                        "folder"
-                                    ]
-                 },
-                 {
-                     "name":  "--match",
-                     "kind":  "option",
-                     "type":  "enum",
-                     "required":  false,
-                     "description":  "Option value for --match",
-                     "enumValues":  [
-                                        "exact",
-                                        "all"
-                                    ]
-                 },
-                 {
-                     "name":  "--dry-run",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --dry-run"
-                 },
-                 {
-                     "name":  "--backup-dir",
-                     "kind":  "option",
-                     "type":  "string",
-                     "required":  false,
-                     "description":  "Option value for --backup-dir"
-                 },
-                 {
-                     "name":  "--verify-readback",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --verify-readback"
-                 },
-                 {
-                     "name":  "--json",
-                     "kind":  "flag",
-                     "type":  "boolean",
-                     "required":  false,
-                     "description":  "Flag --json"
-                 }
-             ],
-    "preconditions":  [
-                          "ASCET ToolAPI session must be available.",
-                          "Live ASCET access must run through the serial executor.",
-                          "Target ASCET path must resolve to the expected object kind."
-                      ],
-    "failureModes":  [
-                         "toolapi_unavailable",
-                         "target_not_found",
-                         "write_failed"
-                     ],
-    "examples":  [
-                     {
-                         "description":  "Basic usage",
-                         "command":  "AscetCli.exe exec set_element_dependency \u003ctarget-path\u003e \u003celement-name\u003e \u003cdependent|independent\u003e [--formula \u003cexpr\u003e] [--mapping \u003cformal=imported\u003e] [--clear-formula] [--target-kind auto|component|project|folder] [--match exact|all] [--dry-run] [--backup-dir \u003cdir\u003e] [--verify-readback] [--json]"
-                     }
-                 ],
-    "pitfalls":  [
-                     "Live ASCET ToolAPI access is serial-only.",
-                     "Run readback and verify after successful writes."
-                 ],
-    "operation":  "set_element_dependency",
-    "lane":  "serial_write",
-    "hostEligible":  false,
-    "supportsBatch":  false,
-    "executionProfile":  {
-                             "hostSafety":  "write",
-                             "hostPolicy":  "force_one_shot",
-                             "timeoutClass":  "write"
-                         },
-    "hiddenFromModel":  false
+{
+  "id": "AscetSetElementDependency",
+  "family": "write",
+  "summary": "Set supported element dependency state and dependency formula with optional readback",
+  "usage": "<target-path> <element-name> <dependent|independent> [--formula <expr>] [--mapping <formal=imported>] [--variant-mapping <variant:formal=imported>] [--variant-policy default|selected|all] [--variant <name>] [--restoration-policy fromSnapshot|explicit|ascetDefault] [--restore-value <variant=value>] [--clear-formula] [--target-kind auto|component|project|folder] [--match exact|all] [--overlay-spec <file>] [--dry-run] [--backup-dir <dir>] [--verify-readback] [--json]",
+  "execution": {
+    "kind": "bridge",
+    "protocolVersion": 1,
+    "subcommand": "exec",
+    "operation": "set_element_dependency",
+    "sessionPolicy": "fresh_session",
+    "transportPolicy": "one_shot_only"
+  },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "write",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": [
+    "class",
+    "module",
+    "folder"
+  ],
+  "args": [
+    {
+      "name": "target-path",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: target-path"
+    },
+    {
+      "name": "element-name",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: element-name"
+    },
+    {
+      "name": "dependent|independent",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Positional argument: dependent|independent"
+    },
+    {
+      "name": "--formula",
+      "kind": "option",
+      "type": "string",
+      "required": false,
+      "description": "Option value for --formula"
+    },
+    {
+      "name": "--mapping",
+      "kind": "option",
+      "type": "string",
+      "required": false,
+      "description": "Option value for --mapping"
+    },
+    {
+      "name": "--variant-mapping",
+      "kind": "option",
+      "type": "string",
+      "required": false,
+      "description": "Repeatable DataVariant mapping in <variant:formal=imported> form"
+    },
+    {
+      "name": "--variant-policy",
+      "kind": "option",
+      "type": "enum",
+      "required": false,
+      "description": "DataVariant selection policy",
+      "enumValues": [
+        "default",
+        "selected",
+        "all"
+      ]
+    },
+    {
+      "name": "--variant",
+      "kind": "option",
+      "type": "string",
+      "required": false,
+      "description": "Repeatable exact DataVariant name used with --variant-policy selected"
+    },
+    {
+      "name": "--restoration-policy",
+      "kind": "option",
+      "type": "enum",
+      "required": false,
+      "description": "Value restoration policy for independent conversion",
+      "enumValues": [
+        "fromSnapshot",
+        "explicit",
+        "ascetDefault"
+      ]
+    },
+    {
+      "name": "--restore-value",
+      "kind": "option",
+      "type": "string",
+      "required": false,
+      "description": "Repeatable explicit restoration value in <variant=value> form"
+    },
+    {
+      "name": "--clear-formula",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --clear-formula"
+    },
+    {
+      "name": "--target-kind",
+      "kind": "option",
+      "type": "enum",
+      "required": false,
+      "description": "Option value for --target-kind",
+      "enumValues": [
+        "auto",
+        "component",
+        "project",
+        "folder"
+      ]
+    },
+    {
+      "name": "--match",
+      "kind": "option",
+      "type": "enum",
+      "required": false,
+      "description": "Option value for --match",
+      "enumValues": [
+        "exact",
+        "all"
+      ]
+    },
+    {
+      "name": "--overlay-spec",
+      "kind": "option",
+      "type": "string",
+      "required": false,
+      "description": "Repeatable overlay element-spec file used for guarded dependency writes"
+    },
+    {
+      "name": "--dry-run",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --dry-run"
+    },
+    {
+      "name": "--backup-dir",
+      "kind": "option",
+      "type": "string",
+      "required": false,
+      "description": "Option value for --backup-dir"
+    },
+    {
+      "name": "--verify-readback",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --verify-readback"
+    },
+    {
+      "name": "--json",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag --json"
+    }
+  ],
+  "preconditions": [
+    "ASCET ToolAPI session must be available.",
+    "Live ASCET access must run through the serial executor.",
+    "Target ASCET path must resolve to the expected object kind."
+  ],
+  "failureModes": [
+    "toolapi_unavailable",
+    "target_not_found",
+    "write_failed"
+  ],
+  "examples": [
+    {
+      "description": "Basic usage",
+      "command": "AscetBridge.exe exec set_element_dependency <target-path> <element-name> <dependent|independent> [--formula <expr>] [--mapping <formal=imported>] [--variant-mapping <variant:formal=imported>] [--variant-policy default|selected|all] [--variant <name>] [--restoration-policy fromSnapshot|explicit|ascetDefault] [--restore-value <variant=value>] [--clear-formula] [--target-kind auto|component|project|folder] [--match exact|all] [--overlay-spec <file>] [--dry-run] [--backup-dir <dir>] [--verify-readback] [--json]"
+    }
+  ],
+  "pitfalls": [
+    "Live ASCET ToolAPI access is serial-only.",
+    "Run readback and verify after successful writes."
+  ],
+  "operation": "set_element_dependency",
+  "lane": "serial_write",
+  "hostEligible": false,
+  "supportsBatch": false,
+  "executionProfile": {
+    "hostSafety": "write",
+    "hostPolicy": "force_one_shot",
+    "timeoutClass": "write"
+  },
+  "hiddenFromModel": false
 }
-
