@@ -55,6 +55,17 @@ test("buildAscetGetArgs maps every action to one get operation", () => {
 	}
 });
 
+test("buildAscetGetArgs forwards component reference name and scope filters", () => {
+	const args = buildAscetGetArgs({
+		action: "component_refs",
+		target: { path: "DEMO\\Project" },
+		filters: { name: "CM_SCM", scope: ["exported"] },
+	});
+	const payload = JSON.parse(args[3] ?? "{}") as { name?: string; scopes?: string[] };
+	assert.equal(payload.name, "CM_SCM");
+	assert.deepEqual(payload.scopes, ["exported"]);
+});
+
 test("formats complete formula data inline without index output", () => {
 	const output = JSON.parse(
 		formatAscetGetResult(

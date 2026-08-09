@@ -11,6 +11,10 @@
 
 - ASCET discovery now uses `ascet_get`, Pi `find`/`grep`/`read`, and exact `ascet_read` operations without a persistent database index.
 
+### Fixed
+
+- Fixed `ascet_get` `component_refs` name and scope filters being ignored.
+
 ### Removed
 
 - Removed `ascet_index`, `ascet_search`, `ascet_explore`, P0/SQLite indexing, startup warmup, index footer, and background index refresh.

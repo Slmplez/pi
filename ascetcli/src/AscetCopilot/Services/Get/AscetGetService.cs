@@ -339,14 +339,17 @@ public sealed class AscetGetService
             {
                 object reference = references.GetValue(j);
                 if (reference == null) continue;
+                string name = SafeGetName(reference);
+                string scope = GetElementScope(reference);
+                if (!MatchesComponentReference(name, scope, request)) continue;
                 object represented = InvokeOptional(reference, "GetRepresentedClass");
                 DataBaseItem target = represented as DataBaseItem;
 
                 Dictionary<string, object> item = new Dictionary<string, object>();
                 item["sourcePath"] = component.Path;
                 item["sourceOid"] = GetObjectOid(component.Component);
-                item["elementPath"] = component.Path + "::" + SafeGetName(reference);
-                item["scope"] = GetElementScope(reference);
+                item["elementPath"] = component.Path + "::" + name;
+                item["scope"] = scope;
                 item["targetPath"] = GetItemPath(target, SafeGetPath(represented));
                 item["targetOid"] = GetObjectOid(target);
                 items.Add(item);
@@ -695,6 +698,11 @@ public sealed class AscetGetService
             if (items[i].TryGetValue("path", out value) && String.Equals(value as string, path, StringComparison.Ordinal)) return true;
         }
         return false;
+    }
+
+    internal static bool MatchesComponentReference(string name, string scope, AscetGetRequest request)
+    {
+        return request != null && MatchesName(name, request.NameFilter) && MatchesScope(scope, request.Scopes);
     }
 
     private static bool MatchesName(string value, string filter)
