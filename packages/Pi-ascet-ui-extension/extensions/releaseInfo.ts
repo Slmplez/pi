@@ -15,11 +15,13 @@ export type CachedUpdateInfo = {
 	registryUrl: string;
 };
 
+export type UpdateUnavailableReason = "tls" | "network" | "registry" | "unknown";
+
 export type UpdateState =
 	| { status: "checking" }
 	| { status: "current"; latestVersion: string }
 	| { status: "available"; latestVersion: string }
-	| { status: "unavailable" };
+	| { status: "unavailable"; reason?: UpdateUnavailableReason };
 
 export type RegistryFetch = (url: URL) => Promise<Pick<Response, "ok" | "status" | "json">>;
 
@@ -77,8 +79,8 @@ export async function checkAscetCopilotUpdate(options: UpdateCheckOptions = {}):
 		const latestVersion = await fetchLatestVersion();
 		await writeCache({ checkedAt: now.getTime(), latestVersion, registryUrl });
 		return createUpdateState(currentVersion, latestVersion);
-	} catch {
-		return { status: "unavailable" };
+	} catch (error) {
+		return { status: "unavailable", reason: classifyUpdateFailure(error) };
 	}
 }
 
@@ -112,7 +114,8 @@ export function createReleaseRows(state: UpdateState, release: ReleaseInfo = ASC
 	}
 
 	if (state.status === "unavailable") {
-		return ["Release", `${release.version} - update check unavailable`, ...release.highlights];
+		const reason = state.reason ? ` (${state.reason.toUpperCase()})` : "";
+		return ["Release", `${release.version} - update check unavailable${reason}`, ...release.highlights];
 	}
 
 	return [
@@ -135,6 +138,49 @@ export function isVersionGreater(candidate: string, current: string): boolean {
 	return false;
 }
 
+const TLS_ERROR_CODES = new Set([
+	"CERT_HAS_EXPIRED",
+	"CERT_NOT_YET_VALID",
+	"DEPTH_ZERO_SELF_SIGNED_CERT",
+	"ERR_TLS_CERT_ALTNAME_INVALID",
+	"UNABLE_TO_GET_ISSUER_CERT",
+	"UNABLE_TO_VERIFY_LEAF_SIGNATURE",
+]);
+
+const NETWORK_ERROR_CODES = new Set([
+	"ECONNREFUSED",
+	"ECONNRESET",
+	"ENETUNREACH",
+	"ENOTFOUND",
+	"ETIMEDOUT",
+]);
+
+function classifyUpdateFailure(error: unknown): UpdateUnavailableReason {
+	const errorRecord = toRecord(error);
+	const causeRecord = toRecord(errorRecord?.cause);
+	const code =
+		(typeof errorRecord?.code === "string" ? errorRecord.code : undefined) ??
+		(typeof causeRecord?.code === "string" ? causeRecord.code : undefined);
+	const message = [
+		typeof errorRecord?.message === "string" ? errorRecord.message : String(error),
+		typeof causeRecord?.message === "string" ? causeRecord.message : "",
+	].join(" ");
+
+	if (TLS_ERROR_CODES.has(code ?? "") || /certificate|tls|ssl|unable to verify|self-signed/i.test(message)) {
+		return "tls";
+	}
+	if (NETWORK_ERROR_CODES.has(code ?? "") || /fetch failed|offline|network|timeout|timed out|socket/i.test(message)) {
+		return "network";
+	}
+	if (/npm registry returned|registry response|dist-tags\.latest/i.test(message)) {
+		return "registry";
+	}
+	return "unknown";
+}
+
+function toRecord(value: unknown): Record<string, unknown> | undefined {
+	return value !== null && typeof value === "object" ? (value as Record<string, unknown>) : undefined;
+}
 function createUpdateState(currentVersion: string, latestVersion: string): UpdateState {
 	if (isVersionGreater(latestVersion, currentVersion)) {
 		return { status: "available", latestVersion };

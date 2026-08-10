@@ -2,6 +2,18 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { getAgentDir, type ExtensionAPI, type ExtensionContext } from "@earendil-works/pi-coding-agent";
 import { AscetHeader } from "./AscetHeader.ts";
+import { ensureBoschSystemCa } from "./bosch-system-ca.ts";
+
+function configureBoschSystemCaAtStartup(): void {
+	try {
+		ensureBoschSystemCa();
+	} catch (error) {
+		const message = error instanceof Error ? error.message : String(error);
+		console.error(`[ascet-copilot] ${message}`);
+	}
+}
+
+configureBoschSystemCaAtStartup();
 
 let quietStartupSynced = false;
 const TERMINAL_TITLE = "ASCET COPILOT";

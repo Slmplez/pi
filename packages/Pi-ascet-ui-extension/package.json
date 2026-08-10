@@ -19,6 +19,9 @@
   "bugs": {
     "url": "https://github.com/Slmplez/Pi-ascet-ui-extension/issues"
   },
+  "engines": {
+    "node": "^22.19.0 || >=24.5.0"
+  },
   "publishConfig": {
     "registry": "https://szh6-v-000cy.szh.apac.bosch.com/nexus/repository/ascet-copilot-npm/",
     "access": "restricted"
@@ -26,6 +29,7 @@
   "files": [
     "extensions/AscetHeader.ts",
     "extensions/index.ts",
+    "extensions/bosch-system-ca.ts",
     "extensions/logo.ts",
     "extensions/recentSessions.ts",
     "extensions/releaseInfo.ts",

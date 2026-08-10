@@ -125,7 +125,32 @@ test("checkAscetCopilotUpdate returns unavailable when registry check fails", as
 		writeCache: async () => {},
 	});
 
-	assert.deepEqual(state, { status: "unavailable" });
+	assert.deepEqual(state, { status: "unavailable", reason: "network" });
+});
+
+test("classifies TLS update failures and renders the reason", async () => {
+	const tlsError = Object.assign(new TypeError("fetch failed"), {
+		cause: {
+			code: "UNABLE_TO_VERIFY_LEAF_SIGNATURE",
+			message: "unable to verify the first certificate",
+		},
+	});
+	const state = await checkAscetCopilotUpdate({
+		currentVersion: ASCET_COPILOT_RELEASE.version,
+		now,
+		fetchLatestVersion: async () => {
+			throw tlsError;
+		},
+		readCache: async () => undefined,
+		writeCache: async () => {},
+	});
+
+	assert.deepEqual(state, { status: "unavailable", reason: "tls" });
+	assert.deepEqual(createReleaseRows(state), [
+		"Release",
+		"0.1.39 - update check unavailable (TLS)",
+		...ASCET_COPILOT_RELEASE.highlights,
+	]);
 });
 
 test("createReleaseRows renders concise release and update text", () => {
