@@ -17,7 +17,7 @@ Bundle mode is fail-closed. If any bundled ASCET asset exists but another requir
 Refresh bundled contracts and C# binaries from the parent `AscetAgent` checkout:
 
 ```powershell
-npm --workspace @zeerke/ascet-copilot-extension run copy-assets
+npm --workspace @vaf-agentworks/ascet-copilot-extension run copy-assets
 ```
 
 Expected bundled paths:

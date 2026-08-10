@@ -1,6 +1,6 @@
 {
-	"name": "@zeerke/ascet-copilot-extension",
-	"version": "0.1.29",
+	"name": "@vaf-agentworks/ascet-copilot-extension",
+	"version": "0.1.39",
 	"description": "ASCET Copilot tool extension for Pi.",
 	"type": "module",
 	"main": "./src/index.ts",
@@ -42,6 +42,7 @@
 	},
 	"private": false,
 	"publishConfig": {
-		"access": "public"
+		"registry": "https://szh6-v-000cy.szh.apac.bosch.com/nexus/repository/ascet-copilot-npm/",
+		"access": "restricted"
 	}
 }

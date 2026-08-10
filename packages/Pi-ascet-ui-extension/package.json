@@ -1,6 +1,6 @@
 {
-  "name": "@zeerke/ascet-copilot-ui",
-  "version": "0.1.29",
+  "name": "@vaf-agentworks/ascet-copilot-ui",
+  "version": "0.1.39",
   "description": "ASCET Copilot startup UI extension for Pi.",
   "type": "module",
   "license": "MIT",
@@ -20,11 +20,12 @@
     "url": "https://github.com/Slmplez/Pi-ascet-ui-extension/issues"
   },
   "publishConfig": {
-    "access": "public"
+    "registry": "https://szh6-v-000cy.szh.apac.bosch.com/nexus/repository/ascet-copilot-npm/",
+    "access": "restricted"
   },
-	"files": [
-		"extensions/AscetHeader.ts",
-		"extensions/index.ts",
+  "files": [
+    "extensions/AscetHeader.ts",
+    "extensions/index.ts",
     "extensions/logo.ts",
     "extensions/recentSessions.ts",
     "extensions/releaseInfo.ts",

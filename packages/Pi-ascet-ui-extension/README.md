@@ -25,25 +25,25 @@ ASCET Copilot startup UI package for Pi.
 Recommended ASCET Copilot install:
 
 ```powershell
-pi install npm:@zeerke/ascet-copilot
+pi install npm:@vaf-agentworks/ascet-copilot
 ```
 
 Standalone UI package:
 
 ```powershell
-pi install npm:@zeerke/ascet-copilot-ui
+pi install npm:@vaf-agentworks/ascet-copilot-ui
 ```
 
 Install a pinned version:
 
 ```powershell
-pi install npm:@zeerke/ascet-copilot-ui@0.1.0
+pi install npm:@vaf-agentworks/ascet-copilot-ui@0.1.0
 ```
 
 Try once without installing:
 
 ```powershell
-pi -e npm:@zeerke/ascet-copilot-ui
+pi -e npm:@vaf-agentworks/ascet-copilot-ui
 ```
 
 ### From GitHub
@@ -82,7 +82,7 @@ From a Pi source checkout:
 ## Update
 
 ```powershell
-pi update --extension npm:@zeerke/ascet-copilot-ui
+pi update --extension npm:@vaf-agentworks/ascet-copilot-ui
 ```
 
 Update all installed Pi packages:
@@ -93,10 +93,20 @@ pi update --all
 
 If you installed from GitHub, use the same package source id that Pi registered during install.
 
+## Update Registry
+
+The startup update checker reads `dist-tags.latest` from the internal ASCET Copilot Nexus registry. Override the registry for testing or migration with:
+
+```powershell
+$env:ASCET_COPILOT_NPM_REGISTRY = "https://nexus.example.com/repository/ascet-copilot-npm/"
+```
+
+Cached results are scoped to the registry URL and are not reused after a registry change.
+
 ## Remove
 
 ```powershell
-pi remove npm:@zeerke/ascet-copilot-ui
+pi remove npm:@vaf-agentworks/ascet-copilot-ui
 ```
 
 If you installed from GitHub, remove the matching GitHub package id instead.
@@ -135,6 +145,8 @@ extensions/
   logo.ts
   recentSessions.ts
   recentSessions.test.ts
+  releaseInfo.ts
+  releaseInfo.test.ts
   tips.ts
 themes/
   ascet-spectrum-dark.json

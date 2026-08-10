@@ -13,11 +13,11 @@ npm install -g @earendil-works/pi-coding-agent
 Then install ASCET Copilot:
 
 ```powershell
-pi install npm:@zeerke/ascet-copilot
+pi install npm:@vaf-agentworks/ascet-copilot
 pi
 ```
 
-This bundle loads the ASCET tool extension, ASCET startup UI, subagents, todo overlay, ask-user-question, Hermes memory, and web access package resources.
+This bundle loads the ASCET tool extension, ASCET startup UI, subagents, todo overlay, ask-user-question, and web access package resources.
 
 ## Bosch LLM Farm Login
 
@@ -41,11 +41,11 @@ The Bosch provider only contacts the gateway after you select `/model bosch-llmf
 ## Update
 
 ```powershell
-pi update --extension npm:@zeerke/ascet-copilot
+pi update --extension npm:@vaf-agentworks/ascet-copilot
 ```
 
 ## Remove
 
 ```powershell
-pi remove npm:@zeerke/ascet-copilot
+pi remove npm:@vaf-agentworks/ascet-copilot
 ```

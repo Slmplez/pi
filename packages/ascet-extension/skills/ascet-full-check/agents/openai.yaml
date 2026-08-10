@@ -1,4 +1,0 @@
-interface:
-  display_name: "ASCET Full Check"
-  short_description: "Run extensible ASCET full checks with traceable parameter mapping evidence"
-  default_prompt: "Run an ASCET full check for the requested target, including read-only parameter mapping checks when applicable."

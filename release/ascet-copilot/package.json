@@ -1,6 +1,6 @@
 {
-  "name": "@zeerke/ascet-copilot",
-  "version": "0.1.29",
+  "name": "@vaf-agentworks/ascet-copilot",
+  "version": "0.1.39",
   "description": "ASCET Copilot package bundle for Pi.",
   "type": "module",
   "license": "MIT",
@@ -12,41 +12,39 @@
     "ascet-copilot"
   ],
   "publishConfig": {
-    "access": "public"
+    "registry": "https://szh6-v-000cy.szh.apac.bosch.com/nexus/repository/ascet-copilot-npm/",
+    "access": "restricted"
   },
   "dependencies": {
-    "@zeerke/ascet-copilot-extension": "0.1.29",
-    "@zeerke/ascet-copilot-ui": "0.1.29",
+    "@vaf-agentworks/ascet-copilot-extension": "0.1.39",
+    "@vaf-agentworks/ascet-copilot-ui": "0.1.39",
     "pi-subagents": "0.34.0",
     "@juicesharp/rpiv-todo": "1.20.0",
     "@juicesharp/rpiv-ask-user-question": "1.20.0",
     "@narumitw/pi-goal": "0.20.0",
-    "pi-hermes-memory": "0.7.23",
     "pi-web-access": "0.13.0"
   },
   "bundledDependencies": [
-    "@zeerke/ascet-copilot-extension",
-    "@zeerke/ascet-copilot-ui",
+    "@vaf-agentworks/ascet-copilot-extension",
+    "@vaf-agentworks/ascet-copilot-ui",
     "pi-subagents",
     "@juicesharp/rpiv-todo",
     "@juicesharp/rpiv-ask-user-question",
     "@narumitw/pi-goal",
-    "pi-hermes-memory",
     "pi-web-access"
   ],
   "pi": {
     "extensions": [
-      "node_modules/@zeerke/ascet-copilot-extension/src/index.ts",
-      "node_modules/@zeerke/ascet-copilot-ui/extensions/index.ts",
+      "node_modules/@vaf-agentworks/ascet-copilot-extension/src/index.ts",
+      "node_modules/@vaf-agentworks/ascet-copilot-ui/extensions/index.ts",
       "node_modules/pi-subagents/src/extension/index.ts",
       "node_modules/@juicesharp/rpiv-todo/index.ts",
       "node_modules/@juicesharp/rpiv-ask-user-question/index.ts",
       "node_modules/@narumitw/pi-goal/src/goal.ts",
-      "node_modules/pi-hermes-memory/src/index.ts",
       "node_modules/pi-web-access/index.ts"
     ],
     "skills": [
-      "node_modules/@zeerke/ascet-copilot-extension/skills",
+      "node_modules/@vaf-agentworks/ascet-copilot-extension/skills/ascet-engineering",
       "node_modules/pi-subagents/skills",
       "node_modules/pi-web-access/skills"
     ],
@@ -54,12 +52,7 @@
       "node_modules/pi-subagents/prompts"
     ],
     "themes": [
-      "node_modules/@zeerke/ascet-copilot-ui/themes"
-    ],
-    "subagents": {
-      "agents": [
-        "node_modules/@zeerke/ascet-copilot-extension/agents"
-      ]
-    }
+      "node_modules/@vaf-agentworks/ascet-copilot-ui/themes"
+    ]
   }
 }

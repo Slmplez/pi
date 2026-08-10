@@ -44,8 +44,11 @@ const missingSkillFiles = expectedSkillFiles.filter((path) => !paths.includes(pa
 if (missingSkillFiles.length > 0) {
 	throw new Error(`Packed ASCET extension is missing Skill files: [${missingSkillFiles.join(", ")}]`);
 }
-if (paths.includes("agents/ascet-implementation.md")) {
-	throw new Error("Packed ASCET extension contains removed agents/ascet-implementation.md.");
+if (paths.some((path) => path.startsWith("agents/"))) {
+	throw new Error("Packed ASCET extension contains removed ASCET checker agents.");
+}
+if (paths.some((path) => path.startsWith("skills/ascet-full-check/"))) {
+	throw new Error("Packed ASCET extension contains the removed ascet-full-check Skill.");
 }
 if (paths.includes("templates/ascet-project/rules/tools/verify.md")) {
 	throw new Error("Packed ASCET extension contains the removed standalone verification workflow.");

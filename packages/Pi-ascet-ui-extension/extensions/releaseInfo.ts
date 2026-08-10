@@ -1,6 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { homedir } from "node:os";
 import { dirname, join } from "node:path";
-import { getAgentDir } from "@earendil-works/pi-coding-agent";
 
 export type ReleaseInfo = {
 	packageName: string;
@@ -12,6 +12,7 @@ export type ReleaseInfo = {
 export type CachedUpdateInfo = {
 	checkedAt: number;
 	latestVersion: string;
+	registryUrl: string;
 };
 
 export type UpdateState =
@@ -20,49 +21,85 @@ export type UpdateState =
 	| { status: "available"; latestVersion: string }
 	| { status: "unavailable" };
 
+export type RegistryFetch = (url: URL) => Promise<Pick<Response, "ok" | "status" | "json">>;
+
 export type UpdateCheckOptions = {
 	currentVersion?: string;
 	now?: Date;
 	cacheTtlMs?: number;
+	registryUrl?: string;
 	fetchLatestVersion?: () => Promise<string>;
+	registryFetch?: RegistryFetch;
 	readCache?: () => Promise<CachedUpdateInfo | undefined>;
 	writeCache?: (cache: CachedUpdateInfo) => Promise<void>;
 };
 
 const ONE_HOUR_MS = 60 * 60 * 1000;
-const UPDATE_CACHE_PATH = join(getAgentDir(), "ascet-copilot", "update-cache.json");
+const UPDATE_CACHE_PATH = join(
+	process.env.PI_CODING_AGENT_DIR ?? join(homedir(), ".pi", "agent"),
+	"ascet-copilot",
+	"update-cache.json",
+);
+
+export const ASCET_COPILOT_NPM_REGISTRY =
+	"https://szh6-v-000cy.szh.apac.bosch.com/nexus/repository/ascet-copilot-npm/";
 
 export const ASCET_COPILOT_RELEASE: ReleaseInfo = {
-	packageName: "@zeerke/ascet-copilot",
-	version: "0.1.29",
+	packageName: "@vaf-agentworks/ascet-copilot",
+	version: "0.1.39",
 	highlights: [
-		"Canonical ascet_edit surface",
-		"ASCET index policy routing",
-		"Index progress status output",
+		"Single-session parameter dependency execution",
+		"Canonical ASCET get, read, diff, and edit tools",
+		"ASCET engineering Skill and guarded writes",
 	],
-	updateCommand: "pi update npm:@zeerke/ascet-copilot",
+	updateCommand: "pi update npm:@vaf-agentworks/ascet-copilot",
 };
 
 export async function checkAscetCopilotUpdate(options: UpdateCheckOptions = {}): Promise<UpdateState> {
 	const currentVersion = options.currentVersion ?? ASCET_COPILOT_RELEASE.version;
 	const now = options.now ?? new Date();
 	const cacheTtlMs = options.cacheTtlMs ?? ONE_HOUR_MS;
+	const registryUrl = normalizeRegistryUrl(
+		options.registryUrl ?? process.env.ASCET_COPILOT_NPM_REGISTRY ?? ASCET_COPILOT_NPM_REGISTRY,
+	);
 	const readCache = options.readCache ?? readUpdateCache;
 	const writeCache = options.writeCache ?? writeUpdateCache;
-	const fetchLatestVersion = options.fetchLatestVersion ?? fetchNpmLatestVersion;
+	const fetchLatestVersion =
+		options.fetchLatestVersion ??
+		(() => fetchAscetCopilotLatestVersion(registryUrl, options.registryFetch));
 
 	try {
 		const cached = await readCache();
-		if (isFreshCache(cached, now, cacheTtlMs)) {
+		if (isFreshCache(cached, now, cacheTtlMs, registryUrl)) {
 			return createUpdateState(currentVersion, cached.latestVersion);
 		}
 
 		const latestVersion = await fetchLatestVersion();
-		await writeCache({ checkedAt: now.getTime(), latestVersion });
+		await writeCache({ checkedAt: now.getTime(), latestVersion, registryUrl });
 		return createUpdateState(currentVersion, latestVersion);
 	} catch {
 		return { status: "unavailable" };
 	}
+}
+
+export async function fetchAscetCopilotLatestVersion(
+	registryUrl: string,
+	registryFetch: RegistryFetch = fetch,
+): Promise<string> {
+	const packagePath = ASCET_COPILOT_RELEASE.packageName.replace("/", "%2F");
+	const url = new URL(packagePath, normalizeRegistryUrl(registryUrl));
+	const response = await registryFetch(url);
+	if (!response.ok) {
+		throw new Error(`npm registry returned ${response.status}`);
+	}
+	const data = (await response.json()) as {
+		"dist-tags"?: { latest?: unknown };
+	};
+	const latestVersion = data["dist-tags"]?.latest;
+	if (typeof latestVersion !== "string" || latestVersion.trim() === "") {
+		throw new Error("npm registry response did not include dist-tags.latest");
+	}
+	return latestVersion;
 }
 
 export function createReleaseRows(state: UpdateState, release: ReleaseInfo = ASCET_COPILOT_RELEASE): string[] {
@@ -109,9 +146,11 @@ function isFreshCache(
 	cache: CachedUpdateInfo | undefined,
 	now: Date,
 	cacheTtlMs: number,
+	registryUrl: string,
 ): cache is CachedUpdateInfo {
 	return (
 		typeof cache?.latestVersion === "string" &&
+		cache.registryUrl === registryUrl &&
 		Number.isFinite(cache.checkedAt) &&
 		now.getTime() - cache.checkedAt >= 0 &&
 		now.getTime() - cache.checkedAt < cacheTtlMs
@@ -125,26 +164,25 @@ function parseStableVersion(version: string): [number, number, number] | undefin
 	return [parts[0], parts[1], parts[2]];
 }
 
-async function fetchNpmLatestVersion(): Promise<string> {
-	const packagePath = ASCET_COPILOT_RELEASE.packageName.replace("/", "%2F");
-	const response = await fetch(`https://registry.npmjs.org/${packagePath}/latest`);
-	if (!response.ok) {
-		throw new Error(`npm registry returned ${response.status}`);
-	}
-	const data = (await response.json()) as { version?: unknown };
-	if (typeof data.version !== "string" || data.version.trim() === "") {
-		throw new Error("npm registry response did not include a version");
-	}
-	return data.version;
+function normalizeRegistryUrl(registryUrl: string): string {
+	return registryUrl.endsWith("/") ? registryUrl : `${registryUrl}/`;
 }
 
 async function readUpdateCache(): Promise<CachedUpdateInfo | undefined> {
 	try {
 		const cache = JSON.parse(await readFile(UPDATE_CACHE_PATH, "utf8")) as Partial<CachedUpdateInfo>;
-		if (typeof cache.latestVersion !== "string" || typeof cache.checkedAt !== "number") {
+		if (
+			typeof cache.latestVersion !== "string" ||
+			typeof cache.checkedAt !== "number" ||
+			typeof cache.registryUrl !== "string"
+		) {
 			return undefined;
 		}
-		return { checkedAt: cache.checkedAt, latestVersion: cache.latestVersion };
+		return {
+			checkedAt: cache.checkedAt,
+			latestVersion: cache.latestVersion,
+			registryUrl: normalizeRegistryUrl(cache.registryUrl),
+		};
 	} catch {
 		return undefined;
 	}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "ASCET Copilot npm Release"
+  short_description: "Prepare, validate, and publish ASCET Copilot to Nexus"
+  default_prompt: "Use $ascet-copilot-npm-release to prepare and publish the next ASCET Copilot patch to Nexus."

@@ -92,7 +92,7 @@ try {
 		tempRoot,
 	);
 
-	const installedRoot = join(tempRoot, "node_modules", "@zeerke", "ascet-copilot-extension");
+	const installedRoot = join(tempRoot, "node_modules", "@vaf-agentworks", "ascet-copilot-extension");
 	const manifestPath = join(installedRoot, "package.json");
 	assertCondition(existsSync(manifestPath), `Installed package manifest is missing: ${manifestPath}`);
 	const manifest = JSON.parse(readFileSync(manifestPath, "utf8")) as ExtensionManifest;
@@ -104,9 +104,10 @@ try {
 	for (const relativePath of expectedSkillFiles) {
 		assertCondition(existsSync(join(skillRoot, relativePath)), `Installed Skill file is missing: ${relativePath}`);
 	}
+	assertCondition(!existsSync(join(installedRoot, "agents")), "Installed package contains removed ASCET checker agents.");
 	assertCondition(
-		!existsSync(join(installedRoot, "agents", "ascet-implementation.md")),
-		"Installed package contains removed agents/ascet-implementation.md.",
+		!existsSync(join(installedRoot, "skills", "ascet-full-check")),
+		"Installed package contains the removed ascet-full-check Skill.",
 	);
 	assertCondition(
 		!existsSync(join(installedRoot, "templates", "ascet-project", "rules", "tools", "verify.md")),
@@ -134,7 +135,8 @@ try {
 				declaredSkill: manifest.pi?.skills,
 				discoveredSkill: discoveredSkill.path,
 				installedSkillFiles: expectedSkillFiles.length,
-				removedImplementationAgentAbsent: true,
+				removedAscetCheckerAgentsAbsent: true,
+				removedFullCheckSkillAbsent: true,
 				standaloneVerificationWorkflowAbsent: true,
 			},
 			null,

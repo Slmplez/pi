@@ -1,9 +1,11 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
+	ASCET_COPILOT_NPM_REGISTRY,
 	ASCET_COPILOT_RELEASE,
 	checkAscetCopilotUpdate,
 	createReleaseRows,
+	fetchAscetCopilotLatestVersion,
 	isVersionGreater,
 	type CachedUpdateInfo,
 } from "./releaseInfo.ts";
@@ -19,6 +21,23 @@ test("isVersionGreater compares semver-like versions", () => {
 	assert.equal(isVersionGreater("0.1.1-beta.1", "0.1.1"), false);
 });
 
+test("fetchAscetCopilotLatestVersion queries the configured Nexus npm registry", async () => {
+	let requestedUrl: string | undefined;
+	const latestVersion = await fetchAscetCopilotLatestVersion(ASCET_COPILOT_NPM_REGISTRY, async (url) => {
+		requestedUrl = url.toString();
+		return new Response(JSON.stringify({ "dist-tags": { latest: "0.1.38" } }), {
+			status: 200,
+			headers: { "content-type": "application/json" },
+		});
+	});
+
+	assert.equal(latestVersion, "0.1.38");
+	assert.equal(
+		requestedUrl,
+		"https://szh6-v-000cy.szh.apac.bosch.com/nexus/repository/ascet-copilot-npm/@vaf-agentworks%2Fascet-copilot",
+	);
+});
+
 test("checkAscetCopilotUpdate returns available when registry latest is newer", async () => {
 	const writes: CachedUpdateInfo[] = [];
 	const state = await checkAscetCopilotUpdate({
@@ -32,7 +51,13 @@ test("checkAscetCopilotUpdate returns available when registry latest is newer", 
 	});
 
 	assert.deepEqual(state, { status: "available", latestVersion: "0.1.2" });
-	assert.deepEqual(writes, [{ checkedAt: now.getTime(), latestVersion: "0.1.2" }]);
+	assert.deepEqual(writes, [
+		{
+			checkedAt: now.getTime(),
+			latestVersion: "0.1.2",
+			registryUrl: ASCET_COPILOT_NPM_REGISTRY,
+		},
+	]);
 });
 
 test("checkAscetCopilotUpdate returns current when registry latest matches current", async () => {
@@ -47,7 +72,7 @@ test("checkAscetCopilotUpdate returns current when registry latest matches curre
 	assert.deepEqual(state, { status: "current", latestVersion: "0.1.1" });
 });
 
-test("checkAscetCopilotUpdate uses fresh cache without network", async () => {
+test("checkAscetCopilotUpdate uses fresh cache from the same registry without network", async () => {
 	let fetchCalled = false;
 	const state = await checkAscetCopilotUpdate({
 		currentVersion: "0.1.1",
@@ -56,12 +81,37 @@ test("checkAscetCopilotUpdate uses fresh cache without network", async () => {
 			fetchCalled = true;
 			return "0.1.2";
 		},
-		readCache: async () => ({ checkedAt: now.getTime() - 1_000, latestVersion: "0.1.2" }),
+		readCache: async () => ({
+			checkedAt: now.getTime() - 1_000,
+			latestVersion: "0.1.2",
+			registryUrl: ASCET_COPILOT_NPM_REGISTRY,
+		}),
 		writeCache: async () => {},
 	});
 
 	assert.equal(fetchCalled, false);
 	assert.deepEqual(state, { status: "available", latestVersion: "0.1.2" });
+});
+
+test("checkAscetCopilotUpdate ignores cache entries from another registry", async () => {
+	let fetchCalled = false;
+	const state = await checkAscetCopilotUpdate({
+		currentVersion: "0.1.1",
+		now,
+		fetchLatestVersion: async () => {
+			fetchCalled = true;
+			return "0.1.3";
+		},
+		readCache: async () => ({
+			checkedAt: now.getTime() - 1_000,
+			latestVersion: "0.1.2",
+			registryUrl: "https://registry.npmjs.org/",
+		}),
+		writeCache: async () => {},
+	});
+
+	assert.equal(fetchCalled, true);
+	assert.deepEqual(state, { status: "available", latestVersion: "0.1.3" });
 });
 
 test("checkAscetCopilotUpdate returns unavailable when registry check fails", async () => {
@@ -79,28 +129,36 @@ test("checkAscetCopilotUpdate returns unavailable when registry check fails", as
 });
 
 test("createReleaseRows renders concise release and update text", () => {
+	const currentVersion = ASCET_COPILOT_RELEASE.version;
+	const versionParts = currentVersion.split(".").map((part) => Number.parseInt(part, 10));
+	const nextVersion = `${versionParts[0]}.${versionParts[1]}.${versionParts[2] + 1}`;
+
 	assert.deepEqual(
 		createReleaseRows({ status: "checking" }, ASCET_COPILOT_RELEASE),
 		[
 			"Release",
-			"0.1.29 - Canonical ascet_edit surface",
-			"ASCET index policy routing",
-			"Index progress status output",
+			`${currentVersion} - Single-session parameter dependency execution`,
+			"Canonical ASCET get, read, diff, and edit tools",
+			"ASCET engineering Skill and guarded writes",
 			"Checking updates...",
 		],
 	);
 	assert.deepEqual(
-		createReleaseRows({ status: "available", latestVersion: "0.1.30" }, ASCET_COPILOT_RELEASE),
-		["Update available", "0.1.29 -> 0.1.30", "pi update npm:@zeerke/ascet-copilot"],
+		createReleaseRows({ status: "available", latestVersion: nextVersion }, ASCET_COPILOT_RELEASE),
+		[
+			"Update available",
+			`${currentVersion} -> ${nextVersion}`,
+			"pi update npm:@vaf-agentworks/ascet-copilot",
+		],
 	);
 	assert.deepEqual(
-		createReleaseRows({ status: "current", latestVersion: "0.1.29" }, ASCET_COPILOT_RELEASE),
+		createReleaseRows({ status: "current", latestVersion: currentVersion }, ASCET_COPILOT_RELEASE),
 		[
 			"Release",
-			"0.1.29 - Up to date",
-			"Canonical ascet_edit surface",
-			"ASCET index policy routing",
-			"Index progress status output",
+			`${currentVersion} - Up to date`,
+			"Single-session parameter dependency execution",
+			"Canonical ASCET get, read, diff, and edit tools",
+			"ASCET engineering Skill and guarded writes",
 		],
 	);
 });
