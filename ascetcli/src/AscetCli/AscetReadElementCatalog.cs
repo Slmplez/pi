@@ -189,6 +189,11 @@ public static class AscetReadElementCatalog
         return AscetJsonContract.Serialize(BuildCatalogPayload(catalog));
     }
 
+    public static string FormatSpecDocumentJson(AscetElementSpecDocument document)
+    {
+        return AscetJsonContract.Serialize(BuildDocumentPayload(document));
+    }
+
     private static Dictionary<string, object> BuildCatalogPayload(AscetElementCatalogReadResult catalog)
     {
         AscetElementSpecDocument document = catalog == null ? null : catalog.Document;

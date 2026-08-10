@@ -97,6 +97,7 @@ function expectedExampleKeys(): Set<string> {
 			}
 		}
 	}
+	expected.add("configure_parameter_dependency_chain.execute");
 	expected.delete("ascet_edit.set_module_code");
 	expected.delete("ascet_edit.set_state_machine_code");
 	for (const operation of ["set-method", "set-header", "set-external-c-code"]) {
@@ -174,7 +175,9 @@ describe("ASCET action few-shot examples", () => {
 				if (example.tool === "ascet_batch_write") {
 					expect((example.args as { operation?: string }).operation, key).toBe(example.action);
 				} else if (example.tool === "configure_parameter_dependency_chain") {
-					expect((example.args as { mode?: string }).mode, key).toBe(example.action);
+					expect(example.action, key).toBe("execute");
+					expect(example.args, key).not.toHaveProperty("mode");
+					expect(example.args, key).not.toHaveProperty("planId");
 				} else if (
 					example.tool === "ascet_edit" &&
 					((example.args as { mode?: string }).mode === "check" ||

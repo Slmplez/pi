@@ -18,6 +18,7 @@
     "AscetSetModuleCode",
     "AscetSetStateMachineCode",
     "AscetSetElementDependency",
+    "AscetConfigureParameterDependencyChainExecute",
     "AscetApplyElementSpec",
     "AscetApplyProjectFormula"
   ],

@@ -7,6 +7,9 @@ import type { AscetEditMutationStatus, AscetEditVerificationStatus } from "./ver
 export type AscetWriteTelemetryOutcome =
 	| "plan_ready"
 	| "committed"
+	| "no_change"
+	| "rolled_back"
+	| "rollback_failed"
 	| "committed_unverified"
 	| "outcome_unknown"
 	| "blocked"
@@ -14,7 +17,7 @@ export type AscetWriteTelemetryOutcome =
 
 export interface AscetWriteTelemetryEvent {
 	operation: string;
-	phase: "plan" | "commit";
+	phase: "plan" | "commit" | "execute";
 	outcome: AscetWriteTelemetryOutcome;
 	durationMs: number;
 	errorCode?: string;

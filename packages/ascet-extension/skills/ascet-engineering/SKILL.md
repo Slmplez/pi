@@ -23,8 +23,8 @@ Use this Skill as the authoritative ASCET engineering workflow. Keep the active 
 4. Freeze `integrationScope` or `featureScope`, ownership, modification layer, excluded objects, and success criteria. If both scopes remain plausible, ask the user.
 5. For non-trivial tasks, maintain a concrete todolist covering scope, evidence, design, preflight/write, and completion. Do not mechanically split every read or Tool call.
 6. Before `PREFLIGHTED`, present a complete implementation plan: requirement, scope/ownership, signal reuse, ESDL patch, Elements, Parameters, Dependencies/Variants, write order, assumptions, and risks. Keep `blockingUnknowns` empty before preflight.
-7. Run mutation preflight with the exact target and approved changes. `executeWrite=true` is the only real-write gate.
-8. Accept a successful executed `ascet_edit` call as completion because Runtime performs automatic action-specific verification. Do not call a separate verification Tool or add `verifyReadback` to model input. Stop on failure.
+7. For ordinary mutations, run exact-target preflight and execute the unchanged payload with `executeWrite=true`. For a complete Provider -> Imported -> Local dependency chain, call `configure_parameter_dependency_chain` once with the complete inline definition; do not call plan, commit, a separate preflight, batch, or three independent writes.
+8. Accept a passed automatic readback as completion. Runtime performs automatic action-specific verification: `ascet_edit` verifies ordinary writes; `configure_parameter_dependency_chain` confirms once, validates all live targets before mutation, verifies all four stages, and compensates in reverse order on failure. Stop on conflict, rollback failure, or unknown outcome.
 
 ## Evidence and planning state
 
@@ -43,8 +43,9 @@ Use this Skill as the authoritative ASCET engineering workflow. Keep the active 
 
 ## Write readiness and stop conditions
 
-- Preflight must use the exact target and approved changes and must not mutate ASCET. Execute only the same payload with `executeWrite=true` after required confirmation.
-- Runtime automatically verifies executed writes. A successful `ascet_edit` result completes the write; do not issue a redundant verification read. Read again only for the next engineering step, failure diagnosis, or an explicit user request.
+- Ordinary `ascet_edit` preflight must use the exact target and approved changes and must not mutate ASCET. Execute only the same payload with `executeWrite=true` after required confirmation.
+- A complete parameter dependency chain is the explicit exception: discovery -> exact evidence -> one `configure_parameter_dependency_chain` call. It has no public preflight, `executeWrite`, `mode`, `planId`, or commit step.
+- Runtime automatically verifies executed writes. A successful `ascet_edit` or chain `committed`/`no_change` result completes the write; do not issue a redundant verification read. Read again only for the next engineering step, failure diagnosis, or an explicit user request.
 - Stop and report failure or unknown outcome without blind retry. Stop and ask when target identity, ownership, scope, business values, mappings, editability, or required evidence remains ambiguous.
 
 ## Surface-specific guardrails

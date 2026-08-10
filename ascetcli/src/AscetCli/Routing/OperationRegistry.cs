@@ -105,6 +105,7 @@ public static class OperationRegistry
             new Dictionary<string, OperationDescriptor>(StringComparer.OrdinalIgnoreCase);
 
         RegisterTyped(descriptors, "apply_element_spec", ExecutionLane.SerialWrite, false, BatchSupportShape.Write);
+        RegisterTyped(descriptors, "configure_parameter_dependency_chain_execute", ExecutionLane.SerialWrite, false, BatchSupportShape.None);
         RegisterLegacy(descriptors, "apply_project_formula", ExecutionLane.SerialWrite, false, BatchSupportShape.Write);
         RegisterTyped(descriptors, "capabilities", ExecutionLane.Diagnostic, false, BatchSupportShape.None);
         RegisterLegacy(descriptors, "component_editable_check", ExecutionLane.LegacyRead, false, BatchSupportShape.None);

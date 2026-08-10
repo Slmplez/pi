@@ -17,6 +17,7 @@ function activateBaseProfile() {
 
 describe("ASCET action runtime guard", () => {
 	test("resolves default actions for tools with optional action parameters", () => {
+		assert.equal(extractToolAction("configure_parameter_dependency_chain", {}), "execute");
 		assert.equal(extractToolAction("ascet_capabilities", {}), "search_actions");
 		assert.equal(extractToolAction("ascet_scheduler_status", {}), "status");
 		assert.equal(extractToolAction("ascet_status", {}), "status");
@@ -29,8 +30,8 @@ describe("ASCET action runtime guard", () => {
 		assert.equal(descriptor?.id, "ascet_get.tree");
 		assert.equal(assertActionActive("ascet_edit", "check")?.id, "ascet_edit.check");
 		assert.equal(
-			assertActionActive("configure_parameter_dependency_chain", "plan")?.id,
-			"configure_parameter_dependency_chain.plan",
+			assertActionActive("configure_parameter_dependency_chain", "execute")?.id,
+			"configure_parameter_dependency_chain.execute",
 		);
 
 		assert.throws(

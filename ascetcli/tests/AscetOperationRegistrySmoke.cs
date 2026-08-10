@@ -37,8 +37,8 @@ public static class AscetOperationRegistrySmoke
     private static void TestRegistryCoverage()
     {
         IList<OperationDescriptor> descriptors = OperationRegistry.GetAll();
-        AssertEqual(65, descriptors.Count, "OperationRegistry descriptor count changed without updating the migration inventory.");
-        AssertEqual(64, AscetBridgeOperationRegistry.GetAll().Count, "Bridge should expose every live operation and exclude no-session capabilities.");
+        AssertEqual(66, descriptors.Count, "OperationRegistry descriptor count changed without updating the migration inventory.");
+        AssertEqual(65, AscetBridgeOperationRegistry.GetAll().Count, "Bridge should expose every live operation and exclude no-session capabilities.");
         AssertTrue(OperationRegistry.ResolveOrThrow("capabilities").SessionPolicy == SessionPolicy.NoSession, "capabilities must remain no-session.");
     }
 
@@ -113,7 +113,7 @@ public static class AscetOperationRegistrySmoke
             }
         }
 
-        AssertEqual(51, publicCount, "Public contract route inventory changed without updating contract coverage.");
+        AssertEqual(52, publicCount, "Public contract route inventory changed without updating contract coverage.");
         AssertEqual(13, internalCount, "Internal runtime route inventory changed without updating the migration audit.");
         AssertEqual(1, diagnosticCount, "Diagnostic route inventory changed without updating the migration audit.");
     }

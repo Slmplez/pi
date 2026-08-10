@@ -119,7 +119,7 @@ if ($artifactPaths.Count -ne 2 -or @($artifactPaths | Where-Object { $_ -notin $
 $capabilities = Invoke-JsonProbe -BridgePath $bridgePath -Arguments @('capabilities', '--json') -Name 'capabilities'
 $routes = @($capabilities.result.routes)
 $operationIds = @($routes | Select-Object -ExpandProperty operationId)
-if (@($capabilities.result.operations).Count -ne 64 -or $routes.Count -ne 64 -or @($operationIds | Sort-Object -Unique).Count -ne 64) {
+if (@($capabilities.result.operations).Count -ne 65 -or $routes.Count -ne 65 -or @($operationIds | Sort-Object -Unique).Count -ne 65) {
     throw 'Capabilities operation/route inventory does not match Milestone A.'
 }
 if ($capabilities.result.persistentImplemented -or @($capabilities.result.modes) -join ',' -ne 'exec,batch,capabilities,selftest') {
@@ -148,7 +148,7 @@ $invalidRoutes = @($routes | Where-Object {
     ($_.mutatesDatabase -and $_.executionProfile.timeoutClass -ne 'write') -or
     ($_.handlerKind -eq 'legacy_one_shot_adapter' -and $_.transportPolicy -ne 'one_shot_only')
 })
-if ($publicRoutes.Count -ne 51 -or $internalRoutes.Count -ne 13 -or $legacyRoutes.Count -ne 38 -or $invalidRoutes.Count -ne 0) {
+if ($publicRoutes.Count -ne 52 -or $internalRoutes.Count -ne 13 -or $legacyRoutes.Count -ne 38 -or $invalidRoutes.Count -ne 0) {
     throw 'Capabilities route policy inventory is invalid.'
 }
 $compatibilityAliases = @('read_code', 'diff', 'read_block_diagram_raw')
@@ -160,10 +160,14 @@ $offline = Invoke-JsonProbe -BridgePath $bridgePath -Arguments @('selftest', 'of
 if (-not $offline.result.passed -or $offline.result.toolApiConnected -or -not $offline.result.inProcess) {
     throw 'Offline selftest must pass in-process without connecting to ToolAPI.'
 }
-if ($offline.result.operationCount -ne 64 -or $offline.result.legacyOneShotCount -ne 38 -or $offline.meta.sessionPolicy -ne 'no_session') {
+if ($offline.result.operationCount -ne 65 -or $offline.result.legacyOneShotCount -ne 38 -or $offline.meta.sessionPolicy -ne 'no_session') {
     throw 'Offline selftest registry/session metadata is invalid.'
 }
 
+$invalidChain = Invoke-ExpectedErrorProbe -BridgePath $bridgePath -Arguments @('exec', 'configure_parameter_dependency_chain_execute', '--json') -ExpectedCode 'invalid_argument' -Name 'missing dependency chain request file'
+if ($invalidChain.meta.sessionPolicy -ne 'fresh_session' -or $invalidChain.meta.mutationStarted -ne $false) {
+    throw 'Rejected dependency chain arguments must report fresh_session and mutationStarted=false.'
+}
 $invalidWrite = Invoke-ExpectedErrorProbe -BridgePath $bridgePath -Arguments @('exec', 'create_folder', '--json') -ExpectedCode 'invalid_arguments' -Name 'missing create_folder target'
 if ($invalidWrite.meta.sessionPolicy -ne 'fresh_session' -or $invalidWrite.meta.mutationStarted -ne $false) {
     throw 'Rejected write arguments must report fresh_session and mutationStarted=false.'
@@ -182,7 +186,8 @@ try {
         @{ Name = 'AscetOperationRegistrySmoke'; Source = (Get-RepoPath 'tests\AscetOperationRegistrySmoke.cs') },
         @{ Name = 'AscetBridgeAdapterSmoke'; Source = (Get-RepoPath 'tests\AscetBridgeAdapterSmoke.cs') },
         @{ Name = 'AscetDatabaseCatalogContractTest'; Source = (Get-RepoPath 'tests\AscetDatabaseCatalogContractTest.cs') },
-        @{ Name = 'AscetSetEnumeratorsOutputTest'; Source = (Get-RepoPath 'tests\AscetSetEnumeratorsOutputTest.cs') }
+        @{ Name = 'AscetSetEnumeratorsOutputTest'; Source = (Get-RepoPath 'tests\AscetSetEnumeratorsOutputTest.cs') },
+        @{ Name = 'AscetParameterDependencyChainExecuteOutputTest'; Source = (Get-RepoPath 'tests\AscetParameterDependencyChainExecuteOutputTest.cs') }
     )
     foreach ($test in $tests) {
         $testPath = Join-Path $testDirectory ($test.Name + '.exe')

@@ -105,14 +105,16 @@ describe("ASCET action catalog", () => {
 		assert.match(dependencyRules, /variant selection.*all variants/);
 		assert.match(dependencyRules, /explicit restoration source/);
 
-		const chainPlan = entries.get("configure_parameter_dependency_chain.plan");
-		const chainCommit = entries.get("configure_parameter_dependency_chain.commit");
-		assert.match(chainPlan?.rules.join("\n") ?? "", /role-specific inline element/);
-		assert.match(chainPlan?.rules.join("\n") ?? "", /same P_<Name>/);
-		assert.match(chainPlan?.rules.join("\n") ?? "", /Consumer Local name must be C_<Name>/);
-		assert.match(chainPlan?.rules.join("\n") ?? "", /formals list and mapping keys must match exactly/);
-		assert.doesNotMatch(chainPlan?.miniFewShot ?? "", /specFile/);
-		const chainArgs = chainPlan?.fewShots[0]?.args;
+		const chain = entries.get("configure_parameter_dependency_chain.execute");
+		const chainRules = chain?.rules.join("\n") ?? "";
+		assert.match(chainRules, /complete inline definition/);
+		assert.match(chainRules, /same P_<Name>/);
+		assert.match(chainRules, /Consumer Local must be C_<Name>/);
+		assert.match(chainRules, /formals and mapping keys must match exactly/);
+		assert.match(chainRules, /zero mutation/);
+		assert.match(chainRules, /Do not retry blindly/);
+		assert.doesNotMatch(chain?.miniFewShot ?? "", /specFile|mode:"plan"|mode:"commit"|planId/);
+		const chainArgs = chain?.fewShots[0]?.args;
 		assert.ok(chainArgs);
 		const provider = chainArgs.provider as { element?: { name?: unknown } };
 		const consumer = chainArgs.consumer as { element?: { name?: unknown } };
@@ -128,6 +130,5 @@ describe("ASCET action catalog", () => {
 		assert.deepEqual(chainDependency.mappings, {
 			P_Threshold: { kind: "parameter", name: "P_Threshold" },
 		});
-		assert.match(chainCommit?.miniFewShot ?? "", /mode:"commit",planId:/);
 	});
 });

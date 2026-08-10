@@ -21,14 +21,18 @@ interface ChainStage {
 }
 
 interface ChainOutcome extends EditOutcome {
-	planId?: unknown;
-	fingerprint?: unknown;
+	writesPerformed?: unknown;
+	mutationStarted?: unknown;
+	beforeStateHash?: unknown;
+	afterStateHash?: unknown;
 	stages?: ChainStage[];
+	rollback?: { status?: unknown; verified?: unknown };
 }
 
 interface ToolResponse {
 	details?: {
 		outcome?: EditOutcome | ChainOutcome;
+		data?: unknown;
 		verification?: VerificationDetails;
 		error?: { code?: unknown; message?: unknown };
 	};
@@ -208,27 +212,81 @@ const definition = {
 	},
 };
 
-const planResponse = await executeTool("configure_parameter_dependency_chain", { mode: "plan", ...definition });
-const plan = requireOutcome(planResponse, "configure_parameter_dependency_chain") as ChainOutcome;
-requireStatus(plan, "planned", "dependency-chain plan");
-if (typeof plan.planId !== "string" || plan.planId.length === 0) {
-	throw new Error(`Dependency-chain plan did not return planId: ${JSON.stringify(plan)}`);
+const executeResponse = await executeTool("configure_parameter_dependency_chain", definition);
+const execute = requireOutcome(executeResponse, "configure_parameter_dependency_chain") as ChainOutcome;
+requireStatus(execute, "committed", "dependency-chain execute");
+if (execute.mutationStarted !== true || execute.writesPerformed !== true) {
+	throw new Error(`Dependency-chain execute did not report a real mutation: ${JSON.stringify(execute)}`);
+}
+if ((execute.stages ?? []).length !== 4 || (execute.stages ?? []).some((stage) => stage.readbackVerified !== true)) {
+	throw new Error(`Dependency-chain execute did not prove four verified stages: ${JSON.stringify(execute.stages)}`);
 }
 
-const commitResponse = await executeTool("configure_parameter_dependency_chain", {
-	mode: "commit",
-	planId: plan.planId,
-});
-const commit = requireOutcome(commitResponse, "configure_parameter_dependency_chain") as ChainOutcome;
-requireStatus(commit, "committed", "dependency-chain commit");
-const committedStages = (commit.stages ?? []).filter((stage) => stage.status === "committed");
-if (
-	committedStages.length !== 4 ||
-	committedStages.some((stage) => stage.readbackVerified !== true) ||
-	new Set(committedStages.map((stage) => stage.stage)).size !== 4
-) {
-	throw new Error(`Dependency-chain commit did not prove four verified stages: ${JSON.stringify(commit.stages)}`);
+const idempotentResponse = await executeTool("configure_parameter_dependency_chain", definition);
+const idempotent = requireOutcome(idempotentResponse, "configure_parameter_dependency_chain") as ChainOutcome;
+requireStatus(idempotent, "no_change", "dependency-chain idempotent repeat");
+if (idempotent.mutationStarted !== false || idempotent.writesPerformed !== false) {
+	throw new Error(`Idempotent repeat reported mutation: ${JSON.stringify(idempotent)}`);
 }
+
+const conflictingDefinition = structuredClone(definition);
+conflictingDefinition.provider.element.comment = "Conflicting live-smoke definition that must not overwrite existing state.";
+const conflictResponse = await executeTool("configure_parameter_dependency_chain", conflictingDefinition);
+const conflict = requireOutcome(conflictResponse, "configure_parameter_dependency_chain") as ChainOutcome;
+requireStatus(conflict, "rejected", "dependency-chain conflict");
+if (conflict.mutationStarted !== false || conflict.writesPerformed !== false) {
+	throw new Error(`Conflict did not preserve zero-mutation semantics: ${JSON.stringify(conflict)}`);
+}
+const afterConflictResponse = await executeTool("configure_parameter_dependency_chain", definition);
+const afterConflict = requireOutcome(afterConflictResponse, "configure_parameter_dependency_chain") as ChainOutcome;
+requireStatus(afterConflict, "no_change", "dependency-chain state after conflict");
+
+const rollbackProviderParameter = "P_SmokeRollback";
+const rollbackLocalParameter = "C_SmokeRollback";
+const rollbackDefinition = structuredClone(definition);
+rollbackDefinition.provider.element.name = rollbackProviderParameter;
+rollbackDefinition.provider.element.comment = "Disposable rollback Provider Parameter.";
+rollbackDefinition.consumer.element.name = rollbackProviderParameter;
+rollbackDefinition.local.element.name = rollbackLocalParameter;
+rollbackDefinition.local.element.comment = "Disposable rollback Local Parameter.";
+rollbackDefinition.dependency.formula = rollbackProviderParameter;
+rollbackDefinition.dependency.formals = [rollbackProviderParameter];
+rollbackDefinition.dependency.mappings = {
+	[rollbackProviderParameter]: { kind: "parameter", name: rollbackProviderParameter },
+};
+process.env.ASCET_PARAMETER_CHAIN_ENABLE_FAILURE_INJECTION = "1";
+process.env.ASCET_PARAMETER_CHAIN_FAIL_AFTER_STAGE = "local";
+let rolledBack: ChainOutcome;
+try {
+	const rollbackResponse = await executeTool("configure_parameter_dependency_chain", rollbackDefinition);
+	rolledBack = requireOutcome(rollbackResponse, "configure_parameter_dependency_chain") as ChainOutcome;
+} finally {
+	delete process.env.ASCET_PARAMETER_CHAIN_ENABLE_FAILURE_INJECTION;
+	delete process.env.ASCET_PARAMETER_CHAIN_FAIL_AFTER_STAGE;
+}
+requireStatus(rolledBack, "rolled_back", "dependency-chain injected rollback");
+if (rolledBack.rollback?.status !== "passed" || rolledBack.rollback?.verified !== true) {
+	throw new Error(`Injected rollback was not verified: ${JSON.stringify(rolledBack)}`);
+}
+
+async function requireElementAbsent(componentPath: string, elementName: string): Promise<unknown> {
+	const response = await executeTool("ascet_get", {
+		action: "elements",
+		target: { path: componentPath },
+		filters: { name: elementName },
+		delivery: "inline",
+	});
+	const data = response.details?.data;
+	if (JSON.stringify(data).includes(`"${elementName}"`)) {
+		throw new Error(`Rollback left Element ${componentPath}/${elementName}: ${JSON.stringify(data)}`);
+	}
+	return data;
+}
+const rollbackReadback = {
+	provider: await requireElementAbsent(providerPath, rollbackProviderParameter),
+	imported: await requireElementAbsent(consumerPath, rollbackProviderParameter),
+	local: await requireElementAbsent(consumerPath, rollbackLocalParameter),
+};
 
 const cleanup = autoCleanup ? await cleanupArtifacts() : undefined;
 console.log(
@@ -242,13 +300,12 @@ console.log(
 			parameterChain: `${providerParameter} -> ${providerParameter} -> ${localParameter}`,
 			valueSource: "Acceptance fixture fixed value 1.0",
 			setup,
-			plan: {
-				status: plan.status,
-				planId: plan.planId,
-				fingerprint: plan.fingerprint,
-				stages: plan.stages,
-			},
-			commit,
+			execute,
+			idempotent,
+			conflict,
+			afterConflict,
+			rolledBack,
+			rollbackReadback,
 			cleanup,
 		},
 		null,

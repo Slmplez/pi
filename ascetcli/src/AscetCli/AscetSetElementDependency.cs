@@ -97,6 +97,21 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
 
         return ExecuteWithSession("set_element_dependency", delegate(AscetSession session)
         {
+            return SetInSession(session, arguments);
+        });
+    }
+
+    public AscetSetElementDependencyResult SetInSession(AscetSession session, AscetSetElementDependencyArguments arguments)
+    {
+        Validate(arguments);
+        if (String.Equals(arguments.TargetKind, "folder", StringComparison.OrdinalIgnoreCase))
+        {
+            throw new AscetReadException("invalid_argument", "set_element_dependency", "A bound-session dependency write requires a component target.");
+        }
+
+        return ExecuteWithBoundSession("set_element_dependency", session, delegate(AscetSession currentSession)
+        {
+            session = currentSession;
             CodeComponent component = ResolveCodeComponent(session, arguments.TargetPath);
             List<string> attempted = new List<string>();
             List<string> issues = new List<string>();

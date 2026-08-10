@@ -821,16 +821,17 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["write", "dependency", "provider-discovery"],
 		}),
 	}),
-	descriptor("configure_parameter_dependency_chain", "plan", "public", WRITE_PROFILES, {
-		prompt: prompt("Plan one complete inline Provider/Consumer/Local dependency chain.", {
+	descriptor("configure_parameter_dependency_chain", "execute", "public", WRITE_PROFILES, {
+		prompt: prompt("Execute one complete guarded Provider/Imported/Local dependency chain.", {
 			rules: [
-				"Use mode=plan before commit. Do not create or pass specFile artifacts; provide one role-specific inline element for provider, consumer, and local.",
-				"Provider and Local must include every applicable decision group. Imported Parameter is the only lightweight exception and must not contain data, implementation, range, or calibration.",
-				"Provider Exported and Consumer Imported names must be the same P_<Name>; the Consumer Local name must be C_<Name>. Provide dependency.formals, bindingPolicy=explicit, mappings, and variantPolicy. The formals list and mapping keys must match exactly; executed stages and rollback writes use automatic internal verification.",
+				"Use only after resolving the exact Provider and Consumer component paths. Submit one complete inline definition; do not call plan, commit, preflight, or batch.",
+				"Provider and Local must include every applicable decision group. Imported Parameter is the lightweight exception and must not contain data, implementation, range, or calibration.",
+				"Provider Exported and Consumer Imported names must be the same P_<Name>; Consumer Local must be C_<Name>. dependency.formals and mapping keys must match exactly, with explicit mapping kind/name and variantPolicy.",
+				"Runtime confirms once before opening Bridge. Bridge validates all live targets before mutation, performs mandatory readback, and compensates in reverse order on failure. Existing conflicting state causes zero mutation.",
+				"Do not retry blindly when mutationStarted=true, rollback_failed, or unknown_outcome is returned.",
 			],
 			fewShots: [
-				shot("plan inline dependency chain", {
-					mode: "plan",
+				shot("execute guarded dependency chain", {
 					provider: {
 						componentPath: "F/Provider",
 						element: {
@@ -871,14 +872,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					},
 				}),
 			],
-			tags: ["write", "dependency", "inline-element", "provider-discovery"],
-		}),
-	}),
-	descriptor("configure_parameter_dependency_chain", "commit", "public", WRITE_PROFILES, {
-		prompt: prompt("Commit a previously planned dependency chain by planId only.", {
-			rules: ["Pass only mode=commit and the unchanged planId returned by plan."],
-			fewShots: [shot("commit dependency chain", { mode: "commit", planId: "plan-id" })],
-			tags: ["write", "dependency", "commit"],
+			tags: ["write", "dependency", "execute", "inline-element", "provider-discovery", "rollback"],
 		}),
 	}),
 	descriptor("ascet_edit", "check", "public", ["component-edit"], {

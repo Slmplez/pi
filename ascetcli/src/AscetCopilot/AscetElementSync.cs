@@ -650,9 +650,13 @@ public sealed class AscetElementSyncSummary
 public interface IComponentElementSyncService
 {
     AscetElementCatalogReadResult ReadCatalog(AscetItemRef component);
+    AscetElementCatalogReadResult ReadCatalogInSession(AscetSession session, AscetItemRef component);
     AscetElementSpecDiffResult Diff(AscetItemRef component, AscetElementSpecDocument spec);
+    AscetElementSpecDiffResult DiffInSession(AscetSession session, AscetItemRef component, AscetElementSpecDocument spec);
     AscetElementSyncResult Apply(AscetItemRef component, AscetElementSpecDocument spec, bool verifyReadback);
     AscetElementSyncResult Apply(AscetItemRef component, AscetElementSpecDocument spec, AscetElementApplyOptions options, bool verifyReadback);
+    AscetElementSyncResult ApplyInSession(AscetSession session, AscetItemRef component, AscetElementSpecDocument spec, AscetElementApplyOptions options, bool verifyReadback, bool saveDatabase);
+    bool RemoveElementInSession(AscetSession session, AscetItemRef component, string elementName, bool verifyReadback, bool saveDatabase);
 }
 
 public static class AscetElementSpecDocumentParser
@@ -3648,13 +3652,22 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
 
     public AscetElementCatalogReadResult ReadCatalog(AscetItemRef component)
     {
+        return ExecuteWithSession("read_element_catalog", delegate(AscetSession session)
+        {
+            return ReadCatalogInSession(session, component);
+        });
+    }
+
+    public AscetElementCatalogReadResult ReadCatalogInSession(AscetSession session, AscetItemRef component)
+    {
         if (component == null)
         {
             throw new AscetReadException("invalid_argument", "read_element_catalog", "Component reference must not be null.");
         }
 
-        return ExecuteWithSession("read_element_catalog", delegate(AscetSession session)
+        return ExecuteWithBoundSession("read_element_catalog", session, delegate(AscetSession currentSession)
         {
+            session = currentSession;
             AscetDiscreteComponent discrete;
             CodeComponent code;
             AscetItemRef resolved = ResolveComponent(session, component.Path, "read_element_catalog", out discrete, out code);
@@ -3685,6 +3698,14 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
 
     public AscetElementSpecDiffResult Diff(AscetItemRef component, AscetElementSpecDocument spec)
     {
+        return ExecuteWithSession("diff_element_spec", delegate(AscetSession session)
+        {
+            return DiffInSession(session, component, spec);
+        });
+    }
+
+    public AscetElementSpecDiffResult DiffInSession(AscetSession session, AscetItemRef component, AscetElementSpecDocument spec)
+    {
         if (component == null)
         {
             throw new AscetReadException("invalid_argument", "diff_element_spec", "Component reference must not be null.");
@@ -3695,8 +3716,9 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
             throw new AscetReadException("invalid_argument", "diff_element_spec", "Element spec document must not be null.");
         }
 
-        return ExecuteWithSession("diff_element_spec", delegate(AscetSession session)
+        return ExecuteWithBoundSession("diff_element_spec", session, delegate(AscetSession currentSession)
         {
+            session = currentSession;
             AscetDiscreteComponent discrete;
             CodeComponent code;
             AscetItemRef resolved = ResolveComponent(session, component.Path, "diff_element_spec", out discrete, out code);
@@ -3712,6 +3734,14 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
 
     public AscetElementSyncResult Apply(AscetItemRef component, AscetElementSpecDocument spec, AscetElementApplyOptions options, bool verifyReadback)
     {
+        return ExecuteWithSession("apply_element_spec", delegate(AscetSession session)
+        {
+            return ApplyInSession(session, component, spec, options, verifyReadback, true);
+        });
+    }
+
+    public AscetElementSyncResult ApplyInSession(AscetSession session, AscetItemRef component, AscetElementSpecDocument spec, AscetElementApplyOptions options, bool verifyReadback, bool saveDatabase)
+    {
         if (component == null)
         {
             throw new AscetReadException("invalid_argument", "apply_element_spec", "Component reference must not be null.");
@@ -3723,8 +3753,9 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
         }
 
         options = NormalizeOptions(options);
-        AscetElementSyncResult result = ExecuteWithSession("apply_element_spec", delegate(AscetSession session)
+        AscetElementSyncResult result = ExecuteWithBoundSession("apply_element_spec", session, delegate(AscetSession currentSession)
         {
+            session = currentSession;
             TableDebugStderr("apply:session-open");
             AscetDiscreteComponent discrete;
             CodeComponent code;
@@ -3732,7 +3763,10 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
             TableDebugStderr("apply:after-resolve-component:" + resolved.Path);
             List<AscetExistingElementState> existing = AscetElementCatalogReader.ReadExistingElements(discrete, code);
             TableDebugStderr("apply:after-read-existing:" + existing.Count.ToString());
-            ValidateProjectFormulas(session, resolved, spec, existing, options.ProjectPath);
+            if (options.Mode != AscetElementApplyMode.Restore)
+            {
+                ValidateProjectFormulas(session, resolved, spec, existing, options.ProjectPath);
+            }
             EnsureExistingLocalParameterDataWritesAreIndependent(code, spec, existing);
             TableDebugStderr("apply:after-validate-formulas");
             DataConfiguration defaultData = code.GetDefaultData();
@@ -3887,7 +3921,10 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
 
             CommitTableVisibility(session, resolved.Path, spec, created, updated, options.ProjectPath);
             FlushTableEditsIfRequested(session, spec);
-            SaveCurrentDatabaseAfterElementWrites(session, created, updated, removed);
+            if (saveDatabase)
+            {
+                SaveCurrentDatabaseAfterElementWrites(session, created, updated, removed);
+            }
 
             bool verifiedInSession = false;
             if (verifyReadback && ContainsTableNames(spec, created, updated))
@@ -3922,12 +3959,57 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
 
         if (verifyReadback && !result.ReadbackVerified)
         {
-            VerifyReadback(component.Path, spec);
+            VerifyReadbackInSession(session, component.Path, spec);
             result.ReadbackVerified = true;
             MarkElementResultsReadbackVerified(result.ElementResults);
         }
 
         return result;
+    }
+
+    public bool RemoveElementInSession(AscetSession session, AscetItemRef component, string elementName, bool verifyReadback, bool saveDatabase)
+    {
+        if (component == null || String.IsNullOrWhiteSpace(component.Path) || String.IsNullOrWhiteSpace(elementName))
+        {
+            throw new AscetReadException("invalid_argument", "remove_element", "Component path and Element name are required.");
+        }
+        return ExecuteWithBoundSession("remove_element", session, delegate(AscetSession currentSession)
+        {
+            AscetDiscreteComponent discrete;
+            CodeComponent code;
+            ResolveComponent(currentSession, component.Path, "remove_element", out discrete, out code);
+            List<AscetExistingElementState> existing = AscetElementCatalogReader.ReadExistingElements(discrete, code);
+            bool found = false;
+            for (int i = 0; i < existing.Count; i++)
+            {
+                if (existing[i] != null && String.Equals(existing[i].Name, elementName, StringComparison.Ordinal))
+                {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                return false;
+            }
+            RemoveElement(discrete, elementName);
+            if (saveDatabase)
+            {
+                SaveCurrentDatabaseAfterElementWrites(currentSession, new List<string>(), new List<string>(), new List<string> { elementName });
+            }
+            if (verifyReadback)
+            {
+                List<AscetExistingElementState> readback = AscetElementCatalogReader.ReadExistingElements(discrete, code);
+                for (int i = 0; i < readback.Count; i++)
+                {
+                    if (readback[i] != null && String.Equals(readback[i].Name, elementName, StringComparison.Ordinal))
+                    {
+                        throw new AscetReadException("rollback_readback_mismatch", "remove_element", "Element '" + elementName + "' still exists after removal.");
+                    }
+                }
+            }
+            return true;
+        });
     }
 
     private void MarkElementResultsReadbackVerified(IList<AscetElementSyncItemResult> results)
@@ -4706,6 +4788,18 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
         }
 
         return false;
+    }
+
+    private void VerifyReadbackInSession(AscetSession session, string componentPath, AscetElementSpecDocument spec)
+    {
+        ExecuteWithBoundSession("verify_apply_element_spec", session, delegate(AscetSession currentSession)
+        {
+            AscetDiscreteComponent discrete;
+            CodeComponent code;
+            ResolveComponent(currentSession, componentPath, "verify_apply_element_spec", out discrete, out code);
+            VerifyReadbackAgainstExisting(spec, AscetElementCatalogReader.ReadExistingElements(discrete, code));
+            return 0;
+        });
     }
 
     private void VerifyReadback(string componentPath, AscetElementSpecDocument spec)

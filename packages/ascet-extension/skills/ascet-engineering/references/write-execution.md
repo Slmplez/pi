@@ -1,5 +1,7 @@
 # Write Execution
 
-Freeze target, scope, changes, mappings, variants, and approval before preflight. Preflight must not write. Execute only the same approved payload with `executeWrite=true`; do not broaden scope or regenerate a plan during execution.
+Freeze target, scope, changes, mappings, variants, and approval before writing. Ordinary `ascet_edit` mutations use non-mutating Preflight followed by the unchanged payload with `executeWrite=true`.
 
-Runtime automatically performs action-specific verification/readback. A successful executed `ascet_edit` result completes the write. On failure or unknown outcome, report the failure, do not claim completion, and do not blindly retry. Read again only when the next engineering step needs fresh state, failure diagnosis requires it, or the user explicitly requests it.
+A complete parameter dependency chain is different: call `configure_parameter_dependency_chain` once. It does not use `executeWrite`, public preflight, plan/commit, or `planId`. Runtime asks for one confirmation before opening Bridge. Bridge then uses one fresh ToolAPI session to validate every live target, capture rollback evidence, write Provider/Imported/Local/Dependency in order, and perform mandatory readback.
+
+`committed` and `no_change` are successful terminal results. Existing conflicts must return zero mutation. `rolled_back` means the attempted write failed but the original state was readback-verified. Stop on `rollback_failed` or `unknown_outcome`; do not blindly retry.

@@ -42,6 +42,9 @@ export function extractToolAction(tool: string, params: unknown): string {
 			return record.operation;
 		}
 	}
+	if (tool === "configure_parameter_dependency_chain") {
+		return "execute";
+	}
 	if (tool === "ascet_capabilities") {
 		return "search_actions";
 	}

@@ -14,7 +14,7 @@ The current ASCET tool model is:
 2. `ascet_read` for exact-surface inspection
 3. `ascet_diff` for exact-target comparison
 4. `ascet_edit` for guarded mutations and Runtime automatic verification
-5. `configure_parameter_dependency_chain` for explicit dependency-chain plans and commits
+5. `configure_parameter_dependency_chain` for one guarded complete dependency-chain execution
 6. `ascet_batch_write` only when the explicit batch feature is enabled
 
 Do not collapse all of these back into a generic "read, write, verify everything everywhere" mental model.
@@ -62,6 +62,13 @@ Do not collapse all of these back into a generic "read, write, verify everything
 
 - one exact mutation is approved
 - the change shape is singular and focused
+
+### Use `configure_parameter_dependency_chain` When
+
+- one complete Provider Exported -> Consumer Imported -> Consumer Local chain is required
+- all exact targets, Element decisions, mappings, and variants are known
+- submit one inline request; do not use plan/commit, separate preflight, or batch
+- accept `committed` or `no_change`; stop on conflict, `rollback_failed`, or `unknown_outcome`
 
 ### Use `ascet_batch_write` When
 

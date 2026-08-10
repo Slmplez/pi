@@ -5,7 +5,7 @@ export interface AscetEditApprovalContext {
 	};
 }
 
-export type AscetEditErrorPrefix = "ascet_edit" | "ascet_batch_write";
+export type AscetEditErrorPrefix = "ascet_edit" | "ascet_batch_write" | "configure_parameter_dependency_chain";
 
 type AscetEditApprovalFailureKind =
 	| "preflight_required"

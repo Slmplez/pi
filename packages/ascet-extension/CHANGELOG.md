@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Breaking Changes
+
+- Replaced configure_parameter_dependency_chain plan/commit with one guarded execution that uses a single Bridge ToolAPI session, live conflict rejection, mandatory readback, and compensating rollback. Removed mode, planId, Plan Store, TTL, fingerprint, and stale-plan behavior for this tool.
+
 ### Added
 
 - Added the `ascet-engineering` Skill with bounded scope, signal-flow, ESDL, Element, Parameter, Dependency, planning, and guarded-write References.
@@ -24,7 +28,6 @@
 - Fixed Bosch LLM Farm slow first-token requests to use effective provider-scoped 15-minute timeouts and five agent-level retries without showing intermediate retry errors.
 - Fixed `ascet_get` `component_refs` name and scope filters being ignored.
 - Fixed failed or unknown ASCET write outcomes retaining stale task-scoped observations when the mutation may already have started.
-- Fixed configure_parameter_dependency_chain commits being rejected as stale when only volatile Bridge metadata, temporary snapshot paths, or temporary OIDs changed between plan and commit.
 
 ### Removed
 

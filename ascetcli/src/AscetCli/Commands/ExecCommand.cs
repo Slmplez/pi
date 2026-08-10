@@ -87,6 +87,8 @@ public static class ExecCommand
                 return HandleApplyElementSpec(AscetCliEnvelope.Slice(args, 1));
             case "set_element_dependency":
                 return HandleSetElementDependency(AscetCliEnvelope.Slice(args, 1));
+            case "configure_parameter_dependency_chain_execute":
+                return HandleConfigureParameterDependencyChainExecute(AscetCliEnvelope.Slice(args, 1));
             default:
                 return HandleLegacyProxyOperation(operation, AscetCliEnvelope.Slice(args, 1));
         }
@@ -699,6 +701,45 @@ public static class ExecCommand
             });
 
             return WriteStructuredWriteResult(operation, result);
+        }
+        catch (Exception ex)
+        {
+            return WriteExecException(operation, ex);
+        }
+    }
+
+    private static int HandleConfigureParameterDependencyChainExecute(string[] args)
+    {
+        const string operation = "configure_parameter_dependency_chain_execute";
+        try
+        {
+            string requestFile = AscetCliEnvelope.GetToken(args, 0);
+            if (String.IsNullOrWhiteSpace(requestFile))
+            {
+                throw new AscetReadException("invalid_argument", operation, "usage: configure_parameter_dependency_chain_execute <request-file> [--json]");
+            }
+            for (int i = 1; i < (args == null ? 0 : args.Length); i++)
+            {
+                if (!String.Equals(args[i], "--json", StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new AscetReadException("invalid_argument", operation, "Unknown argument '" + args[i] + "'.");
+                }
+            }
+            AscetToolApiBootstrap.ConfigureAssemblyResolution();
+            Dictionary<string, object> result = ExecuteSuppressingConsoleOut(delegate()
+            {
+                AscetParameterDependencyChainExecuteRequest request = AscetParameterDependencyChainExecuteParser.ParseFile(requestFile);
+                return new AscetParameterDependencyChainExecuteService().Execute(request);
+            });
+            object mutationValue;
+            bool? mutationStarted = result != null && result.TryGetValue("mutationStarted", out mutationValue) && mutationValue is bool
+                ? (bool?)((bool)mutationValue)
+                : null;
+            return AscetCliEnvelope.WriteSuccess(AscetCliEnvelope.Success("exec", operation, result, mutationStarted));
+        }
+        catch (AscetReadException ex)
+        {
+            return WriteReadException(operation, ex);
         }
         catch (Exception ex)
         {

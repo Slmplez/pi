@@ -24,6 +24,7 @@ import {
 
 export interface RunAscetEditOperationOptions {
 	cwd: string;
+	cliPath?: string;
 	agentId?: string;
 	sessionId?: string;
 	env?: Record<string, string | undefined>;

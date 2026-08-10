@@ -63,20 +63,18 @@ describe("ASCET prompt coordination", () => {
 		assert.ok(total <= Math.floor(TOOL_PROMPT_BASELINE_CHARS * 0.3), `${total} > 70% reduction target`);
 	});
 
-	test("keeps dependency-chain plan and commit rules descriptor-backed", () => {
+	test("keeps dependency-chain execute rules descriptor-backed", () => {
 		const prompt = guidelineText(configureParameterDependencyChainTool);
 		const examples = compactExamplesForTool("configure_parameter_dependency_chain").join("\n");
 
-		assert.match(prompt, /role-specific inline element/);
+		assert.match(prompt, /complete inline definition/);
 		assert.match(prompt, /dependency\.formals/);
-		assert.match(prompt, /automatic internal verification/);
-		assert.doesNotMatch(prompt, /verifyReadback=true/);
-		assert.match(examples, /mode:"plan"/);
+		assert.match(prompt, /mandatory readback/);
+		assert.match(prompt, /compensates in reverse order/);
+		assert.doesNotMatch(prompt, /mode=plan|mode=commit|planId|verifyReadback=true/);
 		assert.match(examples, /name:"P_Threshold"/);
 		assert.match(examples, /name:"C_Threshold"/);
-		assert.doesNotMatch(examples, /name:"P_In"|name:"P_Local"/);
-		assert.match(examples, /mode:"commit",planId:/);
-		assert.doesNotMatch(examples, /verifyReadback/);
+		assert.doesNotMatch(examples, /name:"P_In"|name:"P_Local"|mode:"plan"|mode:"commit"|planId|verifyReadback/);
 	});
 
 	test("deduplicates compact family prompts", () => {
@@ -97,8 +95,7 @@ describe("ASCET prompt coordination", () => {
 		assert.deepEqual(actionInstructionIds({ tool: "ascet_get", action: "elements" }), ["ascet_get.elements"]);
 		assert.equal(getActionInstruction("ascet_read.read_code")?.action, "read_code");
 		assert.deepEqual(actionInstructionIds({ tool: "configure_parameter_dependency_chain" }), [
-			"configure_parameter_dependency_chain.plan",
-			"configure_parameter_dependency_chain.commit",
+			"configure_parameter_dependency_chain.execute",
 		]);
 		assert.ok(
 			findActionInstructions({ profile: "write-preflight", tags: ["provider-discovery"] }).some(
