@@ -1,0 +1,6 @@
+﻿interface:
+  display_name: "ASCET Engineering"
+  short_description: "Evidence-backed ASCET engineering workflow"
+  default_prompt: "Use $ascet-engineering to locate the exact ASCET target, design the change, and prepare guarded writes."
+policy:
+  allow_implicit_invocation: true

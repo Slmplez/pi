@@ -24,7 +24,7 @@ Load this only after workflow, tool, or task docs still leave semantic ambiguity
 
 - The next tool is already obvious.
 - The target is still fuzzy and has not been resolved.
-- The task is only immediate post-write `readback`.
+- The task is only the automatic verification already returned by `ascet_edit`.
 
 ## Evidence
 

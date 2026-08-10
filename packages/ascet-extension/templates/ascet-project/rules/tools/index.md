@@ -24,7 +24,7 @@ Load after `core/workflow.md` and `core/routing.md`.
 | Two exact targets or surfaces must be compared | `diff.md` |
 | One exact mutation must be applied | `write.md` |
 | Many aligned mutations must be applied | `batch-write.md` |
-| Immediate post-write confirmation is needed | `verify.md` |
+| An executed write has returned | inspect `ascet_edit` automatic verification |
 | Folder-scale or project-scale checking is requested | `autocheck.md` |
 
 ## Stop Rules

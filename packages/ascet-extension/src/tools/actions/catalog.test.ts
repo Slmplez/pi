@@ -52,12 +52,32 @@ describe("ASCET action catalog", () => {
 		assert.match(entries.get("ascet_read.read_element")?.compact ?? "", /exact resolved Element/);
 	});
 
+	test("keeps discovery bounded and reference actions outgoing-only", () => {
+		const entries = new Map(listActionCatalogEntries().map((entry) => [entry.id, entry]));
+		const treeRules = entries.get("ascet_get.tree")?.rules.join("\n") ?? "";
+		const elementRules = entries.get("ascet_get.elements")?.rules.join("\n") ?? "";
+		const componentReferenceRules = entries.get("ascet_get.component_refs")?.rules.join("\n") ?? "";
+		const databaseReferenceRules = entries.get("ascet_get.dbitem_refs")?.rules.join("\n") ?? "";
+		const bdeRules = entries.get("ascet_get.bde_edges")?.rules.join("\n") ?? "";
+
+		assert.doesNotMatch(treeRules, /Use tree first/);
+		assert.match(treeRules, /exact path or OID.*directly/);
+		assert.match(elementRules, /user input, tree discovery, or validated stored evidence/);
+		assert.match(componentReferenceRules, /outgoing Component references only/);
+		assert.match(componentReferenceRules, /not a reverse-reference or Project-discovery API/);
+		assert.match(databaseReferenceRules, /outgoing database-item references only/);
+		assert.match(databaseReferenceRules, /not a reverse-reference API/);
+		assert.match(bdeRules, /zero-edge result does not prove.*no Diagram/);
+	});
 	test("defines dependency read/write boundaries around on-demand observations", () => {
 		const entries = new Map(listActionCatalogEntries().map((entry) => [entry.id, entry]));
 		const readChain = entries.get("ascet_read.read_dependent_chain");
 		const writeDependency = entries.get("ascet_edit.set_element_dependency");
 
-		assert.match(readChain?.rules.join("\n") ?? "", /ascet_get.tree and ascet_get.elements/);
+		assert.match(
+			readChain?.rules.join("\n") ?? "",
+			/bounded tree discovery only when those targets are not already known/,
+		);
 		assert.match(writeDependency?.compact ?? "", /existing local parameter/);
 		assert.match(writeDependency?.rules.join("\n") ?? "", /does not create local, imported, or exported elements/);
 		assert.match(writeDependency?.rules.join("\n") ?? "", /invalidate matching on-demand observations/);
@@ -70,8 +90,9 @@ describe("ASCET action catalog", () => {
 
 		assert.match(rules, /element's code role and explicit requirements/);
 		assert.match(rules, /semantic intent drives the target spec/);
-		assert.match(rules, /ascet_get.tree and ascet_get.elements/);
-		assert.match(rules, /Do not copy a sibling's values without semantic equivalence/);
+		assert.match(rules, /bounded ascet_get.tree discovery only when the exact target is not known/);
+		assert.match(rules, /ascet_get.elements for the resolved Component or bounded Folder/);
+		assert.match(rules, /do not copy a sibling's values without semantic equivalence/);
 		assert.match(rules, /Provider Exported Parameter creation.*decision groups/);
 		assert.match(rules, /Local Dependent Parameter creation.*decision groups/);
 		assert.match(rules, /Imported Parameters are the exception/);
@@ -87,8 +108,26 @@ describe("ASCET action catalog", () => {
 		const chainPlan = entries.get("configure_parameter_dependency_chain.plan");
 		const chainCommit = entries.get("configure_parameter_dependency_chain.commit");
 		assert.match(chainPlan?.rules.join("\n") ?? "", /role-specific inline element/);
+		assert.match(chainPlan?.rules.join("\n") ?? "", /same P_<Name>/);
+		assert.match(chainPlan?.rules.join("\n") ?? "", /Consumer Local name must be C_<Name>/);
 		assert.match(chainPlan?.rules.join("\n") ?? "", /formals list and mapping keys must match exactly/);
 		assert.doesNotMatch(chainPlan?.miniFewShot ?? "", /specFile/);
+		const chainArgs = chainPlan?.fewShots[0]?.args;
+		assert.ok(chainArgs);
+		const provider = chainArgs.provider as { element?: { name?: unknown } };
+		const consumer = chainArgs.consumer as { element?: { name?: unknown } };
+		const local = chainArgs.local as { element?: { name?: unknown } };
+		const chainDependency = chainArgs.dependency as {
+			formals?: unknown;
+			mappings?: Record<string, { kind?: unknown; name?: unknown }>;
+		};
+		assert.equal(provider.element?.name, "P_Threshold");
+		assert.equal(consumer.element?.name, "P_Threshold");
+		assert.equal(local.element?.name, "C_Threshold");
+		assert.deepEqual(chainDependency.formals, ["P_Threshold"]);
+		assert.deepEqual(chainDependency.mappings, {
+			P_Threshold: { kind: "parameter", name: "P_Threshold" },
+		});
 		assert.match(chainCommit?.miniFewShot ?? "", /mode:"commit",planId:/);
 	});
 });

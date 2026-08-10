@@ -32,7 +32,6 @@ export type AscetCreateFolderResult = AscetCliJsonResult;
 
 export const ascetCreateFolderParameters = Type.Object({
 	folderPath: Type.String({ description: "ASCET folder path to create.", minLength: 1 }),
-	verifyReadback: Type.Optional(Type.Boolean({ description: "Ask the ASCET CLI to verify readback after writing." })),
 	executeWrite: Type.Optional(
 		Type.Boolean({ description: "Defaults to false. When true, PI still requires interactive confirmation." }),
 	),

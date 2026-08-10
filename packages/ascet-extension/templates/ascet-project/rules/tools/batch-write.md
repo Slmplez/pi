@@ -3,11 +3,11 @@ id: ascet.tool.batch-write
 layer: tool
 ---
 
-# Batch Write Tool
+# Batch Write
 
 ## What This File Answers
 
-When should the agent use `AscetBatchWriteTool`?
+When should the agent use explicitly enabled `ascet_batch_write`?
 
 ## When To Load
 
@@ -27,9 +27,8 @@ Load when the task applies the same mutation shape across multiple exact targets
 
 ## Common Follow-Up
 
-- `AscetVerifyTool`
-- `AscetReadTool`
-- `AscetDiffTool`
+- `ascet_read`
+- `ascet_diff`
 
 ## Evidence
 

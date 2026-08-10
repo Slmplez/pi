@@ -23,7 +23,6 @@ export type AscetDeleteFolderResult = AscetCliJsonResult;
 export const ascetDeleteFolderParameters = Type.Object({
 	folderPath: Type.String({ description: "ASCET folder path to delete.", minLength: 1 }),
 	ifMissing: ifMissingSchema,
-	verifyReadback: Type.Optional(Type.Boolean({ description: "Ask the ASCET CLI to verify readback after writing." })),
 	executeWrite: Type.Optional(Type.Boolean({ description: "When true, PI still requires interactive confirmation." })),
 });
 

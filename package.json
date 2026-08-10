@@ -25,6 +25,8 @@
 		"smoke:ascet-extension": "tsx scripts/ascet-extension-live-smoke.ts",
 		"smoke:ascet-extension:write": "tsx scripts/ascet-extension-write-smoke.ts",
 		"smoke:ascet-extension:project-formula": "tsx scripts/ascet-extension-project-formula-live-smoke.ts",
+		"smoke:ascet-extension:parameter-chain": "tsx scripts/ascet-extension-parameter-chain-live-smoke.ts",
+		"smoke:ascet-extension:esdl-acceptance": "tsx scripts/ascet-extension-esdl-live-acceptance.ts",
 		"smoke:bosch-llmfarm": "tsx scripts/bosch-llmfarm-live-smoke.ts",
 		"profile:tui": "node scripts/profile-coding-agent-node.mjs --mode tui",
 		"profile:rpc": "node scripts/profile-coding-agent-node.mjs --mode rpc",

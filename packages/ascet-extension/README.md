@@ -1,6 +1,6 @@
 # ASCET PI Extension
 
-ASCET tool extension package for PI. It registers ASCET read, verify, and guarded write tools while keeping all ASCET ToolAPI-backed access sequential.
+ASCET tool extension package for PI. It registers the `ascet-engineering` Skill, ASCET read tools, and guarded write tools while keeping all ASCET ToolAPI-backed access sequential.
 
 ## Resolver Modes
 
@@ -286,3 +286,7 @@ The script does not create Projects: a fixture must be explicitly provisioned by
 - `ASCET_PROJECT_FORMULA_SMOKE_PROJECT`
 - `ASCET_PROJECT_FORMULA_SMOKE_FORMULA`
 - `ASCET_PROJECT_FORMULA_SMOKE_CLEANUP_ONLY`
+
+## Engineering Skill
+
+The package publishes `skills/ascet-engineering` as the authoritative ASCET engineering workflow. The former `ascet-implementation` Agent is not published; System Prompt routing and the Skill provide the workflow directly.

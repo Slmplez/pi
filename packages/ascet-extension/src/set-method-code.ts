@@ -24,7 +24,6 @@ export const ascetSetMethodCodeParameters = Type.Object({
 	componentPath: Type.String({ description: "ASCET component path.", minLength: 1 }),
 	methodName: Type.String({ description: "ASCET method name.", minLength: 1 }),
 	codeFile: Type.String({ description: "Path to replacement method code file.", minLength: 1 }),
-	verifyReadback: Type.Optional(Type.Boolean({ description: "Ask the ASCET CLI to verify readback after writing." })),
 	executeWrite: Type.Optional(Type.Boolean({ description: "When true, PI still requires interactive confirmation." })),
 });
 

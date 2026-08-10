@@ -54,7 +54,6 @@ export interface AscetConsumerImportedParameterCreateInput {
 	name: string;
 	modelType: string;
 	unit?: string;
-	comment?: string;
 }
 export interface AscetLocalDependentParameterCreateInput {
 	[key: string]: unknown;
@@ -170,7 +169,6 @@ export const ascetConsumerImportedParameterCreateSchema = strictObject({
 	name: Type.String({ minLength: 1 }),
 	modelType: Type.String({ minLength: 1 }),
 	unit: Type.Optional(Type.String()),
-	comment: Type.Optional(Type.String()),
 });
 
 export const ascetLocalDependentParameterCreateSchema = strictObject({
@@ -259,7 +257,6 @@ const patchImportedElementProperties = {
 	modelType: Type.Optional(Type.String({ minLength: 1 })),
 	scope: Type.Optional(Type.Literal("imported")),
 	unit: Type.Optional(Type.String()),
-	comment: Type.Optional(Type.String()),
 	length: Type.Optional(Type.Integer({ minimum: 1 })),
 };
 

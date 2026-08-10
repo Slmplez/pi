@@ -3,11 +3,11 @@ id: ascet.tool.explore
 layer: tool
 ---
 
-# Explore Tool
+# Bounded Discovery
 
 ## What This File Answers
 
-When should the agent use `AscetExploreTool`?
+When should the agent use bounded `ascet_get` discovery?
 
 ## When To Load
 
@@ -27,10 +27,10 @@ Load when the target is fuzzy, partial, or folder-scoped.
 
 ## Common Follow-Up
 
-- `AscetReadTool`
-- `AscetReferenceTool`
-- `AscetDiffTool`
+- `ascet_read`
+- `ascet_get` reference actions
+- `ascet_diff`
 
 ## Evidence
 
-- `src/ascetcli/contracts/families/explore.json`
+- `src/ascetcli/contracts/families/get.json`

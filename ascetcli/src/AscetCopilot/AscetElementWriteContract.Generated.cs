@@ -4,7 +4,7 @@ using System;
 public static class AscetElementWriteContract
 {
     public const int Version = 2;
-    public const string ContractSha256 = "340743096f5a996a835667200219fe5b71a8bdb1979ed00715fa374ae7c79c58";
+    public const string ContractSha256 = "18a544dad3db2e5c5390df7e126991f40bd62ae6c6c49c4e2a3119f5f89d021f";
     public static readonly string[] IntentValues = new string[] { "create", "patch", "upsert", "restore" };
     public static readonly string[] KindValues = new string[] { "variable", "parameter", "array", "enumeration", "table", "component" };
     public static readonly string[] ScopeValues = new string[] { "local", "exported", "imported" };

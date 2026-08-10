@@ -12,17 +12,22 @@
 	},
 	"scripts": {
 		"copy-assets": "powershell -ExecutionPolicy Bypass -File scripts/copy-ascet-assets.ps1",
-		"verify-assets": "node scripts/verify-packed-assets.mjs"
+		"verify-assets": "node scripts/verify-packed-assets.mjs",
+		"verify-isolated-install": "tsx scripts/verify-isolated-install.ts"
 	},
 	"pi": {
 		"extensions": [
 			"src/index.ts"
+		],
+		"skills": [
+			"skills/ascet-engineering"
 		]
 	},
 	"files": [
 		"src",
 		"templates",
 		"ascet-cli",
+		"skills/ascet-engineering",
 		"README.md",
 		"!ascet-cli/bin/**/*.log",
 		"!ascet-cli/bin/**/*.out",

@@ -22,15 +22,12 @@
                   {
                       "kind":  "command",
                       "commandId":  "AscetSetMethodCode"
-                  },
-                  {
-                      "kind":  "command",
-                      "commandId":  "AscetReadMethodCode"
                   }
               ],
     "requiredRules":  [
                           "live_serial_only",
                           "minimum_change_only",
-                          "write_then_readback"
+                          "automatic_action_readback",
+                          "inspect_verification_feedback"
                       ]
 }

@@ -49,9 +49,6 @@ export const ascetSetMethodSignatureParameters = Type.Object({
 	returnType: Type.Optional(primitiveSignatureType),
 	ifReturnExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("keep"), Type.Literal("replace")])),
 	arguments: Type.Optional(Type.Array(methodSignatureArgumentSchema)),
-	verifyReadback: Type.Optional(
-		Type.Boolean({ description: "Ask the ASCET CLI to verify method signature readback after writing." }),
-	),
 	executeWrite: Type.Optional(Type.Boolean({ description: "When true, PI still requires interactive confirmation." })),
 });
 

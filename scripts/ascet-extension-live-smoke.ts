@@ -225,7 +225,7 @@ const tree = await callAscetGet({
 	target: configuredComponentFolderPath ? { path: configuredComponentFolderPath } : { targetPathPrefix: treePathPrefix },
 	traversal: configuredComponentFolderPath
 		? { depth: 1, maxFolders: 20, maxComponents: 40 }
-		: { depth: 2, maxFolders: 40, maxComponents: 40 },
+		: { depth: 5, maxFolders: 500, maxComponents: 500 },
 	delivery: "stored",
 });
 const treeItems = readObservationItems(tree);
@@ -273,6 +273,7 @@ const diff = await callTool("ascet_diff", {
 	leftPath: componentPath,
 	rightPath: componentPath,
 	changesOnly: true,
+	timeoutMs: 300_000,
 });
 const summaryReadback = await callTool("ascet_read", {
 	action: "read",

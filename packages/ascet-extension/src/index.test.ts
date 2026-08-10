@@ -96,6 +96,6 @@ describe("ASCET extension agent routing hook", () => {
 		});
 
 		assert.match(result?.systemPrompt ?? "", /ASCET coding policy:/);
-		assert.doesNotMatch(result?.systemPrompt ?? "", /ascet-implementation/);
+		assert.match(result?.systemPrompt ?? "", /ascet-engineering Skill/);
 	});
 });

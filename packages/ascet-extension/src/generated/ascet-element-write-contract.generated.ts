@@ -2,7 +2,7 @@
 
 export const ascetElementWriteContractVersion = 2 as const;
 export const ascetElementWriteContractHash =
-	"340743096f5a996a835667200219fe5b71a8bdb1979ed00715fa374ae7c79c58" as const;
+	"18a544dad3db2e5c5390df7e126991f40bd62ae6c6c49c4e2a3119f5f89d021f" as const;
 export const ascetApplyElementIntentValues = ["create", "patch", "upsert", "restore"] as const;
 export const ascetElementKindValues = ["variable", "parameter", "array", "enumeration", "table", "component"] as const;
 export const ascetElementScopeValues = ["local", "exported", "imported"] as const;
@@ -32,7 +32,16 @@ export const ascetElementRoleContract = {
 	consumerImportedParameter: {
 		requiredKind: "parameter",
 		requiredScope: "imported",
-		forbiddenFields: ["data", "impl", "physicalRange", "calibration", "dependency", "range", "implementation"],
+		forbiddenFields: [
+			"data",
+			"impl",
+			"physicalRange",
+			"comment",
+			"calibration",
+			"dependency",
+			"range",
+			"implementation",
+		],
 		requiredCreateFields: ["name", "modelType"],
 	},
 	localDependentParameter: {

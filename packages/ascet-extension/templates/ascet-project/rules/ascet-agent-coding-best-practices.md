@@ -10,13 +10,12 @@ It is not the first file to load for every task. Use it as the compact "global r
 
 The current ASCET tool model is:
 
-1. `AscetExploreTool` for fuzzy targets and navigation-first discovery
-2. `AscetReadTool` for exact-surface inspection
-3. `AscetReferenceTool` for dependency, caller, and usage context
-4. `AscetDiffTool` for exact-target comparison
-5. `AscetWriteTool` for one focused mutation
-6. `AscetBatchWriteTool` for repeated aligned mutations
-7. `AscetVerifyTool.readback` for immediate post-write confirmation only
+1. `ascet_get` for bounded discovery and references
+2. `ascet_read` for exact-surface inspection
+3. `ascet_diff` for exact-target comparison
+4. `ascet_edit` for guarded mutations and Runtime automatic verification
+5. `configure_parameter_dependency_chain` for explicit dependency-chain plans and commits
+6. `ascet_batch_write` only when the explicit batch feature is enabled
 
 Do not collapse all of these back into a generic "read, write, verify everything everywhere" mental model.
 
@@ -27,54 +26,53 @@ Do not collapse all of these back into a generic "read, write, verify everything
 3. Use references or diff only when the task actually needs dependency or comparison context.
 4. Choose the narrowest write path that satisfies the request.
 5. Prefer batch writes only when multiple targets share the same mutation shape.
-6. Treat `AscetVerifyTool` as readback-only, not as a general summary browser.
-7. After `readback`, use broader reads or diffs only when the change type still requires them.
+6. Inspect the verification returned by an executed `ascet_edit`; do not call a separate verification Tool.
+7. Use broader reads or diffs only when the next engineering step or an explicit request requires them.
 8. Do not assume all reads are serialized; the routed command contract determines whether the read is pooled or legacy one-shot.
 9. Do not assume any write is concurrency-safe; individual writes remain serialized.
 10. Report what was verified and what remains unverified.
 
 ## Tool Choice Heuristics
 
-### Use `AscetExploreTool` When
+### Use `ascet_get` When
 
 - the user names a concept, folder, or partial path
 - the target kind is uncertain
 - the agent needs to preview children before deciding what to read next
 
-### Use `AscetReadTool` When
+### Use `ascet_read` When
 
 - the target is exact
 - the task needs summary, snapshot, code, implementation, block diagram, or state-machine-flow content
 - the agent needs exact current structure before a mutation
 - for BDE/block diagram analysis, `read_block_diagram` returns the default semantic graph for signal flow, dependencies, node relations, operations, and rule checks
 
-### Use `AscetReferenceTool` When
+### Use `ascet_get` reference actions when
 
 - the task asks who uses a symbol or binding
 - a signature or binding change may affect other targets
 
-### Use `AscetDiffTool` When
+### Use `ascet_diff` When
 
 - both sides are exact
 - the task is fundamentally about comparison
 - a broader post-write structural comparison is still needed
 
-### Use `AscetWriteTool` When
+### Use `ascet_edit` When
 
 - one exact mutation is approved
 - the change shape is singular and focused
 
-### Use `AscetBatchWriteTool` When
+### Use `ascet_batch_write` When
 
 - two or more exact targets share the same mutation shape
 - the task is sync-oriented or bulk-oriented
 
-### Use `AscetVerifyTool` When
+### After an executed write
 
-- a live write has just finished
-- immediate `readback` of the edited surface is required
-
-Do not use `AscetVerifyTool` for routine browsing, discovery, or pre-write analysis.
+- inspect the `verification` result returned by `ascet_edit`
+- accept a passed verification as completion of that write
+- read again only for the next engineering step, failure diagnosis, or an explicit request
 
 ## Execution And Concurrency Rules
 
@@ -92,9 +90,9 @@ Do not use `AscetVerifyTool` for routine browsing, discovery, or pre-write analy
 
 ### Verification
 
-- `readback` confirms the edited surface.
-- It does not prove every dependent surface is still correct.
-- When signatures, bindings, state-machine semantics, or implementation/data context are involved, add an exact larger-surface re-check.
+- Runtime performs action-specific readback inside every executed `ascet_edit` mutation.
+- A passed result completes the write; it is not a second model Tool step.
+- When signatures, bindings, state-machine semantics, or implementation/data context are involved, add an exact larger-surface read only when the next step requires it.
 
 ## Object-Specific Guardrails
 
@@ -168,12 +166,12 @@ Do not use `AscetVerifyTool` for routine browsing, discovery, or pre-write analy
 
 ## Task-Shape Routing Reminders
 
-- Fuzzy target -> `AscetExploreTool` first.
-- Exact content inspection -> `AscetReadTool`.
-- Signature or binding impact -> add `AscetReferenceTool` or `AscetDiffTool`.
-- One focused mutation -> `AscetWriteTool`.
-- Repeated aligned mutations -> `AscetBatchWriteTool`.
-- Immediate post-write confirmation -> `AscetVerifyTool.readback`.
+- Fuzzy target -> bounded `ascet_get.tree` first.
+- Exact content inspection -> `ascet_read`.
+- Signature or binding impact -> use `ascet_get` references or `ascet_diff` when needed.
+- One focused mutation -> `ascet_edit`.
+- Repeated aligned mutations -> explicitly enabled `ascet_batch_write`.
+- Post-write confirmation -> inspect `ascet_edit` automatic verification.
 - Implementation or data tuning -> always pair the runtime tool path with project-context-aware field interpretation.
 
 ## Anti-Patterns
@@ -181,7 +179,7 @@ Do not use `AscetVerifyTool` for routine browsing, discovery, or pre-write analy
 Do not:
 
 - jump from a fuzzy request directly to a write
-- use `AscetVerifyTool` as a general diagnostic shell
+- add a separate verification Tool after a successful `ascet_edit`
 - assume every live read must be globally serialized
 - assume every read can be pooled
 - make one large mutation when a narrow write action exists
@@ -191,14 +189,14 @@ Do not:
 - switch from `inputs/outputs` to `trigger arguments` casually when the task is not actually RAM-driven
 - change inherited implementation settings as though they were ordinary local scalar values
 - change `Min/Max`, `Impl. Min/Max`, or `Formula` in isolation without checking the coupled fields
-- rely on a successful write call alone as proof of correctness
+- claim completion when automatic verification is failed, missing, or unknown
 
 ## Escalate When
 
 - the target is still ambiguous after exploration
 - more than one object rule materially applies
 - the task spans ESDL, state-machine binding, and implementation behavior together
-- the requested certainty level exceeds what `readback` plus exact-surface reads can prove
+- the requested certainty level exceeds what automatic verification and exact-surface reads can prove
 
 ## Recommended Companion Docs
 

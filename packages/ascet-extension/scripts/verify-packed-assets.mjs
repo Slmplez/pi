@@ -19,6 +19,37 @@ if (!Array.isArray(reports) || reports.length !== 1 || !Array.isArray(reports[0]
 	throw new Error("npm pack --dry-run returned an unexpected report shape.");
 }
 const paths = reports[0].files.map((file) => file.path.replaceAll("\\", "/"));
+const expectedSkillFiles = [
+	"skills/ascet-engineering/SKILL.md",
+	"skills/ascet-engineering/agents/openai.yaml",
+	"skills/ascet-engineering/references/scope-resolution-and-ownership.md",
+	"skills/ascet-engineering/references/database-root-discovery.md",
+	"skills/ascet-engineering/references/customer-integration-workflow.md",
+	"skills/ascet-engineering/references/feature-package-workflow.md",
+	"skills/ascet-engineering/references/class-path-project-context.md",
+	"skills/ascet-engineering/references/project-to-esdl-signal-flow.md",
+	"skills/ascet-engineering/references/esdl-fast-path.md",
+	"skills/ascet-engineering/references/elements-fast-path.md",
+	"skills/ascet-engineering/references/parameter-naming.md",
+	"skills/ascet-engineering/references/parameter-provider-placement.md",
+	"skills/ascet-engineering/references/dependency-advanced-path.md",
+	"skills/ascet-engineering/references/bde-and-surface-routing.md",
+	"skills/ascet-engineering/references/task-planning-and-implementation-plan.md",
+	"skills/ascet-engineering/references/esdl-design-and-signal-reuse.md",
+	"skills/ascet-engineering/references/esdl-literals-and-configuration-values.md",
+	"skills/ascet-engineering/references/tool-recipes.md",
+	"skills/ascet-engineering/references/write-execution.md",
+];
+const missingSkillFiles = expectedSkillFiles.filter((path) => !paths.includes(path));
+if (missingSkillFiles.length > 0) {
+	throw new Error(`Packed ASCET extension is missing Skill files: [${missingSkillFiles.join(", ")}]`);
+}
+if (paths.includes("agents/ascet-implementation.md")) {
+	throw new Error("Packed ASCET extension contains removed agents/ascet-implementation.md.");
+}
+if (paths.includes("templates/ascet-project/rules/tools/verify.md")) {
+	throw new Error("Packed ASCET extension contains the removed standalone verification workflow.");
+}
 const binaryPaths = paths.filter((path) => path.startsWith("ascet-cli/bin/"));
 const expectedBinaryPaths = ["ascet-cli/bin/AscetBridge.exe", "ascet-cli/bin/Ascetapidll/Etas.AscetNET.dll"];
 const missing = expectedBinaryPaths.filter((path) => !binaryPaths.includes(path));

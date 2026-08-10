@@ -10,7 +10,8 @@
 - 从模糊功能需求定位 Core Package；
 - 从 Customer Project、Package 或 Class path 定位真实修改对象；
 - 从 Project 自顶向下展开至目标 Class、BDE、Method 和 ESDL；
-- 理解接口、Signal Flow、当前代码、Elements 和 Parameters 后再修改；
+- 理解接口、Signal Flow、当前代码、Elements 和 Parameters 后形成完整实现方案再修改；
+- 将完整实现方案拆分为可执行、可追踪的细粒度 Todo；
 - 快速编写或修改 ESDL；
 - 正确配置 Element、Parameter 和 Dependency；
 - 通过 Preflight 检查计划后执行真实写入；
@@ -22,7 +23,9 @@
 定位正确对象
 → 理解 Project、Signal Flow、代码和 Elements
 → 冻结 Scope 与修改层
-→ 设计修改
+→ 输出完整实现方案
+→ 使用 todolist 工具维护细粒度执行计划
+→ 用户确认需要确认的设计和写入范围
 → Preflight
 → executeWrite=true
 → ascet_edit 成功返回
@@ -45,9 +48,6 @@ ascet-engineering Skill
 Skill References
   按任务加载定位、ESDL、Elements、Parameter 等规则
         ↓
-ascet-implementation Agent
-  Skill 的薄封装
-        ↓
 Tool Action Descriptor
   当前单步 Action 的准确调用方式
         ↓
@@ -60,9 +60,8 @@ Schema / Runtime
 | 层 | 负责 | 不负责 |
 |---|---|---|
 | System Prompt | 触发 Skill、Scope、安全门、禁止错误写入 | 完整工程流程和参数矩阵 |
-| Skill | 定位、Ownership、Signal Flow、ESDL、Elements、Parameters、写入顺序 | Tool schema 细节 |
+| Skill | 定位、Ownership、Signal Flow、完整实现方案、todolist 工具规划、ESDL、Elements、Parameters、写入顺序 | Tool schema 细节 |
 | Skill Reference | 按领域保存详细规则 | 全量常驻上下文 |
-| Agent | 读取 Skill 并执行当前任务 | 维护另一套工程规则 |
 | Tool Prompt | 当前单步如何正确调用 | 判断整个需求修改哪一层 |
 | Runtime | Schema、Preflight、真实写入、自动验证、锁和调度 | 替 Agent 判断工程 Ownership |
 
@@ -72,9 +71,202 @@ Schema / Runtime
 
 ---
 
-## 3. 写入与自动验证模型
+## 3. Todolist 工具调用与完整实现方案
 
-### 3.1 Agent 可见流程
+这里包含两个聚焦要求：
+
+1. 非简单 ASCET 任务调用 todolist/plan 工具时，任务条目不能只有 1～2 条模糊描述；
+2. 在 Preflight 前，必须先向用户给出可审查的完整工程实现方案。
+
+这不是两套 Todo、两个额外状态或独立交付流程。Todolist 工具只用于跟踪当前任务执行，完整实现方案用于说明最终准备如何修改 ASCET。
+
+### 3.1 Todolist 工具调用规则
+
+非简单任务应在开始实质分析时调用 todolist/plan 工具，并根据实际工作内容生成足够具体的任务条目。禁止只生成：
+
+```text
+1. 分析需求
+2. 修改代码
+```
+
+条目数不设硬性下限，按任务复杂度控制：
+
+| 任务类型 | 建议粒度 |
+|---|---|
+| Exact target 的单一读取或单字段操作 | 1～2 条即可 |
+| 常规 ESDL/Element 修改 | 通常 3～5 条 |
+| 跨 Component、Signal Flow、Parameter chain 或多 Project | 围绕关键里程碑和真实依赖展开，通常 4～6 条；确有独立写入单元时再增加 |
+
+重点是覆盖关键决策和执行边界，不按每个对象、每次读取或每个 Tool 调用机械拆项。每条必须：
+
+- 对应一个可执行、可判断完成的动作；
+- 指明当前阶段或对象，例如 Project 定位、Signal Flow、Method、Element、Parameter、Dependency 或 Preflight；
+- 体现关键依赖顺序；
+- 避免把多个不同对象压缩为“实施修改”；
+- 至多一个条目处于 `in_progress`；
+- 完成后及时更新状态；
+- Scope、目标或设计发生实质变化时更新现有计划。
+
+标准 ASCET 修改任务的 todolist 工具调用通常覆盖 3～5 个关键里程碑：
+
+```text
+1. 确认 Scope、目标对象和成功标准
+2. 读取并理解 Signal Flow、当前实现、Elements 和 Parameters
+3. 形成完整工程实现方案并确认关键决策
+4. 执行必要的 Preflight 和已授权写入
+5. 汇报完成范围、未修改对象和风险
+```
+
+可以合并相邻步骤。只有存在明确先后依赖、不同授权点或独立写入单元时才继续拆分，例如 Parameter Provider、Imported/Local、Dependency 与 ESDL 分别需要独立操作。不要把每次读取或每个 Tool 调用都变成一条 Todo。
+
+### 3.2 完整工程实现方案
+
+在 `CHANGE_READY` 进入 `PREFLIGHTED` 前，Agent 必须先给出针对当前 ASCET 对象的完整实现方案。方案不能只是“修改代码并增加参数”。
+
+至少包含：
+
+| 区块 | 必须说明 |
+|---|---|
+| 需求与成功标准 | 输入条件、目标行为、输出、边界行为、安全默认和不修改范围 |
+| Scope 与 Ownership | `integrationScope`/`featureScope`、Project/Package/Component、修改层、选择原因和排除对象 |
+| Signal Flow 与复用 | 现有 Signal 的 source/transform/consumer、复用点、新 Signal 的必要性、公共接口影响 |
+| ESDL 实现 | 目标 Method/process、Signature 变化、拟写 ESDL 代码或精确 patch、状态、默认值、异常分支和执行顺序 |
+| Element 清单 | 新建/修改/复用对象及 name、scope、kind、model type、unit、formula、range、initial value、implementation 决策 |
+| Parameter 清单 | P_/C_ 名称、Provider、Imported/Exported/Local 关系、具体值或来源、type、unit、range、initial、constant/calibration、implementation 和 dependency |
+| Dependency 与 Variant | formals、explicit mappings、dependency 方向、DataVariant/variantPolicy 和兼容约束 |
+| 写入计划 | Action、exact target、Preflight/Write 顺序和需要用户确认的步骤 |
+| 风险与假设 | 未知事实、业务值来源、跨客户影响、接口兼容性和待确认决策 |
+
+建议输出模板：
+
+```text
+实施方案
+
+1. Scope
+- scopeMode:
+- target Project/Package/Component:
+- modification layer and reason:
+- excluded scope:
+
+2. Signal 和接口
+- reused signals/elements/methods:
+- new or changed signals:
+- source → transform → consumer:
+- public-interface impact:
+
+3. ESDL
+- target method/process:
+- signature change:
+- proposed ESDL code or patch:
+- defaults, state, limits and boundary behavior:
+- execution order:
+
+4. Elements 和 Parameters
+- reused objects:
+- new/modified elements:
+- provider exported P_:
+- consumer imported P_:
+- consumer local C_:
+- type/unit/formula/range/initial/calibration/constant/implementation:
+- parameter value or source:
+- dependency formals/mappings/variants:
+- ESDL/BDE usage point:
+
+5. Write order
+- element/dependency/signature/code actions:
+- Preflight order:
+- executeWrite order:
+
+6. Assumptions and decisions
+- confirmed facts:
+- user decisions required:
+- risks:
+```
+
+当 Method signature、当前代码和相关 Elements 已读取完整时，方案必须给出可直接进入 Preflight 的拟写 ESDL code 或明确 patch，不能只有高层伪代码。
+
+如果证据不足，可以先列出精确伪代码和 `blockingUnknowns`，继续读取并补全；`blockingUnknowns` 未清空前不得进入 Preflight。
+
+新建或修改 Parameter 时，方案必须给出实际参数内容，至少包括：
+
+```text
+name and role
+owner component
+scope and parameter kind
+model type and unit
+formula if applicable
+physical or implementation range
+initial/default value
+calibration or constant role
+implementation choice
+value or source rationale
+dependency formals and mappings
+variant policy
+ESDL/BDE usage point
+```
+
+业务值尚未由用户、现有 Parameter、Formula、Requirement 或 Database evidence 给出时，必须列为用户决策点，不能自行生成一个看似合理的阈值。
+
+不涉及 ESDL、Parameter、Dependency 或新 Signal 的小修改，对应区块写明 `not applicable` 及原因，而不是静默省略。
+
+### 3.3 Signal 和对象复用优先
+
+完整方案必须先说明相关的：
+
+```text
+source → transform → consumer
+```
+
+并检查是否可以复用现有：
+
+- Imported/Exported Signal；
+- Local Element；
+- Method output 或 Return Method；
+- Parameter、Enum、Formula；
+- BDE connection 或现有 Package interface。
+
+复用结论应列出 exact object、owner、scope、type/unit 和使用点。只有现有对象的语义、scope、type、unit、生命周期或 Ownership 不适合时才新建，并说明不复用原因。不得只因为新建对象更直接，就复制一个已有 Signal 或 Parameter。
+
+### 3.4 字面量与“魔法数字”
+
+此前绝对化的 magic-number 约束过于严苛，替换为按语义和配置职责判断：
+
+> 禁止无语义、不可追溯、会影响业务、标定、安全或客户差异，却未命名或未说明来源的业务字面量；不强制把所有数值都创建成 Parameter 或 Constant。
+
+可以直接作为局部 ESDL literal 使用：
+
+- `0`、`1`、`-1` 等基础初始化值或算法控制值；
+- 明确的索引、计数边界、位掩码和 Enum literal；
+- 数学恒等式、明确单位换算或协议固定值；
+- 数据类型或现有接口语义直接决定的饱和边界；
+- 只在一个局部表达式使用、不会成为标定点或客户差异点，且语义清晰的值；
+- 已有命名 Element、Parameter、Enum 或 Constant 的引用。
+
+应优先复用或创建命名 Element、Parameter、Enum 或 Local Constant：
+
+- 客户可标定的阈值、时间、限幅、偏置、增益和默认业务值；
+- 可能随 Customer、Variant、车型或 Package 配置变化的值；
+- 多个 Method/Component 复用的业务值；
+- 安全边界、诊断阈值或公共功能行为值；
+- 无法从变量名、Method 名或紧邻说明理解含义的值。
+
+决策顺序：
+
+```text
+值是否来自需求、标定、客户差异、安全边界或公共业务规则？
+  是 → 优先复用/创建 Parameter、Enum 或命名 Element
+  否 → 是否跨位置复用或难以理解？
+       是 → 使用命名 Local Element；属于模型配置数据时使用 C_ Local Parameter，或明确说明来源
+       否 → 允许局部 ESDL literal
+```
+
+不得因为普通局部字面量而无必要地扩展 P_/C_ Parameter chain 或创建 Provider Class。
+
+---
+
+## 4. 写入与自动验证模型
+
+### 4.1 Agent 可见流程
 
 ```text
 ascet_edit Preflight
@@ -84,7 +276,7 @@ ascet_edit Preflight
 → 写入完成
 ```
 
-### 3.2 Runtime 内部流程
+### 4.2 Runtime 内部流程
 
 ```text
 执行 mutation
@@ -95,7 +287,7 @@ ascet_edit Preflight
 
 自动验证是 Runtime 内部能力，不是 Agent Workflow 中的第二个 Tool 步骤。
 
-### 3.3 成功与失败语义
+### 4.3 成功与失败语义
 
 ```text
 ascet_edit executeWrite=true 成功返回
@@ -118,7 +310,7 @@ ascet_edit 返回失败
 
 这些读取属于后续工程数据获取，不属于固定写入验证步骤。
 
-### 3.4 参数边界
+### 4.4 参数边界
 
 模型公开 schema 不提供：
 
@@ -137,11 +329,11 @@ verifyReadback: true
 
 ---
 
-## 4. Scope 模型
+## 5. Scope 模型
 
 所有修改任务在 Preflight 前必须明确以下两种 Scope 之一。
 
-### 4.1 `integrationScope`
+### 5.1 `integrationScope`
 
 适用于：
 
@@ -168,7 +360,7 @@ Customer Project
 
 > 尽可能在客户集成层完成需求，避免不必要地修改公共功能包。
 
-### 4.2 `featureScope`
+### 5.2 `featureScope`
 
 适用于：
 
@@ -194,7 +386,7 @@ Core Package
 
 > 验证公共行为和客户兼容性，避免破坏现有 Project。
 
-### 4.3 Scope 对照
+### 5.3 Scope 对照
 
 | 项目 | 客户项目适配 | 功能包修改 |
 |---|---|---|
@@ -211,9 +403,9 @@ Core Package
 
 ---
 
-## 5. 用户输入路由
+## 6. 用户输入路由
 
-### 5.1 模糊需求，没有 Class 或 Project path
+### 6.1 模糊需求，没有 Class 或 Project path
 
 默认先根据功能语义定位 Core Package，客户名不是必要条件。
 
@@ -234,7 +426,7 @@ Core Package
 - 不执行全库名称搜索并修改第一个匹配对象；
 - Package 按需展开，不一次展开整个 Database。
 
-### 5.2 用户给出 Customer Project
+### 6.2 用户给出 Customer Project
 
 ```text
 Project
@@ -252,7 +444,7 @@ Project
 - 是否真的需要修改公共 Package；
 - Variant、mapping、调度和客户参数应放在哪一层。
 
-### 5.3 用户给出 Core Package
+### 6.3 用户给出 Core Package
 
 ```text
 Package
@@ -271,7 +463,7 @@ Package
 - 是否影响多个 Customer Projects；
 - 是否可以在客户层完成而无需修改 Package。
 
-### 5.4 用户给出 Exact Class path
+### 6.4 用户给出 Exact Class path
 
 Class path 是定位锚点，不是 Scope 结论。
 
@@ -300,9 +492,9 @@ Class Role 判断：
 
 ---
 
-## 6. Database 大型化与证据规则
+## 7. Database 大型化与证据规则
 
-### 6.1 有界探索
+### 7.1 有界探索
 
 - 先使用用户路径、功能语义或已知范围形成候选；
 - `tree` 只用于必要的有界结构发现，不是所有任务永远第一步；
@@ -310,7 +502,7 @@ Class Role 判断：
 - Package、Project 和 Component 按需展开；
 - 不执行无界 live Database scan。
 
-### 6.2 正向引用和反向候选发现
+### 7.2 正向引用和反向候选发现
 
 `component_refs` 和 `dbitem_refs` 只提供 outgoing references。
 
@@ -330,14 +522,14 @@ Class Role 判断：
 - 多个 Project 命中时按 Customer、Variant 和装配范围消歧；
 - 不选择第一个同名结果。
 
-### 6.3 Partial 和 truncated
+### 7.3 Partial 和 truncated
 
 - 必须检查 observation 的 coverage 和 truncated 状态；
 - Partial/truncated artifact 未命中不能证明对象未被使用；
 - Partial Tree 不能作为完整 Database 结论；
 - 写入后受影响的 stored observations 视为可能失效。
 
-### 6.4 根目录泛化
+### 7.4 根目录泛化
 
 常见根目录只能作为启发式，例如 Customer、Library、Package、Project 或 Platform 类目录。
 
@@ -353,7 +545,7 @@ Skill 不硬编码：
 
 ---
 
-## 7. Project 到目标 ESDL 和 Signal Flow
+## 8. Project 到目标 ESDL 和 Signal Flow
 
 该 Workflow 属于 Skill Reference，不进入 System Prompt 或 Tool Prompt。
 
@@ -398,7 +590,7 @@ Project tree
 
 ---
 
-## 8. ESDL Fast Path
+## 9. ESDL Fast Path
 
 只有以下条件全部满足才能使用：
 
@@ -439,9 +631,9 @@ Method 规则：
 
 ---
 
-## 9. Elements Fast Path
+## 10. Elements Fast Path
 
-### 9.1 `elements` 的职责
+### 10.1 `elements` 的职责
 
 `ascet_get.elements` 只用于：
 
@@ -464,7 +656,7 @@ Method 规则：
 
 精确配置必须使用 `read_element` 或对应精确读取 Action。
 
-### 9.2 Existing Element
+### 10.2 Existing Element
 
 修改 Existing Element 时：
 
@@ -474,7 +666,7 @@ Method 规则：
 
 不得根据默认值覆盖未读取字段。
 
-### 9.3 多 Element 修改
+### 10.3 多 Element 修改
 
 同一个 Component 的多个 Element 使用一次：
 
@@ -486,7 +678,7 @@ apply_element_spec plan
 
 避免逐 Element 重复调用。
 
-### 9.4 Range
+### 10.4 Range
 
 每个 Element 最多选择一个 range source：
 
@@ -500,9 +692,9 @@ Implementation Range
 
 ---
 
-## 10. Parameter 命名与 Ownership
+## 11. Parameter 命名与 Ownership
 
-### 10.1 新参数命名
+### 11.1 新参数命名
 
 ```text
 Provider Exported Parameter: P_<Name>
@@ -521,7 +713,7 @@ Consumer:
   Local C_Threshold
 ```
 
-### 10.2 Dependency Chain
+### 11.2 Dependency Chain
 
 ```text
 C_Threshold
@@ -538,7 +730,7 @@ C_Threshold
 - Existing legacy Parameter 不自动重命名；
 - 名称不能替代 kind、scope、calibration 和 implementation 的 live evidence。
 
-### 10.3 Provider Placement
+### 11.3 Provider Placement
 
 | 参数语义 | Provider 位置 |
 |---|---|
@@ -552,9 +744,9 @@ Generic Provider 必须有跨客户语义证据。不能因为发现已有公共
 
 ---
 
-## 11. Preflight 与真实写入
+## 12. Preflight 与真实写入
 
-### 11.1 Preflight
+### 12.1 Preflight
 
 Mutation Action 缺少 `executeWrite:true` 时只生成 Preflight。
 
@@ -579,7 +771,7 @@ Preflight 检查：
 - 是否影响非目标层；
 - 是否存在 blocking unknowns。
 
-### 11.2 真实写入
+### 12.2 真实写入
 
 ```text
 ascet_edit({
@@ -599,7 +791,7 @@ ascet_edit({
 - Tool 成功返回即完成；
 - Tool 失败时停止，不盲目重试。
 
-### 11.3 Plan/Commit Action
+### 12.3 Plan/Commit Action
 
 对于具有持久化计划的 Action：
 
@@ -614,9 +806,9 @@ Commit 使用原 planId，不重新生成参数或扩大变更。
 
 ---
 
-## 12. Tool Prompt 最终设计
+## 13. Tool Prompt 最终设计
 
-### 12.1 唯一规范源
+### 13.1 唯一规范源
 
 Tool Action Prompt 的唯一规范来源：
 
@@ -639,7 +831,7 @@ Family Prompt 只保留：
 + legacy instruction arrays
 ```
 
-### 12.2 Descriptor 内容
+### 13.2 Descriptor 内容
 
 每个 Descriptor 只回答：
 
@@ -657,7 +849,7 @@ Descriptor 不负责：
 - 完整 ESDL 设计；
 - 跨多个 Tool 的工程流程。
 
-### 12.3 关键 Action 规则
+### 13.3 关键 Action 规则
 
 #### `tree`
 
@@ -691,7 +883,7 @@ Descriptor 不负责：
 - If execution fails, stop instead of blindly retrying.
 ```
 
-### 12.4 Profile Prompt
+### 13.4 Profile Prompt
 
 Profile Prompt 只描述 Profile 增量能力：
 
@@ -704,7 +896,7 @@ Profile 不重复通用工程规则。
 
 ---
 
-## 13. System Prompt 开发方案
+## 14. System Prompt 开发方案
 
 修改：
 
@@ -721,8 +913,11 @@ packages/ascet-extension/src/agent-routing.ts
 - 保留 `AscetCodingPolicyOptions`；
 - 保留 Prompt 只追加一次的行为；
 - 删除完整 Parameter、Dependency、Method、Enum 和 Implementation 矩阵；
+- 删除绝对化的 magic-number 禁止规则；
 - 删除独立验证 Workflow；
-- 明确 ASCET 工程任务必须读取 `ascet-engineering`。
+- 明确 ASCET 工程任务必须读取 `ascet-engineering`；
+- 对非简单任务要求 todolist 工具生成足够具体的任务条目；
+- 在 Preflight 前要求输出完整工程实现方案。
 
 System Prompt 最终只回答：
 
@@ -730,6 +925,8 @@ System Prompt 最终只回答：
 何时触发 Skill
 如何冻结 Scope
 哪些证据不足
+todolist 工具何时调用以及条目如何保持清晰
+完整工程方案何时必须先展示
 什么时候允许 Preflight
 什么时候允许真实写入
 成功和失败如何结束
@@ -737,7 +934,7 @@ System Prompt 最终只回答：
 
 ---
 
-## 14. Skill 开发方案
+## 15. Skill 开发方案
 
 新增：
 
@@ -759,11 +956,14 @@ packages/ascet-extension/skills/ascet-engineering/
     ├── parameter-provider-placement.md
     ├── dependency-advanced-path.md
     ├── bde-and-surface-routing.md
+    ├── task-planning-and-implementation-plan.md
+    ├── esdl-design-and-signal-reuse.md
+    ├── esdl-literals-and-configuration-values.md
     ├── tool-recipes.md
     └── write-execution.md
 ```
 
-### 14.1 `SKILL.md`
+### 15.1 `SKILL.md`
 
 控制在约 60～80 行，只包含：
 
@@ -772,24 +972,27 @@ packages/ascet-extension/skills/ascet-engineering/
 3. Scope Resolution；
 4. Evidence 状态；
 5. Reference 加载表；
-6. Write readiness；
-7. Preflight 与真实写入；
-8. 停止并询问用户的条件。
+6. todolist 工具调用和条目粒度；
+7. 完整工程实现方案；
+8. Write readiness；
+9. Preflight 与真实写入；
+10. 停止并询问用户的条件。
 
-### 14.2 Reference 加载
+### 15.2 Reference 加载
 
 | 任务 | References |
 |---|---|
 | 模糊需求 | scope、root discovery、feature workflow |
 | Customer Project | customer workflow、project signal flow |
 | Exact Class | class context、project signal flow |
-| ESDL 修改 | esdl fast path、surface routing |
+| ESDL 修改 | esdl fast path、surface routing、esdl design and signal reuse、literals and configuration values |
 | Element 配置 | elements fast path |
 | Parameter | naming、provider placement |
 | Dependency | dependency advanced path |
-| 写入 | tool recipes、write execution |
+| 任务规划/完整方案 | task planning and implementation plan、esdl design and signal reuse、tool recipes |
+| 写入 | write execution |
 
-### 14.3 Skill 状态机
+### 15.3 Skill 状态机
 
 ```text
 DISCOVER
@@ -809,45 +1012,27 @@ ascet_edit executeWrite=true 成功返回
 
 ---
 
-## 15. Agent 开发方案
+## 16. Agent 移除方案
 
-修改：
+删除：
 
 ```text
 packages/ascet-extension/agents/ascet-implementation.md
 ```
 
-Frontmatter：
+不再将该 Agent 改造成继承 Skill 的薄封装。ASCET 工程任务直接由 System Prompt 路由到 `ascet-engineering` Skill，再由 Skill 按需加载 References 并调用 Tool。
 
-```yaml
-systemPromptMode: replace
-inheritProjectContext: true
-inheritSkills: true
-tools: read, grep, find, ls, bash, write, edit,
-  ascet_status, ascet_scheduler_status,
-  ascet_get, ascet_read, ascet_diff, ascet_edit
-```
+同步处理：
 
-正文缩减为：
-
-```text
-Read and follow ascet-engineering.
-
-The Skill is authoritative for scope routing, Project-to-Class tracing,
-signal-flow analysis, ESDL, Elements, Parameters, Preflight, and writes.
-
-Do not duplicate Skill rules.
-Do not broaden the frozen scope.
-A successful executed ascet_edit call completes the write because
-verification is automatic.
-Do not call or simulate a separate verification step.
-```
-
-Agent 不再维护独立 Method、Parameter、Dependency、ESDL 或验证规则副本。
+- 删除 `ascet-implementation.md` 的注册、资源发现、打包和测试引用；
+- 如果 `packages/ascet-extension/agents/` 删除该文件后为空，则删除空目录；
+- 不新增替代 Agent、兼容 wrapper 或重定向文件；
+- Agent 通用行为约束继续由 System Prompt 和 `ascet-engineering` Skill 提供；
+- 发布包中只验证 Skill 可发现，并验证已删除的 Agent 不再被打包。
 
 ---
 
-## 16. 独立验证 Tool 移除
+## 17. 独立验证 Tool 移除
 
 删除 standalone Tool 和仅为它服务的 wrapper：
 
@@ -890,7 +1075,7 @@ verifyReadback: true
 
 ---
 
-## 17. Dependency Chain 更新
+## 18. Dependency Chain 更新
 
 `configure_parameter_dependency_chain` 的模型输入不再要求：
 
@@ -925,7 +1110,7 @@ Executed stages and rollback writes use automatic internal verification.
 
 ---
 
-## 18. Package 与资源发现
+## 19. Package 与资源发现
 
 修改：
 
@@ -951,24 +1136,21 @@ packages/ascet-extension/CHANGELOG.md
 
 ```json
 [
-  "agents/ascet-implementation.md",
   "skills/ascet-engineering"
 ]
 ```
-
-注意：Pi 核心 package manifest 原生解析 `extensions/skills/prompts/themes`。Agent 文件进入 npm 包后，由 ASCET 聚合发行包中的 subagent 扩展路径加载，不在扩展包中假设核心直接解析 subagent manifest。
 
 `verify-packed-assets.mjs` 增加检查：
 
 - Skill `SKILL.md` 存在；
 - Skill References 完整；
-- `agents/openai.yaml` 存在；
-- `ascet-implementation.md` 存在；
-- package manifest 引用路径有效。
+- Skill 的 `agents/openai.yaml` 存在；
+- package manifest 引用路径有效；
+- 发布包中不存在 `agents/ascet-implementation.md`。
 
 ---
 
-## 19. 测试驱动开发阶段
+## 20. 测试驱动开发阶段
 
 ### Phase 0：基线与失败测试
 
@@ -976,7 +1158,6 @@ packages/ascet-extension/CHANGELOG.md
 
 ```text
 packages/ascet-extension/src/agent-routing.test.ts
-packages/ascet-extension/src/agents.test.ts
 packages/ascet-extension/src/index.test.ts
 packages/ascet-extension/src/tools/prompt.test.ts
 packages/ascet-extension/src/tools/actions/catalog.test.ts
@@ -995,27 +1176,32 @@ packages/ascet-extension/src/package-resources.test.ts
 
 - System Prompt 为 1000～1500 字符；
 - System Prompt 顶层规则不超过 15；
-- System Prompt 包含 Skill 路由、Scope 和写入安全门；
+- System Prompt 包含 Skill 路由、Scope、todolist 工具规划、完整实施方案和写入安全门；
 - System Prompt 不包含完整 Parameter/Dependency 矩阵；
 - Skill frontmatter 和 Reference links 有效；
-- Agent `inheritSkills=true`；
+- `ascet-implementation.md` 已删除，且没有注册、打包或测试引用；
 - Canonical Tool 和 Profile 中没有 standalone verify Tool；
 - 模型 schema 不接受 `verifyReadback`；
 - Runtime 真实写入内部始终启用自动验证；
 - Tool Prompt 没有重复 guideline；
-- Tool Prompt 默认体积相比基线降低至少 70%。
+- Tool Prompt 默认体积相比基线降低至少 70%；
+- 模糊 ESDL/Parameter 需求在 Preflight 前输出完整实现方案；
+- 有完整 evidence 时方案包含具体拟写 ESDL，而非只有伪代码；
+- 新建 Parameter 方案包含名称、位置、值/来源、type、unit、range、initial、calibration/constant、implementation、dependency 和使用点；
+- todolist 工具条目数与复杂度匹配；常规任务通常 3～5 条，避免含糊的“分析/修改”，也避免过度拆分；
+- 字面量规则允许局部有语义 literal，不强制无必要的 Parameter chain。
 
 ### Phase 1：创建 Skill
 
-实现 Scope、Root Discovery、Project、Class、Signal Flow、ESDL、Elements、Parameter、Dependency 和 Write References。
+实现 Scope、Root Discovery、Project、Class、Signal Flow、todolist 工具规划、完整工程方案、Signal reuse、ESDL、Elements、Parameter、Dependency 和 Write References。
 
 ### Phase 2：精简 System Prompt
 
 只有 Skill 测试通过后，才从 System Prompt 删除详细工程规则。
 
-### Phase 3：精简 Agent
+### Phase 3：移除 Agent
 
-设置 `inheritSkills=true`，删除 Agent 内重复规则。
+删除 `agents/ascet-implementation.md`，清理注册、资源发现、打包和测试引用，不保留薄封装或兼容文件。
 
 ### Phase 4：规范 Tool Prompt
 
@@ -1031,7 +1217,7 @@ packages/ascet-extension/src/package-resources.test.ts
 
 ### Phase 7：Package 与隔离安装
 
-验证 Skill 和 Agent 资源进入 npm package，并能从仓库外安装发现。
+验证 Skill 资源进入 npm package 并能从仓库外安装发现，同时验证已删除的 `ascet-implementation` Agent 不再进入发布包。
 
 ### Phase 8：ASCET Live 验收
 
@@ -1039,14 +1225,13 @@ packages/ascet-extension/src/package-resources.test.ts
 
 ---
 
-## 20. 测试与检查命令
+## 21. 测试与检查命令
 
 定向测试：
 
 ```powershell
 npx tsx --test `
   packages/ascet-extension/src/agent-routing.test.ts `
-  packages/ascet-extension/src/agents.test.ts `
   packages/ascet-extension/src/index.test.ts `
   packages/ascet-extension/src/ascet-engineering-skill.test.ts `
   packages/ascet-extension/src/package-resources.test.ts `
@@ -1074,9 +1259,9 @@ npm run verify-assets
 
 ---
 
-## 21. ASCET Live 验收
+## 22. ASCET Live 验收
 
-### 21.1 Read-only 场景
+### 22.1 Read-only 场景
 
 1. 模糊功能需求 → Core Package；
 2. Customer Project → Package → Class → Method；
@@ -1084,10 +1269,13 @@ npm run verify-assets
 4. BDE/Signal → 目标 ESDL；
 5. Parameter → Provider/Consumer Ownership。
 
-### 21.2 ESDL 写入场景
+### 22.2 ESDL 写入场景
 
 ```text
 读取 baseline signature/code
+→ 输出 Signal reuse、ESDL、Elements 和 Parameter 的完整实现方案
+→ 使用 todolist 工具按对象和写入单元更新任务条目
+→ 确认设计和写入范围
 → Signature Preflight（需要时）
 → Signature executeWrite=true
 → Code Preflight
@@ -1095,20 +1283,25 @@ npm run verify-assets
 → 成功完成
 ```
 
-### 21.3 Local Parameter 场景
+### 22.3 Local Parameter 场景
 
 ```text
-读取 Component 和现有 Elements
+读取 Component、现有 Elements、Parameter Class 和使用 Signal
+→ 输出 C_ 的名称、type、unit、range、initial value、用途和值来源
+→ 在 todolist 工具中拆分 Element plan/write 条目
 → 规划 C_ Local Parameter
 → apply_element_spec plan
 → commit/write
 → 成功完成
 ```
 
-### 21.4 完整 Parameter Chain
+### 22.4 完整 Parameter Chain
 
 ```text
-Provider P_ Exported
+确认 Provider ownership、复用 Signal 和业务值来源
+→ 输出 P_/P_/C_ 名称、内容、metadata、mapping 和 variant 方案
+→ 在 todolist 工具中拆分 Provider/Imported/Local/Dependency 条目
+→ Provider P_ Exported
 → Consumer P_ Imported
 → Consumer C_ Local
 → Explicit dependency mapping
@@ -1116,7 +1309,7 @@ Provider P_ Exported
 → 成功完成
 ```
 
-### 21.5 Live 规则
+### 22.5 Live 规则
 
 - 使用明确授权的 exact target；
 - 所有 ToolAPI 操作串行执行；
@@ -1127,12 +1320,12 @@ Provider P_ Exported
 
 ---
 
-## 22. 最终验收标准
+## 23. 最终验收标准
 
 1. System Prompt 控制在约 1000～1500 字符。
 2. System Prompt 顶层规则不超过 15。
 3. `ascet-engineering` 是工程 Workflow 唯一规范来源。
-4. Agent 通过 `inheritSkills=true` 使用 Skill，不复制完整规则。
+4. 不再提供 `ascet-implementation` Agent；System Prompt 直接路由到 Skill，且不存在薄封装、兼容 wrapper 或残留引用。
 5. 模糊需求先根据功能语义定位 Core Package。
 6. 客户名仅用于 Project、Variant 或装配消歧。
 7. Customer Project 按 Project → Package 方向分析。
@@ -1170,12 +1363,20 @@ Provider P_ Exported
 39. Tool Prompt 只负责单步正确调用。
 40. Action Descriptor 是 Tool Prompt 唯一规范源。
 41. 默认 ASCET Tool Prompt 总量降低至少 70%。
-42. Skill 和 Agent 在隔离安装后的发布包中可发现。
-43. 定向测试、`npm run check`、打包和 ASCET Live 验收全部通过。
+42. Skill 在隔离安装后的发布包中可发现，且 `ascet-implementation` Agent 不在发布包中。
+43. Todolist 工具不设硬性最低条目数；简单任务可 1～2 条，常规任务通常 3～5 条，复杂任务只按关键依赖增加。
+44. Todolist 工具覆盖 Scope、分析、方案、写入等实际里程碑，不使用含糊条目，也不按每个对象或 Tool 调用机械拆分。
+45. todolist 工具任务指明对象、动作、依赖和完成条件，并随目标变化更新状态。
+46. 模糊或有设计影响的需求在 Preflight 前输出完整工程实现方案。
+47. 有完整 evidence 时，方案包含具体拟写 ESDL code/patch，而非只有高层伪代码。
+48. 新建 Parameter 方案包含 P_/C_ 名称、Provider、实际值或来源、type、unit、range、initial、calibration/constant、implementation、dependency、variant 和使用点。
+49. 实现方案明确 Signal source/transform/consumer、复用对象和不复用原因。
+50. 无语义且影响业务、标定或安全的字面量不直接散落在 ESDL；普通局部 literal 不被强制参数化。
+51. 定向测试、`npm run check`、打包和 ASCET Live 验收全部通过。
 
 ---
 
-## 23. 最终结论
+## 24. 最终结论
 
 最终工程 Workflow 为：
 
@@ -1184,8 +1385,10 @@ Provider P_ Exported
 → Scope Resolution
 → Project/Package/Class 正向定位
 → Signal Flow 与当前实现理解
-→ Element/Parameter Ownership 确认
-→ 修改设计
+→ Element/Parameter Ownership 与 Signal reuse 确认
+→ 输出完整工程实现方案
+→ 使用 todolist 工具维护足够具体的执行计划
+→ 确认设计与授权范围
 → Preflight
 → executeWrite=true
 → Tool 成功返回

@@ -139,6 +139,7 @@ test("apply_element_spec uses strict role-discriminated element schemas", () => 
 		{ role: "consumerImportedParameter", name: "P", modelType: "cont", data: { value: 1 } },
 		{ role: "consumerImportedParameter", name: "P", modelType: "cont", impl: { valueType: "sint16" } },
 		{ role: "consumerImportedParameter", name: "P", modelType: "cont", physicalRange: { min: 0, max: 1 } },
+		{ role: "consumerImportedParameter", name: "P", modelType: "cont", comment: "unsupported" },
 		{ role: "consumerImportedParameter", name: "P", modelType: "cont", calibration: true },
 		{ role: "consumerImportedParameter", name: "P", modelType: "cont", dependency: { formula: "P" } },
 		{ role: "localDependentParameter", name: "P", modelType: "cont", data: { value: 1 } },
@@ -236,6 +237,24 @@ test("apply_element_spec commit is planId-only and patch accepts partial fields"
 		}),
 		false,
 	);
+	assert.equal(
+		Value.Check(ascetApplyElementSpecParameters, {
+			action: "apply_element_spec",
+			intent: "patch",
+			componentPath: "DEMO/PID",
+			elements: [{ role: "consumerImportedParameter", name: "P", comment: "unsupported" }],
+		}),
+		false,
+	);
+	assert.throws(
+		() =>
+			normalizeAscetElementSpec(
+				"patch",
+				[{ name: "P", comment: "unsupported" }],
+				[{ name: "P", kind: "parameter", modelType: "cont", scope: "imported" }],
+			),
+		(error: Error) => error.message.includes("P: consumerImportedParameter forbids 'comment'."),
+	);
 });
 
 test("normalization aggregates semantic blockers across multiple elements", () => {
@@ -303,6 +322,7 @@ test("generated Element contract metadata is the runtime source for roles and no
 		false,
 	);
 	assert.ok(ascetElementWriteContractMetadata.fields.element.includes("configurationProvenance"));
+	assert.ok(ascetElementWriteContractMetadata.roles.consumerImportedParameter.forbiddenFields.includes("comment"));
 });
 
 test("dependency overlay specs are internal-only and encoded for composite preflight", () => {

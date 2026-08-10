@@ -3,11 +3,11 @@ id: ascet.tool.write
 layer: tool
 ---
 
-# Write Tool
+# Guarded Write
 
 ## What This File Answers
 
-When should the agent use `AscetWriteTool`?
+When should the agent use `ascet_edit`?
 
 ## When To Load
 
@@ -23,13 +23,12 @@ Load when one exact mutation has been approved.
 
 - The target is still fuzzy.
 - The task is primarily exploratory or comparative.
-- The task is a repeated multi-target sync better suited for `AscetBatchWriteTool`.
+- The task is a repeated multi-target sync better suited for explicitly enabled `ascet_batch_write`.
 
 ## Common Follow-Up
 
-- `AscetVerifyTool`
-- `AscetReadTool`
-- `AscetDiffTool`
+- `ascet_read`
+- `ascet_diff`
 
 ## Evidence
 

@@ -3,11 +3,11 @@ id: ascet.tool.read
 layer: tool
 ---
 
-# Read Tool
+# Exact Read
 
 ## What This File Answers
 
-When should the agent use `AscetReadTool`?
+When should the agent use `ascet_read`?
 
 ## When To Load
 
@@ -17,7 +17,7 @@ Load when the target is exact and the task needs direct content inspection.
 
 - The task needs summary, snapshot, method code, implementation, block diagram, or state-machine-flow content.
 - The agent must confirm the exact current surface before planning a change.
-- A broader post-write structural re-check is required after `readback`.
+- A broader structural read is required after an executed write.
 
 ## Block Diagram Reads
 
@@ -28,13 +28,13 @@ Load when the target is exact and the task needs direct content inspection.
 
 - The target is still fuzzy.
 - The main question is about references or dependency sites.
-- The task is really an immediate post-write `readback`.
+- The task only needs the automatic verification returned by `ascet_edit`.
 
 ## Common Follow-Up
 
-- `AscetReferenceTool`
-- `AscetDiffTool`
-- `AscetWriteTool`
+- `ascet_get` reference actions
+- `ascet_diff`
+- `ascet_edit`
 
 ## Evidence
 

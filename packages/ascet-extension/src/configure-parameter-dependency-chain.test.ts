@@ -12,7 +12,7 @@ import {
 	runConfigureParameterDependencyChain,
 } from "./configure-parameter-dependency-chain.ts";
 import { createCompensatingRollbackOrchestrator } from "./configure-parameter-dependency-chain-rollback.ts";
-import { AscetPlanStore } from "./edit/plan-store.ts";
+import { type AscetPlanJsonValue, AscetPlanStore, createAscetPlanBinding } from "./edit/plan-store.ts";
 
 function createDefinition(): ConfigureParameterDependencyDefinition {
 	return {
@@ -20,7 +20,7 @@ function createDefinition(): ConfigureParameterDependencyDefinition {
 			componentPath: "DEMO/Provider",
 			element: {
 				role: "providerExportedParameter",
-				name: "P_Exported",
+				name: "P_Threshold",
 				modelType: "cont",
 				unit: "",
 				comment: "Provider output",
@@ -34,7 +34,7 @@ function createDefinition(): ConfigureParameterDependencyDefinition {
 			componentPath: "DEMO/Consumer",
 			element: {
 				role: "consumerImportedParameter",
-				name: "P_Imported",
+				name: "P_Threshold",
 				modelType: "cont",
 				unit: "",
 			},
@@ -43,7 +43,7 @@ function createDefinition(): ConfigureParameterDependencyDefinition {
 			componentPath: "DEMO/Consumer",
 			element: {
 				role: "localDependentParameter",
-				name: "P_Local",
+				name: "C_Threshold",
 				modelType: "cont",
 				unit: "",
 				comment: "Dependent local",
@@ -53,17 +53,16 @@ function createDefinition(): ConfigureParameterDependencyDefinition {
 			},
 		},
 		dependency: {
-			formula: "P_Imported + K",
-			formals: ["P_Imported", "K"],
+			formula: "P_Threshold + K",
+			formals: ["P_Threshold", "K"],
 			bindingPolicy: "explicit",
 			mappings: {
-				P_Imported: { kind: "parameter", name: "P_Imported" },
+				P_Threshold: { kind: "parameter", name: "P_Threshold" },
 				K: { kind: "constant", name: "K" },
 			},
 			variantPolicy: "selected",
 			variants: ["Nominal"],
 		},
-		verifyReadback: true,
 	};
 }
 
@@ -171,6 +170,8 @@ describe("configure_parameter_dependency_chain", () => {
 			);
 			const planned = await makePlan(fixture, (request) => Promise.resolve(successExecution(request, 1)));
 			const persisted = fixture.store.load(planned.planId);
+			const persistedDefinition = persisted.params as unknown as ConfigureParameterDependencyDefinition;
+			assert.equal(Object.hasOwn(persistedDefinition.consumer.element, "comment"), false);
 			assert.notEqual(planned.planId, "missing-plan");
 			assert.ok(Array.isArray((persisted.backendPreflight as { stages?: unknown }).stages));
 			assert.equal((persisted.backendPreflight as { stages: unknown[] }).stages.length, 4);
@@ -179,6 +180,104 @@ describe("configure_parameter_dependency_chain", () => {
 		}
 	});
 
+	test("rejects invalid P_/P_/C_ names before live preflight", async () => {
+		const fixture = createFixture();
+		try {
+			const cases: Array<{
+				name: string;
+				mutate: (definition: ConfigureParameterDependencyDefinition) => void;
+				errorCode: string;
+			}> = [
+				{
+					name: "provider prefix",
+					mutate: (definition) => {
+						definition.provider.element.name = "Threshold";
+					},
+					errorCode: "provider_parameter_name_invalid",
+				},
+				{
+					name: "imported prefix",
+					mutate: (definition) => {
+						definition.consumer.element.name = "Threshold";
+					},
+					errorCode: "imported_parameter_name_invalid",
+				},
+				{
+					name: "provider/imported mismatch",
+					mutate: (definition) => {
+						definition.consumer.element.name = "P_Other";
+					},
+					errorCode: "provider_imported_parameter_name_mismatch",
+				},
+				{
+					name: "local prefix",
+					mutate: (definition) => {
+						definition.local.element.name = "P_Local";
+					},
+					errorCode: "local_parameter_name_invalid",
+				},
+			];
+			for (const scenario of cases) {
+				const definition = createDefinition();
+				scenario.mutate(definition);
+				let calls = 0;
+				const result = await runConfigureParameterDependencyChain(
+					{ ...definition, mode: "plan" },
+					{
+						cwd: fixture.cwd,
+						planStore: fixture.store,
+						executeCli: async (request) => {
+							calls += 1;
+							return successExecution(request, 1);
+						},
+					},
+					{},
+				);
+				assert.equal(result.status, "error", scenario.name);
+				if (result.status !== "error") continue;
+				assert.equal(result.error.code, scenario.errorCode, scenario.name);
+				assert.equal(calls, 0, scenario.name);
+			}
+		} finally {
+			fixture.cleanup();
+		}
+	});
+	test("rejects persisted plans whose names violate the current chain contract", async () => {
+		const fixture = createFixture();
+		try {
+			const definition = createDefinition();
+			definition.consumer.element.name = "P_Other";
+			const persisted = fixture.store.create({
+				operation: "configure_parameter_dependency_chain",
+				params: JSON.parse(JSON.stringify(definition)) as AscetPlanJsonValue,
+				backendPreflight: {},
+				binding: createAscetPlanBinding({ cwd: fixture.cwd }),
+			});
+			let calls = 0;
+			const result = await runConfigureParameterDependencyChain(
+				createParams("commit", persisted.planId),
+				{
+					cwd: fixture.cwd,
+					planStore: fixture.store,
+					executeCli: async (request) => {
+						calls += 1;
+						return successExecution(request, 1);
+					},
+				},
+				{ hasUI: true, ui: { confirm: async () => true } },
+			);
+			assert.equal(result.status, "error");
+			if (result.status !== "error") return;
+			assert.equal(result.error.code, "plan_corrupt");
+			assert.deepEqual(result.error.details, {
+				code: "provider_imported_parameter_name_mismatch",
+				message: "Provider Exported and Consumer Imported Parameter names must match exactly.",
+			});
+			assert.equal(calls, 0);
+		} finally {
+			fixture.cleanup();
+		}
+	});
 	test("captures existing dependency mappings for compensating rollback", async () => {
 		const fixture = createFixture();
 		try {
@@ -190,7 +289,7 @@ describe("configure_parameter_dependency_chain", () => {
 						ok: true,
 						result: {
 							dependency: { before: "dependent", after: "dependent" },
-							formula: { before: "Old", after: "P_Imported + K" },
+							formula: { before: "Old", after: "P_Threshold + K" },
 							beforeMappings: [
 								{
 									formal: "Old",
@@ -262,6 +361,66 @@ describe("configure_parameter_dependency_chain", () => {
 			assert.equal(result.status, "error");
 			if (result.status !== "error") return;
 			assert.equal(result.error.code, "stale_plan");
+		} finally {
+			fixture.cleanup();
+		}
+	});
+
+	test("ignores volatile live runtime metadata when verifying commit preflight", async () => {
+		const fixture = createFixture();
+		try {
+			let invocation = 0;
+			const executeCli = async (request: AscetCliRequest): Promise<AscetCliExecutionResult> => {
+				if (request.args[1] === "read_element_catalog") {
+					return successExecution(request, 1);
+				}
+				invocation += 1;
+				return {
+					exitCode: 0,
+					stdout: JSON.stringify({
+						ok: true,
+						result: {
+							readbackVerified: true,
+							beforeDependency: "independent",
+							beforeFormula: "",
+							marker: 1,
+							snapshot: {
+								mode: "capture",
+								path: `C:\\Temp\\dependency-${invocation}.xml`,
+								hash: "stable-snapshot-hash",
+							},
+							identity: {
+								componentOID: `component-${invocation}`,
+								elementOID: `element-${invocation}`,
+							},
+							mappings: [
+								{
+									formal: "P_Threshold",
+									valueName: "P_Threshold",
+									targetKind: "parameter",
+									formalOID: `formal-${invocation}`,
+									valueOID: `value-${invocation}`,
+								},
+							],
+						},
+						meta: {
+							bridgePid: 10_000 + invocation,
+							bridgeGeneration: `generation-${invocation}`,
+							durationMs: invocation,
+						},
+					}),
+					stderr: "",
+					timedOut: false,
+					request,
+				};
+			};
+			const planned = await makePlan(fixture, executeCli);
+			const result = await runConfigureParameterDependencyChain(
+				createParams("commit", planned.planId),
+				{ cwd: fixture.cwd, planStore: fixture.store, executeCli },
+				{ hasUI: true, ui: { confirm: async () => true } },
+			);
+			assert.equal(result.status, "committed");
 		} finally {
 			fixture.cleanup();
 		}
@@ -344,7 +503,7 @@ describe("configure_parameter_dependency_chain", () => {
 		const fixture = createFixture();
 		try {
 			const executeCli = async (request: AscetCliRequest) => {
-				if (appliedElementName(request) === "P_Local") return errorExecution(request, "local_write_failed");
+				if (appliedElementName(request) === "C_Threshold") return errorExecution(request, "local_write_failed");
 				return successExecution(request, 1);
 			};
 			const planned = await makePlan(fixture, (request) => Promise.resolve(successExecution(request, 1)));
@@ -379,7 +538,7 @@ describe("configure_parameter_dependency_chain", () => {
 					planStore: fixture.store,
 					executeCli: async (request) => {
 						calls.push(request.args);
-						if (appliedElementName(request) === "P_Local") {
+						if (appliedElementName(request) === "C_Threshold") {
 							return errorExecution(request, "local_write_failed");
 						}
 						return successExecution(request, 1);
@@ -413,7 +572,7 @@ describe("configure_parameter_dependency_chain", () => {
 							ok: true,
 							result: {
 								dependency: { before: "dependent", after: "dependent" },
-								formula: { before: "Old", after: "P_Imported + K" },
+								formula: { before: "Old", after: "P_Threshold + K" },
 								beforeMappings: [
 									{
 										formal: "Old",
@@ -469,7 +628,7 @@ describe("configure_parameter_dependency_chain", () => {
 		const fixture = createFixture();
 		try {
 			const executeCli = async (request: AscetCliRequest) => {
-				if (appliedElementName(request) === "P_Local") return errorExecution(request, "local_write_failed");
+				if (appliedElementName(request) === "C_Threshold") return errorExecution(request, "local_write_failed");
 				return successExecution(request, 1);
 			};
 			const planned = await makePlan(fixture, (request) => Promise.resolve(successExecution(request, 1)));

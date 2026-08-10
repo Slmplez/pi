@@ -22,7 +22,7 @@ Load after `core/workflow.md`.
 4. If the task compares two exact targets or two exact surfaces, load `tools/diff.md`.
 5. If the task is a single approved mutation, load `tools/write.md`.
 6. If the task is a repeated or synchronized mutation across multiple targets, load `tools/batch-write.md`.
-7. If the task is immediate post-write confirmation, load `tools/verify.md` and `core/verification.md`.
+7. If an executed write returned partial, failed, or unknown verification, load `core/verification.md` and refresh only the evidence needed for the next step.
 8. If the task is folder-scale or project-scale checking, load `tools/autocheck.md`.
 
 ## Object Routing Rules
@@ -41,7 +41,7 @@ Load after `core/workflow.md`.
 | Small local edit | `tools/write.md` and `tasks/small-safe-edit.md` |
 | Signature change | `tools/write.md`, `tasks/signature-change.md`, and `core/verification.md` |
 | Batch or sync change | `tools/batch-write.md`, `tasks/batch-change.md`, and `core/verification.md` |
-| Post-write reporting | `tools/verify.md` and `tasks/closeout.md` |
+| Post-write reporting | `core/verification.md` and `tasks/closeout.md` |
 
 ## Escalate When
 

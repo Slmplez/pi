@@ -23,8 +23,8 @@ Load when the task changes method, process, trigger, action, condition, paramete
 2. Confirm the current signature from read-side sources before writing.
 3. Check references, bindings, or role semantics before the mutation.
 4. Do not combine the signature change with unrelated cleanup.
-5. Run immediate `readback`.
-6. Re-check the exact larger surfaces that consume the signature:
+5. Execute the approved change through `ascet_edit` and inspect its automatic verification.
+6. Re-check the exact larger surfaces that consume the signature only when the next step requires them:
    - references
    - bindings
    - diff

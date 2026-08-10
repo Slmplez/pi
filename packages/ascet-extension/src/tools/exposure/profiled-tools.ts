@@ -9,21 +9,18 @@ type AscetToolDefinition = (typeof allAscetTools)[number];
 type ToolExecute = (...args: unknown[]) => unknown;
 
 const profileGuidelines: Record<AscetProfile, Partial<Record<string, readonly string[]>>> = {
-	base: {
-		ascet_status: ["Use ascet_status first when ASCET runtime availability is unknown."],
-		ascet_get: [
-			"Use ascet_get.tree first, then expand a bounded target with elements, formulas, or reference actions.",
-		],
-		ascet_read: ["Use ascet_read only for precise deep reads of exact targets selected through ascet_get."],
-	},
+	base: {},
+
 	"advanced-read": {
 		ascet_read: [
-			"Use ascet_read action=read_block_diagram for block diagram, BDE, wiring, connection, or signal-flow questions after ascet_get resolves componentPath.",
+			"Use ascet_read action=read_block_diagram for block diagram, BDE, wiring, connection, or signal-flow questions after componentPath is resolved exactly.",
 			'Example: ascet_read({action:"read_block_diagram",componentPath:"DEMO/PID",detailLevel:"summary"})',
 		],
 	},
 	reference: {
-		ascet_get: ["Use component_refs, elements, and import_binding after tree resolves the exact target."],
+		ascet_get: [
+			"Reference profile enables component_refs, elements, and import_binding for exact resolved targets; reference actions return outgoing relationships only.",
+		],
 	},
 	diff: {
 		ascet_diff: ["Use ascet_diff for file, snapshot, method, element-spec, and formula comparisons."],

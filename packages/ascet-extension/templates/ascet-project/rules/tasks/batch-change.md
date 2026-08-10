@@ -21,9 +21,9 @@ Load when the task applies the same mutation shape to multiple exact targets.
 
 1. Confirm that the targets are exact before batching.
 2. Confirm that the mutation shape is aligned enough for one batch operation.
-3. Prefer `AscetBatchWriteTool` when the batch path reduces repeated process startup and preserves consistency.
-4. Run representative `readback` after the batch mutation.
-5. Add larger-surface reads only where the risk actually requires them.
+3. Prefer explicitly enabled `ascet_batch_write` only when it preserves the aligned mutation shape; otherwise use sequential `ascet_edit` actions.
+4. Inspect the automatic verification returned by the executed write path.
+5. Add larger-surface reads only where the next step or risk actually requires them.
 
 ## Escalate When
 

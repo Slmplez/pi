@@ -68,9 +68,6 @@ rules:
   - id: ascet.tool.batch-write
     path: tools/batch-write.md
     layer: tool
-  - id: ascet.tool.verify
-    path: tools/verify.md
-    layer: tool
   - id: ascet.tool.autocheck
     path: tools/autocheck.md
     layer: tool

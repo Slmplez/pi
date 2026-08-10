@@ -67,7 +67,6 @@ export const ascetSetStateMachineCodeParameters = Type.Object({
 	priority: Type.Optional(Type.Number()),
 	methodName: Type.Optional(Type.String()),
 	codeFile: Type.Optional(Type.String({ description: "Path to replacement code file." })),
-	verifyReadback: Type.Optional(Type.Boolean({ description: "Ask the ASCET CLI to verify readback after writing." })),
 	executeWrite: Type.Optional(Type.Boolean({ description: "When true, PI still requires interactive confirmation." })),
 });
 

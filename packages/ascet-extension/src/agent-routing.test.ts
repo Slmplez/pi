@@ -11,16 +11,12 @@ describe("ASCET coding policy routing", () => {
 
 		assert.match(routed, /ASCET coding policy:/);
 		assert.doesNotMatch(routed, /ascet-implementation/);
-		assert.match(routed, /Handle ASCET coding inline/);
+		assert.match(routed, /ascet-engineering Skill/);
 		assert.match(routed, /ascet_edit/);
 		assert.doesNotMatch(routed, /ascet_write/);
-		assert.match(routed, /set_method_code/);
-		assert.match(
-			routed,
-			/Local Dependent Parameter -> Imported Parameter -> same-named Exported Parameter -> Provider Class/,
-		);
-		assert.match(routed, /Physical Range or Implementation Range/);
-		assert.ok(policyLines.length <= 80);
+		assert.match(routed, /executeWrite=true/);
+		assert.match(routed, /complete implementation plan/);
+		assert.ok(policyLines.length <= 30);
 		assert.equal(appendAscetCodingPolicyPrompt(routed), routed);
 	});
 

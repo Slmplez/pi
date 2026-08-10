@@ -70,7 +70,6 @@ export interface ConfigureParameterDependencyDefinition {
 		variantPolicy: "default" | "selected" | "all";
 		variants?: string[];
 	};
-	verifyReadback: true;
 }
 
 export type ConfigureParameterDependencyChainParams =
@@ -208,7 +207,6 @@ const chainProperties = {
 		},
 		{ additionalProperties: false },
 	),
-	verifyReadback: Type.Literal(true),
 } as const;
 
 const configureDefinitionSchema = Type.Object(chainProperties, { additionalProperties: false });
@@ -260,26 +258,51 @@ function definitionWithoutControl(params: ConfigureParameterDependencyDefinition
 		consumer: params.consumer,
 		local: params.local,
 		dependency: params.dependency,
-		verifyReadback: params.verifyReadback,
 	});
 }
 
+const volatileBackendPreflightFields = new Set(["bridgeGeneration", "bridgePid", "durationMs", "sequenceNumber"]);
+
+function stableBackendPreflightValue(value: unknown, parentKey?: string): unknown {
+	if (Array.isArray(value)) {
+		return value.map((entry) => stableBackendPreflightValue(entry, parentKey));
+	}
+	if (!isRecord(value)) {
+		return value;
+	}
+	return Object.fromEntries(
+		Object.entries(value)
+			.filter(([key]) => {
+				if (key === "meta" || volatileBackendPreflightFields.has(key)) {
+					return false;
+				}
+				if (key.endsWith("OID") || key.endsWith("OIDs")) {
+					return false;
+				}
+				return parentKey !== "snapshot" || key !== "path";
+			})
+			.map(([key, entry]) => [key, stableBackendPreflightValue(entry, key)]),
+	);
+}
+
 function createBackendPreflightPayload(stages: ChainStageReport[]): AscetPlanJsonValue {
-	return asPlanJson({
-		stages: stages.map((stage) => ({
-			stage: stage.stage,
-			operation: stage.operation,
-			target: stage.target,
-			status: stage.status,
-			result: stage.result,
-			specHash: stage.specHash ?? null,
-			readbackVerified: stage.readbackVerified ?? null,
-			error: stage.error ?? null,
-		})),
-		rollbackEvidence: stages
-			.filter((stage) => stage.rollbackEvidence !== undefined)
-			.map((stage) => stage.rollbackEvidence),
-	});
+	return asPlanJson(
+		stableBackendPreflightValue({
+			stages: stages.map((stage) => ({
+				stage: stage.stage,
+				operation: stage.operation,
+				target: stage.target,
+				status: stage.status,
+				result: stage.result,
+				specHash: stage.specHash ?? null,
+				readbackVerified: stage.readbackVerified ?? null,
+				error: stage.error ?? null,
+			})),
+			rollbackEvidence: stages
+				.filter((stage) => stage.rollbackEvidence !== undefined)
+				.map((stage) => stage.rollbackEvidence),
+		}),
+	);
 }
 
 function createBaseFailure(
@@ -305,9 +328,96 @@ function createBaseFailure(
 	};
 }
 
+interface ChainValidationError {
+	code: string;
+	message: string;
+}
+
+function validateChainDefinition(params: ConfigureParameterDependencyDefinition): ChainValidationError | undefined {
+	const providerPath = normalizeAscetPath(params.provider.componentPath);
+	const consumerPath = normalizeAscetPath(params.consumer.componentPath);
+	const localPath = normalizeAscetPath(params.local.componentPath);
+	if (providerPath === consumerPath) {
+		return {
+			code: "configure_parameter_dependency_chain_invalid_scope",
+			message: "provider.componentPath and consumer.componentPath must identify different components.",
+		};
+	}
+	if (consumerPath !== localPath) {
+		return {
+			code: "configure_parameter_dependency_chain_invalid_scope",
+			message:
+				"local.componentPath must equal consumer.componentPath because the local dependent parameter is configured in the consumer.",
+		};
+	}
+	if (!/^P_.+/u.test(params.provider.element.name)) {
+		return {
+			code: "provider_parameter_name_invalid",
+			message: "provider.element.name must use the P_<Name> convention.",
+		};
+	}
+	if (!/^P_.+/u.test(params.consumer.element.name)) {
+		return {
+			code: "imported_parameter_name_invalid",
+			message: "consumer.element.name must use the P_<Name> convention.",
+		};
+	}
+	if (params.provider.element.name !== params.consumer.element.name) {
+		return {
+			code: "provider_imported_parameter_name_mismatch",
+			message: "Provider Exported and Consumer Imported Parameter names must match exactly.",
+		};
+	}
+	if (!/^C_.+/u.test(params.local.element.name)) {
+		return {
+			code: "local_parameter_name_invalid",
+			message: "local.element.name must use the C_<Name> convention.",
+		};
+	}
+	if (Object.keys(params.dependency.mappings).length === 0) {
+		return {
+			code: "dependency_mappings_required",
+			message: "The chain requires explicit dependency mappings; formula identifiers are never inferred.",
+		};
+	}
+	const hasImportedParameterMapping = Object.values(params.dependency.mappings).some(
+		(target) => target.kind === "parameter" && target.name === params.consumer.element.name,
+	);
+	if (!hasImportedParameterMapping) {
+		return {
+			code: "configure_parameter_dependency_chain_provider_mapping_required",
+			message: "dependency.mappings must explicitly bind at least one formal to the consumer imported Parameter.",
+		};
+	}
+	const formals = [...params.dependency.formals].sort();
+	const mappingFormals = Object.keys(params.dependency.mappings).sort();
+	if (formals.length !== mappingFormals.length || formals.some((formal, index) => formal !== mappingFormals[index])) {
+		return {
+			code: "dependency_mapping_formals_mismatch",
+			message: "dependency.formals and dependency.mappings keys must match exactly.",
+		};
+	}
+	if (
+		params.dependency.variantPolicy === "selected" &&
+		(!params.dependency.variants || params.dependency.variants.length === 0)
+	) {
+		return {
+			code: "data_variant_selection_required",
+			message: 'dependency.variantPolicy="selected" requires explicit dependency.variants.',
+		};
+	}
+	if (params.dependency.variantPolicy !== "selected" && params.dependency.variants !== undefined) {
+		return {
+			code: "configure_parameter_dependency_chain_invalid_parameter",
+			message: "dependency.variants is only valid with dependency.variantPolicy=selected.",
+		};
+	}
+	return undefined;
+}
+
 function validateChainParams(
 	value: unknown,
-): { params: ConfigureParameterDependencyChainParams } | { error: { code: string; message: string } } {
+): { params: ConfigureParameterDependencyChainParams } | { error: ChainValidationError } {
 	if (!Value.Check(configureValidationSchema, value)) {
 		return {
 			error: {
@@ -321,77 +431,9 @@ function validateChainParams(
 	if (params.mode === "commit") {
 		return { params };
 	}
-	const providerPath = normalizeAscetPath(params.provider.componentPath);
-	const consumerPath = normalizeAscetPath(params.consumer.componentPath);
-	const localPath = normalizeAscetPath(params.local.componentPath);
-	if (providerPath === consumerPath) {
-		return {
-			error: {
-				code: "configure_parameter_dependency_chain_invalid_scope",
-				message: "provider.componentPath and consumer.componentPath must identify different components.",
-			},
-		};
-	}
-	if (consumerPath !== localPath) {
-		return {
-			error: {
-				code: "configure_parameter_dependency_chain_invalid_scope",
-				message:
-					"local.componentPath must equal consumer.componentPath because the local dependent parameter is configured in the consumer.",
-			},
-		};
-	}
-	if (Object.keys(params.dependency.mappings).length === 0) {
-		return {
-			error: {
-				code: "dependency_mappings_required",
-				message: "The chain requires explicit dependency mappings; formula identifiers are never inferred.",
-			},
-		};
-	}
-	const hasImportedParameterMapping = Object.values(params.dependency.mappings).some(
-		(target) => target.kind === "parameter" && target.name === params.consumer.element.name,
-	);
-	if (!hasImportedParameterMapping) {
-		return {
-			error: {
-				code: "configure_parameter_dependency_chain_provider_mapping_required",
-				message: "dependency.mappings must explicitly bind at least one formal to the consumer imported Parameter.",
-			},
-		};
-	}
-	const formals = [...params.dependency.formals].sort();
-	const mappingFormals = Object.keys(params.dependency.mappings).sort();
-	if (formals.length !== mappingFormals.length || formals.some((formal, index) => formal !== mappingFormals[index])) {
-		return {
-			error: {
-				code: "dependency_mapping_formals_mismatch",
-				message: "dependency.formals and dependency.mappings keys must match exactly.",
-			},
-		};
-	}
-	if (
-		params.dependency.variantPolicy === "selected" &&
-		(!params.dependency.variants || params.dependency.variants.length === 0)
-	) {
-		return {
-			error: {
-				code: "data_variant_selection_required",
-				message: 'dependency.variantPolicy="selected" requires explicit dependency.variants.',
-			},
-		};
-	}
-	if (params.dependency.variantPolicy !== "selected" && params.dependency.variants !== undefined) {
-		return {
-			error: {
-				code: "configure_parameter_dependency_chain_invalid_parameter",
-				message: "dependency.variants is only valid with dependency.variantPolicy=selected.",
-			},
-		};
-	}
-	return { params };
+	const error = validateChainDefinition(params);
+	return error ? { error } : { params };
 }
-
 function dependencyMutation(
 	params: ConfigureParameterDependencyDefinition,
 	overlaySpecFiles?: string[],
@@ -1279,15 +1321,10 @@ export const configureParameterDependencyChainTool = defineSequentialAscetTool({
 	description:
 		"Plan or commit an explicit ASCET Provider Exported Parameter -> Consumer Imported Parameter -> Local Dependent Parameter chain without guessing ASCET data.",
 	promptSnippet: "Use configure_parameter_dependency_chain for one explicit provider/consumer/local dependency chain.",
-	promptGuidelines: [
-		"Always call mode=plan first; use the returned random planId unchanged for mode=commit.",
-		"Provide complete role-specific inline elements. Never create or pass provider, consumer, or local specFile paths.",
-		"Provider and Local decision groups are mandatory; Imported Parameter is the only lightweight exception.",
-		"Use explicit dependency formals and mappings with kind=parameter, constant, or systemConstant; never rely on formula token inference.",
-		"variantPolicy and verifyReadback=true are mandatory. Use selected only with an explicit variants list.",
-		"Commit revalidates the persisted plan, captures component rollback evidence, consumes the plan after confirmation, and reports compensating rollback execution on failure.",
-		...buildToolPromptGuidelines({ tool: "configure_parameter_dependency_chain" }),
-	],
+	promptGuidelines: buildToolPromptGuidelines({
+		tool: "configure_parameter_dependency_chain",
+		includeExamples: false,
+	}),
 	parameters: configureParameterDependencyChainParameters,
 	renderCall: renderAscetToolCall,
 	renderResult: renderAscetToolResult,

@@ -75,7 +75,6 @@ const createFolderRequest = Type.Object(
 		ifExists: Type.Optional(
 			Type.Union([Type.Literal("fail"), Type.Literal("ignore"), Type.Literal("return-existing")]),
 		),
-		verifyReadback: Type.Optional(Type.Boolean()),
 	},
 	{ additionalProperties: false },
 );
@@ -87,7 +86,6 @@ const createComponentRequest = Type.Object(
 		ifExists: Type.Optional(
 			Type.Union([Type.Literal("fail"), Type.Literal("return-existing"), Type.Literal("overwrite")]),
 		),
-		verifyReadback: Type.Optional(Type.Boolean()),
 		rollbackOnFailure: Type.Optional(Type.Boolean()),
 	},
 	{ additionalProperties: false },
@@ -111,7 +109,6 @@ const createMethodRequest = Type.Object(
 		ifExists: Type.Optional(
 			Type.Union([Type.Literal("fail"), Type.Literal("return-existing"), Type.Literal("overwrite")]),
 		),
-		verifyReadback: Type.Optional(Type.Boolean()),
 	},
 	{ additionalProperties: false },
 );
@@ -120,7 +117,6 @@ const setMethodCodeRequest = Type.Object(
 		componentPath: Type.String({ minLength: 1 }),
 		methodName: Type.String({ minLength: 1 }),
 		codeFile: Type.String({ minLength: 1 }),
-		verifyReadback: Type.Optional(Type.Boolean()),
 	},
 	{ additionalProperties: false },
 );
@@ -132,7 +128,6 @@ const applyElementSpecRequest = Type.Object(
 		mode: Type.Optional(Type.Literal("restore")),
 		deleteMissing: Type.Optional(Type.Boolean()),
 		recreateIncompatible: Type.Optional(Type.Boolean()),
-		verifyReadback: Type.Optional(Type.Boolean()),
 	},
 	{ additionalProperties: false },
 );
@@ -142,7 +137,6 @@ const applyProjectFormulaRequest = Type.Object(
 		specFile: Type.String({ minLength: 1 }),
 		mode: Type.Optional(Type.Literal("restore")),
 		deleteMissing: Type.Optional(Type.Boolean()),
-		verifyReadback: Type.Optional(Type.Boolean()),
 	},
 	{ additionalProperties: false },
 );
@@ -150,7 +144,6 @@ const deleteComponentRequest = Type.Object(
 	{
 		componentPath: Type.String({ minLength: 1 }),
 		ifMissing: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")])),
-		verifyReadback: Type.Optional(Type.Boolean()),
 	},
 	{ additionalProperties: false },
 );
@@ -159,7 +152,6 @@ const deleteMethodRequest = Type.Object(
 		componentPath: Type.String({ minLength: 1 }),
 		methodName: Type.String({ minLength: 1 }),
 		ifMissing: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")])),
-		verifyReadback: Type.Optional(Type.Boolean()),
 	},
 	{ additionalProperties: false },
 );
@@ -167,7 +159,6 @@ const deleteFolderRequest = Type.Object(
 	{
 		folderPath: Type.String({ minLength: 1 }),
 		ifMissing: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")])),
-		verifyReadback: Type.Optional(Type.Boolean()),
 	},
 	{ additionalProperties: false },
 );

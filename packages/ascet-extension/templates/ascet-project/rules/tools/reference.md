@@ -3,11 +3,11 @@ id: ascet.tool.reference
 layer: tool
 ---
 
-# Reference Tool
+# Reference Reads
 
 ## What This File Answers
 
-When should the agent use `AscetReferenceTool`?
+When should the agent use `ascet_get` reference actions?
 
 ## When To Load
 
@@ -23,13 +23,13 @@ Load when the task depends on caller, usage, or dependency context.
 
 - The target is still fuzzy.
 - The task is only a direct content read.
-- The task is only an immediate post-write `readback`.
+- The task only needs the automatic verification returned by `ascet_edit`.
 
 ## Common Follow-Up
 
-- `AscetReadTool`
-- `AscetDiffTool`
-- `AscetWriteTool`
+- `ascet_read`
+- `ascet_diff`
+- `ascet_edit`
 
 ## Evidence
 

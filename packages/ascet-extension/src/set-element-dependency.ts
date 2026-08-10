@@ -128,9 +128,6 @@ export const ascetSetElementDependencyParameters = Type.Object(
 		match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("all")])),
 		dryRun: Type.Optional(Type.Boolean({ description: "Plan the write without importing patched XML." })),
 		backupDir: Type.Optional(Type.String({ description: "Directory for dependency write backups.", minLength: 1 })),
-		verifyReadback: Type.Optional(
-			Type.Boolean({ description: "Ask the ASCET CLI to verify main/data AMD readback after writing." }),
-		),
 		executeWrite: Type.Optional(
 			Type.Boolean({ description: "When true, PI still requires interactive confirmation." }),
 		),

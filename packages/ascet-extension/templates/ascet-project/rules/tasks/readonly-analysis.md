@@ -20,9 +20,9 @@ Load when the user wants explanation, diagnosis, or evidence gathering without a
 ## Decision Rules
 
 1. Resolve the exact target first if needed.
-2. Prefer `AscetReadTool` once the surface is exact.
-3. Add `AscetReferenceTool` only when dependency context matters.
-4. Add `AscetDiffTool` only when two exact targets or surfaces must be compared.
+2. Prefer `ascet_read` once the surface is exact.
+3. Add `ascet_get` reference actions only when dependency context matters.
+4. Add `ascet_diff` only when two exact targets or surfaces must be compared.
 5. End with findings, next reads, or risks rather than implicit write intent.
 
 ## Escalate When

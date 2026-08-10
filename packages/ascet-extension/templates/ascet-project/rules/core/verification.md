@@ -16,10 +16,10 @@ Load before a live write is executed and before claiming completion after a live
 
 ## Action Rules
 
-1. Never treat a successful write call as sufficient proof.
-2. Use `AscetVerifyTool` only for immediate `readback`.
-3. Treat `readback` as confirmation of the edited surface, not as a full structural audit.
-4. If broader confidence is still needed, use `AscetReadTool`, `AscetReferenceTool`, or `AscetDiffTool` on the exact larger surface that matters.
+1. `ascet_edit` performs action-specific verification inside Runtime for every executed mutation.
+2. A successful executed `ascet_edit` result completes the write; do not call a separate verification Tool.
+3. Treat returned verification as confirmation of the edited action, not as a substitute for evidence needed by a different next step.
+4. If the next engineering step needs broader confidence, use `ascet_read`, `ascet_get`, or `ascet_diff` on the exact larger surface that matters.
 5. If signatures changed, verify dependent references, bindings, or generated-role assumptions.
 6. If a state machine changed, verify both the edited code surface and the affected state or transition relation.
 7. If implementation or data changed, verify under the intended project or target context, not only by displayed field text.
@@ -30,21 +30,20 @@ Load before a live write is executed and before claiming completion after a live
 | Change type | Required checks |
 | --- | --- |
 | Read-only | none beyond source consistency |
-| Local text edit | `readback` plus one exact larger-surface read when needed |
-| Signature change | `readback` plus references or diff check |
-| State machine binding change | `readback` plus state or transition re-check |
-| Implementation/data change | `readback` plus project-context-sensitive re-check |
-| Batch change | representative `readback` plus exact larger-surface follow-up |
+| Local text edit | automatic action-specific verification; read again only if the next step needs it |
+| Signature change | automatic verification plus references or diff when the next step needs them |
+| State machine binding change | automatic verification plus state or transition read when the next step needs them |
+| Implementation/data change | automatic verification plus project-context-sensitive read when required |
+| Batch change | per-action verification in the approved write path; inspect exact follow-up evidence only when required |
 
 ## Escalate When
 
-- `readback` does not match the intended mutation.
+- automatic verification fails or is missing.
 - Exact larger-surface reads still show inconsistent structure or bindings.
 - Validation depends on project context that is not available.
-- The requested certainty level exceeds what current read surfaces can prove.
+- The requested certainty level exceeds what the returned verification and exact-surface reads can prove.
 
 ## Related Docs
 
-- `tools/verify.md`
 - `core/execution-modes.md`
 - `tasks/closeout.md`

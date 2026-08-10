@@ -54,7 +54,7 @@ export type AscetEditObservationTargetParams = {
 
 export const ifMissingSchema = Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")]));
 
-export function appendVerifyAndJson(args: string[], verifyReadback?: boolean): string[] {
+export function appendVerifyAndJson(args: string[], verifyReadback = false): string[] {
 	if (verifyReadback) {
 		args.push("--verify-readback");
 	}

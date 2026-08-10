@@ -10,6 +10,12 @@ function formatEntry(entry: ReturnType<typeof listActionCatalogEntries>[number])
 	return `- ${entry.id}: ${entry.compact}. Ex: ${entry.miniFewShot}`;
 }
 
+export function buildCompactToolPromptGuidelines(tool: string): string[] {
+	return listActionCatalogEntries()
+		.filter((entry) => entry.tool === tool && entry.visibility === "public")
+		.map(formatEntry);
+}
+
 export function buildCompactActionGuide(options: CompactActionGuideOptions = {}): string[] {
 	const entries = listActionCatalogEntries({ includeHidden: options.includeHidden }).filter(
 		(entry) => entry.visibility === "public" || options.includeHidden === true,

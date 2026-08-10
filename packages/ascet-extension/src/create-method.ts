@@ -47,7 +47,6 @@ export const ascetCreateMethodParameters = Type.Object({
 	]),
 	diagram: Type.Optional(Type.String()),
 	ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("return-existing")])),
-	verifyReadback: Type.Optional(Type.Boolean({ description: "Ask the ASCET CLI to verify readback after writing." })),
 	rollbackOnFailure: Type.Optional(Type.Boolean({ description: "Ask the ASCET CLI to roll back when supported." })),
 	executeWrite: Type.Optional(
 		Type.Boolean({ description: "Defaults to false. When true, PI still requires interactive confirmation." }),

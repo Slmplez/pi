@@ -19,7 +19,7 @@ Use the curated knowledge docs only after the next tool or next workflow phase i
 3. Load `tools/index.md`.
 4. Classify intent, target certainty, and change risk.
 5. Load object and task rules only when the target surface is known.
-6. Load `core/verification.md` only when a live write or readback claim is involved.
+6. Load `core/verification.md` only when an executed write has incomplete verification or a verification claim needs clarification.
 
 ## ASCET Workflow Spine
 
@@ -28,8 +28,8 @@ The default runtime spine is tool-first and phase-aware:
 1. Explore when the target is fuzzy
 2. Read when the target and surface are exact
 3. Reference or diff when dependency or comparison context matters
-4. Write or batch-write when the mutation is approved
-5. Verify by `readback`
+4. Write through `ascet_edit` when the mutation is approved
+5. Inspect the automatic verification returned by the executed write
 6. Close out with scope, verification, and residual risk
 
 Do not jump directly from user intent to a live write.
@@ -53,13 +53,12 @@ When the next action is still unclear after `workflow` and `routing`, load:
 
 It is the small, agent-facing chooser for:
 
-- `AscetExploreTool`
-- `AscetReadTool`
-- `AscetReferenceTool`
-- `AscetDiffTool`
-- `AscetWriteTool`
-- `AscetBatchWriteTool`
-- `AscetVerifyTool`
+- `ascet_get`
+- `ascet_read`
+- `ascet_diff`
+- `ascet_edit`
+- `configure_parameter_dependency_chain`
+- `ascet_batch_write` when explicitly enabled
 - ASCET check and diagnostics surfaces
 
 ## Curated Knowledge

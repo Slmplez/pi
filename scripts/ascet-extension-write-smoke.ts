@@ -13,6 +13,7 @@ const testEditabilitySet = process.env.ASCET_WRITE_SMOKE_TEST_EDITABILITY_SET ==
 const componentPath = process.env.ASCET_WRITE_SMOKE_COMPONENT ?? "DEMO\\__pi_write_smoke__\\PiSmoke";
 const folderPath = componentPath.split("\\").slice(0, -1).join("\\");
 const methodName = process.env.ASCET_WRITE_SMOKE_METHOD ?? "calc";
+const providerPath = process.env.ASCET_WRITE_SMOKE_PROVIDER_COMPONENT ?? `${folderPath}\\PiSmokeProvider`;
 const enumerationPath = `${folderPath}\\PiSmokeEnum`;
 const modulePath = `${folderPath}\\PiSmokeModule`;
 const stateMachinePath = `${folderPath}\\PiSmokeStateMachine`;
@@ -136,6 +137,7 @@ async function cleanupSmokeArtifacts() {
 		["delete_component", { componentPath: modulePath, ifMissing: "ignore" }],
 		["delete_component", { componentPath: enumerationPath, ifMissing: "ignore" }],
 		["delete_component", { componentPath, ifMissing: "ignore" }],
+		["delete_folder", { folderPath, ifMissing: "ignore" }],
 	] as const) {
 		try {
 			const response = await executeTool(
@@ -154,7 +156,7 @@ async function cleanupSmokeArtifacts() {
 	}
 	return {
 		operations: cleanup,
-		preservedParentFolder: folderPath,
+		removedFolder: folderPath,
 	};
 }
 
@@ -221,7 +223,7 @@ const elementSpecPlanResponse = await withStage("apply_element_spec_plan", () =>
 		elements: [
 			{
 				role: "standardPrimitive",
-				name: "P_Smoke",
+				name: "C_Smoke",
 				kind: "parameter",
 				modelType: "cont",
 				scope: "local",
@@ -247,7 +249,7 @@ const dependencyPlanResponse = await withStage("set_element_dependency_plan", ()
 	{
 		action: "set_element_dependency",
 		targetPath: componentPath,
-		elementName: "P_Smoke",
+		elementName: "C_Smoke",
 		dependency: "dependent",
 		targetKind: "component",
 	},
@@ -265,7 +267,7 @@ const dependencyResponse = await withStage("set_element_dependency_commit", () =
 const dependencyReadback = await withStage("read_element_dependency", () =>
 	executeTool(
 		"ascet_read",
-		{ action: "read_element_dependency", targetPath: componentPath, elementName: "P_Smoke", targetKind: "component" },
+		{ action: "read_element_dependency", targetPath: componentPath, elementName: "C_Smoke", targetKind: "component" },
 		{ cwd: ascetCwd },
 	),
 );

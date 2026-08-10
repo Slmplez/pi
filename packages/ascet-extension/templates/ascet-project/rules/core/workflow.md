@@ -26,7 +26,7 @@ Load for every ASCET task before any object-specific or task-specific rule.
    - verify
    - check at scale
 2. Classify target certainty next:
-   - fuzzy target -> use `AscetExploreTool`
+   - fuzzy target -> use bounded `ascet_get.tree`
    - exact target -> continue without navigation
 3. Classify the exact surface after the target is known:
    - summary
@@ -39,19 +39,19 @@ Load for every ASCET task before any object-specific or task-specific rule.
    - project formulas
 4. Start every non-trivial task on the read side, not on the write side.
 5. When a write is required, choose the narrowest valid write path.
-6. Prefer `AscetBatchWriteTool` when the task is a repeated multi-target mutation with the same shape.
-7. After a live write, use `AscetVerifyTool` only for immediate `readback`.
-8. If broader confidence is still needed after `readback`, re-check with `AscetReadTool`, `AscetReferenceTool`, or `AscetDiffTool` on the exact surface.
+6. Prefer `ascet_edit` for one approved mutation; use `ascet_batch_write` only when explicitly enabled for aligned batches.
+7. After a live write, inspect the automatic verification returned by `ascet_edit`.
+8. If the next step needs broader confidence, re-check with `ascet_read`, `ascet_get`, or `ascet_diff` on the exact surface.
 9. Close by recording scope, what was verified, and what still remains uncertain.
 
 ## Default Tool Chain
 
-1. `AscetExploreTool` when the target is not exact
-2. `AscetReadTool` when the target and surface are exact
-3. `AscetReferenceTool` or `AscetDiffTool` when dependency or comparison context matters
-4. `AscetWriteTool` or `AscetBatchWriteTool` when the mutation is approved
-5. `AscetVerifyTool.readback` immediately after the write
-6. `AscetReadTool` or `AscetDiffTool` again only when broader structural confirmation is needed
+1. `ascet_get.tree` when the target is not exact
+2. `ascet_read` when the target and surface are exact
+3. `ascet_get` reference actions or `ascet_diff` when dependency or comparison context matters
+4. `ascet_edit` when the mutation is approved
+5. Inspect `ascet_edit` automatic verification after the write
+6. `ascet_read` or `ascet_diff` again only when broader structural confirmation is needed
 
 ## Phase Checklist
 
@@ -71,17 +71,17 @@ Load for every ASCET task before any object-specific or task-specific rule.
 
 - Confirm the specific element, method, state, transition, or field exists.
 - Select the narrowest write surface.
-- Predict whether follow-up `readback` alone is enough.
+- Predict whether the returned automatic verification is enough for the next step.
 
 ### 4. Execute The Write
 
 - Apply the smallest change that satisfies the request.
 - Avoid opportunistic cleanup in the same mutation.
 
-### 5. Verify By Readback
+### 5. Inspect Automatic Verification
 
-- Run immediate `readback`.
-- Record whether broader follow-up reads are still required.
+- Inspect the verification status returned by `ascet_edit`.
+- Record whether broader follow-up reads are still required for the next step.
 - Re-check only the larger surfaces that materially affect correctness.
 
 ### 6. Closeout
@@ -92,11 +92,11 @@ Load for every ASCET task before any object-specific or task-specific rule.
 
 ## Escalate When
 
-- The target is still ambiguous after `AscetExploreTool`.
+- The target is still ambiguous after bounded `ascet_get.tree` discovery.
 - The task spans multiple surfaces such as ESDL plus implementation/data.
 - The request changes signatures, bindings, or generated behavior.
 - You only have a fragment, not the surrounding ASCET structure.
-- The requested certainty level is higher than `readback` plus exact-surface reads can prove.
+- The requested certainty level is higher than automatic verification plus exact-surface reads can prove.
 
 ## Related Docs
 

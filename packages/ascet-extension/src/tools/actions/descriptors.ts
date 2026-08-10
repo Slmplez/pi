@@ -87,7 +87,7 @@ const codeEditRules = [
 const elementSpecRules = [
 	"For model-facing apply_element_spec calls, use inline elements; specFile is internal and must not be supplied by the agent.",
 	"Start from the element's code role and explicit requirements: determine whether it is a parameter, variable, array, state, or enumeration, how the code reads or writes it, its domain, lifecycle, and initialization intent. That semantic intent drives the target spec; do not let a similarly named element or a read result replace the code-level meaning.",
-	"For new elements, use ascet_get.tree and ascet_get.elements for bounded live discovery, Pi grep/read for stored observations, and ascet_read.read_code for complete code. Use ascet_read.read_dependent_chain when dependency context matters. Treat live reads as ASCET compatibility and preservation evidence, not as the semantic source. For existing elements, preserve unchanged live fields and emit only the requested patch; Do not copy a sibling's values without semantic equivalence.",
+	"For new elements, use bounded ascet_get.tree discovery only when the exact target is not known, then use ascet_get.elements for the resolved Component or bounded Folder. Use Pi grep/read for stored observations and ascet_read.read_code for complete code. Use ascet_read.read_dependent_chain when dependency context matters. Treat live reads as ASCET compatibility and preservation evidence, not as the semantic source. For existing elements, preserve unchanged live fields and emit only the requested patch; do not copy a sibling's values without semantic equivalence.",
 	"Do not guess modelType, scope, range, implementation type, formula, calibration, or dependency.",
 	"For Provider Exported Parameter creation, explicitly provide unit, comment, calibration, range, data, and implementation decision groups. Use range.mode=none|physical|implementation, data.mode=explicit|ascetDefault, and implementation.mode=explicit|ascetDefault; omission is invalid and the agent must not guess values.",
 	"For Local Dependent Parameter creation, explicitly provide unit, comment, calibration, range, and implementation decision groups. Local dependent data is forbidden because the value comes from Dependency binding. Imported Parameters are the exception and carry structural compatibility metadata only; do not invent local data, implementation, range, or calibration.",
@@ -105,7 +105,7 @@ const dependencyRules = [
 	"When dependencyFormula is provided, dependencyMappings is mandatory unless bindingPolicy=autoExactName is paired with explicit dependencyFormals. autoExactName maps only a uniquely resolvable same-named Parameter, Constant, or System Constant; never infer mappings from formula text, never infer formals by tokenizing it, and never use fuzzy matching.",
 	"Select the affected DataVariant set explicitly. Never treat an omitted or ambiguous variant selection as all variants; if the operation cannot express the requested variant scope, stop at preflight rather than write.",
 	"When changing dependent to independent, provide an explicit restoration source for every affected DataVariant: a snapshot, an explicit value, or an explicit ASCET default. Do not silently clear the formula, restore zero, or choose an implicit default.",
-	"Use set_element_dependency only for an existing local parameter and verify readback.",
+	"Use set_element_dependency only for an existing local parameter; executed writes use automatic internal verification.",
 ] as const;
 
 export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
@@ -130,9 +130,9 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 		}),
 	}),
 	descriptor("ascet_get", "tree", "public", READ_PROFILES, {
-		prompt: prompt("Read a bounded live Folder/Component tree before expanding one exact target.", {
+		prompt: prompt("Read a bounded live Folder/Component tree when structural discovery is required.", {
 			rules: [
-				"Use tree first for structural discovery. targetPathPrefix accepts a bounded folder scope such as PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation.",
+				"Use tree for bounded structural discovery when the exact target is not yet known. targetPathPrefix accepts a bounded folder scope such as PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation. If an exact path or OID is already validated, call the matching exact Get or Read action directly.",
 				"Tree returns metadata only; it does not load Elements, references, methods, implementations, or code.",
 			],
 			fewShots: [
@@ -161,7 +161,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 	descriptor("ascet_get", "elements", "public", READ_PROFILES, {
 		prompt: prompt("Read complete Element directory entries for an exact Component or bounded Folder selection.", {
 			rules: [
-				"Use elements after tree identifies a target. Filter by name or scope only; do not use a result-count limit.",
+				"Use elements after an exact Component or bounded Folder target is resolved from user input, tree discovery, or validated stored evidence. Filter by name or scope only; do not use a result-count limit.",
 				"Element output is concise identity/scope metadata. Use ascet_read only for a precise deep read.",
 			],
 			fewShots: [shot("list component elements", { action: "elements", target: { path: "DEMO\\PID" } })],
@@ -180,7 +180,9 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 	}),
 	descriptor("ascet_get", "component_refs", "public", READ_PROFILES, {
 		prompt: prompt("Read outgoing Component references without loading source code.", {
-			rules: ["Use component_refs after selecting an exact component with tree."],
+			rules: [
+				"component_refs returns outgoing Component references only. It is not a reverse-reference or Project-discovery API. Call it after resolving an exact Component by path or OID.",
+			],
 			fewShots: [shot("read component refs", { action: "component_refs", target: { path: "DEMO\\Consumer" } })],
 			tags: ["reference", "component", "live-read"],
 		}),
@@ -188,7 +190,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 	descriptor("ascet_get", "bde_edges", "public", READ_PROFILES, {
 		prompt: prompt("Read BDE signal edges for one resolved component/diagram.", {
 			rules: [
-				"Use bde_edges to understand signal flow; use ascet_read.read_block_diagram for deeper diagram details.",
+				"Use bde_edges to understand signal flow; use ascet_read.read_block_diagram for deeper diagram details. A zero-edge result does not prove that the Component has no Diagram.",
 			],
 			fewShots: [
 				shot("read BDE edges", { action: "bde_edges", target: { path: "DEMO\\Controller" }, diagramName: "Main" }),
@@ -215,7 +217,9 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 	}),
 	descriptor("ascet_get", "dbitem_refs", "public", READ_PROFILES, {
 		prompt: prompt("Read outgoing database-item references for one exact object.", {
-			rules: ["Use dbitem_refs for precise object-level relationships not covered by component_refs."],
+			rules: [
+				"dbitem_refs returns outgoing database-item references only. It is not a reverse-reference API and cannot prove all consumers or owners. Use it for precise object-level relationships not covered by component_refs.",
+			],
 			fewShots: [shot("read database refs", { action: "dbitem_refs", target: { path: "DEMO\\Consumer" } })],
 			tags: ["reference", "database-item", "live-read"],
 		}),
@@ -319,7 +323,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			"Exact dependency-chain read for a Local Parameter with an optional explicit Exported provider constraint.",
 			{
 				rules: [
-					"Use ascet_get.tree and ascet_get.elements to identify the consumer Imported Element and candidate provider Exported Element before calling read_dependent_chain.",
+					"Resolve the exact consumer Component and use ascet_get.elements to identify the Imported Element and candidate Exported provider before calling read_dependent_chain. Use bounded tree discovery only when those targets are not already known.",
 					"Pass exporterComponentPath only when the provider path is already known exactly.",
 					"The formula reported by read_dependent_chain is the local dependent parameter expression, not an implementation conversion formula or project formula.",
 					"The Imported Parameter in the consuming component and the Exported Parameter in the provider component must have the same name.",
@@ -355,7 +359,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 	descriptor("ascet_read", "read", "public", READ_PROFILES, {
 		prompt: prompt("Read a live summary for one exact resolved Component.", {
 			rules: [
-				"Use read for independent Class, Module, or StateMachine checks after ascet_get.tree resolves componentPath.",
+				"Use read for independent Class, Module, or StateMachine checks after componentPath is resolved exactly; tree discovery is optional when an exact path or OID is already validated.",
 				"Use ascet_get.formulas instead for Project formula checks.",
 			],
 			fewShots: [shot("read component summary", { action: "read", componentPath: "DEMO/PID" })],
@@ -822,7 +826,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			rules: [
 				"Use mode=plan before commit. Do not create or pass specFile artifacts; provide one role-specific inline element for provider, consumer, and local.",
 				"Provider and Local must include every applicable decision group. Imported Parameter is the only lightweight exception and must not contain data, implementation, range, or calibration.",
-				"Provide dependency.formals, bindingPolicy=explicit, mappings, variantPolicy, and verifyReadback=true. The formals list and mapping keys must match exactly.",
+				"Provider Exported and Consumer Imported names must be the same P_<Name>; the Consumer Local name must be C_<Name>. Provide dependency.formals, bindingPolicy=explicit, mappings, and variantPolicy. The formals list and mapping keys must match exactly; executed stages and rollback writes use automatic internal verification.",
 			],
 			fewShots: [
 				shot("plan inline dependency chain", {
@@ -831,7 +835,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 						componentPath: "F/Provider",
 						element: {
 							role: "providerExportedParameter",
-							name: "P_Out",
+							name: "P_Threshold",
 							modelType: "cont",
 							unit: "",
 							comment: "Provider output",
@@ -843,13 +847,13 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					},
 					consumer: {
 						componentPath: "F/Consumer",
-						element: { role: "consumerImportedParameter", name: "P_In", modelType: "cont" },
+						element: { role: "consumerImportedParameter", name: "P_Threshold", modelType: "cont" },
 					},
 					local: {
 						componentPath: "F/Consumer",
 						element: {
 							role: "localDependentParameter",
-							name: "P_Local",
+							name: "C_Threshold",
 							modelType: "cont",
 							unit: "",
 							comment: "Dependent local",
@@ -859,13 +863,12 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 						},
 					},
 					dependency: {
-						formula: "P_In",
-						formals: ["P_In"],
+						formula: "P_Threshold",
+						formals: ["P_Threshold"],
 						bindingPolicy: "explicit",
-						mappings: { P_In: { kind: "parameter", name: "P_In" } },
+						mappings: { P_Threshold: { kind: "parameter", name: "P_Threshold" } },
 						variantPolicy: "default",
 					},
-					verifyReadback: true,
 				}),
 			],
 			tags: ["write", "dependency", "inline-element", "provider-discovery"],

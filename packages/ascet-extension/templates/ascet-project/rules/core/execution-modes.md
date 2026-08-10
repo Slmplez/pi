@@ -32,7 +32,7 @@ Load when concurrency, verification cost, or write safety materially affects the
 
 - One live mutation at a time.
 - Required for individual write operations.
-- Always pair with immediate `readback`.
+- Executed `ascet_edit` writes always request Runtime action-specific verification.
 
 ### `batch_write`
 
@@ -40,12 +40,11 @@ Load when concurrency, verification cost, or write safety materially affects the
 - Prefer when 2 or more similar changes are being applied with the same structure.
 - Still requires post-write confirmation.
 
-### `readback`
+### `automatic_verification`
 
-- Immediate post-write confirmation.
-- Implemented through `AscetVerifyTool`.
-- Confirms what ASCET now contains on the edited surface.
-- It is not the general structural browser.
+- Action-specific readback performed inside Runtime after an executed `ascet_edit` mutation.
+- A passed result completes the write; it is not a separate model Tool call.
+- Follow-up reads are for the next engineering step, failure diagnosis, or an explicit user request.
 
 ## Planning Rules
 
@@ -53,7 +52,7 @@ Load when concurrency, verification cost, or write safety materially affects the
 2. Prefer `pooled_read` only when the routed contract actually supports it.
 3. Never treat a write as concurrent-safe because nearby reads are.
 4. Use `batch_write` only when the task shape is actually repeated and aligned.
-5. Use `readback` immediately after a write, then add larger-surface checks only when the risk requires them.
+5. Inspect the executed `ascet_edit` verification result, then add larger-surface reads only when the next step or risk requires them.
 
 ## Related Docs
 
@@ -61,4 +60,3 @@ Load when concurrency, verification cost, or write safety materially affects the
 - `core/verification.md`
 - `tools/write.md`
 - `tools/batch-write.md`
-- `tools/verify.md`

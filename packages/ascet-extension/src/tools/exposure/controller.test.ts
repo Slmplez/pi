@@ -64,6 +64,37 @@ describe("ASCET exposure controller", () => {
 		);
 	});
 
+	test("keeps the base profile free of duplicated workflow guidance", () => {
+		const harness = createPiHarness();
+		createAscetExposureController(harness.pi, { env: {} }).activateProfile("base");
+
+		const getPrompt =
+			[...harness.registered]
+				.reverse()
+				.find((tool) => tool.name === "ascet_get")
+				?.promptGuidelines?.join("\n") ?? "";
+		const readPrompt =
+			[...harness.registered]
+				.reverse()
+				.find((tool) => tool.name === "ascet_read")
+				?.promptGuidelines?.join("\n") ?? "";
+		assert.doesNotMatch(getPrompt, /Use ascet_get\.tree first/);
+		assert.doesNotMatch(readPrompt, /selected through ascet_get/);
+	});
+
+	test("keeps reference-profile guidance outgoing-only", () => {
+		const harness = createPiHarness();
+		createAscetExposureController(harness.pi, { env: {} }).activateProfile("reference");
+
+		const getPrompt =
+			[...harness.registered]
+				.reverse()
+				.find((tool) => tool.name === "ascet_get")
+				?.promptGuidelines?.join("\n") ?? "";
+		assert.match(getPrompt, /exact resolved targets/);
+		assert.match(getPrompt, /outgoing relationships only/);
+		assert.doesNotMatch(getPrompt, /after tree resolves/);
+	});
 	test("does not expose retired ascet_verify in any profile", () => {
 		for (const [profile, tools] of Object.entries(profileTools)) {
 			assert.equal(tools.includes("ascet_verify"), false, profile);
