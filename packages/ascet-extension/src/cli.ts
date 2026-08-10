@@ -16,16 +16,20 @@ import type { AscetJobKind } from "./scheduler/types.ts";
 import { createAscetStatusReport } from "./status.ts";
 import { toToolFailurePayload, toToolSuccessPayload } from "./tool-response-contract.ts";
 
-export interface AscetCliRequest {
+export interface AscetCliRequestData {
 	cwd: string;
 	cliPath: string;
 	args: string[];
 	stdin?: string;
-	signal?: AbortSignal;
 	timeoutMs?: number;
-	onSpawn?: (pid: number) => void | Promise<void>;
 	jobKind?: AscetJobKind;
 	mutatesDatabase?: boolean;
+}
+
+/** Runtime-only request. Never expose this object through tool result details. */
+export interface AscetCliRequest extends AscetCliRequestData {
+	signal?: AbortSignal;
+	onSpawn?: (pid: number) => void | Promise<void>;
 }
 
 export interface AscetCliExecutionResult {
@@ -34,7 +38,7 @@ export interface AscetCliExecutionResult {
 	stderr: string;
 	timedOut: boolean;
 	aborted?: boolean;
-	request: AscetCliRequest;
+	request: AscetCliRequestData;
 
 	spawnAttempted?: boolean;
 	spawnSucceeded?: boolean;
@@ -67,7 +71,7 @@ export interface RunAscetCliJsonOptions {
 export interface AscetCliJsonResult {
 	ok: boolean;
 	data: unknown;
-	request: AscetCliRequest;
+	request: AscetCliRequestData;
 	stdout: string;
 	stderr: string;
 	exitCode: number | null;
@@ -288,6 +292,26 @@ async function terminateProcess(child: ChildProcess): Promise<void> {
 	});
 }
 
+function createAscetCliRequestData(request: AscetCliRequestData): AscetCliRequestData {
+	const data: AscetCliRequestData = {
+		cwd: request.cwd,
+		cliPath: request.cliPath,
+		args: [...request.args],
+	};
+	if (request.stdin !== undefined) data.stdin = request.stdin;
+	if (request.timeoutMs !== undefined) data.timeoutMs = request.timeoutMs;
+	if (request.jobKind !== undefined) data.jobKind = request.jobKind;
+	if (request.mutatesDatabase !== undefined) data.mutatesDatabase = request.mutatesDatabase;
+	return data;
+}
+
+function normalizeAscetCliExecutionResult(execution: AscetCliExecutionResult): AscetCliExecutionResult {
+	return {
+		...execution,
+		request: createAscetCliRequestData(execution.request),
+	};
+}
+
 export async function executeAscetCli(request: AscetCliRequest): Promise<AscetCliExecutionResult> {
 	if (request.signal?.aborted) {
 		return {
@@ -302,7 +326,7 @@ export async function executeAscetCli(request: AscetCliRequest): Promise<AscetCl
 			acceptedReceived: false,
 			processClosed: true,
 			validResponseReceived: false,
-			request,
+			request: createAscetCliRequestData(request),
 		};
 	}
 	return new Promise((resolve, reject) => {
@@ -400,7 +424,7 @@ export async function executeAscetCli(request: AscetCliRequest): Promise<AscetCl
 				processClosed: true,
 				validResponseReceived: false,
 				outputLimitExceeded,
-				request,
+				request: createAscetCliRequestData(request),
 			});
 		});
 		if (request.stdin !== undefined) {
@@ -472,7 +496,9 @@ async function executeScheduledAscetCli(
 				await request.onSpawn?.(pid);
 			};
 			try {
-				const execution = await (options.executeCli ?? executeAscetCli)(scheduledRequest);
+				const execution = normalizeAscetCliExecutionResult(
+					await (options.executeCli ?? executeAscetCli)(scheduledRequest),
+				);
 				const acceptedExitCodes = options.acceptedExitCodes ?? [0];
 				const aborted = scheduledRequest.signal?.aborted === true || execution.aborted === true;
 				if (execution.outputLimitExceeded) {
@@ -732,7 +758,7 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 		return {
 			ok: false,
 			data: null,
-			request,
+			request: createAscetCliRequestData(request),
 			stdout: "",
 			stderr: "",
 			exitCode: null,
@@ -752,7 +778,7 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 		return {
 			ok: false,
 			data: null,
-			request,
+			request: createAscetCliRequestData(request),
 			stdout: "",
 			stderr: "",
 			exitCode: null,
@@ -778,7 +804,7 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 		return {
 			ok: false,
 			data: null,
-			request,
+			request: createAscetCliRequestData(request),
 			stdout: "",
 			stderr: "",
 			exitCode: null,
@@ -801,7 +827,7 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 	let execution: AscetCliExecutionResult;
 	try {
 		execution = isControlPlaneRequest(args)
-			? await (options.executeCli ?? executeAscetCli)(request)
+			? normalizeAscetCliExecutionResult(await (options.executeCli ?? executeAscetCli)(request))
 			: await executeScheduledAscetCli(request, { ...options, commandId, jobKind });
 	} catch (error) {
 		if (error instanceof AscetCliProcessError) {
@@ -834,7 +860,7 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 			return {
 				ok: false,
 				data: null,
-				request: failedExecution.request,
+				request: createAscetCliRequestData(failedExecution.request),
 				stdout: failedExecution.stdout,
 				stderr: failedExecution.stderr,
 				exitCode: failedExecution.exitCode,
@@ -890,7 +916,7 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 		return {
 			ok: false,
 			data: null,
-			request,
+			request: createAscetCliRequestData(request),
 			stdout: "",
 			stderr: "",
 			exitCode: null,
@@ -937,7 +963,7 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 	return {
 		ok,
 		data: parsed.ok ? parsed.data : null,
-		request: execution.request,
+		request: createAscetCliRequestData(execution.request),
 		stdout: execution.stdout,
 		stderr: execution.stderr,
 		exitCode: execution.exitCode,

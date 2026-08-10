@@ -362,7 +362,6 @@ function createBlockedBatchWriteResult(
 			cliPath: status.paths.cliPath,
 			args: buildBatchWriteArgs(params),
 			stdin: createBatchPayload(params),
-			signal: options.signal,
 			timeoutMs: options.timeoutMs,
 		},
 		stdout: "",

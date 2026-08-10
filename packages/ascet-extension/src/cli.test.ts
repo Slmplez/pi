@@ -285,6 +285,40 @@ describe("runAscetCliJson scheduler failure semantics", () => {
 		assert.equal(result.exitCode, null);
 		assert.equal(result.aborted, true);
 		assert.equal(result.timedOut, false);
+		assert.doesNotThrow(() => structuredClone(result));
+		assert.equal("signal" in result.request, false);
+	});
+
+	test("keeps runtime callbacks out of public scheduler results", async () => {
+		const fixture = createReadyEnv();
+		const scheduler = createAscetScheduler({ generateJobId: () => "scheduler-cloneable-result" });
+		let spawnedPid: number | undefined;
+		try {
+			const result = await runAscetCliJson(["exec", "synthetic_success", "--json"], {
+				cwd: fixture.cwd,
+				env: fixture.env,
+				scheduler,
+				executeCli: async (request) => {
+					await request.onSpawn?.(4321);
+					spawnedPid = 4321;
+					return {
+						exitCode: 0,
+						stdout: JSON.stringify({ ok: true, result: { summary: "ok" } }),
+						stderr: "",
+						timedOut: false,
+						request,
+					};
+				},
+			});
+
+			assert.equal(result.ok, true);
+			assert.equal(spawnedPid, 4321);
+			assert.doesNotThrow(() => structuredClone(result));
+			assert.equal("onSpawn" in result.request, false);
+			assert.equal("signal" in result.request, false);
+		} finally {
+			fixture.cleanup();
+		}
 	});
 	test("records a non-zero CLI exit as a failed scheduler job", async () => {
 		const fixture = createReadyEnv();
@@ -305,6 +339,7 @@ describe("runAscetCliJson scheduler failure semantics", () => {
 
 			assert.equal(result.ok, false);
 			assert.equal(result.error?.code, "ascet_cli_failed");
+			assert.doesNotThrow(() => structuredClone(result));
 			assert.equal(result.operationId, "synthetic_failure");
 			assert.equal(result.stage, "cli_process");
 			assert.equal(result.diagnostics?.retryable, false);

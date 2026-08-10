@@ -72,7 +72,6 @@ function createBlockedWriteResult(
 			cwd: options.cwd,
 			cliPath: status.paths.cliPath,
 			args: buildCreateFolderArgs(params),
-			signal: options.signal,
 			timeoutMs: options.timeoutMs,
 		},
 		stdout: "",

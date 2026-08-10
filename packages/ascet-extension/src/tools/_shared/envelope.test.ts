@@ -109,6 +109,7 @@ describe("createAscetCliToolDetails", () => {
 		assert.ok(!Object.hasOwn(details, "artifact"));
 		assert.ok(!Object.hasOwn(details, "omittedFields"));
 		assert.doesNotMatch(JSON.stringify(details), /"meta"|"mode"|"error":null|"ok":true/);
+		assert.doesNotThrow(() => structuredClone(details));
 	});
 
 	test("returns structured failure details even if stale artifact metadata is present", () => {
@@ -139,5 +140,6 @@ describe("createAscetCliToolDetails", () => {
 		});
 		assert.ok(!Object.hasOwn(details, "artifact"));
 		assert.ok(!Object.hasOwn(details, "omittedFields"));
+		assert.doesNotThrow(() => structuredClone(details));
 	});
 });

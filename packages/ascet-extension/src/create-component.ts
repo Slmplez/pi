@@ -104,7 +104,6 @@ function createBlockedWriteResult(
 			cwd: options.cwd,
 			cliPath: status.paths.cliPath,
 			args: buildCreateComponentArgs(params),
-			signal: options.signal,
 			timeoutMs: options.timeoutMs,
 		},
 		stdout: "",

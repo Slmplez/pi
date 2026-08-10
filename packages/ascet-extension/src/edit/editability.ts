@@ -122,7 +122,6 @@ function createBlockedEditabilityResult(
 			cwd: options.cwd,
 			cliPath: status.paths.cliPath,
 			args: buildAscetEditabilityArgs(params),
-			signal: options.signal,
 			timeoutMs: options.timeoutMs,
 		},
 		stdout: "",

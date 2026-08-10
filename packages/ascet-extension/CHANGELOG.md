@@ -34,6 +34,8 @@
 - Fixed `ascet_get` `component_refs` name and scope filters being ignored.
 - Fixed failed or unknown ASCET write outcomes retaining stale task-scoped observations when the mutation may already have started.
 
+- Fixed ASCET tool results leaking runtime callbacks and AbortSignals into Pi Agent transport payloads, causing structured-clone failures after completed operations.
+
 ### Removed
 
 - Removed the `ascet-implementation` Agent instead of retaining a thin Skill wrapper.

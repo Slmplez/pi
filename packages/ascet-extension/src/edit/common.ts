@@ -91,7 +91,6 @@ function createBlockedEditResult<TParams>(
 			cwd: options.cwd,
 			cliPath: status.paths.cliPath,
 			args: buildArgs(params),
-			signal: options.signal,
 			timeoutMs: options.timeoutMs,
 		},
 		stdout: "",
