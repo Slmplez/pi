@@ -7,6 +7,13 @@ import { AscetObservationStore } from "../observation-store.ts";
 import { loadDatabaseCatalogTreeSource } from "./tree-source.ts";
 import { DatabaseCatalogError } from "./types.ts";
 
+const completeDatabaseCollectors = {
+	projects: { completed: true },
+	folders: { completed: true },
+	components: { completed: true },
+	enumerations: { completed: true },
+};
+
 function createRoot(): string {
 	return mkdtempSync(join(tmpdir(), "pi-ascet-catalog-tree-"));
 }
@@ -42,6 +49,7 @@ test("loads a full Tree once and deduplicates Module and Enumeration identities 
 				scopeId: "database:DB",
 				completeness: "complete",
 				truncated: false,
+				collectors: completeDatabaseCollectors,
 			},
 			truncated: false,
 			delivery: "stored",
@@ -167,6 +175,25 @@ test("rejects non-Tree, bounded, partial, truncated, and missing-data observatio
 			},
 			delivery: "stored",
 		});
+		const incompleteCollectors = store.create({
+			domain: "tree",
+			target: {},
+			sourceIdentity: {
+				database: { name: "DB", path: "C:/Repo/DB", fingerprint: "a".repeat(64) },
+			},
+			items: [],
+			coverage: {
+				status: "complete_for_scope",
+				scopeKind: "database",
+				scopeId: "database:DB",
+				completeness: "complete",
+				collectors: {
+					...completeDatabaseCollectors,
+					projects: { completed: false },
+				},
+			},
+			delivery: "stored",
+		});
 		const missingData = store.create({
 			domain: "tree",
 			target: {},
@@ -179,6 +206,7 @@ test("rejects non-Tree, bounded, partial, truncated, and missing-data observatio
 				scopeKind: "database",
 				scopeId: "database:DB",
 				completeness: "complete",
+				collectors: completeDatabaseCollectors,
 			},
 			delivery: "stored",
 		});
@@ -188,6 +216,7 @@ test("rejects non-Tree, bounded, partial, truncated, and missing-data observatio
 		assert.equal(partial.delivery, "stored");
 		assert.equal(truncated.delivery, "stored");
 		assert.equal(missingIdentity.delivery, "stored");
+		assert.equal(incompleteCollectors.delivery, "stored");
 		assert.equal(missingData.delivery, "stored");
 		unlinkSync(missingData.observation.dataPath);
 
@@ -209,6 +238,10 @@ test("rejects non-Tree, bounded, partial, truncated, and missing-data observatio
 		await assert.rejects(
 			loadDatabaseCatalogTreeSource(store, missingIdentity.observation.metadata.resultId),
 			(error) => expectCode(error, "database_identity_required"),
+		);
+		await assert.rejects(
+			loadDatabaseCatalogTreeSource(store, incompleteCollectors.observation.metadata.resultId),
+			(error) => expectCode(error, "database_collector_incomplete"),
 		);
 		await assert.rejects(loadDatabaseCatalogTreeSource(store, missingData.observation.metadata.resultId), (error) =>
 			expectCode(error, "source_tree_data_missing"),

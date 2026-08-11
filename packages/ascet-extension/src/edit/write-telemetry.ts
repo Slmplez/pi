@@ -36,6 +36,10 @@ export interface AscetWriteTelemetryEvent {
 	attemptId?: string;
 }
 
+export interface AscetPersistedWriteTelemetryEvent extends AscetWriteTelemetryEvent {
+	version: 2;
+	timestamp: string;
+}
 export interface AscetWriteTelemetryGroupSummary {
 	eventCount: number;
 	bridgeEntered: boolean;
@@ -76,7 +80,7 @@ export function recordAscetWriteTelemetry(
 		mkdirSync(directory, { recursive: true });
 		const context = options.env ?? {};
 		const enrichedEvent = {
-			version: 1,
+			version: 2,
 			timestamp: new Date().toISOString(),
 			...event,
 			...(context.PI_ASCET_RUN_ID ? { runId: context.PI_ASCET_RUN_ID } : {}),

@@ -1187,3 +1187,39 @@ output/live-tools/20260811-fix-validation/completion-audit.md
 ```
 
 当前状态：`FIXED`。
+
+
+---
+
+## 18. Root Fix 重新验证（2026-08-11）
+
+原 `20260811-fix-validation` 不能证明 Plan lock ownership、Event v2 自动 Ledger、base-ref Catalog gate 和 mandatory collector proof，因此仅作为历史证据。
+
+新的权威验证：
+
+```text
+runId: 20260811-root-fix-live-ED3C9BC9
+fixture: PI_LIVE_ROOTFIX_20260811_ED3C9BC9
+focused tests: 45/45 PASS
+ASCET Bridge non-live: PASS
+npm run check: PASS
+Database Tree mandatory collectors: PASS
+isolated writes/readback/diff: PASS
+reverse cleanup: PASS
+raw Event v2 count: 19
+Ledger count: 19
+raw SHA-256: 2402106d1e02754c4f0bb71a040e9a8d6b1e99871890d628e7063e6467e93338
+failed attempt retained: true
+unexpectedWrites: 0
+unknownOutcome: false
+cleanupRequired: false
+fixtureRemaining: false
+```
+
+完成审计：
+
+```text
+output/live-tools/20260811-root-fix-live-ED3C9BC9/completion-audit.md
+```
+
+本文件中与四项 Root Fix 有关的结论以该 run 为准。状态：`FIXED`。

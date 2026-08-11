@@ -28,6 +28,12 @@ function createCatalogStore(root: string): AscetObservationStore {
 			scopeId: "database:DB",
 			completeness: "complete",
 			truncated: false,
+			collectors: {
+				projects: { completed: true },
+				folders: { completed: true },
+				components: { completed: true },
+				enumerations: { completed: true },
+			},
 		},
 		truncated: false,
 		delivery: "stored",

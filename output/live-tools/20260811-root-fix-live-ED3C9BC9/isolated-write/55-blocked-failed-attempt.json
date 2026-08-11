@@ -1,0 +1,45 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"error\": {\n    \"code\": \"ascet_edit_ui_required\",\n    \"message\": \"ASCET edit requires interactive confirmation; this context has no confirmation UI.\"\n  }\n}"
+    }
+  ],
+  "details": {
+    "outcome": {
+      "status": "blocked",
+      "code": "ascet_edit_ui_required",
+      "message": "ASCET edit requires interactive confirmation; this context has no confirmation UI."
+    },
+    "raw": {
+      "ok": false,
+      "data": {
+        "operation": "create_folder",
+        "summary": "ASCET edit request:\noperation: create_folder\nfolderPath: PI_LIVE_ROOTFIX_20260811_ED3C9BC9\nverifyReadback: true",
+        "writeExecuted": false,
+        "confirmation": {
+          "code": "ascet_edit_ui_required"
+        }
+      },
+      "request": {
+        "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+        "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+        "args": [
+          "exec",
+          "create_folder",
+          "PI_LIVE_ROOTFIX_20260811_ED3C9BC9",
+          "--verify-readback",
+          "--json"
+        ]
+      },
+      "stdout": "",
+      "stderr": "",
+      "exitCode": null,
+      "timedOut": false,
+      "error": {
+        "code": "ascet_edit_ui_required",
+        "message": "ASCET edit requires interactive confirmation; this context has no confirmation UI."
+      }
+    }
+  }
+}

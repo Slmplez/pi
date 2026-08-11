@@ -50,6 +50,10 @@ public sealed class AscetGetTraversalState
     public bool RootCollectionAvailable { get; set; }
     public bool RootCollectionCompleted { get; set; }
     public bool RootCollectionEmpty { get; set; }
+    public bool ProjectCollectionCompleted { get; set; }
+    public bool FolderCollectionCompleted { get; set; }
+    public bool ComponentCollectionCompleted { get; set; }
+    public bool EnumerationCollectionCompleted { get; set; }
     public int MissingOidCount { get; set; }
     public int MissingPathCount { get; set; }
     public IList<string> CollectionErrors { get; private set; }
@@ -63,6 +67,10 @@ public sealed class AscetGetTraversalState
         RootCollectionAvailable = false;
         RootCollectionCompleted = false;
         RootCollectionEmpty = false;
+        ProjectCollectionCompleted = false;
+        FolderCollectionCompleted = false;
+        ComponentCollectionCompleted = false;
+        EnumerationCollectionCompleted = false;
         MissingOidCount = 0;
         MissingPathCount = 0;
         CollectionErrors = new List<string>();
@@ -131,9 +139,14 @@ public sealed class AscetGetService
             (!state.RootCollectionStarted || !state.RootCollectionAvailable || state.RootCollectionEmpty);
         bool collectorFailure = state.CollectionErrors.Count > 0;
         bool identityFailure = state.MissingOidCount > 0 || state.MissingPathCount > 0;
+        bool mandatoryCollectorsCompleted = state.ProjectCollectionCompleted &&
+            state.FolderCollectionCompleted &&
+            state.ComponentCollectionCompleted &&
+            state.EnumerationCollectionCompleted;
         bool failed = !databaseIdentityAvailable || rootFailure;
         bool partial = !failed && (state.Truncated || collectorFailure || identityFailure ||
-            (databaseScope && !databaseIdentityOperation && !state.RootCollectionCompleted));
+            (databaseScope && !databaseIdentityOperation &&
+                (!state.RootCollectionCompleted || !mandatoryCollectorsCompleted)));
 
         Dictionary<string, object> coverage = new Dictionary<string, object>();
         coverage["status"] = failed ? "failed" : (partial ? "partial" : "complete_for_scope");
@@ -149,7 +162,7 @@ public sealed class AscetGetService
         coverage["collectorStarted"] = databaseIdentityOperation || state.RootCollectionStarted;
         coverage["collectorCompleted"] = !failed && !partial;
         coverage["rootCollectionAvailable"] = databaseIdentityOperation || state.RootCollectionAvailable;
-        coverage["projectCollectionAvailable"] = !failed && !collectorFailure;
+        coverage["projectCollectionAvailable"] = !failed && state.ProjectCollectionCompleted;
         coverage["missingOidCount"] = state.MissingOidCount;
         coverage["missingPathCount"] = state.MissingPathCount;
         if (state.CollectionErrors.Count > 0) coverage["collectorErrors"] = state.CollectionErrors;
@@ -162,16 +175,24 @@ public sealed class AscetGetService
         AscetGetTraversalState state,
         bool databaseIdentityAvailable)
     {
-        bool traversalCompleted = state.RootCollectionCompleted && !state.Truncated && state.CollectionErrors.Count == 0;
         Dictionary<string, object> collectors = new Dictionary<string, object>();
         collectors["database"] = BuildCollectorPayload(true, databaseIdentityAvailable, databaseIdentityAvailable ? 1 : 0);
-        collectors["projects"] = BuildCollectorPayload(state.RootCollectionStarted, traversalCompleted, CountKind(items, "project"));
-        collectors["folders"] = BuildCollectorPayload(state.RootCollectionStarted, traversalCompleted, CountKind(items, "folder"));
+        collectors["projects"] = BuildCollectorPayload(
+            state.RootCollectionStarted,
+            state.ProjectCollectionCompleted,
+            CountKind(items, "project"));
+        collectors["folders"] = BuildCollectorPayload(
+            state.RootCollectionStarted,
+            state.FolderCollectionCompleted,
+            CountKind(items, "folder"));
         collectors["components"] = BuildCollectorPayload(
             state.RootCollectionStarted,
-            traversalCompleted,
+            state.ComponentCollectionCompleted,
             CountKinds(items, new string[] { "class", "module", "statemachine" }));
-        collectors["enumerations"] = BuildCollectorPayload(state.RootCollectionStarted, traversalCompleted, CountKind(items, "enumeration"));
+        collectors["enumerations"] = BuildCollectorPayload(
+            state.RootCollectionStarted,
+            state.EnumerationCollectionCompleted,
+            CountKind(items, "enumeration"));
         return collectors;
     }
 
@@ -370,7 +391,12 @@ public sealed class AscetGetService
             }
             if (databaseScope)
             {
-                state.RootCollectionCompleted = !state.Truncated && state.CollectionErrors.Count == 0;
+                bool traversalCompleted = !state.Truncated && state.CollectionErrors.Count == 0;
+                state.RootCollectionCompleted = traversalCompleted;
+                state.ProjectCollectionCompleted = traversalCompleted;
+                state.FolderCollectionCompleted = traversalCompleted;
+                state.ComponentCollectionCompleted = traversalCompleted;
+                state.EnumerationCollectionCompleted = traversalCompleted;
             }
             return items;
         }

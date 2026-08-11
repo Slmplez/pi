@@ -102,6 +102,18 @@ function validateFullTree(sourceTreeResultId: string, store: AscetObservationSto
 			{ sourceIdentity: metadata.sourceIdentity },
 		);
 	}
+	const collectors = isRecord(metadata.coverage.collectors) ? metadata.coverage.collectors : undefined;
+	const incompleteCollectors = ["projects", "folders", "components", "enumerations"].filter((name) => {
+		const collector = collectors && isRecord(collectors[name]) ? collectors[name] : undefined;
+		return collector?.completed !== true;
+	});
+	if (incompleteCollectors.length > 0) {
+		throw new DatabaseCatalogError(
+			"database_collector_incomplete",
+			`Tree observation '${sourceTreeResultId}' does not prove that all mandatory database collectors completed.`,
+			{ incompleteCollectors, collectors: collectors ?? null },
+		);
+	}
 	if (!existsSync(descriptor.dataPath)) {
 		throw new DatabaseCatalogError(
 			"source_tree_data_missing",

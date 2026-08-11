@@ -6,7 +6,7 @@
 |---|---|
 | 文档名称 | ASCET Live Tools Root Fix Development Plan |
 | 创建日期 | 2026-08-11 |
-| 当前状态 | REOPENED / DEVELOPMENT PENDING |
+| 当前状态 | FIXED / LIVE VERIFIED |
 | 关联方案 | `docs/2026-08-11-ascet-live-tools-development-fix-plan.md` |
 | 关联根因分析 | `docs/2026-08-11-ascet-live-tools-bug-fix-plan.md` |
 | 修复原则 | 最少改动，修复核心不变量，不引入不必要架构 |
@@ -724,4 +724,100 @@ npm run check结果
 新的最小Live验证目录
 新的completion audit
 更新后的测试计划和Bug Report
+```
+
+---
+
+## 16. 2026-08-11 实施结果
+
+### 16.1 当前状态
+
+```text
+Plan consume lock: FIXED / FOCUSED TEST PASS
+Runtime Evidence Ledger: FIXED / LIVE VERIFIED
+Catalog breaking gate: FIXED / CHECK PASS
+Database collector proof: FIXED / LIVE VERIFIED
+npm run check: PASS
+Full ASCET Bridge non-live suite: PASS
+Fresh Live revalidation: PASS
+Overall: FIXED
+```
+
+### 16.2 最小实现清单
+
+1. `AscetPlanStore.consume()` 只允许成功持有 `wx` lock 的调用方在 `finally` 中删除 lock；`plan_busy` 竞争者不再破坏持有者锁。
+2. 所有 mutation Action 统一经过 `runAscetMutation()` lifecycle/telemetry 边界；Event 升级为 v2，普通写入、Plan、commit、cleanup 和异常逃逸均产生原始事件。
+3. 异常在进入 Bridge 后逃逸时记录 `outcome_unknown`、`mutationStatus=unknown` 和 `cleanupRequired=true`，避免 Ledger 静默漏记不确定写入。
+4. `generate-ascet-write-ledger.ts` 直接读取原始 JSONL，保留全部 attempt，并写入原始内容 SHA-256、Ledger 和 Summary。
+5. Catalog variant identity 仅由 `when` discriminator 决定；optional 字段新增不再误报 variant removal。
+6. Catalog input schema 全部从 descriptor 推导，删除手写 input schema override。
+7. CI breaking gate 使用 PR base SHA 的历史 snapshot 与当前 runtime Catalog 比较；更新当前 snapshot 不能绕过 breaking 检查。
+8. Database Tree 仍只遍历一次；遍历状态新增 projects/folders/components/enumerations 四类 collector completion proof。TypeScript Catalog source 在任一 proof 缺失或为 false 时拒绝 `complete` Tree。
+
+### 16.3 已完成验证
+
+```text
+Focused TypeScript tests: 45/45 PASS
+Database Catalog targeted C# contract: PASS
+Full ASCET Bridge Milestone A non-live suite: PASS
+Runtime Ledger CLI smoke: PASS (2 raw events retained, SHA-256 matched)
+npm run check: PASS
+Catalog snapshot check: PASS
+Catalog base-ref breaking check against HEAD: PASS (non-breaking drift only)
+git diff --check for task files: PASS
+```
+
+聚焦测试覆盖：
+
+```text
+plan-store.test.ts
+write-ledger.test.ts
+write-telemetry.test.ts
+service.test.ts
+catalog.test.ts
+tree-source.test.ts
+catalog-service.test.ts
+```
+
+### 16.4 Live 验证闭环
+
+用户已明确授权最小 Live 写入验证。第一次 run `20260811-root-fix-live-8A8C254E` 发现 Bridge 前 `ui_required` 被误记为 unknown；fixture 已完整清理，该 run 保留为 `FAILED_DISCOVERY` 证据。
+
+最小修复后，第二次 run 完整通过：
+
+```text
+runId: 20260811-root-fix-live-ED3C9BC9
+fixture: PI_LIVE_ROOTFIX_20260811_ED3C9BC9
+Database Tree traversal: 1
+mandatory collectors: all completed
+apply_element_spec: PASS
+set_element_dependency: PASS
+set_enumerators: PASS
+reverse cleanup: PASS
+fixtureRemaining: false
+databaseIdentityMatches: true
+rawEventCount: 19
+ledgerEventCount: 19
+rawSha256: 2402106d1e02754c4f0bb71a040e9a8d6b1e99871890d628e7063e6467e93338
+failedAttemptRetained: true
+failedAttemptSemanticsCorrect: true
+unexpectedWrites: 0
+unknownOutcome: false
+cleanupRequired: false
+```
+
+权威完成审计：
+
+```text
+output/live-tools/20260811-root-fix-live-ED3C9BC9/completion-audit.md
+```
+
+### 16.5 最终关闭条件
+
+```text
+1. 明确 Live write 确认: PASS
+2. 新 run isolated write/readback/diff/cleanup: PASS
+3. raw telemetry 自动生成 Ledger/Summary: PASS
+4. event count、SHA-256、unknownOutcome、cleanupRequired 核对: PASS
+5. 新 completion audit 引用机器生成证据: PASS
 ```

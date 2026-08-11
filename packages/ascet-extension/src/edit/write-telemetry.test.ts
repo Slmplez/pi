@@ -30,6 +30,7 @@ test("records privacy-bounded element write telemetry", () => {
 		);
 		const line = readFileSync(join(root, "telemetry", "element-write.jsonl"), "utf8").trim();
 		const event = JSON.parse(line) as Record<string, unknown>;
+		assert.equal(event.version, 2);
 		assert.equal(event.operation, "apply_element_spec");
 		assert.equal(event.outcome, "committed_unverified");
 		assert.equal(event.verificationStatus, "missing");

@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -37,6 +39,10 @@ jobs:
 
       - name: Check
         run: npm run check
+
+      - name: Check ASCET Action Catalog compatibility
+        if: github.event_name == 'pull_request'
+        run: npm run check:ascet-action-catalog-breaking -- ${{ github.event.pull_request.base.sha }}
 
       - name: Test
         run: npm test

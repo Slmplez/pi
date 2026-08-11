@@ -202,6 +202,27 @@ describe("ASCET action catalog", () => {
 		});
 	});
 
+	test("classifies an optional field addition within an existing variant as non-breaking", () => {
+		const snapshot = createActionCatalogSnapshot();
+		const before = snapshot.actions.find((action) => action.id === "ascet_edit.apply_element_spec");
+		assert.ok(before?.schema.variants?.length);
+		const variants = before.schema.variants.map((variant, index) =>
+			index === 0 ? { ...variant, optional: [...variant.optional, "newOptionalField"] } : variant,
+		);
+		const changed = {
+			...snapshot,
+			actions: snapshot.actions.map((action) =>
+				action.id === before.id
+					? { ...action, schemaFingerprint: "changed", schema: { ...action.schema, variants } }
+					: action,
+			),
+		};
+		const diff = diffActionCatalogSnapshots(snapshot, changed);
+		const change = diff.changes.find((entry) => entry.id === before.id);
+		assert.equal(change?.breaking, false);
+		assert.deepEqual(change?.reasons, []);
+	});
+
 	test("classifies result shape and field removals as breaking", () => {
 		const snapshot = createActionCatalogSnapshot();
 		const before = snapshot.actions.find((action) => action.id === "ascet_get.tree");

@@ -94,7 +94,6 @@ interface ActionOverride {
 	avoidWhen?: readonly string[];
 	aliases?: readonly string[];
 	nextActions?: readonly string[];
-	schema?: AscetActionCatalogEntry["schema"];
 	result?: AscetActionCatalogEntry["result"];
 }
 
@@ -105,14 +104,6 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 		useWhen: ["Action choice, parameters, result shape, or usage rules are unclear."],
 		avoidWhen: ["The exact action and required parameters are already known."],
 		aliases: ["tool action search", "which ascet tool", "action schema", "few-shot", "capability action"],
-		schema: {
-			required: ["action"],
-			optional: ["query", "tool", "name", "limit", "includeHidden", "detailLevel"],
-			enums: {
-				action: ["search_actions"],
-				detailLevel: ["summary", "full"],
-			},
-		},
 		result: { shape: "actionMatches", fields: ["total", "items"] },
 	},
 	"ascet_read.read_code": {
@@ -122,15 +113,6 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 		avoidWhen: ["Need offline text filtering over a stored observation; use Pi grep after ascet_get."],
 		aliases: ["complete code", "full code", "method body", "live code", "read code", "open code"],
 		nextActions: ["ascet_edit.set_method_code", "ascet_diff.diff_method"],
-		schema: {
-			required: ["action", "componentPath"],
-			optional: ["methodName", "section", "detailLevel"],
-			enums: {
-				action: ["read_code"],
-				section: ["body", "header", "external-c", "all"],
-				detailLevel: ["summary", "topology", "full"],
-			},
-		},
 		result: { shape: "codeText", fields: ["component", "name", "section", "text"] },
 	},
 	"ascet_read.read_dependent_chain": {
@@ -152,11 +134,6 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 			"local imported exported parameter",
 		],
 		nextActions: ["ascet_get.elements", "ascet_get.import_binding", "ascet_edit.set_element_dependency"],
-		schema: {
-			required: ["action", "componentPath", "dependentElement"],
-			optional: ["exporterComponentPath"],
-			enums: { action: ["read_dependent_chain"] },
-		},
 		result: { shape: "dependentChain", fields: ["consumer", "provider", "items", "issues"] },
 	},
 	"ascet_read.read_block_diagram": {
@@ -255,13 +232,24 @@ function sortedUnique(values: readonly string[]): string[] {
 }
 
 function schemaVariantKey(variant: NonNullable<AscetActionCatalogEntry["schema"]["variants"]>[number]): string {
-	return canonicalize(variant);
+	return canonicalize(variant.when ?? {});
 }
 
 function hasRemovedValues(previous: readonly string[] | undefined, current: readonly string[] | undefined): boolean {
 	if (!previous) return false;
 	const currentValues = new Set(current ?? []);
 	return previous.some((value) => !currentValues.has(value));
+}
+
+function variantBreakingReasons(
+	previous: NonNullable<AscetActionCatalogEntry["schema"]["variants"]>[number],
+	current: NonNullable<AscetActionCatalogEntry["schema"]["variants"]>[number],
+	key: string,
+): string[] {
+	const previousRequired = new Set(previous.required);
+	return current.required
+		.filter((field) => !previousRequired.has(field))
+		.map((field) => `variant_required_added:${key}:${field}`);
 }
 
 function schemaBreakingReasons(
@@ -276,10 +264,19 @@ function schemaBreakingReasons(
 	for (const [key, values] of Object.entries(previous.schema.enums ?? {})) {
 		if (hasRemovedValues(values, current.schema.enums?.[key])) reasons.push(`enum_value_removed:${key}`);
 	}
-	const previousVariants = new Set((previous.schema.variants ?? []).map(schemaVariantKey));
-	const currentVariants = new Set((current.schema.variants ?? []).map(schemaVariantKey));
-	for (const variant of previousVariants) {
-		if (!currentVariants.has(variant)) reasons.push("variant_removed");
+	const previousVariants = new Map(
+		(previous.schema.variants ?? []).map((variant) => [schemaVariantKey(variant), variant]),
+	);
+	const currentVariants = new Map(
+		(current.schema.variants ?? []).map((variant) => [schemaVariantKey(variant), variant]),
+	);
+	for (const [key, previousVariant] of previousVariants) {
+		const currentVariant = currentVariants.get(key);
+		if (!currentVariant) {
+			reasons.push(`variant_removed:${key}`);
+			continue;
+		}
+		reasons.push(...variantBreakingReasons(previousVariant, currentVariant, key));
 	}
 	if (hasRemovedValues(previous.supportedObjectKinds, current.supportedObjectKinds))
 		reasons.push("object_kind_removed");
@@ -514,7 +511,7 @@ function toCatalogEntry(descriptor: AscetActionDescriptor): AscetActionCatalogEn
 	const family = override?.family ?? resolveFamily(descriptor.tool);
 	const fewShots = (descriptor.prompt?.fewShots ?? []).map((fewShot) => ({ args: { ...fewShot.args } }));
 	const compact = override?.compact ?? descriptor.prompt?.summary ?? descriptor.id;
-	const schema = override?.schema ?? inferSchema(descriptor);
+	const schema = inferSchema(descriptor);
 	const rules = descriptor.prompt?.rules ? [...descriptor.prompt.rules] : [];
 	const result = override?.result ?? inferResult(descriptor);
 	const miniFewShot =

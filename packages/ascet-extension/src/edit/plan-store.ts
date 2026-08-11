@@ -503,8 +503,10 @@ export class AscetPlanStore {
 			this.writeRecord(filePath, consumedRecord);
 			return consumedRecord;
 		} finally {
-			if (lockHandle !== undefined) closeSync(lockHandle);
-			if (existsSync(lockPath)) unlinkSync(lockPath);
+			if (lockHandle !== undefined) {
+				closeSync(lockHandle);
+				if (existsSync(lockPath)) unlinkSync(lockPath);
+			}
 		}
 	}
 

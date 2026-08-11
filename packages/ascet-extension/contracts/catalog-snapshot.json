@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "catalogFingerprint": "9a8cc6e626231c7adf88c9c388f4c6e37369031017889d73f0fab55f7d013a34",
+  "catalogFingerprint": "dc784380372aa25e6a0953b1fcafd2c13693a5b0d716f331c864dd5bc6ff0c81",
   "actions": [
     {
       "id": "ascet_batch_write.batch_create_component",
@@ -2606,7 +2606,7 @@
     },
     {
       "id": "ascet_read.read_code",
-      "schemaFingerprint": "ac2c5b9a5d1aa30f6896d4926a311dc51962b42796ee5ae893c1436e27be4252",
+      "schemaFingerprint": "1680a0699f0c1e644a6dd4c112e83acb686edc6287ece92291e2ab62ee485646",
       "rulesFingerprint": "a761ac44e26952040e246efd4a2e3b04786b4dcabc40097b76ef52b076c531ef",
       "resultFingerprint": "764d33b1ca715dc1a658b81cdd1b26e0e2432c99fc2743e995027bcf57ffaa8c",
       "schema": {
@@ -2624,10 +2624,10 @@
             "read_code"
           ],
           "section": [
-            "body",
             "header",
             "external-c",
-            "all"
+            "all",
+            "body"
           ],
           "detailLevel": [
             "summary",

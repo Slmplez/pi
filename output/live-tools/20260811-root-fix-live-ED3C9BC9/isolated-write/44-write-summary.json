@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "elementChecks": {
+    "inputName": true,
+    "inputScope": true,
+    "dependentName": true,
+    "dependentScope": true
+  },
+  "dependencyChecks": {
+    "matchFound": true,
+    "dependency": true,
+    "formula": true
+  },
+  "enumerationMatches": true
+}

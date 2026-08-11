@@ -1,0 +1,156 @@
+﻿import assert from "node:assert/strict";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { test } from "node:test";
+import type { AscetCliExecutionResult, AscetCliRequest } from "../cli.ts";
+import { AscetObservationStore } from "../observation-store.ts";
+import type { AscetEditApprovalContext } from "./approval.ts";
+import { runAscetEdit } from "./service.ts";
+
+const approvingContext: AscetEditApprovalContext = {
+	hasUI: true,
+	ui: { confirm: async () => true },
+};
+
+function successfulWrite(request: AscetCliRequest): AscetCliExecutionResult {
+	return {
+		exitCode: 0,
+		stdout: JSON.stringify({
+			ok: true,
+			result: { writeSucceeded: true, verifyReadbackRequested: true, readbackVerified: true },
+			error: null,
+		}),
+		stderr: "",
+		timedOut: false,
+		request,
+	};
+}
+
+function readTelemetry(root: string): Array<Record<string, unknown>> {
+	return readFileSync(join(root, "artifacts", "telemetry", "element-write.jsonl"), "utf8")
+		.trim()
+		.split("\n")
+		.map((line) => JSON.parse(line) as Record<string, unknown>);
+}
+
+test("regular approved mutations emit Event v2 telemetry", async () => {
+	const root = mkdtempSync(join(tmpdir(), "pi-ascet-telemetry-write-"));
+	try {
+		const result = await runAscetEdit(
+			{ action: "create_folder", folderPath: "DEMO\\New", executeWrite: true },
+			{
+				cwd: root,
+				env: {
+					PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts"),
+					PI_ASCET_RUN_ID: "run-1",
+					PI_ASCET_WRITE_CLASS: "isolated_fixture",
+				},
+				executeCli: async (request) => successfulWrite(request),
+			},
+			approvingContext,
+		);
+		assert.equal(result.details.outcome.status, "ok");
+		const [event] = readTelemetry(root);
+		assert.deepEqual(
+			{
+				version: event?.version,
+				operation: event?.operation,
+				outcome: event?.outcome,
+				mutationStatus: event?.mutationStatus,
+				bridgeEntered: event?.bridgeEntered,
+				writesPerformed: event?.writesPerformed,
+			},
+			{
+				version: 2,
+				operation: "create_folder",
+				outcome: "committed",
+				mutationStatus: "applied",
+				bridgeEntered: true,
+				writesPerformed: true,
+			},
+		);
+	} finally {
+		rmSync(root, { recursive: true, force: true });
+	}
+});
+
+test("Bridge-prevented approval failures remain not_started", async () => {
+	const root = mkdtempSync(join(tmpdir(), "pi-ascet-telemetry-blocked-"));
+	try {
+		const result = await runAscetEdit(
+			{ action: "create_folder", folderPath: "DEMO\\New", executeWrite: true },
+			{ cwd: root, env: { PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts") } },
+			{},
+		);
+		assert.equal(result.details.outcome.status, "blocked");
+		const [event] = readTelemetry(root);
+		assert.deepEqual(
+			{
+				outcome: event?.outcome,
+				mutationStatus: event?.mutationStatus,
+				bridgeEntered: event?.bridgeEntered,
+				mutationStarted: event?.mutationStarted,
+				cleanupRequired: event?.cleanupRequired,
+			},
+			{
+				outcome: "blocked",
+				mutationStatus: "not_started",
+				bridgeEntered: false,
+				mutationStarted: false,
+				cleanupRequired: false,
+			},
+		);
+	} finally {
+		rmSync(root, { recursive: true, force: true });
+	}
+});
+
+test("post-Bridge exceptions emit outcome_unknown telemetry", async () => {
+	const root = mkdtempSync(join(tmpdir(), "pi-ascet-telemetry-error-"));
+	const artifactRoot = join(root, "artifacts");
+	try {
+		const store = new AscetObservationStore({ root: artifactRoot, thresholdBytes: 1 });
+		const stored = store.create({
+			domain: "tree",
+			target: { targetPathPrefix: "DEMO\\New" },
+			sourceIdentity: {},
+			items: [{ path: "DEMO\\New" }],
+			coverage: { status: "complete_for_scope" },
+			delivery: "stored",
+		});
+		assert.equal(stored.delivery, "stored");
+		rmSync(stored.observation.dataPath);
+		mkdirSync(stored.observation.dataPath);
+		await assert.rejects(
+			runAscetEdit(
+				{ action: "create_folder", folderPath: "DEMO\\New", executeWrite: true },
+				{
+					cwd: root,
+					env: { PI_ASCET_EXTENSION_ARTIFACT_ROOT: artifactRoot },
+					executeCli: async (request) => successfulWrite(request),
+				},
+				approvingContext,
+			),
+		);
+		const [event] = readTelemetry(root);
+		assert.deepEqual(
+			{
+				outcome: event?.outcome,
+				mutationStatus: event?.mutationStatus,
+				bridgeEntered: event?.bridgeEntered,
+				backendResponseReceived: event?.backendResponseReceived,
+				cleanupRequired: event?.cleanupRequired,
+			},
+			{
+				outcome: "outcome_unknown",
+				mutationStatus: "unknown",
+				bridgeEntered: true,
+				backendResponseReceived: true,
+				cleanupRequired: true,
+			},
+		);
+	} finally {
+		rmSync(root, { recursive: true, force: true });
+	}
+});

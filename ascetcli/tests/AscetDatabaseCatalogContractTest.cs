@@ -100,7 +100,11 @@ public static class AscetDatabaseCatalogContractTest
             {
                 RootCollectionStarted = true,
                 RootCollectionAvailable = true,
-                RootCollectionCompleted = true
+                RootCollectionCompleted = true,
+                ProjectCollectionCompleted = true,
+                FolderCollectionCompleted = true,
+                ComponentCollectionCompleted = true,
+                EnumerationCollectionCompleted = true
             };
             Dictionary<string, object> completeCoverage = AscetGetService.BuildCoverage(
                 "get_tree",
@@ -110,6 +114,27 @@ public static class AscetDatabaseCatalogContractTest
                 completeItems);
             AssertEqual("complete_for_scope", completeCoverage["status"] as string, "complete database Tree coverage status");
             AssertEqual("complete", completeCoverage["completeness"] as string, "complete database Tree completeness");
+
+            AscetGetTraversalState incompleteProjectState = new AscetGetTraversalState
+            {
+                RootCollectionStarted = true,
+                RootCollectionAvailable = true,
+                RootCollectionCompleted = true,
+                ProjectCollectionCompleted = false,
+                FolderCollectionCompleted = true,
+                ComponentCollectionCompleted = true,
+                EnumerationCollectionCompleted = true
+            };
+            Dictionary<string, object> incompleteProjectCoverage = AscetGetService.BuildCoverage(
+                "get_tree",
+                databaseTreeRequest,
+                incompleteProjectState,
+                databaseRef,
+                completeItems);
+            AssertEqual("partial", incompleteProjectCoverage["status"] as string, "incomplete Project collector coverage status");
+            Dictionary<string, object> incompleteCollectors = incompleteProjectCoverage["collectors"] as Dictionary<string, object>;
+            Dictionary<string, object> incompleteProjectCollector = incompleteCollectors["projects"] as Dictionary<string, object>;
+            AssertEqual(false, (bool)incompleteProjectCollector["completed"], "incomplete Project collector proof");
 
             AscetGetTraversalState unavailableRootState = new AscetGetTraversalState { RootCollectionStarted = true };
             unavailableRootState.RecordCollectionError("root_collection_unavailable");

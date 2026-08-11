@@ -590,29 +590,51 @@ export async function runAscetMutation(
 	options: RunAscetEditOperationOptions,
 	ctx: AscetEditApprovalContext,
 ): Promise<AscetEditResult> {
+	const startedAt = Date.now();
+	const lifecycle: AscetWriteLifecycleEvidence = {
+		beforeBridge: false,
+		bridgeEntered: false,
+		backendResponseReceived: false,
+	};
+	const trackedOptions = withWriteLifecycleTracking(options, lifecycle);
+	try {
+		const result = await runAscetMutationCore(params, trackedOptions, ctx);
+		recordMutationTelemetry(params, result, options, startedAt, lifecycle);
+		return result;
+	} catch (error) {
+		const phase = resolveTelemetryPhase(params);
+		const mutationStatus = phase !== "plan" && lifecycle.bridgeEntered ? "unknown" : "not_started";
+		const errorCode = isRecord(error) && typeof error.code === "string" ? error.code : "unexpected_exception";
+		recordAscetWriteTelemetry(options, {
+			operation: params.action,
+			phase,
+			outcome: mutationStatus === "unknown" ? "outcome_unknown" : "error",
+			durationMs: Math.max(0, Date.now() - startedAt),
+			errorCode,
+			...("planId" in params && typeof params.planId === "string" ? { planId: params.planId } : {}),
+			mutationStatus,
+			bridgeEntered: lifecycle.bridgeEntered,
+			backendResponseReceived: lifecycle.backendResponseReceived,
+			mutationStarted: mutationStatus === "unknown",
+			writesPerformed: false,
+			cleanupRequired: mutationStatus === "unknown",
+		});
+		throw error;
+	}
+}
+
+async function runAscetMutationCore(
+	params: AscetMutationParams,
+	options: RunAscetEditOperationOptions,
+	ctx: AscetEditApprovalContext,
+): Promise<AscetEditResult> {
 	const normalizedParams = normalizeAscetMutationParams(params);
 	const contractValidation = validateAscetMutationContract(normalizedParams);
 	if (contractValidation) {
 		return asResponse(contractValidation);
 	}
 	if (isPlanManagedCommit(normalizedParams)) {
-		const startedAt = Date.now();
-		const lifecycle: AscetWriteLifecycleEvidence = {
-			beforeBridge: false,
-			bridgeEntered: false,
-			backendResponseReceived: false,
-		};
-		const result = await runPlanManagedCommit(normalizedParams, options, ctx, lifecycle);
-		recordManagedWriteTelemetry(
-			normalizedParams.action,
-			"commit",
-			normalizedParams.planId,
-			result,
-			options,
-			startedAt,
-			lifecycle,
-		);
-		return result;
+		return runPlanManagedCommit(normalizedParams, options, ctx);
 	}
 	const validation = validateAscetMutationParams(normalizedParams);
 	if (validation) {
@@ -623,25 +645,7 @@ export async function runAscetMutation(
 		return asResponse(localInputValidation);
 	}
 	if (isPlanManagedPlan(normalizedParams)) {
-		const startedAt = Date.now();
-		const lifecycle: AscetWriteLifecycleEvidence = {
-			beforeBridge: false,
-			bridgeEntered: false,
-			backendResponseReceived: false,
-		};
-		const result = await runPlanManagedPlan(normalizedParams, {
-			...options,
-			onLifecycle: (event) => {
-				options.onLifecycle?.(event);
-				if (event.stage === "before_bridge") lifecycle.beforeBridge = true;
-				if (event.stage === "bridge_entered") lifecycle.bridgeEntered = true;
-				if (event.stage === "backend_response_received") lifecycle.backendResponseReceived = true;
-			},
-		});
-		const planId =
-			result.details.outcome.status === "preflight" ? String(result.details.outcome.plan.planId ?? "") : undefined;
-		recordManagedWriteTelemetry(normalizedParams.action, "plan", planId, result, options, startedAt, lifecycle);
-		return result;
+		return runPlanManagedPlan(normalizedParams, options);
 	}
 	if (!params.executeWrite) {
 		const backendPreflight = await runBackendMutationPreflight(normalizedParams, options);
@@ -661,24 +665,51 @@ interface AscetWriteLifecycleEvidence {
 	backendResponseReceived: boolean;
 }
 
-function recordManagedWriteTelemetry(
-	operation: string,
-	phase: "plan" | "commit",
-	planId: string | undefined,
+function withWriteLifecycleTracking(
+	options: RunAscetEditOperationOptions,
+	lifecycle: AscetWriteLifecycleEvidence,
+): RunAscetEditOperationOptions {
+	return {
+		...options,
+		onLifecycle: (event) => {
+			if (event.stage === "before_bridge") lifecycle.beforeBridge = true;
+			if (event.stage === "bridge_entered") lifecycle.bridgeEntered = true;
+			if (event.stage === "backend_response_received") lifecycle.backendResponseReceived = true;
+			options.onLifecycle?.(event);
+		},
+	};
+}
+
+function resolveTelemetryPhase(params: AscetMutationParams): "plan" | "commit" | "execute" {
+	if (params.action === "apply_element_spec" || params.action === "set_element_dependency") {
+		return params.phase === "commit" ? "commit" : "plan";
+	}
+	return "execute";
+}
+
+function recordMutationTelemetry(
+	params: AscetMutationParams,
 	result: AscetEditResult,
 	options: RunAscetEditOperationOptions,
 	startedAt: number,
-	lifecycle?: AscetWriteLifecycleEvidence,
+	lifecycle: AscetWriteLifecycleEvidence,
 ): void {
 	const outcome = result.details.outcome;
+	const phase = resolveTelemetryPhase(params);
 	const mutationStatus =
-		phase === "plan"
+		phase === "plan" || outcome.status === "preflight" || !lifecycle.bridgeEntered
 			? "not_started"
 			: result.details.raw
 				? classifyAscetEditExecution(result.details.raw).mutationStatus
-				: partialMutationStatus(outcome);
+				: (partialMutationStatus(outcome) ?? "not_started");
+	const planId =
+		"planId" in params && typeof params.planId === "string"
+			? params.planId
+			: outcome.status === "preflight" && typeof outcome.plan.planId === "string"
+				? outcome.plan.planId
+				: undefined;
 	recordAscetWriteTelemetry(options, {
-		operation,
+		operation: params.action,
 		phase,
 		outcome:
 			outcome.status === "preflight"
@@ -696,9 +727,9 @@ function recordManagedWriteTelemetry(
 		...(outcome.status === "error" ? { errorCode: outcome.error.code } : {}),
 		...(planId ? { planId } : {}),
 		...(result.details.verification ? { verificationStatus: result.details.verification.status } : {}),
-		...(mutationStatus ? { mutationStatus } : {}),
-		bridgeEntered: lifecycle?.bridgeEntered === true,
-		backendResponseReceived: lifecycle?.backendResponseReceived === true,
+		mutationStatus,
+		bridgeEntered: lifecycle.bridgeEntered,
+		backendResponseReceived: lifecycle.backendResponseReceived,
 		mutationStarted: mutationStatus === "applied" || mutationStatus === "unknown",
 		writesPerformed: mutationStatus === "applied",
 		cleanupRequired: mutationStatus === "unknown",
@@ -903,7 +934,6 @@ async function runPlanManagedCommit(
 	params: PlanManagedCommitParams,
 	options: RunAscetEditOperationOptions,
 	ctx: AscetEditApprovalContext,
-	lifecycle: AscetWriteLifecycleEvidence,
 ): Promise<AscetEditResult> {
 	const store = createPlanStore(options);
 	let temporarySpecFile: string | undefined;
@@ -974,15 +1004,6 @@ ${summary}`,
 			return asResponse({ status: "blocked", code: approval.code, message: approval.message });
 		}
 		store.consume(verificationInput);
-		const writeOptions: RunAscetEditOperationOptions = {
-			...options,
-			onLifecycle: (event) => {
-				options.onLifecycle?.(event);
-				if (event.stage === "before_bridge") lifecycle.beforeBridge = true;
-				if (event.stage === "bridge_entered") lifecycle.bridgeEntered = true;
-				if (event.stage === "backend_response_received") lifecycle.backendResponseReceived = true;
-			},
-		};
 		const raw =
 			planned.action === "apply_element_spec"
 				? await runAscetApplyElementSpec(
@@ -991,7 +1012,7 @@ ${summary}`,
 							executeWrite: true,
 							verifyReadback: true,
 						},
-						writeOptions,
+						options,
 					)
 				: await runAscetSetElementDependency(
 						{
@@ -1001,7 +1022,7 @@ ${summary}`,
 							executeWrite: true,
 							verifyReadback: true,
 						},
-						writeOptions,
+						options,
 					);
 		return finalizeAscetMutation({ params: planned, raw, options });
 	} catch (error) {
