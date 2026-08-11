@@ -78,6 +78,17 @@ function normalizeBooleanResult(result: AscetCliJsonResult, operation: string): 
 	}
 	const editable = getEditableBoolean(result.data);
 	if (editable !== undefined) {
+		if (operation === "component_editable_set" && !editable) {
+			return {
+				...result,
+				ok: false,
+				data: false,
+				error: {
+					code: "component_not_editable",
+					message: "ASCET completed component_editable_set but the component remained read-only.",
+				},
+			};
+		}
 		return { ...result, data: editable };
 	}
 	return {

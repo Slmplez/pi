@@ -25,6 +25,7 @@
 
 ### Fixed
 
+- Fixed TCM-backed component editability so `ascet_edit` uses `ReserveItem` followed by `CreateEdition`, and reports a failed write when the component remains read-only.
 - Fixed exact-target Tool Descriptor routing so bounded tree discovery is optional when a path or OID is already validated, and clarified outgoing-reference and zero-edge BDE evidence limits.
 - Fixed dependency-chain guidance and Runtime validation to require same-named Provider/Imported `P_` Parameters and a Consumer Local `C_` Parameter.
 - Fixed the startup UI update checker to read `dist-tags.latest` from the internal Nexus registry and isolate cached results by registry URL.

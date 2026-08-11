@@ -146,6 +146,14 @@ if ($LASTEXITCODE -ne 0) {
     throw "Legacy shim build failed."
 }
 
+Invoke-AscetCsc `
+    -OutputPath (Join-Path $testDir 'AscetComponentEditableTcmOutputTest.exe') `
+    -MainType 'AscetComponentEditableTcmOutputTest' `
+    -Sources @((Join-Path $cliDir 'AscetComponentEditable.cs'), (Join-Path $testsDir 'AscetComponentEditableTcmOutputTest.cs')) `
+    -References @('System.Web.Extensions.dll')
+
+Invoke-CompiledExecutable -Path (Join-Path $testDir 'AscetComponentEditableTcmOutputTest.exe')
+
 $focusedJsonTest = Join-Path $testsDir 'AscetCliJsonOutputTest.cs'
 $fullSuiteAnchor = Join-Path $testsDir 'ProgramOutputTest.cs'
 if ((Test-Path $focusedJsonTest) -and -not (Test-Path $fullSuiteAnchor)) {

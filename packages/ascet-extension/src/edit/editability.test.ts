@@ -131,6 +131,21 @@ describe("ASCET editability actions", () => {
 		}
 	});
 
+	test("treats a successful set response with editable=false as a failed write", async () => {
+		const result = await runAscetEditability(
+			{ mode: "set", componentPath: "DEMO/PID" },
+			{
+				cwd: process.cwd(),
+				executeCli: async (request) =>
+					successfulExecution(request, { ok: true, result: { editable: false }, error: null }),
+			},
+		);
+
+		assert.equal(result.ok, false);
+		assert.equal(result.data, false);
+		assert.equal(result.error?.code, "component_not_editable");
+	});
+
 	test("returns ascet_edit_invalid_output for non-boolean CLI output", async () => {
 		const result = await runAscetEditability(
 			{ mode: "check", componentPath: "DEMO/PID" },

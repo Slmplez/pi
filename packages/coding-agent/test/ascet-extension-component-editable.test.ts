@@ -68,7 +68,7 @@ describe("ASCET component editable PI tool", () => {
 		});
 	});
 
-	it("unwraps the AscetBridge exec envelope with an editable object result", async () => {
+	it("treats an AscetBridge set result with editable=false as a failed write", async () => {
 		const scheduler = createAscetScheduler();
 		const result = await runAscetEditability(
 			{ mode: "set", componentPath: "DEMO\\PID" },
@@ -85,9 +85,12 @@ describe("ASCET component editable PI tool", () => {
 			},
 		);
 
-		expect(result.ok).toBe(true);
+		expect(result.ok).toBe(false);
 		expect(result.data).toBe(false);
-		expect(JSON.parse(formatAscetEditabilityResult(result))).toEqual({ editable: false });
+		expect(result.error?.code).toBe("component_not_editable");
+		expect(JSON.parse(formatAscetEditabilityResult(result))).toMatchObject({
+			error: { code: "component_not_editable" },
+		});
 		expect(scheduler.getSnapshot().recentJobs.at(-1)).toMatchObject({
 			toolName: "ascet_edit",
 			commandId: "component_editable_set",
@@ -162,7 +165,7 @@ describe("ASCET component editable PI tool", () => {
 		expect(text).not.toContain('"action"');
 	});
 
-	it("requires confirmation after executeWrite=true for set mode and still returns bare boolean content", async () => {
+	it("returns a structured error when confirmed set mode leaves the component read-only", async () => {
 		let confirmCalled = false;
 		let executed = false;
 		const response = await ascetEditTool.execute(
@@ -196,7 +199,7 @@ describe("ASCET component editable PI tool", () => {
 
 		expect(confirmCalled).toBe(true);
 		expect(executed).toBe(true);
-		expect(JSON.parse(text)).toEqual({ editable: false });
+		expect(JSON.parse(text)).toMatchObject({ error: { code: "component_not_editable" } });
 		expect(text).not.toContain('"ok"');
 		expect(text).not.toContain('"action"');
 	});

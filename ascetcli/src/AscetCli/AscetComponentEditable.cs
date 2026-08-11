@@ -51,8 +51,32 @@ public sealed class AscetEditableService : AscetReadDomainServiceBase
                 }
 
                 DataBaseItem[] items = new DataBaseItem[] { component };
-                string scmData = scm.GetItemSCMData(items);
-                scm.ExecuteSCMCommand("Lock", scmData, String.Empty);
+                if (IsTcmDriver(scm))
+                {
+                    scm.ExecuteSCMScriptingCommandForItems("ReserveItem", items);
+                    item = ResolveItemByPath(session, normalizedPath);
+                    component = item as Component;
+                    if (component == null)
+                    {
+                        throw new AscetReadException(
+                            "unsupported_item_kind",
+                            operation,
+                            "Item '" + normalizedPath + "' was no longer an ASCET component after reserving it in TCM.");
+                    }
+
+                    if (component.IsVersion() && !component.IsEdition())
+                    {
+                        scm.ExecuteSCMScriptingCommandForItems(
+                            "CreateEdition",
+                            new DataBaseItem[] { component });
+                    }
+                }
+                else
+                {
+                    string scmData = scm.GetItemSCMData(items);
+                    scm.ExecuteSCMCommand("Lock", scmData, String.Empty);
+                }
+
                 item = ResolveItemByPath(session, normalizedPath);
                 component = item as Component;
                 if (component == null)
@@ -72,6 +96,18 @@ public sealed class AscetEditableService : AscetReadDomainServiceBase
                 Editable = isEdition || !usesScmState
             };
         });
+    }
+
+    private bool IsTcmDriver(AscetSCMInterface scm)
+    {
+        string binding = scm.GetSourceControlBindingInformation();
+        if (String.IsNullOrWhiteSpace(binding))
+        {
+            return false;
+        }
+
+        return binding.IndexOf("<scmDriverId>RB_CC.TCM</scmDriverId>", StringComparison.OrdinalIgnoreCase) >= 0 ||
+               binding.IndexOf("<scmDriverName>TCM</scmDriverName>", StringComparison.OrdinalIgnoreCase) >= 0;
     }
 }
 
@@ -116,10 +152,18 @@ public static class AscetComponentEditable
                 ? service.SetEditable(itemPath)
                 : service.CheckEditable(itemPath);
             Console.SetOut(originalOut);
+            bool editable = result != null && result.Editable;
             Dictionary<string, object> payload = new Dictionary<string, object>();
-            payload["editable"] = result != null && result.Editable;
+            payload["editable"] = editable;
+            if (setEditable && !editable)
+            {
+                Dictionary<string, object> error = new Dictionary<string, object>();
+                error["code"] = "component_not_editable";
+                error["message"] = "Component '" + itemPath + "' remained read-only after the SCM editability command.";
+                payload["error"] = error;
+            }
             Console.Write(AscetJsonContract.Serialize(payload));
-            return 0;
+            return setEditable && !editable ? 2 : 0;
         }
         catch (Exception ex)
         {
