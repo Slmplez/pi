@@ -84,7 +84,9 @@ export function toAscetCapabilitiesPayload(result: AscetCapabilitiesResult): unk
 			message: result.error?.message ?? "ASCET capabilities failed.",
 		});
 	}
-	return toActionSearchPayload(result.actionSearch ?? { total: 0, items: [] });
+	return toActionSearchPayload(
+		result.actionSearch ?? { total: 0, items: [], catalogFingerprint: "", catalogVersion: 1 },
+	);
 }
 
 export function formatAscetCapabilitiesResult(result: AscetCapabilitiesResult): string {

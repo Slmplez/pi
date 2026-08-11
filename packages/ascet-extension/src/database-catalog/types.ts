@@ -1,4 +1,8 @@
-import type { AscetObservationCoverage, AscetObservationMetadata } from "../observation-store.ts";
+import type {
+	AscetObservationCoverage,
+	AscetObservationDatabaseIdentity,
+	AscetObservationMetadata,
+} from "../observation-store.ts";
 
 export const databaseCatalogIncludes = ["parameter_class", "enumeration", "module", "message"] as const;
 
@@ -34,6 +38,7 @@ export interface DatabaseCatalogTreeCounts {
 
 export interface DatabaseCatalogTreeSource {
 	metadata: AscetObservationMetadata;
+	databaseIdentity: AscetObservationDatabaseIdentity;
 	dataPath: string;
 	metaPath: string;
 	projects: DatabaseCatalogIdentity[];
@@ -46,6 +51,7 @@ export interface DatabaseCatalogTreeSource {
 }
 
 export interface DatabaseCatalogLiveRequest {
+	databaseIdentity: AscetObservationDatabaseIdentity;
 	scanParameterClasses: boolean;
 	scanParameterEnumerationUsage: boolean;
 	scanMessages: boolean;

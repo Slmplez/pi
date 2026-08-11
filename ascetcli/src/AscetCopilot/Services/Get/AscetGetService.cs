@@ -10,6 +10,7 @@ public sealed class AscetGetRequest
     public string Oid { get; set; }
     public string Path { get; set; }
     public string TargetPathPrefix { get; set; }
+    public string ScopeKind { get; set; }
     public string ElementName { get; set; }
     public string FormulaName { get; set; }
     public string DiagramName { get; set; }
@@ -26,6 +27,7 @@ public sealed class AscetGetRequest
         Oid = String.Empty;
         Path = String.Empty;
         TargetPathPrefix = String.Empty;
+        ScopeKind = String.Empty;
         ElementName = String.Empty;
         FormulaName = String.Empty;
         DiagramName = "Main";
@@ -44,12 +46,32 @@ public sealed class AscetGetTraversalState
     public int FoldersVisited { get; set; }
     public int ComponentsScanned { get; set; }
     public bool Truncated { get; set; }
+    public bool RootCollectionStarted { get; set; }
+    public bool RootCollectionAvailable { get; set; }
+    public bool RootCollectionCompleted { get; set; }
+    public bool RootCollectionEmpty { get; set; }
+    public int MissingOidCount { get; set; }
+    public int MissingPathCount { get; set; }
+    public IList<string> CollectionErrors { get; private set; }
 
     public AscetGetTraversalState()
     {
         FoldersVisited = 0;
         ComponentsScanned = 0;
         Truncated = false;
+        RootCollectionStarted = false;
+        RootCollectionAvailable = false;
+        RootCollectionCompleted = false;
+        RootCollectionEmpty = false;
+        MissingOidCount = 0;
+        MissingPathCount = 0;
+        CollectionErrors = new List<string>();
+    }
+
+    public void RecordCollectionError(string error)
+    {
+        if (String.IsNullOrWhiteSpace(error) || CollectionErrors.Contains(error)) return;
+        CollectionErrors.Add(error);
     }
 }
 
@@ -71,6 +93,7 @@ public sealed class AscetGetService
         List<Dictionary<string, object>> items;
         switch (operation)
         {
+            case "get_database_identity": items = new List<Dictionary<string, object>>(); break;
             case "get_tree": items = GetTree(database, request, state); break;
             case "get_elements": items = GetElements(database, request, state); break;
             case "get_formulas": items = GetFormulas(database, request, state); break;
@@ -82,10 +105,8 @@ public sealed class AscetGetService
                 throw new AscetReadException("unsupported_operation", operation ?? "ascet_get", "Unsupported ASCET get operation.");
         }
 
-        Dictionary<string, object> coverage = new Dictionary<string, object>();
-        coverage["status"] = state.Truncated ? "partial" : "complete_for_scope";
-        coverage["foldersVisited"] = state.FoldersVisited;
-        coverage["componentsScanned"] = state.ComponentsScanned;
+        AnalyzeIdentityEvidence(items, state);
+        Dictionary<string, object> coverage = BuildCoverage(operation, request, state, databaseRef, items);
 
         Dictionary<string, object> result = new Dictionary<string, object>();
         result["items"] = items;
@@ -96,12 +117,165 @@ public sealed class AscetGetService
         return result;
     }
 
-    private static AscetGetRequest ParseRequest(IDictionary<string, object> payload, string operation)
+    internal static Dictionary<string, object> BuildCoverage(
+        string operation,
+        AscetGetRequest request,
+        AscetGetTraversalState state,
+        AscetDatabaseRef databaseRef,
+        IList<Dictionary<string, object>> items)
+    {
+        bool databaseIdentityOperation = String.Equals(operation, "get_database_identity", StringComparison.Ordinal);
+        bool databaseScope = databaseIdentityOperation || String.Equals(request.ScopeKind, "database", StringComparison.Ordinal);
+        bool databaseIdentityAvailable = databaseRef != null && !String.IsNullOrWhiteSpace(databaseRef.Path);
+        bool rootFailure = !databaseIdentityOperation && databaseScope &&
+            (!state.RootCollectionStarted || !state.RootCollectionAvailable || state.RootCollectionEmpty);
+        bool collectorFailure = state.CollectionErrors.Count > 0;
+        bool identityFailure = state.MissingOidCount > 0 || state.MissingPathCount > 0;
+        bool failed = !databaseIdentityAvailable || rootFailure;
+        bool partial = !failed && (state.Truncated || collectorFailure || identityFailure ||
+            (databaseScope && !databaseIdentityOperation && !state.RootCollectionCompleted));
+
+        Dictionary<string, object> coverage = new Dictionary<string, object>();
+        coverage["status"] = failed ? "failed" : (partial ? "partial" : "complete_for_scope");
+        coverage["scopeKind"] = databaseScope ? "database" : InferScopeKind(request);
+        coverage["scopeId"] = BuildScopeId(request, databaseRef);
+        coverage["completeness"] = databaseScope
+            ? (failed ? "failed" : (partial ? "partial" : "complete"))
+            : "bounded";
+        coverage["truncated"] = state.Truncated;
+        coverage["foldersVisited"] = state.FoldersVisited;
+        coverage["componentsScanned"] = state.ComponentsScanned;
+        coverage["identityKinds"] = CollectIdentityKinds(items);
+        coverage["collectorStarted"] = databaseIdentityOperation || state.RootCollectionStarted;
+        coverage["collectorCompleted"] = !failed && !partial;
+        coverage["rootCollectionAvailable"] = databaseIdentityOperation || state.RootCollectionAvailable;
+        coverage["projectCollectionAvailable"] = !failed && !collectorFailure;
+        coverage["missingOidCount"] = state.MissingOidCount;
+        coverage["missingPathCount"] = state.MissingPathCount;
+        if (state.CollectionErrors.Count > 0) coverage["collectorErrors"] = state.CollectionErrors;
+        if (databaseScope) coverage["collectors"] = BuildDatabaseCollectorPayload(items, state, databaseIdentityAvailable);
+        return coverage;
+    }
+
+    private static Dictionary<string, object> BuildDatabaseCollectorPayload(
+        IList<Dictionary<string, object>> items,
+        AscetGetTraversalState state,
+        bool databaseIdentityAvailable)
+    {
+        bool traversalCompleted = state.RootCollectionCompleted && !state.Truncated && state.CollectionErrors.Count == 0;
+        Dictionary<string, object> collectors = new Dictionary<string, object>();
+        collectors["database"] = BuildCollectorPayload(true, databaseIdentityAvailable, databaseIdentityAvailable ? 1 : 0);
+        collectors["projects"] = BuildCollectorPayload(state.RootCollectionStarted, traversalCompleted, CountKind(items, "project"));
+        collectors["folders"] = BuildCollectorPayload(state.RootCollectionStarted, traversalCompleted, CountKind(items, "folder"));
+        collectors["components"] = BuildCollectorPayload(
+            state.RootCollectionStarted,
+            traversalCompleted,
+            CountKinds(items, new string[] { "class", "module", "statemachine" }));
+        collectors["enumerations"] = BuildCollectorPayload(state.RootCollectionStarted, traversalCompleted, CountKind(items, "enumeration"));
+        return collectors;
+    }
+
+    private static Dictionary<string, object> BuildCollectorPayload(bool started, bool completed, int itemCount)
+    {
+        Dictionary<string, object> collector = new Dictionary<string, object>();
+        collector["started"] = started;
+        collector["completed"] = completed;
+        collector["itemCount"] = itemCount;
+        return collector;
+    }
+
+    private static int CountKind(IList<Dictionary<string, object>> items, string kind)
+    {
+        return CountKinds(items, new string[] { kind });
+    }
+
+    private static int CountKinds(IList<Dictionary<string, object>> items, IList<string> kinds)
+    {
+        int count = 0;
+        for (int i = 0; items != null && i < items.Count; i++)
+        {
+            object value;
+            string kind = items[i] != null && items[i].TryGetValue("kind", out value) ? value as string : String.Empty;
+            if (!String.IsNullOrWhiteSpace(kind) && kinds.Contains(kind)) count++;
+        }
+        return count;
+    }
+
+    private static void AnalyzeIdentityEvidence(IList<Dictionary<string, object>> items, AscetGetTraversalState state)
+    {
+        state.MissingOidCount = 0;
+        state.MissingPathCount = 0;
+        for (int i = 0; items != null && i < items.Count; i++)
+        {
+            object oid;
+            object path;
+            if (items[i] == null || !items[i].TryGetValue("oid", out oid) || String.IsNullOrWhiteSpace(oid as string))
+            {
+                state.MissingOidCount++;
+            }
+            if (items[i] == null || !items[i].TryGetValue("path", out path) || String.IsNullOrWhiteSpace(path as string))
+            {
+                state.MissingPathCount++;
+            }
+        }
+    }
+
+    private static string InferScopeKind(AscetGetRequest request)
+    {
+        if (!String.IsNullOrWhiteSpace(request.Oid) || !String.IsNullOrWhiteSpace(request.Path)) return "item";
+        if (!String.IsNullOrWhiteSpace(request.TargetPathPrefix)) return "folder";
+        return "database";
+    }
+
+    private static string BuildScopeId(AscetGetRequest request, AscetDatabaseRef databaseRef)
+    {
+        if (String.Equals(request.ScopeKind, "database", StringComparison.Ordinal))
+        {
+            string identity = databaseRef == null ? String.Empty : FirstNonEmpty(databaseRef.Path, databaseRef.Name);
+            return "database:" + identity;
+        }
+        if (!String.IsNullOrWhiteSpace(request.Oid)) return "oid:" + request.Oid;
+        if (!String.IsNullOrWhiteSpace(request.Path)) return "path:" + request.Path;
+        return "path:" + request.TargetPathPrefix;
+    }
+
+    private static IList<string> CollectIdentityKinds(IList<Dictionary<string, object>> items)
+    {
+        HashSet<string> kinds = new HashSet<string>(StringComparer.Ordinal);
+        if (items != null)
+        {
+            for (int i = 0; i < items.Count; i++)
+            {
+                object value;
+                if (items[i] != null && items[i].TryGetValue("kind", out value))
+                {
+                    string kind = value as string;
+                    if (!String.IsNullOrWhiteSpace(kind)) kinds.Add(kind);
+                }
+            }
+        }
+        List<string> result = new List<string>(kinds);
+        result.Sort(StringComparer.Ordinal);
+        return result;
+    }
+
+    internal static AscetGetRequest ParseRequest(IDictionary<string, object> payload, string operation)
     {
         AscetGetRequest request = new AscetGetRequest();
         request.Oid = GetString(payload, "oid");
         request.Path = NormalizePath(GetString(payload, "path"));
         request.TargetPathPrefix = NormalizePath(GetString(payload, "targetPathPrefix"));
+        request.ScopeKind = GetString(payload, "scope");
+        if (!String.IsNullOrWhiteSpace(request.ScopeKind) &&
+            !String.Equals(operation, "get_tree", StringComparison.Ordinal))
+        {
+            throw new AscetReadException("invalid_scope", operation, "scope is only supported by get_tree.");
+        }
+        if (!String.IsNullOrWhiteSpace(request.ScopeKind) &&
+            !String.Equals(request.ScopeKind, "database", StringComparison.Ordinal))
+        {
+            throw new AscetReadException("invalid_scope", operation, "Unsupported tree scope. Only scope=database is supported.");
+        }
         request.ElementName = GetString(payload, "elementName");
         request.FormulaName = GetString(payload, "formulaName");
         request.DiagramName = FirstNonEmpty(GetString(payload, "diagramName"), "Main");
@@ -112,12 +286,38 @@ public sealed class AscetGetService
         request.Depth = GetNonNegativeInt(payload, "depth", 1, operation);
         request.MaxFolders = GetNonNegativeInt(payload, "maxFolders", 0, operation);
         request.MaxComponents = GetNonNegativeInt(payload, "maxComponents", 0, operation);
+        if (String.Equals(operation, "get_database_identity", StringComparison.Ordinal))
+        {
+            if (payload != null && payload.Count > 0)
+            {
+                throw new AscetReadException("invalid_argument", operation, "get_database_identity does not accept request fields.");
+            }
+            request.ScopeKind = "database";
+        }
+        if (String.Equals(operation, "get_tree", StringComparison.Ordinal) &&
+            String.Equals(request.ScopeKind, "database", StringComparison.Ordinal) &&
+            (!String.IsNullOrWhiteSpace(request.Oid) ||
+             !String.IsNullOrWhiteSpace(request.Path) ||
+             !String.IsNullOrWhiteSpace(request.TargetPathPrefix) ||
+             (payload != null && payload.ContainsKey("depth")) ||
+             (payload != null && payload.ContainsKey("maxFolders")) ||
+             (payload != null && payload.ContainsKey("maxComponents"))))
+        {
+            throw new AscetReadException("invalid_scope", operation, "Database Tree scope cannot be combined with a bounded target or traversal budget.");
+        }
         return request;
     }
 
     private static List<Dictionary<string, object>> GetTree(AscetDataBase database, AscetGetRequest request, AscetGetTraversalState state)
     {
         List<Dictionary<string, object>> items = new List<Dictionary<string, object>>();
+        bool databaseScope = String.Equals(request.ScopeKind, "database", StringComparison.Ordinal);
+        if (databaseScope)
+        {
+            request.Depth = Int32.MaxValue;
+            request.MaxFolders = 0;
+            request.MaxComponents = 0;
+        }
         if (!String.IsNullOrWhiteSpace(request.Oid))
         {
             DataBaseItem targetItem = ResolveTargetItem(database, request, "get_tree");
@@ -137,15 +337,40 @@ public sealed class AscetGetService
         string requestedPath = FirstNonEmpty(request.TargetPathPrefix, request.Path);
         if (String.IsNullOrWhiteSpace(requestedPath))
         {
-            AscetFolder[] topFolders = database.GetAllAscetFolders();
-            if (topFolders == null) return items;
+            AscetFolder[] topFolders = null;
+            if (databaseScope) state.RootCollectionStarted = true;
+            try
+            {
+                topFolders = database.GetAllAscetFolders();
+            }
+            catch (Exception ex)
+            {
+                if (!databaseScope) throw;
+                state.RecordCollectionError("root_collection_error:" + ex.GetType().Name);
+                return items;
+            }
+            if (topFolders == null)
+            {
+                if (databaseScope) state.RecordCollectionError("root_collection_unavailable");
+                return items;
+            }
+            if (databaseScope)
+            {
+                state.RootCollectionAvailable = true;
+                state.RootCollectionEmpty = topFolders.Length == 0;
+                if (state.RootCollectionEmpty) state.RecordCollectionError("root_collection_empty");
+            }
             for (int i = 0; i < topFolders.Length; i++)
             {
                 AscetFolder folder = topFolders[i];
                 if (folder != null && !ReachedFolderBudget(request, state))
                 {
-                    AppendTreeFolder(folder, folder.GetName() ?? String.Empty, request.Depth, request, state, items, false);
+                    AppendTreeFolder(folder, folder.GetName() ?? String.Empty, request.Depth, request, state, items, databaseScope);
                 }
+            }
+            if (databaseScope)
+            {
+                state.RootCollectionCompleted = !state.Truncated && state.CollectionErrors.Count == 0;
             }
             return items;
         }
@@ -177,6 +402,10 @@ public sealed class AscetGetService
         if (remainingDepth <= 0 || state.Truncated) return;
 
         Array directItems = GetFolderItems(folder);
+        if (directItems == null && String.Equals(request.ScopeKind, "database", StringComparison.Ordinal))
+        {
+            state.RecordCollectionError("folder_items_unavailable:" + folderPath);
+        }
         if (directItems != null)
         {
             for (int i = 0; i < directItems.Length; i++)
@@ -205,7 +434,12 @@ public sealed class AscetGetService
             }
         }
 
-        IList<AscetFolder> childFolders = GetChildFolders(folder);
+        bool childFolderCollectionAvailable;
+        IList<AscetFolder> childFolders = GetChildFolders(folder, out childFolderCollectionAvailable);
+        if (!childFolderCollectionAvailable && String.Equals(request.ScopeKind, "database", StringComparison.Ordinal))
+        {
+            state.RecordCollectionError("child_folders_unavailable:" + folderPath);
+        }
         for (int i = 0; i < childFolders.Count; i++)
         {
             AscetFolder child = childFolders[i];
@@ -224,7 +458,14 @@ public sealed class AscetGetService
         if (remainingDepth <= 0 || state.Truncated) return;
 
         Array children = GetDataBaseItemChildren(parent);
-        if (children == null) return;
+        if (children == null)
+        {
+            if (String.Equals(request.ScopeKind, "database", StringComparison.Ordinal))
+            {
+                state.RecordCollectionError("item_children_unavailable:" + parentPath);
+            }
+            return;
+        }
         for (int i = 0; i < children.Length; i++)
         {
             object raw = children.GetValue(i);
@@ -595,12 +836,20 @@ public sealed class AscetGetService
 
     private static IList<AscetFolder> GetChildFolders(AscetFolder folder)
     {
+        bool collectionAvailable;
+        return GetChildFolders(folder, out collectionAvailable);
+    }
+
+    private static IList<AscetFolder> GetChildFolders(AscetFolder folder, out bool collectionAvailable)
+    {
         List<AscetFolder> result = new List<AscetFolder>();
+        collectionAvailable = false;
         if (folder == null) return result;
         foreach (string methodName in new string[] { "GetAllAscetFolders", "GetAllFolders", "GetAllSubFolders", "GetSubFolders" })
         {
             Array folders = InvokeOptional(folder, methodName) as Array;
             if (folders == null) continue;
+            collectionAvailable = true;
             for (int i = 0; i < folders.Length; i++)
             {
                 AscetFolder child = folders.GetValue(i) as AscetFolder;
@@ -623,7 +872,7 @@ public sealed class AscetGetService
 
     private static Array GetFolderItems(AscetFolder folder)
     {
-        return InvokeOptional(folder, "GetAllDataBaseItems") as Array;
+        return InvokeOptionalArray(folder, new string[] { "GetAllDataBaseItems", "GetAllItems", "GetAllComponents" });
     }
 
     private static BlockDiagramConnection[] GetBlockDiagramConnections(AscetDiagram diagram)
@@ -773,6 +1022,17 @@ public sealed class AscetGetService
         Array result = Array.CreateInstance(value.GetType(), 1);
         result.SetValue(value, 0);
         return result;
+    }
+
+    private static Array InvokeOptionalArray(object target, string[] methodNames)
+    {
+        if (methodNames == null) return null;
+        for (int i = 0; i < methodNames.Length; i++)
+        {
+            Array value = InvokeOptional(target, methodNames[i]) as Array;
+            if (value != null) return value;
+        }
+        return null;
     }
 
     private static object InvokeOptional(object target, string methodName, params object[] arguments)
@@ -1541,6 +1801,7 @@ public sealed class DatabaseCatalogService
 
     private static string GetItemKind(object item)
     {
+        if (item is AscetFolder) return "folder";
         if (item is AscetProject) return "project";
         string typeName = item == null ? String.Empty : item.GetType().Name.ToLowerInvariant();
         if (typeName.IndexOf("module", StringComparison.Ordinal) >= 0) return "module";

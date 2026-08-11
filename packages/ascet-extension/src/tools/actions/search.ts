@@ -1,5 +1,6 @@
 import {
 	type AscetActionCatalogEntry,
+	createActionCatalogSnapshot,
 	getActionCatalogEntry,
 	getActionCatalogEntryById,
 	listActionCatalogEntries,
@@ -21,6 +22,7 @@ export interface SearchActionItem {
 	useWhen?: readonly string[];
 	avoidWhen?: readonly string[];
 	schema?: AscetActionCatalogEntry["schema"];
+	schemaFingerprint?: string;
 	rules?: readonly string[];
 	fewShots?: AscetActionCatalogEntry["fewShots"];
 	result?: AscetActionCatalogEntry["result"];
@@ -32,6 +34,8 @@ export interface SearchActionItem {
 export interface SearchActionResult {
 	total: number;
 	items: SearchActionItem[];
+	catalogFingerprint: string;
+	catalogVersion: number;
 }
 
 function normalize(value: string | undefined): string {
@@ -96,6 +100,7 @@ function toSearchItem(
 		useWhen: entry.useWhen,
 		avoidWhen: entry.avoidWhen.length ? entry.avoidWhen : undefined,
 		schema: entry.schema,
+		schemaFingerprint: entry.schemaFingerprint,
 		rules: entry.rules,
 		fewShots: entry.fewShots,
 		result: entry.result,
@@ -109,11 +114,22 @@ function toSearchItem(
 			action: base.action,
 			intent: base.intent,
 			schema: base.schema,
+			schemaFingerprint: base.schemaFingerprint,
 			result: base.result,
 			replacement: base.replacement,
 		};
 	}
 	return base;
+}
+
+function createSearchResult(params: SearchActionParams, total: number, items: SearchActionItem[]): SearchActionResult {
+	const snapshot = createActionCatalogSnapshot({ includeHidden: params.includeHidden === true });
+	return {
+		total,
+		items,
+		catalogFingerprint: snapshot.catalogFingerprint,
+		catalogVersion: snapshot.version,
+	};
 }
 
 export function searchActionCatalog(params: SearchActionParams): SearchActionResult {
@@ -122,27 +138,22 @@ export function searchActionCatalog(params: SearchActionParams): SearchActionRes
 	const limit = Math.max(1, Math.min(params.limit ?? 5, 50));
 	if (params.tool && params.name) {
 		const exact = getActionCatalogEntry(params.tool, params.name, { includeHidden });
-		return {
-			total: exact ? 1 : 0,
-			items: exact ? [toSearchItem(exact, detailLevel)] : [],
-		};
+		return createSearchResult(params, exact ? 1 : 0, exact ? [toSearchItem(exact, detailLevel)] : []);
 	}
 	const query = params.query ?? "";
 	const exactById = getActionCatalogEntryById(query, { includeHidden });
 	if (exactById) {
-		return {
-			total: 1,
-			items: [toSearchItem(exactById, detailLevel)],
-		};
+		return createSearchResult(params, 1, [toSearchItem(exactById, detailLevel)]);
 	}
 	const scored = listActionCatalogEntries({ includeHidden })
 		.map((entry) => ({ entry, score: scoreEntry(entry, query) }))
 		.filter((item) => item.score > 0)
 		.sort((left, right) => right.score - left.score || left.entry.id.localeCompare(right.entry.id));
-	return {
-		total: scored.length,
-		items: scored.slice(0, limit).map((item) => toSearchItem(item.entry, detailLevel)),
-	};
+	return createSearchResult(
+		params,
+		scored.length,
+		scored.slice(0, limit).map((item) => toSearchItem(item.entry, detailLevel)),
+	);
 }
 
 function compactActionSearchValue(value: unknown, preserveKeys = false): unknown {
@@ -174,5 +185,7 @@ export function toActionSearchPayload(result: SearchActionResult): SearchActionR
 	return {
 		total: result.total,
 		items: (compactActionSearchValue(result.items) as SearchActionItem[] | undefined) ?? [],
+		catalogFingerprint: result.catalogFingerprint,
+		catalogVersion: result.catalogVersion,
 	};
 }

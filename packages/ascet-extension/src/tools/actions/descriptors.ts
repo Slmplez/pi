@@ -2,6 +2,7 @@ import type { AscetProfile } from "../exposure/profiles.ts";
 
 export type AscetActionVisibility = "public" | "internal" | "hidden";
 export type AscetActionActivationState = "active" | "inactive" | "hidden" | "feature_disabled";
+export type AscetObjectKind = "database" | "project" | "folder" | "class" | "module" | "statemachine" | "enumeration";
 
 export interface AscetActionFewShot {
 	variant?: string;
@@ -25,6 +26,7 @@ export interface AscetActionDescriptor {
 	profiles: readonly AscetProfile[];
 	featureFlag?: string;
 	deprecatedBy?: string;
+	supportedObjectKinds?: readonly AscetObjectKind[];
 	prompt?: AscetActionPrompt;
 }
 
@@ -130,13 +132,16 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 		}),
 	}),
 	descriptor("ascet_get", "tree", "public", READ_PROFILES, {
+		supportedObjectKinds: ["database", "project", "folder", "class", "module", "statemachine", "enumeration"],
 		prompt: prompt("Read a bounded live Folder/Component tree when structural discovery is required.", {
 			rules: [
 				"Use tree for bounded structural discovery when the exact target is not yet known. targetPathPrefix accepts a bounded folder scope such as PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation. If an exact path or OID is already validated, call the matching exact Get or Read action directly.",
+				"Use scope=database with delivery=stored only when a complete database identity observation is required for database_catalog. Do not combine database scope with a target or traversal budget.",
 				"Tree returns metadata only; it does not load Elements, references, methods, implementations, or code.",
 			],
 			fewShots: [
 				shot("expand package", { action: "tree", target: { targetPathPrefix: "PlatformLibrary\\Package" } }),
+				shot("capture database identities", { action: "tree", scope: "database", delivery: "stored" }),
 			],
 			tags: ["navigation", "tree", "live-read"],
 		}),
@@ -144,7 +149,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 	descriptor("ascet_get", "database_catalog", "public", READ_PROFILES, {
 		prompt: prompt("Build stored full-database catalogs from a complete Tree observation.", {
 			rules: [
-				"Create a complete unbounded stored tree first, then pass its resultId as sourceTreeResultId.",
+				"Create a stored tree with scope=database first, verify coverage.completeness=complete, then pass its resultId as sourceTreeResultId.",
 				"Use include to select required object types; Parameter Class and Message requests perform one combined live scan.",
 			],
 			fewShots: [
@@ -159,10 +164,12 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 		}),
 	}),
 	descriptor("ascet_get", "elements", "public", READ_PROFILES, {
+		supportedObjectKinds: ["folder", "class", "module", "statemachine"],
 		prompt: prompt("Read complete Element directory entries for an exact Component or bounded Folder selection.", {
 			rules: [
 				"Use elements after an exact Component or bounded Folder target is resolved from user input, tree discovery, or validated stored evidence. Filter by name or scope only; do not use a result-count limit.",
 				"Element output is concise identity/scope metadata. Use ascet_read only for a precise deep read.",
+				"Enumeration is not an Element Directory target for this action. Use ascet_read.read_implementation on the resolved Enumeration and inspect typeDefinition.enumerators.",
 			],
 			fewShots: [shot("list component elements", { action: "elements", target: { path: "DEMO\\PID" } })],
 			tags: ["element", "signal", "live-read"],
@@ -274,8 +281,12 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 		}),
 	}),
 	descriptor("ascet_read", "read_implementation", "public", READ_PROFILES, {
-		prompt: prompt("Read implementation metadata for a resolved component.", {
-			rules: ["Use read_implementation when implementation metadata matters more than code text."],
+		supportedObjectKinds: ["class", "module", "statemachine", "enumeration"],
+		prompt: prompt("Read implementation metadata for a resolved component or Enumeration.", {
+			rules: [
+				"Use read_implementation when implementation metadata matters more than code text.",
+				"For Enumeration targets, inspect typeDefinition.enumerators; this is the supported enumerator readback path instead of ascet_get.elements.",
+			],
 			fewShots: [
 				shot("read impl", {
 					action: "read_implementation",
@@ -746,6 +757,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 		}),
 	}),
 	descriptor("ascet_edit", "set_enumerators", "public", WRITE_PROFILES, {
+		supportedObjectKinds: ["enumeration"],
 		prompt: prompt("Set enumeration values for an ASCET enumeration component.", {
 			rules: writePreflightRules,
 			fewShots: [
@@ -759,6 +771,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 		}),
 	}),
 	descriptor("ascet_edit", "apply_element_spec", "public", WRITE_PROFILES, {
+		supportedObjectKinds: ["class", "module", "statemachine"],
 		prompt: prompt("Apply structured primitive element specs from evidence, not guesses.", {
 			rules: [...writePreflightRules, ...elementSpecRules],
 			fewShots: [
@@ -802,6 +815,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 		}),
 	}),
 	descriptor("ascet_edit", "set_element_dependency", "public", WRITE_PROFILES, {
+		supportedObjectKinds: ["folder", "class", "module", "statemachine"],
 		prompt: prompt("Set or clear dependency state for an existing element.", {
 			rules: [
 				...writePreflightRules,

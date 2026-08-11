@@ -563,6 +563,20 @@ describe("ASCET Bridge Milestone A transport semantics", () => {
 		}
 	});
 
+	test("supports a bounded per-request stdout limit for large read payloads", async () => {
+		const result = await executeAscetCli({
+			cwd: process.cwd(),
+			cliPath: process.execPath,
+			args: ["-e", "process.stdout.write('x'.repeat(2048)); setInterval(() => {}, 1000)"],
+			stdoutLimitBytes: 1024,
+			timeoutMs: 10_000,
+		});
+
+		assert.equal(result.outputLimitExceeded, "stdout");
+		assert.equal(result.processClosed, true);
+		assert.equal(result.stdout.length <= 1024, true);
+	});
+
 	test("terminates a Bridge process whose stderr exceeds the transport limit", async () => {
 		const result = await executeAscetCli({
 			cwd: process.cwd(),

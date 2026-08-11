@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 public static class AscetDatabaseCatalogContractTest
@@ -47,6 +47,112 @@ public static class AscetDatabaseCatalogContractTest
             AssertEqual(1, parsedRequest.Modules.Count, "request Module OID deduplication");
             AssertEqual(1, parsedRequest.ClassCandidates.Count, "request Class OID deduplication");
 
+            Dictionary<string, object> databaseTreePayload = new Dictionary<string, object>(StringComparer.Ordinal);
+            databaseTreePayload["scope"] = "database";
+            AscetGetRequest databaseTreeRequest = AscetGetService.ParseRequest(databaseTreePayload, "get_tree");
+            AssertEqual("database", databaseTreeRequest.ScopeKind, "database Tree scope");
+            AssertEqual(0, databaseTreeRequest.MaxFolders, "database Tree folder budget");
+            AssertEqual(0, databaseTreeRequest.MaxComponents, "database Tree component budget");
+
+            AscetGetRequest databaseIdentityRequest = AscetGetService.ParseRequest(
+                new Dictionary<string, object>(StringComparer.Ordinal),
+                "get_database_identity");
+            AssertEqual("database", databaseIdentityRequest.ScopeKind, "database identity scope");
+
+            Dictionary<string, object> invalidDatabaseIdentityPayload = new Dictionary<string, object>(StringComparer.Ordinal);
+            invalidDatabaseIdentityPayload["depth"] = 1;
+            AssertReadError(
+                delegate { AscetGetService.ParseRequest(invalidDatabaseIdentityPayload, "get_database_identity"); },
+                "invalid_argument",
+                "database identity rejects request fields");
+
+            Dictionary<string, object> invalidScopedElementsPayload = new Dictionary<string, object>(StringComparer.Ordinal);
+            invalidScopedElementsPayload["scope"] = "database";
+            AssertReadError(
+                delegate { AscetGetService.ParseRequest(invalidScopedElementsPayload, "get_elements"); },
+                "invalid_scope",
+                "scope is restricted to get_tree");
+
+            Dictionary<string, object> depthBoundedDatabaseTreePayload = new Dictionary<string, object>(StringComparer.Ordinal);
+            depthBoundedDatabaseTreePayload["scope"] = "database";
+            depthBoundedDatabaseTreePayload["depth"] = 1;
+            AssertReadError(
+                delegate { AscetGetService.ParseRequest(depthBoundedDatabaseTreePayload, "get_tree"); },
+                "invalid_scope",
+                "database Tree rejects explicit default depth");
+
+            Dictionary<string, object> boundedDatabaseTreePayload = new Dictionary<string, object>(StringComparer.Ordinal);
+            boundedDatabaseTreePayload["scope"] = "database";
+            boundedDatabaseTreePayload["targetPathPrefix"] = "DB\\Project";
+            AssertReadError(
+                delegate { AscetGetService.ParseRequest(boundedDatabaseTreePayload, "get_tree"); },
+                "invalid_scope",
+                "database Tree rejects bounded target");
+
+            AscetDatabaseRef databaseRef = new AscetDatabaseRef { Name = "DB", Path = "C:\\Repo\\DB" };
+            List<Dictionary<string, object>> completeItems = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object> { { "path", "DB" }, { "oid", "folder-1" }, { "kind", "folder" } },
+                new Dictionary<string, object> { { "path", "DB\\Project" }, { "oid", "project-1" }, { "kind", "project" } },
+                new Dictionary<string, object> { { "path", "DB\\Enumeration" }, { "oid", "enum-1" }, { "kind", "enumeration" } }
+            };
+            AscetGetTraversalState completeState = new AscetGetTraversalState
+            {
+                RootCollectionStarted = true,
+                RootCollectionAvailable = true,
+                RootCollectionCompleted = true
+            };
+            Dictionary<string, object> completeCoverage = AscetGetService.BuildCoverage(
+                "get_tree",
+                databaseTreeRequest,
+                completeState,
+                databaseRef,
+                completeItems);
+            AssertEqual("complete_for_scope", completeCoverage["status"] as string, "complete database Tree coverage status");
+            AssertEqual("complete", completeCoverage["completeness"] as string, "complete database Tree completeness");
+
+            AscetGetTraversalState unavailableRootState = new AscetGetTraversalState { RootCollectionStarted = true };
+            unavailableRootState.RecordCollectionError("root_collection_unavailable");
+            Dictionary<string, object> unavailableRootCoverage = AscetGetService.BuildCoverage(
+                "get_tree",
+                databaseTreeRequest,
+                unavailableRootState,
+                databaseRef,
+                new List<Dictionary<string, object>>());
+            AssertEqual("failed", unavailableRootCoverage["status"] as string, "null root collection coverage status");
+            AssertEqual("failed", unavailableRootCoverage["completeness"] as string, "null root collection completeness");
+
+            AscetGetTraversalState partialState = new AscetGetTraversalState
+            {
+                RootCollectionStarted = true,
+                RootCollectionAvailable = true,
+                RootCollectionCompleted = false
+            };
+            partialState.RecordCollectionError("folder_items_unavailable:DB");
+            Dictionary<string, object> partialCoverage = AscetGetService.BuildCoverage(
+                "get_tree",
+                databaseTreeRequest,
+                partialState,
+                databaseRef,
+                completeItems);
+            AssertEqual("partial", partialCoverage["status"] as string, "collector failure coverage status");
+            AssertEqual("partial", partialCoverage["completeness"] as string, "collector failure completeness");
+
+            AscetGetTraversalState emptyRootState = new AscetGetTraversalState
+            {
+                RootCollectionStarted = true,
+                RootCollectionAvailable = true,
+                RootCollectionEmpty = true
+            };
+            emptyRootState.RecordCollectionError("root_collection_empty");
+            Dictionary<string, object> emptyRootCoverage = AscetGetService.BuildCoverage(
+                "get_tree",
+                databaseTreeRequest,
+                emptyRootState,
+                databaseRef,
+                new List<Dictionary<string, object>>());
+            AssertEqual("failed", emptyRootCoverage["status"] as string, "empty root collection coverage status");
+
             AssertEqual("send_message", DatabaseCatalogContract.NormalizeMessageKind(true, false, false), "send kind");
             AssertEqual("receive_message", DatabaseCatalogContract.NormalizeMessageKind(false, true, false), "receive kind");
             AssertEqual("send_receive_message", DatabaseCatalogContract.NormalizeMessageKind(true, true, true), "send/receive kind priority");
@@ -67,6 +173,11 @@ public static class AscetDatabaseCatalogContractTest
             AssertTrue(!descriptor.SupportsBatch, "operation must not expose batch routing");
             AssertEqual("expensive_scan", descriptor.ExecutionProfile.HostSafety, "operation execution profile");
 
+            OperationDescriptor identityDescriptor = OperationRegistry.ResolveOrThrow("get_database_identity");
+            AssertEqual("pooled_read", identityDescriptor.LaneId, "database identity operation lane");
+            AssertTrue(identityDescriptor.HostEligible, "database identity operation is host eligible");
+            AssertTrue(!identityDescriptor.MutatesDatabase, "database identity operation is read only");
+
             HashSet<string> edgeKeys = new HashSet<string>(StringComparer.Ordinal);
             AssertTrue(edgeKeys.Add(DatabaseCatalogContract.EdgeKey("parent", "child")), "first edge accepted");
             AssertTrue(!edgeKeys.Add(DatabaseCatalogContract.EdgeKey("parent", "child")), "duplicate edge rejected");
@@ -79,6 +190,21 @@ public static class AscetDatabaseCatalogContractTest
             Console.Error.WriteLine(ex.ToString());
             return 1;
         }
+    }
+
+
+    private static void AssertReadError(Action action, string expectedCode, string label)
+    {
+        try
+        {
+            action();
+        }
+        catch (AscetReadException ex)
+        {
+            AssertEqual(expectedCode, ex.Code, label);
+            return;
+        }
+        throw new InvalidOperationException("Assertion failed: " + label + "; expected AscetReadException");
     }
 
     private static void AssertTrue(bool condition, string label)

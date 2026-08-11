@@ -12,6 +12,9 @@ function createCatalogStore(root: string): AscetObservationStore {
 	store.create({
 		domain: "tree",
 		target: {},
+		sourceIdentity: {
+			database: { name: "DB", path: "C:/Repo/DB", fingerprint: "a".repeat(64) },
+		},
 		items: [
 			{ path: "DB\\Project", oid: "project-1", kind: "project" },
 			{ path: "DB\\Project::Module", oid: "module-1", kind: "module" },
@@ -19,7 +22,13 @@ function createCatalogStore(root: string): AscetObservationStore {
 			{ path: "DB\\Enums\\Mode", oid: "enum-1", kind: "enumeration" },
 			{ path: "DB\\Classes\\Parameters", oid: "class-1", kind: "class" },
 		],
-		coverage: { status: "complete_for_scope" },
+		coverage: {
+			status: "complete_for_scope",
+			scopeKind: "database",
+			scopeId: "database:DB",
+			completeness: "complete",
+			truncated: false,
+		},
 		truncated: false,
 		delivery: "stored",
 	});

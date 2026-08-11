@@ -71,6 +71,13 @@ export async function executeDatabaseCatalog(
 	const sourceTreeScanMs = performance.now() - sourceStartedAt;
 	const scanParameterClasses = include.includes("parameter_class");
 	const scanMessages = include.includes("message");
+	if (scanParameterClasses && tree.projects.length === 0) {
+		throw new DatabaseCatalogError(
+			"project_identity_required",
+			"Parameter Class catalog requires at least one Project identity in the database-scope Tree observation.",
+			{ sourceTreeResultId: request.sourceTreeResultId },
+		);
+	}
 	let livePayload: JsonRecord = {};
 	let liveScanMs = 0;
 
@@ -82,6 +89,7 @@ export async function executeDatabaseCatalog(
 			);
 		}
 		const liveRequest: DatabaseCatalogLiveRequest = {
+			databaseIdentity: tree.databaseIdentity,
 			scanParameterClasses,
 			scanParameterEnumerationUsage: scanParameterClasses && include.includes("enumeration"),
 			scanMessages,

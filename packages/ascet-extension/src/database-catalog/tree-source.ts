@@ -71,6 +71,13 @@ function validateFullTree(sourceTreeResultId: string, store: AscetObservationSto
 			`Observation '${sourceTreeResultId}' has domain '${metadata.domain}', but database_catalog requires a Tree observation.`,
 		);
 	}
+	if (metadata.coverage.scopeKind !== "database" || metadata.coverage.completeness !== "complete") {
+		throw new DatabaseCatalogError(
+			"database_scope_required",
+			`Tree observation '${sourceTreeResultId}' is not an explicit complete database-scope observation.`,
+			{ coverage: metadata.coverage, target: metadata.target },
+		);
+	}
 	if (
 		metadata.coverage.status !== "complete_for_scope" ||
 		metadata.truncated === true ||
@@ -83,6 +90,18 @@ function validateFullTree(sourceTreeResultId: string, store: AscetObservationSto
 			{ coverage: metadata.coverage, target: metadata.target, truncated: metadata.truncated ?? false },
 		);
 	}
+	const databaseIdentity = metadata.sourceIdentity?.database;
+	if (
+		!databaseIdentity ||
+		databaseIdentity.path.trim().length === 0 ||
+		databaseIdentity.fingerprint.trim().length === 0
+	) {
+		throw new DatabaseCatalogError(
+			"database_identity_required",
+			`Tree observation '${sourceTreeResultId}' does not contain a verified source database identity.`,
+			{ sourceIdentity: metadata.sourceIdentity },
+		);
+	}
 	if (!existsSync(descriptor.dataPath)) {
 		throw new DatabaseCatalogError(
 			"source_tree_data_missing",
@@ -90,7 +109,7 @@ function validateFullTree(sourceTreeResultId: string, store: AscetObservationSto
 			{ dataPath: descriptor.dataPath },
 		);
 	}
-	return descriptor;
+	return { ...descriptor, databaseIdentity };
 }
 
 function sortedIdentities(values: Iterable<DatabaseCatalogIdentity>): DatabaseCatalogIdentity[] {
@@ -215,6 +234,7 @@ export async function loadDatabaseCatalogTreeSource(
 
 	return {
 		metadata: descriptor.metadata,
+		databaseIdentity: descriptor.databaseIdentity,
 		dataPath: descriptor.dataPath,
 		metaPath: descriptor.metaPath,
 		projects: sortedIdentities(projects.values()),

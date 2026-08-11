@@ -129,6 +129,7 @@ public static class OperationRegistry
         RegisterTyped(descriptors, "list_diagrams", ExecutionLane.PooledRead, true, BatchSupportShape.None);
         RegisterTyped(descriptors, "list_folders", ExecutionLane.PooledRead, true, BatchSupportShape.Read);
         RegisterTyped(descriptors, "list_methods", ExecutionLane.PooledRead, true, BatchSupportShape.Read);
+        RegisterTyped(descriptors, "get_database_identity", ExecutionLane.PooledRead, true, BatchSupportShape.Read);
         RegisterTyped(descriptors, "get_tree", ExecutionLane.PooledRead, true, BatchSupportShape.Read);
         RegisterTyped(descriptors, "get_database_catalog", ExecutionLane.PooledRead, false, BatchSupportShape.None, OperationExecutionProfile.ExpensiveScan(200));
         RegisterTyped(descriptors, "get_elements", ExecutionLane.PooledRead, true, BatchSupportShape.Read);

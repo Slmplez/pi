@@ -37,8 +37,8 @@ public static class AscetOperationRegistrySmoke
     private static void TestRegistryCoverage()
     {
         IList<OperationDescriptor> descriptors = OperationRegistry.GetAll();
-        AssertEqual(66, descriptors.Count, "OperationRegistry descriptor count changed without updating the migration inventory.");
-        AssertEqual(65, AscetBridgeOperationRegistry.GetAll().Count, "Bridge should expose every live operation and exclude no-session capabilities.");
+        AssertEqual(67, descriptors.Count, "OperationRegistry descriptor count changed without updating the migration inventory.");
+        AssertEqual(66, AscetBridgeOperationRegistry.GetAll().Count, "Bridge should expose every live operation and exclude no-session capabilities.");
         AssertTrue(OperationRegistry.ResolveOrThrow("capabilities").SessionPolicy == SessionPolicy.NoSession, "capabilities must remain no-session.");
     }
 
@@ -113,7 +113,7 @@ public static class AscetOperationRegistrySmoke
             }
         }
 
-        AssertEqual(52, publicCount, "Public contract route inventory changed without updating contract coverage.");
+        AssertEqual(53, publicCount, "Public contract route inventory changed without updating contract coverage.");
         AssertEqual(13, internalCount, "Internal runtime route inventory changed without updating the migration audit.");
         AssertEqual(1, diagnosticCount, "Diagnostic route inventory changed without updating the migration audit.");
     }
@@ -156,6 +156,7 @@ public static class AscetOperationRegistrySmoke
     private static void TestVisibility()
     {
         AssertTrue(OperationRegistry.ResolveOrThrow("get_tree").RouteVisibility == RouteVisibility.PublicContract, "get_tree must remain public.");
+        AssertTrue(OperationRegistry.ResolveOrThrow("get_database_identity").RouteVisibility == RouteVisibility.PublicContract, "get_database_identity must remain public.");
         AssertTrue(OperationRegistry.ResolveOrThrow("component_editable_check").RouteVisibility == RouteVisibility.InternalRuntime, "component_editable_check is an internal runtime route.");
         AssertTrue(OperationRegistry.ResolveOrThrow("component_editable_set").RouteVisibility == RouteVisibility.InternalRuntime, "component_editable_set is an internal runtime route.");
         AssertTrue(OperationRegistry.ResolveOrThrow("get_database_catalog").RouteVisibility == RouteVisibility.InternalRuntime, "database catalog is an internal runtime route.");

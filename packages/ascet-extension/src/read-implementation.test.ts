@@ -1,6 +1,10 @@
 ﻿import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import { buildReadImplementationArgs, runAscetReadImplementation } from "./read-implementation.ts";
+import {
+	buildReadImplementationArgs,
+	getReadImplementationEnumerationReadback,
+	runAscetReadImplementation,
+} from "./read-implementation.ts";
 
 describe("read_implementation request", () => {
 	test("passes only CLI-supported implementation selection arguments", () => {
@@ -38,5 +42,18 @@ describe("read_implementation request", () => {
 		assert.equal(result.ok, true);
 		assert.deepEqual(observedArgs, ["exec", "read_implementation", "DEMO\\PID", "--json"]);
 		assert.equal(observedTimeoutMs, 5000);
+	});
+
+	test("extracts independent Enumeration readback names without changing their order", () => {
+		const readback = getReadImplementationEnumerationReadback({
+			ok: true,
+			data: { ok: true, result: { typeDefinition: { enumerators: ["OFF", "ON"] } } },
+			request: { cwd: process.cwd(), cliPath: "AscetBridge.exe", args: [], timeoutMs: 1 },
+			stdout: "",
+			stderr: "",
+			exitCode: 0,
+			timedOut: false,
+		});
+		assert.deepEqual(readback, { enumerators: ["OFF", "ON"] });
 	});
 });

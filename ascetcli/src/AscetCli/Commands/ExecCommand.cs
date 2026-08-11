@@ -43,6 +43,7 @@ public static class ExecCommand
                 return HandleListFolders(AscetCliEnvelope.Slice(args, 1));
             case "get_database_catalog":
                 return HandleDatabaseCatalog(AscetCliEnvelope.Slice(args, 1));
+            case "get_database_identity":
             case "get_tree":
             case "get_elements":
             case "get_formulas":

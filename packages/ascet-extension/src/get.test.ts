@@ -3,8 +3,15 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
+import { Value } from "typebox/value";
 import type { AscetCliJsonResult } from "./cli.ts";
-import { buildAscetGetArgs, formatAscetGetResult, runAscetGet } from "./get.ts";
+import {
+	ascetGetParameters,
+	buildAscetGetArgs,
+	formatAscetGetResult,
+	getAscetDatabaseIdentity,
+	runAscetGet,
+} from "./get.ts";
 import { AscetObservationStore } from "./observation-store.ts";
 
 function successfulResult(items: unknown[]): AscetCliJsonResult {
@@ -29,7 +36,9 @@ function successfulResult(items: unknown[]): AscetCliJsonResult {
 
 test("buildAscetGetArgs maps every action to one get operation", () => {
 	const cases = [
+		["database_identity", { action: "database_identity" }],
 		["tree", { action: "tree", target: { targetPathPrefix: "PlatformLibrary\\Package" } }],
+		["tree", { action: "tree", scope: "database", delivery: "stored" }],
 		["elements", { action: "elements", target: { path: "DEMO\\Component" } }],
 		["formulas", { action: "formulas", target: { path: "DEMO\\Project" } }],
 		["component_refs", { action: "component_refs", target: { oid: "component-oid" } }],
@@ -137,11 +146,24 @@ test("builds local Enumeration and Module catalogs without invoking ASCET CLI", 
 			domain: "tree",
 			resultId: "obs-tree-local-catalog",
 			target: {},
+			sourceIdentity: {
+				database: {
+					name: "DB",
+					path: "C:/Repo/DB",
+					fingerprint: "4dfb2463ceca8e759a76eadb89295388610967b0b283b312f6eb427516e2b2e9",
+				},
+			},
 			items: [
 				{ path: "DB\\Module", oid: "module-1", kind: "module" },
 				{ path: "DB\\Mode", oid: "enum-1", kind: "enumeration" },
 			],
-			coverage: { status: "complete_for_scope" },
+			coverage: {
+				status: "complete_for_scope",
+				scopeKind: "database",
+				scopeId: "database:DB",
+				completeness: "complete",
+				truncated: false,
+			},
 			truncated: false,
 			delivery: "stored",
 		});
@@ -191,11 +213,24 @@ test("sends one stdin request for a live Message catalog scan", async () => {
 			domain: "tree",
 			resultId: "obs-tree-live-catalog",
 			target: {},
+			sourceIdentity: {
+				database: {
+					name: "DB",
+					path: "C:/Repo/DB",
+					fingerprint: "4dfb2463ceca8e759a76eadb89295388610967b0b283b312f6eb427516e2b2e9",
+				},
+			},
 			items: [
 				{ path: "DB\\Project", oid: "project-1", kind: "project" },
 				{ path: "DB\\Module", oid: "module-1", kind: "module" },
 			],
-			coverage: { status: "complete_for_scope" },
+			coverage: {
+				status: "complete_for_scope",
+				scopeKind: "database",
+				scopeId: "database:DB",
+				completeness: "complete",
+				truncated: false,
+			},
 			truncated: false,
 			delivery: "stored",
 		});
@@ -210,6 +245,16 @@ test("sends one stdin request for a live Message catalog scan", async () => {
 				cwd: process.cwd(),
 				executeCli: async (request) => {
 					cliCalls++;
+					if (cliCalls === 1) {
+						assert.deepEqual(request.args, ["exec", "get_database_identity", "--request-json", "{}", "--json"]);
+						return {
+							exitCode: 0,
+							stdout: JSON.stringify({ ok: true, result: { database: { name: "DB", path: "C:/Repo/DB" } } }),
+							stderr: "",
+							timedOut: false,
+							request,
+						};
+					}
 					assert.deepEqual(request.args, ["exec", "get_database_catalog", "--request-stdin", "--json"]);
 					const payload = JSON.parse(request.stdin ?? "") as {
 						scanMessages: boolean;
@@ -225,6 +270,7 @@ test("sends one stdin request for a live Message catalog scan", async () => {
 						stdout: JSON.stringify({
 							ok: true,
 							result: {
+								database: { name: "DB", path: "C:/Repo/DB" },
 								messages: [],
 								moduleMessageEdges: [],
 								coverage: { status: "complete_for_scope" },
@@ -238,10 +284,173 @@ test("sends one stdin request for a live Message catalog scan", async () => {
 			},
 		);
 		assert.equal(result.ok, true);
+		assert.equal(cliCalls, 2);
+	} finally {
+		if (previousRoot === undefined) delete process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT;
+		else process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT = previousRoot;
+		rmSync(root, { recursive: true, force: true });
+	}
+});
+
+test("rejects a live Database Catalog scan before scanning when database identity differs", async () => {
+	const root = mkdtempSync(join(tmpdir(), "pi-ascet-get-catalog-identity-test-"));
+	const previousRoot = process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT;
+	process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT = root;
+	try {
+		const sourceDatabaseIdentity = getAscetDatabaseIdentity({
+			database: { name: "Expected", path: "C:/Repo/Expected" },
+		});
+		assert.ok(sourceDatabaseIdentity);
+		new AscetObservationStore({ root, thresholdBytes: 1 }).create({
+			domain: "tree",
+			resultId: "obs-tree-live-catalog-identity-mismatch",
+			target: {},
+			sourceIdentity: { database: sourceDatabaseIdentity },
+			items: [
+				{ path: "Expected\\Project", oid: "project-1", kind: "project" },
+				{ path: "Expected\\Module", oid: "module-1", kind: "module" },
+			],
+			coverage: {
+				status: "complete_for_scope",
+				scopeKind: "database",
+				scopeId: "database:Expected",
+				completeness: "complete",
+				truncated: false,
+			},
+			truncated: false,
+			delivery: "stored",
+		});
+		let cliCalls = 0;
+		const result = await runAscetGet(
+			{
+				action: "database_catalog",
+				sourceTreeResultId: "obs-tree-live-catalog-identity-mismatch",
+				include: ["message"],
+			},
+			{
+				cwd: process.cwd(),
+				executeCli: async (request) => {
+					cliCalls++;
+					assert.deepEqual(request.args, ["exec", "get_database_identity", "--request-json", "{}", "--json"]);
+					return {
+						exitCode: 0,
+						stdout: JSON.stringify({
+							ok: true,
+							result: { database: { name: "Other", path: "C:/Repo/Other" } },
+						}),
+						stderr: "",
+						timedOut: false,
+						request,
+					};
+				},
+			},
+		);
+		assert.equal(result.ok, false);
+		assert.equal(result.error?.code, "database_identity_mismatch");
 		assert.equal(cliCalls, 1);
 	} finally {
 		if (previousRoot === undefined) delete process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT;
 		else process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT = previousRoot;
 		rmSync(root, { recursive: true, force: true });
 	}
+});
+
+test("database tree scope emits an explicit unbounded identity request", () => {
+	const args = buildAscetGetArgs({ action: "tree", scope: "database", delivery: "stored" });
+	assert.equal(args[0], "exec");
+	assert.equal(args[1], "get_tree");
+	const payload = JSON.parse(args[3] ?? "{}") as Record<string, unknown>;
+	assert.deepEqual(payload, { scope: "database" });
+});
+
+test("database tree scope requires stored delivery and rejects bounded fields", () => {
+	assert.equal(Value.Check(ascetGetParameters, { action: "tree", scope: "database", delivery: "stored" }), true);
+	assert.equal(Value.Check(ascetGetParameters, { action: "tree", scope: "database" }), false);
+	assert.equal(Value.Check(ascetGetParameters, { action: "tree", scope: "database", delivery: "auto" }), false);
+	assert.equal(
+		Value.Check(ascetGetParameters, {
+			action: "tree",
+			scope: "database",
+			delivery: "stored",
+			target: { path: "DEMO" },
+		}),
+		false,
+	);
+});
+
+test("stores backend database identity in observation metadata", () => {
+	const root = mkdtempSync(join(tmpdir(), "pi-ascet-get-database-identity-"));
+	const previousRoot = process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT;
+	process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT = root;
+	try {
+		const result = successfulResult([{ path: "DEMO", oid: "project-1", kind: "project" }]);
+		result.data = {
+			ok: true,
+			result: {
+				items: [{ path: "DEMO", oid: "project-1", kind: "project" }],
+				coverage: {
+					status: "complete_for_scope",
+					scopeKind: "database",
+					scopeId: "database:C:/Repo/DB",
+					completeness: "complete",
+				},
+				truncated: false,
+				source: "live",
+				database: { name: "DB", path: "C:\\Repo\\DB" },
+			},
+		};
+		const output = JSON.parse(
+			formatAscetGetResult({ action: "tree", scope: "database", delivery: "stored" }, result),
+		) as { observation: { resultId: string }; sourceIdentity?: { database?: { fingerprint?: string } } };
+		assert.equal(typeof output.sourceIdentity?.database?.fingerprint, "string");
+		const metadata = new AscetObservationStore({ root }).readStoredMetadata(output.observation.resultId).metadata;
+		assert.deepEqual(metadata.sourceIdentity?.database?.name, "DB");
+		assert.deepEqual(metadata.sourceIdentity?.database?.path, "C:\\Repo\\DB");
+		assert.equal(metadata.sourceIdentity?.database?.fingerprint, output.sourceIdentity?.database?.fingerprint);
+	} finally {
+		if (previousRoot === undefined) delete process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT;
+		else process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT = previousRoot;
+		rmSync(root, { recursive: true, force: true });
+	}
+});
+
+test("database identity action is strict, lightweight, and returns a stable fingerprint", () => {
+	assert.equal(Value.Check(ascetGetParameters, { action: "database_identity" }), true);
+	assert.equal(Value.Check(ascetGetParameters, { action: "database_identity", delivery: "inline" }), false);
+	assert.deepEqual(buildAscetGetArgs({ action: "database_identity" }), [
+		"exec",
+		"get_database_identity",
+		"--request-json",
+		"{}",
+		"--json",
+	]);
+
+	const result = successfulResult([]);
+	result.data = {
+		ok: true,
+		result: {
+			items: [],
+			coverage: {
+				status: "complete_for_scope",
+				scopeKind: "database",
+				scopeId: "database:C:/Repo/DB",
+				completeness: "complete",
+				truncated: false,
+			},
+			truncated: false,
+			source: "live",
+			database: { name: "DB", path: "C:\\Repo\\DB\\" },
+		},
+	};
+	const output = JSON.parse(formatAscetGetResult({ action: "database_identity" }, result)) as {
+		databaseIdentity: { name?: string; path: string; fingerprint: string };
+	};
+	assert.equal(output.databaseIdentity.name, "DB");
+	assert.equal(output.databaseIdentity.path, "C:\\Repo\\DB\\");
+	assert.equal(output.databaseIdentity.fingerprint.length, 64);
+	assert.deepEqual(getAscetDatabaseIdentity({ database: { name: "DB", path: "c:/repo/db" } }), {
+		name: "DB",
+		path: "c:/repo/db",
+		fingerprint: output.databaseIdentity.fingerprint,
+	});
 });

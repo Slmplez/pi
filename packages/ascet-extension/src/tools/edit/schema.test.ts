@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
+import { Value } from "typebox/value";
 import { ascetEditParameters } from "./schema.ts";
 
 describe("ascet_edit schema", () => {
@@ -19,6 +20,7 @@ describe("ascet_edit schema", () => {
 
 		assert.ok(schemaFor(schemas, "set_element_dependency")?.properties?.elementName);
 		assert.ok(schemaFor(schemas, "set_element_dependency")?.properties?.dependency);
+		assert.ok(schemaFor(schemas, "set_element_dependency")?.properties?.executeWrite);
 		assert.equal(schemaFor(schemas, "set_element_dependency")?.properties?.code, undefined);
 	});
 });
@@ -44,3 +46,61 @@ function actionName(schema: unknown): string | undefined {
 	}
 	return Array.isArray(action.enum) && typeof action.enum[0] === "string" ? action.enum[0] : undefined;
 }
+
+test("accepts public set_element_dependency plan and commit controls", () => {
+	assert.equal(
+		Value.Check(ascetEditParameters, {
+			action: "set_element_dependency",
+			targetPath: "FeatureA\\Consumer",
+			elementName: "C_K",
+			dependency: "dependent",
+			executeWrite: false,
+		}),
+		true,
+	);
+	assert.equal(
+		Value.Check(ascetEditParameters, {
+			action: "set_element_dependency",
+			phase: "plan",
+			targetPath: "FeatureA\\Consumer",
+			elementName: "C_K",
+			dependency: "dependent",
+			executeWrite: false,
+		}),
+		true,
+	);
+	assert.equal(
+		Value.Check(ascetEditParameters, {
+			action: "set_element_dependency",
+			phase: "commit",
+			planId: "plan-1",
+			executeWrite: true,
+		}),
+		true,
+	);
+});
+
+test("accepts public apply_element_spec plan and commit controls", () => {
+	for (const intent of ["create", "patch", "upsert", "restore"] as const) {
+		assert.equal(
+			Value.Check(ascetEditParameters, {
+				action: "apply_element_spec",
+				phase: "plan",
+				componentPath: "FeatureA\\Consumer",
+				intent,
+				elements: [],
+				executeWrite: false,
+			}),
+			true,
+		);
+	}
+	assert.equal(
+		Value.Check(ascetEditParameters, {
+			action: "apply_element_spec",
+			phase: "commit",
+			planId: "plan-1",
+			executeWrite: true,
+		}),
+		true,
+	);
+});

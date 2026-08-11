@@ -1,0 +1,3111 @@
+{
+  "version": 1,
+  "catalogFingerprint": "9a8cc6e626231c7adf88c9c388f4c6e37369031017889d73f0fab55f7d013a34",
+  "actions": [
+    {
+      "id": "ascet_batch_write.batch_create_component",
+      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
+      "rulesFingerprint": "16f410507d136f584e3783f9a342a8ee707ab2c5f82085b5edfc50298a183e67",
+      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "schema": {
+        "required": [
+          "action"
+        ],
+        "optional": []
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "result",
+        "fields": [
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_batch_write.batch_create_folder",
+      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
+      "rulesFingerprint": "16f410507d136f584e3783f9a342a8ee707ab2c5f82085b5edfc50298a183e67",
+      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "schema": {
+        "required": [
+          "action"
+        ],
+        "optional": []
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "result",
+        "fields": [
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_batch_write.batch_create_method",
+      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
+      "rulesFingerprint": "16f410507d136f584e3783f9a342a8ee707ab2c5f82085b5edfc50298a183e67",
+      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "schema": {
+        "required": [
+          "action"
+        ],
+        "optional": []
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "result",
+        "fields": [
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_batch_write.batch_delete_component",
+      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
+      "rulesFingerprint": "16f410507d136f584e3783f9a342a8ee707ab2c5f82085b5edfc50298a183e67",
+      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "schema": {
+        "required": [
+          "action"
+        ],
+        "optional": []
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "result",
+        "fields": [
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_batch_write.batch_delete_folder",
+      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
+      "rulesFingerprint": "16f410507d136f584e3783f9a342a8ee707ab2c5f82085b5edfc50298a183e67",
+      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "schema": {
+        "required": [
+          "action"
+        ],
+        "optional": []
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "result",
+        "fields": [
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_batch_write.batch_delete_method",
+      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
+      "rulesFingerprint": "16f410507d136f584e3783f9a342a8ee707ab2c5f82085b5edfc50298a183e67",
+      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "schema": {
+        "required": [
+          "action"
+        ],
+        "optional": []
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "result",
+        "fields": [
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_batch_write.batch_set_element_spec",
+      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
+      "rulesFingerprint": "16f410507d136f584e3783f9a342a8ee707ab2c5f82085b5edfc50298a183e67",
+      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "schema": {
+        "required": [
+          "action"
+        ],
+        "optional": []
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "result",
+        "fields": [
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_batch_write.batch_set_method_code",
+      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
+      "rulesFingerprint": "16f410507d136f584e3783f9a342a8ee707ab2c5f82085b5edfc50298a183e67",
+      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "schema": {
+        "required": [
+          "action"
+        ],
+        "optional": []
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "result",
+        "fields": [
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_batch_write.batch_set_project_formula",
+      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
+      "rulesFingerprint": "16f410507d136f584e3783f9a342a8ee707ab2c5f82085b5edfc50298a183e67",
+      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "schema": {
+        "required": [
+          "action"
+        ],
+        "optional": []
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "result",
+        "fields": [
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_capabilities.search_actions",
+      "schemaFingerprint": "a85ed507a0beb97da2f75719466e7d1c664ee373d4cea51ec7ca0f0f630f3156",
+      "rulesFingerprint": "c9d74cbedc9ec6efe28c48ff162b3570906844ff5f057e16a5900623c34b3de7",
+      "resultFingerprint": "27b9d0af51786f014fafffbe49862f2aef7f3f77b512a20b2ece413926432e94",
+      "schema": {
+        "required": [
+          "action"
+        ],
+        "optional": [
+          "query",
+          "tool",
+          "name",
+          "limit",
+          "includeHidden",
+          "detailLevel"
+        ],
+        "enums": {
+          "action": [
+            "search_actions"
+          ],
+          "detailLevel": [
+            "summary",
+            "full"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "actionMatches",
+        "fields": [
+          "total",
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_diff.diff",
+      "schemaFingerprint": "5ac9e230f78e255192938262e3bc65e2514dcccbaed11f53cd9709eac9b65423",
+      "rulesFingerprint": "8836729a11718ae25be13d7d7c6593824d9d5d6068ed18f6978c0f68251273e6",
+      "resultFingerprint": "8bad60e6e7ac90d51ccf7091b9f3f1c00d0059a267d59c18ba053fb9a490b6db",
+      "schema": {
+        "required": [
+          "action",
+          "leftPath",
+          "rightPath"
+        ],
+        "optional": [
+          "objectKind",
+          "changesOnly",
+          "timeoutMs"
+        ],
+        "enums": {
+          "action": [
+            "diff"
+          ],
+          "objectKind": [
+            "class",
+            "module",
+            "statemachine"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "diff",
+        "fields": [
+          "left",
+          "right",
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_diff.diff_component_snapshot",
+      "schemaFingerprint": "e8031299db15e168a2073b26db644c2fbd2967b168f959953f12b389d0a14188",
+      "rulesFingerprint": "5eac3fcebe740b7a447f488003ff4df0f9430e50cf30a7ace0cef0c60dbe5fd1",
+      "resultFingerprint": "8bad60e6e7ac90d51ccf7091b9f3f1c00d0059a267d59c18ba053fb9a490b6db",
+      "schema": {
+        "required": [
+          "action",
+          "leftPath",
+          "rightPath"
+        ],
+        "optional": [
+          "changesOnly",
+          "timeoutMs"
+        ],
+        "enums": {
+          "action": [
+            "diff_component_snapshot"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "diff",
+        "fields": [
+          "left",
+          "right",
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_diff.diff_element_spec",
+      "schemaFingerprint": "547cc0603c4ffe8e9486bd2e8f5d1a7368ce96443bbda683335c31546b110f08",
+      "rulesFingerprint": "284cf68db53c4950b3dc289b571b4a0685651770d35d8d43ffe86b996cd1d0b7",
+      "resultFingerprint": "8bad60e6e7ac90d51ccf7091b9f3f1c00d0059a267d59c18ba053fb9a490b6db",
+      "schema": {
+        "required": [
+          "action",
+          "componentPath",
+          "specFile"
+        ],
+        "optional": [
+          "changesOnly",
+          "timeoutMs"
+        ],
+        "enums": {
+          "action": [
+            "diff_element_spec"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "diff",
+        "fields": [
+          "left",
+          "right",
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_diff.diff_method",
+      "schemaFingerprint": "394356b0e4619376ec5a21ae22a1bb00978ffa8aef8706cf0e73b71c2d56c6d4",
+      "rulesFingerprint": "0c4781a235370dc1421c1445374f5186eb7ca52728daaf3a6d8df201c2f73d25",
+      "resultFingerprint": "8bad60e6e7ac90d51ccf7091b9f3f1c00d0059a267d59c18ba053fb9a490b6db",
+      "schema": {
+        "required": [
+          "action",
+          "leftPath",
+          "rightPath",
+          "methodName"
+        ],
+        "optional": [
+          "changesOnly",
+          "timeoutMs"
+        ],
+        "enums": {
+          "action": [
+            "diff_method"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "diff",
+        "fields": [
+          "left",
+          "right",
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_diff.diff_project_formulas",
+      "schemaFingerprint": "f67dde138949b653aef3918d4123584e6f66482a2e18aee946f1da0bc94c021e",
+      "rulesFingerprint": "e6ef50ace65caae979aede6751fe96440b827b0625289344a54326bfba62e929",
+      "resultFingerprint": "8bad60e6e7ac90d51ccf7091b9f3f1c00d0059a267d59c18ba053fb9a490b6db",
+      "schema": {
+        "required": [
+          "action",
+          "leftPath",
+          "rightPath"
+        ],
+        "optional": [
+          "changesOnly",
+          "timeoutMs"
+        ],
+        "enums": {
+          "action": [
+            "diff_project_formulas"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "diff",
+        "fields": [
+          "left",
+          "right",
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_diff.diff_state_machine_domain",
+      "schemaFingerprint": "cd1574871f978f5d872a879cccfbffb83ed60ab4ecdc015b0fcc6f8af9608c56",
+      "rulesFingerprint": "bccaea246f6f2ed503088aad5cde9583b3cf288ba28b1a2b162b510678d78269",
+      "resultFingerprint": "8bad60e6e7ac90d51ccf7091b9f3f1c00d0059a267d59c18ba053fb9a490b6db",
+      "schema": {
+        "required": [
+          "action",
+          "leftPath",
+          "rightPath"
+        ],
+        "optional": [
+          "changesOnly",
+          "timeoutMs"
+        ],
+        "enums": {
+          "action": [
+            "diff_state_machine_domain"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "diff",
+        "fields": [
+          "left",
+          "right",
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_edit.apply_element_spec",
+      "schemaFingerprint": "30b2eb8e72450c553869d8d1cd6062788202a6443ae580a7be3f632d9e6f5663",
+      "rulesFingerprint": "1c1be4e56d6a7c13ee8c012f4e9512b1347127a5431d87c3c5fbfd91ad371885",
+      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "schema": {
+        "required": [
+          "action"
+        ],
+        "optional": [
+          "phase",
+          "projectPath",
+          "dataTarget",
+          "implementationTarget",
+          "deleteMissing",
+          "recreateIncompatible",
+          "executeWrite"
+        ],
+        "enums": {
+          "action": [
+            "apply_element_spec"
+          ],
+          "phase": [
+            "plan",
+            "commit"
+          ],
+          "intent": [
+            "create",
+            "patch",
+            "upsert",
+            "restore"
+          ]
+        },
+        "variants": [
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "intent",
+              "elements"
+            ],
+            "optional": [
+              "phase",
+              "projectPath",
+              "dataTarget",
+              "implementationTarget",
+              "deleteMissing",
+              "recreateIncompatible",
+              "executeWrite"
+            ],
+            "when": {
+              "phase": [
+                "plan"
+              ],
+              "intent": [
+                "create"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "intent",
+              "elements"
+            ],
+            "optional": [
+              "phase",
+              "projectPath",
+              "dataTarget",
+              "implementationTarget",
+              "deleteMissing",
+              "recreateIncompatible",
+              "executeWrite"
+            ],
+            "when": {
+              "phase": [
+                "plan"
+              ],
+              "intent": [
+                "patch"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "intent",
+              "elements"
+            ],
+            "optional": [
+              "phase",
+              "projectPath",
+              "dataTarget",
+              "implementationTarget",
+              "deleteMissing",
+              "recreateIncompatible",
+              "executeWrite"
+            ],
+            "when": {
+              "phase": [
+                "plan"
+              ],
+              "intent": [
+                "upsert"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "intent",
+              "elements"
+            ],
+            "optional": [
+              "phase",
+              "projectPath",
+              "dataTarget",
+              "implementationTarget",
+              "deleteMissing",
+              "recreateIncompatible",
+              "executeWrite"
+            ],
+            "when": {
+              "phase": [
+                "plan"
+              ],
+              "intent": [
+                "restore"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "phase",
+              "planId"
+            ],
+            "optional": [
+              "executeWrite"
+            ],
+            "when": {
+              "phase": [
+                "commit"
+              ]
+            }
+          }
+        ]
+      },
+      "supportedObjectKinds": [
+        "class",
+        "module",
+        "statemachine"
+      ],
+      "result": {
+        "shape": "writePreflightOrResult",
+        "fields": [
+          "status",
+          "changed",
+          "verification",
+          "observations"
+        ]
+      }
+    },
+    {
+      "id": "ascet_edit.apply_project_formula",
+      "schemaFingerprint": "d9807097b61e9d6b069acb8449ae8131386093bf3b45d4786ae33f34507838b7",
+      "rulesFingerprint": "857a33930b0f634267abb7d9f89ddbbc3b806d519ed578ec63584305c2bfe32d",
+      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "schema": {
+        "required": [
+          "action",
+          "projectPath",
+          "specFile"
+        ],
+        "optional": [
+          "mode",
+          "deleteMissing",
+          "executeWrite"
+        ],
+        "enums": {
+          "action": [
+            "apply_project_formula"
+          ],
+          "mode": [
+            "restore"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "writePreflightOrResult",
+        "fields": [
+          "status",
+          "changed",
+          "verification",
+          "observations"
+        ]
+      }
+    },
+    {
+      "id": "ascet_edit.check",
+      "schemaFingerprint": "82248f86459a5045c4cc4322f551092c39c3c8ab8dfc5285017aaddf29d94b84",
+      "rulesFingerprint": "68e04ec0446a5bc5c3098f37dbe89e74bf8e7286b2a01160a3330bcad1335e5b",
+      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "schema": {
+        "required": [],
+        "optional": [
+          "executeWrite",
+          "language",
+          "ifExists",
+          "rollbackOnFailure",
+          "componentKind",
+          "methodKind",
+          "returnType",
+          "arguments",
+          "ifReturnExists",
+          "ifMissing",
+          "code",
+          "codeFile",
+          "operation",
+          "section",
+          "methodName",
+          "stateName",
+          "sourceState",
+          "targetState",
+          "priority",
+          "phase",
+          "projectPath",
+          "dataTarget",
+          "implementationTarget",
+          "deleteMissing",
+          "recreateIncompatible",
+          "mode",
+          "targetPath",
+          "componentPath",
+          "dependencyFormula",
+          "dependencyFormals",
+          "bindingPolicy",
+          "dependencyMappings",
+          "variantMappings",
+          "variantPolicy",
+          "variants",
+          "valueRestoration",
+          "clearDependencyFormula",
+          "targetKind",
+          "match"
+        ],
+        "enums": {
+          "action": [
+            "create_folder",
+            "create_component",
+            "create_method",
+            "set_method_signature",
+            "delete_component",
+            "delete_method",
+            "delete_folder",
+            "set_method_code",
+            "set_module_code",
+            "set_state_machine_code",
+            "set_enumerators",
+            "apply_element_spec",
+            "apply_project_formula",
+            "set_element_dependency"
+          ],
+          "kind": [
+            "class",
+            "module",
+            "statemachine",
+            "enumeration"
+          ],
+          "language": [
+            "ESDL",
+            "BDE",
+            "C"
+          ],
+          "ifExists": [
+            "fail",
+            "return-existing"
+          ],
+          "componentKind": [
+            "class",
+            "module",
+            "statemachine"
+          ],
+          "methodKind": [
+            "abstract",
+            "process",
+            "action",
+            "condition",
+            "trigger"
+          ],
+          "returnType": [
+            "cont",
+            "sdisc",
+            "udisc",
+            "log"
+          ],
+          "ifReturnExists": [
+            "fail",
+            "keep",
+            "replace"
+          ],
+          "ifMissing": [
+            "fail",
+            "ignore"
+          ],
+          "operation": [
+            "set-method",
+            "set-header",
+            "set-external-c-code",
+            "set-state-entry-esdl",
+            "set-state-exit-esdl",
+            "set-state-static-esdl",
+            "bind-state-entry-method",
+            "bind-state-exit-method",
+            "bind-state-static-method",
+            "set-transition-condition-esdl",
+            "set-transition-action-esdl",
+            "bind-transition-condition-method",
+            "bind-transition-action-method",
+            "set-start-state"
+          ],
+          "section": [
+            "set-method",
+            "set-header",
+            "set-external-c-code"
+          ],
+          "phase": [
+            "plan",
+            "commit"
+          ],
+          "intent": [
+            "create",
+            "patch",
+            "upsert",
+            "restore"
+          ],
+          "mode": [
+            "restore",
+            "check",
+            "set"
+          ],
+          "dependency": [
+            "dependent",
+            "independent"
+          ],
+          "bindingPolicy": [
+            "explicit",
+            "autoExactName"
+          ],
+          "variantPolicy": [
+            "default",
+            "selected",
+            "all"
+          ],
+          "targetKind": [
+            "auto",
+            "component",
+            "folder"
+          ],
+          "match": [
+            "exact",
+            "all"
+          ]
+        },
+        "variants": [
+          {
+            "required": [
+              "action",
+              "folderPath"
+            ],
+            "optional": [
+              "executeWrite"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "kind"
+            ],
+            "optional": [
+              "language",
+              "ifExists",
+              "rollbackOnFailure",
+              "executeWrite"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "methodName"
+            ],
+            "optional": [
+              "componentKind",
+              "methodKind",
+              "ifExists",
+              "executeWrite"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "methodName"
+            ],
+            "optional": [
+              "returnType",
+              "arguments",
+              "ifReturnExists",
+              "executeWrite"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "componentPath"
+            ],
+            "optional": [
+              "ifMissing",
+              "executeWrite"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "methodName"
+            ],
+            "optional": [
+              "ifMissing",
+              "executeWrite"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "folderPath"
+            ],
+            "optional": [
+              "ifMissing",
+              "executeWrite"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "methodName"
+            ],
+            "optional": [
+              "code",
+              "codeFile",
+              "executeWrite"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "modulePath"
+            ],
+            "optional": [
+              "operation",
+              "section",
+              "methodName",
+              "code",
+              "codeFile",
+              "executeWrite"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "stateMachinePath",
+              "operation"
+            ],
+            "optional": [
+              "stateName",
+              "sourceState",
+              "targetState",
+              "priority",
+              "methodName",
+              "code",
+              "codeFile",
+              "executeWrite"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "enumerators"
+            ],
+            "optional": [
+              "executeWrite"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "intent",
+              "elements"
+            ],
+            "optional": [
+              "phase",
+              "projectPath",
+              "dataTarget",
+              "implementationTarget",
+              "deleteMissing",
+              "recreateIncompatible",
+              "executeWrite"
+            ],
+            "when": {
+              "phase": [
+                "plan"
+              ],
+              "intent": [
+                "create"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "intent",
+              "elements"
+            ],
+            "optional": [
+              "phase",
+              "projectPath",
+              "dataTarget",
+              "implementationTarget",
+              "deleteMissing",
+              "recreateIncompatible",
+              "executeWrite"
+            ],
+            "when": {
+              "phase": [
+                "plan"
+              ],
+              "intent": [
+                "patch"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "intent",
+              "elements"
+            ],
+            "optional": [
+              "phase",
+              "projectPath",
+              "dataTarget",
+              "implementationTarget",
+              "deleteMissing",
+              "recreateIncompatible",
+              "executeWrite"
+            ],
+            "when": {
+              "phase": [
+                "plan"
+              ],
+              "intent": [
+                "upsert"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "intent",
+              "elements"
+            ],
+            "optional": [
+              "phase",
+              "projectPath",
+              "dataTarget",
+              "implementationTarget",
+              "deleteMissing",
+              "recreateIncompatible",
+              "executeWrite"
+            ],
+            "when": {
+              "phase": [
+                "plan"
+              ],
+              "intent": [
+                "restore"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "phase",
+              "planId"
+            ],
+            "optional": [
+              "executeWrite"
+            ],
+            "when": {
+              "phase": [
+                "commit"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "projectPath",
+              "specFile"
+            ],
+            "optional": [
+              "mode",
+              "deleteMissing",
+              "executeWrite"
+            ],
+            "when": {
+              "mode": [
+                "restore"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "elementName",
+              "dependency"
+            ],
+            "optional": [
+              "phase",
+              "targetPath",
+              "componentPath",
+              "dependencyFormula",
+              "dependencyFormals",
+              "bindingPolicy",
+              "dependencyMappings",
+              "variantMappings",
+              "variantPolicy",
+              "variants",
+              "valueRestoration",
+              "clearDependencyFormula",
+              "targetKind",
+              "match",
+              "executeWrite"
+            ],
+            "when": {
+              "phase": [
+                "plan"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "phase",
+              "planId"
+            ],
+            "optional": [
+              "executeWrite"
+            ],
+            "when": {
+              "phase": [
+                "commit"
+              ]
+            }
+          },
+          {
+            "required": [
+              "mode",
+              "componentPath"
+            ],
+            "optional": [
+              "executeWrite"
+            ],
+            "when": {
+              "mode": [
+                "check"
+              ]
+            }
+          },
+          {
+            "required": [
+              "mode",
+              "componentPath"
+            ],
+            "optional": [
+              "executeWrite"
+            ],
+            "when": {
+              "mode": [
+                "set"
+              ]
+            }
+          }
+        ]
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "writePreflightOrResult",
+        "fields": [
+          "status",
+          "changed",
+          "verification",
+          "observations"
+        ]
+      }
+    },
+    {
+      "id": "ascet_edit.create_component",
+      "schemaFingerprint": "ff2433c0a1b5ac0c4b1384fced0066198b9928a8b8355aa637e570efc6c124c3",
+      "rulesFingerprint": "fbfc852152c23c1f527acb47aaf2965b89151c1ca451321cebde07ec8bb6c1f8",
+      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "schema": {
+        "required": [
+          "action",
+          "componentPath",
+          "kind"
+        ],
+        "optional": [
+          "language",
+          "ifExists",
+          "rollbackOnFailure",
+          "executeWrite"
+        ],
+        "enums": {
+          "action": [
+            "create_component"
+          ],
+          "kind": [
+            "class",
+            "module",
+            "statemachine",
+            "enumeration"
+          ],
+          "language": [
+            "ESDL",
+            "BDE",
+            "C"
+          ],
+          "ifExists": [
+            "fail",
+            "return-existing"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "writePreflightOrResult",
+        "fields": [
+          "status",
+          "changed",
+          "verification",
+          "observations"
+        ]
+      }
+    },
+    {
+      "id": "ascet_edit.create_folder",
+      "schemaFingerprint": "4da2ed4137b64f0a3f7c9bc8abf9a07b53ca6a7746833242e027e6d75e607bb7",
+      "rulesFingerprint": "2da045f19e50c584f248353a377a7f84758d5f71a25881c1a46e1de2b164cb96",
+      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "schema": {
+        "required": [
+          "action",
+          "folderPath"
+        ],
+        "optional": [
+          "executeWrite"
+        ],
+        "enums": {
+          "action": [
+            "create_folder"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "writePreflightOrResult",
+        "fields": [
+          "status",
+          "changed",
+          "verification",
+          "observations"
+        ]
+      }
+    },
+    {
+      "id": "ascet_edit.create_method",
+      "schemaFingerprint": "00fa143e02d04699d8e6d3aa9999929355f2d8d51566c1f1f90de5d5150a1462",
+      "rulesFingerprint": "beb65c99aed9c531effcffa0f73f43f35b1a80482a13b13d96eb1003258bd784",
+      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "schema": {
+        "required": [
+          "action",
+          "componentPath",
+          "methodName"
+        ],
+        "optional": [
+          "componentKind",
+          "methodKind",
+          "ifExists",
+          "executeWrite"
+        ],
+        "enums": {
+          "action": [
+            "create_method"
+          ],
+          "componentKind": [
+            "class",
+            "module",
+            "statemachine"
+          ],
+          "methodKind": [
+            "abstract",
+            "process",
+            "action",
+            "condition",
+            "trigger"
+          ],
+          "ifExists": [
+            "fail",
+            "return-existing"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "writePreflightOrResult",
+        "fields": [
+          "status",
+          "changed",
+          "verification",
+          "observations"
+        ]
+      }
+    },
+    {
+      "id": "ascet_edit.delete_component",
+      "schemaFingerprint": "6c9c6cf90de9c90d2976522ea537316949b2b486ac9e47fcd45e505453729b1a",
+      "rulesFingerprint": "2da045f19e50c584f248353a377a7f84758d5f71a25881c1a46e1de2b164cb96",
+      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "schema": {
+        "required": [
+          "action",
+          "componentPath"
+        ],
+        "optional": [
+          "ifMissing",
+          "executeWrite"
+        ],
+        "enums": {
+          "action": [
+            "delete_component"
+          ],
+          "ifMissing": [
+            "fail",
+            "ignore"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "writePreflightOrResult",
+        "fields": [
+          "status",
+          "changed",
+          "verification",
+          "observations"
+        ]
+      }
+    },
+    {
+      "id": "ascet_edit.delete_folder",
+      "schemaFingerprint": "d19a9f03492dddc3ca1f3456e86297eb6c01f04097ab081f2833c4e1ea33f34e",
+      "rulesFingerprint": "2da045f19e50c584f248353a377a7f84758d5f71a25881c1a46e1de2b164cb96",
+      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "schema": {
+        "required": [
+          "action",
+          "folderPath"
+        ],
+        "optional": [
+          "ifMissing",
+          "executeWrite"
+        ],
+        "enums": {
+          "action": [
+            "delete_folder"
+          ],
+          "ifMissing": [
+            "fail",
+            "ignore"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "writePreflightOrResult",
+        "fields": [
+          "status",
+          "changed",
+          "verification",
+          "observations"
+        ]
+      }
+    },
+    {
+      "id": "ascet_edit.delete_method",
+      "schemaFingerprint": "1c1a5f4644cb820b2ca4fbd1da795de9254f5a77b9611422d4f5637ed7dd3dde",
+      "rulesFingerprint": "2da045f19e50c584f248353a377a7f84758d5f71a25881c1a46e1de2b164cb96",
+      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "schema": {
+        "required": [
+          "action",
+          "componentPath",
+          "methodName"
+        ],
+        "optional": [
+          "ifMissing",
+          "executeWrite"
+        ],
+        "enums": {
+          "action": [
+            "delete_method"
+          ],
+          "ifMissing": [
+            "fail",
+            "ignore"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "writePreflightOrResult",
+        "fields": [
+          "status",
+          "changed",
+          "verification",
+          "observations"
+        ]
+      }
+    },
+    {
+      "id": "ascet_edit.set",
+      "schemaFingerprint": "82248f86459a5045c4cc4322f551092c39c3c8ab8dfc5285017aaddf29d94b84",
+      "rulesFingerprint": "9edf0abecd197a006493c93c12229baf68a7c67ca678e786ee94ce2a2a0ce8d2",
+      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "schema": {
+        "required": [],
+        "optional": [
+          "executeWrite",
+          "language",
+          "ifExists",
+          "rollbackOnFailure",
+          "componentKind",
+          "methodKind",
+          "returnType",
+          "arguments",
+          "ifReturnExists",
+          "ifMissing",
+          "code",
+          "codeFile",
+          "operation",
+          "section",
+          "methodName",
+          "stateName",
+          "sourceState",
+          "targetState",
+          "priority",
+          "phase",
+          "projectPath",
+          "dataTarget",
+          "implementationTarget",
+          "deleteMissing",
+          "recreateIncompatible",
+          "mode",
+          "targetPath",
+          "componentPath",
+          "dependencyFormula",
+          "dependencyFormals",
+          "bindingPolicy",
+          "dependencyMappings",
+          "variantMappings",
+          "variantPolicy",
+          "variants",
+          "valueRestoration",
+          "clearDependencyFormula",
+          "targetKind",
+          "match"
+        ],
+        "enums": {
+          "action": [
+            "create_folder",
+            "create_component",
+            "create_method",
+            "set_method_signature",
+            "delete_component",
+            "delete_method",
+            "delete_folder",
+            "set_method_code",
+            "set_module_code",
+            "set_state_machine_code",
+            "set_enumerators",
+            "apply_element_spec",
+            "apply_project_formula",
+            "set_element_dependency"
+          ],
+          "kind": [
+            "class",
+            "module",
+            "statemachine",
+            "enumeration"
+          ],
+          "language": [
+            "ESDL",
+            "BDE",
+            "C"
+          ],
+          "ifExists": [
+            "fail",
+            "return-existing"
+          ],
+          "componentKind": [
+            "class",
+            "module",
+            "statemachine"
+          ],
+          "methodKind": [
+            "abstract",
+            "process",
+            "action",
+            "condition",
+            "trigger"
+          ],
+          "returnType": [
+            "cont",
+            "sdisc",
+            "udisc",
+            "log"
+          ],
+          "ifReturnExists": [
+            "fail",
+            "keep",
+            "replace"
+          ],
+          "ifMissing": [
+            "fail",
+            "ignore"
+          ],
+          "operation": [
+            "set-method",
+            "set-header",
+            "set-external-c-code",
+            "set-state-entry-esdl",
+            "set-state-exit-esdl",
+            "set-state-static-esdl",
+            "bind-state-entry-method",
+            "bind-state-exit-method",
+            "bind-state-static-method",
+            "set-transition-condition-esdl",
+            "set-transition-action-esdl",
+            "bind-transition-condition-method",
+            "bind-transition-action-method",
+            "set-start-state"
+          ],
+          "section": [
+            "set-method",
+            "set-header",
+            "set-external-c-code"
+          ],
+          "phase": [
+            "plan",
+            "commit"
+          ],
+          "intent": [
+            "create",
+            "patch",
+            "upsert",
+            "restore"
+          ],
+          "mode": [
+            "restore",
+            "check",
+            "set"
+          ],
+          "dependency": [
+            "dependent",
+            "independent"
+          ],
+          "bindingPolicy": [
+            "explicit",
+            "autoExactName"
+          ],
+          "variantPolicy": [
+            "default",
+            "selected",
+            "all"
+          ],
+          "targetKind": [
+            "auto",
+            "component",
+            "folder"
+          ],
+          "match": [
+            "exact",
+            "all"
+          ]
+        },
+        "variants": [
+          {
+            "required": [
+              "action",
+              "folderPath"
+            ],
+            "optional": [
+              "executeWrite"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "kind"
+            ],
+            "optional": [
+              "language",
+              "ifExists",
+              "rollbackOnFailure",
+              "executeWrite"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "methodName"
+            ],
+            "optional": [
+              "componentKind",
+              "methodKind",
+              "ifExists",
+              "executeWrite"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "methodName"
+            ],
+            "optional": [
+              "returnType",
+              "arguments",
+              "ifReturnExists",
+              "executeWrite"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "componentPath"
+            ],
+            "optional": [
+              "ifMissing",
+              "executeWrite"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "methodName"
+            ],
+            "optional": [
+              "ifMissing",
+              "executeWrite"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "folderPath"
+            ],
+            "optional": [
+              "ifMissing",
+              "executeWrite"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "methodName"
+            ],
+            "optional": [
+              "code",
+              "codeFile",
+              "executeWrite"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "modulePath"
+            ],
+            "optional": [
+              "operation",
+              "section",
+              "methodName",
+              "code",
+              "codeFile",
+              "executeWrite"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "stateMachinePath",
+              "operation"
+            ],
+            "optional": [
+              "stateName",
+              "sourceState",
+              "targetState",
+              "priority",
+              "methodName",
+              "code",
+              "codeFile",
+              "executeWrite"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "enumerators"
+            ],
+            "optional": [
+              "executeWrite"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "intent",
+              "elements"
+            ],
+            "optional": [
+              "phase",
+              "projectPath",
+              "dataTarget",
+              "implementationTarget",
+              "deleteMissing",
+              "recreateIncompatible",
+              "executeWrite"
+            ],
+            "when": {
+              "phase": [
+                "plan"
+              ],
+              "intent": [
+                "create"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "intent",
+              "elements"
+            ],
+            "optional": [
+              "phase",
+              "projectPath",
+              "dataTarget",
+              "implementationTarget",
+              "deleteMissing",
+              "recreateIncompatible",
+              "executeWrite"
+            ],
+            "when": {
+              "phase": [
+                "plan"
+              ],
+              "intent": [
+                "patch"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "intent",
+              "elements"
+            ],
+            "optional": [
+              "phase",
+              "projectPath",
+              "dataTarget",
+              "implementationTarget",
+              "deleteMissing",
+              "recreateIncompatible",
+              "executeWrite"
+            ],
+            "when": {
+              "phase": [
+                "plan"
+              ],
+              "intent": [
+                "upsert"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "intent",
+              "elements"
+            ],
+            "optional": [
+              "phase",
+              "projectPath",
+              "dataTarget",
+              "implementationTarget",
+              "deleteMissing",
+              "recreateIncompatible",
+              "executeWrite"
+            ],
+            "when": {
+              "phase": [
+                "plan"
+              ],
+              "intent": [
+                "restore"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "phase",
+              "planId"
+            ],
+            "optional": [
+              "executeWrite"
+            ],
+            "when": {
+              "phase": [
+                "commit"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "projectPath",
+              "specFile"
+            ],
+            "optional": [
+              "mode",
+              "deleteMissing",
+              "executeWrite"
+            ],
+            "when": {
+              "mode": [
+                "restore"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "elementName",
+              "dependency"
+            ],
+            "optional": [
+              "phase",
+              "targetPath",
+              "componentPath",
+              "dependencyFormula",
+              "dependencyFormals",
+              "bindingPolicy",
+              "dependencyMappings",
+              "variantMappings",
+              "variantPolicy",
+              "variants",
+              "valueRestoration",
+              "clearDependencyFormula",
+              "targetKind",
+              "match",
+              "executeWrite"
+            ],
+            "when": {
+              "phase": [
+                "plan"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "phase",
+              "planId"
+            ],
+            "optional": [
+              "executeWrite"
+            ],
+            "when": {
+              "phase": [
+                "commit"
+              ]
+            }
+          },
+          {
+            "required": [
+              "mode",
+              "componentPath"
+            ],
+            "optional": [
+              "executeWrite"
+            ],
+            "when": {
+              "mode": [
+                "check"
+              ]
+            }
+          },
+          {
+            "required": [
+              "mode",
+              "componentPath"
+            ],
+            "optional": [
+              "executeWrite"
+            ],
+            "when": {
+              "mode": [
+                "set"
+              ]
+            }
+          }
+        ]
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "writePreflightOrResult",
+        "fields": [
+          "status",
+          "changed",
+          "verification",
+          "observations"
+        ]
+      }
+    },
+    {
+      "id": "ascet_edit.set_element_dependency",
+      "schemaFingerprint": "fff2244b5f114c9545f866d2e4748cfc346a1fee15ec22f28b95df02c9ef447b",
+      "rulesFingerprint": "ccbb93a871cdb12724c81b3718e300ae028b0476d34d924fa5818d263c9b1209",
+      "resultFingerprint": "e4aa326311030a19a7ff709ead6c1ae303f9f93b266524a026adeb78b2ed7dcc",
+      "schema": {
+        "required": [
+          "action"
+        ],
+        "optional": [
+          "phase",
+          "targetPath",
+          "componentPath",
+          "dependencyFormula",
+          "dependencyFormals",
+          "bindingPolicy",
+          "dependencyMappings",
+          "variantMappings",
+          "variantPolicy",
+          "variants",
+          "valueRestoration",
+          "clearDependencyFormula",
+          "targetKind",
+          "match",
+          "executeWrite"
+        ],
+        "enums": {
+          "action": [
+            "set_element_dependency"
+          ],
+          "phase": [
+            "plan",
+            "commit"
+          ],
+          "dependency": [
+            "dependent",
+            "independent"
+          ],
+          "bindingPolicy": [
+            "explicit",
+            "autoExactName"
+          ],
+          "variantPolicy": [
+            "default",
+            "selected",
+            "all"
+          ],
+          "targetKind": [
+            "auto",
+            "component",
+            "folder"
+          ],
+          "match": [
+            "exact",
+            "all"
+          ]
+        },
+        "variants": [
+          {
+            "required": [
+              "action",
+              "elementName",
+              "dependency"
+            ],
+            "optional": [
+              "phase",
+              "targetPath",
+              "componentPath",
+              "dependencyFormula",
+              "dependencyFormals",
+              "bindingPolicy",
+              "dependencyMappings",
+              "variantMappings",
+              "variantPolicy",
+              "variants",
+              "valueRestoration",
+              "clearDependencyFormula",
+              "targetKind",
+              "match",
+              "executeWrite"
+            ],
+            "when": {
+              "phase": [
+                "plan"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "phase",
+              "planId"
+            ],
+            "optional": [
+              "executeWrite"
+            ],
+            "when": {
+              "phase": [
+                "commit"
+              ]
+            }
+          }
+        ]
+      },
+      "supportedObjectKinds": [
+        "folder",
+        "class",
+        "module",
+        "statemachine"
+      ],
+      "result": {
+        "shape": "writeResult",
+        "fields": [
+          "changed",
+          "verification",
+          "observations.invalidated"
+        ]
+      }
+    },
+    {
+      "id": "ascet_edit.set_enumerators",
+      "schemaFingerprint": "a32eeefd1815310868739ae7131a9212ae10f4a2dd3bc555b2438101ba8bf7ff",
+      "rulesFingerprint": "2da045f19e50c584f248353a377a7f84758d5f71a25881c1a46e1de2b164cb96",
+      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "schema": {
+        "required": [
+          "action",
+          "componentPath",
+          "enumerators"
+        ],
+        "optional": [
+          "executeWrite"
+        ],
+        "enums": {
+          "action": [
+            "set_enumerators"
+          ]
+        }
+      },
+      "supportedObjectKinds": [
+        "enumeration"
+      ],
+      "result": {
+        "shape": "writePreflightOrResult",
+        "fields": [
+          "status",
+          "changed",
+          "verification",
+          "observations"
+        ]
+      }
+    },
+    {
+      "id": "ascet_edit.set_method_code",
+      "schemaFingerprint": "2e20000c32f6abd27b3439cd901dc9faa365e9f79fe92fa623498b1897ead9c7",
+      "rulesFingerprint": "1b84406e76d27d72612460654dd1d03447539d00cf953e1448a858614c18e797",
+      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "schema": {
+        "required": [
+          "action",
+          "componentPath",
+          "methodName"
+        ],
+        "optional": [
+          "code",
+          "codeFile",
+          "executeWrite"
+        ],
+        "enums": {
+          "action": [
+            "set_method_code"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "writePreflightOrResult",
+        "fields": [
+          "status",
+          "changed",
+          "verification",
+          "observations"
+        ]
+      }
+    },
+    {
+      "id": "ascet_edit.set_method_signature",
+      "schemaFingerprint": "1cea31381aab61cf3ec5f73adecde7dba89be5dc4fde43d799ef9806f1a21f8d",
+      "rulesFingerprint": "275453acb63855a9d1aeb7a8369bfe38246e964f42bb2c78b79b03bb35c70d01",
+      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "schema": {
+        "required": [
+          "action",
+          "componentPath",
+          "methodName"
+        ],
+        "optional": [
+          "returnType",
+          "arguments",
+          "ifReturnExists",
+          "executeWrite"
+        ],
+        "enums": {
+          "action": [
+            "set_method_signature"
+          ],
+          "returnType": [
+            "cont",
+            "sdisc",
+            "udisc",
+            "log"
+          ],
+          "ifReturnExists": [
+            "fail",
+            "keep",
+            "replace"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "writePreflightOrResult",
+        "fields": [
+          "status",
+          "changed",
+          "verification",
+          "observations"
+        ]
+      }
+    },
+    {
+      "id": "ascet_edit.set_module_code",
+      "schemaFingerprint": "4ff9c64fa3590c8ea2c625b2dd46f458f7a36551aa7a5b874f7360fef5c0f7e1",
+      "rulesFingerprint": "f49502d417ba9adcddfd375cb173e66e1a2ccd2e6b6cea32e09ffca269b60675",
+      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "schema": {
+        "required": [
+          "action",
+          "modulePath"
+        ],
+        "optional": [
+          "operation",
+          "section",
+          "methodName",
+          "code",
+          "codeFile",
+          "executeWrite"
+        ],
+        "enums": {
+          "action": [
+            "set_module_code"
+          ],
+          "operation": [
+            "set-method",
+            "set-header",
+            "set-external-c-code"
+          ],
+          "section": [
+            "set-method",
+            "set-header",
+            "set-external-c-code"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "writePreflightOrResult",
+        "fields": [
+          "status",
+          "changed",
+          "verification",
+          "observations"
+        ]
+      }
+    },
+    {
+      "id": "ascet_edit.set_state_machine_code",
+      "schemaFingerprint": "1449890ba1419d5a76510cd746d832fdff0f1ce3e1482cfe86bca2fb11183e83",
+      "rulesFingerprint": "5d883755988dc2fad87f3fa66908a8de0d3854f9e2d848906fc4f33820fc459c",
+      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "schema": {
+        "required": [
+          "action",
+          "stateMachinePath",
+          "operation"
+        ],
+        "optional": [
+          "stateName",
+          "sourceState",
+          "targetState",
+          "priority",
+          "methodName",
+          "code",
+          "codeFile",
+          "executeWrite"
+        ],
+        "enums": {
+          "action": [
+            "set_state_machine_code"
+          ],
+          "operation": [
+            "set-method",
+            "set-state-entry-esdl",
+            "set-state-exit-esdl",
+            "set-state-static-esdl",
+            "bind-state-entry-method",
+            "bind-state-exit-method",
+            "bind-state-static-method",
+            "set-transition-condition-esdl",
+            "set-transition-action-esdl",
+            "bind-transition-condition-method",
+            "bind-transition-action-method",
+            "set-start-state"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "writePreflightOrResult",
+        "fields": [
+          "status",
+          "changed",
+          "verification",
+          "observations"
+        ]
+      }
+    },
+    {
+      "id": "ascet_get.bde_edges",
+      "schemaFingerprint": "0997bbf35cfdaccf3c11b946c3cc4500b3c936d0713ed4a8834b7e51f1eaecce",
+      "rulesFingerprint": "cd97e3efe7d187251541de85402d94bc90ac79437d405599599bbe9ca5e25343",
+      "resultFingerprint": "ecd4aa85325baf18b24c29618cf9cff4891b6e7d0c90cfbc32d0cc19a4c93d58",
+      "schema": {
+        "required": [
+          "action",
+          "target"
+        ],
+        "optional": [
+          "filters",
+          "traversal",
+          "delivery",
+          "diagramName"
+        ],
+        "enums": {
+          "action": [
+            "bde_edges"
+          ],
+          "delivery": [
+            "auto",
+            "inline",
+            "stored"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "observation",
+        "fields": [
+          "delivery",
+          "items",
+          "observation",
+          "coverage",
+          "truncated"
+        ]
+      }
+    },
+    {
+      "id": "ascet_get.component_refs",
+      "schemaFingerprint": "17d642d365830f8139da982397196b6c2d8ab8537089b017d1d4b7cebf93e21f",
+      "rulesFingerprint": "4af1c7bed62bd37deff252bd18bba66929ee47236800f0e15cfaf37a9b7c1689",
+      "resultFingerprint": "ecd4aa85325baf18b24c29618cf9cff4891b6e7d0c90cfbc32d0cc19a4c93d58",
+      "schema": {
+        "required": [
+          "action",
+          "target"
+        ],
+        "optional": [
+          "filters",
+          "traversal",
+          "delivery"
+        ],
+        "enums": {
+          "action": [
+            "component_refs"
+          ],
+          "delivery": [
+            "auto",
+            "inline",
+            "stored"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "observation",
+        "fields": [
+          "delivery",
+          "items",
+          "observation",
+          "coverage",
+          "truncated"
+        ]
+      }
+    },
+    {
+      "id": "ascet_get.database_catalog",
+      "schemaFingerprint": "d67ca29973fb1211fea8c1d4eb0d45d5cc99e474b77b1563687fa5f96248463c",
+      "rulesFingerprint": "d2fcd7110392d52b60354fcf6d1ea172cf9a7628b9e15987eeaa66bc1bcf2e3e",
+      "resultFingerprint": "ecd4aa85325baf18b24c29618cf9cff4891b6e7d0c90cfbc32d0cc19a4c93d58",
+      "schema": {
+        "required": [
+          "action",
+          "sourceTreeResultId",
+          "include"
+        ],
+        "optional": [
+          "messageDepth",
+          "delivery"
+        ],
+        "enums": {
+          "action": [
+            "database_catalog"
+          ],
+          "delivery": [
+            "stored"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "observation",
+        "fields": [
+          "delivery",
+          "items",
+          "observation",
+          "coverage",
+          "truncated"
+        ]
+      }
+    },
+    {
+      "id": "ascet_get.dbitem_refs",
+      "schemaFingerprint": "3e38d6c72bc0b6c116c8ab264c182477dc186e86ea1260914b10ffe48be9713a",
+      "rulesFingerprint": "105c5df338204c54e95cf94973546f194bd188256e440f253623049711b85ff9",
+      "resultFingerprint": "ecd4aa85325baf18b24c29618cf9cff4891b6e7d0c90cfbc32d0cc19a4c93d58",
+      "schema": {
+        "required": [
+          "action",
+          "target"
+        ],
+        "optional": [
+          "filters",
+          "traversal",
+          "delivery"
+        ],
+        "enums": {
+          "action": [
+            "dbitem_refs"
+          ],
+          "delivery": [
+            "auto",
+            "inline",
+            "stored"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "observation",
+        "fields": [
+          "delivery",
+          "items",
+          "observation",
+          "coverage",
+          "truncated"
+        ]
+      }
+    },
+    {
+      "id": "ascet_get.elements",
+      "schemaFingerprint": "6854b60052bfd58ab2a23276b451384d9c8e6d139abf4b367171f07989be6303",
+      "rulesFingerprint": "992bdb56a42fbaee70993767fc2b307488724d41b0eaae2b0255967555db64ce",
+      "resultFingerprint": "ecd4aa85325baf18b24c29618cf9cff4891b6e7d0c90cfbc32d0cc19a4c93d58",
+      "schema": {
+        "required": [
+          "action",
+          "target"
+        ],
+        "optional": [
+          "filters",
+          "traversal",
+          "delivery",
+          "elementName"
+        ],
+        "enums": {
+          "action": [
+            "elements"
+          ],
+          "delivery": [
+            "auto",
+            "inline",
+            "stored"
+          ]
+        }
+      },
+      "supportedObjectKinds": [
+        "folder",
+        "class",
+        "module",
+        "statemachine"
+      ],
+      "result": {
+        "shape": "observation",
+        "fields": [
+          "delivery",
+          "items",
+          "observation",
+          "coverage",
+          "truncated"
+        ]
+      }
+    },
+    {
+      "id": "ascet_get.formulas",
+      "schemaFingerprint": "2f84efc476da4375965959c509aaace845e27a423429f744116b48930d8457bd",
+      "rulesFingerprint": "e444e934bf57389a1c1365f7f4769b5c9b91a7d3254bf3282516dc39ec2e408d",
+      "resultFingerprint": "ecd4aa85325baf18b24c29618cf9cff4891b6e7d0c90cfbc32d0cc19a4c93d58",
+      "schema": {
+        "required": [
+          "action",
+          "target"
+        ],
+        "optional": [
+          "filters",
+          "traversal",
+          "delivery",
+          "formulaName"
+        ],
+        "enums": {
+          "action": [
+            "formulas"
+          ],
+          "delivery": [
+            "auto",
+            "inline",
+            "stored"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "observation",
+        "fields": [
+          "delivery",
+          "items",
+          "observation",
+          "coverage",
+          "truncated"
+        ]
+      }
+    },
+    {
+      "id": "ascet_get.import_binding",
+      "schemaFingerprint": "726fd9b416f8bc372eae397e2eae5f510650e2fa779f6afdf71011839643f1a7",
+      "rulesFingerprint": "d47116a91641a90943a382a74cdf489cf0804a7d954ea2130eeeac73d022d7a8",
+      "resultFingerprint": "ecd4aa85325baf18b24c29618cf9cff4891b6e7d0c90cfbc32d0cc19a4c93d58",
+      "schema": {
+        "required": [
+          "action",
+          "target",
+          "elementName",
+          "provider"
+        ],
+        "optional": [
+          "filters",
+          "traversal",
+          "delivery"
+        ],
+        "enums": {
+          "action": [
+            "import_binding"
+          ],
+          "delivery": [
+            "auto",
+            "inline",
+            "stored"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "observation",
+        "fields": [
+          "delivery",
+          "items",
+          "observation",
+          "coverage",
+          "truncated"
+        ]
+      }
+    },
+    {
+      "id": "ascet_get.tree",
+      "schemaFingerprint": "781d24add245f8faea9e30162049001a44a86d27fc429344a92fadcea22ef5ec",
+      "rulesFingerprint": "f4fe70080840ecb34bdf23707efe0e649c0bba4fb60e6dedd57151125139c734",
+      "resultFingerprint": "ecd4aa85325baf18b24c29618cf9cff4891b6e7d0c90cfbc32d0cc19a4c93d58",
+      "schema": {
+        "required": [
+          "action"
+        ],
+        "optional": [
+          "target",
+          "filters",
+          "traversal",
+          "delivery"
+        ],
+        "enums": {
+          "action": [
+            "tree"
+          ],
+          "delivery": [
+            "auto",
+            "inline",
+            "stored"
+          ],
+          "scope": [
+            "database"
+          ]
+        },
+        "variants": [
+          {
+            "required": [
+              "action"
+            ],
+            "optional": [
+              "target",
+              "filters",
+              "traversal",
+              "delivery"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "scope",
+              "delivery"
+            ],
+            "optional": [],
+            "when": {
+              "scope": [
+                "database"
+              ]
+            }
+          }
+        ]
+      },
+      "supportedObjectKinds": [
+        "database",
+        "project",
+        "folder",
+        "class",
+        "module",
+        "statemachine",
+        "enumeration"
+      ],
+      "result": {
+        "shape": "observation",
+        "fields": [
+          "delivery",
+          "items",
+          "observation",
+          "coverage",
+          "truncated"
+        ]
+      }
+    },
+    {
+      "id": "ascet_read.read",
+      "schemaFingerprint": "3fc0998c1c06d55efb40889ed6d7602b9a826f7ec657805cdefdec403f98ad86",
+      "rulesFingerprint": "b9d5863cb58d8c63e3c18f3c55ebb458c644221e79d87fde4aff2066795f68e3",
+      "resultFingerprint": "72eb32bd2fe4e9d13e97b1c658715cb02eb04a31d23a0b0c8068222d964c7cd3",
+      "schema": {
+        "required": [
+          "action",
+          "componentPath"
+        ],
+        "optional": [],
+        "enums": {
+          "action": [
+            "read"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "liveRead",
+        "fields": [
+          "component",
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_read.read_block_diagram",
+      "schemaFingerprint": "770c618e8f8fd08bd0ea8369bbbb15f70a0af679e4fc33178a07e6b0c0f879ca",
+      "rulesFingerprint": "505da93f2bb0b3a667192fcc712ad76ba41ab6fecd2fcbe50fbc0b37dbac9208",
+      "resultFingerprint": "54be0b9503f00140f66a013530dcd4d11ea5bc75ad4ebc5198d374b3113c1be6",
+      "schema": {
+        "required": [
+          "action",
+          "componentPath"
+        ],
+        "optional": [
+          "diagramName",
+          "timeoutMs"
+        ],
+        "enums": {
+          "action": [
+            "read_block_diagram"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "blockDiagram",
+        "fields": [
+          "component",
+          "name",
+          "items",
+          "counts"
+        ]
+      }
+    },
+    {
+      "id": "ascet_read.read_code",
+      "schemaFingerprint": "ac2c5b9a5d1aa30f6896d4926a311dc51962b42796ee5ae893c1436e27be4252",
+      "rulesFingerprint": "a761ac44e26952040e246efd4a2e3b04786b4dcabc40097b76ef52b076c531ef",
+      "resultFingerprint": "764d33b1ca715dc1a658b81cdd1b26e0e2432c99fc2743e995027bcf57ffaa8c",
+      "schema": {
+        "required": [
+          "action",
+          "componentPath"
+        ],
+        "optional": [
+          "methodName",
+          "section",
+          "detailLevel"
+        ],
+        "enums": {
+          "action": [
+            "read_code"
+          ],
+          "section": [
+            "body",
+            "header",
+            "external-c",
+            "all"
+          ],
+          "detailLevel": [
+            "summary",
+            "topology",
+            "full"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "codeText",
+        "fields": [
+          "component",
+          "name",
+          "section",
+          "text"
+        ]
+      }
+    },
+    {
+      "id": "ascet_read.read_dependent_chain",
+      "schemaFingerprint": "651d05723d3c9b213d71a07258e02e3dbb4db119c1c1e04a3aa0c7f85093cf70",
+      "rulesFingerprint": "6294df512c5085e2518a45d3ae7453deb6ac6858145c6d4a566d3c7ed69320b1",
+      "resultFingerprint": "c13c00211cad64d18758131fa290ad4b2b96168e9a6182ad25c370062e650963",
+      "schema": {
+        "required": [
+          "action",
+          "componentPath",
+          "dependentElement"
+        ],
+        "optional": [
+          "exporterComponentPath"
+        ],
+        "enums": {
+          "action": [
+            "read_dependent_chain"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "dependentChain",
+        "fields": [
+          "consumer",
+          "provider",
+          "items",
+          "issues"
+        ]
+      }
+    },
+    {
+      "id": "ascet_read.read_element",
+      "schemaFingerprint": "beb848d5b779ba2609b5fafbc46e3d1d3e226f910bcdb2f2e93ad3f6085c4f0c",
+      "rulesFingerprint": "0ba82a8d3ad8dc2aee542c07c4ab5f6e9f469a6eef68144c07845ec69192b8f6",
+      "resultFingerprint": "72eb32bd2fe4e9d13e97b1c658715cb02eb04a31d23a0b0c8068222d964c7cd3",
+      "schema": {
+        "required": [
+          "action",
+          "componentPath",
+          "elementName"
+        ],
+        "optional": [
+          "timeoutMs"
+        ],
+        "enums": {
+          "action": [
+            "read_element"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "liveRead",
+        "fields": [
+          "component",
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_read.read_element_dependency",
+      "schemaFingerprint": "295e6c743223299a3881126c09a3751698552b8cfa45a04c723ccecc8494e7ca",
+      "rulesFingerprint": "f60c7797a8afdba681e7a7cab3185a2133bf9c808bc1ef8015a6556ddec9b92a",
+      "resultFingerprint": "72eb32bd2fe4e9d13e97b1c658715cb02eb04a31d23a0b0c8068222d964c7cd3",
+      "schema": {
+        "required": [
+          "action",
+          "elementName"
+        ],
+        "optional": [
+          "componentPath",
+          "targetKind",
+          "targetPath"
+        ],
+        "enums": {
+          "action": [
+            "read_element_dependency"
+          ],
+          "targetKind": [
+            "auto",
+            "component",
+            "folder",
+            "project"
+          ]
+        },
+        "variants": [
+          {
+            "required": [
+              "action",
+              "targetPath",
+              "elementName"
+            ],
+            "optional": [
+              "componentPath",
+              "targetKind"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "elementName"
+            ],
+            "optional": [
+              "targetPath",
+              "targetKind"
+            ]
+          }
+        ]
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "liveRead",
+        "fields": [
+          "component",
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_read.read_implementation",
+      "schemaFingerprint": "1e0c5a2be0ed7dd4193db80a518bb96a32147107c4920fba7469b8c1aae264f4",
+      "rulesFingerprint": "0974fc1f20e48856c0985437cbbc10b5a9bf41ae1713163e1f03ca429cc430ac",
+      "resultFingerprint": "72eb32bd2fe4e9d13e97b1c658715cb02eb04a31d23a0b0c8068222d964c7cd3",
+      "schema": {
+        "required": [
+          "action",
+          "componentPath"
+        ],
+        "optional": [
+          "implementationMode",
+          "implementationName",
+          "timeoutMs"
+        ],
+        "enums": {
+          "action": [
+            "read_implementation"
+          ],
+          "implementationMode": [
+            "list",
+            "default",
+            "class-impl",
+            "impl"
+          ]
+        }
+      },
+      "supportedObjectKinds": [
+        "class",
+        "module",
+        "statemachine",
+        "enumeration"
+      ],
+      "result": {
+        "shape": "liveRead",
+        "fields": [
+          "component",
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_read.read_method_signature",
+      "schemaFingerprint": "5e1c1d5d08db51461ca9660479510e465343507334f74b43022ae0f34b7e08c6",
+      "rulesFingerprint": "22790524d010a4f876e10efed2212b6a7212d6917ad2cb52f879974ea8c3050c",
+      "resultFingerprint": "72eb32bd2fe4e9d13e97b1c658715cb02eb04a31d23a0b0c8068222d964c7cd3",
+      "schema": {
+        "required": [
+          "action",
+          "componentPath",
+          "methodName"
+        ],
+        "optional": [],
+        "enums": {
+          "action": [
+            "read_method_signature"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "liveRead",
+        "fields": [
+          "component",
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_read.read_state_machine_flow",
+      "schemaFingerprint": "a0178f15bf9f3b8de4041c628e033b95c9976d5d750f105c4d7802ac45572496",
+      "rulesFingerprint": "53eb6d3a9942f6cd8357602df19946a1231d9d4feaea1337193beb63f95211c7",
+      "resultFingerprint": "72eb32bd2fe4e9d13e97b1c658715cb02eb04a31d23a0b0c8068222d964c7cd3",
+      "schema": {
+        "required": [
+          "action",
+          "componentPath"
+        ],
+        "optional": [
+          "detailLevel",
+          "traceDepth"
+        ],
+        "enums": {
+          "action": [
+            "read_state_machine_flow"
+          ],
+          "detailLevel": [
+            "summary",
+            "topology",
+            "full"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "liveRead",
+        "fields": [
+          "component",
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_recover.clear_extension_temp",
+      "schemaFingerprint": "ae13080f45a5cd5b79b376399bf7a3a64edb3f8cba44041730e5aba177f94941",
+      "rulesFingerprint": "bf1ff4921c7f1660f8ac215796954fcc63f4a7e79387de91d522546ab7720a6c",
+      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "schema": {
+        "required": [
+          "action"
+        ],
+        "optional": [],
+        "enums": {
+          "action": [
+            "status",
+            "clear_extension_temp",
+            "scheduler_status",
+            "scheduler_recover",
+            "clear_stale_cli_lock"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "result",
+        "fields": [
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_recover.clear_stale_cli_lock",
+      "schemaFingerprint": "ae13080f45a5cd5b79b376399bf7a3a64edb3f8cba44041730e5aba177f94941",
+      "rulesFingerprint": "8241ed3bd19bd90f595a42883f975cd2b55ef63235d0fdb4dc65a9e97dda1867",
+      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "schema": {
+        "required": [
+          "action"
+        ],
+        "optional": [],
+        "enums": {
+          "action": [
+            "status",
+            "clear_extension_temp",
+            "scheduler_status",
+            "scheduler_recover",
+            "clear_stale_cli_lock"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "result",
+        "fields": [
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_recover.scheduler_recover",
+      "schemaFingerprint": "ae13080f45a5cd5b79b376399bf7a3a64edb3f8cba44041730e5aba177f94941",
+      "rulesFingerprint": "9818f536d6f3c752b04db37f592dd9738db50cff84b539aa8ee0af73bf7c2fa3",
+      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "schema": {
+        "required": [
+          "action"
+        ],
+        "optional": [],
+        "enums": {
+          "action": [
+            "status",
+            "clear_extension_temp",
+            "scheduler_status",
+            "scheduler_recover",
+            "clear_stale_cli_lock"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "result",
+        "fields": [
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_recover.scheduler_status",
+      "schemaFingerprint": "ae13080f45a5cd5b79b376399bf7a3a64edb3f8cba44041730e5aba177f94941",
+      "rulesFingerprint": "f18e91b94e99a6368eac7fd60107d0d5c369ec2da803b004e23c7301345be364",
+      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "schema": {
+        "required": [
+          "action"
+        ],
+        "optional": [],
+        "enums": {
+          "action": [
+            "status",
+            "clear_extension_temp",
+            "scheduler_status",
+            "scheduler_recover",
+            "clear_stale_cli_lock"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "result",
+        "fields": [
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_recover.status",
+      "schemaFingerprint": "ae13080f45a5cd5b79b376399bf7a3a64edb3f8cba44041730e5aba177f94941",
+      "rulesFingerprint": "a0d7b69e053dee6e200cd4043436e1a73d29b993d1847db87db61b48377632f8",
+      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "schema": {
+        "required": [
+          "action"
+        ],
+        "optional": [],
+        "enums": {
+          "action": [
+            "status",
+            "clear_extension_temp",
+            "scheduler_status",
+            "scheduler_recover",
+            "clear_stale_cli_lock"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "result",
+        "fields": [
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_scheduler_status.recover",
+      "schemaFingerprint": "10b49c1bcee229cbeac22ea2838c5960c89146a5ee9b073fe2722eeca4dfc45d",
+      "rulesFingerprint": "b7d6a5481876bccb7ac0f8dde30bc703f432da9cd9b712931e268b00f9cddc49",
+      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "schema": {
+        "required": [],
+        "optional": [
+          "action",
+          "format"
+        ],
+        "enums": {
+          "action": [
+            "status",
+            "recover"
+          ],
+          "format": [
+            "text",
+            "json"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "result",
+        "fields": [
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_scheduler_status.status",
+      "schemaFingerprint": "10b49c1bcee229cbeac22ea2838c5960c89146a5ee9b073fe2722eeca4dfc45d",
+      "rulesFingerprint": "283420890fdb1aa457d690a423cd2a5ee08eae7d9122f087e86b7e45c73f910e",
+      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "schema": {
+        "required": [],
+        "optional": [
+          "action",
+          "format"
+        ],
+        "enums": {
+          "action": [
+            "status",
+            "recover"
+          ],
+          "format": [
+            "text",
+            "json"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "result",
+        "fields": [
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_status.status",
+      "schemaFingerprint": "ea1dcc4db4123606dff315e9e587ea336d36217fa44315111489e4c577a75333",
+      "rulesFingerprint": "8b4e992bf0c0d7de91de2c6dcdc26ebed750be8b1ffd55b7309c718c1623a7b2",
+      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "schema": {
+        "required": [],
+        "optional": [
+          "action"
+        ]
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "result",
+        "fields": [
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "configure_parameter_dependency_chain.execute",
+      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
+      "rulesFingerprint": "2cb8adc47196b5529cfa1a5c01eab60c53d5ff90b6481bd1631a8eaddca2d633",
+      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "schema": {
+        "required": [
+          "action"
+        ],
+        "optional": []
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "result",
+        "fields": [
+          "items"
+        ]
+      }
+    }
+  ]
+}

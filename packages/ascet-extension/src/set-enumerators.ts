@@ -9,6 +9,10 @@ import {
 	type RunAscetEditOperationOptions,
 	runApprovedAscetEditOperation,
 } from "./edit/common.ts";
+import {
+	compareAscetEnumerationReadback,
+	parseAscetAutomaticEnumerationReadback,
+} from "./read/enumeration-readback.ts";
 
 export interface AscetSetEnumeratorsParams extends AscetEditControlParams {
 	componentPath: string;
@@ -38,12 +42,28 @@ export async function runAscetSetEnumerators(
 	params: AscetSetEnumeratorsParams,
 	options: RunAscetSetEnumeratorsOptions,
 ): Promise<AscetSetEnumeratorsResult> {
-	return runAscetCliJson(buildSetEnumeratorsArgs(params), {
+	const result = await runAscetCliJson(buildSetEnumeratorsArgs(params), {
 		...options,
 		toolName: "ascet_edit",
 		commandId: "set_enumerators",
 		jobKind: "write",
 	});
+	if (!result.ok || params.verifyReadback !== true) return result;
+	const readback = parseAscetAutomaticEnumerationReadback(result.data);
+	const comparison = compareAscetEnumerationReadback(params.enumerators, readback?.enumerators ?? []);
+	if (readback && comparison.matches) return result;
+	return {
+		...result,
+		ok: false,
+		stage: "result",
+		error: {
+			code: "readback_mismatch",
+			message: "set_enumerators automatic readback did not match the requested enumerator names and order.",
+			operation: "set_enumerators",
+			stage: "automatic_readback",
+			details: { ...comparison, requiresReadback: true },
+		},
+	};
 }
 
 export async function runApprovedAscetSetEnumerators(

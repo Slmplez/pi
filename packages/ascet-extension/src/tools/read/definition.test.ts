@@ -141,6 +141,43 @@ describe("ascet_read tool", () => {
 		assert.match(result.content[0]?.text ?? "", /out = in;/);
 	});
 
+	test("read_implementation is the public Enumeration enumerator readback path", async () => {
+		let observedArgs: string[] | undefined;
+		const result = await ascetReadTool.execute(
+			"call-enumeration",
+			{ action: "read_implementation", componentPath: "DEMO\\Mode" },
+			new AbortController().signal,
+			undefined,
+			{
+				cwd: process.cwd(),
+				executeCli: async (request) => {
+					observedArgs = request.args;
+					return {
+						exitCode: 0,
+						stdout: JSON.stringify({
+							ok: true,
+							result: {
+								componentPath: "DEMO\\Mode",
+								componentKind: "Enumeration",
+								implementationSourceKind: "TypeDefinition",
+								typeDefinition: { name: "Mode", enumerators: ["OFF", "ON"] },
+							},
+							error: null,
+						}),
+						stderr: "",
+						timedOut: false,
+						request,
+					};
+				},
+			},
+		);
+
+		assert.deepEqual(observedArgs, ["exec", "read_implementation", "DEMO\\Mode", "--json"]);
+		assert.match(result.content[0]?.text ?? "", /"enumerators": \[/);
+		assert.match(result.content[0]?.text ?? "", /"OFF"/);
+		assert.match(result.content[0]?.text ?? "", /"ON"/);
+	});
+
 	test("read_element returns only the exact live catalog entry", async () => {
 		let observedArgs: string[] | undefined;
 		const result = await ascetReadTool.execute(

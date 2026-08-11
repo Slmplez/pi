@@ -1,4 +1,4 @@
-import { type TProperties, Type } from "typebox";
+﻿import { type TProperties, Type } from "typebox";
 import { Value } from "typebox/value";
 import {
 	type AscetApplyElementSpecParams,
@@ -25,6 +25,7 @@ import {
 	type NormalizedElementSpecResult,
 	normalizeAscetElementSpec,
 } from "../element-spec-contract.ts";
+import { getAscetDatabaseIdentity } from "../get.ts";
 import {
 	type AscetCreateMethodComponentKind,
 	getDefaultCreateMethodKind,
@@ -49,6 +50,7 @@ import {
 } from "../set-state-machine-code.ts";
 import { compactObject, toToolFailurePayload, unwrapToolSuccessPayload } from "../tool-response-contract.ts";
 import { openAiObjectUnionSchema } from "../tools/_shared/openai-schema.ts";
+import { selectAscetPublicSchemaVariants } from "../tools/actions/schema-registry.ts";
 import { type AscetEditApprovalContext, isAscetEditApprovalBlockedCode, requestAscetEditApproval } from "./approval.ts";
 import {
 	type AscetObservationInvalidation,
@@ -67,13 +69,22 @@ import {
 	removeTemporaryElementSpec,
 	writeTemporaryElementSpec,
 } from "./element-spec-plan.ts";
-import { type AscetPlanJsonValue, AscetPlanStore, AscetPlanStoreError, createAscetPlanBinding } from "./plan-store.ts";
+import {
+	type AscetPlanDatabaseIdentity,
+	type AscetPlanJsonValue,
+	AscetPlanStore,
+	AscetPlanStoreError,
+	type AscetPlanTargetIdentity,
+	createAscetPlanBinding,
+	createAscetPlanContractFingerprint,
+} from "./plan-store.ts";
 import {
 	type AscetEditExecutionClassification,
 	type AscetEditMutationStatus,
 	type AscetEditVerification,
 	classifyAscetEditExecution,
 } from "./verification.ts";
+import { ascetWriteControlProperties as writeControlSchema } from "./write-control-contract.ts";
 import { recordAscetWriteTelemetry } from "./write-telemetry.ts";
 
 type CodeSource = { code?: string; codeFile?: string };
@@ -253,9 +264,6 @@ const methodSignatureArgumentSchema = strictObject({
 	type: primitiveSignatureTypeSchema,
 	ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("keep"), Type.Literal("replace")])),
 });
-const writeControlSchema = {
-	executeWrite: Type.Optional(Type.Boolean()),
-};
 const componentKindSchema = Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")]);
 const writeComponentKindSchema = Type.Union([
 	Type.Literal("class"),
@@ -446,11 +454,13 @@ export const ascetMutationActionSchemas = [
 		clearDependencyFormula: Type.Optional(Type.Boolean()),
 		targetKind: Type.Optional(Type.Union([Type.Literal("auto"), Type.Literal("component"), Type.Literal("folder")])),
 		match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("all")])),
+		...writeControlSchema,
 	}),
 	strictObject({
 		action: Type.Literal("set_element_dependency"),
 		phase: Type.Literal("commit"),
 		planId: Type.String({ minLength: 1 }),
+		...writeControlSchema,
 	}),
 ] as const;
 
@@ -587,7 +597,12 @@ export async function runAscetMutation(
 	}
 	if (isPlanManagedCommit(normalizedParams)) {
 		const startedAt = Date.now();
-		const result = await runPlanManagedCommit(normalizedParams, options, ctx);
+		const lifecycle: AscetWriteLifecycleEvidence = {
+			beforeBridge: false,
+			bridgeEntered: false,
+			backendResponseReceived: false,
+		};
+		const result = await runPlanManagedCommit(normalizedParams, options, ctx, lifecycle);
 		recordManagedWriteTelemetry(
 			normalizedParams.action,
 			"commit",
@@ -595,6 +610,7 @@ export async function runAscetMutation(
 			result,
 			options,
 			startedAt,
+			lifecycle,
 		);
 		return result;
 	}
@@ -608,10 +624,23 @@ export async function runAscetMutation(
 	}
 	if (isPlanManagedPlan(normalizedParams)) {
 		const startedAt = Date.now();
-		const result = await runPlanManagedPlan(normalizedParams, options);
+		const lifecycle: AscetWriteLifecycleEvidence = {
+			beforeBridge: false,
+			bridgeEntered: false,
+			backendResponseReceived: false,
+		};
+		const result = await runPlanManagedPlan(normalizedParams, {
+			...options,
+			onLifecycle: (event) => {
+				options.onLifecycle?.(event);
+				if (event.stage === "before_bridge") lifecycle.beforeBridge = true;
+				if (event.stage === "bridge_entered") lifecycle.bridgeEntered = true;
+				if (event.stage === "backend_response_received") lifecycle.backendResponseReceived = true;
+			},
+		});
 		const planId =
 			result.details.outcome.status === "preflight" ? String(result.details.outcome.plan.planId ?? "") : undefined;
-		recordManagedWriteTelemetry(normalizedParams.action, "plan", planId, result, options, startedAt);
+		recordManagedWriteTelemetry(normalizedParams.action, "plan", planId, result, options, startedAt, lifecycle);
 		return result;
 	}
 	if (!params.executeWrite) {
@@ -626,6 +655,12 @@ export async function runAscetMutation(
 	return finalizeAscetMutation({ params: normalizedParams, raw, options });
 }
 
+interface AscetWriteLifecycleEvidence {
+	beforeBridge: boolean;
+	bridgeEntered: boolean;
+	backendResponseReceived: boolean;
+}
+
 function recordManagedWriteTelemetry(
 	operation: string,
 	phase: "plan" | "commit",
@@ -633,9 +668,15 @@ function recordManagedWriteTelemetry(
 	result: AscetEditResult,
 	options: RunAscetEditOperationOptions,
 	startedAt: number,
+	lifecycle?: AscetWriteLifecycleEvidence,
 ): void {
 	const outcome = result.details.outcome;
-	const mutationStatus = partialMutationStatus(outcome);
+	const mutationStatus =
+		phase === "plan"
+			? "not_started"
+			: result.details.raw
+				? classifyAscetEditExecution(result.details.raw).mutationStatus
+				: partialMutationStatus(outcome);
 	recordAscetWriteTelemetry(options, {
 		operation,
 		phase,
@@ -656,6 +697,11 @@ function recordManagedWriteTelemetry(
 		...(planId ? { planId } : {}),
 		...(result.details.verification ? { verificationStatus: result.details.verification.status } : {}),
 		...(mutationStatus ? { mutationStatus } : {}),
+		bridgeEntered: lifecycle?.bridgeEntered === true,
+		backendResponseReceived: lifecycle?.backendResponseReceived === true,
+		mutationStarted: mutationStatus === "applied" || mutationStatus === "unknown",
+		writesPerformed: mutationStatus === "applied",
+		cleanupRequired: mutationStatus === "unknown",
 	});
 }
 
@@ -703,6 +749,80 @@ function createPlanStore(options: RunAscetEditOperationOptions): AscetPlanStore 
 	return new AscetPlanStore({ artifactRoot: getAscetArtifactRoot(options.env as NodeJS.ProcessEnv | undefined) });
 }
 
+function createPlanContractFingerprint(params: PlanManagedPlanParams): string {
+	const selection = selectAscetPublicSchemaVariants(ascetMutationParameters, params);
+	if (selection.status !== "selected" || selection.variants.length === 0) {
+		throw new AscetPlanStoreError(
+			"invalid_plan_input",
+			`Unable to resolve the current public contract for ${params.action}.`,
+		);
+	}
+	return createAscetPlanContractFingerprint(toPlanJson(selection.variants.map((variant) => variant.schema)));
+}
+
+async function readCurrentPlanDatabaseIdentity(
+	options: RunAscetEditOperationOptions,
+): Promise<AscetPlanDatabaseIdentity> {
+	const raw = await runAscetCliJson(["exec", "get_database_identity", "--request-json", "{}", "--json"], {
+		...options,
+		toolName: "ascet_edit",
+		commandId: "get_database_identity",
+		jobKind: "read",
+		resourceKey: "ascet.toolapi.global",
+	});
+	const payload = unwrapToolSuccessPayload(raw.data);
+	const identity = raw.ok && isRecord(payload) ? getAscetDatabaseIdentity(payload) : undefined;
+	if (!identity) {
+		throw new AscetPlanStoreError(
+			"plan_database_identity_missing",
+			raw.error?.message ?? "Plan preflight did not return the current ASCET database identity.",
+		);
+	}
+	return identity;
+}
+
+function readString(record: Record<string, unknown> | undefined, ...keys: string[]): string | undefined {
+	for (const key of keys) {
+		const value = record?.[key];
+		if (typeof value === "string" && value.trim().length > 0) return value;
+	}
+	return undefined;
+}
+
+function getPlanTargetIdentity(
+	params: PlanManagedPlanParams,
+	backendPreflight: AscetPlanJsonValue,
+): AscetPlanTargetIdentity {
+	const preflight = isRecord(backendPreflight) ? backendPreflight : undefined;
+	if (params.action === "apply_element_spec") {
+		const identity = asRecord(preflight?.catalogIdentity);
+		const oid = readString(identity, "componentOID", "componentOid", "oid");
+		if (oid && params.componentPath) {
+			return { path: normalizeAscetPath(params.componentPath), oid, kind: "component" };
+		}
+	} else {
+		const result = asRecord(preflight?.result);
+		const payload = asRecord(result?.payload);
+		const identity = asRecord(payload?.identity) ?? asRecord(result?.identity);
+		const path =
+			params.targetPath && params.elementName
+				? `${normalizeAscetPath(params.targetPath)}::${params.elementName}`
+				: undefined;
+		const elementOid = readString(identity, "elementOID", "elementOid");
+		if (elementOid && path) {
+			return { path, oid: elementOid, kind: "element" };
+		}
+		const componentOid = readString(identity, "componentOID", "componentOid");
+		if (componentOid && path) {
+			return { path, oid: componentOid, kind: "component_element" };
+		}
+	}
+	throw new AscetPlanStoreError(
+		"plan_target_identity_missing",
+		`Plan preflight did not return a stable target OID/path/kind for ${params.action}.`,
+	);
+}
+
 function planStoreFailure(error: unknown): AscetEditResult {
 	if (error instanceof AscetPlanStoreError) {
 		return asResponse({ status: "error", error: { code: error.code, message: error.message } });
@@ -741,19 +861,29 @@ async function runPlanManagedPlan(
 	}
 	const backendPreflight = toPlanJson(backend.outcome.plan.backendPreflight ?? {});
 	try {
+		const databaseIdentity = await readCurrentPlanDatabaseIdentity(options);
+		const targetIdentity = getPlanTargetIdentity(params, backendPreflight);
 		const record = createPlanStore(options).create({
 			operation: params.action,
 			params: storedCommitParams(params),
-			backendPreflight,
 			binding: createAscetPlanBinding(options),
+			databaseIdentity,
+			targetIdentity,
+			backendPreflight,
+			contractFingerprint: createPlanContractFingerprint(params),
 		});
 		return asResponse(
 			{
 				status: "preflight",
 				plan: {
 					...backend.outcome.plan,
+					version: record.version,
 					planId: record.planId,
-					fingerprint: record.fingerprint,
+					planFingerprint: record.planFingerprint,
+					contractFingerprint: record.contractFingerprint,
+					evidenceFingerprint: record.evidenceFingerprint,
+					databaseIdentity: record.databaseIdentity,
+					targetIdentity: record.targetIdentity,
 					expiresAt: record.expiresAt,
 				},
 				nextStep: `Call ${params.action} with phase=commit and planId=${record.planId}.`,
@@ -773,11 +903,12 @@ async function runPlanManagedCommit(
 	params: PlanManagedCommitParams,
 	options: RunAscetEditOperationOptions,
 	ctx: AscetEditApprovalContext,
+	lifecycle: AscetWriteLifecycleEvidence,
 ): Promise<AscetEditResult> {
 	const store = createPlanStore(options);
 	let temporarySpecFile: string | undefined;
 	try {
-		const record = store.load(params.planId, createAscetPlanBinding(options));
+		const record = store.load(params.planId);
 		if (record.operation !== params.action || !isRecord(record.params)) {
 			return asResponse({
 				status: "error",
@@ -797,6 +928,8 @@ async function runPlanManagedCommit(
 		if (contractError || parameterError || localError) {
 			return asResponse(contractError ?? parameterError ?? localError!);
 		}
+		const contractFingerprint = createPlanContractFingerprint(planned);
+		const databaseIdentity = await readCurrentPlanDatabaseIdentity(options);
 		const backend = await runBackendMutationPreflight(planned, options);
 		temporarySpecFile = backend?.temporarySpecFile;
 		if (!backend || backend.outcome.status !== "preflight") {
@@ -809,13 +942,18 @@ async function runPlanManagedCommit(
 		}
 		temporarySpecFile = backend.temporarySpecFile;
 		const backendPreflight = toPlanJson(backend.outcome.plan.backendPreflight ?? {});
-		store.verify({
+		const targetIdentity = getPlanTargetIdentity(planned, backendPreflight);
+		const verificationInput = {
 			planId: params.planId,
 			operation: params.action,
 			params: record.params,
-			backendPreflight,
 			binding: createAscetPlanBinding(options),
-		});
+			databaseIdentity,
+			targetIdentity,
+			backendPreflight,
+			contractFingerprint,
+		};
+		store.verify(verificationInput);
 		const prepared = backend.preparedParams;
 		const summary =
 			planned.action === "apply_element_spec"
@@ -826,7 +964,7 @@ async function runPlanManagedCommit(
 				executeWrite: true,
 				title: `Confirm ${params.action} plan`,
 				message: `planId: ${params.planId}
-fingerprint: ${record.fingerprint}
+planFingerprint: ${record.planFingerprint}
 ${summary}`,
 				signal: options.signal,
 			},
@@ -835,13 +973,16 @@ ${summary}`,
 		if (!approval.approved) {
 			return asResponse({ status: "blocked", code: approval.code, message: approval.message });
 		}
-		store.consume({
-			planId: params.planId,
-			operation: params.action,
-			params: record.params,
-			backendPreflight,
-			binding: createAscetPlanBinding(options),
-		});
+		store.consume(verificationInput);
+		const writeOptions: RunAscetEditOperationOptions = {
+			...options,
+			onLifecycle: (event) => {
+				options.onLifecycle?.(event);
+				if (event.stage === "before_bridge") lifecycle.beforeBridge = true;
+				if (event.stage === "bridge_entered") lifecycle.bridgeEntered = true;
+				if (event.stage === "backend_response_received") lifecycle.backendResponseReceived = true;
+			},
+		};
 		const raw =
 			planned.action === "apply_element_spec"
 				? await runAscetApplyElementSpec(
@@ -850,7 +991,7 @@ ${summary}`,
 							executeWrite: true,
 							verifyReadback: true,
 						},
-						options,
+						writeOptions,
 					)
 				: await runAscetSetElementDependency(
 						{
@@ -860,7 +1001,7 @@ ${summary}`,
 							executeWrite: true,
 							verifyReadback: true,
 						},
-						options,
+						writeOptions,
 					);
 		return finalizeAscetMutation({ params: planned, raw, options });
 	} catch (error) {

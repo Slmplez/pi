@@ -7,6 +7,10 @@ import {
 	runAscetCliJson,
 } from "./cli.ts";
 import { normalizeAscetPath } from "./core/path.ts";
+import {
+	type AscetEnumerationReadback,
+	parseAscetIndependentEnumerationReadback,
+} from "./read/enumeration-readback.ts";
 
 export interface AscetReadImplementationParams {
 	componentPath: string;
@@ -57,6 +61,12 @@ export async function runAscetReadImplementation(
 		...options,
 		timeoutMs: params.timeoutMs ?? options.timeoutMs,
 	});
+}
+
+export function getReadImplementationEnumerationReadback(
+	result: AscetReadImplementationResult,
+): AscetEnumerationReadback | undefined {
+	return result.ok ? parseAscetIndependentEnumerationReadback(result.data) : undefined;
 }
 
 export function formatReadImplementationResult(result: AscetReadImplementationResult): string {

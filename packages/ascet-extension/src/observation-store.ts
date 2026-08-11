@@ -22,6 +22,16 @@ export interface AscetObservationCoverage {
 	[key: string]: unknown;
 }
 
+export interface AscetObservationDatabaseIdentity {
+	name?: string;
+	path: string;
+	fingerprint: string;
+}
+
+export interface AscetObservationSourceIdentity {
+	database?: AscetObservationDatabaseIdentity;
+}
+
 export interface AscetObservationMetadata {
 	resultId: string;
 	domain: string;
@@ -30,6 +40,7 @@ export interface AscetObservationMetadata {
 	coverage: AscetObservationCoverage;
 	truncated?: boolean;
 	source: string;
+	sourceIdentity?: AscetObservationSourceIdentity;
 	capturedAt: string;
 }
 
@@ -47,6 +58,7 @@ export interface InlineAscetObservation {
 	coverage: AscetObservationCoverage;
 	truncated?: boolean;
 	source: string;
+	sourceIdentity?: AscetObservationSourceIdentity;
 	capturedAt: string;
 }
 
@@ -75,6 +87,7 @@ export interface CreateAscetObservationInput {
 	coverage: AscetObservationCoverage;
 	truncated?: boolean;
 	source?: string;
+	sourceIdentity?: AscetObservationSourceIdentity;
 	capturedAt?: string;
 	delivery?: AscetObservationDelivery;
 	resultId?: string;
@@ -285,6 +298,7 @@ export class AscetObservationStore {
 				coverage: input.coverage,
 				truncated: input.truncated,
 				source,
+				sourceIdentity: input.sourceIdentity,
 				capturedAt,
 			};
 		}
@@ -297,6 +311,7 @@ export class AscetObservationStore {
 			coverage: input.coverage,
 			...(input.truncated === undefined ? {} : { truncated: input.truncated }),
 			source,
+			...(input.sourceIdentity === undefined ? {} : { sourceIdentity: input.sourceIdentity }),
 			capturedAt,
 		};
 		const metadataContent = `${JSON.stringify(metadata, null, 2)}\n`;

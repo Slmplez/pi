@@ -1,14 +1,19 @@
 ﻿import assert from "node:assert/strict";
-import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, test } from "node:test";
 import {
+	ASCET_PLAN_RECORD_VERSION,
 	type AscetPlanRecord,
 	AscetPlanStore,
 	AscetPlanStoreError,
+	type CreateAscetPlanInput,
 	canonicalizeAscetPlanJson,
+	createAscetPlanContractFingerprint,
+	createAscetPlanEvidenceFingerprint,
 	createAscetPlanFingerprint,
+	type VerifyAscetPlanInput,
 } from "./plan-store.ts";
 
 function createRoot(): string {
@@ -23,22 +28,36 @@ function assertPlanError(callback: () => unknown, code: AscetPlanStoreError["cod
 	});
 }
 
-function createInput() {
+function createInput(): CreateAscetPlanInput {
 	return {
 		operation: "apply_element_spec",
 		params: {
-			targetPath: "Demo/Element",
-			data: { value: 42, variant: "Default" },
+			action: "apply_element_spec",
+			componentPath: "Demo/Element",
+			intent: "create",
+			elements: [{ name: "P", kind: "parameter" }],
 		},
+		binding: { workspace: "C:/Repo", agentId: "agent-a", sessionId: "session-a" },
+		databaseIdentity: { name: "DB", path: "C:/Repo/DB", fingerprint: "a".repeat(64) },
+		targetIdentity: { path: "Demo/Element", oid: "component-1", kind: "component" },
 		backendPreflight: {
 			ok: true,
-			resolved: { kind: "Parameter", oid: "P-1" },
+			resolved: { kind: "component", oid: "component-1" },
 		},
-	} as const;
+		contractFingerprint: createAscetPlanContractFingerprint({
+			action: "apply_element_spec",
+			phase: "plan",
+			intent: "create",
+		}),
+	};
 }
 
-describe("AscetPlanStore", () => {
-	test("creates a canonical persisted plan and reads it back", () => {
+function verifyInput(planId: string): VerifyAscetPlanInput {
+	return { ...createInput(), planId };
+}
+
+describe("AscetPlanStore v2", () => {
+	test("creates a canonical persisted v2 plan with layered fingerprints", () => {
 		const root = createRoot();
 		try {
 			const store = new AscetPlanStore({ artifactRoot: root, generatePlanId: () => "plan-create" });
@@ -47,13 +66,28 @@ describe("AscetPlanStore", () => {
 			const persistedPath = join(root, "plans", "plan-create.json");
 			const loaded = store.load(created.planId);
 			const persisted = JSON.parse(readFileSync(persistedPath, "utf8")) as AscetPlanRecord;
+			const evidenceFingerprint = createAscetPlanEvidenceFingerprint(
+				input.backendPreflight,
+				input.databaseIdentity,
+				input.targetIdentity,
+			);
 
 			assert.equal(existsSync(persistedPath), true);
+			assert.equal(created.version, ASCET_PLAN_RECORD_VERSION);
 			assert.deepEqual(loaded, created);
 			assert.deepEqual(persisted, created);
+			assert.equal(created.evidenceFingerprint, evidenceFingerprint);
 			assert.equal(
-				created.fingerprint,
-				createAscetPlanFingerprint(input.operation, input.params, input.backendPreflight),
+				created.planFingerprint,
+				createAscetPlanFingerprint({
+					operation: input.operation,
+					params: input.params,
+					binding: input.binding,
+					databaseIdentity: input.databaseIdentity,
+					targetIdentity: input.targetIdentity,
+					evidenceFingerprint,
+					contractFingerprint: input.contractFingerprint,
+				}),
 			);
 			assert.equal(canonicalizeAscetPlanJson({ b: 2, a: 1 }), '{"a":1,"b":2}');
 		} finally {
@@ -61,29 +95,75 @@ describe("AscetPlanStore", () => {
 		}
 	});
 
-	test("uses canonical ordering and reports stale plans before commit", () => {
+	test("rejects legacy records instead of executing a v1 plan", () => {
 		const root = createRoot();
 		try {
-			const store = new AscetPlanStore({ artifactRoot: root, generatePlanId: () => "plan-stale" });
-			const input = createInput();
-			const created = store.create(input);
-
-			assert.deepEqual(
-				store.verify({
-					planId: created.planId,
-					operation: input.operation,
-					params: { data: { variant: "Default", value: 42 }, targetPath: "Demo/Element" },
-					backendPreflight: { resolved: { oid: "P-1", kind: "Parameter" }, ok: true },
+			const planDirectory = join(root, "plans");
+			mkdirSync(planDirectory, { recursive: true });
+			writeFileSync(
+				join(planDirectory, "legacy-plan.json"),
+				JSON.stringify({
+					planId: "legacy-plan",
+					operation: "apply_element_spec",
+					params: {},
+					backendPreflight: {},
+					fingerprint: "a".repeat(64),
+					createdAt: "2026-08-11T00:00:00.000Z",
+					expiresAt: "2026-08-11T00:05:00.000Z",
 				}),
-				created,
+				"utf8",
+			);
+			const store = new AscetPlanStore({ artifactRoot: root });
+			assertPlanError(() => store.load("legacy-plan"), "plan_version_unsupported");
+		} finally {
+			rmSync(root, { recursive: true, force: true });
+		}
+	});
+
+	test("validates operation, binding, contract, database, target, evidence, and params independently", () => {
+		const root = createRoot();
+		try {
+			const store = new AscetPlanStore({ artifactRoot: root, generatePlanId: () => "plan-validation" });
+			const created = store.create(createInput());
+			const current = verifyInput(created.planId);
+			assert.deepEqual(store.verify(current), created);
+			assertPlanError(
+				() => store.verify({ ...current, operation: "set_element_dependency" }),
+				"plan_operation_mismatch",
+			);
+			assertPlanError(
+				() => store.verify({ ...current, binding: { ...current.binding, agentId: "agent-b" } }),
+				"plan_binding_mismatch",
+			);
+			assertPlanError(
+				() => store.verify({ ...current, contractFingerprint: "b".repeat(64) }),
+				"plan_contract_mismatch",
 			);
 			assertPlanError(
 				() =>
 					store.verify({
-						planId: created.planId,
-						operation: input.operation,
-						params: { ...input.params, data: { ...input.params.data, value: 43 } },
-						backendPreflight: input.backendPreflight,
+						...current,
+						databaseIdentity: { ...current.databaseIdentity, path: "C:/Repo/Other", fingerprint: "b".repeat(64) },
+					}),
+				"plan_database_identity_mismatch",
+			);
+			assertPlanError(
+				() => store.verify({ ...current, targetIdentity: { ...current.targetIdentity, oid: "component-2" } }),
+				"plan_target_identity_mismatch",
+			);
+			assertPlanError(
+				() =>
+					store.verify({
+						...current,
+						backendPreflight: { ok: true, resolved: { kind: "component", oid: "component-1" }, changed: true },
+					}),
+				"plan_evidence_mismatch",
+			);
+			assertPlanError(
+				() =>
+					store.verify({
+						...current,
+						params: { action: "apply_element_spec", componentPath: "Demo/Other", intent: "create", elements: [] },
 					}),
 				"stale_plan",
 			);
@@ -92,18 +172,11 @@ describe("AscetPlanStore", () => {
 		}
 	});
 
-	test("returns structured errors for operation and plan identity mismatches", () => {
+	test("returns plan identity mismatch for a renamed persisted record", () => {
 		const root = createRoot();
 		try {
 			const store = new AscetPlanStore({ artifactRoot: root, generatePlanId: () => "plan-identity" });
-			const input = createInput();
-			const created = store.create(input);
-
-			assertPlanError(
-				() => store.verify({ ...input, planId: created.planId, operation: "set_element_dependency" }),
-				"plan_operation_mismatch",
-			);
-
+			const created = store.create(createInput());
 			const persistedPath = join(root, "plans", "plan-identity.json");
 			const persisted = JSON.parse(readFileSync(persistedPath, "utf8")) as AscetPlanRecord;
 			writeFileSync(persistedPath, JSON.stringify({ ...persisted, planId: "plan-other" }), "utf8");
@@ -113,67 +186,37 @@ describe("AscetPlanStore", () => {
 		}
 	});
 
-	test("returns plan_expired when the verification clock passes expiresAt", () => {
+	test("returns plan_expired at the exact expiration boundary", () => {
 		const root = createRoot();
-		let now = new Date("2026-08-08T00:00:00.000Z");
+		let now = new Date("2026-08-11T00:00:00.000Z");
 		try {
-			const store = new AscetPlanStore({
-				artifactRoot: root,
-				now: () => now,
-				generatePlanId: () => "plan-expired",
-			});
-			const input = createInput();
-			const created = store.create({ ...input, ttlMs: 1_000 });
+			const store = new AscetPlanStore({ artifactRoot: root, now: () => now, generatePlanId: () => "plan-expired" });
+			const created = store.create({ ...createInput(), ttlMs: 1_000 });
 			now = new Date(created.expiresAt);
-
 			assertPlanError(() => store.load(created.planId), "plan_expired");
 		} finally {
 			rmSync(root, { recursive: true, force: true });
 		}
 	});
 
-	test("binds a plan to workspace, agent, and runtime session", () => {
+	test("consume is lock-protected, marks the plan atomically, and prevents replay", () => {
 		const root = createRoot();
+		let now = new Date("2026-08-11T00:00:00.000Z");
 		try {
-			const store = new AscetPlanStore({ artifactRoot: root, generatePlanId: () => "plan-binding" });
-			const input = createInput();
-			const binding = { workspace: "C:/Repo", agentId: "agent-a", sessionId: "session-a" };
-			const created = store.create({ ...input, binding });
+			const store = new AscetPlanStore({ artifactRoot: root, now: () => now, generatePlanId: () => "plan-consume" });
+			const created = store.create(createInput());
+			const input = verifyInput(created.planId);
+			const lockPath = join(root, "plans", "plan-consume.json.consume.lock");
+			writeFileSync(lockPath, "locked", "utf8");
+			assertPlanError(() => store.consume(input), "plan_busy");
+			rmSync(lockPath, { force: true });
 
-			assert.deepEqual(store.verify({ ...input, planId: created.planId, binding }), created);
-			assertPlanError(
-				() =>
-					store.verify({
-						...input,
-						planId: created.planId,
-						binding: { ...binding, agentId: "agent-b" },
-					}),
-				"plan_binding_mismatch",
-			);
-		} finally {
-			rmSync(root, { recursive: true, force: true });
-		}
-	});
-
-	test("consume marks a plan atomically and prevents replay", () => {
-		const root = createRoot();
-		let now = new Date("2026-08-08T00:00:00.000Z");
-		try {
-			const store = new AscetPlanStore({
-				artifactRoot: root,
-				now: () => now,
-				generatePlanId: () => "plan-consume",
-			});
-			const input = createInput();
-			const created = store.create(input);
-			const consumed = store.consume({ ...input, planId: created.planId });
-
+			const consumed = store.consume(input);
 			assert.equal(consumed.consumedAt, now.toISOString());
-			assertPlanError(() => store.consume({ ...input, planId: created.planId }), "plan_consumed");
+			assertPlanError(() => store.consume(input), "plan_consumed");
 			assertPlanError(() => store.load(created.planId), "plan_consumed");
-
-			now = new Date("2026-08-08T00:01:00.000Z");
-			assertPlanError(() => store.consume({ ...input, planId: created.planId }), "plan_consumed");
+			now = new Date("2026-08-11T00:01:00.000Z");
+			assertPlanError(() => store.consume(input), "plan_consumed");
 		} finally {
 			rmSync(root, { recursive: true, force: true });
 		}

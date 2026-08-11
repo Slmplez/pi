@@ -1,4 +1,4 @@
-import assert from "node:assert/strict";
+﻿import assert from "node:assert/strict";
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -166,13 +166,28 @@ describe("ASCET edit service", () => {
 				params,
 				{
 					cwd: process.cwd(),
-					executeCli: async (request) => ({
-						exitCode: 0,
-						stdout: JSON.stringify({ ok: true, result: { validated: true } }),
-						stderr: "",
-						timedOut: false,
-						request,
-					}),
+					executeCli: async (request) => {
+						const operation = request.args[1];
+						const result =
+							operation === "get_database_identity"
+								? { database: { name: "DB", path: "C:/Repo/DB" } }
+								: operation === "set_element_dependency"
+									? {
+											validated: true,
+											target: "DEMO/C",
+											kind: "component",
+											identity: { componentOID: "C-1", elementOID: "" },
+											definitionHash: "definition-1",
+										}
+									: { validated: true };
+						return {
+							exitCode: 0,
+							stdout: JSON.stringify({ ok: true, result }),
+							stderr: "",
+							timedOut: false,
+							request,
+						};
+					},
 				},
 				{},
 			);
@@ -271,7 +286,12 @@ describe("ASCET edit service", () => {
 						if (request.args[1] === "diff_element_spec") {
 							diffSpec = JSON.parse(readFileSync(request.args[3]!, "utf8"));
 						}
-						const result = request.args[1] === "read_element_catalog" ? { elements: [] } : { changes: [] };
+						const result =
+							request.args[1] === "get_database_identity"
+								? { database: { name: "DB", path: "C:/Repo/DB" } }
+								: request.args[1] === "read_element_catalog"
+									? { elements: [], identity: { componentOID: "C-1" } }
+									: { changes: [] };
 						return {
 							exitCode: 0,
 							stdout: JSON.stringify({ ok: true, result }),
@@ -286,7 +306,7 @@ describe("ASCET edit service", () => {
 			assert.equal(result.details.outcome.status, "preflight");
 			assert.deepEqual(
 				calls.map((call) => call[1]),
-				["read_element_catalog", "diff_element_spec"],
+				["read_element_catalog", "diff_element_spec", "get_database_identity"],
 			);
 			assert.deepEqual(diffSpec, {
 				elements: [{ name: "K", kind: "parameter", modelType: "cont", scope: "local" }],
@@ -325,26 +345,28 @@ describe("ASCET edit service", () => {
 							diffSpec = JSON.parse(readFileSync(request.args[3]!, "utf8"));
 						}
 						const result =
-							request.args[1] === "read_element_catalog"
-								? {
-										elements: [
-											{
-												name: "P",
-												kind: "parameter",
-												modelType: "cont",
-												scope: "local",
-												data: { value: 1 },
-												impl: { valueType: "sint16" },
-												comment: "Old",
+							request.args[1] === "get_database_identity"
+								? { database: { name: "DB", path: "C:/Repo/DB" } }
+								: request.args[1] === "read_element_catalog"
+									? {
+											elements: [
+												{
+													name: "P",
+													kind: "parameter",
+													modelType: "cont",
+													scope: "local",
+													data: { value: 1 },
+													impl: { valueType: "sint16" },
+													comment: "Old",
+												},
+											],
+											identity: { componentOID: "C-1", elementOIDs: { P: "E-1" } },
+											provenance: {
+												dataConfiguration: "DefaultData",
+												implementationConfiguration: "DefaultImpl",
 											},
-										],
-										identity: { componentOID: "C-1", elementOIDs: { P: "E-1" } },
-										provenance: {
-											dataConfiguration: "DefaultData",
-											implementationConfiguration: "DefaultImpl",
-										},
-									}
-								: { changes: [{ name: "P", operation: "update" }] };
+										}
+									: { changes: [{ name: "P", operation: "update" }] };
 						return {
 							exitCode: 0,
 							stdout: JSON.stringify({ ok: true, result }),
@@ -368,7 +390,7 @@ describe("ASCET edit service", () => {
 			}
 			assert.deepEqual(
 				calls.map((call) => call[1]),
-				["read_element_catalog", "diff_element_spec"],
+				["read_element_catalog", "diff_element_spec", "get_database_identity"],
 			);
 			const normalizedSpec = diffSpec as {
 				elements: Array<Record<string, unknown>>;
@@ -412,9 +434,20 @@ describe("ASCET edit service", () => {
 					env: { ASCET_BRIDGE_PATH: cliPath, ASCET_CONTRACTS_PATH: contractsRoot },
 					executeCli: async (request) => {
 						calls.push(request.args);
+						const result =
+							request.args[1] === "get_database_identity"
+								? { database: { name: "DB", path: "C:/Repo/DB" } }
+								: {
+										dryRun: true,
+										validated: true,
+										target: "DEMO/C",
+										kind: "component",
+										identity: { componentOID: "C-1", elementOID: "" },
+										definitionHash: "definition-1",
+									};
 						return {
 							exitCode: 0,
-							stdout: JSON.stringify({ ok: true, result: { dryRun: true, validated: true } }),
+							stdout: JSON.stringify({ ok: true, result }),
 							stderr: "",
 							timedOut: false,
 							request,
@@ -459,9 +492,20 @@ describe("ASCET edit service", () => {
 					env: { ASCET_BRIDGE_PATH: cliPath, ASCET_CONTRACTS_PATH: contractsRoot },
 					executeCli: async (request) => {
 						calls.push(request.args);
+						const result =
+							request.args[1] === "get_database_identity"
+								? { database: { name: "DB", path: "C:/Repo/DB" } }
+								: {
+										dryRun: true,
+										validated: true,
+										target: "DEMO/C",
+										kind: "component",
+										identity: { componentOID: "C-1", elementOID: "" },
+										definitionHash: "definition-1",
+									};
 						return {
 							exitCode: 0,
-							stdout: JSON.stringify({ ok: true, result: { dryRun: true, validated: true } }),
+							stdout: JSON.stringify({ ok: true, result }),
 							stderr: "",
 							timedOut: false,
 							request,
@@ -525,11 +569,13 @@ describe("ASCET edit service", () => {
 				executeCli: async (request: AscetCliRequest): Promise<AscetCliExecutionResult> => {
 					calls.push(request.args);
 					const result =
-						request.args[1] === "read_element_catalog"
-							? { elements: [] }
-							: request.args[1] === "diff_element_spec"
-								? { changes: [] }
-								: { ReadbackVerified: false, ElementResults: [{ name: "K", readbackVerified: false }] };
+						request.args[1] === "get_database_identity"
+							? { database: { name: "DB", path: "C:/Repo/DB" } }
+							: request.args[1] === "read_element_catalog"
+								? { elements: [], identity: { componentOID: "C-1" } }
+								: request.args[1] === "diff_element_spec"
+									? { changes: [] }
+									: { ReadbackVerified: false, ElementResults: [{ name: "K", readbackVerified: false }] };
 					return {
 						exitCode: 0,
 						stdout: JSON.stringify({ ok: true, result, error: null }),
@@ -568,6 +614,8 @@ describe("ASCET edit service", () => {
 				[
 					"read_element_catalog",
 					"diff_element_spec",
+					"get_database_identity",
+					"get_database_identity",
 					"read_element_catalog",
 					"diff_element_spec",
 					"apply_element_spec",
@@ -605,13 +653,28 @@ describe("ASCET edit service", () => {
 				executeCli: async (request: AscetCliRequest): Promise<AscetCliExecutionResult> => {
 					calls.push(request.args);
 					const dryRun = request.args.includes("--dry-run");
+					const result =
+						request.args[1] === "get_database_identity"
+							? { database: { name: "DB", path: "C:/Repo/DB" } }
+							: dryRun
+								? {
+										dryRun: true,
+										beforeDependency: "independent",
+										beforeFormula: "",
+										mappings: [],
+										payload: {
+											target: "DEMO/Controller",
+											kind: "component",
+											identity: { componentOID: "C-1", elementOID: "" },
+											definitionHash: "definition-1",
+										},
+									}
+								: { writeSucceeded: true, verifyReadbackRequested: true, readbackVerified: true };
 					return {
 						exitCode: 0,
 						stdout: JSON.stringify({
 							ok: true,
-							result: dryRun
-								? { dryRun: true, beforeDependency: "independent", beforeFormula: "", mappings: [] }
-								: { writeSucceeded: true, verifyReadbackRequested: true, readbackVerified: true },
+							result,
 							error: null,
 						}),
 						stderr: "",
@@ -636,16 +699,55 @@ describe("ASCET edit service", () => {
 			);
 			assert.equal(plan.details.outcome.status, "preflight");
 			if (plan.details.outcome.status !== "preflight") return;
+			assert.deepEqual(plan.details.outcome.plan.targetIdentity, {
+				path: "DEMO\\Controller::P_Local",
+				oid: "C-1",
+				kind: "component_element",
+			});
 			const result = await runAscetEdit(
 				{ action: "set_element_dependency", phase: "commit", planId: plan.details.outcome.plan.planId as string },
 				options,
 				approvingContext,
 			);
 			assert.equal(result.details.outcome.status, "ok");
-			assert.equal(calls.length, 3);
+			assert.equal(calls.length, 5);
 			assert.equal(calls[0]?.includes("--dry-run"), true);
-			assert.equal(calls[1]?.includes("--dry-run"), true);
-			assert.equal(calls[2]?.includes("--dry-run"), false);
+			assert.equal(calls[1]?.[1], "get_database_identity");
+			assert.equal(calls[2]?.[1], "get_database_identity");
+			assert.equal(calls[3]?.includes("--dry-run"), true);
+			assert.equal(calls[4]?.includes("--dry-run"), false);
+			const telemetry = readFileSync(join(root, "artifacts", "telemetry", "element-write.jsonl"), "utf8")
+				.trim()
+				.split("\n")
+				.map((line) => JSON.parse(line) as Record<string, unknown>);
+			assert.deepEqual(
+				telemetry.map((event) => ({
+					phase: event.phase,
+					bridgeEntered: event.bridgeEntered,
+					backendResponseReceived: event.backendResponseReceived,
+					mutationStatus: event.mutationStatus,
+					mutationStarted: event.mutationStarted,
+					writesPerformed: event.writesPerformed,
+				})),
+				[
+					{
+						phase: "plan",
+						bridgeEntered: true,
+						backendResponseReceived: true,
+						mutationStatus: "not_started",
+						mutationStarted: false,
+						writesPerformed: false,
+					},
+					{
+						phase: "commit",
+						bridgeEntered: true,
+						backendResponseReceived: true,
+						mutationStatus: "applied",
+						mutationStarted: true,
+						writesPerformed: true,
+					},
+				],
+			);
 		} finally {
 			rmSync(root, { recursive: true, force: true });
 		}

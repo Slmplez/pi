@@ -1,4 +1,5 @@
 import { type TProperties, Type } from "typebox";
+import { type AscetPublicWriteControl, ascetWriteControlProperties } from "./edit/write-control-contract.ts";
 import {
 	type ascetApplyElementIntentValues,
 	ascetElementKindValues,
@@ -73,7 +74,7 @@ export interface AscetImplementationTarget {
 	mode: "default";
 }
 
-export interface AscetApplyElementPlanParams {
+export interface AscetApplyElementPlanParams extends AscetPublicWriteControl {
 	action: "apply_element_spec";
 	phase?: "plan";
 	componentPath: string;
@@ -86,7 +87,7 @@ export interface AscetApplyElementPlanParams {
 	recreateIncompatible?: boolean;
 }
 
-export interface AscetApplyElementCommitParams {
+export interface AscetApplyElementCommitParams extends AscetPublicWriteControl {
 	action: "apply_element_spec";
 	phase: "commit";
 	planId: string;
@@ -339,6 +340,7 @@ const planCommonProperties = {
 	implementationTarget: Type.Optional(ascetImplementationTargetSchema),
 	deleteMissing: Type.Optional(Type.Boolean()),
 	recreateIncompatible: Type.Optional(Type.Boolean()),
+	...ascetWriteControlProperties,
 };
 
 export const ascetApplyElementSpecPlanSchema = Type.Union([
@@ -368,6 +370,7 @@ export const ascetApplyElementSpecCommitSchema = strictObject({
 	action: Type.Literal("apply_element_spec"),
 	phase: Type.Literal("commit"),
 	planId: Type.String({ minLength: 1 }),
+	...ascetWriteControlProperties,
 });
 
 export const ascetApplyElementSpecParameters = Type.Union([

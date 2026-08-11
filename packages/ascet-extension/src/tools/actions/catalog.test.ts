@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import { listActionCatalogEntries } from "./catalog.ts";
+import { createActionCatalogSnapshot, diffActionCatalogSnapshots, listActionCatalogEntries } from "./catalog.ts";
 
 const getActions = [
 	"tree",
@@ -47,6 +47,14 @@ describe("ASCET action catalog", () => {
 
 		assert.match(entries.get("ascet_get.tree")?.compact ?? "", /bounded live Folder\/Component tree/);
 		assert.match(entries.get("ascet_get.elements")?.rules.join("\n") ?? "", /result-count limit/);
+		assert.match(
+			entries.get("ascet_get.elements")?.rules.join("\n") ?? "",
+			/Enumeration is not an Element Directory/,
+		);
+		assert.match(
+			entries.get("ascet_read.read_implementation")?.rules.join("\n") ?? "",
+			/typeDefinition\.enumerators/,
+		);
 		assert.match(entries.get("ascet_get.import_binding")?.rules.join("\n") ?? "", /exact path or OID/);
 		assert.match(entries.get("ascet_read.read_code")?.compact ?? "", /complete live code/);
 		assert.match(entries.get("ascet_read.read_element")?.compact ?? "", /exact resolved Element/);
@@ -62,6 +70,10 @@ describe("ASCET action catalog", () => {
 
 		assert.doesNotMatch(treeRules, /Use tree first/);
 		assert.match(treeRules, /exact path or OID.*directly/);
+		assert.match(treeRules, /scope=database.*database_catalog/);
+		assert.ok(
+			entries.get("ascet_get.tree")?.schema.variants?.some((variant) => variant.when?.scope?.includes("database")),
+		);
 		assert.match(elementRules, /user input, tree discovery, or validated stored evidence/);
 		assert.match(componentReferenceRules, /outgoing Component references only/);
 		assert.match(componentReferenceRules, /not a reverse-reference or Project-discovery API/);
@@ -81,6 +93,64 @@ describe("ASCET action catalog", () => {
 		assert.match(writeDependency?.compact ?? "", /existing local parameter/);
 		assert.match(writeDependency?.rules.join("\n") ?? "", /does not create local, imported, or exported elements/);
 		assert.match(writeDependency?.rules.join("\n") ?? "", /invalidate matching on-demand observations/);
+	});
+
+	test("publishes stable action fingerprints and classifies breaking schema drift", () => {
+		const snapshot = createActionCatalogSnapshot();
+		assert.equal(snapshot.version, 1);
+		assert.ok(snapshot.catalogFingerprint.length > 0);
+		assert.ok(snapshot.actions.every((action) => action.schemaFingerprint.length > 0));
+		assert.deepEqual(diffActionCatalogSnapshots(snapshot, snapshot), {
+			catalogDrift: false,
+			breakingSchemaChange: false,
+			changes: [],
+		});
+
+		const before = snapshot.actions.find((action) => action.id === "ascet_edit.set_element_dependency");
+		assert.ok(before);
+		const after = {
+			...before,
+			schemaFingerprint: "changed",
+			schema: { ...before.schema, required: [...before.schema.required, "newRequired"] },
+		};
+		const changed = {
+			...snapshot,
+			actions: snapshot.actions.map((action) => (action.id === before.id ? after : action)),
+		};
+		const diff = diffActionCatalogSnapshots(snapshot, changed);
+		assert.equal(diff.catalogDrift, true);
+		assert.equal(diff.breakingSchemaChange, true);
+		assert.match(diff.changes[0]?.reasons.join(",") ?? "", /required_added:newRequired/);
+	});
+
+	test("derives plan-managed write schemas from public TypeBox variants", () => {
+		const entries = new Map(listActionCatalogEntries().map((entry) => [entry.id, entry]));
+		const dependency = entries.get("ascet_edit.set_element_dependency");
+		assert.ok(dependency);
+		assert.ok(dependency.schema.optional.includes("executeWrite"));
+		assert.ok(dependency.schema.variants?.some((variant) => variant.when?.phase?.includes("plan")));
+		assert.ok(
+			dependency.schema.variants?.some(
+				(variant) => variant.when?.phase?.includes("commit") && variant.required.includes("planId"),
+			),
+		);
+		assert.equal(dependency.schema.optional.includes("dryRun"), false);
+		assert.equal(dependency.schema.optional.includes("backupDir"), false);
+
+		const elementSpec = entries.get("ascet_edit.apply_element_spec");
+		assert.ok(elementSpec?.schema.variants);
+		assert.ok(elementSpec.schema.variants.length >= 5);
+		assert.ok(elementSpec.schema.variants.some((variant) => variant.when?.phase?.includes("commit")));
+		for (const intent of ["create", "patch", "upsert", "restore"]) {
+			assert.ok(elementSpec.schema.variants.some((variant) => variant.when?.intent?.includes(intent)));
+		}
+	});
+
+	test("publishes verified object-kind boundaries", () => {
+		const entries = new Map(listActionCatalogEntries().map((entry) => [entry.id, entry]));
+		assert.deepEqual(entries.get("ascet_edit.set_enumerators")?.supportedObjectKinds, ["enumeration"]);
+		assert.equal(entries.get("ascet_get.elements")?.supportedObjectKinds.includes("enumeration"), false);
+		assert.equal(entries.get("ascet_read.read_implementation")?.supportedObjectKinds.includes("enumeration"), true);
 	});
 
 	test("makes code semantics primary for apply_element_spec", () => {
@@ -130,5 +200,29 @@ describe("ASCET action catalog", () => {
 		assert.deepEqual(chainDependency.mappings, {
 			P_Threshold: { kind: "parameter", name: "P_Threshold" },
 		});
+	});
+
+	test("classifies result shape and field removals as breaking", () => {
+		const snapshot = createActionCatalogSnapshot();
+		const before = snapshot.actions.find((action) => action.id === "ascet_get.tree");
+		assert.ok(before);
+		const changed = {
+			...snapshot,
+			actions: snapshot.actions.map((action) =>
+				action.id === before.id
+					? {
+							...action,
+							resultFingerprint: "changed",
+							supportedObjectKinds: ["database"],
+							result: { shape: `${action.result.shape}V2`, fields: action.result.fields.slice(1) },
+						}
+					: action,
+			),
+		};
+		const diff = diffActionCatalogSnapshots(snapshot, changed);
+		assert.equal(diff.breakingSchemaChange, true);
+		assert.match(diff.changes[0]?.reasons.join(",") ?? "", /object_kind_removed/);
+		assert.match(diff.changes[0]?.reasons.join(",") ?? "", /result_shape_changed/);
+		assert.match(diff.changes[0]?.reasons.join(",") ?? "", /result_field_removed/);
 	});
 });

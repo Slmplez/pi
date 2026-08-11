@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+import type { TSchema } from "typebox";
 import { ascetGetParameters } from "../../get.ts";
 import { compactExamplesForAction } from "../_shared/action-examples.ts";
 import { ascetCapabilitiesParameters } from "../capabilities/schema.ts";
@@ -9,6 +11,7 @@ import { ascetRequirementsParameters } from "../requirements/schema.ts";
 import { ascetSchedulerStatusParameters } from "../scheduler-status/schema.ts";
 import { ascetStatusParameters } from "../status/schema.ts";
 import { type AscetActionDescriptor, listActionDescriptors } from "./descriptors.ts";
+import { listAscetPublicSchemaVariants } from "./schema-registry.ts";
 
 export type AscetActionFamily = "ops" | "get" | "read" | "diff" | "write";
 export type AscetActionRisk = "read" | "diff" | "write" | "ops";
@@ -20,6 +23,7 @@ export interface AscetActionCatalogEntry {
 	family: AscetActionFamily;
 	risk: AscetActionRisk;
 	visibility: AscetActionDescriptor["visibility"];
+	supportedObjectKinds: readonly string[];
 	profiles: readonly string[];
 	featureFlag?: string;
 	deprecatedBy?: string;
@@ -31,6 +35,9 @@ export interface AscetActionCatalogEntry {
 	aliases: readonly string[];
 	tags: readonly string[];
 	nextActions?: readonly string[];
+	schemaFingerprint: string;
+	rulesFingerprint: string;
+	resultFingerprint: string;
 	schema: {
 		required: readonly string[];
 		optional: readonly string[];
@@ -49,6 +56,33 @@ export interface AscetActionCatalogEntry {
 		shape: string;
 		fields: readonly string[];
 	};
+}
+
+export interface AscetActionCatalogSnapshot {
+	version: 1;
+	catalogFingerprint: string;
+	actions: ReadonlyArray<{
+		id: string;
+		schemaFingerprint: string;
+		rulesFingerprint: string;
+		resultFingerprint: string;
+		schema: AscetActionCatalogEntry["schema"];
+		supportedObjectKinds: readonly string[];
+		result: AscetActionCatalogEntry["result"];
+	}>;
+}
+
+export interface AscetActionCatalogChange {
+	id: string;
+	classification: "added" | "removed" | "changed";
+	breaking: boolean;
+	reasons: readonly string[];
+}
+
+export interface AscetActionCatalogDiff {
+	catalogDrift: boolean;
+	breakingSchemaChange: boolean;
+	changes: readonly AscetActionCatalogChange[];
 }
 
 interface ActionOverride {
@@ -154,25 +188,6 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 			"clear dependency",
 		],
 		nextActions: ["ascet_read.read_element_dependency", "ascet_read.read_dependent_chain"],
-		schema: {
-			required: ["action", "targetPath", "elementName", "dependency"],
-			optional: [
-				"dependencyFormula",
-				"dependencyMappings",
-				"clearDependencyFormula",
-				"targetKind",
-				"match",
-				"dryRun",
-				"backupDir",
-				"executeWrite",
-			],
-			enums: {
-				action: ["set_element_dependency"],
-				dependency: ["dependent", "independent"],
-				targetKind: ["auto", "component", "folder", "project"],
-				match: ["exact", "all"],
-			},
-		},
 		result: {
 			shape: "writeResult",
 			fields: ["changed", "verification", "observations.invalidated"],
@@ -213,6 +228,119 @@ const actionParameterSchemas: Readonly<Record<string, unknown>> = {
 		return ascetStatusParameters;
 	},
 };
+
+function canonicalize(value: unknown): string {
+	if (value === null || typeof value === "string" || typeof value === "boolean" || typeof value === "number") {
+		return JSON.stringify(value);
+	}
+	if (Array.isArray(value)) {
+		return `[${value.map(canonicalize).join(",")}]`;
+	}
+	if (typeof value === "object") {
+		const record = value as Record<string, unknown>;
+		return `{${Object.keys(record)
+			.sort()
+			.map((key) => `${JSON.stringify(key)}:${canonicalize(record[key])}`)
+			.join(",")}}`;
+	}
+	return JSON.stringify(String(value));
+}
+
+function fingerprint(value: unknown): string {
+	return createHash("sha256").update(canonicalize(value)).digest("hex");
+}
+
+function sortedUnique(values: readonly string[]): string[] {
+	return [...new Set(values)].sort();
+}
+
+function schemaVariantKey(variant: NonNullable<AscetActionCatalogEntry["schema"]["variants"]>[number]): string {
+	return canonicalize(variant);
+}
+
+function hasRemovedValues(previous: readonly string[] | undefined, current: readonly string[] | undefined): boolean {
+	if (!previous) return false;
+	const currentValues = new Set(current ?? []);
+	return previous.some((value) => !currentValues.has(value));
+}
+
+function schemaBreakingReasons(
+	previous: AscetActionCatalogSnapshot["actions"][number],
+	current: AscetActionCatalogSnapshot["actions"][number],
+): string[] {
+	const reasons: string[] = [];
+	const previousRequired = new Set(previous.schema.required);
+	for (const field of current.schema.required) {
+		if (!previousRequired.has(field)) reasons.push(`required_added:${field}`);
+	}
+	for (const [key, values] of Object.entries(previous.schema.enums ?? {})) {
+		if (hasRemovedValues(values, current.schema.enums?.[key])) reasons.push(`enum_value_removed:${key}`);
+	}
+	const previousVariants = new Set((previous.schema.variants ?? []).map(schemaVariantKey));
+	const currentVariants = new Set((current.schema.variants ?? []).map(schemaVariantKey));
+	for (const variant of previousVariants) {
+		if (!currentVariants.has(variant)) reasons.push("variant_removed");
+	}
+	if (hasRemovedValues(previous.supportedObjectKinds, current.supportedObjectKinds))
+		reasons.push("object_kind_removed");
+	if (previous.result.shape !== current.result.shape) reasons.push("result_shape_changed");
+	if (hasRemovedValues(previous.result.fields, current.result.fields)) reasons.push("result_field_removed");
+	return sortedUnique(reasons);
+}
+
+export function createActionCatalogSnapshot(options: { includeHidden?: boolean } = {}): AscetActionCatalogSnapshot {
+	const actions = listActionCatalogEntries(options)
+		.map((entry) => ({
+			id: entry.id,
+			schemaFingerprint: entry.schemaFingerprint,
+			rulesFingerprint: entry.rulesFingerprint,
+			resultFingerprint: entry.resultFingerprint,
+			schema: entry.schema,
+			supportedObjectKinds: entry.supportedObjectKinds,
+			result: entry.result,
+		}))
+		.sort((left, right) => left.id.localeCompare(right.id));
+	return {
+		version: 1,
+		catalogFingerprint: fingerprint(actions),
+		actions,
+	};
+}
+
+export function diffActionCatalogSnapshots(
+	previous: AscetActionCatalogSnapshot,
+	current: AscetActionCatalogSnapshot,
+): AscetActionCatalogDiff {
+	const previousById = new Map(previous.actions.map((action) => [action.id, action]));
+	const currentById = new Map(current.actions.map((action) => [action.id, action]));
+	const changes: AscetActionCatalogChange[] = [];
+	for (const [id, action] of currentById) {
+		const before = previousById.get(id);
+		if (!before) {
+			changes.push({ id, classification: "added", breaking: false, reasons: [] });
+			continue;
+		}
+		if (
+			before.schemaFingerprint === action.schemaFingerprint &&
+			before.rulesFingerprint === action.rulesFingerprint &&
+			before.resultFingerprint === action.resultFingerprint
+		)
+			continue;
+		const reasons = schemaBreakingReasons(before, action);
+		changes.push({ id, classification: "changed", breaking: reasons.length > 0, reasons });
+	}
+	for (const id of previousById.keys()) {
+		if (!currentById.has(id)) {
+			changes.push({ id, classification: "removed", breaking: true, reasons: ["action_removed"] });
+		}
+	}
+	changes.sort((left, right) => left.id.localeCompare(right.id));
+	return {
+		catalogDrift: changes.length > 0,
+		breakingSchemaChange: changes.some((change) => change.breaking),
+		changes,
+	};
+}
 
 function resolveFamily(tool: string): AscetActionFamily {
 	if (tool === "ascet_get") {
@@ -255,6 +383,7 @@ interface JsonSchemaNode {
 	properties?: Record<string, JsonSchemaNode>;
 	required?: string[];
 	anyOf?: JsonSchemaNode[];
+	oneOf?: JsonSchemaNode[];
 	enum?: unknown[];
 }
 
@@ -265,11 +394,6 @@ function enumValuesFromSchema(schema: JsonSchemaNode | undefined): string[] {
 	const direct = Array.isArray(schema.enum) ? schema.enum : [];
 	const nested = Array.isArray(schema.anyOf) ? schema.anyOf.flatMap((variant) => enumValuesFromSchema(variant)) : [];
 	return unique([...direct, ...nested].filter((value): value is string => typeof value === "string"));
-}
-
-function actionNameFromSchema(schema: JsonSchemaNode | undefined): string | undefined {
-	const values = schema?.enum;
-	return Array.isArray(values) && values.length === 1 && typeof values[0] === "string" ? values[0] : undefined;
 }
 
 function fieldsFromSchema(schema: JsonSchemaNode): AscetActionCatalogEntry["schema"] {
@@ -294,15 +418,9 @@ function fieldsFromSchema(schema: JsonSchemaNode): AscetActionCatalogEntry["sche
 }
 
 function schemaVariantsForAction(schema: JsonSchemaNode, action: string): JsonSchemaNode[] {
-	const variants = Array.isArray(schema.anyOf) ? schema.anyOf : [schema];
-	const matching = variants.filter((variant) => {
-		const variantAction = actionNameFromSchema(variant.properties?.action);
-		return variantAction === action;
-	});
-	if (matching.length > 0) {
-		return matching;
-	}
-	return variants;
+	const variants = listAscetPublicSchemaVariants(schema as TSchema);
+	const matching = variants.filter((variant) => variant.discriminators.action?.includes(action) === true);
+	return (matching.length > 0 ? matching : variants).map((variant) => variant.schema as JsonSchemaNode);
 }
 
 function inferSchemaFromRegistry(descriptor: AscetActionDescriptor): AscetActionCatalogEntry["schema"] | undefined {
@@ -335,11 +453,15 @@ function inferSchemaFromRegistry(descriptor: AscetActionDescriptor): AscetAction
 		variants.length > 1
 			? variants.map((variant) => {
 					const fields = fieldsFromSchema(variant);
-					const whenValue = enumValuesFromSchema(variant.properties?.objectKind);
+					const when: Record<string, readonly string[]> = {};
+					for (const key of ["phase", "mode", "intent", "scope", "objectKind"]) {
+						const values = enumValuesFromSchema(variant.properties?.[key]);
+						if (values.length > 0) when[key] = values;
+					}
 					return {
 						required: fields.required,
 						optional: fields.optional,
-						...(whenValue.length > 0 ? { when: { objectKind: whenValue } } : {}),
+						...(Object.keys(when).length > 0 ? { when } : {}),
 					};
 				})
 			: undefined;
@@ -392,6 +514,9 @@ function toCatalogEntry(descriptor: AscetActionDescriptor): AscetActionCatalogEn
 	const family = override?.family ?? resolveFamily(descriptor.tool);
 	const fewShots = (descriptor.prompt?.fewShots ?? []).map((fewShot) => ({ args: { ...fewShot.args } }));
 	const compact = override?.compact ?? descriptor.prompt?.summary ?? descriptor.id;
+	const schema = override?.schema ?? inferSchema(descriptor);
+	const rules = descriptor.prompt?.rules ? [...descriptor.prompt.rules] : [];
+	const result = override?.result ?? inferResult(descriptor);
 	const miniFewShot =
 		compactExamplesForAction(descriptor.tool, descriptor.action, { includeHidden: true })[0] ??
 		`${descriptor.tool}({action:${JSON.stringify(descriptor.action)}})`;
@@ -402,6 +527,7 @@ function toCatalogEntry(descriptor: AscetActionDescriptor): AscetActionCatalogEn
 		family,
 		risk: override?.risk ?? resolveRisk(family),
 		visibility: descriptor.visibility,
+		supportedObjectKinds: [...(descriptor.supportedObjectKinds ?? [])],
 		profiles: [...descriptor.profiles],
 		featureFlag: descriptor.featureFlag,
 		deprecatedBy: descriptor.deprecatedBy,
@@ -413,10 +539,13 @@ function toCatalogEntry(descriptor: AscetActionDescriptor): AscetActionCatalogEn
 		aliases: buildAliases(descriptor, override),
 		tags: descriptor.prompt?.tags ? [...descriptor.prompt.tags] : [],
 		nextActions: override?.nextActions,
-		schema: override?.schema ?? inferSchema(descriptor),
-		rules: descriptor.prompt?.rules ? [...descriptor.prompt.rules] : [],
+		schemaFingerprint: fingerprint(schema),
+		rulesFingerprint: fingerprint(rules),
+		resultFingerprint: fingerprint(result),
+		schema,
+		rules,
 		fewShots,
-		result: override?.result ?? inferResult(descriptor),
+		result,
 	};
 }
 

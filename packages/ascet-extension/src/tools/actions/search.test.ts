@@ -7,6 +7,8 @@ describe("ASCET action catalog lookup", () => {
 		const result = searchActionCatalog({ query: "ascet_get.tree" });
 
 		assert.equal(result.total, 1);
+		assert.equal(result.catalogVersion, 1);
+		assert.ok(result.catalogFingerprint.length > 0);
 		assert.equal(result.items[0]?.tool, "ascet_get");
 		assert.equal(result.items[0]?.action, "tree");
 		assert.equal(result.items[0]?.result?.shape, "observation");

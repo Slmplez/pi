@@ -1,3 +1,4 @@
+﻿import { createHash } from "node:crypto";
 import { Type } from "typebox";
 import {
 	type AscetCliExecutionResult,
@@ -15,6 +16,7 @@ import {
 } from "./database-catalog/index.ts";
 import {
 	type AscetObservationCoverage,
+	type AscetObservationDatabaseIdentity,
 	type AscetObservationDelivery,
 	type AscetObservationResult,
 	AscetObservationStore,
@@ -23,6 +25,7 @@ import { toToolFailurePayload, unwrapToolSuccessPayload } from "./tool-response-
 import { openAiObjectUnionSchema } from "./tools/_shared/openai-schema.ts";
 
 export type AscetGetAction =
+	| "database_identity"
 	| "tree"
 	| "database_catalog"
 	| "elements"
@@ -59,9 +62,17 @@ interface AscetGetBaseParams {
 }
 
 type AscetTargetedGetParams = AscetGetBaseParams & { target: AscetGetTarget };
+type AscetTreeParams = AscetGetBaseParams & { action: "tree"; scope?: never };
+type AscetDatabaseTreeParams = {
+	action: "tree";
+	scope: "database";
+	delivery: "stored";
+};
 
 export type AscetGetParams =
-	| (AscetGetBaseParams & { action: "tree" })
+	| { action: "database_identity" }
+	| AscetTreeParams
+	| AscetDatabaseTreeParams
 	| DatabaseCatalogRequest
 	| (AscetTargetedGetParams & { action: "elements"; elementName?: string })
 	| (AscetTargetedGetParams & { action: "formulas"; formulaName?: string })
@@ -156,8 +167,13 @@ const targetedProperties = {
 const databaseCatalogIncludeSchema = Type.Union(databaseCatalogIncludes.map((include) => Type.Literal(include)));
 
 export const ascetGetParameters = openAiObjectUnionSchema<AscetGetParams>([
+	Type.Object({ action: Type.Literal("database_identity") }, { additionalProperties: false }),
 	Type.Object(
 		{ action: Type.Literal("tree"), target: Type.Optional(targetSchema), ...commonProperties },
+		{ additionalProperties: false },
+	),
+	Type.Object(
+		{ action: Type.Literal("tree"), scope: Type.Literal("database"), delivery: Type.Literal("stored") },
 		{ additionalProperties: false },
 	),
 	Type.Object(
@@ -218,12 +234,18 @@ function operationForAction(action: AscetGetAction): string {
 }
 
 function buildPayload(params: AscetGetParams): Record<string, unknown> {
+	if (params.action === "database_identity") {
+		return {};
+	}
 	if (params.action === "database_catalog") {
 		return {
 			sourceTreeResultId: params.sourceTreeResultId,
 			include: [...params.include],
 			messageDepth: params.messageDepth ?? 0,
 		};
+	}
+	if (params.action === "tree" && params.scope === "database") {
+		return { scope: "database" };
 	}
 	const target: { oid?: string; path?: string; targetPathPrefix?: string } = params.target ?? {};
 	const filters = params.filters ?? {};
@@ -292,6 +314,46 @@ async function runDatabaseCatalog(
 	try {
 		const catalog = await executeDatabaseCatalog(params, {
 			scanLive: async (liveRequest: DatabaseCatalogLiveRequest) => {
+				liveResult = await runAscetCliJson(["exec", "get_database_identity", "--request-json", "{}", "--json"], {
+					cwd: options.cwd,
+					env: options.env,
+					signal: options.signal,
+					timeoutMs: options.timeoutMs ?? 120_000,
+					executeCli: options.executeCli,
+					toolName: "ascet_get",
+					commandId: "get_database_identity",
+					jobKind: "read",
+					resourceKey: "ascet.toolapi.global",
+				});
+				if (!liveResult.ok) {
+					throw new DatabaseCatalogError(
+						"database_identity_check_failed",
+						liveResult.error?.message ?? "ASCET database identity check failed.",
+						liveResult.error?.details,
+					);
+				}
+				const identityPayload = unwrapToolSuccessPayload(liveResult.data);
+				if (!isRecord(identityPayload)) {
+					throw new DatabaseCatalogError(
+						"database_identity_required",
+						"ASCET database identity check returned no result payload.",
+					);
+				}
+				const preScanDatabaseIdentity = getAscetDatabaseIdentity(identityPayload);
+				if (!preScanDatabaseIdentity) {
+					throw new DatabaseCatalogError(
+						"database_identity_required",
+						"ASCET database identity check did not return the current database identity.",
+					);
+				}
+				if (preScanDatabaseIdentity.fingerprint !== liveRequest.databaseIdentity.fingerprint) {
+					throw new DatabaseCatalogError(
+						"database_identity_mismatch",
+						"Stored Tree source database does not match the current live ASCET database.",
+						{ source: liveRequest.databaseIdentity, current: preScanDatabaseIdentity },
+					);
+				}
+
 				liveResult = await runAscetCliJson(["exec", "get_database_catalog", "--request-stdin", "--json"], {
 					cwd: options.cwd,
 					env: options.env,
@@ -316,6 +378,20 @@ async function runDatabaseCatalog(
 					throw new DatabaseCatalogError(
 						"catalog_live_scan_failed",
 						"ASCET live Database Catalog scan returned no result payload.",
+					);
+				}
+				const currentDatabaseIdentity = getAscetDatabaseIdentity(payload);
+				if (!currentDatabaseIdentity) {
+					throw new DatabaseCatalogError(
+						"database_identity_required",
+						"ASCET live Database Catalog scan did not return the current database identity.",
+					);
+				}
+				if (currentDatabaseIdentity.fingerprint !== liveRequest.databaseIdentity.fingerprint) {
+					throw new DatabaseCatalogError(
+						"database_identity_mismatch",
+						"Stored Tree source database does not match the current live ASCET database.",
+						{ source: liveRequest.databaseIdentity, current: currentDatabaseIdentity },
 					);
 				}
 				return payload;
@@ -403,6 +479,22 @@ function getTruncated(payload: JsonRecord): boolean {
 	return payload.truncated === true;
 }
 
+export function getAscetDatabaseIdentity(payload: JsonRecord): AscetObservationDatabaseIdentity | undefined {
+	if (!isRecord(payload.database)) {
+		return undefined;
+	}
+	const name = typeof payload.database.name === "string" ? payload.database.name.trim() : "";
+	const path = typeof payload.database.path === "string" ? payload.database.path.trim() : "";
+	if (path.length === 0) {
+		return undefined;
+	}
+	const canonicalPath = path.replaceAll("\\", "/").replace(/\/+$/u, "").toLowerCase();
+	const fingerprint = createHash("sha256")
+		.update(JSON.stringify({ name, path: canonicalPath }), "utf8")
+		.digest("hex");
+	return { ...(name.length > 0 ? { name } : {}), path, fingerprint };
+}
+
 function createToolOutput(params: AscetGetParams, result: AscetCliJsonResult): string {
 	if (!result.ok) {
 		return formatAscetCliJsonResult(operationForAction(params.action), result);
@@ -415,14 +507,29 @@ function createToolOutput(params: AscetGetParams, result: AscetCliJsonResult): s
 	if (params.action === "database_catalog") {
 		return JSON.stringify(payload, null, 2);
 	}
+	if (params.action === "database_identity") {
+		const databaseIdentity = getAscetDatabaseIdentity(payload);
+		return JSON.stringify(
+			databaseIdentity
+				? { databaseIdentity }
+				: toToolFailurePayload({
+						code: "database_identity_required",
+						message: "ASCET backend did not return the current database identity.",
+					}),
+			null,
+			2,
+		);
+	}
 
 	const store = new AscetObservationStore();
+	const databaseIdentity = getAscetDatabaseIdentity(payload);
 	const observation = store.create({
 		domain: params.action,
 		target: buildPayload(params),
 		items: getItems(payload),
 		coverage: getCoverage(payload),
 		truncated: getTruncated(payload),
+		...(databaseIdentity ? { sourceIdentity: { database: databaseIdentity } } : {}),
 		source: getSource(payload),
 		delivery: params.delivery,
 	});
@@ -433,6 +540,7 @@ function buildGetOutput(observation: AscetObservationResult, payload: JsonRecord
 	const coverage = getCoverage(payload);
 	const source = getSource(payload);
 	const truncated = getTruncated(payload);
+	const databaseIdentity = getAscetDatabaseIdentity(payload);
 	if (observation.delivery === "inline") {
 		return {
 			delivery: "inline",
@@ -440,6 +548,7 @@ function buildGetOutput(observation: AscetObservationResult, payload: JsonRecord
 			coverage,
 			truncated,
 			source,
+			...(databaseIdentity ? { sourceIdentity: { database: databaseIdentity } } : {}),
 		};
 	}
 
@@ -456,6 +565,7 @@ function buildGetOutput(observation: AscetObservationResult, payload: JsonRecord
 		coverage,
 		truncated,
 		source,
+		...(databaseIdentity ? { sourceIdentity: { database: databaseIdentity } } : {}),
 	};
 }
 

@@ -1,4 +1,4 @@
-import { createHash, randomUUID } from "node:crypto";
+﻿import { createHash, randomUUID } from "node:crypto";
 import {
 	closeSync,
 	existsSync,
@@ -12,6 +12,7 @@ import {
 import { join, resolve } from "node:path";
 import { getAscetArtifactRoot } from "../observation-store.ts";
 
+export const ASCET_PLAN_RECORD_VERSION = 2;
 export const DEFAULT_ASCET_PLAN_TTL_MS = 5 * 60 * 1000;
 
 export type AscetPlanStoreErrorCode =
@@ -20,24 +21,54 @@ export type AscetPlanStoreErrorCode =
 	| "plan_id_conflict"
 	| "plan_not_found"
 	| "plan_corrupt"
+	| "plan_version_unsupported"
 	| "plan_expired"
 	| "plan_consumed"
 	| "plan_busy"
 	| "plan_operation_mismatch"
 	| "plan_id_mismatch"
 	| "plan_binding_mismatch"
+	| "plan_database_identity_missing"
+	| "plan_target_identity_missing"
+	| "plan_contract_mismatch"
+	| "plan_database_identity_mismatch"
+	| "plan_target_identity_mismatch"
+	| "plan_evidence_mismatch"
 	| "stale_plan";
 
 export type AscetPlanJsonPrimitive = string | number | boolean | null;
 export type AscetPlanJsonValue = AscetPlanJsonPrimitive | AscetPlanJsonValue[] | { [key: string]: AscetPlanJsonValue };
 
+export interface AscetPlanBinding {
+	workspace: string;
+	agentId: string;
+	sessionId: string;
+}
+
+export interface AscetPlanDatabaseIdentity {
+	name?: string;
+	path: string;
+	fingerprint: string;
+}
+
+export interface AscetPlanTargetIdentity {
+	path: string;
+	oid: string;
+	kind: string;
+}
+
 export interface AscetPlanRecord {
+	version: 2;
 	planId: string;
 	operation: string;
 	params: AscetPlanJsonValue;
+	binding: AscetPlanBinding;
+	databaseIdentity: AscetPlanDatabaseIdentity;
+	targetIdentity: AscetPlanTargetIdentity;
 	backendPreflight: AscetPlanJsonValue;
-	binding?: AscetPlanJsonValue;
-	fingerprint: string;
+	evidenceFingerprint: string;
+	contractFingerprint: string;
+	planFingerprint: string;
 	createdAt: string;
 	expiresAt: string;
 	consumedAt?: string;
@@ -46,8 +77,11 @@ export interface AscetPlanRecord {
 export interface CreateAscetPlanInput {
 	operation: string;
 	params: AscetPlanJsonValue;
+	binding: AscetPlanBinding;
+	databaseIdentity: AscetPlanDatabaseIdentity;
+	targetIdentity: AscetPlanTargetIdentity;
 	backendPreflight: AscetPlanJsonValue;
-	binding?: AscetPlanJsonValue;
+	contractFingerprint: string;
 	ttlMs?: number;
 	expiresAt?: string;
 	planId?: string;
@@ -57,8 +91,11 @@ export interface VerifyAscetPlanInput {
 	planId: string;
 	operation: string;
 	params: AscetPlanJsonValue;
+	binding: AscetPlanBinding;
+	databaseIdentity: AscetPlanDatabaseIdentity;
+	targetIdentity: AscetPlanTargetIdentity;
 	backendPreflight: AscetPlanJsonValue;
-	binding?: AscetPlanJsonValue;
+	contractFingerprint: string;
 }
 
 export interface AscetPlanStoreOptions {
@@ -89,43 +126,33 @@ const FINGERPRINT = /^[a-f0-9]{64}$/u;
 let temporaryFileCounter = 0;
 const runtimeSessionId = randomUUID();
 
+function isObject(value: unknown): value is Record<string, unknown> {
+	return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
 function isJsonValue(value: unknown): value is AscetPlanJsonValue {
-	if (value === null || typeof value === "string" || typeof value === "boolean") {
-		return true;
-	}
-	if (typeof value === "number") {
-		return Number.isFinite(value);
-	}
-	if (Array.isArray(value)) {
-		return value.every((entry) => isJsonValue(entry));
-	}
-	if (typeof value !== "object") {
-		return false;
-	}
+	if (value === null || typeof value === "string" || typeof value === "boolean") return true;
+	if (typeof value === "number") return Number.isFinite(value);
+	if (Array.isArray(value)) return value.every((entry) => isJsonValue(entry));
+	if (!isObject(value)) return false;
 	const prototype = Object.getPrototypeOf(value);
-	if (prototype !== Object.prototype && prototype !== null) {
-		return false;
-	}
-	return Object.values(value).every((entry) => isJsonValue(entry));
+	return (prototype === Object.prototype || prototype === null) && Object.values(value).every(isJsonValue);
 }
 
 function canonicalize(value: AscetPlanJsonValue): string {
-	if (value === null) {
-		return "null";
-	}
-	if (typeof value === "string" || typeof value === "boolean") {
+	if (value === null) return "null";
+	if (typeof value === "string" || typeof value === "boolean" || typeof value === "number") {
 		return JSON.stringify(value);
 	}
-	if (typeof value === "number") {
-		return JSON.stringify(value);
-	}
-	if (Array.isArray(value)) {
-		return `[${value.map((entry) => canonicalize(entry)).join(",")}]`;
-	}
-	const entries = Object.keys(value)
+	if (Array.isArray(value)) return `[${value.map(canonicalize).join(",")}]`;
+	return `{${Object.keys(value)
 		.sort()
-		.map((key) => `${JSON.stringify(key)}:${canonicalize(value[key])}`);
-	return `{${entries.join(",")}}`;
+		.map((key) => `${JSON.stringify(key)}:${canonicalize(value[key])}`)
+		.join(",")}}`;
+}
+
+function fingerprint(value: AscetPlanJsonValue): string {
+	return createHash("sha256").update(canonicalize(value), "utf8").digest("hex");
 }
 
 function requireJsonValue(value: unknown, description: string): AscetPlanJsonValue {
@@ -135,11 +162,26 @@ function requireJsonValue(value: unknown, description: string): AscetPlanJsonVal
 	return value;
 }
 
-function requireOperation(operation: string): string {
-	if (operation.trim().length === 0) {
-		throw new AscetPlanStoreError("invalid_plan_input", "operation must be a non-empty string.", { operation });
+function requireNonEmpty(value: unknown, description: string): string {
+	if (typeof value !== "string" || value.trim().length === 0) {
+		throw new AscetPlanStoreError("invalid_plan_input", `${description} must be a non-empty string.`, {
+			description,
+		});
 	}
-	return operation;
+	return value;
+}
+
+function requireFingerprint(value: unknown, description: string): string {
+	if (typeof value !== "string" || !FINGERPRINT.test(value)) {
+		throw new AscetPlanStoreError("invalid_plan_input", `${description} must be a lowercase SHA-256 fingerprint.`, {
+			description,
+		});
+	}
+	return value;
+}
+
+function requireOperation(operation: string): string {
+	return requireNonEmpty(operation, "operation");
 }
 
 function requirePlanId(planId: string): string {
@@ -164,24 +206,61 @@ function assertDate(date: Date, description: string): Date {
 	return date;
 }
 
-function createFingerprintPayload(
-	operation: string,
-	params: AscetPlanJsonValue,
-	backendPreflight: AscetPlanJsonValue,
-	binding?: AscetPlanJsonValue,
-): AscetPlanJsonValue {
-	return { operation, params, backendPreflight, ...(binding !== undefined ? { binding } : {}) };
+function requireBinding(value: unknown): AscetPlanBinding {
+	if (!isObject(value)) {
+		throw new AscetPlanStoreError("invalid_plan_input", "binding must be an object.");
+	}
+	return {
+		workspace: requireNonEmpty(value.workspace, "binding.workspace"),
+		agentId: requireNonEmpty(value.agentId, "binding.agentId"),
+		sessionId: requireNonEmpty(value.sessionId, "binding.sessionId"),
+	};
+}
+
+function requireDatabaseIdentity(value: unknown): AscetPlanDatabaseIdentity {
+	if (!isObject(value)) {
+		throw new AscetPlanStoreError("invalid_plan_input", "databaseIdentity must be an object.");
+	}
+	const name = value.name === undefined ? undefined : requireNonEmpty(value.name, "databaseIdentity.name");
+	return {
+		...(name === undefined ? {} : { name }),
+		path: requireNonEmpty(value.path, "databaseIdentity.path"),
+		fingerprint: requireFingerprint(value.fingerprint, "databaseIdentity.fingerprint"),
+	};
+}
+
+function requireTargetIdentity(value: unknown): AscetPlanTargetIdentity {
+	if (!isObject(value)) {
+		throw new AscetPlanStoreError("invalid_plan_input", "targetIdentity must be an object.");
+	}
+	return {
+		path: requireNonEmpty(value.path, "targetIdentity.path"),
+		oid: requireNonEmpty(value.oid, "targetIdentity.oid"),
+		kind: requireNonEmpty(value.kind, "targetIdentity.kind"),
+	};
+}
+
+function bindingJson(binding: AscetPlanBinding): AscetPlanJsonValue {
+	return { workspace: binding.workspace, agentId: binding.agentId, sessionId: binding.sessionId };
+}
+
+function databaseIdentityJson(identity: AscetPlanDatabaseIdentity): AscetPlanJsonValue {
+	return {
+		...(identity.name === undefined ? {} : { name: identity.name }),
+		path: identity.path,
+		fingerprint: identity.fingerprint,
+	};
+}
+
+function targetIdentityJson(identity: AscetPlanTargetIdentity): AscetPlanJsonValue {
+	return { path: identity.path, oid: identity.oid, kind: identity.kind };
 }
 
 export function canonicalizeAscetPlanJson(value: AscetPlanJsonValue): string {
 	return canonicalize(requireJsonValue(value, "value"));
 }
 
-export function createAscetPlanBinding(input: {
-	cwd: string;
-	agentId?: string;
-	sessionId?: string;
-}): AscetPlanJsonValue {
+export function createAscetPlanBinding(input: { cwd: string; agentId?: string; sessionId?: string }): AscetPlanBinding {
 	return {
 		workspace: resolve(input.cwd),
 		agentId: input.agentId?.trim() || "system",
@@ -189,101 +268,136 @@ export function createAscetPlanBinding(input: {
 	};
 }
 
-export function createAscetPlanFingerprint(
-	operation: string,
-	params: AscetPlanJsonValue,
-	backendPreflight: AscetPlanJsonValue,
-	binding?: AscetPlanJsonValue,
-): string {
-	const payload = createFingerprintPayload(
-		requireOperation(operation),
-		requireJsonValue(params, "params"),
-		requireJsonValue(backendPreflight, "backendPreflight"),
-		binding === undefined ? undefined : requireJsonValue(binding, "binding"),
-	);
-	return createHash("sha256").update(canonicalize(payload), "utf8").digest("hex");
+export function createAscetPlanContractFingerprint(contract: AscetPlanJsonValue): string {
+	return fingerprint(requireJsonValue(contract, "contract"));
 }
 
-function isObject(value: unknown): value is Record<string, unknown> {
-	return typeof value === "object" && value !== null && !Array.isArray(value);
+export function createAscetPlanEvidenceFingerprint(
+	backendPreflight: AscetPlanJsonValue,
+	databaseIdentity: AscetPlanDatabaseIdentity,
+	targetIdentity: AscetPlanTargetIdentity,
+): string {
+	return fingerprint({
+		backendPreflight: requireJsonValue(backendPreflight, "backendPreflight"),
+		databaseIdentity: databaseIdentityJson(requireDatabaseIdentity(databaseIdentity)),
+		targetIdentity: targetIdentityJson(requireTargetIdentity(targetIdentity)),
+	});
+}
+
+export function createAscetPlanFingerprint(input: {
+	operation: string;
+	params: AscetPlanJsonValue;
+	binding: AscetPlanBinding;
+	databaseIdentity: AscetPlanDatabaseIdentity;
+	targetIdentity: AscetPlanTargetIdentity;
+	evidenceFingerprint: string;
+	contractFingerprint: string;
+}): string {
+	return fingerprint({
+		version: ASCET_PLAN_RECORD_VERSION,
+		operation: requireOperation(input.operation),
+		params: requireJsonValue(input.params, "params"),
+		binding: bindingJson(requireBinding(input.binding)),
+		databaseIdentity: databaseIdentityJson(requireDatabaseIdentity(input.databaseIdentity)),
+		targetIdentity: targetIdentityJson(requireTargetIdentity(input.targetIdentity)),
+		evidenceFingerprint: requireFingerprint(input.evidenceFingerprint, "evidenceFingerprint"),
+		contractFingerprint: requireFingerprint(input.contractFingerprint, "contractFingerprint"),
+	});
 }
 
 function parsePlanRecord(value: unknown): AscetPlanRecord {
 	if (!isObject(value)) {
 		throw new AscetPlanStoreError("plan_corrupt", "Persisted plan is not a JSON object.");
 	}
-	const planId = value.planId;
-	const operation = value.operation;
-	const params = value.params;
-	const backendPreflight = value.backendPreflight;
-	const binding = value.binding;
-	const fingerprint = value.fingerprint;
-	const createdAt = value.createdAt;
-	const expiresAt = value.expiresAt;
-	const consumedAt = value.consumedAt;
-	if (
-		typeof planId !== "string" ||
-		typeof operation !== "string" ||
-		!isJsonValue(params) ||
-		!isJsonValue(backendPreflight) ||
-		(binding !== undefined && !isJsonValue(binding)) ||
-		typeof fingerprint !== "string" ||
-		typeof createdAt !== "string" ||
-		typeof expiresAt !== "string" ||
-		(consumedAt !== undefined && typeof consumedAt !== "string")
-	) {
-		throw new AscetPlanStoreError("plan_corrupt", "Persisted plan is missing required fields.");
+	if (value.version !== ASCET_PLAN_RECORD_VERSION) {
+		throw new AscetPlanStoreError(
+			"plan_version_unsupported",
+			`Persisted plan version is unsupported: ${String(value.version ?? "missing")}.`,
+			{ version: value.version },
+		);
 	}
-	if (!SAFE_PLAN_ID.test(planId) || !FINGERPRINT.test(fingerprint)) {
-		throw new AscetPlanStoreError("plan_corrupt", "Persisted plan contains unsafe identity fields.", { planId });
-	}
-	const createdTimestamp = parseTimestamp(createdAt, "createdAt");
-	const expiresTimestamp = parseTimestamp(expiresAt, "expiresAt");
-	if (expiresTimestamp <= createdTimestamp) {
-		throw new AscetPlanStoreError("plan_corrupt", "Persisted plan expires before or at creation time.", {
+	try {
+		const planId = requirePlanId(requireNonEmpty(value.planId, "planId"));
+		const operation = requireOperation(requireNonEmpty(value.operation, "operation"));
+		const params = requireJsonValue(value.params, "params");
+		const binding = requireBinding(value.binding);
+		const databaseIdentity = requireDatabaseIdentity(value.databaseIdentity);
+		const targetIdentity = requireTargetIdentity(value.targetIdentity);
+		const backendPreflight = requireJsonValue(value.backendPreflight, "backendPreflight");
+		const evidenceFingerprint = requireFingerprint(value.evidenceFingerprint, "evidenceFingerprint");
+		const contractFingerprint = requireFingerprint(value.contractFingerprint, "contractFingerprint");
+		const planFingerprint = requireFingerprint(value.planFingerprint, "planFingerprint");
+		const createdAt = requireNonEmpty(value.createdAt, "createdAt");
+		const expiresAt = requireNonEmpty(value.expiresAt, "expiresAt");
+		const consumedAt = value.consumedAt === undefined ? undefined : requireNonEmpty(value.consumedAt, "consumedAt");
+		const createdTimestamp = parseTimestamp(createdAt, "createdAt");
+		const expiresTimestamp = parseTimestamp(expiresAt, "expiresAt");
+		if (expiresTimestamp <= createdTimestamp) {
+			throw new AscetPlanStoreError("plan_corrupt", "Persisted plan expires before or at creation time.", {
+				createdAt,
+				expiresAt,
+			});
+		}
+		if (consumedAt !== undefined) parseTimestamp(consumedAt, "consumedAt");
+		const expectedEvidenceFingerprint = createAscetPlanEvidenceFingerprint(
+			backendPreflight,
+			databaseIdentity,
+			targetIdentity,
+		);
+		if (expectedEvidenceFingerprint !== evidenceFingerprint) {
+			throw new AscetPlanStoreError(
+				"plan_corrupt",
+				"Persisted plan evidence fingerprint does not match its contents.",
+				{
+					planId,
+					evidenceFingerprint,
+					expectedEvidenceFingerprint,
+				},
+			);
+		}
+		const expectedPlanFingerprint = createAscetPlanFingerprint({
+			operation,
+			params,
+			binding,
+			databaseIdentity,
+			targetIdentity,
+			evidenceFingerprint,
+			contractFingerprint,
+		});
+		if (expectedPlanFingerprint !== planFingerprint) {
+			throw new AscetPlanStoreError("plan_corrupt", "Persisted plan fingerprint does not match its contents.", {
+				planId,
+				planFingerprint,
+				expectedPlanFingerprint,
+			});
+		}
+		return {
+			version: ASCET_PLAN_RECORD_VERSION,
+			planId,
+			operation,
+			params,
+			binding,
+			databaseIdentity,
+			targetIdentity,
+			backendPreflight,
+			evidenceFingerprint,
+			contractFingerprint,
+			planFingerprint,
 			createdAt,
 			expiresAt,
-		});
+			...(consumedAt === undefined ? {} : { consumedAt }),
+		};
+	} catch (error) {
+		if (error instanceof AscetPlanStoreError && error.code === "plan_corrupt") throw error;
+		if (error instanceof AscetPlanStoreError) {
+			throw new AscetPlanStoreError("plan_corrupt", error.message, error.details);
+		}
+		throw error;
 	}
-	const normalizedConsumedAt = typeof consumedAt === "string" ? consumedAt : undefined;
-	if (normalizedConsumedAt !== undefined) {
-		parseTimestamp(normalizedConsumedAt, "consumedAt");
-	}
-	const normalizedBinding = binding === undefined ? undefined : binding;
-	const expectedFingerprint = createAscetPlanFingerprint(operation, params, backendPreflight, normalizedBinding);
-	if (expectedFingerprint !== fingerprint) {
-		throw new AscetPlanStoreError("plan_corrupt", "Persisted plan fingerprint does not match its contents.", {
-			planId,
-			fingerprint,
-			expectedFingerprint,
-		});
-	}
-	return {
-		planId,
-		operation,
-		params,
-		backendPreflight,
-		...(normalizedBinding !== undefined ? { binding: normalizedBinding } : {}),
-		fingerprint,
-		createdAt,
-		expiresAt,
-		...(normalizedConsumedAt !== undefined ? { consumedAt: normalizedConsumedAt } : {}),
-	};
 }
 
 function serializePlan(record: AscetPlanRecord): string {
-	const value: AscetPlanJsonValue = {
-		planId: record.planId,
-		operation: record.operation,
-		params: record.params,
-		backendPreflight: record.backendPreflight,
-		...(record.binding !== undefined ? { binding: record.binding } : {}),
-		fingerprint: record.fingerprint,
-		createdAt: record.createdAt,
-		expiresAt: record.expiresAt,
-		...(record.consumedAt !== undefined ? { consumedAt: record.consumedAt } : {}),
-	};
-	return `${canonicalize(value)}\n`;
+	return `${canonicalize(record as unknown as AscetPlanJsonValue)}\n`;
 }
 
 export class AscetPlanStore {
@@ -307,8 +421,11 @@ export class AscetPlanStore {
 	public create(input: CreateAscetPlanInput): AscetPlanRecord {
 		const operation = requireOperation(input.operation);
 		const params = requireJsonValue(input.params, "params");
+		const binding = requireBinding(input.binding);
+		const databaseIdentity = requireDatabaseIdentity(input.databaseIdentity);
+		const targetIdentity = requireTargetIdentity(input.targetIdentity);
 		const backendPreflight = requireJsonValue(input.backendPreflight, "backendPreflight");
-		const binding = input.binding === undefined ? undefined : requireJsonValue(input.binding, "binding");
+		const contractFingerprint = requireFingerprint(input.contractFingerprint, "contractFingerprint");
 		const created = assertDate(this.now(), "now");
 		const expiresAt = this.resolveExpiration(created, input);
 		const planId = requirePlanId(input.planId ?? this.generatePlanId());
@@ -316,13 +433,32 @@ export class AscetPlanStore {
 		if (existsSync(filePath)) {
 			throw new AscetPlanStoreError("plan_id_conflict", `Plan already exists: ${planId}`, { planId });
 		}
+		const evidenceFingerprint = createAscetPlanEvidenceFingerprint(
+			backendPreflight,
+			databaseIdentity,
+			targetIdentity,
+		);
+		const planFingerprint = createAscetPlanFingerprint({
+			operation,
+			params,
+			binding,
+			databaseIdentity,
+			targetIdentity,
+			evidenceFingerprint,
+			contractFingerprint,
+		});
 		const record: AscetPlanRecord = {
+			version: ASCET_PLAN_RECORD_VERSION,
 			planId,
 			operation,
 			params,
+			binding,
+			databaseIdentity,
+			targetIdentity,
 			backendPreflight,
-			...(binding !== undefined ? { binding } : {}),
-			fingerprint: createAscetPlanFingerprint(operation, params, backendPreflight, binding),
+			evidenceFingerprint,
+			contractFingerprint,
+			planFingerprint,
 			createdAt: created.toISOString(),
 			expiresAt: expiresAt.toISOString(),
 		};
@@ -330,17 +466,14 @@ export class AscetPlanStore {
 		return record;
 	}
 
-	public load(planId: string, binding?: AscetPlanJsonValue): AscetPlanRecord {
+	public load(planId: string): AscetPlanRecord {
 		const record = this.readRecord(planId);
 		this.assertAvailable(record);
-		if (binding !== undefined) {
-			this.assertBinding(record, binding);
-		}
 		return record;
 	}
 
 	public verify(input: VerifyAscetPlanInput): AscetPlanRecord {
-		const record = this.load(input.planId, input.binding);
+		const record = this.load(input.planId);
 		this.assertMatches(record, input);
 		return record;
 	}
@@ -363,17 +496,15 @@ export class AscetPlanStore {
 			const record = this.readRecord(planId);
 			this.assertAvailable(record);
 			this.assertMatches(record, input);
-			const consumedAt = assertDate(this.now(), "now").toISOString();
-			const consumedRecord: AscetPlanRecord = { ...record, consumedAt };
+			const consumedRecord: AscetPlanRecord = {
+				...record,
+				consumedAt: assertDate(this.now(), "now").toISOString(),
+			};
 			this.writeRecord(filePath, consumedRecord);
 			return consumedRecord;
 		} finally {
-			if (lockHandle !== undefined) {
-				closeSync(lockHandle);
-			}
-			if (existsSync(lockPath)) {
-				unlinkSync(lockPath);
-			}
+			if (lockHandle !== undefined) closeSync(lockHandle);
+			if (existsSync(lockPath)) unlinkSync(lockPath);
 		}
 	}
 
@@ -445,22 +576,6 @@ export class AscetPlanStore {
 		}
 	}
 
-	private assertBinding(record: AscetPlanRecord, binding: AscetPlanJsonValue | undefined): void {
-		const expectedBinding = binding === undefined ? undefined : requireJsonValue(binding, "binding");
-		if (
-			(record.binding === undefined) !== (expectedBinding === undefined) ||
-			(record.binding !== undefined &&
-				expectedBinding !== undefined &&
-				canonicalize(record.binding) !== canonicalize(expectedBinding))
-		) {
-			throw new AscetPlanStoreError("plan_binding_mismatch", `Plan binding does not match: ${record.planId}`, {
-				planId: record.planId,
-				recordedBinding: record.binding,
-				expectedBinding,
-			});
-		}
-	}
-
 	private assertMatches(record: AscetPlanRecord, input: VerifyAscetPlanInput): void {
 		const operation = requireOperation(input.operation);
 		if (record.operation !== operation) {
@@ -470,19 +585,79 @@ export class AscetPlanStore {
 				recordedOperation: record.operation,
 			});
 		}
-		const expectedBinding = input.binding === undefined ? undefined : requireJsonValue(input.binding, "binding");
-		this.assertBinding(record, expectedBinding);
-		const expectedFingerprint = createAscetPlanFingerprint(
-			operation,
-			input.params,
-			input.backendPreflight,
-			expectedBinding,
+		const binding = requireBinding(input.binding);
+		if (canonicalize(bindingJson(record.binding)) !== canonicalize(bindingJson(binding))) {
+			throw new AscetPlanStoreError("plan_binding_mismatch", `Plan binding does not match: ${record.planId}`, {
+				planId: record.planId,
+				recordedBinding: record.binding,
+				expectedBinding: binding,
+			});
+		}
+		const contractFingerprint = requireFingerprint(input.contractFingerprint, "contractFingerprint");
+		if (record.contractFingerprint !== contractFingerprint) {
+			throw new AscetPlanStoreError("plan_contract_mismatch", `Plan contract has changed: ${record.planId}`, {
+				planId: record.planId,
+				recordedContractFingerprint: record.contractFingerprint,
+				expectedContractFingerprint: contractFingerprint,
+			});
+		}
+		const databaseIdentity = requireDatabaseIdentity(input.databaseIdentity);
+		if (
+			canonicalize(databaseIdentityJson(record.databaseIdentity)) !==
+			canonicalize(databaseIdentityJson(databaseIdentity))
+		) {
+			throw new AscetPlanStoreError(
+				"plan_database_identity_mismatch",
+				`Plan database identity does not match: ${record.planId}`,
+				{
+					planId: record.planId,
+					recordedDatabaseIdentity: record.databaseIdentity,
+					expectedDatabaseIdentity: databaseIdentity,
+				},
+			);
+		}
+		const targetIdentity = requireTargetIdentity(input.targetIdentity);
+		if (
+			canonicalize(targetIdentityJson(record.targetIdentity)) !== canonicalize(targetIdentityJson(targetIdentity))
+		) {
+			throw new AscetPlanStoreError(
+				"plan_target_identity_mismatch",
+				`Plan target identity does not match: ${record.planId}`,
+				{
+					planId: record.planId,
+					recordedTargetIdentity: record.targetIdentity,
+					expectedTargetIdentity: targetIdentity,
+				},
+			);
+		}
+		const params = requireJsonValue(input.params, "params");
+		const backendPreflight = requireJsonValue(input.backendPreflight, "backendPreflight");
+		const evidenceFingerprint = createAscetPlanEvidenceFingerprint(
+			backendPreflight,
+			databaseIdentity,
+			targetIdentity,
 		);
-		if (expectedFingerprint !== record.fingerprint) {
+		if (record.evidenceFingerprint !== evidenceFingerprint) {
+			throw new AscetPlanStoreError("plan_evidence_mismatch", `Plan preflight evidence is stale: ${record.planId}`, {
+				planId: record.planId,
+				recordedEvidenceFingerprint: record.evidenceFingerprint,
+				expectedEvidenceFingerprint: evidenceFingerprint,
+			});
+		}
+		const planFingerprint = createAscetPlanFingerprint({
+			operation,
+			params,
+			binding,
+			databaseIdentity,
+			targetIdentity,
+			evidenceFingerprint,
+			contractFingerprint,
+		});
+		if (record.planFingerprint !== planFingerprint) {
 			throw new AscetPlanStoreError("stale_plan", `Plan fingerprint is stale: ${record.planId}`, {
 				planId: record.planId,
-				expectedFingerprint,
-				recordedFingerprint: record.fingerprint,
+				recordedPlanFingerprint: record.planFingerprint,
+				expectedPlanFingerprint: planFingerprint,
 			});
 		}
 	}
@@ -495,9 +670,7 @@ export class AscetPlanStore {
 			writeFileSync(temporaryPath, serializePlan(record), { encoding: "utf8", mode: 0o600 });
 			renameSync(temporaryPath, filePath);
 		} finally {
-			if (existsSync(temporaryPath)) {
-				unlinkSync(temporaryPath);
-			}
+			if (existsSync(temporaryPath)) unlinkSync(temporaryPath);
 		}
 	}
 

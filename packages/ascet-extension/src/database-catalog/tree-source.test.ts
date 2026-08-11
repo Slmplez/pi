@@ -24,6 +24,9 @@ test("loads a full Tree once and deduplicates Module and Enumeration identities 
 		store.create({
 			domain: "tree",
 			target: {},
+			sourceIdentity: {
+				database: { name: "DB", path: "C:/Repo/DB", fingerprint: "a".repeat(64) },
+			},
 			items: [
 				{ path: "DB\\Project", oid: "project-1", kind: "project" },
 				{ path: "DB\\Project::Module", oid: "module-1", kind: "module" },
@@ -33,12 +36,19 @@ test("loads a full Tree once and deduplicates Module and Enumeration identities 
 				{ path: "DB\\Classes\\Parameter", oid: "class-1", kind: "class" },
 				{ path: "DB\\Broken", kind: "class" },
 			],
-			coverage: { status: "complete_for_scope" },
+			coverage: {
+				status: "complete_for_scope",
+				scopeKind: "database",
+				scopeId: "database:DB",
+				completeness: "complete",
+				truncated: false,
+			},
 			truncated: false,
 			delivery: "stored",
 		});
 
 		const source = await loadDatabaseCatalogTreeSource(store, "obs-tree-full");
+		assert.equal(source.databaseIdentity.fingerprint, "a".repeat(64));
 		assert.deepEqual(source.projects, [{ path: "DB\\Project", oid: "project-1" }]);
 		assert.deepEqual(source.modules, [
 			{
@@ -77,6 +87,24 @@ test("rejects non-Tree, bounded, partial, truncated, and missing-data observatio
 		const nonTree = store.create({
 			domain: "elements",
 			target: {},
+			sourceIdentity: {
+				database: { name: "DB", path: "C:/Repo/DB", fingerprint: "a".repeat(64) },
+			},
+			items: [],
+			coverage: {
+				status: "complete_for_scope",
+				scopeKind: "database",
+				scopeId: "database:DB",
+				completeness: "complete",
+			},
+			delivery: "stored",
+		});
+		const implicitRoot = store.create({
+			domain: "tree",
+			target: {},
+			sourceIdentity: {
+				database: { name: "DB", path: "C:/Repo/DB", fingerprint: "a".repeat(64) },
+			},
 			items: [],
 			coverage: { status: "complete_for_scope" },
 			delivery: "stored",
@@ -84,36 +112,82 @@ test("rejects non-Tree, bounded, partial, truncated, and missing-data observatio
 		const bounded = store.create({
 			domain: "tree",
 			target: { targetPathPrefix: "DB\\Project" },
+			sourceIdentity: {
+				database: { name: "DB", path: "C:/Repo/DB", fingerprint: "a".repeat(64) },
+			},
 			items: [],
-			coverage: { status: "complete_for_scope" },
+			coverage: {
+				status: "complete_for_scope",
+				scopeKind: "database",
+				scopeId: "database:DB",
+				completeness: "complete",
+			},
 			delivery: "stored",
 		});
 		const partial = store.create({
 			domain: "tree",
 			target: {},
+			sourceIdentity: {
+				database: { name: "DB", path: "C:/Repo/DB", fingerprint: "a".repeat(64) },
+			},
 			items: [],
-			coverage: { status: "partial" },
+			coverage: {
+				status: "partial",
+				scopeKind: "database",
+				scopeId: "database:DB",
+				completeness: "complete",
+			},
 			delivery: "stored",
 		});
 		const truncated = store.create({
 			domain: "tree",
 			target: {},
+			sourceIdentity: {
+				database: { name: "DB", path: "C:/Repo/DB", fingerprint: "a".repeat(64) },
+			},
 			items: [],
-			coverage: { status: "complete_for_scope" },
+			coverage: {
+				status: "complete_for_scope",
+				scopeKind: "database",
+				scopeId: "database:DB",
+				completeness: "complete",
+			},
 			truncated: true,
+			delivery: "stored",
+		});
+		const missingIdentity = store.create({
+			domain: "tree",
+			target: {},
+			items: [],
+			coverage: {
+				status: "complete_for_scope",
+				scopeKind: "database",
+				scopeId: "database:DB",
+				completeness: "complete",
+			},
 			delivery: "stored",
 		});
 		const missingData = store.create({
 			domain: "tree",
 			target: {},
+			sourceIdentity: {
+				database: { name: "DB", path: "C:/Repo/DB", fingerprint: "a".repeat(64) },
+			},
 			items: [],
-			coverage: { status: "complete_for_scope" },
+			coverage: {
+				status: "complete_for_scope",
+				scopeKind: "database",
+				scopeId: "database:DB",
+				completeness: "complete",
+			},
 			delivery: "stored",
 		});
 		assert.equal(nonTree.delivery, "stored");
+		assert.equal(implicitRoot.delivery, "stored");
 		assert.equal(bounded.delivery, "stored");
 		assert.equal(partial.delivery, "stored");
 		assert.equal(truncated.delivery, "stored");
+		assert.equal(missingIdentity.delivery, "stored");
 		assert.equal(missingData.delivery, "stored");
 		unlinkSync(missingData.observation.dataPath);
 
@@ -123,12 +197,19 @@ test("rejects non-Tree, bounded, partial, truncated, and missing-data observatio
 		await assert.rejects(loadDatabaseCatalogTreeSource(store, nonTree.observation.metadata.resultId), (error) =>
 			expectCode(error, "source_tree_domain_invalid"),
 		);
+		await assert.rejects(loadDatabaseCatalogTreeSource(store, implicitRoot.observation.metadata.resultId), (error) =>
+			expectCode(error, "database_scope_required"),
+		);
 		for (const observation of [bounded, partial, truncated]) {
 			await assert.rejects(
 				loadDatabaseCatalogTreeSource(store, observation.observation.metadata.resultId),
 				(error) => expectCode(error, "full_tree_required"),
 			);
 		}
+		await assert.rejects(
+			loadDatabaseCatalogTreeSource(store, missingIdentity.observation.metadata.resultId),
+			(error) => expectCode(error, "database_identity_required"),
+		);
 		await assert.rejects(loadDatabaseCatalogTreeSource(store, missingData.observation.metadata.resultId), (error) =>
 			expectCode(error, "source_tree_data_missing"),
 		);

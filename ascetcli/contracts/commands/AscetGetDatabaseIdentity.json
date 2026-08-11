@@ -1,0 +1,64 @@
+{
+  "id": "AscetGetDatabaseIdentity",
+  "family": "get",
+  "summary": "Read the current ASCET database name and path identity without traversing database contents.",
+  "usage": "--request-json {} [--json]",
+  "execution": {
+    "kind": "bridge",
+    "protocolVersion": 1,
+    "subcommand": "exec",
+    "operation": "get_database_identity",
+    "sessionPolicy": "fresh_session",
+    "transportPolicy": "one_shot_only"
+  },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "read",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": [
+    "database"
+  ],
+  "args": [
+    {
+      "name": "--request-json",
+      "kind": "option",
+      "type": "json",
+      "required": true,
+      "description": "Empty JSON object; database identity accepts no bounded request fields."
+    },
+    {
+      "name": "--json",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Emit JSON."
+    }
+  ],
+  "preconditions": [
+    "ASCET ToolAPI session must be available and a database must be open."
+  ],
+  "failureModes": [
+    "toolapi_unavailable",
+    "database_not_open",
+    "invalid_argument"
+  ],
+  "examples": [
+    {
+      "description": "Read current database identity",
+      "command": "AscetBridge.exe exec get_database_identity --request-json {} --json"
+    }
+  ],
+  "pitfalls": [
+    "This operation returns identity only and does not prove Database Tree completeness."
+  ],
+  "operation": "get_database_identity",
+  "lane": "pooled_read",
+  "hostEligible": true,
+  "supportsBatch": true,
+  "executionProfile": {
+    "hostSafety": "stable",
+    "hostPolicy": "prefer_host",
+    "timeoutClass": "read"
+  },
+  "hiddenFromModel": false
+}

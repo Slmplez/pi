@@ -208,3 +208,34 @@ test("ascet_edit set routes through the unified approval path", async () => {
 		operation: "component_editable_set",
 	});
 });
+
+test("reports only selected set_element_dependency schema errors", async () => {
+	const invalidParams = {
+		action: "set_element_dependency",
+		targetPath: "DEMO\\Consumer",
+		elementName: "C_K",
+		dependency: "dependent",
+		folderPath: "DEMO\\Unexpected",
+	} as unknown as Parameters<typeof ascetEditTool.execute>[1];
+	const result = await ascetEditTool.execute("call-1", invalidParams, new AbortController().signal, undefined, {
+		cwd: process.cwd(),
+	});
+
+	const payload = JSON.parse(result.content[0]?.text ?? "{}") as {
+		error?: { details?: { errors?: Array<{ message?: string; path?: string }> } };
+	};
+	const errors = payload.error?.details?.errors ?? [];
+	assert.ok(errors.length > 0);
+	assert.equal(
+		errors.some((error) => error.message?.includes("folderPath must have required properties")),
+		false,
+	);
+	assert.equal(
+		errors.some((error) => error.message?.includes("componentPath must have required properties")),
+		false,
+	);
+	assert.equal(
+		errors.some((error) => error.message?.includes("methodName must have required properties")),
+		false,
+	);
+});

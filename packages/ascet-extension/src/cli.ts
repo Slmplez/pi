@@ -29,6 +29,7 @@ export interface AscetCliRequestData {
 /** Runtime-only request. Never expose this object through tool result details. */
 export interface AscetCliRequest extends AscetCliRequestData {
 	signal?: AbortSignal;
+	stdoutLimitBytes?: number;
 	onSpawn?: (pid: number) => void | Promise<void>;
 }
 
@@ -49,6 +50,14 @@ export interface AscetCliExecutionResult {
 	outputLimitExceeded?: "stdout" | "stderr";
 }
 
+export type AscetCliLifecycleStage = "before_bridge" | "bridge_entered" | "backend_response_received";
+
+export interface AscetCliLifecycleEvent {
+	stage: AscetCliLifecycleStage;
+	commandId: string;
+	jobKind: AscetJobKind;
+}
+
 export interface RunAscetCliJsonOptions {
 	cwd: string;
 	cliPath?: string;
@@ -66,6 +75,7 @@ export interface RunAscetCliJsonOptions {
 	/** Scheduler resource label. Live ASCET operations should use ascet.toolapi.global. */
 	resourceKey?: string;
 	queueTimeoutMs?: number;
+	onLifecycle?: (event: AscetCliLifecycleEvent) => void;
 }
 
 export interface AscetCliJsonResult {
@@ -120,7 +130,8 @@ export interface AscetFormattedOutputArtifact {
 }
 
 const MAX_BRIDGE_REQUEST_BYTES = 16 * 1024 * 1024;
-const MAX_BRIDGE_STDOUT_BYTES = 16 * 1024 * 1024;
+const DEFAULT_MAX_BRIDGE_STDOUT_BYTES = 16 * 1024 * 1024;
+const DATABASE_CATALOG_MAX_BRIDGE_STDOUT_BYTES = 64 * 1024 * 1024;
 const MAX_BRIDGE_STDERR_BYTES = 2 * 1024 * 1024;
 
 let formatArtifactCounter = 0;
@@ -351,6 +362,7 @@ export async function executeAscetCli(request: AscetCliRequest): Promise<AscetCl
 		let outputLimitExceeded: "stdout" | "stderr" | undefined;
 		let stdoutBytes = 0;
 		let stderrBytes = 0;
+		const stdoutLimitBytes = request.stdoutLimitBytes ?? DEFAULT_MAX_BRIDGE_STDOUT_BYTES;
 		let timeout: NodeJS.Timeout | undefined;
 		let terminationPromise: Promise<void> | undefined;
 		let spawnMetadataPromise: Promise<void> | undefined;
@@ -383,7 +395,7 @@ export async function executeAscetCli(request: AscetCliRequest): Promise<AscetCl
 		child.stdout?.on("data", (chunk) => {
 			const text = String(chunk);
 			stdoutBytes += Buffer.byteLength(text, "utf8");
-			if (stdoutBytes > MAX_BRIDGE_STDOUT_BYTES) {
+			if (stdoutBytes > stdoutLimitBytes) {
 				outputLimitExceeded = "stdout";
 				startTermination();
 				return;
@@ -456,6 +468,19 @@ function inferJobKind(commandId: string): AscetJobKind {
 	return "read";
 }
 
+function emitAscetCliLifecycle(
+	options: RunAscetCliJsonOptions,
+	stage: AscetCliLifecycleStage,
+	commandId: string,
+	jobKind: AscetJobKind,
+): void {
+	try {
+		options.onLifecycle?.({ stage, commandId, jobKind });
+	} catch {
+		// Evidence collection must never alter CLI behavior.
+	}
+}
+
 async function executeScheduledAscetCli(
 	request: AscetCliRequest,
 	options: RunAscetCliJsonOptions,
@@ -464,11 +489,13 @@ async function executeScheduledAscetCli(
 	const toolName = options.toolName ?? "ascet_cli";
 	const agentId = options.agentId ?? "system";
 	const scheduler = options.scheduler ?? getGlobalAscetScheduler();
+	const jobKind = options.jobKind ?? inferJobKind(commandId);
+	emitAscetCliLifecycle(options, "before_bridge", commandId, jobKind);
 	return scheduler.submit({
 		agentId,
 		toolName,
 		commandId,
-		kind: options.jobKind ?? inferJobKind(commandId),
+		kind: jobKind,
 		resourceKey: options.resourceKey,
 		queueTimeoutMs: options.queueTimeoutMs ?? 60_000,
 		executionTimeoutMs: (request.timeoutMs ?? 60_000) + 5_000,
@@ -496,9 +523,11 @@ async function executeScheduledAscetCli(
 				await request.onSpawn?.(pid);
 			};
 			try {
+				emitAscetCliLifecycle(options, "bridge_entered", commandId, jobKind);
 				const execution = normalizeAscetCliExecutionResult(
 					await (options.executeCli ?? executeAscetCli)(scheduledRequest),
 				);
+				emitAscetCliLifecycle(options, "backend_response_received", commandId, jobKind);
 				const acceptedExitCodes = options.acceptedExitCodes ?? [0];
 				const aborted = scheduledRequest.signal?.aborted === true || execution.aborted === true;
 				if (execution.outputLimitExceeded) {
@@ -750,6 +779,7 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 		timeoutMs: options.timeoutMs,
 		jobKind,
 		mutatesDatabase: jobKind === "write",
+		...(commandId === "get_database_catalog" ? { stdoutLimitBytes: DATABASE_CATALOG_MAX_BRIDGE_STDOUT_BYTES } : {}),
 	};
 
 	const requestSizeBytes = Buffer.byteLength(JSON.stringify({ args, stdin: options.stdin ?? null }), "utf8");
@@ -826,9 +856,14 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 
 	let execution: AscetCliExecutionResult;
 	try {
-		execution = isControlPlaneRequest(args)
-			? normalizeAscetCliExecutionResult(await (options.executeCli ?? executeAscetCli)(request))
-			: await executeScheduledAscetCli(request, { ...options, commandId, jobKind });
+		if (isControlPlaneRequest(args)) {
+			emitAscetCliLifecycle(options, "before_bridge", commandId, jobKind);
+			emitAscetCliLifecycle(options, "bridge_entered", commandId, jobKind);
+			execution = normalizeAscetCliExecutionResult(await (options.executeCli ?? executeAscetCli)(request));
+			emitAscetCliLifecycle(options, "backend_response_received", commandId, jobKind);
+		} else {
+			execution = await executeScheduledAscetCli(request, { ...options, commandId, jobKind });
+		}
 	} catch (error) {
 		if (error instanceof AscetCliProcessError) {
 			const failedExecution = error.execution;

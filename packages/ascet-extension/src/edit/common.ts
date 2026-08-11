@@ -2,6 +2,7 @@ import { Type } from "typebox";
 import {
 	type AscetCliExecutionResult,
 	type AscetCliJsonResult,
+	type AscetCliLifecycleEvent,
 	type AscetCliRequest,
 	formatAscetCliJsonResult,
 	runAscetCliJson,
@@ -32,6 +33,7 @@ export interface RunAscetEditOperationOptions {
 	timeoutMs?: number;
 	executeCli?: (request: AscetCliRequest) => Promise<AscetCliExecutionResult>;
 	scheduler?: Pick<AscetScheduler, "submit" | "getSnapshot">;
+	onLifecycle?: (event: AscetCliLifecycleEvent) => void;
 }
 
 export interface AscetEditControlParams {

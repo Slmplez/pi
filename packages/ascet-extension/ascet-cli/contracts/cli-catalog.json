@@ -349,6 +349,36 @@
       }
     },
     {
+      "id": "AscetConfigureParameterDependencyChainExecute",
+      "family": "write",
+      "summary": "Execute one guarded Provider to Imported to Local parameter dependency chain",
+      "risk": "write",
+      "objectKinds": [
+        "class",
+        "module"
+      ],
+      "supportsJson": true,
+      "requiresSerialLiveAccess": true,
+      "hiddenFromModel": false,
+      "operation": "configure_parameter_dependency_chain_execute",
+      "lane": "serial_write",
+      "hostEligible": false,
+      "supportsBatch": false,
+      "execution": {
+        "kind": "bridge",
+        "protocolVersion": 1,
+        "subcommand": "exec",
+        "operation": "configure_parameter_dependency_chain_execute",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
+      },
+      "executionProfile": {
+        "hostSafety": "write",
+        "hostPolicy": "force_one_shot",
+        "timeoutClass": "write"
+      }
+    },
+    {
       "id": "AscetCreateComponent",
       "family": "write",
       "summary": "Create a component shell",
@@ -821,6 +851,35 @@
         "transportPolicy": "one_shot_only"
       },
       "operation": "get_component_refs",
+      "lane": "pooled_read",
+      "hostEligible": true,
+      "supportsBatch": true,
+      "executionProfile": {
+        "hostSafety": "stable",
+        "hostPolicy": "prefer_host",
+        "timeoutClass": "read"
+      }
+    },
+    {
+      "id": "AscetGetDatabaseIdentity",
+      "family": "get",
+      "summary": "Read the current ASCET database name and path identity without traversing database contents.",
+      "risk": "read",
+      "objectKinds": [
+        "database"
+      ],
+      "supportsJson": true,
+      "requiresSerialLiveAccess": true,
+      "hiddenFromModel": false,
+      "execution": {
+        "kind": "bridge",
+        "protocolVersion": 1,
+        "subcommand": "exec",
+        "operation": "get_database_identity",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
+      },
+      "operation": "get_database_identity",
       "lane": "pooled_read",
       "hostEligible": true,
       "supportsBatch": true,
@@ -1739,36 +1798,6 @@
         "protocolVersion": 1,
         "subcommand": "exec",
         "operation": "set_element_dependency",
-        "sessionPolicy": "fresh_session",
-        "transportPolicy": "one_shot_only"
-      },
-      "executionProfile": {
-        "hostSafety": "write",
-        "hostPolicy": "force_one_shot",
-        "timeoutClass": "write"
-      }
-    },
-    {
-      "id": "AscetConfigureParameterDependencyChainExecute",
-      "family": "write",
-      "summary": "Execute one guarded Provider to Imported to Local parameter dependency chain",
-      "risk": "write",
-      "objectKinds": [
-        "class",
-        "module"
-      ],
-      "supportsJson": true,
-      "requiresSerialLiveAccess": true,
-      "hiddenFromModel": false,
-      "operation": "configure_parameter_dependency_chain_execute",
-      "lane": "serial_write",
-      "hostEligible": false,
-      "supportsBatch": false,
-      "execution": {
-        "kind": "bridge",
-        "protocolVersion": 1,
-        "subcommand": "exec",
-        "operation": "configure_parameter_dependency_chain_execute",
         "sessionPolicy": "fresh_session",
         "transportPolicy": "one_shot_only"
       },
