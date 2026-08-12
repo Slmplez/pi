@@ -305,6 +305,7 @@ function normalizeBridgeResult(data: unknown): ConfigureParameterDependencyChain
 		status !== "committed" &&
 		status !== "no_change" &&
 		status !== "rejected" &&
+		status !== "blocked" &&
 		status !== "rolled_back" &&
 		status !== "rollback_failed" &&
 		status !== "unknown_outcome"

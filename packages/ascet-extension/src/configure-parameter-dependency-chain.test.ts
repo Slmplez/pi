@@ -202,8 +202,8 @@ describe("configure_parameter_dependency_chain execute", () => {
 		}
 	});
 
-	test("passes through no_change, rejected, rolled_back, and rollback_failed results", async () => {
-		for (const status of ["no_change", "rejected", "rolled_back", "rollback_failed"] as const) {
+	test("passes through no_change, rejected, blocked, rolled_back, and rollback_failed results", async () => {
+		for (const status of ["no_change", "rejected", "blocked", "rolled_back", "rollback_failed"] as const) {
 			const fixture = createFixture();
 			try {
 				const result = await runConfigureParameterDependencyChain(
