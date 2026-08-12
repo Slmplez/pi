@@ -55,6 +55,7 @@ public sealed class EnumerationWriteService : AscetReadDomainServiceBase
         {
             AscetEnumeration enumeration = ResolveEnumeration(session, normalizedPath);
             previousEnumerators.AddRange(ReadEnumerators(enumeration));
+            RequireComponentEditableInSession(session, normalizedPath, "set_enumerators");
             if (!enumeration.SetEnumerators(normalizedEnumerators))
             {
                 throw new AscetReadException(

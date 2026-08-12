@@ -871,7 +871,10 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 			const dispatchStarted = failedExecution.spawnSucceeded === true || failedExecution.requestDispatched === true;
 			const preserveStructuredError =
 				structuredError !== undefined &&
-				(jobKind !== "write" || !dispatchStarted || getBridgeMutationStarted(failedExecution) === false);
+				(jobKind !== "write" ||
+					!dispatchStarted ||
+					structuredError.code === "editable_write_gate_blocked" ||
+					getBridgeMutationStarted(failedExecution) === false);
 			const mappedFailure = preserveStructuredError
 				? { code: structuredError.code, details: structuredError.details }
 				: mapWriteFailure(jobKind, structuredError?.code ?? error.resultCode, failedExecution);

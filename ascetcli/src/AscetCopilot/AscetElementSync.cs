@@ -3633,6 +3633,12 @@ public sealed class ComponentElementSyncPlanner
 
 public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IComponentElementSyncService
 {
+    private sealed class ElementRollbackSnapshot
+    {
+        public AscetElementSpecDocument Document { get; set; }
+        public bool Complete { get; set; }
+    }
+
     private readonly ComponentElementSyncPlanner _planner;
 
     public ComponentElementSyncService()
@@ -3752,6 +3758,46 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
             throw new AscetReadException("invalid_argument", "apply_element_spec", "Element spec document must not be null.");
         }
 
+        AscetElementApplyOptions normalizedOptions = NormalizeOptions(options);
+        ElementRollbackSnapshot snapshot = CaptureRollbackSnapshot(session, component, spec, normalizedOptions);
+        AscetElementMutationTransaction transaction = new AscetElementMutationTransaction();
+        return transaction.ExecuteBatch(new AscetElementMutationBatchRequest<AscetElementSyncResult>
+        {
+            SnapshotComplete = snapshot.Complete,
+            Apply = delegate(System.Action mutationStarting)
+            {
+                return ApplyInSessionCore(session, component, spec, normalizedOptions, verifyReadback, saveDatabase, mutationStarting);
+            },
+            Rollback = delegate
+            {
+                ApplyInSessionCore(session, component, snapshot.Document, new AscetElementApplyOptions
+                {
+                    Mode = AscetElementApplyMode.Restore,
+                    DeleteMissing = true,
+                    RecreateIncompatible = true,
+                    ProjectPath = normalizedOptions.ProjectPath
+                }, true, saveDatabase, null);
+            },
+            VerifyRestored = delegate
+            {
+                VerifyRollbackSnapshotExact(session, component.Path, snapshot.Document);
+                return true;
+            }
+        });
+    }
+
+    private AscetElementSyncResult ApplyInSessionCore(AscetSession session, AscetItemRef component, AscetElementSpecDocument spec, AscetElementApplyOptions options, bool verifyReadback, bool saveDatabase, System.Action mutationStarting)
+    {
+        if (component == null)
+        {
+            throw new AscetReadException("invalid_argument", "apply_element_spec", "Component reference must not be null.");
+        }
+
+        if (spec == null)
+        {
+            throw new AscetReadException("invalid_argument", "apply_element_spec", "Element spec document must not be null.");
+        }
+
         options = NormalizeOptions(options);
         AscetElementSyncResult result = ExecuteWithBoundSession("apply_element_spec", session, delegate(AscetSession currentSession)
         {
@@ -3813,6 +3859,18 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
 
             AscetElementSyncPlan plan = _planner.Plan(spec, planningExisting, defaultData != null, defaultImplementation != null);
             TableDebugStderr("apply:after-plan:create=" + (plan.ElementsToCreate == null ? "0" : plan.ElementsToCreate.Count.ToString()) + ":update=" + (plan.ElementsToUpdate == null ? "0" : plan.ElementsToUpdate.Count.ToString()));
+            bool hasMutation = (plan.ElementsToCreate != null && plan.ElementsToCreate.Count > 0) ||
+                (plan.ElementsToUpdate != null && plan.ElementsToUpdate.Count > 0) ||
+                incompatible.Count > 0 ||
+                (options.Mode == AscetElementApplyMode.Restore && options.DeleteMissing && removedEntries.Count > 0);
+            if (hasMutation)
+            {
+                RequireComponentEditableInSession(session, resolved.Path, "apply_element_spec");
+                if (mutationStarting != null)
+                {
+                    mutationStarting();
+                }
+            }
 
             if (NeedsDefaultDataCreation(plan.ElementsToCreate, plan.ElementsToUpdate) && defaultData == null)
             {
@@ -3992,6 +4050,7 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
             {
                 return false;
             }
+            RequireComponentEditableInSession(currentSession, component.Path, "remove_element");
             RemoveElement(discrete, elementName);
             if (saveDatabase)
             {
@@ -4009,6 +4068,185 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
                 }
             }
             return true;
+        });
+    }
+
+    private ElementRollbackSnapshot CaptureRollbackSnapshot(AscetSession session, AscetItemRef component, AscetElementSpecDocument spec, AscetElementApplyOptions options)
+    {
+        return ExecuteWithBoundSession("snapshot_apply_element_spec", session, delegate(AscetSession currentSession)
+        {
+            AscetDiscreteComponent discrete;
+            CodeComponent code;
+            AscetItemRef resolved = ResolveComponent(currentSession, component.Path, "snapshot_apply_element_spec", out discrete, out code);
+            List<AscetExistingElementState> existing = AscetElementCatalogReader.ReadExistingElements(discrete, code);
+            AscetElementSpecDiffResult diff = _planner.BuildDiff(resolved.Path, spec, existing);
+            return new ElementRollbackSnapshot
+            {
+                Document = AscetElementCatalogReader.BuildSpecDocument(existing),
+                Complete = IsRollbackSnapshotComplete(
+                    existing,
+                    spec,
+                    options,
+                    diff,
+                    code.GetDefaultData() != null,
+                    discrete.GetDefaultImplementation() != null)
+            };
+        });
+    }
+
+    private bool IsRollbackSnapshotComplete(
+        IList<AscetExistingElementState> existingElements,
+        AscetElementSpecDocument requestedDocument,
+        AscetElementApplyOptions options,
+        AscetElementSpecDiffResult diff,
+        bool hasDefaultData,
+        bool hasDefaultImplementation)
+    {
+        Dictionary<string, AscetExistingElementState> existing = IndexExisting(existingElements);
+        HashSet<string> incompatible = new HashSet<string>(StringComparer.Ordinal);
+        IList<AscetElementIncompatibleDiff> incompatibleEntries = diff == null ? null : diff.IncompatibleElements;
+        if (incompatibleEntries != null)
+        {
+            for (int i = 0; i < incompatibleEntries.Count; i++)
+            {
+                AscetElementIncompatibleDiff entry = incompatibleEntries[i];
+                if (entry != null && !String.IsNullOrWhiteSpace(entry.Name))
+                {
+                    incompatible.Add(entry.Name);
+                }
+            }
+        }
+
+        IList<AscetElementSpec> requested = requestedDocument == null ? null : requestedDocument.Elements;
+        if (requested != null)
+        {
+            for (int i = 0; i < requested.Count; i++)
+            {
+                AscetElementSpec element = requested[i];
+                if (element == null || String.IsNullOrWhiteSpace(element.Name))
+                {
+                    continue;
+                }
+
+                AscetExistingElementState state;
+                if (!existing.TryGetValue(element.Name, out state))
+                {
+                    if (RequiresDataWrite(element) && !hasDefaultData)
+                    {
+                        return false;
+                    }
+                    if (AscetElementSyncSpecRules.RequiresImplementation(element) && !hasDefaultImplementation)
+                    {
+                        return false;
+                    }
+                    continue;
+                }
+
+                if (incompatible.Contains(element.Name))
+                {
+                    if (!IsExistingElementFullyRestorable(state))
+                    {
+                        return false;
+                    }
+                    continue;
+                }
+
+                if (RequiresDataWrite(element) && !HasSelectedDataConfiguration(state))
+                {
+                    return false;
+                }
+                if (AscetElementSyncSpecRules.RequiresImplementation(element) && !HasSelectedImplementationConfiguration(state))
+                {
+                    return false;
+                }
+            }
+        }
+
+        if (options != null && options.Mode == AscetElementApplyMode.Restore && options.DeleteMissing)
+        {
+            IList<AscetElementCatalogEntry> removed = diff == null ? null : diff.RemovedElements;
+            if (removed != null)
+            {
+                for (int i = 0; i < removed.Count; i++)
+                {
+                    AscetElementCatalogEntry entry = removed[i];
+                    AscetExistingElementState state;
+                    if (entry != null && existing.TryGetValue(entry.Name ?? String.Empty, out state) && !IsExistingElementFullyRestorable(state))
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private bool RequiresDataWrite(AscetElementSpec element)
+    {
+        return element != null &&
+            (element.Data != null || element.XValues != null || element.YValues != null || element.Values != null);
+    }
+
+    private bool IsExistingElementFullyRestorable(AscetExistingElementState state)
+    {
+        if (state == null || state.Kind == AscetElementSpecKind.Unknown)
+        {
+            return false;
+        }
+        if (state.Kind == AscetElementSpecKind.Component)
+        {
+            return !String.IsNullOrWhiteSpace(state.ReferencedComponentPath);
+        }
+        if (state.Kind == AscetElementSpecKind.Table)
+        {
+            return HasSelectedDataConfiguration(state);
+        }
+        return HasSelectedDataConfiguration(state) && HasSelectedImplementationConfiguration(state);
+    }
+
+    private bool HasSelectedDataConfiguration(AscetExistingElementState state)
+    {
+        return state != null &&
+            state.ConfigurationProvenance != null &&
+            state.ConfigurationProvenance.DataConfiguration != null &&
+            state.ConfigurationProvenance.DataConfiguration.Selected;
+    }
+
+    private bool HasSelectedImplementationConfiguration(AscetExistingElementState state)
+    {
+        return state != null &&
+            state.ConfigurationProvenance != null &&
+            state.ConfigurationProvenance.ImplementationConfiguration != null &&
+            state.ConfigurationProvenance.ImplementationConfiguration.Selected;
+    }
+
+    private void VerifyRollbackSnapshotExact(AscetSession session, string componentPath, AscetElementSpecDocument snapshot)
+    {
+        ExecuteWithBoundSession("verify_element_rollback", session, delegate(AscetSession currentSession)
+        {
+            AscetDiscreteComponent discrete;
+            CodeComponent code;
+            ResolveComponent(currentSession, componentPath, "verify_element_rollback", out discrete, out code);
+            List<AscetExistingElementState> readback = AscetElementCatalogReader.ReadExistingElements(discrete, code);
+            VerifyReadbackAgainstExisting(snapshot, readback);
+
+            Dictionary<string, AscetExistingElementState> actual = IndexExisting(readback);
+            IList<AscetElementSpec> expected = snapshot == null ? null : snapshot.Elements;
+            int expectedCount = expected == null ? 0 : expected.Count;
+            if (actual.Count != expectedCount)
+            {
+                throw new AscetReadException("rollback_readback_mismatch", "verify_element_rollback", "Element rollback readback count mismatch. Expected " + expectedCount.ToString() + " but found " + actual.Count.ToString() + ".");
+            }
+            for (int i = 0; expected != null && i < expected.Count; i++)
+            {
+                AscetElementSpec element = expected[i];
+                if (element != null && !actual.ContainsKey(element.Name ?? String.Empty))
+                {
+                    throw new AscetReadException("rollback_readback_mismatch", "verify_element_rollback", "Element '" + (element.Name ?? String.Empty) + "' is missing after rollback.");
+                }
+            }
+            return 0;
         });
     }
 
@@ -6088,8 +6326,8 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
         int xSize = xValues.Count;
         int ySize = yValues.Count;
 
-        // ä¸è°ƒç”¨ SetXSize/SetYSize - è¿™äº›è°ƒç”¨ä¼šå¯¼è‡´ COM å¯¹è±¡å¤±æ•ˆ
-        // å¤§å°å·²ç»åœ¨åˆ›å»ºè¡¨æ—¶é€šè¿‡ SetMaxXSize/SetMaxYSize è®¾ç½®
+        // Ã¤Â¸ÂÃ¨Â°Æ’Ã§â€Â¨ SetXSize/SetYSize - Ã¨Â¿â„¢Ã¤Âºâ€ºÃ¨Â°Æ’Ã§â€Â¨Ã¤Â¼Å¡Ã¥Â¯Â¼Ã¨â€¡Â´ COM Ã¥Â¯Â¹Ã¨Â±Â¡Ã¥Â¤Â±Ã¦â€¢Ë†
+        // Ã¥Â¤Â§Ã¥Â°ÂÃ¥Â·Â²Ã§Â»ÂÃ¥Å“Â¨Ã¥Ë†â€ºÃ¥Â»ÂºÃ¨Â¡Â¨Ã¦â€”Â¶Ã©â‚¬Å¡Ã¨Â¿â€¡ SetMaxXSize/SetMaxYSize Ã¨Â®Â¾Ã§Â½Â®
         TableDebugStderr("table2d:data:before-set-xysize:" + spec.Name + ":x=" + xSize.ToString() + ":y=" + ySize.ToString());
         if (!dataItem.SetXSize(xSize))
         {
@@ -6105,7 +6343,7 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
 
         bool writeAxes = AscetElementSyncSpecRules.RequiresCustomTwoDTableAxisWrite(spec.XValues, spec.YValues);
 
-        // ç«‹å³è®¾ç½®æ¨¡å¼: èŽ·å–-ä¿®æ”¹-ç«‹å³æŒä¹…åŒ–,é¿å… COM å¯¹è±¡ç”Ÿå‘½å‘¨æœŸé—®é¢˜
+        // Ã§Â«â€¹Ã¥ÂÂ³Ã¨Â®Â¾Ã§Â½Â®Ã¦Â¨Â¡Ã¥Â¼Â: Ã¨Å½Â·Ã¥Ââ€“-Ã¤Â¿Â®Ã¦â€Â¹-Ã§Â«â€¹Ã¥ÂÂ³Ã¦Å’ÂÃ¤Â¹â€¦Ã¥Å’â€“,Ã©ÂÂ¿Ã¥â€¦Â COM Ã¥Â¯Â¹Ã¨Â±Â¡Ã§â€Å¸Ã¥â€˜Â½Ã¥â€˜Â¨Ã¦Å“Å¸Ã©â€”Â®Ã©Â¢Ëœ
         if (writeAxes)
         {
             TableDebugStderr("table2d:data:before-get-xdist:" + spec.Name);

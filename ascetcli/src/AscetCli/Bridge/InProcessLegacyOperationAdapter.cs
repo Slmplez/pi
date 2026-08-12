@@ -47,7 +47,7 @@ public static class InProcessLegacyOperationAdapter
                     invocation.Stdout,
                     "Legacy operation returned exit code " + invocation.ExitCode.ToString(CultureInfo.InvariantCulture) + ".");
             }
-            return WriteFailure(operation, code, message, invocation.Stdout, invocation.Stderr, IsMutatingOperation(operation) ? (bool?)null : false);
+            return WriteFailure(operation, code, message, invocation.Stdout, invocation.Stderr, AscetCliEnvelope.ResolveFailureMutationStarted(IsMutatingOperation(operation), code));
         }
 
         Dictionary<string, object> result = TryParseObject(invocation.Stdout);

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -22,6 +23,7 @@ public static class AscetParameterDependencyChainExecuteOutputTest
             OperationDescriptor descriptor = OperationRegistry.ResolveOrThrow("configure_parameter_dependency_chain_execute");
             AssertTrue(descriptor.MutatesDatabase, "chain route must mutate");
             AssertTrue(!descriptor.HostEligible && !descriptor.SupportsBatch, "chain route must be one-shot and non-batch");
+            TestEditableGateFailureIsBlockedBeforeMutation();
             Console.WriteLine("AscetParameterDependencyChainExecuteOutputTest passed.");
             return 0;
         }
@@ -36,6 +38,29 @@ public static class AscetParameterDependencyChainExecuteOutputTest
         }
     }
 
+    private static void TestEditableGateFailureIsBlockedBeforeMutation()
+    {
+        Dictionary<string, object> result = AscetParameterDependencyChainExecuteService.FailureBeforeMutation(
+            "chain-test",
+            new AscetReadException(
+                "editable_write_gate_blocked",
+                "configure_parameter_dependency_chain_execute",
+                "Component 'F\\Consumer' is not editable."),
+            new List<Dictionary<string, object>>());
+
+        AssertEqual("blocked", Convert.ToString(result["status"]), "editable gate status");
+        AssertTrue(!Convert.ToBoolean(result["writesPerformed"]), "editable gate failure must report zero writes");
+        AssertTrue(!Convert.ToBoolean(result["mutationStarted"]), "editable gate failure must occur before mutation");
+
+        Dictionary<string, object> error = result["error"] as Dictionary<string, object>;
+        AssertTrue(error != null, "editable gate failure must include an error payload");
+        AssertEqual("editable_write_gate_blocked", Convert.ToString(error["code"]), "editable gate error code");
+
+        Dictionary<string, object> rollback = result["rollback"] as Dictionary<string, object>;
+        AssertTrue(rollback != null, "editable gate failure must include rollback metadata");
+        AssertTrue(!Convert.ToBoolean(rollback["required"]), "editable gate failure must not require compensation");
+        AssertEqual("not_required", Convert.ToString(rollback["status"]), "editable gate rollback status");
+    }
     private static string RequestJson()
     {
         return "{" +

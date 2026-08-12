@@ -72,6 +72,9 @@ function shot(intent: string, args: Record<string, unknown>, variant?: string): 
 const writePreflightRules = [
 	"By default this tool returns a non-error preflight outcome and does not write.",
 	"Set executeWrite=true only when the user explicitly asks to apply the write; PI still requires confirmation.",
+	"Preflight and dry-run remain available when a Component is not editable.",
+	"Runtime performs a fresh same-session editable=true check immediately before each real mutation.",
+	"Do not call mode=check merely to authorize a write, and never call mode=set without explicit user intent.",
 	"Executed writes always perform mandatory action-specific readback verification.",
 	"Do not request or disable verification through ascet_edit parameters.",
 ] as const;
@@ -842,6 +845,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 				"Provider and Local must include every applicable decision group. Imported Parameter is the lightweight exception and must not contain data, implementation, range, or calibration.",
 				"Provider Exported and Consumer Imported names must be the same P_<Name>; Consumer Local must be C_<Name>. dependency.formals and mapping keys must match exactly, with explicit mapping kind/name and variantPolicy.",
 				"Runtime confirms once before opening Bridge. Bridge validates all live targets before mutation, performs mandatory readback, and compensates in reverse order on failure. Existing conflicting state causes zero mutation.",
+				"Bridge checks Provider and Consumer editability before mutation and checks the affected Component again before compensating writes.",
 				"Do not retry blindly when mutationStarted=true, rollback_failed, or unknown_outcome is returned.",
 			],
 			fewShots: [
@@ -891,7 +895,9 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 	}),
 	descriptor("ascet_edit", "check", "public", ["component-edit"], {
 		prompt: prompt("Check whether a source-controlled ASCET component is editable.", {
-			rules: ["Use mode=check before editing a source-controlled ASCET component when editability is uncertain."],
+			rules: [
+				"Use mode=check only to inspect current SCM state; write authorization is enforced independently by a fresh runtime same-session check.",
+			],
 			fewShots: [shot("check editable", { mode: "check", componentPath: "DEMO/PID" })],
 			tags: ["write", "scm", "preflight"],
 		}),

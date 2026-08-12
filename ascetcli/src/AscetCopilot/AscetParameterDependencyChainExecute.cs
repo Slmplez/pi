@@ -132,6 +132,11 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
                 return Success("no_change", operationId, false, false, beforeHash, beforeHash, stages);
             }
 
+            RequireComponentsEditableInSession(
+                session,
+                new string[] { request.Provider.ComponentPath, request.Consumer.ComponentPath },
+                "configure_parameter_dependency_chain_execute");
+
             if (providerNeedsWrite)
             {
                 mutationStarted = true;
@@ -476,9 +481,13 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
         return result;
     }
 
-    private static Dictionary<string, object> FailureBeforeMutation(string operationId, Exception error, IList<Dictionary<string, object>> stages)
+    internal static Dictionary<string, object> FailureBeforeMutation(string operationId, Exception error, IList<Dictionary<string, object>> stages)
     {
-        Dictionary<string, object> result = BaseResult("rejected", operationId, false, false);
+        AscetReadException ascet = error as AscetReadException;
+        string status = ascet != null && String.Equals(ascet.Code, "editable_write_gate_blocked", StringComparison.Ordinal)
+            ? "blocked"
+            : "rejected";
+        Dictionary<string, object> result = BaseResult(status, operationId, false, false);
         result["error"] = ErrorPayload(error);
         result["stages"] = stages;
         result["rollback"] = new Dictionary<string, object> { { "required", false }, { "status", "not_required" } };

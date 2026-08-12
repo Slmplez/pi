@@ -1,12 +1,192 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
+using de.etas.cebra.toolAPI.Ascet;
+using de.etas.cebra.toolAPI.Common;
 
 public interface IAscetBatchWriteExecutor
 {
     IList<AscetBatchResultItemDto> Execute(IList<AscetBatchRequestItemDto> requests);
 }
 
+internal interface IAscetBatchEditableWriteGate
+{
+    void RequireEditable(IList<AscetBatchRequestItemDto> requests);
+}
+
+internal sealed class NoOpAscetBatchEditableWriteGate : IAscetBatchEditableWriteGate
+{
+    public void RequireEditable(IList<AscetBatchRequestItemDto> requests)
+    {
+    }
+}
+
+internal sealed class AscetBatchEditableWriteGate : AscetReadDomainServiceBase, IAscetBatchEditableWriteGate
+{
+    public void RequireEditable(IList<AscetBatchRequestItemDto> requests)
+    {
+        if (requests == null)
+        {
+            throw new ArgumentNullException("requests");
+        }
+
+        List<string> componentPaths = new List<string>();
+        List<string> folderPaths = new List<string>();
+        for (int i = 0; i < requests.Count; i++)
+        {
+            AscetBatchRequestItemDto request = requests[i];
+            string operation = request == null || String.IsNullOrWhiteSpace(request.operation)
+                ? String.Empty
+                : request.operation.Trim().ToLowerInvariant();
+            IDictionary<string, object> args = request == null ? null : request.args;
+            switch (operation)
+            {
+                case "create_method":
+                case "set_method_code":
+                case "apply_element_spec":
+                case "delete_component":
+                case "delete_method":
+                    AddPath(componentPaths, ReadString(args, "componentPath"));
+                    break;
+                case "apply_project_formula":
+                    AddPath(componentPaths, ReadString(args, "projectPath"));
+                    break;
+                case "delete_folder":
+                    AddPath(folderPaths, ReadString(args, "folderPath"));
+                    break;
+            }
+        }
+
+        if (componentPaths.Count == 0 && folderPaths.Count == 0)
+        {
+            return;
+        }
+
+        ExecuteWithSession("ascet_batch_write", delegate(AscetSession session)
+        {
+            for (int i = 0; i < folderPaths.Count; i++)
+            {
+                AscetFolder folder = ResolveFolder(session.GetCurrentDatabaseHandle(), folderPaths[i]);
+                CollectComponentPaths(folder, componentPaths, new HashSet<string>(StringComparer.OrdinalIgnoreCase));
+            }
+            RequireComponentsEditableInSession(session, componentPaths, "ascet_batch_write");
+            return true;
+        });
+    }
+
+    private static void AddPath(IList<string> paths, string path)
+    {
+        if (!String.IsNullOrWhiteSpace(path))
+        {
+            paths.Add(path.Trim().Replace('/', '\\'));
+        }
+    }
+
+    private static string ReadString(IDictionary<string, object> args, string key)
+    {
+        object value;
+        return args != null && args.TryGetValue(key, out value) && value is string
+            ? ((string)value).Trim()
+            : String.Empty;
+    }
+
+    private AscetFolder ResolveFolder(AscetDataBase database, string folderPath)
+    {
+        string[] segments = (folderPath ?? String.Empty).Trim().Trim('\\').Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
+        AscetFolder[] currentLevel = database == null ? null : database.GetAllAscetFolders();
+        AscetFolder current = null;
+        for (int i = 0; i < segments.Length; i++)
+        {
+            current = FindFolder(currentLevel, segments[i]);
+            if (current == null)
+            {
+                throw new AscetReadException("folder_not_found", "ascet_batch_write", "Folder '" + folderPath + "' was not found.");
+            }
+            currentLevel = GetChildFolders(current);
+        }
+        return current;
+    }
+
+    private static AscetFolder FindFolder(AscetFolder[] folders, string name)
+    {
+        if (folders == null)
+        {
+            return null;
+        }
+        for (int i = 0; i < folders.Length; i++)
+        {
+            if (folders[i] != null && String.Equals(folders[i].GetName(), name, StringComparison.Ordinal))
+            {
+                return folders[i];
+            }
+        }
+        return null;
+    }
+
+    private static AscetFolder[] GetChildFolders(AscetFolder folder)
+    {
+        Array values = InvokeArray(folder, new string[] { "GetAllAscetFolders", "GetAllFolders", "GetAllSubFolders", "GetSubFolders" });
+        if (values == null)
+        {
+            return new AscetFolder[0];
+        }
+        AscetFolder[] result = new AscetFolder[values.Length];
+        for (int i = 0; i < values.Length; i++)
+        {
+            result[i] = values.GetValue(i) as AscetFolder;
+        }
+        return result;
+    }
+
+    private static void CollectComponentPaths(AscetFolder folder, IList<string> paths, ISet<string> seen)
+    {
+        if (folder == null)
+        {
+            return;
+        }
+        Array items = InvokeArray(folder, new string[] { "GetAllDataBaseItems", "GetAllItems", "GetAllComponents" });
+        if (items != null)
+        {
+            for (int i = 0; i < items.Length; i++)
+            {
+                Component component = items.GetValue(i) as Component;
+                string path = component == null ? String.Empty : (component.GetNameWithPath() ?? String.Empty);
+                if (!String.IsNullOrWhiteSpace(path) && seen.Add(path))
+                {
+                    paths.Add(path);
+                }
+            }
+        }
+        AscetFolder[] children = GetChildFolders(folder);
+        for (int i = 0; i < children.Length; i++)
+        {
+            CollectComponentPaths(children[i], paths, seen);
+        }
+    }
+
+    private static Array InvokeArray(object target, string[] methodNames)
+    {
+        if (target == null)
+        {
+            return null;
+        }
+        for (int i = 0; i < methodNames.Length; i++)
+        {
+            MethodInfo method = target.GetType().GetMethod(methodNames[i], BindingFlags.Instance | BindingFlags.Public);
+            if (method == null)
+            {
+                continue;
+            }
+            Array result = method.Invoke(target, null) as Array;
+            if (result != null)
+            {
+                return result;
+            }
+        }
+        return null;
+    }
+}
 public sealed class AscetBatchWriteExecutor : IAscetBatchWriteExecutor
 {
     private static readonly object ConsoleSuppressionGate = new object();
@@ -22,6 +202,7 @@ public sealed class AscetBatchWriteExecutor : IAscetBatchWriteExecutor
     private readonly IMethodDeleteService methodDeleter;
     private readonly IFolderCreateService folderCreator;
     private readonly IFolderDeleteService folderDeleter;
+    private readonly IAscetBatchEditableWriteGate editableWriteGate;
 
     public AscetBatchWriteExecutor()
         : this(
@@ -33,7 +214,8 @@ public sealed class AscetBatchWriteExecutor : IAscetBatchWriteExecutor
             new ComponentDeleteService(),
             new MethodDeleteService(),
             new FolderCreateService(),
-            new FolderDeleteService())
+            new FolderDeleteService(),
+            new AscetBatchEditableWriteGate())
     {
     }
 
@@ -103,7 +285,8 @@ public sealed class AscetBatchWriteExecutor : IAscetBatchWriteExecutor
         IComponentDeleteService componentDeleter,
         IMethodDeleteService methodDeleter,
         IFolderCreateService folderCreator,
-        IFolderDeleteService folderDeleter)
+        IFolderDeleteService folderDeleter,
+        IAscetBatchEditableWriteGate editableWriteGate = null)
     {
         this.componentWriter = componentWriter ?? new ComponentWriteService();
         this.methodWriter = methodWriter ?? new ExecMethodWriteService();
@@ -114,6 +297,7 @@ public sealed class AscetBatchWriteExecutor : IAscetBatchWriteExecutor
         this.methodDeleter = methodDeleter ?? new MethodDeleteService();
         this.folderCreator = folderCreator ?? new FolderCreateService();
         this.folderDeleter = folderDeleter ?? new FolderDeleteService();
+        this.editableWriteGate = editableWriteGate ?? new NoOpAscetBatchEditableWriteGate();
     }
 
     public IList<AscetBatchResultItemDto> Execute(IList<AscetBatchRequestItemDto> requests)
@@ -124,6 +308,7 @@ public sealed class AscetBatchWriteExecutor : IAscetBatchWriteExecutor
         }
 
         AscetToolApiBootstrap.ConfigureAssemblyResolution();
+        editableWriteGate.RequireEditable(requests);
 
         List<AscetBatchResultItemDto> results = new List<AscetBatchResultItemDto>();
         for (int i = 0; i < requests.Count; i++)

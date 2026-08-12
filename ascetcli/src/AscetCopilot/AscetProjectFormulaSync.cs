@@ -546,6 +546,12 @@ public sealed class ProjectFormulaApplyService : ProjectFormulaReadService, IPro
             IList<AscetProjectFormulaSpec> requested = spec.Formulas ?? new List<AscetProjectFormulaSpec>();
             string mode = AscetProjectFormulaSpecDocumentParser.NormalizeMode(spec.Mode);
 
+            if (requested.Count > 0 ||
+                (String.Equals(mode, "restore", StringComparison.Ordinal) && spec.HasDeleteMissing && spec.DeleteMissing))
+            {
+                RequireComponentEditableInSession(session, projectPath, "apply_project_formula");
+            }
+
             for (int i = 0; i < requested.Count; i++)
             {
                 AscetProjectFormulaSpec entry = requested[i];

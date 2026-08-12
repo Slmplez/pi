@@ -3,7 +3,11 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, test } from "node:test";
-import { invalidateBatchWriteObservations, runApprovedAscetBatchWrite } from "./batch-write.ts";
+import {
+	createBatchWriteOutcome,
+	invalidateBatchWriteObservations,
+	runApprovedAscetBatchWrite,
+} from "./batch-write.ts";
 import type { AscetCliExecutionResult, AscetCliRequest } from "./cli.ts";
 import type { AscetEditApprovalContext } from "./edit/approval.ts";
 import { AscetObservationStore } from "./observation-store.ts";
@@ -56,6 +60,33 @@ function createExecution(request: AscetCliRequest, exitCode: number): AscetCliEx
 	};
 }
 
+describe("ASCET batch write outcome", () => {
+	test("classifies the runtime editable gate as blocked without extra fields", () => {
+		const outcome = createBatchWriteOutcome({
+			ok: false,
+			data: null,
+			request: {
+				cwd: "C:/Repo",
+				cliPath: "AscetBridge.exe",
+				args: ["batch", "set_method_code"],
+			},
+			stdout: "",
+			stderr: "",
+			exitCode: 1,
+			timedOut: false,
+			error: {
+				code: "editable_write_gate_blocked",
+				message: "ASCET write blocked because component 'DEMO/ReadOnly' is not editable.",
+			},
+		});
+
+		assert.deepEqual(outcome, {
+			status: "blocked",
+			code: "editable_write_gate_blocked",
+			message: "ASCET write blocked because component 'DEMO/ReadOnly' is not editable.",
+		});
+	});
+});
 describe("ASCET batch write observation invalidation", () => {
 	test("invalidates observations for all successful batch targets", () => {
 		const environment = createEnvironment();

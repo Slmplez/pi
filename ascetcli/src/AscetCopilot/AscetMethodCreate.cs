@@ -74,6 +74,7 @@ public sealed class MethodCreateService : MethodCatalogService, IMethodCreateSer
                     return true;
                 }
 
+                RequireComponentEditableInSession(session, componentPath, "create_method");
                 CodeComponent codeComponent = ResolveCodeComponent(session, componentPath);
                 object diagram = ResolveOrCreateDiagram(codeComponent, normalizedDiagramName);
                 CreateMethodOnDiagram(diagram, methodName, methodKind, componentPath, normalizedDiagramName);
@@ -186,6 +187,7 @@ public sealed class MethodCreateService : MethodCatalogService, IMethodCreateSer
                     return true;
                 }
 
+                RequireComponentEditableInSession(currentSession, componentPath, "create_method");
                 CodeComponent codeComponent = ResolveCodeComponent(currentSession, componentPath);
                 object diagram = ResolveOrCreateDiagram(codeComponent, normalizedDiagramName);
                 CreateMethodOnDiagram(diagram, methodName, methodKind, componentPath, normalizedDiagramName);

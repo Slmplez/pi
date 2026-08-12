@@ -61,6 +61,7 @@ public sealed class MethodDeleteService : MethodCatalogService, IMethodDeleteSer
 
             methodKind = found.Reference == null ? AscetMethodKind.Unknown : found.Reference.MethodKind;
             diagramName = found.DiagramName ?? String.Empty;
+            RequireComponentEditableInSession(session, componentPath, "delete_method");
             RemoveMethodFromDiagram(found, componentPath, methodName);
             deleted = true;
             return true;

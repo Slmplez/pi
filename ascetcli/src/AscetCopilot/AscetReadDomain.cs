@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -943,6 +943,62 @@ public abstract class AscetReadDomainServiceBase
     protected AscetSessionFactory SessionFactory { get; private set; }
     protected ComponentClassifier Classifier { get; private set; }
 
+    protected bool IsComponentEditableInSession(AscetSession session, string componentPath, string operation)
+    {
+        if (session == null)
+        {
+            throw new ArgumentNullException("session");
+        }
+
+        DataBaseItem item = ResolveItemByPath(session, componentPath);
+        Component component = item as Component;
+        if (component == null)
+        {
+            throw new AscetReadException(
+                "unsupported_component_kind",
+                operation,
+                "Item '" + componentPath + "' is not an ASCET component and has no Component editability state.");
+        }
+
+        bool isVersion = component.IsVersion();
+        bool isEdition = component.IsEdition();
+        return IsEditableComponentState(isVersion, isEdition);
+    }
+
+    internal static bool IsEditableComponentState(bool isVersion, bool isEdition)
+    {
+        return isEdition || (!isVersion && !isEdition);
+    }
+
+    protected void RequireComponentEditableInSession(AscetSession session, string componentPath, string operation)
+    {
+        if (!IsComponentEditableInSession(session, componentPath, operation))
+        {
+            throw new AscetReadException(
+                "editable_write_gate_blocked",
+                operation,
+                "ASCET write blocked because component '" + componentPath + "' is not editable.");
+        }
+    }
+
+    protected void RequireComponentsEditableInSession(AscetSession session, IEnumerable<string> componentPaths, string operation)
+    {
+        if (componentPaths == null)
+        {
+            throw new ArgumentNullException("componentPaths");
+        }
+
+        HashSet<string> checkedPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (string componentPath in componentPaths)
+        {
+            if (String.IsNullOrWhiteSpace(componentPath) || !checkedPaths.Add(componentPath))
+            {
+                continue;
+            }
+
+            RequireComponentEditableInSession(session, componentPath, operation);
+        }
+    }
     protected T ExecuteWithSession<T>(string operation, Func<AscetSession, T> action)
     {
         if (action == null)
@@ -1000,8 +1056,15 @@ public abstract class AscetReadDomainServiceBase
             throw new AscetReadException("invalid_argument", "resolve_item_by_path", "Component path must not be empty.");
         }
 
-        AscetItemPath parsed = AscetItemPath.Parse(componentPath);
-        return ResolveItem(session, parsed.ItemName, parsed.FolderPath);
+        AscetResolvedTarget resolved = new AscetTargetResolver(
+            new ToolApiAscetTargetResolutionBackend(session.GetCurrentDatabaseHandle()))
+            .Resolve(new AscetTargetRequest { Path = componentPath });
+        DataBaseItem item = resolved.NativeItem as DataBaseItem;
+        if (item == null)
+        {
+            throw new AscetReadException("unsupported_target_kind", "resolve_item_by_path", "Resolved target is not an ASCET database item.");
+        }
+        return item;
     }
 
     protected DataBaseItem ResolveItem(AscetSession session, string itemName, string folderPath)
@@ -1009,6 +1072,12 @@ public abstract class AscetReadDomainServiceBase
         if (String.IsNullOrWhiteSpace(itemName))
         {
             throw new AscetReadException("invalid_argument", "resolve_item", "Item name must not be empty.");
+        }
+
+        if (itemName.IndexOf("::", StringComparison.Ordinal) >= 0)
+        {
+            string projectChildPath = String.IsNullOrWhiteSpace(folderPath) ? itemName : folderPath.TrimEnd('\\') + "\\" + itemName;
+            return ResolveItemByPath(session, projectChildPath);
         }
 
         AscetDataBase database = session.GetCurrentDatabaseHandle();
@@ -1023,7 +1092,6 @@ public abstract class AscetReadDomainServiceBase
 
         return item;
     }
-
     protected CodeComponent ResolveCodeComponent(AscetSession session, AscetItemRef component)
     {
         if (component == null)
@@ -2547,6 +2615,7 @@ public sealed class MethodWriteService : MethodCatalogService, IMethodWriteServi
             MethodHandle method = FindMethodHandle(CollectMethodHandles(session, component), component.Path, methodName);
             resolvedMethod = method.Reference;
             previousCode = method.Method.GetCode() ?? String.Empty;
+            RequireComponentEditableInSession(session, component.Path, "set_method_code");
             bool writeSucceeded = method.Method.SetCode(code);
 
             if (!writeSucceeded)
@@ -2623,6 +2692,7 @@ public sealed class MethodWriteService : MethodCatalogService, IMethodWriteServi
             MethodHandle method = FindMethodHandle(CollectMethodHandles(currentSession, component), component.Path, methodName);
             resolvedMethod = method.Reference;
             previousCode = method.Method.GetCode() ?? String.Empty;
+            RequireComponentEditableInSession(currentSession, component.Path, "set_method_code");
             bool writeSucceeded = method.Method.SetCode(code);
 
             if (!writeSucceeded)

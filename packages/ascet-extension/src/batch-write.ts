@@ -16,6 +16,7 @@ import {
 	requestAscetEditApproval,
 } from "./edit/approval.ts";
 import { type AscetEditObservationTargetParams, invalidateAscetEditObservations } from "./edit/common.ts";
+import { isAscetEditableWriteGateBlockedCode } from "./edit/editable-write-gate.ts";
 import {
 	type AscetCreateMethodComponentKind,
 	type AscetCreateMethodKind,
@@ -503,7 +504,7 @@ export function createBatchWriteOutcome(result: AscetBatchWriteResult): AscetToo
 	if (code === "ascet_batch_write_preflight_required") {
 		return createPreflightOutcome((asRecord(result.data) ?? { message }) as Record<string, unknown>);
 	}
-	if (isAscetEditApprovalBlockedCode(code)) {
+	if (isAscetEditApprovalBlockedCode(code) || isAscetEditableWriteGateBlockedCode(code)) {
 		return { status: "blocked", code, message };
 	}
 	return { status: "error", error: { code, message } };

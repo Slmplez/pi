@@ -1,4 +1,4 @@
-import assert from "node:assert/strict";
+﻿import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import type { AscetCliJsonResult } from "../cli.ts";
 import { classifyAscetEditExecution, extractAscetEditVerification } from "./verification.ts";
@@ -101,6 +101,7 @@ describe("ASCET edit verification", () => {
 
 		assert.deepEqual(classification, {
 			mutationStatus: "applied",
+			consistencyStatus: "unknown",
 			verification: {
 				mode: "automatic_readback",
 				source: "write_command",
@@ -109,6 +110,7 @@ describe("ASCET edit verification", () => {
 				verified: false,
 				status: "failed",
 			},
+			rollback: { required: false, status: "not_required", verified: true },
 			shouldInvalidateObservations: true,
 		});
 	});
@@ -150,5 +152,81 @@ describe("ASCET edit verification", () => {
 			assert.equal(classification.verification.status, "unknown");
 			assert.equal(classification.shouldInvalidateObservations, true);
 		}
+	});
+	test("classifies a verified compensating rollback as restored", () => {
+		const classification = classifyAscetEditExecution(
+			createRawResult({
+				ok: true,
+				data: {
+					result: {
+						status: "rolled_back",
+						rollback: { required: true, status: "passed", verified: true },
+					},
+				},
+				exitCode: 0,
+			}),
+		);
+
+		assert.deepEqual(classification, {
+			mutationStatus: "rolled_back",
+			consistencyStatus: "restored",
+			verification: {
+				mode: "automatic_readback",
+				source: "write_command",
+				required: true,
+				requested: null,
+				verified: null,
+				status: "unknown",
+			},
+			rollback: { required: true, status: "passed", verified: true },
+			shouldInvalidateObservations: true,
+		});
+	});
+
+	test("classifies an Element transaction rolled-back error as restored", () => {
+		const classification = classifyAscetEditExecution(
+			createRawResult({
+				error: {
+					code: "element_transaction_rolled_back",
+					message: "previous Element state restored",
+				},
+			}),
+		);
+
+		assert.equal(classification.mutationStatus, "rolled_back");
+		assert.equal(classification.consistencyStatus, "restored");
+		assert.deepEqual(classification.rollback, { required: true, status: "passed", verified: true });
+		assert.equal(classification.shouldInvalidateObservations, true);
+	});
+
+	test("classifies a Method consistency rollback as restored", () => {
+		const classification = classifyAscetEditExecution(
+			createRawResult({
+				error: {
+					code: "method_consistency_rolled_back",
+					message: "Method consistency validation failed and previous code was restored.",
+				},
+			}),
+		);
+		assert.equal(classification.mutationStatus, "rolled_back");
+		assert.equal(classification.consistencyStatus, "restored");
+		assert.equal(classification.rollback.status, "passed");
+	});
+
+	test("classifies a failed rollback as unknown consistency", () => {
+		const classification = classifyAscetEditExecution(
+			createRawResult({
+				error: {
+					code: "element_transaction_rollback_failed",
+					message: "rollback failed",
+					details: { rollback: { required: true, status: "failed", verified: false } },
+				},
+			}),
+		);
+
+		assert.equal(classification.mutationStatus, "unknown");
+		assert.equal(classification.consistencyStatus, "unknown");
+		assert.deepEqual(classification.rollback, { required: true, status: "failed", verified: false });
+		assert.equal(classification.shouldInvalidateObservations, true);
 	});
 });

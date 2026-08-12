@@ -1,9 +1,10 @@
-﻿import assert from "node:assert/strict";
+import assert from "node:assert/strict";
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, test } from "node:test";
 import type { AscetCliExecutionResult, AscetCliRequest } from "../cli.ts";
+import { AscetObservationStore } from "../observation-store.ts";
 import type { AscetEditApprovalContext } from "./approval.ts";
 import { type AscetMutationParams, getAscetEditActionId, resolveAscetEditInvocation, runAscetEdit } from "./service.ts";
 
@@ -11,6 +12,48 @@ const approvingContext: AscetEditApprovalContext = {
 	hasUI: true,
 	ui: { confirm: async () => true },
 };
+
+function completeTreeExecution(request: AscetCliRequest): AscetCliExecutionResult {
+	return {
+		exitCode: 0,
+		stdout: JSON.stringify({
+			ok: true,
+			result: {
+				items: [
+					{ path: "DEMO", oid: "F-1", kind: "folder" },
+					{ path: "Package\\Shared\\Controller", oid: "C-1", kind: "module" },
+					{ path: "DEMO\\Project::Controller", oid: "C-1", kind: "module" },
+				],
+				coverage: {
+					status: "complete_for_scope",
+					completeness: "complete",
+					collectorCompleted: true,
+				},
+				truncated: false,
+				database: { name: "DB", path: "C:/Repo/DB" },
+			},
+			error: null,
+		}),
+		stderr: "",
+		timedOut: false,
+		request,
+	};
+}
+
+function directMutationExecution(request: AscetCliRequest): AscetCliExecutionResult {
+	if (request.args[1] === "get_tree") return completeTreeExecution(request);
+	const result =
+		request.args[1] === "get_database_identity"
+			? { database: { name: "DB", path: "C:/Repo/DB" } }
+			: { writeSucceeded: true, verifyReadbackRequested: true, readbackVerified: true };
+	return {
+		exitCode: 0,
+		stdout: JSON.stringify({ ok: true, result, error: null }),
+		stderr: "",
+		timedOut: false,
+		request,
+	};
+}
 
 describe("ASCET edit service", () => {
 	test("uses action or mode as the canonical edit action id", () => {
@@ -167,6 +210,7 @@ describe("ASCET edit service", () => {
 				{
 					cwd: process.cwd(),
 					executeCli: async (request) => {
+						if (request.args[1] === "get_tree") return completeTreeExecution(request);
 						const operation = request.args[1];
 						const result =
 							operation === "get_database_identity"
@@ -259,7 +303,7 @@ describe("ASCET edit service", () => {
 		});
 	});
 
-	test("checks apply_element_spec input and runs backend diff preflight", async () => {
+	test("blocks a new Element plan when Data and Implementation items cannot be resolved without mutation", async () => {
 		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-spec-preflight-"));
 		const contractsRoot = join(root, "contracts");
 		mkdirSync(contractsRoot, { recursive: true });
@@ -280,8 +324,13 @@ describe("ASCET edit service", () => {
 				},
 				{
 					cwd: root,
-					env: { ASCET_BRIDGE_PATH: cliPath, ASCET_CONTRACTS_PATH: contractsRoot },
+					env: {
+						ASCET_BRIDGE_PATH: cliPath,
+						ASCET_CONTRACTS_PATH: contractsRoot,
+						PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts"),
+					},
 					executeCli: async (request) => {
+						if (request.args[1] === "get_tree") return completeTreeExecution(request);
 						calls.push(request.args);
 						if (request.args[1] === "diff_element_spec") {
 							diffSpec = JSON.parse(readFileSync(request.args[3]!, "utf8"));
@@ -303,18 +352,167 @@ describe("ASCET edit service", () => {
 				},
 				{},
 			);
-			assert.equal(result.details.outcome.status, "preflight");
+			assert.deepEqual(result.details.outcome, {
+				status: "error",
+				error: {
+					code: "data_item_not_resolvable_preflight",
+					message:
+						"Element preflight could not prove Data/Implementation item resolution for: K (data_item_not_resolvable_preflight, implementation_item_not_resolvable_preflight).",
+				},
+			});
 			assert.deepEqual(
 				calls.map((call) => call[1]),
-				["read_element_catalog", "diff_element_spec", "get_database_identity"],
+				["read_element_catalog"],
 			);
-			assert.deepEqual(diffSpec, {
-				elements: [{ name: "K", kind: "parameter", modelType: "cont", scope: "local" }],
+			assert.equal(diffSpec, undefined);
+		} finally {
+			rmSync(root, { recursive: true, force: true });
+		}
+	});
+
+	test("blocks an existing Element plan when the selected Data item is unresolved", async () => {
+		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-data-preflight-"));
+		const contractsRoot = join(root, "contracts");
+		mkdirSync(contractsRoot, { recursive: true });
+		const cliPath = join(root, "AscetBridge.exe");
+		writeFileSync(cliPath, "", "utf8");
+		writeFileSync(join(contractsRoot, "cli-catalog.json"), "{}", "utf8");
+		const calls: string[][] = [];
+		try {
+			const result = await runAscetEdit(
+				{
+					action: "apply_element_spec",
+					componentPath: "DEMO/C",
+					intent: "patch",
+					elements: [{ name: "P", comment: "Updated" }],
+				},
+				{
+					cwd: root,
+					env: {
+						ASCET_BRIDGE_PATH: cliPath,
+						ASCET_CONTRACTS_PATH: contractsRoot,
+						PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts"),
+					},
+					executeCli: async (request) => {
+						calls.push(request.args);
+						const backendResult = {
+							elements: [
+								{
+									name: "P",
+									kind: "parameter",
+									modelType: "cont",
+									scope: "local",
+									configurationProvenance: {
+										dataConfiguration: { source: "elementValue", configurationName: "", selected: true },
+										implementationConfiguration: {
+											source: "defaultImplementationConfiguration",
+											configurationName: "DefaultImpl",
+											selected: true,
+										},
+									},
+								},
+							],
+							identity: { componentOID: "C-1", elementOIDs: { P: "E-1" } },
+						};
+						return {
+							exitCode: 0,
+							stdout: JSON.stringify({ ok: true, result: backendResult }),
+							stderr: "",
+							timedOut: false,
+							request,
+						};
+					},
+				},
+				{},
+			);
+			assert.deepEqual(result.details.outcome, {
+				status: "error",
+				error: {
+					code: "data_item_not_resolvable_preflight",
+					message:
+						"Element preflight could not prove Data/Implementation item resolution for: P (data_item_not_resolvable_preflight).",
+				},
 			});
-			if (result.details.outcome.status === "preflight") {
-				const plan = result.details.outcome.plan as { backendPreflight: { validated: boolean } };
-				assert.equal(plan.backendPreflight.validated, true);
-			}
+			assert.deepEqual(
+				calls.map((call) => call[1]),
+				["read_element_catalog"],
+			);
+		} finally {
+			rmSync(root, { recursive: true, force: true });
+		}
+	});
+
+	test("blocks an existing Element plan when the selected Implementation item is unresolved", async () => {
+		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-implementation-preflight-"));
+		const contractsRoot = join(root, "contracts");
+		mkdirSync(contractsRoot, { recursive: true });
+		const cliPath = join(root, "AscetBridge.exe");
+		writeFileSync(cliPath, "", "utf8");
+		writeFileSync(join(contractsRoot, "cli-catalog.json"), "{}", "utf8");
+		const calls: string[][] = [];
+		try {
+			const result = await runAscetEdit(
+				{
+					action: "apply_element_spec",
+					componentPath: "DEMO/C",
+					intent: "patch",
+					elements: [{ name: "P", comment: "Updated" }],
+				},
+				{
+					cwd: root,
+					env: {
+						ASCET_BRIDGE_PATH: cliPath,
+						ASCET_CONTRACTS_PATH: contractsRoot,
+						PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts"),
+					},
+					executeCli: async (request) => {
+						calls.push(request.args);
+						const backendResult = {
+							elements: [
+								{
+									name: "P",
+									kind: "parameter",
+									modelType: "cont",
+									scope: "local",
+									configurationProvenance: {
+										dataConfiguration: {
+											source: "defaultDataConfiguration",
+											configurationName: "DefaultData",
+											selected: true,
+										},
+										implementationConfiguration: {
+											source: "elementImplementation",
+											configurationName: "",
+											selected: true,
+										},
+									},
+								},
+							],
+							identity: { componentOID: "C-1", elementOIDs: { P: "E-1" } },
+						};
+						return {
+							exitCode: 0,
+							stdout: JSON.stringify({ ok: true, result: backendResult }),
+							stderr: "",
+							timedOut: false,
+							request,
+						};
+					},
+				},
+				{},
+			);
+			assert.deepEqual(result.details.outcome, {
+				status: "error",
+				error: {
+					code: "implementation_item_not_resolvable_preflight",
+					message:
+						"Element preflight could not prove Data/Implementation item resolution for: P (implementation_item_not_resolvable_preflight).",
+				},
+			});
+			assert.deepEqual(
+				calls.map((call) => call[1]),
+				["read_element_catalog"],
+			);
 		} finally {
 			rmSync(root, { recursive: true, force: true });
 		}
@@ -338,8 +536,13 @@ describe("ASCET edit service", () => {
 				},
 				{
 					cwd: root,
-					env: { ASCET_BRIDGE_PATH: join(root, "AscetBridge.exe"), ASCET_CONTRACTS_PATH: contractsRoot },
+					env: {
+						ASCET_BRIDGE_PATH: join(root, "AscetBridge.exe"),
+						ASCET_CONTRACTS_PATH: contractsRoot,
+						PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts"),
+					},
 					executeCli: async (request) => {
+						if (request.args[1] === "get_tree") return completeTreeExecution(request);
 						calls.push(request.args);
 						if (request.args[1] === "diff_element_spec") {
 							diffSpec = JSON.parse(readFileSync(request.args[3]!, "utf8"));
@@ -358,6 +561,18 @@ describe("ASCET edit service", () => {
 													data: { value: 1 },
 													impl: { valueType: "sint16" },
 													comment: "Old",
+													configurationProvenance: {
+														dataConfiguration: {
+															source: "defaultDataConfiguration",
+															configurationName: "DefaultData",
+															selected: true,
+														},
+														implementationConfiguration: {
+															source: "defaultImplementationConfiguration",
+															configurationName: "DefaultImpl",
+															selected: true,
+														},
+													},
 												},
 											],
 											identity: { componentOID: "C-1", elementOIDs: { P: "E-1" } },
@@ -382,9 +597,30 @@ describe("ASCET edit service", () => {
 			if (result.details.outcome.status === "preflight") {
 				const backend = result.details.outcome.plan.backendPreflight as Record<string, unknown>;
 				assert.deepEqual(backend.catalogIdentity, { componentOID: "C-1", elementOIDs: { P: "E-1" } });
-				assert.deepEqual((backend.catalogSnapshot as Record<string, unknown>).provenance, {
-					dataConfiguration: "DefaultData",
-					implementationConfiguration: "DefaultImpl",
+				assert.equal(backend.operation, "authoritative_element_preflight");
+				assert.equal(backend.validated, true);
+				const capabilities = backend.capabilities as {
+					validated: boolean;
+					elements: Array<Record<string, unknown>>;
+				};
+				assert.equal(capabilities.validated, true);
+				assert.deepEqual(capabilities.elements[0], {
+					name: "P",
+					operation: "patch",
+					dataConfiguration: {
+						source: "defaultDataConfiguration",
+						configurationName: "DefaultData",
+						selected: true,
+					},
+					implementationConfiguration: {
+						source: "defaultImplementationConfiguration",
+						configurationName: "DefaultImpl",
+						selected: true,
+					},
+					dataItemResolvable: true,
+					implementationItemResolvable: true,
+					capabilityStatus: "validated",
+					blockingCodes: [],
 				});
 				assert.equal(typeof backend.liveSnapshotHash, "string");
 			}
@@ -431,8 +667,13 @@ describe("ASCET edit service", () => {
 				},
 				{
 					cwd: root,
-					env: { ASCET_BRIDGE_PATH: cliPath, ASCET_CONTRACTS_PATH: contractsRoot },
+					env: {
+						ASCET_BRIDGE_PATH: cliPath,
+						ASCET_CONTRACTS_PATH: contractsRoot,
+						PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts"),
+					},
 					executeCli: async (request) => {
+						if (request.args[1] === "get_tree") return completeTreeExecution(request);
 						calls.push(request.args);
 						const result =
 							request.args[1] === "get_database_identity"
@@ -489,8 +730,13 @@ describe("ASCET edit service", () => {
 				},
 				{
 					cwd: root,
-					env: { ASCET_BRIDGE_PATH: cliPath, ASCET_CONTRACTS_PATH: contractsRoot },
+					env: {
+						ASCET_BRIDGE_PATH: cliPath,
+						ASCET_CONTRACTS_PATH: contractsRoot,
+						PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts"),
+					},
 					executeCli: async (request) => {
+						if (request.args[1] === "get_tree") return completeTreeExecution(request);
 						calls.push(request.args);
 						const result =
 							request.args[1] === "get_database_identity"
@@ -568,11 +814,34 @@ describe("ASCET edit service", () => {
 				},
 				executeCli: async (request: AscetCliRequest): Promise<AscetCliExecutionResult> => {
 					calls.push(request.args);
+					if (request.args[1] === "get_tree") return completeTreeExecution(request);
 					const result =
 						request.args[1] === "get_database_identity"
 							? { database: { name: "DB", path: "C:/Repo/DB" } }
 							: request.args[1] === "read_element_catalog"
-								? { elements: [], identity: { componentOID: "C-1" } }
+								? {
+										elements: [
+											{
+												name: "K",
+												kind: "parameter",
+												modelType: "cont",
+												scope: "local",
+												configurationProvenance: {
+													dataConfiguration: {
+														source: "defaultDataConfiguration",
+														configurationName: "DefaultData",
+														selected: true,
+													},
+													implementationConfiguration: {
+														source: "defaultImplementationConfiguration",
+														configurationName: "DefaultImpl",
+														selected: true,
+													},
+												},
+											},
+										],
+										identity: { componentOID: "C-1", elementOIDs: { K: "E-1" } },
+									}
 								: request.args[1] === "diff_element_spec"
 									? { changes: [] }
 									: { ReadbackVerified: false, ElementResults: [{ name: "K", readbackVerified: false }] };
@@ -590,10 +859,8 @@ describe("ASCET edit service", () => {
 					action: "apply_element_spec",
 					phase: "plan",
 					componentPath: "DEMO\\Controller",
-					intent: "create",
-					elements: [
-						{ role: "standardPrimitive", name: "K", kind: "parameter", modelType: "cont", scope: "local" },
-					],
+					intent: "patch",
+					elements: [{ name: "K", comment: "Updated" }],
 				},
 				options,
 				{},
@@ -615,9 +882,11 @@ describe("ASCET edit service", () => {
 					"read_element_catalog",
 					"diff_element_spec",
 					"get_database_identity",
+					"get_tree",
 					"get_database_identity",
 					"read_element_catalog",
 					"diff_element_spec",
+					"get_tree",
 					"apply_element_spec",
 				],
 			);
@@ -652,6 +921,7 @@ describe("ASCET edit service", () => {
 				},
 				executeCli: async (request: AscetCliRequest): Promise<AscetCliExecutionResult> => {
 					calls.push(request.args);
+					if (request.args[1] === "get_tree") return completeTreeExecution(request);
 					const dryRun = request.args.includes("--dry-run");
 					const result =
 						request.args[1] === "get_database_identity"
@@ -710,12 +980,14 @@ describe("ASCET edit service", () => {
 				approvingContext,
 			);
 			assert.equal(result.details.outcome.status, "ok");
-			assert.equal(calls.length, 5);
+			assert.equal(calls.length, 7);
 			assert.equal(calls[0]?.includes("--dry-run"), true);
 			assert.equal(calls[1]?.[1], "get_database_identity");
-			assert.equal(calls[2]?.[1], "get_database_identity");
-			assert.equal(calls[3]?.includes("--dry-run"), true);
-			assert.equal(calls[4]?.includes("--dry-run"), false);
+			assert.equal(calls[2]?.[1], "get_tree");
+			assert.equal(calls[3]?.[1], "get_database_identity");
+			assert.equal(calls[4]?.includes("--dry-run"), true);
+			assert.equal(calls[5]?.[1], "get_tree");
+			assert.equal(calls[6]?.includes("--dry-run"), false);
 			const telemetry = readFileSync(join(root, "artifacts", "telemetry", "element-write.jsonl"), "utf8")
 				.trim()
 				.split("\n")
@@ -747,6 +1019,274 @@ describe("ASCET edit service", () => {
 						writesPerformed: true,
 					},
 				],
+			);
+		} finally {
+			rmSync(root, { recursive: true, force: true });
+		}
+	});
+
+	test("routes set_method_code through one target-bound confirmation and approval receipt", async () => {
+		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-method-coordinator-"));
+		let confirmations = 0;
+		let mutationDispatches = 0;
+		let confirmationMessage = "";
+		try {
+			const result = await runAscetEdit(
+				{
+					action: "set_method_code",
+					componentPath: "DEMO\\Project::Controller",
+					methodName: "calc",
+					code: "result = 1;",
+					executeWrite: true,
+				},
+				{
+					cwd: root,
+					env: { PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts") },
+					executeCli: async (request: AscetCliRequest): Promise<AscetCliExecutionResult> => {
+						if (request.args[1] === "get_tree" || request.args[1] === "get_database_identity") {
+							return directMutationExecution(request);
+						}
+						mutationDispatches++;
+						return directMutationExecution(request);
+					},
+				},
+				{
+					hasUI: true,
+					ui: {
+						confirm: async (_title, message) => {
+							confirmations++;
+							confirmationMessage = message;
+							return true;
+						},
+					},
+				},
+			);
+			assert.equal(result.details.outcome.status, "ok");
+			assert.equal(confirmations, 1);
+			assert.equal(mutationDispatches, 1);
+			assert.match(confirmationMessage, /targetOid: C-1/u);
+			assert.match(confirmationMessage, /ownerPath: Package\\Shared\\Controller/u);
+			assert.match(confirmationMessage, /affectedProjects: DEMO\\Project/u);
+		} finally {
+			rmSync(root, { recursive: true, force: true });
+		}
+	});
+
+	test("quarantines an unknown direct method write and blocks a Package alias without confirmation", async () => {
+		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-method-quarantine-"));
+		let confirmations = 0;
+		let mutationDispatches = 0;
+		const options = {
+			cwd: root,
+			env: { PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts") },
+			executeCli: async (request: AscetCliRequest): Promise<AscetCliExecutionResult> => {
+				if (request.args[1] === "get_tree" || request.args[1] === "get_database_identity") {
+					return directMutationExecution(request);
+				}
+				mutationDispatches++;
+				return {
+					exitCode: 1,
+					stdout: JSON.stringify({
+						ok: false,
+						result: null,
+						error: { code: "write_outcome_unknown", message: "unknown method write" },
+					}),
+					stderr: "",
+					timedOut: false,
+					request,
+				};
+			},
+		};
+		const context: AscetEditApprovalContext = {
+			hasUI: true,
+			ui: {
+				confirm: async () => {
+					confirmations++;
+					return true;
+				},
+			},
+		};
+		try {
+			const first = await runAscetEdit(
+				{
+					action: "set_method_code",
+					componentPath: "DEMO\\Project::Controller",
+					methodName: "calc",
+					code: "result = 1;",
+					executeWrite: true,
+				},
+				options,
+				context,
+			);
+			assert.equal(first.details.outcome.status, "partial");
+
+			const second = await runAscetEdit(
+				{
+					action: "set_method_code",
+					componentPath: "Package\\Shared\\Controller",
+					methodName: "calc",
+					code: "result = 2;",
+					executeWrite: true,
+				},
+				options,
+				context,
+			);
+			assert.equal(second.details.outcome.status, "blocked");
+			if (second.details.outcome.status === "blocked") {
+				assert.equal(second.details.outcome.code, "mutation_target_quarantined");
+			}
+			assert.equal(confirmations, 1);
+			assert.equal(mutationDispatches, 1);
+		} finally {
+			rmSync(root, { recursive: true, force: true });
+		}
+	});
+
+	test("records Bridge-prevented approval failures as not_started", async () => {
+		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-telemetry-blocked-"));
+		try {
+			const result = await runAscetEdit(
+				{ action: "create_folder", folderPath: "DEMO\\New", executeWrite: true },
+				{
+					cwd: root,
+					env: { PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts") },
+					executeCli: async (request: AscetCliRequest) => directMutationExecution(request),
+				},
+				{},
+			);
+			assert.equal(result.details.outcome.status, "blocked");
+			const telemetry = readFileSync(join(root, "artifacts", "telemetry", "element-write.jsonl"), "utf8")
+				.trim()
+				.split("\n")
+				.map((line) => JSON.parse(line) as Record<string, unknown>);
+			assert.equal(telemetry.length, 1);
+			assert.deepEqual(
+				{
+					outcome: telemetry[0]?.outcome,
+					mutationStatus: telemetry[0]?.mutationStatus,
+					bridgeEntered: telemetry[0]?.bridgeEntered,
+					mutationStarted: telemetry[0]?.mutationStarted,
+					writesPerformed: telemetry[0]?.writesPerformed,
+					cleanupRequired: telemetry[0]?.cleanupRequired,
+				},
+				{
+					outcome: "blocked",
+					mutationStatus: "not_started",
+					bridgeEntered: true,
+					mutationStarted: false,
+					writesPerformed: false,
+					cleanupRequired: false,
+				},
+			);
+		} finally {
+			rmSync(root, { recursive: true, force: true });
+		}
+	});
+
+	test("records outcome_unknown telemetry when an unexpected exception escapes after Bridge response", async () => {
+		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-telemetry-error-"));
+		const artifactRoot = join(root, "artifacts");
+		try {
+			const store = new AscetObservationStore({ root: artifactRoot, thresholdBytes: 1 });
+			const stored = store.create({
+				domain: "tree",
+				target: { targetPathPrefix: "DEMO\\New" },
+				sourceIdentity: {},
+				items: [{ path: "DEMO\\New" }],
+				coverage: { status: "complete_for_scope" },
+				delivery: "stored",
+			});
+			assert.equal(stored.delivery, "stored");
+			rmSync(stored.observation.dataPath);
+			mkdirSync(stored.observation.dataPath);
+
+			await assert.rejects(
+				runAscetEdit(
+					{ action: "create_folder", folderPath: "DEMO\\New", executeWrite: true },
+					{
+						cwd: root,
+						env: { PI_ASCET_EXTENSION_ARTIFACT_ROOT: artifactRoot },
+						executeCli: async (request: AscetCliRequest): Promise<AscetCliExecutionResult> =>
+							directMutationExecution(request),
+					},
+					approvingContext,
+				),
+			);
+			const telemetry = readFileSync(join(artifactRoot, "telemetry", "element-write.jsonl"), "utf8")
+				.trim()
+				.split("\n")
+				.map((line) => JSON.parse(line) as Record<string, unknown>);
+			assert.equal(telemetry.length, 1);
+			assert.deepEqual(
+				{
+					outcome: telemetry[0]?.outcome,
+					mutationStatus: telemetry[0]?.mutationStatus,
+					bridgeEntered: telemetry[0]?.bridgeEntered,
+					backendResponseReceived: telemetry[0]?.backendResponseReceived,
+					mutationStarted: telemetry[0]?.mutationStarted,
+					cleanupRequired: telemetry[0]?.cleanupRequired,
+				},
+				{
+					outcome: "outcome_unknown",
+					mutationStatus: "unknown",
+					bridgeEntered: true,
+					backendResponseReceived: true,
+					mutationStarted: true,
+					cleanupRequired: true,
+				},
+			);
+		} finally {
+			rmSync(root, { recursive: true, force: true });
+		}
+	});
+
+	test("records runtime telemetry for a regular approved write", async () => {
+		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-telemetry-"));
+		try {
+			const result = await runAscetEdit(
+				{ action: "create_folder", folderPath: "DEMO\\New", executeWrite: true },
+				{
+					cwd: root,
+					env: {
+						PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts"),
+						PI_ASCET_RUN_ID: "run-1",
+						PI_ASCET_PHASE_ID: "write-1",
+						PI_ASCET_CASE_ID: "W-CREATE-FOLDER",
+						PI_ASCET_ATTEMPT_ID: "attempt-1",
+						PI_ASCET_WRITE_CLASS: "isolated_fixture",
+					},
+					executeCli: async (request: AscetCliRequest): Promise<AscetCliExecutionResult> =>
+						directMutationExecution(request),
+				},
+				approvingContext,
+			);
+			assert.equal(result.details.outcome.status, "ok");
+			const telemetry = readFileSync(join(root, "artifacts", "telemetry", "element-write.jsonl"), "utf8")
+				.trim()
+				.split("\n")
+				.map((line) => JSON.parse(line) as Record<string, unknown>);
+			assert.equal(telemetry.length, 1);
+			assert.deepEqual(
+				{
+					version: telemetry[0]?.version,
+					operation: telemetry[0]?.operation,
+					phase: telemetry[0]?.phase,
+					writeClass: telemetry[0]?.writeClass,
+					bridgeEntered: telemetry[0]?.bridgeEntered,
+					backendResponseReceived: telemetry[0]?.backendResponseReceived,
+					mutationStarted: telemetry[0]?.mutationStarted,
+					writesPerformed: telemetry[0]?.writesPerformed,
+				},
+				{
+					version: 2,
+					operation: "create_folder",
+					phase: "execute",
+					writeClass: "isolated_fixture",
+					bridgeEntered: true,
+					backendResponseReceived: true,
+					mutationStarted: true,
+					writesPerformed: true,
+				},
 			);
 		} finally {
 			rmSync(root, { recursive: true, force: true });

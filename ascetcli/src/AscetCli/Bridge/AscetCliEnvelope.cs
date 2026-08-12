@@ -189,6 +189,18 @@ internal static class AscetCliEnvelope
         }
         return "fresh_session";
     }
+    internal static bool? ResolveFailureMutationStarted(bool mutating, string code)
+    {
+        if (!mutating)
+        {
+            return false;
+        }
+
+        return String.Equals(code, "editable_write_gate_blocked", StringComparison.Ordinal)
+            ? (bool?)false
+            : null;
+    }
+
     private static bool? ResolveMutationStarted(string mode, string operation, bool? mutationStarted)
     {
         if (mutationStarted.HasValue)

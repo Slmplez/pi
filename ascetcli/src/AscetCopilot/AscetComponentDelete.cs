@@ -55,6 +55,7 @@ public sealed class ComponentDeleteService : AscetReadDomainServiceBase, ICompon
                 throw new AscetReadException("unsupported_component_kind", "delete_component", "Item '" + componentPath + "' is not a removable ASCET component.");
             }
 
+            RequireComponentEditableInSession(session, componentPath, "delete_component");
             bool removed = folder.RemoveComponent(component);
             if (!removed)
             {

@@ -1,4 +1,4 @@
-﻿import assert from "node:assert/strict";
+import assert from "node:assert/strict";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -40,6 +40,18 @@ function createInput(): CreateAscetPlanInput {
 		binding: { workspace: "C:/Repo", agentId: "agent-a", sessionId: "session-a" },
 		databaseIdentity: { name: "DB", path: "C:/Repo/DB", fingerprint: "a".repeat(64) },
 		targetIdentity: { path: "Demo/Element", oid: "component-1", kind: "component" },
+		targetImpact: {
+			sharedObject: true,
+			requestedPath: "Project\\Demo::Element",
+			ownerPath: "Package\\Demo\\Element",
+			targetOid: "component-1",
+			aliasPaths: ["Package\\Demo\\Element", "Project\\Demo::Element"],
+			affectedProjects: ["Project\\Demo"],
+			completeness: "complete",
+			writeAllowed: true,
+			fingerprint: "sha256:impact-a",
+		},
+		guardGeneration: 4,
 		backendPreflight: {
 			ok: true,
 			resolved: { kind: "component", oid: "component-1" },
@@ -56,8 +68,8 @@ function verifyInput(planId: string): VerifyAscetPlanInput {
 	return { ...createInput(), planId };
 }
 
-describe("AscetPlanStore v2", () => {
-	test("creates a canonical persisted v2 plan with layered fingerprints", () => {
+describe("AscetPlanStore v3", () => {
+	test("creates a canonical persisted v3 plan with impact, guard generation, and layered fingerprints", () => {
 		const root = createRoot();
 		try {
 			const store = new AscetPlanStore({ artifactRoot: root, generatePlanId: () => "plan-create" });
@@ -70,10 +82,15 @@ describe("AscetPlanStore v2", () => {
 				input.backendPreflight,
 				input.databaseIdentity,
 				input.targetIdentity,
+				input.targetImpact,
+				input.guardGeneration,
 			);
 
 			assert.equal(existsSync(persistedPath), true);
 			assert.equal(created.version, ASCET_PLAN_RECORD_VERSION);
+			assert.equal(created.state, "planned");
+			assert.deepEqual(created.targetImpact, input.targetImpact);
+			assert.equal(created.guardGeneration, 4);
 			assert.deepEqual(loaded, created);
 			assert.deepEqual(persisted, created);
 			assert.equal(created.evidenceFingerprint, evidenceFingerprint);
@@ -85,6 +102,8 @@ describe("AscetPlanStore v2", () => {
 					binding: input.binding,
 					databaseIdentity: input.databaseIdentity,
 					targetIdentity: input.targetIdentity,
+					targetImpact: input.targetImpact,
+					guardGeneration: input.guardGeneration,
 					evidenceFingerprint,
 					contractFingerprint: input.contractFingerprint,
 				}),
@@ -152,6 +171,14 @@ describe("AscetPlanStore v2", () => {
 				"plan_target_identity_mismatch",
 			);
 			assertPlanError(
+				() => store.verify({ ...current, targetImpact: { fingerprint: "sha256:impact-b" } }),
+				"plan_target_impact_mismatch",
+			);
+			assertPlanError(
+				() => store.verify({ ...current, guardGeneration: current.guardGeneration + 1 }),
+				"plan_guard_generation_mismatch",
+			);
+			assertPlanError(
 				() =>
 					store.verify({
 						...current,
@@ -209,9 +236,15 @@ describe("AscetPlanStore v2", () => {
 			const lockPath = join(root, "plans", "plan-consume.json.consume.lock");
 			writeFileSync(lockPath, "locked", "utf8");
 			assertPlanError(() => store.consume(input), "plan_busy");
+			assert.equal(existsSync(lockPath), true, "a competing consumer must not delete the active consume lock");
 			rmSync(lockPath, { force: true });
 
+			const executing = store.beginExecution(input);
+			assert.equal(executing.state, "executing");
+			assert.equal(executing.executingAt, now.toISOString());
+			assertPlanError(() => store.load(created.planId), "plan_executing");
 			const consumed = store.consume(input);
+			assert.equal(consumed.state, "consumed");
 			assert.equal(consumed.consumedAt, now.toISOString());
 			assertPlanError(() => store.consume(input), "plan_consumed");
 			assertPlanError(() => store.load(created.planId), "plan_consumed");

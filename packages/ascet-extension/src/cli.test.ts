@@ -763,6 +763,41 @@ describe("ASCET Bridge Milestone A transport semantics", () => {
 				backend: { code: "write_failed", stage: undefined, details: undefined, operation: undefined },
 			});
 
+			const editableGateBlocked = await runAscetCliJson(
+				["exec", "set_method_code", "Demo\\ReadOnly", "Main", "return;", "--json"],
+				{
+					cwd: fixture.cwd,
+					env: fixture.env,
+					jobKind: "write",
+					executeCli: async (request) => ({
+						exitCode: 2,
+						stdout: JSON.stringify({
+							type: "response",
+							protocolVersion: 1,
+							ok: false,
+							result: null,
+							error: { code: "editable_write_gate_blocked", message: "not editable" },
+							meta: {
+								bridgePid: 4321,
+								bridgeGeneration: "test-generation",
+								durationMs: 1,
+								sessionPolicy: "fresh_session",
+								mutationStarted: null,
+							},
+						}),
+						stderr: "",
+						timedOut: false,
+						spawnAttempted: true,
+						spawnSucceeded: true,
+						requestDispatched: true,
+						processClosed: true,
+						request,
+					}),
+				},
+			);
+			assert.equal(editableGateBlocked.error?.code, "editable_write_gate_blocked");
+			assert.equal(editableGateBlocked.error?.message, "not editable");
+
 			const structuredNotStarted = await runAscetCliJson(["exec", "create_folder", "\\Safe", "--json"], {
 				cwd: fixture.cwd,
 				env: fixture.env,

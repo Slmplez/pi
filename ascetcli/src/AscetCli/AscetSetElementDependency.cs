@@ -124,12 +124,11 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
             bool hasFormula = !String.IsNullOrWhiteSpace(arguments.DependencyFormula);
             bool hasMappings = (arguments.DependencyMappings != null && arguments.DependencyMappings.Count > 0) ||
                 (arguments.VariantDependencyMappings != null && arguments.VariantDependencyMappings.Count > 0);
-            bool needsDependencyWrite = beforeDependent != wantDependent;
             bool needsFormulaWrite = (hasFormula && !String.Equals(beforeFormula, arguments.DependencyFormula, StringComparison.Ordinal)) ||
                 (hasFormula && hasMappings) ||
                 (arguments.ClearDependencyFormula && !String.IsNullOrWhiteSpace(beforeFormula));
             bool needsDataWrite = !wantDependent && !String.IsNullOrWhiteSpace(arguments.RestorationPolicy);
-            bool needsWrite = needsDependencyWrite || needsFormulaWrite || needsDataWrite;
+            bool needsWrite = RequiresDependencyWrite(match, arguments);
             IList<AscetElementDependencyDataVariantState> beforeDataVariants =
                 (hasFormula || needsDataWrite)
                     ? ReadLiveDataVariantStates(component, arguments.TargetPath, arguments.ElementName, arguments.OverlaySpecFiles, attempted)
@@ -244,6 +243,7 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
                 }
                 else
                 {
+                    RequireComponentEditableInSession(session, arguments.TargetPath, "set_element_dependency");
                     backupDirectory = ResolveBackupDirectory(arguments.BackupDirectory, arguments.TargetPath);
                     attempted.Add("ExportXMLToFile(backup)");
                     Directory.CreateDirectory(backupDirectory);
@@ -626,6 +626,30 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
         }
     }
 
+    internal static bool RequiresDependencyWrite(AscetElementDependencyPlanMatch match, AscetSetElementDependencyArguments arguments)
+    {
+        if (match == null)
+        {
+            throw new ArgumentNullException("match");
+        }
+        if (arguments == null)
+        {
+            throw new ArgumentNullException("arguments");
+        }
+
+        bool wantDependent = String.Equals(arguments.RequestedDependency, "dependent", StringComparison.OrdinalIgnoreCase);
+        bool beforeDependent = String.Equals(match.BeforeDependency, "dependent", StringComparison.OrdinalIgnoreCase);
+        string beforeFormula = match.FormulaCode ?? String.Empty;
+        bool hasFormula = !String.IsNullOrWhiteSpace(arguments.DependencyFormula);
+        bool hasMappings = (arguments.DependencyMappings != null && arguments.DependencyMappings.Count > 0) ||
+            (arguments.VariantDependencyMappings != null && arguments.VariantDependencyMappings.Count > 0);
+        bool needsDependencyWrite = beforeDependent != wantDependent;
+        bool needsFormulaWrite = (hasFormula && !String.Equals(beforeFormula, arguments.DependencyFormula, StringComparison.Ordinal)) ||
+            (hasFormula && hasMappings) ||
+            (arguments.ClearDependencyFormula && !String.IsNullOrWhiteSpace(beforeFormula));
+        bool needsDataWrite = !wantDependent && !String.IsNullOrWhiteSpace(arguments.RestorationPolicy);
+        return needsDependencyWrite || needsFormulaWrite || needsDataWrite;
+    }
     private AscetSetElementDependencyResult SetFolder(AscetSetElementDependencyArguments arguments)
     {
         AscetElementDependencyPlanService planner = new AscetElementDependencyPlanService();
@@ -744,6 +768,21 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
         List<string> attempted = new List<string> { "PlanFolder" };
         List<string> issues = new List<string>();
         string backupRoot = String.IsNullOrWhiteSpace(arguments.BackupDirectory) ? String.Empty : Path.GetFullPath(arguments.BackupDirectory);
+
+        List<string> componentPaths = new List<string>();
+        for (int i = 0; i < supported.Count; i++)
+        {
+            if (RequiresDependencyWrite(supported[i], arguments))
+            {
+                componentPaths.Add(supported[i].ComponentPath);
+            }
+        }
+
+        ExecuteWithSession("set_element_dependency", delegate(AscetSession session)
+        {
+            RequireComponentsEditableInSession(session, componentPaths, "set_element_dependency");
+            return true;
+        });
 
         for (int i = 0; i < supported.Count; i++)
         {
@@ -1507,6 +1546,7 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
         AscetItemPath parsed = AscetItemPath.Parse(componentPath);
         AscetDataBase database = session.GetCurrentDatabaseHandle();
         AscetFolder folder = ResolveFolder(database, parsed.FolderPath);
+        RequireComponentEditableInSession(session, componentPath, "set_element_dependency");
         attempted.Add("ImportXMLFromFile(rollback)");
         DataBaseItem restored = folder.ImportXMLFromFile(backupDirectory, Path.GetFileName(main), DependencyImportDiscardImplementation, false, false, false);
         if (restored == null)

@@ -44,7 +44,9 @@ Use this Skill as the authoritative ASCET engineering workflow. Keep the active 
 ## Write readiness and stop conditions
 
 - Ordinary `ascet_edit` preflight must use the exact target and approved changes and must not mutate ASCET. Execute only the same payload with `executeWrite=true` after required confirmation.
-- A complete parameter dependency chain is the explicit exception: discovery -> exact evidence -> one `configure_parameter_dependency_chain` call. It has no public preflight, `executeWrite`, `mode`, `planId`, or commit step.
+- Preflight, plan, diff, and dry-run remain available when a Component is not editable. Immediately before every real mutation, runtime checks the affected Component internally in the same ASCET session and blocks the write unless `editable=true`.
+- Do not call `mode=check` merely to authorize a write; earlier checks do not grant permission. Never call `mode=set` automatically; acquiring editability requires explicit user intent.
+- A complete parameter dependency chain is the explicit exception: discovery -> exact evidence -> one `configure_parameter_dependency_chain` call. It has no public preflight, `executeWrite`, `mode`, `planId`, or commit step. Runtime checks Provider and Consumer editability before mutation and checks the affected Component again before compensating writes.
 - Runtime automatically verifies executed writes. A successful `ascet_edit` or chain `committed`/`no_change` result completes the write; do not issue a redundant verification read. Read again only for the next engineering step, failure diagnosis, or an explicit user request.
 - Stop and report failure or unknown outcome without blind retry. Stop and ask when target identity, ownership, scope, business values, mappings, editability, or required evidence remains ambiguous.
 

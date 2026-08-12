@@ -1,4 +1,4 @@
-﻿import { createHash, randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import {
 	closeSync,
 	existsSync,
@@ -12,7 +12,7 @@ import {
 import { join, resolve } from "node:path";
 import { getAscetArtifactRoot } from "../observation-store.ts";
 
-export const ASCET_PLAN_RECORD_VERSION = 2;
+export const ASCET_PLAN_RECORD_VERSION = 3;
 export const DEFAULT_ASCET_PLAN_TTL_MS = 5 * 60 * 1000;
 
 export type AscetPlanStoreErrorCode =
@@ -24,6 +24,8 @@ export type AscetPlanStoreErrorCode =
 	| "plan_version_unsupported"
 	| "plan_expired"
 	| "plan_consumed"
+	| "plan_executing"
+	| "plan_state_mismatch"
 	| "plan_busy"
 	| "plan_operation_mismatch"
 	| "plan_id_mismatch"
@@ -33,6 +35,8 @@ export type AscetPlanStoreErrorCode =
 	| "plan_contract_mismatch"
 	| "plan_database_identity_mismatch"
 	| "plan_target_identity_mismatch"
+	| "plan_target_impact_mismatch"
+	| "plan_guard_generation_mismatch"
 	| "plan_evidence_mismatch"
 	| "stale_plan";
 
@@ -57,20 +61,26 @@ export interface AscetPlanTargetIdentity {
 	kind: string;
 }
 
+export type AscetPlanState = "planned" | "executing" | "consumed";
+
 export interface AscetPlanRecord {
-	version: 2;
+	version: 3;
+	state: AscetPlanState;
 	planId: string;
 	operation: string;
 	params: AscetPlanJsonValue;
 	binding: AscetPlanBinding;
 	databaseIdentity: AscetPlanDatabaseIdentity;
 	targetIdentity: AscetPlanTargetIdentity;
+	targetImpact: AscetPlanJsonValue;
+	guardGeneration: number;
 	backendPreflight: AscetPlanJsonValue;
 	evidenceFingerprint: string;
 	contractFingerprint: string;
 	planFingerprint: string;
 	createdAt: string;
 	expiresAt: string;
+	executingAt?: string;
 	consumedAt?: string;
 }
 
@@ -80,6 +90,8 @@ export interface CreateAscetPlanInput {
 	binding: AscetPlanBinding;
 	databaseIdentity: AscetPlanDatabaseIdentity;
 	targetIdentity: AscetPlanTargetIdentity;
+	targetImpact: AscetPlanJsonValue;
+	guardGeneration: number;
 	backendPreflight: AscetPlanJsonValue;
 	contractFingerprint: string;
 	ttlMs?: number;
@@ -94,6 +106,8 @@ export interface VerifyAscetPlanInput {
 	binding: AscetPlanBinding;
 	databaseIdentity: AscetPlanDatabaseIdentity;
 	targetIdentity: AscetPlanTargetIdentity;
+	targetImpact: AscetPlanJsonValue;
+	guardGeneration: number;
 	backendPreflight: AscetPlanJsonValue;
 	contractFingerprint: string;
 }
@@ -256,6 +270,22 @@ function targetIdentityJson(identity: AscetPlanTargetIdentity): AscetPlanJsonVal
 	return { path: identity.path, oid: identity.oid, kind: identity.kind };
 }
 
+function requireGuardGeneration(value: unknown): number {
+	if (!Number.isSafeInteger(value) || (value as number) < 0) {
+		throw new AscetPlanStoreError("invalid_plan_input", "guardGeneration must be a non-negative safe integer.", {
+			guardGeneration: value,
+		});
+	}
+	return value as number;
+}
+
+function requirePlanState(value: unknown): AscetPlanState {
+	if (value !== "planned" && value !== "executing" && value !== "consumed") {
+		throw new AscetPlanStoreError("plan_corrupt", `Persisted plan state is invalid: ${String(value)}.`);
+	}
+	return value;
+}
+
 export function canonicalizeAscetPlanJson(value: AscetPlanJsonValue): string {
 	return canonicalize(requireJsonValue(value, "value"));
 }
@@ -276,11 +306,15 @@ export function createAscetPlanEvidenceFingerprint(
 	backendPreflight: AscetPlanJsonValue,
 	databaseIdentity: AscetPlanDatabaseIdentity,
 	targetIdentity: AscetPlanTargetIdentity,
+	targetImpact: AscetPlanJsonValue,
+	guardGeneration: number,
 ): string {
 	return fingerprint({
 		backendPreflight: requireJsonValue(backendPreflight, "backendPreflight"),
 		databaseIdentity: databaseIdentityJson(requireDatabaseIdentity(databaseIdentity)),
 		targetIdentity: targetIdentityJson(requireTargetIdentity(targetIdentity)),
+		targetImpact: requireJsonValue(targetImpact, "targetImpact"),
+		guardGeneration: requireGuardGeneration(guardGeneration),
 	});
 }
 
@@ -290,6 +324,8 @@ export function createAscetPlanFingerprint(input: {
 	binding: AscetPlanBinding;
 	databaseIdentity: AscetPlanDatabaseIdentity;
 	targetIdentity: AscetPlanTargetIdentity;
+	targetImpact: AscetPlanJsonValue;
+	guardGeneration: number;
 	evidenceFingerprint: string;
 	contractFingerprint: string;
 }): string {
@@ -300,6 +336,8 @@ export function createAscetPlanFingerprint(input: {
 		binding: bindingJson(requireBinding(input.binding)),
 		databaseIdentity: databaseIdentityJson(requireDatabaseIdentity(input.databaseIdentity)),
 		targetIdentity: targetIdentityJson(requireTargetIdentity(input.targetIdentity)),
+		targetImpact: requireJsonValue(input.targetImpact, "targetImpact"),
+		guardGeneration: requireGuardGeneration(input.guardGeneration),
 		evidenceFingerprint: requireFingerprint(input.evidenceFingerprint, "evidenceFingerprint"),
 		contractFingerprint: requireFingerprint(input.contractFingerprint, "contractFingerprint"),
 	});
@@ -317,18 +355,23 @@ function parsePlanRecord(value: unknown): AscetPlanRecord {
 		);
 	}
 	try {
+		const state = requirePlanState(value.state);
 		const planId = requirePlanId(requireNonEmpty(value.planId, "planId"));
 		const operation = requireOperation(requireNonEmpty(value.operation, "operation"));
 		const params = requireJsonValue(value.params, "params");
 		const binding = requireBinding(value.binding);
 		const databaseIdentity = requireDatabaseIdentity(value.databaseIdentity);
 		const targetIdentity = requireTargetIdentity(value.targetIdentity);
+		const targetImpact = requireJsonValue(value.targetImpact, "targetImpact");
+		const guardGeneration = requireGuardGeneration(value.guardGeneration);
 		const backendPreflight = requireJsonValue(value.backendPreflight, "backendPreflight");
 		const evidenceFingerprint = requireFingerprint(value.evidenceFingerprint, "evidenceFingerprint");
 		const contractFingerprint = requireFingerprint(value.contractFingerprint, "contractFingerprint");
 		const planFingerprint = requireFingerprint(value.planFingerprint, "planFingerprint");
 		const createdAt = requireNonEmpty(value.createdAt, "createdAt");
 		const expiresAt = requireNonEmpty(value.expiresAt, "expiresAt");
+		const executingAt =
+			value.executingAt === undefined ? undefined : requireNonEmpty(value.executingAt, "executingAt");
 		const consumedAt = value.consumedAt === undefined ? undefined : requireNonEmpty(value.consumedAt, "consumedAt");
 		const createdTimestamp = parseTimestamp(createdAt, "createdAt");
 		const expiresTimestamp = parseTimestamp(expiresAt, "expiresAt");
@@ -338,11 +381,23 @@ function parsePlanRecord(value: unknown): AscetPlanRecord {
 				expiresAt,
 			});
 		}
+		if (executingAt !== undefined) parseTimestamp(executingAt, "executingAt");
 		if (consumedAt !== undefined) parseTimestamp(consumedAt, "consumedAt");
+		if (state === "planned" && (executingAt !== undefined || consumedAt !== undefined)) {
+			throw new AscetPlanStoreError("plan_corrupt", "A planned record must not contain execution timestamps.");
+		}
+		if (state === "executing" && (executingAt === undefined || consumedAt !== undefined)) {
+			throw new AscetPlanStoreError("plan_corrupt", "An executing record requires executingAt and no consumedAt.");
+		}
+		if (state === "consumed" && (executingAt === undefined || consumedAt === undefined)) {
+			throw new AscetPlanStoreError("plan_corrupt", "A consumed record requires executingAt and consumedAt.");
+		}
 		const expectedEvidenceFingerprint = createAscetPlanEvidenceFingerprint(
 			backendPreflight,
 			databaseIdentity,
 			targetIdentity,
+			targetImpact,
+			guardGeneration,
 		);
 		if (expectedEvidenceFingerprint !== evidenceFingerprint) {
 			throw new AscetPlanStoreError(
@@ -361,6 +416,8 @@ function parsePlanRecord(value: unknown): AscetPlanRecord {
 			binding,
 			databaseIdentity,
 			targetIdentity,
+			targetImpact,
+			guardGeneration,
 			evidenceFingerprint,
 			contractFingerprint,
 		});
@@ -373,18 +430,22 @@ function parsePlanRecord(value: unknown): AscetPlanRecord {
 		}
 		return {
 			version: ASCET_PLAN_RECORD_VERSION,
+			state,
 			planId,
 			operation,
 			params,
 			binding,
 			databaseIdentity,
 			targetIdentity,
+			targetImpact,
+			guardGeneration,
 			backendPreflight,
 			evidenceFingerprint,
 			contractFingerprint,
 			planFingerprint,
 			createdAt,
 			expiresAt,
+			...(executingAt === undefined ? {} : { executingAt }),
 			...(consumedAt === undefined ? {} : { consumedAt }),
 		};
 	} catch (error) {
@@ -424,6 +485,8 @@ export class AscetPlanStore {
 		const binding = requireBinding(input.binding);
 		const databaseIdentity = requireDatabaseIdentity(input.databaseIdentity);
 		const targetIdentity = requireTargetIdentity(input.targetIdentity);
+		const targetImpact = requireJsonValue(input.targetImpact, "targetImpact");
+		const guardGeneration = requireGuardGeneration(input.guardGeneration);
 		const backendPreflight = requireJsonValue(input.backendPreflight, "backendPreflight");
 		const contractFingerprint = requireFingerprint(input.contractFingerprint, "contractFingerprint");
 		const created = assertDate(this.now(), "now");
@@ -437,6 +500,8 @@ export class AscetPlanStore {
 			backendPreflight,
 			databaseIdentity,
 			targetIdentity,
+			targetImpact,
+			guardGeneration,
 		);
 		const planFingerprint = createAscetPlanFingerprint({
 			operation,
@@ -444,17 +509,22 @@ export class AscetPlanStore {
 			binding,
 			databaseIdentity,
 			targetIdentity,
+			targetImpact,
+			guardGeneration,
 			evidenceFingerprint,
 			contractFingerprint,
 		});
 		const record: AscetPlanRecord = {
 			version: ASCET_PLAN_RECORD_VERSION,
+			state: "planned",
 			planId,
 			operation,
 			params,
 			binding,
 			databaseIdentity,
 			targetIdentity,
+			targetImpact,
+			guardGeneration,
 			backendPreflight,
 			evidenceFingerprint,
 			contractFingerprint,
@@ -478,8 +548,49 @@ export class AscetPlanStore {
 		return record;
 	}
 
+	public beginExecution(input: VerifyAscetPlanInput): AscetPlanRecord {
+		return this.withTransitionLock(input.planId, () => {
+			const record = this.readRecord(input.planId);
+			this.assertAvailable(record);
+			this.assertMatches(record, input);
+			const executingRecord: AscetPlanRecord = {
+				...record,
+				state: "executing",
+				executingAt: assertDate(this.now(), "now").toISOString(),
+			};
+			this.writeRecord(this.planPath(input.planId), executingRecord);
+			return executingRecord;
+		});
+	}
+
 	public consume(input: VerifyAscetPlanInput): AscetPlanRecord {
-		const planId = requirePlanId(input.planId);
+		return this.withTransitionLock(input.planId, () => {
+			const record = this.readRecord(input.planId);
+			if (record.state === "consumed") {
+				throw new AscetPlanStoreError("plan_consumed", `Plan has already been consumed: ${record.planId}`, {
+					planId: record.planId,
+					consumedAt: record.consumedAt,
+				});
+			}
+			if (record.state !== "executing") {
+				throw new AscetPlanStoreError("plan_state_mismatch", `Plan is not executing: ${record.planId}`, {
+					planId: record.planId,
+					state: record.state,
+				});
+			}
+			this.assertMatches(record, input);
+			const consumedRecord: AscetPlanRecord = {
+				...record,
+				state: "consumed",
+				consumedAt: assertDate(this.now(), "now").toISOString(),
+			};
+			this.writeRecord(this.planPath(input.planId), consumedRecord);
+			return consumedRecord;
+		});
+	}
+
+	private withTransitionLock<T>(planIdValue: string, action: () => T): T {
+		const planId = requirePlanId(planIdValue);
 		const filePath = this.planPath(planId);
 		mkdirSync(this.planDirectory(), { recursive: true });
 		const lockPath = `${filePath}.consume.lock`;
@@ -489,19 +600,11 @@ export class AscetPlanStore {
 				lockHandle = openSync(lockPath, "wx");
 			} catch (error) {
 				if (this.isFileExistsError(error)) {
-					throw new AscetPlanStoreError("plan_busy", `Plan is currently being consumed: ${planId}`, { planId });
+					throw new AscetPlanStoreError("plan_busy", `Plan is currently being updated: ${planId}`, { planId });
 				}
 				throw error;
 			}
-			const record = this.readRecord(planId);
-			this.assertAvailable(record);
-			this.assertMatches(record, input);
-			const consumedRecord: AscetPlanRecord = {
-				...record,
-				consumedAt: assertDate(this.now(), "now").toISOString(),
-			};
-			this.writeRecord(filePath, consumedRecord);
-			return consumedRecord;
+			return action();
 		} finally {
 			if (lockHandle !== undefined) {
 				closeSync(lockHandle);
@@ -564,10 +667,16 @@ export class AscetPlanStore {
 	}
 
 	private assertAvailable(record: AscetPlanRecord): void {
-		if (record.consumedAt !== undefined) {
+		if (record.state === "consumed") {
 			throw new AscetPlanStoreError("plan_consumed", `Plan has already been consumed: ${record.planId}`, {
 				planId: record.planId,
 				consumedAt: record.consumedAt,
+			});
+		}
+		if (record.state === "executing") {
+			throw new AscetPlanStoreError("plan_executing", `Plan execution has already started: ${record.planId}`, {
+				planId: record.planId,
+				executingAt: record.executingAt,
 			});
 		}
 		if (assertDate(this.now(), "now").getTime() >= parseTimestamp(record.expiresAt, "expiresAt")) {
@@ -632,12 +741,38 @@ export class AscetPlanStore {
 				},
 			);
 		}
+		const targetImpact = requireJsonValue(input.targetImpact, "targetImpact");
+		if (canonicalize(record.targetImpact) !== canonicalize(targetImpact)) {
+			throw new AscetPlanStoreError(
+				"plan_target_impact_mismatch",
+				`Plan target impact does not match: ${record.planId}`,
+				{
+					planId: record.planId,
+					recordedTargetImpact: record.targetImpact,
+					expectedTargetImpact: targetImpact,
+				},
+			);
+		}
+		const guardGeneration = requireGuardGeneration(input.guardGeneration);
+		if (record.guardGeneration !== guardGeneration) {
+			throw new AscetPlanStoreError(
+				"plan_guard_generation_mismatch",
+				`Plan mutation guard generation does not match: ${record.planId}`,
+				{
+					planId: record.planId,
+					recordedGuardGeneration: record.guardGeneration,
+					expectedGuardGeneration: guardGeneration,
+				},
+			);
+		}
 		const params = requireJsonValue(input.params, "params");
 		const backendPreflight = requireJsonValue(input.backendPreflight, "backendPreflight");
 		const evidenceFingerprint = createAscetPlanEvidenceFingerprint(
 			backendPreflight,
 			databaseIdentity,
 			targetIdentity,
+			targetImpact,
+			guardGeneration,
 		);
 		if (record.evidenceFingerprint !== evidenceFingerprint) {
 			throw new AscetPlanStoreError("plan_evidence_mismatch", `Plan preflight evidence is stale: ${record.planId}`, {
@@ -652,6 +787,8 @@ export class AscetPlanStore {
 			binding,
 			databaseIdentity,
 			targetIdentity,
+			targetImpact,
+			guardGeneration,
 			evidenceFingerprint,
 			contractFingerprint,
 		});

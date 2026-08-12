@@ -1,22 +1,21 @@
-﻿import { type TProperties, Type } from "typebox";
+import { type TProperties, Type } from "typebox";
 import { Value } from "typebox/value";
 import {
 	type AscetApplyElementSpecParams,
 	createApplyElementSpecSummary,
-	runApprovedAscetApplyElementSpec,
 	runAscetApplyElementSpec,
 } from "../apply-element-spec.ts";
-import { runApprovedAscetApplyProjectFormula } from "../apply-project-formula.ts";
+import { runAscetApplyProjectFormula } from "../apply-project-formula.ts";
 import { type AscetCliJsonResult, runAscetCliJson } from "../cli.ts";
 import { normalizeAscetPath } from "../core/path.ts";
 import { type AscetToolOutcome, createPreflightOutcome } from "../core/results.ts";
 import { withInlineCodeFile } from "../core/temp-files.ts";
-import { runApprovedAscetCreateComponent } from "../create-component.ts";
-import { runApprovedAscetCreateFolder } from "../create-folder.ts";
-import { runApprovedAscetCreateMethod } from "../create-method.ts";
-import { runApprovedAscetDeleteComponent } from "../delete-component.ts";
-import { runApprovedAscetDeleteFolder } from "../delete-folder.ts";
-import { runApprovedAscetDeleteMethod } from "../delete-method.ts";
+import { runAscetCreateComponent } from "../create-component.ts";
+import { runAscetCreateFolder } from "../create-folder.ts";
+import { runAscetCreateMethod } from "../create-method.ts";
+import { runAscetDeleteComponent } from "../delete-component.ts";
+import { runAscetDeleteFolder } from "../delete-folder.ts";
+import { runAscetDeleteMethod } from "../delete-method.ts";
 import {
 	type AscetApplyElementCommitParams,
 	type AscetApplyElementPlanParams,
@@ -25,7 +24,7 @@ import {
 	type NormalizedElementSpecResult,
 	normalizeAscetElementSpec,
 } from "../element-spec-contract.ts";
-import { getAscetDatabaseIdentity } from "../get.ts";
+import { getAscetDatabaseIdentity, runAscetGet } from "../get.ts";
 import {
 	type AscetCreateMethodComponentKind,
 	getDefaultCreateMethodKind,
@@ -37,17 +36,13 @@ import {
 	type AscetDependencyRestorationValue,
 	createSetElementDependencySummary,
 	resolveSetElementDependencyMappings,
-	runApprovedAscetSetElementDependency,
 	runAscetSetElementDependency,
 } from "../set-element-dependency.ts";
-import { runApprovedAscetSetEnumerators } from "../set-enumerators.ts";
-import { runApprovedAscetSetMethodCode } from "../set-method-code.ts";
-import { runApprovedAscetSetMethodSignature } from "../set-method-signature.ts";
-import { runApprovedAscetSetModuleCode } from "../set-module-code.ts";
-import {
-	ASCET_SET_STATE_MACHINE_CODE_OPERATIONS,
-	runApprovedAscetSetStateMachineCode,
-} from "../set-state-machine-code.ts";
+import { runAscetSetEnumerators } from "../set-enumerators.ts";
+import { runAscetSetMethodCode } from "../set-method-code.ts";
+import { runAscetSetMethodSignature } from "../set-method-signature.ts";
+import { runAscetSetModuleCode } from "../set-module-code.ts";
+import { ASCET_SET_STATE_MACHINE_CODE_OPERATIONS, runAscetSetStateMachineCode } from "../set-state-machine-code.ts";
 import { compactObject, toToolFailurePayload, unwrapToolSuccessPayload } from "../tool-response-contract.ts";
 import { openAiObjectUnionSchema } from "../tools/_shared/openai-schema.ts";
 import { selectAscetPublicSchemaVariants } from "../tools/actions/schema-registry.ts";
@@ -63,12 +58,15 @@ import {
 	formatAscetEditabilityResult,
 	runApprovedAscetEditability,
 } from "./editability.ts";
+import { isAscetEditableWriteGateBlockedCode } from "./editable-write-gate.ts";
 import {
 	findElementSpecDocument,
 	fingerprintJson,
 	removeTemporaryElementSpec,
 	writeTemporaryElementSpec,
 } from "./element-spec-plan.ts";
+import { AscetMutationCoordinator, AscetMutationCoordinatorError } from "./mutation-coordinator.ts";
+import { AscetMutationGuardStore, AscetMutationGuardStoreError } from "./mutation-guard-store.ts";
 import {
 	type AscetPlanDatabaseIdentity,
 	type AscetPlanJsonValue,
@@ -78,6 +76,7 @@ import {
 	createAscetPlanBinding,
 	createAscetPlanContractFingerprint,
 } from "./plan-store.ts";
+import { type AscetTargetImpact, type AscetTargetImpactEntry, resolveAscetTargetImpact } from "./target-impact.ts";
 import {
 	type AscetEditExecutionClassification,
 	type AscetEditMutationStatus,
@@ -472,7 +471,7 @@ function outcomeFromCliResult(result: AscetCliJsonResult): AscetToolOutcome {
 	}
 	const code = result.error?.code ?? "ascet_edit_failed";
 	const message = result.error?.message ?? "ASCET edit failed.";
-	if (isAscetEditApprovalBlockedCode(code)) {
+	if (isAscetEditApprovalBlockedCode(code) || isAscetEditableWriteGateBlockedCode(code)) {
 		return { status: "blocked", code, message };
 	}
 	return { status: "error", error: { code, message } };
@@ -655,8 +654,7 @@ async function runAscetMutationCore(
 		return asResponse(createPreflightOutcome({ action: normalizedParams.action, params: normalizedParams }));
 	}
 
-	const raw = await dispatchMutation(prepareExecutableMutation(normalizedParams), options, ctx);
-	return finalizeAscetMutation({ params: normalizedParams, raw, options });
+	return runCoordinatedDirectMutation(normalizedParams, options, ctx);
 }
 
 interface AscetWriteLifecycleEvidence {
@@ -730,8 +728,8 @@ function recordMutationTelemetry(
 		mutationStatus,
 		bridgeEntered: lifecycle.bridgeEntered,
 		backendResponseReceived: lifecycle.backendResponseReceived,
-		mutationStarted: mutationStatus === "applied" || mutationStatus === "unknown",
-		writesPerformed: mutationStatus === "applied",
+		mutationStarted: mutationStatus === "applied" || mutationStatus === "rolled_back" || mutationStatus === "unknown",
+		writesPerformed: mutationStatus === "applied" || mutationStatus === "rolled_back",
 		cleanupRequired: mutationStatus === "unknown",
 	});
 }
@@ -780,7 +778,117 @@ function createPlanStore(options: RunAscetEditOperationOptions): AscetPlanStore 
 	return new AscetPlanStore({ artifactRoot: getAscetArtifactRoot(options.env as NodeJS.ProcessEnv | undefined) });
 }
 
-function createPlanContractFingerprint(params: PlanManagedPlanParams): string {
+function createMutationGuardStore(options: RunAscetEditOperationOptions): AscetMutationGuardStore {
+	return new AscetMutationGuardStore({
+		artifactRoot: getAscetArtifactRoot(options.env as NodeJS.ProcessEnv | undefined),
+	});
+}
+
+interface AscetTreeSafetyEvidence {
+	complete: boolean;
+	databaseIdentity?: AscetPlanDatabaseIdentity;
+	entries: AscetTargetImpactEntry[];
+}
+
+async function readTreeSafetyEvidence(options: RunAscetEditOperationOptions): Promise<AscetTreeSafetyEvidence> {
+	const raw = await runAscetGet({ action: "tree", scope: "database", delivery: "stored" }, options);
+	const payload = raw.ok ? unwrapToolSuccessPayload(raw.data) : undefined;
+	const result = isRecord(payload) ? payload : undefined;
+	const coverage = asRecord(result?.coverage);
+	const databaseIdentity = result ? getAscetDatabaseIdentity(result) : undefined;
+	const complete =
+		raw.ok &&
+		databaseIdentity !== undefined &&
+		coverage?.status === "complete_for_scope" &&
+		coverage.completeness === "complete" &&
+		coverage.collectorCompleted === true &&
+		result?.truncated !== true;
+	const entries = Array.isArray(result?.items)
+		? result.items.flatMap((entry) => {
+				const item = asRecord(entry);
+				const path = readString(item, "path");
+				const oid = readString(item, "oid");
+				const kind = readString(item, "kind");
+				return path && oid && kind ? [{ path, oid, kind }] : [];
+			})
+		: [];
+	return { complete, databaseIdentity, entries };
+}
+
+async function readPlanTargetImpact(
+	targetIdentity: AscetPlanTargetIdentity,
+	databaseIdentity: AscetPlanDatabaseIdentity,
+	options: RunAscetEditOperationOptions,
+): Promise<AscetTargetImpact> {
+	const tree = await readTreeSafetyEvidence(options);
+	const databaseMatches = tree.databaseIdentity?.fingerprint === databaseIdentity.fingerprint;
+	const targetObserved = tree.entries.some((entry) => entry.oid === targetIdentity.oid);
+	return resolveAscetTargetImpact({
+		targetOid: targetIdentity.oid,
+		requestedPath: targetIdentity.path,
+		completeness: tree.complete && databaseMatches && targetObserved ? "complete" : "unknown",
+		entries: tree.entries,
+	});
+}
+
+function directMutationAnchorPath(params: AscetMutationParams): string | undefined {
+	switch (params.action) {
+		case "create_folder":
+			return parentAscetPath(params.folderPath);
+		case "create_component":
+			return parentAscetPath(params.componentPath);
+		case "create_method":
+		case "set_method_signature":
+		case "delete_component":
+		case "delete_method":
+		case "set_method_code":
+		case "set_enumerators":
+			return params.componentPath;
+		case "delete_folder":
+			return params.folderPath;
+		case "set_module_code":
+			return params.modulePath;
+		case "set_state_machine_code":
+			return params.stateMachinePath;
+		case "apply_project_formula":
+			return params.projectPath;
+		case "apply_element_spec":
+		case "set_element_dependency":
+			return undefined;
+	}
+}
+
+function parentAscetPath(path: string): string | undefined {
+	const normalized = normalizeAscetPath(path);
+	const separator = normalized.lastIndexOf("\\");
+	return separator > 0 ? normalized.slice(0, separator) : undefined;
+}
+
+function findTreeTargetIdentity(
+	params: AscetMutationParams,
+	tree: AscetTreeSafetyEvidence,
+): AscetPlanTargetIdentity | undefined {
+	const targetPath = directMutationAnchorPath(params);
+	if (!targetPath) return undefined;
+	const normalizedTarget = normalizeAscetPath(targetPath).toLocaleLowerCase();
+	const entry = tree.entries.find(
+		(candidate) => normalizeAscetPath(candidate.path).toLocaleLowerCase() === normalizedTarget,
+	);
+	return entry ? { path: normalizeAscetPath(targetPath), oid: entry.oid, kind: entry.kind } : undefined;
+}
+
+function storedDirectMutationParams(params: AscetMutationParams): AscetPlanJsonValue {
+	const stored = { ...params } as Record<string, unknown>;
+	delete stored.executeWrite;
+	delete stored.verifyReadback;
+	if (typeof stored.code === "string") {
+		stored.codeFingerprint = fingerprintJson(stored.code);
+		delete stored.code;
+	}
+	return toPlanJson(stored);
+}
+
+function createPlanContractFingerprint(params: AscetMutationParams): string {
 	const selection = selectAscetPublicSchemaVariants(ascetMutationParameters, params);
 	if (selection.status !== "selected" || selection.variants.length === 0) {
 		throw new AscetPlanStoreError(
@@ -855,7 +963,11 @@ function getPlanTargetIdentity(
 }
 
 function planStoreFailure(error: unknown): AscetEditResult {
-	if (error instanceof AscetPlanStoreError) {
+	if (
+		error instanceof AscetPlanStoreError ||
+		error instanceof AscetMutationGuardStoreError ||
+		error instanceof AscetMutationCoordinatorError
+	) {
 		return asResponse({ status: "error", error: { code: error.code, message: error.message } });
 	}
 	throw error;
@@ -894,12 +1006,35 @@ async function runPlanManagedPlan(
 	try {
 		const databaseIdentity = await readCurrentPlanDatabaseIdentity(options);
 		const targetIdentity = getPlanTargetIdentity(params, backendPreflight);
+		const targetImpact = await readPlanTargetImpact(targetIdentity, databaseIdentity, options);
+		if (!targetImpact.writeAllowed) {
+			return asResponse({
+				status: "error",
+				error: {
+					code: targetImpact.blockingCode ?? "shared_object_impact_unknown",
+					message: `Complete shared-object impact evidence is required before planning ${params.action}.`,
+				},
+			});
+		}
+		const guardCheck = createMutationGuardStore(options).assertClear(
+			databaseIdentity.fingerprint,
+			targetIdentity.oid,
+		);
+		if (!guardCheck.clear) {
+			return asResponse({
+				status: "blocked",
+				code: "mutation_target_quarantined",
+				message: `Target OID ${targetIdentity.oid} is quarantined and requires reconciliation.`,
+			});
+		}
 		const record = createPlanStore(options).create({
 			operation: params.action,
 			params: storedCommitParams(params),
 			binding: createAscetPlanBinding(options),
 			databaseIdentity,
 			targetIdentity,
+			targetImpact: toPlanJson(targetImpact),
+			guardGeneration: guardCheck.generation,
 			backendPreflight,
 			contractFingerprint: createPlanContractFingerprint(params),
 		});
@@ -915,6 +1050,8 @@ async function runPlanManagedPlan(
 					evidenceFingerprint: record.evidenceFingerprint,
 					databaseIdentity: record.databaseIdentity,
 					targetIdentity: record.targetIdentity,
+					targetImpact: record.targetImpact,
+					guardGeneration: record.guardGeneration,
 					expiresAt: record.expiresAt,
 				},
 				nextStep: `Call ${params.action} with phase=commit and planId=${record.planId}.`,
@@ -973,6 +1110,25 @@ async function runPlanManagedCommit(
 		temporarySpecFile = backend.temporarySpecFile;
 		const backendPreflight = toPlanJson(backend.outcome.plan.backendPreflight ?? {});
 		const targetIdentity = getPlanTargetIdentity(planned, backendPreflight);
+		const targetImpact = await readPlanTargetImpact(targetIdentity, databaseIdentity, options);
+		if (!targetImpact.writeAllowed) {
+			return asResponse({
+				status: "error",
+				error: {
+					code: targetImpact.blockingCode ?? "shared_object_impact_unknown",
+					message: `Complete shared-object impact evidence is required before committing ${params.action}.`,
+				},
+			});
+		}
+		const guardStore = createMutationGuardStore(options);
+		const guardCheck = guardStore.assertClear(databaseIdentity.fingerprint, targetIdentity.oid);
+		if (!guardCheck.clear) {
+			return asResponse({
+				status: "blocked",
+				code: "mutation_target_quarantined",
+				message: `Target OID ${targetIdentity.oid} is quarantined and requires reconciliation.`,
+			});
+		}
 		const verificationInput = {
 			planId: params.planId,
 			operation: params.action,
@@ -980,6 +1136,8 @@ async function runPlanManagedCommit(
 			binding: createAscetPlanBinding(options),
 			databaseIdentity,
 			targetIdentity,
+			targetImpact: toPlanJson(targetImpact),
+			guardGeneration: guardCheck.generation,
 			backendPreflight,
 			contractFingerprint,
 		};
@@ -995,6 +1153,10 @@ async function runPlanManagedCommit(
 				title: `Confirm ${params.action} plan`,
 				message: `planId: ${params.planId}
 planFingerprint: ${record.planFingerprint}
+targetOid: ${targetIdentity.oid}
+sharedObject: ${String(targetImpact.sharedObject)}
+ownerPath: ${targetImpact.ownerPath}
+affectedProjects: ${targetImpact.affectedProjects.join(", ") || "none"}
 ${summary}`,
 				signal: options.signal,
 			},
@@ -1003,27 +1165,48 @@ ${summary}`,
 		if (!approval.approved) {
 			return asResponse({ status: "blocked", code: approval.code, message: approval.message });
 		}
-		store.consume(verificationInput);
-		const raw =
-			planned.action === "apply_element_spec"
-				? await runAscetApplyElementSpec(
-						{
-							...requirePreparedApplyElementParams(prepared),
-							executeWrite: true,
-							verifyReadback: true,
-						},
-						options,
-					)
-				: await runAscetSetElementDependency(
-						{
-							...planned,
-							targetPath: planned.targetPath!,
-							dryRun: false,
-							executeWrite: true,
-							verifyReadback: true,
-						},
-						options,
-					);
+		const coordinator = new AscetMutationCoordinator({
+			artifactRoot: getAscetArtifactRoot(options.env as NodeJS.ProcessEnv | undefined),
+		});
+		const raw = await coordinator.execute({
+			action: params.action,
+			planId: params.planId,
+			planFingerprint: record.planFingerprint,
+			databaseFingerprint: databaseIdentity.fingerprint,
+			targetOid: targetIdentity.oid,
+			targetKind: targetIdentity.kind,
+			canonicalPath: targetIdentity.path,
+			targetImpactFingerprint: targetImpact.fingerprint,
+			guardGeneration: guardCheck.generation,
+			sessionId: verificationInput.binding.sessionId,
+			approvalTtlMs: Math.max(1, Date.parse(record.expiresAt) - Date.now()),
+			beginExecution: () => {
+				store.beginExecution(verificationInput);
+			},
+			completeExecution: () => {
+				store.consume(verificationInput);
+			},
+			dispatch: async () =>
+				planned.action === "apply_element_spec"
+					? runAscetApplyElementSpec(
+							{
+								...requirePreparedApplyElementParams(prepared),
+								executeWrite: true,
+								verifyReadback: true,
+							},
+							options,
+						)
+					: runAscetSetElementDependency(
+							{
+								...planned,
+								targetPath: planned.targetPath!,
+								dryRun: false,
+								executeWrite: true,
+								verifyReadback: true,
+							},
+							options,
+						),
+		});
 		return finalizeAscetMutation({ params: planned, raw, options });
 	} catch (error) {
 		return planStoreFailure(error);
@@ -1031,6 +1214,126 @@ ${summary}`,
 		if (temporarySpecFile) {
 			removeTemporaryElementSpec(temporarySpecFile);
 		}
+	}
+}
+
+async function runCoordinatedDirectMutation(
+	params: AscetMutationParams,
+	options: RunAscetEditOperationOptions,
+	ctx: AscetEditApprovalContext,
+): Promise<AscetEditResult> {
+	try {
+		const databaseIdentity = await readCurrentPlanDatabaseIdentity(options);
+		const tree = await readTreeSafetyEvidence(options);
+		if (!tree.complete || tree.databaseIdentity?.fingerprint !== databaseIdentity.fingerprint) {
+			return asResponse({
+				status: "error",
+				error: {
+					code: "shared_object_impact_unknown",
+					message: `Complete current-database Tree evidence is required before executing ${params.action}.`,
+				},
+			});
+		}
+		const targetIdentity = findTreeTargetIdentity(params, tree);
+		if (!targetIdentity) {
+			return asResponse({
+				status: "error",
+				error: {
+					code: "plan_target_identity_missing",
+					message: `The mutation anchor for ${params.action} was not found in the complete database Tree.`,
+				},
+			});
+		}
+		const targetImpact = resolveAscetTargetImpact({
+			targetOid: targetIdentity.oid,
+			requestedPath: targetIdentity.path,
+			completeness: "complete",
+			entries: tree.entries,
+		});
+		const guardStore = createMutationGuardStore(options);
+		const guardCheck = guardStore.assertClear(databaseIdentity.fingerprint, targetIdentity.oid);
+		if (!guardCheck.clear) {
+			return asResponse({
+				status: "blocked",
+				code: "mutation_target_quarantined",
+				message: `Target OID ${targetIdentity.oid} is quarantined and requires reconciliation.`,
+			});
+		}
+		const storedParams = storedDirectMutationParams(params);
+		const backendPreflight = toPlanJson({
+			operation: "direct_mutation_safety_preflight",
+			validated: true,
+			targetIdentity,
+			targetImpactFingerprint: targetImpact.fingerprint,
+		});
+		const binding = createAscetPlanBinding(options);
+		const store = createPlanStore(options);
+		const record = store.create({
+			operation: params.action,
+			params: storedParams,
+			binding,
+			databaseIdentity,
+			targetIdentity,
+			targetImpact: toPlanJson(targetImpact),
+			guardGeneration: guardCheck.generation,
+			backendPreflight,
+			contractFingerprint: createPlanContractFingerprint(params),
+		});
+		const verificationInput = {
+			planId: record.planId,
+			operation: params.action,
+			params: storedParams,
+			binding,
+			databaseIdentity,
+			targetIdentity,
+			targetImpact: toPlanJson(targetImpact),
+			guardGeneration: guardCheck.generation,
+			backendPreflight,
+			contractFingerprint: record.contractFingerprint,
+		};
+		const approval = await requestAscetEditApproval(
+			{
+				executeWrite: true,
+				title: `Confirm ${params.action} plan`,
+				message: `planId: ${record.planId}
+planFingerprint: ${record.planFingerprint}
+targetOid: ${targetIdentity.oid}
+sharedObject: ${String(targetImpact.sharedObject)}
+ownerPath: ${targetImpact.ownerPath}
+affectedProjects: ${targetImpact.affectedProjects.join(", ") || "none"}`,
+				signal: options.signal,
+			},
+			ctx,
+		);
+		if (!approval.approved) {
+			return asResponse({ status: "blocked", code: approval.code, message: approval.message });
+		}
+		const coordinator = new AscetMutationCoordinator({
+			artifactRoot: getAscetArtifactRoot(options.env as NodeJS.ProcessEnv | undefined),
+		});
+		const raw = await coordinator.execute({
+			action: params.action,
+			planId: record.planId,
+			planFingerprint: record.planFingerprint,
+			databaseFingerprint: databaseIdentity.fingerprint,
+			targetOid: targetIdentity.oid,
+			targetKind: targetIdentity.kind,
+			canonicalPath: targetImpact.ownerPath,
+			targetImpactFingerprint: targetImpact.fingerprint,
+			guardGeneration: guardCheck.generation,
+			sessionId: binding.sessionId,
+			approvalTtlMs: Math.max(1, Date.parse(record.expiresAt) - Date.now()),
+			beginExecution: () => {
+				store.beginExecution(verificationInput);
+			},
+			completeExecution: () => {
+				store.consume(verificationInput);
+			},
+			dispatch: () => dispatchMutation(prepareExecutableMutation(params), options),
+		});
+		return finalizeAscetMutation({ params, raw, options });
+	} catch (error) {
+		return planStoreFailure(error);
 	}
 }
 
@@ -1070,6 +1373,112 @@ function validateLocalMutationInputs(
 	_options: RunAscetEditOperationOptions,
 ): AscetToolOutcome | undefined {
 	return undefined;
+}
+
+const AUTHORITATIVE_DATA_CONFIGURATION_SOURCES = new Set(["defaultDataConfiguration", "classDataConfiguration"]);
+const AUTHORITATIVE_IMPLEMENTATION_CONFIGURATION_SOURCES = new Set([
+	"defaultImplementationConfiguration",
+	"classImplementationConfiguration",
+]);
+
+function isAuthoritativeConfiguration(
+	value: Record<string, unknown> | "unresolved" | "not_applicable",
+	allowedSources: ReadonlySet<string>,
+): value is Record<string, unknown> {
+	return (
+		isRecord(value) &&
+		value.selected === true &&
+		typeof value.source === "string" &&
+		allowedSources.has(value.source) &&
+		typeof value.configurationName === "string" &&
+		value.configurationName.trim().length > 0
+	);
+}
+
+interface ElementPreflightCapability {
+	name: string;
+	operation: "create" | "patch";
+	dataConfiguration: Record<string, unknown> | "unresolved" | "not_applicable";
+	implementationConfiguration: Record<string, unknown> | "unresolved" | "not_applicable";
+	dataItemResolvable: boolean;
+	implementationItemResolvable: boolean;
+	capabilityStatus: "validated" | "blocked";
+	blockingCodes: string[];
+}
+
+interface ElementPreflightCapabilityResult {
+	validated: boolean;
+	elements: ElementPreflightCapability[];
+}
+
+function evaluateElementPreflightCapabilities(
+	normalized: NormalizedElementSpecResult,
+	liveElements: readonly Record<string, unknown>[],
+): ElementPreflightCapabilityResult {
+	const liveByName = new Map<string, Record<string, unknown>>();
+	for (const element of liveElements) {
+		if (typeof element.name === "string") liveByName.set(element.name, element);
+	}
+	const operationByName = new Map(normalized.resolvedOperations.map((entry) => [entry.name, entry.operation]));
+	const elements = normalized.spec.elements.map((element): ElementPreflightCapability => {
+		const name = typeof element.name === "string" ? element.name : "";
+		const operation = operationByName.get(name) ?? "create";
+		const isComponentReference = element.kind === "component";
+		const live = liveByName.get(name);
+		const provenance = isRecord(live?.configurationProvenance) ? live.configurationProvenance : undefined;
+		const dataConfiguration = isComponentReference
+			? "not_applicable"
+			: isRecord(provenance?.dataConfiguration)
+				? provenance.dataConfiguration
+				: "unresolved";
+		const implementationConfiguration = isComponentReference
+			? "not_applicable"
+			: isRecord(provenance?.implementationConfiguration)
+				? provenance.implementationConfiguration
+				: "unresolved";
+		const blockingCodes: string[] = [];
+		if (operation === "create" && !isComponentReference) {
+			blockingCodes.push("data_item_not_resolvable_preflight", "implementation_item_not_resolvable_preflight");
+		} else if (!isComponentReference) {
+			if (!isAuthoritativeConfiguration(dataConfiguration, AUTHORITATIVE_DATA_CONFIGURATION_SOURCES)) {
+				blockingCodes.push("data_item_not_resolvable_preflight");
+			}
+			if (
+				!isAuthoritativeConfiguration(
+					implementationConfiguration,
+					AUTHORITATIVE_IMPLEMENTATION_CONFIGURATION_SOURCES,
+				)
+			) {
+				blockingCodes.push("implementation_item_not_resolvable_preflight");
+			}
+		}
+		return {
+			name,
+			operation,
+			dataConfiguration,
+			implementationConfiguration,
+			dataItemResolvable: isComponentReference || !blockingCodes.includes("data_item_not_resolvable_preflight"),
+			implementationItemResolvable:
+				isComponentReference || !blockingCodes.includes("implementation_item_not_resolvable_preflight"),
+			capabilityStatus: blockingCodes.length === 0 ? "validated" : "blocked",
+			blockingCodes,
+		};
+	});
+	return { validated: elements.every((element) => element.capabilityStatus === "validated"), elements };
+}
+
+function createElementPreflightFailure(capabilities: ElementPreflightCapabilityResult): AscetToolOutcome | undefined {
+	const blocked = capabilities.elements.filter((element) => element.capabilityStatus === "blocked");
+	if (blocked.length === 0) return undefined;
+	const firstCode = blocked[0]?.blockingCodes[0] ?? "element_preflight_unresolved";
+	const summary = blocked.map((element) => `${element.name} (${element.blockingCodes.join(", ")})`).join("; ");
+	return {
+		status: "error",
+		error: {
+			code: firstCode,
+			message: `Element preflight could not prove Data/Implementation item resolution for: ${summary}.`,
+		},
+	};
 }
 
 async function runBackendMutationPreflight(
@@ -1120,6 +1529,11 @@ async function runBackendMutationPreflight(
 				raw: catalogRaw,
 			};
 		}
+		const capabilities = evaluateElementPreflightCapabilities(normalized, catalog.elements);
+		const capabilityFailure = createElementPreflightFailure(capabilities);
+		if (capabilityFailure) {
+			return { outcome: capabilityFailure, raw: catalogRaw };
+		}
 		const specFile = writeTemporaryElementSpec(
 			normalized.spec,
 			getAscetArtifactRoot(options.env as NodeJS.ProcessEnv | undefined),
@@ -1142,8 +1556,9 @@ async function runBackendMutationPreflight(
 				action: params.action,
 				params,
 				backendPreflight: {
-					operation: "diff_element_spec",
-					validated: true,
+					operation: "authoritative_element_preflight",
+					validated: capabilities.validated,
+					capabilities,
 					liveElementCount: catalog.elements.length,
 					liveSnapshotHash: fingerprintJson(catalog),
 					catalogSnapshot: catalog,
@@ -1155,7 +1570,7 @@ async function runBackendMutationPreflight(
 					normalizedSpec: normalized.spec,
 					result: unwrapToolSuccessPayload(raw.data),
 					limitations: [
-						"diff_element_spec validates and plans the spec without applying Data/Implementation writes or readback.",
+						"New primitive Elements are rejected because ToolAPI cannot prove Data/Implementation item resolution without first creating the Element.",
 						...(params.projectPath
 							? ["projectPath-specific formula validation remains deferred to apply_element_spec commit."]
 							: []),
@@ -1230,6 +1645,9 @@ interface FinalizeAscetMutationInput {
 
 function finalizeAscetMutation(input: FinalizeAscetMutationInput): AscetEditResult {
 	const errorCode = input.raw.error?.code;
+	if (errorCode && isAscetEditableWriteGateBlockedCode(errorCode)) {
+		return asResponse(outcomeFromCliResult(input.raw), input.raw);
+	}
 	if (
 		errorCode &&
 		(isAscetEditApprovalBlockedCode(errorCode) ||
@@ -1309,6 +1727,8 @@ function createPartialEditOutcome(
 		status: "partial",
 		data: {
 			mutationStatus: classification.mutationStatus,
+			consistencyStatus: classification.consistencyStatus,
+			rollback: classification.rollback,
 			...(raw.ok ? { changed: extractChangedPayload(raw) } : {}),
 			verification: classification.verification,
 			observations,
@@ -1335,7 +1755,9 @@ function partialMutationStatus(outcome: AscetToolOutcome): AscetEditMutationStat
 		return undefined;
 	}
 	const status = outcome.data.mutationStatus;
-	return status === "applied" || status === "not_started" || status === "unknown" ? status : undefined;
+	return status === "applied" || status === "not_started" || status === "rolled_back" || status === "unknown"
+		? status
+		: undefined;
 }
 
 function asRecord(value: unknown): Record<string, unknown> | undefined {
@@ -1692,57 +2114,52 @@ function validateAscetMutationParams(params: AscetMutationParams): AscetToolOutc
 async function dispatchMutation(
 	params: ExecutableAscetMutationParams,
 	options: RunAscetEditOperationOptions,
-	ctx: AscetEditApprovalContext,
 ): Promise<AscetCliJsonResult> {
 	switch (params.action) {
 		case "create_folder":
-			return runApprovedAscetCreateFolder(params, options, ctx);
+			return runAscetCreateFolder(params, options);
 		case "create_component":
-			return runApprovedAscetCreateComponent(params, options, ctx);
+			return runAscetCreateComponent(params, options);
 		case "create_method":
 			if (!params.methodKind) {
 				throw new Error("create_method requires methodKind after validation.");
 			}
-			return runApprovedAscetCreateMethod({ ...params, methodKind: params.methodKind }, options, ctx);
+			return runAscetCreateMethod({ ...params, methodKind: params.methodKind }, options);
 		case "set_method_signature":
-			return runApprovedAscetSetMethodSignature(params, options, ctx);
+			return runAscetSetMethodSignature(params, options);
 		case "delete_component":
-			return runApprovedAscetDeleteComponent(params, options, ctx);
+			return runAscetDeleteComponent(params, options);
 		case "delete_method":
-			return runApprovedAscetDeleteMethod(params, options, ctx);
+			return runAscetDeleteMethod(params, options);
 		case "delete_folder":
-			return runApprovedAscetDeleteFolder(params, options, ctx);
+			return runAscetDeleteFolder(params, options);
 		case "set_method_code":
-			return withEditCode(params, (codeFile) =>
-				runApprovedAscetSetMethodCode({ ...params, codeFile }, options, ctx),
-			);
+			return withEditCode(params, (codeFile) => runAscetSetMethodCode({ ...params, codeFile }, options));
 		case "set_module_code":
 			return withEditCode(params, (codeFile) =>
-				runApprovedAscetSetModuleCode({ ...params, operation: params.operation!, codeFile }, options, ctx),
+				runAscetSetModuleCode({ ...params, operation: params.operation!, codeFile }, options),
 			);
 		case "set_state_machine_code":
 			if (params.code !== undefined || params.codeFile !== undefined) {
-				return withEditCode(params, (codeFile) =>
-					runApprovedAscetSetStateMachineCode({ ...params, codeFile }, options, ctx),
-				);
+				return withEditCode(params, (codeFile) => runAscetSetStateMachineCode({ ...params, codeFile }, options));
 			}
-			return runApprovedAscetSetStateMachineCode(params, options, ctx);
+			return runAscetSetStateMachineCode(params, options);
 		case "set_enumerators":
-			return runApprovedAscetSetEnumerators(params, options, ctx);
+			return runAscetSetEnumerators(params, options);
 		case "apply_element_spec":
 			if (params.phase === "commit") {
 				throw new Error("apply_element_spec commit must be invoked with planId.");
 			}
-			return runApprovedAscetApplyElementSpec(requirePreparedApplyElementParams(params), options, ctx);
+			return runAscetApplyElementSpec(requirePreparedApplyElementParams(params), options);
 		case "apply_project_formula":
-			return runApprovedAscetApplyProjectFormula(params, options, ctx);
+			return runAscetApplyProjectFormula(params, options);
 		case "set_element_dependency":
 			if (!params.targetPath || !params.elementName || !params.dependency || params.phase === "commit") {
 				throw new Error(
 					"set_element_dependency requires planned targetPath/elementName/dependency after validation.",
 				);
 			}
-			return runApprovedAscetSetElementDependency(
+			return runAscetSetElementDependency(
 				{
 					...params,
 					targetPath: params.targetPath,
@@ -1750,7 +2167,6 @@ async function dispatchMutation(
 					dependency: params.dependency,
 				},
 				options,
-				ctx,
 			);
 	}
 }

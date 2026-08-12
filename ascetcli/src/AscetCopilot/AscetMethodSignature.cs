@@ -193,6 +193,7 @@ public sealed class MethodSignatureService : MethodCatalogService, IMethodSignat
                     "Method '" + methodName + "' in component '" + componentPath + "' does not support primitive method signatures.");
             }
 
+            RequireComponentEditableInSession(currentSession, componentPath, "set_method_signature");
             ReturnPatchResult returnPatch = ApplyReturnPatch(method, methodName, normalizedSpec.ReturnType, normalizedSpec.IfReturnExists);
             IList<AscetMethodArgumentResult> argumentResults = ApplyArgumentPatches(method, methodName, normalizedSpec.Arguments, verifyReadback);
             AscetModelElement readback = String.IsNullOrWhiteSpace(normalizedSpec.ReturnType) ? method.GetReturnElement() : method.GetReturnElement();

@@ -317,7 +317,9 @@ public static class BatchCommand
             mapped.message,
             "batch",
             mapped.operation,
-            String.Equals(lane, "write", StringComparison.OrdinalIgnoreCase) ? (bool?)null : false);
+            AscetCliEnvelope.ResolveFailureMutationStarted(
+                String.Equals(lane, "write", StringComparison.OrdinalIgnoreCase),
+                mapped.code));
         Dictionary<string, object> error = envelope["error"] as Dictionary<string, object>;
         if (error != null && mapped.details != null)
         {

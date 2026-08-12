@@ -1171,6 +1171,13 @@ public static class ExecCommand
             return null;
         }
 
+        if (!result.Succeeded)
+        {
+            return AscetCliEnvelope.ResolveFailureMutationStarted(
+                true,
+                result.Error == null ? String.Empty : result.Error.Code);
+        }
+
         Dictionary<string, object> payload = result.Payload;
         object directDryRun;
         if (payload != null && payload.TryGetValue("dryRun", out directDryRun) && directDryRun is bool && (bool)directDryRun)
@@ -1267,7 +1274,7 @@ public static class ExecCommand
             BuildWriteErrorPayload(fallbackOperation, error),
             "exec",
             fallbackOperation,
-            null);
+            AscetCliEnvelope.ResolveFailureMutationStarted(true, error.Code));
     }
 
     private static void NormalizeWritePayload(string operationName, Dictionary<string, object> payload, bool writeSucceeded, WriteVerificationResult verification)
@@ -1468,7 +1475,7 @@ public static class ExecCommand
             if (trimmed.StartsWith("StackTrace:", StringComparison.OrdinalIgnoreCase)
                 || trimmed.StartsWith("at ", StringComparison.Ordinal)
                 || trimmed.StartsWith("at\t", StringComparison.Ordinal)
-                || trimmed.StartsWith("ÃƒÂ¯Ã‚Â¿Ã‚Â½ÃƒÂ¯Ã‚Â¿Ã‚Â½ ", StringComparison.Ordinal))
+                || trimmed.StartsWith("ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¿Ãƒâ€šÃ‚Â½ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¿Ãƒâ€šÃ‚Â½ ", StringComparison.Ordinal))
             {
                 break;
             }

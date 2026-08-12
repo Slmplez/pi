@@ -235,6 +235,7 @@ public sealed class TextCodeWriteService : AscetReadDomainServiceBase, ITextCode
         {
             FunctionalComponent functionalComponent = ResolveFunctionalComponent(session, component);
             string existingCode = getter(functionalComponent) ?? String.Empty;
+            RequireComponentEditableInSession(session, component.Path, operation);
             bool writeSucceeded = setter(functionalComponent, code);
             if (!writeSucceeded)
             {
@@ -384,6 +385,7 @@ public sealed class StateMachineWriteService : MethodCatalogService, IStateMachi
         {
             State state = ResolveState(session, stateMachine, selector, "set_start_state");
             targetName = state.GetName() ?? String.Empty;
+            RequireComponentEditableInSession(session, stateMachine.Path, "set_start_state");
             string existingValue = state.IsStartState() ? "true" : "false";
             bool writeSucceeded = state.SetStartState();
             if (!writeSucceeded)
@@ -424,6 +426,7 @@ public sealed class StateMachineWriteService : MethodCatalogService, IStateMachi
         string previousValue = ExecuteWithSession(operation, delegate(AscetSession session)
         {
             State state = ResolveState(session, stateMachine, selector, operation);
+            RequireComponentEditableInSession(session, stateMachine.Path, operation);
             targetName = state.GetName() ?? String.Empty;
             string existingValue = getter(state) ?? String.Empty;
             bool writeSucceeded = setter(state, code);
@@ -470,6 +473,7 @@ public sealed class StateMachineWriteService : MethodCatalogService, IStateMachi
             targetName = state.GetName() ?? String.Empty;
             AbstractMethod previousMethod = getter(state);
             string existingValue = previousMethod == null ? String.Empty : (previousMethod.GetName() ?? String.Empty);
+            RequireComponentEditableInSession(session, stateMachine.Path, operation);
             bool writeSucceeded = setter(state, method.Method);
             if (!writeSucceeded)
             {
@@ -512,6 +516,7 @@ public sealed class StateMachineWriteService : MethodCatalogService, IStateMachi
             Transition transition = ResolveTransition(session, stateMachine, selector, operation);
             AscetTransitionRef transitionRef = BuildTransitionRef(transition);
             targetName = transitionRef == null ? AscetComponentWriteUtilities.DescribeTransitionSelector(selector) : (transitionRef.SourceName + "->" + transitionRef.TargetName);
+            RequireComponentEditableInSession(session, stateMachine.Path, operation);
             string existingValue = getter(transition) ?? String.Empty;
             bool writeSucceeded = setter(transition, code);
             if (!writeSucceeded)
@@ -556,6 +561,7 @@ public sealed class StateMachineWriteService : MethodCatalogService, IStateMachi
             MethodHandle method = FindMethodHandle(CollectMethodHandles(session, stateMachine), stateMachine.Path, methodName);
             AscetTransitionRef transitionRef = BuildTransitionRef(transition);
             targetName = transitionRef == null ? AscetComponentWriteUtilities.DescribeTransitionSelector(selector) : (transitionRef.SourceName + "->" + transitionRef.TargetName);
+            RequireComponentEditableInSession(session, stateMachine.Path, operation);
             AbstractMethod previousMethod = getter(transition);
             string existingValue = previousMethod == null ? String.Empty : (previousMethod.GetName() ?? String.Empty);
             bool writeSucceeded = setter(transition, method.Method);

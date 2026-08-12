@@ -1,8 +1,12 @@
 import type { AscetCliJsonResult } from "../cli.ts";
 
-export type AscetEditMutationStatus = "applied" | "not_started" | "unknown";
+export type AscetEditMutationStatus = "applied" | "not_started" | "rolled_back" | "unknown";
+
+export type AscetEditConsistencyStatus = "consistent" | "restored" | "unknown";
 
 export type AscetEditVerificationStatus = "passed" | "failed" | "missing" | "unknown";
+
+export type AscetEditRollbackStatus = "not_required" | "passed" | "failed" | "unknown";
 
 export interface AscetEditVerification {
 	mode: "automatic_readback";
@@ -13,9 +17,17 @@ export interface AscetEditVerification {
 	status: AscetEditVerificationStatus;
 }
 
+export interface AscetEditRollback {
+	required: boolean;
+	status: AscetEditRollbackStatus;
+	verified: boolean | null;
+}
+
 export interface AscetEditExecutionClassification {
 	mutationStatus: AscetEditMutationStatus;
+	consistencyStatus: AscetEditConsistencyStatus;
 	verification: AscetEditVerification;
+	rollback: AscetEditRollback;
 	shouldInvalidateObservations: boolean;
 }
 
@@ -25,6 +37,9 @@ const REQUIRES_READBACK_KEY = "requiresreadback";
 const WRITE_NOT_STARTED_CODE = "write_not_started";
 const READBACK_MISMATCH_CODE = "readback_mismatch";
 const WRITE_OUTCOME_UNKNOWN_CODE = "write_outcome_unknown";
+const ROLLED_BACK_STATUS = "rolled_back";
+const ELEMENT_TRANSACTION_ROLLED_BACK_CODE = "element_transaction_rolled_back";
+const ROLLBACK_FAILED_STATUS = "rollback_failed";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
 	return typeof value === "object" && value !== null;
@@ -52,6 +67,50 @@ function findNestedBoolean(value: unknown, key: string, seen = new Set<object>()
 	return undefined;
 }
 
+function findNestedString(value: unknown, key: string, seen = new Set<object>()): string | undefined {
+	if (!isRecord(value) || seen.has(value)) {
+		return undefined;
+	}
+	seen.add(value);
+
+	for (const [entryKey, entryValue] of Object.entries(value)) {
+		if (entryKey.toLowerCase() === key && typeof entryValue === "string") {
+			return entryValue;
+		}
+	}
+
+	for (const entryValue of Object.values(value)) {
+		const nestedValue = findNestedString(entryValue, key, seen);
+		if (nestedValue !== undefined) {
+			return nestedValue;
+		}
+	}
+
+	return undefined;
+}
+
+function findNestedRecord(value: unknown, key: string, seen = new Set<object>()): Record<string, unknown> | undefined {
+	if (!isRecord(value) || seen.has(value)) {
+		return undefined;
+	}
+	seen.add(value);
+
+	for (const [entryKey, entryValue] of Object.entries(value)) {
+		if (entryKey.toLowerCase() === key && isRecord(entryValue)) {
+			return entryValue;
+		}
+	}
+
+	for (const entryValue of Object.values(value)) {
+		const nestedValue = findNestedRecord(entryValue, key, seen);
+		if (nestedValue !== undefined) {
+			return nestedValue;
+		}
+	}
+
+	return undefined;
+}
+
 function createVerification(
 	requested: boolean | null,
 	verified: boolean | null,
@@ -71,6 +130,24 @@ function createUnknownVerification(): AscetEditVerification {
 	return createVerification(null, null, "unknown");
 }
 
+function createNoRollback(): AscetEditRollback {
+	return { required: false, status: "not_required", verified: true };
+}
+
+function extractRollback(value: unknown): AscetEditRollback {
+	const rollback = findNestedRecord(value, "rollback");
+	if (!rollback) {
+		return createNoRollback();
+	}
+
+	const required = findNestedBoolean(rollback, "required") ?? true;
+	const verified = findNestedBoolean(rollback, "verified") ?? null;
+	const rawStatus = findNestedString(rollback, "status")?.toLowerCase();
+	const status: AscetEditRollbackStatus =
+		rawStatus === "passed" || rawStatus === "failed" || rawStatus === "not_required" ? rawStatus : "unknown";
+	return { required, status, verified };
+}
+
 export function extractAscetEditVerification(data: unknown): AscetEditVerification {
 	const requested = findNestedBoolean(data, VERIFY_READBACK_REQUESTED_KEY) ?? null;
 	const verified = findNestedBoolean(data, READBACK_VERIFIED_KEY) ?? null;
@@ -87,22 +164,63 @@ export function extractAscetEditVerification(data: unknown): AscetEditVerificati
 }
 
 export function classifyAscetEditExecution(raw: AscetCliJsonResult): AscetEditExecutionClassification {
-	if (raw.ok) {
-		const verification = extractAscetEditVerification(raw.data);
+	const operationStatus = findNestedString(raw.ok ? raw.data : raw.error?.details, "status")?.toLowerCase();
+	const rollback = extractRollback(raw.ok ? raw.data : raw.error?.details);
+	const errorCode = raw.error?.code.toLowerCase();
+
+	if (errorCode === ELEMENT_TRANSACTION_ROLLED_BACK_CODE || errorCode?.endsWith("_rolled_back") === true) {
 		return {
-			mutationStatus: "applied",
-			verification,
+			mutationStatus: "rolled_back",
+			consistencyStatus: "restored",
+			verification: createUnknownVerification(),
+			rollback: { required: true, status: "passed", verified: true },
 			shouldInvalidateObservations: true,
 		};
 	}
 
-	const errorCode = raw.error?.code.toLowerCase();
+	if (operationStatus === ROLLED_BACK_STATUS || (rollback.required && rollback.status === "passed")) {
+		return {
+			mutationStatus: "rolled_back",
+			consistencyStatus: "restored",
+			verification: createUnknownVerification(),
+			rollback,
+			shouldInvalidateObservations: true,
+		};
+	}
+
+	if (
+		operationStatus === ROLLBACK_FAILED_STATUS ||
+		errorCode?.includes("rollback_failed") === true ||
+		(rollback.required && rollback.status === "failed")
+	) {
+		return {
+			mutationStatus: "unknown",
+			consistencyStatus: "unknown",
+			verification: createUnknownVerification(),
+			rollback,
+			shouldInvalidateObservations: true,
+		};
+	}
+
+	if (raw.ok) {
+		const verification = extractAscetEditVerification(raw.data);
+		return {
+			mutationStatus: "applied",
+			consistencyStatus: verification.status === "passed" ? "consistent" : "unknown",
+			verification,
+			rollback,
+			shouldInvalidateObservations: true,
+		};
+	}
+
 	const requiresReadback = findNestedBoolean(raw.error?.details, REQUIRES_READBACK_KEY);
 
 	if (errorCode === READBACK_MISMATCH_CODE) {
 		return {
 			mutationStatus: "applied",
+			consistencyStatus: "unknown",
 			verification: createVerification(true, false, "failed"),
+			rollback,
 			shouldInvalidateObservations: true,
 		};
 	}
@@ -110,7 +228,9 @@ export function classifyAscetEditExecution(raw: AscetCliJsonResult): AscetEditEx
 	if (errorCode === WRITE_NOT_STARTED_CODE || requiresReadback === false) {
 		return {
 			mutationStatus: "not_started",
+			consistencyStatus: "consistent",
 			verification: createUnknownVerification(),
+			rollback,
 			shouldInvalidateObservations: false,
 		};
 	}
@@ -118,14 +238,18 @@ export function classifyAscetEditExecution(raw: AscetCliJsonResult): AscetEditEx
 	if (errorCode === WRITE_OUTCOME_UNKNOWN_CODE || requiresReadback === true) {
 		return {
 			mutationStatus: "unknown",
+			consistencyStatus: "unknown",
 			verification: createUnknownVerification(),
+			rollback,
 			shouldInvalidateObservations: true,
 		};
 	}
 
 	return {
 		mutationStatus: "unknown",
+		consistencyStatus: "unknown",
 		verification: createUnknownVerification(),
+		rollback,
 		shouldInvalidateObservations: true,
 	};
 }
