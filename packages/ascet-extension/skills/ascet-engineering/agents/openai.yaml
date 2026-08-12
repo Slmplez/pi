@@ -1,6 +1,6 @@
 interface:
   display_name: "ASCET Engineering"
   short_description: "Evidence-backed ASCET engineering workflow"
-  default_prompt: "Use $ascet-engineering to resolve exact ASCET targets, design evidence-backed changes, and use one guarded configure_parameter_dependency_chain execution for complete Provider/Imported/Local chains."
+  default_prompt: "Use $ascet-engineering to resolve the active Project and canonical ASCET definition, trace ESDL/BDE signal flow and Element configuration, freeze the correct modification scope, and produce a guarded executable implementation plan."
 policy:
   allow_implicit_invocation: true

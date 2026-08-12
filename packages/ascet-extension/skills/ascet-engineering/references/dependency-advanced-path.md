@@ -1,6 +1,6 @@
 # Dependency Advanced Path
 
-Resolve the exact Provider Component, Consumer Component, Imported Parameter, Local Parameter, mapping targets, and variants before writing. Provider Exported and Consumer Imported Parameters must use the same `P_<Name>`; the Consumer Local Parameter uses `C_<Name>`.
+Resolve the exact Provider Component, Consumer Component, Imported Parameter, Local Dependent Parameter, mapping targets, and variants before writing. Provider Exported and Consumer Imported Parameters must use the same `P_<Name>`; the Consumer Local Dependent Parameter uses `C_<Name>`. Do not apply `C_` to an ordinary Local State/Internal Variable that is not part of this dependency chain.
 
 For one complete Provider -> Imported -> Local chain, call `configure_parameter_dependency_chain` once with three complete inline Element definitions plus explicit `formula`, `formals`, typed `mappings`, and `variantPolicy`. Do not call plan, commit, a separate preflight, batch, or three independent `ascet_edit` writes.
 

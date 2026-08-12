@@ -17,6 +17,7 @@ const playbooksRoot = join(packageRoot, "ascet-cli", "contracts", "playbooks");
 const skillReferences = [
 	"scope-resolution-and-ownership.md",
 	"database-root-discovery.md",
+	"cnms-cust-routing-and-ownership.md",
 	"customer-integration-workflow.md",
 	"feature-package-workflow.md",
 	"class-path-project-context.md",
