@@ -1,9 +1,9 @@
 import assert from "node:assert/strict";
-import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, test } from "node:test";
-import type { AscetCliJsonResult, AscetCliRequest } from "../cli.ts";
+import type { AscetCliJsonResult, AscetCliLifecycleEvent, AscetCliRequest } from "../cli.ts";
 import { AscetMutationCoordinator, AscetMutationCoordinatorError } from "./mutation-coordinator.ts";
 import { AscetMutationGuardStore } from "./mutation-guard-store.ts";
 
@@ -22,7 +22,10 @@ function rawResult(input: Partial<AscetCliJsonResult>): AscetCliJsonResult {
 	};
 }
 
-function input(events: string[], dispatch: () => Promise<AscetCliJsonResult>) {
+function input(
+	events: string[],
+	dispatch: (onLifecycle: (event: AscetCliLifecycleEvent) => void) => Promise<AscetCliJsonResult>,
+) {
 	return {
 		action: "apply_element_spec",
 		planId: "plan-1",
@@ -35,6 +38,10 @@ function input(events: string[], dispatch: () => Promise<AscetCliJsonResult>) {
 		guardGeneration: 0,
 		sessionId: "session-1",
 		approvalTtlMs: 60_000,
+		journal: {
+			beforeSnapshot: { elements: [{ name: "before" }] },
+			attemptedMutation: { action: "apply_element_spec", elements: [{ name: "after" }] },
+		},
 		beginExecution: () => events.push("plan:executing"),
 		completeExecution: () => events.push("plan:consumed"),
 		dispatch,
@@ -48,8 +55,11 @@ describe("ASCET mutation coordinator", () => {
 			const events: string[] = [];
 			const coordinator = new AscetMutationCoordinator({ artifactRoot: root });
 			const raw = await coordinator.execute(
-				input(events, async () => {
+				input(events, async (onLifecycle) => {
+					onLifecycle({ stage: "before_bridge", commandId: "apply_element_spec", jobKind: "write" });
 					events.push("bridge:dispatch");
+					onLifecycle({ stage: "bridge_entered", commandId: "apply_element_spec", jobKind: "write" });
+					onLifecycle({ stage: "backend_response_received", commandId: "apply_element_spec", jobKind: "write" });
 					return rawResult({
 						ok: true,
 						data: { result: { verifyReadbackRequested: true, readbackVerified: true } },
@@ -64,7 +74,7 @@ describe("ASCET mutation coordinator", () => {
 		}
 	});
 
-	test("converts a stale target lock into process_interrupted quarantine", async () => {
+	test("quarantines a stale target lock without deleting a lock it does not own", async () => {
 		const root = mkdtempSync(join(tmpdir(), "pi-ascet-coordinator-stale-"));
 		try {
 			const coordinator = new AscetMutationCoordinator({ artifactRoot: root });
@@ -90,10 +100,51 @@ describe("ASCET mutation coordinator", () => {
 				},
 			);
 			assert.equal(dispatched, false);
-			assert.equal(existsSync(lockPath), false);
+			assert.equal(existsSync(lockPath), true);
 			const guard = new AscetMutationGuardStore({ artifactRoot: root }).assertClear("db-1", "oid-1");
 			assert.equal(guard.clear, false);
 			assert.equal(guard.record?.reason, "process_interrupted");
+		} finally {
+			rmSync(root, { recursive: true, force: true });
+		}
+	});
+
+	test("does not quarantine a failure before the mutation Bridge lifecycle starts", async () => {
+		const root = mkdtempSync(join(tmpdir(), "pi-ascet-coordinator-prebridge-"));
+		try {
+			const events: string[] = [];
+			const coordinator = new AscetMutationCoordinator({ artifactRoot: root });
+			await assert.rejects(
+				coordinator.execute(
+					input(events, async () => {
+						throw new Error("local preparation failed");
+					}),
+				),
+				/local preparation failed/u,
+			);
+			assert.deepEqual(events, []);
+			assert.equal(new AscetMutationGuardStore({ artifactRoot: root }).assertClear("db-1", "oid-1").clear, true);
+		} finally {
+			rmSync(root, { recursive: true, force: true });
+		}
+	});
+
+	test("does not quarantine a scheduler failure before bridge_entered", async () => {
+		const root = mkdtempSync(join(tmpdir(), "pi-ascet-coordinator-before-bridge-"));
+		try {
+			const events: string[] = [];
+			const coordinator = new AscetMutationCoordinator({ artifactRoot: root });
+			await assert.rejects(
+				coordinator.execute(
+					input(events, async (onLifecycle) => {
+						onLifecycle({ stage: "before_bridge", commandId: "apply_element_spec", jobKind: "write" });
+						throw new Error("scheduler lock unavailable");
+					}),
+				),
+				/scheduler lock unavailable/u,
+			);
+			assert.deepEqual(events, ["plan:executing"]);
+			assert.equal(new AscetMutationGuardStore({ artifactRoot: root }).assertClear("db-1", "oid-1").clear, true);
 		} finally {
 			rmSync(root, { recursive: true, force: true });
 		}
@@ -104,13 +155,31 @@ describe("ASCET mutation coordinator", () => {
 		try {
 			const coordinator = new AscetMutationCoordinator({ artifactRoot: root });
 			await coordinator.execute(
-				input([], async () =>
-					rawResult({ error: { code: "write_outcome_unknown", message: "unknown" }, operationId: "op-1" }),
-				),
+				input([], async (onLifecycle) => {
+					onLifecycle({ stage: "before_bridge", commandId: "apply_element_spec", jobKind: "write" });
+					onLifecycle({ stage: "bridge_entered", commandId: "apply_element_spec", jobKind: "write" });
+					onLifecycle({ stage: "backend_response_received", commandId: "apply_element_spec", jobKind: "write" });
+					return rawResult({ error: { code: "write_outcome_unknown", message: "unknown" }, operationId: "op-1" });
+				}),
 			);
 			const guard = new AscetMutationGuardStore({ artifactRoot: root }).assertClear("db-1", "oid-1");
 			assert.equal(guard.clear, false);
 			assert.equal(guard.record?.reason, "unknown_outcome");
+			assert.ok(guard.record?.journalPath);
+			assert.ok(existsSync(guard.record.journalPath));
+			const journal = JSON.parse(readFileSync(guard.record.journalPath, "utf8")) as {
+				status: string;
+				beforeSnapshot: unknown;
+				attemptedMutation: unknown;
+			};
+			assert.equal(journal.status, "unknown");
+			assert.deepEqual(journal.beforeSnapshot, { elements: [{ name: "before" }] });
+			assert.deepEqual(journal.attemptedMutation, {
+				action: "apply_element_spec",
+				elements: [{ name: "after" }],
+			});
+			assert.match(guard.record.beforeSnapshotFingerprint ?? "", /^sha256:/u);
+			assert.match(guard.record.desiredFingerprint ?? "", /^sha256:/u);
 
 			await assert.rejects(
 				coordinator.execute({ ...input([], async () => rawResult({})), canonicalPath: "Project\\P::C" }),

@@ -384,6 +384,14 @@ public sealed class AscetElementConfigurationProvenance
     public AscetConfigurationProvenance ImplementationConfiguration { get; set; }
 }
 
+public sealed class AscetComponentConfigurationProvenance
+{
+    public AscetConfigurationProvenance DefaultDataConfiguration { get; set; }
+    public AscetConfigurationProvenance ClassDataConfiguration { get; set; }
+    public AscetConfigurationProvenance DefaultImplementationConfiguration { get; set; }
+    public AscetConfigurationProvenance ClassImplementationConfiguration { get; set; }
+}
+
 public sealed class AscetElementImplSpec
 {
     public string MemoryLocation { get; set; }
@@ -519,6 +527,7 @@ public sealed class AscetElementCatalogReadResult
     public string ComponentPath { get; set; }
     public string ComponentOid { get; set; }
     public IDictionary<string, string> ElementOids { get; set; }
+    public AscetComponentConfigurationProvenance ComponentConfigurationProvenance { get; set; }
     public AscetElementSpecDocument Document { get; set; }
 }
 
@@ -1600,6 +1609,35 @@ internal static class AscetElementSpecSemanticRules
 
 internal static class AscetElementCatalogReader
 {
+    public static AscetComponentConfigurationProvenance ReadComponentConfigurationProvenance(AscetDiscreteComponent component, CodeComponent owner)
+    {
+        DataConfiguration defaultData = owner == null ? null : owner.GetDefaultData();
+        DataConfiguration classData = component == null ? null : component.GetClassData();
+        ImplConfiguration defaultImplementation = component == null ? null : component.GetDefaultImplementation();
+        ImplConfiguration classImplementation = component == null ? null : component.GetClassImplementation();
+        return new AscetComponentConfigurationProvenance
+        {
+            DefaultDataConfiguration = BuildSelectedConfigurationProvenance("defaultDataConfiguration", defaultData),
+            ClassDataConfiguration = BuildSelectedConfigurationProvenance("classDataConfiguration", classData),
+            DefaultImplementationConfiguration = BuildSelectedConfigurationProvenance("defaultImplementationConfiguration", defaultImplementation),
+            ClassImplementationConfiguration = BuildSelectedConfigurationProvenance("classImplementationConfiguration", classImplementation)
+        };
+    }
+
+    private static AscetConfigurationProvenance BuildSelectedConfigurationProvenance(string source, object configuration)
+    {
+        if (configuration == null)
+        {
+            return null;
+        }
+        return new AscetConfigurationProvenance
+        {
+            Source = source,
+            ConfigurationName = SafeGetString(configuration, "GetName"),
+            Selected = true
+        };
+    }
+
     public static List<AscetExistingElementState> ReadExistingElements(AscetDiscreteComponent component, CodeComponent owner)
     {
         List<AscetExistingElementState> result = new List<AscetExistingElementState>();
@@ -3697,6 +3735,7 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
                 ComponentPath = resolved.Path,
                 ComponentOid = componentOid,
                 ElementOids = elementOids,
+                ComponentConfigurationProvenance = AscetElementCatalogReader.ReadComponentConfigurationProvenance(discrete, code),
                 Document = AscetElementCatalogReader.BuildSpecDocument(existing)
             };
         });
@@ -3764,9 +3803,10 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
         return transaction.ExecuteBatch(new AscetElementMutationBatchRequest<AscetElementSyncResult>
         {
             SnapshotComplete = snapshot.Complete,
-            Apply = delegate(System.Action mutationStarting)
+            TargetPath = component.Path,
+            Apply = delegate(System.Action mutationStarting, System.Action mutationStageApplied)
             {
-                return ApplyInSessionCore(session, component, spec, normalizedOptions, verifyReadback, saveDatabase, mutationStarting);
+                return ApplyInSessionCore(session, component, spec, normalizedOptions, verifyReadback, saveDatabase, mutationStarting, mutationStageApplied);
             },
             Rollback = delegate
             {
@@ -3776,7 +3816,7 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
                     DeleteMissing = true,
                     RecreateIncompatible = true,
                     ProjectPath = normalizedOptions.ProjectPath
-                }, true, saveDatabase, null);
+                }, true, saveDatabase, null, null);
             },
             VerifyRestored = delegate
             {
@@ -3786,7 +3826,7 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
         });
     }
 
-    private AscetElementSyncResult ApplyInSessionCore(AscetSession session, AscetItemRef component, AscetElementSpecDocument spec, AscetElementApplyOptions options, bool verifyReadback, bool saveDatabase, System.Action mutationStarting)
+    private AscetElementSyncResult ApplyInSessionCore(AscetSession session, AscetItemRef component, AscetElementSpecDocument spec, AscetElementApplyOptions options, bool verifyReadback, bool saveDatabase, System.Action mutationStarting, System.Action mutationStageApplied)
     {
         if (component == null)
         {
@@ -3901,6 +3941,7 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
                             }
 
                             RemoveElement(discrete, entry.Name);
+                            if (mutationStageApplied != null) mutationStageApplied();
                             removed.Add(entry.Name);
                             issues.Add("Removed extra live element during restore: " + entry.Name + ".");
                         }
@@ -3923,6 +3964,7 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
                         }
 
                         RecreateElement(session, code, discrete, recreateSpec, defaultData, defaultImplementation, classImplementation);
+                        if (mutationStageApplied != null) mutationStageApplied();
                         removed.Add(name);
                         created.Add(name);
                         recreatedNames.Add(name);
@@ -3944,6 +3986,7 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
                     }
 
                     RecreateElement(session, code, discrete, recreateSpec, defaultData, defaultImplementation, classImplementation);
+                    if (mutationStageApplied != null) mutationStageApplied();
                     removed.Add(name);
                     created.Add(name);
                     recreatedNames.Add(name);
@@ -3964,6 +4007,7 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
 
                 TableDebugStderr("apply:create-loop:before:" + name + ":" + elementsToCreate[i].Kind.ToString());
                 CreateElement(session, code, discrete, elementsToCreate[i], defaultData, defaultImplementation, classImplementation);
+                if (mutationStageApplied != null) mutationStageApplied();
                 TableDebugStderr("apply:create-loop:after:" + name);
                 created.Add(name);
             }
@@ -3973,6 +4017,7 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
             {
                 TableDebugStderr("apply:update-loop:before:" + (elementsToUpdate[i].Name ?? String.Empty) + ":" + elementsToUpdate[i].Kind.ToString());
                 UpdateElement(session, code, discrete, elementsToUpdate[i], defaultData, defaultImplementation, classImplementation);
+                if (mutationStageApplied != null) mutationStageApplied();
                 TableDebugStderr("apply:update-loop:after:" + (elementsToUpdate[i].Name ?? String.Empty));
                 updated.Add(elementsToUpdate[i].Name ?? String.Empty);
             }

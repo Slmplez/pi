@@ -1,4 +1,4 @@
-﻿import assert from "node:assert/strict";
+import assert from "node:assert/strict";
 import { mkdirSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -13,14 +13,22 @@ const approvingContext: AscetEditApprovalContext = {
 	ui: { confirm: async () => true },
 };
 
-function successfulWrite(request: AscetCliRequest): AscetCliExecutionResult {
+function successfulExecution(request: AscetCliRequest): AscetCliExecutionResult {
+	const operation = request.args[1];
+	const result =
+		operation === "get_database_identity"
+			? { database: { name: "DB", path: "C:/Repo/DB" } }
+			: operation === "get_tree"
+				? {
+						items: [{ path: "DEMO", oid: "F-1", kind: "folder" }],
+						coverage: { status: "complete_for_scope", completeness: "complete", collectorCompleted: true },
+						truncated: false,
+						database: { name: "DB", path: "C:/Repo/DB" },
+					}
+				: { writeSucceeded: true, verifyReadbackRequested: true, readbackVerified: true };
 	return {
 		exitCode: 0,
-		stdout: JSON.stringify({
-			ok: true,
-			result: { writeSucceeded: true, verifyReadbackRequested: true, readbackVerified: true },
-			error: null,
-		}),
+		stdout: JSON.stringify({ ok: true, result, error: null }),
 		stderr: "",
 		timedOut: false,
 		request,
@@ -46,7 +54,7 @@ test("regular approved mutations emit Event v2 telemetry", async () => {
 					PI_ASCET_RUN_ID: "run-1",
 					PI_ASCET_WRITE_CLASS: "isolated_fixture",
 				},
-				executeCli: async (request) => successfulWrite(request),
+				executeCli: async (request) => successfulExecution(request),
 			},
 			approvingContext,
 		);
@@ -75,12 +83,16 @@ test("regular approved mutations emit Event v2 telemetry", async () => {
 	}
 });
 
-test("Bridge-prevented approval failures remain not_started", async () => {
+test("read-only preflight Bridge calls do not mark a blocked mutation as entered", async () => {
 	const root = mkdtempSync(join(tmpdir(), "pi-ascet-telemetry-blocked-"));
 	try {
 		const result = await runAscetEdit(
 			{ action: "create_folder", folderPath: "DEMO\\New", executeWrite: true },
-			{ cwd: root, env: { PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts") } },
+			{
+				cwd: root,
+				env: { PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts") },
+				executeCli: async (request) => successfulExecution(request),
+			},
 			{},
 		);
 		assert.equal(result.details.outcome.status, "blocked");
@@ -128,7 +140,7 @@ test("post-Bridge exceptions emit outcome_unknown telemetry", async () => {
 				{
 					cwd: root,
 					env: { PI_ASCET_EXTENSION_ARTIFACT_ROOT: artifactRoot },
-					executeCli: async (request) => successfulWrite(request),
+					executeCli: async (request) => successfulExecution(request),
 				},
 				approvingContext,
 			),

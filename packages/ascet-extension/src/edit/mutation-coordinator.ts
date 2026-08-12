@@ -1,9 +1,10 @@
 import { createHash } from "node:crypto";
 import { closeSync, existsSync, mkdirSync, openSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import type { AscetCliJsonResult } from "../cli.ts";
+import type { AscetCliJsonResult, AscetCliLifecycleEvent } from "../cli.ts";
 import { AscetApprovalStore } from "./approval-store.ts";
 import { AscetMutationGuardStore } from "./mutation-guard-store.ts";
+import { AscetMutationJournalStore } from "./mutation-journal-store.ts";
 import { classifyAscetEditExecution } from "./verification.ts";
 
 export type AscetMutationCoordinatorErrorCode =
@@ -39,7 +40,11 @@ export interface AscetMutationCoordinatorInput {
 	approvalTtlMs: number;
 	beginExecution: () => void;
 	completeExecution: () => void;
-	dispatch: () => Promise<AscetCliJsonResult>;
+	journal: {
+		beforeSnapshot: unknown;
+		attemptedMutation: unknown;
+	};
+	dispatch: (onLifecycle: (event: AscetCliLifecycleEvent) => void) => Promise<AscetCliJsonResult>;
 }
 
 function identityHash(value: string): string {
@@ -60,11 +65,13 @@ export class AscetMutationCoordinator {
 	private readonly artifactRoot: string;
 	private readonly guardStore: AscetMutationGuardStore;
 	private readonly approvalStore: AscetApprovalStore;
+	private readonly journalStore: AscetMutationJournalStore;
 
 	constructor(options: AscetMutationCoordinatorOptions) {
 		this.artifactRoot = requireText(options.artifactRoot, "artifactRoot");
 		this.guardStore = new AscetMutationGuardStore({ artifactRoot: this.artifactRoot });
 		this.approvalStore = new AscetApprovalStore({ artifactRoot: this.artifactRoot });
+		this.journalStore = new AscetMutationJournalStore({ artifactRoot: this.artifactRoot });
 	}
 
 	async execute(input: AscetMutationCoordinatorInput): Promise<AscetCliJsonResult> {
@@ -90,16 +97,44 @@ export class AscetMutationCoordinator {
 				approvalId: approval.receipt.approvalId,
 				token: approval.token,
 			});
+			const journal = this.journalStore.prepare({
+				databaseFingerprint: input.databaseFingerprint,
+				targetOid: input.targetOid,
+				targetKind: input.targetKind,
+				canonicalPath: input.canonicalPath,
+				action: input.action,
+				planId: input.planId,
+				planFingerprint: input.planFingerprint,
+				targetImpactFingerprint: input.targetImpactFingerprint,
+				guardGeneration: input.guardGeneration,
+				beforeSnapshot: input.journal.beforeSnapshot,
+				attemptedMutation: input.journal.attemptedMutation,
+			});
 
 			let executionStarted = false;
-			let dispatchStarted = false;
+			let bridgeEntered = false;
+			let backendResponseReceived = false;
 			let quarantined = false;
 			try {
-				input.beginExecution();
-				executionStarted = true;
-				dispatchStarted = true;
-				const raw = await input.dispatch();
+				const raw = await input.dispatch((event) => {
+					if (event.stage === "before_bridge" && !executionStarted) {
+						input.beginExecution();
+						executionStarted = true;
+					}
+					if (event.stage === "bridge_entered") bridgeEntered = true;
+					if (event.stage === "backend_response_received") backendResponseReceived = true;
+				});
+				if (!executionStarted) {
+					throw new Error("Mutation dispatch completed without before_bridge lifecycle evidence.");
+				}
 				const classification = classifyAscetEditExecution(raw);
+				const evidence = { bridgeEntered, backendResponseReceived, mutationStarted: bridgeEntered };
+				const journalRecord = this.journalStore.update(journal.path, {
+					status: classification.mutationStatus,
+					evidence,
+					...(raw.operationId ? { operationId: raw.operationId } : {}),
+					...(raw.error?.code ? { errorCode: raw.error.code } : {}),
+				});
 				if (classification.mutationStatus === "unknown") {
 					this.guardStore.quarantine({
 						databaseFingerprint: input.databaseFingerprint,
@@ -110,14 +145,23 @@ export class AscetMutationCoordinator {
 						operation: input.action,
 						operationId: raw.operationId ?? `plan:${input.planId}`,
 						planId: input.planId,
-						evidence: { bridgeEntered: true, backendResponseReceived: true, mutationStarted: true },
+						journalPath: journal.path,
+						beforeSnapshotFingerprint: journalRecord.beforeSnapshotFingerprint,
+						desiredFingerprint: journalRecord.desiredFingerprint,
+						evidence,
 					});
 					quarantined = true;
 				}
 				input.completeExecution();
 				return raw;
 			} catch (error) {
-				if (executionStarted && !quarantined) {
+				const evidence = { bridgeEntered, backendResponseReceived, mutationStarted: bridgeEntered };
+				const journalRecord = this.journalStore.update(journal.path, {
+					status: bridgeEntered ? "unknown" : "not_started",
+					evidence,
+					errorCode: error instanceof Error ? error.name : "unknown_error",
+				});
+				if (bridgeEntered && !quarantined) {
 					this.guardStore.quarantine({
 						databaseFingerprint: input.databaseFingerprint,
 						targetOid: input.targetOid,
@@ -127,11 +171,10 @@ export class AscetMutationCoordinator {
 						operation: input.action,
 						operationId: `plan:${input.planId}`,
 						planId: input.planId,
-						evidence: {
-							bridgeEntered: dispatchStarted,
-							backendResponseReceived: false,
-							mutationStarted: dispatchStarted,
-						},
+						journalPath: journal.path,
+						beforeSnapshotFingerprint: journalRecord.beforeSnapshotFingerprint,
+						desiredFingerprint: journalRecord.desiredFingerprint,
+						evidence,
 					});
 				}
 				throw error;
@@ -182,7 +225,6 @@ export class AscetMutationCoordinator {
 					planId: input.planId,
 					evidence: { bridgeEntered: true, backendResponseReceived: false, mutationStarted: true },
 				});
-				if (existsSync(lockPath)) unlinkSync(lockPath);
 				throw new AscetMutationCoordinatorError(
 					"mutation_target_quarantined",
 					`Stale mutation lock for target OID ${input.targetOid} was quarantined as process_interrupted.`,

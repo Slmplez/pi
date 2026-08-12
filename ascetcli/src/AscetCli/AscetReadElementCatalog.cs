@@ -231,6 +231,13 @@ public static class AscetReadElementCatalog
             payload["identity"] = identity;
         }
 
+        Dictionary<string, object> componentProvenance = BuildComponentConfigurationProvenancePayload(
+            catalog == null ? null : catalog.ComponentConfigurationProvenance);
+        if (componentProvenance.Count > 0)
+        {
+            payload["componentConfigurationProvenance"] = componentProvenance;
+        }
+
         return payload;
     }
 
@@ -385,6 +392,32 @@ public static class AscetReadElementCatalog
             }
         }
 
+        return payload;
+    }
+
+    private static Dictionary<string, object> BuildComponentConfigurationProvenancePayload(AscetComponentConfigurationProvenance provenance)
+    {
+        Dictionary<string, object> payload = new Dictionary<string, object>();
+        if (provenance == null)
+        {
+            return payload;
+        }
+        if (provenance.DefaultDataConfiguration != null)
+        {
+            payload["defaultDataConfiguration"] = BuildConfigurationProvenancePayload(provenance.DefaultDataConfiguration);
+        }
+        if (provenance.ClassDataConfiguration != null)
+        {
+            payload["classDataConfiguration"] = BuildConfigurationProvenancePayload(provenance.ClassDataConfiguration);
+        }
+        if (provenance.DefaultImplementationConfiguration != null)
+        {
+            payload["defaultImplementationConfiguration"] = BuildConfigurationProvenancePayload(provenance.DefaultImplementationConfiguration);
+        }
+        if (provenance.ClassImplementationConfiguration != null)
+        {
+            payload["classImplementationConfiguration"] = BuildConfigurationProvenancePayload(provenance.ClassImplementationConfiguration);
+        }
         return payload;
     }
 

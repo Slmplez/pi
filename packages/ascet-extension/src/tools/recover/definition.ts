@@ -1,4 +1,4 @@
-import { defineSequentialAscetTool } from "../../core/tool.ts";
+import { type AscetToolContext, defineSequentialAscetTool } from "../../core/tool.ts";
 import { routeAscetAction } from "../../routing/router.ts";
 import { formatAscetRecoverResult, runAscetRecover } from "../recover.ts";
 import { ascetRecoverPrompt } from "./prompt.ts";
@@ -16,11 +16,20 @@ export const ascetRecoverTool = defineSequentialAscetTool({
 	async execute(
 		_toolCallId: string,
 		params: AscetRecoverParams,
-		_signal: AbortSignal,
+		signal: AbortSignal,
 		_onUpdate: unknown,
-		ctx: { cwd: string },
+		ctx: AscetToolContext,
 	) {
-		const result = await runAscetRecover(params, { cwd: ctx.cwd });
+		const result = await runAscetRecover(params, {
+			cwd: ctx.cwd,
+			env: ctx.env,
+			signal,
+			executeCli: ctx.executeCli,
+			confirm:
+				ctx.hasUI && ctx.ui?.confirm
+					? (title, message) => ctx.ui!.confirm(title, message, { signal, timeout: 30_000 })
+					: undefined,
+		});
 		const route = routeAscetAction({ toolName: "ascet_recover", action: params.action });
 		return {
 			content: [{ type: "text", text: formatAscetRecoverResult(result) }],

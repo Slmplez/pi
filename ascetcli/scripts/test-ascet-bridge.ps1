@@ -188,6 +188,7 @@ try {
         @{ Name = 'AscetDatabaseCatalogContractTest'; Source = (Get-RepoPath 'tests\AscetDatabaseCatalogContractTest.cs') },
         @{ Name = 'AscetTargetResolverContractTest'; Source = (Get-RepoPath 'tests\AscetTargetResolverContractTest.cs') },
         @{ Name = 'AscetElementMutationTransactionTest'; Source = (Get-RepoPath 'tests\AscetElementMutationTransactionTest.cs') },
+        @{ Name = 'AscetElementProvenanceOutputTest'; Source = (Get-RepoPath 'tests\AscetElementProvenanceOutputTest.cs') },
         @{ Name = 'AscetMethodConsistencyTest'; Source = (Get-RepoPath 'tests\AscetMethodConsistencyTest.cs') },
         @{ Name = 'AscetEditableWriteGateOutputTest'; Source = (Get-RepoPath 'tests\AscetEditableWriteGateOutputTest.cs') },
         @{ Name = 'AscetSetEnumeratorsOutputTest'; Source = (Get-RepoPath 'tests\AscetSetEnumeratorsOutputTest.cs') },

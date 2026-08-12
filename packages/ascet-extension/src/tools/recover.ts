@@ -2,26 +2,69 @@ import { existsSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { resolve } from "node:path";
 import { Type } from "typebox";
+import type { AscetCliExecutionResult, AscetCliRequest } from "../cli.ts";
+import {
+	type AscetMutationGuardCheck,
+	AscetMutationGuardStore,
+	AscetMutationGuardStoreError,
+} from "../edit/mutation-guard-store.ts";
+import { type AscetMutationJournalStatus, AscetMutationJournalStore } from "../edit/mutation-journal-store.ts";
+import {
+	type AscetMutationAcceptCurrentResult,
+	type AscetMutationReconcileWriteResult,
+	runAscetMutationAcceptCurrent,
+	runAscetMutationReconcileWrite,
+} from "../edit/mutation-reconciliation.ts";
+import { getAscetArtifactRoot } from "../observation-store.ts";
 import { clearStaleAscetCliLock } from "../scheduler/cli-lock.ts";
 import { createAscetSchedulerStatusReport } from "../scheduler/status.ts";
 import { type AscetRuntimeStatusReport, createAscetRuntimeStatusReport } from "../status-runtime.ts";
 import { toToolSuccessPayload } from "../tool-response-contract.ts";
-import { openAiObjectSchema } from "./_shared/openai-schema.ts";
+import { openAiObjectUnionSchema } from "./_shared/openai-schema.ts";
 
 export type AscetRecoverParams =
 	| { action: "status" }
 	| { action: "clear_extension_temp" }
 	| { action: "scheduler_status" }
 	| { action: "scheduler_recover" }
-	| { action: "clear_stale_cli_lock" };
+	| { action: "clear_stale_cli_lock" }
+	| {
+			action: "reconcile_mutation";
+			mode: "inspect";
+			databaseFingerprint: string;
+			targetOid: string;
+			expectedGeneration: number;
+	  }
+	| {
+			action: "reconcile_mutation";
+			mode: "rollback_to_before" | "cleanup_created" | "accept_current";
+			databaseFingerprint: string;
+			targetOid: string;
+			expectedGeneration: number;
+			executeWrite: true;
+	  };
 
 export interface RunAscetRecoverOptions {
 	cwd: string;
 	env?: Record<string, string | undefined>;
 	tempRoot?: string;
 	createStatusReport?: (options: RunAscetRecoverOptions) => Promise<AscetRuntimeStatusReport>;
+	signal?: AbortSignal;
+	executeCli?: (request: AscetCliRequest) => Promise<AscetCliExecutionResult>;
+	confirm?: (title: string, message: string) => Promise<boolean>;
 }
 
+export interface AscetMutationJournalInspection {
+	status: AscetMutationJournalStatus;
+	action: string;
+	planId: string;
+	planFingerprint: string;
+	targetImpactFingerprint: string;
+	beforeSnapshotFingerprint: string;
+	desiredFingerprint: string;
+	createdAt: string;
+	updatedAt: string;
+}
 export interface AscetRecoverResult {
 	ok: boolean;
 	action: AscetRecoverParams["action"];
@@ -31,20 +74,51 @@ export interface AscetRecoverResult {
 		tempRoot?: string;
 		cleared?: boolean;
 		staleLockCleared?: boolean;
+		mutationGuard?: AscetMutationGuardCheck;
+		mutationJournal?: AscetMutationJournalInspection;
+		reconciliation?: AscetMutationReconcileWriteResult | AscetMutationAcceptCurrentResult;
 	};
 }
 
-export const ascetRecoverParameters = openAiObjectSchema<AscetRecoverParams>(
-	Type.Object({
-		action: Type.Union([
-			Type.Literal("status"),
-			Type.Literal("clear_extension_temp"),
-			Type.Literal("scheduler_status"),
-			Type.Literal("scheduler_recover"),
-			Type.Literal("clear_stale_cli_lock"),
-		]),
-	}),
-);
+export const ascetRecoverParameters = openAiObjectUnionSchema<AscetRecoverParams>([
+	Type.Object(
+		{
+			action: Type.Union([
+				Type.Literal("status"),
+				Type.Literal("clear_extension_temp"),
+				Type.Literal("scheduler_status"),
+				Type.Literal("scheduler_recover"),
+				Type.Literal("clear_stale_cli_lock"),
+			]),
+		},
+		{ additionalProperties: false },
+	),
+	Type.Object(
+		{
+			action: Type.Literal("reconcile_mutation"),
+			mode: Type.Literal("inspect"),
+			databaseFingerprint: Type.String({ minLength: 1 }),
+			targetOid: Type.String({ minLength: 1 }),
+			expectedGeneration: Type.Integer({ minimum: 0 }),
+		},
+		{ additionalProperties: false },
+	),
+	Type.Object(
+		{
+			action: Type.Literal("reconcile_mutation"),
+			mode: Type.Union([
+				Type.Literal("rollback_to_before"),
+				Type.Literal("cleanup_created"),
+				Type.Literal("accept_current"),
+			]),
+			databaseFingerprint: Type.String({ minLength: 1 }),
+			targetOid: Type.String({ minLength: 1 }),
+			expectedGeneration: Type.Integer({ minimum: 1 }),
+			executeWrite: Type.Literal(true),
+		},
+		{ additionalProperties: false },
+	),
+]);
 
 function getExtensionTempRoot(options: RunAscetRecoverOptions): string {
 	return options.tempRoot ?? resolve(tmpdir(), "pi-ascet-extension");
@@ -54,6 +128,56 @@ export async function runAscetRecover(
 	params: AscetRecoverParams,
 	options: RunAscetRecoverOptions,
 ): Promise<AscetRecoverResult> {
+	if (params.action === "reconcile_mutation" && params.mode !== "inspect") {
+		const reconciliation =
+			params.mode === "accept_current"
+				? await runAscetMutationAcceptCurrent({ ...params, mode: "accept_current" }, options)
+				: await runAscetMutationReconcileWrite({ ...params, mode: params.mode }, options);
+		return { ok: true, action: params.action, data: { reconciliation } };
+	}
+
+	if (params.action === "reconcile_mutation") {
+		const store = new AscetMutationGuardStore({
+			artifactRoot: getAscetArtifactRoot(options.env as NodeJS.ProcessEnv | undefined),
+		});
+		const mutationGuard = store.assertClear(params.databaseFingerprint, params.targetOid);
+		if (mutationGuard.generation !== params.expectedGeneration) {
+			throw new AscetMutationGuardStoreError(
+				"guard_generation_mismatch",
+				`Expected guard generation ${params.expectedGeneration}, current generation is ${mutationGuard.generation}.`,
+			);
+		}
+		let mutationJournal: AscetMutationJournalInspection | undefined;
+		const guardRecord = mutationGuard.record;
+		if (guardRecord?.journalPath) {
+			const journal = new AscetMutationJournalStore({
+				artifactRoot: getAscetArtifactRoot(options.env as NodeJS.ProcessEnv | undefined),
+			}).load(guardRecord.journalPath);
+			if (
+				journal.databaseFingerprint !== params.databaseFingerprint ||
+				journal.targetOid !== params.targetOid ||
+				journal.beforeSnapshotFingerprint !== guardRecord.beforeSnapshotFingerprint ||
+				journal.desiredFingerprint !== guardRecord.desiredFingerprint
+			) {
+				throw new AscetMutationGuardStoreError(
+					"guard_corrupt",
+					"Mutation journal identity or fingerprints do not match the quarantine guard.",
+				);
+			}
+			mutationJournal = {
+				status: journal.status,
+				action: journal.action,
+				planId: journal.planId,
+				planFingerprint: journal.planFingerprint,
+				targetImpactFingerprint: journal.targetImpactFingerprint,
+				beforeSnapshotFingerprint: journal.beforeSnapshotFingerprint,
+				desiredFingerprint: journal.desiredFingerprint,
+				createdAt: journal.createdAt,
+				updatedAt: journal.updatedAt,
+			};
+		}
+		return { ok: true, action: params.action, data: { mutationGuard, mutationJournal } };
+	}
 	if (params.action === "status") {
 		return {
 			ok: true,
@@ -101,6 +225,20 @@ export async function runAscetRecover(
 }
 
 export function formatAscetRecoverResult(result: AscetRecoverResult): string {
+	if (result.action === "reconcile_mutation") {
+		return JSON.stringify(
+			toToolSuccessPayload(
+				result.data.reconciliation
+					? { reconciliation: result.data.reconciliation }
+					: {
+							mutationGuard: result.data.mutationGuard,
+							mutationJournal: result.data.mutationJournal,
+						},
+			),
+			null,
+			2,
+		);
+	}
 	if (result.action === "status") {
 		return JSON.stringify(toToolSuccessPayload(result.data.status ?? {}), null, 2);
 	}

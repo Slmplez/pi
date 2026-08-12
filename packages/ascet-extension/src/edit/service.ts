@@ -6,7 +6,7 @@ import {
 	runAscetApplyElementSpec,
 } from "../apply-element-spec.ts";
 import { runAscetApplyProjectFormula } from "../apply-project-formula.ts";
-import { type AscetCliJsonResult, runAscetCliJson } from "../cli.ts";
+import { type AscetCliJsonResult, type AscetCliLifecycleEvent, runAscetCliJson } from "../cli.ts";
 import { normalizeAscetPath } from "../core/path.ts";
 import { type AscetToolOutcome, createPreflightOutcome } from "../core/results.ts";
 import { withInlineCodeFile } from "../core/temp-files.ts";
@@ -46,7 +46,12 @@ import { ASCET_SET_STATE_MACHINE_CODE_OPERATIONS, runAscetSetStateMachineCode } 
 import { compactObject, toToolFailurePayload, unwrapToolSuccessPayload } from "../tool-response-contract.ts";
 import { openAiObjectUnionSchema } from "../tools/_shared/openai-schema.ts";
 import { selectAscetPublicSchemaVariants } from "../tools/actions/schema-registry.ts";
-import { type AscetEditApprovalContext, isAscetEditApprovalBlockedCode, requestAscetEditApproval } from "./approval.ts";
+import {
+	type AscetEditApprovalContext,
+	type AscetEditApprovalFailure,
+	isAscetEditApprovalBlockedCode,
+	requestAscetEditApproval,
+} from "./approval.ts";
 import {
 	type AscetObservationInvalidation,
 	invalidateAscetEditObservations,
@@ -477,6 +482,13 @@ function outcomeFromCliResult(result: AscetCliJsonResult): AscetToolOutcome {
 	return { status: "error", error: { code, message } };
 }
 
+function outcomeFromApprovalFailure(approval: AscetEditApprovalFailure): AscetToolOutcome {
+	if (isAscetEditApprovalBlockedCode(approval.code)) {
+		return { status: "blocked", code: approval.code, message: approval.message };
+	}
+	return { status: "error", error: { code: approval.code, message: approval.message } };
+}
+
 function asResponse(
 	outcome: AscetToolOutcome,
 	raw?: AscetCliJsonResult,
@@ -595,9 +607,8 @@ export async function runAscetMutation(
 		bridgeEntered: false,
 		backendResponseReceived: false,
 	};
-	const trackedOptions = withWriteLifecycleTracking(options, lifecycle);
 	try {
-		const result = await runAscetMutationCore(params, trackedOptions, ctx);
+		const result = await runAscetMutationCore(params, options, ctx, lifecycle);
 		recordMutationTelemetry(params, result, options, startedAt, lifecycle);
 		return result;
 	} catch (error) {
@@ -626,6 +637,7 @@ async function runAscetMutationCore(
 	params: AscetMutationParams,
 	options: RunAscetEditOperationOptions,
 	ctx: AscetEditApprovalContext,
+	lifecycle: AscetWriteLifecycleEvidence,
 ): Promise<AscetEditResult> {
 	const normalizedParams = normalizeAscetMutationParams(params);
 	const contractValidation = validateAscetMutationContract(normalizedParams);
@@ -633,7 +645,7 @@ async function runAscetMutationCore(
 		return asResponse(contractValidation);
 	}
 	if (isPlanManagedCommit(normalizedParams)) {
-		return runPlanManagedCommit(normalizedParams, options, ctx);
+		return runPlanManagedCommit(normalizedParams, options, ctx, lifecycle);
 	}
 	const validation = validateAscetMutationParams(normalizedParams);
 	if (validation) {
@@ -654,7 +666,7 @@ async function runAscetMutationCore(
 		return asResponse(createPreflightOutcome({ action: normalizedParams.action, params: normalizedParams }));
 	}
 
-	return runCoordinatedDirectMutation(normalizedParams, options, ctx);
+	return runCoordinatedDirectMutation(normalizedParams, options, ctx, lifecycle);
 }
 
 interface AscetWriteLifecycleEvidence {
@@ -666,10 +678,12 @@ interface AscetWriteLifecycleEvidence {
 function withWriteLifecycleTracking(
 	options: RunAscetEditOperationOptions,
 	lifecycle: AscetWriteLifecycleEvidence,
+	onCoordinatorLifecycle: (event: AscetCliLifecycleEvent) => void,
 ): RunAscetEditOperationOptions {
 	return {
 		...options,
 		onLifecycle: (event) => {
+			onCoordinatorLifecycle(event);
 			if (event.stage === "before_bridge") lifecycle.beforeBridge = true;
 			if (event.stage === "bridge_entered") lifecycle.bridgeEntered = true;
 			if (event.stage === "backend_response_received") lifecycle.backendResponseReceived = true;
@@ -869,7 +883,16 @@ function findTreeTargetIdentity(
 	tree: AscetTreeSafetyEvidence,
 ): AscetPlanTargetIdentity | undefined {
 	const targetPath = directMutationAnchorPath(params);
-	if (!targetPath) return undefined;
+	if (!targetPath) {
+		if (params.action === "create_folder" && tree.complete && tree.databaseIdentity) {
+			return {
+				path: normalizeAscetPath(tree.databaseIdentity.path),
+				oid: `database:${tree.databaseIdentity.fingerprint}`,
+				kind: "database",
+			};
+		}
+		return undefined;
+	}
 	const normalizedTarget = normalizeAscetPath(targetPath).toLocaleLowerCase();
 	const entry = tree.entries.find(
 		(candidate) => normalizeAscetPath(candidate.path).toLocaleLowerCase() === normalizedTarget,
@@ -1071,6 +1094,7 @@ async function runPlanManagedCommit(
 	params: PlanManagedCommitParams,
 	options: RunAscetEditOperationOptions,
 	ctx: AscetEditApprovalContext,
+	lifecycle: AscetWriteLifecycleEvidence,
 ): Promise<AscetEditResult> {
 	const store = createPlanStore(options);
 	let temporarySpecFile: string | undefined;
@@ -1163,7 +1187,7 @@ ${summary}`,
 			ctx,
 		);
 		if (!approval.approved) {
-			return asResponse({ status: "blocked", code: approval.code, message: approval.message });
+			return asResponse(outcomeFromApprovalFailure(approval));
 		}
 		const coordinator = new AscetMutationCoordinator({
 			artifactRoot: getAscetArtifactRoot(options.env as NodeJS.ProcessEnv | undefined),
@@ -1180,21 +1204,23 @@ ${summary}`,
 			guardGeneration: guardCheck.generation,
 			sessionId: verificationInput.binding.sessionId,
 			approvalTtlMs: Math.max(1, Date.parse(record.expiresAt) - Date.now()),
+			journal: { beforeSnapshot: record.backendPreflight, attemptedMutation: record.params },
 			beginExecution: () => {
 				store.beginExecution(verificationInput);
 			},
 			completeExecution: () => {
 				store.consume(verificationInput);
 			},
-			dispatch: async () =>
-				planned.action === "apply_element_spec"
+			dispatch: async (onLifecycle) => {
+				const writeOptions = withWriteLifecycleTracking(options, lifecycle, onLifecycle);
+				return planned.action === "apply_element_spec"
 					? runAscetApplyElementSpec(
 							{
 								...requirePreparedApplyElementParams(prepared),
 								executeWrite: true,
 								verifyReadback: true,
 							},
-							options,
+							writeOptions,
 						)
 					: runAscetSetElementDependency(
 							{
@@ -1204,8 +1230,9 @@ ${summary}`,
 								executeWrite: true,
 								verifyReadback: true,
 							},
-							options,
-						),
+							writeOptions,
+						);
+			},
 		});
 		return finalizeAscetMutation({ params: planned, raw, options });
 	} catch (error) {
@@ -1221,6 +1248,7 @@ async function runCoordinatedDirectMutation(
 	params: AscetMutationParams,
 	options: RunAscetEditOperationOptions,
 	ctx: AscetEditApprovalContext,
+	lifecycle: AscetWriteLifecycleEvidence,
 ): Promise<AscetEditResult> {
 	try {
 		const databaseIdentity = await readCurrentPlanDatabaseIdentity(options);
@@ -1306,7 +1334,7 @@ affectedProjects: ${targetImpact.affectedProjects.join(", ") || "none"}`,
 			ctx,
 		);
 		if (!approval.approved) {
-			return asResponse({ status: "blocked", code: approval.code, message: approval.message });
+			return asResponse(outcomeFromApprovalFailure(approval));
 		}
 		const coordinator = new AscetMutationCoordinator({
 			artifactRoot: getAscetArtifactRoot(options.env as NodeJS.ProcessEnv | undefined),
@@ -1323,13 +1351,18 @@ affectedProjects: ${targetImpact.affectedProjects.join(", ") || "none"}`,
 			guardGeneration: guardCheck.generation,
 			sessionId: binding.sessionId,
 			approvalTtlMs: Math.max(1, Date.parse(record.expiresAt) - Date.now()),
+			journal: { beforeSnapshot: record.backendPreflight, attemptedMutation: record.params },
 			beginExecution: () => {
 				store.beginExecution(verificationInput);
 			},
 			completeExecution: () => {
 				store.consume(verificationInput);
 			},
-			dispatch: () => dispatchMutation(prepareExecutableMutation(params), options),
+			dispatch: (onLifecycle) =>
+				dispatchMutation(
+					prepareExecutableMutation(params),
+					withWriteLifecycleTracking(options, lifecycle, onLifecycle),
+				),
 		});
 		return finalizeAscetMutation({ params, raw, options });
 	} catch (error) {
@@ -1414,6 +1447,7 @@ interface ElementPreflightCapabilityResult {
 function evaluateElementPreflightCapabilities(
 	normalized: NormalizedElementSpecResult,
 	liveElements: readonly Record<string, unknown>[],
+	componentConfigurationProvenance: Record<string, unknown> | undefined,
 ): ElementPreflightCapabilityResult {
 	const liveByName = new Map<string, Record<string, unknown>>();
 	for (const element of liveElements) {
@@ -1426,20 +1460,31 @@ function evaluateElementPreflightCapabilities(
 		const isComponentReference = element.kind === "component";
 		const live = liveByName.get(name);
 		const provenance = isRecord(live?.configurationProvenance) ? live.configurationProvenance : undefined;
+		const exported = element.scope === "exported";
+		const createDataConfiguration = exported
+			? (asRecord(componentConfigurationProvenance?.classDataConfiguration) ??
+				asRecord(componentConfigurationProvenance?.defaultDataConfiguration))
+			: asRecord(componentConfigurationProvenance?.defaultDataConfiguration);
+		const createImplementationConfiguration = exported
+			? (asRecord(componentConfigurationProvenance?.classImplementationConfiguration) ??
+				asRecord(componentConfigurationProvenance?.defaultImplementationConfiguration))
+			: asRecord(componentConfigurationProvenance?.defaultImplementationConfiguration);
 		const dataConfiguration = isComponentReference
 			? "not_applicable"
-			: isRecord(provenance?.dataConfiguration)
-				? provenance.dataConfiguration
-				: "unresolved";
+			: operation === "create"
+				? (createDataConfiguration ?? "unresolved")
+				: isRecord(provenance?.dataConfiguration)
+					? provenance.dataConfiguration
+					: "unresolved";
 		const implementationConfiguration = isComponentReference
 			? "not_applicable"
-			: isRecord(provenance?.implementationConfiguration)
-				? provenance.implementationConfiguration
-				: "unresolved";
+			: operation === "create"
+				? (createImplementationConfiguration ?? "unresolved")
+				: isRecord(provenance?.implementationConfiguration)
+					? provenance.implementationConfiguration
+					: "unresolved";
 		const blockingCodes: string[] = [];
-		if (operation === "create" && !isComponentReference) {
-			blockingCodes.push("data_item_not_resolvable_preflight", "implementation_item_not_resolvable_preflight");
-		} else if (!isComponentReference) {
+		if (!isComponentReference) {
 			if (!isAuthoritativeConfiguration(dataConfiguration, AUTHORITATIVE_DATA_CONFIGURATION_SOURCES)) {
 				blockingCodes.push("data_item_not_resolvable_preflight");
 			}
@@ -1529,7 +1574,11 @@ async function runBackendMutationPreflight(
 				raw: catalogRaw,
 			};
 		}
-		const capabilities = evaluateElementPreflightCapabilities(normalized, catalog.elements);
+		const capabilities = evaluateElementPreflightCapabilities(
+			normalized,
+			catalog.elements,
+			asRecord(catalog.componentConfigurationProvenance),
+		);
 		const capabilityFailure = createElementPreflightFailure(capabilities);
 		if (capabilityFailure) {
 			return { outcome: capabilityFailure, raw: catalogRaw };
@@ -1570,7 +1619,6 @@ async function runBackendMutationPreflight(
 					normalizedSpec: normalized.spec,
 					result: unwrapToolSuccessPayload(raw.data),
 					limitations: [
-						"New primitive Elements are rejected because ToolAPI cannot prove Data/Implementation item resolution without first creating the Element.",
 						...(params.projectPath
 							? ["projectPath-specific formula validation remains deferred to apply_element_spec commit."]
 							: []),

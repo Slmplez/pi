@@ -100,4 +100,43 @@ describe("ASCET mutation guard store", () => {
 			env.cleanup();
 		}
 	});
+	test("claims one quarantined generation for reconciliation", () => {
+		const env = environment();
+		try {
+			const store = new AscetMutationGuardStore({ artifactRoot: env.root });
+			const quarantined = store.quarantine({
+				databaseFingerprint: "db-1",
+				targetOid: "oid-1",
+				targetKind: "component",
+				canonicalPath: "Package\\C",
+				reason: "unknown_outcome",
+				operation: "apply_element_spec",
+				operationId: "operation-4",
+				evidence: { bridgeEntered: true, backendResponseReceived: false, mutationStarted: true },
+			});
+			const reconciling = store.beginReconciliation({
+				databaseFingerprint: "db-1",
+				targetOid: "oid-1",
+				expectedGeneration: quarantined.generation,
+				mode: "rollback_to_before",
+			});
+
+			assert.equal(reconciling.status, "reconciling");
+			assert.equal(reconciling.generation, quarantined.generation + 1);
+			assert.equal(reconciling.reconciliationMode, "rollback_to_before");
+			assert.throws(
+				() =>
+					store.beginReconciliation({
+						databaseFingerprint: "db-1",
+						targetOid: "oid-1",
+						expectedGeneration: quarantined.generation,
+						mode: "cleanup_created",
+					}),
+				(error: unknown) =>
+					error instanceof AscetMutationGuardStoreError && error.code === "guard_generation_mismatch",
+			);
+		} finally {
+			env.cleanup();
+		}
+	});
 });

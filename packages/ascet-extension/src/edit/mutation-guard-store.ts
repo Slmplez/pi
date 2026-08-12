@@ -13,6 +13,7 @@ import { join } from "node:path";
 
 export type AscetMutationGuardStatus = "clear" | "quarantined" | "reconciling";
 export type AscetMutationGuardReason = "unknown_outcome" | "rollback_failed" | "process_interrupted";
+export type AscetMutationReconciliationMode = "rollback_to_before" | "cleanup_created" | "accept_current";
 
 export interface AscetMutationGuardEvidence {
 	bridgeEntered: boolean;
@@ -38,6 +39,8 @@ export interface AscetMutationGuardRecord {
 	detectedAt?: string;
 	reconciledAt?: string;
 	reconciliationEvidenceFingerprint?: string;
+	reconciliationMode?: AscetMutationReconciliationMode;
+	reconciliationStartedAt?: string;
 	evidence?: AscetMutationGuardEvidence;
 }
 
@@ -56,6 +59,12 @@ export interface AscetMutationQuarantineInput {
 	evidence: AscetMutationGuardEvidence;
 }
 
+export interface AscetMutationGuardBeginReconciliationInput {
+	databaseFingerprint: string;
+	targetOid: string;
+	expectedGeneration: number;
+	mode: AscetMutationReconciliationMode;
+}
 export interface AscetMutationGuardClearInput {
 	databaseFingerprint: string;
 	targetOid: string;
@@ -201,6 +210,32 @@ export class AscetMutationGuardStore {
 		});
 	}
 
+	beginReconciliation(input: AscetMutationGuardBeginReconciliationInput): AscetMutationGuardRecord {
+		const databaseFingerprint = requireText(input.databaseFingerprint, "databaseFingerprint");
+		const targetOid = requireText(input.targetOid, "targetOid");
+		return this.withLock(databaseFingerprint, targetOid, () => {
+			const existing = this.load(databaseFingerprint, targetOid);
+			const currentGeneration = existing?.generation ?? 0;
+			if (currentGeneration !== input.expectedGeneration) {
+				throw new AscetMutationGuardStoreError(
+					"guard_generation_mismatch",
+					`Expected guard generation ${input.expectedGeneration}, current generation is ${currentGeneration}.`,
+				);
+			}
+			if (!existing || existing.status !== "quarantined") {
+				throw new AscetMutationGuardStoreError("target_not_quarantined", "Target is not quarantined.");
+			}
+			const record: AscetMutationGuardRecord = {
+				...existing,
+				generation: existing.generation + 1,
+				status: "reconciling",
+				reconciliationMode: input.mode,
+				reconciliationStartedAt: this.now().toISOString(),
+			};
+			this.writeRecord(record);
+			return record;
+		});
+	}
 	clear(input: AscetMutationGuardClearInput): AscetMutationGuardRecord {
 		const databaseFingerprint = requireText(input.databaseFingerprint, "databaseFingerprint");
 		const targetOid = requireText(input.targetOid, "targetOid");

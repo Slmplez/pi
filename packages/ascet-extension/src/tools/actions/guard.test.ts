@@ -3,7 +3,7 @@ import { describe, test } from "node:test";
 import { createAscetExposureController } from "../exposure/controller.ts";
 import { AscetActionUnavailableError, assertActionActive, extractToolAction } from "./guard.ts";
 
-function activateBaseProfile() {
+function activateProfile(profile: "base" | "write-preflight") {
 	const pi = {
 		registerTool(_tool: unknown) {},
 		getActiveTools() {
@@ -12,7 +12,7 @@ function activateBaseProfile() {
 		setActiveTools(_toolNames: string[]) {},
 	};
 	const exposure = createAscetExposureController(pi, { env: {} });
-	exposure.activateProfile("base");
+	exposure.activateProfile(profile);
 }
 
 describe("ASCET action runtime guard", () => {
@@ -24,10 +24,11 @@ describe("ASCET action runtime guard", () => {
 	});
 
 	test("allows active Get actions and rejects unknown actions", () => {
-		activateBaseProfile();
+		activateProfile("base");
 
 		const descriptor = assertActionActive("ascet_get", "tree");
 		assert.equal(descriptor?.id, "ascet_get.tree");
+		assert.equal(assertActionActive("ascet_get", "database_identity")?.id, "ascet_get.database_identity");
 		assert.equal(assertActionActive("ascet_edit", "check")?.id, "ascet_edit.check");
 		assert.equal(
 			assertActionActive("configure_parameter_dependency_chain", "execute")?.id,
@@ -42,5 +43,9 @@ describe("ASCET action runtime guard", () => {
 				error.payload.action === "unknown" &&
 				error.payload.state === "hidden",
 		);
+	});
+	test("allows public mutation reconciliation in write recovery profiles", () => {
+		activateProfile("write-preflight");
+		assert.equal(assertActionActive("ascet_recover", "reconcile_mutation")?.id, "ascet_recover.reconcile_mutation");
 	});
 });

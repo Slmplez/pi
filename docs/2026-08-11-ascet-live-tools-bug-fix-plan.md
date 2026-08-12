@@ -1650,3 +1650,1266 @@ action + planId + planFingerprint + database identity + target OID + expiry + no
 8. approval token 被篡改、过期、复用或绑定不同 target：全部拒绝。
 
 在上述实现和 isolated fixture 回归测试完成前，不得把本节状态升级为 `FIXED`。
+
+---
+
+## 20. 七个 Tools Bug 详细开发修复方案
+
+### 20.1 目标和边界
+
+本节是第 19 节的可执行开发设计。目标不是让错误信息更友好，而是建立以下强约束：
+
+```text
+写入前可证明
+写入中可追踪
+写入失败可恢复
+无法证明时禁止继续写
+所有路径和确认绑定同一个真实对象身份
+```
+
+本轮完成后必须满足：
+
+1. 一个批量 Element 请求不会留下部分成功状态。
+2. Method 文本成功回读不能掩盖缺失符号或无效 Element 配置。
+3. `apply_element_spec` plan 只能在 Data/Implementation 可写性得到证明后生成。
+4. unknown/rollback_failed 会持久锁定真实 target OID，而不是只记录日志。
+5. get/read/edit/editability 使用同一目标解析结果。
+6. Project alias 指向共享 Package OID 时，plan 和确认必须显示真实影响范围。
+7. 所有 mutation 使用 plan-bound、target-bound、一次性的 approval receipt。
+
+不在本轮范围内：
+
+- 不通过放宽验证或把 unknown 改名为 warning 来关闭问题。
+- 不使用重试掩盖部分写入。
+- 不把对话中的普通文本自动当作数据库写入授权。
+- 不保留旧 Plan v2 的执行兼容性；升级后旧 plan 必须明确返回 `plan_version_unsupported`。
+
+### 20.2 当前实现约束
+
+| 领域 | 当前实现 | 关键限制 |
+|---|---|---|
+| Element apply | `ComponentElementSyncService.ApplyInSession` 顺序执行 create/update/remove | ToolAPI mutation 会立即改变当前 session 中的模型，不能把“尚未 Save”当成事务 |
+| Element snapshot | `AscetElementCatalogReader.ReadExistingElements` 和 `BuildSpecDocument` 已能回读多数 Element/Data/Impl 字段 | snapshot 必须增加 completeness 证明；字段 unresolved 时不能承诺可回滚 |
+| 已有补偿模式 | `AscetParameterDependencyChainExecute` 已有 before snapshot、逆序 rollback、rollback readback 和 failure injection | 可复用模式，但需要抽象为通用 transaction，而不是复制代码 |
+| Method verification | `SetMethodCodeVerificationHook` 只比较方法文本 | 不检查符号、DataConfiguration、ImplementationConfiguration 或 Component consistency |
+| Element preflight | TypeScript 调用 `read_element_catalog`、normalize、`diff_element_spec` | diff 不会解析新 Element 的实际 Data/Implementation item |
+| unknown 分类 | `verification.ts` 将失败分类为 applied/not_started/unknown | unknown 只影响返回值和 telemetry，没有持久 guard |
+| 路径解析 | `AscetGetService.ResolveComponents` 单独支持 `Project::Child` | read/edit/editability 仍通过 `AscetItemPath + GetItemInFolder` |
+| Plan | Plan v2 已绑定 database、target、contract 和 evidence | 未绑定 impact、approval receipt 和 mutation guard generation |
+| Approval | `requestAscetEditApproval` 只有 executeWrite/UI bool | 无 planId、target OID、database identity、impact fingerprint 和一次性消费 |
+
+### 20.3 共享基础架构
+
+七个问题不能分别增加局部判断。需要先建立四个共享组件。
+
+#### 20.3.1 `AscetTargetResolver`
+
+建议新增：
+
+```text
+ascetcli/src/AscetCopilot/Resolution/AscetTargetResolver.cs
+```
+
+核心输入：
+
+```csharp
+public sealed class AscetTargetRequest
+{
+    public string Path { get; set; }
+    public string Oid { get; set; }
+    public string ExpectedKind { get; set; }
+}
+```
+
+核心输出：
+
+```csharp
+public sealed class AscetResolvedTarget
+{
+    public string RequestedPath { get; set; }
+    public string CanonicalPath { get; set; }
+    public string TargetOid { get; set; }
+    public string TargetKind { get; set; }
+    public string OwnerPath { get; set; }
+    public string OwnerOid { get; set; }
+    public string ReferenceOid { get; set; }
+    public string ResolutionKind { get; set; }
+    public IList<string> AliasPaths { get; set; }
+    public DataBaseItem Item { get; set; }
+}
+```
+
+支持三种输入：
+
+```text
+folder\component
+projectPath::childName
+OID
+```
+
+解析规则：
+
+1. path 和 OID 同时提供时必须解析到同一 `TargetOid`，否则返回 `target_identity_mismatch`。
+2. `Project::Child` 必须先解析 Project，再通过 Project 模型元素取得 represented Component。
+3. 对 Project child 同时保留：Project reference identity、represented Component identity、canonical Package path。
+4. resolver 返回的是当前 session 内的真实对象，调用方不得再根据字符串重新解析一次。
+5. object kind 不符合 action contract 时返回 `unsupported_target_kind`，不能在后续写入阶段才失败。
+6. OID 为空或 ToolAPI 无法提供稳定 OID 时，mutation action 返回 `target_identity_unavailable`。
+
+#### 20.3.2 `AscetMutationCoordinator`
+
+TypeScript 所有 mutation 统一进入一个 coordinator：
+
+```text
+validate contract
+→ resolve database identity
+→ resolve target identity
+→ check quarantine
+→ run backend preflight
+→ persist plan
+→ resolve shared-object impact
+→ request approval
+→ acquire target mutation lock
+→ consume approval and plan
+→ dispatch Bridge
+→ classify outcome
+→ verify/rollback/quarantine
+```
+
+建议新增：
+
+```text
+packages/ascet-extension/src/edit/mutation-coordinator.ts
+packages/ascet-extension/src/edit/mutation-coordinator.test.ts
+```
+
+所有现有 `runApprovedAscet*` 入口改为 coordinator adapter。普通 `executeWrite=true` 不再直接绕过 plan：内部生成短生命周期 ephemeral plan，再走相同 approval 和 guard 流程。
+
+#### 20.3.3 Plan v3
+
+`AscetPlanRecord` 升级为 version 3，新增：
+
+```ts
+interface AscetPlanTargetImpact {
+  sharedObject: boolean;
+  ownerPath: string;
+  ownerOid: string;
+  aliasPaths: string[];
+  affectedProjects: Array<{ path: string; oid: string }>;
+  completeness: "complete" | "unknown";
+  fingerprint: string;
+}
+
+interface AscetPlanRecordV3 {
+  version: 3;
+  planId: string;
+  operation: string;
+  databaseIdentity: AscetPlanDatabaseIdentity;
+  targetIdentity: AscetPlanTargetIdentity;
+  targetImpact: AscetPlanTargetImpact;
+  backendPreflight: AscetPlanJsonValue;
+  preMutationSnapshotFingerprint?: string;
+  guardGeneration: number;
+  contractFingerprint: string;
+  evidenceFingerprint: string;
+  planFingerprint: string;
+  createdAt: string;
+  expiresAt: string;
+  state: "ready" | "executing" | "consumed" | "reconciliation_required";
+}
+```
+
+Plan fingerprint 必须包含：
+
+```text
+operation
+normalized params
+database identity
+target OID/kind
+impact fingerprint
+backend preflight evidence
+snapshot fingerprint
+guard generation
+contract fingerprint
+expiry
+```
+
+#### 20.3.4 统一 mutation 状态
+
+扩展当前 mutation 状态：
+
+```ts
+type AscetEditMutationStatus =
+  | "not_started"
+  | "applied"
+  | "rolled_back"
+  | "unknown";
+```
+
+统一结果至少包含：
+
+```json
+{
+  "mutationStatus": "applied|not_started|rolled_back|unknown",
+  "consistencyStatus": "consistent|restored|unknown",
+  "verification": {
+    "status": "passed|failed|missing|unknown"
+  },
+  "rollback": {
+    "required": false,
+    "status": "not_required|passed|failed",
+    "verified": true,
+    "stages": []
+  },
+  "guard": {
+    "status": "clear|quarantined",
+    "targetOid": "...",
+    "generation": 1
+  }
+}
+```
+
+状态约束：
+
+| 情况 | mutationStatus | consistencyStatus | guard |
+|---|---|---|---|
+| Bridge 前拒绝 | not_started | consistent | clear |
+| 写入且完整验证 | applied | consistent | clear |
+| 写入失败但完整回滚 | rolled_back | restored | clear |
+| 写入/回滚/进程结果无法证明 | unknown | unknown | quarantined |
+
+---
+
+### 20.4 Bug 1：`apply_element_spec` 批量写入非原子
+
+#### 20.4.1 根因
+
+当前 `ApplyInSession` 在同一个 loop 内直接执行：
+
+```text
+CreateElement(A)
+CreateElement(B)
+CreateElement(C)
+CreateElement(D) → failure
+```
+
+A/B/C 已经进入当前 ASCET session，异常只终止调用，不会自动删除前三项。`SaveCurrentDatabase` 尚未调用也不能证明修改未生效。
+
+#### 20.4.2 目标语义
+
+对一个 apply request，外部只能观察到两种稳定结果：
+
+```text
+全部目标状态与请求一致
+或
+目标恢复到请求前状态
+```
+
+不得返回“部分成功但继续可写”。
+
+#### 20.4.3 事务模型
+
+ASCET ToolAPI 未提供已验证的数据库事务 API，因此实现 application-level compensating transaction。
+
+建议新增：
+
+```text
+ascetcli/src/AscetCopilot/Transactions/AscetElementMutationTransaction.cs
+ascetcli/src/AscetCopilot/Transactions/AscetElementMutationSnapshot.cs
+```
+
+事务阶段：
+
+```text
+PREPARE
+  1. 解析 component OID。
+  2. 计算完整 mutation set：create/update/remove/recreate。
+  3. 回读所有受影响 Element 的 before state。
+  4. 验证 snapshot completeness。
+  5. 生成 snapshot fingerprint。
+
+APPLY
+  6. 逐项写入，并在 journal 记录完成的 stage。
+  7. 每个 stage 记录 element name、operation、before OID、after OID。
+  8. 此阶段禁止 SaveCurrentDatabase。
+
+VERIFY
+  9. 对完整请求执行一次 full-batch readback/diff。
+  10. 任一 Element 不一致视为事务失败。
+
+COMMIT
+  11. 只有 full-batch verification 通过后调用一次 SaveCurrentDatabase。
+  12. Save 后再次执行轻量 identity/readback。
+
+ROLLBACK
+  13. 逆序处理 journal。
+  14. create → remove。
+  15. update → restore before spec。
+  16. remove/recreate → recreate before spec。
+  17. 验证 rollback diff 与 snapshot 完全一致。
+  18. rollback 通过后保存恢复状态。
+```
+
+#### 20.4.4 Snapshot completeness
+
+`AscetExistingElementState` 已包含多数恢复字段，但必须新增：
+
+```text
+snapshotStatus: complete|incomplete
+unresolvedFields: string[]
+dataItemResolved: boolean
+implementationItemResolved: boolean
+sourceElementOid
+configuration fingerprints
+```
+
+以下任一情况必须在 mutation 前返回 `mutation_snapshot_incomplete`：
+
+- 受影响 Element 无法回读 kind/scope/type。
+- 请求会修改 Data，但 before Data Item unresolved。
+- 请求会修改 Implementation，但 before Impl Item unresolved。
+- table/array shape 或 values 无法完整回读。
+- delete/recreate 的 Element 无法生成可 round-trip 的 restore spec。
+
+#### 20.4.5 Journal
+
+Journal 不包含完整业务数据，只记录可审计阶段：
+
+```json
+{
+  "operationId": "...",
+  "componentOid": "...",
+  "snapshotFingerprint": "...",
+  "stages": [
+    {
+      "sequence": 1,
+      "element": "C_AVH_DoubleBrakePressCount",
+      "operation": "create",
+      "status": "applied",
+      "afterOid": "..."
+    }
+  ]
+}
+```
+
+journal 必须在每个 mutation stage 后立即刷新，进程异常退出时 reconciliation 可以知道最后已知阶段。
+
+#### 20.4.6 Failure injection
+
+参考 Parameter Dependency Chain，增加仅测试环境生效的注入点：
+
+```text
+ASCET_ELEMENT_TX_ENABLE_FAILURE_INJECTION=1
+ASCET_ELEMENT_TX_FAIL_AFTER_STAGE=create:3
+ASCET_ELEMENT_TX_FAIL_DURING_ROLLBACK=remove:2
+```
+
+生产环境未显式启用时必须忽略这些变量。
+
+#### 20.4.7 错误码
+
+| 错误码 | 含义 |
+|---|---|
+| `mutation_snapshot_incomplete` | 写入前无法生成完整恢复快照 |
+| `element_transaction_apply_failed` | apply 阶段失败，尚待 rollback 结果 |
+| `element_transaction_verification_failed` | full-batch readback/diff 不一致 |
+| `element_transaction_rolled_back` | 写入失败且已恢复，mutationStatus=rolled_back |
+| `element_transaction_rollback_failed` | rollback 无法完整证明，mutationStatus=unknown |
+| `database_save_outcome_unknown` | Save 调用结果无法证明 |
+
+#### 20.4.8 修改文件
+
+主要修改：
+
+```text
+ascetcli/src/AscetCopilot/AscetElementSync.cs
+ascetcli/src/AscetCopilot/Transactions/*
+ascetcli/src/AscetCli/AscetApplyElementSpec.cs
+packages/ascet-extension/src/apply-element-spec.ts
+packages/ascet-extension/src/edit/verification.ts
+packages/ascet-extension/src/edit/service.ts
+packages/ascet-extension/src/edit/write-telemetry.ts
+```
+
+#### 20.4.9 验收测试
+
+1. 四个新 Element，第 4 个 create 注入失败：最终四个均不存在。
+2. 两个 create + 一个 update 失败：新增项删除，更新项恢复。
+3. deleteMissing 后失败：被删除项恢复。
+4. rollback 自身失败：返回 unknown，并生成 quarantine。
+5. rollback 成功：返回 rolled_back，允许新 plan，但旧 plan 不可重放。
+6. Save 失败：不得报告 rolled_back 或 applied，必须 unknown + quarantine。
+
+---
+
+### 20.5 Bug 2：`set_method_code` 不验证引用 Element
+
+#### 20.5.1 根因
+
+当前验证条件等价于：
+
+```text
+writtenText == readbackText
+```
+
+这只能证明文本被保存，不能证明：
+
+- 引用的 Element 存在。
+- Element scope/type 与用法兼容。
+- DataConfiguration/ImplementationConfiguration 可解析。
+- ASCET parser/compiler 接受该方法。
+- 整个 Component 保持一致。
+
+#### 20.5.2 验证层次
+
+新增 `AscetComponentConsistencyService`：
+
+```text
+ascetcli/src/AscetCopilot/Services/Validation/AscetComponentConsistencyService.cs
+```
+
+验证分四层：
+
+```text
+L1 text readback
+L2 referenced symbol resolution
+L3 referenced Element configuration resolution
+L4 native ASCET parse/compile/consistency validation
+```
+
+只有四层全部通过，`ReadbackVerified=true`。
+
+#### 20.5.3 写入前流程
+
+1. 统一 resolver 获取 Component 和 OID。
+2. 回读旧方法代码并生成 `previousCodeFingerprint`。
+3. 获取 Component symbol catalog：Elements、Method arguments、合法 method names、Enumeration literals 和语言内建符号。
+4. 对新代码执行 native parser capability probe。
+5. 如果 ToolAPI 有公开 parse/compile/consistency API，必须使用原生结果作为权威验证。
+6. 如果没有可用原生 API，只允许 lexical symbol scan 作为 precheck；不能把 lexical scan 标记为最终 consistency verified。
+7. 无法进行权威一致性验证时返回 `method_consistency_validation_unavailable`，默认不写。
+
+不得用简单正则表达式作为最终符号解析器。
+
+#### 20.5.4 写入后流程
+
+```text
+set code
+→ exact text readback
+→ native method parse
+→ resolve referenced Elements
+→ resolve each referenced Data/Impl configuration
+→ component consistency check
+```
+
+引用 Element 的验证记录：
+
+```json
+{
+  "name": "C_AVH_DoubleBrakeReq",
+  "resolved": false,
+  "scope": null,
+  "dataConfiguration": "missing",
+  "implementationConfiguration": "missing"
+}
+```
+
+#### 20.5.5 Method rollback
+
+写入后任一 L2-L4 验证失败：
+
+1. 写回旧代码。
+2. 精确 readback 旧代码。
+3. 再次执行 consistency validation。
+4. rollback 通过返回 `rolled_back`。
+5. rollback 失败返回 unknown 并 quarantine Component OID。
+
+#### 20.5.6 结果契约
+
+```json
+{
+  "writeSucceeded": true,
+  "textReadbackVerified": true,
+  "symbolResolutionVerified": false,
+  "configurationResolutionVerified": false,
+  "componentConsistencyVerified": false,
+  "readbackVerified": false,
+  "missingSymbols": ["C_AVH_DoubleBrakeReq"],
+  "mutationStatus": "rolled_back"
+}
+```
+
+#### 20.5.7 错误码
+
+| 错误码 | 含义 |
+|---|---|
+| `method_symbol_not_found` | 引用符号不存在 |
+| `method_symbol_ambiguous` | 引用符号无法唯一解析 |
+| `method_element_configuration_unresolved` | 引用 Element 存在但 Data/Impl 配置不可解析 |
+| `method_parse_failed` | ASCET parser 拒绝代码 |
+| `component_consistency_failed` | Component 一致性检查失败 |
+| `method_consistency_validation_unavailable` | 无权威验证能力，写入被阻止 |
+| `method_code_rollback_failed` | 旧代码恢复失败，进入 quarantine |
+
+#### 20.5.8 修改文件
+
+```text
+ascetcli/src/AscetCopilot/Services/Write/MethodWriteService.cs
+ascetcli/src/AscetCopilot/Services/Read/MethodReadService.cs
+ascetcli/src/AscetCopilot/Services/Validation/*
+ascetcli/src/AscetCli/AscetSetMethodCode.cs
+packages/ascet-extension/src/set-method-code.ts
+packages/ascet-extension/src/edit/service.ts
+```
+
+#### 20.5.9 验收测试
+
+1. 引用四个存在 Element：通过。
+2. 引用一个缺失 Element：写入被拒绝或自动恢复旧代码。
+3. Element 存在但 DataConfiguration unresolved：失败并恢复。
+4. Method 文本 round-trip 成功但 parser 失败：不得返回 success。
+5. rollback 失败：unknown + Component quarantine。
+6. 注释、字符串、关键字和 Method argument 不得被误报为缺失 Element。
+
+---
+
+### 20.6 Bug 3：Element preflight/commit 不一致
+
+#### 20.6.1 根因
+
+当前 preflight 证明的是：
+
+```text
+JSON contract valid
++ current catalog readable
++ requested diff computable
+```
+
+它没有证明 commit 中这些调用会成功：
+
+```text
+defaultData.GetItem(element)
+element.GetValue()
+defaultImplementation.GetItem(...)
+classImplementation.GetItem(...)
+Data/Impl setters
+```
+
+#### 20.6.2 新后端操作
+
+新增只读操作：
+
+```text
+preflight_element_spec
+```
+
+建议文件：
+
+```text
+ascetcli/src/AscetCli/AscetPreflightElementSpec.cs
+ascetcli/src/AscetCopilot/Services/Validation/ElementSpecPreflightService.cs
+```
+
+TypeScript 不再把 `diff_element_spec` 的成功包装为 `validated=true`；必须消费新操作返回的 capability evidence。
+
+#### 20.6.3 每个 Element 的 preflight evidence
+
+```json
+{
+  "name": "C_AVH_DoubleBrakeWindow",
+  "operation": "create",
+  "modelElement": {
+    "kindSupported": true,
+    "scopeSupported": true,
+    "creationApiAvailable": true
+  },
+  "data": {
+    "required": true,
+    "configurationResolved": true,
+    "itemResolution": "proven|not_applicable|unavailable",
+    "requestedFieldsSupported": true
+  },
+  "implementation": {
+    "required": true,
+    "defaultConfigurationResolved": true,
+    "classConfigurationResolved": true,
+    "itemResolution": "proven|not_applicable|unavailable",
+    "requestedFieldsSupported": true
+  },
+  "writable": true,
+  "blockingReasons": []
+}
+```
+
+#### 20.6.4 新 Element 的证明策略
+
+新 Element 在真实创建前可能没有 Data Item。实现必须按以下顺序选择权威策略：
+
+1. 使用 ASCET 原生 non-mutating validation/factory capability API。
+2. 如果 ToolAPI 支持内存 clone 或 disposable object，使用不连接数据库持久状态的 materialization probe。
+3. 如果只能通过修改真实 Component 才能知道结果，则 preflight 不得执行该修改，也不得返回 validated。
+4. 对无法证明的类型返回 `element_preflight_capability_unavailable`，不生成 planId。
+
+禁止在共享目标上“创建后立即删除”来冒充只读 preflight。
+
+#### 20.6.5 Plan gate
+
+只有满足以下条件才创建 Plan v3：
+
+```text
+所有 element.writable == true
+所有 blockingReasons 为空
+snapshot complete
+impact completeness == complete
+target guard == clear
+```
+
+backend preflight fingerprint 必须包含每个 Element 的 capability evidence。Commit 时重新运行并比较 fingerprint；变化则返回 `stale_plan`。
+
+#### 20.6.6 错误码
+
+| 错误码 | 含义 |
+|---|---|
+| `element_preflight_failed` | 一个或多个 Element 不可写 |
+| `data_configuration_unresolved` | DataConfiguration 不可解析 |
+| `implementation_configuration_unresolved` | ImplConfiguration 不可解析 |
+| `data_item_preflight_unavailable` | 无法在只读阶段证明 Data Item |
+| `implementation_item_preflight_unavailable` | 无法在只读阶段证明 Impl Item |
+| `element_preflight_capability_unavailable` | ToolAPI 不支持安全证明 |
+| `preflight_evidence_changed` | Commit 前证据变化 |
+
+#### 20.6.7 修改文件
+
+```text
+ascetcli/src/AscetCli/AscetPreflightElementSpec.cs
+ascetcli/src/AscetCopilot/AscetElementSync.cs
+ascetcli/src/AscetCopilot/Services/Validation/ElementSpecPreflightService.cs
+ascetcli/src/AscetCli/Routing/OperationRegistry.cs
+ascetcli/contracts/commands/*
+packages/ascet-extension/src/edit/service.ts
+packages/ascet-extension/src/element-spec-contract.ts
+packages/ascet-extension/src/tools/actions/*
+```
+
+#### 20.6.8 验收测试
+
+1. DataConfiguration unresolved：preflight error，无 planId，无 mutation。
+2. ImplConfiguration unresolved：preflight error，无 planId。
+3. preflight 成功后配置变化：commit 返回 stale_plan，mutationStatus=not_started。
+4. 只读 preflight telemetry 必须证明 Bridge 进入 read lane，writesPerformed=false。
+5. 不支持安全 materialization 的类型：明确 blocked，不能降级为 diff-only plan。
+
+---
+
+### 20.7 Bug 4：unknown 后没有阻止后续写入
+
+#### 20.7.1 Guard store
+
+新增持久化 guard：
+
+```text
+packages/ascet-extension/src/edit/mutation-guard-store.ts
+packages/ascet-extension/src/edit/mutation-guard-store.test.ts
+```
+
+存储路径：
+
+```text
+<artifactRoot>/mutation-guards/<databaseFingerprint>/<targetOid>.json
+```
+
+不能使用用户输入 path 作为 key，因为 Project alias 和 Package path 可能指向同一 OID。
+
+#### 20.7.2 Guard record
+
+```ts
+interface AscetMutationGuardRecord {
+  version: 1;
+  databaseFingerprint: string;
+  targetOid: string;
+  targetKind: string;
+  canonicalPath: string;
+  generation: number;
+  status: "quarantined" | "reconciling";
+  reason: "unknown_outcome" | "rollback_failed" | "process_interrupted";
+  operation: string;
+  operationId: string;
+  planId?: string;
+  journalPath?: string;
+  beforeSnapshotFingerprint?: string;
+  desiredFingerprint?: string;
+  detectedAt: string;
+  evidence: {
+    bridgeEntered: boolean;
+    backendResponseReceived: boolean;
+    mutationStarted: boolean;
+  };
+}
+```
+
+#### 20.7.3 写入拦截点
+
+必须检查两次：
+
+1. plan/preflight 前：快速阻止明显被隔离目标。
+2. approval 后、Bridge dispatch 前：在 target lock 内再次检查，防止竞态。
+
+被隔离时返回：
+
+```json
+{
+  "status": "blocked",
+  "code": "target_quarantined",
+  "mutationStatus": "not_started",
+  "targetOid": "...",
+  "operationId": "...",
+  "requiredAction": "reconcile"
+}
+```
+
+#### 20.7.4 何时写入 quarantine
+
+- Bridge 已进入但没有可信 backend response。
+- backend 返回 `write_outcome_unknown`。
+- rollback 任一 stage 失败或 rollback readback 不一致。
+- SaveCurrentDatabase 结果无法证明。
+- 进程恢复时发现 journal 停留在 `bridge_entered`、`mutation_started` 或 `rollback_started`。
+
+#### 20.7.5 Reconciliation API
+
+新增受控 action：
+
+```text
+ascet_edit.reconcile_target
+```
+
+支持模式：
+
+```text
+inspect
+rollback_to_before
+accept_current
+cleanup_created
+```
+
+规则：
+
+- `inspect` 只读，返回 before/current/desired diff。
+- `rollback_to_before` 和 `cleanup_created` 是 mutation，必须专项确认。
+- `accept_current` 只允许 current state 完整可读且 consistency validation 通过。
+- guard 解除必须原子增加 generation，并记录 reconciliation evidence fingerprint。
+- 禁止提供无证据的 `forceUnlock=true`。
+
+#### 20.7.6 修改文件
+
+```text
+packages/ascet-extension/src/edit/mutation-guard-store.ts
+packages/ascet-extension/src/edit/mutation-coordinator.ts
+packages/ascet-extension/src/edit/service.ts
+packages/ascet-extension/src/edit/verification.ts
+packages/ascet-extension/src/edit/write-telemetry.ts
+packages/ascet-extension/src/tools/edit/schema.ts
+ascetcli/src/AscetCopilot/Transactions/*
+```
+
+#### 20.7.7 验收测试
+
+1. unknown 后对同 OID 的相同 path 写入：blocked。
+2. unknown 后通过另一个 alias path 写同 OID：同样 blocked。
+3. 不同 Component OID：不被误锁。
+4. inspect reconciliation 不写数据库。
+5. rollback_to_before 成功：guard generation 增加并解除。
+6. reconciliation 失败：guard 保持 quarantined。
+7. 并发两个 commit：只有一个取得 target lock。
+
+---
+
+### 20.8 Bug 5：Project 子组件路径解析不一致
+
+#### 20.8.1 统一调用方式
+
+以下服务必须删除自己的字符串解析逻辑，改用 `AscetTargetResolver`：
+
+```text
+AscetGetService
+ComponentLocatorService
+MethodReadService
+ComponentReadService
+SummaryReadService
+AscetEditableService
+ComponentElementSyncService
+MethodWriteService
+所有 verification hooks
+```
+
+#### 20.8.2 Identity 语义
+
+对于：
+
+```text
+CN_Libary\...\IPBCustGeneral_ECU_CSW_BB88010::CM_AVH
+```
+
+resolver 返回：
+
+```json
+{
+  "requestedPath": "...Project::CM_AVH",
+  "canonicalPath": "PlatformLibrary\\Package\\...\\CM_AVH",
+  "targetOid": "040gpc83142g1no70o90q9iltgggg",
+  "targetKind": "module",
+  "resolutionKind": "project_reference",
+  "ownerPath": "PlatformLibrary\\Package\\...\\CM_AVH",
+  "aliasPaths": ["...Project::CM_AVH", "...Package\\CM_AVH"]
+}
+```
+
+所有 read/write response 必须同时返回 requestedPath 和 canonical identity，避免用户误以为修改的是 Project 私有副本。
+
+#### 20.8.3 OID-first commit
+
+Plan 生成后，commit 不再使用原始 path 作为最终定位依据：
+
+```text
+resolve current database
+→ resolve target by stored OID
+→ verify requested/canonical path aliases still point to same OID
+→ execute on resolved object
+```
+
+path 只用于可读展示和 alias drift 检测。
+
+#### 20.8.4 歧义处理
+
+- Project 中同名 child 多于一个：`target_ambiguous`。
+- `::` 左侧不是 Project：`invalid_project_child_path`。
+- child 存在但无 represented Component：`represented_component_missing`。
+- stored OID 存在但 path 指向其他 OID：`target_identity_mismatch`。
+- OID 指向不支持 object kind：`unsupported_target_kind`。
+
+#### 20.8.5 修改文件
+
+```text
+ascetcli/src/AscetCopilot/Resolution/*
+ascetcli/src/AscetCopilot/AscetReadDomain.cs
+ascetcli/src/AscetCopilot/Services/Get/AscetGetService.cs
+ascetcli/src/AscetCopilot/Services/Read/*
+ascetcli/src/AscetCopilot/Services/Write/*
+ascetcli/src/AscetCli/AscetComponentEditable.cs
+ascetcli/src/AscetCopilot/AscetElementSync.cs
+```
+
+#### 20.8.6 验收测试
+
+对同一个 Project child：
+
+```text
+ascet_get.tree
+ascet_get.elements
+ascet_read.read_implementation
+ascet_read.read_method_code
+ascet_edit.check
+apply_element_spec preflight
+set_method_code preflight
+```
+
+必须返回同一个 `targetOid`。另外验证 OID 直接输入与两个 alias path 的结果一致。
+
+---
+
+### 20.9 Bug 6：共享 OID 没有影响警告
+
+#### 20.9.1 Impact resolver
+
+新增：
+
+```text
+packages/ascet-extension/src/edit/target-impact.ts
+ascetcli/src/AscetCopilot/Services/Get/TargetImpactService.cs
+```
+
+输入是 database identity + resolved target OID，不是用户 path。
+
+#### 20.9.2 影响数据来源
+
+按可靠性排序：
+
+1. 当前 database-scope complete Tree 中的 OID/alias 信息。
+2. Project module/reference collector 对 target OID 的精确匹配。
+3. Package owner path 和 database item identity。
+
+现有 `dbitem_refs` 只有 outgoing references，不能单独证明全部 consumer；不得用于宣称 impact complete。
+
+#### 20.9.3 Completeness gate
+
+impact 结果必须有：
+
+```text
+complete
+unknown
+```
+
+只有 database identity 匹配、Tree 未 truncated、Project collector 无错误时才能标记 complete。impact unknown 时共享对象 mutation 默认 blocked：
+
+```text
+shared_object_impact_unknown
+```
+
+#### 20.9.4 sharedObject 判定
+
+以下任一成立即为 shared：
+
+- 同一 target OID 存在多个 alias path。
+- requested path 是 Project reference，而 owner path 是 Package object。
+- affectedProjects 数量大于 1。
+- 当前 target 是可被多个 Project 消费的 Package-owned object。
+
+输出：
+
+```json
+{
+  "sharedObject": true,
+  "requestedPath": "Project::CM_AVH",
+  "ownerPath": "PlatformLibrary\\Package\\...\\CM_AVH",
+  "targetOid": "040gpc83142g1no70o90q9iltgggg",
+  "aliasPaths": [],
+  "affectedProjects": [],
+  "completeness": "complete",
+  "fingerprint": "sha256:..."
+}
+```
+
+#### 20.9.5 Plan 和确认
+
+impact 必须进入：
+
+```text
+plan payload
+plan fingerprint
+approval message
+approval receipt binding
+write telemetry
+final result
+```
+
+共享对象确认文本至少显示：
+
+```text
+Requested path
+Canonical owner path
+Target OID
+Affected Project count
+Affected Project paths
+```
+
+用户未通过专项 impact confirmation 时返回 `shared_object_confirmation_required`。
+
+#### 20.9.6 Impact drift
+
+commit 前重新计算 impact：
+
+- fingerprint 相同：继续。
+- consumer 增加、owner 变化或 completeness 下降：`target_impact_changed`，旧 approval 失效。
+- consumer 减少也视为 plan evidence 变化，必须重新 plan。
+
+#### 20.9.7 验收测试
+
+1. Project alias 与 Package path 同 OID：sharedObject=true。
+2. 通过 Project path 发起，确认显示 Package owner。
+3. 未确认 shared impact：Bridge 不启动。
+4. impact incomplete：blocked。
+5. plan 后新增 consumer：commit stale。
+6. 同一个 approval 不能用于不同 alias/不同 OID。
+
+---
+
+### 20.10 Bug 7：Confirmation contract 不一致
+
+#### 20.10.1 Approval receipt
+
+`ctx.ui.confirm()` 返回 true 后，由 extension 内部生成 receipt。模型和用户参数不能直接提供 receipt。
+
+建议新增：
+
+```text
+packages/ascet-extension/src/edit/approval-store.ts
+packages/ascet-extension/src/edit/approval-store.test.ts
+```
+
+结构：
+
+```ts
+interface AscetApprovalReceipt {
+  version: 1;
+  approvalId: string;
+  tokenHash: string;
+  action: string;
+  planId: string;
+  planFingerprint: string;
+  databaseFingerprint: string;
+  targetOid: string;
+  targetImpactFingerprint: string;
+  guardGeneration: number;
+  sessionId: string;
+  approvedAt: string;
+  expiresAt: string;
+  consumedAt?: string;
+}
+```
+
+receipt TTL 建议 60 秒，必须小于或等于 plan TTL。
+
+#### 20.10.2 统一确认状态机
+
+```text
+PLAN_READY
+→ APPROVAL_REQUESTED
+→ APPROVED_RECEIPT_CREATED
+→ TARGET_LOCK_ACQUIRED
+→ RECEIPT_CONSUMED
+→ PLAN_EXECUTING
+→ BRIDGE_DISPATCHED
+→ FINALIZED
+```
+
+消费顺序必须避免竞态：
+
+1. 获取 target mutation lock。
+2. 再次验证 guard generation、database、target、impact 和 plan fingerprint。
+3. 原子消费 approval receipt。
+4. 将 plan 标记 executing。
+5. 写 operation journal `before_bridge`。
+6. dispatch Bridge。
+
+#### 20.10.3 进程中断语义
+
+| 最后 journal 阶段 | 结论 |
+|---|---|
+| approval created，未取得 lock | not_started，可重新确认 |
+| lock acquired，before_bridge=false | not_started，receipt 已消费，需重新确认 |
+| before_bridge=true，bridge_entered=false | not_started 或可证明未启动 |
+| bridge_entered=true，无 response | unknown + quarantine |
+| response received，rollback 未完成 | 根据 backend result；无法证明则 quarantine |
+
+#### 20.10.4 普通 executeWrite
+
+`set_method_code(executeWrite=true)` 等普通写入必须内部执行：
+
+```text
+create ephemeral plan
+→ backend preflight
+→ resolve impact
+→ request same approval
+→ consume same receipt
+→ execute
+```
+
+这样普通写入和 `apply_element_spec phase=commit` 不再使用两套授权语义。
+
+#### 20.10.5 对话确认
+
+对话中的“确认执行”只表示用户意图，不能直接作为数据库授权证据。系统必须满足以下之一：
+
+1. 触发结构化 UI confirmation，并生成 receipt。
+2. 平台提供可验证的 structured consent event，extension 将其转换为同样的 receipt。
+
+普通聊天文本、模型转述或 `executeWrite=true` 字段不能生成 receipt。
+
+#### 20.10.6 错误码
+
+| 错误码 | 含义 |
+|---|---|
+| `approval_required` | 尚未产生结构化确认 |
+| `approval_not_granted` | 用户拒绝 |
+| `approval_expired` | receipt 过期 |
+| `approval_consumed` | receipt 已使用 |
+| `approval_binding_mismatch` | action/plan/database/target/impact 不匹配 |
+| `approval_guard_generation_mismatch` | 确认后目标 guard 状态变化 |
+| `approval_ui_unavailable` | 当前上下文无确认 UI |
+
+#### 20.10.7 验收测试
+
+1. apply_element_spec 和 set_method_code 使用相同 coordinator。
+2. receipt 绑定错误 planId：拒绝。
+3. receipt 绑定错误 target OID：拒绝。
+4. receipt 过期：拒绝且 Bridge 不启动。
+5. receipt 重放：拒绝。
+6. impact fingerprint 改变：旧 receipt 失效。
+7. guard generation 改变：旧 receipt 失效。
+8. UI confirm=true 但 signal 在 dispatch 前 aborted：not_started，不写。
+
+---
+
+### 20.11 测试矩阵
+
+#### 20.11.1 TypeScript focused tests
+
+新增或扩展：
+
+```text
+packages/ascet-extension/src/edit/mutation-coordinator.test.ts
+packages/ascet-extension/src/edit/mutation-guard-store.test.ts
+packages/ascet-extension/src/edit/approval-store.test.ts
+packages/ascet-extension/src/edit/plan-store.test.ts
+packages/ascet-extension/src/edit/service.test.ts
+packages/ascet-extension/src/edit/verification.test.ts
+packages/ascet-extension/src/edit/write-telemetry.test.ts
+packages/ascet-extension/src/edit/target-impact.test.ts
+packages/ascet-extension/src/tools/edit/schema.test.ts
+```
+
+必须覆盖：状态机、原子文件写入、并发锁、过期、重放、alias OID、impact drift 和 guard generation。
+
+#### 20.11.2 C# non-live tests
+
+新增：
+
+```text
+ascetcli/tests/AscetTargetResolverContractTest.cs
+ascetcli/tests/AscetElementMutationTransactionTest.cs
+ascetcli/tests/AscetElementSpecPreflightContractTest.cs
+ascetcli/tests/AscetMethodConsistencyContractTest.cs
+ascetcli/tests/AscetTargetImpactContractTest.cs
+```
+
+使用 fake/faux ToolAPI adapter 注入：
+
+- 第 N 个 create 失败。
+- rollback remove 失败。
+- Data Item unresolved。
+- Impl Item unresolved。
+- Project child 与 Package object 同 OID。
+- native consistency validator 返回 missing symbol。
+
+#### 20.11.3 Isolated Live tests
+
+只能在独立 fixture 下执行：
+
+```text
+PI_LIVE_TOOLS_TX_<runId>
+```
+
+测试顺序：
+
+1. 创建 isolated Folder/Class/Enumeration。
+2. 验证三种 target resolver 输入返回同一 OID。
+3. 执行 Element happy path。
+4. 启用 failure injection，验证 4→0 rollback。
+5. 注入 rollback failure，验证 quarantine。
+6. 验证同 OID alias 后续写入被阻止。
+7. reconcile rollback_to_before。
+8. 写入引用缺失 Element 的 Method，验证旧代码恢复。
+9. 构造 shared alias impact，验证专项确认。
+10. 逆序 cleanup。
+11. 确认 fixture 不存在、database identity 不变、unexpectedWrites=0。
+
+#### 20.11.4 禁止的测试方式
+
+- 不在真实业务 Component 上制造部分失败。
+- 不通过人工删除残留项来把 case 标记为 PASS。
+- 不把 rollback failed 的 case 当成“预期失败所以通过”；必须同时验证 quarantine。
+- 不复用旧 plan 或旧 approval receipt。
+
+---
+
+### 20.12 实施顺序和依赖
+
+```text
+Phase 0  冻结当前失败复现与结果契约
+   ↓
+Phase 1  Shared Target Resolver + identity contract
+   ↓
+Phase 2  Mutation Guard Store + target lock + operation journal
+   ↓
+Phase 3  Plan v3 + Approval Receipt + Mutation Coordinator
+   ↓
+Phase 4  Element Spec authoritative preflight
+   ↓
+Phase 5  Element compensating transaction and rollback
+   ↓
+Phase 6  Method consistency validation and rollback
+   ↓
+Phase 7  Shared-object impact resolver and impact confirmation
+   ↓
+Phase 8  Focused tests + Bridge non-live + npm run check
+   ↓
+Phase 9  Read-only Live resolver/impact validation
+   ↓
+Phase 10 Isolated failure-injection write/rollback/quarantine/reconcile
+```
+
+优先级说明：
+
+- P0 业务行为仍是最高优先级。
+- 但原子写入必须依赖 stable target OID 和 quarantine，因此先完成 resolver/guard 基础层。
+- shared impact 与 confirmation 最后接入，但 approval receipt 基础必须在所有写入重构前完成。
+
+### 20.13 分阶段提交建议
+
+建议拆分提交，避免一个提交同时改变所有安全边界：
+
+```text
+1. feat: add shared ASCET target resolver
+2. feat: add persistent mutation quarantine guard
+3. fix: bind mutation approval to plan and target identity
+4. fix: validate element data and implementation during preflight
+5. fix: make element spec mutation compensating-atomic
+6. fix: validate method symbol and component consistency
+7. fix: warn and confirm shared ASCET object impact
+8. test: add isolated mutation failure and reconciliation coverage
+9. docs: update live tools safety and release gates
+```
+
+每个代码提交都必须运行对应 focused tests；涉及 TypeScript/C# 代码的最终集成提交必须运行：
+
+```text
+focused node tests
+ASCET Bridge non-live tests
+npm run check
+```
+
+### 20.14 Definition of Done
+
+七个问题只有同时满足以下条件才能标记 `FIXED`：
+
+1. 四 Element 第四项失败后，独立 readback 证明没有留下前三项。
+2. rollback 成功返回 rolled_back；rollback 失败返回 unknown 并锁定 OID。
+3. unknown 后任何 alias path 的 mutation 都被 `target_quarantined` 阻止。
+4. Method 引用缺失 Element 时不能返回 readbackVerified=true。
+5. Method consistency 失败后旧代码恢复并通过独立回读。
+6. Data/Implementation unresolved 时 preflight 不生成 planId。
+7. get/read/edit/editability 对 Project child 返回同一 target OID。
+8. Project alias 与 Package path 同 OID 时 plan 显示 owner 和 affectedProjects。
+9. impact incomplete 时禁止共享对象写入。
+10. 所有 mutation 使用 plan-bound、target-bound、impact-bound receipt。
+11. approval 过期、篡改、重放、跨 target 使用全部被拒绝。
+12. focused tests、Bridge non-live tests 和 `npm run check` 全部通过。
+13. isolated failure-injection、rollback、quarantine、reconcile 和 cleanup 全部通过。
+14. fixture 精确清理，原数据库 identity 不变，unexpectedWrites=0。
+15. 外部 Bug Report 和测试计划包含 case-level 证据，而不是只引用整体 PASS。
+
+在以上 15 项全部具备证据之前，本节整体状态保持：
+
+```text
+NOT FIXED
+```
+
+### 20.15 与四项 Root Fix 的范围关系
+
+以下四项基础缺陷已通过独立方案和新的 Live run 完成修复：
+
+```text
+Plan consume lock ownership
+Runtime Evidence Ledger Event v2
+Catalog base-ref breaking gate
+Database mandatory collector completeness proof
+```
+
+权威证据：
+
+```text
+docs/2026-08-11-ascet-live-tools-root-fix-development-plan.md
+output/live-tools/20260811-root-fix-live-ED3C9BC9/completion-audit.md
+```
+
+该完成状态不改变本节七项更大范围 mutation atomicity/rollback/quarantine 方案的 `NOT FIXED` 状态，两者范围必须分开审计。

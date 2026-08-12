@@ -13,6 +13,21 @@ class AscetElementProvenanceOutputTest
             {
                 { "P_Exported", "ELEMENT-OID" }
             },
+            ComponentConfigurationProvenance = new AscetComponentConfigurationProvenance
+            {
+                DefaultDataConfiguration = new AscetConfigurationProvenance
+                {
+                    Source = "defaultDataConfiguration",
+                    ConfigurationName = "DefaultData",
+                    Selected = true
+                },
+                DefaultImplementationConfiguration = new AscetConfigurationProvenance
+                {
+                    Source = "defaultImplementationConfiguration",
+                    ConfigurationName = "DefaultImplementation",
+                    Selected = true
+                }
+            },
             Document = new AscetElementSpecDocument
             {
                 Elements = new List<AscetElementSpec>
@@ -45,6 +60,7 @@ class AscetElementProvenanceOutputTest
 
         string json = AscetReadElementCatalog.FormatJsonOutput(catalog);
         if (json.IndexOf("\"identity\":{\"componentOID\":\"COMPONENT-OID\",\"elementOIDs\":{\"P_Exported\":\"ELEMENT-OID\"}}", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"componentConfigurationProvenance\":{\"defaultDataConfiguration\":{\"source\":\"defaultDataConfiguration\",\"configurationName\":\"DefaultData\",\"selected\":true},\"defaultImplementationConfiguration\":{\"source\":\"defaultImplementationConfiguration\",\"configurationName\":\"DefaultImplementation\",\"selected\":true}}", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"configurationProvenance\"", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"dataConfiguration\":{\"source\":\"classDataConfiguration\",\"configurationName\":\"ClassData\",\"selected\":true}", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"implementationConfiguration\":{\"source\":\"classImplementationConfiguration\",\"configurationName\":\"ClassImplementation\",\"selected\":true}", StringComparison.Ordinal) < 0)

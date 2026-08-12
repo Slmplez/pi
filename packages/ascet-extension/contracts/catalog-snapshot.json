@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "catalogFingerprint": "f371bb874a379309989d4593f64d46c0227b82169a8f2bfb1a161bae1eaf3596",
+  "catalogFingerprint": "633e79801327d153eee7c3759a9df791c7c1f0f5f3e6178376da81fd3b51ae6f",
   "actions": [
     {
       "id": "ascet_batch_write.batch_create_component",
@@ -2312,6 +2312,36 @@
       }
     },
     {
+      "id": "ascet_get.database_identity",
+      "schemaFingerprint": "e74fa7115068f249f2c8859786381e2db7c36561046705882a920b252721e3db",
+      "rulesFingerprint": "ef0c77cb1e8938088492d6ca7d1c8d6f2c0d6665dc5c56454f4544f1a5a966a7",
+      "resultFingerprint": "ecd4aa85325baf18b24c29618cf9cff4891b6e7d0c90cfbc32d0cc19a4c93d58",
+      "schema": {
+        "required": [
+          "action"
+        ],
+        "optional": [],
+        "enums": {
+          "action": [
+            "database_identity"
+          ]
+        }
+      },
+      "supportedObjectKinds": [
+        "database"
+      ],
+      "result": {
+        "shape": "observation",
+        "fields": [
+          "delivery",
+          "items",
+          "observation",
+          "coverage",
+          "truncated"
+        ]
+      }
+    },
+    {
       "id": "ascet_get.dbitem_refs",
       "schemaFingerprint": "3e38d6c72bc0b6c116c8ab264c182477dc186e86ea1260914b10ffe48be9713a",
       "rulesFingerprint": "105c5df338204c54e95cf94973546f194bd188256e440f253623049711b85ff9",
@@ -2871,7 +2901,7 @@
     },
     {
       "id": "ascet_recover.clear_extension_temp",
-      "schemaFingerprint": "ae13080f45a5cd5b79b376399bf7a3a64edb3f8cba44041730e5aba177f94941",
+      "schemaFingerprint": "2c90e06410461e338d24b600e09e85d470c917dedc4c810406d393c76b9a1984",
       "rulesFingerprint": "bf1ff4921c7f1660f8ac215796954fcc63f4a7e79387de91d522546ab7720a6c",
       "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
       "schema": {
@@ -2885,9 +2915,57 @@
             "clear_extension_temp",
             "scheduler_status",
             "scheduler_recover",
-            "clear_stale_cli_lock"
+            "clear_stale_cli_lock",
+            "reconcile_mutation"
+          ],
+          "mode": [
+            "inspect",
+            "rollback_to_before",
+            "cleanup_created",
+            "accept_current"
           ]
-        }
+        },
+        "variants": [
+          {
+            "required": [
+              "action"
+            ],
+            "optional": []
+          },
+          {
+            "required": [
+              "action",
+              "mode",
+              "databaseFingerprint",
+              "targetOid",
+              "expectedGeneration"
+            ],
+            "optional": [],
+            "when": {
+              "mode": [
+                "inspect"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "mode",
+              "databaseFingerprint",
+              "targetOid",
+              "expectedGeneration",
+              "executeWrite"
+            ],
+            "optional": [],
+            "when": {
+              "mode": [
+                "rollback_to_before",
+                "cleanup_created",
+                "accept_current"
+              ]
+            }
+          }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
@@ -2899,7 +2977,7 @@
     },
     {
       "id": "ascet_recover.clear_stale_cli_lock",
-      "schemaFingerprint": "ae13080f45a5cd5b79b376399bf7a3a64edb3f8cba44041730e5aba177f94941",
+      "schemaFingerprint": "2c90e06410461e338d24b600e09e85d470c917dedc4c810406d393c76b9a1984",
       "rulesFingerprint": "8241ed3bd19bd90f595a42883f975cd2b55ef63235d0fdb4dc65a9e97dda1867",
       "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
       "schema": {
@@ -2913,9 +2991,126 @@
             "clear_extension_temp",
             "scheduler_status",
             "scheduler_recover",
-            "clear_stale_cli_lock"
+            "clear_stale_cli_lock",
+            "reconcile_mutation"
+          ],
+          "mode": [
+            "inspect",
+            "rollback_to_before",
+            "cleanup_created",
+            "accept_current"
           ]
-        }
+        },
+        "variants": [
+          {
+            "required": [
+              "action"
+            ],
+            "optional": []
+          },
+          {
+            "required": [
+              "action",
+              "mode",
+              "databaseFingerprint",
+              "targetOid",
+              "expectedGeneration"
+            ],
+            "optional": [],
+            "when": {
+              "mode": [
+                "inspect"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "mode",
+              "databaseFingerprint",
+              "targetOid",
+              "expectedGeneration",
+              "executeWrite"
+            ],
+            "optional": [],
+            "when": {
+              "mode": [
+                "rollback_to_before",
+                "cleanup_created",
+                "accept_current"
+              ]
+            }
+          }
+        ]
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "result",
+        "fields": [
+          "items"
+        ]
+      }
+    },
+    {
+      "id": "ascet_recover.reconcile_mutation",
+      "schemaFingerprint": "cafbf93c47afe92b2cb48246e3ec56347e66b4c7dd93c79247e79c14dc34d01b",
+      "rulesFingerprint": "8fe824980072dea03d964c57f0dd5adaf8a9d9d0c53ccb2391cc51aea405454a",
+      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "schema": {
+        "required": [
+          "action",
+          "mode",
+          "databaseFingerprint",
+          "targetOid",
+          "expectedGeneration"
+        ],
+        "optional": [],
+        "enums": {
+          "action": [
+            "reconcile_mutation"
+          ],
+          "mode": [
+            "inspect",
+            "rollback_to_before",
+            "cleanup_created",
+            "accept_current"
+          ]
+        },
+        "variants": [
+          {
+            "required": [
+              "action",
+              "mode",
+              "databaseFingerprint",
+              "targetOid",
+              "expectedGeneration"
+            ],
+            "optional": [],
+            "when": {
+              "mode": [
+                "inspect"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "mode",
+              "databaseFingerprint",
+              "targetOid",
+              "expectedGeneration",
+              "executeWrite"
+            ],
+            "optional": [],
+            "when": {
+              "mode": [
+                "rollback_to_before",
+                "cleanup_created",
+                "accept_current"
+              ]
+            }
+          }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
@@ -2927,7 +3122,7 @@
     },
     {
       "id": "ascet_recover.scheduler_recover",
-      "schemaFingerprint": "ae13080f45a5cd5b79b376399bf7a3a64edb3f8cba44041730e5aba177f94941",
+      "schemaFingerprint": "2c90e06410461e338d24b600e09e85d470c917dedc4c810406d393c76b9a1984",
       "rulesFingerprint": "9818f536d6f3c752b04db37f592dd9738db50cff84b539aa8ee0af73bf7c2fa3",
       "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
       "schema": {
@@ -2941,9 +3136,57 @@
             "clear_extension_temp",
             "scheduler_status",
             "scheduler_recover",
-            "clear_stale_cli_lock"
+            "clear_stale_cli_lock",
+            "reconcile_mutation"
+          ],
+          "mode": [
+            "inspect",
+            "rollback_to_before",
+            "cleanup_created",
+            "accept_current"
           ]
-        }
+        },
+        "variants": [
+          {
+            "required": [
+              "action"
+            ],
+            "optional": []
+          },
+          {
+            "required": [
+              "action",
+              "mode",
+              "databaseFingerprint",
+              "targetOid",
+              "expectedGeneration"
+            ],
+            "optional": [],
+            "when": {
+              "mode": [
+                "inspect"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "mode",
+              "databaseFingerprint",
+              "targetOid",
+              "expectedGeneration",
+              "executeWrite"
+            ],
+            "optional": [],
+            "when": {
+              "mode": [
+                "rollback_to_before",
+                "cleanup_created",
+                "accept_current"
+              ]
+            }
+          }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
@@ -2955,7 +3198,7 @@
     },
     {
       "id": "ascet_recover.scheduler_status",
-      "schemaFingerprint": "ae13080f45a5cd5b79b376399bf7a3a64edb3f8cba44041730e5aba177f94941",
+      "schemaFingerprint": "2c90e06410461e338d24b600e09e85d470c917dedc4c810406d393c76b9a1984",
       "rulesFingerprint": "f18e91b94e99a6368eac7fd60107d0d5c369ec2da803b004e23c7301345be364",
       "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
       "schema": {
@@ -2969,9 +3212,57 @@
             "clear_extension_temp",
             "scheduler_status",
             "scheduler_recover",
-            "clear_stale_cli_lock"
+            "clear_stale_cli_lock",
+            "reconcile_mutation"
+          ],
+          "mode": [
+            "inspect",
+            "rollback_to_before",
+            "cleanup_created",
+            "accept_current"
           ]
-        }
+        },
+        "variants": [
+          {
+            "required": [
+              "action"
+            ],
+            "optional": []
+          },
+          {
+            "required": [
+              "action",
+              "mode",
+              "databaseFingerprint",
+              "targetOid",
+              "expectedGeneration"
+            ],
+            "optional": [],
+            "when": {
+              "mode": [
+                "inspect"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "mode",
+              "databaseFingerprint",
+              "targetOid",
+              "expectedGeneration",
+              "executeWrite"
+            ],
+            "optional": [],
+            "when": {
+              "mode": [
+                "rollback_to_before",
+                "cleanup_created",
+                "accept_current"
+              ]
+            }
+          }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
@@ -2983,7 +3274,7 @@
     },
     {
       "id": "ascet_recover.status",
-      "schemaFingerprint": "ae13080f45a5cd5b79b376399bf7a3a64edb3f8cba44041730e5aba177f94941",
+      "schemaFingerprint": "2c90e06410461e338d24b600e09e85d470c917dedc4c810406d393c76b9a1984",
       "rulesFingerprint": "a0d7b69e053dee6e200cd4043436e1a73d29b993d1847db87db61b48377632f8",
       "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
       "schema": {
@@ -2997,9 +3288,57 @@
             "clear_extension_temp",
             "scheduler_status",
             "scheduler_recover",
-            "clear_stale_cli_lock"
+            "clear_stale_cli_lock",
+            "reconcile_mutation"
+          ],
+          "mode": [
+            "inspect",
+            "rollback_to_before",
+            "cleanup_created",
+            "accept_current"
           ]
-        }
+        },
+        "variants": [
+          {
+            "required": [
+              "action"
+            ],
+            "optional": []
+          },
+          {
+            "required": [
+              "action",
+              "mode",
+              "databaseFingerprint",
+              "targetOid",
+              "expectedGeneration"
+            ],
+            "optional": [],
+            "when": {
+              "mode": [
+                "inspect"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "mode",
+              "databaseFingerprint",
+              "targetOid",
+              "expectedGeneration",
+              "executeWrite"
+            ],
+            "optional": [],
+            "when": {
+              "mode": [
+                "rollback_to_before",
+                "cleanup_created",
+                "accept_current"
+              ]
+            }
+          }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {

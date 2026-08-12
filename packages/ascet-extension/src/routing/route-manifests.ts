@@ -64,7 +64,21 @@ export const ascetRouteManifestEntries = [
 		operation: "clear_stale_cli_lock",
 		category: "ops",
 	},
+	{
+		toolName: "ascet_recover",
+		action: "reconcile_mutation",
+		logicalCommandId: "PiAscetRecoverReconcileMutation",
+		operation: "reconcile_mutation",
+		category: "ops",
+	},
 
+	{
+		toolName: "ascet_get",
+		action: "database_identity",
+		logicalCommandId: "AscetGetDatabaseIdentity",
+		operation: "get_database_identity",
+		category: "domain",
+	},
 	{
 		toolName: "ascet_get",
 		action: "tree",

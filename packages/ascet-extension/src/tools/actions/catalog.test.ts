@@ -3,6 +3,7 @@ import { describe, test } from "node:test";
 import { createActionCatalogSnapshot, diffActionCatalogSnapshots, listActionCatalogEntries } from "./catalog.ts";
 
 const getActions = [
+	"database_identity",
 	"tree",
 	"database_catalog",
 	"elements",

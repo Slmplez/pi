@@ -134,6 +134,17 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["ops", "capability", "action-search"],
 		}),
 	}),
+	descriptor("ascet_get", "database_identity", "public", READ_PROFILES, {
+		supportedObjectKinds: ["database"],
+		prompt: prompt("Read the current live ASCET database identity.", {
+			rules: [
+				"Use this action to verify the open database name and path before consuming stored observations or starting a guarded mutation.",
+				"This action is read-only and accepts no target or traversal fields.",
+			],
+			fewShots: [shot("verify current database", { action: "database_identity" })],
+			tags: ["database", "identity", "live-read"],
+		}),
+	}),
 	descriptor("ascet_get", "tree", "public", READ_PROFILES, {
 		supportedObjectKinds: ["database", "project", "folder", "class", "module", "statemachine", "enumeration"],
 		prompt: prompt("Read a bounded live Folder/Component tree when structural discovery is required.", {
@@ -949,6 +960,31 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["ops", "scheduler", "recover"],
 		}),
 	}),
+	descriptor(
+		"ascet_recover",
+		"reconcile_mutation",
+		"public",
+		["write-preflight", "batch-write", "component-edit", "ops"],
+		{
+			prompt: prompt("Inspect and reconcile a quarantined ASCET mutation target.", {
+				rules: [
+					"Start with mode=inspect. Inspect is read-only and never clears quarantine.",
+					"Bind reconciliation to the exact database fingerprint, target OID, and guard generation.",
+					"Do not attempt another mutation while the target remains quarantined.",
+				],
+				fewShots: [
+					shot("inspect quarantined mutation", {
+						action: "reconcile_mutation",
+						mode: "inspect",
+						databaseFingerprint: "sha256:database",
+						targetOid: "040...",
+						expectedGeneration: 1,
+					}),
+				],
+				tags: ["ops", "mutation", "reconciliation"],
+			}),
+		},
+	),
 	descriptor("ascet_scheduler_status", "status", "public", ["write-preflight", "batch-write", "ops"], {
 		prompt: prompt("Inspect ASCET runtime scheduler queue, PI CLI lock, and operation health.", {
 			rules: ["Use ascet_scheduler_status when ASCET tools appear stuck, queued, degraded, or timing out."],

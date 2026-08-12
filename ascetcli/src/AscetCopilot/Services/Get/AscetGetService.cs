@@ -339,24 +339,9 @@ public sealed class AscetGetService
             request.MaxFolders = 0;
             request.MaxComponents = 0;
         }
-        if (!String.IsNullOrWhiteSpace(request.Oid))
-        {
-            DataBaseItem targetItem = ResolveTargetItem(database, request, "get_tree");
-            string canonicalPath = NormalizePath(SafeGetPath(targetItem));
-            string targetPath = FirstNonEmpty(canonicalPath, request.Path, SafeGetName(targetItem));
-            AscetFolder folderTarget = targetItem as AscetFolder;
-            if (folderTarget != null)
-            {
-                AppendTreeFolder(folderTarget, targetPath, request.Depth, request, state, items, true);
-                return items;
-            }
-
-            AppendTreeItemChildren(targetItem, targetPath, request.Depth, request, state, items, true);
-            return items;
-        }
 
         string requestedPath = FirstNonEmpty(request.TargetPathPrefix, request.Path);
-        if (String.IsNullOrWhiteSpace(requestedPath))
+        if (String.IsNullOrWhiteSpace(request.Oid) && String.IsNullOrWhiteSpace(requestedPath))
         {
             AscetFolder[] topFolders = null;
             if (databaseScope) state.RootCollectionStarted = true;
@@ -401,22 +386,28 @@ public sealed class AscetGetService
             return items;
         }
 
-        if (!String.IsNullOrWhiteSpace(request.TargetPathPrefix))
+        if (String.IsNullOrWhiteSpace(request.Oid) && !String.IsNullOrWhiteSpace(request.TargetPathPrefix))
         {
             AscetFolder targetFolder = ResolveFolder(database, requestedPath);
             AppendTreeFolder(targetFolder, requestedPath, request.Depth, request, state, items, true);
             return items;
         }
 
-        DataBaseItem targetItemByPath = ResolveTargetItem(database, request, "get_tree");
-        AscetFolder folderTargetByPath = targetItemByPath as AscetFolder;
-        if (folderTargetByPath != null)
+        AscetResolvedTarget resolvedTarget = ResolveTreeTarget(request, new ToolApiAscetTargetResolutionBackend(database));
+        DataBaseItem targetItem = resolvedTarget.NativeItem as DataBaseItem;
+        if (targetItem == null)
         {
-            AppendTreeFolder(folderTargetByPath, requestedPath, request.Depth, request, state, items, true);
+            throw new AscetReadException("unsupported_target_kind", "get_tree", "Resolved target is not an ASCET database item.");
+        }
+        string targetPath = FirstNonEmpty(resolvedTarget.RequestedPath, resolvedTarget.CanonicalPath, SafeGetName(targetItem));
+        AscetFolder folderTarget = targetItem as AscetFolder;
+        if (folderTarget != null)
+        {
+            AppendTreeFolder(folderTarget, targetPath, request.Depth, request, state, items, true);
             return items;
         }
 
-        AppendTreeItemChildren(targetItemByPath, requestedPath, request.Depth, request, state, items, true);
+        AppendTreeItemChildren(targetItem, targetPath, request.Depth, request, state, items, true);
         return items;
     }
 
@@ -799,6 +790,25 @@ public sealed class AscetGetService
         }
     }
 
+    internal static AscetResolvedTarget ResolveTreeTarget(AscetGetRequest request, IAscetTargetResolutionBackend backend)
+    {
+        if (request == null)
+        {
+            throw new AscetReadException("invalid_target", "get_tree", "Target request must not be null.");
+        }
+        try
+        {
+            return new AscetTargetResolver(backend).Resolve(new AscetTargetRequest
+            {
+                Path = request.Path,
+                Oid = request.Oid
+            });
+        }
+        catch (AscetReadException ex)
+        {
+            throw new AscetReadException(ex.Code, "get_tree", ex.Message, ex);
+        }
+    }
     private static DataBaseItem ResolveItemByPath(AscetDataBase database, string path, string operation)
     {
         AscetItemPath parsed = AscetItemPath.Parse(path);
@@ -831,7 +841,7 @@ public sealed class AscetGetService
         return method == null ? null : method.Invoke(database, new object[] { oid }) as DataBaseItem;
     }
 
-    private static AscetFolder ResolveFolder(AscetDataBase database, string folderPath)
+    internal static AscetFolder ResolveFolder(AscetDataBase database, string folderPath)
     {
         string[] segments = NormalizePath(folderPath).Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
         IList<AscetFolder> current = GetTopFolders(database);

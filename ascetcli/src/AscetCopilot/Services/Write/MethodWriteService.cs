@@ -28,19 +28,30 @@ public sealed class ExecMethodWriteService : IExecMethodCodeWriteService
     private readonly IComponentLocatorService locator;
     private readonly IMethodWriteService writer;
     private readonly AscetWriteExecutor executor;
+    private readonly IMethodConsistencyService consistency;
 
     public ExecMethodWriteService()
-        : this(new ComponentLocatorService(), new MethodWriteService(), null)
+        : this(new ComponentLocatorService(), new MethodWriteService(), null, null)
     {
     }
 
     public ExecMethodWriteService(IComponentLocatorService locator, IMethodWriteService writer, AscetWriteExecutor executor)
+        : this(locator, writer, executor, null)
+    {
+    }
+
+    public ExecMethodWriteService(
+        IComponentLocatorService locator,
+        IMethodWriteService writer,
+        AscetWriteExecutor executor,
+        IMethodConsistencyService consistency)
     {
         this.locator = locator ?? new ComponentLocatorService();
         this.writer = writer ?? new MethodWriteService();
         this.executor = executor ?? new AscetWriteExecutor(
             new WriteVerificationService(
                 new SetMethodCodeVerificationHook()));
+        this.consistency = consistency ?? new MethodConsistencyService();
     }
 
     public SetMethodCodeWriteRequest ParseExecArguments(string[] args)
@@ -76,7 +87,61 @@ public sealed class ExecMethodWriteService : IExecMethodCodeWriteService
             {
                 AscetItemPath parsed = AscetItemPath.Parse(request.ComponentPath);
                 AscetItemRef component = locator.FindItemInFolder(parsed.ItemName, parsed.FolderPath);
-                AscetMethodWriteResult result = writer.SetMethodCode(component, request.MethodName, request.Code, false);
+                MethodConsistencySnapshot snapshot = consistency.Capture(component, request.MethodName);
+                AscetMethodWriteResult result = null;
+                bool writeCompleted = false;
+                try
+                {
+                    result = writer.SetMethodCode(component, request.MethodName, request.Code, false);
+                    writeCompleted = true;
+                    consistency.Validate(component, request.MethodName, request.Code);
+                }
+                catch (Exception validationError)
+                {
+                    if (!writeCompleted)
+                    {
+                        throw;
+                    }
+
+                    try
+                    {
+                        writer.SetMethodCode(component, request.MethodName, snapshot == null ? String.Empty : (snapshot.PreviousCode ?? String.Empty), false);
+                        if (!consistency.VerifyRollback(component, request.MethodName, snapshot == null ? String.Empty : (snapshot.PreviousCode ?? String.Empty)))
+                        {
+                            throw new AscetReadException(
+                                "method_consistency_rollback_failed",
+                                "set_method_code",
+                                "Method consistency validation failed and previous code could not be verified after rollback.",
+                                validationError);
+                        }
+                    }
+                    catch (AscetReadException rollbackError)
+                    {
+                        if (String.Equals(rollbackError.Code, "method_consistency_rollback_failed", StringComparison.Ordinal))
+                        {
+                            throw;
+                        }
+                        throw new AscetReadException(
+                            "method_consistency_rollback_failed",
+                            "set_method_code",
+                            "Method consistency validation failed and rollback failed: " + rollbackError.Message,
+                            validationError);
+                    }
+                    catch (Exception rollbackError)
+                    {
+                        throw new AscetReadException(
+                            "method_consistency_rollback_failed",
+                            "set_method_code",
+                            "Method consistency validation failed and rollback failed: " + rollbackError.Message,
+                            validationError);
+                    }
+
+                    throw new AscetReadException(
+                        "method_consistency_rolled_back",
+                        "set_method_code",
+                        "Method consistency validation failed and previous code was restored: " + validationError.Message,
+                        validationError);
+                }
 
                 AscetWriteActionResult actionResult = new AscetWriteActionResult();
                 actionResult.Summary = BuildSummary(result);
