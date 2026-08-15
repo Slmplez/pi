@@ -71,7 +71,7 @@ describe("ASCET component editable PI tool", () => {
 	it("treats an AscetBridge set result with editable=false as a failed write", async () => {
 		const scheduler = createAscetScheduler();
 		const result = await runAscetEditability(
-			{ mode: "set", componentPath: "DEMO\\PID" },
+			{ mode: "set", componentPath: "DEMO\\PID", intent: "preview" },
 			{
 				cwd: repoRoot,
 				scheduler,
@@ -127,12 +127,12 @@ describe("ASCET component editable PI tool", () => {
 		expect(text).not.toContain('"action"');
 	});
 
-	it("uses the same executeWrite permission gate as ascet_edit for set mode", async () => {
+	it("uses the same intent permission gate as ascet_edit for set mode", async () => {
 		let confirmCalled = false;
-		let executed = false;
+		const executedOperations: string[] = [];
 		const response = await ascetEditTool.execute(
 			"editable",
-			{ mode: "set", componentPath: "DEMO\\PID" },
+			{ mode: "set", componentPath: "DEMO\\PID", intent: "preview" },
 			new AbortController().signal,
 			undefined,
 			{
@@ -145,7 +145,7 @@ describe("ASCET component editable PI tool", () => {
 					},
 				},
 				executeCli: async (request: AscetCliRequest): Promise<AscetCliExecutionResult> => {
-					executed = true;
+					executedOperations.push(request.args[1] ?? "");
 					return {
 						exitCode: 0,
 						stdout: JSON.stringify({ ok: true, result: true, error: null, meta: { mode: "exec" } }),
@@ -159,32 +159,33 @@ describe("ASCET component editable PI tool", () => {
 		const text = response.content[0]?.type === "text" ? response.content[0].text : "";
 
 		expect(confirmCalled).toBe(false);
-		expect(executed).toBe(false);
-		expect(text).toContain("ascet_edit_preflight_required");
+		expect(executedOperations).toEqual(["component_editable_check"]);
+		expect(JSON.parse(text)).toEqual({ editable: true });
 		expect(text).not.toContain('"ok"');
 		expect(text).not.toContain('"action"');
 	});
 
 	it("returns a structured error when confirmed set mode leaves the component read-only", async () => {
 		let confirmCalled = false;
-		let executed = false;
+		const executedOperations: string[] = [];
 		const response = await ascetEditTool.execute(
 			"editable",
-			{ mode: "set", componentPath: "DEMO\\PID", executeWrite: true },
+			{ mode: "set", componentPath: "DEMO\\PID", intent: "apply" },
 			new AbortController().signal,
 			undefined,
 			{
 				cwd: repoRoot,
 				hasUI: true,
 				ui: {
-					confirm: async (_title: string, message: string) => {
+					confirm: async (title: string, message: string) => {
 						confirmCalled = true;
-						expect(message).toContain("DEMO\\PID");
+						expect(title).toBe("Make ASCET component editable?");
+						expect(message).toBe("Target: DEMO\\PID");
 						return true;
 					},
 				},
 				executeCli: async (request: AscetCliRequest): Promise<AscetCliExecutionResult> => {
-					executed = true;
+					executedOperations.push(request.args[1] ?? "");
 					return {
 						exitCode: 0,
 						stdout: JSON.stringify({ ok: true, result: false, error: null, meta: { mode: "exec" } }),
@@ -198,7 +199,11 @@ describe("ASCET component editable PI tool", () => {
 		const text = response.content[0]?.type === "text" ? response.content[0].text : "";
 
 		expect(confirmCalled).toBe(true);
-		expect(executed).toBe(true);
+		expect(executedOperations).toEqual([
+			"component_editable_check",
+			"component_editable_check",
+			"component_editable_set",
+		]);
 		expect(JSON.parse(text)).toMatchObject({ error: { code: "component_not_editable" } });
 		expect(text).not.toContain('"ok"');
 		expect(text).not.toContain('"action"');

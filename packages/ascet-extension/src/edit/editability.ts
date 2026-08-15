@@ -6,23 +6,21 @@ import {
 	runAscetCliJson,
 } from "../cli.ts";
 import { normalizeAscetPath } from "../core/path.ts";
+import { evaluateAscetPermission } from "../permissions/evaluate.ts";
+import { parseAscetPermissionRules } from "../permissions/settings.ts";
+import type { PermissionMode } from "../permissions/types.ts";
 import type { AscetScheduler } from "../scheduler/scheduler.ts";
 import { createAscetStatusReport } from "../status.ts";
 import { toToolSuccessPayload } from "../tool-response-contract.ts";
-import {
-	type AscetEditApprovalContext,
-	type AscetEditApprovalFailure,
-	createAscetEditApprovalResultData,
-	requestAscetEditApproval,
-} from "./approval.ts";
+import { type AscetEditApprovalContext, requestAscetMutationApproval } from "./approval.ts";
+import { getAscetEditAction } from "./contract.ts";
+import type { AscetMutationIntent } from "./write-control-contract.ts";
 
 export type AscetEditabilityMode = "check" | "set";
 
-export interface AscetEditabilityParams {
-	mode: AscetEditabilityMode;
-	componentPath: string;
-	executeWrite?: boolean;
-}
+export type AscetEditabilityParams =
+	| { mode: "check"; componentPath: string }
+	| { mode: "set"; componentPath: string; intent: AscetMutationIntent };
 
 export interface RunAscetEditabilityOptions {
 	cwd: string;
@@ -33,11 +31,14 @@ export interface RunAscetEditabilityOptions {
 	scheduler?: Pick<AscetScheduler, "submit" | "getSnapshot">;
 }
 
+export interface AscetEditabilityContext extends AscetEditApprovalContext {
+	permissionMode?: PermissionMode;
+	getSettings?: () => Readonly<Record<string, unknown>>;
+}
+
 function normalizeComponentPath(componentPath: string): string {
 	const normalized = normalizeAscetPath(componentPath.trim()).replace(/^\\+/, "");
-	if (!normalized) {
-		throw new Error("componentPath is required for ascet_edit.");
-	}
+	if (!normalized) throw new Error("componentPath is required for ascet_edit.");
 	return normalized;
 }
 
@@ -45,37 +46,25 @@ export function getAscetEditabilityOperation(mode: AscetEditabilityMode): string
 	return mode === "set" ? "component_editable_set" : "component_editable_check";
 }
 
-export function buildAscetEditabilityArgs(params: AscetEditabilityParams): string[] {
+export function buildAscetEditabilityArgs(params: Pick<AscetEditabilityParams, "mode" | "componentPath">): string[] {
 	return ["exec", getAscetEditabilityOperation(params.mode), normalizeComponentPath(params.componentPath), "--json"];
 }
 
 function getEditableBoolean(data: unknown): boolean | undefined {
-	if (typeof data === "boolean") {
-		return data;
-	}
-	if (!data || typeof data !== "object" || Array.isArray(data)) {
-		return undefined;
-	}
+	if (typeof data === "boolean") return data;
+	if (!data || typeof data !== "object" || Array.isArray(data)) return undefined;
 	const candidate = data as { editable?: unknown; result?: unknown };
-	if (typeof candidate.editable === "boolean") {
-		return candidate.editable;
-	}
-	if (typeof candidate.result === "boolean") {
-		return candidate.result;
-	}
+	if (typeof candidate.editable === "boolean") return candidate.editable;
+	if (typeof candidate.result === "boolean") return candidate.result;
 	if (candidate.result && typeof candidate.result === "object" && !Array.isArray(candidate.result)) {
 		const envelopeResult = candidate.result as { editable?: unknown };
-		if (typeof envelopeResult.editable === "boolean") {
-			return envelopeResult.editable;
-		}
+		if (typeof envelopeResult.editable === "boolean") return envelopeResult.editable;
 	}
 	return undefined;
 }
 
 function normalizeBooleanResult(result: AscetCliJsonResult, operation: string): AscetCliJsonResult {
-	if (!result.ok) {
-		return result;
-	}
+	if (!result.ok) return result;
 	const editable = getEditableBoolean(result.data);
 	if (editable !== undefined) {
 		if (operation === "component_editable_set" && !editable) {
@@ -119,7 +108,8 @@ export async function runAscetEditability(
 function createBlockedEditabilityResult(
 	params: AscetEditabilityParams,
 	options: RunAscetEditabilityOptions,
-	approval: AscetEditApprovalFailure,
+	code: string,
+	message: string,
 ): AscetCliJsonResult {
 	const status = createAscetStatusReport({ cwd: options.cwd, env: options.env });
 	return {
@@ -127,7 +117,8 @@ function createBlockedEditabilityResult(
 		data: {
 			operation: getAscetEditabilityOperation(params.mode),
 			summary: createSetEditabilitySummary(params),
-			...createAscetEditApprovalResultData(approval),
+			writeExecuted: false,
+			mutation: { status: "not_started" },
 		},
 		request: {
 			cwd: options.cwd,
@@ -139,7 +130,7 @@ function createBlockedEditabilityResult(
 		stderr: "",
 		exitCode: null,
 		timedOut: false,
-		error: { code: approval.code, message: approval.message },
+		error: { code, message },
 	};
 }
 
@@ -154,26 +145,58 @@ function createSetEditabilitySummary(params: AscetEditabilityParams): string {
 export async function runApprovedAscetEditability(
 	params: AscetEditabilityParams,
 	options: RunAscetEditabilityOptions,
-	ctx: AscetEditApprovalContext,
+	ctx: AscetEditabilityContext,
 ): Promise<AscetCliJsonResult> {
-	if (params.mode !== "set") {
-		return runAscetEditability(params, options);
+	if (params.mode === "check") return runAscetEditability(params, options);
+	const checkParams = { mode: "check" as const, componentPath: params.componentPath };
+	const preflight = await runAscetEditability(checkParams, options);
+	if (params.intent === "preview" || !preflight.ok || preflight.data === true) return preflight;
+
+	const descriptor = getAscetEditAction("set")?.permission;
+	if (!descriptor) throw new Error("Missing ASCET editability permission descriptor.");
+	const decision = evaluateAscetPermission({
+		mode: ctx.permissionMode ?? "default",
+		action: "set",
+		descriptor,
+		rules: parseAscetPermissionRules(ctx.getSettings?.()),
+		path: params.componentPath,
+		hardGatesPassed: true,
+		evidenceComplete: true,
+	});
+	if (decision.behavior === "deny") {
+		return createBlockedEditabilityResult(params, options, "ascet_edit_permission_denied", decision.reason);
 	}
-
-	const approval = await requestAscetEditApproval(
-		{
-			executeWrite: params.executeWrite,
-			title: "Confirm ASCET editability",
-			message: createSetEditabilitySummary(params),
-			signal: options.signal,
-		},
-		ctx,
-	);
-
-	if (!approval.approved) {
-		return createBlockedEditabilityResult(params, options, approval);
+	if (decision.behavior === "ask") {
+		const approval = await requestAscetMutationApproval(
+			{
+				title: "Make ASCET component editable?",
+				message: `Target: ${params.componentPath}`,
+				signal: options.signal,
+			},
+			ctx,
+		);
+		if (approval.status !== "approved") {
+			const code =
+				approval.status === "ui_unavailable"
+					? "ascet_edit_approval_required"
+					: approval.status === "cancelled"
+						? "ascet_edit_operation_aborted_before_write"
+						: approval.status === "ui_failed"
+							? "ascet_edit_confirmation_ui_failed"
+							: "ascet_edit_confirmation_not_granted";
+			const message =
+				approval.status === "ui_unavailable"
+					? "This operation requires an interactive approval channel."
+					: approval.status === "ui_failed"
+						? `ASCET edit confirmation UI failed: ${approval.message}`
+						: approval.status === "cancelled"
+							? "ASCET edit was cancelled before the write began."
+							: "ASCET edit confirmation was not granted.";
+			return createBlockedEditabilityResult(params, options, code, message);
+		}
 	}
-
+	const revalidated = await runAscetEditability(checkParams, options);
+	if (!revalidated.ok || revalidated.data === true) return revalidated;
 	return runAscetEditability(params, options);
 }
 
