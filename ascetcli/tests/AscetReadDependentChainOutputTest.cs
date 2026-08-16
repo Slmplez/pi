@@ -1,27 +1,45 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 class AscetReadDependentChainOutputTest
 {
     static int Main()
     {
         AscetReadDependentChainArguments parsed = AscetReadDependentChain.ParseArguments(
-            new[] { @"/Custom/TESTCLASS", "C_K_Effective", "--provider-scope", @"\Custom", "--max-candidates", "25", "--json" });
+            new[] { @"/Custom/TESTCLASS", "C_K_Effective", "--json" });
 
         if (!String.Equals(parsed.ComponentPath, @"Custom\TESTCLASS", StringComparison.Ordinal) ||
             !String.Equals(parsed.DependentElementName, "C_K_Effective", StringComparison.Ordinal) ||
-            !String.Equals(parsed.ProviderScopePath, @"Custom", StringComparison.Ordinal) ||
-            parsed.MaxCandidates != 25 ||
             !parsed.EmitJson)
         {
             Console.Error.WriteLine("unexpected dependent chain argument parsing");
             return 1;
         }
 
+        string exportDirectory = AscetDependentChainReadService.PrepareExportDirectory(
+            new AscetDependentChainReadRequest
+            {
+                ComponentPath = @"PlatformLibrary_NewBrakeSystems\Package\BSM_BrakeSignalsAndMonitorings\Private\SignalCon\BSM_BrakePedalAppliedCalculation"
+            });
+        try
+        {
+            if (exportDirectory.Length >= 100 ||
+                Path.GetFileName(exportDirectory).Length > 10 ||
+                exportDirectory.IndexOf("BSM_BrakePedalAppliedCalculation", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                Console.Error.WriteLine("dependent-chain default export directory is not path-length safe: " + exportDirectory);
+                return 7;
+            }
+        }
+        finally
+        {
+            if (Directory.Exists(exportDirectory)) Directory.Delete(exportDirectory, true);
+        }
+
         AscetReadDependentChainArguments constrained = AscetReadDependentChain.ParseArguments(
             new[] { @"Custom\TESTCLASS", "C_K_Effective", "--exporter", @"\Custom\Components\_CalibrationParameters" });
-        if (!String.Equals(constrained.ExporterComponentPath, @"Custom\Components\_CalibrationParameters", StringComparison.Ordinal) ||
-            constrained.MaxCandidates != 200)
+        if (!String.Equals(constrained.ExporterComponentPath, @"Custom\Components\_CalibrationParameters", StringComparison.Ordinal))
         {
             Console.Error.WriteLine("unexpected dependent chain constrained argument parsing");
             return 6;
@@ -82,7 +100,6 @@ class AscetReadDependentChainOutputTest
 
         ExpectInvalid(new[] { @"Custom\TESTCLASS", "C_K_Effective", "--exporter" }, "Missing value after --exporter", 4);
         ExpectInvalid(new[] { @"Custom\TESTCLASS", "C_K_Effective", "--exporter", @"Custom\Components\_CalibrationParameters", "extra" }, "Unknown argument", 5);
-        ExpectInvalid(new[] { @"Custom\TESTCLASS", "C_K_Effective", "--max-candidates", "0" }, "positive integer", 3);
 
         return 0;
     }

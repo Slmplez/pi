@@ -35,6 +35,7 @@ export interface RunGuardedAscetMutationInput {
 		context: AscetGuardedMutationExecutionContext,
 	) => Promise<AscetGuardedMutationExecutionResult>;
 	maxMaterialChanges?: number;
+	materialChangeError?: { code: string; message: string };
 }
 
 function baseEnvelope(mode: PermissionMode): AscetMutationResultEnvelope {
@@ -260,7 +261,7 @@ export async function runGuardedAscetMutation(
 				...envelope,
 				status: "blocked",
 				preflight: { status: "passed", evidence: preflight.evidence },
-				error: {
+				error: input.materialChangeError ?? {
 					code: "ascet_edit_target_unstable",
 					message: "The authoritative ASCET mutation scope changed repeatedly during approval.",
 				},

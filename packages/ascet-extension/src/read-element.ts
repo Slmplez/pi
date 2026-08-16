@@ -7,6 +7,7 @@ import {
 	runAscetCliJson,
 } from "./cli.ts";
 import { normalizeAscetPath } from "./core/path.ts";
+import type { AscetScheduler } from "./scheduler/scheduler.ts";
 import { unwrapToolSuccessPayload } from "./tool-response-contract.ts";
 
 export interface AscetReadElementParams {
@@ -20,6 +21,8 @@ export interface RunAscetReadElementOptions {
 	env?: Record<string, string | undefined>;
 	signal?: AbortSignal;
 	timeoutMs?: number;
+	agentId?: string;
+	scheduler?: Pick<AscetScheduler, "submit" | "getSnapshot">;
 	executeCli?: (request: AscetCliRequest) => Promise<AscetCliExecutionResult>;
 }
 

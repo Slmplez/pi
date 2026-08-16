@@ -71,7 +71,7 @@ function shot(intent: string, args: Record<string, unknown>, variant?: string): 
 
 const writePreflightRules = [
 	"By default this tool returns a non-error preflight outcome and does not write.",
-	"Set executeWrite=true only when the user explicitly asks to apply the write; PI still requires confirmation.",
+	"Use intent=apply when the user explicitly asked for the exact write; runtime permission handling performs any required confirmation in the same call. Use intent=preview only for a non-mutating preview.",
 	"Preflight and dry-run remain available when a Component is not editable.",
 	"Runtime performs a fresh same-session editable=true check immediately before each real mutation.",
 	"Do not call mode=check merely to authorize a write, and never call mode=set without explicit user intent.",
@@ -92,25 +92,15 @@ const codeEditRules = [
 const elementSpecRules = [
 	"For model-facing apply_element_spec calls, use inline elements; specFile is internal and must not be supplied by the agent.",
 	"Start from the element's code role and explicit requirements: determine whether it is a parameter, variable, array, state, or enumeration, how the code reads or writes it, its domain, lifecycle, and initialization intent. That semantic intent drives the target spec; do not let a similarly named element or a read result replace the code-level meaning.",
-	"For new elements, use bounded ascet_get.tree discovery only when the exact target is not known, then use ascet_get.elements for the resolved Component or bounded Folder. Use Pi grep/read for stored observations and ascet_read.read_code for complete code. Use ascet_read.read_dependent_chain when dependency context matters. Treat live reads as ASCET compatibility and preservation evidence, not as the semantic source. For existing elements, preserve unchanged live fields and emit only the requested patch; do not copy a sibling's values without semantic equivalence.",
+	"For new elements, use ascet_search when the exact target is not known, then validate existing candidates with ascet_read.read_element. Use ascet_read.read_code for complete code and ascet_read.read_dependent_chain when dependency context matters. Treat live reads as ASCET compatibility and preservation evidence, not as the semantic source. For existing elements, preserve unchanged live fields and emit only the requested patch; do not copy a sibling's values without semantic equivalence.",
 	"Do not guess modelType, scope, range, implementation type, formula, calibration, or dependency.",
 	"For Provider Exported Parameter creation, explicitly provide unit, comment, calibration, range, data, and implementation decision groups. Use range.mode=none|physical|implementation, data.mode=explicit|ascetDefault, and implementation.mode=explicit|ascetDefault; omission is invalid and the agent must not guess values.",
 	"For Local Dependent Parameter creation, explicitly provide unit, comment, calibration, range, and implementation decision groups. Local dependent data is forbidden because the value comes from Dependency binding. Imported Parameters are the exception and carry structural compatibility metadata only; do not invent local data, implementation, range, or calibration.",
 	"For explicit implementations, provide valueType, memoryLocation, formula, and limitAssignments. Use an empty formula only to explicitly select no conversion formula, and use limitAssignments=null when the option is not applicable. Ranged discrete Parameters require limitAssignments=true.",
 	"For a new enumeration, include enumerationPath and scalar data.value; do not add physicalRange. Existing-element patches may omit unchanged fields.",
-	"If any required create field is unknown, stop at preflight and resolve live metadata with ascet_get.elements or ask for the value.",
+	"If any required create field is unknown, stop at preflight and resolve exact live metadata with ascet_read.read_element or ask for the value.",
 	"For an existing local dependent Parameter, omit data.value: its DataVariant stores the Dependency binding, not a ScalarType value. apply_element_spec rejects data.value for this state.",
-	"Dependency is not part of apply_element_spec JSON; use set_element_dependency after the target parameter exists.",
-] as const;
-
-const dependencyRules = [
-	"Dependency mappings may target an existing Parameter, Constant, or System Constant. Resolve every target's live kind, scope, name, and OID before writing; do not assume that a mapping target is Imported.",
-	"If a mapping target is an Imported Parameter, additionally resolve the authoritative same-named Exported Parameter provider and verify the Imported/Exported compatibility. Do not apply this provider-chain requirement to Constant or System Constant targets.",
-	"When creating a dependent Local Parameter from an exported provider, align metadata from the authoritative provider, not from the bridge Imported Parameter.",
-	"When dependencyFormula is provided, dependencyMappings is mandatory unless bindingPolicy=autoExactName is paired with explicit dependencyFormals. autoExactName maps only a uniquely resolvable same-named Parameter, Constant, or System Constant; never infer mappings from formula text, never infer formals by tokenizing it, and never use fuzzy matching.",
-	"Select the affected DataVariant set explicitly. Never treat an omitted or ambiguous variant selection as all variants; if the operation cannot express the requested variant scope, stop at preflight rather than write.",
-	"When changing dependent to independent, provide an explicit restoration source for every affected DataVariant: a snapshot, an explicit value, or an explicit ASCET default. Do not silently clear the formula, restore zero, or choose an implicit default.",
-	"Use set_element_dependency only for an existing local parameter; executed writes use automatic internal verification.",
+	"Dependency is not part of apply_element_spec JSON; use create_dependent_chain to create or verify the complete Provider/Imported/Local chain.",
 ] as const;
 
 export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
@@ -134,115 +124,43 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["ops", "capability", "action-search"],
 		}),
 	}),
-	descriptor("ascet_get", "database_identity", "public", READ_PROFILES, {
-		supportedObjectKinds: ["database"],
-		prompt: prompt("Read the current live ASCET database identity.", {
+	descriptor("ascet_search", "*", "public", READ_PROFILES, {
+		prompt: prompt("Search the ten native ASCET Search modes with one compact tool.", {
 			rules: [
-				"Use this action to verify the open database name and path before consuming stored observations or starting a guarded mutation.",
-				"This action is read-only and accepts no target or traversal fields.",
+				"Use mode=comp, comp-ref, method, method-ref, method-element, element, element-ref, sender, receiver, or text.",
+				"Search results are live hints, not complete metadata. Resolve an exact path before ascet_get, ascet_read, or any edit.",
+				"The extension hides and closes the native Search window after collecting results.",
 			],
-			fewShots: [shot("verify current database", { action: "database_identity" })],
-			tags: ["database", "identity", "live-read"],
+			fewShots: [
+				shot("find element", { mode: "element", q: "PCA_Ctrl_slMin_RA", limit: 20 }),
+				shot("find code text", { mode: "text", q: "VLC3IsInControl", limit: 20 }),
+			],
+			tags: ["search", "discovery", "native-ui"],
 		}),
 	}),
 	descriptor("ascet_get", "tree", "public", READ_PROFILES, {
 		supportedObjectKinds: ["database", "project", "folder", "class", "module", "statemachine", "enumeration"],
-		prompt: prompt("Read a bounded live Folder/Component tree when structural discovery is required.", {
+		prompt: prompt("Read a bounded live Folder/Component hierarchy from an exact scope.", {
 			rules: [
-				"Use tree for bounded structural discovery when the exact target is not yet known. targetPathPrefix accepts a bounded folder scope such as PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation. If an exact path or OID is already validated, call the matching exact Get or Read action directly.",
-				"Use scope=database with delivery=stored only when a complete database identity observation is required for database_catalog. Do not combine database scope with a target or traversal budget.",
-				"Tree returns metadata only; it does not load Elements, references, methods, implementations, or code.",
+				"Use tree only for bounded hierarchy expansion. It does not perform name search; use ascet_search for candidate discovery.",
+				"Omit path for the database root. depth defaults to 1 and is limited to 1 through 5.",
+				"Tree returns hierarchy metadata only; it does not load Elements, references, methods, implementations, or code.",
 			],
 			fewShots: [
-				shot("expand package", { action: "tree", target: { targetPathPrefix: "PlatformLibrary\\Package" } }),
-				shot("capture database identities", { action: "tree", scope: "database", delivery: "stored" }),
+				shot("expand package", { action: "tree", path: "PlatformLibrary\\Package", depth: 2 }),
+				shot("read database root", { action: "tree", depth: 1 }),
 			],
 			tags: ["navigation", "tree", "live-read"],
-		}),
-	}),
-	descriptor("ascet_get", "database_catalog", "public", READ_PROFILES, {
-		prompt: prompt("Build stored full-database catalogs from a complete Tree observation.", {
-			rules: [
-				"Create a stored tree with scope=database first, verify coverage.completeness=complete, then pass its resultId as sourceTreeResultId.",
-				"Use include to select required object types; Parameter Class and Message requests perform one combined live scan.",
-			],
-			fewShots: [
-				shot("build database catalog", {
-					action: "database_catalog",
-					sourceTreeResultId: "obs-tree-full",
-					include: ["module", "enumeration"],
-					delivery: "stored",
-				}),
-			],
-			tags: ["catalog", "database", "stored-read"],
-		}),
-	}),
-	descriptor("ascet_get", "elements", "public", READ_PROFILES, {
-		supportedObjectKinds: ["folder", "class", "module", "statemachine"],
-		prompt: prompt("Read complete Element directory entries for an exact Component or bounded Folder selection.", {
-			rules: [
-				"Use elements after an exact Component or bounded Folder target is resolved from user input, tree discovery, or validated stored evidence. Filter by name or scope only; do not use a result-count limit.",
-				"Element output is concise identity/scope metadata. Use ascet_read only for a precise deep read.",
-				"Enumeration is not an Element Directory target for this action. Use ascet_read.read_implementation on the resolved Enumeration and inspect typeDefinition.enumerators.",
-			],
-			fewShots: [shot("list component elements", { action: "elements", target: { path: "DEMO\\PID" } })],
-			tags: ["element", "signal", "live-read"],
 		}),
 	}),
 	descriptor("ascet_get", "formulas", "public", READ_PROFILES, {
 		prompt: prompt("Read complete Project Formula definitions for one exact Project.", {
 			rules: [
-				"Formula contents and parameter details are returned by formulas. Use Pi grep/read for large stored formula observations.",
-				"Do not use formulas to locate an unknown project; navigate with tree first.",
+				"Use formulas only with one exact Project path. name optionally filters one Formula.",
+				"Do not use formulas to locate an unknown Project; use ascet_search or bounded tree discovery first.",
 			],
-			fewShots: [shot("read project formulas", { action: "formulas", target: { path: "DEMO\\Project" } })],
+			fewShots: [shot("read project formula", { action: "formulas", path: "DEMO\\Project", name: "VehicleMass" })],
 			tags: ["project", "formula", "live-read"],
-		}),
-	}),
-	descriptor("ascet_get", "component_refs", "public", READ_PROFILES, {
-		prompt: prompt("Read outgoing Component references without loading source code.", {
-			rules: [
-				"component_refs returns outgoing Component references only. It is not a reverse-reference or Project-discovery API. Call it after resolving an exact Component by path or OID.",
-			],
-			fewShots: [shot("read component refs", { action: "component_refs", target: { path: "DEMO\\Consumer" } })],
-			tags: ["reference", "component", "live-read"],
-		}),
-	}),
-	descriptor("ascet_get", "bde_edges", "public", READ_PROFILES, {
-		prompt: prompt("Read BDE signal edges for one resolved component/diagram.", {
-			rules: [
-				"Use bde_edges to understand signal flow; use ascet_read.read_block_diagram for deeper diagram details. A zero-edge result does not prove that the Component has no Diagram.",
-			],
-			fewShots: [
-				shot("read BDE edges", { action: "bde_edges", target: { path: "DEMO\\Controller" }, diagramName: "Main" }),
-			],
-			tags: ["reference", "diagram", "signal-flow"],
-		}),
-	}),
-	descriptor("ascet_get", "import_binding", "public", READ_PROFILES, {
-		prompt: prompt("Verify one Imported Element binding against an explicit provider Component.", {
-			rules: [
-				"Use import_binding only after elements identifies the consumer Imported Element and provider Exported Element.",
-				"Provider identity must be exact path or OID; this action does not perform global provider search.",
-			],
-			fewShots: [
-				shot("verify import binding", {
-					action: "import_binding",
-					target: { path: "DEMO\\Consumer" },
-					elementName: "P_Request",
-					provider: { path: "DEMO\\Provider" },
-				}),
-			],
-			tags: ["reference", "imported", "exported"],
-		}),
-	}),
-	descriptor("ascet_get", "dbitem_refs", "public", READ_PROFILES, {
-		prompt: prompt("Read outgoing database-item references for one exact object.", {
-			rules: [
-				"dbitem_refs returns outgoing database-item references only. It is not a reverse-reference API and cannot prove all consumers or owners. Use it for precise object-level relationships not covered by component_refs.",
-			],
-			fewShots: [shot("read database refs", { action: "dbitem_refs", target: { path: "DEMO\\Consumer" } })],
-			tags: ["reference", "database-item", "live-read"],
 		}),
 	}),
 	descriptor("ascet_read", "read_code", "public", READ_PROFILES, {
@@ -281,7 +199,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 	descriptor("ascet_read", "read_element", "public", READ_PROFILES, {
 		prompt: prompt("Read complete metadata for one exact resolved Element.", {
 			rules: [
-				"Use read_element after ascet_get.elements identifies one Component and Element name.",
+				"Use read_element after ascet_search identifies a candidate Component and Element name; validate the exact path before relying on metadata.",
 				"Use this action for exact kind, modelType, scope, value, calibration, range, and implementation metadata; do not use it for folder discovery.",
 			],
 			fewShots: [
@@ -299,7 +217,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 		prompt: prompt("Read implementation metadata for a resolved component or Enumeration.", {
 			rules: [
 				"Use read_implementation when implementation metadata matters more than code text.",
-				"For Enumeration targets, inspect typeDefinition.enumerators; this is the supported enumerator readback path instead of ascet_get.elements.",
+				"For Enumeration targets, inspect typeDefinition.enumerators; this is the supported exact enumerator readback path.",
 			],
 			fewShots: [
 				shot("read impl", {
@@ -348,8 +266,8 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			"Exact dependency-chain read for a Local Parameter with an optional explicit Exported provider constraint.",
 			{
 				rules: [
-					"Resolve the exact consumer Component and use ascet_get.elements to identify the Imported Element and candidate Exported provider before calling read_dependent_chain. Use bounded tree discovery only when those targets are not already known.",
-					"Pass exporterComponentPath only when the provider path is already known exactly.",
+					"Resolve the exact Consumer Component and Local Parameter before calling read_dependent_chain.",
+					"If exporterComponentPath is omitted, Runtime performs live native Element Search and accepts only one exact validated Exported Parameter. Never choose the first same-named result.",
 					"The formula reported by read_dependent_chain is the local dependent parameter expression, not an implementation conversion formula or project formula.",
 					"The Imported Parameter in the consuming component and the Exported Parameter in the provider component must have the same name.",
 				],
@@ -367,7 +285,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 	descriptor("ascet_read", "read_element_dependency", "public", READ_PROFILES, {
 		prompt: prompt("Read dependency flag and formula for one existing element.", {
 			rules: [
-				"Use read_element_dependency before set_element_dependency when you need the current dependency flag or formula.",
+				"Use read_element_dependency only when you need the raw dependency flag or formula; use read_dependent_chain before create_dependent_chain when inspecting an existing chain.",
 				"Use read_dependent_chain when provider-chain consistency also matters.",
 			],
 			fewShots: [
@@ -480,7 +398,9 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 	descriptor("ascet_edit", "create_folder", "public", WRITE_PROFILES, {
 		prompt: prompt("Create one ASCET folder with guarded preflight/readback behavior.", {
 			rules: writePreflightRules,
-			fewShots: [shot("preflight folder", { action: "create_folder", folderPath: "DEMO/New" })],
+			fewShots: [
+				shot("apply folder creation", { action: "create_folder", folderPath: "DEMO/New", intent: "apply" }),
+			],
 			tags: ["write", "folder", "preflight"],
 		}),
 	}),
@@ -494,6 +414,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			fewShots: [
 				shot("preflight component", {
 					action: "create_component",
+					intent: "apply",
 					componentPath: "DEMO/C",
 					kind: "class",
 					language: "ESDL",
@@ -508,6 +429,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			fewShots: [
 				shot("preflight method", {
 					action: "create_method",
+					intent: "apply",
 					componentPath: "DEMO/PID",
 					componentKind: "class",
 					methodName: "calc2",
@@ -527,6 +449,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			fewShots: [
 				shot("patch signature", {
 					action: "set_method_signature",
+					intent: "apply",
 					componentPath: "DEMO/PID",
 					methodName: "calc",
 					returnType: "cont",
@@ -542,6 +465,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			fewShots: [
 				shot("delete component", {
 					action: "delete_component",
+					intent: "apply",
 					componentPath: "DEMO/Old",
 					ifMissing: "fail",
 				}),
@@ -555,6 +479,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			fewShots: [
 				shot("delete method", {
 					action: "delete_method",
+					intent: "apply",
 					componentPath: "DEMO/PID",
 					methodName: "old",
 					ifMissing: "fail",
@@ -569,6 +494,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			fewShots: [
 				shot("delete folder", {
 					action: "delete_folder",
+					intent: "apply",
 					folderPath: "DEMO/Old",
 					ifMissing: "fail",
 				}),
@@ -582,6 +508,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			fewShots: [
 				shot("set method body", {
 					action: "set_method_code",
+					intent: "apply",
 					componentPath: "DEMO/PID",
 					methodName: "calc",
 					codeFile: "calc.esdl",
@@ -602,6 +529,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					"set module method",
 					{
 						action: "set_module_code",
+						intent: "apply",
 						modulePath: "DEMO/M",
 						operation: "set-method",
 						methodName: "calc",
@@ -635,6 +563,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					"set SM method",
 					{
 						action: "set_state_machine_code",
+						intent: "apply",
 						stateMachinePath: "D/SM",
 						operation: "set-method",
 						methodName: "tick",
@@ -646,6 +575,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					"set entry ESDL",
 					{
 						action: "set_state_machine_code",
+						intent: "apply",
 						stateMachinePath: "D/SM",
 						operation: "set-state-entry-esdl",
 						stateName: "Idle",
@@ -657,6 +587,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					"set exit ESDL",
 					{
 						action: "set_state_machine_code",
+						intent: "apply",
 						stateMachinePath: "D/SM",
 						operation: "set-state-exit-esdl",
 						stateName: "Idle",
@@ -668,6 +599,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					"set static ESDL",
 					{
 						action: "set_state_machine_code",
+						intent: "apply",
 						stateMachinePath: "D/SM",
 						operation: "set-state-static-esdl",
 						stateName: "Idle",
@@ -679,6 +611,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					"bind entry",
 					{
 						action: "set_state_machine_code",
+						intent: "apply",
 						stateMachinePath: "D/SM",
 						operation: "bind-state-entry-method",
 						stateName: "Idle",
@@ -690,6 +623,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					"bind exit",
 					{
 						action: "set_state_machine_code",
+						intent: "apply",
 						stateMachinePath: "D/SM",
 						operation: "bind-state-exit-method",
 						stateName: "Idle",
@@ -701,6 +635,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					"bind static",
 					{
 						action: "set_state_machine_code",
+						intent: "apply",
 						stateMachinePath: "D/SM",
 						operation: "bind-state-static-method",
 						stateName: "Idle",
@@ -712,6 +647,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					"set transition condition",
 					{
 						action: "set_state_machine_code",
+						intent: "apply",
 						stateMachinePath: "S",
 						operation: "set-transition-condition-esdl",
 						sourceState: "A",
@@ -724,6 +660,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					"set transition action",
 					{
 						action: "set_state_machine_code",
+						intent: "apply",
 						stateMachinePath: "S",
 						operation: "set-transition-action-esdl",
 						sourceState: "A",
@@ -736,6 +673,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					"bind transition cond",
 					{
 						action: "set_state_machine_code",
+						intent: "apply",
 						stateMachinePath: "S",
 						operation: "bind-transition-condition-method",
 						sourceState: "A",
@@ -748,6 +686,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					"bind transition action",
 					{
 						action: "set_state_machine_code",
+						intent: "apply",
 						stateMachinePath: "S",
 						operation: "bind-transition-action-method",
 						sourceState: "A",
@@ -760,6 +699,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 					"set start state",
 					{
 						action: "set_state_machine_code",
+						intent: "apply",
 						stateMachinePath: "D/SM",
 						operation: "set-start-state",
 						stateName: "Idle",
@@ -777,6 +717,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			fewShots: [
 				shot("set enum values", {
 					action: "set_enumerators",
+					intent: "apply",
 					componentPath: "D/E",
 					enumerators: ["E_OFF", "E_ON"],
 				}),
@@ -792,7 +733,8 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 				shot("plan element creation", {
 					action: "apply_element_spec",
 					componentPath: "F/C",
-					intent: "create",
+					intent: "apply",
+					elementIntent: "create",
 					elements: [
 						{
 							role: "providerExportedParameter",
@@ -820,6 +762,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			fewShots: [
 				shot("apply formulas", {
 					action: "apply_project_formula",
+					intent: "apply",
 					projectPath: "D/P",
 					specFile: "formula.json",
 					mode: "restore",
@@ -828,47 +771,26 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			tags: ["write", "project", "formula"],
 		}),
 	}),
-	descriptor("ascet_edit", "set_element_dependency", "public", WRITE_PROFILES, {
-		supportedObjectKinds: ["folder", "class", "module", "statemachine"],
-		prompt: prompt("Set or clear dependency state for an existing element.", {
+	descriptor("ascet_edit", "create_dependent_chain", "public", WRITE_PROFILES, {
+		supportedObjectKinds: ["class", "module", "statemachine"],
+		prompt: prompt("Create or verify one Provider/Imported/Local Parameter dependency chain.", {
 			rules: [
 				...writePreflightRules,
-				...dependencyRules,
-				"set_element_dependency does not create local, imported, or exported elements; use apply_element_spec first for new elements.",
-				"Successful executed writes invalidate matching on-demand observations; dry runs and failed writes do not invalidate observations.",
+				"Provide explicit Element definitions. Missing Elements are created; exact existing Elements are reused; conflicts are never overwritten.",
+				"When provider.componentPath is omitted, Runtime uses live native Element Search and accepts only one exact validated Exported Parameter.",
+				"Apply always performs automatic full readback. A successful apply is verified before it is returned.",
+				"Use one explicit Formula/Formal/Imported binding only; never guess binding or DataVariant metadata.",
 			],
 			fewShots: [
-				shot("plan dependency", {
-					action: "set_element_dependency",
-					targetPath: "F/C",
-					elementName: "K",
-					dependency: "dependent",
-					variantPolicy: "default",
-				}),
-			],
-			tags: ["write", "dependency", "provider-discovery"],
-		}),
-	}),
-	descriptor("configure_parameter_dependency_chain", "execute", "public", WRITE_PROFILES, {
-		prompt: prompt("Execute one complete guarded Provider/Imported/Local dependency chain.", {
-			rules: [
-				"Use only after resolving the exact Provider and Consumer component paths. Submit one complete inline definition; do not call plan, commit, preflight, or batch.",
-				"Provider and Local must include every applicable decision group. Imported Parameter is the lightweight exception and must not contain data, implementation, range, or calibration.",
-				"Provider Exported and Consumer Imported names must be the same P_<Name>; Consumer Local must be C_<Name>. dependency.formals and mapping keys must match exactly, with explicit mapping kind/name and variantPolicy.",
-				"Runtime confirms once before opening Bridge. Bridge validates all live targets before mutation, performs mandatory readback, and compensates in reverse order on failure. Existing conflicting state causes zero mutation.",
-				"Bridge checks Provider and Consumer editability before mutation and checks the affected Component again before compensating writes.",
-				"Do not retry blindly when mutationStarted=true, rollback_failed, or unknown_outcome is returned.",
-			],
-			fewShots: [
-				shot("execute guarded dependency chain", {
+				shot("preview dependency chain", {
+					action: "create_dependent_chain",
 					provider: {
-						componentPath: "F/Provider",
+						componentPath: "FeatureA/Provider",
 						element: {
-							role: "providerExportedParameter",
 							name: "P_Threshold",
 							modelType: "cont",
 							unit: "",
-							comment: "Provider output",
+							comment: "",
 							calibration: false,
 							range: { mode: "none" },
 							data: { mode: "ascetDefault" },
@@ -876,32 +798,23 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 						},
 					},
 					consumer: {
-						componentPath: "F/Consumer",
-						element: { role: "consumerImportedParameter", name: "P_Threshold", modelType: "cont" },
-					},
-					local: {
-						componentPath: "F/Consumer",
-						element: {
-							role: "localDependentParameter",
+						componentPath: "FeatureA/Consumer",
+						importedElement: { name: "P_Threshold", modelType: "cont", unit: "" },
+						localElement: {
 							name: "C_Threshold",
 							modelType: "cont",
 							unit: "",
-							comment: "Dependent local",
+							comment: "",
 							calibration: false,
 							range: { mode: "none" },
 							implementation: { mode: "ascetDefault" },
 						},
 					},
-					dependency: {
-						formula: "P_Threshold",
-						formals: ["P_Threshold"],
-						bindingPolicy: "explicit",
-						mappings: { P_Threshold: { kind: "parameter", name: "P_Threshold" } },
-						variantPolicy: "default",
-					},
+					binding: { formula: "P_Threshold", formal: "P_Threshold", variantPolicy: "default" },
+					intent: "preview",
 				}),
 			],
-			tags: ["write", "dependency", "execute", "inline-element", "provider-discovery", "rollback"],
+			tags: ["write", "dependency", "create", "provider-discovery", "readback"],
 		}),
 	}),
 	descriptor("ascet_edit", "check", "public", ["component-edit"], {
@@ -917,9 +830,9 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 		prompt: prompt("Request an ASCET SCM lock through guarded write flow.", {
 			rules: [
 				"Use mode=set only when the user intends to make the component editable.",
-				"Set executeWrite=true only when the user explicitly asks to apply the lock request.",
+				"Use intent=apply when the user explicitly asks to request editability; use intent=preview to inspect the current state without writing.",
 			],
-			fewShots: [shot("lock component", { mode: "set", componentPath: "DEMO/PID", executeWrite: true })],
+			fewShots: [shot("lock component", { mode: "set", componentPath: "DEMO/PID", intent: "apply" })],
 			tags: ["write", "scm"],
 		}),
 	}),
@@ -1008,6 +921,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			fewShots: [
 				shot("batch method code", {
 					operation: "batch_set_method_code",
+					intent: "apply",
 					requests: [{ componentPath: "DEMO/PID", methodName: "calc", codeFile: "calc.esdl" }],
 				}),
 			],
@@ -1022,6 +936,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			fewShots: [
 				shot("batch specs", {
 					operation: "batch_set_element_spec",
+					intent: "apply",
 					requests: [{ componentPath: "DEMO/PID", specFile: "spec.json", mode: "restore" }],
 				}),
 			],
@@ -1036,6 +951,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			fewShots: [
 				shot("batch components", {
 					operation: "batch_create_component",
+					intent: "apply",
 					requests: [{ componentPath: "DEMO/C", kind: "class", language: "ESDL" }],
 				}),
 			],
@@ -1050,6 +966,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			fewShots: [
 				shot("batch methods", {
 					operation: "batch_create_method",
+					intent: "apply",
 					requests: [
 						{ componentPath: "DEMO/PID", methodName: "calc2", componentKind: "class", methodKind: "abstract" },
 					],
@@ -1066,6 +983,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			fewShots: [
 				shot("batch formulas", {
 					operation: "batch_set_project_formula",
+					intent: "apply",
 					requests: [{ projectPath: "D/P", specFile: "formula.json", mode: "restore" }],
 				}),
 			],
@@ -1080,6 +998,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			fewShots: [
 				shot("batch delete components", {
 					operation: "batch_delete_component",
+					intent: "apply",
 					requests: [{ componentPath: "DEMO/Old", ifMissing: "fail" }],
 				}),
 			],
@@ -1094,6 +1013,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			fewShots: [
 				shot("batch delete methods", {
 					operation: "batch_delete_method",
+					intent: "apply",
 					requests: [{ componentPath: "DEMO/PID", methodName: "old", ifMissing: "fail" }],
 				}),
 			],
@@ -1108,6 +1028,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			fewShots: [
 				shot("batch folders", {
 					operation: "batch_create_folder",
+					intent: "apply",
 					requests: [{ folderPath: "DEMO/New" }],
 				}),
 			],
@@ -1122,6 +1043,7 @@ export const ascetActionCatalog: readonly AscetActionDescriptor[] = [
 			fewShots: [
 				shot("batch delete folders", {
 					operation: "batch_delete_folder",
+					intent: "apply",
 					requests: [{ folderPath: "DEMO/Old", ifMissing: "fail" }],
 				}),
 			],

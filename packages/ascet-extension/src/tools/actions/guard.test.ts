@@ -1,51 +1,60 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import { createAscetExposureController } from "../exposure/controller.ts";
+import { resolveProfileTools } from "../exposure/profiles.ts";
 import { AscetActionUnavailableError, assertActionActive, extractToolAction } from "./guard.ts";
 
-function activateProfile(profile: "base" | "write-preflight") {
-	const pi = {
-		registerTool(_tool: unknown) {},
-		getActiveTools() {
-			return [];
-		},
-		setActiveTools(_toolNames: string[]) {},
-	};
-	const exposure = createAscetExposureController(pi, { env: {} });
-	exposure.activateProfile(profile);
-}
+const env: Record<string, string | undefined> = {};
+const baseContext = {
+	env,
+	activeProfile: "base" as const,
+	activeTools: resolveProfileTools("base", env),
+};
+const writeContext = {
+	env,
+	activeProfile: "write-preflight" as const,
+	activeTools: resolveProfileTools("write-preflight", env),
+};
+const opsContext = {
+	env,
+	activeProfile: "ops" as const,
+	activeTools: resolveProfileTools("ops", env),
+};
 
 describe("ASCET action runtime guard", () => {
-	test("resolves default actions for tools with optional action parameters", () => {
-		assert.equal(extractToolAction("configure_parameter_dependency_chain", {}), "execute");
+	test("extracts action or mode without retired tool special cases", () => {
+		assert.equal(extractToolAction("ascet_get", { action: "tree" }), "tree");
+		assert.equal(extractToolAction("ascet_search", { mode: "element" }), "element");
 		assert.equal(extractToolAction("ascet_capabilities", {}), "search_actions");
 		assert.equal(extractToolAction("ascet_scheduler_status", {}), "status");
 		assert.equal(extractToolAction("ascet_status", {}), "status");
+		assert.equal(extractToolAction("configure_parameter_dependency_chain", {}), "default");
 	});
 
-	test("allows active Get actions and rejects unknown actions", () => {
-		activateProfile("base");
-
-		const descriptor = assertActionActive("ascet_get", "tree");
-		assert.equal(descriptor?.id, "ascet_get.tree");
-		assert.equal(assertActionActive("ascet_get", "database_identity")?.id, "ascet_get.database_identity");
-		assert.equal(assertActionActive("ascet_edit", "check")?.id, "ascet_edit.check");
-		assert.equal(
-			assertActionActive("configure_parameter_dependency_chain", "execute")?.id,
-			"configure_parameter_dependency_chain.execute",
-		);
-
+	test("allows only the public Get actions", () => {
+		assert.equal(assertActionActive("ascet_get", "tree", baseContext)?.id, "ascet_get.tree");
+		assert.equal(assertActionActive("ascet_get", "formulas", baseContext)?.id, "ascet_get.formulas");
 		assert.throws(
-			() => assertActionActive("ascet_get", "unknown"),
+			() => assertActionActive("ascet_get", "database_identity", baseContext),
 			(error) =>
 				error instanceof AscetActionUnavailableError &&
 				error.payload.tool === "ascet_get" &&
-				error.payload.action === "unknown" &&
+				error.payload.action === "database_identity" &&
 				error.payload.state === "hidden",
 		);
 	});
+
+	test("exposes create_dependent_chain through ascet_edit and retires the composite tool", () => {
+		assert.equal(
+			assertActionActive("ascet_edit", "create_dependent_chain", writeContext)?.id,
+			"ascet_edit.create_dependent_chain",
+		);
+		assert.equal(assertActionActive("configure_parameter_dependency_chain", "execute", writeContext), undefined);
+	});
+
 	test("allows public mutation reconciliation in write recovery profiles", () => {
-		activateProfile("write-preflight");
-		assert.equal(assertActionActive("ascet_recover", "reconcile_mutation")?.id, "ascet_recover.reconcile_mutation");
+		assert.equal(
+			assertActionActive("ascet_recover", "reconcile_mutation", opsContext)?.id,
+			"ascet_recover.reconcile_mutation",
+		);
 	});
 });

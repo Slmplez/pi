@@ -1,7 +1,6 @@
 import { buildCompactToolPromptGuidelines } from "../actions/compact-prompt.ts";
 
 export const ascetGetPrompt = {
-	promptSnippet:
-		"Get one bounded ASCET structure or stored observation; use ascet_capabilities for full action rules.",
+	promptSnippet: "Read one exact ASCET target; use ascet_search for name or text discovery.",
 	promptGuidelines: buildCompactToolPromptGuidelines("ascet_get"),
 } as const;

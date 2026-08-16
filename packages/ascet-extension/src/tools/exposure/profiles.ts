@@ -10,16 +10,12 @@ export type AscetProfile =
 
 export const DEFAULT_ASCET_PROFILE: AscetProfile = "base";
 
-const ON_DEMAND_DISCOVERY_TOOLS = ["find", "grep", "read", "ascet_get", "ascet_read"] as const;
+const FILE_TOOLS = ["find", "grep", "read"] as const;
+const ASCET_READ_TOOLS = ["ascet_search", "ascet_get", "ascet_read"] as const;
+const ON_DEMAND_DISCOVERY_TOOLS = [...FILE_TOOLS, ...ASCET_READ_TOOLS] as const;
 const COMMON_ASCET_TOOLS = ["ascet_status", "ascet_capabilities", "ascet_recover", "ascet_scheduler_status"] as const;
 
-const DEFAULT_ACTIVE_TOOLS = [
-	...ON_DEMAND_DISCOVERY_TOOLS,
-	...COMMON_ASCET_TOOLS,
-	"ascet_diff",
-	"ascet_edit",
-	"configure_parameter_dependency_chain",
-] as const;
+const DEFAULT_ACTIVE_TOOLS = [...ON_DEMAND_DISCOVERY_TOOLS, ...COMMON_ASCET_TOOLS, "ascet_diff", "ascet_edit"] as const;
 
 export const profileTools: Record<AscetProfile, readonly string[]> = {
 	base: DEFAULT_ACTIVE_TOOLS,
@@ -32,7 +28,6 @@ export const profileTools: Record<AscetProfile, readonly string[]> = {
 		"ascet_capabilities",
 		"ascet_edit",
 		"ascet_scheduler_status",
-		"configure_parameter_dependency_chain",
 	],
 	"batch-write": [
 		...ON_DEMAND_DISCOVERY_TOOLS,
@@ -40,15 +35,8 @@ export const profileTools: Record<AscetProfile, readonly string[]> = {
 		"ascet_capabilities",
 		"ascet_edit",
 		"ascet_scheduler_status",
-		"configure_parameter_dependency_chain",
 	],
-	"component-edit": [
-		...ON_DEMAND_DISCOVERY_TOOLS,
-		"ascet_status",
-		"ascet_capabilities",
-		"ascet_edit",
-		"configure_parameter_dependency_chain",
-	],
+	"component-edit": [...ON_DEMAND_DISCOVERY_TOOLS, "ascet_status", "ascet_capabilities", "ascet_edit"],
 	ops: [...ON_DEMAND_DISCOVERY_TOOLS, ...COMMON_ASCET_TOOLS],
 };
 

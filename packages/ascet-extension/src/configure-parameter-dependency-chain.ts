@@ -9,7 +9,7 @@ import { normalizeAscetPath } from "./core/path.ts";
 import { type AscetToolContext, defineSequentialAscetTool } from "./core/tool.ts";
 import type { AscetEditApprovalContext } from "./edit/approval.ts";
 import { requestAscetEditApproval } from "./edit/approval.ts";
-import type { RunAscetEditOperationOptions } from "./edit/common.ts";
+import { checkAscetDatabaseIdentityForWrite, type RunAscetEditOperationOptions } from "./edit/common.ts";
 import { recordAscetWriteTelemetry } from "./edit/write-telemetry.ts";
 import {
 	type AscetConsumerImportedParameterCreateInput,
@@ -56,8 +56,15 @@ export interface ConfigureParameterDependencyChainOptions extends RunAscetEditOp
 	timeoutMs?: number;
 }
 
+export interface ConfigureParameterDependencyChainBridgeControl {
+	intent: "preview" | "apply";
+	expectedBeforeState?: Record<string, unknown>;
+	acquireEditability?: boolean;
+}
+
 export interface ConfigureParameterDependencyChainResult {
 	status:
+		| "preview"
 		| "committed"
 		| "no_change"
 		| "rejected"
@@ -69,8 +76,7 @@ export interface ConfigureParameterDependencyChainResult {
 	writesPerformed: boolean;
 	mutationStarted: boolean;
 	consistency: "compensating";
-	beforeStateHash?: string;
-	afterStateHash?: string;
+	beforeState?: Record<string, unknown>;
 	operationId?: string;
 	stages?: unknown[];
 	verification?: unknown;
@@ -251,8 +257,14 @@ function normalizeElement(element: Record<string, unknown>): { elements: Record<
 	return normalizeAscetElementSpec("create", [element], []).spec;
 }
 
-function buildBridgeRequest(params: ConfigureParameterDependencyDefinition): Record<string, unknown> {
+function buildBridgeRequest(
+	params: ConfigureParameterDependencyDefinition,
+	control: ConfigureParameterDependencyChainBridgeControl,
+): Record<string, unknown> {
 	return {
+		intent: control.intent,
+		...(control.expectedBeforeState ? { expectedBeforeState: control.expectedBeforeState } : {}),
+		acquireEditability: control.acquireEditability === true,
 		provider: {
 			componentPath: normalizeAscetPath(params.provider.componentPath),
 			spec: normalizeElement(params.provider.element),
@@ -297,11 +309,17 @@ function removeBridgeRequest(path: string): void {
 function normalizeBridgeResult(data: unknown): ConfigureParameterDependencyChainResult | undefined {
 	if (data === null || typeof data !== "object" || Array.isArray(data)) return undefined;
 	const envelope = data as Record<string, unknown>;
-	const candidate = envelope.type === "response" && envelope.protocolVersion === 1 ? envelope.result : data;
+	const candidate =
+		envelope.type === "response" && envelope.protocolVersion === 1
+			? envelope.result
+			: envelope.ok === true && envelope.result !== undefined
+				? envelope.result
+				: data;
 	if (candidate === null || typeof candidate !== "object" || Array.isArray(candidate)) return undefined;
 	const result = candidate as Record<string, unknown>;
 	const status = result.status;
 	if (
+		status !== "preview" &&
 		status !== "committed" &&
 		status !== "no_change" &&
 		status !== "rejected" &&
@@ -321,18 +339,17 @@ function normalizeBridgeResult(data: unknown): ConfigureParameterDependencyChain
 	};
 }
 
-async function runConfigureParameterDependencyChainInternal(
+export async function runConfigureParameterDependencyChainBridge(
 	value: unknown,
 	options: ConfigureParameterDependencyChainOptions,
-	ctx: AscetEditApprovalContext,
+	control: ConfigureParameterDependencyChainBridgeControl,
 ): Promise<ConfigureParameterDependencyChainResult> {
 	const validation = validateChainParams(value);
 	if ("error" in validation) return rejected(validation.error);
-	const params = validation.params;
 
 	let bridgeRequest: Record<string, unknown>;
 	try {
-		bridgeRequest = buildBridgeRequest(params);
+		bridgeRequest = buildBridgeRequest(validation.params, control);
 	} catch (error) {
 		return rejected({
 			code: "configure_parameter_dependency_chain_invalid_element_spec",
@@ -340,35 +357,14 @@ async function runConfigureParameterDependencyChainInternal(
 		});
 	}
 
-	const approval = await requestAscetEditApproval(
-		{
-			executeWrite: true,
-			title: "Execute ASCET parameter dependency chain",
-			message: buildConfirmationSummary(params),
-			signal: options.signal,
-			errorPrefix: "configure_parameter_dependency_chain",
-		},
-		ctx,
-	);
-	if (!approval.approved) {
-		return {
-			status: "blocked",
-			writesPerformed: false,
-			mutationStarted: false,
-			consistency: "compensating",
-			error: { code: approval.code, message: approval.message },
-			rollback: { required: false, status: "not_required" },
-		};
-	}
-
 	let requestPath = "";
 	try {
 		requestPath = writeBridgeRequest(bridgeRequest);
 		const cliResult = await runAscetCliJson(["exec", OPERATION, requestPath, "--json"], {
 			...options,
-			toolName: TOOL_NAME,
+			toolName: "ascet_edit",
 			commandId: OPERATION,
-			jobKind: "write",
+			jobKind: control.intent === "apply" ? "write" : "read",
 		});
 		if (!cliResult.ok) {
 			const unknown = cliResult.error?.code === "write_outcome_unknown";
@@ -388,19 +384,66 @@ async function runConfigureParameterDependencyChainInternal(
 			normalizeBridgeResult(cliResult.data) ?? {
 				status: "unknown_outcome",
 				writesPerformed: false,
-				mutationStarted: true,
+				mutationStarted: control.intent === "apply",
 				consistency: "compensating",
 				error: {
 					code: "configure_parameter_dependency_chain_invalid_bridge_result",
 					message: "Bridge returned an invalid dependency-chain result.",
 					details: cliResult.data,
 				},
-				rollback: { required: true, status: "unknown" },
+				rollback: { required: control.intent === "apply", status: "unknown" },
 			}
 		);
 	} finally {
 		if (requestPath) removeBridgeRequest(requestPath);
 	}
+}
+
+async function runConfigureParameterDependencyChainInternal(
+	value: unknown,
+	options: ConfigureParameterDependencyChainOptions,
+	ctx: AscetEditApprovalContext,
+): Promise<ConfigureParameterDependencyChainResult> {
+	const validation = validateChainParams(value);
+	if ("error" in validation) return rejected(validation.error);
+	const params = validation.params;
+
+	const databaseCheck = await checkAscetDatabaseIdentityForWrite(options);
+	if (databaseCheck.result) {
+		return {
+			status: "blocked",
+			writesPerformed: false,
+			mutationStarted: false,
+			consistency: "compensating",
+			error: databaseCheck.result.error,
+			rollback: { required: false, status: "not_required" },
+		};
+	}
+
+	const approval = await requestAscetEditApproval(
+		{
+			title: "Execute ASCET parameter dependency chain",
+			message: buildConfirmationSummary(params),
+			signal: options.signal,
+			errorPrefix: "configure_parameter_dependency_chain",
+		},
+		ctx,
+	);
+	if (!approval.approved) {
+		return {
+			status: "blocked",
+			writesPerformed: false,
+			mutationStarted: false,
+			consistency: "compensating",
+			error: { code: approval.code, message: approval.message },
+			rollback: { required: false, status: "not_required" },
+		};
+	}
+
+	return runConfigureParameterDependencyChainBridge(params, options, {
+		intent: "apply",
+		acquireEditability: false,
+	});
 }
 
 export async function runConfigureParameterDependencyChain(

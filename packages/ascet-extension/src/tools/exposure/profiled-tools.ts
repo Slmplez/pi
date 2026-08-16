@@ -19,7 +19,7 @@ const profileGuidelines: Record<AscetProfile, Partial<Record<string, readonly st
 	},
 	reference: {
 		ascet_get: [
-			"Reference profile enables component_refs, elements, and import_binding for exact resolved targets; reference actions return outgoing relationships only.",
+			"Use ascet_search comp-ref or element-ref for live reference candidates, then validate the exact target with ascet_read.",
 		],
 	},
 	diff: {

@@ -1,10 +1,11 @@
 import { createHash } from "node:crypto";
 import type { TSchema } from "typebox";
-import { ascetGetParameters } from "../../get.ts";
+import { ascetSearchParameters } from "../../search.ts";
 import { compactExamplesForAction } from "../_shared/action-examples.ts";
 import { ascetCapabilitiesParameters } from "../capabilities/schema.ts";
 import { ascetDiffParameters } from "../diff/schema.ts";
 import { ascetEditParameters } from "../edit/schema.ts";
+import { ascetGetParameters } from "../get/schema.ts";
 import { ascetReadParameters } from "../read/schema.ts";
 import { ascetRecoverParameters } from "../recover/schema.ts";
 import { ascetRequirementsParameters } from "../requirements/schema.ts";
@@ -13,7 +14,7 @@ import { ascetStatusParameters } from "../status/schema.ts";
 import { type AscetActionDescriptor, listActionDescriptors } from "./descriptors.ts";
 import { listAscetPublicSchemaVariants } from "./schema-registry.ts";
 
-export type AscetActionFamily = "ops" | "get" | "read" | "diff" | "write";
+export type AscetActionFamily = "ops" | "search" | "get" | "read" | "diff" | "write";
 export type AscetActionRisk = "read" | "diff" | "write" | "ops";
 
 export interface AscetActionCatalogEntry {
@@ -110,22 +111,21 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 		compact: "read complete live code; not global code search",
 		intent: "Read complete current code text from a resolved ASCET component or method.",
 		useWhen: ["Need complete live code for a known component, method, C header, or external C section."],
-		avoidWhen: ["Need offline text filtering over a stored observation; use Pi grep after ascet_get."],
+		avoidWhen: ["Need candidate discovery by name or code text; use ascet_search first."],
 		aliases: ["complete code", "full code", "method body", "live code", "read code", "open code"],
 		nextActions: ["ascet_edit.set_method_code", "ascet_diff.diff_method"],
 		result: { shape: "codeText", fields: ["component", "name", "section", "text"] },
 	},
 	"ascet_read.read_dependent_chain": {
-		compact: "read one exact local/imported/exported dependency chain; provider path is optional explicit evidence",
-		intent:
-			"Read the dependency chain for a known Local Parameter, optionally constrained to one exact provider component.",
+		compact: "read one exact Local/Imported/Exported Parameter dependency chain",
+		intent: "Read the current dependency chain for a known Consumer Local Parameter.",
 		useWhen: [
-			"The consumer component and dependent Element are already known.",
-			"A provider path is known exactly and must be verified as the exporter.",
+			"The Consumer Component and Local Parameter are already known.",
+			"The Provider must be resolved by live native Element Search or verified from an explicit exact path.",
 		],
 		avoidWhen: [
-			"Need to discover an unknown provider component; use ascet_get.tree and ascet_get.elements first.",
-			"Need to create or modify dependency state; use ascet_edit.apply_element_spec then ascet_edit.set_element_dependency.",
+			"The Consumer Component or Local Parameter is unknown; use ascet_search and exact reads first.",
+			"Need to create, complete, or configure the chain; use ascet_edit.create_dependent_chain.",
 		],
 		aliases: [
 			"dependent chain",
@@ -133,8 +133,8 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 			"exported parameter provider",
 			"local imported exported parameter",
 		],
-		nextActions: ["ascet_get.elements", "ascet_get.import_binding", "ascet_edit.set_element_dependency"],
-		result: { shape: "dependentChain", fields: ["consumer", "provider", "items", "issues"] },
+		nextActions: ["ascet_edit.create_dependent_chain"],
+		result: { shape: "dependentChain", fields: ["found", "chain", "error"] },
 	},
 	"ascet_read.read_block_diagram": {
 		aliases: ["read block diagram", "BDE", "diagram content", "block diagram"],
@@ -145,30 +145,21 @@ const actionOverrides: Readonly<Record<string, ActionOverride>> = {
 		nextActions: ["ascet_read.read_code"],
 		result: { shape: "writePreflightOrResult", fields: ["status", "changed", "verification", "observations"] },
 	},
-	"ascet_edit.set_element_dependency": {
-		compact:
-			"set dependency flag/formula on an existing local parameter only; successful writes invalidate matching observations",
-		intent: "Set or clear dependency state and formula for an existing local parameter through guarded write flow.",
+	"ascet_edit.create_dependent_chain": {
+		compact: "preview or create-or-verify one Provider/Imported/Local Parameter dependency chain",
+		intent:
+			"Create missing Elements, reuse exact Elements, configure one explicit dependency, and verify by automatic readback.",
 		useWhen: [
-			"The local parameter already exists and the user wants dependency=dependent or dependency=independent applied.",
-			"Need to set the local dependent parameter formula after local/imported elements were created with apply_element_spec.",
+			"A complete explicit Element and binding definition is available for preview or apply.",
+			"The previous set-only case must configure a dependency between existing exact Elements.",
 		],
 		avoidWhen: [
-			"Need to create local, imported, or exported elements; use apply_element_spec first.",
-			"Need to discover provider evidence before writing; use read_dependent_chain first.",
+			"Formula, Formal, Element type, scope, unit, range, implementation, or DataVariant metadata would need to be guessed.",
+			"Provider Search returns zero or multiple exact validated candidates and no explicit componentPath is available.",
 		],
-		aliases: [
-			"set dependency",
-			"dependent parameter write",
-			"dependency formula",
-			"make local parameter dependent",
-			"clear dependency",
-		],
-		nextActions: ["ascet_read.read_element_dependency", "ascet_read.read_dependent_chain"],
-		result: {
-			shape: "writeResult",
-			fields: ["changed", "verification", "observations.invalidated"],
-		},
+		aliases: ["create dependent chain", "set dependent chain", "dependency chain write", "bind imported parameter"],
+		nextActions: ["ascet_read.read_dependent_chain"],
+		result: { shape: "dependentChainWrite", fields: ["ok", "changed", "verified", "created", "configured", "code"] },
 	},
 };
 
@@ -185,6 +176,9 @@ const actionParameterSchemas: Readonly<Record<string, unknown>> = {
 	},
 	get ascet_edit() {
 		return ascetEditParameters;
+	},
+	get ascet_search() {
+		return ascetSearchParameters;
 	},
 	get ascet_get() {
 		return ascetGetParameters;
@@ -340,6 +334,9 @@ export function diffActionCatalogSnapshots(
 }
 
 function resolveFamily(tool: string): AscetActionFamily {
+	if (tool === "ascet_search") {
+		return "search";
+	}
 	if (tool === "ascet_get") {
 		return "get";
 	}
@@ -480,8 +477,11 @@ function inferSchema(descriptor: AscetActionDescriptor): AscetActionCatalogEntry
 }
 
 function inferResult(descriptor: AscetActionDescriptor): AscetActionCatalogEntry["result"] {
+	if (descriptor.tool === "ascet_search") {
+		return { shape: "searchMatches", fields: ["count", "items", "more", "error"] };
+	}
 	if (descriptor.tool === "ascet_get") {
-		return { shape: "observation", fields: ["delivery", "items", "observation", "coverage", "truncated"] };
+		return { shape: "items", fields: ["count", "items", "more", "error"] };
 	}
 	if (descriptor.tool === "ascet_read") {
 		return { shape: "liveRead", fields: ["component", "items"] };

@@ -557,8 +557,6 @@ public static class ExecCommand
                     ComponentPath = request.ComponentPath,
                     DependentElementName = request.DependentElementName,
                     ExporterComponentPath = request.ExporterComponentPath,
-                    ProviderScopePath = request.ProviderScopePath,
-                    MaxCandidates = request.MaxCandidates,
                     DebugDirectory = request.DebugDirectory,
                     KeepTemp = request.KeepTemp
                 });

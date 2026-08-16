@@ -1,11 +1,11 @@
 import type { AscetCliExecutionResult, AscetCliRequest } from "../../cli.ts";
 import { type AscetToolContext, defineSequentialAscetTool } from "../../core/tool.ts";
-import { type AscetEditParams, formatAscetEditResult, getAscetEditActionId, runAscetEdit } from "../../edit/service.ts";
+import { formatAscetEditResult, getAscetEditActionId, runAscetEdit } from "../../edit/service.ts";
 import { routeAscetAction } from "../../routing/router.ts";
 import type { AscetScheduler } from "../../scheduler/scheduler.ts";
 import { ASCET_SET_STATE_MACHINE_CODE_OPERATIONS } from "../../set-state-machine-code.ts";
 import { ascetEditPrompt } from "./prompt.ts";
-import { ascetEditParameters } from "./schema.ts";
+import { type AscetEditParams, ascetEditParameters } from "./schema.ts";
 import { renderCall, renderResult } from "./ui.ts";
 
 const validStateMachineOperations = new Set<string>(ASCET_SET_STATE_MACHINE_CODE_OPERATIONS);

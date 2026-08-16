@@ -100,6 +100,10 @@ function bridgeExecution(request: AscetCliRequest, result: Record<string, unknow
 	};
 }
 
+function databaseIdentityExecution(request: AscetCliRequest): AscetCliExecutionResult {
+	return bridgeExecution(request, { database: { name: "DB", path: "C:/Repo/DB" } });
+}
+
 function approvedContext(onConfirm?: (message: string) => void) {
 	return {
 		hasUI: true,
@@ -164,6 +168,7 @@ describe("configure_parameter_dependency_chain execute", () => {
 					cwd: fixture.cwd,
 					cliPath: fixture.cliPath,
 					executeCli: async (request) => {
+						if (request.args[1] === "get_database_identity") return databaseIdentityExecution(request);
 						calls.push(request);
 						requestPath = request.args[2] ?? "";
 						requestDocument = JSON.parse(readFileSync(requestPath, "utf8")) as Record<string, unknown>;
@@ -172,8 +177,6 @@ describe("configure_parameter_dependency_chain execute", () => {
 							writesPerformed: true,
 							mutationStarted: true,
 							consistency: "compensating",
-							beforeStateHash: "before",
-							afterStateHash: "after",
 							verification: { status: "passed", verified: true },
 							rollback: { required: false, status: "not_required" },
 						});
@@ -212,12 +215,14 @@ describe("configure_parameter_dependency_chain execute", () => {
 						cwd: fixture.cwd,
 						cliPath: fixture.cliPath,
 						executeCli: async (request) =>
-							bridgeExecution(request, {
-								status,
-								writesPerformed: status === "rolled_back" || status === "rollback_failed",
-								mutationStarted: status === "rolled_back" || status === "rollback_failed",
-								rollback: { required: status === "rolled_back" || status === "rollback_failed" },
-							}),
+							request.args[1] === "get_database_identity"
+								? databaseIdentityExecution(request)
+								: bridgeExecution(request, {
+										status,
+										writesPerformed: status === "rolled_back" || status === "rollback_failed",
+										mutationStarted: status === "rolled_back" || status === "rollback_failed",
+										rollback: { required: status === "rolled_back" || status === "rollback_failed" },
+									}),
 					},
 					approvedContext(),
 				);
@@ -239,6 +244,7 @@ describe("configure_parameter_dependency_chain execute", () => {
 					cwd: fixture.cwd,
 					cliPath: fixture.cliPath,
 					executeCli: async (request) => {
+						if (request.args[1] === "get_database_identity") return databaseIdentityExecution(request);
 						calls += 1;
 						return bridgeExecution(request, { status: "committed" });
 					},

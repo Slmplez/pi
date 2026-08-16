@@ -1,7 +1,10 @@
+import { getAscetEditPermissionDescriptor } from "../permissions/descriptors.ts";
+
 export type AscetEditActionId =
 	| "create_folder"
 	| "create_component"
 	| "create_method"
+	| "create_dependent_chain"
 	| "set_method_signature"
 	| "delete_component"
 	| "delete_method"
@@ -16,6 +19,16 @@ export type AscetEditActionId =
 	| "check"
 	| "set";
 
+export interface AscetEditPermissionDescriptor {
+	baseRisk: "safe" | "medium" | "high";
+	autoApprovable: boolean;
+	destructive: boolean;
+	replacesExistingContent: boolean;
+	requiresEditableTarget: boolean;
+	requiresCompleteImpact: boolean;
+	requiresReadback: boolean;
+}
+
 export interface AscetEditActionContract {
 	id: AscetEditActionId;
 	discriminator: {
@@ -25,7 +38,7 @@ export interface AscetEditActionContract {
 	logicalCommandId: string;
 	operation: string;
 	jobKind: "read" | "write";
-	requiresApproval: boolean;
+	permission?: AscetEditPermissionDescriptor;
 	profileNames: readonly string[];
 	executor: string;
 	schemaKey: string;
@@ -42,7 +55,7 @@ const ascetEditActions = [
 		logicalCommandId: "AscetCreateFolder",
 		operation: "create_folder",
 		jobKind: "write",
-		requiresApproval: true,
+		permission: getAscetEditPermissionDescriptor("create_folder")!,
 		profileNames: mutationProfiles,
 		executor: "createFolder",
 		schemaKey: "create_folder",
@@ -54,7 +67,7 @@ const ascetEditActions = [
 		logicalCommandId: "AscetCreateComponent",
 		operation: "create_component",
 		jobKind: "write",
-		requiresApproval: true,
+		permission: getAscetEditPermissionDescriptor("create_component")!,
 		profileNames: mutationProfiles,
 		executor: "createComponent",
 		schemaKey: "create_component",
@@ -66,11 +79,23 @@ const ascetEditActions = [
 		logicalCommandId: "AscetCreateMethod",
 		operation: "create_method",
 		jobKind: "write",
-		requiresApproval: true,
+		permission: getAscetEditPermissionDescriptor("create_method")!,
 		profileNames: mutationProfiles,
 		executor: "createMethod",
 		schemaKey: "create_method",
 		promptKey: "create_method",
+	},
+	{
+		id: "create_dependent_chain",
+		discriminator: { field: "action", value: "create_dependent_chain" },
+		logicalCommandId: "AscetCreateDependentChain",
+		operation: "configure_parameter_dependency_chain_execute",
+		jobKind: "write",
+		permission: getAscetEditPermissionDescriptor("create_dependent_chain")!,
+		profileNames: mutationProfiles,
+		executor: "createDependentChain",
+		schemaKey: "create_dependent_chain",
+		promptKey: "create_dependent_chain",
 	},
 	{
 		id: "set_method_signature",
@@ -78,7 +103,7 @@ const ascetEditActions = [
 		logicalCommandId: "AscetSetMethodSignature",
 		operation: "set_method_signature",
 		jobKind: "write",
-		requiresApproval: true,
+		permission: getAscetEditPermissionDescriptor("set_method_signature")!,
 		profileNames: mutationProfiles,
 		executor: "setMethodSignature",
 		schemaKey: "set_method_signature",
@@ -90,7 +115,7 @@ const ascetEditActions = [
 		logicalCommandId: "AscetDeleteComponent",
 		operation: "delete_component",
 		jobKind: "write",
-		requiresApproval: true,
+		permission: getAscetEditPermissionDescriptor("delete_component")!,
 		profileNames: mutationProfiles,
 		executor: "deleteComponent",
 		schemaKey: "delete_component",
@@ -102,7 +127,7 @@ const ascetEditActions = [
 		logicalCommandId: "AscetDeleteMethod",
 		operation: "delete_method",
 		jobKind: "write",
-		requiresApproval: true,
+		permission: getAscetEditPermissionDescriptor("delete_method")!,
 		profileNames: mutationProfiles,
 		executor: "deleteMethod",
 		schemaKey: "delete_method",
@@ -114,7 +139,7 @@ const ascetEditActions = [
 		logicalCommandId: "AscetDeleteFolder",
 		operation: "delete_folder",
 		jobKind: "write",
-		requiresApproval: true,
+		permission: getAscetEditPermissionDescriptor("delete_folder")!,
 		profileNames: mutationProfiles,
 		executor: "deleteFolder",
 		schemaKey: "delete_folder",
@@ -126,7 +151,7 @@ const ascetEditActions = [
 		logicalCommandId: "AscetSetMethodCode",
 		operation: "set_method_code",
 		jobKind: "write",
-		requiresApproval: true,
+		permission: getAscetEditPermissionDescriptor("set_method_code")!,
 		profileNames: mutationProfiles,
 		executor: "setMethodCode",
 		schemaKey: "set_method_code",
@@ -138,7 +163,7 @@ const ascetEditActions = [
 		logicalCommandId: "AscetSetModuleCode",
 		operation: "set_module_code",
 		jobKind: "write",
-		requiresApproval: true,
+		permission: getAscetEditPermissionDescriptor("set_module_code")!,
 		profileNames: mutationProfiles,
 		executor: "setModuleCode",
 		schemaKey: "set_module_code",
@@ -150,7 +175,7 @@ const ascetEditActions = [
 		logicalCommandId: "AscetSetStateMachineCode",
 		operation: "set_state_machine_code",
 		jobKind: "write",
-		requiresApproval: true,
+		permission: getAscetEditPermissionDescriptor("set_state_machine_code")!,
 		profileNames: mutationProfiles,
 		executor: "setStateMachineCode",
 		schemaKey: "set_state_machine_code",
@@ -162,7 +187,7 @@ const ascetEditActions = [
 		logicalCommandId: "AscetSetEnumerators",
 		operation: "set_enumerators",
 		jobKind: "write",
-		requiresApproval: true,
+		permission: getAscetEditPermissionDescriptor("set_enumerators")!,
 		profileNames: mutationProfiles,
 		executor: "setEnumerators",
 		schemaKey: "set_enumerators",
@@ -174,7 +199,7 @@ const ascetEditActions = [
 		logicalCommandId: "AscetApplyElementSpec",
 		operation: "apply_element_spec",
 		jobKind: "write",
-		requiresApproval: true,
+		permission: getAscetEditPermissionDescriptor("apply_element_spec")!,
 		profileNames: mutationProfiles,
 		executor: "applyElementSpec",
 		schemaKey: "apply_element_spec",
@@ -186,7 +211,7 @@ const ascetEditActions = [
 		logicalCommandId: "AscetApplyProjectFormula",
 		operation: "apply_project_formula",
 		jobKind: "write",
-		requiresApproval: true,
+		permission: getAscetEditPermissionDescriptor("apply_project_formula")!,
 		profileNames: mutationProfiles,
 		executor: "applyProjectFormula",
 		schemaKey: "apply_project_formula",
@@ -198,7 +223,7 @@ const ascetEditActions = [
 		logicalCommandId: "AscetSetElementDependency",
 		operation: "set_element_dependency",
 		jobKind: "write",
-		requiresApproval: true,
+		permission: getAscetEditPermissionDescriptor("set_element_dependency")!,
 		profileNames: mutationProfiles,
 		executor: "setElementDependency",
 		schemaKey: "set_element_dependency",
@@ -210,7 +235,6 @@ const ascetEditActions = [
 		logicalCommandId: "AscetComponentEditableCheck",
 		operation: "component_editable_check",
 		jobKind: "read",
-		requiresApproval: false,
 		profileNames: editabilityProfiles,
 		executor: "editability",
 		schemaKey: "check",
@@ -222,7 +246,7 @@ const ascetEditActions = [
 		logicalCommandId: "AscetComponentEditableSet",
 		operation: "component_editable_set",
 		jobKind: "write",
-		requiresApproval: true,
+		permission: getAscetEditPermissionDescriptor("set")!,
 		profileNames: editabilityProfiles,
 		executor: "editability",
 		schemaKey: "set",

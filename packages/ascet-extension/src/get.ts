@@ -1,4 +1,4 @@
-﻿import { createHash } from "node:crypto";
+import { createHash } from "node:crypto";
 import { Type } from "typebox";
 import {
 	type AscetCliExecutionResult,
@@ -21,6 +21,7 @@ import {
 	type AscetObservationResult,
 	AscetObservationStore,
 } from "./observation-store.ts";
+import type { AscetScheduler } from "./scheduler/scheduler.ts";
 import { toToolFailurePayload, unwrapToolSuccessPayload } from "./tool-response-contract.ts";
 import { openAiObjectUnionSchema } from "./tools/_shared/openai-schema.ts";
 
@@ -89,6 +90,8 @@ export interface RunAscetGetOptions {
 	env?: Record<string, string | undefined>;
 	signal?: AbortSignal;
 	timeoutMs?: number;
+	agentId?: string;
+	scheduler?: Pick<AscetScheduler, "submit" | "getSnapshot">;
 	executeCli?: (request: AscetCliRequest) => Promise<AscetCliExecutionResult>;
 }
 
@@ -321,6 +324,8 @@ async function runDatabaseCatalog(
 					timeoutMs: options.timeoutMs ?? 120_000,
 					executeCli: options.executeCli,
 					toolName: "ascet_get",
+					agentId: options.agentId,
+					scheduler: options.scheduler,
 					commandId: "get_database_identity",
 					jobKind: "read",
 					resourceKey: "ascet.toolapi.global",
@@ -362,6 +367,8 @@ async function runDatabaseCatalog(
 					timeoutMs: options.timeoutMs ?? 180_000,
 					executeCli: options.executeCli,
 					toolName: "ascet_get",
+					agentId: options.agentId,
+					scheduler: options.scheduler,
 					commandId: "get_database_catalog",
 					jobKind: "read",
 					resourceKey: "ascet.toolapi.global",
@@ -448,6 +455,8 @@ export async function runAscetGet(params: AscetGetParams, options: RunAscetGetOp
 		timeoutMs: options.timeoutMs ?? defaultTimeoutMs,
 		executeCli: options.executeCli,
 		toolName: "ascet_get",
+		agentId: options.agentId,
+		scheduler: options.scheduler,
 		commandId: operationForAction(params.action),
 		jobKind: "read",
 		resourceKey: "ascet.toolapi.global",
@@ -480,19 +489,72 @@ function getTruncated(payload: JsonRecord): boolean {
 }
 
 export function getAscetDatabaseIdentity(payload: JsonRecord): AscetObservationDatabaseIdentity | undefined {
-	if (!isRecord(payload.database)) {
-		return undefined;
-	}
-	const name = typeof payload.database.name === "string" ? payload.database.name.trim() : "";
-	const path = typeof payload.database.path === "string" ? payload.database.path.trim() : "";
-	if (path.length === 0) {
-		return undefined;
-	}
+	if (!isRecord(payload.database)) return undefined;
+	const database = payload.database;
+	const name = typeof database.name === "string" ? database.name.trim() : "";
+	const reportedPath = normalizeDatabasePath(typeof database.path === "string" ? database.path : "");
+	const backendCanonicalPath = normalizeDatabasePath(
+		typeof database.canonicalPath === "string" ? database.canonicalPath : "",
+	);
+	const backendStatus = database.identityStatus;
+	const issues = Array.isArray(database.identityIssues)
+		? database.identityIssues.filter((issue): issue is string => typeof issue === "string" && issue.length > 0)
+		: [];
+	const inferred = inferDatabaseIdentity(name, reportedPath);
+	const path = backendCanonicalPath || inferred.path;
+	if (!path) return undefined;
+	const status =
+		backendStatus === "consistent" || backendStatus === "inconsistent" || backendStatus === "unknown"
+			? backendStatus
+			: inferred.status;
+	const effectiveIssues = issues.length > 0 ? issues : inferred.issues;
 	const canonicalPath = path.replaceAll("\\", "/").replace(/\/+$/u, "").toLowerCase();
 	const fingerprint = createHash("sha256")
 		.update(JSON.stringify({ name, path: canonicalPath }), "utf8")
 		.digest("hex");
-	return { ...(name.length > 0 ? { name } : {}), path, fingerprint };
+	return {
+		...(name ? { name } : {}),
+		path,
+		...(reportedPath && reportedPath !== path ? { reportedPath } : {}),
+		status,
+		issues: effectiveIssues,
+		fingerprint,
+	};
+}
+
+function normalizeDatabasePath(value: string): string {
+	return value.trim().replaceAll("/", "\\").replace(/\\+$/u, "");
+}
+
+function inferDatabaseIdentity(
+	name: string,
+	reportedPath: string,
+): Pick<AscetObservationDatabaseIdentity, "path" | "status" | "issues"> {
+	const normalize = (value: string) => value.replaceAll("/", "\\").replace(/\\+$/u, "");
+	const normalizedName = normalize(name);
+	const normalizedReportedPath = normalize(reportedPath);
+	const isAbsoluteName = /^[A-Za-z]:\\/u.test(normalizedName) || normalizedName.startsWith("\\\\");
+	if (isAbsoluteName) {
+		const nameLower = normalizedName.toLowerCase();
+		const pathLower = normalizedReportedPath.toLowerCase();
+		const consistent = pathLower.length > 0 && (nameLower === pathLower || nameLower.startsWith(`${pathLower}\\`));
+		return {
+			path: normalizedName,
+			status: consistent ? "consistent" : "inconsistent",
+			issues: consistent ? [] : ["database_name_path_mismatch"],
+		};
+	}
+	if (!normalizedReportedPath) return { path: "", status: "unknown", issues: ["database_identity_path_missing"] };
+	const reportedName = normalizedReportedPath.split("\\").at(-1) ?? "";
+	return {
+		path: normalizedReportedPath,
+		status: !name || reportedName.toLowerCase() === name.toLowerCase() ? "consistent" : "unknown",
+		issues: !name || reportedName.toLowerCase() === name.toLowerCase() ? [] : ["database_name_path_unverified"],
+	};
+}
+
+export function isAscetDatabaseIdentityWritable(identity: AscetObservationDatabaseIdentity): boolean {
+	return identity.status === "consistent";
 }
 
 function createToolOutput(params: AscetGetParams, result: AscetCliJsonResult): string {

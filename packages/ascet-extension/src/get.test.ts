@@ -14,6 +14,19 @@ import {
 } from "./get.ts";
 import { AscetObservationStore } from "./observation-store.ts";
 
+const completeDatabaseCollectors = {
+	projects: { completed: true },
+	folders: { completed: true },
+	components: { completed: true },
+	enumerations: { completed: true },
+};
+
+function databaseIdentity(name = "DB", path = "C:/Repo/DB") {
+	const identity = getAscetDatabaseIdentity({ database: { name, path } });
+	assert.ok(identity);
+	return identity;
+}
+
 function successfulResult(items: unknown[]): AscetCliJsonResult {
 	return {
 		ok: true,
@@ -146,13 +159,7 @@ test("builds local Enumeration and Module catalogs without invoking ASCET CLI", 
 			domain: "tree",
 			resultId: "obs-tree-local-catalog",
 			target: {},
-			sourceIdentity: {
-				database: {
-					name: "DB",
-					path: "C:/Repo/DB",
-					fingerprint: "4dfb2463ceca8e759a76eadb89295388610967b0b283b312f6eb427516e2b2e9",
-				},
-			},
+			sourceIdentity: { database: databaseIdentity() },
 			items: [
 				{ path: "DB\\Module", oid: "module-1", kind: "module" },
 				{ path: "DB\\Mode", oid: "enum-1", kind: "enumeration" },
@@ -163,6 +170,7 @@ test("builds local Enumeration and Module catalogs without invoking ASCET CLI", 
 				scopeId: "database:DB",
 				completeness: "complete",
 				truncated: false,
+				collectors: completeDatabaseCollectors,
 			},
 			truncated: false,
 			delivery: "stored",
@@ -213,13 +221,7 @@ test("sends one stdin request for a live Message catalog scan", async () => {
 			domain: "tree",
 			resultId: "obs-tree-live-catalog",
 			target: {},
-			sourceIdentity: {
-				database: {
-					name: "DB",
-					path: "C:/Repo/DB",
-					fingerprint: "4dfb2463ceca8e759a76eadb89295388610967b0b283b312f6eb427516e2b2e9",
-				},
-			},
+			sourceIdentity: { database: databaseIdentity() },
 			items: [
 				{ path: "DB\\Project", oid: "project-1", kind: "project" },
 				{ path: "DB\\Module", oid: "module-1", kind: "module" },
@@ -230,6 +232,7 @@ test("sends one stdin request for a live Message catalog scan", async () => {
 				scopeId: "database:DB",
 				completeness: "complete",
 				truncated: false,
+				collectors: completeDatabaseCollectors,
 			},
 			truncated: false,
 			delivery: "stored",
@@ -316,6 +319,7 @@ test("rejects a live Database Catalog scan before scanning when database identit
 				scopeId: "database:Expected",
 				completeness: "complete",
 				truncated: false,
+				collectors: completeDatabaseCollectors,
 			},
 			truncated: false,
 			delivery: "stored",
@@ -443,14 +447,31 @@ test("database identity action is strict, lightweight, and returns a stable fing
 		},
 	};
 	const output = JSON.parse(formatAscetGetResult({ action: "database_identity" }, result)) as {
-		databaseIdentity: { name?: string; path: string; fingerprint: string };
+		databaseIdentity: { name?: string; path: string; status: string; issues: string[]; fingerprint: string };
 	};
 	assert.equal(output.databaseIdentity.name, "DB");
-	assert.equal(output.databaseIdentity.path, "C:\\Repo\\DB\\");
+	assert.equal(output.databaseIdentity.path, "C:\\Repo\\DB");
+	assert.equal(output.databaseIdentity.status, "consistent");
+	assert.deepEqual(output.databaseIdentity.issues, []);
 	assert.equal(output.databaseIdentity.fingerprint.length, 64);
 	assert.deepEqual(getAscetDatabaseIdentity({ database: { name: "DB", path: "c:/repo/db" } }), {
 		name: "DB",
-		path: "c:/repo/db",
+		path: "c:\\repo\\db",
+		status: "consistent",
+		issues: [],
 		fingerprint: output.databaseIdentity.fingerprint,
 	});
+});
+
+test("database identity detects an absolute name outside the reported path", () => {
+	const identity = getAscetDatabaseIdentity({
+		database: {
+			name: "C:\\Repo\\PackageA\\ASW\\Db\\AscetDb_1",
+			path: "C:\\Repo\\PackageB\\ASW\\Db\\",
+		},
+	});
+	assert.equal(identity?.status, "inconsistent");
+	assert.equal(identity?.path, "C:\\Repo\\PackageA\\ASW\\Db\\AscetDb_1");
+	assert.equal(identity?.reportedPath, "C:\\Repo\\PackageB\\ASW\\Db");
+	assert.deepEqual(identity?.issues, ["database_name_path_mismatch"]);
 });

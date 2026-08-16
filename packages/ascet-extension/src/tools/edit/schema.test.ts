@@ -18,10 +18,12 @@ describe("ascet_edit schema", () => {
 		assert.equal(schemaFor(schemas, "create_folder")?.properties?.componentPath, undefined);
 		assert.equal(schemaFor(schemas, "create_folder")?.properties?.methodName, undefined);
 
-		assert.ok(schemaFor(schemas, "set_element_dependency")?.properties?.elementName);
-		assert.ok(schemaFor(schemas, "set_element_dependency")?.properties?.dependency);
-		assert.ok(schemaFor(schemas, "set_element_dependency")?.properties?.executeWrite);
-		assert.equal(schemaFor(schemas, "set_element_dependency")?.properties?.code, undefined);
+		assert.equal(schemaFor(schemas, "set_element_dependency"), undefined);
+		assert.equal(schemaFor(schemas, "set_dependent_chain"), undefined);
+		assert.ok(schemaFor(schemas, "create_dependent_chain")?.properties?.provider);
+		assert.ok(schemaFor(schemas, "create_dependent_chain")?.properties?.consumer);
+		assert.ok(schemaFor(schemas, "create_dependent_chain")?.properties?.binding);
+		assert.ok(schemaFor(schemas, "create_dependent_chain")?.properties?.intent);
 	});
 });
 
@@ -47,49 +49,28 @@ function actionName(schema: unknown): string | undefined {
 	return Array.isArray(action.enum) && typeof action.enum[0] === "string" ? action.enum[0] : undefined;
 }
 
-test("accepts public set_element_dependency plan and commit controls", () => {
+test("does not expose the internal set_element_dependency backend", () => {
 	assert.equal(
 		Value.Check(ascetEditParameters, {
 			action: "set_element_dependency",
 			targetPath: "FeatureA\\Consumer",
 			elementName: "C_K",
 			dependency: "dependent",
-			executeWrite: false,
+			intent: "apply",
 		}),
-		true,
-	);
-	assert.equal(
-		Value.Check(ascetEditParameters, {
-			action: "set_element_dependency",
-			phase: "plan",
-			targetPath: "FeatureA\\Consumer",
-			elementName: "C_K",
-			dependency: "dependent",
-			executeWrite: false,
-		}),
-		true,
-	);
-	assert.equal(
-		Value.Check(ascetEditParameters, {
-			action: "set_element_dependency",
-			phase: "commit",
-			planId: "plan-1",
-			executeWrite: true,
-		}),
-		true,
+		false,
 	);
 });
 
-test("accepts public apply_element_spec plan and commit controls", () => {
-	for (const intent of ["create", "patch", "upsert", "restore"] as const) {
+test("requires one-call apply_element_spec intent and rejects plan/commit controls", () => {
+	for (const elementIntent of ["create", "patch", "upsert", "restore"] as const) {
 		assert.equal(
 			Value.Check(ascetEditParameters, {
 				action: "apply_element_spec",
-				phase: "plan",
 				componentPath: "FeatureA\\Consumer",
-				intent,
+				elementIntent,
 				elements: [],
-				executeWrite: false,
+				intent: "preview",
 			}),
 			true,
 		);
@@ -99,8 +80,53 @@ test("accepts public apply_element_spec plan and commit controls", () => {
 			action: "apply_element_spec",
 			phase: "commit",
 			planId: "plan-1",
-			executeWrite: true,
+			intent: "apply",
 		}),
-		true,
+		false,
+	);
+});
+test("accepts create_dependent_chain and rejects retired or incomplete requests", () => {
+	const params = {
+		action: "create_dependent_chain",
+		provider: {
+			componentPath: "FeatureA\\Provider",
+			element: {
+				name: "P_Threshold",
+				modelType: "cont",
+				unit: "",
+				comment: "",
+				calibration: false,
+				range: { mode: "none" },
+				data: { mode: "ascetDefault" },
+				implementation: { mode: "ascetDefault" },
+			},
+		},
+		consumer: {
+			componentPath: "FeatureA\\Consumer",
+			importedElement: { name: "P_Threshold", modelType: "cont", unit: "" },
+			localElement: {
+				name: "C_Threshold",
+				modelType: "cont",
+				unit: "",
+				comment: "",
+				calibration: false,
+				range: { mode: "none" },
+				implementation: { mode: "ascetDefault" },
+			},
+		},
+		binding: { formula: "P_Threshold", formal: "P_Threshold", variantPolicy: "default" },
+		intent: "preview",
+	} as const;
+	assert.equal(Value.Check(ascetEditParameters, params), true);
+	assert.equal(Value.Check(ascetEditParameters, { ...params, formals: ["P_Threshold"] }), false);
+	assert.equal(Value.Check(ascetEditParameters, { ...params, intent: "commit" }), false);
+	assert.equal(
+		Value.Check(ascetEditParameters, {
+			action: "set_dependent_chain",
+			componentPath: "FeatureA\\Consumer",
+			dependentElement: "C_Threshold",
+			intent: "preview",
+		}),
+		false,
 	);
 });

@@ -23,18 +23,33 @@ function guardedCreateFolderExecution(request: AscetCliRequest): AscetCliExecuti
 	const result =
 		operation === "get_database_identity"
 			? { database: { name: "DB", path: "C:/Repo/DB" } }
-			: operation === "get_tree"
+			: operation === "preflight_create_folder"
 				? {
-						items: [{ path: "DEMO", oid: "F-1", kind: "folder" }],
-						coverage: {
-							status: "complete_for_scope",
-							completeness: "complete",
-							collectorCompleted: true,
+						folderPath: request.args[2],
+						databasePath: "C:/Repo/DB",
+						existing: ["DEMO"],
+						willCreate: [request.args[2]],
+						conflicts: [],
+						capability: {
+							status: "supported",
+							methods: ["AddFolder(String)"],
+							saveAvailable: true,
+							readbackAvailable: true,
 						},
-						truncated: false,
-						database: { name: "DB", path: "C:/Repo/DB" },
+						noOp: false,
 					}
-				: { writeSucceeded: true, verifyReadbackRequested: true, readbackVerified: true };
+				: operation === "get_tree"
+					? {
+							items: [{ path: "DEMO", oid: "F-1", kind: "folder" }],
+							coverage: {
+								status: "complete_for_scope",
+								completeness: "complete",
+								collectorCompleted: true,
+							},
+							truncated: false,
+							database: { name: "DB", path: "C:/Repo/DB" },
+						}
+					: { writeSucceeded: true, verifyReadbackRequested: true, readbackVerified: true };
 	return {
 		exitCode: 0,
 		stdout: JSON.stringify({ ok: true, result, error: null }),
@@ -44,7 +59,7 @@ function guardedCreateFolderExecution(request: AscetCliRequest): AscetCliExecuti
 	};
 }
 
-test("ascet_edit remains canonical while the dependency-chain composite is explicitly registered", () => {
+test("ascet_edit remains canonical and the retired dependency-chain composite is not registered", () => {
 	const names: readonly string[] = canonicalAscetToolNames;
 	assert.equal(ascetEditTool.name, "ascet_edit");
 	assert.deepEqual(names, [
@@ -52,17 +67,18 @@ test("ascet_edit remains canonical while the dependency-chain composite is expli
 		"ascet_capabilities",
 		"ascet_recover",
 		"ascet_scheduler_status",
+		"ascet_search",
 		"ascet_get",
 		"ascet_read",
 		"ascet_diff",
 		"ascet_edit",
-		"configure_parameter_dependency_chain",
 	]);
 	assert.deepEqual([...ascetEditManifest.map((route) => route.action)].sort(), [
 		"apply_element_spec",
 		"apply_project_formula",
 		"check",
 		"create_component",
+		"create_dependent_chain",
 		"create_folder",
 		"create_method",
 		"delete_component",
@@ -110,7 +126,7 @@ test("ascet_edit check keeps the editability value and backend operation", async
 test("ascet_edit write actions remain preflight by default", async () => {
 	const result = await ascetEditTool.execute(
 		"call-1",
-		{ action: "create_folder", folderPath: "DEMO/New" },
+		{ action: "create_folder", folderPath: "DEMO/New", intent: "preview" },
 		new AbortController().signal,
 		undefined,
 		{ cwd: process.cwd() },
@@ -130,16 +146,14 @@ test("ascet_edit returns a blocked outcome when confirmation is not granted", as
 	try {
 		const result = await ascetEditTool.execute(
 			"call-1",
-			{ action: "create_folder", folderPath: "DEMO/New", executeWrite: true },
+			{ action: "create_folder", folderPath: "DEMO/New", intent: "apply" },
 			new AbortController().signal,
 			undefined,
 			{
 				cwd: root,
 				env: { PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts") },
 				executeCli: async (request) => {
-					if (request.args[1] !== "get_database_identity" && request.args[1] !== "get_tree") {
-						mutationDispatches++;
-					}
+					if (request.args[1] === "create_folder") mutationDispatches++;
 					return guardedCreateFolderExecution(request);
 				},
 				hasUI: true,
@@ -157,7 +171,54 @@ test("ascet_edit returns a blocked outcome when confirmation is not granted", as
 	}
 });
 
-test("ascet_edit keeps confirmation independent from a cancelled tool run and never writes afterward", async () => {
+test("ascet_edit applies exact scoped deny settings to the planned write target", async () => {
+	const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-scoped-deny-"));
+	let confirmations = 0;
+	let mutationDispatches = 0;
+	try {
+		const result = await ascetEditTool.execute(
+			"call-1",
+			{ action: "create_folder", folderPath: "DEMO/Denied", intent: "apply" },
+			new AbortController().signal,
+			undefined,
+			{
+				cwd: root,
+				env: { PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts") },
+				permissionMode: "auto",
+				getSettings: () => ({
+					ascetPermissions: {
+						rules: [{ behavior: "deny", action: "create_folder", path: "DEMO\\Denied" }],
+					},
+				}),
+				executeCli: async (request) => {
+					if (request.args[1] === "create_folder") mutationDispatches++;
+					return guardedCreateFolderExecution(request);
+				},
+				hasUI: true,
+				ui: {
+					confirm: async () => {
+						confirmations++;
+						return true;
+					},
+				},
+			},
+		);
+
+		assert.equal(result.details.outcome.status, "blocked");
+		if (result.details.outcome.status === "blocked") {
+			assert.equal(result.details.outcome.code, "ascet_edit_permission_denied");
+		}
+		assert.equal(result.details.mutationResult?.permission.decision, "deny");
+		assert.equal(result.details.mutationResult?.permission.rule?.path, "DEMO\\Denied");
+		assert.equal(result.details.mutationResult?.bridge.bridgeEntered, false);
+		assert.equal(confirmations, 0);
+		assert.equal(mutationDispatches, 0);
+	} finally {
+		rmSync(root, { recursive: true, force: true });
+	}
+});
+
+test("ascet_edit cancels approval with the tool run and never writes afterward", async () => {
 	const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-confirm-cancelled-"));
 	const toolRun = new AbortController();
 	let mutationDispatches = 0;
@@ -165,16 +226,14 @@ test("ascet_edit keeps confirmation independent from a cancelled tool run and ne
 	try {
 		const result = await ascetEditTool.execute(
 			"call-1",
-			{ action: "create_folder", folderPath: "DEMO/New", executeWrite: true },
+			{ action: "create_folder", folderPath: "DEMO/New", intent: "apply" },
 			toolRun.signal,
 			undefined,
 			{
 				cwd: root,
 				env: { PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts") },
 				executeCli: async (request) => {
-					if (request.args[1] !== "get_database_identity" && request.args[1] !== "get_tree") {
-						mutationDispatches++;
-					}
+					if (request.args[1] === "create_folder") mutationDispatches++;
 					return guardedCreateFolderExecution(request);
 				},
 				hasUI: true,
@@ -188,7 +247,7 @@ test("ascet_edit keeps confirmation independent from a cancelled tool run and ne
 			},
 		);
 
-		assert.equal(confirmationSignal, undefined);
+		assert.equal(confirmationSignal, toolRun.signal);
 		assert.equal(mutationDispatches, 0);
 		assert.equal(result.details.outcome.status, "blocked");
 		if (result.details.outcome.status === "blocked") {
@@ -199,12 +258,12 @@ test("ascet_edit keeps confirmation independent from a cancelled tool run and ne
 	}
 });
 
-test("ascet_edit reports a confirmation UI failure as an error", async () => {
+test("ascet_edit reports a confirmation UI failure as blocked", async () => {
 	const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-confirm-ui-failure-"));
 	try {
 		const result = await ascetEditTool.execute(
 			"call-1",
-			{ action: "create_folder", folderPath: "DEMO/New", executeWrite: true },
+			{ action: "create_folder", folderPath: "DEMO/New", intent: "apply" },
 			new AbortController().signal,
 			undefined,
 			{
@@ -220,9 +279,9 @@ test("ascet_edit reports a confirmation UI failure as an error", async () => {
 			},
 		);
 
-		assert.equal(result.details.outcome.status, "error");
-		if (result.details.outcome.status === "error") {
-			assert.equal(result.details.outcome.error.code, "ascet_edit_confirmation_ui_failed");
+		assert.equal(result.details.outcome.status, "blocked");
+		if (result.details.outcome.status === "blocked") {
+			assert.equal(result.details.outcome.code, "ascet_edit_confirmation_ui_failed");
 		}
 	} finally {
 		rmSync(root, { recursive: true, force: true });
@@ -232,16 +291,16 @@ test("ascet_edit reports a confirmation UI failure as an error", async () => {
 test("ascet_edit set routes through the unified approval path", async () => {
 	const result = await ascetEditTool.execute(
 		"call-1",
-		{ mode: "set", componentPath: "DEMO/PID", executeWrite: true },
+		{ mode: "set", componentPath: "DEMO/PID", intent: "apply" },
 		new AbortController().signal,
 		undefined,
-		{ cwd: process.cwd() },
+		{ cwd: process.cwd(), executeCli: async (request) => editableExecution(request, false) },
 	);
 
 	assert.equal(result.details.tool, "ascet_edit");
 	assert.equal(result.details.action, "set");
 	assert.equal(result.details.mode, "set");
-	assert.equal(result.details.error?.code, "ascet_edit_ui_required");
+	assert.equal(result.details.error?.code, "ascet_edit_approval_required");
 	assert.deepEqual(result.details.command, {
 		logicalCommandId: "AscetComponentEditableSet",
 		backendCommandId: "AscetComponentEditableSet",
@@ -249,33 +308,17 @@ test("ascet_edit set routes through the unified approval path", async () => {
 	});
 });
 
-test("reports only selected set_element_dependency schema errors", async () => {
+test("rejects the retired set_dependent_chain public action", async () => {
 	const invalidParams = {
-		action: "set_element_dependency",
-		targetPath: "DEMO\\Consumer",
-		elementName: "C_K",
-		dependency: "dependent",
-		folderPath: "DEMO\\Unexpected",
+		action: "set_dependent_chain",
+		componentPath: "DEMO\\Consumer",
+		dependentElement: "C_K",
+		intent: "preview",
 	} as unknown as Parameters<typeof ascetEditTool.execute>[1];
 	const result = await ascetEditTool.execute("call-1", invalidParams, new AbortController().signal, undefined, {
 		cwd: process.cwd(),
 	});
 
-	const payload = JSON.parse(result.content[0]?.text ?? "{}") as {
-		error?: { details?: { errors?: Array<{ message?: string; path?: string }> } };
-	};
-	const errors = payload.error?.details?.errors ?? [];
-	assert.ok(errors.length > 0);
-	assert.equal(
-		errors.some((error) => error.message?.includes("folderPath must have required properties")),
-		false,
-	);
-	assert.equal(
-		errors.some((error) => error.message?.includes("componentPath must have required properties")),
-		false,
-	);
-	assert.equal(
-		errors.some((error) => error.message?.includes("methodName must have required properties")),
-		false,
-	);
+	const payload = JSON.parse(result.content[0]?.text ?? "{}") as { error?: { code?: string } };
+	assert.ok(payload.error?.code);
 });

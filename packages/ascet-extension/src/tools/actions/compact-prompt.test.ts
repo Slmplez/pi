@@ -20,7 +20,7 @@ describe("ASCET compact action guide", () => {
 		const text = buildCompactActionGuide().join("\n");
 
 		assert.doesNotMatch(text, /\bascet_index\b/);
-		assert.doesNotMatch(text, /\bascet_search\b/);
+		assert.match(text, /ascet_search\.\*/);
 		assert.doesNotMatch(text, /\bascet_explore\b/);
 		assert.doesNotMatch(text, /\bascet_batch_write\b/);
 	});

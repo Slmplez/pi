@@ -335,6 +335,13 @@ export const ascetRouteManifestEntries = [
 	},
 	{
 		toolName: "ascet_edit",
+		action: "create_dependent_chain",
+		logicalCommandId: "AscetCreateDependentChain",
+		operation: "configure_parameter_dependency_chain_execute",
+		category: "domain",
+	},
+	{
+		toolName: "ascet_edit",
 		action: "set_element_dependency",
 		logicalCommandId: "AscetSetElementDependency",
 		operation: "set_element_dependency",

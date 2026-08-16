@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "catalogFingerprint": "633e79801327d153eee7c3759a9df791c7c1f0f5f3e6178376da81fd3b51ae6f",
+  "catalogFingerprint": "b9956074fb2958b5544656d2701b5579b4e1336f4c57d7a4880de0a6ee72cb90",
   "actions": [
     {
       "id": "ascet_batch_write.batch_create_component",
@@ -404,31 +404,33 @@
     },
     {
       "id": "ascet_edit.apply_element_spec",
-      "schemaFingerprint": "30b2eb8e72450c553869d8d1cd6062788202a6443ae580a7be3f632d9e6f5663",
-      "rulesFingerprint": "db970008013401a9f9e03c6ba70dfd41092fb933de3e9c70289f835a5d494738",
+      "schemaFingerprint": "2c7903a193f34c9bea321985413b7c16c5dcbb7503be980da5a74ebfb7328d25",
+      "rulesFingerprint": "547667329c3db6c1548609b76bbd394839ecc4ed545b60cf0a4796537d4a98b2",
       "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
       "schema": {
         "required": [
-          "action"
+          "action",
+          "componentPath",
+          "intent",
+          "elementIntent",
+          "elements"
         ],
         "optional": [
-          "phase",
           "projectPath",
           "dataTarget",
           "implementationTarget",
           "deleteMissing",
-          "recreateIncompatible",
-          "executeWrite"
+          "recreateIncompatible"
         ],
         "enums": {
           "action": [
             "apply_element_spec"
           ],
-          "phase": [
-            "plan",
-            "commit"
-          ],
           "intent": [
+            "preview",
+            "apply"
+          ],
+          "elementIntent": [
             "create",
             "patch",
             "upsert",
@@ -441,23 +443,20 @@
               "action",
               "componentPath",
               "intent",
+              "elementIntent",
               "elements"
             ],
             "optional": [
-              "phase",
               "projectPath",
               "dataTarget",
               "implementationTarget",
               "deleteMissing",
-              "recreateIncompatible",
-              "executeWrite"
+              "recreateIncompatible"
             ],
             "when": {
-              "phase": [
-                "plan"
-              ],
               "intent": [
-                "create"
+                "preview",
+                "apply"
               ]
             }
           },
@@ -466,23 +465,20 @@
               "action",
               "componentPath",
               "intent",
+              "elementIntent",
               "elements"
             ],
             "optional": [
-              "phase",
               "projectPath",
               "dataTarget",
               "implementationTarget",
               "deleteMissing",
-              "recreateIncompatible",
-              "executeWrite"
+              "recreateIncompatible"
             ],
             "when": {
-              "phase": [
-                "plan"
-              ],
               "intent": [
-                "patch"
+                "preview",
+                "apply"
               ]
             }
           },
@@ -491,23 +487,20 @@
               "action",
               "componentPath",
               "intent",
+              "elementIntent",
               "elements"
             ],
             "optional": [
-              "phase",
               "projectPath",
               "dataTarget",
               "implementationTarget",
               "deleteMissing",
-              "recreateIncompatible",
-              "executeWrite"
+              "recreateIncompatible"
             ],
             "when": {
-              "phase": [
-                "plan"
-              ],
               "intent": [
-                "upsert"
+                "preview",
+                "apply"
               ]
             }
           },
@@ -516,38 +509,20 @@
               "action",
               "componentPath",
               "intent",
+              "elementIntent",
               "elements"
             ],
             "optional": [
-              "phase",
               "projectPath",
               "dataTarget",
               "implementationTarget",
               "deleteMissing",
-              "recreateIncompatible",
-              "executeWrite"
+              "recreateIncompatible"
             ],
             "when": {
-              "phase": [
-                "plan"
-              ],
               "intent": [
-                "restore"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "phase",
-              "planId"
-            ],
-            "optional": [
-              "executeWrite"
-            ],
-            "when": {
-              "phase": [
-                "commit"
+                "preview",
+                "apply"
               ]
             }
           }
@@ -570,19 +545,19 @@
     },
     {
       "id": "ascet_edit.apply_project_formula",
-      "schemaFingerprint": "d9807097b61e9d6b069acb8449ae8131386093bf3b45d4786ae33f34507838b7",
-      "rulesFingerprint": "c8fa09230dccd4aed959c0f1ac6ebf581360dc9e1f0dee980a964e791624d325",
+      "schemaFingerprint": "273db8d99e188d87518b926db6a8c66790a97d7061f030ee6803c7fc484b0fba",
+      "rulesFingerprint": "d3febaf28e21a24bbe10e8a00ea41cc0f541464ba71b9d00b550b594e8e9b27e",
       "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
       "schema": {
         "required": [
           "action",
           "projectPath",
-          "specFile"
+          "specFile",
+          "intent"
         ],
         "optional": [
           "mode",
-          "deleteMissing",
-          "executeWrite"
+          "deleteMissing"
         ],
         "enums": {
           "action": [
@@ -590,6 +565,10 @@
           ],
           "mode": [
             "restore"
+          ],
+          "intent": [
+            "preview",
+            "apply"
           ]
         }
       },
@@ -606,18 +585,17 @@
     },
     {
       "id": "ascet_edit.check",
-      "schemaFingerprint": "82248f86459a5045c4cc4322f551092c39c3c8ab8dfc5285017aaddf29d94b84",
+      "schemaFingerprint": "7af58a0d2e3de4847c4a35421f2d6194c49f5feb2c603f3d2d7d594cc2da8e72",
       "rulesFingerprint": "e02c0a3a7f70dd0cbbdbc703f6ac344dff4fd4b3870ea26da8b3b9466226a75c",
       "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
       "schema": {
         "required": [],
         "optional": [
-          "executeWrite",
           "language",
           "ifExists",
           "rollbackOnFailure",
           "componentKind",
-          "methodKind",
+          "diagram",
           "returnType",
           "arguments",
           "ifReturnExists",
@@ -631,26 +609,12 @@
           "sourceState",
           "targetState",
           "priority",
-          "phase",
           "projectPath",
           "dataTarget",
           "implementationTarget",
           "deleteMissing",
           "recreateIncompatible",
-          "mode",
-          "targetPath",
-          "componentPath",
-          "dependencyFormula",
-          "dependencyFormals",
-          "bindingPolicy",
-          "dependencyMappings",
-          "variantMappings",
-          "variantPolicy",
-          "variants",
-          "valueRestoration",
-          "clearDependencyFormula",
-          "targetKind",
-          "match"
+          "mode"
         ],
         "enums": {
           "action": [
@@ -667,7 +631,11 @@
             "set_enumerators",
             "apply_element_spec",
             "apply_project_formula",
-            "set_element_dependency"
+            "create_dependent_chain"
+          ],
+          "intent": [
+            "preview",
+            "apply"
           ],
           "kind": [
             "class",
@@ -732,11 +700,7 @@
             "set-header",
             "set-external-c-code"
           ],
-          "phase": [
-            "plan",
-            "commit"
-          ],
-          "intent": [
+          "elementIntent": [
             "create",
             "patch",
             "upsert",
@@ -746,141 +710,174 @@
             "restore",
             "check",
             "set"
-          ],
-          "dependency": [
-            "dependent",
-            "independent"
-          ],
-          "bindingPolicy": [
-            "explicit",
-            "autoExactName"
-          ],
-          "variantPolicy": [
-            "default",
-            "selected",
-            "all"
-          ],
-          "targetKind": [
-            "auto",
-            "component",
-            "folder"
-          ],
-          "match": [
-            "exact",
-            "all"
           ]
         },
         "variants": [
           {
             "required": [
               "action",
-              "folderPath"
+              "folderPath",
+              "intent"
             ],
-            "optional": [
-              "executeWrite"
-            ]
+            "optional": [],
+            "when": {
+              "intent": [
+                "preview",
+                "apply"
+              ]
+            }
           },
           {
             "required": [
               "action",
               "componentPath",
-              "kind"
+              "kind",
+              "intent"
             ],
             "optional": [
               "language",
               "ifExists",
-              "rollbackOnFailure",
-              "executeWrite"
-            ]
+              "rollbackOnFailure"
+            ],
+            "when": {
+              "intent": [
+                "preview",
+                "apply"
+              ]
+            }
           },
           {
             "required": [
               "action",
               "componentPath",
-              "methodName"
+              "methodName",
+              "methodKind",
+              "intent"
             ],
             "optional": [
               "componentKind",
-              "methodKind",
-              "ifExists",
-              "executeWrite"
-            ]
+              "diagram",
+              "ifExists"
+            ],
+            "when": {
+              "intent": [
+                "preview",
+                "apply"
+              ]
+            }
           },
           {
             "required": [
               "action",
               "componentPath",
-              "methodName"
+              "methodName",
+              "intent"
             ],
             "optional": [
               "returnType",
               "arguments",
-              "ifReturnExists",
-              "executeWrite"
-            ]
-          },
-          {
-            "required": [
-              "action",
-              "componentPath"
+              "ifReturnExists"
             ],
-            "optional": [
-              "ifMissing",
-              "executeWrite"
-            ]
+            "when": {
+              "intent": [
+                "preview",
+                "apply"
+              ]
+            }
           },
           {
             "required": [
               "action",
               "componentPath",
-              "methodName"
+              "intent"
             ],
             "optional": [
-              "ifMissing",
-              "executeWrite"
-            ]
-          },
-          {
-            "required": [
-              "action",
-              "folderPath"
+              "ifMissing"
             ],
-            "optional": [
-              "ifMissing",
-              "executeWrite"
-            ]
+            "when": {
+              "intent": [
+                "preview",
+                "apply"
+              ]
+            }
           },
           {
             "required": [
               "action",
               "componentPath",
-              "methodName"
+              "methodName",
+              "intent"
+            ],
+            "optional": [
+              "ifMissing"
+            ],
+            "when": {
+              "intent": [
+                "preview",
+                "apply"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "folderPath",
+              "intent"
+            ],
+            "optional": [
+              "ifMissing"
+            ],
+            "when": {
+              "intent": [
+                "preview",
+                "apply"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "methodName",
+              "intent"
             ],
             "optional": [
               "code",
-              "codeFile",
-              "executeWrite"
-            ]
+              "codeFile"
+            ],
+            "when": {
+              "intent": [
+                "preview",
+                "apply"
+              ]
+            }
           },
           {
             "required": [
               "action",
-              "modulePath"
+              "modulePath",
+              "intent"
             ],
             "optional": [
               "operation",
               "section",
               "methodName",
               "code",
-              "codeFile",
-              "executeWrite"
-            ]
+              "codeFile"
+            ],
+            "when": {
+              "intent": [
+                "preview",
+                "apply"
+              ]
+            }
           },
           {
             "required": [
               "action",
               "stateMachinePath",
-              "operation"
+              "operation",
+              "intent"
             ],
             "optional": [
               "stateName",
@@ -889,42 +886,27 @@
               "priority",
               "methodName",
               "code",
-              "codeFile",
-              "executeWrite"
-            ]
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "enumerators"
-            ],
-            "optional": [
-              "executeWrite"
-            ]
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "intent",
-              "elements"
-            ],
-            "optional": [
-              "phase",
-              "projectPath",
-              "dataTarget",
-              "implementationTarget",
-              "deleteMissing",
-              "recreateIncompatible",
-              "executeWrite"
+              "codeFile"
             ],
             "when": {
-              "phase": [
-                "plan"
-              ],
               "intent": [
-                "create"
+                "preview",
+                "apply"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "enumerators",
+              "intent"
+            ],
+            "optional": [],
+            "when": {
+              "intent": [
+                "preview",
+                "apply"
               ]
             }
           },
@@ -933,23 +915,20 @@
               "action",
               "componentPath",
               "intent",
+              "elementIntent",
               "elements"
             ],
             "optional": [
-              "phase",
               "projectPath",
               "dataTarget",
               "implementationTarget",
               "deleteMissing",
-              "recreateIncompatible",
-              "executeWrite"
+              "recreateIncompatible"
             ],
             "when": {
-              "phase": [
-                "plan"
-              ],
               "intent": [
-                "patch"
+                "preview",
+                "apply"
               ]
             }
           },
@@ -958,23 +937,20 @@
               "action",
               "componentPath",
               "intent",
+              "elementIntent",
               "elements"
             ],
             "optional": [
-              "phase",
               "projectPath",
               "dataTarget",
               "implementationTarget",
               "deleteMissing",
-              "recreateIncompatible",
-              "executeWrite"
+              "recreateIncompatible"
             ],
             "when": {
-              "phase": [
-                "plan"
-              ],
               "intent": [
-                "upsert"
+                "preview",
+                "apply"
               ]
             }
           },
@@ -983,38 +959,42 @@
               "action",
               "componentPath",
               "intent",
+              "elementIntent",
               "elements"
             ],
             "optional": [
-              "phase",
               "projectPath",
               "dataTarget",
               "implementationTarget",
               "deleteMissing",
-              "recreateIncompatible",
-              "executeWrite"
+              "recreateIncompatible"
             ],
             "when": {
-              "phase": [
-                "plan"
-              ],
               "intent": [
-                "restore"
+                "preview",
+                "apply"
               ]
             }
           },
           {
             "required": [
               "action",
-              "phase",
-              "planId"
+              "componentPath",
+              "intent",
+              "elementIntent",
+              "elements"
             ],
             "optional": [
-              "executeWrite"
+              "projectPath",
+              "dataTarget",
+              "implementationTarget",
+              "deleteMissing",
+              "recreateIncompatible"
             ],
             "when": {
-              "phase": [
-                "commit"
+              "intent": [
+                "preview",
+                "apply"
               ]
             }
           },
@@ -1022,60 +1002,36 @@
             "required": [
               "action",
               "projectPath",
-              "specFile"
+              "specFile",
+              "intent"
             ],
             "optional": [
               "mode",
-              "deleteMissing",
-              "executeWrite"
+              "deleteMissing"
             ],
             "when": {
               "mode": [
                 "restore"
+              ],
+              "intent": [
+                "preview",
+                "apply"
               ]
             }
           },
           {
             "required": [
               "action",
-              "elementName",
-              "dependency"
+              "provider",
+              "consumer",
+              "binding",
+              "intent"
             ],
-            "optional": [
-              "phase",
-              "targetPath",
-              "componentPath",
-              "dependencyFormula",
-              "dependencyFormals",
-              "bindingPolicy",
-              "dependencyMappings",
-              "variantMappings",
-              "variantPolicy",
-              "variants",
-              "valueRestoration",
-              "clearDependencyFormula",
-              "targetKind",
-              "match",
-              "executeWrite"
-            ],
+            "optional": [],
             "when": {
-              "phase": [
-                "plan"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "phase",
-              "planId"
-            ],
-            "optional": [
-              "executeWrite"
-            ],
-            "when": {
-              "phase": [
-                "commit"
+              "intent": [
+                "preview",
+                "apply"
               ]
             }
           },
@@ -1084,9 +1040,7 @@
               "mode",
               "componentPath"
             ],
-            "optional": [
-              "executeWrite"
-            ],
+            "optional": [],
             "when": {
               "mode": [
                 "check"
@@ -1096,14 +1050,17 @@
           {
             "required": [
               "mode",
-              "componentPath"
+              "componentPath",
+              "intent"
             ],
-            "optional": [
-              "executeWrite"
-            ],
+            "optional": [],
             "when": {
               "mode": [
                 "set"
+              ],
+              "intent": [
+                "preview",
+                "apply"
               ]
             }
           }
@@ -1122,20 +1079,20 @@
     },
     {
       "id": "ascet_edit.create_component",
-      "schemaFingerprint": "ff2433c0a1b5ac0c4b1384fced0066198b9928a8b8355aa637e570efc6c124c3",
-      "rulesFingerprint": "7dff0d49ab3bb3e70c9e636f41c4d116f004d4622a5cce8acee7c48185883468",
+      "schemaFingerprint": "a994d8041ac390900a8be817c52e0fb259237b1d7abb30c307a2baeac6dd535b",
+      "rulesFingerprint": "a7876b92f29f5f34bb218fee0b0f1c69e76bd5c95ad2db86e791dcbacdafdb0a",
       "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
       "schema": {
         "required": [
           "action",
           "componentPath",
-          "kind"
+          "kind",
+          "intent"
         ],
         "optional": [
           "language",
           "ifExists",
-          "rollbackOnFailure",
-          "executeWrite"
+          "rollbackOnFailure"
         ],
         "enums": {
           "action": [
@@ -1155,6 +1112,10 @@
           "ifExists": [
             "fail",
             "return-existing"
+          ],
+          "intent": [
+            "preview",
+            "apply"
           ]
         }
       },
@@ -1170,21 +1131,65 @@
       }
     },
     {
+      "id": "ascet_edit.create_dependent_chain",
+      "schemaFingerprint": "33b1f08e5faea2e5758576ac29c9310eee1f9c56675a7836f92c9a55c41a7abb",
+      "rulesFingerprint": "e7b7d6c5cdd0df99721256dcd1c549aaac65683369d0df2f718dc833caa77bc5",
+      "resultFingerprint": "d6c085ccf187be25e8c0c3e545b2f580d88cca86bf28738ad9b2fc9f22ff317e",
+      "schema": {
+        "required": [
+          "action",
+          "provider",
+          "consumer",
+          "binding",
+          "intent"
+        ],
+        "optional": [],
+        "enums": {
+          "action": [
+            "create_dependent_chain"
+          ],
+          "intent": [
+            "preview",
+            "apply"
+          ]
+        }
+      },
+      "supportedObjectKinds": [
+        "class",
+        "module",
+        "statemachine"
+      ],
+      "result": {
+        "shape": "dependentChainWrite",
+        "fields": [
+          "ok",
+          "changed",
+          "verified",
+          "created",
+          "configured",
+          "code"
+        ]
+      }
+    },
+    {
       "id": "ascet_edit.create_folder",
-      "schemaFingerprint": "4da2ed4137b64f0a3f7c9bc8abf9a07b53ca6a7746833242e027e6d75e607bb7",
-      "rulesFingerprint": "db42defb0ba8dfd01cdde299f33937c0d42b1c647ce70b2b992ea9a284c6d4ba",
+      "schemaFingerprint": "c57ece0cc7c3ba8a19e91fec7f6fb92c725ab405dce9b3976d5775cdc30d9311",
+      "rulesFingerprint": "423c15011de6b6bb52d9305bd047bf172ebaef433588572cc34e9dbdfe327214",
       "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
       "schema": {
         "required": [
           "action",
-          "folderPath"
+          "folderPath",
+          "intent"
         ],
-        "optional": [
-          "executeWrite"
-        ],
+        "optional": [],
         "enums": {
           "action": [
             "create_folder"
+          ],
+          "intent": [
+            "preview",
+            "apply"
           ]
         }
       },
@@ -1201,20 +1206,21 @@
     },
     {
       "id": "ascet_edit.create_method",
-      "schemaFingerprint": "00fa143e02d04699d8e6d3aa9999929355f2d8d51566c1f1f90de5d5150a1462",
-      "rulesFingerprint": "4ea02e50a739a0f809526bc0d80ba0683cbaad0ad933e73fe0146fd0b1d80fa9",
+      "schemaFingerprint": "f79eb1faee1a67dd7f596c20e7a202841cf010f930bc1b4a107bf0263b790f4b",
+      "rulesFingerprint": "8e3e910a068870a5961b3cbf5e58a28bdff83baf500c70036cdcd000bb7be839",
       "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
       "schema": {
         "required": [
           "action",
           "componentPath",
-          "methodName"
+          "methodName",
+          "methodKind",
+          "intent"
         ],
         "optional": [
           "componentKind",
-          "methodKind",
-          "ifExists",
-          "executeWrite"
+          "diagram",
+          "ifExists"
         ],
         "enums": {
           "action": [
@@ -1235,6 +1241,10 @@
           "ifExists": [
             "fail",
             "return-existing"
+          ],
+          "intent": [
+            "preview",
+            "apply"
           ]
         }
       },
@@ -1251,17 +1261,17 @@
     },
     {
       "id": "ascet_edit.delete_component",
-      "schemaFingerprint": "6c9c6cf90de9c90d2976522ea537316949b2b486ac9e47fcd45e505453729b1a",
-      "rulesFingerprint": "db42defb0ba8dfd01cdde299f33937c0d42b1c647ce70b2b992ea9a284c6d4ba",
+      "schemaFingerprint": "4ff036b5438a16262b090425b93324301a368288bb357f90596f7dc5f1d036cd",
+      "rulesFingerprint": "423c15011de6b6bb52d9305bd047bf172ebaef433588572cc34e9dbdfe327214",
       "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
       "schema": {
         "required": [
           "action",
-          "componentPath"
+          "componentPath",
+          "intent"
         ],
         "optional": [
-          "ifMissing",
-          "executeWrite"
+          "ifMissing"
         ],
         "enums": {
           "action": [
@@ -1270,6 +1280,10 @@
           "ifMissing": [
             "fail",
             "ignore"
+          ],
+          "intent": [
+            "preview",
+            "apply"
           ]
         }
       },
@@ -1286,17 +1300,17 @@
     },
     {
       "id": "ascet_edit.delete_folder",
-      "schemaFingerprint": "d19a9f03492dddc3ca1f3456e86297eb6c01f04097ab081f2833c4e1ea33f34e",
-      "rulesFingerprint": "db42defb0ba8dfd01cdde299f33937c0d42b1c647ce70b2b992ea9a284c6d4ba",
+      "schemaFingerprint": "0673d0e770eac056ab3207833cd544d1b7830ec3272a067ff6bbe7dd2def9fa5",
+      "rulesFingerprint": "423c15011de6b6bb52d9305bd047bf172ebaef433588572cc34e9dbdfe327214",
       "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
       "schema": {
         "required": [
           "action",
-          "folderPath"
+          "folderPath",
+          "intent"
         ],
         "optional": [
-          "ifMissing",
-          "executeWrite"
+          "ifMissing"
         ],
         "enums": {
           "action": [
@@ -1305,6 +1319,10 @@
           "ifMissing": [
             "fail",
             "ignore"
+          ],
+          "intent": [
+            "preview",
+            "apply"
           ]
         }
       },
@@ -1321,18 +1339,18 @@
     },
     {
       "id": "ascet_edit.delete_method",
-      "schemaFingerprint": "1c1a5f4644cb820b2ca4fbd1da795de9254f5a77b9611422d4f5637ed7dd3dde",
-      "rulesFingerprint": "db42defb0ba8dfd01cdde299f33937c0d42b1c647ce70b2b992ea9a284c6d4ba",
+      "schemaFingerprint": "91886052bc9519f5e3172d8c984d99324eb8d3bf1a03db035fc5d5de6c975875",
+      "rulesFingerprint": "423c15011de6b6bb52d9305bd047bf172ebaef433588572cc34e9dbdfe327214",
       "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
       "schema": {
         "required": [
           "action",
           "componentPath",
-          "methodName"
+          "methodName",
+          "intent"
         ],
         "optional": [
-          "ifMissing",
-          "executeWrite"
+          "ifMissing"
         ],
         "enums": {
           "action": [
@@ -1341,6 +1359,10 @@
           "ifMissing": [
             "fail",
             "ignore"
+          ],
+          "intent": [
+            "preview",
+            "apply"
           ]
         }
       },
@@ -1357,18 +1379,17 @@
     },
     {
       "id": "ascet_edit.set",
-      "schemaFingerprint": "82248f86459a5045c4cc4322f551092c39c3c8ab8dfc5285017aaddf29d94b84",
-      "rulesFingerprint": "9edf0abecd197a006493c93c12229baf68a7c67ca678e786ee94ce2a2a0ce8d2",
+      "schemaFingerprint": "7af58a0d2e3de4847c4a35421f2d6194c49f5feb2c603f3d2d7d594cc2da8e72",
+      "rulesFingerprint": "0b4a3b4b099010e0cbfd170f0ba343b77a004e2780a3a1af5a1c0a43e389dc07",
       "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
       "schema": {
         "required": [],
         "optional": [
-          "executeWrite",
           "language",
           "ifExists",
           "rollbackOnFailure",
           "componentKind",
-          "methodKind",
+          "diagram",
           "returnType",
           "arguments",
           "ifReturnExists",
@@ -1382,26 +1403,12 @@
           "sourceState",
           "targetState",
           "priority",
-          "phase",
           "projectPath",
           "dataTarget",
           "implementationTarget",
           "deleteMissing",
           "recreateIncompatible",
-          "mode",
-          "targetPath",
-          "componentPath",
-          "dependencyFormula",
-          "dependencyFormals",
-          "bindingPolicy",
-          "dependencyMappings",
-          "variantMappings",
-          "variantPolicy",
-          "variants",
-          "valueRestoration",
-          "clearDependencyFormula",
-          "targetKind",
-          "match"
+          "mode"
         ],
         "enums": {
           "action": [
@@ -1418,7 +1425,11 @@
             "set_enumerators",
             "apply_element_spec",
             "apply_project_formula",
-            "set_element_dependency"
+            "create_dependent_chain"
+          ],
+          "intent": [
+            "preview",
+            "apply"
           ],
           "kind": [
             "class",
@@ -1483,11 +1494,7 @@
             "set-header",
             "set-external-c-code"
           ],
-          "phase": [
-            "plan",
-            "commit"
-          ],
-          "intent": [
+          "elementIntent": [
             "create",
             "patch",
             "upsert",
@@ -1497,141 +1504,174 @@
             "restore",
             "check",
             "set"
-          ],
-          "dependency": [
-            "dependent",
-            "independent"
-          ],
-          "bindingPolicy": [
-            "explicit",
-            "autoExactName"
-          ],
-          "variantPolicy": [
-            "default",
-            "selected",
-            "all"
-          ],
-          "targetKind": [
-            "auto",
-            "component",
-            "folder"
-          ],
-          "match": [
-            "exact",
-            "all"
           ]
         },
         "variants": [
           {
             "required": [
               "action",
-              "folderPath"
+              "folderPath",
+              "intent"
             ],
-            "optional": [
-              "executeWrite"
-            ]
+            "optional": [],
+            "when": {
+              "intent": [
+                "preview",
+                "apply"
+              ]
+            }
           },
           {
             "required": [
               "action",
               "componentPath",
-              "kind"
+              "kind",
+              "intent"
             ],
             "optional": [
               "language",
               "ifExists",
-              "rollbackOnFailure",
-              "executeWrite"
-            ]
+              "rollbackOnFailure"
+            ],
+            "when": {
+              "intent": [
+                "preview",
+                "apply"
+              ]
+            }
           },
           {
             "required": [
               "action",
               "componentPath",
-              "methodName"
+              "methodName",
+              "methodKind",
+              "intent"
             ],
             "optional": [
               "componentKind",
-              "methodKind",
-              "ifExists",
-              "executeWrite"
-            ]
+              "diagram",
+              "ifExists"
+            ],
+            "when": {
+              "intent": [
+                "preview",
+                "apply"
+              ]
+            }
           },
           {
             "required": [
               "action",
               "componentPath",
-              "methodName"
+              "methodName",
+              "intent"
             ],
             "optional": [
               "returnType",
               "arguments",
-              "ifReturnExists",
-              "executeWrite"
-            ]
-          },
-          {
-            "required": [
-              "action",
-              "componentPath"
+              "ifReturnExists"
             ],
-            "optional": [
-              "ifMissing",
-              "executeWrite"
-            ]
+            "when": {
+              "intent": [
+                "preview",
+                "apply"
+              ]
+            }
           },
           {
             "required": [
               "action",
               "componentPath",
-              "methodName"
+              "intent"
             ],
             "optional": [
-              "ifMissing",
-              "executeWrite"
-            ]
-          },
-          {
-            "required": [
-              "action",
-              "folderPath"
+              "ifMissing"
             ],
-            "optional": [
-              "ifMissing",
-              "executeWrite"
-            ]
+            "when": {
+              "intent": [
+                "preview",
+                "apply"
+              ]
+            }
           },
           {
             "required": [
               "action",
               "componentPath",
-              "methodName"
+              "methodName",
+              "intent"
+            ],
+            "optional": [
+              "ifMissing"
+            ],
+            "when": {
+              "intent": [
+                "preview",
+                "apply"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "folderPath",
+              "intent"
+            ],
+            "optional": [
+              "ifMissing"
+            ],
+            "when": {
+              "intent": [
+                "preview",
+                "apply"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "methodName",
+              "intent"
             ],
             "optional": [
               "code",
-              "codeFile",
-              "executeWrite"
-            ]
+              "codeFile"
+            ],
+            "when": {
+              "intent": [
+                "preview",
+                "apply"
+              ]
+            }
           },
           {
             "required": [
               "action",
-              "modulePath"
+              "modulePath",
+              "intent"
             ],
             "optional": [
               "operation",
               "section",
               "methodName",
               "code",
-              "codeFile",
-              "executeWrite"
-            ]
+              "codeFile"
+            ],
+            "when": {
+              "intent": [
+                "preview",
+                "apply"
+              ]
+            }
           },
           {
             "required": [
               "action",
               "stateMachinePath",
-              "operation"
+              "operation",
+              "intent"
             ],
             "optional": [
               "stateName",
@@ -1640,42 +1680,27 @@
               "priority",
               "methodName",
               "code",
-              "codeFile",
-              "executeWrite"
-            ]
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "enumerators"
-            ],
-            "optional": [
-              "executeWrite"
-            ]
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "intent",
-              "elements"
-            ],
-            "optional": [
-              "phase",
-              "projectPath",
-              "dataTarget",
-              "implementationTarget",
-              "deleteMissing",
-              "recreateIncompatible",
-              "executeWrite"
+              "codeFile"
             ],
             "when": {
-              "phase": [
-                "plan"
-              ],
               "intent": [
-                "create"
+                "preview",
+                "apply"
+              ]
+            }
+          },
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "enumerators",
+              "intent"
+            ],
+            "optional": [],
+            "when": {
+              "intent": [
+                "preview",
+                "apply"
               ]
             }
           },
@@ -1684,23 +1709,20 @@
               "action",
               "componentPath",
               "intent",
+              "elementIntent",
               "elements"
             ],
             "optional": [
-              "phase",
               "projectPath",
               "dataTarget",
               "implementationTarget",
               "deleteMissing",
-              "recreateIncompatible",
-              "executeWrite"
+              "recreateIncompatible"
             ],
             "when": {
-              "phase": [
-                "plan"
-              ],
               "intent": [
-                "patch"
+                "preview",
+                "apply"
               ]
             }
           },
@@ -1709,23 +1731,20 @@
               "action",
               "componentPath",
               "intent",
+              "elementIntent",
               "elements"
             ],
             "optional": [
-              "phase",
               "projectPath",
               "dataTarget",
               "implementationTarget",
               "deleteMissing",
-              "recreateIncompatible",
-              "executeWrite"
+              "recreateIncompatible"
             ],
             "when": {
-              "phase": [
-                "plan"
-              ],
               "intent": [
-                "upsert"
+                "preview",
+                "apply"
               ]
             }
           },
@@ -1734,38 +1753,42 @@
               "action",
               "componentPath",
               "intent",
+              "elementIntent",
               "elements"
             ],
             "optional": [
-              "phase",
               "projectPath",
               "dataTarget",
               "implementationTarget",
               "deleteMissing",
-              "recreateIncompatible",
-              "executeWrite"
+              "recreateIncompatible"
             ],
             "when": {
-              "phase": [
-                "plan"
-              ],
               "intent": [
-                "restore"
+                "preview",
+                "apply"
               ]
             }
           },
           {
             "required": [
               "action",
-              "phase",
-              "planId"
+              "componentPath",
+              "intent",
+              "elementIntent",
+              "elements"
             ],
             "optional": [
-              "executeWrite"
+              "projectPath",
+              "dataTarget",
+              "implementationTarget",
+              "deleteMissing",
+              "recreateIncompatible"
             ],
             "when": {
-              "phase": [
-                "commit"
+              "intent": [
+                "preview",
+                "apply"
               ]
             }
           },
@@ -1773,60 +1796,36 @@
             "required": [
               "action",
               "projectPath",
-              "specFile"
+              "specFile",
+              "intent"
             ],
             "optional": [
               "mode",
-              "deleteMissing",
-              "executeWrite"
+              "deleteMissing"
             ],
             "when": {
               "mode": [
                 "restore"
+              ],
+              "intent": [
+                "preview",
+                "apply"
               ]
             }
           },
           {
             "required": [
               "action",
-              "elementName",
-              "dependency"
+              "provider",
+              "consumer",
+              "binding",
+              "intent"
             ],
-            "optional": [
-              "phase",
-              "targetPath",
-              "componentPath",
-              "dependencyFormula",
-              "dependencyFormals",
-              "bindingPolicy",
-              "dependencyMappings",
-              "variantMappings",
-              "variantPolicy",
-              "variants",
-              "valueRestoration",
-              "clearDependencyFormula",
-              "targetKind",
-              "match",
-              "executeWrite"
-            ],
+            "optional": [],
             "when": {
-              "phase": [
-                "plan"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "phase",
-              "planId"
-            ],
-            "optional": [
-              "executeWrite"
-            ],
-            "when": {
-              "phase": [
-                "commit"
+              "intent": [
+                "preview",
+                "apply"
               ]
             }
           },
@@ -1835,9 +1834,7 @@
               "mode",
               "componentPath"
             ],
-            "optional": [
-              "executeWrite"
-            ],
+            "optional": [],
             "when": {
               "mode": [
                 "check"
@@ -1847,14 +1844,17 @@
           {
             "required": [
               "mode",
-              "componentPath"
+              "componentPath",
+              "intent"
             ],
-            "optional": [
-              "executeWrite"
-            ],
+            "optional": [],
             "when": {
               "mode": [
                 "set"
+              ],
+              "intent": [
+                "preview",
+                "apply"
               ]
             }
           }
@@ -1872,141 +1872,25 @@
       }
     },
     {
-      "id": "ascet_edit.set_element_dependency",
-      "schemaFingerprint": "fff2244b5f114c9545f866d2e4748cfc346a1fee15ec22f28b95df02c9ef447b",
-      "rulesFingerprint": "b7c95fe8ed377f8a5d08eda597b72b81d63a02bfc39a95f25438f69eeb621e33",
-      "resultFingerprint": "e4aa326311030a19a7ff709ead6c1ae303f9f93b266524a026adeb78b2ed7dcc",
-      "schema": {
-        "required": [
-          "action"
-        ],
-        "optional": [
-          "phase",
-          "targetPath",
-          "componentPath",
-          "dependencyFormula",
-          "dependencyFormals",
-          "bindingPolicy",
-          "dependencyMappings",
-          "variantMappings",
-          "variantPolicy",
-          "variants",
-          "valueRestoration",
-          "clearDependencyFormula",
-          "targetKind",
-          "match",
-          "executeWrite"
-        ],
-        "enums": {
-          "action": [
-            "set_element_dependency"
-          ],
-          "phase": [
-            "plan",
-            "commit"
-          ],
-          "dependency": [
-            "dependent",
-            "independent"
-          ],
-          "bindingPolicy": [
-            "explicit",
-            "autoExactName"
-          ],
-          "variantPolicy": [
-            "default",
-            "selected",
-            "all"
-          ],
-          "targetKind": [
-            "auto",
-            "component",
-            "folder"
-          ],
-          "match": [
-            "exact",
-            "all"
-          ]
-        },
-        "variants": [
-          {
-            "required": [
-              "action",
-              "elementName",
-              "dependency"
-            ],
-            "optional": [
-              "phase",
-              "targetPath",
-              "componentPath",
-              "dependencyFormula",
-              "dependencyFormals",
-              "bindingPolicy",
-              "dependencyMappings",
-              "variantMappings",
-              "variantPolicy",
-              "variants",
-              "valueRestoration",
-              "clearDependencyFormula",
-              "targetKind",
-              "match",
-              "executeWrite"
-            ],
-            "when": {
-              "phase": [
-                "plan"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "phase",
-              "planId"
-            ],
-            "optional": [
-              "executeWrite"
-            ],
-            "when": {
-              "phase": [
-                "commit"
-              ]
-            }
-          }
-        ]
-      },
-      "supportedObjectKinds": [
-        "folder",
-        "class",
-        "module",
-        "statemachine"
-      ],
-      "result": {
-        "shape": "writeResult",
-        "fields": [
-          "changed",
-          "verification",
-          "observations.invalidated"
-        ]
-      }
-    },
-    {
       "id": "ascet_edit.set_enumerators",
-      "schemaFingerprint": "a32eeefd1815310868739ae7131a9212ae10f4a2dd3bc555b2438101ba8bf7ff",
-      "rulesFingerprint": "db42defb0ba8dfd01cdde299f33937c0d42b1c647ce70b2b992ea9a284c6d4ba",
+      "schemaFingerprint": "cf1159592107a75d44693bfd16115fe2b29f4efde4e10f774dad988a5d78bb28",
+      "rulesFingerprint": "423c15011de6b6bb52d9305bd047bf172ebaef433588572cc34e9dbdfe327214",
       "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
       "schema": {
         "required": [
           "action",
           "componentPath",
-          "enumerators"
+          "enumerators",
+          "intent"
         ],
-        "optional": [
-          "executeWrite"
-        ],
+        "optional": [],
         "enums": {
           "action": [
             "set_enumerators"
+          ],
+          "intent": [
+            "preview",
+            "apply"
           ]
         }
       },
@@ -2025,23 +1909,27 @@
     },
     {
       "id": "ascet_edit.set_method_code",
-      "schemaFingerprint": "2e20000c32f6abd27b3439cd901dc9faa365e9f79fe92fa623498b1897ead9c7",
-      "rulesFingerprint": "0b46b212599e051d61fa3d39794481b81e936dc6f614ae0369376ff4287fb00e",
+      "schemaFingerprint": "9f8b4f6def715b0ad517bcc80db4d718d96fd40d6431c9890f3821951fd1cbc1",
+      "rulesFingerprint": "db36e76d30d8b4263c4c01c410b0c97a9e65e0fe1e90f8b12cb6f8ad6afafbc6",
       "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
       "schema": {
         "required": [
           "action",
           "componentPath",
-          "methodName"
+          "methodName",
+          "intent"
         ],
         "optional": [
           "code",
-          "codeFile",
-          "executeWrite"
+          "codeFile"
         ],
         "enums": {
           "action": [
             "set_method_code"
+          ],
+          "intent": [
+            "preview",
+            "apply"
           ]
         }
       },
@@ -2058,20 +1946,20 @@
     },
     {
       "id": "ascet_edit.set_method_signature",
-      "schemaFingerprint": "1cea31381aab61cf3ec5f73adecde7dba89be5dc4fde43d799ef9806f1a21f8d",
-      "rulesFingerprint": "7af65b1d3663e9c7c811cff034445ab7bb70fd715fbb040a4bc25adb12c13eb7",
+      "schemaFingerprint": "b1e38e5cfb05368e0b0349e5cd95843f5e6001ef69873ac7d342e8bb6651420d",
+      "rulesFingerprint": "25c6f988c10619c697824d06f19b5f9c7a4453fa1a3294f23dd464cb1b3cda8b",
       "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
       "schema": {
         "required": [
           "action",
           "componentPath",
-          "methodName"
+          "methodName",
+          "intent"
         ],
         "optional": [
           "returnType",
           "arguments",
-          "ifReturnExists",
-          "executeWrite"
+          "ifReturnExists"
         ],
         "enums": {
           "action": [
@@ -2087,6 +1975,10 @@
             "fail",
             "keep",
             "replace"
+          ],
+          "intent": [
+            "preview",
+            "apply"
           ]
         }
       },
@@ -2103,21 +1995,21 @@
     },
     {
       "id": "ascet_edit.set_module_code",
-      "schemaFingerprint": "4ff9c64fa3590c8ea2c625b2dd46f458f7a36551aa7a5b874f7360fef5c0f7e1",
-      "rulesFingerprint": "c7f0e3fcd364d5d3fe3f45fb2137ec44e2b6d9503f0eeffd8bd23ffe7a7aba33",
+      "schemaFingerprint": "6670578f2b7b8a5fdddb0266e5de849ad2720a8f7554b52a72e7df51f8b88211",
+      "rulesFingerprint": "9f19c4d729618655f70fe656fd36bcf6f6a1518f016da5b69895510d1e143109",
       "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
       "schema": {
         "required": [
           "action",
-          "modulePath"
+          "modulePath",
+          "intent"
         ],
         "optional": [
           "operation",
           "section",
           "methodName",
           "code",
-          "codeFile",
-          "executeWrite"
+          "codeFile"
         ],
         "enums": {
           "action": [
@@ -2132,6 +2024,10 @@
             "set-method",
             "set-header",
             "set-external-c-code"
+          ],
+          "intent": [
+            "preview",
+            "apply"
           ]
         }
       },
@@ -2148,14 +2044,15 @@
     },
     {
       "id": "ascet_edit.set_state_machine_code",
-      "schemaFingerprint": "1449890ba1419d5a76510cd746d832fdff0f1ce3e1482cfe86bca2fb11183e83",
-      "rulesFingerprint": "f18095bd76d00bbc7c43e455cea01a77423b641ad8214abbda22618f3fb82535",
+      "schemaFingerprint": "1d1adf9156a7baf771d07e40356386d461e978381989165b12e5e6ddb6c3267b",
+      "rulesFingerprint": "68c65d88b32cbf628f4441002aed9e09330739f6dae2fcb06c2a6f6388c489de",
       "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
       "schema": {
         "required": [
           "action",
           "stateMachinePath",
-          "operation"
+          "operation",
+          "intent"
         ],
         "optional": [
           "stateName",
@@ -2164,8 +2061,7 @@
           "priority",
           "methodName",
           "code",
-          "codeFile",
-          "executeWrite"
+          "codeFile"
         ],
         "enums": {
           "action": [
@@ -2184,6 +2080,10 @@
             "bind-transition-condition-method",
             "bind-transition-action-method",
             "set-start-state"
+          ],
+          "intent": [
+            "preview",
+            "apply"
           ]
         }
       },
@@ -2199,363 +2099,53 @@
       }
     },
     {
-      "id": "ascet_get.bde_edges",
-      "schemaFingerprint": "0997bbf35cfdaccf3c11b946c3cc4500b3c936d0713ed4a8834b7e51f1eaecce",
-      "rulesFingerprint": "cd97e3efe7d187251541de85402d94bc90ac79437d405599599bbe9ca5e25343",
-      "resultFingerprint": "ecd4aa85325baf18b24c29618cf9cff4891b6e7d0c90cfbc32d0cc19a4c93d58",
-      "schema": {
-        "required": [
-          "action",
-          "target"
-        ],
-        "optional": [
-          "filters",
-          "traversal",
-          "delivery",
-          "diagramName"
-        ],
-        "enums": {
-          "action": [
-            "bde_edges"
-          ],
-          "delivery": [
-            "auto",
-            "inline",
-            "stored"
-          ]
-        }
-      },
-      "supportedObjectKinds": [],
-      "result": {
-        "shape": "observation",
-        "fields": [
-          "delivery",
-          "items",
-          "observation",
-          "coverage",
-          "truncated"
-        ]
-      }
-    },
-    {
-      "id": "ascet_get.component_refs",
-      "schemaFingerprint": "17d642d365830f8139da982397196b6c2d8ab8537089b017d1d4b7cebf93e21f",
-      "rulesFingerprint": "4af1c7bed62bd37deff252bd18bba66929ee47236800f0e15cfaf37a9b7c1689",
-      "resultFingerprint": "ecd4aa85325baf18b24c29618cf9cff4891b6e7d0c90cfbc32d0cc19a4c93d58",
-      "schema": {
-        "required": [
-          "action",
-          "target"
-        ],
-        "optional": [
-          "filters",
-          "traversal",
-          "delivery"
-        ],
-        "enums": {
-          "action": [
-            "component_refs"
-          ],
-          "delivery": [
-            "auto",
-            "inline",
-            "stored"
-          ]
-        }
-      },
-      "supportedObjectKinds": [],
-      "result": {
-        "shape": "observation",
-        "fields": [
-          "delivery",
-          "items",
-          "observation",
-          "coverage",
-          "truncated"
-        ]
-      }
-    },
-    {
-      "id": "ascet_get.database_catalog",
-      "schemaFingerprint": "d67ca29973fb1211fea8c1d4eb0d45d5cc99e474b77b1563687fa5f96248463c",
-      "rulesFingerprint": "d2fcd7110392d52b60354fcf6d1ea172cf9a7628b9e15987eeaa66bc1bcf2e3e",
-      "resultFingerprint": "ecd4aa85325baf18b24c29618cf9cff4891b6e7d0c90cfbc32d0cc19a4c93d58",
-      "schema": {
-        "required": [
-          "action",
-          "sourceTreeResultId",
-          "include"
-        ],
-        "optional": [
-          "messageDepth",
-          "delivery"
-        ],
-        "enums": {
-          "action": [
-            "database_catalog"
-          ],
-          "delivery": [
-            "stored"
-          ]
-        }
-      },
-      "supportedObjectKinds": [],
-      "result": {
-        "shape": "observation",
-        "fields": [
-          "delivery",
-          "items",
-          "observation",
-          "coverage",
-          "truncated"
-        ]
-      }
-    },
-    {
-      "id": "ascet_get.database_identity",
-      "schemaFingerprint": "e74fa7115068f249f2c8859786381e2db7c36561046705882a920b252721e3db",
-      "rulesFingerprint": "ef0c77cb1e8938088492d6ca7d1c8d6f2c0d6665dc5c56454f4544f1a5a966a7",
-      "resultFingerprint": "ecd4aa85325baf18b24c29618cf9cff4891b6e7d0c90cfbc32d0cc19a4c93d58",
-      "schema": {
-        "required": [
-          "action"
-        ],
-        "optional": [],
-        "enums": {
-          "action": [
-            "database_identity"
-          ]
-        }
-      },
-      "supportedObjectKinds": [
-        "database"
-      ],
-      "result": {
-        "shape": "observation",
-        "fields": [
-          "delivery",
-          "items",
-          "observation",
-          "coverage",
-          "truncated"
-        ]
-      }
-    },
-    {
-      "id": "ascet_get.dbitem_refs",
-      "schemaFingerprint": "3e38d6c72bc0b6c116c8ab264c182477dc186e86ea1260914b10ffe48be9713a",
-      "rulesFingerprint": "105c5df338204c54e95cf94973546f194bd188256e440f253623049711b85ff9",
-      "resultFingerprint": "ecd4aa85325baf18b24c29618cf9cff4891b6e7d0c90cfbc32d0cc19a4c93d58",
-      "schema": {
-        "required": [
-          "action",
-          "target"
-        ],
-        "optional": [
-          "filters",
-          "traversal",
-          "delivery"
-        ],
-        "enums": {
-          "action": [
-            "dbitem_refs"
-          ],
-          "delivery": [
-            "auto",
-            "inline",
-            "stored"
-          ]
-        }
-      },
-      "supportedObjectKinds": [],
-      "result": {
-        "shape": "observation",
-        "fields": [
-          "delivery",
-          "items",
-          "observation",
-          "coverage",
-          "truncated"
-        ]
-      }
-    },
-    {
-      "id": "ascet_get.elements",
-      "schemaFingerprint": "6854b60052bfd58ab2a23276b451384d9c8e6d139abf4b367171f07989be6303",
-      "rulesFingerprint": "992bdb56a42fbaee70993767fc2b307488724d41b0eaae2b0255967555db64ce",
-      "resultFingerprint": "ecd4aa85325baf18b24c29618cf9cff4891b6e7d0c90cfbc32d0cc19a4c93d58",
-      "schema": {
-        "required": [
-          "action",
-          "target"
-        ],
-        "optional": [
-          "filters",
-          "traversal",
-          "delivery",
-          "elementName"
-        ],
-        "enums": {
-          "action": [
-            "elements"
-          ],
-          "delivery": [
-            "auto",
-            "inline",
-            "stored"
-          ]
-        }
-      },
-      "supportedObjectKinds": [
-        "folder",
-        "class",
-        "module",
-        "statemachine"
-      ],
-      "result": {
-        "shape": "observation",
-        "fields": [
-          "delivery",
-          "items",
-          "observation",
-          "coverage",
-          "truncated"
-        ]
-      }
-    },
-    {
       "id": "ascet_get.formulas",
-      "schemaFingerprint": "2f84efc476da4375965959c509aaace845e27a423429f744116b48930d8457bd",
-      "rulesFingerprint": "e444e934bf57389a1c1365f7f4769b5c9b91a7d3254bf3282516dc39ec2e408d",
-      "resultFingerprint": "ecd4aa85325baf18b24c29618cf9cff4891b6e7d0c90cfbc32d0cc19a4c93d58",
+      "schemaFingerprint": "ce87e505bbef3e5b54599fc671836c51cdd47df9d69e66ffe72eda25f2c0a33b",
+      "rulesFingerprint": "308a35b0df6408498a8d16b23547d4de4c1172626dc009f6e52b36bbd06ee41f",
+      "resultFingerprint": "352f2d71bf6e25ec4d6371461d1e309aa061b730c9e943b1982cc170253177fc",
       "schema": {
         "required": [
           "action",
-          "target"
+          "path"
         ],
         "optional": [
-          "filters",
-          "traversal",
-          "delivery",
-          "formulaName"
+          "name"
         ],
         "enums": {
           "action": [
             "formulas"
-          ],
-          "delivery": [
-            "auto",
-            "inline",
-            "stored"
           ]
         }
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "observation",
+        "shape": "items",
         "fields": [
-          "delivery",
+          "count",
           "items",
-          "observation",
-          "coverage",
-          "truncated"
-        ]
-      }
-    },
-    {
-      "id": "ascet_get.import_binding",
-      "schemaFingerprint": "726fd9b416f8bc372eae397e2eae5f510650e2fa779f6afdf71011839643f1a7",
-      "rulesFingerprint": "d47116a91641a90943a382a74cdf489cf0804a7d954ea2130eeeac73d022d7a8",
-      "resultFingerprint": "ecd4aa85325baf18b24c29618cf9cff4891b6e7d0c90cfbc32d0cc19a4c93d58",
-      "schema": {
-        "required": [
-          "action",
-          "target",
-          "elementName",
-          "provider"
-        ],
-        "optional": [
-          "filters",
-          "traversal",
-          "delivery"
-        ],
-        "enums": {
-          "action": [
-            "import_binding"
-          ],
-          "delivery": [
-            "auto",
-            "inline",
-            "stored"
-          ]
-        }
-      },
-      "supportedObjectKinds": [],
-      "result": {
-        "shape": "observation",
-        "fields": [
-          "delivery",
-          "items",
-          "observation",
-          "coverage",
-          "truncated"
+          "more",
+          "error"
         ]
       }
     },
     {
       "id": "ascet_get.tree",
-      "schemaFingerprint": "781d24add245f8faea9e30162049001a44a86d27fc429344a92fadcea22ef5ec",
-      "rulesFingerprint": "f4fe70080840ecb34bdf23707efe0e649c0bba4fb60e6dedd57151125139c734",
-      "resultFingerprint": "ecd4aa85325baf18b24c29618cf9cff4891b6e7d0c90cfbc32d0cc19a4c93d58",
+      "schemaFingerprint": "ed9237f01ed938d47490427aadca3f25f024af9228812808cb42a2fd95c26f4b",
+      "rulesFingerprint": "ad497faa2cc5d9ae7451744891638b9f78035f1c2873fc10ed5bc7ab6a0e059b",
+      "resultFingerprint": "352f2d71bf6e25ec4d6371461d1e309aa061b730c9e943b1982cc170253177fc",
       "schema": {
         "required": [
           "action"
         ],
         "optional": [
-          "target",
-          "filters",
-          "traversal",
-          "delivery"
+          "path",
+          "depth"
         ],
         "enums": {
           "action": [
             "tree"
-          ],
-          "delivery": [
-            "auto",
-            "inline",
-            "stored"
-          ],
-          "scope": [
-            "database"
           ]
-        },
-        "variants": [
-          {
-            "required": [
-              "action"
-            ],
-            "optional": [
-              "target",
-              "filters",
-              "traversal",
-              "delivery"
-            ]
-          },
-          {
-            "required": [
-              "action",
-              "scope",
-              "delivery"
-            ],
-            "optional": [],
-            "when": {
-              "scope": [
-                "database"
-              ]
-            }
-          }
-        ]
+        }
       },
       "supportedObjectKinds": [
         "database",
@@ -2567,13 +2157,12 @@
         "enumeration"
       ],
       "result": {
-        "shape": "observation",
+        "shape": "items",
         "fields": [
-          "delivery",
+          "count",
           "items",
-          "observation",
-          "coverage",
-          "truncated"
+          "more",
+          "error"
         ]
       }
     },
@@ -2680,8 +2269,8 @@
     {
       "id": "ascet_read.read_dependent_chain",
       "schemaFingerprint": "651d05723d3c9b213d71a07258e02e3dbb4db119c1c1e04a3aa0c7f85093cf70",
-      "rulesFingerprint": "6294df512c5085e2518a45d3ae7453deb6ac6858145c6d4a566d3c7ed69320b1",
-      "resultFingerprint": "c13c00211cad64d18758131fa290ad4b2b96168e9a6182ad25c370062e650963",
+      "rulesFingerprint": "75cf0a92c0e7dc14c860293df05df47b13e29b56fe32a80f6676bba0308c8b16",
+      "resultFingerprint": "67a19c2264f74d5bdd5aa6ec2e857c8064ef5b5a4b9895c705c5fdec8907133b",
       "schema": {
         "required": [
           "action",
@@ -2701,17 +2290,16 @@
       "result": {
         "shape": "dependentChain",
         "fields": [
-          "consumer",
-          "provider",
-          "items",
-          "issues"
+          "found",
+          "chain",
+          "error"
         ]
       }
     },
     {
       "id": "ascet_read.read_element",
       "schemaFingerprint": "beb848d5b779ba2609b5fafbc46e3d1d3e226f910bcdb2f2e93ad3f6085c4f0c",
-      "rulesFingerprint": "0ba82a8d3ad8dc2aee542c07c4ab5f6e9f469a6eef68144c07845ec69192b8f6",
+      "rulesFingerprint": "3d213b805930522113a9741c9feaab71e76019354fa795202ea5ced226e70a5f",
       "resultFingerprint": "72eb32bd2fe4e9d13e97b1c658715cb02eb04a31d23a0b0c8068222d964c7cd3",
       "schema": {
         "required": [
@@ -2740,7 +2328,7 @@
     {
       "id": "ascet_read.read_element_dependency",
       "schemaFingerprint": "295e6c743223299a3881126c09a3751698552b8cfa45a04c723ccecc8494e7ca",
-      "rulesFingerprint": "f60c7797a8afdba681e7a7cab3185a2133bf9c808bc1ef8015a6556ddec9b92a",
+      "rulesFingerprint": "b4a88240b2b5ee70ebcd66cbb56a747d20ac7b71971ab8db416ba7cfeafa4ad1",
       "resultFingerprint": "72eb32bd2fe4e9d13e97b1c658715cb02eb04a31d23a0b0c8068222d964c7cd3",
       "schema": {
         "required": [
@@ -2800,7 +2388,7 @@
     {
       "id": "ascet_read.read_implementation",
       "schemaFingerprint": "1e0c5a2be0ed7dd4193db80a518bb96a32147107c4920fba7469b8c1aae264f4",
-      "rulesFingerprint": "0974fc1f20e48856c0985437cbbc10b5a9bf41ae1713163e1f03ca429cc430ac",
+      "rulesFingerprint": "07df63fac577f21d4c83d44f10d14da4a6b7992d3dc671e97663c31b51c3d419",
       "resultFingerprint": "72eb32bd2fe4e9d13e97b1c658715cb02eb04a31d23a0b0c8068222d964c7cd3",
       "schema": {
         "required": [
@@ -2901,7 +2489,7 @@
     },
     {
       "id": "ascet_recover.clear_extension_temp",
-      "schemaFingerprint": "2c90e06410461e338d24b600e09e85d470c917dedc4c810406d393c76b9a1984",
+      "schemaFingerprint": "ae13080f45a5cd5b79b376399bf7a3a64edb3f8cba44041730e5aba177f94941",
       "rulesFingerprint": "bf1ff4921c7f1660f8ac215796954fcc63f4a7e79387de91d522546ab7720a6c",
       "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
       "schema": {
@@ -2915,57 +2503,9 @@
             "clear_extension_temp",
             "scheduler_status",
             "scheduler_recover",
-            "clear_stale_cli_lock",
-            "reconcile_mutation"
-          ],
-          "mode": [
-            "inspect",
-            "rollback_to_before",
-            "cleanup_created",
-            "accept_current"
+            "clear_stale_cli_lock"
           ]
-        },
-        "variants": [
-          {
-            "required": [
-              "action"
-            ],
-            "optional": []
-          },
-          {
-            "required": [
-              "action",
-              "mode",
-              "databaseFingerprint",
-              "targetOid",
-              "expectedGeneration"
-            ],
-            "optional": [],
-            "when": {
-              "mode": [
-                "inspect"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "mode",
-              "databaseFingerprint",
-              "targetOid",
-              "expectedGeneration",
-              "executeWrite"
-            ],
-            "optional": [],
-            "when": {
-              "mode": [
-                "rollback_to_before",
-                "cleanup_created",
-                "accept_current"
-              ]
-            }
-          }
-        ]
+        }
       },
       "supportedObjectKinds": [],
       "result": {
@@ -2977,7 +2517,7 @@
     },
     {
       "id": "ascet_recover.clear_stale_cli_lock",
-      "schemaFingerprint": "2c90e06410461e338d24b600e09e85d470c917dedc4c810406d393c76b9a1984",
+      "schemaFingerprint": "ae13080f45a5cd5b79b376399bf7a3a64edb3f8cba44041730e5aba177f94941",
       "rulesFingerprint": "8241ed3bd19bd90f595a42883f975cd2b55ef63235d0fdb4dc65a9e97dda1867",
       "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
       "schema": {
@@ -2991,57 +2531,9 @@
             "clear_extension_temp",
             "scheduler_status",
             "scheduler_recover",
-            "clear_stale_cli_lock",
-            "reconcile_mutation"
-          ],
-          "mode": [
-            "inspect",
-            "rollback_to_before",
-            "cleanup_created",
-            "accept_current"
+            "clear_stale_cli_lock"
           ]
-        },
-        "variants": [
-          {
-            "required": [
-              "action"
-            ],
-            "optional": []
-          },
-          {
-            "required": [
-              "action",
-              "mode",
-              "databaseFingerprint",
-              "targetOid",
-              "expectedGeneration"
-            ],
-            "optional": [],
-            "when": {
-              "mode": [
-                "inspect"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "mode",
-              "databaseFingerprint",
-              "targetOid",
-              "expectedGeneration",
-              "executeWrite"
-            ],
-            "optional": [],
-            "when": {
-              "mode": [
-                "rollback_to_before",
-                "cleanup_created",
-                "accept_current"
-              ]
-            }
-          }
-        ]
+        }
       },
       "supportedObjectKinds": [],
       "result": {
@@ -3053,7 +2545,7 @@
     },
     {
       "id": "ascet_recover.reconcile_mutation",
-      "schemaFingerprint": "cafbf93c47afe92b2cb48246e3ec56347e66b4c7dd93c79247e79c14dc34d01b",
+      "schemaFingerprint": "efbaecd7d7624afa2153272dec5d422e97a50543ad1507592ddd7f15da8dc073",
       "rulesFingerprint": "8fe824980072dea03d964c57f0dd5adaf8a9d9d0c53ccb2391cc51aea405454a",
       "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
       "schema": {
@@ -3074,6 +2566,9 @@
             "rollback_to_before",
             "cleanup_created",
             "accept_current"
+          ],
+          "intent": [
+            "apply"
           ]
         },
         "variants": [
@@ -3099,7 +2594,7 @@
               "databaseFingerprint",
               "targetOid",
               "expectedGeneration",
-              "executeWrite"
+              "intent"
             ],
             "optional": [],
             "when": {
@@ -3107,6 +2602,9 @@
                 "rollback_to_before",
                 "cleanup_created",
                 "accept_current"
+              ],
+              "intent": [
+                "apply"
               ]
             }
           }
@@ -3122,7 +2620,7 @@
     },
     {
       "id": "ascet_recover.scheduler_recover",
-      "schemaFingerprint": "2c90e06410461e338d24b600e09e85d470c917dedc4c810406d393c76b9a1984",
+      "schemaFingerprint": "ae13080f45a5cd5b79b376399bf7a3a64edb3f8cba44041730e5aba177f94941",
       "rulesFingerprint": "9818f536d6f3c752b04db37f592dd9738db50cff84b539aa8ee0af73bf7c2fa3",
       "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
       "schema": {
@@ -3136,57 +2634,9 @@
             "clear_extension_temp",
             "scheduler_status",
             "scheduler_recover",
-            "clear_stale_cli_lock",
-            "reconcile_mutation"
-          ],
-          "mode": [
-            "inspect",
-            "rollback_to_before",
-            "cleanup_created",
-            "accept_current"
+            "clear_stale_cli_lock"
           ]
-        },
-        "variants": [
-          {
-            "required": [
-              "action"
-            ],
-            "optional": []
-          },
-          {
-            "required": [
-              "action",
-              "mode",
-              "databaseFingerprint",
-              "targetOid",
-              "expectedGeneration"
-            ],
-            "optional": [],
-            "when": {
-              "mode": [
-                "inspect"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "mode",
-              "databaseFingerprint",
-              "targetOid",
-              "expectedGeneration",
-              "executeWrite"
-            ],
-            "optional": [],
-            "when": {
-              "mode": [
-                "rollback_to_before",
-                "cleanup_created",
-                "accept_current"
-              ]
-            }
-          }
-        ]
+        }
       },
       "supportedObjectKinds": [],
       "result": {
@@ -3198,7 +2648,7 @@
     },
     {
       "id": "ascet_recover.scheduler_status",
-      "schemaFingerprint": "2c90e06410461e338d24b600e09e85d470c917dedc4c810406d393c76b9a1984",
+      "schemaFingerprint": "ae13080f45a5cd5b79b376399bf7a3a64edb3f8cba44041730e5aba177f94941",
       "rulesFingerprint": "f18e91b94e99a6368eac7fd60107d0d5c369ec2da803b004e23c7301345be364",
       "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
       "schema": {
@@ -3212,57 +2662,9 @@
             "clear_extension_temp",
             "scheduler_status",
             "scheduler_recover",
-            "clear_stale_cli_lock",
-            "reconcile_mutation"
-          ],
-          "mode": [
-            "inspect",
-            "rollback_to_before",
-            "cleanup_created",
-            "accept_current"
+            "clear_stale_cli_lock"
           ]
-        },
-        "variants": [
-          {
-            "required": [
-              "action"
-            ],
-            "optional": []
-          },
-          {
-            "required": [
-              "action",
-              "mode",
-              "databaseFingerprint",
-              "targetOid",
-              "expectedGeneration"
-            ],
-            "optional": [],
-            "when": {
-              "mode": [
-                "inspect"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "mode",
-              "databaseFingerprint",
-              "targetOid",
-              "expectedGeneration",
-              "executeWrite"
-            ],
-            "optional": [],
-            "when": {
-              "mode": [
-                "rollback_to_before",
-                "cleanup_created",
-                "accept_current"
-              ]
-            }
-          }
-        ]
+        }
       },
       "supportedObjectKinds": [],
       "result": {
@@ -3274,7 +2676,7 @@
     },
     {
       "id": "ascet_recover.status",
-      "schemaFingerprint": "2c90e06410461e338d24b600e09e85d470c917dedc4c810406d393c76b9a1984",
+      "schemaFingerprint": "ae13080f45a5cd5b79b376399bf7a3a64edb3f8cba44041730e5aba177f94941",
       "rulesFingerprint": "a0d7b69e053dee6e200cd4043436e1a73d29b993d1847db87db61b48377632f8",
       "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
       "schema": {
@@ -3288,57 +2690,9 @@
             "clear_extension_temp",
             "scheduler_status",
             "scheduler_recover",
-            "clear_stale_cli_lock",
-            "reconcile_mutation"
-          ],
-          "mode": [
-            "inspect",
-            "rollback_to_before",
-            "cleanup_created",
-            "accept_current"
+            "clear_stale_cli_lock"
           ]
-        },
-        "variants": [
-          {
-            "required": [
-              "action"
-            ],
-            "optional": []
-          },
-          {
-            "required": [
-              "action",
-              "mode",
-              "databaseFingerprint",
-              "targetOid",
-              "expectedGeneration"
-            ],
-            "optional": [],
-            "when": {
-              "mode": [
-                "inspect"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "mode",
-              "databaseFingerprint",
-              "targetOid",
-              "expectedGeneration",
-              "executeWrite"
-            ],
-            "optional": [],
-            "when": {
-              "mode": [
-                "rollback_to_before",
-                "cleanup_created",
-                "accept_current"
-              ]
-            }
-          }
-        ]
+        }
       },
       "supportedObjectKinds": [],
       "result": {
@@ -3409,6 +2763,45 @@
       }
     },
     {
+      "id": "ascet_search.*",
+      "schemaFingerprint": "635108bdc37e8e136f46995ba796bbbfffd0a512df305b4246577e59e33b7f76",
+      "rulesFingerprint": "b971fc9640bf94e27771ec7af84dece579ab4cf3f5e6bca83f36cb75c81eac1f",
+      "resultFingerprint": "df1be2bb74ca14e486caafca7148cbccdd3e0f43efd26f7013a73c79745417ab",
+      "schema": {
+        "required": [
+          "mode",
+          "q"
+        ],
+        "optional": [
+          "limit"
+        ],
+        "enums": {
+          "mode": [
+            "comp",
+            "comp-ref",
+            "method",
+            "method-ref",
+            "method-element",
+            "element",
+            "element-ref",
+            "sender",
+            "receiver",
+            "text"
+          ]
+        }
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "searchMatches",
+        "fields": [
+          "count",
+          "items",
+          "more",
+          "error"
+        ]
+      }
+    },
+    {
       "id": "ascet_status.status",
       "schemaFingerprint": "ea1dcc4db4123606dff315e9e587ea336d36217fa44315111489e4c577a75333",
       "rulesFingerprint": "8b4e992bf0c0d7de91de2c6dcdc26ebed750be8b1ffd55b7309c718c1623a7b2",
@@ -3418,25 +2811,6 @@
         "optional": [
           "action"
         ]
-      },
-      "supportedObjectKinds": [],
-      "result": {
-        "shape": "result",
-        "fields": [
-          "items"
-        ]
-      }
-    },
-    {
-      "id": "configure_parameter_dependency_chain.execute",
-      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
-      "rulesFingerprint": "1809989bd492334758b2e95e5ce22fed436e391fee36501848af916149eaeb86",
-      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
-      "schema": {
-        "required": [
-          "action"
-        ],
-        "optional": []
       },
       "supportedObjectKinds": [],
       "result": {

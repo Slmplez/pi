@@ -1,7 +1,7 @@
 {
   "id": "AscetConfigureParameterDependencyChainExecute",
   "family": "write",
-  "summary": "Execute one guarded Provider to Imported to Local parameter dependency chain",
+  "summary": "Preview or apply one create-or-verify Provider to Imported to Local parameter dependency chain",
   "usage": "<request-file> [--json]",
   "execution": {
     "kind": "bridge",
@@ -25,7 +25,7 @@
       "kind": "positional",
       "type": "string",
       "required": true,
-      "description": "JSON request containing complete Provider, Consumer Imported, Local, and Dependency definitions"
+      "description": "JSON request containing intent, optional expected target-state snapshot/editability authorization, and complete Provider, Consumer Imported, Local, and Dependency definitions"
     },
     {
       "name": "--json",
@@ -38,18 +38,22 @@
   "preconditions": [
     "ASCET ToolAPI session must be available.",
     "Live ASCET access must run through the serial executor.",
-    "The request must contain exact Provider and Consumer component paths."
+    "The request must contain exact Provider and Consumer component paths.",
+    "Apply must compare the approved target-specific semantic state and perform mandatory readback."
   ],
   "failureModes": [
     "toolapi_unavailable",
     "target_not_found",
-    "state_conflict",
+    "element_conflict",
+    "dependency_conflict",
+    "target_state_changed",
+    "editable_write_gate_blocked",
     "readback_mismatch",
     "dependency_write_rollback_failed"
   ],
   "examples": [
     {
-      "description": "Execute one complete guarded dependency chain",
+      "description": "Preview or apply one complete create-or-verify dependency chain",
       "command": "AscetBridge.exe exec configure_parameter_dependency_chain_execute <request-file> --json"
     }
   ],
@@ -67,5 +71,5 @@
     "hostPolicy": "force_one_shot",
     "timeoutClass": "write"
   },
-  "hiddenFromModel": false
+  "hiddenFromModel": true
 }

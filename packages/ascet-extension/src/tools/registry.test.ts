@@ -22,7 +22,7 @@ describe("ASCET tool registry", () => {
 	});
 
 	test("does not register retired P0 discovery tools", () => {
-		for (const name of ["ascet_index", "ascet_search", "ascet_explore", "ascet_verify"] as const) {
+		for (const name of ["ascet_index", "ascet_explore", "ascet_verify"] as const) {
 			assert.equal(canonicalAscetToolNames.includes(name as never), false, `${name} must not be canonical`);
 			assert.equal(allAscetToolNames.includes(name as never), false, `${name} must not be registered`);
 		}

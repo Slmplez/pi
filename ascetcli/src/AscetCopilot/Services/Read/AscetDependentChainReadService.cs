@@ -24,8 +24,6 @@ public sealed class AscetDependentChainReadRequest
     public string ComponentPath { get; set; }
     public string DependentElementName { get; set; }
     public string ExporterComponentPath { get; set; }
-    public string ProviderScopePath { get; set; }
-    public int MaxCandidates { get; set; }
     public string DebugDirectory { get; set; }
     public bool KeepTemp { get; set; }
 }
@@ -35,28 +33,39 @@ public sealed class AscetDependentChainReadService : AscetReadDomainServiceBase
     public AscetDependentChainReadResult Read(AscetDependentChainReadRequest request)
     {
         Validate(request);
-
         return ExecuteWithSession("read_dependent_chain", delegate(AscetSession session)
         {
-            CodeComponent importer = ResolveCodeComponent(session, request.ComponentPath);
+            return ReadInSession(session, request);
+        });
+    }
+
+    internal AscetDependentChainReadResult ReadInSession(AscetSession session, AscetDependentChainReadRequest request)
+    {
+        Validate(request);
+        return ExecuteWithBoundSession("read_dependent_chain", session, delegate(AscetSession currentSession)
+        {
+            CodeComponent importer = ResolveCodeComponent(currentSession, request.ComponentPath);
             CodeComponent explicitExporter = String.IsNullOrWhiteSpace(request.ExporterComponentPath)
                 ? null
-                : ResolveCodeComponent(session, request.ExporterComponentPath);
+                : ResolveCodeComponent(currentSession, request.ExporterComponentPath);
             string exportDirectory = PrepareExportDirectory(request);
             bool deleteExport = !request.KeepTemp && String.IsNullOrWhiteSpace(request.DebugDirectory);
 
             try
             {
-                DataBaseItem item = ResolveItemByPath(session, request.ComponentPath);
+                DataBaseItem item = ResolveItemByPath(currentSession, request.ComponentPath);
                 bool ok = item.ExportXMLToFile(exportDirectory, false);
                 if (!ok)
                 {
-                    throw new AscetReadException("tool_api_error", "read_dependent_chain", "ASCET ExportXMLToFile returned false for component '" + request.ComponentPath + "'.");
+                    throw new AscetReadException(
+                        "tool_api_error",
+                        "read_dependent_chain",
+                        BuildExportFailureMessage(item, request.ComponentPath, exportDirectory));
                 }
 
                 AscetDependentChainXmlResult xml = AscetDependentChainXml.ReadExportDirectory(exportDirectory, request.DependentElementName);
                 AscetDependentChainReadResult result = BuildResult(request, xml, exportDirectory, deleteExport);
-                FillRuntimeMatches(session, importer, explicitExporter, request, result);
+                FillRuntimeMatches(currentSession, importer, explicitExporter, request, result);
                 FinalizeCompleteness(result);
                 return result;
             }
@@ -86,14 +95,9 @@ public sealed class AscetDependentChainReadService : AscetReadDomainServiceBase
         {
             throw new AscetReadException("invalid_argument", "read_dependent_chain", "Dependent element name must not be empty.");
         }
-
-        if (request.MaxCandidates < 0)
-        {
-            throw new AscetReadException("invalid_argument", "read_dependent_chain", "Max candidates must not be negative.");
-        }
     }
 
-    private static string PrepareExportDirectory(AscetDependentChainReadRequest request)
+    internal static string PrepareExportDirectory(AscetDependentChainReadRequest request)
     {
         if (!String.IsNullOrWhiteSpace(request.DebugDirectory))
         {
@@ -102,9 +106,9 @@ public sealed class AscetDependentChainReadService : AscetReadDomainServiceBase
             return debugDirectory;
         }
 
-        string root = Path.Combine(Path.GetTempPath(), "AscetCopolit", "dependent-chain");
-        string leaf = SanitizePathPart(request.ComponentPath) + "-" + DateTime.UtcNow.ToString("yyyyMMddHHmmss") + "-" + Guid.NewGuid().ToString("N");
-        string directory = Path.Combine(root, leaf);
+        string root = Path.Combine(Path.GetTempPath(), "ascet-ed");
+        Directory.CreateDirectory(root);
+        string directory = Path.Combine(root, "d-" + Guid.NewGuid().ToString("N").Substring(0, 8));
         Directory.CreateDirectory(directory);
         return directory;
     }
@@ -153,7 +157,6 @@ public sealed class AscetDependentChainReadService : AscetReadDomainServiceBase
             return;
         }
 
-        IList<AscetItemRef> providerCandidates = null;
         for (int i = 0; i < result.Inputs.Count; i++)
         {
             AscetDependentChainInput input = result.Inputs[i];
@@ -186,12 +189,10 @@ public sealed class AscetDependentChainReadService : AscetReadDomainServiceBase
                 continue;
             }
 
-            if (providerCandidates == null)
-            {
-                providerCandidates = ListProviderCandidates(session, request, result);
-            }
-
-            FillDiscoveredRuntimeMatch(session, providerCandidates, valueElement, input, result);
+            input.ExportExists = false;
+            input.ExportDiscovery = "deferred";
+            input.Issue = "provider_resolution_deferred";
+            AddIssue(result, input.Issue + ":" + (input.ValueName ?? String.Empty));
         }
     }
 
@@ -216,157 +217,6 @@ public sealed class AscetDependentChainReadService : AscetReadDomainServiceBase
         }
 
         FillExportElement(input, exportElement, exporterComponentPath, "explicit");
-    }
-
-    private void FillDiscoveredRuntimeMatch(AscetSession session, IList<AscetItemRef> candidates, AscetModelElement valueElement, AscetDependentChainInput input, AscetDependentChainReadResult result)
-    {
-        List<AscetDependentChainExportCandidate> matches = new List<AscetDependentChainExportCandidate>();
-        AscetModelElement matchedElement = null;
-        string matchedOwner = String.Empty;
-
-        if (candidates != null)
-        {
-            for (int i = 0; i < candidates.Count; i++)
-            {
-                AscetItemRef candidate = candidates[i];
-                if (candidate == null || String.IsNullOrWhiteSpace(candidate.Path))
-                {
-                    continue;
-                }
-
-                CodeComponent exporter = TryResolveCodeComponent(session, candidate.Path);
-                if (exporter == null || !exporter.ExistsExportForImport(valueElement))
-                {
-                    continue;
-                }
-
-                AscetModelElement exportElement = exporter.GetExportForImport(valueElement);
-                if (exportElement == null)
-                {
-                    AddIssue(result, "export_handle_not_returned:" + (input.ValueName ?? String.Empty));
-                    continue;
-                }
-
-                if (matchedElement == null)
-                {
-                    matchedElement = exportElement;
-                    matchedOwner = candidate.Path;
-                }
-
-                matches.Add(new AscetDependentChainExportCandidate
-                {
-                    Name = SafeGetName(exportElement),
-                    Scope = SafeGetScope(exportElement),
-                    Type = exportElement.GetType().Name,
-                    Owner = candidate.Path
-                });
-            }
-        }
-
-        if (matches.Count == 0)
-        {
-            input.ExportExists = false;
-            input.ExportDiscovery = "auto";
-            input.Issue = "export_not_found";
-            AddIssue(result, input.Issue + ":" + (input.ValueName ?? String.Empty));
-            return;
-        }
-
-        if (matches.Count > 1)
-        {
-            input.ExportExists = false;
-            input.ExportDiscovery = "auto";
-            input.ExportCandidates = matches;
-            input.Issue = "export_ambiguous";
-            AddIssue(result, input.Issue + ":" + (input.ValueName ?? String.Empty));
-            return;
-        }
-
-        FillExportElement(input, matchedElement, matchedOwner, "auto");
-    }
-
-    private IList<AscetItemRef> ListProviderCandidates(AscetSession session, AscetDependentChainReadRequest request, AscetDependentChainReadResult result)
-    {
-        string scopePath = !String.IsNullOrWhiteSpace(request.ProviderScopePath)
-            ? request.ProviderScopePath
-            : GetParentPath(request.ComponentPath);
-        int maxCandidates = request.MaxCandidates > 0 ? request.MaxCandidates : 200;
-
-        try
-        {
-            ComponentReadService reader = new ComponentReadService();
-            ComponentReadResponse response = reader.ReadBoundDatabase(
-                new ComponentReadRequest
-                {
-                    FolderPath = scopePath,
-                    Kind = AscetComponentKind.Unknown,
-                    Query = String.Empty,
-                    Limit = maxCandidates + 1,
-                    Recursive = true
-                },
-                session.GetCurrentDatabaseHandle(),
-                null);
-
-            List<AscetItemRef> candidates = new List<AscetItemRef>();
-            IList<AscetItemRef> items = response == null ? null : response.Items;
-            if (items != null)
-            {
-                for (int i = 0; i < items.Count; i++)
-                {
-                    AscetItemRef item = items[i];
-                    if (item == null || String.Equals(item.Path, request.ComponentPath, StringComparison.Ordinal))
-                    {
-                        continue;
-                    }
-
-                    if (item.Kind == AscetComponentKind.Class ||
-                        item.Kind == AscetComponentKind.Module ||
-                        item.Kind == AscetComponentKind.StateMachine ||
-                        item.Kind == AscetComponentKind.ContinuousTimeBlock ||
-                        item.Kind == AscetComponentKind.Unknown)
-                    {
-                        candidates.Add(item);
-                    }
-                }
-            }
-
-            if (candidates.Count > maxCandidates)
-            {
-                AddIssue(result, "provider_candidate_limit_exceeded:" + maxCandidates.ToString());
-                return candidates.GetRange(0, maxCandidates);
-            }
-
-            return candidates;
-        }
-        catch (AscetReadException ex)
-        {
-            if (String.Equals(ex.Code, "folder_not_found", StringComparison.Ordinal))
-            {
-                AddIssue(result, "provider_scope_not_found:" + scopePath);
-                return new List<AscetItemRef>();
-            }
-
-            throw;
-        }
-    }
-
-    private CodeComponent TryResolveCodeComponent(AscetSession session, string componentPath)
-    {
-        try
-        {
-            return ResolveCodeComponent(session, componentPath);
-        }
-        catch (AscetReadException ex)
-        {
-            if (String.Equals(ex.Code, "unsupported_component_kind", StringComparison.Ordinal) ||
-                String.Equals(ex.Code, "target_is_folder", StringComparison.Ordinal) ||
-                String.Equals(ex.Code, "component_not_found", StringComparison.Ordinal))
-            {
-                return null;
-            }
-
-            throw;
-        }
     }
 
     private static void FillExportElement(AscetDependentChainInput input, AscetModelElement exportElement, string ownerPath, string discovery)
@@ -483,30 +333,28 @@ public sealed class AscetDependentChainReadService : AscetReadDomainServiceBase
         result.Issues.Add(issue);
     }
 
-    private static string SanitizePathPart(string value)
+    private static string BuildExportFailureMessage(DataBaseItem item, string componentPath, string exportDirectory)
     {
-        string text = String.IsNullOrWhiteSpace(value) ? "component" : value.Trim();
-        char[] invalid = Path.GetInvalidFileNameChars();
-        for (int i = 0; i < invalid.Length; i++)
+        string toolError = String.Empty;
+        try
         {
-            text = text.Replace(invalid[i], '_');
+            if (item != null && item.IsToolErrorAvailable())
+            {
+                toolError = " toolErrorCode=" + item.GetToolErrorCode().ToString() +
+                    " toolErrorMessage=" + (item.GetToolErrorMessage() ?? String.Empty);
+            }
+        }
+        catch (Exception ex)
+        {
+            toolError = " toolErrorReadFailed=" + ex.Message;
         }
 
-        text = text.Replace('\\', '_').Replace('/', '_').Replace(':', '_');
-        return text;
+        return "ASCET ExportXMLToFile returned false for component '" + (componentPath ?? String.Empty) +
+            "'. exportDirectory='" + (exportDirectory ?? String.Empty) +
+            "' exportDirectoryLength=" + (exportDirectory == null ? 0 : exportDirectory.Length).ToString() +
+            "." + toolError;
     }
 
-    private static string GetParentPath(string path)
-    {
-        string normalized = (path ?? String.Empty).Trim().Replace('/', '\\');
-        while (normalized.StartsWith("\\", StringComparison.Ordinal))
-        {
-            normalized = normalized.Substring(1);
-        }
-
-        int index = normalized.LastIndexOf('\\');
-        return index <= 0 ? String.Empty : normalized.Substring(0, index);
-    }
 }
 
 public static class AscetDependentChainOutput

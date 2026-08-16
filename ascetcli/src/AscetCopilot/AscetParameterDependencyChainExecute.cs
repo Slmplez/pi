@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography;
 using System.Text;
 using System.Web.Script.Serialization;
 
@@ -32,6 +31,9 @@ public sealed class AscetParameterDependencyChainDependencyRequest
 
 public sealed class AscetParameterDependencyChainExecuteRequest
 {
+    public string Intent { get; set; }
+    public Dictionary<string, object> ExpectedBeforeState { get; set; }
+    public bool AcquireEditability { get; set; }
     public AscetParameterDependencyChainElementRequest Provider { get; set; }
     public AscetParameterDependencyChainElementRequest Consumer { get; set; }
     public AscetParameterDependencyChainElementRequest Local { get; set; }
@@ -42,18 +44,26 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
 {
     private readonly ComponentElementSyncService _elementSync;
     private readonly AscetSetElementDependencyService _dependencyService;
+    private readonly AscetDependentChainReadService _chainReadService;
 
     public AscetParameterDependencyChainExecuteService()
-        : this(new ComponentElementSyncService(), new AscetSetElementDependencyService())
+        : this(new ComponentElementSyncService(), new AscetSetElementDependencyService(), new AscetDependentChainReadService())
     {
     }
 
     public AscetParameterDependencyChainExecuteService(ComponentElementSyncService elementSync, AscetSetElementDependencyService dependencyService)
+        : this(elementSync, dependencyService, new AscetDependentChainReadService())
+    {
+    }
+
+    public AscetParameterDependencyChainExecuteService(ComponentElementSyncService elementSync, AscetSetElementDependencyService dependencyService, AscetDependentChainReadService chainReadService)
     {
         if (elementSync == null) throw new ArgumentNullException("elementSync");
         if (dependencyService == null) throw new ArgumentNullException("dependencyService");
+        if (chainReadService == null) throw new ArgumentNullException("chainReadService");
         _elementSync = elementSync;
         _dependencyService = dependencyService;
+        _chainReadService = chainReadService;
     }
 
     public Dictionary<string, object> Execute(AscetParameterDependencyChainExecuteRequest request)
@@ -93,6 +103,7 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
         AscetElementSpec consumerElementBefore = null;
         AscetElementSpec localElementBefore = null;
         AscetSetElementDependencyResult dependencyBefore = null;
+        Dictionary<string, object> beforeState = null;
 
         try
         {
@@ -118,24 +129,33 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
             }
             if (conflicts.Count > 0) return Rejected(operationId, conflicts, stages);
 
-            string beforeHash = ComputeStateHash(providerBefore, consumerBefore, dependencyBefore);
+            beforeState = CaptureTargetState(request, providerBefore, consumerBefore, dependencyBefore);
+            List<Dictionary<string, object>> editableTargets = ReadEditableTargets(session, providerBefore, consumerBefore);
             bool providerNeedsWrite = HasAdded(providerDiff);
             bool consumerNeedsWrite = HasAdded(consumerDiff);
             bool localNeedsWrite = HasAdded(localDiff);
             bool dependencyNeedsWrite = !dependencyExact;
+            AddPlannedStages(stages, providerNeedsWrite, consumerNeedsWrite, localNeedsWrite, dependencyNeedsWrite, IsPreview(request));
+            if (IsPreview(request))
+            {
+                return Preview(operationId, beforeState, stages, editableTargets,
+                    !providerNeedsWrite && !consumerNeedsWrite && !localNeedsWrite && !dependencyNeedsWrite);
+            }
+            if (request.ExpectedBeforeState != null && !SemanticStateEquals(request.ExpectedBeforeState, beforeState))
+            {
+                throw new AscetReadException("target_state_changed", "configure_parameter_dependency_chain_execute",
+                    "ASCET dependency-chain state changed after approval.");
+            }
             if (!providerNeedsWrite && !consumerNeedsWrite && !localNeedsWrite && !dependencyNeedsWrite)
             {
-                stages.Add(Stage("provider", "verified", true));
-                stages.Add(Stage("consumer", "verified", true));
-                stages.Add(Stage("local", "verified", true));
-                stages.Add(Stage("dependency", "verified", true));
-                return Success("no_change", operationId, false, false, beforeHash, beforeHash, stages);
+                VerifyFinalState(session, request, providerRef, consumerRef);
+                return WithTargets(Success("no_change", operationId, false, false, stages), editableTargets);
             }
 
-            RequireComponentsEditableInSession(
+            EnsureComponentsEditableInSession(
                 session,
                 new string[] { request.Provider.ComponentPath, request.Consumer.ComponentPath },
-                "configure_parameter_dependency_chain_execute");
+                request.AcquireEditability);
 
             if (providerNeedsWrite)
             {
@@ -143,10 +163,9 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
                 AscetElementSyncResult applied = _elementSync.ApplyInSession(session, providerRef, request.Provider.Spec, null, true, true);
                 providerWritten = HasCreated(applied);
                 RequireElementReadback(applied, "provider");
-                stages.Add(Stage("provider", "created", true));
+                ReplaceStage(stages, "provider", "created", true);
                 ThrowIfInjectedFailure("provider");
             }
-            else stages.Add(Stage("provider", "verified", true));
 
             if (consumerNeedsWrite)
             {
@@ -154,10 +173,9 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
                 AscetElementSyncResult applied = _elementSync.ApplyInSession(session, consumerRef, request.Consumer.Spec, null, true, true);
                 consumerWritten = HasCreated(applied);
                 RequireElementReadback(applied, "consumer");
-                stages.Add(Stage("consumer", "created", true));
+                ReplaceStage(stages, "consumer", "created", true);
                 ThrowIfInjectedFailure("consumer");
             }
-            else stages.Add(Stage("consumer", "verified", true));
 
             if (localNeedsWrite)
             {
@@ -165,10 +183,9 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
                 AscetElementSyncResult applied = _elementSync.ApplyInSession(session, consumerRef, request.Local.Spec, null, true, true);
                 localWritten = HasCreated(applied);
                 RequireElementReadback(applied, "local");
-                stages.Add(Stage("local", "created", true));
+                ReplaceStage(stages, "local", "created", true);
                 ThrowIfInjectedFailure("local");
             }
-            else stages.Add(Stage("local", "verified", true));
 
             if (dependencyNeedsWrite)
             {
@@ -177,16 +194,13 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
                 dependencyWritten = applied != null && applied.MatchesChanged > 0;
                 if (applied == null || !applied.WriteSucceeded || !applied.ReadbackVerified)
                     throw new AscetReadException("readback_mismatch", "configure_parameter_dependency_chain_execute", "Dependency write did not pass mandatory readback.");
-                stages.Add(Stage("dependency", "created", true));
+                ReplaceStage(stages, "dependency", "configured", true);
                 ThrowIfInjectedFailure("dependency");
             }
-            else stages.Add(Stage("dependency", "verified", true));
 
             VerifyFinalState(session, request, providerRef, consumerRef);
-            AscetElementCatalogReadResult providerAfter = _elementSync.ReadCatalogInSession(session, providerRef);
-            AscetElementCatalogReadResult consumerAfter = _elementSync.ReadCatalogInSession(session, consumerRef);
-            AscetSetElementDependencyResult dependencyAfter = _dependencyService.SetInSession(session, BuildDependencyArguments(request, true, String.Empty));
-            return Success("committed", operationId, true, mutationStarted, beforeHash, ComputeStateHash(providerAfter, consumerAfter, dependencyAfter), stages);
+            return WithTargets(Success("committed", operationId, true, mutationStarted, stages),
+                ReadEditableTargets(session, providerBefore, consumerBefore));
         }
         catch (Exception originalError)
         {
@@ -201,6 +215,30 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
                 TryRollback("consumer", rollbackStages, rollbackErrors, delegate() { RestoreElement(session, consumerRef, request.Consumer.Spec.Elements[0].Name, consumerElementBefore); });
             if (providerWritten)
                 TryRollback("provider", rollbackStages, rollbackErrors, delegate() { RestoreElement(session, providerRef, request.Provider.Spec.Elements[0].Name, providerElementBefore); });
+            if (rollbackErrors.Count == 0)
+            {
+                try
+                {
+                    AscetElementCatalogReadResult providerRollback = _elementSync.ReadCatalogInSession(session, providerRef);
+                    AscetElementCatalogReadResult consumerRollback = _elementSync.ReadCatalogInSession(session, consumerRef);
+                    if (!ElementStateRestored(providerRollback, request.Provider.Spec.Elements[0].Name, providerElementBefore))
+                        rollbackErrors.Add("Provider rollback readback does not match the original Element state.");
+                    if (!ElementStateRestored(consumerRollback, request.Consumer.Spec.Elements[0].Name, consumerElementBefore))
+                        rollbackErrors.Add("Imported rollback readback does not match the original Element state.");
+                    if (!ElementStateRestored(consumerRollback, request.Local.Spec.Elements[0].Name, localElementBefore))
+                        rollbackErrors.Add("Local rollback readback does not match the original Element state.");
+                    if (localElementBefore != null)
+                    {
+                        AscetSetElementDependencyResult dependencyRollback = _dependencyService.SetInSession(session, BuildDependencyArguments(request, true, String.Empty));
+                        if (!DependencyStateRestored(dependencyBefore, dependencyRollback))
+                            rollbackErrors.Add("Dependency rollback readback does not match the original binding state.");
+                    }
+                }
+                catch (Exception rollbackReadbackError)
+                {
+                    rollbackErrors.Add("rollback_readback:" + rollbackReadbackError.Message);
+                }
+            }
             bool rollbackPassed = rollbackErrors.Count == 0;
             Dictionary<string, object> result = BaseResult(rollbackPassed ? "rolled_back" : "rollback_failed", operationId, true, true);
             result["stages"] = stages;
@@ -224,6 +262,10 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
     {
         if (request == null || request.Provider == null || request.Consumer == null || request.Local == null || request.Dependency == null)
             throw new AscetReadException("invalid_argument", "configure_parameter_dependency_chain_execute", "Provider, Consumer, Local, and Dependency are required.");
+        if (!String.IsNullOrWhiteSpace(request.Intent) &&
+            !String.Equals(request.Intent, "preview", StringComparison.OrdinalIgnoreCase) &&
+            !String.Equals(request.Intent, "apply", StringComparison.OrdinalIgnoreCase))
+            throw new AscetReadException("invalid_argument", "configure_parameter_dependency_chain_execute", "intent must be preview or apply.");
         ValidateElementRequest(request.Provider, "provider");
         ValidateElementRequest(request.Consumer, "consumer");
         ValidateElementRequest(request.Local, "local");
@@ -362,6 +404,39 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
             details["beforeMappings"] = dependency == null ? null : dependency.BeforeFormulaMappings;
             throw new AscetReadException("readback_mismatch", "configure_parameter_dependency_chain_execute", "Final Dependency readback does not match the requested chain: " + AscetJsonContract.Serialize(details));
         }
+
+        AscetDependentChainReadResult chain = _chainReadService.ReadInSession(session, new AscetDependentChainReadRequest
+        {
+            ComponentPath = request.Consumer.ComponentPath,
+            DependentElementName = request.Local.Spec.Elements[0].Name,
+            ExporterComponentPath = request.Provider.ComponentPath
+        });
+        if (!MatchesCompleteChainReadback(chain, request))
+            throw new AscetReadException("readback_mismatch", "configure_parameter_dependency_chain_execute",
+                "Final shared dependency-chain readback does not match the requested Provider/Imported/Local chain.");
+    }
+
+    private static bool MatchesCompleteChainReadback(AscetDependentChainReadResult chain, AscetParameterDependencyChainExecuteRequest request)
+    {
+        if (chain == null || !chain.Complete || chain.Dependent == null ||
+            !String.Equals(chain.ComponentPath, request.Consumer.ComponentPath, StringComparison.OrdinalIgnoreCase) ||
+            !String.Equals(chain.ExporterComponentPath, request.Provider.ComponentPath, StringComparison.OrdinalIgnoreCase) ||
+            !String.Equals(chain.Dependent.Name, request.Local.Spec.Elements[0].Name, StringComparison.Ordinal) ||
+            chain.Inputs == null) return false;
+        string importedName = request.Consumer.Spec.Elements[0].Name;
+        string exportedName = request.Provider.Spec.Elements[0].Name;
+        for (int i = 0; i < chain.Inputs.Count; i++)
+        {
+            AscetDependentChainInput input = chain.Inputs[i];
+            if (input != null && input.ExportExists &&
+                String.Equals(input.ValueName, importedName, StringComparison.Ordinal) &&
+                String.Equals(input.ValueScope, "imported", StringComparison.OrdinalIgnoreCase) &&
+                String.Equals(input.ExportName, exportedName, StringComparison.Ordinal) &&
+                String.Equals(input.ExportScope, "exported", StringComparison.OrdinalIgnoreCase) &&
+                String.Equals(input.ExportOwnerPath, request.Provider.ComponentPath, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+        return false;
     }
 
     private static void RequireExactDiff(AscetElementSpecDiffResult diff, string stage)
@@ -436,6 +511,38 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
             throw new AscetReadException("rollback_readback_mismatch", "configure_parameter_dependency_chain_execute", "Element rollback did not pass readback verification for '" + elementName + "'.");
     }
 
+    private static bool ElementStateRestored(AscetElementCatalogReadResult catalog, string elementName, AscetElementSpec before)
+    {
+        AscetElementSpec current = FindElement(catalog, elementName);
+        if (before == null) return current == null;
+        if (current == null) return false;
+        JavaScriptSerializer serializer = new JavaScriptSerializer();
+        serializer.MaxJsonLength = Int32.MaxValue;
+        return String.Equals(
+            Canonicalize(serializer.DeserializeObject(serializer.Serialize(before)), String.Empty),
+            Canonicalize(serializer.DeserializeObject(serializer.Serialize(current)), String.Empty),
+            StringComparison.Ordinal);
+    }
+
+    private static bool DependencyStateRestored(AscetSetElementDependencyResult before, AscetSetElementDependencyResult current)
+    {
+        if (before == null || current == null) return before == current;
+        Dictionary<string, object> left = DependencyState(before);
+        Dictionary<string, object> right = DependencyState(current);
+        return String.Equals(Canonicalize(left, String.Empty), Canonicalize(right, String.Empty), StringComparison.Ordinal);
+    }
+
+    private static Dictionary<string, object> DependencyState(AscetSetElementDependencyResult value)
+    {
+        return new Dictionary<string, object>
+        {
+            { "dependency", value == null ? String.Empty : value.BeforeDependency },
+            { "formula", value == null ? String.Empty : value.BeforeFormula },
+            { "mappings", value == null ? null : value.BeforeFormulaMappings },
+            { "variants", value == null ? null : value.DataVariantNames }
+        };
+    }
+
     private static AscetElementSpec FindElement(AscetElementCatalogReadResult catalog, string elementName)
     {
         if (catalog == null || catalog.Document == null || catalog.Document.Elements == null) return null;
@@ -461,11 +568,93 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
         }
     }
 
-    private static Dictionary<string, object> Success(string status, string operationId, bool writesPerformed, bool mutationStarted, string beforeHash, string afterHash, IList<Dictionary<string, object>> stages)
+    private static bool IsPreview(AscetParameterDependencyChainExecuteRequest request)
+    {
+        return request != null && String.Equals(request.Intent, "preview", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static void AddPlannedStages(IList<Dictionary<string, object>> stages, bool provider, bool consumer, bool local, bool dependency, bool preview)
+    {
+        stages.Add(Stage("provider", provider ? (preview ? "create" : "pending") : "verified", !provider));
+        stages.Add(Stage("consumer", consumer ? (preview ? "create" : "pending") : "verified", !consumer));
+        stages.Add(Stage("local", local ? (preview ? "create" : "pending") : "verified", !local));
+        stages.Add(Stage("dependency", dependency ? (preview ? "configure" : "pending") : "verified", !dependency));
+    }
+
+    private static void ReplaceStage(IList<Dictionary<string, object>> stages, string name, string status, bool readbackVerified)
+    {
+        for (int i = 0; i < stages.Count; i++)
+        {
+            object value;
+            if (stages[i] != null && stages[i].TryGetValue("stage", out value) && String.Equals(Convert.ToString(value), name, StringComparison.Ordinal))
+            {
+                stages[i] = Stage(name, status, readbackVerified);
+                return;
+            }
+        }
+        stages.Add(Stage(name, status, readbackVerified));
+    }
+
+    private List<Dictionary<string, object>> ReadEditableTargets(AscetSession session, AscetElementCatalogReadResult provider, AscetElementCatalogReadResult consumer)
+    {
+        AscetEditableService service = new AscetEditableService();
+        List<Dictionary<string, object>> targets = new List<Dictionary<string, object>>();
+        targets.Add(EditableTarget(provider, service.CheckEditableInSession(session, provider.ComponentPath)));
+        if (!String.Equals(provider.ComponentPath, consumer.ComponentPath, StringComparison.OrdinalIgnoreCase))
+            targets.Add(EditableTarget(consumer, service.CheckEditableInSession(session, consumer.ComponentPath)));
+        return targets;
+    }
+
+    private static Dictionary<string, object> EditableTarget(AscetElementCatalogReadResult catalog, AscetComponentEditableResult state)
+    {
+        return new Dictionary<string, object>
+        {
+            { "path", catalog == null ? String.Empty : (catalog.ComponentPath ?? String.Empty) },
+            { "oid", catalog == null ? String.Empty : (catalog.ComponentOid ?? String.Empty) },
+            { "editable", state != null && state.Editable }
+        };
+    }
+
+    private static Dictionary<string, object> WithTargets(Dictionary<string, object> result, IList<Dictionary<string, object>> targets)
+    {
+        result["targets"] = targets;
+        return result;
+    }
+
+    private static Dictionary<string, object> Preview(string operationId, Dictionary<string, object> beforeState, IList<Dictionary<string, object>> stages, IList<Dictionary<string, object>> targets, bool noOp)
+    {
+        Dictionary<string, object> result = BaseResult("preview", operationId, false, false);
+        result["beforeState"] = beforeState;
+        result["stages"] = stages;
+        result["targets"] = targets;
+        result["noOp"] = noOp;
+        result["verification"] = new Dictionary<string, object> { { "status", "available" }, { "verified", noOp } };
+        result["rollback"] = new Dictionary<string, object> { { "required", false }, { "status", "not_required" } };
+        return result;
+    }
+
+    private static void EnsureComponentsEditableInSession(AscetSession session, IEnumerable<string> componentPaths, bool acquire)
+    {
+        AscetEditableService service = new AscetEditableService();
+        HashSet<string> checkedPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (string componentPath in componentPaths)
+        {
+            if (String.IsNullOrWhiteSpace(componentPath) || !checkedPaths.Add(componentPath)) continue;
+            AscetComponentEditableResult state = service.CheckEditableInSession(session, componentPath);
+            if (state != null && state.Editable) continue;
+            if (!acquire)
+                throw new AscetReadException("editable_write_gate_blocked", "configure_parameter_dependency_chain_execute",
+                    "Component '" + componentPath + "' is read-only and editability acquisition was not authorized.");
+            AscetComponentEditableResult acquired = service.SetEditableInSession(session, componentPath);
+            if (acquired == null || !acquired.Editable)
+                throw new AscetReadException("component_not_editable", "configure_parameter_dependency_chain_execute",
+                    "Component '" + componentPath + "' remained read-only after the authorized SCM operation.");
+        }
+    }
+
+    private static Dictionary<string, object> Success(string status, string operationId, bool writesPerformed, bool mutationStarted, IList<Dictionary<string, object>> stages)
     {
         Dictionary<string, object> result = BaseResult(status, operationId, writesPerformed, mutationStarted);
-        result["beforeStateHash"] = beforeHash ?? String.Empty;
-        result["afterStateHash"] = afterHash ?? String.Empty;
         result["stages"] = stages;
         result["verification"] = new Dictionary<string, object> { { "status", "passed" }, { "verified", true } };
         result["rollback"] = new Dictionary<string, object> { { "required", false }, { "status", "not_required" } };
@@ -549,30 +738,36 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
     }
     private static string NormalizePath(string path) { return (path ?? String.Empty).Trim().Replace('/', '\\').TrimStart('\\'); }
 
-    private static string ComputeStateHash(AscetElementCatalogReadResult provider, AscetElementCatalogReadResult consumer, AscetSetElementDependencyResult dependency)
+    private static Dictionary<string, object> CaptureTargetState(
+        AscetParameterDependencyChainExecuteRequest request,
+        AscetElementCatalogReadResult provider,
+        AscetElementCatalogReadResult consumer,
+        AscetSetElementDependencyResult dependency)
     {
-        Dictionary<string, object> state = new Dictionary<string, object>();
-        state["providerPath"] = provider == null ? String.Empty : provider.ComponentPath;
-        state["provider"] = provider == null ? null : provider.Document;
-        state["consumerPath"] = consumer == null ? String.Empty : consumer.ComponentPath;
-        state["consumer"] = consumer == null ? null : consumer.Document;
-        state["localDependency"] = new Dictionary<string, object>
+        return new Dictionary<string, object>
         {
-            { "dependency", dependency == null ? String.Empty : dependency.BeforeDependency },
-            { "formula", dependency == null ? String.Empty : dependency.BeforeFormula },
-            { "mappings", dependency == null ? null : dependency.BeforeFormulaMappings },
-            { "variants", dependency == null ? null : dependency.DataVariantNames }
+            { "providerComponentPath", NormalizePath(request.Provider.ComponentPath) },
+            { "consumerComponentPath", NormalizePath(request.Consumer.ComponentPath) },
+            { "provider", ElementSemanticState(provider, request.Provider.Spec.Elements[0].Name) },
+            { "imported", ElementSemanticState(consumer, request.Consumer.Spec.Elements[0].Name) },
+            { "local", ElementSemanticState(consumer, request.Local.Spec.Elements[0].Name) },
+            { "dependency", DependencyState(dependency) }
         };
+    }
+
+    private static object ElementSemanticState(AscetElementCatalogReadResult catalog, string elementName)
+    {
+        AscetElementSpec element = FindElement(catalog, elementName);
+        if (element == null) return null;
         JavaScriptSerializer serializer = new JavaScriptSerializer();
         serializer.MaxJsonLength = Int32.MaxValue;
-        string canonical = Canonicalize(serializer.DeserializeObject(serializer.Serialize(state)), String.Empty);
-        using (SHA256 algorithm = SHA256.Create())
-        {
-            byte[] digest = algorithm.ComputeHash(Encoding.UTF8.GetBytes(canonical));
-            StringBuilder output = new StringBuilder(digest.Length * 2);
-            for (int i = 0; i < digest.Length; i++) output.Append(digest[i].ToString("x2"));
-            return output.ToString();
-        }
+        return serializer.DeserializeObject(serializer.Serialize(element));
+    }
+
+    private static bool SemanticStateEquals(IDictionary<string, object> expected, IDictionary<string, object> current)
+    {
+        if (expected == null || current == null) return expected == current;
+        return String.Equals(Canonicalize(expected, String.Empty), Canonicalize(current, String.Empty), StringComparison.Ordinal);
     }
 
     private static string Canonicalize(object value, string key)
@@ -635,6 +830,9 @@ public static class AscetParameterDependencyChainExecuteParser
         Dictionary<string, object> root = AscetJsonContract.DeserializeObject(File.ReadAllText(path, Encoding.UTF8));
         return new AscetParameterDependencyChainExecuteRequest
         {
+            Intent = GetString(root, "intent"),
+            ExpectedBeforeState = GetDictionary(root, "expectedBeforeState"),
+            AcquireEditability = GetBoolean(root, "acquireEditability"),
             Provider = ParseElement(GetDictionary(root, "provider"), "provider"),
             Consumer = ParseElement(GetDictionary(root, "consumer"), "consumer"),
             Local = ParseElement(GetDictionary(root, "local"), "local"),
@@ -691,6 +889,12 @@ public static class AscetParameterDependencyChainExecuteParser
     {
         object result;
         return value != null && value.TryGetValue(key, out result) && result != null ? Convert.ToString(result) : String.Empty;
+    }
+
+    private static bool GetBoolean(Dictionary<string, object> value, string key)
+    {
+        object result;
+        return value != null && value.TryGetValue(key, out result) && result is bool && (bool)result;
     }
 
     private static IList<string> GetStrings(Dictionary<string, object> value, string key)

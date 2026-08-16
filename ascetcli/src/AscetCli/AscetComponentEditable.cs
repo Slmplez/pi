@@ -21,13 +21,33 @@ public sealed class AscetEditableService : AscetReadDomainServiceBase
         return GetEditableState(itemPath, true);
     }
 
+    internal AscetComponentEditableResult CheckEditableInSession(AscetSession session, string itemPath)
+    {
+        return GetEditableStateInSession(session, itemPath, false);
+    }
+
+    internal AscetComponentEditableResult SetEditableInSession(AscetSession session, string itemPath)
+    {
+        return GetEditableStateInSession(session, itemPath, true);
+    }
+
     private AscetComponentEditableResult GetEditableState(string itemPath, bool setEditable)
     {
-        string normalizedPath = AscetComponentEditable.NormalizeItemPath(itemPath);
         string operation = setEditable ? "component_editable_set" : "component_editable_check";
         return ExecuteWithSession(operation, delegate(AscetSession session)
         {
-            DataBaseItem item = ResolveItemByPath(session, normalizedPath);
+            return GetEditableStateInSession(session, itemPath, setEditable);
+        });
+    }
+
+    private AscetComponentEditableResult GetEditableStateInSession(AscetSession session, string itemPath, bool setEditable)
+    {
+        if (session == null) throw new ArgumentNullException("session");
+        string normalizedPath = AscetComponentEditable.NormalizeItemPath(itemPath);
+        string operation = setEditable ? "component_editable_set" : "component_editable_check";
+        return ExecuteWithBoundSession(operation, session, delegate(AscetSession currentSession)
+        {
+            DataBaseItem item = ResolveItemByPath(currentSession, normalizedPath);
             Component component = item as Component;
             if (component == null)
             {
@@ -41,7 +61,7 @@ public sealed class AscetEditableService : AscetReadDomainServiceBase
             bool wasEdition = component.IsEdition();
             if (setEditable && wasVersion && !wasEdition)
             {
-                AscetSCMInterface scm = session.GetToolHandle().GetSCMInterface();
+                AscetSCMInterface scm = currentSession.GetToolHandle().GetSCMInterface();
                 if (scm == null)
                 {
                     throw new AscetReadException(
@@ -54,7 +74,7 @@ public sealed class AscetEditableService : AscetReadDomainServiceBase
                 if (IsTcmDriver(scm))
                 {
                     scm.ExecuteSCMScriptingCommandForItems("ReserveItem", items);
-                    item = ResolveItemByPath(session, normalizedPath);
+                    item = ResolveItemByPath(currentSession, normalizedPath);
                     component = item as Component;
                     if (component == null)
                     {
@@ -77,7 +97,7 @@ public sealed class AscetEditableService : AscetReadDomainServiceBase
                     scm.ExecuteSCMCommand("Lock", scmData, String.Empty);
                 }
 
-                item = ResolveItemByPath(session, normalizedPath);
+                item = ResolveItemByPath(currentSession, normalizedPath);
                 component = item as Component;
                 if (component == null)
                 {

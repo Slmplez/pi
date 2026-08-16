@@ -13,12 +13,12 @@ const ascetToolNameSet = new Set([
 	"ascet_capabilities",
 	"ascet_recover",
 	"ascet_scheduler_status",
+	"ascet_search",
 	"ascet_get",
 	"ascet_read",
 	"ascet_diff",
 	"ascet_edit",
 	"ascet_batch_write",
-	"configure_parameter_dependency_chain",
 ]);
 
 function isFeatureEnabled(featureFlag: string | undefined, env: Record<string, string | undefined>): boolean {

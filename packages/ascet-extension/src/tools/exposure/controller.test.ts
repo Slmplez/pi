@@ -48,6 +48,7 @@ describe("ASCET exposure controller", () => {
 			"find",
 			"grep",
 			"read",
+			"ascet_search",
 			"ascet_get",
 			"ascet_read",
 			"ascet_status",
@@ -56,7 +57,6 @@ describe("ASCET exposure controller", () => {
 			"ascet_scheduler_status",
 			"ascet_diff",
 			"ascet_edit",
-			"configure_parameter_dependency_chain",
 		]);
 		assert.equal(
 			harness.registered.some((tool) => tool.name === "ascet_batch_write"),
@@ -82,7 +82,7 @@ describe("ASCET exposure controller", () => {
 		assert.doesNotMatch(readPrompt, /selected through ascet_get/);
 	});
 
-	test("keeps reference-profile guidance outgoing-only", () => {
+	test("uses native reference Search and exact-read guidance", () => {
 		const harness = createPiHarness();
 		createAscetExposureController(harness.pi, { env: {} }).activateProfile("reference");
 
@@ -145,7 +145,16 @@ describe("ASCET exposure controller", () => {
 
 		assert.deepEqual(exposure.getMetadata(), {
 			profile: "advanced-read",
-			activeTools: ["find", "grep", "read", "ascet_get", "ascet_read", "ascet_status", "ascet_capabilities"],
+			activeTools: [
+				"find",
+				"grep",
+				"read",
+				"ascet_search",
+				"ascet_get",
+				"ascet_read",
+				"ascet_status",
+				"ascet_capabilities",
+			],
 			batchWriteEnabled: false,
 		});
 	});

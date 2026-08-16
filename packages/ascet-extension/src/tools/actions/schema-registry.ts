@@ -62,6 +62,12 @@ function stringValues(schema: JsonSchemaNode | undefined): string[] {
 	const values = [
 		...(Array.isArray(schema.enum) ? schema.enum : []),
 		...(typeof schema.const === "string" ? [schema.const] : []),
+		...(Array.isArray(schema.anyOf)
+			? schema.anyOf.flatMap((variant) => stringValues(variant as JsonSchemaNode))
+			: []),
+		...(Array.isArray(schema.oneOf)
+			? schema.oneOf.flatMap((variant) => stringValues(variant as JsonSchemaNode))
+			: []),
 	];
 	return [...new Set(values.filter((value): value is string => typeof value === "string"))];
 }

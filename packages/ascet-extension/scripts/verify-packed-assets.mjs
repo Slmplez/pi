@@ -54,13 +54,17 @@ if (paths.includes("templates/ascet-project/rules/tools/verify.md")) {
 	throw new Error("Packed ASCET extension contains the removed standalone verification workflow.");
 }
 const binaryPaths = paths.filter((path) => path.startsWith("ascet-cli/bin/"));
-const expectedBinaryPaths = ["ascet-cli/bin/AscetBridge.exe", "ascet-cli/bin/Ascetapidll/Etas.AscetNET.dll"];
+const expectedBinaryPaths = [
+	"ascet-cli/bin/AscetBridge.exe",
+	"ascet-cli/bin/AscetSearch.exe",
+	"ascet-cli/bin/Ascetapidll/Etas.AscetNET.dll",
+];
 const missing = expectedBinaryPaths.filter((path) => !binaryPaths.includes(path));
 const unexpected = binaryPaths.filter((path) => !expectedBinaryPaths.includes(path));
-if (binaryPaths.length !== 2 || missing.length > 0 || unexpected.length > 0) {
+if (binaryPaths.length !== 3 || missing.length > 0 || unexpected.length > 0) {
 	throw new Error(`Packed ASCET Bridge allowlist mismatch. Missing: [${missing.join(", ")}]. Unexpected: [${unexpected.join(", ")}].`);
 }
 if (!paths.includes("ascet-cli/contracts/cli-catalog.json")) {
 	throw new Error("Packed extension is missing ascet-cli/contracts/cli-catalog.json.");
 }
-console.log("Packed ASCET extension contains exactly 1 Bridge EXE and 1 ToolAPI DLL.");
+console.log("Packed ASCET extension contains exactly 2 EXEs and 1 ToolAPI DLL.");

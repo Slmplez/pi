@@ -20,6 +20,7 @@ public static class AscetParameterDependencyChainExecuteOutputTest
             AssertEqual("C_Threshold", request.Local.Spec.Elements[0].Name, "local name");
             AssertEqual("P_Threshold", request.Dependency.Formals[0], "formal");
             AssertEqual("parameter", request.Dependency.Mappings["P_Threshold"].Kind, "mapping kind");
+            AssertTrue(request.ExpectedBeforeState != null && request.ExpectedBeforeState.ContainsKey("provider"), "expected semantic state");
             OperationDescriptor descriptor = OperationRegistry.ResolveOrThrow("configure_parameter_dependency_chain_execute");
             AssertTrue(descriptor.MutatesDatabase, "chain route must mutate");
             AssertTrue(!descriptor.HostEligible && !descriptor.SupportsBatch, "chain route must be one-shot and non-batch");
@@ -64,6 +65,7 @@ public static class AscetParameterDependencyChainExecuteOutputTest
     private static string RequestJson()
     {
         return "{" +
+            "\"intent\":\"preview\",\"expectedBeforeState\":{\"provider\":null,\"imported\":null,\"local\":null,\"dependency\":{}},\"acquireEditability\":true," +
             "\"provider\":{\"componentPath\":\"F\\\\Provider\",\"spec\":{\"elements\":[{\"name\":\"P_Threshold\",\"kind\":\"parameter\",\"modelType\":\"cont\",\"scope\":\"exported\",\"unit\":\"\",\"comment\":\"Provider\",\"calibration\":false}]}}," +
             "\"consumer\":{\"componentPath\":\"F\\\\Consumer\",\"spec\":{\"elements\":[{\"name\":\"P_Threshold\",\"kind\":\"parameter\",\"modelType\":\"cont\",\"scope\":\"imported\"}]}}," +
             "\"local\":{\"componentPath\":\"F\\\\Consumer\",\"spec\":{\"elements\":[{\"name\":\"C_Threshold\",\"kind\":\"parameter\",\"modelType\":\"cont\",\"scope\":\"local\",\"unit\":\"\",\"comment\":\"Local\",\"calibration\":false}]}}," +
