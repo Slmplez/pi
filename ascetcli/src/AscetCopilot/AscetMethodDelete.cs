@@ -28,6 +28,44 @@ public sealed class MethodDeleteService : MethodCatalogService, IMethodDeleteSer
 {
     public AscetMethodDeleteResult DeleteMethod(string componentPath, string methodName, bool verifyReadback, bool ignoreMissing)
     {
+        AscetMethodDeleteResult result = ExecuteWithSession("delete_method", delegate(AscetSession session)
+        {
+            return DeleteMethodInSession(session, componentPath, methodName, false, ignoreMissing);
+        });
+        result.VerifyReadbackRequested = verifyReadback;
+        if (!verifyReadback)
+        {
+            return result;
+        }
+
+        try
+        {
+            GetMethod(componentPath, methodName);
+            result.ReadbackVerified = false;
+        }
+        catch (AscetReadException ex)
+        {
+            if (!String.Equals(ex.Code, "method_not_found", StringComparison.Ordinal))
+            {
+                throw;
+            }
+            result.ReadbackVerified = true;
+        }
+
+        if (!result.ReadbackVerified)
+        {
+            throw new AscetReadException("readback_mismatch", "delete_method", "Readback verification failed for deleted method '" + methodName + "' in component '" + componentPath + "'.");
+        }
+        return result;
+    }
+
+    internal AscetMethodDeleteResult DeleteMethodInSession(AscetSession session, string componentPath, string methodName, bool verifyReadback, bool ignoreMissing)
+    {
+        if (session == null)
+        {
+            throw new ArgumentNullException("session");
+        }
+
         if (String.IsNullOrWhiteSpace(componentPath))
         {
             throw new AscetReadException("invalid_argument", "delete_method", "Component path must not be empty.");
@@ -38,55 +76,36 @@ public sealed class MethodDeleteService : MethodCatalogService, IMethodDeleteSer
             throw new AscetReadException("invalid_argument", "delete_method", "Method name must not be empty.");
         }
 
+        DataBaseItem item = ResolveItemByPath(session, componentPath);
+        AscetItemRef component = Classifier.ToItemRef(item);
+        MethodHandleWithDiagram found = FindMethod(session, component, methodName);
         bool deleted = false;
-        bool alreadyMissing = false;
+        bool alreadyMissing = found == null;
         AscetMethodKind methodKind = AscetMethodKind.Unknown;
         string diagramName = String.Empty;
 
-        ExecuteWithSession("delete_method", delegate(AscetSession session)
+        if (found == null)
         {
-            DataBaseItem item = ResolveItemByPath(session, componentPath);
-            AscetItemRef component = Classifier.ToItemRef(item);
-            MethodHandleWithDiagram found = FindMethod(session, component, methodName);
-            if (found == null)
+            if (!ignoreMissing)
             {
-                alreadyMissing = true;
-                if (!ignoreMissing)
-                {
-                    throw new AscetReadException("method_not_found", "delete_method", "Method '" + methodName + "' was not found in component '" + componentPath + "'.");
-                }
-
-                return true;
+                throw new AscetReadException("method_not_found", "delete_method", "Method '" + methodName + "' was not found in component '" + componentPath + "'.");
             }
-
+        }
+        else
+        {
             methodKind = found.Reference == null ? AscetMethodKind.Unknown : found.Reference.MethodKind;
             diagramName = found.DiagramName ?? String.Empty;
             RequireComponentEditableInSession(session, componentPath, "delete_method");
             RemoveMethodFromDiagram(found, componentPath, methodName);
             deleted = true;
-            return true;
-        });
+        }
 
         bool readbackVerified = !verifyReadback;
         if (verifyReadback)
         {
-            try
-            {
-                GetMethod(componentPath, methodName);
-                readbackVerified = false;
-            }
-            catch (AscetReadException ex)
-            {
-                if (String.Equals(ex.Code, "method_not_found", StringComparison.Ordinal))
-                {
-                    readbackVerified = true;
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
+            DataBaseItem readbackItem = ResolveItemByPath(session, componentPath);
+            AscetItemRef readbackComponent = Classifier.ToItemRef(readbackItem);
+            readbackVerified = FindMethod(session, readbackComponent, methodName) == null;
             if (!readbackVerified)
             {
                 throw new AscetReadException("readback_mismatch", "delete_method", "Readback verification failed for deleted method '" + methodName + "' in component '" + componentPath + "'.");

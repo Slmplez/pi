@@ -242,7 +242,7 @@ public sealed class MethodCreateService : MethodCatalogService, IMethodCreateSer
                 try
                 {
                     MethodDeleteService deleteService = new MethodDeleteService();
-                    deleteService.DeleteMethod(componentPath, methodName, false, true);
+                    deleteService.DeleteMethodInSession(session, componentPath, methodName, false, true);
                 }
                 catch
                 {
