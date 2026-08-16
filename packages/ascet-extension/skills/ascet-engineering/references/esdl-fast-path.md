@@ -1,7 +1,16 @@
 # ESDL Fast Path
 
-Use the fast path only after Project/Class context, frozen scope/layer, Method existence, signature, current ESDL, relevant Elements, Signal Flow, and `blockingUnknowns` are resolved.
+For an exact existing Method body, use the shortest safe route:
 
-Separate Method shell, signature, and body. Use `create_method` for the shell, `set_method_signature` for arguments/return, and `set_method_code` for body text. Do not fake arguments, returns, or declarations in ESDL; do not create same-name overloads. A Return Method has one explicit return value and complete return behavior.
+```text
+ascet_read.read_code
+→ ascet_edit.set_method_code
+```
 
-Recommended write order: Element/Dependency → Method shell → Signature → ESDL body, each with preflight before write.
+When the signature changes, read both body and signature, use `ascet_edit.set_method_signature`, then use `ascet_edit.set_method_code`. For a new Method, use `ascet_edit.create_method`, set the signature only when required, and then set the body.
+
+Keep Method shell, signature, and body separate. Do not place arguments, return declarations, or fake overloads in body text. Ensure every control path satisfies the declared return behavior.
+
+When ordinary Elements are part of the change, use `ascet_edit.apply_element_spec` before the body write. When a complete Parameter Dependency Chain is part of the change, use `ascet_edit.create_dependent_chain` instead. Read current Element or chain state only when it affects design or conflict handling.
+
+Do not force an exact Method change through Project, ownership, BDE, or full Signal Flow analysis unless that evidence can alter the requested code or target.

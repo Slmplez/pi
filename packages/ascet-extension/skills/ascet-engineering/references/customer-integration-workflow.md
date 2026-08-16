@@ -1,7 +1,7 @@
 # Customer Integration Workflow
 
-For customer-specific behavior, begin at the active Customer Product Project. Trace Formula, assembly, Module instances, customer interfaces, wrapper, Package join point, and target Class. Prefer the customer layer when it satisfies the requirement without changing a shared definition.
+For customer-specific behavior, begin at the exact active Customer Product Project. Read only the Formula, assembly, Module instance, customer interface, wrapper, Package join point, mapping, and target definition needed to identify the modification layer.
 
-Treat `Project::Module` as assembly context. Resolve its exact OID to the canonical Module/Class definition before reading or editing ESDL, BDE, Elements, or Parameters. Inspect project-owned `Modules` and `Parameter` branches when present; customer integration is not restricted to a `Customer\<name>` root.
+Resolve a Project Module instance to its canonical definition before changing ESDL, BDE, Elements, Parameters, or StateMachine behavior. Prefer the customer layer when it satisfies the requirement without changing a shared definition.
 
-Place customer-specific Parameters and mappings in the verified Customer/Project owner layer. Confirm Variant, dependency direction, public-interface impact, shared OID consumers, and excluded shared objects before preflight.
+Use `ascet_get.formulas` only with an exact Project path. Place customer-only Parameters and mappings in the verified Customer or Project owner layer. Confirm Variant, dependency direction, public-interface impact, shared consumers, and excluded shared objects when they can alter the change.

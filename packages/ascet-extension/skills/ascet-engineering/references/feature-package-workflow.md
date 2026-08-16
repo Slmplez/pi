@@ -1,7 +1,7 @@
 # Feature Package Workflow
 
-For shared behavior, begin with feature semantics and bounded generic Platform Package, China Package, or CNMS candidates. Resolve any Project Module instance by exact OID to its canonical Module/Class/StateMachine definition, then trace Method/BDE/Parameter Provider and representative active Project impact.
+For shared behavior, begin with feature semantics and bounded generic Platform Package, China Package, or CNMS candidates. Resolve the exact canonical Class, Module, or StateMachine definition, then read only the Method, BDE, Provider, interface, and representative active Project impact needed for the request.
 
-A CNMS Project may be only an assembly context; verify whether the actual definition is generic-platform, China-package, CNMS-, Project-, or Customer-owned. Confirm shared requirement intent before changing a Provider or public interface.
+A CNMS Project may be assembly context rather than the owner. Verify whether the definition is generic-platform, China-package, CNMS-, Project-, or Customer-owned before writing. Confirm shared requirement intent before changing a Provider or public interface.
 
-Prefer existing Package objects when semantics, ownership, type, unit, lifecycle, and reuse match. Record compatibility impact and the active Projects affected before write.
+Prefer compatible existing Package objects. Record the reason for any new object and the affected active consumers. Stop when ownership, compatibility, or modification scope remains ambiguous.
