@@ -1,0 +1,259 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="index">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="buttons">
+    <param name="See Also" value="buttons">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="editor for conditional tables">
+      <param name="Name" value="Toolbars">
+      <param name="Local" value="CTab_description_buttons.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Conditional table">
+    <param name="Name" value="Overview - Conditional Table Editor">
+    <param name="Local" value="CTab_overview.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="add element">
+      <param name="Name" value="Adding Basic Elements, Enumerations">
+      <param name="Local" value="add_elements.htm">
+      <param name="Name" value="Adding Complex Elements">
+      <param name="Local" value="complex_elements.htm">
+      <param name="Name" value="Adding Arguments and Method-Local Variables of the Trigger Method">
+      <param name="Local" value="arguments_variables.htm">
+      <param name="Name" value="Including a Component via the Block Library">
+      <param name="Local" value="ctab_includecomponent_blocklibrary.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="code generation">
+      <param name="Name" value="Experimenting with Conditional Tables">
+      <param name="Local" value="experimenting_ct.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="create">
+      <param name="Name" value="Creating a Conditional Table">
+      <param name="Local" value="create_ct.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="create column">
+      <param name="Name" value="Creating Columns in the Instruction Area">
+      <param name="Local" value="create-column_instrusction.htm">
+      <param name="Name" value="Creating Columns in the Condition Area">
+      <param name="Local" value="create_column_condition.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="create rows">
+      <param name="Name" value="Creating Rows">
+      <param name="Local" value="CTab_create_rows.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="delete elements">
+      <param name="Name" value="Deleting Elements">
+      <param name="Local" value="CTab_RenameDelete_elements.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="delete rows">
+      <param name="Name" value="Deleting Rows">
+      <param name="Local" value="CTab_delete_rows.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="editor">
+      <param name="Name" value="Overview - Conditional Table Editor">
+      <param name="Local" value="CTab_overview.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="enter condition">
+      <param name="Name" value="Entering a Condition or an Instruction">
+      <param name="Local" value="enter_condition_instruction.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="experimenting">
+      <param name="Name" value="Experimenting with Conditional Tables">
+      <param name="Local" value="experimenting_ct.htm">
+      <param name="Name" value="Starting an Offline Experiment">
+      <param name="Local" value="CTab_Starting_an_Offline_Experiment.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="make elements accessible">
+      <param name="Name" value="Making Elements Accessible for External Communication">
+      <param name="Local" value="make_elements_accessible.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="move columns">
+      <param name="Name" value="Moving Columns">
+      <param name="Local" value="CTab_move_columns.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="move rows">
+      <param name="Name" value="Moving Rows">
+      <param name="Local" value="CTab_move_rows.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="remove columns">
+      <param name="Name" value="Removing Columns">
+      <param name="Local" value="CTab_remove_columns.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="set up">
+      <param name="Name" value="Setting Up Conditional Tables">
+      <param name="Local" value="setting_up_ct.htm">
+      <param name="Name" value="Setting up a Conditional Table">
+      <param name="Local" value="Ctab_SetUp_ConditionalTable.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="use methods">
+      <param name="Name" value="Using Methods in Conditions/Instructions">
+      <param name="Local" value="use_methods_c_i.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="enter instruction">
+      <param name="Name" value="Entering a Condition or an Instruction">
+      <param name="Local" value="enter_condition_instruction.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="specify">
+      <param name="Name" value="Specifying Conditional Tables">
+      <param name="Local" value="specifying_ct.htm">
+      <param name="Name" value="Specifying a Conditional Table">
+      <param name="Local" value="Ctab_SpecifyConditionalTable.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="editor">
+    <param name="See Also" value="editor">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="conditional tables">
+      <param name="Name" value="Overview - Conditional Table Editor">
+      <param name="Local" value="CTab_overview.htm">
+      <param name="Name" value="Conditional Table Editor - Window Elements">
+      <param name="Local" value="CTab_Description_of_Window_Elements.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Editor for conditional tables">
+    <param name="Name" value="Conditional Table Editor - Window Elements">
+    <param name="Local" value="CTab_Description_of_Window_Elements.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="buttons">
+      <param name="Name" value="Toolbars">
+      <param name="Local" value="CTab_description_buttons.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="menu options">
+      <param name="Name" value="Menu Bar">
+      <param name="Local" value="CTab_menu_bar.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Get/Set ports">
+    <param name="See Also" value="Get/Set ports">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="conditional table">
+      <param name="Name" value="Making Elements Accessible for External Communication">
+      <param name="Local" value="make_elements_accessible.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="menu options">
+    <param name="See Also" value="menu options">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="editor for conditional tables">
+      <param name="Name" value="Menu Bar">
+      <param name="Local" value="CTab_menu_bar.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="specify conditional table">
+    <param name="Name" value="Specifying Conditional Tables">
+    <param name="Local" value="specifying_ct.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="table">
+    <param name="See Also" value="table">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="condition">
+      <param name="Name" value="Overview - Conditional Table Editor">
+      <param name="Local" value="CTab_overview.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="user interface">
+    <param name="See Also" value="user interface">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="editor for conditional tables">
+      <param name="Name" value="Overview - Conditional Table Editor">
+      <param name="Local" value="CTab_overview.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="toolbar">
+    <param name="See Also" value="toolbar">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="configure">
+      <param name="Name" value="Configuring a Toolbar">
+      <param name="Local" value="IntroductionEnglishUS.chm::/INT_Configuring_Toolbar.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="copy">
+    <param name="See Also" value="copy">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="element">
+      <param name="Name" value="Copying Elements in the Outline Tab">
+      <param name="Local" value="IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="element">
+    <param name="See Also" value="element">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="copy">
+      <param name="Name" value="Copying Elements in the Outline Tab">
+      <param name="Local" value="IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="delete">
+      <param name="Name" value="Showing and Deleting Unused Elements">
+      <param name="Local" value="ctab_showdeleteunusedElements.htm">
+      <param name="Name" value="Renaming and Deleting Elements">
+      <param name="Local" value="CTab_RenameDelete_elements.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="show unused">
+      <param name="Name" value="Showing and Deleting Unused Elements">
+      <param name="Local" value="ctab_showdeleteunusedElements.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="rename">
+      <param name="Name" value="Renaming and Deleting Elements">
+      <param name="Local" value="CTab_RenameDelete_elements.htm">
+    </object>
+    </ul>
+</ul>
+</html>

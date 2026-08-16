@@ -1,0 +1,65 @@
+{
+  "id": "AscetPreflightCreateFolder",
+  "family": "read",
+  "summary": "Resolve the authoritative create-folder path plan and capabilities without mutation",
+  "usage": "<folder-path> [--json]",
+  "execution": {
+    "kind": "bridge",
+    "protocolVersion": 1,
+    "subcommand": "exec",
+    "operation": "preflight_create_folder",
+    "sessionPolicy": "fresh_session",
+    "transportPolicy": "one_shot_only"
+  },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "read",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": [
+    "generic"
+  ],
+  "args": [
+    {
+      "name": "folder-path",
+      "kind": "positional",
+      "type": "string",
+      "required": true,
+      "description": "Folder path to inspect"
+    },
+    {
+      "name": "--json",
+      "kind": "flag",
+      "type": "boolean",
+      "required": false,
+      "description": "Emit JSON"
+    }
+  ],
+  "preconditions": [
+    "ASCET ToolAPI session must be available.",
+    "The current database identity must be resolvable."
+  ],
+  "failureModes": [
+    "toolapi_unavailable",
+    "database_not_open",
+    "invalid_argument"
+  ],
+  "examples": [
+    {
+      "description": "Inspect a nested folder path",
+      "command": "AscetBridge.exe exec preflight_create_folder A\\B\\C --json"
+    }
+  ],
+  "pitfalls": [
+    "This operation is read-only and must not create or save folders."
+  ],
+  "operation": "preflight_create_folder",
+  "lane": "legacy_read",
+  "hostEligible": false,
+  "supportsBatch": false,
+  "executionProfile": {
+    "hostSafety": "read",
+    "hostPolicy": "force_one_shot",
+    "timeoutClass": "read"
+  },
+  "hiddenFromModel": true
+}

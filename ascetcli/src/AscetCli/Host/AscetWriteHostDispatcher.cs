@@ -186,20 +186,36 @@ internal sealed class AscetWriteHostDispatcher
 
         if (context.WriteContext != null)
         {
+            AscetLiveContextSnapshot existingSnapshot = context.WriteContext.GetSnapshot();
+            AssertWritableDatabaseIdentity(existingSnapshot == null ? null : existingSnapshot.DatabaseRef);
             return context.WriteContext;
         }
 
         AscetLiveContext liveContext = new AscetLiveContextFactory().Create();
         context.WriteContext = new AscetWriteHostContext(liveContext);
-        if (context.SessionGeneration <= 0)
-        {
-            AscetLiveContextSnapshot snapshot = context.WriteContext.GetSnapshot();
-            context.SessionGeneration = snapshot == null ? 0 : snapshot.SessionGeneration;
-            context.DatabaseBindingGeneration = snapshot == null ? 0 : snapshot.DatabaseBindingGeneration;
-            context.DatabaseRef = snapshot == null ? null : snapshot.DatabaseRef;
-        }
+        AscetLiveContextSnapshot snapshot = context.WriteContext.GetSnapshot();
+        context.SessionGeneration = snapshot == null ? 0 : snapshot.SessionGeneration;
+        context.DatabaseBindingGeneration = snapshot == null ? 0 : snapshot.DatabaseBindingGeneration;
+        context.DatabaseRef = snapshot == null ? null : snapshot.DatabaseRef;
+        AssertWritableDatabaseIdentity(context.DatabaseRef);
 
         return context.WriteContext;
+    }
+
+    private static void AssertWritableDatabaseIdentity(AscetDatabaseRef databaseRef)
+    {
+        if (databaseRef == null)
+        {
+            throw new AscetReadException("database_identity_missing", "dispatch_request", "Current ASCET database identity is unavailable.");
+        }
+        if (!String.Equals(databaseRef.IdentityStatus, "consistent", StringComparison.OrdinalIgnoreCase))
+        {
+            string issueText = databaseRef.IdentityIssues == null ? String.Empty : String.Join(",", databaseRef.IdentityIssues);
+            throw new AscetReadException(
+                "database_identity_inconsistent",
+                "dispatch_request",
+                "Current ASCET database identity is not consistent. " + issueText);
+        }
     }
 
     private static string NormalizeRequiredString(IDictionary<string, object> payload, string key, string operation)
@@ -510,6 +526,12 @@ internal sealed class AscetWriteHostDispatcher
         Dictionary<string, object> database = new Dictionary<string, object>();
         database["name"] = databaseRef == null ? String.Empty : (databaseRef.Name ?? String.Empty);
         database["path"] = databaseRef == null ? String.Empty : (databaseRef.Path ?? String.Empty);
+        database["canonicalPath"] = databaseRef == null ? String.Empty : (databaseRef.CanonicalPath ?? String.Empty);
+        database["identityStatus"] = databaseRef == null ? "unknown" : (databaseRef.IdentityStatus ?? "unknown");
+        if (databaseRef != null && databaseRef.IdentityIssues != null && databaseRef.IdentityIssues.Count > 0)
+        {
+            database["identityIssues"] = databaseRef.IdentityIssues;
+        }
         return database;
     }
 

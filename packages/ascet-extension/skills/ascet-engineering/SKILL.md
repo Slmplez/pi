@@ -23,7 +23,7 @@ Use this Skill as the authoritative ASCET engineering workflow. Keep scope bound
 4. Freeze scope, canonical owner, modification layer, excluded objects, and success criteria; keep `blockingUnknowns` explicit.
 5. For non-trivial tasks, maintain a concrete todolist covering scope, evidence, design, preflight/write, and completion without splitting every read or Tool call.
 6. Before `PREFLIGHTED`, present a complete implementation plan: requirement, ownership, source/transform/consumer, concrete ESDL patch, Element/Parameter metadata, Dependencies/Variants, write order, assumptions, and risks.
-7. For ordinary mutations, run exact-target preflight and execute the unchanged payload with `executeWrite=true`. For one complete Provider -> Imported -> Local dependency chain, call `configure_parameter_dependency_chain` once with the complete inline definition.
+7. For ordinary mutations, use one `ascet_edit` call with `intent=apply`; use `intent=preview` only for a non-mutating preview. For dependency changes, call `ascet_read.read_dependent_chain` first, then `ascet_edit.set_dependent_chain`.
 8. Accept passed automatic action-specific verification as completion. Stop on conflict, rollback failure, unknown outcome, or evidence that invalidates the frozen target or scope.
 
 ## Evidence and planning state
@@ -44,10 +44,10 @@ Use this Skill as the authoritative ASCET engineering workflow. Keep scope bound
 
 ## Write readiness and stop conditions
 
-- Ordinary `ascet_edit` preflight uses the exact target and approved changes and must not mutate ASCET. Execute only the same payload with `executeWrite=true` after required confirmation.
-- Preflight, plan, diff, and dry-run remain available when a Component is not editable. Immediately before every real mutation, runtime checks the affected Component internally in the same ASCET session and blocks unless `editable=true`.
-- Do not call `mode=check` merely to authorize a write; earlier checks do not grant permission. Never call `mode=set` automatically; acquiring editability requires explicit user intent.
-- A complete parameter dependency chain is the explicit exception: one `configure_parameter_dependency_chain` call with no public preflight, `executeWrite`, `mode`, `planId`, commit, batch, or independent writes. Runtime checks Provider and Consumer editability before mutation and checks the affected Component again before compensating writes.
+- `ascet_edit` with `intent=preview` is non-mutating. `intent=apply` performs exact-target preflight, permission evaluation, optional approval, revalidation, optional editability acquisition, mutation, and mandatory readback in the same call.
+- Preview, diff, and dry-run remain available when a Component is not editable. Immediately before every real mutation, runtime rechecks the affected Component inside the guarded ASCET session and either acquires editability when authorized or blocks before the primary mutation.
+- Do not call `mode=check` merely to authorize a write; earlier checks do not grant permission. Do not issue a separate `mode=set` as part of an ordinary write flow; the guarded `intent=apply` call owns authorized editability acquisition and reports that the editable state may persist.
+- For dependency chains, use `ascet_edit.create_dependent_chain` with complete explicit Element and binding definitions. Runtime may use live native Element Search to resolve one exact Provider, creates only missing Elements, reuses exact matches, rejects conflicts, and automatically verifies apply results. Use `ascet_read.read_dependent_chain` for current-state inspection.
 - Runtime automatically verifies executed writes. A successful `ascet_edit` or chain `committed`/`no_change` result completes the write; read again only for the next engineering step, failure diagnosis, or explicit request.
 - Stop and report failure or unknown outcome without blind retry. Stop and ask when target identity, canonical ownership, scope, values, mappings, editability, or required evidence remains ambiguous.
 
@@ -80,3 +80,4 @@ Use this Skill as the authoritative ASCET engineering workflow. Keep scope bound
 | Tool calls/writes | `references/tool-recipes.md`, `references/write-execution.md` |
 
 Do not replace missing evidence with guessed business values, provider paths, ranges, formulas, or implementation settings.
+

@@ -13,12 +13,27 @@ async function createTree(root: string) {
 	store.create({
 		domain: "tree",
 		target: {},
+		sourceIdentity: {
+			database: { name: "DB", path: "C:/Repo/DB", status: "consistent", issues: [], fingerprint: "a".repeat(64) },
+		},
 		items: [
 			{ path: "DB\\Project", oid: "project-1", kind: "project" },
 			{ path: "DB\\Modules\\Module", oid: "module-1", kind: "module" },
 			{ path: "DB\\Enums\\Mode", oid: "enum-1", kind: "enumeration" },
 		],
-		coverage: { status: "complete_for_scope" },
+		coverage: {
+			status: "complete_for_scope",
+			scopeKind: "database",
+			scopeId: "database:DB",
+			completeness: "complete",
+			truncated: false,
+			collectors: {
+				projects: { completed: true },
+				folders: { completed: true },
+				components: { completed: true },
+				enumerations: { completed: true },
+			},
+		},
 		truncated: false,
 		delivery: "stored",
 	});

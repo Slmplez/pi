@@ -21,7 +21,7 @@ export interface AscetMutationReconcileWriteParams {
 	databaseFingerprint: string;
 	targetOid: string;
 	expectedGeneration: number;
-	executeWrite: true;
+	intent: "apply";
 }
 
 export interface AscetMutationReconcileWriteOptions {
@@ -177,11 +177,11 @@ export async function runAscetMutationReconcileWrite(
 				componentPath: journal.canonicalPath,
 				specFile,
 				mode: "restore",
-				intent: "restore",
+				intent: "apply",
+				elementIntent: "restore",
 				deleteMissing: true,
 				recreateIncompatible: params.mode === "rollback_to_before",
 				verifyReadback: true,
-				executeWrite: true,
 			},
 			options,
 		);
@@ -246,7 +246,7 @@ export interface AscetMutationAcceptCurrentParams {
 	databaseFingerprint: string;
 	targetOid: string;
 	expectedGeneration: number;
-	executeWrite: true;
+	intent: "apply";
 }
 
 export interface AscetMutationAcceptCurrentResult {

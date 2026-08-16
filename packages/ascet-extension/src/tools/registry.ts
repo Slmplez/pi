@@ -1,4 +1,4 @@
-import { ascetBatchWriteTool } from "./batch-write/index.ts";
+﻿import { ascetBatchWriteTool } from "./batch-write/index.ts";
 import { ascetCapabilitiesTool } from "./capabilities/index.ts";
 import { ascetDiffTool } from "./diff/index.ts";
 import { ascetEditTool } from "./edit/index.ts";
@@ -9,41 +9,50 @@ import { ascetSchedulerStatusTool } from "./scheduler-status/index.ts";
 import { ascetSearchTool } from "./search/index.ts";
 import { ascetStatusTool } from "./status/index.ts";
 
-export const canonicalOpsTools = [
-	ascetStatusTool,
-	ascetCapabilitiesTool,
-	ascetRecoverTool,
-	ascetSchedulerStatusTool,
-] as const;
+function registryKeys<const T extends Readonly<Record<string, unknown>>>(registry: T): Array<keyof T & string> {
+	return Object.keys(registry) as Array<keyof T & string>;
+}
 
-export const canonicalDomainTools = [
-	ascetSearchTool,
-	ascetGetTool,
-	ascetReadTool,
-	ascetDiffTool,
-	ascetEditTool,
-] as const;
+const canonicalOpsToolRegistry = {
+	ascet_status: ascetStatusTool,
+	ascet_capabilities: ascetCapabilitiesTool,
+	ascet_recover: ascetRecoverTool,
+	ascet_scheduler_status: ascetSchedulerStatusTool,
+} as const;
 
-export const canonicalAscetToolNames = [
-	"ascet_status",
-	"ascet_capabilities",
-	"ascet_recover",
-	"ascet_scheduler_status",
-	"ascet_search",
-	"ascet_get",
-	"ascet_read",
-	"ascet_diff",
-	"ascet_edit",
-] as const;
+const canonicalDomainToolRegistry = {
+	ascet_search: ascetSearchTool,
+	ascet_get: ascetGetTool,
+	ascet_read: ascetReadTool,
+	ascet_diff: ascetDiffTool,
+	ascet_edit: ascetEditTool,
+} as const;
 
-export const canonicalAscetTools = [...canonicalOpsTools, ...canonicalDomainTools] as const;
-export const hiddenAscetTools = [ascetBatchWriteTool] as const;
-export const allAscetTools = [...canonicalAscetTools, ...hiddenAscetTools] as const;
-export const allAscetToolNames = [...canonicalAscetToolNames, "ascet_batch_write"] as const;
-export const allAscetToolNameSet = new Set<string>(allAscetToolNames);
+const hiddenAscetToolRegistry = {
+	ascet_batch_write: ascetBatchWriteTool,
+} as const;
 
-for (const [index, tool] of canonicalAscetTools.entries()) {
-	if (tool.name !== canonicalAscetToolNames[index]) {
-		throw new Error(`ASCET canonical tool order mismatch: ${tool.name}`);
+const canonicalAscetToolRegistry = {
+	...canonicalOpsToolRegistry,
+	...canonicalDomainToolRegistry,
+} as const;
+const allAscetToolRegistry = {
+	...canonicalAscetToolRegistry,
+	...hiddenAscetToolRegistry,
+} as const;
+
+for (const [name, tool] of Object.entries(allAscetToolRegistry)) {
+	if (tool.name !== name) {
+		throw new Error(`ASCET tool registry name mismatch: ${name} != ${tool.name}`);
 	}
 }
+
+export const canonicalOpsTools = Object.values(canonicalOpsToolRegistry);
+export const canonicalDomainTools = Object.values(canonicalDomainToolRegistry);
+export const canonicalAscetTools = Object.values(canonicalAscetToolRegistry);
+export const hiddenAscetTools = Object.values(hiddenAscetToolRegistry);
+export const allAscetTools = Object.values(allAscetToolRegistry);
+
+export const canonicalAscetToolNames = registryKeys(canonicalAscetToolRegistry);
+export const allAscetToolNames = registryKeys(allAscetToolRegistry);
+export const allAscetToolNameSet = new Set<string>(allAscetToolNames);

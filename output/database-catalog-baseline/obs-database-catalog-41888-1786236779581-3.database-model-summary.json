@@ -1,0 +1,59 @@
+{
+  "catalogResultId": "obs-database-catalog-41888-1786236779581-3",
+  "sourceTreeResultId": "obs-tree-live-20260808-full-database",
+  "include": [
+    "message"
+  ],
+  "messageDepth": 0,
+  "capturedAt": "2026-08-09T00:52:59.581Z",
+  "coverage": {
+    "status": "complete_for_scope",
+    "failureCount": 0
+  },
+  "sourceTreeCounts": {
+    "sourceTreeRowCount": 10670,
+    "projectCount": 75,
+    "moduleRowCount": 859,
+    "uniqueModuleCount": 428,
+    "moduleAliasCount": 431,
+    "enumerationCount": 708,
+    "classRowCount": 7069,
+    "invalidRowCount": 0
+  },
+  "perTypeCounts": {
+    "parameterClasses": 0,
+    "enumerations": 0,
+    "modules": 0,
+    "messages": 24656
+  },
+  "perRelationCounts": {
+    "moduleMessageEdges": 24656
+  },
+  "liveCounts": {
+    "moduleInputCount": 428,
+    "moduleSuccessCount": 428,
+    "moduleFailureCount": 0,
+    "sendMessageCount": 11335,
+    "receiveMessageCount": 12773,
+    "sendReceiveMessageCount": 548,
+    "projectComplexEdgeCount": 0,
+    "parameterClassCount": 0,
+    "parameterClassEdgeCount": 0,
+    "parameterEnumEdgeCount": 0,
+    "messageCount": 24656,
+    "moduleMessageEdgeCount": 24656,
+    "messageEnumEdgeCount": 0
+  },
+  "perStageTimings": {
+    "projectScanMs": 0,
+    "parameterClosureMs": 0,
+    "moduleScanMs": 84874,
+    "totalServiceMs": 84874,
+    "sessionOpenMs": 218,
+    "sessionCloseMs": 2,
+    "sourceTreeScanMs": 29.513500000000022,
+    "liveScanMs": 87936.686
+  },
+  "warnings": [],
+  "failures": []
+}

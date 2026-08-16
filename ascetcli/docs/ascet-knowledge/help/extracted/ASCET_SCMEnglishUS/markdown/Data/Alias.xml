@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CatapultAliasFile Version="1">
+    <Map Name="Compare_Configuration_Dialog_Box" Link="SCM_Compare_Configuration_Dialog_Box.htm" ResolvedId="270026" />
+    <Map Name="Select_Revision_Dialog_Box" Link="SCM_Select_Revision_Dialog_Box.htm" ResolvedId="270010" />
+    <Map Name="Driver_Selection_Dialog_Box" Link="SCM_Driver_Selection_Dialog_Box.htm" ResolvedId="270001" />
+    <Map Name="ASCET_SCM_Delete_Elements_Dialog_Box" Link="SCM_ASCET-SCM_Delete_Elements_Dialog_Box.htm" ResolvedId="270014" />
+    <Map Name="Add_and_Commit_Configuration_Dialog_Box" Link="SCM_Add_and_Commit_Configuration_Dialog_Box.htm" ResolvedId="270020" />
+    <Map Name="Repository_Selection_Dialog_Box" Link="SCM_Repository_Selection_Dialog_Box.htm" ResolvedId="270031" />
+    <Map Name="Update_Dialog_Box" Link="SCM_Update_Dialog_Box.htm" ResolvedId="270004" />
+    <Map Name="Checkout_Configuration_Dialog_Box" Link="SCM_Checkout_Configuration_Dialog_Box.htm" ResolvedId="270019" />
+    <Map Name="Subversion_Settings_Dialog_Box" Link="SCM_Subversion_Settings_Dialog_Box.htm" ResolvedId="270003" />
+    <Map Name="Update_to_Latest_Revision_Dialog_Box" Link="SCM_Update_to_Latest_DialogBox.htm" ResolvedId="270005" />
+    <Map Name="Detailed_Result_Information_Dialog_Box" Link="SCM_Detailed_Result_Information_Dialog_Box.htm" ResolvedId="270017" />
+    <Map Name="Time_Consuming_Operation_Dialog_Box" Link="SCM_Time_Consuming_Operation_Dialog_Box.htm" ResolvedId="270032" />
+    <Map Name="Delete_Dialog_Box" Link="SCM_Delete_Dialog_Box.htm" ResolvedId="270015" />
+    <Map Name="Local_Modifications_Detected_Dialog_Box" Link="SCM_Local_Modifications_Detected_Dialog_Box.htm" ResolvedId="270016" />
+    <Map Name="Commit_Dialog_Box" Link="SCM_Commit_Dialog_Box.htm" ResolvedId="270006" />
+    <Map Name="Version_Details_Dialog_Box" Link="SCM_Version_Details_Dialog_Box.htm" ResolvedId="270009" />
+    <Map Name="Update_Configuration_Dialog_Box" Link="SCM_Update_Configuration_Dialog_Box.htm" ResolvedId="270021" />
+    <Map Name="Commit_Configuration_Dialog_Box" Link="SCM_Commit_Configuration_Dialog_Box.htm" ResolvedId="270023" />
+    <Map Name="Result_Dialog_Box" Link="SCM_Result_Dialog_Box.htm" ResolvedId="270030" />
+    <Map Name="Commit_without_Previous_Lock_Dialog_Box" Link="SCM_Commit_without_Previous_Lock_Dialog_Box.htm" ResolvedId="270036" />
+    <Map Name="Overview" Link="SCM_Overview.htm" ResolvedId="270000" />
+    <Map Name="Add_and_Commit_Dialog_Box" Link="SCM_Add_and_Commit_Dialog_Box.htm" ResolvedId="270034" />
+    <Map Name="Item_Details_Dialog_Box" Link="SCM_Item_Details_Dialog_Box.htm" ResolvedId="270018" />
+    <Map Name="Items_under_Source_Control_Dialog_Box" Link="SCM_Items_under_Source_Control_Dialog_Box.htm" ResolvedId="270012" />
+    <Map Name="Configuration_Details_Dialog_Box" Link="SCM_Configuration_Details_Dialog_Box.htm" ResolvedId="270025" />
+    <Map Name="Edit_without_Lock_Dialog_Box" Link="SCM_Edit_without_Lock_Dialog_Box.htm" ResolvedId="270035" />
+    <Map Name="Checkout_Dialog_Box" Link="SCM_Checkout_Dialog_Box.htm" ResolvedId="270002" />
+    <Map Name="Show_Log_Dialog_Box" Link="SCM_Show_Log_Dialog_Box.htm" ResolvedId="270013" />
+    <Map Name="Compare_Configuration_for_Verification_Dialog_Box" Link="SCM_VerifyConfiguration_DialogBox.htm" ResolvedId="270027" />
+    <Map Name="Update_to_Latest_Configuration_Dialog_Box" Link="SCM_Update_to_Latest_Configuration_Dialog_Box.htm" ResolvedId="270039" />
+    <Map Name="Edit_Attribute_Value_Dialog_Box" Link="SCM_Edit_Attribute_Value_Dialog_Box.htm" ResolvedId="270033" />
+    <Map Name="Conflicts_Found_Dialog_Box" Link="SCM_Conflicts_Found_Dialog_Box.htm" ResolvedId="270028" />
+</CatapultAliasFile>

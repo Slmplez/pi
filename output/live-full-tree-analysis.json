@@ -1,0 +1,280 @@
+{
+  "coverage": {
+    "status": "complete_for_scope",
+    "foldersVisited": 1853,
+    "componentsScanned": 8065
+  },
+  "truncated": false,
+  "database": {
+    "name": "C:\\Repo\\F05_IPB_L2_0429",
+    "path": "C:\\Repo\\"
+  },
+  "itemCount": 10670,
+  "kindCounts": {
+    "folder": 1844,
+    "class": 7069,
+    "module": 859,
+    "enumeration": 708,
+    "project": 75,
+    "statemachine": 62,
+    "asceticon": 46,
+    "signal": 7
+  },
+  "projectCount": 75,
+  "projectsWithMembers": 75,
+  "projectsWithoutMembers": 0,
+  "projectMemberEdgeCount": 431,
+  "projectMemberKindCounts": {
+    "module": 431
+  },
+  "uniqueProjectRootOids": 428,
+  "projectGroupCount": 75,
+  "largestGroups": [
+    {
+      "projectCount": 1,
+      "memberCount": 80,
+      "uniqueRootCount": 80,
+      "sampleProjects": [
+        "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010"
+      ]
+    },
+    {
+      "projectCount": 1,
+      "memberCount": 19,
+      "uniqueRootCount": 19,
+      "sampleProjects": [
+        "PlatformLibrary\\Package\\VDC_Component\\Component\\VDC_MAIN\\VDC_ISS_BAonly\\VdcIssBAonly_ECU_CSW_BB00001"
+      ]
+    },
+    {
+      "projectCount": 1,
+      "memberCount": 17,
+      "uniqueRootCount": 17,
+      "sampleProjects": [
+        "CN_Libary\\CNMS_IPB20\\IPBCustTwoDrvUnitAxleSplit\\IPBCustTwoDrvUnitAxleSplit_ECU_CSW_BB88010"
+      ]
+    },
+    {
+      "projectCount": 1,
+      "memberCount": 16,
+      "uniqueRootCount": 16,
+      "sampleProjects": [
+        "CN_Libary\\CNMS_IPB20\\IPBCustOneDrvUnitxwD\\IPBCustOneDrvUnitxwD_ECU_CSW_BB88010"
+      ]
+    },
+    {
+      "projectCount": 1,
+      "memberCount": 12,
+      "uniqueRootCount": 12,
+      "sampleProjects": [
+        "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Component\\CSMPlus_ECU_CSW_BB00001"
+      ]
+    },
+    {
+      "projectCount": 1,
+      "memberCount": 11,
+      "uniqueRootCount": 11,
+      "sampleProjects": [
+        "PlatformLibrary\\Package\\BoostFunctions\\Component\\BoostCore\\BoostFcns_ECU_CSW_BB00001"
+      ]
+    },
+    {
+      "projectCount": 1,
+      "memberCount": 10,
+      "uniqueRootCount": 10,
+      "sampleProjects": [
+        "CN_Libary\\CNMS_IPB20\\IPBCustNonHADHAP\\IPBCustNonHADHAP_ECU_CSW_BB88010"
+      ]
+    },
+    {
+      "projectCount": 1,
+      "memberCount": 8,
+      "uniqueRootCount": 8,
+      "sampleProjects": [
+        "PlatformLibrary\\Package\\DragTorqueController\\Component\\DTFDTCDTE\\Dtc5ms20ms_ECU_CSW_BB00001"
+      ]
+    },
+    {
+      "projectCount": 1,
+      "memberCount": 8,
+      "uniqueRootCount": 8,
+      "sampleProjects": [
+        "PlatformLibrary\\Package\\WheelSpeedSensors\\Component\\SspWssWscEdgeAllAddSigTtcNoGc\\SspWssWscEdgeAllAddSigTtcNoGc_ECU_CSW_BB00001"
+      ]
+    },
+    {
+      "projectCount": 1,
+      "memberCount": 7,
+      "uniqueRootCount": 7,
+      "sampleProjects": [
+        "PlatformLibrary\\Package\\TCS_TractionControlSystem\\Component\\Core\\TCS_ECU_CSW_BB00001"
+      ]
+    },
+    {
+      "projectCount": 1,
+      "memberCount": 6,
+      "uniqueRootCount": 6,
+      "sampleProjects": [
+        "CN_Libary\\Package\\LDM\\ADC\\Component\\Main\\ADCMainCustIPB_ECU_CSW_BB00001"
+      ]
+    },
+    {
+      "projectCount": 1,
+      "memberCount": 6,
+      "uniqueRootCount": 6,
+      "sampleProjects": [
+        "PlatformLibrary\\Package\\ABC_AdaptiveBrakeController\\Component\\ABC_ECU_CSW_BB00001"
+      ]
+    },
+    {
+      "projectCount": 1,
+      "memberCount": 6,
+      "uniqueRootCount": 6,
+      "sampleProjects": [
+        "PlatformLibrary\\Package\\VLC_VehicleLongitudinalControl\\VLC_ACC\\component\\VLC\\VLC_ECU_CSW_BB00001"
+      ]
+    },
+    {
+      "projectCount": 1,
+      "memberCount": 6,
+      "uniqueRootCount": 6,
+      "sampleProjects": [
+        "PlatformLibrary\\Package\\LCO_LongitudinalControlOffRoad\\Component\\LTP_ECU_CSW_BB00001"
+      ]
+    },
+    {
+      "projectCount": 1,
+      "memberCount": 6,
+      "uniqueRootCount": 6,
+      "sampleProjects": [
+        "PlatformLibrary\\Package\\LateralDynamicsInterface\\Component\\LDI\\LDI_ECU_CSW_BB00001"
+      ]
+    },
+    {
+      "projectCount": 1,
+      "memberCount": 6,
+      "uniqueRootCount": 6,
+      "sampleProjects": [
+        "PlatformLibrary_NewBrakeSystems\\Package\\CRB_CooperativeRegenerativeBraking\\Component\\CRB_IPB\\CRBipb_ECU_CSW_BB00001"
+      ]
+    },
+    {
+      "projectCount": 1,
+      "memberCount": 5,
+      "uniqueRootCount": 5,
+      "sampleProjects": [
+        "PlatformLibrary\\Package\\AntiLockController\\Component\\ALC\\ALC5ms20ms_ECU_CSW_BB00001"
+      ]
+    },
+    {
+      "projectCount": 1,
+      "memberCount": 5,
+      "uniqueRootCount": 5,
+      "sampleProjects": [
+        "PlatformLibrary\\Package\\Hydraulics\\Component\\HAL_IPB\\HAL_IPB_ECU_CSW_BB00001"
+      ]
+    },
+    {
+      "projectCount": 1,
+      "memberCount": 5,
+      "uniqueRootCount": 5,
+      "sampleProjects": [
+        "PlatformLibrary\\Package\\LDMCoor_LongitudinalDynamicArbitrator\\Component\\LDMCoordinator_ECU_CSW_BB00001"
+      ]
+    },
+    {
+      "projectCount": 1,
+      "memberCount": 5,
+      "uniqueRootCount": 5,
+      "sampleProjects": [
+        "PlatformLibrary\\Package\\LCO_LongitudinalControlOffRoad\\Component\\CAX_ECU_CSW_BB00001"
+      ]
+    }
+  ],
+  "maxMembersPerProject": 80,
+  "projectsByMemberCountTop": [
+    {
+      "path": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010",
+      "memberCount": 80
+    },
+    {
+      "path": "PlatformLibrary\\Package\\VDC_Component\\Component\\VDC_MAIN\\VDC_ISS_BAonly\\VdcIssBAonly_ECU_CSW_BB00001",
+      "memberCount": 19
+    },
+    {
+      "path": "CN_Libary\\CNMS_IPB20\\IPBCustTwoDrvUnitAxleSplit\\IPBCustTwoDrvUnitAxleSplit_ECU_CSW_BB88010",
+      "memberCount": 17
+    },
+    {
+      "path": "CN_Libary\\CNMS_IPB20\\IPBCustOneDrvUnitxwD\\IPBCustOneDrvUnitxwD_ECU_CSW_BB88010",
+      "memberCount": 16
+    },
+    {
+      "path": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Component\\CSMPlus_ECU_CSW_BB00001",
+      "memberCount": 12
+    },
+    {
+      "path": "PlatformLibrary\\Package\\BoostFunctions\\Component\\BoostCore\\BoostFcns_ECU_CSW_BB00001",
+      "memberCount": 11
+    },
+    {
+      "path": "CN_Libary\\CNMS_IPB20\\IPBCustNonHADHAP\\IPBCustNonHADHAP_ECU_CSW_BB88010",
+      "memberCount": 10
+    },
+    {
+      "path": "PlatformLibrary\\Package\\DragTorqueController\\Component\\DTFDTCDTE\\Dtc5ms20ms_ECU_CSW_BB00001",
+      "memberCount": 8
+    },
+    {
+      "path": "PlatformLibrary\\Package\\WheelSpeedSensors\\Component\\SspWssWscEdgeAllAddSigTtcNoGc\\SspWssWscEdgeAllAddSigTtcNoGc_ECU_CSW_BB00001",
+      "memberCount": 8
+    },
+    {
+      "path": "PlatformLibrary\\Package\\TCS_TractionControlSystem\\Component\\Core\\TCS_ECU_CSW_BB00001",
+      "memberCount": 7
+    },
+    {
+      "path": "CN_Libary\\Package\\LDM\\ADC\\Component\\Main\\ADCMainCustIPB_ECU_CSW_BB00001",
+      "memberCount": 6
+    },
+    {
+      "path": "PlatformLibrary_NewBrakeSystems\\Package\\CRB_CooperativeRegenerativeBraking\\Component\\CRB_IPB\\CRBipb_ECU_CSW_BB00001",
+      "memberCount": 6
+    },
+    {
+      "path": "PlatformLibrary\\Package\\ABC_AdaptiveBrakeController\\Component\\ABC_ECU_CSW_BB00001",
+      "memberCount": 6
+    },
+    {
+      "path": "PlatformLibrary\\Package\\LateralDynamicsInterface\\Component\\LDI\\LDI_ECU_CSW_BB00001",
+      "memberCount": 6
+    },
+    {
+      "path": "PlatformLibrary\\Package\\LCO_LongitudinalControlOffRoad\\Component\\LTP_ECU_CSW_BB00001",
+      "memberCount": 6
+    },
+    {
+      "path": "PlatformLibrary\\Package\\VLC_VehicleLongitudinalControl\\VLC_ACC\\component\\VLC\\VLC_ECU_CSW_BB00001",
+      "memberCount": 6
+    },
+    {
+      "path": "PlatformLibrary\\Package\\AntiLockController\\Component\\ALC\\ALC5ms20ms_ECU_CSW_BB00001",
+      "memberCount": 5
+    },
+    {
+      "path": "PlatformLibrary\\Package\\CCO_CruiseControlOffroad\\Component\\CCO_ECU_CSW_BB00001",
+      "memberCount": 5
+    },
+    {
+      "path": "PlatformLibrary\\Package\\EMC_EmergencyModeControl\\Component\\Main\\EMC_Main_ECU_CSW_BB00001",
+      "memberCount": 5
+    },
+    {
+      "path": "PlatformLibrary\\Package\\Hydraulics\\Component\\HAL_IPB\\HAL_IPB_ECU_CSW_BB00001",
+      "memberCount": 5
+    }
+  ],
+  "orphanMemberRowCount": 0,
+  "unmappedProjectMemberCount": 0,
+  "canonicalOidConflictCount": 0
+}

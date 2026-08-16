@@ -22,7 +22,9 @@ Publish `extension`, `ui`, then the aggregate package. Refresh compatible bundle
 - Keep aggregate dependencies and `bundledDependencies` synchronized.
 - Update compatible stable external dependencies automatically before every release.
 - Do not take breaking dependency updates unless the user explicitly approves them.
-- Do not publish until tests, packaging checks, and required live ASCET validation pass.
+- Do not publish until focused tests, packaging checks, required live ASCET validation, and `npm run check` pass.
+- Run the repository-wide `test.sh` gate when Bash is available. On Windows without Bash/WSL, execute an equivalent PowerShell run that isolates and restores `auth.json`, sets `PI_NO_LOCAL_LLM=1`, removes provider credentials, and runs `npm test`.
+- Treat failures from untouched packages as baseline exceptions only after the user explicitly accepts the unverified scope. Never waive failures in changed packages, packaging, ASCET live validation, or `npm run check`.
 - Request one explicit confirmation immediately before the first irreversible `npm publish`.
 - Publish serially. Never use batch publication.
 - Write generated `.tgz` files only to a temporary directory outside every package source directory.
@@ -119,7 +121,9 @@ bash ./test.sh
 npm run check
 ```
 
-For runtime, Bridge, tool, contract, prompt, or Skill changes, run the required serial real ASCET Live validation against the approved database. Treat nominal preflight or plan output as insufficient. Require committed writes, readback evidence, cleanup, and zero residual locks. If live validation is skipped, obtain explicit user acceptance and state the unverified scope.
+On Windows without Bash/WSL, use the equivalent PowerShell gate described above and record any accepted untouched-package baseline failures in the final release summary.
+
+For runtime, Bridge, tool, contract, prompt, or Skill changes, run the required serial real ASCET Live validation against the approved database. Treat nominal preflight or plan output as insufficient. Require committed writes, readback evidence, cleanup-only verification, and zero residual locks. If live validation is skipped, obtain explicit user acceptance and state the unverified scope.
 
 ## 4. Pack the First-Party Packages
 

@@ -1,0 +1,55 @@
+{
+  "delivery": "stored",
+  "catalog": {
+    "resultId": "obs-database-catalog-38136-1786458211262-0",
+    "sourceTreeResultId": "obs-tree-38136-1786458211173-0",
+    "include": [
+      "module",
+      "enumeration"
+    ],
+    "artifacts": {
+      "catalog": {
+        "dataPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\20260811-root-fix-live-8A8C254E\\artifacts\\obs-database-catalog-38136-1786458211262-0.database-model-catalog.ndjson",
+        "itemCount": 1136
+      },
+      "relations": {
+        "projectComplexEdges": {
+          "notCreatedReason": "scan_not_requested"
+        },
+        "parameterClassEdges": {
+          "notCreatedReason": "scan_not_requested"
+        },
+        "parameterEnumEdges": {
+          "notCreatedReason": "scan_not_requested"
+        },
+        "projectModuleEdges": {
+          "dataPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\20260811-root-fix-live-8A8C254E\\artifacts\\obs-database-catalog-38136-1786458211262-0.project-module-edges.ndjson",
+          "itemCount": 431
+        },
+        "moduleMessageEdges": {
+          "notCreatedReason": "scan_not_requested"
+        },
+        "messageEnumEdges": {
+          "notCreatedReason": "scan_not_requested"
+        }
+      },
+      "summaryPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\20260811-root-fix-live-8A8C254E\\artifacts\\obs-database-catalog-38136-1786458211262-0.database-model-summary.json",
+      "metaPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\20260811-root-fix-live-8A8C254E\\artifacts\\obs-database-catalog-38136-1786458211262-0.database-model.meta.json",
+      "enumerations": {
+        "dataPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\20260811-root-fix-live-8A8C254E\\artifacts\\obs-database-catalog-38136-1786458211262-0.enumerations.ndjson",
+        "itemCount": 708
+      },
+      "modules": {
+        "dataPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\20260811-root-fix-live-8A8C254E\\artifacts\\obs-database-catalog-38136-1786458211262-0.modules.ndjson",
+        "itemCount": 428
+      }
+    }
+  },
+  "coverage": {
+    "status": "complete_for_scope"
+  },
+  "timings": {
+    "sourceTreeScanMs": 72.08959999999934,
+    "liveScanMs": 0
+  }
+}

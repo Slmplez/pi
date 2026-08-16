@@ -1,0 +1,75 @@
+{
+  "stage": "editable-Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_CRC_Interface\\TCS_CUS_CRC_Interface",
+  "request": {
+    "toolName": "ascet_edit",
+    "params": {
+      "mode": "check",
+      "componentPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_CRC_Interface\\TCS_CUS_CRC_Interface"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"editable\": false\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "ok",
+        "data": false,
+        "warnings": []
+      },
+      "raw": {
+        "ok": true,
+        "data": false,
+        "request": {
+          "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "component_editable_check",
+            "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_CRC_Interface\\TCS_CUS_CRC_Interface",
+            "--json"
+          ],
+          "timeoutMs": 60000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"editable\":false},\"error\":null,\"meta\":{\"bridgePid\":30892,\"bridgeGeneration\":\"4f5d2210-ff94-4d04-9d2d-50a84a6215c7\",\"durationMs\":224,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"component_editable_check\"}}\r\n",
+        "stderr": "",
+        "exitCode": 0,
+        "timedOut": false,
+        "aborted": false,
+        "operationId": "component_editable_check"
+      },
+      "tool": "ascet_edit",
+      "action": "check",
+      "mode": "check",
+      "value": false,
+      "command": {
+        "logicalCommandId": "AscetComponentEditableCheck",
+        "backendCommandId": "AscetComponentEditableCheck",
+        "operation": "component_editable_check"
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "component_editable_check",
+            "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_CRC_Interface\\TCS_CUS_CRC_Interface",
+            "--json"
+          ],
+          "timeoutMs": 60000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 0,
+        "timedOut": false,
+        "stderr": ""
+      }
+    }
+  }
+}

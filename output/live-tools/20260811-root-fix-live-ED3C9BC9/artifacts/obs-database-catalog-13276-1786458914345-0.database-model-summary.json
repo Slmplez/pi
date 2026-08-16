@@ -1,0 +1,40 @@
+{
+  "catalogResultId": "obs-database-catalog-13276-1786458914345-0",
+  "sourceTreeResultId": "obs-tree-13276-1786458914278-0",
+  "include": [
+    "module",
+    "enumeration"
+  ],
+  "messageDepth": 0,
+  "capturedAt": "2026-08-11T14:35:14.345Z",
+  "coverage": {
+    "status": "complete_for_scope"
+  },
+  "sourceTreeCounts": {
+    "sourceTreeRowCount": 10681,
+    "projectCount": 75,
+    "moduleRowCount": 859,
+    "uniqueModuleCount": 428,
+    "moduleAliasCount": 431,
+    "enumerationCount": 708,
+    "classRowCount": 7069,
+    "invalidRowCount": 0
+  },
+  "perTypeCounts": {
+    "parameterClasses": 0,
+    "enumerations": 708,
+    "modules": 428,
+    "messages": 0
+  },
+  "perRelationCounts": {
+    "projectModuleEdges": 431
+  },
+  "liveCounts": {},
+  "perStageTimings": {
+    "sourceTreeScanMs": 54.02399999999761,
+    "liveScanMs": 0
+  },
+  "warnings": [],
+  "failures": [],
+  "diagnostics": {}
+}

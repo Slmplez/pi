@@ -1,0 +1,146 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"changed\": {\n    \"operationName\": \"create_component\",\n    \"sequenceNumber\": 1,\n    \"writeSucceeded\": true,\n    \"summary\": \"Created ESDL class PI_LIVE_FIX_20260812_EE770C82\\\\ClassUnderTest.\",\n    \"payload\": {\n      \"component\": \"PI_LIVE_FIX_20260812_EE770C82/ClassUnderTest\",\n      \"folderPath\": \"PI_LIVE_FIX_20260812_EE770C82\",\n      \"componentName\": \"ClassUnderTest\",\n      \"kind\": \"class\",\n      \"language\": \"ESDL\",\n      \"created\": true,\n      \"alreadyExisted\": false,\n      \"verifyReadbackRequested\": true,\n      \"rollbackOnFailureRequested\": false,\n      \"readbackVerified\": true,\n      \"summary\": \"Created ESDL class PI_LIVE_FIX_20260812_EE770C82\\\\ClassUnderTest.\",\n      \"expectedDefaultScaffold\": {\n        \"verified\": false,\n        \"generatedItems\": [\n          {\n            \"kind\": \"method\",\n            \"name\": \"calc\"\n          }\n        ],\n        \"defaultEntryMethod\": \"calc\"\n      }\n    }\n  },\n  \"verification\": {\n    \"mode\": \"automatic_readback\",\n    \"source\": \"write_command\",\n    \"required\": true,\n    \"requested\": true,\n    \"verified\": true,\n    \"status\": \"passed\"\n  }\n}"
+    }
+  ],
+  "details": {
+    "outcome": {
+      "status": "ok",
+      "verified": true,
+      "data": {
+        "changed": {
+          "operationName": "create_component",
+          "sequenceNumber": 1,
+          "writeSucceeded": true,
+          "summary": "Created ESDL class PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest.",
+          "payload": {
+            "componentPath": "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+            "folderPath": "PI_LIVE_FIX_20260812_EE770C82",
+            "componentName": "ClassUnderTest",
+            "kind": "class",
+            "languageKind": "ESDL",
+            "created": true,
+            "alreadyExisted": false,
+            "verifyReadbackRequested": true,
+            "rollbackOnFailureRequested": false,
+            "readbackVerified": true,
+            "summary": "Created ESDL class PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest.",
+            "expectedDefaultScaffold": {
+              "verified": false,
+              "generatedItems": [
+                {
+                  "kind": "method",
+                  "name": "calc"
+                }
+              ],
+              "defaultEntryMethod": "calc"
+            }
+          }
+        },
+        "verification": {
+          "mode": "automatic_readback",
+          "source": "write_command",
+          "required": true,
+          "requested": true,
+          "verified": true,
+          "status": "passed"
+        },
+        "observations": {
+          "invalidated": []
+        }
+      },
+      "warnings": []
+    },
+    "raw": {
+      "ok": true,
+      "data": {
+        "type": "response",
+        "protocolVersion": 1,
+        "ok": true,
+        "result": {
+          "operationName": "create_component",
+          "sequenceNumber": 1,
+          "writeSucceeded": true,
+          "summary": "Created ESDL class PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest.",
+          "payload": {
+            "componentPath": "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+            "folderPath": "PI_LIVE_FIX_20260812_EE770C82",
+            "componentName": "ClassUnderTest",
+            "kind": "class",
+            "languageKind": "ESDL",
+            "created": true,
+            "alreadyExisted": false,
+            "verifyReadbackRequested": true,
+            "rollbackOnFailureRequested": false,
+            "readbackVerified": true,
+            "summary": "Created ESDL class PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest.",
+            "expectedDefaultScaffold": {
+              "verified": false,
+              "generatedItems": [
+                {
+                  "kind": "method",
+                  "name": "calc"
+                }
+              ],
+              "defaultEntryMethod": "calc"
+            }
+          },
+          "verification": {
+            "requested": true,
+            "attempted": true,
+            "succeeded": true,
+            "summary": "component_exists",
+            "details": {}
+          }
+        },
+        "error": null,
+        "meta": {
+          "bridgePid": 4164,
+          "bridgeGeneration": "a868ed67-1fb8-4d7f-bb80-965b7d73a32f",
+          "durationMs": 600,
+          "sessionPolicy": "fresh_session",
+          "mutationStarted": true,
+          "mode": "exec",
+          "operation": "create_component"
+        }
+      },
+      "request": {
+        "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+        "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+        "args": [
+          "exec",
+          "create_component",
+          "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+          "--kind",
+          "class",
+          "--language",
+          "ESDL",
+          "--verify-readback",
+          "--json"
+        ],
+        "timeoutMs": 240000,
+        "jobKind": "write",
+        "mutatesDatabase": true
+      },
+      "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"operationName\":\"create_component\",\"sequenceNumber\":1,\"writeSucceeded\":true,\"summary\":\"Created ESDL class PI_LIVE_FIX_20260812_EE770C82\\\\ClassUnderTest.\",\"payload\":{\"componentPath\":\"PI_LIVE_FIX_20260812_EE770C82\\\\ClassUnderTest\",\"folderPath\":\"PI_LIVE_FIX_20260812_EE770C82\",\"componentName\":\"ClassUnderTest\",\"kind\":\"class\",\"languageKind\":\"ESDL\",\"created\":true,\"alreadyExisted\":false,\"verifyReadbackRequested\":true,\"rollbackOnFailureRequested\":false,\"readbackVerified\":true,\"summary\":\"Created ESDL class PI_LIVE_FIX_20260812_EE770C82\\\\ClassUnderTest.\",\"expectedDefaultScaffold\":{\"verified\":false,\"generatedItems\":[{\"kind\":\"method\",\"name\":\"calc\"}],\"defaultEntryMethod\":\"calc\"}},\"verification\":{\"requested\":true,\"attempted\":true,\"succeeded\":true,\"summary\":\"component_exists\",\"details\":{}}},\"error\":null,\"meta\":{\"bridgePid\":4164,\"bridgeGeneration\":\"a868ed67-1fb8-4d7f-bb80-965b7d73a32f\",\"durationMs\":600,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":true,\"mode\":\"exec\",\"operation\":\"create_component\"}}\r\n",
+      "stderr": "",
+      "exitCode": 0,
+      "timedOut": false,
+      "aborted": false,
+      "operationId": "create_component"
+    },
+    "observations": {
+      "invalidated": []
+    },
+    "verification": {
+      "mode": "automatic_readback",
+      "source": "write_command",
+      "required": true,
+      "requested": true,
+      "verified": true,
+      "status": "passed"
+    }
+  }
+}

@@ -255,7 +255,7 @@ Available tools:
 
 Guidelines:
 - By default this tool returns a non-error preflight outcome and does not write.
-- Set executeWrite=true only when the user explicitly asks to apply the write; PI still requires confirmation.
+- Use `intent="apply"` only when the user explicitly asks to apply the write; PI performs preflight, optional confirmation, mutation, and readback in the same call.
 - ...
 ```
 
@@ -306,7 +306,7 @@ Guidelines:
 - interactive confirmation
 - readback verification
 
-例如 `ascet_write` 不能只靠 prompt 告诉模型“不要直接写”，还必须由工具逻辑默认 preflight、`executeWrite=true` 二次确认来兜底。
+例如 `ascet_edit` 不能只靠 prompt 告诉模型“不要直接写”，还必须由工具逻辑强制 `intent`、preflight、权限评估、可选确认和 readback 来兜底。
 
 ### 3. 工具执行时不会补充 prompt
 

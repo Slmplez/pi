@@ -1,0 +1,58 @@
+{
+  "ok": true,
+  "data": {
+    "type": "response",
+    "protocolVersion": 1,
+    "ok": true,
+    "result": {
+      "ComponentPath": "PI_LIVE_ROOTFIX_20260811_ED3C9BC9\\EnumerationUnderTest",
+      "ComponentKind": "Enumeration",
+      "LanguageKind": "Unknown",
+      "ImplementationSourceKind": "TypeDefinition",
+      "Mode": "Default",
+      "RequestedImplementationName": "",
+      "ResolvedImplementationName": "",
+      "MemoryLocation": "",
+      "OptionGenerateMethodBody": false,
+      "OptionOptimizeMethodCalls": false,
+      "Elements": [],
+      "TypeDefinition": {
+        "Name": "EnumerationUnderTest",
+        "Enumerators": [
+          "ROOTFIX_OFF",
+          "ROOTFIX_ON",
+          "ROOTFIX_DIAG"
+        ]
+      }
+    },
+    "error": null,
+    "meta": {
+      "bridgePid": 32860,
+      "bridgeGeneration": "7b7ef4d4-4500-4c3a-bbab-b5f1b1d7877d",
+      "durationMs": 290,
+      "sessionPolicy": "fresh_session",
+      "mutationStarted": false,
+      "mode": "exec",
+      "operation": "read_implementation"
+    }
+  },
+  "request": {
+    "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+    "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+    "args": [
+      "exec",
+      "read_implementation",
+      "PI_LIVE_ROOTFIX_20260811_ED3C9BC9\\EnumerationUnderTest",
+      "--json"
+    ],
+    "timeoutMs": 180000,
+    "jobKind": "read",
+    "mutatesDatabase": false
+  },
+  "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"ComponentPath\":\"PI_LIVE_ROOTFIX_20260811_ED3C9BC9\\\\EnumerationUnderTest\",\"ComponentKind\":\"Enumeration\",\"LanguageKind\":\"Unknown\",\"ImplementationSourceKind\":\"TypeDefinition\",\"Mode\":\"Default\",\"RequestedImplementationName\":\"\",\"ResolvedImplementationName\":\"\",\"MemoryLocation\":\"\",\"OptionGenerateMethodBody\":false,\"OptionOptimizeMethodCalls\":false,\"Elements\":[],\"TypeDefinition\":{\"Name\":\"EnumerationUnderTest\",\"Enumerators\":[\"ROOTFIX_OFF\",\"ROOTFIX_ON\",\"ROOTFIX_DIAG\"]}},\"error\":null,\"meta\":{\"bridgePid\":32860,\"bridgeGeneration\":\"7b7ef4d4-4500-4c3a-bbab-b5f1b1d7877d\",\"durationMs\":290,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"read_implementation\"}}\r\n",
+  "stderr": "",
+  "exitCode": 0,
+  "timedOut": false,
+  "aborted": false,
+  "operationId": "read_implementation"
+}

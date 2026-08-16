@@ -1,0 +1,207 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"status\": \"preflight\",\n  \"plan\": {\n    \"action\": \"apply_element_spec\",\n    \"params\": {\n      \"action\": \"apply_element_spec\",\n      \"phase\": \"plan\",\n      \"component\": \"PI_LIVE_ROOTFIX_20260811_ED3C9BC9/ClassUnderTest\",\n      \"intent\": \"create\",\n      \"executeWrite\": false,\n      \"elements\": [\n        {\n          \"role\": \"providerExportedParameter\",\n          \"name\": \"P_Input\",\n          \"modelType\": \"cont\",\n          \"comment\": \"ASCET root-fix live validation input\",\n          \"calibration\": false,\n          \"range\": {\n            \"mode\": \"none\"\n          },\n          \"data\": {\n            \"mode\": \"ascetDefault\"\n          },\n          \"implementation\": {\n            \"mode\": \"ascetDefault\"\n          }\n        },\n        {\n          \"role\": \"localDependentParameter\",\n          \"name\": \"P_Dependent\",\n          \"modelType\": \"cont\",\n          \"comment\": \"ASCET root-fix live validation dependent\",\n          \"calibration\": false,\n          \"range\": {\n            \"mode\": \"none\"\n          },\n          \"implementation\": {\n            \"mode\": \"ascetDefault\"\n          }\n        }\n      ]\n    },\n    \"backendPreflight\": {\n      \"operation\": \"diff_element_spec\",\n      \"validated\": true,\n      \"liveElementCount\": 0,\n      \"liveSnapshotHash\": \"841e0f88a39e603337a04e1187e263557d4a444878a179779b4c7b3e91da5f2f\",\n      \"catalogSnapshot\": {\n        \"identity\": {\n          \"componentOID\": \"040g00001g001qg7105gbmqme8hg2\"\n        }\n      },\n      \"catalogIdentity\": {\n        \"componentOID\": \"040g00001g001qg7105gbmqme8hg2\"\n      },\n      \"normalizedSpecHash\": \"31841ce8d46ce10e5482a675c3a52a171be9eeef55ec3e9b1082d71e3798b436\",\n      \"resolvedIntent\": \"create\",\n      \"resolvedOperations\": [\n        {\n          \"name\": \"P_Input\",\n          \"operation\": \"create\"\n        },\n        {\n          \"name\": \"P_Dependent\",\n          \"operation\": \"create\"\n        }\n      ],\n      \"warnings\": [\n        \"P_Input: data.mode=ascetDefault explicitly selects ASCET default data.\",\n        \"P_Input: implementation.mode=ascetDefault explicitly selects ASCET default implementation.\",\n        \"P_Dependent: implementation.mode=ascetDefault explicitly selects ASCET default implementation.\"\n      ],\n      \"normalizedSpec\": {\n        \"elements\": [\n          {\n            \"name\": \"P_Input\",\n            \"kind\": \"parameter\",\n            \"modelType\": \"cont\",\n            \"scope\": \"exported\",\n            \"comment\": \"ASCET root-fix live validation input\",\n            \"calibration\": false\n          },\n          {\n            \"name\": \"P_Dependent\",\n            \"kind\": \"parameter\",\n            \"modelType\": \"cont\",\n            \"scope\": \"local\",\n            \"comment\": \"ASCET root-fix live validation dependent\",\n            \"calibration\": false\n          }\n        ]\n      },\n      \"result\": {\n        \"component\": \"PI_LIVE_ROOTFIX_20260811_ED3C9BC9/ClassUnderTest\",\n        \"addedElements\": [\n          {\n            \"name\": \"P_Input\",\n            \"kind\": \"Parameter\",\n            \"signature\": \"Parameter ModelType=cont Scope=exported Calibration=False\"\n          },\n          {\n            \"name\": \"P_Dependent\",\n            \"kind\": \"Parameter\",\n            \"signature\": \"Parameter ModelType=cont Scope=local Calibration=False\"\n          }\n        ],\n        \"summary\": \"2 added, 0 removed, 0 modified, 0 incompatible\"\n      },\n      \"limitations\": [\n        \"diff_element_spec validates and plans the spec without applying Data/Implementation writes or readback.\"\n      ]\n    },\n    \"version\": 2,\n    \"planId\": \"58b4368a-b39d-455c-8b38-974804bdcb86\",\n    \"planFingerprint\": \"c6d4cd650d9fedde901a299575e952d42e7a8de1b3c40cab6a14678a8d47760a\",\n    \"contractFingerprint\": \"fecd7bc6891d2f7f201490e54d970ab90f6e38dd3e3e4315c728164f6d2b2496\",\n    \"evidenceFingerprint\": \"7681ed7ddabf28d98810826cb99e0f9e2dbbc7d4d89ad82c3029304b40e5b8e0\",\n    \"databaseIdentity\": {\n      \"name\": \"C:\\\\Repo\\\\F05_IPB_L2_0429\",\n      \"path\": \"C:/Repo/\",\n      \"fingerprint\": \"def9e68cc955cc916cdfa1a2d26c32c8d2b16503cdcc4d337b3c7ba9a5643bf8\"\n    },\n    \"targetIdentity\": {\n      \"path\": \"PI_LIVE_ROOTFIX_20260811_ED3C9BC9/ClassUnderTest\",\n      \"oid\": \"040g00001g001qg7105gbmqme8hg2\",\n      \"kind\": \"component\"\n    },\n    \"expiresAt\": \"2026-08-11T14:40:18.493Z\"\n  },\n  \"nextStep\": \"Call apply_element_spec with phase=commit and planId=58b4368a-b39d-455c-8b38-974804bdcb86.\"\n}"
+    }
+  ],
+  "details": {
+    "outcome": {
+      "status": "preflight",
+      "plan": {
+        "action": "apply_element_spec",
+        "params": {
+          "action": "apply_element_spec",
+          "phase": "plan",
+          "componentPath": "PI_LIVE_ROOTFIX_20260811_ED3C9BC9\\ClassUnderTest",
+          "intent": "create",
+          "executeWrite": false,
+          "elements": [
+            {
+              "role": "providerExportedParameter",
+              "name": "P_Input",
+              "modelType": "cont",
+              "unit": "",
+              "comment": "ASCET root-fix live validation input",
+              "calibration": false,
+              "range": {
+                "mode": "none"
+              },
+              "data": {
+                "mode": "ascetDefault"
+              },
+              "implementation": {
+                "mode": "ascetDefault"
+              }
+            },
+            {
+              "role": "localDependentParameter",
+              "name": "P_Dependent",
+              "modelType": "cont",
+              "unit": "",
+              "comment": "ASCET root-fix live validation dependent",
+              "calibration": false,
+              "range": {
+                "mode": "none"
+              },
+              "implementation": {
+                "mode": "ascetDefault"
+              }
+            }
+          ]
+        },
+        "backendPreflight": {
+          "operation": "diff_element_spec",
+          "validated": true,
+          "liveElementCount": 0,
+          "liveSnapshotHash": "841e0f88a39e603337a04e1187e263557d4a444878a179779b4c7b3e91da5f2f",
+          "catalogSnapshot": {
+            "elements": [],
+            "identity": {
+              "componentOID": "040g00001g001qg7105gbmqme8hg2"
+            }
+          },
+          "catalogIdentity": {
+            "componentOID": "040g00001g001qg7105gbmqme8hg2"
+          },
+          "normalizedSpecHash": "31841ce8d46ce10e5482a675c3a52a171be9eeef55ec3e9b1082d71e3798b436",
+          "resolvedIntent": "create",
+          "resolvedOperations": [
+            {
+              "name": "P_Input",
+              "operation": "create"
+            },
+            {
+              "name": "P_Dependent",
+              "operation": "create"
+            }
+          ],
+          "warnings": [
+            "P_Input: data.mode=ascetDefault explicitly selects ASCET default data.",
+            "P_Input: implementation.mode=ascetDefault explicitly selects ASCET default implementation.",
+            "P_Dependent: implementation.mode=ascetDefault explicitly selects ASCET default implementation."
+          ],
+          "normalizedSpec": {
+            "elements": [
+              {
+                "name": "P_Input",
+                "kind": "parameter",
+                "modelType": "cont",
+                "scope": "exported",
+                "unit": "",
+                "comment": "ASCET root-fix live validation input",
+                "calibration": false
+              },
+              {
+                "name": "P_Dependent",
+                "kind": "parameter",
+                "modelType": "cont",
+                "scope": "local",
+                "unit": "",
+                "comment": "ASCET root-fix live validation dependent",
+                "calibration": false
+              }
+            ]
+          },
+          "result": {
+            "ComponentPath": "PI_LIVE_ROOTFIX_20260811_ED3C9BC9\\ClassUnderTest",
+            "AddedElements": [
+              {
+                "Name": "P_Input",
+                "Kind": "Parameter",
+                "Signature": "Parameter ModelType=cont Scope=exported Calibration=False"
+              },
+              {
+                "Name": "P_Dependent",
+                "Kind": "Parameter",
+                "Signature": "Parameter ModelType=cont Scope=local Calibration=False"
+              }
+            ],
+            "RemovedElements": [],
+            "ModifiedElements": [],
+            "IncompatibleElements": [],
+            "SkippedElements": [],
+            "Summary": "2 added, 0 removed, 0 modified, 0 incompatible"
+          },
+          "limitations": [
+            "diff_element_spec validates and plans the spec without applying Data/Implementation writes or readback."
+          ]
+        },
+        "version": 2,
+        "planId": "58b4368a-b39d-455c-8b38-974804bdcb86",
+        "planFingerprint": "c6d4cd650d9fedde901a299575e952d42e7a8de1b3c40cab6a14678a8d47760a",
+        "contractFingerprint": "fecd7bc6891d2f7f201490e54d970ab90f6e38dd3e3e4315c728164f6d2b2496",
+        "evidenceFingerprint": "7681ed7ddabf28d98810826cb99e0f9e2dbbc7d4d89ad82c3029304b40e5b8e0",
+        "databaseIdentity": {
+          "name": "C:\\Repo\\F05_IPB_L2_0429",
+          "path": "C:\\Repo\\",
+          "fingerprint": "def9e68cc955cc916cdfa1a2d26c32c8d2b16503cdcc4d337b3c7ba9a5643bf8"
+        },
+        "targetIdentity": {
+          "path": "PI_LIVE_ROOTFIX_20260811_ED3C9BC9\\ClassUnderTest",
+          "oid": "040g00001g001qg7105gbmqme8hg2",
+          "kind": "component"
+        },
+        "expiresAt": "2026-08-11T14:40:18.493Z"
+      },
+      "nextStep": "Call apply_element_spec with phase=commit and planId=58b4368a-b39d-455c-8b38-974804bdcb86."
+    },
+    "raw": {
+      "ok": true,
+      "data": {
+        "type": "response",
+        "protocolVersion": 1,
+        "ok": true,
+        "result": {
+          "ComponentPath": "PI_LIVE_ROOTFIX_20260811_ED3C9BC9\\ClassUnderTest",
+          "AddedElements": [
+            {
+              "Name": "P_Input",
+              "Kind": "Parameter",
+              "Signature": "Parameter ModelType=cont Scope=exported Calibration=False"
+            },
+            {
+              "Name": "P_Dependent",
+              "Kind": "Parameter",
+              "Signature": "Parameter ModelType=cont Scope=local Calibration=False"
+            }
+          ],
+          "RemovedElements": [],
+          "ModifiedElements": [],
+          "IncompatibleElements": [],
+          "SkippedElements": [],
+          "Summary": "2 added, 0 removed, 0 modified, 0 incompatible"
+        },
+        "error": null,
+        "meta": {
+          "bridgePid": 17064,
+          "bridgeGeneration": "b0f5cc58-d2a8-4e61-a835-7f5ecc899062",
+          "durationMs": 261,
+          "sessionPolicy": "fresh_session",
+          "mutationStarted": false,
+          "mode": "exec",
+          "operation": "diff_element_spec"
+        }
+      },
+      "request": {
+        "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+        "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+        "args": [
+          "exec",
+          "diff_element_spec",
+          "PI_LIVE_ROOTFIX_20260811_ED3C9BC9\\ClassUnderTest",
+          "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\20260811-root-fix-live-ED3C9BC9\\artifacts\\element-spec-plans\\inline-13276-1786458917753-ef747e07-7e27-4067-8c7e-23e33d91fc7c.json",
+          "--json"
+        ],
+        "jobKind": "read",
+        "mutatesDatabase": false
+      },
+      "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"ComponentPath\":\"PI_LIVE_ROOTFIX_20260811_ED3C9BC9\\\\ClassUnderTest\",\"AddedElements\":[{\"Name\":\"P_Input\",\"Kind\":\"Parameter\",\"Signature\":\"Parameter ModelType=cont Scope=exported Calibration=False\"},{\"Name\":\"P_Dependent\",\"Kind\":\"Parameter\",\"Signature\":\"Parameter ModelType=cont Scope=local Calibration=False\"}],\"RemovedElements\":[],\"ModifiedElements\":[],\"IncompatibleElements\":[],\"SkippedElements\":[],\"Summary\":\"2 added, 0 removed, 0 modified, 0 incompatible\"},\"error\":null,\"meta\":{\"bridgePid\":17064,\"bridgeGeneration\":\"b0f5cc58-d2a8-4e61-a835-7f5ecc899062\",\"durationMs\":261,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"diff_element_spec\"}}\r\n",
+      "stderr": "",
+      "exitCode": 0,
+      "timedOut": false,
+      "aborted": false,
+      "operationId": "diff_element_spec"
+    }
+  }
+}

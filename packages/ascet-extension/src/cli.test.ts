@@ -848,3 +848,28 @@ describe("ASCET Bridge Milestone A transport semantics", () => {
 		}
 	});
 });
+
+describe("runAscetCliJson raw JSON protocol", () => {
+	test("accepts a non-Bridge JSON payload for standalone ASCET executables", async () => {
+		const fixture = createReadyEnv();
+		try {
+			const result = await runAscetCliJson(
+				["-e", 'process.stdout.write(JSON.stringify({ok:true,count:1,items:["hit"]}))'],
+				{
+					cwd: fixture.cwd,
+					env: fixture.env,
+					cliPath: process.execPath,
+					processName: "AscetSearch.exe",
+					responseProtocol: "raw-json",
+					commandId: "native_search_element",
+					jobKind: "read",
+					timeoutMs: 5_000,
+				},
+			);
+			assert.equal(result.ok, true);
+			assert.deepEqual(result.data, { ok: true, count: 1, items: ["hit"] });
+		} finally {
+			fixture.cleanup();
+		}
+	});
+});

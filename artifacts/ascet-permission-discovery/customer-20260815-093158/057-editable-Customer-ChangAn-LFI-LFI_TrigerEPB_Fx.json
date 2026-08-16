@@ -1,0 +1,75 @@
+{
+  "stage": "editable-Customer\\ChangAn\\LFI\\LFI_TrigerEPB_Fx",
+  "request": {
+    "toolName": "ascet_edit",
+    "params": {
+      "mode": "check",
+      "componentPath": "Customer\\ChangAn\\LFI\\LFI_TrigerEPB_Fx"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"editable\": false\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "ok",
+        "data": false,
+        "warnings": []
+      },
+      "raw": {
+        "ok": true,
+        "data": false,
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "component_editable_check",
+            "Customer\\ChangAn\\LFI\\LFI_TrigerEPB_Fx",
+            "--json"
+          ],
+          "timeoutMs": 60000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"editable\":false},\"error\":null,\"meta\":{\"bridgePid\":23636,\"bridgeGeneration\":\"4504726d-a5fb-494a-bb8f-b8e7ca8175f2\",\"durationMs\":471,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"component_editable_check\"}}\r\n",
+        "stderr": "",
+        "exitCode": 0,
+        "timedOut": false,
+        "aborted": false,
+        "operationId": "component_editable_check"
+      },
+      "tool": "ascet_edit",
+      "action": "check",
+      "mode": "check",
+      "value": false,
+      "command": {
+        "logicalCommandId": "AscetComponentEditableCheck",
+        "backendCommandId": "AscetComponentEditableCheck",
+        "operation": "component_editable_check"
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "component_editable_check",
+            "Customer\\ChangAn\\LFI\\LFI_TrigerEPB_Fx",
+            "--json"
+          ],
+          "timeoutMs": 60000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 0,
+        "timedOut": false,
+        "stderr": ""
+      }
+    }
+  }
+}

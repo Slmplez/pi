@@ -1,0 +1,75 @@
+{
+  "stage": "editable-Customer\\MB\\Package\\VLC\\Private\\VLC_FxActSetForAxCtrl",
+  "request": {
+    "toolName": "ascet_edit",
+    "params": {
+      "mode": "check",
+      "componentPath": "Customer\\MB\\Package\\VLC\\Private\\VLC_FxActSetForAxCtrl"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"editable\": false\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "ok",
+        "data": false,
+        "warnings": []
+      },
+      "raw": {
+        "ok": true,
+        "data": false,
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "component_editable_check",
+            "Customer\\MB\\Package\\VLC\\Private\\VLC_FxActSetForAxCtrl",
+            "--json"
+          ],
+          "timeoutMs": 60000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"editable\":false},\"error\":null,\"meta\":{\"bridgePid\":476,\"bridgeGeneration\":\"4256e370-b6ab-48f4-8df4-83790a641dc5\",\"durationMs\":353,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"component_editable_check\"}}\r\n",
+        "stderr": "",
+        "exitCode": 0,
+        "timedOut": false,
+        "aborted": false,
+        "operationId": "component_editable_check"
+      },
+      "tool": "ascet_edit",
+      "action": "check",
+      "mode": "check",
+      "value": false,
+      "command": {
+        "logicalCommandId": "AscetComponentEditableCheck",
+        "backendCommandId": "AscetComponentEditableCheck",
+        "operation": "component_editable_check"
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "component_editable_check",
+            "Customer\\MB\\Package\\VLC\\Private\\VLC_FxActSetForAxCtrl",
+            "--json"
+          ],
+          "timeoutMs": 60000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 0,
+        "timedOut": false,
+        "stderr": ""
+      }
+    }
+  }
+}

@@ -1,0 +1,3038 @@
+[
+  {
+    "path": "CN_Libary\\Package\\LDM\\ADC\\Component\\Main\\ADCMainCustIPB_ECU_CSW_BB00001",
+    "oid": "040g00001g001po71gd05bpa43sgu",
+    "members": [
+      {
+        "elementName": "CM_ADCMain_APBHost",
+        "oid": "040g00001g001pg70gd188nv8dl0q",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\LDM\\ADC\\Component\\Main\\Configuration\\CM_ADCMain_APBHost"
+      },
+      {
+        "elementName": "Asw2Asw_ADCMain_IPB",
+        "oid": "040g00001g001po71gd07or4a3lji",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\LDM\\ADC\\Component\\Main\\Asw2Asw_ADCMain_IPB"
+      },
+      {
+        "elementName": "XPass_BB00001_ADCMain_IPB",
+        "oid": "040g00001g001po71gd07ot8lijjk",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\LDM\\ADC\\Component\\Main\\XPass_BB00001_ADCMain_IPB"
+      },
+      {
+        "elementName": "CM_ADCMain_Generic",
+        "oid": "040g00001g001pg70gag8bg5f90gq",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\LDM\\ADC\\Component\\Main\\CM_ADCMain_Generic"
+      },
+      {
+        "elementName": "CM_ADC_CcoInteraction",
+        "oid": "040g000020j93pg70s5ga7iik2ob6",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\LDM\\ADC\\Component\\Public\\Configuration\\CM_ADC_CcoInteraction"
+      },
+      {
+        "elementName": "CM_ADCMain_IPB",
+        "oid": "040g00001g001pg70g9gka9a87som",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\LDM\\ADC\\Component\\Main\\Configuration\\CM_ADCMain_IPB"
+      }
+    ]
+  },
+  {
+    "path": "CN_Libary\\Package\\LDM\\APC\\Component\\APCAxCust\\APCAxCust_ECU_CSW_BB00001",
+    "oid": "040g00002092bp870s6g8bojnqf0a",
+    "members": [
+      {
+        "elementName": "XPass_BB00001_APCAxCust",
+        "oid": "040g00002092bp870s6g8bqf6710a",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\LDM\\APC\\Component\\APCAxCust\\XPass_BB00001_APCAxCust"
+      },
+      {
+        "elementName": "CM_APCWrap",
+        "oid": "040g00002092bpg70o807jfvm2kn4",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\LDM\\APC\\Private\\CM_APCWrap"
+      },
+      {
+        "elementName": "Asw2Asw_APCAxCust_BB00001",
+        "oid": "040g00002092bp870s6g8bqi3vuga",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\LDM\\APC\\Component\\APCAxCust\\Asw2Asw_APCAxCust_BB00001"
+      },
+      {
+        "elementName": "CM_APCAxCust",
+        "oid": "040g00002092bp870s6g9355r39b2",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\LDM\\APC\\Component\\APCAxCust\\CM_APCAxCust"
+      }
+    ]
+  },
+  {
+    "path": "CN_Libary\\Package\\iTAS_IntelligenceTurningAssistanceSystem\\Component\\iTAS_ECU_CSW_BB00001",
+    "oid": "040g00001g001po70g6g9h4ke96gg",
+    "members": [
+      {
+        "elementName": "Asw2Asw_iTAS",
+        "oid": "040g00001g001po70g6g9h4joobgg",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\iTAS_IntelligenceTurningAssistanceSystem\\Component\\Asw2Asw_iTAS"
+      },
+      {
+        "elementName": "XPass_BB00000_iTAS",
+        "oid": "040g00001g001po70g6g9h4l3pigg",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\iTAS_IntelligenceTurningAssistanceSystem\\Component\\XPass_BB00000_iTAS"
+      },
+      {
+        "elementName": "CM_iTAS",
+        "oid": "040g000020r3dpo70o8g66m0fe6ku",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\iTAS_IntelligenceTurningAssistanceSystem\\Component\\Config\\CM_iTAS"
+      },
+      {
+        "elementName": "iTAS_20ms",
+        "oid": "040g00001g001po70g6g9j3r4ueg0",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\iTAS_IntelligenceTurningAssistanceSystem\\Examples\\iTAS_20ms"
+      }
+    ]
+  },
+  {
+    "path": "CN_Libary\\Package\\CST_ComfortableStop\\component\\CST_ECU_CSW_BB00001",
+    "oid": "040g000020hhjog71gcg5q5jjqp28",
+    "members": [
+      {
+        "elementName": "Asw2Asw_CST",
+        "oid": "040g000020hhjog71gcg5q5j81u28",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\CST_ComfortableStop\\component\\Asw2Asw_CST"
+      },
+      {
+        "elementName": "CST5ms",
+        "oid": "040g000020hhjog71gcg5q8hjgn2o",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\CST_ComfortableStop\\public\\CST5ms"
+      },
+      {
+        "elementName": "XPass_BB00000_CST",
+        "oid": "040g000020hhjog71gcg5q5k9b9i8",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\CST_ComfortableStop\\component\\XPass_BB00000_CST"
+      }
+    ]
+  },
+  {
+    "path": "CN_Libary\\Package\\APBMiGen2IPB_Project\\ExternalEPB\\ExternalEpbGen2Cust_ECU_CSW_BB99230",
+    "oid": "040g00001g001po70k9gpo2vkmt1s",
+    "members": [
+      {
+        "elementName": "Asw2Asw_ExternalEpbCust_BB99230",
+        "oid": "040g00001g001po70k9gponblve1s",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\APBMiGen2IPB_Project\\ExternalEPB\\Asw2Asw_ExternalEpbCust_BB99230"
+      },
+      {
+        "elementName": "CM_ExternalEPB_BB99230",
+        "oid": "040g00001g001po70k9gqo0m9742c",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\APBMiGen2IPB_Project\\ExternalEPB\\CM_ExternalEPB_BB99230"
+      },
+      {
+        "elementName": "XPass_BB99230_ExternalEpbCust",
+        "oid": "040g00001g001po70k9gponsd3r1u",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\APBMiGen2IPB_Project\\ExternalEPB\\XPass_BB99230_ExternalEpbCust"
+      }
+    ]
+  },
+  {
+    "path": "CN_Libary\\Package\\VDM\\Component\\VDM_ECU_CSW_BB00147",
+    "oid": "040g000020g39o87108g9ghumpb5e",
+    "members": [
+      {
+        "elementName": "XPass_BB00147_VDM",
+        "oid": "040g000020g39o87108g8tojjudjg",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\VDM\\Component\\XPass_BB00147_VDM"
+      },
+      {
+        "elementName": "VDM20ms",
+        "oid": "040g000020g39o87108g90auamv3k",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\VDM\\Public\\VDM20ms_BB00147"
+      },
+      {
+        "elementName": "Asw2Asw_VDM",
+        "oid": "040g000020g39o87108g8to2rlu3g",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\VDM\\Component\\Asw2Asw_VDM_BB00147"
+      }
+    ]
+  },
+  {
+    "path": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010",
+    "oid": "040g00001g001po71ce23rk1bgtag",
+    "members": [
+      {
+        "elementName": "CM_CCO_IPB",
+        "oid": "040gpc8gggsg1p87045hc35gqk4i0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CCO_CruiseControlOffroad\\Component\\Configuration\\CM_CCO_IPB"
+      },
+      {
+        "elementName": "CM_LemIPB_IgnitionOff",
+        "oid": "040gm0042trg1o8704105ggv2ih04",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LEM_LeakageMonitoring\\Component\\Config\\CM_LemIPB_IgnitionOff"
+      },
+      {
+        "elementName": "CM_Boost_SBB_OFF",
+        "oid": "040gpc876kig1po70k879sv8cneoe",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BoostFunctions\\Component\\Config_FcnAvailability\\CM_Boost_SBB_OFF"
+      },
+      {
+        "elementName": "CM_ATM_ModelSelection_GAC",
+        "oid": "040g00001g001q070ka0a402nte0o",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\GAC\\ATM\\Component\\CM_ATM_ModelSelection_GAC"
+      },
+      {
+        "elementName": "CM_BDW_Direct",
+        "oid": "040gpc832pr01o070k53q0vc7ep52",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BDW_BrakeDiskWiping\\component\\Config\\CM_BDW_Direct"
+      },
+      {
+        "elementName": "CM_AEB_For_RCTB",
+        "oid": "040g000020k5fp871cc131is5m9hm",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\AEB_RCTB\\Modules\\CM_AEB_For_RCTB"
+      },
+      {
+        "elementName": "CM_DBR_IPB",
+        "oid": "040gm005ac9g1o070s7gi86fp2gis",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary_NewBrakeSystems\\Package\\DBR_DriverBrakeRequest\\Component\\Config\\Config_IPB\\CM_DBR_IPB"
+      },
+      {
+        "elementName": "CM_CBDSProxy_ESP_10ms_VDC_ISS",
+        "oid": "040gm00ha8o01p870sdg8qd4r2ih4",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CBDS_ConnectedBrakeDataSystemProxy\\Component\\Config\\CM_CBDSProxy_ESP_10ms_VDC_ISS"
+      },
+      {
+        "elementName": "CM_CCOPt",
+        "oid": "040gpc8gggsg1p071050g5upphm00",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CCO_CruiseControlOffroad\\Component\\Configuration\\CM_CCOPt"
+      },
+      {
+        "elementName": "CM_ABC_Off",
+        "oid": "040go2o01g001po70c86igih0n3gc",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\ABC_AdaptiveBrakeController\\Component\\Configuration\\CM_ABC_Off"
+      },
+      {
+        "elementName": "CM_Boost_ESPIPB",
+        "oid": "040qm00000001og7046g40klosb1q",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BoostFunctions\\Component\\Config\\CM_Boost_ESPIPB"
+      },
+      {
+        "elementName": "CM_STFipb_ParkingBrake_Automated",
+        "oid": "040gm0092e301og710311k2lp9d08",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\STF_StiffnessMonitoring\\Component\\Config\\CM_STFipb_ParkingBrake_Automated"
+      },
+      {
+        "elementName": "CM_CCOBrake_Extended",
+        "oid": "040gpc8gggsg1p071c5hmtf8hpv1a",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CCO_CruiseControlOffroad\\Component\\Configuration\\CM_CCOBrake_Extended"
+      },
+      {
+        "elementName": "CM_CCO_NonHADHAP",
+        "oid": "040gpc868tj01p8710fgllksssjga",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CCO_CruiseControlOffroad\\Component\\Configuration\\CM_CCO_NonHADHAP"
+      },
+      {
+        "elementName": "CM_SspWss_EspSbsWss",
+        "oid": "040g00022a101og70kcheqhrhmfj6",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\WheelSpeedSensors\\Component\\Configuration\\CM_SspWss_EspSbsWss"
+      },
+      {
+        "elementName": "CM_Boost_HFC_OFF",
+        "oid": "040qm00e00001oo70870ta22h4hgu",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BoostFunctions\\Component\\Config_FcnAvailability\\CM_Boost_HFC_OFF"
+      },
+      {
+        "elementName": "CM_AEB_IPB_Ref",
+        "oid": "040go2o01g001po70s5i7gfba9mg0",
+        "kind": "module",
+        "canonicalPath": "PlatformProjects\\IPB\\Modules\\CM_AEB_IPB_Ref"
+      },
+      {
+        "elementName": "CM_CPE_ESP10_Nominal",
+        "oid": "040qm0001g001po70c4g5pass630m",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary_NewBrakeSystems\\Package\\CPE_CpEstimation\\Components\\CP_Estimation_CPE\\Config\\CM_CPE_ESP10_Nominal"
+      },
+      {
+        "elementName": "CM_CCOPre",
+        "oid": "040gpc8gggsg1p071050gaench602",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CCO_CruiseControlOffroad\\Component\\Configuration\\CM_CCOPre"
+      },
+      {
+        "elementName": "CM_AWB_Standard",
+        "oid": "040gpc88b1pg1oo70k80et0gllu0a",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\AWB_AutomaticWarningBrake\\Component\\Config\\CM_AWB_Standard"
+      },
+      {
+        "elementName": "CM_Boost_HBA_ON",
+        "oid": "040qm00e00001oo70870sgsoeek0k",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BoostFunctions\\Component\\Config_FcnAvailability\\CM_Boost_HBA_ON"
+      },
+      {
+        "elementName": "CM_CDP",
+        "oid": "040qm00800001n87107g9g2k47ohu",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CDP_ControlledDecelerationforParkingBrake\\Component\\Config\\CM_CDP"
+      },
+      {
+        "elementName": "CM_CSM_PT_Preproccesing",
+        "oid": "040qm000p0001po70g906570ak94m",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Component\\Config\\CM_CSM_PT_Preproccesing"
+      },
+      {
+        "elementName": "CM_SCM",
+        "oid": "040gpc8345201o070k64iliu68i20",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\Config\\CM_SCM"
+      },
+      {
+        "elementName": "CM_CBDSProxy_WhlTqFric_10ms",
+        "oid": "040g00001g003q07188g61uju2r58",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CBDS_ConnectedBrakeDataSystemProxy\\Component\\Config\\CM_CBDSProxy_WhlTqFric_10ms"
+      },
+      {
+        "elementName": "CM_IPBCust_SignalExport",
+        "oid": "040gm006c09g1p070cbg6umeo5s0c",
+        "kind": "module",
+        "canonicalPath": "PlatformProjects\\IPB\\Modules\\CM_IPBCust_SignalExport"
+      },
+      {
+        "elementName": "CM_SspWss_IPB_ESP4DPB",
+        "oid": "040qm0004hg01po70ga07vc84od0a",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\WheelSpeedSensors\\Component\\Configuration\\CM_SspWss_IPB_ESP4DPB"
+      },
+      {
+        "elementName": "CM_CCOBrake",
+        "oid": "040gpc8gggsg1p071050g5qkc1200",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CCO_CruiseControlOffroad\\Component\\Configuration\\CM_CCOBrake"
+      },
+      {
+        "elementName": "CM_CCOHMI",
+        "oid": "040gpc8i50cg1p07144hqpptico66",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CCO_CruiseControlOffroad\\Component\\Configuration\\CM_CCOHMI"
+      },
+      {
+        "elementName": "CM_IPBCust_SignalExport_Diag",
+        "oid": "040gm006c09g1p070cc0ea9hv6o2s",
+        "kind": "module",
+        "canonicalPath": "PlatformProjects\\IPB\\Modules\\CM_IPBCust_SignalExport_Diag"
+      },
+      {
+        "elementName": "CM_LFC20ms",
+        "oid": "040qm00300001n870g9hda48kmvg0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LFC_LongitudinalForceControl\\Component\\Config\\CM_LFC20ms"
+      },
+      {
+        "elementName": "CM_Boost_HBB_OFF",
+        "oid": "040qm00e00001oo70870tvovk0vis",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BoostFunctions\\Component\\Config_FcnAvailability\\CM_Boost_HBB_OFF"
+      },
+      {
+        "elementName": "CM_DriverInteraction_IPB",
+        "oid": "040gpc88b2101p070k2kheki9tpao",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LDMFxVehConnector\\Component\\Configuration\\CM_DriverInteraction_IPB"
+      },
+      {
+        "elementName": "CM_LDI4ExtReq",
+        "oid": "040qm00b00001o870g3i4eh1ff6hc",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LateralDynamicsInterface\\Component\\Configuration\\CM_LDI4ExtReq"
+      },
+      {
+        "elementName": "CM_CCOVxTarGen",
+        "oid": "040gpc8gggsg1p8704akn7ef1sn3u",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CCO_CruiseControlOffroad\\Component\\Configuration\\CM_CCOVxTarGen"
+      },
+      {
+        "elementName": "TaskBaseCtrlx1Variant",
+        "oid": "040gm006c09g1p070cc0eit48rhiu",
+        "kind": "module",
+        "canonicalPath": "PlatformProjects\\IPB\\Modules\\IPBCust_5ms_BB93833"
+      },
+      {
+        "elementName": "CM_SspWss_SignalExport_IPBCust",
+        "oid": "040gm006c09g1p070cc0eib4uhqiu",
+        "kind": "module",
+        "canonicalPath": "PlatformProjects\\IPB\\Modules\\CM_SspWss_SignalExport_IPBCust"
+      },
+      {
+        "elementName": "CM_SspWss",
+        "oid": "040qm01g44001n870g7g5s83fi10q",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\WheelSpeedSensors\\Component\\Configuration\\CM_SspWss"
+      },
+      {
+        "elementName": "CM_LCO20ms",
+        "oid": "040qm000p0001p0710ag53hh2lmgm",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LCO_LongitudinalControlOffRoad\\Component\\Config\\CM_LCO20ms"
+      },
+      {
+        "elementName": "CM_HazardWarning",
+        "oid": "040gm00jcm801o07087kdkhq0414s",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\HAZ_HazardWarning\\Component\\Configuration\\CM_HazardWarning"
+      },
+      {
+        "elementName": "TCS_MTC_PreCtrl",
+        "oid": "040g00001g001q070oe0nqagia8gq",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\MTC_PreCtrl\\component\\TCS_MTC_PreCtrl"
+      },
+      {
+        "elementName": "CM_PreBSMipb",
+        "oid": "040rk0001g001p870s4g8iqlto1g0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary_NewBrakeSystems\\Package\\BSM_BrakeSignalsAndMonitorings\\Config\\CM_PreBSMipb"
+      },
+      {
+        "elementName": "CM_DDR_WithIntelligentWSS",
+        "oid": "040gm00o81801o071c7gigka36v3i",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\DDR_DriveDirectionRecognition\\Component\\Configuration\\CM_DDR_WithIntelligentWSS"
+      },
+      {
+        "elementName": "CM_CRB_StillstandSimulation",
+        "oid": "040qm0001k001po70k7gbv8ibvois",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary_NewBrakeSystems\\Package\\CRB_CooperativeRegenerativeBraking\\Component\\Config\\CM_CRB_StillstandSimulation"
+      },
+      {
+        "elementName": "Asw2Asw_IPBCustGen_BB88010",
+        "oid": "040g00001g001po71ceielofd35gq",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\Asw2Asw_IPBCustGen_BB88010"
+      },
+      {
+        "elementName": "CM_SASClass3_N3C3_Driver_20ms",
+        "oid": "040gm00889301o87084gto1cj3mig",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\SteeringAngleSensors\\Component\\Configuration\\CM_SASClass3_N3C3_Driver_20ms"
+      },
+      {
+        "elementName": "CM_CSM_ConfigWrapperOther",
+        "oid": "040qm00000001pg71c5g708hbfvja",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Component\\Config\\CM_CSM_ConfigWrapperOther"
+      },
+      {
+        "elementName": "CM_AVH",
+        "oid": "040gpc83142g1no70o90q9iltgggg",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\AVH_AutomaticVehicleHold\\Component\\Config\\CM_AVH"
+      },
+      {
+        "elementName": "CM_LemIPB_ParkingBrake_Automated",
+        "oid": "040qm00a24001o070cfg6a06mqehk",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LEM_LeakageMonitoring\\Component\\Config\\CM_LemIPB_ParkingBrake_Automated"
+      },
+      {
+        "elementName": "CM_Pata_ADCAPC",
+        "oid": "040g000020hm9p871863v0r91vtjs",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\VDM\\Component\\CM_Pata_ADCAPC"
+      },
+      {
+        "elementName": "CM_CSM_ConfigWrapperBrakeSystem",
+        "oid": "040qm00000001pg71c507l58etdgq",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Component\\Config\\CM_CSM_ConfigWrapperBrakeSystem"
+      },
+      {
+        "elementName": "CM_DATxpb_WithoutAutomatedDriving",
+        "oid": "040g00001g001po70g60le8i18b1s",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\DAT_DiagnosisActuationTest\\Component\\Configuration\\CM_DATxpb_WithoutAutomatedDriving"
+      },
+      {
+        "elementName": "CM_TCS_CUS",
+        "oid": "040qm000ag001oo714505a6os3r0q",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\TCS_TractionControlSystem\\Component\\Configuration\\CM_TCS_CUS"
+      },
+      {
+        "elementName": "CM_DAT_SpeedLimitCalc_IPB2_0",
+        "oid": "040gm0052dr01po7042v2gd3dlk88",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\DAT_DiagnosisActuationTest\\Component\\Configuration\\CM_DAT_SpeedLimitCalc_IPB2_0"
+      },
+      {
+        "elementName": "CM_INS_SignalExportCOG",
+        "oid": "040qm00314001n870seg84ct2ib06",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\InertialSensors\\Component\\Configuration\\CM_INS_SignalExportCOG"
+      },
+      {
+        "elementName": "CM_ABP_Standard",
+        "oid": "040gpc88b1pg1oo70k80e13d5h100",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\ABP_AutomaticBrakePrefill\\component\\Config\\CM_ABP_Standard"
+      },
+      {
+        "elementName": "CM_HSM",
+        "oid": "040qm00200001no718bjfvaui84g0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\HSM_HoldSupportforMotorstart\\Component\\Config\\CM_HSM"
+      },
+      {
+        "elementName": "CM_CSM_ConfigWrapperClosedLoopLongControlAvailable",
+        "oid": "040go2o01g001po70s322bv1pnkg4",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Component\\Config\\CM_CSM_ConfigWrapperClosedLoopLongControlAvailable"
+      },
+      {
+        "elementName": "CM_CSM_ConfigWrapperWssIntelligent",
+        "oid": "040qm00000001pg71c507kun7gs0q",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Component\\Config\\CM_CSM_ConfigWrapperWssIntelligent"
+      },
+      {
+        "elementName": "CM_HSH_Extended_Availability_wo_HAD",
+        "oid": "040gpc88gm401po71c33ci4igpv0c",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\HSH_HydraulicStateHandler\\Config\\CM_HSH_Extended_Availability_wo_HAD"
+      },
+      {
+        "elementName": "CM_CST_Default",
+        "oid": "040g000020hhjoo70g50e6d9qt200",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\CST_ComfortableStop\\component\\config\\CM_CST_Default"
+      },
+      {
+        "elementName": "CM_HHCPlus",
+        "oid": "040qm00a0o001no7049g73fcd8s04",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\HHC_HillHoldControl\\Component\\Config\\CM_HHCPlus"
+      },
+      {
+        "elementName": "CM_Boost_MVR_OFF",
+        "oid": "040gpc89a4o01p070s7hd07t5i5iq",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BoostFunctions\\Component\\Config_FcnAvailability\\CM_Boost_MVR_OFF"
+      },
+      {
+        "elementName": "CM_CSM_Wrapper",
+        "oid": "040gpc8g61q01pg70cahlkm190sgo",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Component\\Config\\CM_CSM_Wrapper"
+      },
+      {
+        "elementName": "CM_PPCipb2x",
+        "oid": "040rk0001g001p871g318ah43rmg0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\PPC_PressurePlausibilityCheck\\Component\\Config\\CM_PPCipb2x"
+      },
+      {
+        "elementName": "CM_LDI_SignalExport",
+        "oid": "040qm00000001oo708303ab7pseg0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LateralDynamicsInterface\\Component\\Configuration\\CM_LDI_SignalExport"
+      },
+      {
+        "elementName": "CM_Boost_Extended",
+        "oid": "040qm00e00001og7141g7ku1hq9hc",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BoostFunctions\\Component\\Config\\CM_Boost_Extended"
+      },
+      {
+        "elementName": "CM_MBPCore_withoutDWTD_Driver_20ms",
+        "oid": "040qm00600001n870ca08fqumflki",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\ModelBasedProcessing\\Component\\Configuration\\CM_MBPCore_withoutDWTD_Driver_20ms"
+      },
+      {
+        "elementName": "VariantCodingVerification",
+        "oid": "040g0068iho01n8714bgg96q7f7gs",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\VariantCoding\\VariantCodingVerification\\VariantCodingVerification"
+      },
+      {
+        "elementName": "CM_TCS_BTM",
+        "oid": "040qm000ag001oo7147053o8h7j06",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\TCS_TractionControlSystem\\Component\\Configuration\\CM_TCS_BTM"
+      },
+      {
+        "elementName": "CM_CRB_IPB",
+        "oid": "040qm00000001o871g6ga8acpucjm",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary_NewBrakeSystems\\Package\\CRB_CooperativeRegenerativeBraking\\Component\\Config\\CM_CRB_IPB"
+      },
+      {
+        "elementName": "CM_TCS_IPB",
+        "oid": "040qm000ag001oo7147053oeaol08",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\TCS_TractionControlSystem\\Component\\Configuration\\CM_TCS_IPB"
+      },
+      {
+        "elementName": "CM_Boost_HRB_ON",
+        "oid": "040qm00e00001oo70870t3un34p0s",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BoostFunctions\\Component\\Config_FcnAvailability\\CM_Boost_HRB_ON"
+      },
+      {
+        "elementName": "CM_BTM_with_tStandMinutes_with_Tambient",
+        "oid": "040qm00300001n870g8gh9q0pmn08",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BrakeDiscTemperatureModel\\Component\\Config\\CM_BTM_with_tStandMinutes_with_Tambient"
+      },
+      {
+        "elementName": "CM_LDMSSMAPBMiGen2Adapter",
+        "oid": "040gpc83141g1no71c2062i8vs6g6",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LDMFxVehConnector\\Component\\Configuration\\CM_LDMSSMAPBMiGen2Adapter"
+      },
+      {
+        "elementName": "TaskBaseCtrlx4",
+        "oid": "040gm006c09g1p070cc0ejnudlk30",
+        "kind": "module",
+        "canonicalPath": "PlatformProjects\\IPB\\Modules\\IPBCust_Sensors20ms_BB93833"
+      },
+      {
+        "elementName": "XPass_BB88010_IPBCustGen",
+        "oid": "040g00001g001po71ceiemn4v7rh2",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\XPass_BB88010_IPBCustGen"
+      },
+      {
+        "elementName": "CM_CSM_ConfigWrapperPowertrain",
+        "oid": "040qm00000001pg71c508447nich4",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Component\\Config\\CM_CSM_ConfigWrapperPowertrain"
+      },
+      {
+        "elementName": "TCS_iEC",
+        "oid": "040g00001g001q070s9g6j7t2gth8",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\IEC_IntelligentEscapeController\\Component\\Configuration\\TCS_iEC"
+      },
+      {
+        "elementName": "CM_TDM_ParkingBrake_Automatic",
+        "oid": "040go2o01g001po70ce095jjv4dg4",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\TDM_TemporaryDeactivationMotor\\Component\\Config\\CM_TDM_ParkingBrake_Automatic"
+      }
+    ]
+  },
+  {
+    "path": "CN_Libary\\CNMS_IPB20\\IPBCustNonHADHAP\\IPBCustNonHADHAP_ECU_CSW_BB88010",
+    "oid": "040g00001g001q0714706k444us72",
+    "members": [
+      {
+        "elementName": "XPass_BB88010_IPBCustNonHADHAP",
+        "oid": "040g00001g001q0714707vjjlq0nk",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\CNMS_IPB20\\IPBCustNonHADHAP\\XPass_BB88010_IPBCustNonHADHAP"
+      },
+      {
+        "elementName": "LFIHost_5ms",
+        "oid": "040qm00e00001og70s32n3ri59dma",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LFI_LongitudinalForceInterface\\Component\\LFIHost_5ms"
+      },
+      {
+        "elementName": "CM_FxWrapper",
+        "oid": "040g000000001po710e3jracl5jae",
+        "kind": "module",
+        "canonicalPath": "Customer\\ChangAn\\LFI\\CM_FxWrapper"
+      },
+      {
+        "elementName": "CM_RBF_IPB",
+        "oid": "040gpc8g61p01oo70gbio1qg7ca28",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\RBF_RemoteBrakeFacade\\Component\\Main\\CM_RBF_IPB"
+      },
+      {
+        "elementName": "CM_LFI_IPB",
+        "oid": "040gpc89gu401po70cai8aclkq2kq",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LFI_LongitudinalForceInterface\\Component\\Config\\CM_LFI_IPB"
+      },
+      {
+        "elementName": "VMCProxy_Main_5ms",
+        "oid": "040qm0000c001oo70gcg7r5bciegk",
+        "kind": "module",
+        "canonicalPath": "PlatformProjects_NewBrakeSystems\\Package\\VMCProxy\\Component\\Vmc\\VMCProxy_Main_5ms"
+      },
+      {
+        "elementName": "Asw2Asw_IPBCustNonHADHAP_BB88010",
+        "oid": "040g00001g001q071490b0pe6mn0k",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\CNMS_IPB20\\IPBCustNonHADHAP\\Asw2Asw_IPBCustNonHADHAP_BB88010"
+      },
+      {
+        "elementName": "CM_EMC_IPBsolo",
+        "oid": "040qm000ms001oo70c0g432ar8dg0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\EMC_EmergencyModeControl\\Component\\Main\\CM_EMC_IPBsolo"
+      },
+      {
+        "elementName": "CM_APB_IPB1Box",
+        "oid": "040qm0001g001q070450oiqmm2h0e",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\APBMiGen2_Component\\Config\\CM_APB_IPB1Box"
+      },
+      {
+        "elementName": "CM_RBF_Tx",
+        "oid": "040gpc8g61p01oo70g8gs1eg0vs04",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\RBF_RemoteBrakeFacade\\Component\\Backup\\CM_RBF_Tx"
+      }
+    ]
+  },
+  {
+    "path": "CN_Libary\\CNMS_IPB20\\IPBCustOneDrvUnitxwD\\IPBCustOneDrvUnitxwD_ECU_CSW_BB88010",
+    "oid": "040g00001g001po71g0j09j8rb986",
+    "members": [
+      {
+        "elementName": "CM_TCS_1Mot_xWD",
+        "oid": "040qm0001g001pg71c4gc67tgt3g2",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\TCS_TractionControlSystem\\Component\\Configuration\\CM_TCS_1Mot_xWD"
+      },
+      {
+        "elementName": "CM_PT_1Mot_xWD",
+        "oid": "040qm0001g001po708c0p0fe2umh8",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\PT_PowerTrain\\Component\\Configuration\\Generic\\CM_PT_1Mot_xWD"
+      },
+      {
+        "elementName": "XPASS_BB88010_IPBCustOneDrvUnitxwD",
+        "oid": "040g00001g001po71g0j09j9eo088",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\CNMS_IPB20\\IPBCustOneDrvUnitxwD\\XPASS_BB88010_IPBCustOneDrvUnitxwD"
+      },
+      {
+        "elementName": "CM_PT_1Mot_xWD_CUS",
+        "oid": "040qm0001g001po708c0p0fr6sshc",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\PT_PowerTrain\\Component\\Configuration\\Template\\CM_PT_1Mot_xWD_CUS"
+      },
+      {
+        "elementName": "CM_CRB_Fx_GAC2Huawei",
+        "oid": "040g00001g001q0714agev6pk0558",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\GAC\\CRBS\\CM_CRB_Fx_GAC2Huawei"
+      },
+      {
+        "elementName": "CM_CSM_PT_Preprocessing_Conventional",
+        "oid": "040qm0001g001po70k8g61uochoku",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Component\\Config\\CM_CSM_PT_Preprocessing_Conventional"
+      },
+      {
+        "elementName": "Asw2Asw_IPBCustOneDrvUnitxwD_BB88010",
+        "oid": "040g00001g001po71g0j09j8hgko2",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\CNMS_IPB20\\IPBCustOneDrvUnitxwD\\Asw2Asw_IPBCustOneDrvUnitxwD_BB88010"
+      },
+      {
+        "elementName": "CM_EBP5ms",
+        "oid": "040qm00608001n870g4072em95j1m",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\EBP_ElectronicBrakePrefill\\component\\Config\\CM_EBP5ms"
+      },
+      {
+        "elementName": "CM_CRB_PowertrainModel_IPB_CNMS",
+        "oid": "040g00001g001q0718809j1nasp08",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\CRB_CooperativeRegenerativeBraking\\Component\\Config\\CM_CRB_PowertrainModel_IPB_CNMS"
+      },
+      {
+        "elementName": "CM_ORA_SingleAxle",
+        "oid": "040g000020kn1pg714eh76scelh22",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary_NewBrakeSystems\\Package\\CRB_CooperativeRegenerativeBraking\\Component\\Config\\CM_ORA_SingleAxle"
+      },
+      {
+        "elementName": "CM_DTC_SM_1EM_Hybrid",
+        "oid": "040qm0001g001po70g8g8qcflak48",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\DragTorqueController\\Component\\Configuration\\CM_DTC_SM_1EM_Hybrid"
+      },
+      {
+        "elementName": "CM_CNMS_PTConfiguration_SingleAxle",
+        "oid": "040g00001g001q07045gf02oufjuc",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\CNMS_IPB20\\Configuration\\CM_CNMS_PTConfiguration_SingleAxle"
+      },
+      {
+        "elementName": "CM_VDC_CNMSIPB20_2WD",
+        "oid": "040g000020pm3po71g30b1j0k2h16",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VDC_Component\\Component\\Configuration\\CM_VDC_CNMSIPB20_2WD"
+      },
+      {
+        "elementName": "CM_ALC_IPB",
+        "oid": "040qm00c0k001o8708dgim7bebu26",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\AntiLockController\\Component\\Configuration\\CM_ALC_IPB"
+      },
+      {
+        "elementName": "CM_CST_PTConfig_CUS_OneDrvUnit",
+        "oid": "040g00001g001q071c2gg4p4dc6he",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\CST_ComfortableStop\\component\\config\\CM_CST_PTConfig_CUS"
+      },
+      {
+        "elementName": "CM_INS",
+        "oid": "040gm00o6po01no70gb2296ubfrg6",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\InertialSensors\\Component\\Configuration\\CM_INS"
+      }
+    ]
+  },
+  {
+    "path": "CN_Libary\\CNMS_IPB20\\IPBCustTwoDrvUnitAxleSplit\\IPBCustTwoDrvUnitAxleSplit_ECU_CSW_BB88010",
+    "oid": "040g00001g001po71ceier21nkm1m",
+    "members": [
+      {
+        "elementName": "CM_INS_AxleSplit",
+        "oid": "040qm000to001p870cblrq5qo87g0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\InertialSensors\\Component\\Configuration\\CM_INS_AxleSplit"
+      },
+      {
+        "elementName": "CM_CRB_Fx_GAC2Huawei",
+        "oid": "040g00001g001q0714agev6pk0558",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\GAC\\CRBS\\CM_CRB_Fx_GAC2Huawei"
+      },
+      {
+        "elementName": "CM_TCS_2Mot_AWDAxleSplit",
+        "oid": "040qm0001g001pg71c40b6ea5iqgi",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\TCS_TractionControlSystem\\Component\\Configuration\\CM_TCS_2Mot_AWDAxleSplit"
+      },
+      {
+        "elementName": "XPass_BB88010_IPBCustTwoDrvUnitAxleSplit",
+        "oid": "040g00001g001po71ceier3gvaq1m",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\CNMS_IPB20\\IPBCustTwoDrvUnitAxleSplit\\XPass_BB88010_IPBCustTwoDrvUnitAxleSplit"
+      },
+      {
+        "elementName": "CM_CSM_PT_Preprocessing_AxleSplit",
+        "oid": "040qm0001g001po70k8g60n1s81ku",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Component\\Config\\CM_CSM_PT_Preprocessing_AxleSplit"
+      },
+      {
+        "elementName": "CM_PT_2Mot_AWDAxleSplit_CUS",
+        "oid": "040qm0001g001po708b0e4qipc22k",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\PT_PowerTrain\\Component\\Configuration\\Template\\CM_PT_2Mot_AWDAxleSplit_CUS"
+      },
+      {
+        "elementName": "Asw2Asw_IPBCustTwoDrvUnitAxleSplit_BB88010",
+        "oid": "040g00001g001po71ceier21bu7ha",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\CNMS_IPB20\\IPBCustTwoDrvUnitAxleSplit\\Asw2Asw_IPBCustTwoDrvUnitAxleSplit_BB88010"
+      },
+      {
+        "elementName": "CM_VDC_CNMS_IPB20_Axlesplit",
+        "oid": "040g000020pm3po71gcgar78bmo7e",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VDC_Component\\Component\\Configuration\\CM_VDC_CNMS_IPB20_Axlesplit"
+      },
+      {
+        "elementName": "CM_CRB_PowertrainModel_IPB_CNMS",
+        "oid": "040g00001g001q0718809j1nasp08",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\CRB_CooperativeRegenerativeBraking\\Component\\Config\\CM_CRB_PowertrainModel_IPB_CNMS"
+      },
+      {
+        "elementName": "CM_CST_PTConfig_CUS_2Mot_AWDAxleSplit",
+        "oid": "040g00001g001q071c2gg4p4dc6he",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\Package\\CST_ComfortableStop\\component\\config\\CM_CST_PTConfig_CUS"
+      },
+      {
+        "elementName": "CM_EBP5ms_AxleSplit",
+        "oid": "040gpc88b2101o870g5gem114hm42",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\EBP_ElectronicBrakePrefill\\component\\Config\\CM_EBP5ms_AxleSplit"
+      },
+      {
+        "elementName": "CM_ALC_IPB_AxleSplit",
+        "oid": "040gm00i40jg1pg71435j8jg8lo6o",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\AntiLockController\\Component\\Configuration\\CM_ALC_IPB_AxleSplit"
+      },
+      {
+        "elementName": "CM_TCS_MTCActive_Interface_Local202312",
+        "oid": "040g00001g001po71440vvv31ptkm",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\WheelSpeedSensors\\Component\\Configuration\\CM_TCS_MTCActive_Interface_Local202312"
+      },
+      {
+        "elementName": "CM_DTC_TM_2EM_FA_RA",
+        "oid": "040qm0001g001po70g8g70tonhvg0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\DragTorqueController\\Component\\Configuration\\CM_DTC_TM_2EM_FA_RA"
+      },
+      {
+        "elementName": "CM_PT_2Mot_AWDAxleSplit",
+        "oid": "040qm0001g001po708b0e4q3so7ig",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\PT_PowerTrain\\Component\\Configuration\\Generic\\CM_PT_2Mot_AWDAxleSplit"
+      },
+      {
+        "elementName": "CM_ORA_AxleSplit",
+        "oid": "040g000020kn1pg714eh4ik6ro2go",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary_NewBrakeSystems\\Package\\CRB_CooperativeRegenerativeBraking\\Component\\Config\\CM_ORA_AxleSplit"
+      },
+      {
+        "elementName": "CM_CNMS_PTConfiguration_AxleSplit",
+        "oid": "040g00001g001q07045gf2l378ufa",
+        "kind": "module",
+        "canonicalPath": "CN_Libary\\CNMS_IPB20\\Configuration\\CM_CNMS_PTConfiguration_AxleSplit"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\ABC_AdaptiveBrakeController\\Component\\ABC_ECU_CSW_BB00001",
+    "oid": "040go2o01g001p871g112btc1d9ku",
+    "members": [
+      {
+        "elementName": "ABC_PreProcess",
+        "oid": "040go2o01g001p871g112cmantulc",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\ABC_AdaptiveBrakeController\\public\\ABC_PreProcess"
+      },
+      {
+        "elementName": "Asw2Asw_AdaptiveBrakeController",
+        "oid": "040go2o01g001p871g112btaoflkq",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\ABC_AdaptiveBrakeController\\Component\\Asw2Asw_AdaptiveBrakeController"
+      },
+      {
+        "elementName": "ABC_ALC_Arbitration",
+        "oid": "040qm0001g001pg71g410rbdl7s4s",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\ABC_AdaptiveBrakeController\\public\\ABC_ALC_Arbitration"
+      },
+      {
+        "elementName": "ABC_HAL",
+        "oid": "040qm00000001pg70gcg8a8glo4g0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\ABC_AdaptiveBrakeController\\public\\ABC_HAL"
+      },
+      {
+        "elementName": "ABC_controller",
+        "oid": "040go2o01g001p871g112btb2644s",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\ABC_AdaptiveBrakeController\\public\\ABC_controller"
+      },
+      {
+        "elementName": "XPass_BB00000_AdaptiveBrakeController",
+        "oid": "040go2o01g001p871g112btaan94q",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\ABC_AdaptiveBrakeController\\Component\\XPass_BB00000_AdaptiveBrakeController"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\AntiLockController\\Component\\ALC\\ALC5ms20ms_ECU_CSW_BB00001",
+    "oid": "040qm0040g001n870o62bo0i2v80c",
+    "members": [
+      {
+        "elementName": "XPass",
+        "oid": "040qm0071g001n870g9g806e548pc",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\AntiLockController\\Component\\ALC\\Modules\\XPass_BB00000_ALC5ms20ms"
+      },
+      {
+        "elementName": "AntiLockControl_20ms_Esp",
+        "oid": "040qm0000g001mg710a05kkti1jjs",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\AntiLockController\\Public\\AntiLockControl_20ms_Esp"
+      },
+      {
+        "elementName": "AbsOes5ms_ESP",
+        "oid": "040qm02id4001lg71g9g4pa3658c2",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\AntiLockController\\Public\\AbsOes5ms_ESP"
+      },
+      {
+        "elementName": "AbsCtrl5ms_ESP",
+        "oid": "040qm02id4001lg71g9g4r46b5t8k",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\AntiLockController\\Public\\AbsCtrl5ms_ESP"
+      },
+      {
+        "elementName": "Asw2Asw_ALC5ms20ms",
+        "oid": "040qm0071g001n870g9g806ddm19a",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\AntiLockController\\Component\\ALC\\Modules\\Asw2Asw_ALC5ms20ms"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\PT_PowerTrain\\Component\\Core\\PT_ECU_CSW_BB00001",
+    "oid": "040qm00000001p871090k25ci4d3e",
+    "members": [
+      {
+        "elementName": "Asw2Asw_PT",
+        "oid": "040qm000ag001p870sd097fukch9k",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\PT_PowerTrain\\Component\\Core\\Asw2Asw_PT"
+      },
+      {
+        "elementName": "PT_Model",
+        "oid": "040qm000ag001p870s9g6tied050s",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\PT_PowerTrain\\Component\\Core\\PT_Model"
+      },
+      {
+        "elementName": "XPass_BB00000_PT",
+        "oid": "040qm00000001p871090k2cq1olje",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\PT_PowerTrain\\Component\\Core\\XPass_BB00000_PT"
+      },
+      {
+        "elementName": "PT_Actuator",
+        "oid": "040qm00000001p87102gkvg2qoui8",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\PT_PowerTrain\\Component\\Core\\PT_Actuator"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\PAL_PlungerAbstractionLayer\\Component\\Projects\\PAL_ECU_CSW_BB00000",
+    "oid": "040qm00800001no704agrbdgis45o",
+    "members": [
+      {
+        "elementName": "PAL_ComponentProtection",
+        "oid": "040gpc8g29001p070s70s85lto65g",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\PAL_PlungerAbstractionLayer\\Public\\PAL_ComponentProtection"
+      },
+      {
+        "elementName": "Asw2Asw_PAL_PlungerAbstractionLayer",
+        "oid": "040qm00800001ng71c5g7htl6hd1m",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\PAL_PlungerAbstractionLayer\\Component\\Modules\\Asw2Asw_PAL_PlungerAbstractionLayer"
+      },
+      {
+        "elementName": "PAL_PlungerAbstractionLayer",
+        "oid": "040qm00800001no704agp9h6jeujc",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\PAL_PlungerAbstractionLayer\\Public\\PAL_PlungerAbstractionLayer"
+      },
+      {
+        "elementName": "XPass_BB00000_PAL_PlungerAbstractionLayer",
+        "oid": "040qm00800001ng71c5g7kd0tbkho",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\PAL_PlungerAbstractionLayer\\Component\\Modules\\XPass_BB00000_PAL_PlungerAbstractionLayer"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\DragTorqueController\\Component\\DTFDTCDTE\\Dtc5ms20ms_ECU_CSW_BB00001",
+    "oid": "040qm0001g001pg70s751kbkdmpj2",
+    "members": [
+      {
+        "elementName": "Asw2Asw_Dtc5ms20ms",
+        "oid": "040qm0001g001pg70s751kk8fndj2",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\DragTorqueController\\Component\\DTFDTCDTE\\Module\\Asw2Asw_Dtc5ms20ms"
+      },
+      {
+        "elementName": "XPass_BB00000_Dtc5ms20ms",
+        "oid": "040qm0001g001pg70s751klca75j4",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\DragTorqueController\\Component\\DTFDTCDTE\\Module\\XPass_BB00000_Dtc5ms20ms"
+      },
+      {
+        "elementName": "DTC_SplitFA",
+        "oid": "040qm00b2c001oo708d0abvtfpfmo",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\DragTorqueController\\Public\\DragTorqueController_SplitDriveTrainFA_20ms"
+      },
+      {
+        "elementName": "DTC_pre",
+        "oid": "040qm00b2c001oo708a084cpukhgo",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\DragTorqueController\\Public\\DragTorqueController_preprocessing_20ms"
+      },
+      {
+        "elementName": "DTC_post",
+        "oid": "040qm00b2c001oo708ag6kt4jemg4",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\DragTorqueController\\Public\\DragTorqueController_postprocessing_20ms"
+      },
+      {
+        "elementName": "DTC_single",
+        "oid": "040qm00b2c001oo708a084jpuud0o",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\DragTorqueController\\Public\\DragTorqueController_SingleDriveTrain_20ms"
+      },
+      {
+        "elementName": "DTC_SplitRA",
+        "oid": "040qm00b2c001oo708d0adpnrt070",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\DragTorqueController\\Public\\DragTorqueController_SplitDriveTrainRA_20ms"
+      },
+      {
+        "elementName": "DTC_pre_5ms",
+        "oid": "040rk0001g001p0710a071j74e7g2",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\DragTorqueController\\Public\\DragTorqueController_preprocessing_5ms"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\InertialSensors\\Component\\INS_StandaloneAsynch\\INSStandaloneAsynch_ECU_CSW_BB00001",
+    "oid": "040qm0040g001n870o62fhejdir2c",
+    "members": [
+      {
+        "elementName": "XPass",
+        "oid": "040qm00314001n870kc09cv9uv8a4",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\InertialSensors\\Component\\INS_StandaloneAsynch\\XPass_BB00000_INS_StandaloneAsynch"
+      },
+      {
+        "elementName": "INS_StandaloneAsynch_20ms",
+        "oid": "040qm00314001n870kc09cv888fq0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\InertialSensors\\Component\\INS_StandaloneAsynch\\INS_StandaloneAsynch_20ms"
+      },
+      {
+        "elementName": "ASW2ASW",
+        "oid": "040qm00314001n87107g6sjj1f40q",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\InertialSensors\\Component\\INS_IntegratedSMI7\\Asw2Asw_INS"
+      },
+      {
+        "elementName": "INS_Standalone_40ms",
+        "oid": "040qm00314001n870kc096gccb9o2",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\InertialSensors\\Component\\INS_Standalone\\INS_Standalone_40ms"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\SteeringAngleSensors\\Component\\SASClass3\\SasClass3_ECU_CSW_BB00001",
+    "oid": "040qm0040g001n870o62eem1nm5g0",
+    "members": [
+      {
+        "elementName": "LTCSas_40ms",
+        "oid": "040qm00600001n87082g920qci6h4",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\SteeringAngleSensors\\Component\\SASClass3\\LTCSas_40ms"
+      },
+      {
+        "elementName": "XPass",
+        "oid": "040go436c8001mo70oe0k9kpakiis",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\SteeringAngleSensors\\Component\\SASClass3\\XPass_BB00000_Class3"
+      },
+      {
+        "elementName": "ASW2ASW",
+        "oid": "040go436c8001mo70oe0k9pfj9g32",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\SteeringAngleSensors\\Component\\SASClass3\\Asw2Asw_Class3"
+      },
+      {
+        "elementName": "SasClass3_20ms",
+        "oid": "040go436c8001mo70oe0k7qnrbf1i",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\SteeringAngleSensors\\Component\\SASClass3\\Class3_20ms"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\WheelSpeedSensors\\Component\\SspWssWithDir\\SspWssWithDir_ECU_CSW_BB00001",
+    "oid": "040qm0040g001n870o62ejlkv9l02",
+    "members": [
+      {
+        "elementName": "Asw2Asw",
+        "oid": "040qm00314001n870cdg5ahlaflgo",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\WheelSpeedSensors\\Component\\SspWssWithDir\\Asw2Asw_SspWssWithDir"
+      },
+      {
+        "elementName": "XPass",
+        "oid": "040qm00314001n870cdg5ahph4e0q",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\WheelSpeedSensors\\Component\\SspWssWithDir\\XPass_BB00000_SspWssWithDir"
+      },
+      {
+        "elementName": "SspWssWithDir_20",
+        "oid": "040qm00314001n870cdg5ahnervgo",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\WheelSpeedSensors\\Component\\SspWssWithDir\\SspWssWithDir_20ms"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\WheelSpeedSensors\\Component\\SspWssWscEdgeAllAddSigTtcNoGc\\SspWssWscEdgeAllAddSigTtcNoGc_ECU_CSW_BB00001",
+    "oid": "040qm0001g001q0708a08c34soi3k",
+    "members": [
+      {
+        "elementName": "SspWss_TtcNoGc_20",
+        "oid": "040qm0001g001q0708a08c352krjk",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\WheelSpeedSensors\\Component\\SspWssWscEdgeAllAddSigTtcNoGc\\SspWss_TtcNoGc_20"
+      },
+      {
+        "elementName": "Asw2Asw_SspWssWscEdgeAllAddSigTtcNoGc",
+        "oid": "040qm0001g001q0708a08c33bse3g",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\WheelSpeedSensors\\Component\\SspWssWscEdgeAllAddSigTtcNoGc\\Asw2Asw_SspWssWscEdgeAllAddSigTtcNoGc"
+      },
+      {
+        "elementName": "SspWss_WscEdgeAllAddSigTtc_20",
+        "oid": "040qm0001g001q0708a08c3459rji",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\WheelSpeedSensors\\Component\\SspWssWscEdgeAllAddSigTtcNoGc\\SspWss_WscEdgeAllAddSigTtc_20"
+      },
+      {
+        "elementName": "SspWss_WscEdgeAll_5",
+        "oid": "040qm0001g001q0708a08c33ln33g",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\WheelSpeedSensors\\Component\\SspWssWscEdgeAllAddSigTtcNoGc\\SspWss_WscEdgeAll_5"
+      },
+      {
+        "elementName": "XPass_BB00000_SspWssWscEdgeAllAddSigTtcNoGc",
+        "oid": "040qm0001g001q0708a08c35cd63k",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\WheelSpeedSensors\\Component\\SspWssWscEdgeAllAddSigTtcNoGc\\XPass_BB00000_SspWssWscEdgeAllAddSigTtcNoGc"
+      },
+      {
+        "elementName": "SspWss_WscEdgeAllAddSig_120",
+        "oid": "040qm0001g001q0708a08c34f3a3i",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\WheelSpeedSensors\\Component\\SspWssWscEdgeAllAddSigTtcNoGc\\SspWss_WscEdgeAllAddSig_120"
+      },
+      {
+        "elementName": "SspWss_vVehInt_5",
+        "oid": "040qm0001g001q070scg91alqlm08",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\WheelSpeedSensors\\Component\\SspWssWscEdgeAllAddSigTtcNoGc\\SspWss_vVehInt_5"
+      },
+      {
+        "elementName": "SspWss_ModInt_5",
+        "oid": "040qm0001g001q070scg91alct6g8",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\WheelSpeedSensors\\Component\\SspWssWscEdgeAllAddSigTtcNoGc\\SspWss_ModInt_5"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\ABP_AutomaticBrakePrefill\\component\\ABP_IPB_ECU_CSW_BB00001",
+    "oid": "040gpc88b1pg1oo70ke3girvkpl04",
+    "members": [
+      {
+        "elementName": "ABP20ms_IPB",
+        "oid": "040gpc88b1pg1oo70ke3go7b8ipgk",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\ABP_AutomaticBrakePrefill\\public\\ABP20ms_IPB"
+      },
+      {
+        "elementName": "XPass_BB00000_ABP",
+        "oid": "040qm00100001mo70ob0ekqmjhebe",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\ABP_AutomaticBrakePrefill\\component\\XPass_BB00000_ABP"
+      },
+      {
+        "elementName": "Asw2Asw_ABP",
+        "oid": "040qm00100001mo70ob0ekqrhmvbk",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\ABP_AutomaticBrakePrefill\\component\\Asw2Asw_ABP"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\Hydraulics\\Component\\HAL_IPB\\HAL_IPB_ECU_CSW_BB00001",
+    "oid": "040rk0001g001po70sc1e38so3o1s",
+    "members": [
+      {
+        "elementName": "IPB_5ms_NewValveActuation",
+        "oid": "040qm00ao8001ng718705nn253ch4",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\Hydraulics\\Public\\IPB_5ms_NewValveActuation"
+      },
+      {
+        "elementName": "IPB_5ms_TargetPressureArbitration",
+        "oid": "040qm00ao8001ng718705ngc6iggu",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\Hydraulics\\Public\\IPB_5ms_TargetPressureArbitration"
+      },
+      {
+        "elementName": "XPass",
+        "oid": "040qm00a00001ng714d057d5fbt3a",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\Hydraulics\\Component\\HAL_IPB\\XPass_BB00000_HALsxIPB"
+      },
+      {
+        "elementName": "HAL5ms",
+        "oid": "040qm00ao8001no70gbg5rtr90v0i",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\Hydraulics\\Public\\HAL_ESP_5ms_IPB"
+      },
+      {
+        "elementName": "Asw2Asw",
+        "oid": "040qm00a00001ng714d05754cbi38",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\Hydraulics\\Component\\HAL_IPB\\Asw2Asw_HALsxIPB"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\VLC_VehicleLongitudinalControl\\VLC_ACC\\component\\VLC\\VLC_ECU_CSW_BB00001",
+    "oid": "040qm00600001n870o62lfu2l5vn4",
+    "members": [
+      {
+        "elementName": "VLC_DecisionLayer",
+        "oid": "040qm000ms001p071c607mi1cc9iq",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VLC_VehicleLongitudinalControl\\VLC_ACC\\private\\VLC_DecisionLayer"
+      },
+      {
+        "elementName": "XPass",
+        "oid": "040qm00100001mo70ob0et41mc300",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VLC_VehicleLongitudinalControl\\VLC_ACC\\component\\VLC\\XPass_BB00000_VLC"
+      },
+      {
+        "elementName": "VLC_Wrapper",
+        "oid": "040qm000p0001p070s4089upaqihc",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VLC_VehicleLongitudinalControl\\VLC_ACC\\private\\VLC_Wrapper"
+      },
+      {
+        "elementName": "Asw2Asw",
+        "oid": "040qm00100001mo70ob0et4hadk06",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VLC_VehicleLongitudinalControl\\VLC_ACC\\component\\VLC\\Asw2Asw_VLC"
+      },
+      {
+        "elementName": "VLC_PreCalculation",
+        "oid": "040qm000ms001p87043g90qh1i0qq",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VLC_VehicleLongitudinalControl\\VLC_ACC\\private\\VLC_PreCalculation"
+      },
+      {
+        "elementName": "VLC_AxPreparation",
+        "oid": "040qm000ms001p071c608f6mrt7gk",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VLC_VehicleLongitudinalControl\\VLC_ACC\\private\\VLC_AxPreparation"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\VLC_VehicleLongitudinalControl\\VLC_APA\\component\\VLC\\VLCAPA_ECU_CSW_BB00001",
+    "oid": "040qm00608001ng7102inm94aa12a",
+    "members": [
+      {
+        "elementName": "XPass",
+        "oid": "040qm00608001ng7102inm92pgria",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VLC_VehicleLongitudinalControl\\VLC_APA\\component\\VLC\\XPass_BB00000_VLC_APA"
+      },
+      {
+        "elementName": "VLC20ms_APA",
+        "oid": "040qm00608001ng714cgpfet83qkk",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VLC_VehicleLongitudinalControl\\VLC_APA\\examples\\VLC20ms_APA"
+      },
+      {
+        "elementName": "Asw2Asw",
+        "oid": "040qm00608001ng7102inm927vti8",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VLC_VehicleLongitudinalControl\\VLC_APA\\component\\VLC\\Asw2Asw_VLC_APA"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Component\\CSMPlus_ECU_CSW_BB00001",
+    "oid": "040qm00000001p0704bg8pg6ccqhm",
+    "members": [
+      {
+        "elementName": "CSM_CoreHoldService",
+        "oid": "040gpc88gm3g1oo70segc8rfj45ga",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Private\\Hold\\CSM_CoreHoldService"
+      },
+      {
+        "elementName": "CSM_VSE",
+        "oid": "040gpc88gm3g1oo70s2hi6s8nffg4",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Private\\VSE\\CSM_VSE"
+      },
+      {
+        "elementName": "CSM_SecureFeedback",
+        "oid": "040qm00000001pg70o1g6rk1cr512",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Private\\Secure\\CSM_SecureFeedback"
+      },
+      {
+        "elementName": "CSM_Post_LDM_DynamicArbitrator",
+        "oid": "040qm00000001oo71g609dq2b561m",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Private\\Post_Wrapper\\CSM_Post_LDM_DynamicArbitrator"
+      },
+      {
+        "elementName": "CSM_Arbitrator",
+        "oid": "040gpc8h69s01p071420crrtrsnh4",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Private\\Arbitrator\\CSM_Arbitrators"
+      },
+      {
+        "elementName": "CSM_CoreGearPositionService",
+        "oid": "040gpc8g61q01pg718dib9kt3c6to",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Private\\GearPositionService\\CSM_CoreGearPositionService"
+      },
+      {
+        "elementName": "CSM_CoreParkService",
+        "oid": "040gpc88gm3g1oo7104091pcfa0g4",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Private\\Park\\CSM_CoreParkService"
+      },
+      {
+        "elementName": "CSM_CoreParkPawlService",
+        "oid": "040gpc88gm3g1oo71040aofpr1n0c",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Private\\ParkPawl\\CSM_CoreParkPawlService"
+      },
+      {
+        "elementName": "CSM_SafetyConnector20ms",
+        "oid": "040qm00000001p870c1g90lbarj04",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Private\\SafetyConnector\\CSM_SafetyConnector20ms"
+      },
+      {
+        "elementName": "Asw2Asw_CSM",
+        "oid": "040gpc88gm3g1oo70s2hi5p8rho04",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Component\\Asw2Asw_CSM"
+      },
+      {
+        "elementName": "XPass_BB00000_CSMCore",
+        "oid": "040qm00000001p070c80agrqom758",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Component\\XPass_BB00000_CSMCore"
+      },
+      {
+        "elementName": "CSM_PreCore",
+        "oid": "040qm00000001p071c3072lfvtjge",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Private\\Hold\\CSM_PreCore"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Component\\CSMReverseGearMon_ECU_CSW_BB00001",
+    "oid": "040qm00000001pg71c7g53uceq30g",
+    "members": [
+      {
+        "elementName": "Asw2Asw_CSMReverseGearMon",
+        "oid": "040qm00000001pg71c7g54ekv360i",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Component\\Asw2Asw_CSMReverseGearMon"
+      },
+      {
+        "elementName": "XPass_BB00000_CSMReverseGearMon",
+        "oid": "040qm00000001pg71c7g54miag4gm",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Component\\XPass_BB00000_CSMReverseGearMon"
+      },
+      {
+        "elementName": "CSM_ReverseGearSwitchMonitoring",
+        "oid": "040qm00000001oo718706e1m1jf5m",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Private\\Monitorings\\ReverseGearSwitchMonitoring\\CSM_ReverseGearSwitchMonitoring"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\LDMCoor_LongitudinalDynamicArbitrator\\Component\\LDMCoordinator_ECU_CSW_BB00001",
+    "oid": "040gpc83451g1no714ag7lc2bt30e",
+    "members": [
+      {
+        "elementName": "LDMCoor",
+        "oid": "040qm00e00001og7083g5gjamk724",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LDMCoor_LongitudinalDynamicArbitrator\\private\\LDMCoor"
+      },
+      {
+        "elementName": "Xpass_BB00000_LDMCoordinator",
+        "oid": "040gpc83451g1no714ag7lbub4c0e",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LDMCoor_LongitudinalDynamicArbitrator\\Component\\Xpass_BB00000_LDMCoordinator"
+      },
+      {
+        "elementName": "Asw2Asw_LDMCoordinator",
+        "oid": "040gpc83451g1no714ag7lc5p1mge",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LDMCoor_LongitudinalDynamicArbitrator\\Component\\Asw2Asw_LDMCoordinator"
+      },
+      {
+        "elementName": "LDMCoor_InterTaskData",
+        "oid": "040qm00e00001o871gdilp2kbae00",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LDMCoor_LongitudinalDynamicArbitrator\\private\\LDMCoor_InterTaskData"
+      },
+      {
+        "elementName": "LDMCoorGlobal",
+        "oid": "040qm00e00001p070sbgb34mqtnga",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LDMCoor_LongitudinalDynamicArbitrator\\private\\LDMCoorGlobal"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\LCO_LongitudinalControlOffRoad\\Component\\CAX_ECU_CSW_BB00001",
+    "oid": "040qm00000001pg70s90896i827ig",
+    "members": [
+      {
+        "elementName": "CAX_RequestWrapper",
+        "oid": "040qm000p0001oo71g4hepmhh7a0u",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LCO_LongitudinalControlOffRoad\\private\\Pre_Wrapper\\CAX_RequestWrapper"
+      },
+      {
+        "elementName": "LCO_Preprocessing",
+        "oid": "040qm000p0001oo70ocghe1qnrg3a",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LCO_LongitudinalControlOffRoad\\public\\LCO_Preprocessing"
+      },
+      {
+        "elementName": "CAX20ms",
+        "oid": "040qm000p0001oo70ocgh5hagsl02",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LCO_LongitudinalControlOffRoad\\public\\CAX20ms"
+      },
+      {
+        "elementName": "ASW2ASW_CAX",
+        "oid": "040qm00000001pg70s907ioh2ifg4",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LCO_LongitudinalControlOffRoad\\Component\\ASW2ASW_CAX"
+      },
+      {
+        "elementName": "XPass_BB00000_CAX",
+        "oid": "040gpc89cs801pg7101kg7c2r8pg0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LCO_LongitudinalControlOffRoad\\Component\\XPass_BB00000_CAX"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\LCO_LongitudinalControlOffRoad\\Component\\LTP_ECU_CSW_BB00001",
+    "oid": "040qm000p0001pg70s7g69im1sg1c",
+    "members": [
+      {
+        "elementName": "LTP_RequestWrapper",
+        "oid": "040qm000p0001pg70s7g7arfv5i0g",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LCO_LongitudinalControlOffRoad\\private\\Pre_Wrapper\\LTP_RequestWrapper"
+      },
+      {
+        "elementName": "XPass_BB00000_LTP",
+        "oid": "040gpd801g001pg710d0798d4m900",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LCO_LongitudinalControlOffRoad\\Component\\XPass_BB00000_LTP"
+      },
+      {
+        "elementName": "LTP_CVX20ms",
+        "oid": "040qm000p0001pg70s7g6i1i4o3g0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LCO_LongitudinalControlOffRoad\\public\\LTP_CVX20ms"
+      },
+      {
+        "elementName": "LTP_OutputWrapper",
+        "oid": "040qm000p0001pg70sdg71ltltp1g",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LCO_LongitudinalControlOffRoad\\private\\Post_Wrapper\\LTP_OutputWrapper"
+      },
+      {
+        "elementName": "LTP_TRP20ms",
+        "oid": "040qm000p0001pg70s7g6bgk1lohe",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LCO_LongitudinalControlOffRoad\\public\\LTP_TRP20ms"
+      },
+      {
+        "elementName": "ASW2ASW_LTP",
+        "oid": "040gpd801g001pg710d0796ualt00",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LCO_LongitudinalControlOffRoad\\Component\\ASW2ASW_LTP"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\CCO_CruiseControlOffroad\\Component\\CCO_ECU_CSW_BB00001",
+    "oid": "040qm000p0001p07108g5d6e32vj6",
+    "members": [
+      {
+        "elementName": "CCO_Wrapper_Postprocessing",
+        "oid": "040gpc8841bg1pg71067iir9nq6i4",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CCO_CruiseControlOffroad\\Public\\CCO_Wrapper_Postprocessing"
+      },
+      {
+        "elementName": "XPass_BB00000_CCO",
+        "oid": "040gpc8gggsg1p071082irb7ikm6s",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CCO_CruiseControlOffroad\\Component\\XPass_BB00000_CCO"
+      },
+      {
+        "elementName": "CCO_Main",
+        "oid": "040gpc8gggsg1p07105gup2k3sn1m",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CCO_CruiseControlOffroad\\Public\\CCO_Main"
+      },
+      {
+        "elementName": "Asw2Asw_CCO",
+        "oid": "040gpc8gggsg1p071082irdlipf6s",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CCO_CruiseControlOffroad\\Component\\Asw2Asw_CCO"
+      },
+      {
+        "elementName": "CCO_Wrapper",
+        "oid": "040gpc8gggsg1p071082iop8b93mk",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CCO_CruiseControlOffroad\\Public\\CCO_Wrapper"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\EMC_EmergencyModeControl\\Component\\Main\\EMC_Main_ECU_CSW_BB00001",
+    "oid": "040qm00e00001o071g3gca8em8f06",
+    "members": [
+      {
+        "elementName": "EMC_Main_XPass_BB00000",
+        "oid": "040qm00e00001o071g3gce4ouu8gc",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\EMC_EmergencyModeControl\\Component\\Main\\XPass_BB00000_Main_EMC"
+      },
+      {
+        "elementName": "EMC_Stop_Main20ms",
+        "oid": "040qm00000001o871081pt070j3ia",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\EMC_EmergencyModeControl\\Component\\Main\\EMC_Stop_Main20ms"
+      },
+      {
+        "elementName": "EMC_Feedback_Main20ms",
+        "oid": "040qm00e00001o07185h03paa7vns",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\EMC_EmergencyModeControl\\Component\\Main\\EMC_Feedback_Main20ms"
+      },
+      {
+        "elementName": "EMC_Drive_Main20ms",
+        "oid": "040qm00e00001o07101gtlt2udpqs",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\EMC_EmergencyModeControl\\Component\\Main\\EMC_Drive_Main20ms"
+      },
+      {
+        "elementName": "EMC_Main_Asw2Asw",
+        "oid": "040gpc89gu401pg70ka0el7v5cv00",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\EMC_EmergencyModeControl\\Component\\Main\\EMC_Main_Asw2Asw"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\VehicleStateEstimation\\Component\\VSE_ECU_CSW_BB00001",
+    "oid": "040qm00000001pg718605l24de94i",
+    "members": [
+      {
+        "elementName": "XPass_BB00000_VSE",
+        "oid": "040qm00000001pg718605lcvgr04i",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VehicleStateEstimation\\Component\\XPass_BB00000_VSE"
+      },
+      {
+        "elementName": "Asw2Asw_VSE",
+        "oid": "040qm00000001pg718605ld0c7jki",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VehicleStateEstimation\\Component\\Asw2Asw_VSE"
+      },
+      {
+        "elementName": "VSE_20ms",
+        "oid": "040qm0001g001po70c51f0fe4qg54",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VehicleStateEstimation\\Component\\VSE_20ms"
+      },
+      {
+        "elementName": "VSE_5ms",
+        "oid": "040qm0001g001po7083g7aktkk926",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VehicleStateEstimation\\Component\\VSE_5ms"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\AVH_AutomaticVehicleHold\\Component\\AVH_ECU_CSW_BB00001",
+    "oid": "040gm00041j01n870o62n188rg9e8",
+    "members": [
+      {
+        "elementName": "AVH20ms",
+        "oid": "040qm00218001mo70460oiht697ne",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\AVH_AutomaticVehicleHold\\Component\\AVH20ms"
+      },
+      {
+        "elementName": "Asw2Asw",
+        "oid": "040qm00100001mo70ob0f8r8f4b6k",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\AVH_AutomaticVehicleHold\\Component\\Asw2Asw_AVH"
+      },
+      {
+        "elementName": "XPass",
+        "oid": "040qm00100001mo70ob0f8r4i6q6c",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\AVH_AutomaticVehicleHold\\Component\\XPass_BB00000_AVH"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\LFC_LongitudinalForceControl\\Component\\LFC\\LFC_ECU_CSW_BB00001",
+    "oid": "040qm00600001n870o62ld2d803lo",
+    "members": [
+      {
+        "elementName": "LFC20ms",
+        "oid": "040qm03j88001mo704eetln0qt6g8",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LFC_LongitudinalForceControl\\public\\LFC20ms"
+      },
+      {
+        "elementName": "XPass",
+        "oid": "040qm00300001n870g8grmj5m2l00",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LFC_LongitudinalForceControl\\Component\\LFC\\XPass_BB00000_LFC"
+      },
+      {
+        "elementName": "Asw2Asw",
+        "oid": "040qm00300001n870g8grmj3rdh00",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LFC_LongitudinalForceControl\\Component\\LFC\\Asw2Asw_LFC"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\AWB_AutomaticWarningBrake\\Component\\AWB_ECU_CSW_BB00001",
+    "oid": "040gm00041j01n870o62n1f9h3iu8",
+    "members": [
+      {
+        "elementName": "AWB20ms",
+        "oid": "040qm00300001mg71g6h3e10upo3e",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\AWB_AutomaticWarningBrake\\Component\\AWB20ms"
+      },
+      {
+        "elementName": "Asw2Asw_AWB",
+        "oid": "040qm00200001n870g406t1f4d60a",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\AWB_AutomaticWarningBrake\\Component\\Asw2Asw_AWB"
+      },
+      {
+        "elementName": "XPass_BB00000_AWB",
+        "oid": "040qm00200001n870g406t1i9tn0a",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\AWB_AutomaticWarningBrake\\Component\\XPass_BB00000_AWB"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\BrakeSignalsAndMonitorings\\Component\\Acm5ms20ms_SC_AC_IPB\\AcmIPB_ECU_CSW_BB00001",
+    "oid": "040qm00800001ng7184g6q9uhgvh2",
+    "members": [
+      {
+        "elementName": "Asw2Asw_AcmIPB",
+        "oid": "040qm00800001ng7184g6q9vsdgh2",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BrakeSignalsAndMonitorings\\Component\\Acm5ms20ms_SC_AC_IPB\\Asw2Asw_AcmIPB"
+      },
+      {
+        "elementName": "XPass_BB00000_AcmIPB",
+        "oid": "040qm00800001ng7184g6qa0hu512",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BrakeSignalsAndMonitorings\\Component\\Acm5ms20ms_SC_AC_IPB\\XPass_BB00000_AcmIPB"
+      },
+      {
+        "elementName": "ACM_IPB_5ms",
+        "oid": "040qm00800001ng7184g70fm8tshe",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BrakeSignalsAndMonitorings\\Public\\ACM_IPB_5ms"
+      },
+      {
+        "elementName": "ACM_IPB_20ms",
+        "oid": "040qm00800001ng7184g70fmqej1e",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BrakeSignalsAndMonitorings\\Public\\ACM_IPB_20ms"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\MSC_MotorSignalConditioning\\Component\\Projects\\MSC_ECU_CSW_BB00000",
+    "oid": "040qm00800001no7088gd065ul3gg",
+    "members": [
+      {
+        "elementName": "XPass_BB00000_MSC_MotorSignalConditioning",
+        "oid": "040qm00800001no7088gd1r48qv0g",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\MSC_MotorSignalConditioning\\Component\\Modules\\XPass_BB00000_MSC_MotorSignalConditioning"
+      },
+      {
+        "elementName": "ASW2ASW_MSC_MotorSignalConditioning",
+        "oid": "040qm00800001no7088gd0n5klkgg",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\MSC_MotorSignalConditioning\\Component\\Modules\\ASW2ASW_MSC_MotorSignalConditioning"
+      },
+      {
+        "elementName": "MSC_MotorSignalConditioning",
+        "oid": "040qm00800001no7088gcplno6q0e",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\MSC_MotorSignalConditioning\\Public\\MSC_MotorSignalConditioning"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\HSH_HydraulicStateHandler\\Component\\HSH\\HSH_ECU_CSW_BB00001",
+    "oid": "040qm00c9k001no708105kv2al10m",
+    "members": [
+      {
+        "elementName": "ASW2ASW",
+        "oid": "040qm00c9k001no708105kv1df8gg",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\HSH_HydraulicStateHandler\\Component\\HSH\\ASW2ASW_HSH"
+      },
+      {
+        "elementName": "HSH5ms",
+        "oid": "040qm009dc001ng7188169qjsun0c",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\HSH_HydraulicStateHandler\\Public\\HSH5ms"
+      },
+      {
+        "elementName": "HSH5ms_Pre",
+        "oid": "040qm00c9k001no70gc0fkjeuk1g0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\HSH_HydraulicStateHandler\\Public\\HSH5ms_Pre"
+      },
+      {
+        "elementName": "XPass",
+        "oid": "040qm00c9k001no708105kv3nhigm",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\HSH_HydraulicStateHandler\\Component\\HSH\\XPass_BB00000_HSH"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\PPC_PressurePlausibilityCheck\\Component\\PPCbase\\PPCbase_ECU_CSW_BB00001",
+    "oid": "040qm0000o001p870sbga35mcdjgk",
+    "members": [
+      {
+        "elementName": "XPass_BB000000_PPCbase_PressurePlausibilityCheck",
+        "oid": "040gm009elkg1p870sd0vdf1i100u",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\PPC_PressurePlausibilityCheck\\Component\\PPCbase\\XPass_BB000000_PPCbase_PressurePlausibilityCheck"
+      },
+      {
+        "elementName": "Asw2Asw_PPCbase_PressurePlausibilityCheck",
+        "oid": "040qm0000o001p870sbga43d4640k",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\PPC_PressurePlausibilityCheck\\Component\\PPCbase\\Asw2Asw_PPCbase_PressurePlausibilityCheck"
+      },
+      {
+        "elementName": "PPCbase_20ms",
+        "oid": "040qm0000o001p870sbga4lhcijgk",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\PPC_PressurePlausibilityCheck\\Component\\PPCbase\\PPCbase_20ms"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\AIM_AirMonitoring\\Component\\AimIPB\\AimIPB_ECU_CSW_BB00000",
+    "oid": "040qm00a24001no70c9g6i9usrr2i",
+    "members": [
+      {
+        "elementName": "Asw2Asw_AimIPB",
+        "oid": "040qm00a24001no70c9g6i9uj372i",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\AIM_AirMonitoring\\Component\\AimIPB\\Asw2Asw_AimIPB"
+      },
+      {
+        "elementName": "AimIPB_5ms",
+        "oid": "040qm00a24001no70c9g6j6d05kio",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\AIM_AirMonitoring\\Public\\AimIPB_5ms"
+      },
+      {
+        "elementName": "XPass_BB00000_AimIPB",
+        "oid": "040qm00a24001no70c9g6i9vi4dik",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\AIM_AirMonitoring\\Component\\AimIPB\\XPass_BB00000_AimIPB"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\RPL_Replenishment\\Component\\RPL\\RPL_ECU_CSW_BB00001",
+    "oid": "040qm009dc001ng71830590n00m06",
+    "members": [
+      {
+        "elementName": "XPass",
+        "oid": "040qm009dc001ng71830590o71706",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\RPL_Replenishment\\Component\\RPL\\XPass_BB00000_RPL"
+      },
+      {
+        "elementName": "ASW2ASW",
+        "oid": "040qm009dc001ng71830590pc5t06",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\RPL_Replenishment\\Component\\RPL\\ASW2ASW_RPL"
+      },
+      {
+        "elementName": "RPLCtrl5ms",
+        "oid": "040qm009dc001ng7183057oqureg4",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\RPL_Replenishment\\Public\\RPLCtrl5ms"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\LEM_LeakageMonitoring\\Component\\LemIPB\\LemIPB_ECU_CSW_BB00000",
+    "oid": "040qm00a24001no70kb1h60pn4vg0",
+    "members": [
+      {
+        "elementName": "LemIPB_5ms",
+        "oid": "040qm00a24001no70kb1h64ng3gg0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LEM_LeakageMonitoring\\Component\\LemIPB\\LemIPB_5ms"
+      },
+      {
+        "elementName": "XPass_BB00000_LemIPB",
+        "oid": "040qm00a24001no70kb1h60rbu1g0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LEM_LeakageMonitoring\\Component\\LemIPB\\XPass_BB00000_LemIPB"
+      },
+      {
+        "elementName": "Asw2Asw_LemIPB",
+        "oid": "040qm00a24001no70kb1h60qs9i00",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LEM_LeakageMonitoring\\Component\\LemIPB\\Asw2Asw_LemIPB"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\BDW_BrakeDiskWiping\\component\\BDW_IPB_ECU_CSW_BB00001",
+    "oid": "040gpc88b1pg1oo70ke3hjcl5ckjm",
+    "members": [
+      {
+        "elementName": "XPass_BB00000_BDW_IPB",
+        "oid": "040gpc88b1pg1oo70ke3hjakeg1jm",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BDW_BrakeDiskWiping\\component\\XPass_BB00000_BDW_IPB"
+      },
+      {
+        "elementName": "Asw2Asw_BDW_IPB",
+        "oid": "040gpc88b1pg1oo70ke3hfkuvc83k",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BDW_BrakeDiskWiping\\component\\Asw2Asw_BDW_IPB"
+      },
+      {
+        "elementName": "BDW20ms_IPB",
+        "oid": "040gpc88b1pg1oo70kejnf0hbid0a",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BDW_BrakeDiskWiping\\public\\BDW20ms_IPB"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\KBM_KnockBackMitigation\\Component\\KBM\\KBM_ECU_CSW_BB00000",
+    "oid": "040ru1001g001q070cd06ntgdrliu",
+    "members": [
+      {
+        "elementName": "KBM20ms_Router",
+        "oid": "040ru1001g001q070cd06v91uvvj0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\KBM_KnockBackMitigation\\Public\\KBM20ms_Router"
+      },
+      {
+        "elementName": "XPass_BB00000_KBM",
+        "oid": "040ru1001g001q070cd06ntghk0j0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\KBM_KnockBackMitigation\\Component\\KBM\\XPass_BB00000_KBM"
+      },
+      {
+        "elementName": "Asw2Asw_KBM",
+        "oid": "040ru1001g001q070cd06ntg7v1iu",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\KBM_KnockBackMitigation\\Component\\KBM\\Asw2Asw_KBM"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\BLA\\Component\\BLA\\BLA_BrakeLightActuation_ECU_CSW_BB00001",
+    "oid": "040gm00i40jg1pg71c72c32923ahu",
+    "members": [
+      {
+        "elementName": "BLA_BrakeLightActuation_20ms",
+        "oid": "040gm00i40jg1pg71c4go15fkusgo",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BLA\\Public\\BLA_BrakeLightActuation_20ms"
+      },
+      {
+        "elementName": "XPass_BB00000_BrakeLightActuation",
+        "oid": "040gm00i40jg1pg71c7iod3ed5li6",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BLA\\Component\\BLA\\Modules\\XPass_BB00000_BrakeLightActuation"
+      },
+      {
+        "elementName": "Asw2Asw_BLA20msESP",
+        "oid": "040gm00i40jg1pg71c72ckch6m4i0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BLA\\Component\\BLA\\Modules\\Asw2Asw_BLA20msESP"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\BrakeDiscTemperatureModel\\Component\\BTM\\BTM_ECU_CSW_BB00001",
+    "oid": "040qm00600001n870o630llmmfqm0",
+    "members": [
+      {
+        "elementName": "XPass_BB00000_BTM",
+        "oid": "040qm00300001n870g8ggkn0elug0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BrakeDiscTemperatureModel\\Component\\BTM\\XPass_BB00000_BTM"
+      },
+      {
+        "elementName": "BTM120ms",
+        "oid": "040qm00300001n870g8gjda5ll51c",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BrakeDiscTemperatureModel\\Public\\BTM120ms"
+      },
+      {
+        "elementName": "Asw2Asw_BTM",
+        "oid": "040qm00300001n870g8ggkmurscg0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BrakeDiscTemperatureModel\\Component\\BTM\\Asw2Asw_BTM"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\BoostFunctions\\Component\\BoostCore\\BoostFcns_ECU_CSW_BB00001",
+    "oid": "040qm00e00001o8718cg8ijtfu52s",
+    "members": [
+      {
+        "elementName": "Asw2Asw_Boost",
+        "oid": "040qm00618001o8710c15kr2haj1a",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BoostFunctions\\Component\\BoostCore\\Asw2Asw_Boost"
+      },
+      {
+        "elementName": "SBB_Main",
+        "oid": "040qm0001g001pg70g5hpmue0hlga",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BoostFunctions\\Public\\SBB_Main"
+      },
+      {
+        "elementName": "Boost_Postprocessing_Main",
+        "oid": "040qm00e00001o8718bg84oupiu1e",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BoostFunctions\\Public\\Boost_Postprocessing_Main"
+      },
+      {
+        "elementName": "HBB_HBC_Main",
+        "oid": "040qm00e00001o8718bg84l9fmlhe",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BoostFunctions\\Public\\HBB_HBC_Main"
+      },
+      {
+        "elementName": "HFC_Main",
+        "oid": "040qm00e00001oo708207emg1s1g0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BoostFunctions\\Public\\HFC_Main"
+      },
+      {
+        "elementName": "Boost_PressGradientDS10",
+        "oid": "040qm00e00001o871cc06r1rhhj0m",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BoostFunctions\\Public\\Boost_PressGradientDS10"
+      },
+      {
+        "elementName": "Boost_Preprocessing_Main",
+        "oid": "040qm00618001o870s5gg4b0nld06",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BoostFunctions\\Public\\Boost_Preprocessing_Main"
+      },
+      {
+        "elementName": "HBA_Main",
+        "oid": "040qm00e00001o8718bg84k0p6c1e",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BoostFunctions\\Public\\HBA_Main"
+      },
+      {
+        "elementName": "HRB_Main",
+        "oid": "040qm00e00001oo704eh5i78jmbh4",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BoostFunctions\\Public\\HRB_Main"
+      },
+      {
+        "elementName": "XPass_BB00000_Boost",
+        "oid": "040qm00618001o8710c15kqp4vqh8",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BoostFunctions\\Component\\BoostCore\\XPass_BB00000_Boost"
+      },
+      {
+        "elementName": "MVR_Main",
+        "oid": "040qm00000001oo70s1gef4f9u42g",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\BoostFunctions\\Public\\MVR_Main"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\CDD_ControlledDecelerationforDriverAssistanceSystems\\CDD_AP\\component\\CDD\\CDDAP_ECU_CSW_BB00001",
+    "oid": "040qm00608001no714cinji9rd7a8",
+    "members": [
+      {
+        "elementName": "XPass",
+        "oid": "040qm00608001no714cinjigvhjq8",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CDD_ControlledDecelerationforDriverAssistanceSystems\\CDD_AP\\component\\CDD\\XPass_BB00000_CDD_AP"
+      },
+      {
+        "elementName": "CDDAP20ms",
+        "oid": "040qm00608001no714cinjq310oqc",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CDD_ControlledDecelerationforDriverAssistanceSystems\\CDD_AP\\examples\\CDDAP20ms"
+      },
+      {
+        "elementName": "Asw2Asw",
+        "oid": "040qm00608001no714cinji14jnq6",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CDD_ControlledDecelerationforDriverAssistanceSystems\\CDD_AP\\component\\CDD\\Asw2Asw_CDD_AP"
+      },
+      {
+        "elementName": "CDD_SysVarLimCDDAP",
+        "oid": "040qm00608001no714cinl4p6bvcm",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CDD_ControlledDecelerationforDriverAssistanceSystems\\CDD_AP\\public\\CDD_SysVarLimCDD_AP"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\LDMFxVehConnector\\Component\\LDMFxVehConnector_IPB\\LDMFxVehConnectorIPB_ECU_CSW_BB00001",
+    "oid": "040gpc86cq001oo70kc09pobc9e3i",
+    "members": [
+      {
+        "elementName": "Asw2Asw_LDMFxVehConnectorIPB",
+        "oid": "040gpc86cq001oo70kc09qgjrtp3i",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LDMFxVehConnector\\Component\\LDMFxVehConnector_IPB\\Asw2Asw_LDMFxVehConnectorIPB"
+      },
+      {
+        "elementName": "LDMConf_IPB",
+        "oid": "040gpc86cq001oo70kc09qn7bjg3i",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LDMFxVehConnector\\public\\LDMConf_IPB"
+      },
+      {
+        "elementName": "XPass_BB00000_LDMFxVehConnectorIPB",
+        "oid": "040gpc86cq001oo70kc09qknon6ji",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LDMFxVehConnector\\Component\\LDMFxVehConnector_IPB\\XPass_BB00000_LDMFxVehConnectorIPB"
+      },
+      {
+        "elementName": "LDMFxVehConnectorIPB5ms",
+        "oid": "040gpc86cq001oo70kc09qqkpe23k",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LDMFxVehConnector\\public\\LDMFxVehConnectorIPB5ms"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\CDP_ControlledDecelerationforParkingBrake\\Component\\CDP_ECU_CSW_BB00001",
+    "oid": "040gm00041j01n870o62n2bie3hua",
+    "members": [
+      {
+        "elementName": "XPass_BB00000_CDP",
+        "oid": "040qm00200001n870g406rnt5r002",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CDP_ControlledDecelerationforParkingBrake\\Component\\XPass_BB00000_CDP"
+      },
+      {
+        "elementName": "CDP20ms",
+        "oid": "040qm00300001mg71g6h2iel211pi",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CDP_ControlledDecelerationforParkingBrake\\Component\\CDP20ms"
+      },
+      {
+        "elementName": "Asw2Asw_CDP",
+        "oid": "040qm00200001n870g406rnqdtr02",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CDP_ControlledDecelerationforParkingBrake\\Component\\Asw2Asw_CDP"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\CHP_CentralizedHardwareProtection\\Component\\CHP\\CHP_ECU_CSW_BB00001",
+    "oid": "040gpc8g64001pg70odg9rsbqnv02",
+    "members": [
+      {
+        "elementName": "CHP_5ms_PostHAL",
+        "oid": "040qm0001g001q07045ghjlcmvhg8",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CHP_CentralizedHardwareProtection\\Public\\CHP_5ms_PostHAL"
+      },
+      {
+        "elementName": "ASW2ASW_CHP",
+        "oid": "040gpc8g64001pg70oe0f51si2nga",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CHP_CentralizedHardwareProtection\\Component\\CHP\\ASW2ASW_CHP"
+      },
+      {
+        "elementName": "XPass_BB00000_CHP",
+        "oid": "040gpc8g64001pg70oe0f549f3kga",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CHP_CentralizedHardwareProtection\\Component\\CHP\\XPass_BB00000_CHP"
+      },
+      {
+        "elementName": "CHP_5ms",
+        "oid": "040gpc8g64001pg70of0pfk41bog0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\CHP_CentralizedHardwareProtection\\Public\\CHP_5ms"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\MLI_MotorLimitation\\Component\\xPB\\MLIxpb_ECU_CSW_BB00000",
+    "oid": "040g00001g001pg70s30c2stu58ga",
+    "members": [
+      {
+        "elementName": "ASW2ASW_MLI_MotorLimitation",
+        "oid": "040qm00800001no704agp26uq7e3a",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\MLI_MotorLimitation\\Component\\IPB\\ASW2ASW_MLI_MotorLimitation"
+      },
+      {
+        "elementName": "XPass_BB00000_MLI_MotorLimitation",
+        "oid": "040qm00800001no704agp2i5841jc",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\MLI_MotorLimitation\\Component\\IPB\\XPass_BB00000_MLI_MotorLimitation"
+      },
+      {
+        "elementName": "MLI_MotorLimitation",
+        "oid": "040qm00800001no704agos3df4jj6",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\MLI_MotorLimitation\\Public\\MLI_MotorLimitation"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\Connector\\Component\\Connector5msIPB_ECU_CSW_BB00001",
+    "oid": "040gm0042ti01o8708di86hcb0j1m",
+    "members": [
+      {
+        "elementName": "Asw2Asw_Connector5msIPB",
+        "oid": "040gm0042ti01o8708di8cdlghl24",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\Connector\\Component\\Modules\\Asw2Asw_Connector5msIPB"
+      },
+      {
+        "elementName": "Connector_VDC_TCS_forIPB",
+        "oid": "040qm00900001o07046gh7rk9s5ke",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\Connector\\Public\\Connector_VDC_TCS_forIPB"
+      },
+      {
+        "elementName": "Connector_pTgtLimit_IPB",
+        "oid": "040gm0098d401pg70810fpircchk6",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\Connector\\Component\\Modules\\Connector_pTgtLimit_IPB"
+      },
+      {
+        "elementName": "XPass_BB00000_Connector5ms",
+        "oid": "040gm0042ti01o070cc08lf5tu1h0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\Connector\\Component\\Modules\\XPass_BB00000_Connector5ms"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\DAT_DiagnosisActuationTest\\Component\\XPB\\DATxpb_ECU_CSW_BB00001",
+    "oid": "040gm006c0g01p87140g5323pgh1q",
+    "members": [
+      {
+        "elementName": "DAT5ms",
+        "oid": "040rk0001g001pg70s7g1956idll6",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\DAT_DiagnosisActuationTest\\Public\\DATxpb_Implementation"
+      },
+      {
+        "elementName": "ASW2ASW_DATxpb",
+        "oid": "040rk0001g001pg70s7g19q10illa",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\DAT_DiagnosisActuationTest\\Component\\XPB\\ASW2ASW_DATxpb"
+      },
+      {
+        "elementName": "XPass_BB00000_DATxpb",
+        "oid": "040rk0001g001pg70s7g19nubpg5a",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\DAT_DiagnosisActuationTest\\Component\\XPB\\XPass_BB00000_DATxpb"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\DDR_DriveDirectionRecognition\\Component\\DDR_20ms\\DDR_20ms_ECU_CSW_BB00001",
+    "oid": "040gm00o81801o071g6gickc7agk6",
+    "members": [
+      {
+        "elementName": "XPass_BB00000_DDR_20ms",
+        "oid": "040gm00o81801o071c6hropa7b9g2",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\DDR_DriveDirectionRecognition\\Component\\DDR_20ms\\XPass_BB00000_DDR_20ms"
+      },
+      {
+        "elementName": "ASW2ASW_DDR_20ms",
+        "oid": "040gm00o81801o071c6hrop8inr00",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\DDR_DriveDirectionRecognition\\Component\\DDR_20ms\\ASW2ASW_DDR_20ms"
+      },
+      {
+        "elementName": "DDR_20ms",
+        "oid": "040gm00o81801o071c6hrop944k02",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\DDR_DriveDirectionRecognition\\Component\\DDR_20ms\\DDR_20ms"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\PSM_PowerUpAndShutdownManagement\\Component\\Projects\\PSM_ECU_CSW_BB00000",
+    "oid": "040qm00900001o0718506je92ic2k",
+    "members": [
+      {
+        "elementName": "XPass_BB00000_PSM_PowerUpAndShutdownManagement",
+        "oid": "040qm00900001o0718506kt4egh2s",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\PSM_PowerUpAndShutdownManagement\\Component\\Modules\\XPass_BB00000_PSM_PowerUpAndShutdownManagement"
+      },
+      {
+        "elementName": "PSM_PowerUpAndShutdownManagement",
+        "oid": "040qm00900001o0718506kkoo67iq",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\PSM_PowerUpAndShutdownManagement\\Public\\PSM_PowerUpAndShutdownManagement"
+      },
+      {
+        "elementName": "Asw2Asw_PSM_PowerUpAndShutdownManagement",
+        "oid": "040qm00900001o0718506kt3uvv2q",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\PSM_PowerUpAndShutdownManagement\\Component\\Modules\\Asw2Asw_PSM_PowerUpAndShutdownManagement"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\TemperatureSignalChain\\Component\\TSC_IPB\\TSCipb_ECU_CSW_BB00001",
+    "oid": "040qm00600001o0718a06sls35ng0",
+    "members": [
+      {
+        "elementName": "Asw2Asw_TSC_IPB",
+        "oid": "040qm00600001o0718905vlu341g0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\TemperatureSignalChain\\Component\\TSC_IPB\\Asw2Asw_TSC_IPB"
+      },
+      {
+        "elementName": "XPass_BB00000_TSC_IPB",
+        "oid": "040qm00600001o07188g8pgggia0c",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\TemperatureSignalChain\\Component\\TSC_IPB\\XPass_BB00000_TSC_IPB"
+      },
+      {
+        "elementName": "TSC_SignalProcessing",
+        "oid": "040gm0088a201o870o0g5qh4ckfg2",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\TemperatureSignalChain\\Public\\TSC_SignalProcessing"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\FWA_FadingWarningAssist\\Component\\FWA\\FWA_ECU_CSW_BB00001",
+    "oid": "040gpc8314201o07146h5tsmvlh2s",
+    "members": [
+      {
+        "elementName": "XPass_BB00000_Fading_detection",
+        "oid": "040gpc8314201o07147hqr4vt4rl2",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\FWA_FadingWarningAssist\\Component\\FWA\\XPass_BB00000_Fading_detection"
+      },
+      {
+        "elementName": "Asw2Asw_FadingDetection",
+        "oid": "040g001e01o01o070s6025hr5u214",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\FWA_FadingWarningAssist\\Component\\FWA\\Asw2Asw_FadingDetection"
+      },
+      {
+        "elementName": "FWA_IPB_5ms",
+        "oid": "040qm00f00001o071c107o9jo42gc",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\FWA_FadingWarningAssist\\Public\\FWA_IPB_5ms"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\HAZ_HazardWarning\\Component\\HAZ\\HAZ_HazardWarning_ECU_CSW_BB00001",
+    "oid": "040gm00jcm801o07087kdki2otl4s",
+    "members": [
+      {
+        "elementName": "XPass_BB00000_HazardWarning",
+        "oid": "040gm001ipk01no71gff3ojp4cmg4",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\HAZ_HazardWarning\\Component\\HAZ\\Modules\\XPass_BB00000_HazardWarning"
+      },
+      {
+        "elementName": "Asw2Asw_Haz20msESP",
+        "oid": "040gm004j5h01o071010eic06hl14",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\HAZ_HazardWarning\\Component\\HAZ\\Modules\\Asw2Asw_Haz20msESP"
+      },
+      {
+        "elementName": "HAZ_HazardWarning20ms",
+        "oid": "040gm004j5h01o07100gbqb1b3i0k",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\HAZ_HazardWarning\\Public\\HAZ_HazardWarning20ms"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\HHC_HillHoldControl\\Component\\HHCPlus\\HHCPlus_ECU_CSW_BB00001",
+    "oid": "040qm00600001n870o62l8t661d36",
+    "members": [
+      {
+        "elementName": "Asw2Asw_HHCPlus",
+        "oid": "040qm00500001n8708b07at0ja204",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\HHC_HillHoldControl\\Component\\HHCPlus\\Asw2Asw_HHCPlus"
+      },
+      {
+        "elementName": "HHC20ms",
+        "oid": "040qm00500001n8708b07i5m7ik0c",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\HHC_HillHoldControl\\Component\\HHCPlus\\HHCPlus"
+      },
+      {
+        "elementName": "XPass",
+        "oid": "040qm00500001n8708b07at29r704",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\HHC_HillHoldControl\\Component\\HHCPlus\\XPass_BB00000_HHCPlus"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\STF_StiffnessMonitoring\\Component\\HLM\\HLMipb_ECU_CSW_BB00000",
+    "oid": "040rk0001g001po70o2g7ag5die0o",
+    "members": [
+      {
+        "elementName": "HLM_HighLeakageMonitoring_5ms",
+        "oid": "040rk0001g001po70o2g7bqb33c0q",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\STF_StiffnessMonitoring\\Public\\HLM_HighLeakageMonitoring_5ms"
+      },
+      {
+        "elementName": "Asw2Asw_HLM",
+        "oid": "040rk0001g001po70oeg8fah40u0o",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\STF_StiffnessMonitoring\\Component\\HLM\\Asw2Asw_HLM"
+      },
+      {
+        "elementName": "XPass_BB00000_HLM",
+        "oid": "040rk0001g001po70s2g7vodtbo2u",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\STF_StiffnessMonitoring\\Component\\HLM\\XPass_BB00000_HLM"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\TPC_TargetPressureCircuitseparation\\Component\\TPC_ECU_CSW_BB00001",
+    "oid": "040qm00c9k001o070s7g7sshreo2i",
+    "members": [
+      {
+        "elementName": "ASW2ASW_TPC",
+        "oid": "040qm00c9k001o070s7g7t07b3b2i",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\TPC_TargetPressureCircuitseparation\\Component\\ASW2ASW_TPC"
+      },
+      {
+        "elementName": "XPass_BB00000_IIP",
+        "oid": "040qm00c9k001o070s7g7t080h42o",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\TPC_TargetPressureCircuitseparation\\Component\\XPass_BB00000_TPC"
+      },
+      {
+        "elementName": "TPC_TargetPressureCircuitSeparation",
+        "oid": "040qm00c9k001no70c90hqq5h8do6",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\TPC_TargetPressureCircuitseparation\\Public\\TPC_TargetPressureCircuitSeparation"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\TDM_TemporaryDeactivationMotor\\Component\\TDM\\TDM_ECU_CSW_BB00001",
+    "oid": "040qm0000s001o071ccg46j21pi00",
+    "members": [
+      {
+        "elementName": "ASW2ASW_TDM",
+        "oid": "040qm0000s001o071ccg46j1i4rg0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\TDM_TemporaryDeactivationMotor\\Component\\TDM\\ASW2ASW_TDM"
+      },
+      {
+        "elementName": "XPass_BB00000_TDM",
+        "oid": "040qm0000s001o071ccg46itdg900",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\TDM_TemporaryDeactivationMotor\\Component\\TDM\\XPass_BB00000_TDM"
+      },
+      {
+        "elementName": "TDM_5ms",
+        "oid": "040qm0000s001o071ccg4bedped0c",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\TDM_TemporaryDeactivationMotor\\Public\\TDM_5ms"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\ModelBasedProcessing\\Component\\MBPCore\\MBP_ECU_CSW_BB00001",
+    "oid": "040qm0040g001n870o62fjdl5sv2e",
+    "members": [
+      {
+        "elementName": "MBP_20ms",
+        "oid": "040qm00600001n8708e065biahogc",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\ModelBasedProcessing\\Component\\MBPCore\\MBP_20ms"
+      },
+      {
+        "elementName": "XPass_BB00000_MBP",
+        "oid": "040qm00600001n8708e065b6jgsgc",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\ModelBasedProcessing\\Component\\MBPCore\\XPass_BB00000_MBP"
+      },
+      {
+        "elementName": "MBP_40ms",
+        "oid": "040qm00600001n8708e065ecp28gm",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\ModelBasedProcessing\\Component\\MBPCore\\MBP_40ms"
+      },
+      {
+        "elementName": "Asw2Asw_MBP",
+        "oid": "040qm00600001n8708e065bovfvgg",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\ModelBasedProcessing\\Component\\MBPCore\\Asw2Asw_MBP"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\TCS_TractionControlSystem\\Component\\Core\\TCS_ECU_CSW_BB00001",
+    "oid": "040qm000ag001oo714a051s472fgq",
+    "members": [
+      {
+        "elementName": "XPass_BB0000_TCS",
+        "oid": "040qm000ag001oo714bg6irshq02q",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\TCS_TractionControlSystem\\Component\\Core\\XPass_BB00000_TCS"
+      },
+      {
+        "elementName": "TCS_Core_Out",
+        "oid": "040qm000ag001oo714bg4usp84s0g",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\TCS_TractionControlSystem\\Component\\Core\\TCS_Core_Out"
+      },
+      {
+        "elementName": "Asw2Asw_TCS",
+        "oid": "040qm000ag001oo714a051moivj0o",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\TCS_TractionControlSystem\\Component\\Core\\Asw2Asw_TCS"
+      },
+      {
+        "elementName": "TCS_Core",
+        "oid": "040qm000ag001oo714bg4ug67pqge",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\TCS_TractionControlSystem\\Component\\Core\\TCS_Core"
+      },
+      {
+        "elementName": "TCS_Core_CBDS",
+        "oid": "040gm009io1g1p871g3gmedrl65gc",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\TCS_TractionControlSystem\\Component\\Core\\TCS_Core_CBDS"
+      },
+      {
+        "elementName": "TCS_Core_BTCPreCntrl",
+        "oid": "040rk0001g001q070o9ga5airevh4",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\TCS_TractionControlSystem\\Component\\Core\\TCS_Core_BTCPreCntrl"
+      },
+      {
+        "elementName": "TCS_Core_Mon",
+        "oid": "040qm000ag001p8714bg8t6nt2fhu",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\TCS_TractionControlSystem\\Component\\Core\\TCS_Core_Mon"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\LateralDynamicsInterface\\Component\\LDI\\LDI_ECU_CSW_BB00001",
+    "oid": "040qm00b00001o870s3jj1rlrj402",
+    "members": [
+      {
+        "elementName": "LDI_Arbitration",
+        "oid": "040qm00b00001og70o6g4l6tacbhi",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LateralDynamicsInterface\\Public\\LDI_Arbitration"
+      },
+      {
+        "elementName": "LDI_TaskInterpolation",
+        "oid": "040qm00b00001og70o6g4omrlqbi0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LateralDynamicsInterface\\Public\\LDI_TaskInterpolation"
+      },
+      {
+        "elementName": "XPass_BB00000_LDI",
+        "oid": "040qm00b00001o870s3jj251fkv04",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LateralDynamicsInterface\\Component\\LDI\\XPass_BB00000_LDI"
+      },
+      {
+        "elementName": "LDI5ms",
+        "oid": "040qm00b00001o070g40a4ahevh64",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LateralDynamicsInterface\\Public\\LDI5ms"
+      },
+      {
+        "elementName": "Asw2Asw_LDI",
+        "oid": "040qm00b00001o870s3jj2502vmg2",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LateralDynamicsInterface\\Component\\LDI\\Asw2Asw_LDI"
+      },
+      {
+        "elementName": "LDI_NoEstimation",
+        "oid": "040qm00b00001og70o6g5l2j40e62",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LateralDynamicsInterface\\Public\\LDI_NoEstimation"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\VDC_Component\\Component\\VDC_MAIN\\VDC_ISS_BAonly\\VdcIssBAonly_ECU_CSW_BB00001",
+    "oid": "040qm00000001oo7187ht2j30mu1i",
+    "members": [
+      {
+        "elementName": "VDC_ISS_BA_Bridge",
+        "oid": "040qm00000001oo7187hreppajh32",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VehicleDynamicsController\\ISS_Layers\\VDC_ISS_BA_Bridge"
+      },
+      {
+        "elementName": "VDC_ExternalInterface",
+        "oid": "040qm00900001no70sa06m79tug1i",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VDC_Component\\Component\\VDC_MAIN\\Modules\\VDC_ExternalInterface"
+      },
+      {
+        "elementName": "ISS_BSC",
+        "oid": "040qm0000s001p070o4i2t9umbr6e",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VDC_Component\\Component\\VDC_MAIN\\Modules\\ISS_BSC"
+      },
+      {
+        "elementName": "VDC_ISS_Legacy_Interface",
+        "oid": "040qm0000s001p8708cg40qfvjh00",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VDC_Component\\Component\\VDC_MAIN\\Modules\\VDC_ISS_Legacy_Interface"
+      },
+      {
+        "elementName": "VDC_TSM",
+        "oid": "040qm00700001n870cag4vjp16fg0",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VDC_Component\\Component\\VDC_MAIN\\Modules\\VDC_TSM"
+      },
+      {
+        "elementName": "VDC_LAC_MassEstimation",
+        "oid": "040gm002293g1no710349u64pk70k",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VDC_Component\\Component\\VDC_MAIN\\Modules\\VDC_LAC_MassEstimation"
+      },
+      {
+        "elementName": "VDC_ISS_BA_Core",
+        "oid": "040qm00000001oo7187hrergrum34",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VehicleDynamicsController\\ISS_Layers\\VDC_ISS_BA_Core"
+      },
+      {
+        "elementName": "VDC_RMF",
+        "oid": "040qm00700001n870cb07fj57p46q",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VDC_Component\\Component\\VDC_MAIN\\Modules\\VDC_RMF"
+      },
+      {
+        "elementName": "VDC_Service",
+        "oid": "040qm00000001oo70o3hf1das1bu8",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VDC_Component\\Component\\VDC_MAIN\\Modules\\VDC_Service"
+      },
+      {
+        "elementName": "_ISS_woAddOns_Constant",
+        "oid": "040qm0000s001p8708cg7csslvnb8",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VDC_Component\\Component\\VDC_MAIN\\Parameter\\_ISS_woAddOns_Constant"
+      },
+      {
+        "elementName": "VDC_ISS_BA_SetUp",
+        "oid": "040qm00000001oo7187hresucstj6",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VehicleDynamicsController\\ISS_Layers\\VDC_ISS_BA_SetUp"
+      },
+      {
+        "elementName": "Asw2Asw_VDC_ISS",
+        "oid": "040qm00000001oo7187ht2j2f2f1g",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VDC_Component\\Component\\VDC_MAIN\\VDC_ISS_BAonly\\Asw2Asw_VDC_ISS"
+      },
+      {
+        "elementName": "VDC_TaskInterpolation",
+        "oid": "040qm00a00001no70seg53ojg4ns6",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VDC_Component\\Component\\VDC_MAIN\\Modules\\VDC_TaskInterpolation"
+      },
+      {
+        "elementName": "XPass_BB00000_VDC_ISS",
+        "oid": "040qm00000001oo7187ht2j38fg1i",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VDC_Component\\Component\\VDC_MAIN\\VDC_ISS_BAonly\\XPass_BB00000_VDC_ISS"
+      },
+      {
+        "elementName": "VDC_CCC",
+        "oid": "040qm000l8001p070s52b3a9389gu",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VDC_Component\\Component\\VDC_MAIN\\Modules\\VDC_CCC"
+      },
+      {
+        "elementName": "_ISS_woAddOns_Calibration",
+        "oid": "040qm0000s001p8708cg7cr3tj7r8",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VDC_Component\\Component\\VDC_MAIN\\Parameter\\_ISS_woAddOns_Calibration"
+      },
+      {
+        "elementName": "_AddOns_Constant",
+        "oid": "040qm01m4s001n870g1gdhsq2pbkc",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VDC_Component\\Component\\VDC_MAIN\\Parameter\\_AddOns_Constant"
+      },
+      {
+        "elementName": "VDC_LAC_VCH",
+        "oid": "040gm002293g1no70cc08a60sa33a",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VDC_Component\\Component\\VDC_MAIN\\Modules\\VDC_LAC_VCH"
+      },
+      {
+        "elementName": "_AddOns_Calibration",
+        "oid": "040qm01m4s001n870ce15l4clfmg2",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\VDC_Component\\Component\\VDC_MAIN\\Parameter\\_AddOns_Calibration"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\SCM_ECU_CSW_BB00001",
+    "oid": "040qm00600001n870o62lebe3qnm6",
+    "members": [
+      {
+        "elementName": "Asw2Asw_SCM",
+        "oid": "040qm00200001n870g406s6n3qcg6",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\Asw2Asw_SCM"
+      },
+      {
+        "elementName": "XPass_BB00000_SCM",
+        "oid": "040qm00200001n870g406s6qp3q06",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\XPass_BB00000_SCM"
+      },
+      {
+        "elementName": "SCM10ms",
+        "oid": "040qm00300001mo704c03v706vbku",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\SCM10ms"
+      },
+      {
+        "elementName": "SCM20ms",
+        "oid": "040qm00300001mo704c03v68bb3ku",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\SCM20ms"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\LongitudinalVehicleMotionModelling\\Component\\LVMM\\LVMM_ECU_CSW_BB00001",
+    "oid": "040gpc83141g1no7141g5ca7qndga",
+    "members": [
+      {
+        "elementName": "Asw2Asw_LVMM",
+        "oid": "040gpc83141g1no710d0rmgi25mhg",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LongitudinalVehicleMotionModelling\\Component\\LVMM\\Asw2Asw_LVMM"
+      },
+      {
+        "elementName": "Xpass_BB00000_LVMM",
+        "oid": "040gpc83141g1no710d0rmlsga9hg",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LongitudinalVehicleMotionModelling\\Component\\LVMM\\Xpass_BB00000_LVMM"
+      },
+      {
+        "elementName": "LVMM5ms",
+        "oid": "040qm00218001n870g50f7i2jb62s",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LongitudinalVehicleMotionModelling\\public\\LVMM5ms"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\LFI_LongitudinalForceInterface\\Component\\LFI\\LFI_ECU_CSW_BB00001",
+    "oid": "040gpc89gu401po70cai8a67spj4o",
+    "members": [
+      {
+        "elementName": "LFI_5ms",
+        "oid": "040gpc89gu401po70cai8a636fi4m",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LFI_LongitudinalForceInterface\\Private\\LFI_5ms"
+      },
+      {
+        "elementName": "XPass_BB00000_LFI",
+        "oid": "040gpc89gu401po70cai8a69blvko",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LFI_LongitudinalForceInterface\\Component\\LFI\\XPass_BB00000_LFI"
+      },
+      {
+        "elementName": "Asw2Asw_LFI",
+        "oid": "040gpc89gu401po70cai8a65scqko",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LFI_LongitudinalForceInterface\\Component\\LFI\\Asw2Asw_LFI"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\RBF_RemoteBrakeFacade\\Component\\Main\\RBF_Main_ECU_CSW_BB00001",
+    "oid": "040gpc86cpqg1og70kah02dslo300",
+    "members": [
+      {
+        "elementName": "RBF_Main",
+        "oid": "040gpc86cpqg1og70k5gjkkpal400",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\RBF_RemoteBrakeFacade\\Component\\Main\\RBF_Main"
+      },
+      {
+        "elementName": "XPass_BB00000_RBF_Main",
+        "oid": "040gpc86cpqg1og70kagu2ttm960g",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\RBF_RemoteBrakeFacade\\Component\\Main\\XPass_BB00000_RBF_Main"
+      },
+      {
+        "elementName": "Asw2Asw_RBF_Main",
+        "oid": "040gpc86cpqg1og70kagu2tt8k7gg",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\RBF_RemoteBrakeFacade\\Component\\Main\\Asw2Asw_RBF_Main"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\LDMCoor_Connector\\Component\\LDMCoorConnector_ECU_CSW_BB00001",
+    "oid": "040qm00e00001og70k90o43svmpho",
+    "members": [
+      {
+        "elementName": "LDMCoor_BSA",
+        "oid": "040qm00000001po70ceg87lbraklc",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LDMCoor_Connector\\Component\\LDMCoor_BSA"
+      },
+      {
+        "elementName": "LDMCoor_Arbitrator_mesg",
+        "oid": "040gpc86cq001og70kcvh9rb2bf1s",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LDMCoor_Connector\\Component\\LDMCoor_Arbitrator_mesg"
+      },
+      {
+        "elementName": "Asw2Asw_LDMCoorConnector",
+        "oid": "040qm00e00001og70k90o4v5e1hhq",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LDMCoor_Connector\\Component\\Asw2Asw_LDMCoorConnector"
+      },
+      {
+        "elementName": "Xpass_BB00000_LDMCoorConnector",
+        "oid": "040qm00e00001og70kb04b76qc300",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LDMCoor_Connector\\Component\\Xpass_BB00000_LDMCoorConnector"
+      },
+      {
+        "elementName": "LDMCoor_Export_OutDated",
+        "oid": "040qm00e00001og708a0faaulmt82",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LDMCoor_Connector\\Component\\LDMCoor_Export_OutDated"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary\\Package\\LifeTimeManagement\\Component\\LTM_IPB\\LTM_IPB_ECU_CSW_BB00000",
+    "oid": "040gm008892g1og7100hkaanpudg2",
+    "members": [
+      {
+        "elementName": "Ltm_IPB_Mod",
+        "oid": "040gm008892g1og7100hkdkru30g2",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LifeTimeManagement\\Public\\Ltm_IPB_Mod"
+      },
+      {
+        "elementName": "Asw2Asw",
+        "oid": "040gm008892g1og7100hkaamissg2",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LifeTimeManagement\\Component\\LTM_IPB\\Asw2Asw_LTM_IPB"
+      },
+      {
+        "elementName": "XPass",
+        "oid": "040gm008892g1og7100hkaap0ul02",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary\\Package\\LifeTimeManagement\\Component\\LTM_IPB\\XPass_BB00000_LTM_IPB"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary_NewBrakeSystems\\Package\\DBR_DriverBrakeRequest\\Component\\IPB\\DbrIPB_ECU_CSW_BB00001",
+    "oid": "040qm00800001ng71c3go7pqlosgq",
+    "members": [
+      {
+        "elementName": "XPass",
+        "oid": "040qm00800001ng71c3go7tos9e0q",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary_NewBrakeSystems\\Package\\DBR_DriverBrakeRequest\\Component\\IPB\\Modules\\XPass_BB00001_DBR_IPB"
+      },
+      {
+        "elementName": "DBR5ms",
+        "oid": "040qm00800001ng71852moatomek8",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary_NewBrakeSystems\\Package\\DBR_DriverBrakeRequest\\Component\\IPB\\Modules\\DBR_IPB_TaskBaseCtrlx1"
+      },
+      {
+        "elementName": "Asw2Asw_IPB",
+        "oid": "040qm00800001ng71c3gnvo4nu60m",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary_NewBrakeSystems\\Package\\DBR_DriverBrakeRequest\\Component\\IPB\\Modules\\Asw2Asw_IPB"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary_NewBrakeSystems\\Package\\BSM_BrakeSignalsAndMonitorings\\Component\\IPB\\BsmIPB_ECU_CSW_BB00001",
+    "oid": "040qm00800001ng718406tjalcm0s",
+    "members": [
+      {
+        "elementName": "Asw2Asw_BSM_IPB",
+        "oid": "040qm00800001ng718406tpmnt80s",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary_NewBrakeSystems\\Package\\BSM_BrakeSignalsAndMonitorings\\Component\\IPB\\Asw2Asw_BSM_IPB"
+      },
+      {
+        "elementName": "XPass_BB00001_BSM_IPB",
+        "oid": "040qm00800001ng718406tpn1ls0s",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary_NewBrakeSystems\\Package\\BSM_BrakeSignalsAndMonitorings\\Component\\IPB\\XPass_BB00001_BSM_IPB"
+      },
+      {
+        "elementName": "BSM_IPB_20ms",
+        "oid": "040qm00800001ng718406tgfk2rgq",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary_NewBrakeSystems\\Package\\BSM_BrakeSignalsAndMonitorings\\Component\\IPB\\BSM_IPB_20ms"
+      },
+      {
+        "elementName": "BSM_IPB_5ms",
+        "oid": "040qm00800001ng718406teuq1sgq",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary_NewBrakeSystems\\Package\\BSM_BrakeSignalsAndMonitorings\\Component\\IPB\\BSM_IPB_5ms"
+      }
+    ]
+  },
+  {
+    "path": "PlatformLibrary_NewBrakeSystems\\Package\\CRB_CooperativeRegenerativeBraking\\Component\\CRB_IPB\\CRBipb_ECU_CSW_BB00001",
+    "oid": "040qm00700001o07085gq77gkat9g",
+    "members": [
+      {
+        "elementName": "XPass_BB00000_CRB_Ipb",
+        "oid": "040qm00700001o070cffsnuj4oj3e",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary_NewBrakeSystems\\Package\\CRB_CooperativeRegenerativeBraking\\Component\\CRB_IPB\\Modules\\XPass_BB00000_CRB_Ipb"
+      },
+      {
+        "elementName": "Asw2Asw_CRB_Ipb",
+        "oid": "040qm00700001o070c7he8pqtskso",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary_NewBrakeSystems\\Package\\CRB_CooperativeRegenerativeBraking\\Component\\CRB_IPB\\Modules\\Asw2Asw_CRB_IPB"
+      },
+      {
+        "elementName": "CRBipbDrv_5ms",
+        "oid": "040qm00700001o07085gq65smsdpg",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary_NewBrakeSystems\\Package\\CRB_CooperativeRegenerativeBraking\\Component\\CRB_IPB\\Modules\\CRBipbDrv_5ms"
+      },
+      {
+        "elementName": "CRB_EfficiencyCalculation_5ms",
+        "oid": "040qm0001c001p0714205164le902",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary_NewBrakeSystems\\Package\\CRB_CooperativeRegenerativeBraking\\Component\\COMMON\\Modules\\CRB_EfficiencyCalculation_5ms"
+      },
+      {
+        "elementName": "CRBipbLDM_5ms",
+        "oid": "040qm00700001o0708afqn2fabq54",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary_NewBrakeSystems\\Package\\CRB_CooperativeRegenerativeBraking\\Component\\CRB_IPB\\Modules\\CRBipbLdm_5ms"
+      },
+      {
+        "elementName": "CRB_VehicleState_5ms",
+        "oid": "040qm00900001o070obvhu1iibfik",
+        "kind": "module",
+        "canonicalPath": "PlatformLibrary_NewBrakeSystems\\Package\\CRB_CooperativeRegenerativeBraking\\Component\\COMMON\\Modules\\CRB_VehicleState_5ms"
+      }
+    ]
+  }
+]

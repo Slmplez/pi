@@ -1,0 +1,125 @@
+{
+  "version": 1,
+  "status": "applied",
+  "databaseFingerprint": "49be9da8ddaa5ac7b09b24a394229cbbd9a9dc3dbabadf9704da7ff25633274a",
+  "targetOid": "040g00001g001qg71060i85ff2002",
+  "targetKind": "component",
+  "canonicalPath": "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+  "action": "apply_element_spec",
+  "planId": "4df03e27-e66f-4135-8195-87d06fa6d399",
+  "planFingerprint": "a2f3e44d12fa22b1b6177557173aa5d7b8ca0fb1b5b102d458eb3cb4360acac2",
+  "targetImpactFingerprint": "sha256:0d81277e0b76a4629a04fa14d63f7f1f949ea8eaba542f3095b615e2475253cc",
+  "guardGeneration": 3,
+  "beforeSnapshotFingerprint": "sha256:86299132fbc5d29cf933a7aff3536ca2d1795a9c7b488b49ed8f77a8d7ada723",
+  "desiredFingerprint": "sha256:29fd3fe2cfd007ae03774883405b6f21a16b29a4ca34bdd36017b4a0d6358e89",
+  "beforeSnapshot": {
+    "capabilities": {
+      "elements": [],
+      "validated": true
+    },
+    "catalogIdentity": {
+      "componentOID": "040g00001g001qg71060i85ff2002"
+    },
+    "catalogSnapshot": {
+      "componentConfigurationProvenance": {
+        "classDataConfiguration": {
+          "configurationName": "ClassUnderTest",
+          "selected": true,
+          "source": "classDataConfiguration"
+        },
+        "classImplementationConfiguration": {
+          "configurationName": "ClassUnderTest",
+          "selected": true,
+          "source": "classImplementationConfiguration"
+        },
+        "defaultDataConfiguration": {
+          "configurationName": "Data",
+          "selected": true,
+          "source": "defaultDataConfiguration"
+        },
+        "defaultImplementationConfiguration": {
+          "configurationName": "Impl",
+          "selected": true,
+          "source": "defaultImplementationConfiguration"
+        }
+      },
+      "elements": [
+        {
+          "calibration": true,
+          "configurationProvenance": {
+            "dataConfiguration": {
+              "configurationName": "Data",
+              "selected": true,
+              "source": "defaultDataConfiguration"
+            },
+            "implementationConfiguration": {
+              "configurationName": "Impl",
+              "selected": true,
+              "source": "defaultImplementationConfiguration"
+            }
+          },
+          "data": {
+            "value": 0
+          },
+          "impl": {
+            "formula": "ident",
+            "limitAssignments": true,
+            "memoryLocation": "Default",
+            "valueType": "real64"
+          },
+          "kind": "variable",
+          "modelType": "cont",
+          "name": "C_FIX_PostReconcile",
+          "scope": "local"
+        }
+      ],
+      "identity": {
+        "componentOID": "040g00001g001qg71060i85ff2002"
+      }
+    },
+    "limitations": [],
+    "liveElementCount": 1,
+    "liveSnapshotHash": "f42e5d4316795a6eb6e36296dcbbccdff106abc85e2fc50db4d6d6ca839c3220",
+    "normalizedSpec": {
+      "elements": []
+    },
+    "normalizedSpecHash": "a91d7cc1eff74cb5a904d6073dd7724daedc69c4d432de62a1630a2e51bf94a6",
+    "operation": "authoritative_element_preflight",
+    "resolvedIntent": "restore",
+    "resolvedOperations": [],
+    "result": {
+      "AddedElements": [],
+      "ComponentPath": "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+      "IncompatibleElements": [],
+      "ModifiedElements": [],
+      "RemovedElements": [
+        {
+          "Kind": "Variable",
+          "Name": "C_FIX_PostReconcile",
+          "Signature": "Variable ModelType=cont Scope=local Calibration=True"
+        }
+      ],
+      "SkippedElements": [],
+      "Summary": "0 added, 1 removed, 0 modified, 0 incompatible"
+    },
+    "validated": true,
+    "warnings": []
+  },
+  "attemptedMutation": {
+    "action": "apply_element_spec",
+    "componentPath": "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+    "deleteMissing": true,
+    "elements": [],
+    "intent": "restore"
+  },
+  "createdAt": "2026-08-12T05:58:39.229Z",
+  "updatedAt": "2026-08-12T05:58:40.195Z",
+  "evidence": {
+    "bridgeEntered": true,
+    "backendResponseReceived": true,
+    "mutationStarted": true
+  },
+  "outcome": {
+    "operationId": "apply_element_spec"
+  }
+}

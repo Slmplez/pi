@@ -1,0 +1,5 @@
+﻿Log File: C:\ProgramData\ETAS\LogFiles\DumpChildWindows\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+mainView=SGMainView childWindowsClass=OrderedCollection
+publicCount=0
+remoteCount=0

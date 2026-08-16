@@ -1,0 +1,10 @@
+{
+    "databaseName":  "C:\\Repo\\11_ASCETCopilotLiveTest\\AscetDb_Xiaomi_DPB_48V_For_Upgrade_Int_MM21xD5EDxED840001xECCL_6870\\ASW\\Db\\AscetDb_20260205055732",
+    "databasePath":  "C:\\Repo\\11_ASCETCopilotLiveTest\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\ASW\\Db\\",
+    "startedAt":  "2026-08-12T13:26:10.9673296+08:00",
+    "stableGate":  true,
+    "runId":  "LIVE_TOOLS_20260812-132609_2257A020",
+    "bridge":  "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+    "fixtureRoot":  "PI_LIVE_FIX_20260812_2257A020",
+    "componentPath":  "PI_LIVE_FIX_20260812_2257A020\\ClassUnderTest"
+}

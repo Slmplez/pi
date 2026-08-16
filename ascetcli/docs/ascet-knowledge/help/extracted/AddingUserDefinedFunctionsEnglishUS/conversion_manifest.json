@@ -1,0 +1,123 @@
+{
+  "generated_at": "2026-04-01T03:07:14.911727Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\AddingUserDefinedFunctionsEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AddingUserDefinedFunctionsEnglishUS",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AddingUserDefinedFunctionsEnglishUS\\markdown",
+  "input_html_count": 18,
+  "converted_html_count": 18,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 12,
+  "toc_entries_count": 22,
+  "index_entries_count": 41,
+  "index_required": true,
+  "mappings": [
+    {
+      "html_rel_path": "AUD_defining_autostart_action.htm",
+      "md_rel_path": "AUD_defining_autostart_action.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AUD_defining_shutdown_action.htm",
+      "md_rel_path": "AUD_defining_shutdown_action.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AUD_Overview.htm",
+      "md_rel_path": "AUD_Overview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Available_SELECTOR_Commands.htm",
+      "md_rel_path": "Available_SELECTOR_Commands.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "defining__menu_items.htm",
+      "md_rel_path": "defining__menu_items.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "execute.htm",
+      "md_rel_path": "execute.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "file.htm",
+      "md_rel_path": "file.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "fork.htm",
+      "md_rel_path": "fork.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Hints_for_Defining_Menu_Items.htm",
+      "md_rel_path": "Hints_for_Defining_Menu_Items.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "menu_item.htm",
+      "md_rel_path": "menu_item.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Names_of_the_Windows.htm",
+      "md_rel_path": "Names_of_the_Windows.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "nowait.htm",
+      "md_rel_path": "nowait.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "object.htm",
+      "md_rel_path": "object.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "post.htm",
+      "md_rel_path": "post.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "selector.htm",
+      "md_rel_path": "selector.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "send.htm",
+      "md_rel_path": "send.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "structure_script_file.htm",
+      "md_rel_path": "structure_script_file.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "to_define_menu_items.htm",
+      "md_rel_path": "to_define_menu_items.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ComponentData toolVersion="V6.1.5_2.2.0" schemaVersion="6.1.0.0">
+	<DataSet name="PiConsumer" OID="_040g00001g001qg7107gc7919031e" default="false" classConfig="true">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-15T15:18:05" timeStampCounter="909"/>
+	</DataSet>
+	<DataSet name="Data" OID="_040g00001g001qg7107gc791701he" default="true" classConfig="false">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-15T15:18:04" timeStampCounter="908"/>
+		<DataEntry elementName="C_PI_ChainTest_20260815230930237" elementOID="_040g00001g001qg7107gc7a5d85he">
+			<DataVariant name="default">
+				<Dependency>
+					<Parameter formalName="P_PI_ChainTest_20260815230930237" formalOID="_040g0h48bncf2kctj18ce2017hgnn" valueName="P_PI_ChainTest_20260815230930237" valueOID="_040g00001g001qg7107gc7a4rk51e"/>
+				</Dependency>
+			</DataVariant>
+		</DataEntry>
+		<DataEntry elementName="C_PI_ConcurrentA_20260815230930237" elementOID="_040g00001g001qg7107gc8d2t15he">
+			<DataVariant name="default">
+				<Dependency>
+					<Parameter formalName="P_PI_ConcurrentA_20260815230930237" formalOID="_040g0vomsh27tpag5bl0hl062483g" valueName="P_PI_ConcurrentA_20260815230930237" valueOID="_040g00001g001qg7107gc8d0at51e"/>
+				</Dependency>
+			</DataVariant>
+		</DataEntry>
+		<DataEntry elementName="C_PI_ConcurrentB_20260815230930237" elementOID="_040g00001g001qg7107gc8dou1ihe">
+			<DataVariant name="default">
+				<ScalarType>
+					<Numeric value="0.0"/>
+				</ScalarType>
+			</DataVariant>
+		</DataEntry>
+		<DataEntry elementName="C_PI_ConcurrentSame_20260815230930237" elementOID="_040g00001g001qg7107gc8adocqhe">
+			<DataVariant name="default">
+				<Dependency>
+					<Parameter formalName="P_PI_ConcurrentSame_20260815230930237" formalOID="_040g010qhhu2u25pac0hs4q7qjt21" valueName="P_PI_ConcurrentSame_20260815230930237" valueOID="_040g00001g001qg7107gc8abpsq1e"/>
+				</Dependency>
+			</DataVariant>
+		</DataEntry>
+		<DataEntry elementName="C_PI_Partial_20260815230930237" elementOID="_040g00001g001qg7107gc87brghhe">
+			<DataVariant name="default">
+				<Dependency>
+					<Parameter formalName="P_PI_Partial_20260815230930237" formalOID="_040g029200kap0dq436681iteak75" valueName="P_PI_Partial_20260815230930237" valueOID="_040g00001g001qg7107gc87a8oh1e"/>
+				</Dependency>
+			</DataVariant>
+		</DataEntry>
+		<DataEntry elementName="C_PI_SetOnly_20260815230930237" elementOID="_040g00001g001qg7107gc7s0s8ahe">
+			<DataVariant name="default">
+				<Dependency>
+					<Parameter formalName="P_PI_SetOnly_20260815230930237" formalOID="_040g0h725rr4pt30bp6g375p8c1fs" valueName="P_PI_SetOnly_20260815230930237" valueOID="_040g00001g001qg7107gc7s0iga1e"/>
+				</Dependency>
+			</DataVariant>
+		</DataEntry>
+	</DataSet>
+	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+		<SignedInfo>
+			<CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+			<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+			<Reference>
+				<Transforms>
+					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+				</Transforms>
+				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+				<DigestValue>FTazOhuD7BbI5MEubF4XLuyVGYM=</DigestValue>
+			</Reference>
+		</SignedInfo>
+		<SignatureValue>KnG9JCM8sWmNM6ATohy8wdxeEFYxELahhwfsBefFOu51w6DmQxFJgJ+SbpDVP5D6
+AnF2huXWJQokRqAHDYnxXtm9a2LAS1A/kblavjk37QJP3wcCo98H7eANG+UIlO5h
+0WRUZjEI2rJkuXhPqbaRH3utOwd+vwu4kvmhrGED2/XdfSRLw0lKEniymm60+qBr
+vs/qwOwpDi/T2u9YTLA3h5SEgXYpoTuFlRjtTnAkYt/f/B46mfIZ6ikAwJuztgV/
+0Ic33nFfaPVpwAEYLyMw46iVquDz9+/SRSQval+u/wLMg70eIQLTpon3yYhEwiUQ
+Xi9FC5+Jo5Cd/umUspU70Q==</SignatureValue>
+		<KeyInfo>
+			<KeyName>Etas Ascet Verification</KeyName>
+		</KeyInfo>
+	</Signature>
+</ComponentData>

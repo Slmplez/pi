@@ -26,7 +26,8 @@ Load for every ASCET task before any object-specific or task-specific rule.
    - verify
    - check at scale
 2. Classify target certainty next:
-   - fuzzy target -> use bounded `ascet_get.tree`
+   - fuzzy name or text -> use `ascet_search`
+   - hierarchy-only uncertainty -> use bounded `ascet_get.tree`
    - exact target -> continue without navigation
 3. Classify the exact surface after the target is known:
    - summary
@@ -46,12 +47,13 @@ Load for every ASCET task before any object-specific or task-specific rule.
 
 ## Default Tool Chain
 
-1. `ascet_get.tree` when the target is not exact
-2. `ascet_read` when the target and surface are exact
-3. `ascet_get` reference actions or `ascet_diff` when dependency or comparison context matters
-4. `ascet_edit` when the mutation is approved
-5. Inspect `ascet_edit` automatic verification after the write
-6. `ascet_read` or `ascet_diff` again only when broader structural confirmation is needed
+1. `ascet_search` when the target name, reference, message, method, element, or code text is not exact
+2. `ascet_get.tree` only when hierarchy expansion is required
+3. `ascet_read` when the target and surface are exact
+4. Exact `ascet_get` actions or `ascet_diff` when structure, dependency, or comparison context matters
+5. `ascet_edit` when the mutation is approved
+6. Inspect `ascet_edit` automatic verification after the write
+7. `ascet_read` or `ascet_diff` again only when broader structural confirmation is needed
 
 ## Phase Checklist
 
@@ -92,7 +94,7 @@ Load for every ASCET task before any object-specific or task-specific rule.
 
 ## Escalate When
 
-- The target is still ambiguous after bounded `ascet_get.tree` discovery.
+- The target is still ambiguous after `ascet_search` and any required bounded hierarchy expansion.
 - The task spans multiple surfaces such as ESDL plus implementation/data.
 - The request changes signatures, bindings, or generated behavior.
 - You only have a fragment, not the surrounding ASCET structure.

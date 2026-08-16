@@ -1,0 +1,693 @@
+{
+  "generated_at": "2026-04-01T03:08:13.378088Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\IntroductionEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\IntroductionEnglishUS",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\IntroductionEnglishUS\\markdown",
+  "input_html_count": 113,
+  "converted_html_count": 113,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 145,
+  "toc_entries_count": 117,
+  "index_entries_count": 192,
+  "index_required": true,
+  "mappings": [
+    {
+      "html_rel_path": "ins_compatibilitycheck_arraysmatrices.htm",
+      "md_rel_path": "ins_compatibilitycheck_arraysmatrices.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Array.htm",
+      "md_rel_path": "INT_Array.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_ASCETAutomationAPI.htm",
+      "md_rel_path": "INT_ASCETAutomationAPI.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "int_ascetlinks.htm",
+      "md_rel_path": "int_ascetlinks.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_ASCETLinks_AddressableObjects.htm",
+      "md_rel_path": "INT_ASCETLinks_AddressableObjects.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_ASCETLinks_Examples.htm",
+      "md_rel_path": "INT_ASCETLinks_Examples.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_ASCETRPWindows.htm",
+      "md_rel_path": "INT_ASCETRPWindows.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_characteristic_lines_and_maps.htm",
+      "md_rel_path": "INT_characteristic_lines_and_maps.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Classes.htm",
+      "md_rel_path": "INT_Classes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_CodeGen_RedundantDataStorage.htm",
+      "md_rel_path": "INT_CodeGen_RedundantDataStorage.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "int_compatibilitycomponentinstances.htm",
+      "md_rel_path": "int_compatibilitycomponentinstances.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_ComplementService_RDS.htm",
+      "md_rel_path": "INT_ComplementService_RDS.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Component_Types.htm",
+      "md_rel_path": "INT_Component_Types.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "int_componentsrescalableelements.htm",
+      "md_rel_path": "int_componentsrescalableelements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_composite_summaryct.htm",
+      "md_rel_path": "INT_composite_summaryct.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Configuring_Toolbar.htm",
+      "md_rel_path": "INT_Configuring_Toolbar.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_constants_and_system_constants.htm",
+      "md_rel_path": "INT_constants_and_system_constants.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Convert_SdiscUdisc_to_limitInt_wrapInt.htm",
+      "md_rel_path": "INT_Convert_SdiscUdisc_to_limitInt_wrapInt.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "int_copyingelements_outlinetab.htm",
+      "md_rel_path": "int_copyingelements_outlinetab.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_CreateMapping_UDIR.htm",
+      "md_rel_path": "INT_CreateMapping_UDIR.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_CreateOptionSet_UDIR.htm",
+      "md_rel_path": "INT_CreateOptionSet_UDIR.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Data.htm",
+      "md_rel_path": "INT_Data.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_DataTypeNames.htm",
+      "md_rel_path": "INT_DataTypeNames.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Definition_and_Instantiation_of_Components.htm",
+      "md_rel_path": "INT_Definition_and_Instantiation_of_Components.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_dependent_parameters.htm",
+      "md_rel_path": "INT_dependent_parameters.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_dt_parameter.htm",
+      "md_rel_path": "INT_dt_parameter.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_ElementsRescalableImpl.htm",
+      "md_rel_path": "INT_ElementsRescalableImpl.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_enumeration.htm",
+      "md_rel_path": "INT_enumeration.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Example__Code_Generation_for_an_Addition.htm",
+      "md_rel_path": "INT_Example__Code_Generation_for_an_Addition.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Example__Data.htm",
+      "md_rel_path": "INT_Example__Data.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Example__Implementation_Casts.htm",
+      "md_rel_path": "INT_Example__Implementation_Casts.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Example_a_user_def.h.htm",
+      "md_rel_path": "INT_Example_a_user_def.h.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Example_CopyElementsOutlineTab.htm",
+      "md_rel_path": "INT_Example_CopyElementsOutlineTab.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Example_Implementations_ScalarTypes.htm",
+      "md_rel_path": "INT_Example_Implementations_ScalarTypes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Example_MemClassRedundantDataStorage.htm",
+      "md_rel_path": "INT_Example_MemClassRedundantDataStorage.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Example_SearchOutline_TypeAhead.htm",
+      "md_rel_path": "INT_Example_SearchOutline_TypeAhead.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_ExplicitReferences.htm",
+      "md_rel_path": "INT_ExplicitReferences.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_FindReplace_Window.htm",
+      "md_rel_path": "INT_FindReplace_Window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_fixed_table.htm",
+      "md_rel_path": "INT_fixed_table.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_General_Rules_for_the_Implementation_Transformation.htm",
+      "md_rel_path": "INT_General_Rules_for_the_Implementation_Transformation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_group_table_and_distribution.htm",
+      "md_rel_path": "INT_group_table_and_distribution.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Hierarchical_Class_Structure.htm",
+      "md_rel_path": "INT_Hierarchical_Class_Structure.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Hierarchical_Module_Structure.htm",
+      "md_rel_path": "INT_Hierarchical_Module_Structure.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_HighRes_InterpolationRoutines.htm",
+      "md_rel_path": "INT_HighRes_InterpolationRoutines.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_implementation_casts.htm",
+      "md_rel_path": "INT_implementation_casts.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Implementations_for_Scalar_Types.htm",
+      "md_rel_path": "INT_Implementations_for_Scalar_Types.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Importing_Dependent_Parameters.htm",
+      "md_rel_path": "INT_Importing_Dependent_Parameters.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_IncludeUDIR.htm",
+      "md_rel_path": "INT_IncludeUDIR.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_InitExplicitReferences.htm",
+      "md_rel_path": "INT_InitExplicitReferences.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Int_IntegerArithmetic_RescalableElements.htm",
+      "md_rel_path": "Int_IntegerArithmetic_RescalableElements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_InterpolationRoutines.htm",
+      "md_rel_path": "INT_InterpolationRoutines.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Launching_ASCET.htm",
+      "md_rel_path": "INT_Launching_ASCET.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Licensing.htm",
+      "md_rel_path": "INT_Licensing.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_literals.htm",
+      "md_rel_path": "INT_literals.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_MappingAdaptiveTables.htm",
+      "md_rel_path": "INT_MappingAdaptiveTables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_MappingFileUDIR.htm",
+      "md_rel_path": "INT_MappingFileUDIR.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_MappingNormalTables.htm",
+      "md_rel_path": "INT_MappingNormalTables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_matrix.htm",
+      "md_rel_path": "INT_matrix.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_MemoryClasses_RedundantDataStorage.htm",
+      "md_rel_path": "INT_MemoryClasses_RedundantDataStorage.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_messages.htm",
+      "md_rel_path": "INT_messages.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_MigrationConversion_of_References.htm",
+      "md_rel_path": "INT_MigrationConversion_of_References.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "int_modules.htm",
+      "md_rel_path": "int_modules.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Modules_vs._Classes.htm",
+      "md_rel_path": "INT_Modules_vs._Classes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_OperationsRescalableElements.htm",
+      "md_rel_path": "INT_OperationsRescalableElements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Overview.htm",
+      "md_rel_path": "INT_Overview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Overview_CodeGen_w_Implementations.htm",
+      "md_rel_path": "INT_Overview_CodeGen_w_Implementations.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Overview_ComponentInterface.htm",
+      "md_rel_path": "INT_Overview_ComponentInterface.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Overview_Components.htm",
+      "md_rel_path": "INT_Overview_Components.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "int_overview_DataImplementations.htm",
+      "md_rel_path": "int_overview_DataImplementations.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "int_overview_implementation_casts.htm",
+      "md_rel_path": "int_overview_implementation_casts.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Overview_Implementations.htm",
+      "md_rel_path": "INT_Overview_Implementations.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Overview_ReusingComponents.htm",
+      "md_rel_path": "INT_Overview_ReusingComponents.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_parameters.htm",
+      "md_rel_path": "INT_parameters.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Properties_of_Implementation_Casts.htm",
+      "md_rel_path": "INT_Properties_of_Implementation_Casts.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_RedundantDataStorage.htm",
+      "md_rel_path": "INT_RedundantDataStorage.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_RescalableImplementations.htm",
+      "md_rel_path": "INT_RescalableImplementations.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Reserved_Keywords.htm",
+      "md_rel_path": "INT_Reserved_Keywords.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_resources.htm",
+      "md_rel_path": "INT_resources.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "int_safetyadvicegeneral.htm",
+      "md_rel_path": "int_safetyadvicegeneral.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "int_safetyinformation.htm",
+      "md_rel_path": "int_safetyinformation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_scalar_summary.htm",
+      "md_rel_path": "INT_scalar_summary.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_scalar_types__continuous.htm",
+      "md_rel_path": "INT_scalar_types__continuous.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_scalar_types__logical.htm",
+      "md_rel_path": "INT_scalar_types__logical.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_scalar_types__signed_discrete.htm",
+      "md_rel_path": "INT_scalar_types__signed_discrete.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_scalar_types__unsigned_discrete.htm",
+      "md_rel_path": "INT_scalar_types__unsigned_discrete.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_ScalarTypes_LimitedInteger.htm",
+      "md_rel_path": "INT_ScalarTypes_LimitedInteger.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_ScalarTypes_WrapAroundInteger.htm",
+      "md_rel_path": "INT_ScalarTypes_WrapAroundInteger.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_SearchDelete_Unused_ProcessesMethodsRunnables.htm",
+      "md_rel_path": "INT_SearchDelete_Unused_ProcessesMethodsRunnables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_SearchTreePane.htm",
+      "md_rel_path": "INT_SearchTreePane.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_SearchTreeWindow.htm",
+      "md_rel_path": "INT_SearchTreeWindow.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Starting_the_ETAS_License_Manager.htm",
+      "md_rel_path": "INT_Starting_the_ETAS_License_Manager.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_summaryke.htm",
+      "md_rel_path": "INT_summaryke.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_summaryrt.htm",
+      "md_rel_path": "INT_summaryrt.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_temporary_variables.htm",
+      "md_rel_path": "INT_temporary_variables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Test_NewBehavior_IntegerTypes.htm",
+      "md_rel_path": "INT_Test_NewBehavior_IntegerTypes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "int_the_implementation_of_composite_types.htm",
+      "md_rel_path": "int_the_implementation_of_composite_types.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_The_Implementation_of_Methods_and_Processes.htm",
+      "md_rel_path": "INT_The_Implementation_of_Methods_and_Processes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "int_the_implementation_of_user-defined_types.htm",
+      "md_rel_path": "int_the_implementation_of_user-defined_types.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "int_the_interface_of_classes.htm",
+      "md_rel_path": "int_the_interface_of_classes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_The_Interface_of_Modules.htm",
+      "md_rel_path": "INT_The_Interface_of_Modules.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_the_scope_of_elements.htm",
+      "md_rel_path": "INT_the_scope_of_elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Toolbar_Configuration_Window.htm",
+      "md_rel_path": "INT_Toolbar_Configuration_Window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Transformation_of_Data_under_Implementation.htm",
+      "md_rel_path": "INT_Transformation_of_Data_under_Implementation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "int_types_and_elements.htm",
+      "md_rel_path": "int_types_and_elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_Typical_Workflow.htm",
+      "md_rel_path": "INT_Typical_Workflow.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_User-Defined_Model_Types.htm",
+      "md_rel_path": "INT_User-Defined_Model_Types.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_UserDefinedInterpolationRoutines.htm",
+      "md_rel_path": "INT_UserDefinedInterpolationRoutines.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_UseReferencesWithoutInit.htm",
+      "md_rel_path": "INT_UseReferencesWithoutInit.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_ValueTypes_ReferenceTypes.htm",
+      "md_rel_path": "INT_ValueTypes_ReferenceTypes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_variables.htm",
+      "md_rel_path": "INT_variables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_VariableSize_ArraysMatrices.htm",
+      "md_rel_path": "INT_VariableSize_ArraysMatrices.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_VariantSize_ArraysMatrices.htm",
+      "md_rel_path": "INT_VariantSize_ArraysMatrices.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "INT_virtual_variables_parameters.htm",
+      "md_rel_path": "INT_virtual_variables_parameters.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

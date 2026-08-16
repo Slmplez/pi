@@ -1,4 +1,4 @@
-﻿import assert from "node:assert/strict";
+import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import type { AscetCliJsonResult } from "../cli.ts";
 import { classifyAscetEditExecution, extractAscetEditVerification } from "./verification.ts";
@@ -228,5 +228,30 @@ describe("ASCET edit verification", () => {
 		assert.equal(classification.consistencyStatus, "unknown");
 		assert.deepEqual(classification.rollback, { required: true, status: "failed", verified: false });
 		assert.equal(classification.shouldInvalidateObservations, true);
+	});
+	test("classifies explicit guarded mutation metadata", () => {
+		const partial = classifyAscetEditExecution(
+			createRawResult({
+				error: {
+					code: "create_method_failed",
+					message: "failed after editability acquisition",
+					details: { mutationStatus: "partially_applied", verificationStatus: "unknown" },
+				},
+			}),
+		);
+		assert.equal(partial.mutationStatus, "partially_applied");
+		assert.equal(partial.verification.status, "unknown");
+		assert.equal(partial.shouldInvalidateObservations, true);
+
+		const noOp = classifyAscetEditExecution(
+			createRawResult({
+				ok: true,
+				data: { mutationStatus: "no_op", verificationStatus: "passed" },
+				exitCode: 0,
+			}),
+		);
+		assert.equal(noOp.mutationStatus, "no_op");
+		assert.equal(noOp.verification.status, "passed");
+		assert.equal(noOp.shouldInvalidateObservations, false);
 	});
 });

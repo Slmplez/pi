@@ -1,0 +1,165 @@
+{
+  "generated_at": "2026-04-01T03:07:58.222938Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\ElementEditorEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ElementEditorEnglishUS",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ElementEditorEnglishUS\\markdown",
+  "input_html_count": 25,
+  "converted_html_count": 25,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 24,
+  "toc_entries_count": 30,
+  "index_entries_count": 54,
+  "index_required": true,
+  "mappings": [
+    {
+      "html_rel_path": "eed_calibrationaccess.htm",
+      "md_rel_path": "eed_calibrationaccess.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EEd_create_fromula_dependent.htm",
+      "md_rel_path": "EEd_create_fromula_dependent.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EEd_dependent_elements.htm",
+      "md_rel_path": "EEd_dependent_elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EEd_edit_element_configuration.htm",
+      "md_rel_path": "EEd_edit_element_configuration.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EEd_edit_formula_dependent.htm",
+      "md_rel_path": "EEd_edit_formula_dependent.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EEd_EditCalibrationAccess.htm",
+      "md_rel_path": "EEd_EditCalibrationAccess.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "eed_editconfiguration_complexelement.htm",
+      "md_rel_path": "eed_editconfiguration_complexelement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "eed_editconfiguration_compositeelement.htm",
+      "md_rel_path": "eed_editconfiguration_compositeelement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EEd_EditElementScope.htm",
+      "md_rel_path": "EEd_EditElementScope.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EEd_element_configuration.htm",
+      "md_rel_path": "EEd_element_configuration.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EED_Element_Editor_Basic_Elements.htm",
+      "md_rel_path": "EED_Element_Editor_Basic_Elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EEd_Element_Editor_CT_Block_Elements.htm",
+      "md_rel_path": "EEd_Element_Editor_CT_Block_Elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EEd_Element_Editor_Included_Component.htm",
+      "md_rel_path": "EEd_Element_Editor_Included_Component.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EEd_enable_diabale_elements.htm",
+      "md_rel_path": "EEd_enable_diabale_elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "eed_for_interrunnablevariables.htm",
+      "md_rel_path": "eed_for_interrunnablevariables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EEd_Formula_Editor_Dependent_Parameters.htm",
+      "md_rel_path": "EEd_Formula_Editor_Dependent_Parameters.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EEd_ImportedElements.htm",
+      "md_rel_path": "EEd_ImportedElements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EEd_instances_occurrences.htm",
+      "md_rel_path": "EEd_instances_occurrences.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EEd_open_element_editor.htm",
+      "md_rel_path": "EEd_open_element_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EEd_Overview.htm",
+      "md_rel_path": "EEd_Overview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EEd_PropertiesEditor_ModeGroups.htm",
+      "md_rel_path": "EEd_PropertiesEditor_ModeGroups.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EEd_Reference_to_User_Interface.htm",
+      "md_rel_path": "EEd_Reference_to_User_Interface.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Eed_SpecifyArrayMatrix_VariableSize.htm",
+      "md_rel_path": "Eed_SpecifyArrayMatrix_VariableSize.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EEd_Specifying_a_Reference.htm",
+      "md_rel_path": "EEd_Specifying_a_Reference.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EEd_use_temporary_variables.htm",
+      "md_rel_path": "EEd_use_temporary_variables.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

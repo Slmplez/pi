@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ComponentData toolVersion="V6.1.5_2.2.0" schemaVersion="6.1.0.0">
+	<DataSet name="Inline" OID="_040g00001g001qg710414u7ee9a00" default="false" classConfig="true">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-08T05:52:27" timeStampCounter="339"/>
+	</DataSet>
+	<DataSet name="Data" OID="_040g00001g001qg710414u7ee98g0" default="true" classConfig="false">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-08T05:52:27" timeStampCounter="340"/>
+		<DataEntry elementName="P_Input" elementOID="_040g00001g001qg710414u7sr9ig0">
+			<DataVariant name="default">
+				<ScalarType>
+					<Numeric value="1.0"/>
+				</ScalarType>
+			</DataVariant>
+		</DataEntry>
+		<DataEntry elementName="P_Local" elementOID="_040g00001g001qg710414u7tepj00">
+			<DataVariant name="default">
+				<Dependency>
+					<Parameter formalName="P_Input" formalOID="_040g0muj723d5122uj7dlhopqict2" valueName="P_Input" valueOID="_040g00001g001qg710414u7sr9ig0"/>
+				</Dependency>
+			</DataVariant>
+		</DataEntry>
+	</DataSet>
+	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+		<SignedInfo>
+			<CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+			<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+			<Reference>
+				<Transforms>
+					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+				</Transforms>
+				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+				<DigestValue>4EK2856ce3FTopQejZVhq1MFoBY=</DigestValue>
+			</Reference>
+		</SignedInfo>
+		<SignatureValue>LPmGD8SB5lSCkM/qWpzO3fw1DoHGUudaW7WqPjAmhO3bDdhWxmc9djtEl1vLKHAm
+52DD2akaf6t6LR6OJmVvJuK60Bb+2uSLp4zvhfcT8d1FLo6mSxd7xZnq7/RzpGZL
+RrFbliQNV0NaoaZBvPjvgCxet/X2gIz+D+6FgnqrdHxvgrQ2+CRLCEVugb/ezs2R
+LO+sGpEEFtwn+YCDoZ9Op174k3UN4+Mkt36XOeGYQMJ7DDSZyh4SGaDP01S8XdjT
+PQL5qwToW7SZQMgZ/3GLyeX+eAyexiulPGN8ZPAm3192Q8/UjEkdJk045ERJplBA
+Tt0Nmdmt7qhRT3Ld0lOgow==</SignatureValue>
+		<KeyInfo>
+			<KeyName>Etas Ascet Verification</KeyName>
+		</KeyInfo>
+	</Signature>
+</ComponentData>

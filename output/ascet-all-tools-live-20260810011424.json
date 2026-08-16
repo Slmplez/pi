@@ -1,0 +1,165 @@
+{
+  "ok": false,
+  "startedDatabase": "C:\\Repo\\F05_IPB_L2_0429",
+  "root": "TEST\\__pi_all_tools_live_20260810011424",
+  "projectPath": "PlatformLibrary\\Package\\RBF_RemoteBrakeFacade\\Component\\Main\\RBF_Main_ECU_CSW_BB00001",
+  "expectedActionCount": 59,
+  "coveredActionCount": 1,
+  "missing": [
+    "ascet_capabilities.search_actions",
+    "ascet_get.tree",
+    "ascet_get.database_catalog",
+    "ascet_get.elements",
+    "ascet_get.formulas",
+    "ascet_get.component_refs",
+    "ascet_get.bde_edges",
+    "ascet_get.import_binding",
+    "ascet_get.dbitem_refs",
+    "ascet_read.read_code",
+    "ascet_read.read_method_signature",
+    "ascet_read.read_element",
+    "ascet_read.read_implementation",
+    "ascet_read.read_block_diagram",
+    "ascet_read.read_state_machine_flow",
+    "ascet_read.read_dependent_chain",
+    "ascet_read.read_element_dependency",
+    "ascet_read.read",
+    "ascet_diff.diff",
+    "ascet_diff.diff_method",
+    "ascet_diff.diff_component_snapshot",
+    "ascet_diff.diff_state_machine_domain",
+    "ascet_diff.diff_element_spec",
+    "ascet_diff.diff_project_formulas",
+    "ascet_edit.create_folder",
+    "ascet_edit.create_component",
+    "ascet_edit.create_method",
+    "ascet_edit.set_method_signature",
+    "ascet_edit.delete_component",
+    "ascet_edit.delete_method",
+    "ascet_edit.delete_folder",
+    "ascet_edit.set_method_code",
+    "ascet_edit.set_module_code",
+    "ascet_edit.set_state_machine_code",
+    "ascet_edit.set_enumerators",
+    "ascet_edit.apply_element_spec",
+    "ascet_edit.apply_project_formula",
+    "ascet_edit.set_element_dependency",
+    "configure_parameter_dependency_chain.plan",
+    "configure_parameter_dependency_chain.commit",
+    "ascet_edit.check",
+    "ascet_edit.set",
+    "ascet_recover.status",
+    "ascet_recover.clear_extension_temp",
+    "ascet_recover.scheduler_status",
+    "ascet_recover.scheduler_recover",
+    "ascet_recover.clear_stale_cli_lock",
+    "ascet_scheduler_status.status",
+    "ascet_scheduler_status.recover",
+    "ascet_batch_write.batch_set_method_code",
+    "ascet_batch_write.batch_set_element_spec",
+    "ascet_batch_write.batch_create_component",
+    "ascet_batch_write.batch_create_method",
+    "ascet_batch_write.batch_set_project_formula",
+    "ascet_batch_write.batch_delete_component",
+    "ascet_batch_write.batch_delete_method",
+    "ascet_batch_write.batch_create_folder",
+    "ascet_batch_write.batch_delete_folder"
+  ],
+  "failed": [
+    {
+      "key": "ascet_capabilities.search_actions",
+      "stage": "search_actions",
+      "tool": "ascet_capabilities",
+      "action": "search_actions",
+      "success": false,
+      "elapsedMs": 2,
+      "error": {
+        "code": "ascet_invalid_parameters",
+        "message": "Invalid parameters for ascet_capabilities."
+      },
+      "summary": {
+        "ok": false,
+        "tool": "ascet_capabilities",
+        "error": {
+          "code": "ascet_invalid_parameters",
+          "message": "Invalid parameters for ascet_capabilities.",
+          "details": {
+            "errors": {
+              "arrayLength": 1
+            }
+          }
+        },
+        "recover": {
+          "tool": "ascet_capabilities",
+          "action": "search_actions",
+          "query": "ascet_capabilities"
+        }
+      }
+    }
+  ],
+  "cleanupErrors": [
+    {
+      "stage": "main",
+      "message": "ascet_capabilities.search_actions failed: ascet_invalid_parameters Invalid parameters for ascet_capabilities."
+    }
+  ],
+  "registered": {
+    "base": [
+      "ascet_status",
+      "ascet_capabilities",
+      "ascet_recover",
+      "ascet_scheduler_status",
+      "ascet_get",
+      "ascet_read",
+      "ascet_diff",
+      "ascet_edit",
+      "configure_parameter_dependency_chain"
+    ],
+    "batch": []
+  },
+  "originalFormulaCount": 0,
+  "calls": [
+    {
+      "key": "ascet_status.status",
+      "stage": "status",
+      "tool": "ascet_status",
+      "action": "status",
+      "success": true,
+      "elapsedMs": 776,
+      "status": "ok",
+      "summary": {
+        "summary": "ASCET status: ready\nASCET installation: ready\nASCET mode: bundle\nASCET extension: C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\nASCET source: unresolved\nASCET Bridge: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe\nASCET contracts: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts\ncli-catalog.json: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts\\cli-catalog.json\nASCET DLL: ready\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\Ascetapidll\\Etas.AscetNET.dll\nASCET ToolAPI: ready\n  ASCET live ToolAPI quick self-test\n  elapsedMs: 764\nASCET scheduler: ready\nASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none"
+      }
+    },
+    {
+      "key": "ascet_capabilities.search_actions",
+      "stage": "search_actions",
+      "tool": "ascet_capabilities",
+      "action": "search_actions",
+      "success": false,
+      "elapsedMs": 2,
+      "error": {
+        "code": "ascet_invalid_parameters",
+        "message": "Invalid parameters for ascet_capabilities."
+      },
+      "summary": {
+        "ok": false,
+        "tool": "ascet_capabilities",
+        "error": {
+          "code": "ascet_invalid_parameters",
+          "message": "Invalid parameters for ascet_capabilities.",
+          "details": {
+            "errors": {
+              "arrayLength": 1
+            }
+          }
+        },
+        "recover": {
+          "tool": "ascet_capabilities",
+          "action": "search_actions",
+          "query": "ascet_capabilities"
+        }
+      }
+    }
+  ]
+}

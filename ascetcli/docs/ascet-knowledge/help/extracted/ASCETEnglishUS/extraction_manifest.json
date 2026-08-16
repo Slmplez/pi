@@ -1,0 +1,105 @@
+{
+  "generated_at": "2026-04-01T03:07:27.429723Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\ASCETEnglishUS.chm",
+  "unpack_dir": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ASCETEnglishUS\\unpacked",
+  "total_files": 14,
+  "total_size_bytes": 178684,
+  "counts_by_extension": {
+    ".htm": 2,
+    ".brs": 1,
+    ".glo": 1,
+    ".hhc": 1,
+    ".hhk": 1,
+    ".js": 2,
+    ".xml": 1,
+    ".gif": 3,
+    ".css": 1,
+    ".lng": 1
+  },
+  "files": [
+    {
+      "relative_path": "ascet_overview.htm",
+      "size": 1050,
+      "sha256": "08aed186706209d7ef6695712e10634e5600503e10da988342629a07a10582ec",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ASCETEnglishUS.brs",
+      "size": 2,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "extension": ".brs"
+    },
+    {
+      "relative_path": "ASCETEnglishUS.glo",
+      "size": 17415,
+      "sha256": "47e510183ed4d8df8febebb23ee96ca91fb9b0caa8e305a1c8b089d9b6c9afac",
+      "extension": ".glo"
+    },
+    {
+      "relative_path": "ASCETEnglishUS.hhc",
+      "size": 7895,
+      "sha256": "2ed54c761474abaed273dd1ca13ed7b77a7b603dc0bfa663b51934928f23ddb0",
+      "extension": ".hhc"
+    },
+    {
+      "relative_path": "ASCETEnglishUS.hhk",
+      "size": 566,
+      "sha256": "d8d6f847ce892fea3e32a27ca587cedd309aa9f2a4c3d9e01baec7ee9d57ab34",
+      "extension": ".hhk"
+    },
+    {
+      "relative_path": "display.js",
+      "size": 5656,
+      "sha256": "85712144c31aac1d2706f3b60475055a673961f71bc37c0f4c9e9c4b85fa9b31",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "eHelp.xml",
+      "size": 372,
+      "sha256": "a924813a22f5cb592f86bb2f7e60bdd1216208b73352a6fd9dc75f1fbe100615",
+      "extension": ".xml"
+    },
+    {
+      "relative_path": "ehlpdhtm.js",
+      "size": 125795,
+      "sha256": "27341ee30f4f93f2de046e91706dafe5ff0522553b5c2d4645362d4aead15641",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "etas_contact_addresses.htm",
+      "size": 4051,
+      "sha256": "f99be22ffd838d06330078e77937d5e18a5198f17238e581088ad220dd971711",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "images/exp_minus.gif",
+      "size": 837,
+      "sha256": "18a8ea974d756d370d6f7067283fc8c0b26f235c8e98bdaaf13a63e7dca8b1c4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exp_plus.gif",
+      "size": 842,
+      "sha256": "9ff1991cf9c6de621e2672bebf74fbc56680e3413f74d6cf18e25238701651be",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/statisch.gif",
+      "size": 831,
+      "sha256": "481cd3e8b966f0a4398b853efce140287877173b926b53d710791675a1b15aa4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Layout.css",
+      "size": 9786,
+      "sha256": "15b8ecb694f0faf615cf7acf82397ee41f6f70902a3ad07c33fb415c4fd77b9a",
+      "extension": ".css"
+    },
+    {
+      "relative_path": "RoboHHRE.lng",
+      "size": 3586,
+      "sha256": "607e16623990c7b694bb11537edbecfbd7057fda1739bba5173e9d8a4942b18f",
+      "extension": ".lng"
+    }
+  ]
+}

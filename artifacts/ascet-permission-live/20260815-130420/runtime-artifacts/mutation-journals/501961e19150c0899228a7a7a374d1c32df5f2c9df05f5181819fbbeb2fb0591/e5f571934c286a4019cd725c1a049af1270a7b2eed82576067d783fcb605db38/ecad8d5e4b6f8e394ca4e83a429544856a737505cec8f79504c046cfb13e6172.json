@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "status": "applied",
+  "databaseFingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c",
+  "targetOid": "040g00001g001qg7107g7svets1g0",
+  "targetKind": "folder",
+  "canonicalPath": "DEMO\\__pi_permission_smoke__20260815-130420",
+  "action": "delete_folder",
+  "planId": "0e7c5c78-c15b-41e8-90ba-0fea4c403567",
+  "planFingerprint": "457f54f7700d728ccea19083897ac3751506125c77275392d03387180579b317",
+  "targetImpactFingerprint": "sha256:fc0177ea40780e32bfefdb1e15926192deaafdb168ceca877477bc2c48b70a6e",
+  "guardGeneration": 0,
+  "beforeSnapshotFingerprint": "sha256:9a0adfba115da09a0d8a9f3b2508213b03d6cf4c6360a8ae164adc48006acc12",
+  "desiredFingerprint": "sha256:6df4f1b88b1141b9b7197c7fe8a98ed21dfaff873fa4adbdac5d09ba15b3792c",
+  "beforeSnapshot": {
+    "operation": "authoritative_single_call_preflight",
+    "validated": true,
+    "authoritativePlan": {
+      "operation": "registered_guarded_operation_preflight",
+      "validated": true,
+      "result": {
+        "targetPath": "DEMO\\__pi_permission_smoke__20260815-130420",
+        "editable": "not_applicable",
+        "capability": {
+          "status": "supported",
+          "source": "registered_closed_operation"
+        },
+        "readbackAvailable": true,
+        "noOp": false
+      }
+    },
+    "normalizedEvidence": {
+      "version": 1,
+      "action": "delete_folder",
+      "paramsFingerprint": "6df4f1b88b1141b9b7197c7fe8a98ed21dfaff873fa4adbdac5d09ba15b3792c",
+      "database": {
+        "path": "C:\\Repo\\F05_IPB_L2_0429",
+        "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+      },
+      "target": {
+        "path": "DEMO\\__pi_permission_smoke__20260815-130420",
+        "oid": "040g00001g001qg7107g7svets1g0",
+        "kind": "folder"
+      },
+      "impact": {
+        "complete": true,
+        "sharedObject": false,
+        "ownerPath": "DEMO\\__pi_permission_smoke__20260815-130420",
+        "affectedProjects": [],
+        "fingerprint": "sha256:fc0177ea40780e32bfefdb1e15926192deaafdb168ceca877477bc2c48b70a6e"
+      },
+      "capability": {
+        "status": "supported",
+        "operation": "registered_guarded_operation_preflight",
+        "evidence": {
+          "status": "supported",
+          "source": "registered_closed_operation"
+        }
+      },
+      "editability": {
+        "applicable": false,
+        "status": "not_applicable",
+        "canRequestEditable": false
+      },
+      "effects": [
+        {
+          "kind": "delete_folder",
+          "target": "DEMO\\__pi_permission_smoke__20260815-130420",
+          "description": "delete_folder: DEMO\\__pi_permission_smoke__20260815-130420"
+        }
+      ],
+      "verification": {
+        "available": true,
+        "operation": "delete_folder_readback",
+        "target": {
+          "path": "DEMO\\__pi_permission_smoke__20260815-130420"
+        }
+      },
+      "riskModifiers": [],
+      "noOp": false,
+      "generatedAt": "2026-08-15T05:25:34.231Z",
+      "approvalMaterialFingerprint": "275aba1dd979676a14766bd40bd1193c1e88c17bd0a95649deb4f0e03dab2065"
+    },
+    "permissionMode": "default",
+    "permissionDecision": "ask",
+    "risk": "high",
+    "approvedAt": "2026-08-15T05:25:12.118Z",
+    "revalidatedAt": "2026-08-15T05:25:34.231Z",
+    "targetIdentity": {
+      "path": "DEMO\\__pi_permission_smoke__20260815-130420",
+      "oid": "040g00001g001qg7107g7svets1g0",
+      "kind": "folder"
+    },
+    "targetImpactFingerprint": "sha256:fc0177ea40780e32bfefdb1e15926192deaafdb168ceca877477bc2c48b70a6e"
+  },
+  "attemptedMutation": {
+    "action": "delete_folder",
+    "folderPath": "DEMO\\__pi_permission_smoke__20260815-130420",
+    "ifMissing": "ignore"
+  },
+  "createdAt": "2026-08-15T05:25:34.250Z",
+  "updatedAt": "2026-08-15T05:25:35.355Z",
+  "evidence": {
+    "bridgeEntered": true,
+    "backendResponseReceived": true,
+    "mutationStarted": true
+  },
+  "outcome": {
+    "operationId": "delete_folder"
+  }
+}

@@ -1,5 +1,6 @@
-export const ascetBackendCommandAliases = {
+﻿export const ascetBackendCommandAliases = {
 	AscetReadCode: "AscetReadTextCode",
+	AscetCreateDependentChain: "AscetConfigureParameterDependencyChainExecute",
 } as const;
 
 export type AscetLogicalCommandId = keyof typeof ascetBackendCommandAliases | string;

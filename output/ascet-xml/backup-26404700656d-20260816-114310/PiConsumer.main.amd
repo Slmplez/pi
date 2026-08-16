@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ComponentMain toolVersion="V6.1.5_2.2.0" schemaVersion="6.1.1.0">
+	<Component name="PiConsumer" nameSpace="/DEMO/__pi_create_dependent_chain_20260816033447512" OID="_040g00001g001qg71080hhpgmg5hg" timeStamp="2026-08-16T03:43:10" componentType="ASCET_Class" specificationType="ESDL">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-16T03:43:10" timeStampCounter="1674"/>
+		<CustomerSpecificAttributes>
+			<ConfigurationManagement edition="true" versionID="" configurationID=""/>
+			<RequirementsManagement requirementsID=""/>
+			<AccessManagement read="true" write="true" import="true"/>
+		</CustomerSpecificAttributes>
+		<Elements>
+			<Element name="C_PI_ChainTest_20260816033447512" OID="_040g00001g001qg71080hhqjbsa1g" ignore="false">
+				<Comment>Disposable ASCET create_dependent_chain acceptance Local.</Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="local" virtual="false" dependent="true" volatile="false" calibrated="false" set="false" get="false" read="true" write="false" reference="false">
+							<Formula code="P_PI_ChainTest_20260816033447512">
+								<Formal name="P_PI_ChainTest_20260816033447512" OID="_040g025vc0ojk93v23fglnjk3v61a"/>
+							</Formula>
+						</PrimitiveAttributes>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+			<Element name="C_PI_ConcurrentA_20260816033447512" OID="_040g00001g001qg71080hisudpa1g" ignore="false">
+				<Comment>Disposable ASCET create_dependent_chain acceptance Local.</Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="local" virtual="false" dependent="true" volatile="false" calibrated="false" set="false" get="false" read="true" write="false" reference="false">
+							<Formula code="P_PI_ConcurrentA_20260816033447512">
+								<Formal name="P_PI_ConcurrentA_20260816033447512" OID="_040g04pi20qqcv4esj0jru0tmo9ni"/>
+							</Formula>
+						</PrimitiveAttributes>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+			<Element name="C_PI_ConcurrentB_20260816033447512" OID="_040g00001g001qg71080hitj5pn1g" ignore="false">
+				<Comment>Disposable ASCET create_dependent_chain acceptance Local.</Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="local" virtual="false" dependent="true" volatile="false" calibrated="false" set="false" get="false" read="true" write="false" reference="false">
+							<Formula code="P_PI_ConcurrentB_20260816033447512">
+								<Formal name="P_PI_ConcurrentB_20260816033447512" OID="_040g0t2a5ecmmmcpiu2eka4ol9mm3"/>
+							</Formula>
+						</PrimitiveAttributes>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+			<Element name="C_PI_ConcurrentSame_20260816033447512" OID="_040g00001g001qg71080hiqbn8v1g" ignore="false">
+				<Comment>Disposable ASCET create_dependent_chain acceptance Local.</Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="local" virtual="false" dependent="true" volatile="false" calibrated="false" set="false" get="false" read="true" write="false" reference="false">
+							<Formula code="P_PI_ConcurrentSame_20260816033447512">
+								<Formal name="P_PI_ConcurrentSame_20260816033447512" OID="_040g04sblrbc3oar9d1c30pbp0e01"/>
+							</Formula>
+						</PrimitiveAttributes>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+			<Element name="C_PI_Partial_20260816033447512" OID="_040g00001g001qg71080hinbb8m1g" ignore="false">
+				<Comment>Disposable ASCET create_dependent_chain acceptance Local.</Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="local" virtual="false" dependent="true" volatile="false" calibrated="false" set="false" get="false" read="true" write="false" reference="false">
+							<Formula code="P_PI_Partial_20260816033447512">
+								<Formal name="P_PI_Partial_20260816033447512" OID="_040g0vf4t24vl9phnf0mvio3019f2"/>
+							</Formula>
+						</PrimitiveAttributes>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+			<Element name="C_PI_Rollback_20260816033447512" OID="_040g00001g001qg71080hiv2na61g" ignore="false">
+				<Comment>Disposable ASCET create_dependent_chain acceptance Local.</Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="local" virtual="false" dependent="false" volatile="false" calibrated="false" set="false" get="false" read="true" write="false" reference="false"/>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+			<Element name="C_PI_SetOnly_20260816033447512" OID="_040g00001g001qg71080hic37sf1g" ignore="false">
+				<Comment>Disposable ASCET create_dependent_chain acceptance Local.</Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="local" virtual="false" dependent="true" volatile="false" calibrated="false" set="false" get="false" read="true" write="false" reference="false">
+							<Formula code="P_PI_SetOnly_20260816033447512">
+								<Formal name="P_PI_SetOnly_20260816033447512" OID="_040g0kr019s9kepp393s1i8q35a3n"/>
+							</Formula>
+						</PrimitiveAttributes>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+			<Element name="P_PI_ChainTest_20260816033447512" OID="_040g00001g001qg71080hhqiu49hg" ignore="false">
+				<Comment></Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="imported" virtual="false" dependent="false" volatile="false" calibrated="true" set="false" get="false" read="true" write="false" reference="false"/>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+			<Element name="P_PI_ConcurrentA_20260816033447512" OID="_040g00001g001qg71080hiss3h9hg" ignore="false">
+				<Comment></Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="imported" virtual="false" dependent="false" volatile="false" calibrated="true" set="false" get="false" read="true" write="false" reference="false"/>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+			<Element name="P_PI_ConcurrentB_20260816033447512" OID="_040g00001g001qg71080hitgc1mhg" ignore="false">
+				<Comment></Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="imported" virtual="false" dependent="false" volatile="false" calibrated="true" set="false" get="false" read="true" write="false" reference="false"/>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+			<Element name="P_PI_ConcurrentSame_20260816033447512" OID="_040g00001g001qg71080hiqa0kuhg" ignore="false">
+				<Comment></Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="imported" virtual="false" dependent="false" volatile="false" calibrated="true" set="false" get="false" read="true" write="false" reference="false"/>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+			<Element name="P_PI_Partial_20260816033447512" OID="_040g00001g001qg71080hin9uclhg" ignore="false">
+				<Comment></Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="imported" virtual="false" dependent="false" volatile="false" calibrated="true" set="false" get="false" read="true" write="false" reference="false"/>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+			<Element name="P_PI_Rollback_20260816033447512" OID="_040g00001g001qg71080hiuvfq5hg" ignore="false">
+				<Comment></Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="imported" virtual="false" dependent="false" volatile="false" calibrated="true" set="false" get="false" read="true" write="false" reference="false"/>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+			<Element name="P_PI_SetOnly_20260816033447512" OID="_040g00001g001qg71080hic35sehg" ignore="false">
+				<Comment></Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="imported" virtual="false" dependent="false" volatile="false" calibrated="true" set="false" get="false" read="true" write="false" reference="false"/>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+		</Elements>
+		<MethodSignatures>
+			<MethodSignature name="calc" OID="_040g00001g001qg71080hhpgqc8hg" public="true" default="false" defaultMethod="false" hidden="false" availableForOS="false"/>
+		</MethodSignatures>
+		<TimeStamps>
+			<TimeStamp timeStampKey="directAccessTimeStampKey" timeStampValue="2026-08-16T03:42:59"/>
+			<TimeStamp timeStampKey="exportImportTimeStampKey" timeStampValue="2026-08-16T03:42:59"/>
+			<TimeStamp timeStampKey="formulaTimeStampKey" timeStampValue="2026-08-16T03:42:59"/>
+			<TimeStamp timeStampKey="implementationCastTimeStampKey" timeStampValue="2026-08-16T03:42:59"/>
+			<TimeStamp timeStampKey="implementationTypeTimeStampKey" timeStampValue="2026-08-16T03:42:59"/>
+			<TimeStamp timeStampKey="methodsTimeStampKey" timeStampValue="2026-08-16T03:42:59"/>
+		</TimeStamps>
+	</Component>
+	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+		<SignedInfo>
+			<CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+			<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+			<Reference>
+				<Transforms>
+					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+				</Transforms>
+				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+				<DigestValue>aVBqEYbWQHAKyBq7LJezk/NyHUU=</DigestValue>
+			</Reference>
+		</SignedInfo>
+		<SignatureValue>ZR0EsgirM4xSJqJRDaM/HKpBzTg9nQbJePTy+Ck0n+5xaqioPsqZgKSO8m7BcH5h
+bENlDk8x8W+m4WgMCsN50+We3bXFcsIqwArUkBJX/z+wRqqbvcB5qTBhL+3Yemea
+pei786tMQlaHrwuk9q7XucbE8kVJ4Fa72IhJbr4Argt00v8EOaAIaIefROdmHkbe
+lOf3vAocHMdfsPpMO5lPdhBkFAMWZlnsnI0L5GICzZ/fMKt3jL3dicVbtjNYaW36
+spchut1tr7Dl0Zj/WPzvEswljEJjScx4/5lUR+hO4OqCKISNO6oG4v0YENNvqe1i
+3Dt1jS8H3XlvPNgLr7jHxw==</SignatureValue>
+		<KeyInfo>
+			<KeyName>Etas Ascet Verification</KeyName>
+		</KeyInfo>
+	</Signature>
+</ComponentMain>

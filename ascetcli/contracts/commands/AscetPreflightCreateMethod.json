@@ -1,0 +1,37 @@
+{
+  "id": "AscetPreflightCreateMethod",
+  "family": "read",
+  "summary": "Resolve create-method target, compatibility, Diagram capability, editability, and readback evidence without mutation",
+  "usage": "<component-path> <method-name> --method-kind <abstract|process|action|condition|trigger> [--diagram <name>] [--if-exists <fail|return-existing>] [--json]",
+  "execution": {
+    "kind": "bridge",
+    "protocolVersion": 1,
+    "subcommand": "exec",
+    "operation": "preflight_create_method",
+    "sessionPolicy": "fresh_session",
+    "transportPolicy": "one_shot_only"
+  },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "read",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": ["component", "method"],
+  "args": [
+    { "name": "component-path", "kind": "positional", "type": "string", "required": true, "description": "Component path" },
+    { "name": "method-name", "kind": "positional", "type": "string", "required": true, "description": "Method name" },
+    { "name": "--method-kind", "kind": "option", "type": "string", "required": true, "description": "Method kind" },
+    { "name": "--diagram", "kind": "option", "type": "string", "required": false, "description": "Diagram name" },
+    { "name": "--if-exists", "kind": "option", "type": "string", "required": false, "description": "Existing-method policy" },
+    { "name": "--json", "kind": "flag", "type": "boolean", "required": false, "description": "Emit JSON" }
+  ],
+  "preconditions": ["ASCET ToolAPI session must be available.", "The target component must resolve in the current database."],
+  "failureModes": ["toolapi_unavailable", "target_not_found", "invalid_argument"],
+  "examples": [{ "description": "Inspect action creation", "command": "AscetBridge.exe exec preflight_create_method Demo\\SM stateProbe --method-kind action --json" }],
+  "pitfalls": ["This operation is read-only and must not create a Diagram or method."],
+  "operation": "preflight_create_method",
+  "lane": "legacy_read",
+  "hostEligible": false,
+  "supportsBatch": false,
+  "executionProfile": { "hostSafety": "read", "hostPolicy": "force_one_shot", "timeoutClass": "read" },
+  "hiddenFromModel": true
+}

@@ -5,7 +5,6 @@ type JsonRecord = Record<string, unknown>;
 
 interface EditOutcome {
 	status?: unknown;
-	plan?: { planId?: unknown; fingerprint?: unknown };
 	error?: { code?: unknown; message?: unknown };
 	message?: unknown;
 	data?: unknown;
@@ -95,10 +94,10 @@ function requireVerified(response: ToolResponse, stage: string): void {
 }
 
 async function preflightAndWrite(params: JsonRecord): Promise<{ preflight: EditOutcome; write: EditOutcome }> {
-	const preflightResponse = await executeEdit(params);
+	const preflightResponse = await executeEdit({ ...params, intent: "preview" });
 	const preflight = requireOutcome(preflightResponse, `${String(params.action)} preflight`);
 	requireStatus(preflight, "preflight", `${String(params.action)} preflight`);
-	const writeResponse = await executeEdit({ ...params, executeWrite: true });
+	const writeResponse = await executeEdit({ ...params, intent: "apply" });
 	const write = requireOutcome(writeResponse, `${String(params.action)} write`);
 	requireStatus(write, "ok", `${String(params.action)} write`);
 	requireVerified(writeResponse, `${String(params.action)} write`);
@@ -158,10 +157,10 @@ const setup = {
 	}),
 };
 
-const elementPlanResponse = await executeEdit({
+const element = await preflightAndWrite({
 	action: "apply_element_spec",
 	componentPath,
-	intent: "create",
+	elementIntent: "create",
 	elements: [
 		{
 			role: "standardPrimitive",
@@ -178,20 +177,6 @@ const elementPlanResponse = await executeEdit({
 		},
 	],
 });
-const elementPlan = requireOutcome(elementPlanResponse, "apply_element_spec plan");
-requireStatus(elementPlan, "preflight", "apply_element_spec plan");
-const elementPlanId = elementPlan.plan?.planId;
-if (typeof elementPlanId !== "string" || elementPlanId.length === 0) {
-	throw new Error(`apply_element_spec plan did not return planId: ${JSON.stringify(elementPlan)}`);
-}
-const elementCommitResponse = await executeEdit({
-	action: "apply_element_spec",
-	phase: "commit",
-	planId: elementPlanId,
-});
-const elementCommit = requireOutcome(elementCommitResponse, "apply_element_spec commit");
-requireStatus(elementCommit, "ok", "apply_element_spec commit");
-requireVerified(elementCommitResponse, "apply_element_spec commit");
 
 const code = "// PI ASCET ESDL acceptance: consume the named local parameter.\nreturn input + C_SmokeThreshold;\n";
 const methodCode = await preflightAndWrite({
@@ -227,7 +212,7 @@ console.log(
 				},
 			},
 			setup,
-			element: { plan: elementPlan, commit: elementCommit },
+			element,
 			methodCode,
 			cleanup,
 		},

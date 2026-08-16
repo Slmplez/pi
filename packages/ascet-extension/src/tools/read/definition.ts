@@ -1,5 +1,5 @@
 import type { AscetCliExecutionResult, AscetCliJsonResult, AscetCliRequest } from "../../cli.ts";
-import { defineSequentialAscetTool } from "../../core/tool.ts";
+import { type AscetToolContext, defineSequentialAscetTool } from "../../core/tool.ts";
 import { formatReadBlockDiagramResult, runAscetReadBlockDiagram } from "../../read-block-diagram.ts";
 import { formatReadComponentSummaryResult, runAscetReadComponentSummary } from "../../read-component-summary.ts";
 import { formatReadDependentChainResult, runAscetReadDependentChain } from "../../read-dependent-chain.ts";
@@ -9,6 +9,7 @@ import { formatReadImplementationResult, runAscetReadImplementation } from "../.
 import { formatReadMethodSignatureResult, runAscetReadMethodSignature } from "../../read-method-signature.ts";
 import { formatReadStateMachineFlowResult, runAscetReadStateMachineFlow } from "../../read-state-machine-flow.ts";
 import { formatReadTextCodeResult, runAscetReadTextCode } from "../../read-text-code.ts";
+import type { AscetScheduler } from "../../scheduler/scheduler.ts";
 import { createHashSummary } from "../../tool-response-contract.ts";
 import { createAscetCliToolDetails } from "../_shared/envelope.ts";
 import { ascetReadPrompt } from "./prompt.ts";
@@ -20,6 +21,8 @@ interface RunOptions {
 	env?: Record<string, string | undefined>;
 	signal?: AbortSignal;
 	timeoutMs?: number;
+	agentId?: string;
+	scheduler?: Pick<AscetScheduler, "submit" | "getSnapshot">;
 	executeCli?: (request: AscetCliRequest) => Promise<AscetCliExecutionResult>;
 }
 
@@ -170,17 +173,22 @@ export const ascetReadTool = defineSequentialAscetTool({
 		params: AscetReadParams,
 		signal: AbortSignal,
 		_onUpdate: unknown,
-		ctx: { cwd: string; executeCli?: RunOptions["executeCli"] },
+		ctx: AscetToolContext & { executeCli?: RunOptions["executeCli"] },
 	) {
 		const result = await runAscetRead(params, {
 			cwd: ctx.cwd,
+			env: ctx.env,
 			signal,
 			timeoutMs: 90_000,
+			agentId: ctx.agentId,
+			scheduler: ctx.scheduler,
 			executeCli: ctx.executeCli,
 		});
+		const details: Record<string, unknown> = { ...createAscetCliToolDetails("ascet_read", params.action, result) };
+		if (params.action === "read_dependent_chain") delete details.data;
 		return {
 			content: [{ type: "text", text: formatAscetReadResult(params, result) }],
-			details: createAscetCliToolDetails("ascet_read", params.action, result),
+			details,
 		};
 	},
 });

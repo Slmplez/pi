@@ -1,0 +1,25 @@
+{
+  "status": "passed",
+  "fixtureRoot": "PI_LIVE_ROOTFIX_20260811_8A8C254E",
+  "classPath": "PI_LIVE_ROOTFIX_20260811_8A8C254E\\ClassUnderTest",
+  "enumerationPath": "PI_LIVE_ROOTFIX_20260811_8A8C254E\\EnumerationUnderTest",
+  "applyElementSpec": {
+    "inputName": true,
+    "inputScope": true,
+    "dependentName": true,
+    "dependentScope": true
+  },
+  "setElementDependency": {
+    "matchFound": true,
+    "dependency": true,
+    "formula": true
+  },
+  "setEnumerators": {
+    "matches": true,
+    "actual": [
+      "ROOTFIX_OFF",
+      "ROOTFIX_ON",
+      "ROOTFIX_DIAG"
+    ]
+  }
+}

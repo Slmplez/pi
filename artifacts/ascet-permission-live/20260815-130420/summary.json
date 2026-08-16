@@ -1,0 +1,599 @@
+{
+  "ok": false,
+  "ascetCwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+  "smokeRoot": "DEMO\\__pi_permission_smoke__20260815-130420",
+  "regressionComponent": "Customer\\GAC\\Package\\AVH_AutomaticVehicleHold\\Private\\GAC_AVH_Autonomous_StandByControl_Activating",
+  "readOnlyComponent": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress",
+  "failureComponent": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+  "expectedDatabaseFingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c",
+  "approvalDelayMs": 31000,
+  "cleanupResults": [
+    {
+      "stage": "cleanup-read-only-method",
+      "status": "removed",
+      "mutationResult": {
+        "status": "ok",
+        "permission": {
+          "mode": "default",
+          "decision": "ask",
+          "risk": "high",
+          "reason": "Default mode requires confirmation for every actual ASCET write."
+        },
+        "preflight": {
+          "status": "passed",
+          "evidence": {
+            "version": 1,
+            "action": "delete_method",
+            "paramsFingerprint": "d8c60f713d6e70ae0eddf56958f408148022640e3cacfb09a7e60ca49fe84066",
+            "database": {
+              "path": "C:\\Repo\\F05_IPB_L2_0429",
+              "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+            },
+            "target": {
+              "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress",
+              "oid": "040qm00000001p870c4hh9q42lfka",
+              "kind": "class"
+            },
+            "impact": {
+              "complete": true,
+              "sharedObject": false,
+              "ownerPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress",
+              "affectedProjects": [],
+              "fingerprint": "sha256:17a328d0d8094d303a4dc120b24852b02898bca4ddc638103c3c28a58825066b"
+            },
+            "capability": {
+              "status": "supported",
+              "operation": "registered_guarded_operation_preflight",
+              "evidence": {
+                "status": "supported",
+                "source": "registered_closed_operation"
+              }
+            },
+            "editability": {
+              "applicable": true,
+              "status": "editable",
+              "canRequestEditable": false
+            },
+            "effects": [
+              {
+                "kind": "delete_method",
+                "target": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress",
+                "description": "delete_method: Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress"
+              }
+            ],
+            "verification": {
+              "available": true,
+              "operation": "delete_method_readback",
+              "target": {
+                "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress"
+              }
+            },
+            "riskModifiers": [],
+            "noOp": false,
+            "generatedAt": "2026-08-15T05:22:32.970Z",
+            "approvalMaterialFingerprint": "7f94a44456b3a89e003d3e980edb61d59c0aeab7b4153f78f94b374083fa84be"
+          }
+        },
+        "editability": {
+          "status": "editable"
+        },
+        "mutation": {
+          "status": "applied"
+        },
+        "verification": {
+          "status": "passed"
+        },
+        "audit": {
+          "approvedAt": "2026-08-15T05:22:10.366Z",
+          "revalidatedAt": "2026-08-15T05:22:32.970Z",
+          "preflightFingerprint": "d8c60f713d6e70ae0eddf56958f408148022640e3cacfb09a7e60ca49fe84066",
+          "approvalMaterialFingerprint": "7f94a44456b3a89e003d3e980edb61d59c0aeab7b4153f78f94b374083fa84be"
+        },
+        "bridge": {
+          "beforeBridge": true,
+          "bridgeEntered": true,
+          "backendResponseReceived": true
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      },
+      "outcome": {
+        "status": "ok",
+        "verified": true,
+        "data": {
+          "changed": {
+            "componentPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress",
+            "methodName": "PiCompoundMethod",
+            "methodKind": "AbstractMethod",
+            "diagram": "Main",
+            "deleted": true,
+            "alreadyMissing": false,
+            "targetKey": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress::PiCompoundMethod",
+            "summary": "Deleted method PiCompoundMethod in Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress."
+          },
+          "verification": {
+            "mode": "automatic_readback",
+            "source": "write_command",
+            "required": true,
+            "requested": true,
+            "verified": true,
+            "status": "passed"
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    },
+    {
+      "stage": "cleanup-editable-component",
+      "status": "removed",
+      "mutationResult": {
+        "status": "ok",
+        "permission": {
+          "mode": "default",
+          "decision": "ask",
+          "risk": "high",
+          "reason": "Default mode requires confirmation for every actual ASCET write."
+        },
+        "preflight": {
+          "status": "passed",
+          "evidence": {
+            "version": 1,
+            "action": "delete_component",
+            "paramsFingerprint": "b3d79b590a932c0aed8c868874d039c767e730881ad7c7c1e922b0892cac9919",
+            "database": {
+              "path": "C:\\Repo\\F05_IPB_L2_0429",
+              "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+            },
+            "target": {
+              "path": "DEMO\\__pi_permission_smoke__20260815-130420\\EditableClass",
+              "oid": "040g00001g001qg7107g7uikq02g0",
+              "kind": "class"
+            },
+            "impact": {
+              "complete": true,
+              "sharedObject": false,
+              "ownerPath": "DEMO\\__pi_permission_smoke__20260815-130420\\EditableClass",
+              "affectedProjects": [],
+              "fingerprint": "sha256:e6af1caf64bbea6b35b2cd7924b669762c346c245f52cc25452bcdca3da97ec4"
+            },
+            "capability": {
+              "status": "supported",
+              "operation": "registered_guarded_operation_preflight",
+              "evidence": {
+                "status": "supported",
+                "source": "registered_closed_operation"
+              }
+            },
+            "editability": {
+              "applicable": true,
+              "status": "editable",
+              "canRequestEditable": false
+            },
+            "effects": [
+              {
+                "kind": "delete_component",
+                "target": "DEMO\\__pi_permission_smoke__20260815-130420\\EditableClass",
+                "description": "delete_component: DEMO\\__pi_permission_smoke__20260815-130420\\EditableClass"
+              }
+            ],
+            "verification": {
+              "available": true,
+              "operation": "delete_component_readback",
+              "target": {
+                "path": "DEMO\\__pi_permission_smoke__20260815-130420\\EditableClass"
+              }
+            },
+            "riskModifiers": [],
+            "noOp": false,
+            "generatedAt": "2026-08-15T05:23:17.491Z",
+            "approvalMaterialFingerprint": "17a3b61bff2c7d6ef28a077f107a87a685380d7bcf3a6ecdee39193828200988"
+          }
+        },
+        "editability": {
+          "status": "editable"
+        },
+        "mutation": {
+          "status": "applied"
+        },
+        "verification": {
+          "status": "passed"
+        },
+        "audit": {
+          "approvedAt": "2026-08-15T05:22:55.871Z",
+          "revalidatedAt": "2026-08-15T05:23:17.491Z",
+          "preflightFingerprint": "b3d79b590a932c0aed8c868874d039c767e730881ad7c7c1e922b0892cac9919",
+          "approvalMaterialFingerprint": "17a3b61bff2c7d6ef28a077f107a87a685380d7bcf3a6ecdee39193828200988"
+        },
+        "bridge": {
+          "beforeBridge": true,
+          "bridgeEntered": true,
+          "backendResponseReceived": true
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      },
+      "outcome": {
+        "status": "ok",
+        "verified": true,
+        "data": {
+          "changed": {
+            "componentPath": "DEMO\\__pi_permission_smoke__20260815-130420\\EditableClass",
+            "folderPath": "DEMO\\__pi_permission_smoke__20260815-130420",
+            "componentName": "EditableClass",
+            "deleted": true,
+            "alreadyMissing": false,
+            "summary": "Deleted component DEMO\\__pi_permission_smoke__20260815-130420\\EditableClass."
+          },
+          "verification": {
+            "mode": "automatic_readback",
+            "source": "write_command",
+            "required": true,
+            "requested": true,
+            "verified": true,
+            "status": "passed"
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    },
+    {
+      "stage": "cleanup-auto-folder",
+      "status": "removed",
+      "mutationResult": {
+        "status": "ok",
+        "permission": {
+          "mode": "default",
+          "decision": "ask",
+          "risk": "high",
+          "reason": "Default mode requires confirmation for every actual ASCET write."
+        },
+        "preflight": {
+          "status": "passed",
+          "evidence": {
+            "version": 1,
+            "action": "delete_folder",
+            "paramsFingerprint": "0fb50ced89f0ed08fbe6d73f48a32a9efd1be308b72b2445e9026b7268d181df",
+            "database": {
+              "path": "C:\\Repo\\F05_IPB_L2_0429",
+              "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+            },
+            "target": {
+              "path": "DEMO\\__pi_permission_smoke__20260815-130420\\AutoAllowed",
+              "oid": "040g00001g001qg7107g7v81g4700",
+              "kind": "folder"
+            },
+            "impact": {
+              "complete": true,
+              "sharedObject": false,
+              "ownerPath": "DEMO\\__pi_permission_smoke__20260815-130420\\AutoAllowed",
+              "affectedProjects": [],
+              "fingerprint": "sha256:268d9a92a8ded656f47dea7e1603a5185deaf391073c8341523eb9280e8dd056"
+            },
+            "capability": {
+              "status": "supported",
+              "operation": "registered_guarded_operation_preflight",
+              "evidence": {
+                "status": "supported",
+                "source": "registered_closed_operation"
+              }
+            },
+            "editability": {
+              "applicable": false,
+              "status": "not_applicable",
+              "canRequestEditable": false
+            },
+            "effects": [
+              {
+                "kind": "delete_folder",
+                "target": "DEMO\\__pi_permission_smoke__20260815-130420\\AutoAllowed",
+                "description": "delete_folder: DEMO\\__pi_permission_smoke__20260815-130420\\AutoAllowed"
+              }
+            ],
+            "verification": {
+              "available": true,
+              "operation": "delete_folder_readback",
+              "target": {
+                "path": "DEMO\\__pi_permission_smoke__20260815-130420\\AutoAllowed"
+              }
+            },
+            "riskModifiers": [],
+            "noOp": false,
+            "generatedAt": "2026-08-15T05:24:03.000Z",
+            "approvalMaterialFingerprint": "f28eb6628b5e13e0e2520e00b83bfbb0738c0c9cc497fb5461b26218f2ba3833"
+          }
+        },
+        "editability": {
+          "status": "not_applicable"
+        },
+        "mutation": {
+          "status": "applied"
+        },
+        "verification": {
+          "status": "passed"
+        },
+        "audit": {
+          "approvedAt": "2026-08-15T05:23:41.134Z",
+          "revalidatedAt": "2026-08-15T05:24:03.000Z",
+          "preflightFingerprint": "0fb50ced89f0ed08fbe6d73f48a32a9efd1be308b72b2445e9026b7268d181df",
+          "approvalMaterialFingerprint": "f28eb6628b5e13e0e2520e00b83bfbb0738c0c9cc497fb5461b26218f2ba3833"
+        },
+        "bridge": {
+          "beforeBridge": true,
+          "bridgeEntered": true,
+          "backendResponseReceived": true
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      },
+      "outcome": {
+        "status": "ok",
+        "verified": true,
+        "data": {
+          "changed": {
+            "folderPath": "DEMO\\__pi_permission_smoke__20260815-130420\\AutoAllowed",
+            "deleted": true,
+            "alreadyMissing": false,
+            "summary": "Deleted folder DEMO\\__pi_permission_smoke__20260815-130420\\AutoAllowed."
+          },
+          "verification": {
+            "mode": "automatic_readback",
+            "source": "write_command",
+            "required": true,
+            "requested": true,
+            "verified": true,
+            "status": "passed"
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    },
+    {
+      "stage": "cleanup-accept-folder",
+      "status": "removed",
+      "mutationResult": {
+        "status": "ok",
+        "permission": {
+          "mode": "default",
+          "decision": "ask",
+          "risk": "high",
+          "reason": "Default mode requires confirmation for every actual ASCET write."
+        },
+        "preflight": {
+          "status": "passed",
+          "evidence": {
+            "version": 1,
+            "action": "delete_folder",
+            "paramsFingerprint": "d2bd09ceee58a4b64dfc260c3088f920324e85013e5713bacd0289158ac39673",
+            "database": {
+              "path": "C:\\Repo\\F05_IPB_L2_0429",
+              "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+            },
+            "target": {
+              "path": "DEMO\\__pi_permission_smoke__20260815-130420\\AcceptEdits",
+              "oid": "040g00001g001qg7107g7tv9fk200",
+              "kind": "folder"
+            },
+            "impact": {
+              "complete": true,
+              "sharedObject": false,
+              "ownerPath": "DEMO\\__pi_permission_smoke__20260815-130420\\AcceptEdits",
+              "affectedProjects": [],
+              "fingerprint": "sha256:89589bd4a51a336357b06e6eb33ad0d44748a3eed0009a5568ed7b591d858245"
+            },
+            "capability": {
+              "status": "supported",
+              "operation": "registered_guarded_operation_preflight",
+              "evidence": {
+                "status": "supported",
+                "source": "registered_closed_operation"
+              }
+            },
+            "editability": {
+              "applicable": false,
+              "status": "not_applicable",
+              "canRequestEditable": false
+            },
+            "effects": [
+              {
+                "kind": "delete_folder",
+                "target": "DEMO\\__pi_permission_smoke__20260815-130420\\AcceptEdits",
+                "description": "delete_folder: DEMO\\__pi_permission_smoke__20260815-130420\\AcceptEdits"
+              }
+            ],
+            "verification": {
+              "available": true,
+              "operation": "delete_folder_readback",
+              "target": {
+                "path": "DEMO\\__pi_permission_smoke__20260815-130420\\AcceptEdits"
+              }
+            },
+            "riskModifiers": [],
+            "noOp": false,
+            "generatedAt": "2026-08-15T05:24:48.724Z",
+            "approvalMaterialFingerprint": "719c7e2cc102efa97ede9d86d23c20b26363cbbf9a49e023a5b0c555f6b56c43"
+          }
+        },
+        "editability": {
+          "status": "not_applicable"
+        },
+        "mutation": {
+          "status": "applied"
+        },
+        "verification": {
+          "status": "passed"
+        },
+        "audit": {
+          "approvedAt": "2026-08-15T05:24:25.978Z",
+          "revalidatedAt": "2026-08-15T05:24:48.724Z",
+          "preflightFingerprint": "d2bd09ceee58a4b64dfc260c3088f920324e85013e5713bacd0289158ac39673",
+          "approvalMaterialFingerprint": "719c7e2cc102efa97ede9d86d23c20b26363cbbf9a49e023a5b0c555f6b56c43"
+        },
+        "bridge": {
+          "beforeBridge": true,
+          "bridgeEntered": true,
+          "backendResponseReceived": true
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      },
+      "outcome": {
+        "status": "ok",
+        "verified": true,
+        "data": {
+          "changed": {
+            "folderPath": "DEMO\\__pi_permission_smoke__20260815-130420\\AcceptEdits",
+            "deleted": true,
+            "alreadyMissing": false,
+            "summary": "Deleted folder DEMO\\__pi_permission_smoke__20260815-130420\\AcceptEdits."
+          },
+          "verification": {
+            "mode": "automatic_readback",
+            "source": "write_command",
+            "required": true,
+            "requested": true,
+            "verified": true,
+            "status": "passed"
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    },
+    {
+      "stage": "cleanup-root-folder",
+      "status": "removed",
+      "mutationResult": {
+        "status": "ok",
+        "permission": {
+          "mode": "default",
+          "decision": "ask",
+          "risk": "high",
+          "reason": "Default mode requires confirmation for every actual ASCET write."
+        },
+        "preflight": {
+          "status": "passed",
+          "evidence": {
+            "version": 1,
+            "action": "delete_folder",
+            "paramsFingerprint": "6df4f1b88b1141b9b7197c7fe8a98ed21dfaff873fa4adbdac5d09ba15b3792c",
+            "database": {
+              "path": "C:\\Repo\\F05_IPB_L2_0429",
+              "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+            },
+            "target": {
+              "path": "DEMO\\__pi_permission_smoke__20260815-130420",
+              "oid": "040g00001g001qg7107g7svets1g0",
+              "kind": "folder"
+            },
+            "impact": {
+              "complete": true,
+              "sharedObject": false,
+              "ownerPath": "DEMO\\__pi_permission_smoke__20260815-130420",
+              "affectedProjects": [],
+              "fingerprint": "sha256:fc0177ea40780e32bfefdb1e15926192deaafdb168ceca877477bc2c48b70a6e"
+            },
+            "capability": {
+              "status": "supported",
+              "operation": "registered_guarded_operation_preflight",
+              "evidence": {
+                "status": "supported",
+                "source": "registered_closed_operation"
+              }
+            },
+            "editability": {
+              "applicable": false,
+              "status": "not_applicable",
+              "canRequestEditable": false
+            },
+            "effects": [
+              {
+                "kind": "delete_folder",
+                "target": "DEMO\\__pi_permission_smoke__20260815-130420",
+                "description": "delete_folder: DEMO\\__pi_permission_smoke__20260815-130420"
+              }
+            ],
+            "verification": {
+              "available": true,
+              "operation": "delete_folder_readback",
+              "target": {
+                "path": "DEMO\\__pi_permission_smoke__20260815-130420"
+              }
+            },
+            "riskModifiers": [],
+            "noOp": false,
+            "generatedAt": "2026-08-15T05:25:34.231Z",
+            "approvalMaterialFingerprint": "275aba1dd979676a14766bd40bd1193c1e88c17bd0a95649deb4f0e03dab2065"
+          }
+        },
+        "editability": {
+          "status": "not_applicable"
+        },
+        "mutation": {
+          "status": "applied"
+        },
+        "verification": {
+          "status": "passed"
+        },
+        "audit": {
+          "approvedAt": "2026-08-15T05:25:12.118Z",
+          "revalidatedAt": "2026-08-15T05:25:34.231Z",
+          "preflightFingerprint": "6df4f1b88b1141b9b7197c7fe8a98ed21dfaff873fa4adbdac5d09ba15b3792c",
+          "approvalMaterialFingerprint": "275aba1dd979676a14766bd40bd1193c1e88c17bd0a95649deb4f0e03dab2065"
+        },
+        "bridge": {
+          "beforeBridge": true,
+          "bridgeEntered": true,
+          "backendResponseReceived": true
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      },
+      "outcome": {
+        "status": "ok",
+        "verified": true,
+        "data": {
+          "changed": {
+            "folderPath": "DEMO\\__pi_permission_smoke__20260815-130420",
+            "deleted": true,
+            "alreadyMissing": false,
+            "summary": "Deleted folder DEMO\\__pi_permission_smoke__20260815-130420."
+          },
+          "verification": {
+            "mode": "automatic_readback",
+            "source": "write_command",
+            "required": true,
+            "requested": true,
+            "verified": true,
+            "status": "passed"
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    }
+  ],
+  "error": "Expected mutation envelope blocked, received ok."
+}

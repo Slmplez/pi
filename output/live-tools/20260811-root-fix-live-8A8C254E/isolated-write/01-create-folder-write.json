@@ -1,0 +1,92 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"changed\": {\n    \"folderPath\": \"PI_LIVE_ROOTFIX_20260811_8A8C254E\",\n    \"created\": true,\n    \"createdCount\": 1,\n    \"existingCount\": 0,\n    \"summary\": \"Created folder path 'PI_LIVE_ROOTFIX_20260811_8A8C254E' (1 created, 0 existing).\"\n  },\n  \"verification\": {\n    \"mode\": \"automatic_readback\",\n    \"source\": \"write_command\",\n    \"required\": true,\n    \"requested\": true,\n    \"verified\": true,\n    \"status\": \"passed\"\n  }\n}"
+    }
+  ],
+  "details": {
+    "outcome": {
+      "status": "ok",
+      "verified": true,
+      "data": {
+        "changed": {
+          "folderPath": "PI_LIVE_ROOTFIX_20260811_8A8C254E",
+          "created": true,
+          "createdCount": 1,
+          "existingCount": 0,
+          "summary": "Created folder path 'PI_LIVE_ROOTFIX_20260811_8A8C254E' (1 created, 0 existing)."
+        },
+        "verification": {
+          "mode": "automatic_readback",
+          "source": "write_command",
+          "required": true,
+          "requested": true,
+          "verified": true,
+          "status": "passed"
+        },
+        "observations": {
+          "invalidated": []
+        }
+      },
+      "warnings": []
+    },
+    "raw": {
+      "ok": true,
+      "data": {
+        "type": "response",
+        "protocolVersion": 1,
+        "ok": true,
+        "result": {
+          "folderPath": "PI_LIVE_ROOTFIX_20260811_8A8C254E",
+          "created": true,
+          "createdCount": 1,
+          "existingCount": 0,
+          "verifyReadbackRequested": true,
+          "readbackVerified": true,
+          "summary": "Created folder path 'PI_LIVE_ROOTFIX_20260811_8A8C254E' (1 created, 0 existing)."
+        },
+        "error": null,
+        "meta": {
+          "bridgePid": 39088,
+          "bridgeGeneration": "0a7f00a1-1028-4700-89f3-a157ac3d4b69",
+          "durationMs": 819,
+          "sessionPolicy": "fresh_session",
+          "mutationStarted": true,
+          "mode": "exec",
+          "operation": "create_folder"
+        }
+      },
+      "request": {
+        "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+        "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+        "args": [
+          "exec",
+          "create_folder",
+          "PI_LIVE_ROOTFIX_20260811_8A8C254E",
+          "--verify-readback",
+          "--json"
+        ],
+        "jobKind": "write",
+        "mutatesDatabase": true
+      },
+      "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"folderPath\":\"PI_LIVE_ROOTFIX_20260811_8A8C254E\",\"created\":true,\"createdCount\":1,\"existingCount\":0,\"verifyReadbackRequested\":true,\"readbackVerified\":true,\"summary\":\"Created folder path \\u0027PI_LIVE_ROOTFIX_20260811_8A8C254E\\u0027 (1 created, 0 existing).\"},\"error\":null,\"meta\":{\"bridgePid\":39088,\"bridgeGeneration\":\"0a7f00a1-1028-4700-89f3-a157ac3d4b69\",\"durationMs\":819,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":true,\"mode\":\"exec\",\"operation\":\"create_folder\"}}\r\n",
+      "stderr": "",
+      "exitCode": 0,
+      "timedOut": false,
+      "aborted": false,
+      "operationId": "create_folder"
+    },
+    "observations": {
+      "invalidated": []
+    },
+    "verification": {
+      "mode": "automatic_readback",
+      "source": "write_command",
+      "required": true,
+      "requested": true,
+      "verified": true,
+      "status": "passed"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+    "runId":  "LIVE_TOOLS_20260812-134514_EE770C82",
+    "startedAt":  "2026-08-12T13:45:18.9038635+08:00",
+    "bridge":  "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+    "stableGate":  true,
+    "databasePath":  "C:\\Repo\\11_ASCETCopilotLiveTest\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\ASW\\Db\\",
+    "databaseName":  "C:\\Repo\\11_ASCETCopilotLiveTest\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\ASW\\Db\\AscetDb_20260707223121",
+    "componentPath":  "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+    "namePathConsistent":  true,
+    "fixtureRoot":  "PI_LIVE_FIX_20260812_EE770C82",
+    "stableIdentityCount":  1
+}

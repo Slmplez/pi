@@ -1,0 +1,490 @@
+{
+  "tool": "ascet_get",
+  "params": {
+    "action": "elements",
+    "target": {
+      "path": "PlatformLibrary\\Package\\AVH_AutomaticVehicleHold\\Component\\Config\\CM_AVH"
+    },
+    "delivery": "inline"
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"delivery\": \"inline\",\n  \"items\": [\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CSMTarGearStep\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_CustjDeact\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"exported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_AVHSwitchOn\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CSMApbButtonRelease\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CSMGearStep\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::LDMSelectedControllerT5\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_CustDeactType\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"exported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CSMDriverPresent\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::FS_AVH_UseActGear\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_AVHButtonPressed\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CSMABrkRequested\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::C_AVH_DriverPresentNegDelay\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::P_AVH_DriverAbsenceMaxTime\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_CustTrigStandbyOff\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"exported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::AvhStandby\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::Temp_CSMDriveUnitState_Off\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_NVM_ForceAvhStandby\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::Temp_CSMDriveUnitState_On\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CSMSkidDrive\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_CustTrigTempDisable\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"exported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_AVHDeactivationByBrakePedal\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::AvhRequest\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::AvhDriverIntentionOff_B\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"exported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_CustTrigResetTempDisable\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"exported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_ForceStandby\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::InputRodStroke_Network\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_DriveoffRequested\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"exported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CSMDriverPresent_Valid\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CSMAcceleratorPedalApplied\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::BrakePedalIsApplied\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::NvM_AVH_Data_ReadSuccess\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_CustTrigStandbyService\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"exported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_CustTrigRelease\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"exported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CSMABrkSystem\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CSMVehStandstill\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CSMBrakePedalApplied\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::axSlope\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_CustTrigTakeOver\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"exported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::P_AVH_dT\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_CSMDriveUnitState\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"exported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_CustTrigHold\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"exported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_AVHActivationByBrakePedal\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"exported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::NvM_AvhLastMode_Write\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::OnePedalToStop_Active\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::C_dT\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::NvM_AVH_Data_Read\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::P_AVH_StandstillDelay\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::LfcHoldActive\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_HoldForceSufficient\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"exported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CSMSkidYawRate\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::Temp_PwrModSts_On\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_CustCondDisableHold\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"exported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::P_AVH_DriverPresentNegDelay\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::C_AVH_DriverAbsenceMaxTime\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_DriverAbsent\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"exported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_CustTrigStandbyOn\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"exported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_DriverPresent\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"exported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_Standstill\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"exported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_CustTDeact\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"exported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CSMHoldState\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::AvhSet\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CSMCurrentSystemMode\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CSMGearbox_Valid\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CM_AVH_TarGearStep\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"exported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::AvhState\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::C_AVH_DelayStandstill\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CSMABrkActuated\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CSMGearboxType\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::CSMMassVehicleEmpty\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"imported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::AvhSwitch\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"exported\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::AVH_Standstill_TurnOnDelay\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::AVH_SwitchLogic\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::HoldForceSufficient\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::AVH_DriveOffRequested\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::AVH_NvM_SetData\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::AVH_BrakePedalPatternDetection_Xiaomi\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::AVH_CustStandbyLogic\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::AVH_NvM_ReadData\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::AVH_CustTempDisable\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::AVH_ButtonLogic\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::AVH_DriverPresentF\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::AVH_CustStateLogic\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::AVH_SwitchAdaption\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    },\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH::AVH_ForceStandbyLogic\",\n      \"componentOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"scope\": \"local\"\n    }\n  ],\n  \"coverage\": {\n    \"status\": \"partial\",\n    \"scopeKind\": \"item\",\n    \"scopeId\": \"path:PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH\",\n    \"completeness\": \"bounded\",\n    \"truncated\": false,\n    \"foldersVisited\": 0,\n    \"componentsScanned\": 1,\n    \"identityKinds\": [],\n    \"collectorStarted\": false,\n    \"collectorCompleted\": false,\n    \"rootCollectionAvailable\": false,\n    \"projectCollectionAvailable\": false,\n    \"missingOidCount\": 84,\n    \"missingPathCount\": 0\n  },\n  \"truncated\": false,\n  \"source\": \"live\",\n  \"sourceIdentity\": {\n    \"database\": {\n      \"name\": \"C:\\\\Repo\\\\11_ASCETCopilotLiveTest\\\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\\\ASW\\\\Db\\\\AscetDb_20260707223121\",\n      \"path\": \"C:\\\\Repo\\\\11_ASCETCopilotLiveTest\\\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\\\ASW\\\\Db\\\\\",\n      \"fingerprint\": \"49be9da8ddaa5ac7b09b24a394229cbbd9a9dc3dbabadf9704da7ff25633274a\"\n    }\n  }\n}"
+      }
+    ],
+    "details": {
+      "tool": "ascet_get",
+      "action": "elements",
+      "command": {
+        "logicalCommandId": "AscetGetElements",
+        "backendCommandId": "AscetGetElements",
+        "operation": "get_elements"
+      },
+      "data": {
+        "items": [
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CSMTarGearStep",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_CustjDeact",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "exported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_AVHSwitchOn",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CSMApbButtonRelease",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CSMGearStep",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::LDMSelectedControllerT5",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_CustDeactType",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "exported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CSMDriverPresent",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::FS_AVH_UseActGear",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_AVHButtonPressed",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CSMABrkRequested",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::C_AVH_DriverPresentNegDelay",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::P_AVH_DriverAbsenceMaxTime",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_CustTrigStandbyOff",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "exported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::AvhStandby",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::Temp_CSMDriveUnitState_Off",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_NVM_ForceAvhStandby",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::Temp_CSMDriveUnitState_On",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CSMSkidDrive",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_CustTrigTempDisable",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "exported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_AVHDeactivationByBrakePedal",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::AvhRequest",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::AvhDriverIntentionOff_B",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "exported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_CustTrigResetTempDisable",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "exported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_ForceStandby",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::InputRodStroke_Network",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_DriveoffRequested",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "exported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CSMDriverPresent_Valid",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CSMAcceleratorPedalApplied",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::BrakePedalIsApplied",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::NvM_AVH_Data_ReadSuccess",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_CustTrigStandbyService",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "exported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_CustTrigRelease",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "exported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CSMABrkSystem",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CSMVehStandstill",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CSMBrakePedalApplied",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::axSlope",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_CustTrigTakeOver",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "exported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::P_AVH_dT",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_CSMDriveUnitState",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "exported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_CustTrigHold",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "exported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_AVHActivationByBrakePedal",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "exported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::NvM_AvhLastMode_Write",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::OnePedalToStop_Active",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::C_dT",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::NvM_AVH_Data_Read",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::P_AVH_StandstillDelay",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::LfcHoldActive",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_HoldForceSufficient",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "exported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CSMSkidYawRate",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::Temp_PwrModSts_On",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_CustCondDisableHold",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "exported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::P_AVH_DriverPresentNegDelay",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::C_AVH_DriverAbsenceMaxTime",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_DriverAbsent",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "exported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_CustTrigStandbyOn",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "exported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_DriverPresent",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "exported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_Standstill",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "exported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_CustTDeact",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "exported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CSMHoldState",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::AvhSet",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CSMCurrentSystemMode",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CSMGearbox_Valid",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CM_AVH_TarGearStep",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "exported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::AvhState",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::C_AVH_DelayStandstill",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CSMABrkActuated",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CSMGearboxType",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::CSMMassVehicleEmpty",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "imported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::AvhSwitch",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "exported"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::AVH_Standstill_TurnOnDelay",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::AVH_SwitchLogic",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::HoldForceSufficient",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::AVH_DriveOffRequested",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::AVH_NvM_SetData",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::AVH_BrakePedalPatternDetection_Xiaomi",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::AVH_CustStandbyLogic",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::AVH_NvM_ReadData",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::AVH_CustTempDisable",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::AVH_ButtonLogic",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::AVH_DriverPresentF",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::AVH_CustStateLogic",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::AVH_SwitchAdaption",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          },
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH::AVH_ForceStandbyLogic",
+            "componentOid": "040gpc83142g1no70o90q9iltgggg",
+            "scope": "local"
+          }
+        ],
+        "coverage": {
+          "status": "partial",
+          "scopeKind": "item",
+          "scopeId": "path:PlatformLibrary\\Package\\AVH_AutomaticVehicleHold\\Component\\Config\\CM_AVH",
+          "completeness": "bounded",
+          "truncated": false,
+          "foldersVisited": 0,
+          "componentsScanned": 1,
+          "collectorStarted": false,
+          "collectorCompleted": false,
+          "rootCollectionAvailable": false,
+          "projectCollectionAvailable": false,
+          "missingOidCount": 84,
+          "missingPathCount": 0
+        },
+        "truncated": false,
+        "source": "live",
+        "database": {
+          "name": "C:\\Repo\\11_ASCETCopilotLiveTest\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\ASW\\Db\\AscetDb_20260707223121",
+          "path": "C:/Repo/11_ASCETCopilotLiveTest/AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599/ASW/Db/"
+        }
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:/Repo/09_ASCETCopilot/pi-ascet-extension-prototype/packages/ascet-extension/ascet-cli/bin/AscetBridge.exe",
+          "args": [
+            "exec",
+            "get_elements",
+            "--request-json",
+            "{\"path\":\"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH\"}",
+            "--json"
+          ],
+          "timeoutMs": 180000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 0,
+        "timedOut": false
+      }
+    }
+  }
+}

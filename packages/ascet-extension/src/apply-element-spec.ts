@@ -1,4 +1,4 @@
-﻿import { type AscetCliJsonResult, runAscetCliJson } from "./cli.ts";
+import { type AscetCliJsonResult, runAscetCliJson } from "./cli.ts";
 import { normalizeAscetPath } from "./core/path.ts";
 import type { AscetEditApprovalContext } from "./edit/approval.ts";
 import {
@@ -11,11 +11,7 @@ import {
 } from "./edit/common.ts";
 import type { AscetElementInput } from "./element-spec-contract.ts";
 
-export type {
-	AscetApplyElementCommitParams,
-	AscetApplyElementPlanParams,
-	AscetElementInput,
-} from "./element-spec-contract.ts";
+export type { AscetApplyElementPlanParams, AscetElementInput } from "./element-spec-contract.ts";
 export { ascetApplyElementSpecParameters } from "./element-spec-contract.ts";
 
 /** Internal runner parameters. Model-facing calls use the plan/commit schema exported above. */
@@ -24,7 +20,7 @@ export interface AscetApplyElementSpecParams extends AscetEditControlParams {
 	specFile: string;
 	projectPath?: string;
 	mode?: "restore";
-	intent?: "create" | "patch" | "upsert" | "restore";
+	elementIntent?: "create" | "patch" | "upsert" | "restore";
 	elements?: AscetElementInput[];
 	deleteMissing?: boolean;
 	recreateIncompatible?: boolean;
@@ -53,7 +49,7 @@ export function buildApplyElementSpecArgs(params: AscetApplyElementSpecParams): 
 export function createApplyElementSpecSummary(params: AscetApplyElementSpecParams): string {
 	return createAscetEditSummary("apply_element_spec", {
 		componentPath: params.componentPath,
-		intent: params.intent ?? (params.mode === "restore" ? "restore" : "internal-spec"),
+		elementIntent: params.elementIntent ?? (params.mode === "restore" ? "restore" : "internal-spec"),
 		elements: params.elements?.length ?? "resolved from internal spec",
 		projectPath: params.projectPath ?? "",
 		deleteMissing: params.deleteMissing === true,

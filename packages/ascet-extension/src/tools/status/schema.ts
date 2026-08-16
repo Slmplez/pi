@@ -1,5 +1,2 @@
-import { Type } from "typebox";
-
 export type AscetStatusParams = Record<string, never>;
-
-export const ascetStatusParameters = Type.Object({});
+export { ascetStatusActionSchema as ascetStatusParameters } from "../actions/contracts/ops.ts";

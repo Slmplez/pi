@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ComponentMain toolVersion="V6.1.5_2.2.0" schemaVersion="6.1.1.0">
+	<Component name="PiSmokeConsumer" nameSpace="/DEMO/__pi_parameter_chain_smoke__" OID="_040g00001g001qg71051nvtv7lsg6" timeStamp="2026-08-10T02:16:20" componentType="ASCET_Class" specificationType="ESDL">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-10T02:16:20" timeStampCounter="2092"/>
+		<CustomerSpecificAttributes>
+			<ConfigurationManagement edition="true" versionID="" configurationID=""/>
+			<RequirementsManagement requirementsID=""/>
+			<AccessManagement read="true" write="true" import="true"/>
+		</CustomerSpecificAttributes>
+		<Elements>
+			<Element name="C_SmokeThreshold" OID="_040g00001g001qg71051nvv06a106" ignore="false">
+				<Comment>Consumer-local dependent smoke threshold.</Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="local" virtual="false" dependent="false" volatile="false" calibrated="false" set="false" get="false" read="true" write="false" reference="false"/>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+			<Element name="P_SmokeThreshold" OID="_040g00001g001qg71051nvussu0g6" ignore="false">
+				<Comment></Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="imported" virtual="false" dependent="false" volatile="false" calibrated="true" set="false" get="false" read="true" write="false" reference="false"/>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+		</Elements>
+		<MethodSignatures>
+			<MethodSignature name="calc" OID="_040g00001g001qg71051nvtvbhvg6" public="true" default="false" defaultMethod="false" hidden="false" availableForOS="false"/>
+		</MethodSignatures>
+		<TimeStamps>
+			<TimeStamp timeStampKey="methodsTimeStampKey" timeStampValue="2026-08-10T02:16:11"/>
+		</TimeStamps>
+	</Component>
+	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+		<SignedInfo>
+			<CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+			<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+			<Reference>
+				<Transforms>
+					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+				</Transforms>
+				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+				<DigestValue>qmjZ8H0pKa899TDLDvUJzj2NT2M=</DigestValue>
+			</Reference>
+		</SignedInfo>
+		<SignatureValue>LwOoAmBoZrsCEyC+VBe6L2YMbTtFZlLlGMCX7HKvGC4CwaxTsgFxtGYtFqP+mua1
+eOuLmwQ7/mvWWRl4ISH6zeQxoCgjCZRujI/wTr/QBQe09rtIW4PcfjLFN6UVTsAw
++vySsdzZBnlQmkI9ZTCsllR1NACipCcuyssttS0whNEl4SVXOyntED4/r1bziqPN
+1cP1YI0dVh+ba8vdBwsMhgjh6xdtrjCjjDUrd6rctcwhG8ukbZ8uddEU+Yed+9xJ
+YYgQ0FC632t8l2DGT3ZVzIsblesI4B1yF/ZAfpCvZ9XYXWhm+a5LCeVWmjOl9krO
+nfi/DejLEUFXlPVmVX0G3w==</SignatureValue>
+		<KeyInfo>
+			<KeyName>Etas Ascet Verification</KeyName>
+		</KeyInfo>
+	</Signature>
+</ComponentMain>

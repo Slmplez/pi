@@ -27,6 +27,8 @@
 		"check:ts-imports": "node scripts/check-ts-relative-imports.mjs",
 		"smoke:ascet-extension": "tsx scripts/ascet-extension-live-smoke.ts",
 		"smoke:ascet-extension:write": "tsx scripts/ascet-extension-write-smoke.ts",
+		"smoke:ascet-extension:permission-modes": "tsx scripts/ascet-permission-modes-live-validation.ts",
+		"smoke:ascet-extension:permission-discovery": "tsx scripts/ascet-permission-live-discovery.ts",
 		"smoke:ascet-extension:project-formula": "tsx scripts/ascet-extension-project-formula-live-smoke.ts",
 		"smoke:ascet-extension:parameter-chain": "tsx scripts/ascet-extension-parameter-chain-live-smoke.ts",
 		"smoke:ascet-extension:esdl-acceptance": "tsx scripts/ascet-extension-esdl-live-acceptance.ts",

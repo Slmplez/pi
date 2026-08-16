@@ -1,0 +1,58 @@
+{
+  "ok": true,
+  "data": {
+    "type": "response",
+    "protocolVersion": 1,
+    "ok": true,
+    "result": {
+      "ComponentPath": "PI_LIVE_ROOTFIX_20260811_8A8C254E\\ClassUnderTest",
+      "AddedElements": [],
+      "RemovedElements": [],
+      "ModifiedElements": [],
+      "IncompatibleElements": [],
+      "SkippedElements": [
+        {
+          "Name": "P_Input",
+          "Kind": "Parameter",
+          "Signature": "Parameter ModelType=cont Scope=exported Calibration=False"
+        },
+        {
+          "Name": "P_Dependent",
+          "Kind": "Parameter",
+          "Signature": "Parameter ModelType=cont Scope=local Calibration=False"
+        }
+      ],
+      "Summary": "0 added, 0 removed, 0 modified, 0 incompatible"
+    },
+    "error": null,
+    "meta": {
+      "bridgePid": 1928,
+      "bridgeGeneration": "80b5a3f0-d97e-423f-9fd2-173a154fc9b9",
+      "durationMs": 536,
+      "sessionPolicy": "fresh_session",
+      "mutationStarted": false,
+      "mode": "exec",
+      "operation": "diff_element_spec"
+    }
+  },
+  "request": {
+    "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+    "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+    "args": [
+      "exec",
+      "diff_element_spec",
+      "PI_LIVE_ROOTFIX_20260811_8A8C254E\\ClassUnderTest",
+      "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\20260811-root-fix-live-8A8C254E\\isolated-write\\13-expected-element-spec.json",
+      "--json"
+    ],
+    "timeoutMs": 180000,
+    "jobKind": "read",
+    "mutatesDatabase": false
+  },
+  "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"ComponentPath\":\"PI_LIVE_ROOTFIX_20260811_8A8C254E\\\\ClassUnderTest\",\"AddedElements\":[],\"RemovedElements\":[],\"ModifiedElements\":[],\"IncompatibleElements\":[],\"SkippedElements\":[{\"Name\":\"P_Input\",\"Kind\":\"Parameter\",\"Signature\":\"Parameter ModelType=cont Scope=exported Calibration=False\"},{\"Name\":\"P_Dependent\",\"Kind\":\"Parameter\",\"Signature\":\"Parameter ModelType=cont Scope=local Calibration=False\"}],\"Summary\":\"0 added, 0 removed, 0 modified, 0 incompatible\"},\"error\":null,\"meta\":{\"bridgePid\":1928,\"bridgeGeneration\":\"80b5a3f0-d97e-423f-9fd2-173a154fc9b9\",\"durationMs\":536,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"diff_element_spec\"}}\r\n",
+  "stderr": "",
+  "exitCode": 0,
+  "timedOut": false,
+  "aborted": false,
+  "operationId": "diff_element_spec"
+}

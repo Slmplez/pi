@@ -14,7 +14,7 @@ function createTempProject(): { cwd: string; cleanup: () => void } {
 }
 
 describe("buildAscetInitPrompt", () => {
-	test("guides the agent to use status, on-demand get, precise reads, and writes", () => {
+	test("guides the agent to use status, native search, exact reads, and writes", () => {
 		const prompt = buildAscetInitPrompt({
 			scope: { ok: true, kind: "database" },
 			projectRulesPrompt: "ASCET project rules loaded.",
@@ -23,9 +23,10 @@ describe("buildAscetInitPrompt", () => {
 
 		assert.match(prompt, /ASCET project rules loaded/);
 		assert.match(prompt, /<repo-file: AGENTS\.md>/);
-		assert.match(prompt, /This initialization uses live ASCET data on demand/);
+		assert.match(prompt, /This initialization uses native ascet_search for discovery/);
 		assert.match(prompt, /First run ascet_status/);
-		assert.match(prompt, /Use ascet_get to navigate and retrieve live data on demand/);
+		assert.match(prompt, /Use one ascet_search call to find components/);
+		assert.match(prompt, /Use ascet_get after resolution/);
 		assert.match(prompt, /Pi find\/grep\/read/);
 		assert.match(prompt, /Use ascet_read only after the target is located/);
 		assert.match(prompt, /Use ascet_edit for all ASCET writes/);
@@ -66,7 +67,8 @@ describe("executeAscetInitCommand", () => {
 			assert.match(messages[0] ?? "", /<repo-file: agent\.md>/);
 			assert.match(messages[0] ?? "", /<repo-file: README\.md>/);
 			assert.match(messages[0] ?? "", /First run ascet_status/);
-			assert.match(messages[0] ?? "", /Use ascet_get to navigate and retrieve live data on demand/);
+			assert.match(messages[0] ?? "", /Use one ascet_search call to find components/);
+			assert.match(messages[0] ?? "", /Use ascet_get after resolution/);
 			assert.match(messages[0] ?? "", /Pi find\/grep\/read/);
 			assert.match(messages[0] ?? "", /Use ascet_read/);
 			assert.match(messages[0] ?? "", /Use ascet_edit/);

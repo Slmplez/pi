@@ -1,0 +1,1173 @@
+{
+  "generated_at": "2026-04-01T03:07:59.878690Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\ESDLEditorEnglishUS.chm",
+  "unpack_dir": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ESDLEditorEnglishUS\\unpacked",
+  "total_files": 192,
+  "total_size_bytes": 748540,
+  "counts_by_extension": {
+    ".htm": 110,
+    ".gif": 73,
+    ".js": 2,
+    ".xml": 1,
+    ".brs": 1,
+    ".glo": 1,
+    ".hhc": 1,
+    ".hhk": 1,
+    ".css": 1,
+    ".lng": 1
+  },
+  "files": [
+    {
+      "relative_path": "Arithmetic_Operators.htm",
+      "size": 787,
+      "sha256": "7fd0d31ee9af318cafbb51a9a4e487eaa600c5dbb93c33a873c2921d4bc938f8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "break.htm",
+      "size": 809,
+      "sha256": "3e02c1ee1ee692d7c9f85b35b197063d5aa0d918de46d6bcb99729e0e91c61bb",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "BUTTON.GIF",
+      "size": 844,
+      "sha256": "6d10387853fe90ec87f720a6460a8cd1d2559683e66c81683a705a5e0e6f2ea9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_c.gif",
+      "size": 1002,
+      "sha256": "7ad80aff3fb70a873236fd793f5f589ec72d5b0bb95f87e90cd54bf3184bbf7d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_e.gif",
+      "size": 1001,
+      "sha256": "d0759184f7598fb88928c75e893f42ecebc0b5f33c9ab1a3fa3ba78ca8f9fdb1",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_i.gif",
+      "size": 1013,
+      "sha256": "d1816cf14d7bdff3b1e11803ef4ac3f5a2b4fad8d7025463b685d2c48a311beb",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_l.gif",
+      "size": 1001,
+      "sha256": "69a65242f34882704f77be0a6539d8eea99be793c37b257be21e7650900be9a7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_s.gif",
+      "size": 1002,
+      "sha256": "74dc245c7e5037607ac2fd1a7309bc186107ff7960b8dcf7d55916c75395a715",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_u.gif",
+      "size": 1004,
+      "sha256": "baecac5c5c1ff2e4f627ab5bfe948e9616b83188073306ea79add915d44c9956",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_w.gif",
+      "size": 1006,
+      "sha256": "441d66eade67b3d631a1fd270830bc46e8238ac1804f65627c69c98a0bfd48bf",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonactivateexternaleditor.gif",
+      "size": 1112,
+      "sha256": "3f9e4f614ee020c8be0faa36bb8c1357126f50079e3e8e8c57fb850de04a1150",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonarray.gif",
+      "size": 954,
+      "sha256": "44fbecfd23bc7bd6b172d6480e5d286fc50c72640e7ee92fa7b879a63ec01625",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonArrow.gif",
+      "size": 894,
+      "sha256": "19009d7d9f9913e358296d682bc6c85a0c1189cc3a38e5e32ebbf2d8205943e7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttoncompile.gif",
+      "size": 1068,
+      "sha256": "398c7b79a092b52feca2bb655f07aed02c221a876c9ab7e237264fbbcd7773fb",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttoncopy.gif",
+      "size": 1781,
+      "sha256": "8b32c6c0cc6624dca24d75af2fce3675d476e1ab69c6aa6e0e96642e54d2cc26",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttoncut.gif",
+      "size": 1731,
+      "sha256": "292e729494c6099ba14c1f24d7a9575e4bf77e3eafbcbde18e441309bf5d797a",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttondelete.gif",
+      "size": 1744,
+      "sha256": "8883cc24137874984dbfaf9ad1bad3185c5b1897d79b8ad7b5c72e31d6ea135c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttondeltat.gif",
+      "size": 957,
+      "sha256": "2dd3c85a666f0aa446e354eb552fc9f7644ae129775c542946b75bae7a7eed67",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttondistribution.gif",
+      "size": 936,
+      "sha256": "8919c2b830a33ab6077aaaab40866de622e396025bd3abde39cce9988ee68231",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonEditdata.gif",
+      "size": 1086,
+      "sha256": "5dea1aca3d69bf99a877b2b64d7ceb6524b8fb3ec8c328d9ea4aec070ba94594",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttoneditimplementation.gif",
+      "size": 1087,
+      "sha256": "ca8557d03dd5c637967a1b66d9aae624def32fb5a37accb6f6101938a3f15485",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttongeneratecode.gif",
+      "size": 1048,
+      "sha256": "2f3357c9b3817b6dec1d42383ae47f4ed00c4781cb690b3741e4023b51f514a4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonimplementationcast.gif",
+      "size": 966,
+      "sha256": "0ae66bfef859d0744c34728eed174c59f53c127a2ccf802a90898a2b19ddab74",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttoninsertcomponent.gif",
+      "size": 995,
+      "sha256": "54d1c9bfac540f3fb2e4b97568c53beef958b9def9e0d6176e9eb7b2d06ac5a8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttoninsertmethod.gif",
+      "size": 1112,
+      "sha256": "f70b7164182f09acf11a468f1bcc9ce4078fea092c1a21a771aa78501291be64",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttoninsertprocess.gif",
+      "size": 1086,
+      "sha256": "42da41391eee9fdb07b0bd360d0ae3cbebd823f63671384c133e6e80d3e91b4b",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonmatrix.gif",
+      "size": 985,
+      "sha256": "c9bd73ee40ec64d126d27ebf59635426ac76c6d1561f036babaa68ad3b4479cf",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttononedtable.gif",
+      "size": 1066,
+      "sha256": "e4b3540564d5922e26792d2413180f73765630935ccc5513e8838d8d90bde6b7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonopenexperiment.gif",
+      "size": 989,
+      "sha256": "5978c6514b8d6c301b48428592a28b9e4f2e248f9950d0155698e3a85902d575",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonparameter.gif",
+      "size": 1061,
+      "sha256": "96fbf56b615075d1a54634067ebf82a7cd16472fd4f2f92f80c1734c99c1a176",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonpaste.gif",
+      "size": 1773,
+      "sha256": "decd5d4d7b140e91e5ee47e25ad3f9c3f18ec01abd2ec29917c328e13a608e65",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonprint.gif",
+      "size": 1774,
+      "sha256": "0187fb121a80c8c4c81595b4b21503144ff8d6d5e11b5947a72ee557c01f4856",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonreceivemessage.gif",
+      "size": 1003,
+      "sha256": "556b366f0a87f3e6ccb730767bf586f544da3888d8fb4f91f2b047aa8b1f79aa",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonredo.gif",
+      "size": 1730,
+      "sha256": "4a41199a94cd29c899a51073a020c5f33bdd6e7496ee19187ed67065549132f5",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonressource.gif",
+      "size": 955,
+      "sha256": "3c5542e8806e89000cb78677624892fa9b2ba7200c48d8cfa3680111044af152",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ButtonSave.gif",
+      "size": 1795,
+      "sha256": "f8510abfccc38092b5bdf99d9e499b3723e03a8cf1547af1d0fcc5ffef265f65",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonsendmessage.gif",
+      "size": 1008,
+      "sha256": "e2f9d3d1b4a6e80c79c5a8b6f33798405f42e8924d0bc78cf0aa8243f1f4f62e",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonsendreceivemessage.gif",
+      "size": 984,
+      "sha256": "a0a5149deb0f4ef599c8e6a7ebf70771f0355062a68c4e509da376de3f9cb132",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttontwodtable.gif",
+      "size": 1063,
+      "sha256": "04505829276fd92668c890c31b2eb7142ab565556933e96c32abd22742afdf54",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonundo.gif",
+      "size": 1737,
+      "sha256": "8ae27df361e92ca9f0305b59356ec1ece1c950a5d78f4f4b4c78b4259b53ea90",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonvariable.gif",
+      "size": 1064,
+      "sha256": "4583df0940c296269e661ca896a5b9631c758fb6b3ec98699caabf502c991d10",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableC.gif",
+      "size": 1001,
+      "sha256": "4ea17f01be456b0c83a804b239d27faba8be84914da851655c8e46a2cab56bf6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableE.gif",
+      "size": 1001,
+      "sha256": "e4e2341315b59ba9aa8c6272e61a3ef6fa788fd50d0f24ae10cc6dcef556f7b1",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableI.gif",
+      "size": 1007,
+      "sha256": "2099b24318b7f035d00b459dbe4edee4bedbf0a4aab06cd78399cda2c5c21185",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableL.gif",
+      "size": 1002,
+      "sha256": "bc2fdec10179b6f6781d11f27df6ec11d913e2aba58bd25b5c94e779d4db031a",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableS.gif",
+      "size": 1006,
+      "sha256": "1aa33ece46fe9c9932a6178895c25016d800d5983274216c80111400acf05f1c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableU.gif",
+      "size": 1004,
+      "sha256": "41a8f43bceee6c000e8b35efc8a1dee1707e84161e1e662cb79663b41c8b464f",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableW.gif",
+      "size": 1011,
+      "sha256": "f28662aca44c31b5f396def6df5dccc44c56845fb9217a630032e9cee47ce23a",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ceditor_ext2.gif",
+      "size": 1277,
+      "sha256": "a741fc4d3c9040940abb19bcd8b8e5541f9d597e74717c0630fb54bf69a49f66",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "codegen_dbtoolarge.htm",
+      "size": 2826,
+      "sha256": "2c503c782fa77d7222ff5b5d14b2861d8a21ab87696dca57f45463f8867da3af",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "comboboxselectonlinetype.gif",
+      "size": 1122,
+      "sha256": "ce152f585a19be925e718064083166391bb08e8ac3a9619a5c21bf6ff8dea317",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Comparison_Operators.htm",
+      "size": 817,
+      "sha256": "de74d7f305e93bbb5a060575dd7737b471c4c22424e5a3d325ca8f5aa62fad32",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "conditional_operator_mux.htm",
+      "size": 1367,
+      "sha256": "1464a90387e30cfcb02099f6b9ce55b4526befe072957f3cadf178e11b9ef687",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Creating_class_module.htm",
+      "size": 3278,
+      "sha256": "2ce8d10949ada97931c6caf15c242e6ff285917abeb3c9638f197f35fa4d9443",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "creating_esdl_code.htm",
+      "size": 2703,
+      "sha256": "1fb4b872b75cd39c7ddb5e9a59e7f202e7e0c57459cfd2ae84f4e431e2904f28",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "display.js",
+      "size": 5654,
+      "sha256": "3db06472a8b5caaf492754ef4018e68f6836601e4037bfeea5d17d5874155ef2",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "DoWhile01.gif",
+      "size": 4518,
+      "sha256": "d1e0119c9a0b9a4d23d7682f16914a87778f509bdd8d2852921b05f14b067d41",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "DoWhile02.gif",
+      "size": 13947,
+      "sha256": "f55e9f621b8437a5e4ccd24f7881408c3d9beaa71664c73f97467438a085e1ce",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "editing_esdl_code.htm",
+      "size": 1591,
+      "sha256": "286f9dbc7fd33abed2162a44a9e402ebcb5c15efd48f0716f3ed7a6dac58b703",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "eHelp.xml",
+      "size": 371,
+      "sha256": "cc8a32d5458eb3ea6982bfe5a209a9f5ac9db3a0a8b5b2a5a44a1dceed57cc77",
+      "extension": ".xml"
+    },
+    {
+      "relative_path": "ehlpdhtm.js",
+      "size": 125797,
+      "sha256": "e99517243c72e0958c88ba432518be9870e229513baa2aeeb6db6e5a148a5df9",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "end-external-editor.htm",
+      "size": 1776,
+      "sha256": "f8b6f3944391dddcbd0d9e610d825d35e3765bbadf83ae165b19a1b9fd3bae3c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "esdl_access_control.htm",
+      "size": 2626,
+      "sha256": "84e4fa395d1b1161f66d04359aed9b46015c4cd502eccd53fbdd771c9ff9faef",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "esdl_accessing_block_diagrams_from_esdl.htm",
+      "size": 1976,
+      "sha256": "010a85fdcd416eac1e8c8fd7ce67b72a1dca90a07e730fcfed6be953777df825",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_AdaptiveCharacteristic_Restrictions.htm",
+      "size": 3601,
+      "sha256": "636e442f55503e18a3cb7c9f840aac59190126417617062cb19c11835e536a63",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_analyze_diagram.htm",
+      "size": 8135,
+      "sha256": "195999843098b19327b8ae303c185d0b8b51376bbcee59a7024a5926095b41f4",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_analyzing_esdl_components.htm",
+      "size": 1452,
+      "sha256": "bc78bc9b64edf5c880bde9b4f83dbaf8ec20a015a65916035ffbe6409942959d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Arrays_-_Description.htm",
+      "size": 3108,
+      "sha256": "2c5278f5b9b632476544c1765816c4dd8431b26e26089c0c00c4610583b547fc",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_AssertOperation.htm",
+      "size": 4155,
+      "sha256": "3b748aa60382c439651012668a50bd496e37f48897d6528abeba63f7c674e53f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Browse_View.htm",
+      "size": 1888,
+      "sha256": "6e82ebb3563639312b96b61d440f0282a4e6689512f64fec581b1bb94a6e32c1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Build_Menu.htm",
+      "size": 3714,
+      "sha256": "0485014cdc1d8e2445d9a545584b8ae589cfcc957e0a3ce3b4ef643f3be9c2f9",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Comments.htm",
+      "size": 974,
+      "sha256": "3788545921420d7f4441b47ea46bcbca99e2a4e8e4785fa98b0f102489a03dde",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "esdl_contextmenu_browseview.htm",
+      "size": 7353,
+      "sha256": "ff1ab120e4fca82c3987fdae4ebe0f7ae2542b12b8828af8a5a03dc5d61e1186",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "esdl_contextmenu_componentselements.htm",
+      "size": 7947,
+      "sha256": "100295c142d69f40cf907e1848e55313e83b6db430ceb35d70abc4bf2e8e4f54",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "esdl_contextmenu_diagrammethods.htm",
+      "size": 4412,
+      "sha256": "1a4cf449f09136eac812fbe9b73e77bef50da8bb3600ce84e7df70a652794d75",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_ControlFlow_Summary.htm",
+      "size": 1540,
+      "sha256": "a0501067b1b0b60069b7c5826abe4f4db52f2dfc13b85994b177c68d26dc324a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_ConversionOperations.htm",
+      "size": 5928,
+      "sha256": "0b785c52bead5fb29cb4067039b86bf40b7f33f5b4d56b440edf4b9312ddd769",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Data_Types.htm",
+      "size": 2857,
+      "sha256": "18483d5d5d5f9344b0a7c5fe68c0325a17a9c92f9bbd2fcbc504d9f69929591f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Description_of_WindowElement.htm",
+      "size": 3989,
+      "sha256": "e86211ef537111f64ad3a839d82e12801704de72a856722e58db9ea7a18e53a5",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Direct_Access_Methods.htm",
+      "size": 1749,
+      "sha256": "cdbb77f8710da11a61654f26069bd61e66ef960d91226acb9de353ec742ca076",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "esdl_distributions_and_group_tables_-_description.htm",
+      "size": 2724,
+      "sha256": "6fb679a942fe6864d0927b174cbd64d759a09f202963459b6aabe2a7d675b6da",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_DoWhile.htm",
+      "size": 1686,
+      "sha256": "dda65b1d34093f61429cc10d26c1d42be835e2784fc0e8c983992a47d16a2ba2",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Edit_Menu.htm",
+      "size": 5389,
+      "sha256": "33e683c36ad6633eec8dd689d0f95b9dcf761645392b956b04a1db933816f98c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Elements_Palette.htm",
+      "size": 11962,
+      "sha256": "dd97c0c1c673191b82a695072be0f22dbb97b52e88dad2086b75d5e298ee5530",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Enumerations.htm",
+      "size": 11892,
+      "sha256": "abb39608d364cf9145be4c4e4f52678aa3d7718c2fc4400cc4a9f40af5428c89",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "esdl_esdl_as_modellinglanguage.htm",
+      "size": 3721,
+      "sha256": "c5fd39b84d6a9b9ccb624278359ce665bae4359ce1317edb41fbd05ed883e50a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_ESDL_Syntax.htm",
+      "size": 2333,
+      "sha256": "9006636ca50fe5c609fb69238de0947386b8c85702291ddb5fbae23fcadb6564",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "esdl_esdl_vs._block_diagrams.htm",
+      "size": 2670,
+      "sha256": "5724be81ea81e9754e9098eee70b6b4b5fbf0d2d7b2e93b206215db3995321e5",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "esdl_example__access_to_mathematical_functions.htm",
+      "size": 1148,
+      "sha256": "890c1a0f8f592fb17703136ed8484ec72b9ebdc125edcebe6fcebb8cd047b578",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Example__For.htm",
+      "size": 2358,
+      "sha256": "7dd7311fa0e40dc37edfeb0d015847dfe38151c88de23ac957337e55e339d202",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Example__SwitchCaseDefault.htm",
+      "size": 1947,
+      "sha256": "a6fd00e98fbb1328101fb31bae3de7cbbcf895372d2b15c4b8ea31622f66ed8b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Example__To_Build_the_Integrator_Element.htm",
+      "size": 3440,
+      "sha256": "db02d49575991261bc6551abf586939ebe925efee283fff79fa98fa7e2259adf",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Example_AssertOperation.htm",
+      "size": 4923,
+      "sha256": "5bfa3535a96100f2e267acda838d99e69620a641dd43b46a6d897ca6388e312a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Example_ConversionOperations.htm",
+      "size": 6389,
+      "sha256": "e6af2f7c22653497fecf721eb4a1bb8597e60340ef675fb8de16c44513a513c2",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_ExampleDoWhile.htm",
+      "size": 1952,
+      "sha256": "ad9eeab4511cc80714fba09ea69eacd800a1a8f5da8537475e434dc9285b5af5",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_External_Editor_View.htm",
+      "size": 1857,
+      "sha256": "8f74265c1b9f25828408a91e2d72088360c251cbc60fb4aa73c120689d4f9f0a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Extras_Menu.htm",
+      "size": 5160,
+      "sha256": "3a9aab09b1e210819d610d3792e697add248b5a256ffcbec43ae0e0363101389",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_File_Menu.htm",
+      "size": 4732,
+      "sha256": "33e5f618237dfede6a02a2e1eaf5a835a44db0c8dbbc9cc0b5a6b97ffee044dc",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "esdl_filtering_the_component_pane.htm",
+      "size": 2095,
+      "sha256": "6ac341c4cd1d88dc4b5cc809240b6199c050dd28bf2807ccaea42b8451d2a752",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_FindReplace_code.htm",
+      "size": 3824,
+      "sha256": "9ea4ac230fdb7750febec17d9c6d29bcbe06475d9e825a9578cddc3f64b0d8a9",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Help_Menu.htm",
+      "size": 930,
+      "sha256": "482f2edc18d7fc6018a4d9881dae1a0f51d9212155efc69f9fd262bf38859273",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Implementation_Casts_in_ESDL.htm",
+      "size": 4151,
+      "sha256": "6620c271c1ef4cdfd0986c0ed6b6054f4a7cf5f4bb74edb67c8ba7574c01cf46",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_IncludeComponent_BlockLibrary.htm",
+      "size": 1588,
+      "sha256": "1f12ef35b7f67035c39a21e9ed553b239820c5666449d32991258584d12398c2",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Insert_Menu.htm",
+      "size": 2995,
+      "sha256": "c934a9d7fafc6bac11957f55f062a5ae2fe920cff687073a44e972ae94a58456",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Library_Palette.htm",
+      "size": 1375,
+      "sha256": "31f9a5b3b0ec7b2b38e888996a266364141ff37aaa3e94a4a3bdebf67229e152",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "esdl_linear_interpolation(1d).htm",
+      "size": 4317,
+      "sha256": "a5abc166b65442c4eabc173d9298bbe679b63f5dc126164c569a4e46734dba22",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "esdl_linear_interpolation_(2d).htm",
+      "size": 4754,
+      "sha256": "f3102bff4a1084579b9478d71233a79dcea8f06ae18c3d6c4201d64a82199532",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Mathematical_Functions.htm",
+      "size": 1671,
+      "sha256": "173959d735fe6903bbcd95bd8f2f78584eb08dff60932cc2229d9f306c1b0ba0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Mathematical_Functions__Summary.htm",
+      "size": 6051,
+      "sha256": "ae3e6ecbdaf29027a5f9d35926a899478b80b37b2fbdaa718add1ce1d159df64",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "esdl_matrices_-_description.htm",
+      "size": 2620,
+      "sha256": "29e5fb62a8fc39bd4c540a568ac1d0198bef85c8c0219aab9d559e958612e4d6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Menu_Bar.htm",
+      "size": 1369,
+      "sha256": "761d70ba30632a36762632efc25fb57bcc1151b91f0eacebbb25f18c0a362005",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Messages.htm",
+      "size": 3557,
+      "sha256": "128d8c3500c16a32f5402c183cca6123d42925c1e6bac8d89c651813385ac8f6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Methods.htm",
+      "size": 2655,
+      "sha256": "361e317e4366c8d8643a172ef80a3704b97eda382b71a0b0a5f585db4725e44f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Methods_with_a_Return_Value.htm",
+      "size": 2250,
+      "sha256": "32e915a0f218442153a38634c89eb3a60eb6827762e685fa47201a623eb77194",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Nested_Methods.htm",
+      "size": 1146,
+      "sha256": "45283a0cbc28a641d966ca4403330e9830d1421098df1a0bf9d66cd7e6f356ff",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_One-Dimensional_Tables_-_Description.htm",
+      "size": 3894,
+      "sha256": "44cae65fa8f8c2891720153074c5771ce256de8d61898e77c5cd46bdaaf7271f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Overview.htm",
+      "size": 2507,
+      "sha256": "a6921e23080da14758d9f606a71434367243ba509a7cfe940e019246a6637691",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Overview_-_Composite_Data_Types.htm",
+      "size": 1373,
+      "sha256": "5ac03912023941ce550d67f5e79ea21c92394556295eac67ba8352a07f60ece4",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Palettes.htm",
+      "size": 685,
+      "sha256": "0730068f4663c2c04e146dd8468a866d2e3c44b2d2915df4ffb193d3e5325287",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Primitive_Methods.htm",
+      "size": 3705,
+      "sha256": "d09c2bfe3c8221ad1601e8e64dd7f2fe86d3bca8a1bf3a990ef359298c71dbb1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Public_Interface_of_Arrays.htm",
+      "size": 2865,
+      "sha256": "feb25f28a92d660b843535beb2629bf2f3c11fe485292aa6ee6a19800311196b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm",
+      "size": 11102,
+      "sha256": "d61af0464e11478d9da56702d0868c0374e875e1358b0b0d072454265b53b5d1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Public_Interface_of_Matrices.htm",
+      "size": 3217,
+      "sha256": "fa2bc2e3fdb80d328468d8b5ac991c58851feaf6c67ef7c8c3d0063085c67c89",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Public_Interface_of_One-Dimensional_Tables.htm",
+      "size": 6137,
+      "sha256": "296349106fed26b526dae31a23d580621df2b3178903369c816ccddc5b307685",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Public_Interface_of_Two-Dimensional_Tables.htm",
+      "size": 8356,
+      "sha256": "bcf9c239e780c6a699a5335a32f6b6713e2c75208509d3a993fc4832755a1753",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "esdl_reference__esdl_vs._ansi_c.htm",
+      "size": 2611,
+      "sha256": "6f9607a6d6fab9fe67f224b7cbe31208f8be31f56c7d3d7c9f8b1910cffe521e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "esdl_reference__esdl_vs._java.htm",
+      "size": 2930,
+      "sha256": "9e2bbe5d0a72cf6fbbf8dd7d2f576c9750718215971b4b83bcec388d6627bd89",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "esdl_resources.htm",
+      "size": 2239,
+      "sha256": "03e91b2de7ed0d385ed99dda3e837c05d086133d487112914239a89d470fa505",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Search_replace_print_code.htm",
+      "size": 1319,
+      "sha256": "be519d6f6ccdb6700329ae0e811c429bd48b9e5183ef433c51ff793f65c5fd61",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_SearchDeleteUnusedElements.htm",
+      "size": 10354,
+      "sha256": "5a190ce64403e1621da4368fd8fc571435a6836fd8fdaf79f7d6a462700434a9",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_SearchResultsView.htm",
+      "size": 10163,
+      "sha256": "6ba0ca02223c3ddb2599e7038c458fc78f378fecfbeac9fe749198347fc8f883",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "esdl_selectdefaultmethodprocess.htm",
+      "size": 1645,
+      "sha256": "40bddc713fd5224e8dc508357edcde467742032bdc955688c99ff69678a482b6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Specification_View.htm",
+      "size": 3954,
+      "sha256": "c31737b681c9c9fa143fecbced45447ceb5954ac058c55723ffac7254a6ba95d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Structures.htm",
+      "size": 2039,
+      "sha256": "a0dac9364e0a5346f1fec3d2219fab85820a730fb5c4f073cff7bb47cfd253dc",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Toolbar_Elements.htm",
+      "size": 7563,
+      "sha256": "4f1eec9761357017b826d730875e06ad4e20352c7eb1fbd056aaacd2a40c7488",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Toolbar_General.htm",
+      "size": 8626,
+      "sha256": "2da90679a057feff6394c78715ded0e30f8d4ef6ebf61170731492f707edb851",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Toolbars.htm",
+      "size": 764,
+      "sha256": "6071efee4fec58458fc3f730cc0a2c4df5c5d75d922bd6ec77ba4b0e9f2dd43e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Tools_Menu.htm",
+      "size": 776,
+      "sha256": "e9c1781d17535bab21fed3fe8d62affa741d7de26f496f7e566fb863b3265b07",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_TreePane.htm",
+      "size": 7923,
+      "sha256": "9fb03c3257ef532c16f0fd604a2dd0e15fb77b1e7b76a5b45adeb1dfc3f0a5ea",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Two-Dimensional_Tables_-_Description.htm",
+      "size": 4015,
+      "sha256": "fb239fff8e7170754af66da62dbed4c616b434093c8dc3be3d090fac361a6d62",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Type_Conversion.htm",
+      "size": 1823,
+      "sha256": "79f8a26e62a788c35336caa15b21cf9969e99e7c7ba186be86a56d2f0765aa82",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "esdl_used.htm",
+      "size": 3285,
+      "sha256": "99d3dfb8b551c0dc2d4b14ef38bc2c0b8add4d64e93fe307d6a7bb69b67e9351",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "esdl_using_esdl_in_state_machines.htm",
+      "size": 2678,
+      "sha256": "eddef4f8a7feb680a6b642b4df3fe1d6517c233b78580ed9a5a74f659bb852e8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Variable_Names.htm",
+      "size": 2046,
+      "sha256": "fc475827d166d4af54f7a94b4cba1b569d39ee32d47006eec287e128e4d53402",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_VerifyOperator.htm",
+      "size": 1994,
+      "sha256": "76b854e831557b49fe7098bb9bf882b47421e148f339a940200f6f0693857fa7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_View_Menu.htm",
+      "size": 3906,
+      "sha256": "8385d1e8feabd5ff7a3bb6df242646ab83da89827513de10d6796bd34655dbcd",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDL_Window_Menu.htm",
+      "size": 991,
+      "sha256": "d24258ef3522995c55348e81a9e57ef729e40cfdf811d20e8d4fddda6268020a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "esdl_working_with_methods_and_processes.htm",
+      "size": 2598,
+      "sha256": "5d04cf05e1ebfe8e169f6a9fe78801e305a40833abbcd0389b3613fabbd29ee4",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ESDLEditorEnglishUS.brs",
+      "size": 2,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "extension": ".brs"
+    },
+    {
+      "relative_path": "ESDLEditorEnglishUS.glo",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "extension": ".glo"
+    },
+    {
+      "relative_path": "ESDLEditorEnglishUS.hhc",
+      "size": 24564,
+      "sha256": "b8b4fda5361707728c1b3d4db3f8ac221a0e4e038791fc621e2e6fe7b1b1b1f4",
+      "extension": ".hhc"
+    },
+    {
+      "relative_path": "ESDLEditorEnglishUS.hhk",
+      "size": 90382,
+      "sha256": "21efa74aa21b532238f9e3a314065f230f844cd06792d0fac51b1c26ed774b4f",
+      "extension": ".hhk"
+    },
+    {
+      "relative_path": "ESDLenum_1.gif",
+      "size": 6050,
+      "sha256": "ebc6d58acbc0edb63a8cabc240f341bd5daed7f1f018e863fd971f861b4968ab",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ESDLenum_2b.gif",
+      "size": 7011,
+      "sha256": "f3dc61ef7b0731a76010994a7be23313151dbcf3833e4259abb57d64a955f748",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ESDLenum_3b.gif",
+      "size": 1950,
+      "sha256": "4dbe1582ed8c93f3a98c1119a8262fb3000e44264c5b135ffe1b6c9a7e7ec126",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "external_editor.htm",
+      "size": 2417,
+      "sha256": "c76144217a8c853c0998dbc290f59fe78ccdf5f2521ba8ce62cd522a956a649f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "for.htm",
+      "size": 2448,
+      "sha256": "210b2d10a1502ba74ffeb96410c6ff8802dd6a7e9adf3f23d82d1c14beb41c60",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "icon_InExternalEditor.gif",
+      "size": 983,
+      "sha256": "5463fe7e8715b8ebd5a1624470d3b79b3a6462180215bac3cb03bab196b0ee27",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "icon_NotInExternalEditor.gif",
+      "size": 953,
+      "sha256": "8482ccaa9d66abaf9e50d27c1895b2ec306e1fb53bf8b7ec31415ee1e9a14db9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ifelse.htm",
+      "size": 2194,
+      "sha256": "ef4ba816241bda666777eae6a771262b9e1e7e61de3af60a239381da518e2256",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "images/button_filtertab.gif",
+      "size": 1036,
+      "sha256": "7964c2e4fa9542b8098bc1aa6ab3a14b2a612dbea3cae7fc1e2f97d12be1eb78",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/button_filtertab2.gif",
+      "size": 1076,
+      "sha256": "7283bee7576e1399b14d4b413b5004d224ea2908794e82a1c912512c1a5e19f6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/buttonCollapse.gif",
+      "size": 980,
+      "sha256": "c7a6e0d9af6b0e27b9ab870ca2ccb70f15e8cfa326ea1d5db99fa7a6cb1c3645",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/buttonExpand.gif",
+      "size": 982,
+      "sha256": "3b381ad805bf80fc3fa8d6cb7ccef8f03a17d9a90e52b767c345bc293664f0ae",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/buttonSearch.gif",
+      "size": 1724,
+      "sha256": "1f19089e422bbbd75e9e3a0f4b03600abea8cff5ddab442d99db8beddc2ce81d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/buttonSortCriteria.gif",
+      "size": 1735,
+      "sha256": "bd29e4c075d1ffa8223a2e9e84f349db0d6b6415271a3b3027da7c86f4edb015",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/comboboxSearch.gif",
+      "size": 1851,
+      "sha256": "f72a86b501685b3e8065edddd7c972c5d2284a4321b9a3d95ba5c718caa798c8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/expminus.gif",
+      "size": 837,
+      "sha256": "18a8ea974d756d370d6f7067283fc8c0b26f235c8e98bdaaf13a63e7dca8b1c4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/expplus.gif",
+      "size": 842,
+      "sha256": "9ff1991cf9c6de621e2672bebf74fbc56680e3413f74d6cf18e25238701651be",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/statisch.gif",
+      "size": 831,
+      "sha256": "481cd3e8b966f0a4398b853efce140287877173b926b53d710791675a1b15aa4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ImplCast_ESDL_as_BDE copy.gif",
+      "size": 1887,
+      "sha256": "4b82791313e8e3dd276e2f849f807feb12706f45c3076e3095d9cdbb5a289490",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "InsertClass copy.gif",
+      "size": 1014,
+      "sha256": "a3e8c0bc011dbfcf4982ba2a5c3ca7c3a11fe03f6590ea54c4fa20c8710b4142",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "InsertModule copy.gif",
+      "size": 1015,
+      "sha256": "d4fcfbe4a97defe2f7eb7158445f92b692aa70af0a0db9d342c2f6162c057f45",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Layout.css",
+      "size": 10200,
+      "sha256": "a82e1006fb05b5b2e4f893e49d34fba366f0a13a0babd42c936f7858063193f5",
+      "extension": ".css"
+    },
+    {
+      "relative_path": "limiter.gif",
+      "size": 2240,
+      "sha256": "c4dac5a787588eae4cdf0780691c66e4cb2d8990d237ca85e462d1217ca4ffaf",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "literals_and_constants.htm",
+      "size": 1550,
+      "sha256": "2aa8c5f14e97e29f9bea0dfccc0a12b6774a2b9ec4baa09f3a07efe58641994f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Logical_Operators.htm",
+      "size": 1075,
+      "sha256": "5f673d5cf421a923fbe40072114d68f956193783175748e7cd8bd2ce42136ff0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "open-external-editor.htm",
+      "size": 2589,
+      "sha256": "8fade5c17a82a86591c11a7e4a4d3ccf08e0723db4adfe8202b530870f97806b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "pbutton_onedtable.gif",
+      "size": 963,
+      "sha256": "5dc14fb377a0aad010923bffac64b6a87b3def6fd5cab01634841af3df1777a7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "pbutton_twodtable.gif",
+      "size": 980,
+      "sha256": "afd4af8cbd642fc2843d5dcad05d29299ef2d99e75ba0d6ac2a1d319f489cb67",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "pcombobox_typeoftable.gif",
+      "size": 1040,
+      "sha256": "d6abf506aa4646fd8a5d2313e4ebe7f7cd6ef2ab55ee2c0222f9636d47a29d0f",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Printing_the_C_Code.htm",
+      "size": 1816,
+      "sha256": "63468a114a029e1f157f166b6accdb69e93b9b8e6ba189932d03eb0005ffe87d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "RoboHHRE.lng",
+      "size": 3586,
+      "sha256": "607e16623990c7b694bb11537edbecfbd7057fda1739bba5173e9d8a4942b18f",
+      "extension": ".lng"
+    },
+    {
+      "relative_path": "SearchView_PotentiallyUsed.gif",
+      "size": 7429,
+      "sha256": "b2543974f852a11829edac37c227bb52885e8671c0943628649190d7b2a79416",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Shorthand_Assignment_Operators.htm",
+      "size": 887,
+      "sha256": "64a7abc6ed35786890b536a2e77be0c591713a0da839cf489de28614cf206eb7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "specifying_modules.htm",
+      "size": 1286,
+      "sha256": "1cf27ded77ac4f7fadfdbdfd377ac279b254173146805eacdc99fcb1f776cf1a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "summary.htm",
+      "size": 6164,
+      "sha256": "662049ff0818affc1874b459ad57b85e53a4438654e9adc78a54532875157be7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "switchasedefault.htm",
+      "size": 3217,
+      "sha256": "652c500536ce469e3922be3e165fd778cc9eef74312c3f9555699aad17f30541",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "this.htm",
+      "size": 2183,
+      "sha256": "83f7c83db5a63583508dae57ea110c3a26347ff86161349edd19289cd6afdc65",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Unary_Operators.htm",
+      "size": 784,
+      "sha256": "1d2a7d859ec9500ec3c8bae1ce60d4ecd3c2cdfc0b4d8a6305d0221ecb81891b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "use_impl.casts.htm",
+      "size": 2065,
+      "sha256": "393292126e383fdb599d4b74a29c08669228bcff3ca3ebfb24d75a1466a74fc1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "while.htm",
+      "size": 1515,
+      "sha256": "f1b544e374b15ce5020197006831a02d856916d880ff7b7eb0944a2aca498f5d",
+      "extension": ".htm"
+    }
+  ]
+}

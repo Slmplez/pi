@@ -1,0 +1,58 @@
+{
+  "ok": true,
+  "data": {
+    "type": "response",
+    "protocolVersion": 1,
+    "ok": true,
+    "result": {
+      "ComponentPath": "PI_LIVE_FIX_20260811_13947C09\\EnumerationUnderTest",
+      "ComponentKind": "Enumeration",
+      "LanguageKind": "Unknown",
+      "ImplementationSourceKind": "TypeDefinition",
+      "Mode": "Default",
+      "RequestedImplementationName": "",
+      "ResolvedImplementationName": "",
+      "MemoryLocation": "",
+      "OptionGenerateMethodBody": false,
+      "OptionOptimizeMethodCalls": false,
+      "Elements": [],
+      "TypeDefinition": {
+        "Name": "EnumerationUnderTest",
+        "Enumerators": [
+          "FIX_OFF",
+          "FIX_ON",
+          "FIX_DIAG"
+        ]
+      }
+    },
+    "error": null,
+    "meta": {
+      "bridgePid": 18388,
+      "bridgeGeneration": "4c09719d-1331-4b09-aecf-d3eeed82c928",
+      "durationMs": 557,
+      "sessionPolicy": "fresh_session",
+      "mutationStarted": false,
+      "mode": "exec",
+      "operation": "read_implementation"
+    }
+  },
+  "request": {
+    "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+    "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+    "args": [
+      "exec",
+      "read_implementation",
+      "PI_LIVE_FIX_20260811_13947C09\\EnumerationUnderTest",
+      "--json"
+    ],
+    "timeoutMs": 180000,
+    "jobKind": "read",
+    "mutatesDatabase": false
+  },
+  "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"ComponentPath\":\"PI_LIVE_FIX_20260811_13947C09\\\\EnumerationUnderTest\",\"ComponentKind\":\"Enumeration\",\"LanguageKind\":\"Unknown\",\"ImplementationSourceKind\":\"TypeDefinition\",\"Mode\":\"Default\",\"RequestedImplementationName\":\"\",\"ResolvedImplementationName\":\"\",\"MemoryLocation\":\"\",\"OptionGenerateMethodBody\":false,\"OptionOptimizeMethodCalls\":false,\"Elements\":[],\"TypeDefinition\":{\"Name\":\"EnumerationUnderTest\",\"Enumerators\":[\"FIX_OFF\",\"FIX_ON\",\"FIX_DIAG\"]}},\"error\":null,\"meta\":{\"bridgePid\":18388,\"bridgeGeneration\":\"4c09719d-1331-4b09-aecf-d3eeed82c928\",\"durationMs\":557,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"read_implementation\"}}\r\n",
+  "stderr": "",
+  "exitCode": 0,
+  "timedOut": false,
+  "aborted": false,
+  "operationId": "read_implementation"
+}

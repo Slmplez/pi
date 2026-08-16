@@ -1,0 +1,155 @@
+{
+  "version": 1,
+  "status": "rolled_back",
+  "databaseFingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c",
+  "targetOid": "040g060kg0001k070o6g5us4p0eg2",
+  "targetKind": "statemachine",
+  "canonicalPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+  "action": "create_method",
+  "planId": "a17c2ddb-fe97-498a-a465-36f26325848c",
+  "planFingerprint": "fc99677c7470ad650ae13628c172b0c5c08af4c9c03432dc3bed286ffdcc1ba4",
+  "targetImpactFingerprint": "sha256:f44640d6c73a5c49ab0f39e9269e744e497fb06068c6ec78c6a5ec9b2fe66bea",
+  "guardGeneration": 0,
+  "beforeSnapshotFingerprint": "sha256:c1dd1d9c4809a222f408af076a2647e5acfd26e884a1fae87d76e7b23aecbefe",
+  "desiredFingerprint": "sha256:9bf0e70081a5d3a4c0c8933371a09adab3a443ee1ae032995fe6073705fe97e5",
+  "beforeSnapshot": {
+    "operation": "authoritative_single_call_preflight",
+    "validated": true,
+    "authoritativePlan": {
+      "operation": "preflight_create_method",
+      "validated": true,
+      "result": {
+        "databasePath": "C:\\Repo\\F05_IPB_L2_0429",
+        "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+        "componentOid": "040g060kg0001k070o6g5us4p0eg2",
+        "componentKind": "StateMachine",
+        "languageKind": "ESDL",
+        "diagramName": "Main",
+        "diagramExists": false,
+        "diagramRuntimeType": "",
+        "requiredMethod": "AddAction",
+        "requiredSignature": "AddAction(String)",
+        "requiredMethodAvailable": false,
+        "addDiagramAvailable": true,
+        "futureMethodCapabilityProven": false,
+        "editable": false,
+        "readbackAvailable": true,
+        "noOp": false,
+        "existingMethod": null,
+        "plannedEffects": [
+          {
+            "kind": "create_diagram",
+            "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl::Main"
+          },
+          {
+            "kind": "create_method",
+            "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl::PiForcedFailure",
+            "methodKind": "Action"
+          }
+        ],
+        "capability": {
+          "status": "supported",
+          "operation": "AddAction",
+          "failureCode": "",
+          "failureMessage": ""
+        }
+      }
+    },
+    "normalizedEvidence": {
+      "version": 1,
+      "action": "create_method",
+      "paramsFingerprint": "9bf0e70081a5d3a4c0c8933371a09adab3a443ee1ae032995fe6073705fe97e5",
+      "database": {
+        "path": "C:\\Repo\\F05_IPB_L2_0429",
+        "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+      },
+      "target": {
+        "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+        "oid": "040g060kg0001k070o6g5us4p0eg2",
+        "kind": "statemachine"
+      },
+      "impact": {
+        "complete": true,
+        "sharedObject": false,
+        "ownerPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+        "affectedProjects": [],
+        "fingerprint": "sha256:f44640d6c73a5c49ab0f39e9269e744e497fb06068c6ec78c6a5ec9b2fe66bea"
+      },
+      "capability": {
+        "status": "supported",
+        "operation": "AddAction",
+        "evidence": {
+          "status": "supported",
+          "operation": "AddAction",
+          "failureCode": "",
+          "failureMessage": ""
+        }
+      },
+      "editability": {
+        "applicable": true,
+        "status": "read_only",
+        "canRequestEditable": true
+      },
+      "effects": [
+        {
+          "kind": "request_editability",
+          "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+          "description": "Request component editability for PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl"
+        },
+        {
+          "kind": "create_diagram",
+          "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl::Main",
+          "description": "create_diagram: PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl::Main"
+        },
+        {
+          "kind": "create_method",
+          "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl::PiForcedFailure",
+          "description": "create_method: PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl::PiForcedFailure"
+        }
+      ],
+      "verification": {
+        "available": true,
+        "operation": "create_method_readback",
+        "target": {
+          "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl"
+        }
+      },
+      "riskModifiers": [
+        "minimum_risk:medium",
+        "missing_diagram_creation"
+      ],
+      "noOp": false,
+      "generatedAt": "2026-08-16T02:35:56.797Z",
+      "approvalMaterialFingerprint": "1eb4937381e41c2f370bfa891ea3d3279d233f5df47da565615a7ee31eae08ac"
+    },
+    "permissionMode": "default",
+    "permissionDecision": "ask",
+    "risk": "medium",
+    "approvedAt": "2026-08-16T02:35:34.480Z",
+    "revalidatedAt": "2026-08-16T02:35:56.797Z",
+    "targetIdentity": {
+      "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+      "oid": "040g060kg0001k070o6g5us4p0eg2",
+      "kind": "statemachine"
+    },
+    "targetImpactFingerprint": "sha256:f44640d6c73a5c49ab0f39e9269e744e497fb06068c6ec78c6a5ec9b2fe66bea"
+  },
+  "attemptedMutation": {
+    "action": "create_method",
+    "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+    "componentKind": "statemachine",
+    "methodName": "PiForcedFailure",
+    "methodKind": "action",
+    "ifExists": "fail"
+  },
+  "createdAt": "2026-08-16T02:35:56.813Z",
+  "updatedAt": "2026-08-16T02:49:27.171Z",
+  "evidence": {
+    "bridgeEntered": true,
+    "backendResponseReceived": true,
+    "mutationStarted": true
+  },
+  "outcome": {
+    "operationId": "manual_verified_no_effect"
+  }
+}

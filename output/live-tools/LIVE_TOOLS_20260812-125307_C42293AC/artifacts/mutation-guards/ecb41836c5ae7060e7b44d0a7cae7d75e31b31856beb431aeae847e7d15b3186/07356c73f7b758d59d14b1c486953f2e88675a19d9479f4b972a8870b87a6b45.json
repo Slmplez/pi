@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "databaseFingerprint": "82d15c1e563d8f43061868480858221d57264355d2699bc9c969ea86a210cc03",
+  "targetOid": "040g00001g001qg71060i1966pf02",
+  "targetKind": "component",
+  "canonicalPath": "PI_LIVE_FIX_20260812_C42293AC\\ClassUnderTest",
+  "generation": 3,
+  "status": "clear",
+  "reason": "unknown_outcome",
+  "operation": "apply_element_spec",
+  "operationId": "apply_element_spec",
+  "planId": "5006b4a6-b6a9-4e7a-b1c0-64064aafa38e",
+  "journalPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\LIVE_TOOLS_20260812-125307_C42293AC\\artifacts\\mutation-journals\\ecb41836c5ae7060e7b44d0a7cae7d75e31b31856beb431aeae847e7d15b3186\\07356c73f7b758d59d14b1c486953f2e88675a19d9479f4b972a8870b87a6b45\\e20129d73557c2b520adb933ec457bd255bc386620e5785a0836d425da00b81a.json",
+  "beforeSnapshotFingerprint": "sha256:d487807f04b98ce1878f8b1a908a65d0198baa12e4e01e3df31168fec1d33a32",
+  "desiredFingerprint": "sha256:885a2f9c23bfba8f9ccd2475204a31e19932f8f641d41501199c7ece98578486",
+  "detectedAt": "2026-08-12T05:21:50.749Z",
+  "evidence": {
+    "bridgeEntered": true,
+    "backendResponseReceived": true,
+    "mutationStarted": true
+  },
+  "reconciliationMode": "cleanup_created",
+  "reconciliationStartedAt": "2026-08-12T05:22:28.650Z",
+  "reconciledAt": "2026-08-12T05:22:33.435Z",
+  "reconciliationEvidenceFingerprint": "sha256:60369ab98a80330a60f23c815a029d6c3763b223c536fae9b6ec30f9667cdcba"
+}

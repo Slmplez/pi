@@ -1,0 +1,10 @@
+﻿{
+    "Timestamp":  "2026-08-15T14:08:25.3798255+08:00",
+    "Pid":  25888,
+    "StartTime":  "2026-08-15T11:57:43.5866260+08:00",
+    "Responding":  true,
+    "WorkingSet64":  463208448,
+    "HandleCount":  343,
+    "WorkingSetDeltaFromBaseline":  -1290240,
+    "HandleDeltaFromBaseline":  -1
+}

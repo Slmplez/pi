@@ -1,0 +1,223 @@
+{
+  "stage": "cleanup-root-folder",
+  "startedAt": "2026-08-15T05:59:28.519Z",
+  "finishedAt": "2026-08-15T06:00:14.555Z",
+  "request": {
+    "toolName": "ascet_edit",
+    "params": {
+      "action": "delete_folder",
+      "folderPath": "DEMO\\__pi_permission_smoke__20260815-134337",
+      "ifMissing": "ignore",
+      "intent": "apply"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"status\": \"ok\",\n  \"permission\": {\n    \"mode\": \"default\",\n    \"decision\": \"ask\",\n    \"risk\": \"high\",\n    \"reason\": \"Default mode requires confirmation for every actual ASCET write.\"\n  },\n  \"preflight\": {\n    \"status\": \"passed\",\n    \"evidence\": {\n      \"version\": 1,\n      \"action\": \"delete_folder\",\n      \"paramsFingerprint\": \"70d38b2da81bf5b2fd19f9ca30eb41e66ab4911870dc1b1ffe3b508ff32cef6c\",\n      \"database\": {\n        \"path\": \"C:/Repo/F05_IPB_L2_0429\",\n        \"fingerprint\": \"71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c\"\n      },\n      \"target\": {\n        \"path\": \"DEMO/__pi_permission_smoke__20260815-134337\",\n        \"oid\": \"040g00001g001qg7107g8595a09g0\",\n        \"kind\": \"folder\"\n      },\n      \"impact\": {\n        \"complete\": true,\n        \"sharedObject\": false,\n        \"ownerPath\": \"DEMO/__pi_permission_smoke__20260815-134337\",\n        \"fingerprint\": \"sha256:4d12f1d4d2ad4c6a4a165c5703152527a0cd8252163af42b53779c635a7858ef\"\n      },\n      \"capability\": {\n        \"status\": \"supported\",\n        \"operation\": \"registered_guarded_operation_preflight\",\n        \"evidence\": {\n          \"status\": \"supported\",\n          \"source\": \"registered_closed_operation\"\n        }\n      },\n      \"editability\": {\n        \"applicable\": false,\n        \"status\": \"not_applicable\",\n        \"canRequestEditable\": false\n      },\n      \"effects\": [\n        {\n          \"kind\": \"delete_folder\",\n          \"target\": \"DEMO/__pi_permission_smoke__20260815-134337\",\n          \"description\": \"delete_folder: DEMO\\\\__pi_permission_smoke__20260815-134337\"\n        }\n      ],\n      \"verification\": {\n        \"available\": true,\n        \"operation\": \"delete_folder_readback\",\n        \"target\": {\n          \"path\": \"DEMO/__pi_permission_smoke__20260815-134337\"\n        }\n      },\n      \"noOp\": false,\n      \"generatedAt\": \"2026-08-15T06:00:13.276Z\",\n      \"approvalMaterialFingerprint\": \"ff19795cf7f10d8e271b1d0060394fecc03f6a46732eeb6c712e65d087b38c79\"\n    }\n  },\n  \"editability\": {\n    \"status\": \"not_applicable\"\n  },\n  \"mutation\": {\n    \"status\": \"applied\"\n  },\n  \"verification\": {\n    \"status\": \"passed\"\n  },\n  \"audit\": {\n    \"approvedAt\": \"2026-08-15T05:59:51.053Z\",\n    \"revalidatedAt\": \"2026-08-15T06:00:13.276Z\",\n    \"preflightFingerprint\": \"70d38b2da81bf5b2fd19f9ca30eb41e66ab4911870dc1b1ffe3b508ff32cef6c\",\n    \"approvalMaterialFingerprint\": \"ff19795cf7f10d8e271b1d0060394fecc03f6a46732eeb6c712e65d087b38c79\"\n  },\n  \"bridge\": {\n    \"beforeBridge\": true,\n    \"bridgeEntered\": true,\n    \"backendResponseReceived\": true\n  },\n  \"recovery\": {\n    \"required\": false\n  }\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "ok",
+        "verified": true,
+        "data": {
+          "changed": {
+            "folderPath": "DEMO\\__pi_permission_smoke__20260815-134337",
+            "deleted": true,
+            "alreadyMissing": false,
+            "summary": "Deleted folder DEMO\\__pi_permission_smoke__20260815-134337."
+          },
+          "verification": {
+            "mode": "automatic_readback",
+            "source": "write_command",
+            "required": true,
+            "requested": true,
+            "verified": true,
+            "status": "passed"
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      },
+      "raw": {
+        "ok": true,
+        "data": {
+          "type": "response",
+          "protocolVersion": 1,
+          "ok": true,
+          "result": {
+            "folderPath": "DEMO\\__pi_permission_smoke__20260815-134337",
+            "deleted": true,
+            "alreadyMissing": false,
+            "verifyReadbackRequested": true,
+            "readbackVerified": true,
+            "summary": "Deleted folder DEMO\\__pi_permission_smoke__20260815-134337."
+          },
+          "error": null,
+          "meta": {
+            "bridgePid": 12732,
+            "bridgeGeneration": "b50e4bc4-65ab-447f-a923-c653b183bc47",
+            "durationMs": 713,
+            "sessionPolicy": "fresh_session",
+            "mutationStarted": true,
+            "mode": "exec",
+            "operation": "delete_folder"
+          }
+        },
+        "request": {
+          "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "delete_folder",
+            "DEMO\\__pi_permission_smoke__20260815-134337",
+            "--if-missing",
+            "ignore",
+            "--verify-readback",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "write",
+          "mutatesDatabase": true
+        },
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"folderPath\":\"DEMO\\\\__pi_permission_smoke__20260815-134337\",\"deleted\":true,\"alreadyMissing\":false,\"verifyReadbackRequested\":true,\"readbackVerified\":true,\"summary\":\"Deleted folder DEMO\\\\__pi_permission_smoke__20260815-134337.\"},\"error\":null,\"meta\":{\"bridgePid\":12732,\"bridgeGeneration\":\"b50e4bc4-65ab-447f-a923-c653b183bc47\",\"durationMs\":713,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":true,\"mode\":\"exec\",\"operation\":\"delete_folder\"}}\r\n",
+        "stderr": "",
+        "exitCode": 0,
+        "timedOut": false,
+        "aborted": false,
+        "operationId": "delete_folder"
+      },
+      "observations": {
+        "invalidated": []
+      },
+      "verification": {
+        "mode": "automatic_readback",
+        "source": "write_command",
+        "required": true,
+        "requested": true,
+        "verified": true,
+        "status": "passed"
+      },
+      "mutationResult": {
+        "status": "ok",
+        "permission": {
+          "mode": "default",
+          "decision": "ask",
+          "risk": "high",
+          "reason": "Default mode requires confirmation for every actual ASCET write."
+        },
+        "preflight": {
+          "status": "passed",
+          "evidence": {
+            "version": 1,
+            "action": "delete_folder",
+            "paramsFingerprint": "70d38b2da81bf5b2fd19f9ca30eb41e66ab4911870dc1b1ffe3b508ff32cef6c",
+            "database": {
+              "path": "C:\\Repo\\F05_IPB_L2_0429",
+              "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+            },
+            "target": {
+              "path": "DEMO\\__pi_permission_smoke__20260815-134337",
+              "oid": "040g00001g001qg7107g8595a09g0",
+              "kind": "folder"
+            },
+            "impact": {
+              "complete": true,
+              "sharedObject": false,
+              "ownerPath": "DEMO\\__pi_permission_smoke__20260815-134337",
+              "affectedProjects": [],
+              "fingerprint": "sha256:4d12f1d4d2ad4c6a4a165c5703152527a0cd8252163af42b53779c635a7858ef"
+            },
+            "capability": {
+              "status": "supported",
+              "operation": "registered_guarded_operation_preflight",
+              "evidence": {
+                "status": "supported",
+                "source": "registered_closed_operation"
+              }
+            },
+            "editability": {
+              "applicable": false,
+              "status": "not_applicable",
+              "canRequestEditable": false
+            },
+            "effects": [
+              {
+                "kind": "delete_folder",
+                "target": "DEMO\\__pi_permission_smoke__20260815-134337",
+                "description": "delete_folder: DEMO\\__pi_permission_smoke__20260815-134337"
+              }
+            ],
+            "verification": {
+              "available": true,
+              "operation": "delete_folder_readback",
+              "target": {
+                "path": "DEMO\\__pi_permission_smoke__20260815-134337"
+              }
+            },
+            "riskModifiers": [],
+            "noOp": false,
+            "generatedAt": "2026-08-15T06:00:13.276Z",
+            "approvalMaterialFingerprint": "ff19795cf7f10d8e271b1d0060394fecc03f6a46732eeb6c712e65d087b38c79"
+          }
+        },
+        "editability": {
+          "status": "not_applicable"
+        },
+        "mutation": {
+          "status": "applied"
+        },
+        "verification": {
+          "status": "passed"
+        },
+        "audit": {
+          "approvedAt": "2026-08-15T05:59:51.053Z",
+          "revalidatedAt": "2026-08-15T06:00:13.276Z",
+          "preflightFingerprint": "70d38b2da81bf5b2fd19f9ca30eb41e66ab4911870dc1b1ffe3b508ff32cef6c",
+          "approvalMaterialFingerprint": "ff19795cf7f10d8e271b1d0060394fecc03f6a46732eeb6c712e65d087b38c79"
+        },
+        "bridge": {
+          "beforeBridge": true,
+          "bridgeEntered": true,
+          "backendResponseReceived": true
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      },
+      "tool": "ascet_edit",
+      "action": "delete_folder",
+      "command": {
+        "logicalCommandId": "AscetDeleteFolder",
+        "backendCommandId": "AscetDeleteFolder",
+        "operation": "delete_folder"
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "delete_folder",
+            "DEMO\\__pi_permission_smoke__20260815-134337",
+            "--if-missing",
+            "ignore",
+            "--verify-readback",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "write",
+          "mutatesDatabase": true
+        },
+        "exitCode": 0,
+        "timedOut": false,
+        "stderr": ""
+      }
+    }
+  }
+}

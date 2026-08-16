@@ -1,0 +1,57 @@
+{
+  "ok": true,
+  "data": {
+    "ok": true,
+    "result": {
+      "componentPath": "PI_LIVE_ROOTFIX_20260811_8A8C254E\\ClassUnderTest",
+      "element": {
+        "name": "P_Dependent",
+        "kind": "parameter",
+        "modelType": "cont",
+        "scope": "local",
+        "comment": "ASCET root-fix live validation dependent",
+        "calibration": false,
+        "configurationProvenance": {
+          "dataConfiguration": {
+            "source": "defaultDataConfiguration",
+            "configurationName": "Data",
+            "selected": true
+          },
+          "implementationConfiguration": {
+            "source": "defaultImplementationConfiguration",
+            "configurationName": "Impl",
+            "selected": true
+          }
+        },
+        "data": {
+          "value": 0
+        },
+        "impl": {
+          "memoryLocation": "Default",
+          "valueType": "real64",
+          "formula": "ident",
+          "limitAssignments": false
+        }
+      }
+    }
+  },
+  "request": {
+    "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+    "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+    "args": [
+      "exec",
+      "read_element_catalog",
+      "PI_LIVE_ROOTFIX_20260811_8A8C254E\\ClassUnderTest",
+      "--json"
+    ],
+    "timeoutMs": 180000,
+    "jobKind": "read",
+    "mutatesDatabase": false
+  },
+  "stdout": "{\"ok\":true,\"result\":{\"componentPath\":\"PI_LIVE_ROOTFIX_20260811_8A8C254E\\\\ClassUnderTest\",\"element\":{\"name\":\"P_Dependent\",\"kind\":\"parameter\",\"modelType\":\"cont\",\"scope\":\"local\",\"comment\":\"ASCET root-fix live validation dependent\",\"calibration\":false,\"configurationProvenance\":{\"dataConfiguration\":{\"source\":\"defaultDataConfiguration\",\"configurationName\":\"Data\",\"selected\":true},\"implementationConfiguration\":{\"source\":\"defaultImplementationConfiguration\",\"configurationName\":\"Impl\",\"selected\":true}},\"data\":{\"value\":0},\"impl\":{\"memoryLocation\":\"Default\",\"valueType\":\"real64\",\"formula\":\"ident\",\"limitAssignments\":false}}}}",
+  "stderr": "",
+  "exitCode": 0,
+  "timedOut": false,
+  "aborted": false,
+  "operationId": "read_element_catalog"
+}

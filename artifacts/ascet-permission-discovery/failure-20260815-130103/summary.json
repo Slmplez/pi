@@ -1,0 +1,274 @@
+{
+  "ok": true,
+  "readOnly": true,
+  "ascetCwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+  "prefix": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+  "candidateLimit": 1,
+  "database": {
+    "tool": "ascet_get",
+    "action": "database_identity",
+    "command": {
+      "logicalCommandId": "AscetGetDatabaseIdentity",
+      "backendCommandId": "AscetGetDatabaseIdentity",
+      "operation": "get_database_identity"
+    },
+    "data": {
+      "items": [],
+      "coverage": {
+        "status": "complete_for_scope",
+        "scopeKind": "database",
+        "scopeId": "database:C:\\Repo\\",
+        "completeness": "complete",
+        "truncated": false,
+        "foldersVisited": 0,
+        "componentsScanned": 0,
+        "collectorStarted": true,
+        "collectorCompleted": true,
+        "rootCollectionAvailable": true,
+        "projectCollectionAvailable": false,
+        "missingOidCount": 0,
+        "missingPathCount": 0,
+        "collectors": {
+          "database": {
+            "started": true,
+            "completed": true,
+            "itemCount": 1
+          },
+          "projects": {
+            "started": false,
+            "completed": false,
+            "itemCount": 0
+          },
+          "folders": {
+            "started": false,
+            "completed": false,
+            "itemCount": 0
+          },
+          "components": {
+            "started": false,
+            "completed": false,
+            "itemCount": 0
+          },
+          "enumerations": {
+            "started": false,
+            "completed": false,
+            "itemCount": 0
+          }
+        }
+      },
+      "truncated": false,
+      "source": "live",
+      "database": {
+        "name": "C:\\Repo\\F05_IPB_L2_0429",
+        "path": "C:/Repo/",
+        "canonicalPath": "C:/Repo/F05_IPB_L2_0429",
+        "identityStatus": "consistent"
+      }
+    },
+    "diagnostics": {
+      "request": {
+        "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+        "cliPath": "C:/Repo/09_ASCETCopilot/pi-ascet-extension-prototype/packages/ascet-extension/ascet-cli/bin/AscetBridge.exe",
+        "args": [
+          "exec",
+          "get_database_identity",
+          "--request-json",
+          "{}",
+          "--json"
+        ],
+        "timeoutMs": 120000,
+        "jobKind": "read",
+        "mutatesDatabase": false
+      },
+      "exitCode": 0,
+      "timedOut": false
+    }
+  },
+  "tree": {
+    "delivery": "stored",
+    "itemCount": 10681,
+    "observation": {
+      "resultId": "obs-tree-29276-1786770149012-0",
+      "domain": "tree",
+      "format": "ndjson",
+      "dataPath": "C:\\Users\\NHJ3SZH\\AppData\\Local\\Temp\\pi-ascet-extension\\artifacts\\obs-tree-29276-1786770149012-0.tree.ndjson",
+      "metaPath": "C:\\Users\\NHJ3SZH\\AppData\\Local\\Temp\\pi-ascet-extension\\artifacts\\obs-tree-29276-1786770149012-0.meta.json",
+      "itemCount": 10681
+    }
+  },
+  "selected": {
+    "failureComponent": {
+      "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+      "kind": "statemachine",
+      "editable": false,
+      "previewStatus": "preflight",
+      "diagramStatus": "missing"
+    }
+  },
+  "databaseSafetyWarning": "Do not authorize writes until this fingerprint is confirmed to belong to a disposable database.",
+  "topLevelCounts": {
+    "TEST": 1,
+    "DEMO": 1,
+    "Customer": 143,
+    "PlatformLibrary_iBoosterG2": 6,
+    "CN_Library": 15,
+    "PlatformLibrary": 8992,
+    "PlatformLibrary_NewBrakeSystems": 812,
+    "PlatformLibraryVmc": 5,
+    "PlatformProjects": 19,
+    "PlatformProjects_NewBrakeSystems": 9,
+    "CN_Libary": 678
+  },
+  "environmentSuggestion": {
+    "ASCET_PERMISSION_SMOKE_DATABASE_FINGERPRINT": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c",
+    "ASCET_PERMISSION_SMOKE_FAILURE_COMPONENT": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+    "ASCET_PERMISSION_SMOKE_FAILURE_COMPONENT_KIND": "statemachine",
+    "ASCET_PERMISSION_SMOKE_FAILURE_METHOD_KIND": "action"
+  },
+  "inspected": [
+    {
+      "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+      "kind": "statemachine",
+      "editable": false,
+      "previewStatus": "preflight",
+      "diagramStatus": "missing"
+    }
+  ],
+  "scheduler": {
+    "ok": true,
+    "scheduler": {
+      "hostState": "healthy",
+      "runningJob": null,
+      "queuedJobs": [],
+      "recentJobs": [
+        {
+          "jobId": "ascet-job-1",
+          "agentId": "system",
+          "toolName": "ascet_status",
+          "commandId": "selftest",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786770067794,
+          "startedAt": 1786770067795,
+          "queueWaitMs": 1,
+          "finishedAt": 1786770068706,
+          "executionMs": 911
+        },
+        {
+          "jobId": "ascet-job-2",
+          "agentId": "system",
+          "toolName": "ascet_get",
+          "commandId": "get_database_identity",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786770068710,
+          "startedAt": 1786770068710,
+          "queueWaitMs": 0,
+          "finishedAt": 1786770069225,
+          "executionMs": 515
+        },
+        {
+          "jobId": "ascet-job-3",
+          "agentId": "system",
+          "toolName": "ascet_get",
+          "commandId": "get_tree",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786770069231,
+          "startedAt": 1786770069231,
+          "queueWaitMs": 0,
+          "finishedAt": 1786770149003,
+          "executionMs": 79772
+        },
+        {
+          "jobId": "ascet-job-4",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "component_editable_check",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786770149091,
+          "startedAt": 1786770149091,
+          "queueWaitMs": 0,
+          "finishedAt": 1786770149904,
+          "executionMs": 813
+        },
+        {
+          "jobId": "ascet-job-5",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "preflight_create_method",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786770149909,
+          "startedAt": 1786770149909,
+          "queueWaitMs": 0,
+          "finishedAt": 1786770150722,
+          "executionMs": 813
+        },
+        {
+          "jobId": "ascet-job-6",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "get_database_identity",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786770150724,
+          "startedAt": 1786770150724,
+          "queueWaitMs": 0,
+          "finishedAt": 1786770151223,
+          "executionMs": 499
+        },
+        {
+          "jobId": "ascet-job-7",
+          "agentId": "system",
+          "toolName": "ascet_get",
+          "commandId": "get_tree",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786770151225,
+          "startedAt": 1786770151225,
+          "queueWaitMs": 0,
+          "finishedAt": 1786770231843,
+          "executionMs": 80618
+        }
+      ],
+      "pendingByAgent": {},
+      "activeCount": 0,
+      "resource": {
+        "key": "ascet.toolapi.global",
+        "active": 0,
+        "queued": 0,
+        "concurrency": 1,
+        "runningJob": null
+      }
+    },
+    "cliLock": {
+      "locked": false,
+      "path": "C:\\Users\\NHJ3SZH\\AppData\\Local\\PI\\ascet\\locks\\ascet-toolapi.lock"
+    },
+    "operationHealth": [],
+    "summary": "ASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nRecent:\n- ascet-job-1 ascet_status/selftest agent=system state=succeeded (queueWait=1ms, exec=911ms)\n- ascet-job-2 ascet_get/get_database_identity agent=system state=succeeded (queueWait=0ms, exec=515ms)\n- ascet-job-3 ascet_get/get_tree agent=system state=succeeded (queueWait=0ms, exec=79772ms)\n- ascet-job-4 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=0ms, exec=813ms)\n- ascet-job-5 ascet_edit/preflight_create_method agent=system state=succeeded (queueWait=0ms, exec=813ms)\n- ascet-job-6 ascet_edit/get_database_identity agent=system state=succeeded (queueWait=0ms, exec=499ms)\n- ascet-job-7 ascet_get/get_tree agent=system state=succeeded (queueWait=0ms, exec=80618ms)\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none",
+    "tool": "ascet_scheduler_status",
+    "action": "status",
+    "command": {
+      "logicalCommandId": "PiAscetSchedulerStatus",
+      "backendCommandId": "PiAscetSchedulerStatus",
+      "operation": "scheduler_status"
+    }
+  }
+}

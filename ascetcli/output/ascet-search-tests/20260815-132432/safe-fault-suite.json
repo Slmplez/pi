@@ -1,0 +1,76 @@
+﻿{
+    "unknownMode":  {
+                        "exit":  2,
+                        "code":  "usage",
+                        "error":  "Unknown mode: unknown-mode"
+                    },
+    "emptyQuery":  {
+                       "exit":  2,
+                       "code":  "usage",
+                       "error":  "Query must not be empty."
+                   },
+    "negativeMax":  {
+                        "exit":  2,
+                        "code":  "usage",
+                        "error":  "-n must be zero or a positive integer."
+                    },
+    "zeroTimeout":  {
+                        "exit":  2,
+                        "code":  "usage",
+                        "error":  "-t must be a positive integer."
+                    },
+    "unknownOption":  {
+                          "exit":  2,
+                          "code":  "usage",
+                          "error":  "Unknown option: --bad"
+                      },
+    "specialQueries":  [
+                           {
+                               "length":  3,
+                               "count":  0,
+                               "ui":  false,
+                               "ms":  729
+                           },
+                           {
+                               "length":  8,
+                               "count":  0,
+                               "ui":  false,
+                               "ms":  475
+                           },
+                           {
+                               "length":  4,
+                               "count":  0,
+                               "ui":  false,
+                               "ms":  599
+                           },
+                           {
+                               "length":  2,
+                               "count":  0,
+                               "ui":  false,
+                               "ms":  350
+                           },
+                           {
+                               "length":  512,
+                               "count":  0,
+                               "ui":  false,
+                               "ms":  683
+                           }
+                       ],
+    "missingDll":  {
+                       "exit":  1,
+                       "json":  true,
+                       "output":  "{\"ok\":false,\"code\":\"FileNotFoundException\",\"error\":\"Could not load file or assembly \u0027Etas.AscetNET, Version=6.1.5.0, Culture=neutral, PublicKeyToken=c9b6e760b808c9f9\u0027 or one of its dependencies. The system cannot find the file specified.\"}"
+                   },
+    "readOnlyRuntime":  {
+                            "childWindows":  0,
+                            "pidBefore":  25888,
+                            "pidAfter":  25888
+                        },
+    "skippedUnsafe":  [
+                          "ASCET not running",
+                          "multiple ASCET processes",
+                          "database closed",
+                          "ASCET terminated during search",
+                          "manual native Find already running"
+                      ]
+}

@@ -1,0 +1,93 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"changed\": {\n    \"folderPath\": \"PI_LIVE_FIX_20260811_13947C09\",\n    \"created\": true,\n    \"createdCount\": 1,\n    \"existingCount\": 0,\n    \"summary\": \"Created folder path 'PI_LIVE_FIX_20260811_13947C09' (1 created, 0 existing).\"\n  },\n  \"verification\": {\n    \"mode\": \"automatic_readback\",\n    \"source\": \"write_command\",\n    \"required\": true,\n    \"requested\": true,\n    \"verified\": true,\n    \"status\": \"passed\"\n  }\n}"
+    }
+  ],
+  "details": {
+    "outcome": {
+      "status": "ok",
+      "verified": true,
+      "data": {
+        "changed": {
+          "folderPath": "PI_LIVE_FIX_20260811_13947C09",
+          "created": true,
+          "createdCount": 1,
+          "existingCount": 0,
+          "summary": "Created folder path 'PI_LIVE_FIX_20260811_13947C09' (1 created, 0 existing)."
+        },
+        "verification": {
+          "mode": "automatic_readback",
+          "source": "write_command",
+          "required": true,
+          "requested": true,
+          "verified": true,
+          "status": "passed"
+        },
+        "observations": {
+          "invalidated": []
+        }
+      },
+      "warnings": []
+    },
+    "raw": {
+      "ok": true,
+      "data": {
+        "type": "response",
+        "protocolVersion": 1,
+        "ok": true,
+        "result": {
+          "folderPath": "PI_LIVE_FIX_20260811_13947C09",
+          "created": true,
+          "createdCount": 1,
+          "existingCount": 0,
+          "verifyReadbackRequested": true,
+          "readbackVerified": true,
+          "summary": "Created folder path 'PI_LIVE_FIX_20260811_13947C09' (1 created, 0 existing)."
+        },
+        "error": null,
+        "meta": {
+          "bridgePid": 7484,
+          "bridgeGeneration": "7d7e98e8-07d5-4200-a03d-6f2a604f89a7",
+          "durationMs": 820,
+          "sessionPolicy": "fresh_session",
+          "mutationStarted": true,
+          "mode": "exec",
+          "operation": "create_folder"
+        }
+      },
+      "request": {
+        "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+        "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+        "args": [
+          "exec",
+          "create_folder",
+          "PI_LIVE_FIX_20260811_13947C09",
+          "--verify-readback",
+          "--json"
+        ],
+        "timeoutMs": 180000,
+        "jobKind": "write",
+        "mutatesDatabase": true
+      },
+      "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"folderPath\":\"PI_LIVE_FIX_20260811_13947C09\",\"created\":true,\"createdCount\":1,\"existingCount\":0,\"verifyReadbackRequested\":true,\"readbackVerified\":true,\"summary\":\"Created folder path \\u0027PI_LIVE_FIX_20260811_13947C09\\u0027 (1 created, 0 existing).\"},\"error\":null,\"meta\":{\"bridgePid\":7484,\"bridgeGeneration\":\"7d7e98e8-07d5-4200-a03d-6f2a604f89a7\",\"durationMs\":820,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":true,\"mode\":\"exec\",\"operation\":\"create_folder\"}}\r\n",
+      "stderr": "",
+      "exitCode": 0,
+      "timedOut": false,
+      "aborted": false,
+      "operationId": "create_folder"
+    },
+    "observations": {
+      "invalidated": []
+    },
+    "verification": {
+      "mode": "automatic_readback",
+      "source": "write_command",
+      "required": true,
+      "requested": true,
+      "verified": true,
+      "status": "passed"
+    }
+  }
+}

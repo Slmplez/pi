@@ -1,0 +1,35 @@
+Log File: C:\ProgramData\ETAS\LogFiles\AscetBridge\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Component: PlatformLibrary\Package\AVH_AutomaticVehicleHold\private\AVH_DriveOffRequested
+Kind: Class
+Language: ESDL
+Diagrams: 1
+  - BlockDiagram: Main
+Methods: 2
+  - AbstractMethod: calc
+  - AbstractMethod: DriveOffRequested
+
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+=== Method: calc (AbstractMethod) ===
+// Purpose of this class is to determine a drive off request for AVH
+// so far only driver drive off request is considered
+
+if	(	(DriverAcceleratorApplied == true)		// Driver accelerator is pressed
+	||	((ClutchEngagementPoint == true) && (	GearboxType == CSMGearboxType_ManualWoGearInfo
+											||	GearboxType == CSMGearboxType_ManualWithGearInfo))    //Clutch is pressed and Gearbox is manual
+	)
+{
+	 DriveOffRequested = true;
+}
+else
+{
+      DriveOffRequested = false;
+}
+
+
+=== Method: DriveOffRequested (AbstractMethod) ===
+return DriveOffRequested;
+
+

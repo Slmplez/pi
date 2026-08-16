@@ -1,0 +1,76 @@
+{
+  "catalogResultId": "obs-database-catalog-41888-1786237063824-7",
+  "sourceTreeResultId": "obs-tree-live-20260808-full-database",
+  "include": [
+    "parameter_class",
+    "enumeration",
+    "module",
+    "message"
+  ],
+  "messageDepth": 0,
+  "capturedAt": "2026-08-09T00:57:43.824Z",
+  "coverage": {
+    "status": "complete_for_scope",
+    "failureCount": 0
+  },
+  "sourceTreeCounts": {
+    "sourceTreeRowCount": 10670,
+    "projectCount": 75,
+    "moduleRowCount": 859,
+    "uniqueModuleCount": 428,
+    "moduleAliasCount": 431,
+    "enumerationCount": 708,
+    "classRowCount": 7069,
+    "invalidRowCount": 0
+  },
+  "perTypeCounts": {
+    "parameterClasses": 950,
+    "enumerations": 708,
+    "modules": 428,
+    "messages": 24656
+  },
+  "perRelationCounts": {
+    "projectComplexEdges": 696,
+    "parameterClassEdges": 1335,
+    "parameterEnumEdges": 315,
+    "projectModuleEdges": 431,
+    "moduleMessageEdges": 24656,
+    "messageEnumEdges": 4851
+  },
+  "liveCounts": {
+    "projectInputCount": 75,
+    "projectSuccessCount": 75,
+    "projectFailureCount": 0,
+    "parameterClassScannedCount": 1014,
+    "parameterClassVerifiedCount": 950,
+    "parameterClassRejectedNoEvidenceCount": 3,
+    "parameterClassRejectedHasMethodsCount": 61,
+    "orphanCandidateCount": 123,
+    "orphanVerifiedCount": 94,
+    "moduleInputCount": 428,
+    "moduleSuccessCount": 428,
+    "moduleFailureCount": 0,
+    "sendMessageCount": 11335,
+    "receiveMessageCount": 12773,
+    "sendReceiveMessageCount": 548,
+    "projectComplexEdgeCount": 696,
+    "parameterClassCount": 950,
+    "parameterClassEdgeCount": 1335,
+    "parameterEnumEdgeCount": 315,
+    "messageCount": 24656,
+    "moduleMessageEdgeCount": 24656,
+    "messageEnumEdgeCount": 4851
+  },
+  "perStageTimings": {
+    "projectScanMs": 2540,
+    "parameterClosureMs": 34622,
+    "moduleScanMs": 88356,
+    "totalServiceMs": 125520,
+    "sessionOpenMs": 218,
+    "sessionCloseMs": 2,
+    "sourceTreeScanMs": 29.62280000001192,
+    "liveScanMs": 126734.02660000001
+  },
+  "warnings": [],
+  "failures": []
+}

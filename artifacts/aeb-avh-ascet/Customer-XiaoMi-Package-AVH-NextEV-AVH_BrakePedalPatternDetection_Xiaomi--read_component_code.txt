@@ -1,0 +1,24 @@
+Log File: C:\ProgramData\ETAS\LogFiles\AscetBridge\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Component: Customer\XiaoMi\Package\AVH\NextEV\AVH_BrakePedalPatternDetection_Xiaomi
+Kind: Class
+Language: BDE
+Diagrams: 1
+  - BlockDiagram: Main
+Methods: 3
+  - AbstractMethod: AVHActivationByBrakePedal
+  - AbstractMethod: AVHDeactivationByBrakePedal
+  - AbstractMethod: calc
+
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+=== Method: AVHActivationByBrakePedal (AbstractMethod) ===
+
+
+=== Method: AVHDeactivationByBrakePedal (AbstractMethod) ===
+
+
+=== Method: calc (AbstractMethod) ===
+
+

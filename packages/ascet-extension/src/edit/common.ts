@@ -8,6 +8,8 @@ import {
 	runAscetCliJson,
 } from "../cli.ts";
 import { normalizeAscetPath } from "../core/path.ts";
+import { getAscetDatabaseIdentity, isAscetDatabaseIdentityWritable } from "../get.ts";
+import type { AscetObservationDatabaseIdentity } from "../observation-store.ts";
 import {
 	getAscetArtifactRoot,
 	invalidateAscetObservations,
@@ -15,6 +17,7 @@ import {
 } from "../observation-store.ts";
 import type { AscetScheduler } from "../scheduler/scheduler.ts";
 import { createAscetStatusReport } from "../status.ts";
+import { unwrapToolSuccessPayload } from "../tool-response-contract.ts";
 import {
 	type AscetEditApprovalContext,
 	type AscetEditApprovalFailure,
@@ -38,7 +41,7 @@ export interface RunAscetEditOperationOptions {
 
 export interface AscetEditControlParams {
 	verifyReadback?: boolean;
-	executeWrite?: boolean;
+	intent?: "preview" | "apply";
 }
 
 export interface AscetObservationInvalidation {
@@ -56,6 +59,50 @@ export type AscetEditObservationTargetParams = {
 };
 
 export const ifMissingSchema = Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")]));
+
+export async function checkAscetDatabaseIdentityForWrite(
+	options: RunAscetEditOperationOptions,
+): Promise<{ identity?: AscetObservationDatabaseIdentity; result?: AscetCliJsonResult }> {
+	const raw = await runAscetCliJson(["exec", "get_database_identity", "--request-json", "{}", "--json"], {
+		...options,
+		toolName: "ascet_edit",
+		commandId: "get_database_identity",
+		jobKind: "read",
+		resourceKey: "ascet.toolapi.global",
+	});
+	const payload = unwrapToolSuccessPayload(raw.data);
+	const identity =
+		raw.ok && payload && typeof payload === "object" && !Array.isArray(payload)
+			? getAscetDatabaseIdentity(payload as Record<string, unknown>)
+			: undefined;
+	if (!raw.ok || !identity) {
+		return {
+			result: {
+				...raw,
+				ok: false,
+				error: {
+					code: "database_identity_missing",
+					message: raw.error?.message ?? "Current ASCET database identity is unavailable.",
+				},
+			},
+		};
+	}
+	if (!isAscetDatabaseIdentityWritable(identity)) {
+		return {
+			identity,
+			result: {
+				...raw,
+				ok: false,
+				error: {
+					code: "database_identity_inconsistent",
+					message: `Current ASCET database identity is ${identity.status}: ${identity.issues.join(", ") || "no diagnostic details"}.`,
+					details: identity,
+				},
+			},
+		};
+	}
+	return { identity };
+}
 
 export function appendVerifyAndJson(args: string[], verifyReadback = false): string[] {
 	if (verifyReadback) {
@@ -113,9 +160,16 @@ export async function runApprovedAscetEditOperation<TParams extends AscetEditCon
 	title = "Confirm ASCET edit",
 	errorPrefix: AscetEditErrorPrefix = "ascet_edit",
 ): Promise<AscetCliJsonResult> {
+	if ((params.intent ?? "preview") !== "apply") {
+		return createBlockedEditResult(operation, params, options, buildArgs, summary, {
+			approved: false,
+			code: `${errorPrefix}_approval_required`,
+			message:
+				"Use the guarded public ascet_edit call with intent=preview for authoritative non-mutating preflight.",
+		});
+	}
 	const approval = await requestAscetEditApproval(
 		{
-			executeWrite: params.executeWrite,
 			title,
 			message: summary,
 			signal: options.signal,

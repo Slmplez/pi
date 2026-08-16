@@ -39,10 +39,10 @@ describe("ASCET editable write-gate policy", () => {
 		assert.match(chainRules, /checks the affected Component again before compensating writes/u);
 
 		const skill = readFileSync(skillPath, "utf8");
-		assert.match(skill, /Preflight, plan, diff, and dry-run remain available when a Component is not editable/u);
-		assert.match(skill, /runtime checks the affected Component internally in the same ASCET session/u);
+		assert.match(skill, /Preview, diff, and dry-run remain available when a Component is not editable/u);
+		assert.match(skill, /runtime rechecks the affected Component inside the guarded ASCET session/u);
 		assert.match(skill, /Do not call `mode=check` merely to authorize a write/u);
-		assert.match(skill, /Never call `mode=set` automatically/u);
+		assert.match(skill, /Do not issue a separate `mode=set` as part of an ordinary write flow/u);
 		assert.match(skill, /checks the affected Component again before compensating writes/u);
 	});
 });

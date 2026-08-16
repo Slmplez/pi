@@ -168,7 +168,7 @@ function grepObservationItems(output: AscetGetOutput, query: string): JsonRecord
 if (cleanupOnly) {
 	const component = await executeTool(
 		"ascet_edit",
-		{ action: "delete_component", componentPath: projectPath, ifMissing: "ignore", executeWrite: true },
+		{ action: "delete_component", componentPath: projectPath, ifMissing: "ignore", intent: "apply" },
 		writeContext,
 	);
 	console.log(JSON.stringify({
@@ -194,7 +194,7 @@ if (preflight.details.outcome?.status !== "preflight") {
 
 const applied = await executeTool(
 	"ascet_edit",
-	{ action: "apply_project_formula", projectPath, specFile, executeWrite: true },
+	{ action: "apply_project_formula", projectPath, specFile, intent: "apply" },
 	writeContext,
 );
 const formulas = parseAscetGetOutput(await executeTool(

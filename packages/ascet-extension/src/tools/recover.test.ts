@@ -171,7 +171,7 @@ describe("ASCET mutation reconciliation", () => {
 					databaseFingerprint,
 					targetOid: "oid-1",
 					expectedGeneration: quarantined.generation,
-					executeWrite: true,
+					intent: "apply",
 				},
 				{
 					cwd: process.cwd(),
@@ -259,7 +259,7 @@ describe("ASCET mutation reconciliation", () => {
 					databaseFingerprint,
 					targetOid: "oid-1",
 					expectedGeneration: quarantined.generation,
-					executeWrite: true,
+					intent: "apply",
 				},
 				{
 					cwd: process.cwd(),
@@ -340,7 +340,7 @@ describe("ASCET mutation reconciliation", () => {
 					databaseFingerprint,
 					targetOid: "oid-1",
 					expectedGeneration: quarantined.generation,
-					executeWrite: true,
+					intent: "apply",
 				},
 				{
 					cwd: process.cwd(),

@@ -1,0 +1,339 @@
+{
+  "generated_at": "2026-04-01T03:07:52.702321Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\ConditionalTableEditorEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ConditionalTableEditorEnglishUS",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ConditionalTableEditorEnglishUS\\markdown",
+  "input_html_count": 54,
+  "converted_html_count": 54,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 56,
+  "toc_entries_count": 60,
+  "index_entries_count": 44,
+  "index_required": true,
+  "mappings": [
+    {
+      "html_rel_path": "add_elements.htm",
+      "md_rel_path": "add_elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "alter_column_width.htm",
+      "md_rel_path": "alter_column_width.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "arguments_variables.htm",
+      "md_rel_path": "arguments_variables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "codegen_dbtoolarge.htm",
+      "md_rel_path": "codegen_dbtoolarge.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "column_menu.htm",
+      "md_rel_path": "column_menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "complex_elements.htm",
+      "md_rel_path": "complex_elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "create-column_instrusction.htm",
+      "md_rel_path": "create-column_instrusction.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "create_column_condition.htm",
+      "md_rel_path": "create_column_condition.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "create_ct.htm",
+      "md_rel_path": "create_ct.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_Browse_View.htm",
+      "md_rel_path": "CTab_Browse_View.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_Build_Menu.htm",
+      "md_rel_path": "CTab_Build_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ctab_component_pane.htm",
+      "md_rel_path": "ctab_component_pane.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ctab_contextmenu_componentelement.htm",
+      "md_rel_path": "ctab_contextmenu_componentelement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ctab_contextmenu_diagrammethod.htm",
+      "md_rel_path": "ctab_contextmenu_diagrammethod.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ctab_contextmenu_specificationview.htm",
+      "md_rel_path": "ctab_contextmenu_specificationview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ctab_contextmenubrowseview.htm",
+      "md_rel_path": "ctab_contextmenubrowseview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_create_rows.htm",
+      "md_rel_path": "CTab_create_rows.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_delete_rows.htm",
+      "md_rel_path": "CTab_delete_rows.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_description_buttons.htm",
+      "md_rel_path": "CTab_description_buttons.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_Description_of_Window_Elements.htm",
+      "md_rel_path": "CTab_Description_of_Window_Elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_Edit_Menu.htm",
+      "md_rel_path": "CTab_Edit_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_Elements_Palette.htm",
+      "md_rel_path": "CTab_Elements_Palette.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_Extras_Menu.htm",
+      "md_rel_path": "CTab_Extras_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_File_Menu.htm",
+      "md_rel_path": "CTab_File_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ctab_filtering_the_component_pane.htm",
+      "md_rel_path": "ctab_filtering_the_component_pane.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_Help_Menu.htm",
+      "md_rel_path": "CTab_Help_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ctab_includecomponent_blocklibrary.htm",
+      "md_rel_path": "ctab_includecomponent_blocklibrary.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_Insert_Menu.htm",
+      "md_rel_path": "CTab_Insert_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_Library_Palette.htm",
+      "md_rel_path": "CTab_Library_Palette.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_menu_bar.htm",
+      "md_rel_path": "CTab_menu_bar.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_move_columns.htm",
+      "md_rel_path": "CTab_move_columns.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_move_rows.htm",
+      "md_rel_path": "CTab_move_rows.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_overview.htm",
+      "md_rel_path": "CTab_overview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_Palettes.htm",
+      "md_rel_path": "CTab_Palettes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_remove_columns.htm",
+      "md_rel_path": "CTab_remove_columns.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_RenameDelete_elements.htm",
+      "md_rel_path": "CTab_RenameDelete_elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ctab_searchresultsview.htm",
+      "md_rel_path": "ctab_searchresultsview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Ctab_SetUp_ConditionalTable.htm",
+      "md_rel_path": "Ctab_SetUp_ConditionalTable.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ctab_showdeleteunusedElements.htm",
+      "md_rel_path": "ctab_showdeleteunusedElements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_Specification_View.htm",
+      "md_rel_path": "CTab_Specification_View.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Ctab_SpecifyConditionalTable.htm",
+      "md_rel_path": "Ctab_SpecifyConditionalTable.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_Starting_an_Offline_Experiment.htm",
+      "md_rel_path": "CTab_Starting_an_Offline_Experiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_Tools_Menu.htm",
+      "md_rel_path": "CTab_Tools_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Ctab_unused.htm",
+      "md_rel_path": "Ctab_unused.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Ctab_unused2.htm",
+      "md_rel_path": "Ctab_unused2.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CTab_view_menu.htm",
+      "md_rel_path": "CTab_view_menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "enter_condition_instruction.htm",
+      "md_rel_path": "enter_condition_instruction.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "experimenting_ct.htm",
+      "md_rel_path": "experimenting_ct.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "make_elements_accessible.htm",
+      "md_rel_path": "make_elements_accessible.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "row_menu.htm",
+      "md_rel_path": "row_menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Setting_the_Background_Color.htm",
+      "md_rel_path": "Setting_the_Background_Color.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "setting_up_ct.htm",
+      "md_rel_path": "setting_up_ct.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "specifying_ct.htm",
+      "md_rel_path": "specifying_ct.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "use_methods_c_i.htm",
+      "md_rel_path": "use_methods_c_i.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

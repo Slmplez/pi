@@ -1,0 +1,20 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="index">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="ASCET">
+    <param name="Name" value="ASCET Overview">
+    <param name="Local" value="ascet_overview.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="contacts">
+      <param name="Name" value="ETAS Contact Addresses">
+      <param name="Local" value="etas_contact_addresses.htm">
+    </object>
+    </ul>
+</ul>
+</html>

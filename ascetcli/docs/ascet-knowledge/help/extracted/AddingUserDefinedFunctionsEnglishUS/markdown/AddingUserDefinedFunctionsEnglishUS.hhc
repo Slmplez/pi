@@ -1,0 +1,103 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="toc">
+  <param name="Image Width" value="16">
+  <param name="Window Styles" value="0x800427">
+  <param name="ExWindow Styles" value="0x100">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Adding User-Defined Functions">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Overview">
+      <param name="Local" value="AUD_Overview.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Basics">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Menu Item Definition">
+        <param name="Local" value="defining__menu_items.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Hints for Defining Menu Items">
+        <param name="Local" value="Hints_for_Defining_Menu_Items.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Window Names">
+        <param name="Local" value="Names_of_the_Windows.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Defining an Autostart Action">
+        <param name="Local" value="AUD_defining_autostart_action.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Defining a Shutdown Action">
+        <param name="Local" value="AUD_defining_shutdown_action.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Structure of the Script Files">
+        <param name="Local" value="structure_script_file.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Keywords for Script files">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="EXECUTE">
+          <param name="Local" value="execute.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="NOWAIT">
+          <param name="Local" value="nowait.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="OBJECT">
+          <param name="Local" value="object.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="SELECTOR">
+          <param name="Local" value="selector.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Available SELECTOR Commands">
+          <param name="Local" value="Available_SELECTOR_Commands.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="MENUITEM">
+          <param name="Local" value="menu_item.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="FILE">
+          <param name="Local" value="file.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="FORK">
+          <param name="Local" value="fork.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="SEND">
+          <param name="Local" value="send.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="POST">
+          <param name="Local" value="post.htm">
+        </object>
+        </ul>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Instructions">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Defining Menu Items">
+        <param name="Local" value="to_define_menu_items.htm">
+      </object>
+      </ul>
+    </ul>
+</ul>
+</html>

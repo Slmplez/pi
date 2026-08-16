@@ -1,0 +1,106 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"status\": \"partial\",\n  \"data\": {\n    \"mutationStatus\": \"unknown\",\n    \"consistencyStatus\": \"unknown\",\n    \"rollback\": {\n      \"required\": false,\n      \"status\": \"not_required\",\n      \"verified\": true\n    },\n    \"verification\": {\n      \"mode\": \"automatic_readback\",\n      \"source\": \"write_command\",\n      \"required\": true,\n      \"status\": \"unknown\"\n    }\n  },\n  \"failures\": [\n    {\n      \"code\": \"write_outcome_unknown\",\n      \"message\": \"Element mutation failed and rollback could not be verified: Injected isolated-fixture rollback failure.\",\n      \"retryable\": false,\n      \"requiresFreshRead\": true\n    }\n  ]\n}"
+    }
+  ],
+  "details": {
+    "outcome": {
+      "status": "partial",
+      "data": {
+        "mutationStatus": "unknown",
+        "consistencyStatus": "unknown",
+        "rollback": {
+          "required": false,
+          "status": "not_required",
+          "verified": true
+        },
+        "verification": {
+          "mode": "automatic_readback",
+          "source": "write_command",
+          "required": true,
+          "requested": null,
+          "verified": null,
+          "status": "unknown"
+        },
+        "observations": {
+          "invalidated": []
+        }
+      },
+      "failures": [
+        {
+          "code": "write_outcome_unknown",
+          "message": "Element mutation failed and rollback could not be verified: Injected isolated-fixture rollback failure.",
+          "retryable": false,
+          "requiresFreshRead": true
+        }
+      ]
+    },
+    "raw": {
+      "ok": false,
+      "data": null,
+      "request": {
+        "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+        "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+        "args": [
+          "exec",
+          "apply_element_spec",
+          "PI_LIVE_FIX_20260812_C42293AC\\ClassUnderTest",
+          "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\LIVE_TOOLS_20260812-125307_C42293AC\\artifacts\\element-spec-plans\\inline-34644-1786512070909-a64af5ef-04db-414e-86d3-7920e8ec112f.json",
+          "--verify-readback",
+          "--json"
+        ],
+        "timeoutMs": 240000,
+        "jobKind": "write",
+        "mutatesDatabase": true
+      },
+      "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"element_transaction_rollback_failed\",\"message\":\"Element mutation failed and rollback could not be verified: Injected isolated-fixture rollback failure.\",\"operation\":\"apply_element_spec\",\"stage\":\"write\",\"exceptionType\":\"AscetReadException\",\"details\":{\"innerExceptionType\":\"AscetReadException\",\"innerExceptionMessage\":\"Injected isolated-fixture failure after mutation stage 3.\"}},\"meta\":{\"bridgePid\":36632,\"bridgeGeneration\":\"aee70477-1ab3-4f8f-b508-af4ef7a48b18\",\"durationMs\":596,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":null,\"mode\":\"exec\",\"operation\":\"apply_element_spec\"}}\r\n",
+      "stderr": "",
+      "exitCode": 2,
+      "timedOut": false,
+      "aborted": false,
+      "operationId": "apply_element_spec",
+      "stage": "cli_process",
+      "diagnostics": {
+        "operationId": "apply_element_spec",
+        "stage": "cli_process",
+        "exitCode": 2,
+        "timedOut": false,
+        "aborted": false,
+        "stderrSummary": "",
+        "stdoutSummary": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"element_transaction_rollback_failed\",\"message\":\"Element mutation failed and rollback could not be verified: Injected isolated-fixture rollback failure.\",\"operation\":\"apply_element_spec\",\"stage\":\"write\",\"exceptionType\":\"AscetReadException\",\"details\":{\"innerExceptionType\":\"AscetReadException\",\"innerExceptionMessage\":\"Injected isolated-fixture failure after mutation stage 3.\"}},\"meta\":{\"bridgePid\":36632,\"bridgeGeneration\":\"aee70477-1ab3-4f8f-b508-af4ef7a48b18\",\"durationMs\":596,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":null,\"mode\":\"exec\",\"operation\":\"apply_element_spec\"}}",
+        "retryable": false
+      },
+      "error": {
+        "code": "write_outcome_unknown",
+        "message": "Element mutation failed and rollback could not be verified: Injected isolated-fixture rollback failure.",
+        "details": {
+          "originalCode": "element_transaction_rollback_failed",
+          "retryable": false,
+          "requiresReadback": true,
+          "backend": {
+            "code": "element_transaction_rollback_failed",
+            "stage": "write",
+            "details": {
+              "innerExceptionType": "AscetReadException",
+              "innerExceptionMessage": "Injected isolated-fixture failure after mutation stage 3."
+            },
+            "operation": "apply_element_spec"
+          }
+        }
+      }
+    },
+    "observations": {
+      "invalidated": []
+    },
+    "verification": {
+      "mode": "automatic_readback",
+      "source": "write_command",
+      "required": true,
+      "requested": null,
+      "verified": null,
+      "status": "unknown"
+    }
+  }
+}

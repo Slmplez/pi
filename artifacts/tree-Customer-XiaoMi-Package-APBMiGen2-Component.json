@@ -1,0 +1,1 @@
+﻿{"type":"response","protocolVersion":1,"ok":false,"result":null,"error":{"code":"unhandled_exception","message":"Invalid JSON primitive: Customer."},"meta":{"bridgePid":29896,"bridgeGeneration":"20b768fc-cb1a-4b01-855f-ff21495fd611","durationMs":43,"sessionPolicy":"fresh_session","mutationStarted":false,"mode":"exec","operation":"get_tree"}}

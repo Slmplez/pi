@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "status": "applied",
+  "databaseFingerprint": "82d15c1e563d8f43061868480858221d57264355d2699bc9c969ea86a210cc03",
+  "targetOid": "database:82d15c1e563d8f43061868480858221d57264355d2699bc9c969ea86a210cc03",
+  "targetKind": "database",
+  "canonicalPath": "C:\\Repo\\11_ASCETCopilotLiveTest\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\ASW\\Db\\",
+  "action": "create_folder",
+  "planId": "4d232a40-66fc-49b1-84a9-c0dc1d08bf06",
+  "planFingerprint": "b71441db690a247ce61d59973a277c42e154e447d4d2da5237aed2020ed94660",
+  "targetImpactFingerprint": "sha256:1e147a8beb75d5e90ee811fd56a448429022fc69d21e911779466cc3ae8e3a5c",
+  "guardGeneration": 0,
+  "beforeSnapshotFingerprint": "sha256:fc83731c912da573baf1ad52ad3a611732e7f6ae6dc26acc2eb20c56cd943911",
+  "desiredFingerprint": "sha256:29a0e849dbcba15eb02ba66bc924cf5342acdda208f8c4cea2e10e14eed21285",
+  "beforeSnapshot": {
+    "operation": "direct_mutation_safety_preflight",
+    "validated": true,
+    "targetIdentity": {
+      "path": "C:\\Repo\\11_ASCETCopilotLiveTest\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\ASW\\Db\\",
+      "oid": "database:82d15c1e563d8f43061868480858221d57264355d2699bc9c969ea86a210cc03",
+      "kind": "database"
+    },
+    "targetImpactFingerprint": "sha256:1e147a8beb75d5e90ee811fd56a448429022fc69d21e911779466cc3ae8e3a5c"
+  },
+  "attemptedMutation": {
+    "action": "create_folder",
+    "folderPath": "PI_LIVE_FIX_20260812_2257A020"
+  },
+  "createdAt": "2026-08-12T05:27:38.177Z",
+  "updatedAt": "2026-08-12T05:27:39.106Z",
+  "evidence": {
+    "bridgeEntered": true,
+    "backendResponseReceived": true,
+    "mutationStarted": true
+  },
+  "outcome": {
+    "operationId": "create_folder"
+  }
+}

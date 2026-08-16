@@ -1,0 +1,263 @@
+{
+  "version": 1,
+  "status": "rolled_back",
+  "databaseFingerprint": "49be9da8ddaa5ac7b09b24a394229cbbd9a9dc3dbabadf9704da7ff25633274a",
+  "targetOid": "040g00001g001qg71060i85ff2002",
+  "targetKind": "component",
+  "canonicalPath": "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+  "action": "apply_element_spec",
+  "planId": "296ea2fc-a52a-4a93-bbc1-b787b32da35f",
+  "planFingerprint": "cee0eea3d5b84a53e64944963df368818ec84a4ab41423ff580cca83e27a1da5",
+  "targetImpactFingerprint": "sha256:0d81277e0b76a4629a04fa14d63f7f1f949ea8eaba542f3095b615e2475253cc",
+  "guardGeneration": 0,
+  "beforeSnapshotFingerprint": "sha256:c999de6fd92a827353a9b5d4261a647b7c9dace0be80360f0210fb5abdbab7f2",
+  "desiredFingerprint": "sha256:ae475eedd8354dfcb7312124baf6f72e6d9335b50cc8b346566064bcf24f8c8c",
+  "beforeSnapshot": {
+    "capabilities": {
+      "elements": [
+        {
+          "blockingCodes": [],
+          "capabilityStatus": "validated",
+          "dataConfiguration": {
+            "configurationName": "Data",
+            "selected": true,
+            "source": "defaultDataConfiguration"
+          },
+          "dataItemResolvable": true,
+          "implementationConfiguration": {
+            "configurationName": "Impl",
+            "selected": true,
+            "source": "defaultImplementationConfiguration"
+          },
+          "implementationItemResolvable": true,
+          "name": "C_FIX_B_One",
+          "operation": "create"
+        },
+        {
+          "blockingCodes": [],
+          "capabilityStatus": "validated",
+          "dataConfiguration": {
+            "configurationName": "Data",
+            "selected": true,
+            "source": "defaultDataConfiguration"
+          },
+          "dataItemResolvable": true,
+          "implementationConfiguration": {
+            "configurationName": "Impl",
+            "selected": true,
+            "source": "defaultImplementationConfiguration"
+          },
+          "implementationItemResolvable": true,
+          "name": "C_FIX_B_Two",
+          "operation": "create"
+        },
+        {
+          "blockingCodes": [],
+          "capabilityStatus": "validated",
+          "dataConfiguration": {
+            "configurationName": "Data",
+            "selected": true,
+            "source": "defaultDataConfiguration"
+          },
+          "dataItemResolvable": true,
+          "implementationConfiguration": {
+            "configurationName": "Impl",
+            "selected": true,
+            "source": "defaultImplementationConfiguration"
+          },
+          "implementationItemResolvable": true,
+          "name": "C_FIX_B_Three",
+          "operation": "create"
+        },
+        {
+          "blockingCodes": [],
+          "capabilityStatus": "validated",
+          "dataConfiguration": {
+            "configurationName": "Data",
+            "selected": true,
+            "source": "defaultDataConfiguration"
+          },
+          "dataItemResolvable": true,
+          "implementationConfiguration": {
+            "configurationName": "Impl",
+            "selected": true,
+            "source": "defaultImplementationConfiguration"
+          },
+          "implementationItemResolvable": true,
+          "name": "C_FIX_B_Four",
+          "operation": "create"
+        }
+      ],
+      "validated": true
+    },
+    "catalogIdentity": {
+      "componentOID": "040g00001g001qg71060i85ff2002"
+    },
+    "catalogSnapshot": {
+      "componentConfigurationProvenance": {
+        "classDataConfiguration": {
+          "configurationName": "ClassUnderTest",
+          "selected": true,
+          "source": "classDataConfiguration"
+        },
+        "classImplementationConfiguration": {
+          "configurationName": "ClassUnderTest",
+          "selected": true,
+          "source": "classImplementationConfiguration"
+        },
+        "defaultDataConfiguration": {
+          "configurationName": "Data",
+          "selected": true,
+          "source": "defaultDataConfiguration"
+        },
+        "defaultImplementationConfiguration": {
+          "configurationName": "Impl",
+          "selected": true,
+          "source": "defaultImplementationConfiguration"
+        }
+      },
+      "elements": [],
+      "identity": {
+        "componentOID": "040g00001g001qg71060i85ff2002"
+      }
+    },
+    "limitations": [],
+    "liveElementCount": 0,
+    "liveSnapshotHash": "3577c3da806c30180dbb5ff04d6ee46d2cb982e254e6a3c6e14f7b6f2e190705",
+    "normalizedSpec": {
+      "elements": [
+        {
+          "kind": "variable",
+          "modelType": "cont",
+          "name": "C_FIX_B_One",
+          "scope": "local"
+        },
+        {
+          "kind": "variable",
+          "modelType": "cont",
+          "name": "C_FIX_B_Two",
+          "scope": "local"
+        },
+        {
+          "kind": "variable",
+          "modelType": "cont",
+          "name": "C_FIX_B_Three",
+          "scope": "local"
+        },
+        {
+          "kind": "variable",
+          "modelType": "cont",
+          "name": "C_FIX_B_Four",
+          "scope": "local"
+        }
+      ]
+    },
+    "normalizedSpecHash": "698767abef8d7658381a34ddf818f41e0b879712a5f73f9c060598d4ec515f16",
+    "operation": "authoritative_element_preflight",
+    "resolvedIntent": "create",
+    "resolvedOperations": [
+      {
+        "name": "C_FIX_B_One",
+        "operation": "create"
+      },
+      {
+        "name": "C_FIX_B_Two",
+        "operation": "create"
+      },
+      {
+        "name": "C_FIX_B_Three",
+        "operation": "create"
+      },
+      {
+        "name": "C_FIX_B_Four",
+        "operation": "create"
+      }
+    ],
+    "result": {
+      "AddedElements": [
+        {
+          "Kind": "Variable",
+          "Name": "C_FIX_B_One",
+          "Signature": "Variable ModelType=cont Scope=local"
+        },
+        {
+          "Kind": "Variable",
+          "Name": "C_FIX_B_Two",
+          "Signature": "Variable ModelType=cont Scope=local"
+        },
+        {
+          "Kind": "Variable",
+          "Name": "C_FIX_B_Three",
+          "Signature": "Variable ModelType=cont Scope=local"
+        },
+        {
+          "Kind": "Variable",
+          "Name": "C_FIX_B_Four",
+          "Signature": "Variable ModelType=cont Scope=local"
+        }
+      ],
+      "ComponentPath": "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+      "IncompatibleElements": [],
+      "ModifiedElements": [],
+      "RemovedElements": [],
+      "SkippedElements": [],
+      "Summary": "4 added, 0 removed, 0 modified, 0 incompatible"
+    },
+    "validated": true,
+    "warnings": [
+      "C_FIX_B_One: data.value omitted; ASCET default data will be used.",
+      "C_FIX_B_One: implementation omitted; ASCET default implementation will be used.",
+      "C_FIX_B_Two: data.value omitted; ASCET default data will be used.",
+      "C_FIX_B_Two: implementation omitted; ASCET default implementation will be used.",
+      "C_FIX_B_Three: data.value omitted; ASCET default data will be used.",
+      "C_FIX_B_Three: implementation omitted; ASCET default implementation will be used.",
+      "C_FIX_B_Four: data.value omitted; ASCET default data will be used.",
+      "C_FIX_B_Four: implementation omitted; ASCET default implementation will be used."
+    ]
+  },
+  "attemptedMutation": {
+    "action": "apply_element_spec",
+    "componentPath": "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+    "elements": [
+      {
+        "kind": "variable",
+        "modelType": "cont",
+        "name": "C_FIX_B_One",
+        "role": "standardPrimitive",
+        "scope": "local"
+      },
+      {
+        "kind": "variable",
+        "modelType": "cont",
+        "name": "C_FIX_B_Two",
+        "role": "standardPrimitive",
+        "scope": "local"
+      },
+      {
+        "kind": "variable",
+        "modelType": "cont",
+        "name": "C_FIX_B_Three",
+        "role": "standardPrimitive",
+        "scope": "local"
+      },
+      {
+        "kind": "variable",
+        "modelType": "cont",
+        "name": "C_FIX_B_Four",
+        "role": "standardPrimitive",
+        "scope": "local"
+      }
+    ],
+    "intent": "create"
+  },
+  "createdAt": "2026-08-12T05:55:38.549Z",
+  "updatedAt": "2026-08-12T05:56:02.774Z",
+  "evidence": {
+    "bridgeEntered": true,
+    "backendResponseReceived": true,
+    "mutationStarted": true
+  },
+  "outcome": {
+    "operationId": "apply_element_spec"
+  }
+}

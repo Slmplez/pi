@@ -1,0 +1,16 @@
+{
+    "resultId":  "obs-tree-live-20260808-full-database",
+    "domain":  "tree",
+    "target":  {
+
+               },
+    "itemCount":  10670,
+    "coverage":  {
+                     "status":  "complete_for_scope",
+                     "foldersVisited":  1853,
+                     "componentsScanned":  8065
+                 },
+    "truncated":  false,
+    "source":  "live",
+    "capturedAt":  "2026-08-08T06:36:10.000Z"
+}

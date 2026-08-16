@@ -1,0 +1,3 @@
+| Column 1 |
+| --- |
+| The element appears in at least one of the methods of the CT block. If the CT block is modeled in C code, the element must appear in a method in the the currently selected variant of the CT block. The element is an input or output. The included component is a CT block. (Included CT blocks are always used.) An included component contains (directly or indirectly) at least one exported element that is used. An included C code component contains at least one target/arithmetic/implementation combination with an external header that is used globally (activated option Use header global ; see Adding a Header File to the Source Module ). |

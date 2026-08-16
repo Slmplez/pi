@@ -1,0 +1,20 @@
+{
+  "generated_at": "2026-04-01T03:08:16.706709Z",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\OperationHintsEnglishUS",
+  "checked_files": 24,
+  "checked_links": 122,
+  "broken_links": [
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\OperationHintsEnglishUS\\markdown\\Operation_Using_the_Keyboard.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\OperationHintsEnglishUS\\OperationHintsEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    }
+  ]
+}

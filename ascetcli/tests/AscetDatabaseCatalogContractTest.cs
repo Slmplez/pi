@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 public static class AscetDatabaseCatalogContractTest
 {
@@ -7,6 +8,33 @@ public static class AscetDatabaseCatalogContractTest
     {
         try
         {
+            string identityRoot = Path.Combine(Path.GetTempPath(), "ascet-identity-" + Guid.NewGuid().ToString("N"));
+            string firstContainer = Path.Combine(identityRoot, "first", "Db");
+            string firstDatabase = Path.Combine(firstContainer, "AscetDb_1");
+            string secondContainer = Path.Combine(identityRoot, "second", "Db");
+            Directory.CreateDirectory(firstDatabase);
+            Directory.CreateDirectory(secondContainer);
+            try
+            {
+                AscetDatabaseRef consistentIdentity = AscetDatabaseIdentityResolver.Resolve(firstDatabase, firstContainer);
+                AssertEqual("consistent", consistentIdentity.IdentityStatus, "full database name within reported path");
+                AssertEqual(Path.GetFullPath(firstDatabase).TrimEnd('\\'), consistentIdentity.CanonicalPath, "canonical database path");
+                AssertEqual(0, consistentIdentity.IdentityIssues.Count, "consistent database identity issues");
+
+                AscetDatabaseRef mismatchedIdentity = AscetDatabaseIdentityResolver.Resolve(firstDatabase, secondContainer);
+                AssertEqual("inconsistent", mismatchedIdentity.IdentityStatus, "database name/path mismatch status");
+                AssertTrue(mismatchedIdentity.IdentityIssues.Contains("database_name_path_mismatch"), "database mismatch issue");
+                AssertEqual(Path.GetFullPath(firstDatabase).TrimEnd('\\'), mismatchedIdentity.CanonicalPath, "mismatch preserves current handle path");
+
+                AscetDatabaseRef shortNameIdentity = AscetDatabaseIdentityResolver.Resolve("AscetDb_1", firstContainer);
+                AssertEqual("consistent", shortNameIdentity.IdentityStatus, "short database name resolution");
+                AssertEqual(Path.GetFullPath(firstDatabase).TrimEnd('\\'), shortNameIdentity.CanonicalPath, "short database canonical path");
+            }
+            finally
+            {
+                if (Directory.Exists(identityRoot)) Directory.Delete(identityRoot, true);
+            }
+
             IList<DatabaseCatalogIdentity> identities = DatabaseCatalogContract.DeduplicateIdentities(
                 new DatabaseCatalogIdentity[]
                 {

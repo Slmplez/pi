@@ -1,74 +1,63 @@
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
+﻿import { resolve } from "node:path";
 import { loadExtensions } from "../packages/coding-agent/src/core/extensions/loader.ts";
-
-interface ToolResponse {
-	content: Array<{ type: string; text?: string }>;
-	details: {
-		ok?: boolean;
-		[key: string]: unknown;
-		outcome?: {
-			status: string;
-			data?: unknown;
-		};
-		data?: {
-			result?: Record<string, unknown>;
-		};
-		error?: {
-			code: string;
-			message: string;
-		};
-		artifact?: unknown;
-	};
-}
 
 type JsonRecord = Record<string, unknown>;
 type ComponentKind = "class" | "module" | "statemachine";
 
-interface AscetGetOutput {
-	delivery: "inline" | "stored";
-	items?: unknown[];
-	observation?: {
-		resultId: string;
-		domain: string;
-		format: "ndjson";
-		dataPath: string;
-		metaPath: string;
-		itemCount: number;
+interface ToolResponse {
+	content: Array<{ type: string; text?: string }>;
+	details: Record<string, unknown> & {
+		error?: { code?: string; message?: string };
+		outcome?: { status?: string; data?: unknown };
 	};
-	coverage?: unknown;
-	truncated?: boolean;
-	source?: string;
+}
+
+interface ComponentTarget {
+	path: string;
+	kind?: ComponentKind;
 }
 
 const repoRoot = resolve(process.cwd());
-// Keep the extension under test separate from the ASCET project/runtime it targets.
 const ascetCwd = resolve(process.env.ASCET_SMOKE_CWD ?? repoRoot);
 const configuredComponentPath = process.env.ASCET_SMOKE_COMPONENT;
-const configuredComponentFolderPath = configuredComponentPath
-	? configuredComponentPath.split(/[\\/]/u).slice(0, -1).join("\\")
-	: undefined;
-const treePathPrefix = process.env.ASCET_SMOKE_TREE_PREFIX ?? "PlatformLibrary\\Package";
+const configuredTreePath = process.env.ASCET_SMOKE_TREE_PREFIX;
 const preflightFolderPath = process.env.ASCET_SMOKE_PREFLIGHT_FOLDER ?? "__pi_ascet_live_smoke_preflight__";
 const extensionPath = resolve(repoRoot, ".pi/extensions/ascet/index.ts");
-const result = await loadExtensions([extensionPath], repoRoot);
+const loadResult = await loadExtensions([extensionPath], repoRoot);
 
-if (result.errors.length > 0) {
-	console.error(JSON.stringify({ ok: false, stage: "load_extension", errors: result.errors }, null, 2));
-	process.exit(1);
+if (loadResult.errors.length > 0) {
+	throw new Error(`ASCET extension load failed: ${JSON.stringify(loadResult.errors)}`);
+}
+const extension = loadResult.extensions.find((entry) => entry.path.replaceAll("\\", "/").endsWith("ascet/index.ts"));
+if (!extension) throw new Error("ASCET extension was not loaded.");
+
+function asRecord(value: unknown): JsonRecord | undefined {
+	return value !== null && typeof value === "object" && !Array.isArray(value) ? (value as JsonRecord) : undefined;
 }
 
-const extension = result.extensions.find((entry) => entry.path.replaceAll("\\", "/").endsWith("ascet/index.ts"));
-if (!extension) {
-	console.error(JSON.stringify({ ok: false, stage: "find_extension", error: "ASCET extension was not loaded" }, null, 2));
-	process.exit(1);
+function parseContent(response: ToolResponse): unknown {
+	const text = response.content.find((entry) => entry.type === "text")?.text;
+	if (text === undefined) throw new Error("ASCET tool returned no text content.");
+	try {
+		return JSON.parse(text) as unknown;
+	} catch {
+		return text;
+	}
+}
+
+function errorFrom(value: unknown): { code?: string; message?: string } | undefined {
+	const error = asRecord(asRecord(value)?.error);
+	return error
+		? {
+				code: typeof error.code === "string" ? error.code : undefined,
+				message: typeof error.message === "string" ? error.message : undefined,
+			}
+		: undefined;
 }
 
 async function executeTool(name: string, params: Record<string, unknown>): Promise<ToolResponse> {
-	const tool = extension?.tools.get(name)?.definition;
-	if (!tool) {
-		throw new Error(`Tool is not registered: ${name}`);
-	}
+	const tool = extension.tools.get(name)?.definition;
+	if (!tool) throw new Error(`Tool is not registered: ${name}`);
 	return (await tool.execute(
 		`ascet-live-smoke-${name}`,
 		params,
@@ -78,249 +67,115 @@ async function executeTool(name: string, params: Record<string, unknown>): Promi
 	)) as ToolResponse;
 }
 
-function assertToolSuccess(name: string, response: ToolResponse): void {
-	const outcomeStatus = response.details.outcome?.status;
-	const ok =
-		(response.details.ok !== false && !response.details.error && response.details.data !== undefined) ||
-		response.details.artifact !== undefined ||
-		response.details.ok === true ||
-		outcomeStatus === "ok" ||
-		outcomeStatus === "preflight";
-	if (!ok) {
-		throw new Error(`${name} failed: ${response.details.error?.code ?? "unknown"} ${response.details.error?.message ?? ""}`);
-	}
-}
-
-async function callTool(name: string, params: Record<string, unknown>): Promise<unknown> {
+async function callTool(name: string, params: Record<string, unknown>): Promise<{ payload: unknown; details: JsonRecord }> {
 	const response = await executeTool(name, params);
-	assertToolSuccess(name, response);
-	return response.details.data?.result ?? response.details.data ?? response.details.outcome?.data ?? response.details.outcome ?? response.details;
+	const payload = parseContent(response);
+	const error = response.details.error ?? errorFrom(payload);
+	if (error) throw new Error(`${name} failed: ${error.code ?? "unknown"} ${error.message ?? ""}`.trim());
+	return { payload, details: response.details };
 }
 
-async function callToolAllowingError(name: string, params: Record<string, unknown>) {
-	return (await executeTool(name, params)).details;
+function itemRecords(payload: unknown): JsonRecord[] {
+	const items = asRecord(payload)?.items;
+	return Array.isArray(items) ? items.flatMap((item) => (asRecord(item) ? [asRecord(item)!] : [])) : [];
 }
 
-function asRecord(value: unknown): JsonRecord | undefined {
-	return value !== null && typeof value === "object" && !Array.isArray(value) ? (value as JsonRecord) : undefined;
-}
-
-function getAscetGetOutput(response: ToolResponse): AscetGetOutput {
-	const text = response.content.find((entry) => entry.type === "text")?.text;
-	if (!text) {
-		throw new Error("ascet_get did not return a text observation payload.");
-	}
-	const parsed = asRecord(JSON.parse(text));
-	if (!parsed || (parsed.delivery !== "inline" && parsed.delivery !== "stored")) {
-		throw new Error(`ascet_get returned an invalid observation payload: ${text}`);
-	}
-	return parsed as AscetGetOutput;
-}
-
-async function callAscetGet(params: Record<string, unknown>): Promise<AscetGetOutput> {
-	const response = await executeTool("ascet_get", params);
-	assertToolSuccess("ascet_get", response);
-	return getAscetGetOutput(response);
-}
-
-function readObservationItems(output: AscetGetOutput): JsonRecord[] {
-	if (output.delivery === "inline") {
-		if (!Array.isArray(output.items)) {
-			throw new Error("Inline ascet_get observation did not include items.");
-		}
-		return output.items.map((item, index) => {
-			const record = asRecord(item);
-			if (!record) {
-				throw new Error(`Inline ascet_get item ${index} is not a JSON object.`);
-			}
-			return record;
-		});
-	}
-
-	const observation = output.observation;
-	if (!observation) {
-		throw new Error("Stored ascet_get observation did not include file locations.");
-	}
-	const metadata = asRecord(JSON.parse(readFileSync(observation.metaPath, "utf8")));
-	if (metadata?.resultId !== observation.resultId) {
-		throw new Error(`Observation metadata does not match result '${observation.resultId}'.`);
-	}
-	const ndjson = readFileSync(observation.dataPath, "utf8").trim();
-	if (!ndjson) {
-		return [];
-	}
-	return ndjson.split(/\r?\n/u).map((line, index) => {
-		const record = asRecord(JSON.parse(line));
-		if (!record) {
-			throw new Error(`Observation NDJSON item ${index} is not a JSON object.`);
-		}
-		return record;
-	});
-}
-
-function grepObservationItems(output: AscetGetOutput, query: string): JsonRecord[] {
-	const normalizedQuery = query.replaceAll("/", "\\").toLocaleLowerCase();
-	return readObservationItems(output).filter((item) =>
-		JSON.stringify(item).replaceAll("\\\\", "\\").toLocaleLowerCase().includes(normalizedQuery),
-	);
-}
-
-function getString(record: JsonRecord, key: string): string | undefined {
-	const value = record[key];
-	return typeof value === "string" && value.length > 0 ? value : undefined;
-}
-
-function getComponentKind(item: JsonRecord): ComponentKind | undefined {
-	const kind = getString(item, "kind");
-	return kind === "class" || kind === "module" || kind === "statemachine" ? kind : undefined;
-}
-
-function getComponentFromTree(items: readonly JsonRecord[]): { path: string; kind: ComponentKind } | undefined {
-	for (const item of items) {
-		const path = getString(item, "path");
-		const kind = getComponentKind(item);
-		if (path && kind) {
-			return { path, kind };
-		}
+function stringField(record: JsonRecord, ...keys: string[]): string | undefined {
+	for (const key of keys) {
+		const value = record[key];
+		if (typeof value === "string" && value.length > 0) return value;
 	}
 	return undefined;
 }
 
-function summarizeObservation(output: AscetGetOutput): JsonRecord {
-	if (output.delivery === "inline") {
-		return { delivery: output.delivery, itemCount: output.items?.length ?? 0 };
+function componentKind(record: JsonRecord): ComponentKind | undefined {
+	const value = stringField(record, "kind", "type", "objectKind")?.toLowerCase();
+	if (value === "class" || value === "module" || value === "statemachine") return value;
+	if (value === "state machine" || value === "state_machine") return "statemachine";
+	return undefined;
+}
+
+function componentFrom(items: readonly JsonRecord[], exactPath?: string): ComponentTarget | undefined {
+	const normalizedExact = exactPath?.replaceAll("/", "\\").toLowerCase();
+	for (const item of items) {
+		const path = stringField(item, "path", "component", "componentPath");
+		if (!path) continue;
+		if (normalizedExact && path.replaceAll("/", "\\").toLowerCase() !== normalizedExact) continue;
+		const kind = componentKind(item);
+		if (kind || normalizedExact) return { path, kind };
 	}
-	return {
-		delivery: output.delivery,
-		resultId: output.observation?.resultId,
-		dataPath: output.observation?.dataPath,
-		metaPath: output.observation?.metaPath,
-		itemCount: output.observation?.itemCount,
-	};
+	return undefined;
 }
 
-const statusTool = extension.tools.get("ascet_status")?.definition;
-if (!statusTool) {
-	throw new Error("Tool is not registered: ascet_status");
+const statusResponse = await executeTool("ascet_status", {});
+if (statusResponse.details.installationOk !== true) {
+	throw new Error(`ascet_status reported unavailable installation: ${JSON.stringify(statusResponse.details)}`);
 }
-const status = (await statusTool.execute(
-	"ascet-live-smoke-status",
-	{},
-	new AbortController().signal,
-	undefined,
-	{ cwd: ascetCwd },
-)) as ToolResponse;
-if (!status.details.installationOk) {
-	throw new Error(`ascet_status reported unavailable ASCET installation: ${JSON.stringify(status.details)}`);
-}
-
-const schedulerBefore = await callTool("ascet_scheduler_status", { format: "json" });
+const statusSummary = parseContent(statusResponse);
+const schedulerBefore = await callTool("ascet_scheduler_status", { action: "status", format: "json" });
 const capabilities = await callTool("ascet_capabilities", {
 	action: "search_actions",
 	query: "complete code",
 	limit: 3,
 });
-const tree = await callAscetGet({
-	action: "tree",
-	target: configuredComponentFolderPath ? { path: configuredComponentFolderPath } : { targetPathPrefix: treePathPrefix },
-	traversal: configuredComponentFolderPath
-		? { depth: 1, maxFolders: 20, maxComponents: 40 }
-		: { depth: 5, maxFolders: 500, maxComponents: 500 },
-	delivery: "stored",
-});
-const treeItems = readObservationItems(tree);
-const component = getComponentFromTree(
-	configuredComponentPath ? grepObservationItems(tree, configuredComponentPath) : treeItems,
-);
-if (!component) {
-	throw new Error(
-		configuredComponentPath
-			? `ascet_get.tree did not resolve configured component '${configuredComponentPath}'.`
-			: `ascet_get.tree found no Class, Module, or StateMachine below '${treePathPrefix}'. Set ASCET_SMOKE_COMPONENT to an exact path.`,
-	);
+
+const treeScopes = configuredComponentPath
+	? [configuredComponentPath.split(/[\\/]/u).slice(0, -1).join("\\")]
+	: [configuredTreePath, "DEMO", undefined];
+let treePayload: unknown;
+let selectedComponent: ComponentTarget | undefined;
+let selectedTreePath: string | undefined;
+for (const path of treeScopes) {
+	const tree = await callTool("ascet_get", { action: "tree", ...(path ? { path } : {}), depth: path ? 5 : 2 });
+	const candidate = componentFrom(itemRecords(tree.payload), configuredComponentPath);
+	if (candidate) {
+		treePayload = tree.payload;
+		selectedComponent = candidate;
+		selectedTreePath = path;
+		break;
+	}
 }
-const componentPath = component.path;
-const elements = await callAscetGet({
-	action: "elements",
-	target: { path: componentPath },
-	delivery: "stored",
-});
-const refs = await callAscetGet({
-	action: "component_refs",
-	target: { path: componentPath },
-	delivery: "stored",
-});
-const elementItems = readObservationItems(elements);
-const firstElementName = getString(elementItems[0] ?? {}, "path")?.split("::").at(-1);
-const elementMatches = firstElementName ? grepObservationItems(elements, firstElementName) : [];
-const blockDiagram = await callToolAllowingError("ascet_read", {
-	action: "read_block_diagram",
-	componentPath,
-	diagramName: "Main",
-});
-if (
-	blockDiagram.error &&
-	blockDiagram.error.code !== "ascet_block_diagram_surface_not_supported" &&
-	blockDiagram.error.code !== "diagram_not_found"
-) {
-	throw new Error(
-		`ascet_read.read_block_diagram expected ok or unsupported text ESDL surface, got: ${blockDiagram.error?.code ?? "ok"}`,
-	);
+if (!selectedComponent) {
+	throw new Error("ascet_get.tree found no Class, Module, or StateMachine. Set ASCET_SMOKE_COMPONENT to an exact path.");
 }
-const editable = await callTool("ascet_edit", { mode: "check", componentPath });
+
+const componentName = selectedComponent.path.split(/[\\/]/u).at(-1) ?? selectedComponent.path;
+const search = await callTool("ascet_search", { action: "search", mode: "comp", q: componentName, limit: 20 });
+const summary = await callTool("ascet_read", { action: "read", componentPath: selectedComponent.path });
+const editable = await callTool("ascet_edit", { mode: "check", componentPath: selectedComponent.path });
 const diff = await callTool("ascet_diff", {
 	action: "diff_component_snapshot",
-	leftPath: componentPath,
-	rightPath: componentPath,
+	leftPath: selectedComponent.path,
+	rightPath: selectedComponent.path,
 	changesOnly: true,
 	timeoutMs: 300_000,
 });
-const summaryReadback = await callTool("ascet_read", {
-	action: "read",
-	componentPath,
-});
-const writePreflight = await callTool("ascet_edit", {
+const writePreview = await callTool("ascet_edit", {
 	action: "create_folder",
 	folderPath: preflightFolderPath,
+	intent: "preview",
 });
-const schedulerAfter = await callTool("ascet_scheduler_status", { format: "json" });
-const schedulerRecover = await callTool("ascet_scheduler_status", { action: "recover", format: "json" });
+const schedulerAfter = await callTool("ascet_scheduler_status", { action: "status", format: "json" });
 
 console.log(
 	JSON.stringify(
 		{
 			ok: true,
+			readOnly: true,
 			ascetCwd,
-			tools: {
-				ascet_status: { installationOk: status.details.installationOk },
-				ascet_scheduler_status_before: schedulerBefore,
-				ascet_capabilities: capabilities,
-				ascet_get_tree: {
-					observation: summarizeObservation(tree),
-					selectedComponent: component,
-				},
-				ascet_get_elements: {
-					observation: summarizeObservation(elements),
-					piGrepRead: { firstElementName, matches: elementMatches.length },
-				},
-				ascet_get_component_refs: {
-					observation: summarizeObservation(refs),
-					piRead: { itemCount: readObservationItems(refs).length },
-				},
-				ascet_read_block_diagram: {
-					ok: !blockDiagram.error,
-					error: blockDiagram.error,
-				},
-				ascet_edit_check: { editable },
-				ascet_diff: { diff },
-				ascet_read_summary: { summaryReadback },
-				ascet_edit_preflight: {
-					folderPath: preflightFolderPath,
-					status: (writePreflight as { status?: unknown }).status,
-					nextStep: (writePreflight as { nextStep?: unknown }).nextStep,
-				},
-				ascet_scheduler_status_after: schedulerAfter,
-				ascet_scheduler_recover: schedulerRecover,
+			selectedTreePath,
+			selectedComponent,
+			checks: {
+				status: { installationOk: true, summary: statusSummary },
+				schedulerBefore: schedulerBefore.payload,
+				capabilities: capabilities.payload,
+				tree: treePayload,
+				search: search.payload,
+				readSummary: summary.payload,
+				editability: editable.payload,
+				diffSelf: diff.payload,
+				writePreview: writePreview.payload,
+				schedulerAfter: schedulerAfter.payload,
 			},
 		},
 		null,

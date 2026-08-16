@@ -1,10 +1,13 @@
 import type { Api, AssistantMessageEventStream, Context, Model, SimpleStreamOptions } from "@earendil-works/pi-ai";
 import type { OAuthCredentials, OAuthLoginCallbacks } from "@earendil-works/pi-ai/oauth";
 import type { TSchema } from "typebox";
+import { Value } from "typebox/value";
 import type { AscetCliExecutionResult, AscetCliRequest } from "../cli.ts";
+import type { AscetPermissionSnapshot } from "../permissions/types.ts";
 import { renderAscetToolCall, renderAscetToolResult } from "../rendering.ts";
 import type { AscetScheduler } from "../scheduler/scheduler.ts";
 import { createInvalidParametersToolResult } from "../tools/_shared/validation.ts";
+import { getAscetActionContract } from "../tools/actions/contract-registry.ts";
 import type { ActionActivationContext } from "../tools/actions/gates.ts";
 import {
 	AscetActionUnavailableError,
@@ -96,9 +99,10 @@ export interface AscetExtensionAPI {
 						setStatus?(key: string, text: string | undefined): void;
 					};
 				},
-			) => void;
+			) => Promise<void> | void;
 		},
 	): void;
+	appendEntry?(customType: string, data?: unknown): void;
 	registerProvider?(name: string, config: AscetProviderConfig): void;
 	applySettingsDefaults?(defaults: AscetSettingsDefaults): void;
 	on?(
@@ -139,8 +143,10 @@ export interface AscetExtensionAPI {
 				mode?: string;
 				sessionManager?: {
 					getCwd(): string;
+					getEntries(): Array<{ type: string; customType?: string; data?: unknown }>;
 				};
 				ui?: {
+					notify?(message: string, level?: "info" | "warning" | "error"): void;
 					setStatus?(key: string, text: string | undefined): void;
 					theme?: {
 						fg?(color: string, text: string): string;
@@ -153,6 +159,7 @@ export interface AscetExtensionAPI {
 
 export interface AscetToolContext {
 	cwd: string;
+	ascetPermission?: AscetPermissionSnapshot;
 	agentId?: string;
 	sessionId?: string;
 	env?: Record<string, string | undefined>;
@@ -185,6 +192,35 @@ function getActionActivationContext(value: unknown): ActionActivationContext {
 	return context as ActionActivationContext;
 }
 
+function agentContentPayload(result: unknown): unknown {
+	if (result === null || typeof result !== "object" || Array.isArray(result)) return undefined;
+	const content = (result as { content?: unknown }).content;
+	if (!Array.isArray(content)) return undefined;
+	const textPart = content.find(
+		(part): part is { type: "text"; text: string } =>
+			part !== null &&
+			typeof part === "object" &&
+			!Array.isArray(part) &&
+			(part as { type?: unknown }).type === "text" &&
+			typeof (part as { text?: unknown }).text === "string",
+	);
+	if (!textPart) return undefined;
+	try {
+		return JSON.parse(textPart.text) as unknown;
+	} catch {
+		return textPart.text;
+	}
+}
+
+export function assertAscetActionResult(tool: string, action: string, result: unknown): void {
+	const contract = getAscetActionContract(tool, action);
+	if (!contract) return;
+	const payload = agentContentPayload(result);
+	if (payload === undefined || !Value.Check(contract.result, payload)) {
+		throw new Error(`ASCET action result violates Contract: ${contract.id}`);
+	}
+}
+
 export function defineSequentialAscetTool<T extends AscetRenderableTool>(
 	tool: T,
 ): Omit<T, "executionMode" | "renderCall" | "renderResult"> & {
@@ -212,7 +248,9 @@ export function defineSequentialAscetTool<T extends AscetRenderableTool>(
 					}
 					throw error;
 				}
-				return tool.execute!(...args);
+				const result = await tool.execute!(...args);
+				assertAscetActionResult(tool.name, extractToolAction(tool.name, args[1]), result);
+				return result;
 			}
 		: undefined;
 	return {

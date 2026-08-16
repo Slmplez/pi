@@ -1,0 +1,77 @@
+{
+  "stage": "setup-failure-editability",
+  "startedAt": "2026-08-15T02:20:30.596Z",
+  "finishedAt": "2026-08-15T02:20:31.072Z",
+  "request": {
+    "toolName": "ascet_edit",
+    "params": {
+      "mode": "check",
+      "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"editable\": false\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "ok",
+        "data": false,
+        "warnings": []
+      },
+      "raw": {
+        "ok": true,
+        "data": false,
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "component_editable_check",
+            "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+            "--json"
+          ],
+          "timeoutMs": 60000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"editable\":false},\"error\":null,\"meta\":{\"bridgePid\":28140,\"bridgeGeneration\":\"e1aa6bb3-47f9-45c7-a477-12342bbefca2\",\"durationMs\":199,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"component_editable_check\"}}\r\n",
+        "stderr": "",
+        "exitCode": 0,
+        "timedOut": false,
+        "aborted": false,
+        "operationId": "component_editable_check"
+      },
+      "tool": "ascet_edit",
+      "action": "check",
+      "mode": "check",
+      "value": false,
+      "command": {
+        "logicalCommandId": "AscetComponentEditableCheck",
+        "backendCommandId": "AscetComponentEditableCheck",
+        "operation": "component_editable_check"
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "component_editable_check",
+            "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+            "--json"
+          ],
+          "timeoutMs": 60000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 0,
+        "timedOut": false,
+        "stderr": ""
+      }
+    }
+  }
+}

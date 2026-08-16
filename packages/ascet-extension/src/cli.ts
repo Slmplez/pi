@@ -75,6 +75,8 @@ export interface RunAscetCliJsonOptions {
 	/** Scheduler resource label. Live ASCET operations should use ascet.toolapi.global. */
 	resourceKey?: string;
 	queueTimeoutMs?: number;
+	processName?: string;
+	responseProtocol?: "bridge" | "raw-json";
 	onLifecycle?: (event: AscetCliLifecycleEvent) => void;
 }
 
@@ -510,7 +512,7 @@ async function executeScheduledAscetCli(
 					agentId,
 					commandId,
 					toolName,
-					processName: "AscetBridge.exe",
+					processName: options.processName ?? "AscetBridge.exe",
 				},
 				{
 					env: options.env,
@@ -544,8 +546,12 @@ async function executeScheduledAscetCli(
 					throw new AscetCliProcessError(execution, "ascet_cli_timeout", "ASCET CLI execution timed out.");
 				}
 				const rawParsed = parseJson(execution.stdout);
-				execution.validResponseReceived = rawParsed.ok && isBridgeResponseEnvelope(rawParsed.data);
-				const parsed = requireBridgeResponseEnvelope(rawParsed, options.executeCli === undefined);
+				execution.validResponseReceived =
+					rawParsed.ok && (options.responseProtocol === "raw-json" || isBridgeResponseEnvelope(rawParsed.data));
+				const parsed = requireBridgeResponseEnvelope(
+					rawParsed,
+					options.executeCli === undefined && options.responseProtocol !== "raw-json",
+				);
 				const structuredError = parsed.ok ? getCliFailureEnvelopeError(parsed.data) : undefined;
 				if (!acceptedExitCodes.includes(execution.exitCode ?? Number.NaN)) {
 					throw createAscetCliProcessError(
@@ -984,8 +990,12 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 		};
 	}
 	const rawParsed = parseJson(execution.stdout);
-	execution.validResponseReceived = rawParsed.ok && isBridgeResponseEnvelope(rawParsed.data);
-	const parsed = requireBridgeResponseEnvelope(rawParsed, options.executeCli === undefined);
+	execution.validResponseReceived =
+		rawParsed.ok && (options.responseProtocol === "raw-json" || isBridgeResponseEnvelope(rawParsed.data));
+	const parsed = requireBridgeResponseEnvelope(
+		rawParsed,
+		options.executeCli === undefined && options.responseProtocol !== "raw-json",
+	);
 	const aborted = options.signal?.aborted === true || execution.aborted === true;
 	const acceptedExitCodes = options.acceptedExitCodes ?? [0];
 	const processOk = acceptedExitCodes.includes(execution.exitCode ?? Number.NaN) && !execution.timedOut && !aborted;

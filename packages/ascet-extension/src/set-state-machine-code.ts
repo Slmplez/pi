@@ -67,7 +67,7 @@ export const ascetSetStateMachineCodeParameters = Type.Object({
 	priority: Type.Optional(Type.Number()),
 	methodName: Type.Optional(Type.String()),
 	codeFile: Type.Optional(Type.String({ description: "Path to replacement code file." })),
-	executeWrite: Type.Optional(Type.Boolean({ description: "When true, PI still requires interactive confirmation." })),
+	intent: Type.Union([Type.Literal("preview"), Type.Literal("apply")]),
 });
 
 export function buildSetStateMachineCodeArgs(params: AscetSetStateMachineCodeParams): string[] {

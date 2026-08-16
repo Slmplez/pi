@@ -1,7 +1,6 @@
 import { existsSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { resolve } from "node:path";
-import { Type } from "typebox";
 import type { AscetCliExecutionResult, AscetCliRequest } from "../cli.ts";
 import {
 	type AscetMutationGuardCheck,
@@ -20,7 +19,6 @@ import { clearStaleAscetCliLock } from "../scheduler/cli-lock.ts";
 import { createAscetSchedulerStatusReport } from "../scheduler/status.ts";
 import { type AscetRuntimeStatusReport, createAscetRuntimeStatusReport } from "../status-runtime.ts";
 import { toToolSuccessPayload } from "../tool-response-contract.ts";
-import { openAiObjectUnionSchema } from "./_shared/openai-schema.ts";
 
 export type AscetRecoverParams =
 	| { action: "status" }
@@ -41,7 +39,7 @@ export type AscetRecoverParams =
 			databaseFingerprint: string;
 			targetOid: string;
 			expectedGeneration: number;
-			executeWrite: true;
+			intent: "apply";
 	  };
 
 export interface RunAscetRecoverOptions {
@@ -79,46 +77,6 @@ export interface AscetRecoverResult {
 		reconciliation?: AscetMutationReconcileWriteResult | AscetMutationAcceptCurrentResult;
 	};
 }
-
-export const ascetRecoverParameters = openAiObjectUnionSchema<AscetRecoverParams>([
-	Type.Object(
-		{
-			action: Type.Union([
-				Type.Literal("status"),
-				Type.Literal("clear_extension_temp"),
-				Type.Literal("scheduler_status"),
-				Type.Literal("scheduler_recover"),
-				Type.Literal("clear_stale_cli_lock"),
-			]),
-		},
-		{ additionalProperties: false },
-	),
-	Type.Object(
-		{
-			action: Type.Literal("reconcile_mutation"),
-			mode: Type.Literal("inspect"),
-			databaseFingerprint: Type.String({ minLength: 1 }),
-			targetOid: Type.String({ minLength: 1 }),
-			expectedGeneration: Type.Integer({ minimum: 0 }),
-		},
-		{ additionalProperties: false },
-	),
-	Type.Object(
-		{
-			action: Type.Literal("reconcile_mutation"),
-			mode: Type.Union([
-				Type.Literal("rollback_to_before"),
-				Type.Literal("cleanup_created"),
-				Type.Literal("accept_current"),
-			]),
-			databaseFingerprint: Type.String({ minLength: 1 }),
-			targetOid: Type.String({ minLength: 1 }),
-			expectedGeneration: Type.Integer({ minimum: 1 }),
-			executeWrite: Type.Literal(true),
-		},
-		{ additionalProperties: false },
-	),
-]);
 
 function getExtensionTempRoot(options: RunAscetRecoverOptions): string {
 	return options.tempRoot ?? resolve(tmpdir(), "pi-ascet-extension");

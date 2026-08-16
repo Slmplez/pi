@@ -1,0 +1,134 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"changed\": {\n    \"operationName\": \"create_component\",\n    \"sequenceNumber\": 1,\n    \"writeSucceeded\": true,\n    \"summary\": \"Created enumeration PI_LIVE_FIX_20260811_13947C09\\\\EnumerationUnderTest.\",\n    \"payload\": {\n      \"component\": \"PI_LIVE_FIX_20260811_13947C09/EnumerationUnderTest\",\n      \"folderPath\": \"PI_LIVE_FIX_20260811_13947C09\",\n      \"componentName\": \"EnumerationUnderTest\",\n      \"kind\": \"enumeration\",\n      \"language\": \"Unknown\",\n      \"created\": true,\n      \"alreadyExisted\": false,\n      \"verifyReadbackRequested\": true,\n      \"rollbackOnFailureRequested\": false,\n      \"readbackVerified\": true,\n      \"summary\": \"Created enumeration PI_LIVE_FIX_20260811_13947C09\\\\EnumerationUnderTest.\",\n      \"expectedDefaultScaffold\": {\n        \"verified\": false\n      }\n    }\n  },\n  \"verification\": {\n    \"mode\": \"automatic_readback\",\n    \"source\": \"write_command\",\n    \"required\": true,\n    \"requested\": true,\n    \"verified\": true,\n    \"status\": \"passed\"\n  }\n}"
+    }
+  ],
+  "details": {
+    "outcome": {
+      "status": "ok",
+      "verified": true,
+      "data": {
+        "changed": {
+          "operationName": "create_component",
+          "sequenceNumber": 1,
+          "writeSucceeded": true,
+          "summary": "Created enumeration PI_LIVE_FIX_20260811_13947C09\\EnumerationUnderTest.",
+          "payload": {
+            "componentPath": "PI_LIVE_FIX_20260811_13947C09\\EnumerationUnderTest",
+            "folderPath": "PI_LIVE_FIX_20260811_13947C09",
+            "componentName": "EnumerationUnderTest",
+            "kind": "enumeration",
+            "languageKind": "Unknown",
+            "created": true,
+            "alreadyExisted": false,
+            "verifyReadbackRequested": true,
+            "rollbackOnFailureRequested": false,
+            "readbackVerified": true,
+            "summary": "Created enumeration PI_LIVE_FIX_20260811_13947C09\\EnumerationUnderTest.",
+            "expectedDefaultScaffold": {
+              "verified": false,
+              "generatedItems": [],
+              "defaultEntryMethod": ""
+            }
+          }
+        },
+        "verification": {
+          "mode": "automatic_readback",
+          "source": "write_command",
+          "required": true,
+          "requested": true,
+          "verified": true,
+          "status": "passed"
+        },
+        "observations": {
+          "invalidated": []
+        }
+      },
+      "warnings": []
+    },
+    "raw": {
+      "ok": true,
+      "data": {
+        "type": "response",
+        "protocolVersion": 1,
+        "ok": true,
+        "result": {
+          "operationName": "create_component",
+          "sequenceNumber": 1,
+          "writeSucceeded": true,
+          "summary": "Created enumeration PI_LIVE_FIX_20260811_13947C09\\EnumerationUnderTest.",
+          "payload": {
+            "componentPath": "PI_LIVE_FIX_20260811_13947C09\\EnumerationUnderTest",
+            "folderPath": "PI_LIVE_FIX_20260811_13947C09",
+            "componentName": "EnumerationUnderTest",
+            "kind": "enumeration",
+            "languageKind": "Unknown",
+            "created": true,
+            "alreadyExisted": false,
+            "verifyReadbackRequested": true,
+            "rollbackOnFailureRequested": false,
+            "readbackVerified": true,
+            "summary": "Created enumeration PI_LIVE_FIX_20260811_13947C09\\EnumerationUnderTest.",
+            "expectedDefaultScaffold": {
+              "verified": false,
+              "generatedItems": [],
+              "defaultEntryMethod": ""
+            }
+          },
+          "verification": {
+            "requested": true,
+            "attempted": true,
+            "succeeded": true,
+            "summary": "component_exists",
+            "details": {}
+          }
+        },
+        "error": null,
+        "meta": {
+          "bridgePid": 12620,
+          "bridgeGeneration": "fbd18b15-c285-4cc5-a227-4da3dd0cbe8d",
+          "durationMs": 445,
+          "sessionPolicy": "fresh_session",
+          "mutationStarted": true,
+          "mode": "exec",
+          "operation": "create_component"
+        }
+      },
+      "request": {
+        "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+        "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+        "args": [
+          "exec",
+          "create_component",
+          "PI_LIVE_FIX_20260811_13947C09\\EnumerationUnderTest",
+          "--kind",
+          "enumeration",
+          "--verify-readback",
+          "--json"
+        ],
+        "timeoutMs": 180000,
+        "jobKind": "write",
+        "mutatesDatabase": true
+      },
+      "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"operationName\":\"create_component\",\"sequenceNumber\":1,\"writeSucceeded\":true,\"summary\":\"Created enumeration PI_LIVE_FIX_20260811_13947C09\\\\EnumerationUnderTest.\",\"payload\":{\"componentPath\":\"PI_LIVE_FIX_20260811_13947C09\\\\EnumerationUnderTest\",\"folderPath\":\"PI_LIVE_FIX_20260811_13947C09\",\"componentName\":\"EnumerationUnderTest\",\"kind\":\"enumeration\",\"languageKind\":\"Unknown\",\"created\":true,\"alreadyExisted\":false,\"verifyReadbackRequested\":true,\"rollbackOnFailureRequested\":false,\"readbackVerified\":true,\"summary\":\"Created enumeration PI_LIVE_FIX_20260811_13947C09\\\\EnumerationUnderTest.\",\"expectedDefaultScaffold\":{\"verified\":false,\"generatedItems\":[],\"defaultEntryMethod\":\"\"}},\"verification\":{\"requested\":true,\"attempted\":true,\"succeeded\":true,\"summary\":\"component_exists\",\"details\":{}}},\"error\":null,\"meta\":{\"bridgePid\":12620,\"bridgeGeneration\":\"fbd18b15-c285-4cc5-a227-4da3dd0cbe8d\",\"durationMs\":445,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":true,\"mode\":\"exec\",\"operation\":\"create_component\"}}\r\n",
+      "stderr": "",
+      "exitCode": 0,
+      "timedOut": false,
+      "aborted": false,
+      "operationId": "create_component"
+    },
+    "observations": {
+      "invalidated": []
+    },
+    "verification": {
+      "mode": "automatic_readback",
+      "source": "write_command",
+      "required": true,
+      "requested": true,
+      "verified": true,
+      "status": "passed"
+    }
+  }
+}

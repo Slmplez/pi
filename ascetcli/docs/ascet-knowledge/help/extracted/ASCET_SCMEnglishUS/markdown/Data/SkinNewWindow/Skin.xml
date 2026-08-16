@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CatapultSkin Version="1" Title="ASCET-SCM" AutoSyncTOC="true" Tabs="TOC,Index,Search,Favorites,Glossary" Top="5px" Left="5px" Width="507px" Height="379px" DefaultTab="TOC">
+    <HtmlHelpOptions ShowMenuBar="false" TopmostWindowStyle="false" AutoShowNavigationPane="false" EnableButtonCaptions="false" AdvancedSearch="true" NavigationPaneWidth="0" Buttons="Hide,Back,Forward,Options,Print" HideNavigationOnStartup="false" />
+    <Toc LinesBetweenItems="true" LinesFromRoot="false" SingleClick="true" PlusMinusSquares="true" AlwaysShowSelection="false" UseFolderIcons="false" ImageListWidth="16" BinaryStorage="false" />
+    <Stylesheet Link="Stylesheet.xml" />
+</CatapultSkin>

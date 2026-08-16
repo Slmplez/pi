@@ -1,0 +1,12 @@
+NAME=AUTOSAR
+Automotive Open System Architecture; see http://www.autosar.org/
+NAME=Pport
+Provided port; used by an SWC to provide data or services to other SWC. A Pport is implemented either as sender port or as server port.
+NAME=Rport
+Required port; used by an SWC to require data or services from other SWC. An Rport is implemented either as receiver port or as client port.
+NAME=RTE
+AUTOSAR runtime environment; provides the interface between software components, basic software, and operating systems.
+NAME=runnable
+Runnable entity; a piece of code in an SWC that is triggered by the RTE at runtime. It corresponds largely to the processes known in ASCET.
+NAME=SWC
+AUTOSAR software component

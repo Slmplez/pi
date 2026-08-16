@@ -1,0 +1,146 @@
+{
+  "generated_at": "2026-04-01T03:08:10.092451Z",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS",
+  "checked_files": 121,
+  "checked_links": 1217,
+  "broken_links": [
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\markdown\\IIO_APIfunctionsERCOSEK.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\markdown\\IIO_ConfigureES910.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\markdown\\IIO_ConfigureRTPROPC_ES581.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\markdown\\IIO_Examples_Targets_in_HWselectionWindow.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\markdown\\IIO_NVRAM_HardwareSupport.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\markdown\\IIO_Perform_Transfer.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/int_safetyinformation.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/int_safetyadvicegeneral.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/ExperimentationEnglishUS.chm::/EE_Run_BackAnimationExperiment.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/ComponentManagerEnglishUS.chm::/CM_Hardware_Options.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/int_safetyinformation.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/int_safetyadvicegeneral.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/ComponentManagerEnglishUS.chm::/CM_Hardware_Options.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/ComponentManagerEnglishUS.chm::/CM_Hardware_Options.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/ComponentManagerEnglishUS.chm::/CM_Hardware_Options.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/ExperimentationEnglishUS.chm::/EE_BackAnimationExperimentWindow.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/ExperimentationEnglishUS.chm::/EE_StartStop_BackAnimationExperiment.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\INTECRIOConnectivityRPEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\INTECRIOConnectivityRPEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\INTECRIOConnectivityRPEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\INTECRIOConnectivityRPEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\INTECRIOConnectivityRPEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\INTECRIOConnectivityRPEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    }
+  ]
+}

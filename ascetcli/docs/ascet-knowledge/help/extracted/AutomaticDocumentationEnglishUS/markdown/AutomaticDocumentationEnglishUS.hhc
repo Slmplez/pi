@@ -1,0 +1,239 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="toc">
+  <param name="Image Width" value="16">
+  <param name="Window Styles" value="0x800427">
+  <param name="ExWindow Styles" value="0x100">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Automatic Documentation">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Overview">
+      <param name="Local" value="AD_Overview.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Basics">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Generating Documentation">
+        <param name="Local" value="generating_documentation.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Documentation Output Formats">
+        <param name="Local" value="docu_file_output_formats.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="ASCII Format">
+          <param name="Local" value="ascii_format.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="HTML Format">
+          <param name="Local" value="html_format.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Postscript Format">
+          <param name="Local" value="postscript_format.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="RTF Format">
+          <param name="Local" value="rtf_format.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Options for Element Types">
+        <param name="Local" value="Options_for_Element_Types.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Views">
+        <param name="Local" value="AD_views.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Notes">
+        <param name="Local" value="AD_notes.htm">
+      </object>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Instructions">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Setting the Options for Documentation Generation">
+        <param name="Local" value="set_options_docu_generation.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Selecting the Items for Generating Documentation">
+        <param name="Local" value="select_items_gen_docu.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Providing a Path to LaTeX">
+        <param name="Local" value="AD_ProvidePathLaTeX.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Changing the Selection">
+        <param name="Local" value="change_selection.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Generating Documentation for a Folder or Database/Workspace Items">
+        <param name="Local" value="generate_docu_folder_database.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Storing the Documentation Contents to a File">
+        <param name="Local" value="store_docu_contents.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Viewing the Generated Documentation">
+        <param name="Local" value="view_generated_docu.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Working on Views">
+        <param name="Local" value="AD_Working_on_Views.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Creating and Managing Views">
+          <param name="Local" value="AD_create_docu_views.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing a View">
+          <param name="Local" value="determine_content_docu_file.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Exporting Views">
+          <param name="Local" value="Exporting_Views.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Example: View Export File">
+          <param name="Local" value="AD_ExampleViewExportFile.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Importing Views">
+          <param name="Local" value="Importing_Views.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Selecting a Default View">
+          <param name="Local" value="select_default_view.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Changing the View Display of a Diagram">
+          <param name="Local" value="change_view_display_diagram.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Making Global Settings for Element Groups">
+          <param name="Local" value="Global_Settings_Elem_Grps.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing the Views of a Diagram Item">
+          <param name="Local" value="AD_EditView_of_DiagramItem.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Creating and Using a Default View Configuration">
+          <param name="Local" value="AD_CreateUseDefaultViewConfiguration.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Working on Notes">
+        <param name="Local" value="AD_Working_on_Notes.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Creating a Note">
+          <param name="Local" value="create_note.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Creating a Text Segment">
+          <param name="Local" value="create_text_segment.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing a Text Segment">
+          <param name="Local" value="edit_text_segment.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Assigning a Text Segment to a View">
+          <param name="Local" value="assign_text_segment.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Deassigning a View">
+          <param name="Local" value="deassign_view.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Viewing Text Segment Assignments">
+          <param name="Local" value="view_text_segment_assignments.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Installing MiKTeX">
+        <param name="Local" value="AD_InstallMiKTeX.htm">
+      </object>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Reference to User Interface">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Documentation Contents Window">
+        <param name="Local" value="AD_Documentation_Contents_Window.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Document Menu">
+          <param name="Local" value="AD_Document_Menu.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="ASCET Document Contents Window">
+        <param name="Local" value="AD_ASCET_DocContents_Window.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Documentation Tab">
+          <param name="Local" value="AD_Documentation_Tab.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="BDE Tab">
+          <param name="Local" value="AD_BDE_Tab.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Elements Tab">
+          <param name="Local" value="AD_Elements_Tab.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Notes Editor">
+        <param name="Local" value="AD_NotesEditorWindow.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Views Menu (Notes Editor)">
+          <param name="Local" value="AD_ViewsMenu_NotesEditor.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Text Segments Menu">
+          <param name="Local" value="AD_TextSegmentsMenu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Edit Menu (Notes Editor)">
+          <param name="Local" value="AD_EditMenu_NotesEditor.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Element Properties Dialog Window">
+        <param name="Local" value="AD_Element_Properties_Window.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Views Window">
+        <param name="Local" value="AD_Views_Window.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Views Window (Graphical Editors)">
+        <param name="Local" value="AD_ViewsWindow_GraphicalEditors.htm">
+      </object>
+      </ul>
+    </ul>
+</ul>
+</html>

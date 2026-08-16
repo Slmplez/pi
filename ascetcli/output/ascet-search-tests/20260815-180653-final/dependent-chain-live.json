@@ -1,0 +1,76 @@
+{
+  "read": {
+    "found": true,
+    "chain": {
+      "local": {
+        "componentPath": "CN_Libary\\Package\\LDM\\ADC\\Private\\ADC_VLCDriveOffAndStandstillPostCalc",
+        "element": "C_ACC_vRollOutReq"
+      },
+      "imported": {
+        "componentPath": "CN_Libary\\Package\\LDM\\ADC\\Private\\ADC_VLCDriveOffAndStandstillPostCalc",
+        "element": "P_ACC_vRollOutReq"
+      },
+      "exported": {
+        "componentPath": "PlatformLibrary\\Package\\VLC_VehicleLongitudinalControl\\VLC_ACC\\parameter\\private\\VLC_ACC_StandStillParameter",
+        "element": "P_ACC_vRollOutReq"
+      }
+    }
+  },
+  "readDetails": {
+    "ok": true
+  },
+  "preview": {
+    "changed": false,
+    "error": {
+      "code": "ascet_edit_invalid_parameter",
+      "message": "dependencyFormals is only valid with bindingPolicy=autoExactName."
+    }
+  },
+  "previewDetails": {
+    "edit": {
+      "outcome": {
+        "status": "error",
+        "error": {
+          "code": "ascet_edit_invalid_parameter",
+          "message": "dependencyFormals is only valid with bindingPolicy=autoExactName."
+        }
+      },
+      "error": {
+        "code": "ascet_edit_invalid_parameter",
+        "message": "dependencyFormals is only valid with bindingPolicy=autoExactName."
+      },
+      "mutationResult": {
+        "status": "error",
+        "permission": {
+          "mode": "default",
+          "decision": "not_evaluated"
+        },
+        "preflight": {
+          "status": "failed"
+        },
+        "editability": {
+          "status": "unknown"
+        },
+        "mutation": {
+          "status": "not_started"
+        },
+        "verification": {
+          "status": "not_applicable"
+        },
+        "error": {
+          "code": "ascet_edit_invalid_parameter",
+          "message": "dependencyFormals is only valid with bindingPolicy=autoExactName."
+        },
+        "bridge": {
+          "beforeBridge": false,
+          "bridgeEntered": false,
+          "backendResponseReceived": false
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      }
+    }
+  }
+}

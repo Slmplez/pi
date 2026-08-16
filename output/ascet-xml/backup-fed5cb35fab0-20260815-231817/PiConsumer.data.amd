@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ComponentData toolVersion="V6.1.5_2.2.0" schemaVersion="6.1.0.0">
+	<DataSet name="PiConsumer" OID="_040g00001g001qg7107gc7919031e" default="false" classConfig="true">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-15T15:18:18" timeStampCounter="961"/>
+	</DataSet>
+	<DataSet name="Data" OID="_040g00001g001qg7107gc791701he" default="true" classConfig="false">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-15T15:18:17" timeStampCounter="960"/>
+		<DataEntry elementName="C_PI_ChainTest_20260815230930237" elementOID="_040g00001g001qg7107gc7a5d85he">
+			<DataVariant name="default">
+				<Dependency>
+					<Parameter formalName="P_PI_ChainTest_20260815230930237" formalOID="_040g0h48bncf2kctj18ce2017hgnn" valueName="P_PI_ChainTest_20260815230930237" valueOID="_040g00001g001qg7107gc7a4rk51e"/>
+				</Dependency>
+			</DataVariant>
+		</DataEntry>
+		<DataEntry elementName="C_PI_ConcurrentA_20260815230930237" elementOID="_040g00001g001qg7107gc8d2t15he">
+			<DataVariant name="default">
+				<Dependency>
+					<Parameter formalName="P_PI_ConcurrentA_20260815230930237" formalOID="_040g0vomsh27tpag5bl0hl062483g" valueName="P_PI_ConcurrentA_20260815230930237" valueOID="_040g00001g001qg7107gc8d0at51e"/>
+				</Dependency>
+			</DataVariant>
+		</DataEntry>
+		<DataEntry elementName="C_PI_ConcurrentB_20260815230930237" elementOID="_040g00001g001qg7107gc8dou1ihe">
+			<DataVariant name="default">
+				<Dependency>
+					<Parameter formalName="P_PI_ConcurrentB_20260815230930237" formalOID="_040g01hkoa42nehbi0136stalim32" valueName="P_PI_ConcurrentB_20260815230930237" valueOID="_040g00001g001qg7107gc8dlsdi1e"/>
+				</Dependency>
+			</DataVariant>
+		</DataEntry>
+		<DataEntry elementName="C_PI_ConcurrentSame_20260815230930237" elementOID="_040g00001g001qg7107gc8adocqhe">
+			<DataVariant name="default">
+				<Dependency>
+					<Parameter formalName="P_PI_ConcurrentSame_20260815230930237" formalOID="_040g010qhhu2u25pac0hs4q7qjt21" valueName="P_PI_ConcurrentSame_20260815230930237" valueOID="_040g00001g001qg7107gc8abpsq1e"/>
+				</Dependency>
+			</DataVariant>
+		</DataEntry>
+		<DataEntry elementName="C_PI_Partial_20260815230930237" elementOID="_040g00001g001qg7107gc87brghhe">
+			<DataVariant name="default">
+				<Dependency>
+					<Parameter formalName="P_PI_Partial_20260815230930237" formalOID="_040g029200kap0dq436681iteak75" valueName="P_PI_Partial_20260815230930237" valueOID="_040g00001g001qg7107gc87a8oh1e"/>
+				</Dependency>
+			</DataVariant>
+		</DataEntry>
+		<DataEntry elementName="C_PI_Rollback_20260815230930237" elementOID="_040g00001g001qg7107gc8fbr21he">
+			<DataVariant name="default">
+				<ScalarType>
+					<Numeric value="0.0"/>
+				</ScalarType>
+			</DataVariant>
+		</DataEntry>
+		<DataEntry elementName="C_PI_SetOnly_20260815230930237" elementOID="_040g00001g001qg7107gc7s0s8ahe">
+			<DataVariant name="default">
+				<Dependency>
+					<Parameter formalName="P_PI_SetOnly_20260815230930237" formalOID="_040g0h725rr4pt30bp6g375p8c1fs" valueName="P_PI_SetOnly_20260815230930237" valueOID="_040g00001g001qg7107gc7s0iga1e"/>
+				</Dependency>
+			</DataVariant>
+		</DataEntry>
+	</DataSet>
+	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+		<SignedInfo>
+			<CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+			<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+			<Reference>
+				<Transforms>
+					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+				</Transforms>
+				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+				<DigestValue>F9QynszfEtfyFPoPSwvuKATttuA=</DigestValue>
+			</Reference>
+		</SignedInfo>
+		<SignatureValue>c334P9ae2voKgs8m8DrSYnKlVoHPmHLo1OC7P7MDG8iC6v32Rd7OXbs8h1K3ODOy
+ssUyOOuZJxJYwuQjmB/+HKmRTQe3btym0gYL0eo3BTDm0/jOh6L68ant3B4mHrAP
+SZyvQuJ9fXoH7gfGRbVf3yL0hISkAJc8XjrpkdhQsL9ppava/mbs+cSSH84lVdkf
+CG/OF5IayIhBxDW44+n2ZiQ5++TJlqD4+vaOlafIdrHApWJKwyIbkK8I5DGEuJSK
+wJsKVYDu6fME9p0yW9SDtxTsmpPo24+xkdno6b1Cvm9Q9LdAfTtsEdBwn28BPXiY
+OJYFuzPeRHk92kBcDhG3Dw==</SignatureValue>
+		<KeyInfo>
+			<KeyName>Etas Ascet Verification</KeyName>
+		</KeyInfo>
+	</Signature>
+</ComponentData>

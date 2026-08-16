@@ -1,0 +1,130 @@
+{
+  "stage": "cleanup-only-editable-component",
+  "startedAt": "2026-08-15T01:23:30.308Z",
+  "finishedAt": "2026-08-15T01:23:30.927Z",
+  "request": {
+    "toolName": "ascet_edit",
+    "params": {
+      "action": "delete_component",
+      "componentPath": "DEMO\\__pi_permission_smoke__20260814-191154\\EditableClass",
+      "ifMissing": "ignore",
+      "intent": "apply"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"status\": \"error\",\n  \"permission\": {\n    \"mode\": \"default\",\n    \"decision\": \"not_evaluated\"\n  },\n  \"preflight\": {\n    \"status\": \"failed\"\n  },\n  \"editability\": {\n    \"status\": \"not_applicable\"\n  },\n  \"mutation\": {\n    \"status\": \"not_started\"\n  },\n  \"verification\": {\n    \"status\": \"unknown\"\n  },\n  \"error\": {\n    \"code\": \"legacy_operation_failed\",\n    \"message\": \"target_not_found:resolve_target:No ASCET item was found at 'DEMO\\\\__pi_permission_smoke__20260814-191154\\\\EditableClass'.\"\n  },\n  \"bridge\": {\n    \"beforeBridge\": false,\n    \"bridgeEntered\": false,\n    \"backendResponseReceived\": false\n  },\n  \"recovery\": {\n    \"required\": false\n  }\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "error",
+        "error": {
+          "code": "legacy_operation_failed",
+          "message": "target_not_found:resolve_target:No ASCET item was found at 'DEMO\\__pi_permission_smoke__20260814-191154\\EditableClass'."
+        }
+      },
+      "raw": {
+        "ok": false,
+        "data": null,
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "component_editable_check",
+            "DEMO\\__pi_permission_smoke__20260814-191154\\EditableClass",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"legacy_operation_failed\",\"message\":\"target_not_found:resolve_target:No ASCET item was found at \\u0027DEMO\\\\__pi_permission_smoke__20260814-191154\\\\EditableClass\\u0027.\"},\"meta\":{\"bridgePid\":32332,\"bridgeGeneration\":\"fa29f6cb-0c14-4fa3-851a-5cca77882110\",\"durationMs\":322,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"component_editable_check\"}}\r\n",
+        "stderr": "target_not_found:resolve_target:No ASCET item was found at 'DEMO\\__pi_permission_smoke__20260814-191154\\EditableClass'.\r\n",
+        "exitCode": 2,
+        "timedOut": false,
+        "aborted": false,
+        "operationId": "component_editable_check",
+        "stage": "cli_process",
+        "diagnostics": {
+          "operationId": "component_editable_check",
+          "stage": "cli_process",
+          "exitCode": 2,
+          "timedOut": false,
+          "aborted": false,
+          "stderrSummary": "target_not_found:resolve_target:No ASCET item was found at 'DEMO\\__pi_permission_smoke__20260814-191154\\EditableClass'.",
+          "stdoutSummary": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"legacy_operation_failed\",\"message\":\"target_not_found:resolve_target:No ASCET item was found at \\u0027DEMO\\\\__pi_permission_smoke__20260814-191154\\\\EditableClass\\u0027.\"},\"meta\":{\"bridgePid\":32332,\"bridgeGeneration\":\"fa29f6cb-0c14-4fa3-851a-5cca77882110\",\"durationMs\":322,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"component_editable_check\"}}",
+          "retryable": false
+        },
+        "error": {
+          "code": "legacy_operation_failed",
+          "message": "target_not_found:resolve_target:No ASCET item was found at 'DEMO\\__pi_permission_smoke__20260814-191154\\EditableClass'."
+        }
+      },
+      "error": {
+        "code": "legacy_operation_failed",
+        "message": "target_not_found:resolve_target:No ASCET item was found at 'DEMO\\__pi_permission_smoke__20260814-191154\\EditableClass'."
+      },
+      "mutationResult": {
+        "status": "error",
+        "permission": {
+          "mode": "default",
+          "decision": "not_evaluated"
+        },
+        "preflight": {
+          "status": "failed"
+        },
+        "editability": {
+          "status": "not_applicable"
+        },
+        "mutation": {
+          "status": "not_started"
+        },
+        "verification": {
+          "status": "unknown"
+        },
+        "error": {
+          "code": "legacy_operation_failed",
+          "message": "target_not_found:resolve_target:No ASCET item was found at 'DEMO\\__pi_permission_smoke__20260814-191154\\EditableClass'."
+        },
+        "bridge": {
+          "beforeBridge": false,
+          "bridgeEntered": false,
+          "backendResponseReceived": false
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      },
+      "tool": "ascet_edit",
+      "action": "delete_component",
+      "command": {
+        "logicalCommandId": "AscetDeleteComponent",
+        "backendCommandId": "AscetDeleteComponent",
+        "operation": "delete_component"
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "component_editable_check",
+            "DEMO\\__pi_permission_smoke__20260814-191154\\EditableClass",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 2,
+        "timedOut": false,
+        "stderr": "target_not_found:resolve_target:No ASCET item was found at 'DEMO\\__pi_permission_smoke__20260814-191154\\EditableClass'.\r\n"
+      }
+    }
+  }
+}

@@ -1,0 +1,356 @@
+{
+  "generated_at": "2026-04-01T03:08:20.543992Z",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS",
+  "checked_files": 187,
+  "checked_links": 2232,
+  "broken_links": [
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\ASAM-2MC_Tab.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\CodeOptimization.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\Exp_Code_Options_Window.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\generateexecutable.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\generating_files.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\linkobjects.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\PE_ActivateOldBehaviorBanners.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\PE_Banners_in_GeneratedCode.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\PE_Code_Generation_Options.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\PE_ContextMenuNavigationTrees.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\pe_examples_formulas_asap2file.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\PE_FormulasTab.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\PE_generatecode.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\PE_MISRA_compliant.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\PE_OS_Tab.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\pe_searchdel_unused_procsmethodsrunnables.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\PE_SearchDeleting_UnusedElements.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\PE_SearchResultsView.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\PE_TargetOptimized.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\PE_Task_Options.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\pe_used.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\PE_Working_on_Tasks.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\savegenerated.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\markdown\\swapsettings.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_SearchTreePane.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_Configuring_Toolbar.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_Toolbar_Configuration_Window.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_Configuring_Toolbar.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_Reserved_Keywords.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_Reserved_Keywords.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_Reserved_Keywords.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/ComponentManagerEnglishUS.chm::/List_of_Error_Messages.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/ComponentManagerEnglishUS.chm::/List_of_Error_Messages.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/ComponentManagerEnglishUS.chm::/List_of_Information_Messages.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/ComponentManagerEnglishUS.chm::/List_of_Warning_Messages.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\ProjectEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\ProjectEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\ProjectEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\ProjectEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\ProjectEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\ProjectEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\ProjectEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\ProjectEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\ProjectEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\ProjectEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\ProjectEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\ProjectEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\ProjectEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\ProjectEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\ProjectEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\ProjectEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\ProjectEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\ProjectEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\ProjectEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\ProjectEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\ProjectEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\ProjectEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ProjectEditorEnglishUS\\ProjectEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    }
+  ]
+}

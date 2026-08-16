@@ -1,0 +1,129 @@
+﻿
+=== Customer-XiaoMi-Package-AVH-NextEV-AVH_ActivationByBrakePedal_Xiaomi--read_component_snapshot.json ===
+[AVHActivationByBrakePedal] result.Methods.0.MethodName = AVHActivationByBrakePedal
+[AVHActivationByBrakePedal] result.Methods.0.Code = return AVHActivationByBrakePedal;
+[C_AVH_DGearActivationPressure] result.Methods.1.Code = //Set default value  AVHActivationByBrakePedal = false;  AVHPressureSuffcient = false;    //Calculate driver brake force is sufficient    //Hold pressure threshold increase when slope increase  pSlope = ((AxSlope * C_AVH_PressureSlope).abs());    //For D gear pressure sufficient  AVH_PressureDGearSufficient = (C_AVH_DGearActivationPressure + pSlope);  AAct_DGear_Sufficient = (((AVH_PressureDGearSufficient * C_p2F) / BrakeSysReferenceMass).abs());    //For R gear pressure sufficient  AVH_Pressure...
+[C_AVH_DGearActivationPressure] result.Implementation.Elements.2.ElementName = C_AVH_DGearActivationPressure
+[AVHActivationByBrakePedal] result.Implementation.Elements.8.ElementName = AVHActivationByBrakePedal
+[C_AVH_RGearActivationPressure] result.Implementation.Elements.14.ElementName = C_AVH_RGearActivationPressure
+[AVHActivationByBrakePedal] result.Implementation.Elements.16.ElementName = AVHActivationByBrakePedal/return
+[AVHActivationByBrakePedal] result.Implementation.Elements.16.DisplayScope = AVHActivationByBrakePedal
+[AVHActivationByBrakePedal] result.Implementation.Elements.16.CanonicalScope = avhactivationbybrakepedal
+
+=== Customer-XiaoMi-Package-AVH-NextEV-AVH_BrakePedalPatternDetection_Xiaomi--read_component_snapshot.json ===
+[AVHActivationByBrakePedal] result.Methods.0.MethodName = AVHActivationByBrakePedal
+[C_AVH_DGearActivationPressure] result.Implementation.Elements.1.ChildElements.2.ElementName = C_AVH_DGearActivationPressure
+[AVHActivationByBrakePedal] result.Implementation.Elements.1.ChildElements.8.ElementName = AVHActivationByBrakePedal
+[C_AVH_RGearActivationPressure] result.Implementation.Elements.1.ChildElements.14.ElementName = C_AVH_RGearActivationPressure
+[AVHActivationByBrakePedal] result.Implementation.Elements.1.ChildElements.16.ElementName = AVHActivationByBrakePedal/return
+[AVHActivationByBrakePedal] result.Implementation.Elements.1.ChildElements.16.DisplayScope = AVHActivationByBrakePedal
+[AVHActivationByBrakePedal] result.Implementation.Elements.1.ChildElements.16.CanonicalScope = avhactivationbybrakepedal
+[AVHActivationByBrakePedal] result.Implementation.Elements.3.ElementName = AVHActivationByBrakePedal/return
+[AVHActivationByBrakePedal] result.Implementation.Elements.3.DisplayScope = AVHActivationByBrakePedal
+[AVHActivationByBrakePedal] result.Implementation.Elements.3.CanonicalScope = avhactivationbybrakepedal
+
+=== PlatformLibrary-Package-AVH_AutomaticVehicleHold-Component-Config-CM_AVH--read_component_snapshot.json ===
+[LDMSelectedController] result.Implementation.Elements.5.ElementName = LDMSelectedControllerT5
+[DriveOffRequested] result.Implementation.Elements.26.ElementName = CM_AVH_DriveoffRequested
+[CM_AVH_CustTrigHold] result.Implementation.Elements.40.ElementName = CM_AVH_CustTrigHold
+[AVHActivationByBrakePedal] result.Implementation.Elements.41.ElementName = CM_AVH_AVHActivationByBrakePedal
+[CsmHoldState] result.Implementation.Elements.59.ElementName = CSMHoldState
+[DriveOffRequested] result.Implementation.Elements.73.ElementName = AVH_DriveOffRequested
+[DriveOffRequested] result.Implementation.Elements.73.ReferencedComponentPath = PlatformLibrary\Package\AVH_AutomaticVehicleHold\private\AVH_DriveOffRequested
+[DriveOffRequested] result.Implementation.Elements.73.ChildElements.0.ElementName = DriveOffRequested
+[DriveOffRequested] result.Implementation.Elements.73.ChildElements.4.ElementName = DriveOffRequested/return
+[DriveOffRequested] result.Implementation.Elements.73.ChildElements.4.DisplayScope = DriveOffRequested
+[DriveOffRequested] result.Implementation.Elements.73.ChildElements.4.CanonicalScope = driveoffrequested
+[C_AVH_DGearActivationPressure] result.Implementation.Elements.75.ChildElements.1.ChildElements.2.ElementName = C_AVH_DGearActivationPressure
+[AVHActivationByBrakePedal] result.Implementation.Elements.75.ChildElements.1.ChildElements.8.ElementName = AVHActivationByBrakePedal
+[C_AVH_RGearActivationPressure] result.Implementation.Elements.75.ChildElements.1.ChildElements.14.ElementName = C_AVH_RGearActivationPressure
+[AVHActivationByBrakePedal] result.Implementation.Elements.75.ChildElements.1.ChildElements.16.ElementName = AVHActivationByBrakePedal/return
+[AVHActivationByBrakePedal] result.Implementation.Elements.75.ChildElements.1.ChildElements.16.DisplayScope = AVHActivationByBrakePedal
+[AVHActivationByBrakePedal] result.Implementation.Elements.75.ChildElements.1.ChildElements.16.CanonicalScope = avhactivationbybrakepedal
+[AVHActivationByBrakePedal] result.Implementation.Elements.75.ChildElements.3.ElementName = AVHActivationByBrakePedal/return
+[AVHActivationByBrakePedal] result.Implementation.Elements.75.ChildElements.3.DisplayScope = AVHActivationByBrakePedal
+[AVHActivationByBrakePedal] result.Implementation.Elements.75.ChildElements.3.CanonicalScope = avhactivationbybrakepedal
+[CM_AVH_CustTrigHold] result.Implementation.Elements.81.ChildElements.9.ElementName = CM_AVH_CustTrigHold
+[CsmHoldState] result.Implementation.Elements.81.ChildElements.22.ElementName = calc/CsmHoldState
+[LDMSelectedController] result.Implementation.Elements.81.ChildElements.23.ElementName = calc/LDMSelectedController
+[CM_AVH_CustTrigHold] result.Implementation.Elements.81.ChildElements.30.ElementName = CM_AVH_CustTrigHold/return
+[CM_AVH_CustTrigHold] result.Implementation.Elements.81.ChildElements.30.DisplayScope = CM_AVH_CustTrigHold
+[CM_AVH_CustTrigHold] result.Implementation.Elements.81.ChildElements.30.CanonicalScope = cm_avh_custtrighold
+[LDMSelectedController] result.References.References.0.SourceElementName = LDMSelectedControllerT5
+[LDMSelectedController] result.References.References.0.TargetComponentName = LDMSelectedController
+[LDMSelectedController] result.References.References.0.TargetComponentPath = PlatformLibrary\Package\LDMLibrary\public\LDMSelectedController
+[CsmHoldState] result.References.References.7.SourceElementName = CSMHoldState
+[DriveOffRequested] result.References.References.15.SourceElementName = AVH_DriveOffRequested
+[DriveOffRequested] result.References.References.15.TargetComponentName = AVH_DriveOffRequested
+[DriveOffRequested] result.References.References.15.TargetComponentPath = PlatformLibrary\Package\AVH_AutomaticVehicleHold\private\AVH_DriveOffRequested
+[LDMSelectedController] result.References.TargetComponents.0.Name = LDMSelectedController
+[LDMSelectedController] result.References.TargetComponents.0.Path = PlatformLibrary\Package\LDMLibrary\public\LDMSelectedController
+[DriveOffRequested] result.References.TargetComponents.12.Name = AVH_DriveOffRequested
+[DriveOffRequested] result.References.TargetComponents.12.Path = PlatformLibrary\Package\AVH_AutomaticVehicleHold\private\AVH_DriveOffRequested
+[LDMSelectedController] result.References.Summary = LDMSelectedControllerT5 -> PlatformLibrary\Package\LDMLibrary\public\LDMSelectedController  CM_AVH_CustDeactType -> PlatformLibrary\Package\CSM_CentralizedStandstillManagement\Public\Enumeration\CSM_DeactType  Temp_CSMDriveUnitState_Off -> PlatformLibrary\Package\CSM_CentralizedStandstillManagement\Public\Enumeration\CSM_StateDrvUnit  Temp_CSMDriveUnitState_On -> PlatformLibrary\Package\CSM_CentralizedStandstillManagement\Public\Enumeration\CSM_StateDrvUnit  AvhRequest -> PlatformLibrary\Package...
+[LDMSelectedController] result.ReferenceTrace.0.Children.0.ComponentPath = PlatformLibrary\Package\LDMLibrary\public\LDMSelectedController
+[LDMSelectedController] result.ReferenceTrace.0.Children.0.ViaElementName = LDMSelectedControllerT5
+[CsmHoldState] result.ReferenceTrace.0.Children.7.ViaElementName = CSMHoldState
+[DriveOffRequested] result.ReferenceTrace.0.Children.15.ComponentPath = PlatformLibrary\Package\AVH_AutomaticVehicleHold\private\AVH_DriveOffRequested
+[DriveOffRequested] result.ReferenceTrace.0.Children.15.ViaElementName = AVH_DriveOffRequested
+
+=== PlatformLibrary-Package-AVH_AutomaticVehicleHold-private-AVH_CustStateLogic--read_component_snapshot.json ===
+[CM_AVH_CustTrigHold] result.Methods.0.Code = /* The purpose of this class is to specify customer specific          */  /* trigger conditions of AVH state handling                           */      /* Release Conditions												*/    /* 1: Define customer specific deactivation condition  	  CM_AVH_CustTrigRelease is used to trigger deactivation of  	  function         2: Define customer specifc deactivation strategy  	  CM_AVH_CustDeactType will be considered in Core Module and  	  to CSM.        Default-Strategy, means CSM itslef decide...
+[CM_AVH_CustTrigHold] result.Methods.5.MethodName = CM_AVH_CustTrigHold
+[CM_AVH_CustTrigHold] result.Methods.5.Code = return CM_AVH_CustTrigHold;
+[CM_AVH_CustTrigHold] result.Implementation.Elements.9.ElementName = CM_AVH_CustTrigHold
+[CsmHoldState] result.Implementation.Elements.22.ElementName = calc/CsmHoldState
+[LDMSelectedController] result.Implementation.Elements.23.ElementName = calc/LDMSelectedController
+[CM_AVH_CustTrigHold] result.Implementation.Elements.30.ElementName = CM_AVH_CustTrigHold/return
+[CM_AVH_CustTrigHold] result.Implementation.Elements.30.DisplayScope = CM_AVH_CustTrigHold
+[CM_AVH_CustTrigHold] result.Implementation.Elements.30.CanonicalScope = cm_avh_custtrighold
+[CsmHoldState] result.References.References.3.SourceElementName = calc/CsmHoldState
+[LDMSelectedController] result.References.References.4.SourceElementName = calc/LDMSelectedController
+[LDMSelectedController] result.References.References.4.TargetComponentName = LDMSelectedController
+[LDMSelectedController] result.References.References.4.TargetComponentPath = PlatformLibrary\Package\LDMLibrary\public\LDMSelectedController
+[LDMSelectedController] result.References.TargetComponents.4.Name = LDMSelectedController
+[LDMSelectedController] result.References.TargetComponents.4.Path = PlatformLibrary\Package\LDMLibrary\public\LDMSelectedController
+[LDMSelectedController] result.References.Summary = CM_AVH_CustDeactType -> PlatformLibrary\Package\CSM_CentralizedStandstillManagement\Public\Enumeration\CSM_DeactType  FS_AVH_HMIType -> PlatformLibrary\Package\AVH_AutomaticVehicleHold\private\AVHHMIType  calc/AvhState -> PlatformLibrary\Package\AVH_AutomaticVehicleHold\public\AVHState  calc/CsmHoldState -> PlatformLibrary\Package\CSM_CentralizedStandstillManagement\Public\Enumeration\CSM_HoldState  calc/LDMSelectedController -> PlatformLibrary\Package\LDMLibrary\public\LDMSelectedController  CM...
+[CsmHoldState] result.ReferenceTrace.0.Children.3.ViaElementName = calc/CsmHoldState
+[LDMSelectedController] result.ReferenceTrace.0.Children.4.ComponentPath = PlatformLibrary\Package\LDMLibrary\public\LDMSelectedController
+[LDMSelectedController] result.ReferenceTrace.0.Children.4.ViaElementName = calc/LDMSelectedController
+
+=== PlatformLibrary-Package-AVH_AutomaticVehicleHold-private-AVH_DriveOffRequested--read_component_snapshot.json ===
+[DriveOffRequested] result.componentPath = PlatformLibrary\Package\AVH_AutomaticVehicleHold\private\AVH_DriveOffRequested
+[DriveOffRequested] result.Component.Name = AVH_DriveOffRequested
+[DriveOffRequested] result.Component.Path = PlatformLibrary\Package\AVH_AutomaticVehicleHold\private\AVH_DriveOffRequested
+[DriveOffRequested] result.Diagrams.0.OwningComponentPath = PlatformLibrary\Package\AVH_AutomaticVehicleHold\private\AVH_DriveOffRequested
+[DriveOffRequested] result.Methods.0.ComponentPath = PlatformLibrary\Package\AVH_AutomaticVehicleHold\private\AVH_DriveOffRequested
+[DriveOffRequested] result.Methods.0.Code = // Purpose of this class is to determine a drive off request for AVH  // so far only driver drive off request is considered    if	(	(DriverAcceleratorApplied == true)		// Driver accelerator is pressed  	||	((ClutchEngagementPoint == true) && (	GearboxType == CSMGearboxType_ManualWoGearInfo  											||	GearboxType == CSMGearboxType_ManualWithGearInfo))    //Clutch is pressed and Gearbox is manual  	)  {  	 DriveOffRequested = true;  }  else  {        DriveOffRequested = false;  }
+[DriveOffRequested] result.Methods.1.ComponentPath = PlatformLibrary\Package\AVH_AutomaticVehicleHold\private\AVH_DriveOffRequested
+[DriveOffRequested] result.Methods.1.MethodName = DriveOffRequested
+[DriveOffRequested] result.Methods.1.Code = return DriveOffRequested;
+[DriveOffRequested] result.Implementation.ComponentPath = PlatformLibrary\Package\AVH_AutomaticVehicleHold\private\AVH_DriveOffRequested
+[DriveOffRequested] result.Implementation.Elements.0.ElementName = DriveOffRequested
+[DriveOffRequested] result.Implementation.Elements.4.ElementName = DriveOffRequested/return
+[DriveOffRequested] result.Implementation.Elements.4.DisplayScope = DriveOffRequested
+[DriveOffRequested] result.Implementation.Elements.4.CanonicalScope = driveoffrequested
+[DriveOffRequested] result.References.ComponentPath = PlatformLibrary\Package\AVH_AutomaticVehicleHold\private\AVH_DriveOffRequested
+[DriveOffRequested] result.ReferenceTrace.0.ComponentPath = PlatformLibrary\Package\AVH_AutomaticVehicleHold\private\AVH_DriveOffRequested
+[DriveOffRequested] result.Summary = Class AVH_DriveOffRequested has 1 reference and 1 diagram
+
+=== PlatformLibrary-Package-AVH_AutomaticVehicleHold-private-AVH_StateMachine--read_component_snapshot.json ===
+[CsmHoldState] result.Methods.1.Code = /*****************************************************************************/  /************************Pre-Calculations*************************************/  if(CsmParkBrakeState == CSMApbSysState_Applied)  {  	ParkReqTriggered = false;  }else{  	ParkReqTriggered = ParkReqTriggered;  }    if(ParkReqTriggered == true)  {  	timeParkApplyTimeUp = (timeParkApplyTimeUp + CycleTime).min(C_CSM_ParkApplyReqTimeUp + 2*CycleTime);  	if(timeParkApplyTimeUp > C_CSM_ParkApplyReqTimeUp)  	{  		ParkApplyTi...
+[AVHParkReq] result.Implementation.Elements.15.ElementName = AVHParkReq
+[CsmHoldState] result.Implementation.Elements.19.ElementName = calc/CsmHoldState
+[AVHTrig_MechHold] result.Implementation.Elements.23.ElementName = calc/AVHTrig_MechHold
+[AVHParkReq] result.References.References.2.SourceElementName = AVHParkReq
+[CsmHoldState] result.References.References.4.SourceElementName = calc/CsmHoldState
+[CsmHoldState] result.References.Summary = AVHHoldReq -> PlatformLibrary\Package\CSM_CentralizedStandstillManagement\Public\Enumeration\CSM_HoldReq  AVHState -> PlatformLibrary\Package\AVH_AutomaticVehicleHold\public\AVHState  AVHParkReq -> PlatformLibrary\Package\CSM_CentralizedStandstillManagement\Public\Enumeration\CSM_ParkReq  calc/CsmParkBrakeState -> PlatformLibrary\Package\CSM_CentralizedStandstillManagement\Public\Enumeration\CSM_ApbSystemState  calc/CsmHoldState -> PlatformLibrary\Package\CSM_CentralizedStandstillManagement\Publ...
+[AVHParkReq] result.ReferenceTrace.0.Children.2.ViaElementName = AVHParkReq
+[CsmHoldState] result.ReferenceTrace.0.Children.4.ViaElementName = calc/CsmHoldState
+[AVHParkReq] result.StateMachineFlow.ReferenceTrace.0.Children.2.ViaElementName = AVHParkReq
+[CsmHoldState] result.StateMachineFlow.ReferenceTrace.0.Children.4.ViaElementName = calc/CsmHoldState
+
+=== PlatformLibrary-Package-AVH_AutomaticVehicleHold-private-AVH_TriggerAvhStatemachine--read_component_snapshot.json ===
+[DriveOffRequested] result.Methods.0.Code = /******************* Core Conditions for AVH Hold ***************************/  HoldCoreConditions =  (		TargetStateAvh     		== AVH_On					// if AVH is isn't degraded  	&& 	CurrentSystemMode		== CSMCurSysMode_NORMAL		// ignition is ON  	&& 	AbsActive               == false					// AND ABS is not active (Strongly Safety relevant)  	&& 	Ena_AVH                 == true						// AND AVH is disabled due to SSM arbitration  	&& 	AvhStandby              == true						// AND AVH is in StandbyON  	&& 	Driv...
+[DriveOffRequested] result.Implementation.Elements.12.ElementName = calc/DriveOffRequested
+[AVHParkReq] result.Implementation.Elements.24.ElementName = calc/AvhParkReqTimeUp
+[RollPrevOver] result.Implementation.Elements.25.ElementName = calc/RollPrevOver
+[AVHActivationByBrakePedal] result.Implementation.Elements.32.ElementName = calc/AVHActivationByBrakePedal
+[ADSRequestAVH_Trigger] result.Implementation.Elements.33.ElementName = calc/ADSRequestAVH_Trigger

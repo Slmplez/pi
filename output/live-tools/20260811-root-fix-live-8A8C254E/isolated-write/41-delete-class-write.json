@@ -1,0 +1,96 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"changed\": {\n    \"component\": \"PI_LIVE_ROOTFIX_20260811_8A8C254E/ClassUnderTest\",\n    \"folderPath\": \"PI_LIVE_ROOTFIX_20260811_8A8C254E\",\n    \"componentName\": \"ClassUnderTest\",\n    \"deleted\": true,\n    \"alreadyMissing\": false,\n    \"summary\": \"Deleted component PI_LIVE_ROOTFIX_20260811_8A8C254E\\\\ClassUnderTest.\"\n  },\n  \"verification\": {\n    \"mode\": \"automatic_readback\",\n    \"source\": \"write_command\",\n    \"required\": true,\n    \"requested\": true,\n    \"verified\": true,\n    \"status\": \"passed\"\n  }\n}"
+    }
+  ],
+  "details": {
+    "outcome": {
+      "status": "ok",
+      "verified": true,
+      "data": {
+        "changed": {
+          "componentPath": "PI_LIVE_ROOTFIX_20260811_8A8C254E\\ClassUnderTest",
+          "folderPath": "PI_LIVE_ROOTFIX_20260811_8A8C254E",
+          "componentName": "ClassUnderTest",
+          "deleted": true,
+          "alreadyMissing": false,
+          "summary": "Deleted component PI_LIVE_ROOTFIX_20260811_8A8C254E\\ClassUnderTest."
+        },
+        "verification": {
+          "mode": "automatic_readback",
+          "source": "write_command",
+          "required": true,
+          "requested": true,
+          "verified": true,
+          "status": "passed"
+        },
+        "observations": {
+          "invalidated": []
+        }
+      },
+      "warnings": []
+    },
+    "raw": {
+      "ok": true,
+      "data": {
+        "type": "response",
+        "protocolVersion": 1,
+        "ok": true,
+        "result": {
+          "componentPath": "PI_LIVE_ROOTFIX_20260811_8A8C254E\\ClassUnderTest",
+          "folderPath": "PI_LIVE_ROOTFIX_20260811_8A8C254E",
+          "componentName": "ClassUnderTest",
+          "deleted": true,
+          "alreadyMissing": false,
+          "verifyReadbackRequested": true,
+          "readbackVerified": true,
+          "summary": "Deleted component PI_LIVE_ROOTFIX_20260811_8A8C254E\\ClassUnderTest."
+        },
+        "error": null,
+        "meta": {
+          "bridgePid": 31216,
+          "bridgeGeneration": "58d3832b-f56c-49f8-b3a2-f617b97ab3b9",
+          "durationMs": 567,
+          "sessionPolicy": "fresh_session",
+          "mutationStarted": true,
+          "mode": "exec",
+          "operation": "delete_component"
+        }
+      },
+      "request": {
+        "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+        "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+        "args": [
+          "exec",
+          "delete_component",
+          "PI_LIVE_ROOTFIX_20260811_8A8C254E\\ClassUnderTest",
+          "--if-missing",
+          "ignore",
+          "--verify-readback",
+          "--json"
+        ],
+        "jobKind": "write",
+        "mutatesDatabase": true
+      },
+      "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"componentPath\":\"PI_LIVE_ROOTFIX_20260811_8A8C254E\\\\ClassUnderTest\",\"folderPath\":\"PI_LIVE_ROOTFIX_20260811_8A8C254E\",\"componentName\":\"ClassUnderTest\",\"deleted\":true,\"alreadyMissing\":false,\"verifyReadbackRequested\":true,\"readbackVerified\":true,\"summary\":\"Deleted component PI_LIVE_ROOTFIX_20260811_8A8C254E\\\\ClassUnderTest.\"},\"error\":null,\"meta\":{\"bridgePid\":31216,\"bridgeGeneration\":\"58d3832b-f56c-49f8-b3a2-f617b97ab3b9\",\"durationMs\":567,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":true,\"mode\":\"exec\",\"operation\":\"delete_component\"}}\r\n",
+      "stderr": "",
+      "exitCode": 0,
+      "timedOut": false,
+      "aborted": false,
+      "operationId": "delete_component"
+    },
+    "observations": {
+      "invalidated": []
+    },
+    "verification": {
+      "mode": "automatic_readback",
+      "source": "write_command",
+      "required": true,
+      "requested": true,
+      "verified": true,
+      "status": "passed"
+    }
+  }
+}

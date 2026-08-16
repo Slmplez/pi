@@ -1,0 +1,6 @@
+﻿{
+    "command":  "ascetcli/scripts/test-ascet-bridge.ps1",
+    "exitCode":  0,
+    "completedAt":  "2026-08-12T11:08:38.3339455+08:00",
+    "log":  "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\LIVE_TOOLS_20260812-105126_F1DF11BC\\seven-bug-fix\\20-bridge\\bridge-non-live.txt"
+}

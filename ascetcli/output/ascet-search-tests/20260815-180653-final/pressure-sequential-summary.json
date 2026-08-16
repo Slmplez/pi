@@ -1,0 +1,11 @@
+{
+    "calls":  500,
+    "failures":  0,
+    "averageMs":  2821.21,
+    "maxMs":  15624,
+    "finished":  {
+                     "value":  "\/Date(1786790010442)\/",
+                     "DisplayHint":  2,
+                     "DateTime":  "Saturday, August 15, 2026 6:33:30 PM"
+                 }
+}

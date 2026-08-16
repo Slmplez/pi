@@ -1,0 +1,63 @@
+{
+  "stage": "setup-smoke-root-absent",
+  "startedAt": "2026-08-15T01:44:55.496Z",
+  "finishedAt": "2026-08-15T01:44:56.045Z",
+  "request": {
+    "toolName": "ascet_get",
+    "params": {
+      "action": "tree",
+      "target": {
+        "targetPathPrefix": "DEMO\\__pi_permission_smoke__20260815-094449"
+      },
+      "traversal": {
+        "depth": 4,
+        "maxFolders": 200,
+        "maxComponents": 200
+      }
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"error\": {\n    \"code\": \"folder_not_found\",\n    \"message\": \"Folder 'DEMO\\\\__pi_permission_smoke__20260815-094449' was not found.\",\n    \"details\": {\n      \"stdout\": \"{\\\"type\\\":\\\"response\\\",\\\"protocolVersion\\\":1,\\\"ok\\\":false,\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":\\\"folder_not_found\\\",\\\"message\\\":\\\"Folder \\\\u0027DEMO\\\\\\\\__pi_permission_smoke__20260815-094449\\\\u0027 was not found.\\\"},\\\"meta\\\":{\\\"bridgePid\\\":17488,\\\"bridgeGeneration\\\":\\\"7b113797-fd00-482b-bb8b-17775f557f2b\\\",\\\"durationMs\\\":235,\\\"sessionPolicy\\\":\\\"fresh_session\\\",\\\"mutationStarted\\\":false,\\\"mode\\\":\\\"exec\\\",\\\"operation\\\":\\\"get_tree\\\"}}\",\n      \"exitCode\": 2,\n      \"operationId\": \"get_tree\",\n      \"stage\": \"cli_process\",\n      \"retryable\": false,\n      \"stdoutSummary\": \"{\\\"type\\\":\\\"response\\\",\\\"protocolVersion\\\":1,\\\"ok\\\":false,\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":\\\"folder_not_found\\\",\\\"message\\\":\\\"Folder \\\\u0027DEMO\\\\\\\\__pi_permission_smoke__20260815-094449\\\\u0027 was not found.\\\"},\\\"meta\\\":{\\\"bridgePid\\\":17488,\\\"bridgeGeneration\\\":\\\"7b113797-fd00-482b-bb8b-17775f557f2b\\\",\\\"durationMs\\\":235,\\\"sessionPolicy\\\":\\\"fresh_session\\\",\\\"mutationStarted\\\":false,\\\"mode\\\":\\\"exec\\\",\\\"operation\\\":\\\"get_tree\\\"}}\"\n    }\n  }\n}"
+      }
+    ],
+    "details": {
+      "tool": "ascet_get",
+      "action": "tree",
+      "command": {
+        "logicalCommandId": "AscetGetTree",
+        "backendCommandId": "AscetGetTree",
+        "operation": "get_tree"
+      },
+      "error": {
+        "code": "folder_not_found",
+        "message": "Folder 'DEMO\\__pi_permission_smoke__20260815-094449' was not found.",
+        "details": {
+          "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"folder_not_found\",\"message\":\"Folder \\u0027DEMO\\\\__pi_permission_smoke__20260815-094449\\u0027 was not found.\"},\"meta\":{\"bridgePid\":17488,\"bridgeGeneration\":\"7b113797-fd00-482b-bb8b-17775f557f2b\",\"durationMs\":235,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"get_tree\"}}\r\n",
+          "exitCode": 2
+        }
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:/Repo/09_ASCETCopilot/pi-ascet-extension-prototype/packages/ascet-extension/ascet-cli/bin/AscetBridge.exe",
+          "args": [
+            "exec",
+            "get_tree",
+            "--request-json",
+            "{\"targetPathPrefix\":\"DEMO\\\\__pi_permission_smoke__20260815-094449\",\"depth\":4,\"maxFolders\":200,\"maxComponents\":200}",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 2,
+        "timedOut": false,
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"folder_not_found\",\"message\":\"Folder \\u0027DEMO\\\\__pi_permission_smoke__20260815-094449\\u0027 was not found.\"},\"meta\":{\"bridgePid\":17488,\"bridgeGeneration\":\"7b113797-fd00-482b-bb8b-17775f557f2b\",\"durationMs\":235,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"get_tree\"}}\r\n"
+      }
+    }
+  }
+}

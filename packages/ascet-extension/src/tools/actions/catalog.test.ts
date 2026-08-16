@@ -32,10 +32,10 @@ describe("ASCET action catalog", () => {
 
 		assert.deepEqual(
 			search.map((entry) => entry.action),
-			["*"],
+			["search"],
 		);
 		assert.equal(search[0]?.family, "search");
-		assert.deepEqual(search[0]?.schema.required, ["mode", "q"]);
+		assert.deepEqual(search[0]?.schema.required, ["action", "mode", "q"]);
 		assert.deepEqual(search[0]?.schema.optional, ["limit"]);
 		assert.deepEqual(search[0]?.result, {
 			shape: "searchMatches",
@@ -51,7 +51,7 @@ describe("ASCET action catalog", () => {
 
 	test("keeps Search live-only and Get bounded/exact", () => {
 		const entries = entriesById();
-		const searchRules = entries.get("ascet_search.*")?.rules.join("\n") ?? "";
+		const searchRules = entries.get("ascet_search.search")?.rules.join("\n") ?? "";
 		const treeRules = entries.get("ascet_get.tree")?.rules.join("\n") ?? "";
 		const formulasRules = entries.get("ascet_get.formulas")?.rules.join("\n") ?? "";
 

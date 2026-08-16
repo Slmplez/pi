@@ -1,0 +1,183 @@
+{
+  "generated_at": "2026-04-01T03:08:14.864876Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\LayoutEditorEnglishUS.chm",
+  "unpack_dir": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\LayoutEditorEnglishUS\\unpacked",
+  "total_files": 27,
+  "total_size_bytes": 190950,
+  "counts_by_extension": {
+    ".htm": 16,
+    ".gif": 3,
+    ".xml": 1,
+    ".js": 1,
+    ".css": 1,
+    ".brs": 1,
+    ".glo": 1,
+    ".hhc": 1,
+    ".hhk": 1,
+    ".lng": 1
+  },
+  "files": [
+    {
+      "relative_path": "assign_icon_class.htm",
+      "size": 2298,
+      "sha256": "d8576d78384faf410702354c93841851d8444b0dc3c2e5b3512deaa0ccf24c6d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "BUTTON.GIF",
+      "size": 844,
+      "sha256": "6d10387853fe90ec87f720a6460a8cd1d2559683e66c81683a705a5e0e6f2ea9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "change_default_newblocks.htm",
+      "size": 2599,
+      "sha256": "b28f5b3edc3f3bafa6d9aafa1ab82dbc6ad2a2c267f35e11cc20466c7484b642",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "editing_class_layout.htm",
+      "size": 1436,
+      "sha256": "31f99421d7c7386fc168edd62373e334ef3c23217cdeb54bf4364ae97b47995e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "editing_layout_other_comp.htm",
+      "size": 2208,
+      "sha256": "b45b8cedba404adc40c511fc3294918eb58fd1e25b007cdff0bebd909e33d09c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "eHelp.xml",
+      "size": 371,
+      "sha256": "01856cedf878416b9bdd1e83fdbc63b93d74f3a225604f261d945cb665ebaaab",
+      "extension": ".xml"
+    },
+    {
+      "relative_path": "ehlpdhtm.js",
+      "size": 125805,
+      "sha256": "5e1cc80a63e935c5d04018ed9437260b2dd6f3974059ef5b69313497ea7cb602",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "enable_disable_methods.htm",
+      "size": 2100,
+      "sha256": "49d9344786a90b8d40e11db31daa7e46db05dcd6e9b897bb93ab33f57a94af0a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "flexLayout_active.gif",
+      "size": 1064,
+      "sha256": "f48e448f4a67d1db9334f5a6f63a4a3180e649ed2a5bba2e99472f52b1af56ab",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "image1.gif",
+      "size": 5872,
+      "sha256": "679f1a29458b26c9da1feaf0b3d6ccfb9a4d80811ea93fd26072bd212940f457",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Layout.css",
+      "size": 9786,
+      "sha256": "fa7b5a6453a21a0fb428753bb054c98f2002a31eaef5306319201e3e2a2673c5",
+      "extension": ".css"
+    },
+    {
+      "relative_path": "LayoutEditorEnglishUS.brs",
+      "size": 2,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "extension": ".brs"
+    },
+    {
+      "relative_path": "LayoutEditorEnglishUS.glo",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "extension": ".glo"
+    },
+    {
+      "relative_path": "LayoutEditorEnglishUS.hhc",
+      "size": 3740,
+      "sha256": "8741cc34cfad1e699805634b67477d0ec1dd64bb2ecfabfab3cb4a6b560aa38e",
+      "extension": ".hhc"
+    },
+    {
+      "relative_path": "LayoutEditorEnglishUS.hhk",
+      "size": 4159,
+      "sha256": "509e5b01edfbf627e248da605b79f6c001c36760b8b484c80737eaa3c317ab86",
+      "extension": ".hhk"
+    },
+    {
+      "relative_path": "LDe_View_Menu.htm",
+      "size": 928,
+      "sha256": "4332955b791f7170d3c166b074e43952f0580c3c1075a1c6e490cd5891d129f2",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "LEd_Description_of_Window_Elements.htm",
+      "size": 3447,
+      "sha256": "f23ffd45f82719661438ef26b92685d9680c9e7c8e8c0f84285ffab7d4bf69bd",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "led_flexiblelayout.htm",
+      "size": 1563,
+      "sha256": "07803b4892f4fd39054c07facc8d3ff71cbd73bf2116060f40a5608fa16e50a6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "LEd_Layout_Menu.htm",
+      "size": 2510,
+      "sha256": "6e7432555456bdb49f2280b7774fa9c2fd2f06ad1bf9be8800473354db01528f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "LEd_Layout_Settings_for_Window.htm",
+      "size": 2930,
+      "sha256": "a20640df3bd050b4bd21c3685475bae2a4bfe6ab37add3a19234dd2974840137",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "LEd_modify_diagram_block.htm",
+      "size": 2164,
+      "sha256": "7949c8d5ef42549d940540e4741bfd3aeaba5f17dfb94e4775db59f2ecdba124",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "LEd_open_layout_editor.htm",
+      "size": 1930,
+      "sha256": "ea28076021d00a7893cf3c13cb82681fd22715a0bb0f73872f54e377ee69015b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "LEd_Overview.htm",
+      "size": 1731,
+      "sha256": "b1fc982113808af07a53107567725fae95f43b103c0f29bc60673bbcc5426dcc",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "modify_block_attributes.htm",
+      "size": 4047,
+      "sha256": "c78ffa708b0df7b210e56a1ca54a718b4345065640e8fdb003098218423b7692",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "modify_layout_editor_display.htm",
+      "size": 2035,
+      "sha256": "36a2090fe9e376b8623492f2e92e52cae4199afcd59ec9fb35cdfc43c7082580",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "move_ports.htm",
+      "size": 1795,
+      "sha256": "4c26efdc8942c5dbc408bd195a24d6f6c3279145268b4bb6a7f6c10aecb93aaf",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "RoboHHRE.lng",
+      "size": 3586,
+      "sha256": "607e16623990c7b694bb11537edbecfbd7057fda1739bba5173e9d8a4942b18f",
+      "extension": ".lng"
+    }
+  ]
+}

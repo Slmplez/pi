@@ -23,7 +23,7 @@ export type AscetDeleteComponentResult = AscetCliJsonResult;
 export const ascetDeleteComponentParameters = Type.Object({
 	componentPath: Type.String({ description: "ASCET component path to delete.", minLength: 1 }),
 	ifMissing: ifMissingSchema,
-	executeWrite: Type.Optional(Type.Boolean({ description: "When true, PI still requires interactive confirmation." })),
+	intent: Type.Union([Type.Literal("preview"), Type.Literal("apply")]),
 });
 
 export function buildDeleteComponentArgs(params: AscetDeleteComponentParams): string[] {

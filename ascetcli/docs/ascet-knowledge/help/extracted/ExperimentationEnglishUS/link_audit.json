@@ -1,0 +1,110 @@
+{
+  "generated_at": "2026-04-01T03:08:04.836454Z",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ExperimentationEnglishUS",
+  "checked_files": 224,
+  "checked_links": 2025,
+  "broken_links": [
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ExperimentationEnglishUS\\markdown\\EE_AssignArrayMatrix_MeasurementWindow.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ExperimentationEnglishUS\\markdown\\EE_edit_exisiting_sample_points.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ExperimentationEnglishUS\\markdown\\EE_MeasurementWindowsGUI.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ExperimentationEnglishUS\\markdown\\EE_SettingTimeBehavior.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ExperimentationEnglishUS\\markdown\\EE_StimulusDialogWindow.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ExperimentationEnglishUS\\markdown\\open_experi_environ_offline.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ExperimentationEnglishUS\\markdown\\start-offline_experiment.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ExperimentationEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/SpecifyingCTBlocksEnglishUS.chm::/CTB_Configuring_the_Solver.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ExperimentationEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/SpecifyingCTBlocksEnglishUS.chm::/CTB_Solvers.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ExperimentationEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/SpecifyingCTBlocksEnglishUS.chm::/CTB_Configuring_the_Solver.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ExperimentationEnglishUS\\ExperimentationEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ExperimentationEnglishUS\\ExperimentationEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ExperimentationEnglishUS\\ExperimentationEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ExperimentationEnglishUS\\ExperimentationEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ExperimentationEnglishUS\\ExperimentationEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ExperimentationEnglishUS\\ExperimentationEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ExperimentationEnglishUS\\ExperimentationEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    }
+  ]
+}

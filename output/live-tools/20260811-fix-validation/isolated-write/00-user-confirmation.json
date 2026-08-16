@@ -1,0 +1,19 @@
+{
+  "confirmedAt": "2026-08-11T08:35:25.924Z",
+  "confirmationText": "确认执行隔离写入测试",
+  "fixtureRoot": "PI_LIVE_FIX_20260811_13947C09",
+  "approvals": [
+    {
+      "title": "Confirm ASCET folder creation",
+      "message": "ASCET edit request:\noperation: create_folder\nfolderPath: PI_LIVE_FIX_20260811_13947C09\nverifyReadback: true"
+    },
+    {
+      "title": "Confirm ASCET component creation",
+      "message": "ASCET edit request:\noperation: create_component\ncomponentPath: PI_LIVE_FIX_20260811_13947C09\\ClassUnderTest\nkind: class\nlanguage: ESDL\nifExists: \nverifyReadback: true\nrollbackOnFailure: false"
+    },
+    {
+      "title": "Confirm ASCET component creation",
+      "message": "ASCET edit request:\noperation: create_component\ncomponentPath: PI_LIVE_FIX_20260811_13947C09\\EnumerationUnderTest\nkind: enumeration\nlanguage: \nifExists: \nverifyReadback: true\nrollbackOnFailure: false"
+    }
+  ]
+}

@@ -1,0 +1,121 @@
+Log File: C:\ProgramData\ETAS\LogFiles\AscetBridge\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Component: Customer\XiaoMi\Package\AVH\NextEV\AVH_ActivationByBrakePedal_Xiaomi
+Kind: Class
+Language: ESDL
+Diagrams: 1
+  - BlockDiagram: Main
+Methods: 2
+  - AbstractMethod: AVHActivationByBrakePedal
+  - AbstractMethod: calc
+
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+=== Method: AVHActivationByBrakePedal (AbstractMethod) ===
+return AVHActivationByBrakePedal;
+
+
+=== Method: calc (AbstractMethod) ===
+//Set default value
+AVHActivationByBrakePedal = false;
+AVHPressureSuffcient = false;
+
+//Calculate driver brake force is sufficient
+
+//Hold pressure threshold increase when slope increase
+pSlope = ((AxSlope * C_AVH_PressureSlope).abs());
+
+//For D gear pressure sufficient
+AVH_PressureDGearSufficient = (C_AVH_DGearActivationPressure + pSlope);
+AAct_DGear_Sufficient = (((AVH_PressureDGearSufficient * C_p2F) / BrakeSysReferenceMass).abs());
+
+//For R gear pressure sufficient
+AVH_PressureRGearSufficient = (C_AVH_RGearActivationPressure + pSlope);
+AAct_RGear_Sufficient = (((AVH_PressureRGearSufficient * C_p2F) / BrakeSysReferenceMass).abs());
+
+//D Gear activation
+if(GearBoxValid == true && (AvhGear == 1))
+{
+    if(ABrkAct.abs() > AAct_DGear_Sufficient)
+    {
+        AVHPressureSuffcient = true;
+    }
+    else
+    {
+        AVHPressureSuffcient = false;
+    }
+}
+
+//R Gear activation
+else if(GearBoxValid == true && (AvhGear == -1))
+{
+    if(ABrkAct.abs() > AAct_RGear_Sufficient)
+    {
+        AVHPressureSuffcient = true;
+    }
+    else
+    {
+        AVHPressureSuffcient = false;
+    }
+}
+
+else
+{
+    AVHPressureSuffcient = false;
+}
+
+//Case 1
+// When AVH not active, to allow AVH by press brake pedal directly.
+if(AvhState != AVHState_Hold)
+{
+	ActivationAllowedInNewBrakeCycle = true;
+}
+else if(AvhState == AVHState_Hold)
+{
+	// after AVH hold, reset flag
+	ActivationAllowedInNewBrakeCycle = false;
+	//ActivationAllowedInDeactBrakeCycle = false;
+}
+else
+{
+	//do nothing
+}
+// case 2
+// Set flag to indicate the brake cycle of AVH just deactivated by press brake pedal.
+if(BrakePedalIsApplied == true)
+{
+	if(AVHDeactivationByBrakePedal == true)
+	{
+		DeactivationBrakeCycle = true;
+	}
+	else
+	{
+		//do nothing
+	}
+}
+else if(BrakePedalIsApplied == false && AVHPressureSuffcient == false)
+{
+	DeactivationBrakeCycle = false;
+}
+else
+{	//Do nothing
+}
+
+//Final
+if((   ActivationAllowedInNewBrakeCycle == true && AVHPressureSuffcient == true) 
+	&& DeactivationBrakeCycle == false 
+	&& OnePedalToStop_Active == false)
+{
+    AVHActivationByBrakePedal = true;
+}
+else if(DeactivationBrakeCycle == true)
+{
+    AVHActivationByBrakePedal = false;
+}
+else
+{
+	AVHActivationByBrakePedal = false;
+}
+
+

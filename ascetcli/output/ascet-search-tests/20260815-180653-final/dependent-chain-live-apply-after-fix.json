@@ -1,0 +1,67 @@
+{
+  "before": {
+    "found": true,
+    "chain": {
+      "local": {
+        "componentPath": "CN_Libary\\Package\\LDM\\ADC\\Private\\ADC_VLCDriveOffAndStandstillPostCalc",
+        "element": "C_ACC_vRollOutReq"
+      },
+      "imported": {
+        "componentPath": "CN_Libary\\Package\\LDM\\ADC\\Private\\ADC_VLCDriveOffAndStandstillPostCalc",
+        "element": "P_ACC_vRollOutReq"
+      },
+      "exported": {
+        "componentPath": "PlatformLibrary\\Package\\VLC_VehicleLongitudinalControl\\VLC_ACC\\parameter\\private\\VLC_ACC_StandStillParameter",
+        "element": "P_ACC_vRollOutReq"
+      }
+    }
+  },
+  "apply": {
+    "changed": false,
+    "chain": {
+      "local": {
+        "componentPath": "CN_Libary\\Package\\LDM\\ADC\\Private\\ADC_VLCDriveOffAndStandstillPostCalc",
+        "element": "C_ACC_vRollOutReq"
+      },
+      "imported": {
+        "componentPath": "CN_Libary\\Package\\LDM\\ADC\\Private\\ADC_VLCDriveOffAndStandstillPostCalc",
+        "element": "P_ACC_vRollOutReq"
+      },
+      "exported": {
+        "componentPath": "PlatformLibrary\\Package\\VLC_VehicleLongitudinalControl\\VLC_ACC\\parameter\\private\\VLC_ACC_StandStillParameter",
+        "element": "P_ACC_vRollOutReq"
+      }
+    }
+  },
+  "applyDetails": {
+    "provider": {
+      "ok": true,
+      "componentPath": "PlatformLibrary\\Package\\VLC_VehicleLongitudinalControl\\VLC_ACC\\parameter\\private\\VLC_ACC_StandStillParameter",
+      "elementName": "P_ACC_vRollOutReq"
+    },
+    "binding": {
+      "importedElement": "P_ACC_vRollOutReq",
+      "formula": "P_ACC_vRollOutReq",
+      "formal": "P_ACC_vRollOutReq",
+      "variantPolicy": "default"
+    },
+    "idempotent": true
+  },
+  "after": {
+    "found": true,
+    "chain": {
+      "local": {
+        "componentPath": "CN_Libary\\Package\\LDM\\ADC\\Private\\ADC_VLCDriveOffAndStandstillPostCalc",
+        "element": "C_ACC_vRollOutReq"
+      },
+      "imported": {
+        "componentPath": "CN_Libary\\Package\\LDM\\ADC\\Private\\ADC_VLCDriveOffAndStandstillPostCalc",
+        "element": "P_ACC_vRollOutReq"
+      },
+      "exported": {
+        "componentPath": "PlatformLibrary\\Package\\VLC_VehicleLongitudinalControl\\VLC_ACC\\parameter\\private\\VLC_ACC_StandStillParameter",
+        "element": "P_ACC_vRollOutReq"
+      }
+    }
+  }
+}

@@ -1,0 +1,246 @@
+Log File: C:\ProgramData\ETAS\LogFiles\AscetBridge\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Component: PlatformLibrary\Package\AVH_AutomaticVehicleHold\private\AVH_StateMachine
+Kind: StateMachine
+Language: ESDL
+Diagrams: 2
+  - StateMachineDiagram: Main
+  - BlockDiagram: Public
+Methods: 2
+  - Trigger: TriggerTransition
+  - AbstractMethod: calc
+
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+=== Method: TriggerTransition (Trigger) ===
+
+
+=== Method: calc (AbstractMethod) ===
+/*****************************************************************************/
+/************************Pre-Calculations*************************************/
+if(CsmParkBrakeState == CSMApbSysState_Applied)
+{
+	ParkReqTriggered = false;
+}else{
+	ParkReqTriggered = ParkReqTriggered;
+}
+
+if(ParkReqTriggered == true)
+{
+	timeParkApplyTimeUp = (timeParkApplyTimeUp + CycleTime).min(C_CSM_ParkApplyReqTimeUp + 2*CycleTime);
+	if(timeParkApplyTimeUp > C_CSM_ParkApplyReqTimeUp)
+	{
+		ParkApplyTimeUp = true;
+	}
+}else
+{
+	timeParkApplyTimeUp = 0;
+	ParkApplyTimeUp = false;
+}
+
+if(AVHHoldReq == CSMHoldReq_Release)
+{
+	timeInRelease = (timeInRelease + CycleTime).min(C_CSM_CSMTimeTriggerRelease + 2*CycleTime);
+}else
+{
+	timeInRelease = 0;
+}
+
+
+/*****************************************************************************/
+/***************Determination of relevant trigger*****************************/
+
+
+// trigger pressure release out of hydraulic hold if ...
+if(AVHTrig_Release	== true)							// function triggers release
+{
+	Trig_Release = true;
+}else
+{
+	Trig_Release = false;
+}
+
+// trigger for DriveOff 
+if(		(	CsmHoldState == CSMHoldState_DriveOff
+		||	CsmHoldState == CSMHoldState_DriveOffTrqBal
+		||	CsmHoldState == CSMHoldState_Deact) // Deact considered due to robustness
+	&&	Trig_Release  == false
+	&&	AVHReq_DriveOff == true)
+{
+	Trig_DriveOff = true;
+}else
+{
+	Trig_DriveOff = false;
+}
+
+// trigger Hold by AVH if ...
+if(	   AVHTrig_Hold     		== true					// function triggers hold
+	&& Trig_Release		        == false				// (avoid toggeling behaviour of AVH)
+	&& Trig_DriveOff			== false
+	)
+{
+	Trig_Hold = true;
+}
+else
+{
+	Trig_Hold = false;
+}
+
+// trigger Drive Off out of AVH
+// in case function was requesting for drive off and CSM has confirmed
+if(		(	CsmHoldState == CSMHoldState_DriveOff
+		||	CsmHoldState == CSMHoldState_DriveOffTrqBal
+		||	CsmHoldState == CSMHoldState_Deact) // Deact considered due to robustness
+	&&	Trig_Release  == false
+	&&	AVHReq_DriveOffK1 == true
+	&&	Trig_Hold == false)
+{
+	Trig_DriveOff = true;
+}else
+{
+	Trig_DriveOff = Trig_DriveOff;
+}
+
+
+
+
+/*****************************************************************************/
+/**********Trigger the transition first time (1 of 2)*************************/
+TriggerTransition();
+
+/*****************************************************************************/
+/************  check if park brake shall be applied  *************************/
+
+// trigger park brake to close if ... (only allowed in case parallel Hold is also triggered)
+if (AVHTrig_MechHold == true)				// function triggers mech hold
+{
+	if(AVHState == AVHState_Hold)
+	{
+		Trig_MechHold = true;
+	}else
+	{
+		Trig_MechHold = false;
+	}
+}else
+{
+	Trig_MechHold = false;
+}
+
+
+
+// trigger Standby
+// in case deactivation is triggered long enough to expect that other function definitely have control
+Trig_NotActive = (	AVHHoldReq == CSMHoldReq_Release
+				&&	CsmHoldState != CSMHoldState_Deact
+				&&	timeInRelease > C_CSM_CSMTimeTriggerRelease);
+					
+Trig_NotActive = (	Trig_NotActive
+				||	CsmHoldState == CSMHoldState_NotActive
+				||	AVHHoldReq == CSMHoldReq_None);
+
+/*****************************************************************************/
+/**********Trigger the transition first time (2 of 2)*************************/
+TriggerTransition();
+
+
+
+/*****************************************************************************/
+/*************Define outputs based on current state***************************/
+switch(sm)
+{
+	// Set varaibles for Not Active state
+	case NotActive:
+	{
+		AVHState = AVHState_NotActive;
+		AVHHoldReq = CSMHoldReq_None;
+		if(AVHTrig_Standby == true)
+		{
+			AVHHoldReq = CSMHoldReq_Standby;
+		}
+		AVHParkReq = CSMParkReq_None;
+		ParkReqTriggered = false;
+		break;
+	}
+	
+	// Set varaibles for Hold State
+	case Hold:
+	{
+		AVHState = AVHState_Hold;
+		AVHHoldReq = CSMHoldReq_Hold;
+		if(AVHReq_DriveOff == true)
+		{
+			AVHHoldReq = CSMHoldReq_DriveOff;
+		}
+
+		AVHParkReq = CSMParkReq_None;
+		break;
+	}
+	
+	// Set varaibles for Hold State
+	case MechHold:
+	{
+		AVHState = AVHState_MechHold;
+		AVHHoldReq = CSMHoldReq_Hold;
+		if(AVHReq_DriveOff == true)
+		{
+			AVHHoldReq = CSMHoldReq_DriveOff;
+		}
+		
+		AVHParkReq = CSMParkReq_Apply;
+		ParkReqTriggered = true;
+		break;
+	}
+	
+	// Set varaibles for Drive Off
+	case DriveOff:
+	{
+		AVHState = AVHState_DriveOff;
+		AVHHoldReq = CSMHoldReq_DriveOff;
+		
+		if(ParkReqTriggered == true && DriverPresence == true)
+		{
+			AVHParkReq = CSMParkReq_Release;
+		}else
+		{
+			AVHParkReq = CSMParkReq_None;
+		}
+		ParkReqTriggered = false;
+		break;
+	}
+	
+	// Set varaibles for Release
+	case Release:
+	{
+		AVHState = AVHState_Release;
+		AVHHoldReq = CSMHoldReq_Release;
+		if(		Trig_Release == false
+			&&	AVHReq_DriveOff == true)
+		{
+			AVHHoldReq = CSMHoldReq_DriveOff;
+		}
+		
+		AVHParkReq = CSMParkReq_None;
+		break;
+	}
+
+	// Set varaibles in case of undefined (Must not happen! Please consider all states above)
+	default:
+	{
+		AVHState = AVHState_NotActive;
+		AVHHoldReq = CSMHoldReq_None;
+				
+		AVHParkReq = CSMParkReq_None;
+		ParkReqTriggered = false;
+		break;
+	}
+}
+
+
+/*****************************************************************************/
+/*************Post Calculations***************************/
+
+//Storage
+AVHReq_DriveOffK1 = AVHReq_DriveOff;
+
+

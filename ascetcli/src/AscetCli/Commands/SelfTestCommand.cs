@@ -43,6 +43,27 @@ public static class SelfTestCommand
                     profile));
         }
 
+        Dictionary<string, object> falseMeta = new Dictionary<string, object>();
+        falseMeta["mutationStarted"] = false;
+        Dictionary<string, object> falseEnvelope = new Dictionary<string, object>();
+        falseEnvelope["meta"] = falseMeta;
+        Dictionary<string, object> trueMeta = new Dictionary<string, object>();
+        trueMeta["mutationStarted"] = true;
+        Dictionary<string, object> trueEnvelope = new Dictionary<string, object>();
+        trueEnvelope["meta"] = trueMeta;
+        if (InProcessLegacyOperationAdapter.ReadMutationStarted(falseEnvelope) != false
+            || InProcessLegacyOperationAdapter.ReadMutationStarted(trueEnvelope) != true
+            || InProcessLegacyOperationAdapter.ReadMutationStarted(new Dictionary<string, object>()).HasValue)
+        {
+            return AscetCliEnvelope.WriteError(
+                ExitCodeStructuredError,
+                AscetCliEnvelope.Error(
+                    "guarded_mutation_started_metadata_invalid",
+                    "In-process guarded mutation did not preserve explicit mutationStarted metadata.",
+                    "selftest",
+                    "offline"));
+        }
+
         Dictionary<string, object> result = new Dictionary<string, object>();
         result["profile"] = profile;
         result["passed"] = true;
@@ -86,6 +107,33 @@ public static class SelfTestCommand
             }
         }
 
+        if (!String.Equals(
+            AscetGuardedCreateMethodOutcome.ClassifyFailure(false, true, false, true, true),
+            "rolled_back",
+            StringComparison.Ordinal))
+        {
+            return AscetCliEnvelope.WriteError(
+                ExitCodeStructuredError,
+                AscetCliEnvelope.Error(
+                    "guarded_create_method_compensation_invalid",
+                    "Guarded create_method did not classify verified Diagram compensation as rolled_back.",
+                    "selftest",
+                    "offline"));
+        }
+        if (!String.Equals(
+            AscetGuardedCreateMethodOutcome.ClassifyFailure(true, true, false, true, true),
+            "partially_applied",
+            StringComparison.Ordinal))
+        {
+            return AscetCliEnvelope.WriteError(
+                ExitCodeStructuredError,
+                AscetCliEnvelope.Error(
+                    "guarded_create_method_editability_invalid",
+                    "Guarded create_method did not preserve persistent editability as a partial outcome.",
+                    "selftest",
+                    "offline"));
+        }
+
         Dictionary<string, object> result = new Dictionary<string, object>();
         result["profile"] = "offline";
         result["passed"] = true;
@@ -95,6 +143,8 @@ public static class SelfTestCommand
         result["protocolVersion"] = 1;
         result["inProcess"] = true;
         result["toolApiConnected"] = false;
+        result["guardedCreateMethodCompensation"] = true;
+        result["guardedMutationStartedMetadata"] = true;
 
         return AscetCliEnvelope.WriteSuccess(
             AscetCliEnvelope.Success(

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ComponentImplementation toolVersion="V6.1.5_2.2.0" schemaVersion="6.1.0.1">
+	<ImplementationSet name="PiConsumer" default="false" classConfig="true" memoryLocation="Default" generateMethodBody="true" optimizeMethodCalls="true" usingServiceRoutines="false" hierarchicalGenerationForSM="true" outlineMethodsSM="true" inlinePrivateMethodsSM="true" generateDataStructures="true" cacheLocking="automatic" userDefinedOrder="false" OID="_040g00001g001qg71080hhpgmg71g">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-16T03:42:58" timeStampCounter="1630"/>
+	</ImplementationSet>
+	<ImplementationSet name="Impl" default="true" classConfig="false" memoryLocation="Default" generateMethodBody="true" optimizeMethodCalls="true" usingServiceRoutines="false" hierarchicalGenerationForSM="true" outlineMethodsSM="true" inlinePrivateMethodsSM="true" generateDataStructures="true" cacheLocking="automatic" userDefinedOrder="false" OID="_040g00001g001qg71080hhpgmg6hg">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-16T03:42:58" timeStampCounter="1629"/>
+		<ImplementationEntry>
+			<ImplementationVariant name="default">
+				<ElementImplementation elementName="C_PI_ChainTest_20260816033447512" elementOID="_040g00001g001qg71080hhqjbsa1g">
+					<ScalarImplementation>
+						<NumericImplementation limitAssignments="true" isLimitOverflow="true" limitOverflow="automatic" memoryLocationInstance="Default" additionalInformation="" cacheLocking="automatic" quantization="0" formula="ident" master="Model" physType="real64" implType="real64" zeroNotIncluded="false">
+							<PhysicalInterval min="0" max="10"/>
+							<ImplementationInterval min="0.0" max="10.0"/>
+						</NumericImplementation>
+					</ScalarImplementation>
+				</ElementImplementation>
+			</ImplementationVariant>
+		</ImplementationEntry>
+		<ImplementationEntry>
+			<ImplementationVariant name="default">
+				<ElementImplementation elementName="C_PI_ConcurrentA_20260816033447512" elementOID="_040g00001g001qg71080hisudpa1g">
+					<ScalarImplementation>
+						<NumericImplementation limitAssignments="true" isLimitOverflow="true" limitOverflow="automatic" memoryLocationInstance="Default" additionalInformation="" cacheLocking="automatic" quantization="0" formula="ident" master="Model" physType="real64" implType="real64" zeroNotIncluded="false">
+							<PhysicalInterval min="0" max="10"/>
+							<ImplementationInterval min="0.0" max="10.0"/>
+						</NumericImplementation>
+					</ScalarImplementation>
+				</ElementImplementation>
+			</ImplementationVariant>
+		</ImplementationEntry>
+		<ImplementationEntry>
+			<ImplementationVariant name="default">
+				<ElementImplementation elementName="C_PI_ConcurrentB_20260816033447512" elementOID="_040g00001g001qg71080hitj5pn1g">
+					<ScalarImplementation>
+						<NumericImplementation limitAssignments="true" isLimitOverflow="true" limitOverflow="automatic" memoryLocationInstance="Default" additionalInformation="" cacheLocking="automatic" quantization="0" formula="ident" master="Model" physType="real64" implType="real64" zeroNotIncluded="false">
+							<PhysicalInterval min="0" max="10"/>
+							<ImplementationInterval min="0.0" max="10.0"/>
+						</NumericImplementation>
+					</ScalarImplementation>
+				</ElementImplementation>
+			</ImplementationVariant>
+		</ImplementationEntry>
+		<ImplementationEntry>
+			<ImplementationVariant name="default">
+				<ElementImplementation elementName="C_PI_ConcurrentSame_20260816033447512" elementOID="_040g00001g001qg71080hiqbn8v1g">
+					<ScalarImplementation>
+						<NumericImplementation limitAssignments="true" isLimitOverflow="true" limitOverflow="automatic" memoryLocationInstance="Default" additionalInformation="" cacheLocking="automatic" quantization="0" formula="ident" master="Model" physType="real64" implType="real64" zeroNotIncluded="false">
+							<PhysicalInterval min="0" max="10"/>
+							<ImplementationInterval min="0.0" max="10.0"/>
+						</NumericImplementation>
+					</ScalarImplementation>
+				</ElementImplementation>
+			</ImplementationVariant>
+		</ImplementationEntry>
+		<ImplementationEntry>
+			<ImplementationVariant name="default">
+				<ElementImplementation elementName="C_PI_Partial_20260816033447512" elementOID="_040g00001g001qg71080hinbb8m1g">
+					<ScalarImplementation>
+						<NumericImplementation limitAssignments="true" isLimitOverflow="true" limitOverflow="automatic" memoryLocationInstance="Default" additionalInformation="" cacheLocking="automatic" quantization="0" formula="ident" master="Model" physType="real64" implType="real64" zeroNotIncluded="false">
+							<PhysicalInterval min="0" max="10"/>
+							<ImplementationInterval min="0.0" max="10.0"/>
+						</NumericImplementation>
+					</ScalarImplementation>
+				</ElementImplementation>
+			</ImplementationVariant>
+		</ImplementationEntry>
+		<ImplementationEntry>
+			<ImplementationVariant name="default">
+				<ElementImplementation elementName="C_PI_SetOnly_20260816033447512" elementOID="_040g00001g001qg71080hic37sf1g">
+					<ScalarImplementation>
+						<NumericImplementation limitAssignments="true" isLimitOverflow="true" limitOverflow="automatic" memoryLocationInstance="Default" additionalInformation="" cacheLocking="automatic" quantization="0" formula="ident" master="Model" physType="real64" implType="real64" zeroNotIncluded="false">
+							<PhysicalInterval min="0" max="10"/>
+							<ImplementationInterval min="0.0" max="10.0"/>
+						</NumericImplementation>
+					</ScalarImplementation>
+				</ElementImplementation>
+			</ImplementationVariant>
+		</ImplementationEntry>
+	</ImplementationSet>
+	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+		<SignedInfo>
+			<CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+			<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+			<Reference>
+				<Transforms>
+					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+				</Transforms>
+				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+				<DigestValue>FUVKBnW1GKZqLOYJz2UvJZaUpA8=</DigestValue>
+			</Reference>
+		</SignedInfo>
+		<SignatureValue>TjxmNS5+nZSIA94LmPgXMxsuQicklZWJKJcBfhw7CQiRQ5k+yVvR5Vtd6jzQIua/
+0EYj2ygAc3P8kif+Z6gxBPMFH8eNuelrXSsBBLuXea+wuWzKfS1dJHrGXAuIkBFB
+lEsGZ0/kRt6fxfbz+ImD2XGdLYB/347ZAmt4f6NxBDb8gVGEqcIXBpm9ubtDDv2/
+XRPXo9q7ho6RBtbpOKMFC2Xk9CI8Xyg/mUMBrEplwKxDI43Z5pef+rwsSLtwC16G
+8Ko1ZbYkLKRRIWIlCXR/KIqYeHni4LaEtQN1qywJKSPGusRbr0RTLS6/k1oKxyfl
+uPssqGqEIs3pVDUbRunzJg==</SignatureValue>
+		<KeyInfo>
+			<KeyName>Etas Ascet Verification</KeyName>
+		</KeyInfo>
+	</Signature>
+</ComponentImplementation>

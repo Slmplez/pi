@@ -1,0 +1,244 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="toc">
+  <param name="Image Width" value="16">
+  <param name="Window Styles" value="0x800427">
+  <param name="ExWindow Styles" value="0x100">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Data Editor">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Overview">
+      <param name="Local" value="DEd_Overview.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Basics">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Editors for Scalar Types">
+        <param name="Local" value="DEd_editors_scalar_types.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Table Editor (Editor for Combined Types)">
+        <param name="Local" value="DEd_editor_combined_types.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Special Characteristic Table Types">
+        <param name="Local" value="DEd_specCharTables.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Data Sets">
+        <param name="Local" value="DEd_data_sets.htm">
+      </object>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Instructions">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Opening a Data Editor">
+        <param name="Local" value="DEd_open_editor.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Editing Scalar Types">
+        <param name="Local" value="DEd_EditingScalarTypes.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing a Numerical Value">
+          <param name="Local" value="DEd_edit_value.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing a Logical Value">
+          <param name="Local" value="DEd_edit_logical_editor.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Selecting an Enumerator">
+          <param name="Local" value="DEd_select-enumerator.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Editing Combined Types">
+        <param name="Local" value="DEd_EditingCombinedTypes.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing an Array or Matrix">
+          <param name="Local" value="DEd_setup_array.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing a Characteristic Line">
+          <param name="Local" value="DEd_edit_1d_table.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing a Characteristic Map">
+          <param name="Local" value="DEd_EditCharacteristicMap.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing the Axis Points of a Fixed Characteristic Line/Map">
+          <param name="Local" value="DEd_setup_axis_points.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Data Sets">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Viewing Data Sets">
+          <param name="Local" value="DEd_view_data.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing Data Sets">
+          <param name="Local" value="DEd_EditDataSets.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Creating or Copying a New Data Set">
+            <param name="Local" value="DEd_create_copy_data.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Selecting a Data Set">
+            <param name="Local" value="DEd_SelectDataSet.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Selecting a Default Data Set">
+            <param name="Local" value="DEd_make_dataset_default.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Editing Data in a Data Set (A)">
+            <param name="Local" value="DEd_open_data_editor.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Editing Data in a Data Set (B)">
+            <param name="Local" value="DEd_copy_data.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Working with the Global Elements Data Set">
+            <param name="Local" value="DEd_work_globalelement_dataset.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Renaming a Data Set">
+            <param name="Local" value="DEd_rename_data_set.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Deleting a Data Set">
+            <param name="Local" value="DEd_delete_data_set.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Browsing a Data Set of an Included Component">
+          <param name="Local" value="DEd_browse_dataset.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Showing the Differences Between Two Data Sets">
+          <param name="Local" value="DEd_show_difference_2datasets.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Data Exchange">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Exporting a Data Set">
+            <param name="Local" value="DEd_export_dataset.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Writing Array or Table Data to a File">
+            <param name="Local" value="DEd_write_array_tabledata.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Reading the Data for an Array or a Table from a File">
+            <param name="Local" value="DEd_read_data_array_table.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Setting the Data Exchange Options">
+            <param name="Local" value="DEd_set_data_exchange_option.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Using the Data Exchange Tool Set">
+            <param name="Local" value="DEd_use_data_exchange_toolset.htm">
+          </object>
+          </ul>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Editing Dependent Parameters">
+        <param name="Local" value="DEd_Editing_Dependent_Parameters.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Mapping a Reference">
+        <param name="Local" value="DEd_MappingReference.htm">
+      </object>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Reference to User Interface">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Data Editors for Scalar Types">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Numerical Editor">
+          <param name="Local" value="DEd_numerical_editor.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Logical Editor">
+          <param name="Local" value="DEd_logical-editor.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Enumeration Editor">
+          <param name="Local" value="DEd_enumeration_editor.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Description of the Table Editor (Data Editor for Combined Types)">
+        <param name="Local" value="DEd_DataEditor_CombinedTypes.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Edit Menu (Table Editor)">
+          <param name="Local" value="DEd_EditMenuTableEditor.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Axis Menu (Table Editor)">
+          <param name="Local" value="DEd_AxisMenuTableEditor.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="View Menu (Table Editor)">
+          <param name="Local" value="DEd_ViewMenuTableEditor.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Extras Menu (Table Editor)">
+          <param name="Local" value="DEd_ExtrasMenuTableEditor.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Data Editor for Included Components">
+        <param name="Local" value="DEd_Data_for___Component__Window.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Data Menu">
+          <param name="Local" value="DEd_Data_Menu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Element Menu">
+          <param name="Local" value="DEd_Element_Menu.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Data Editor for Explicit References">
+        <param name="Local" value="Ded_DataEditor_ExplicitReferences.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Edit Dependency for: Window">
+        <param name="Local" value="DEd_Edit_Dependency_for__Window.htm">
+      </object>
+      </ul>
+    </ul>
+</ul>
+</html>

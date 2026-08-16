@@ -1,0 +1,318 @@
+{
+  "stage": "preview-PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Vehicle\\Control\\RBD\\Vehicle_RBD-abstract",
+  "request": {
+    "toolName": "ascet_edit",
+    "params": {
+      "action": "create_method",
+      "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Vehicle\\Control\\RBD\\Vehicle_RBD",
+      "componentKind": "class",
+      "methodName": "__PiPermissionProbe__",
+      "methodKind": "abstract",
+      "ifExists": "fail",
+      "intent": "preview"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"status\": \"ok\",\n  \"permission\": {\n    \"mode\": \"default\",\n    \"decision\": \"not_evaluated\"\n  },\n  \"preflight\": {\n    \"status\": \"passed\",\n    \"evidence\": {\n      \"action\": \"create_method\",\n      \"params\": {\n        \"action\": \"create_method\",\n        \"component\": \"PlatformLibrary/Package/AntiLockController/Private/SMC/Vehicle/Control/RBD/Vehicle_RBD\",\n        \"kind\": \"class\",\n        \"name\": \"__PiPermissionProbe__\",\n        \"type\": \"abstract\",\n        \"ifExists\": \"fail\",\n        \"intent\": \"preview\"\n      },\n      \"backendPreflight\": {\n        \"operation\": \"preflight_create_method\",\n        \"validated\": true,\n        \"result\": {\n          \"databasePath\": \"C:/Repo/F05_IPB_L2_0429\",\n          \"component\": \"PlatformLibrary/Package/AntiLockController/Private/SMC/Vehicle/Control/RBD/Vehicle_RBD\",\n          \"componentOid\": \"040qm01420001lo70kc07sgk2h5rs\",\n          \"kind\": \"Class\",\n          \"language\": \"ESDL\",\n          \"diagramName\": \"Main\",\n          \"diagramExists\": true,\n          \"diagramRuntimeType\": \"de.etas.cebra.toolAPI.Ascet.DiscreteMethodDiagram\",\n          \"requiredMethod\": \"AddMethod\",\n          \"requiredSignature\": \"AddMethod(String)\",\n          \"requiredMethodAvailable\": true,\n          \"addDiagramAvailable\": false,\n          \"futureMethodCapabilityProven\": true,\n          \"editable\": false,\n          \"readbackAvailable\": true,\n          \"noOp\": false,\n          \"plannedEffects\": [\n            {\n              \"kind\": \"create_method\",\n              \"target\": \"PlatformLibrary/Package/AntiLockController/Private/SMC/Vehicle/Control/RBD/Vehicle_RBD::__PiPermissionProbe__\",\n              \"type\": \"AbstractMethod\"\n            }\n          ],\n          \"capability\": {\n            \"status\": \"supported\",\n            \"operation\": \"AddMethod\"\n          }\n        }\n      },\n      \"databaseIdentity\": {\n        \"name\": \"C:\\\\Repo\\\\F05_IPB_L2_0429\",\n        \"path\": \"C:/Repo/F05_IPB_L2_0429\",\n        \"reportedPath\": \"C:/Repo\",\n        \"status\": \"consistent\",\n        \"fingerprint\": \"71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c\"\n      },\n      \"targetIdentity\": {\n        \"path\": \"PlatformLibrary/Package/AntiLockController/Private/SMC/Vehicle/Control/RBD/Vehicle_RBD\",\n        \"oid\": \"040qm01420001lo70kc07sgk2h5rs\",\n        \"kind\": \"class\"\n      },\n      \"targetImpact\": {\n        \"sharedObject\": false,\n        \"requestedPath\": \"PlatformLibrary/Package/AntiLockController/Private/SMC/Vehicle/Control/RBD/Vehicle_RBD\",\n        \"ownerPath\": \"PlatformLibrary/Package/AntiLockController/Private/SMC/Vehicle/Control/RBD/Vehicle_RBD\",\n        \"targetOid\": \"040qm01420001lo70kc07sgk2h5rs\",\n        \"aliasPaths\": [\n          \"PlatformLibrary\\\\Package\\\\AntiLockController\\\\Private\\\\SMC\\\\Vehicle\\\\Control\\\\RBD\\\\Vehicle_RBD\"\n        ],\n        \"completeness\": \"complete\",\n        \"writeAllowed\": true,\n        \"fingerprint\": \"sha256:510507903b6f0b0aeb1d2edd34d514e64be57dffde995bfc6f7a51eb35361f23\"\n      },\n      \"editability\": \"read_only\",\n      \"guardGeneration\": 0,\n      \"readbackAvailable\": true\n    }\n  },\n  \"editability\": {\n    \"status\": \"blocked\",\n    \"initiallyEditable\": false,\n    \"acquiredByThisOperation\": false\n  },\n  \"mutation\": {\n    \"status\": \"not_started\"\n  },\n  \"verification\": {\n    \"status\": \"not_applicable\"\n  },\n  \"bridge\": {\n    \"beforeBridge\": false,\n    \"bridgeEntered\": false,\n    \"backendResponseReceived\": false\n  },\n  \"recovery\": {\n    \"required\": false\n  }\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "preflight",
+        "plan": {
+          "action": "create_method",
+          "params": {
+            "action": "create_method",
+            "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Vehicle\\Control\\RBD\\Vehicle_RBD",
+            "componentKind": "class",
+            "methodName": "__PiPermissionProbe__",
+            "methodKind": "abstract",
+            "ifExists": "fail",
+            "intent": "preview"
+          },
+          "backendPreflight": {
+            "operation": "preflight_create_method",
+            "validated": true,
+            "result": {
+              "databasePath": "C:\\Repo\\F05_IPB_L2_0429",
+              "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Vehicle\\Control\\RBD\\Vehicle_RBD",
+              "componentOid": "040qm01420001lo70kc07sgk2h5rs",
+              "componentKind": "Class",
+              "languageKind": "ESDL",
+              "diagramName": "Main",
+              "diagramExists": true,
+              "diagramRuntimeType": "de.etas.cebra.toolAPI.Ascet.DiscreteMethodDiagram",
+              "requiredMethod": "AddMethod",
+              "requiredSignature": "AddMethod(String)",
+              "requiredMethodAvailable": true,
+              "addDiagramAvailable": false,
+              "futureMethodCapabilityProven": true,
+              "editable": false,
+              "readbackAvailable": true,
+              "noOp": false,
+              "existingMethod": null,
+              "plannedEffects": [
+                {
+                  "kind": "create_method",
+                  "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Vehicle\\Control\\RBD\\Vehicle_RBD::__PiPermissionProbe__",
+                  "methodKind": "AbstractMethod"
+                }
+              ],
+              "capability": {
+                "status": "supported",
+                "operation": "AddMethod",
+                "failureCode": "",
+                "failureMessage": ""
+              }
+            }
+          },
+          "databaseIdentity": {
+            "name": "C:\\Repo\\F05_IPB_L2_0429",
+            "path": "C:\\Repo\\F05_IPB_L2_0429",
+            "reportedPath": "C:\\Repo",
+            "status": "consistent",
+            "issues": [],
+            "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+          },
+          "targetIdentity": {
+            "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Vehicle\\Control\\RBD\\Vehicle_RBD",
+            "oid": "040qm01420001lo70kc07sgk2h5rs",
+            "kind": "class"
+          },
+          "targetImpact": {
+            "sharedObject": false,
+            "requestedPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Vehicle\\Control\\RBD\\Vehicle_RBD",
+            "ownerPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Vehicle\\Control\\RBD\\Vehicle_RBD",
+            "targetOid": "040qm01420001lo70kc07sgk2h5rs",
+            "aliasPaths": [
+              "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Vehicle\\Control\\RBD\\Vehicle_RBD"
+            ],
+            "affectedProjects": [],
+            "completeness": "complete",
+            "writeAllowed": true,
+            "fingerprint": "sha256:510507903b6f0b0aeb1d2edd34d514e64be57dffde995bfc6f7a51eb35361f23"
+          },
+          "editability": "read_only",
+          "guardGeneration": 0,
+          "readbackAvailable": true,
+          "preflightFingerprint": "5299a90139f456844660701c1cfda4fb260632585f81f811aab1762bab99d9ec"
+        },
+        "nextStep": "Preview complete. No ASCET mutation was performed."
+      },
+      "raw": {
+        "ok": true,
+        "data": {
+          "type": "response",
+          "protocolVersion": 1,
+          "ok": true,
+          "result": {
+            "databasePath": "C:\\Repo\\F05_IPB_L2_0429",
+            "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Vehicle\\Control\\RBD\\Vehicle_RBD",
+            "componentOid": "040qm01420001lo70kc07sgk2h5rs",
+            "componentKind": "Class",
+            "languageKind": "ESDL",
+            "diagramName": "Main",
+            "diagramExists": true,
+            "diagramRuntimeType": "de.etas.cebra.toolAPI.Ascet.DiscreteMethodDiagram",
+            "requiredMethod": "AddMethod",
+            "requiredSignature": "AddMethod(String)",
+            "requiredMethodAvailable": true,
+            "addDiagramAvailable": false,
+            "futureMethodCapabilityProven": true,
+            "editable": false,
+            "readbackAvailable": true,
+            "noOp": false,
+            "existingMethod": null,
+            "plannedEffects": [
+              {
+                "kind": "create_method",
+                "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Vehicle\\Control\\RBD\\Vehicle_RBD::__PiPermissionProbe__",
+                "methodKind": "AbstractMethod"
+              }
+            ],
+            "capability": {
+              "status": "supported",
+              "operation": "AddMethod",
+              "failureCode": "",
+              "failureMessage": ""
+            }
+          },
+          "error": null,
+          "meta": {
+            "bridgePid": 29960,
+            "bridgeGeneration": "5a57f43f-c0f8-4efc-99cb-952fb92414c5",
+            "durationMs": 342,
+            "sessionPolicy": "fresh_session",
+            "mutationStarted": false,
+            "mode": "exec",
+            "operation": "preflight_create_method"
+          }
+        },
+        "request": {
+          "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "preflight_create_method",
+            "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Vehicle\\Control\\RBD\\Vehicle_RBD",
+            "__PiPermissionProbe__",
+            "--method-kind",
+            "abstract",
+            "--if-exists",
+            "fail",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"databasePath\":\"C:\\\\Repo\\\\F05_IPB_L2_0429\",\"componentPath\":\"PlatformLibrary\\\\Package\\\\AntiLockController\\\\Private\\\\SMC\\\\Vehicle\\\\Control\\\\RBD\\\\Vehicle_RBD\",\"componentOid\":\"040qm01420001lo70kc07sgk2h5rs\",\"componentKind\":\"Class\",\"languageKind\":\"ESDL\",\"diagramName\":\"Main\",\"diagramExists\":true,\"diagramRuntimeType\":\"de.etas.cebra.toolAPI.Ascet.DiscreteMethodDiagram\",\"requiredMethod\":\"AddMethod\",\"requiredSignature\":\"AddMethod(String)\",\"requiredMethodAvailable\":true,\"addDiagramAvailable\":false,\"futureMethodCapabilityProven\":true,\"editable\":false,\"readbackAvailable\":true,\"noOp\":false,\"existingMethod\":null,\"plannedEffects\":[{\"kind\":\"create_method\",\"target\":\"PlatformLibrary\\\\Package\\\\AntiLockController\\\\Private\\\\SMC\\\\Vehicle\\\\Control\\\\RBD\\\\Vehicle_RBD::__PiPermissionProbe__\",\"methodKind\":\"AbstractMethod\"}],\"capability\":{\"status\":\"supported\",\"operation\":\"AddMethod\",\"failureCode\":\"\",\"failureMessage\":\"\"}},\"error\":null,\"meta\":{\"bridgePid\":29960,\"bridgeGeneration\":\"5a57f43f-c0f8-4efc-99cb-952fb92414c5\",\"durationMs\":342,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"preflight_create_method\"}}\r\n",
+        "stderr": "",
+        "exitCode": 0,
+        "timedOut": false,
+        "aborted": false,
+        "operationId": "preflight_create_method"
+      },
+      "mutationResult": {
+        "status": "ok",
+        "permission": {
+          "mode": "default",
+          "decision": "not_evaluated"
+        },
+        "preflight": {
+          "status": "passed",
+          "evidence": {
+            "action": "create_method",
+            "params": {
+              "action": "create_method",
+              "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Vehicle\\Control\\RBD\\Vehicle_RBD",
+              "componentKind": "class",
+              "methodName": "__PiPermissionProbe__",
+              "methodKind": "abstract",
+              "ifExists": "fail",
+              "intent": "preview"
+            },
+            "backendPreflight": {
+              "operation": "preflight_create_method",
+              "validated": true,
+              "result": {
+                "databasePath": "C:\\Repo\\F05_IPB_L2_0429",
+                "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Vehicle\\Control\\RBD\\Vehicle_RBD",
+                "componentOid": "040qm01420001lo70kc07sgk2h5rs",
+                "componentKind": "Class",
+                "languageKind": "ESDL",
+                "diagramName": "Main",
+                "diagramExists": true,
+                "diagramRuntimeType": "de.etas.cebra.toolAPI.Ascet.DiscreteMethodDiagram",
+                "requiredMethod": "AddMethod",
+                "requiredSignature": "AddMethod(String)",
+                "requiredMethodAvailable": true,
+                "addDiagramAvailable": false,
+                "futureMethodCapabilityProven": true,
+                "editable": false,
+                "readbackAvailable": true,
+                "noOp": false,
+                "existingMethod": null,
+                "plannedEffects": [
+                  {
+                    "kind": "create_method",
+                    "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Vehicle\\Control\\RBD\\Vehicle_RBD::__PiPermissionProbe__",
+                    "methodKind": "AbstractMethod"
+                  }
+                ],
+                "capability": {
+                  "status": "supported",
+                  "operation": "AddMethod",
+                  "failureCode": "",
+                  "failureMessage": ""
+                }
+              }
+            },
+            "databaseIdentity": {
+              "name": "C:\\Repo\\F05_IPB_L2_0429",
+              "path": "C:\\Repo\\F05_IPB_L2_0429",
+              "reportedPath": "C:\\Repo",
+              "status": "consistent",
+              "issues": [],
+              "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+            },
+            "targetIdentity": {
+              "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Vehicle\\Control\\RBD\\Vehicle_RBD",
+              "oid": "040qm01420001lo70kc07sgk2h5rs",
+              "kind": "class"
+            },
+            "targetImpact": {
+              "sharedObject": false,
+              "requestedPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Vehicle\\Control\\RBD\\Vehicle_RBD",
+              "ownerPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Vehicle\\Control\\RBD\\Vehicle_RBD",
+              "targetOid": "040qm01420001lo70kc07sgk2h5rs",
+              "aliasPaths": [
+                "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Vehicle\\Control\\RBD\\Vehicle_RBD"
+              ],
+              "affectedProjects": [],
+              "completeness": "complete",
+              "writeAllowed": true,
+              "fingerprint": "sha256:510507903b6f0b0aeb1d2edd34d514e64be57dffde995bfc6f7a51eb35361f23"
+            },
+            "editability": "read_only",
+            "guardGeneration": 0,
+            "readbackAvailable": true
+          }
+        },
+        "editability": {
+          "status": "blocked",
+          "initiallyEditable": false,
+          "acquiredByThisOperation": false
+        },
+        "mutation": {
+          "status": "not_started"
+        },
+        "verification": {
+          "status": "not_applicable"
+        },
+        "bridge": {
+          "beforeBridge": false,
+          "bridgeEntered": false,
+          "backendResponseReceived": false
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      },
+      "tool": "ascet_edit",
+      "action": "create_method",
+      "command": {
+        "logicalCommandId": "AscetCreateMethod",
+        "backendCommandId": "AscetCreateMethod",
+        "operation": "create_method"
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "preflight_create_method",
+            "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Vehicle\\Control\\RBD\\Vehicle_RBD",
+            "__PiPermissionProbe__",
+            "--method-kind",
+            "abstract",
+            "--if-exists",
+            "fail",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 0,
+        "timedOut": false,
+        "stderr": ""
+      }
+    }
+  }
+}

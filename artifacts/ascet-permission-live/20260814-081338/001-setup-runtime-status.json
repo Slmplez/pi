@@ -1,0 +1,83 @@
+{
+  "stage": "setup-runtime-status",
+  "startedAt": "2026-08-14T00:13:42.773Z",
+  "finishedAt": "2026-08-14T00:13:43.684Z",
+  "request": {
+    "toolName": "ascet_status",
+    "params": {}
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "ASCET status: ready\nASCET installation: ready\nASCET mode: bundle\nASCET extension: C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\nASCET source: C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\nASCET Bridge: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe\nASCET contracts: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts\ncli-catalog.json: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts\\cli-catalog.json\nASCET DLL: ready\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\Ascetapidll\\Etas.AscetNET.dll\nASCET ToolAPI: ready\n  ASCET live ToolAPI quick self-test\n  elapsedMs: 896\nASCET scheduler: ready\nASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none"
+      }
+    ],
+    "details": {
+      "ok": true,
+      "paths": {
+        "mode": "bundle",
+        "ascetAgentRoot": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+        "extensionRoot": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension",
+        "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+        "contractsRoot": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts",
+        "catalogPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts\\cli-catalog.json"
+      },
+      "checks": {
+        "cliExists": true,
+        "contractsRootExists": true,
+        "catalogExists": true
+      },
+      "summary": "ASCET status: ready\nASCET installation: ready\nASCET mode: bundle\nASCET extension: C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\nASCET source: C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\nASCET Bridge: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe\nASCET contracts: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts\ncli-catalog.json: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts\\cli-catalog.json\nASCET DLL: ready\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\Ascetapidll\\Etas.AscetNET.dll\nASCET ToolAPI: ready\n  ASCET live ToolAPI quick self-test\n  elapsedMs: 896\nASCET scheduler: ready\nASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none",
+      "installationOk": true,
+      "dllOk": true,
+      "runtimeOk": true,
+      "schedulerOk": true,
+      "dll": {
+        "ok": true,
+        "path": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\Ascetapidll\\Etas.AscetNET.dll"
+      },
+      "runtime": {
+        "ok": true,
+        "commandId": "selftest",
+        "description": "ASCET live ToolAPI quick self-test",
+        "elapsedMs": 896,
+        "exitCode": 0,
+        "timedOut": false,
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"profile\":\"quick\",\"passed\":true,\"status\":\"passed\",\"stdout\":\"Log File: C:\\\\ProgramData\\\\ETAS\\\\LogFiles\\\\AscetBridge\\\\Cebra\\r\\nProgram Path: C:\\\\Program Files (x86)\\\\ETAS\\\\ASCET6.1.5\\\\Cebra\\r\\nDatabase: C:\\\\Repo\\\\F05_IPB_L2_0429\\r\\nDatabasePath: C:\\\\Repo\\\\\\r\\nTopFolders: 11\\r\\n\",\"stderr\":\"\",\"inProcess\":true},\"error\":null,\"meta\":{\"bridgePid\":30944,\"bridgeGeneration\":\"6fa1e986-4641-42c6-9bd8-a97e8a8c7d7b\",\"durationMs\":350,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"selftest\",\"operation\":\"quick\"}}\r\n",
+        "stderr": ""
+      },
+      "scheduler": {
+        "ok": true,
+        "scheduler": {
+          "hostState": "healthy",
+          "runningJob": null,
+          "queuedJobs": [],
+          "recentJobs": [],
+          "pendingByAgent": {},
+          "activeCount": 0,
+          "resource": {
+            "key": "ascet.toolapi.global",
+            "active": 0,
+            "queued": 0,
+            "concurrency": 1,
+            "runningJob": null
+          }
+        },
+        "cliLock": {
+          "locked": false,
+          "path": "C:\\Users\\NHJ3SZH\\AppData\\Local\\PI\\ascet\\locks\\ascet-toolapi.lock"
+        },
+        "operationHealth": [],
+        "summary": "ASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none"
+      },
+      "tool": "ascet_status",
+      "action": "status",
+      "command": {
+        "logicalCommandId": "PiAscetStatus",
+        "backendCommandId": "PiAscetStatus",
+        "operation": "status"
+      }
+    }
+  }
+}

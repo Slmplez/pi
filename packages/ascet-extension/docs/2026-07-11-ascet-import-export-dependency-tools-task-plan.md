@@ -52,7 +52,7 @@ Date: 2026-07-11
   dryRun?: boolean;
   backupDir?: string;
   verifyReadback?: boolean;
-  executeWrite?: boolean;
+  intent: "preview" | "apply";
 }
 ```
 

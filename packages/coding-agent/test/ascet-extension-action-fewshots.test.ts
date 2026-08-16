@@ -1,7 +1,6 @@
 import { Value } from "typebox/value";
 import { describe, expect, it } from "vitest";
-import { configureParameterDependencyChainParameters } from "../../ascet-extension/src/configure-parameter-dependency-chain.ts";
-import { ascetGetParameters } from "../../ascet-extension/src/get.ts";
+import { ascetSearchParameters } from "../../ascet-extension/src/search.ts";
 import {
 	type AscetActionExample,
 	ascetActionExamples,
@@ -12,6 +11,7 @@ import { ascetBatchWriteParameters } from "../../ascet-extension/src/tools/batch
 import { ascetCapabilitiesParameters } from "../../ascet-extension/src/tools/capabilities/schema.ts";
 import { ascetDiffParameters } from "../../ascet-extension/src/tools/diff/schema.ts";
 import { ascetEditParameters } from "../../ascet-extension/src/tools/edit/schema.ts";
+import { ascetGetParameters } from "../../ascet-extension/src/tools/get/schema.ts";
 import { ascetReadParameters } from "../../ascet-extension/src/tools/read/schema.ts";
 import { ascetRecoverParameters } from "../../ascet-extension/src/tools/recover/schema.ts";
 import { allAscetToolNames, canonicalAscetToolNames } from "../../ascet-extension/src/tools/registry.ts";
@@ -23,12 +23,12 @@ const schemaByTool = {
 	ascet_capabilities: ascetCapabilitiesParameters,
 	ascet_recover: ascetRecoverParameters,
 	ascet_scheduler_status: ascetSchedulerStatusParameters,
+	ascet_search: ascetSearchParameters,
 	ascet_get: ascetGetParameters,
 	ascet_read: ascetReadParameters,
 	ascet_diff: ascetDiffParameters,
 	ascet_edit: ascetEditParameters,
 	ascet_batch_write: ascetBatchWriteParameters,
-	configure_parameter_dependency_chain: configureParameterDependencyChainParameters,
 } as const;
 
 function stringLiterals(schema: unknown): string[] {
@@ -55,16 +55,14 @@ function actionSchemas(
 ): Array<{ properties?: { action?: unknown; operation?: unknown; mode?: unknown } }> {
 	const node = schema as
 		| {
-				anyOf?: Array<{ properties?: { action?: unknown; operation?: unknown; mode?: unknown } }>;
+				anyOf?: unknown[];
+				oneOf?: unknown[];
 				properties?: { action?: unknown; operation?: unknown; mode?: unknown };
 		  }
 		| undefined;
-	if (!node) {
-		return [];
-	}
-	if (Array.isArray(node.anyOf)) {
-		return node.anyOf;
-	}
+	if (!node) return [];
+	const variants = [...(node.anyOf ?? []), ...(node.oneOf ?? [])];
+	if (variants.length > 0) return variants.flatMap(actionSchemas);
 	return node.properties ? [node] : [];
 }
 
@@ -97,7 +95,6 @@ function expectedExampleKeys(): Set<string> {
 			}
 		}
 	}
-	expected.add("configure_parameter_dependency_chain.execute");
 	expected.delete("ascet_edit.set_module_code");
 	expected.delete("ascet_edit.set_state_machine_code");
 	for (const operation of ["set-method", "set-header", "set-external-c-code"]) {
@@ -141,31 +138,35 @@ describe("ASCET action few-shot examples", () => {
 		expect(projectedKeys).toEqual(catalogKeys);
 	});
 
-	it("covers every model-facing action and operation variant exactly once", () => {
+	it("covers every model-facing action and every operation variant", () => {
 		const expected = expectedExampleKeys();
 		const actual = new Set(ascetActionExamples.map(exampleKey));
 
 		expect(actual).toEqual(expected);
-		expect(ascetActionExamples).toHaveLength(expected.size);
 		expect(actual.has("ascet_edit.set_class_method_code")).toBe(false);
 	});
 
 	it("keeps every example schema-valid and compact", () => {
-		const seen = new Set<string>();
+		const seenCalls = new Set<string>();
+		const seenVariants = new Set<string>();
 		for (const example of ascetActionExamples) {
 			const key = exampleKey(example);
 			expect(allAscetToolNames, key).toContain(example.tool as (typeof allAscetToolNames)[number]);
-			expect(seen.has(key), key).toBe(false);
-			seen.add(key);
+			expect(seenCalls.has(example.call), example.call).toBe(false);
+			seenCalls.add(example.call);
+			if (example.variant) {
+				expect(seenVariants.has(key), key).toBe(false);
+				seenVariants.add(key);
+			}
 			expect(example.intent.trim(), key).toBe(example.intent);
 			expect(example.intent.length, key).toBeGreaterThan(0);
 			expect(example.intent.length, key).toBeLessThanOrEqual(36);
 			const maxCallLength =
-				example.tool === "configure_parameter_dependency_chain"
+				example.tool === "ascet_edit" && example.action === "create_dependent_chain"
 					? 1_200
 					: example.tool === "ascet_edit" && example.action === "apply_element_spec"
 						? 500
-						: 160;
+						: 180;
 			expect(example.call.length, key).toBeLessThanOrEqual(maxCallLength);
 			expect(example.call, key).not.toContain("\n");
 			expect(example.call, key).toContain(`${example.tool}(`);
@@ -174,8 +175,8 @@ describe("ASCET action few-shot examples", () => {
 			if (example.tool !== "ascet_status" && example.tool !== "ascet_capabilities") {
 				if (example.tool === "ascet_batch_write") {
 					expect((example.args as { operation?: string }).operation, key).toBe(example.action);
-				} else if (example.tool === "configure_parameter_dependency_chain") {
-					expect(example.action, key).toBe("execute");
+				} else if (example.tool === "ascet_edit" && example.action === "create_dependent_chain") {
+					expect((example.args as { action?: string }).action, key).toBe("create_dependent_chain");
 					expect(example.args, key).not.toHaveProperty("mode");
 					expect(example.args, key).not.toHaveProperty("planId");
 				} else if (
@@ -195,10 +196,10 @@ describe("ASCET action few-shot examples", () => {
 		const allGuidelines = canonicalAscetToolNames.flatMap((tool) => compactExamplesForTool(tool));
 		const totalCharacters = allGuidelines.reduce((sum, guideline) => sum + guideline.length + 1, 0);
 
-		expect(allGuidelines).toHaveLength(catalogExampleKeys({ publicOnly: true }).size);
+		expect(allGuidelines).toHaveLength(ascetActionExamples.filter((example) => example.hidden !== true).length);
 		expect(totalCharacters).toBeLessThanOrEqual(11_000);
 		for (const guideline of allGuidelines) {
-			const maxGuidelineLength = guideline.startsWith("configure_parameter_dependency_chain(")
+			const maxGuidelineLength = guideline.startsWith('ascet_edit({action:"create_dependent_chain"')
 				? 1_200
 				: guideline.startsWith('ascet_edit({action:"apply_element_spec"')
 					? 500

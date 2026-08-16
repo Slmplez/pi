@@ -1,0 +1,70 @@
+{
+  "resultId": "obs-tree-10600-1786504414110-0",
+  "domain": "tree",
+  "target": {
+    "scope": "database"
+  },
+  "itemCount": 9162,
+  "coverage": {
+    "status": "complete_for_scope",
+    "scopeKind": "database",
+    "scopeId": "database:C:\\Repo\\11_ASCETCopilotLiveTest\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\ASW\\Db\\",
+    "completeness": "complete",
+    "truncated": false,
+    "foldersVisited": 1624,
+    "componentsScanned": 6815,
+    "identityKinds": [
+      "asceticon",
+      "class",
+      "enumeration",
+      "folder",
+      "module",
+      "project",
+      "signal",
+      "statemachine"
+    ],
+    "collectorStarted": true,
+    "collectorCompleted": true,
+    "rootCollectionAvailable": true,
+    "projectCollectionAvailable": true,
+    "missingOidCount": 0,
+    "missingPathCount": 0,
+    "collectors": {
+      "database": {
+        "started": true,
+        "completed": true,
+        "itemCount": 1
+      },
+      "projects": {
+        "started": true,
+        "completed": true,
+        "itemCount": 63
+      },
+      "folders": {
+        "started": true,
+        "completed": true,
+        "itemCount": 1624
+      },
+      "components": {
+        "started": true,
+        "completed": true,
+        "itemCount": 6752
+      },
+      "enumerations": {
+        "started": true,
+        "completed": true,
+        "itemCount": 641
+      }
+    }
+  },
+  "truncated": false,
+  "source": "live",
+  "sourceIdentity": {
+    "database": {
+      "name": "C:\\Repo\\11_ASCETCopilotLiveTest\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\ASW\\Db\\AscetDb_20260707223121",
+      "path": "C:\\Repo\\11_ASCETCopilotLiveTest\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\ASW\\Db\\",
+      "fingerprint": "49be9da8ddaa5ac7b09b24a394229cbbd9a9dc3dbabadf9704da7ff25633274a"
+    }
+  },
+  "capturedAt": "2026-08-12T03:13:34.110Z"
+}

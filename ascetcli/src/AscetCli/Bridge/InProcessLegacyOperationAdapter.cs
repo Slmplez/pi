@@ -13,6 +13,28 @@ public sealed class LegacyOperationInvocationResult
     public string Stderr { get; set; }
 }
 
+public sealed class InProcessLegacyOperationException : Exception
+{
+    public string Code { get; private set; }
+    public string Operation { get; private set; }
+    public bool? MutationStarted { get; private set; }
+    public Dictionary<string, object> Envelope { get; private set; }
+
+    public InProcessLegacyOperationException(
+        string code,
+        string operation,
+        string message,
+        bool? mutationStarted,
+        Dictionary<string, object> envelope)
+        : base(message)
+    {
+        Code = code ?? String.Empty;
+        Operation = operation ?? String.Empty;
+        MutationStarted = mutationStarted;
+        Envelope = envelope;
+    }
+}
+
 public static class InProcessLegacyOperationAdapter
 {
     private const int ExitCodeStructuredError = 2;
@@ -47,7 +69,7 @@ public static class InProcessLegacyOperationAdapter
                     invocation.Stdout,
                     "Legacy operation returned exit code " + invocation.ExitCode.ToString(CultureInfo.InvariantCulture) + ".");
             }
-            return WriteFailure(operation, code, message, invocation.Stdout, invocation.Stderr, AscetCliEnvelope.ResolveFailureMutationStarted(IsMutatingOperation(operation), code));
+            return WriteFailure(operation, code, message, invocation.Stdout, invocation.Stderr, ReadMutationStarted(envelope) ?? AscetCliEnvelope.ResolveFailureMutationStarted(IsMutatingOperation(operation), code));
         }
 
         Dictionary<string, object> result = TryParseObject(invocation.Stdout);
@@ -98,9 +120,12 @@ public static class InProcessLegacyOperationAdapter
         {
             case "apply_project_formula":
             case "create_method":
+            case "guarded_create_method":
+            case "preflight_create_method":
             case "delete_method":
                 return 2;
             case "create_folder":
+            case "preflight_create_folder":
             case "delete_component":
             case "delete_folder":
                 return 1;
@@ -190,15 +215,18 @@ public static class InProcessLegacyOperationAdapter
     public static Dictionary<string, object> InvokeJsonObject(string operation, LegacyOperationEntryPoint entryPoint, string[] args)
     {
         LegacyOperationInvocationResult invocation = Invoke(entryPoint, args);
+        Dictionary<string, object> parsed = TryParseObject(invocation.Stdout);
         if (invocation.ExitCode != 0)
         {
-            throw new AscetReadException(
-                "in_process_operation_failed",
+            Dictionary<string, object> error = GetDictionary(parsed, "error");
+            throw new InProcessLegacyOperationException(
+                FirstNonEmpty(GetString(error, "code"), String.Empty, "in_process_operation_failed"),
                 operation ?? String.Empty,
-                FirstNonEmpty(invocation.Stderr, invocation.Stdout, "In-process operation failed."));
+                FirstNonEmpty(GetString(error, "message"), invocation.Stderr, "In-process operation failed."),
+                ReadMutationStarted(parsed),
+                parsed);
         }
 
-        Dictionary<string, object> parsed = TryParseObject(invocation.Stdout);
         if (parsed == null)
         {
             throw new AscetReadException(
@@ -211,10 +239,12 @@ public static class InProcessLegacyOperationAdapter
         if (parsed.TryGetValue("ok", out okValue) && okValue is bool && !(bool)okValue)
         {
             Dictionary<string, object> error = GetDictionary(parsed, "error");
-            throw new AscetReadException(
+            throw new InProcessLegacyOperationException(
                 FirstNonEmpty(GetString(error, "code"), String.Empty, "in_process_operation_failed"),
                 operation ?? String.Empty,
-                FirstNonEmpty(GetString(error, "message"), invocation.Stderr, "In-process operation failed."));
+                FirstNonEmpty(GetString(error, "message"), invocation.Stderr, "In-process operation failed."),
+                ReadMutationStarted(parsed),
+                parsed);
         }
 
         Dictionary<string, object> result = GetDictionary(parsed, "result");
@@ -268,6 +298,16 @@ public static class InProcessLegacyOperationAdapter
         }
     }
 
+    internal static bool? ReadMutationStarted(IDictionary<string, object> envelope)
+    {
+        Dictionary<string, object> meta = GetDictionary(envelope, "meta");
+        if (meta == null || !meta.ContainsKey("mutationStarted") || !(meta["mutationStarted"] is bool))
+        {
+            return null;
+        }
+        return (bool)meta["mutationStarted"];
+    }
+
     private static Dictionary<string, object> GetDictionary(IDictionary<string, object> payload, string key)
     {
         if (payload == null || !payload.ContainsKey(key))
@@ -299,3 +339,6 @@ public static class InProcessLegacyOperationAdapter
         return fallback ?? String.Empty;
     }
 }
+
+
+

@@ -48,3 +48,28 @@ export interface AscetPermissionEvaluationInput {
 	targetCount?: number;
 	variantCount?: number;
 }
+
+export interface AscetPermissionSnapshot {
+	mode: PermissionMode;
+	rules: readonly AscetPermissionRule[];
+	configError?: string;
+}
+
+export interface AscetPermissionProvider {
+	getSnapshot(cwd: string): AscetPermissionSnapshot;
+}
+
+const DEFAULT_ASCET_PERMISSION_SNAPSHOT: AscetPermissionSnapshot = Object.freeze({
+	mode: "default",
+	rules: Object.freeze([]),
+});
+
+export function isPermissionMode(value: unknown): value is PermissionMode {
+	return value === "default" || value === "acceptEdits" || value === "auto";
+}
+
+export function resolveAscetPermissionSnapshot(ctx: {
+	ascetPermission?: AscetPermissionSnapshot;
+}): AscetPermissionSnapshot {
+	return ctx.ascetPermission ?? DEFAULT_ASCET_PERMISSION_SNAPSHOT;
+}

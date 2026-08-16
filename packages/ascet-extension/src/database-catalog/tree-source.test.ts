@@ -1,4 +1,4 @@
-import assert from "node:assert/strict";
+﻿import assert from "node:assert/strict";
 import { mkdtempSync, rmSync, unlinkSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -32,7 +32,7 @@ test("loads a full Tree once and deduplicates Module and Enumeration identities 
 			domain: "tree",
 			target: {},
 			sourceIdentity: {
-				database: { name: "DB", path: "C:/Repo/DB", fingerprint: "a".repeat(64) },
+				database: { name: "DB", path: "C:/Repo/DB", status: "consistent", issues: [], fingerprint: "a".repeat(64) },
 			},
 			items: [
 				{ path: "DB\\Project", oid: "project-1", kind: "project" },
@@ -96,7 +96,7 @@ test("rejects non-Tree, bounded, partial, truncated, and missing-data observatio
 			domain: "elements",
 			target: {},
 			sourceIdentity: {
-				database: { name: "DB", path: "C:/Repo/DB", fingerprint: "a".repeat(64) },
+				database: { name: "DB", path: "C:/Repo/DB", status: "consistent", issues: [], fingerprint: "a".repeat(64) },
 			},
 			items: [],
 			coverage: {
@@ -111,7 +111,7 @@ test("rejects non-Tree, bounded, partial, truncated, and missing-data observatio
 			domain: "tree",
 			target: {},
 			sourceIdentity: {
-				database: { name: "DB", path: "C:/Repo/DB", fingerprint: "a".repeat(64) },
+				database: { name: "DB", path: "C:/Repo/DB", status: "consistent", issues: [], fingerprint: "a".repeat(64) },
 			},
 			items: [],
 			coverage: { status: "complete_for_scope" },
@@ -121,7 +121,7 @@ test("rejects non-Tree, bounded, partial, truncated, and missing-data observatio
 			domain: "tree",
 			target: { targetPathPrefix: "DB\\Project" },
 			sourceIdentity: {
-				database: { name: "DB", path: "C:/Repo/DB", fingerprint: "a".repeat(64) },
+				database: { name: "DB", path: "C:/Repo/DB", status: "consistent", issues: [], fingerprint: "a".repeat(64) },
 			},
 			items: [],
 			coverage: {
@@ -136,7 +136,7 @@ test("rejects non-Tree, bounded, partial, truncated, and missing-data observatio
 			domain: "tree",
 			target: {},
 			sourceIdentity: {
-				database: { name: "DB", path: "C:/Repo/DB", fingerprint: "a".repeat(64) },
+				database: { name: "DB", path: "C:/Repo/DB", status: "consistent", issues: [], fingerprint: "a".repeat(64) },
 			},
 			items: [],
 			coverage: {
@@ -151,7 +151,7 @@ test("rejects non-Tree, bounded, partial, truncated, and missing-data observatio
 			domain: "tree",
 			target: {},
 			sourceIdentity: {
-				database: { name: "DB", path: "C:/Repo/DB", fingerprint: "a".repeat(64) },
+				database: { name: "DB", path: "C:/Repo/DB", status: "consistent", issues: [], fingerprint: "a".repeat(64) },
 			},
 			items: [],
 			coverage: {
@@ -179,7 +179,7 @@ test("rejects non-Tree, bounded, partial, truncated, and missing-data observatio
 			domain: "tree",
 			target: {},
 			sourceIdentity: {
-				database: { name: "DB", path: "C:/Repo/DB", fingerprint: "a".repeat(64) },
+				database: { name: "DB", path: "C:/Repo/DB", status: "consistent", issues: [], fingerprint: "a".repeat(64) },
 			},
 			items: [],
 			coverage: {
@@ -198,7 +198,7 @@ test("rejects non-Tree, bounded, partial, truncated, and missing-data observatio
 			domain: "tree",
 			target: {},
 			sourceIdentity: {
-				database: { name: "DB", path: "C:/Repo/DB", fingerprint: "a".repeat(64) },
+				database: { name: "DB", path: "C:/Repo/DB", status: "consistent", issues: [], fingerprint: "a".repeat(64) },
 			},
 			items: [],
 			coverage: {

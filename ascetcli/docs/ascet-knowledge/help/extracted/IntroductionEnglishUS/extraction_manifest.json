@@ -1,0 +1,1570 @@
+{
+  "generated_at": "2026-04-01T03:08:11.855698Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\IntroductionEnglishUS.chm",
+  "unpack_dir": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\IntroductionEnglishUS\\unpacked",
+  "total_files": 258,
+  "total_size_bytes": 4502807,
+  "counts_by_extension": {
+    ".gif": 129,
+    ".bmp": 7,
+    ".js": 2,
+    ".xml": 1,
+    ".htm": 113,
+    ".brs": 1,
+    ".glo": 1,
+    ".hhc": 1,
+    ".hhk": 1,
+    ".css": 1,
+    ".lng": 1
+  },
+  "files": [
+    {
+      "relative_path": "AddMul_mit_Impl_Cast copy.gif",
+      "size": 2278,
+      "sha256": "b226b733e250875e255ae49d28dc80cced5a57709e70303758fe4c3d5fe3fea8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "AddMul_ohne_Impl_Cast copy.gif",
+      "size": 2166,
+      "sha256": "fc1440ee50146b3f735c065611b48454433443b2a5ce7f66a83c101a785619e5",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "asd0301a copy.gif",
+      "size": 1357,
+      "sha256": "ae9df2f1ee663b84c6ad2dcc14b86bef7cbf47f70126244fa5b287a9200f0f01",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "asd1004.gif",
+      "size": 1594,
+      "sha256": "e8b62ebfdf931278283c9dea0fc3525934a0aff3d94c8be45c06edb49ec5101a",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ASDlinks_01.gif",
+      "size": 36279,
+      "sha256": "476b538e316433e995d5787c0b957f1536c9e7f9ae71d1b34b11b4e4a2d8d23c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ASDlinks_03.gif",
+      "size": 35975,
+      "sha256": "21c7c84f2dd67a735903249f56db92fc7e604e904b3f8906da7d6dc6418f5d3f",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ASDlinks_08.gif",
+      "size": 31305,
+      "sha256": "306f449e91d9039faa10252da29dba9ebc3a47206c2856edb92ace49d7ce71f1",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ASDlinks_09.gif",
+      "size": 31246,
+      "sha256": "78fee81321fdc424f996bc2ce3942bb3860d9527cf9ea90a2f04b482f628400c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ASDlinks_10.gif",
+      "size": 32570,
+      "sha256": "9ac4672a91d36aa90c67eca873b16f87c24a86004ad0e9b276fa2d2872fed0a5",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ASDlinks_11.gif",
+      "size": 33428,
+      "sha256": "4e1f3b5bac3dbe18ab3486f54bd2fe47e979864e99a697301204124ce14efa60",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ASDlinks_12.gif",
+      "size": 35462,
+      "sha256": "7d83fd97ff2d4238d6db4b3abbdaa21c2d085e0e3379309075a5fc9c2e71362e",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ASDlinks_13.gif",
+      "size": 37639,
+      "sha256": "39cc1cd619d1b3090460aa8a1d4088cc1667eceecba3f07396b4b68ef2c3b3c5",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ASDlinks_15.gif",
+      "size": 34504,
+      "sha256": "b9b6b0ef947dd7ec0a58da4978c269ce755aa5ebd6a702aaba1a5c99dd85ca26",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ASDlinks_17.gif",
+      "size": 37895,
+      "sha256": "fdec87fb80a33025f29d80b20e40c9752c3c30a780432a849bc6aa2b376126f8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ASDlinks_18.gif",
+      "size": 32213,
+      "sha256": "e4b37c9981626c6891621a8ac88e2155d772a5b58bc650793c05ba3731aa495b",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ASDlinks_21.gif",
+      "size": 36101,
+      "sha256": "f6f6e10ddeca3ccfc002502018b4946c0aeca10bc78498eb80689cdafaaf996c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ASDlinks_23.gif",
+      "size": 37197,
+      "sha256": "3b0f3666a249f822b4b4a088a79dc6fcac99b169d8bf9301ceee6ebee6bb6fd1",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ASDlinks_26.gif",
+      "size": 29434,
+      "sha256": "e4ace6b3ba9b1aef8fccbf14082431548d6fb073c507143d6132dd74d953f1f9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ASDlinks_27.gif",
+      "size": 31452,
+      "sha256": "7306053b8f3def401cfa2b461beca04e7e1c03b15723535c19e6171f80dd3cad",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ASDlinks_28.gif",
+      "size": 27408,
+      "sha256": "b8b0a19ca8baa93cb69951e671fb64fe91eb4cdd4a4c5e791a62fb8fa4e9ffa8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ASDlinks_29.gif",
+      "size": 30256,
+      "sha256": "dc3cad358d0acda140be944b5b4fead2e93e0a98a42114f6f04223f8bd470010",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ASDlinks_30.gif",
+      "size": 29714,
+      "sha256": "e0daa21186ffcc36c3399400b28c1cf0b8645415e2145beb9722e21458429a92",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ASDlinks_31.gif",
+      "size": 35465,
+      "sha256": "3a49c2d9263f2c7c417c03d0e87ee41d936fb953d11ac2b02c01f076880e3bc2",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ASDlinks_32.gif",
+      "size": 35146,
+      "sha256": "9e12107e4ea6080578e73537559fda2502b922e1440ae5a43ba5de22e57ad043",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ASDlinks_33.gif",
+      "size": 43295,
+      "sha256": "5cb46f03a4f6846024ff4e43c3ebb1008899c8e29a680e1ab859a206b9514553",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ASDlinks_34.gif",
+      "size": 34916,
+      "sha256": "954d9c7bfcace1bd38f1ee245dca6e3a22313b9d0d6ca533f537f41be342d1e3",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ASDlinks_35.gif",
+      "size": 42752,
+      "sha256": "32effc9144bf574c91c547b55f1e0c464725758a73e3b0724aa98129c1e1bd4f",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "basisel_msg.gif",
+      "size": 4470,
+      "sha256": "f453f2ec6651119bb75ceb033c6477a1b4ac6bf6f154ac83bebcdfa9fb9799ee",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "basisel_msg_nonsc.gif",
+      "size": 10128,
+      "sha256": "bc1748acc59a7fde71ea0c893a1bb0bb0c5f2576c89923eda3734b6efc3f7dfa",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "BUTTON.GIF",
+      "size": 844,
+      "sha256": "6d10387853fe90ec87f720a6460a8cd1d2559683e66c81683a705a5e0e6f2ea9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_parameter.gif",
+      "size": 990,
+      "sha256": "e5fa34b74f5f1dfecf4cb31ff0a29798d5da43df1726258fa218093c7ecb7a17",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonCopy.gif",
+      "size": 1781,
+      "sha256": "8b32c6c0cc6624dca24d75af2fce3675d476e1ab69c6aa6e0e96642e54d2cc26",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonPaste.gif",
+      "size": 1773,
+      "sha256": "decd5d4d7b140e91e5ee47e25ad3f9c3f18ec01abd2ec29917c328e13a608e65",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonProjectProperties.gif",
+      "size": 1015,
+      "sha256": "619f649adcc2948038adfc049b7f892769a03f3fe5f386c8bb7713c6c387bbdf",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttons_literals.gif",
+      "size": 1346,
+      "sha256": "4bcd684ca094615513ab97b6ff2e78a447be69c32d6b298b7472a3bd13496ef1",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonSearch.gif",
+      "size": 932,
+      "sha256": "9e9f88528ac36f8e54b8a6d92f93b323ddabc6469fb90c05cccca96186886d55",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonSearch_typeahead.gif",
+      "size": 963,
+      "sha256": "c113d9257562360b5377e6380b50988ea466b0f8231d40462c3dbcb77f7f8655",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonSearch_wildcard.gif",
+      "size": 931,
+      "sha256": "0e346af50ca8436ae99505a06687afa184c5677c31aa93f2603f76ac5d9d206b",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "DIA0057.gif",
+      "size": 4465,
+      "sha256": "6879878ee7384afd5a8486588e374401e2166641f422684b88aab59fd1cf02ba",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "DIA0058.bmp",
+      "size": 547830,
+      "sha256": "692046cc44071f360069fbca4afd45a467045c9fdac5d413619a3b4bf20f824e",
+      "extension": ".bmp"
+    },
+    {
+      "relative_path": "DIA0059.bmp",
+      "size": 489606,
+      "sha256": "82efac1d4a70ef3971056721c27303a8efdef811b0ee2e86f83fafc0a09457f0",
+      "extension": ".bmp"
+    },
+    {
+      "relative_path": "DIA0060.bmp",
+      "size": 173214,
+      "sha256": "6b29761fc357ae57be02aa6a4c61214b530b53d3f3cf7786c7f13d107c2a8102",
+      "extension": ".bmp"
+    },
+    {
+      "relative_path": "DIA0061.gif",
+      "size": 9127,
+      "sha256": "9e3a11b0067835a30345fab552f51ffd58df044ce152aefe74313f6e43aff459",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "DIA0063.gif",
+      "size": 11845,
+      "sha256": "98e51ad104474f964e61a8e5ac4655e42b60008a682994d6847d882c0a7ef063",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "DIA0064.bmp",
+      "size": 531998,
+      "sha256": "46e70bf0f7160eede4c898a31b3ecb02cee9cc72288d7f8ea89a2b068707df67",
+      "extension": ".bmp"
+    },
+    {
+      "relative_path": "DIA0065.bmp",
+      "size": 457254,
+      "sha256": "b2c7f5cf968c6dfaa5b4e7ed36b4c5df9d5eede37b73934676a3f2375bc50eeb",
+      "extension": ".bmp"
+    },
+    {
+      "relative_path": "DIA0066.gif",
+      "size": 7741,
+      "sha256": "48a62e0934b222c448bc6dd35577ed30b71c045b53c3ee44f17168bf87bd9247",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "DIA0069.gif",
+      "size": 3133,
+      "sha256": "64c902dff9f4c4bb22c952e81b56d67735fa2c9fcc992fea592965152cdccb84",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "DIA0070.gif",
+      "size": 5811,
+      "sha256": "5498f3506b1f33bb5bfc6b3250fe69954960a72655043871573e0632bd59d2a1",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Dia0071.gif",
+      "size": 2101,
+      "sha256": "0b6755fa6286bd1fbf67c782f793e5ca5123445b308213e9908ff26a886c50b0",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Dia0072.gif",
+      "size": 5250,
+      "sha256": "08ac5f3042da70e21e27898c6d680fb104312f2ccb645718a93d2edd42f202a9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Dia0073.gif",
+      "size": 3690,
+      "sha256": "1e9423487c60306b8567d93b10c165ebd2692117f08e489a90f8d39f0d1c2d38",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "DIA0074.gif",
+      "size": 8860,
+      "sha256": "0803546e9c38ce9f036297baedc3da25b3ff8f9efe704de43559e00ac01c001d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "DIA0075.gif",
+      "size": 9384,
+      "sha256": "51fd2d716514762971bab1cbb38d35ccf2deb49715444fe804988d73cf5eee82",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "display.js",
+      "size": 5656,
+      "sha256": "85712144c31aac1d2706f3b60475055a673961f71bc37c0f4c9e9c4b85fa9b31",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "eHelp.xml",
+      "size": 371,
+      "sha256": "576421470f3333d479fb43b3470c8da7915e242188c83049fee0d7a214801217",
+      "extension": ".xml"
+    },
+    {
+      "relative_path": "ehlpdhtm.js",
+      "size": 125803,
+      "sha256": "33c65b7e22f5c44a8df07b5076d9c791ad3ec455a46176422eaf160e7e7931c5",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "example_dataset1.gif",
+      "size": 9111,
+      "sha256": "cd744ab29b3f668fd099d15953ee685b3da920ff376721a004e6b0f2be53843c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "example_dataset1b.gif",
+      "size": 18569,
+      "sha256": "429578f1fdd4a3ce7dca8c79de3e6ac60acbd2faeab649246e5662669b194fc0",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "example_dataset2.gif",
+      "size": 9123,
+      "sha256": "8f7bb831dc46c7a61314cd124024a2a93bbfbbf17e7651d92454dbbc4e48ea58",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "example_dataset2b.gif",
+      "size": 18643,
+      "sha256": "54d3dde455e9f44930753d29c440a0590800b617e514056f64b7a58591b650a5",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "example_limitInt_01.gif",
+      "size": 5021,
+      "sha256": "70e7d4314889f51fa1daa0a3c2497c903493ffa7a93c04885c0c40a069a39c69",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "example_limitInt_02.gif",
+      "size": 5239,
+      "sha256": "cc00d56949736456a1faf30084690f9de9afc8af17f3ca68c814ce2f23e743fd",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "example_limitInt_03.gif",
+      "size": 2513,
+      "sha256": "c9f21803de23b3609ad69181cde6758808ce4a510277fc39be8af7fd482d4ed6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "example_typeahead_01.gif",
+      "size": 9190,
+      "sha256": "828aaed1b0fdea2fbd3d8c501edced97dce984e9061a4dea9af333944ceb04ea",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "example_typeahead_02.gif",
+      "size": 10572,
+      "sha256": "05d55bba356c55d541d63791a51fef38ef7355110a0906bf8b91016d75ea3220",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "example_typeahead_03.gif",
+      "size": 9213,
+      "sha256": "a9d540b67e4735ac9f01395cd4eb6e3ae697ee9ac4c3d29513e836cb472a087f",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "example_typeahead_04.gif",
+      "size": 9244,
+      "sha256": "dd5c060a7d6216f56274ce10dccbd6a4e98a155db40a2768098b31d950e9feba",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "example_typeahead_05.gif",
+      "size": 9205,
+      "sha256": "548ef6aa452314a0a20f31b30ceebd7961cc3f333e9eca6674a02b7b122586fd",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "example_typeahead_06.gif",
+      "size": 9379,
+      "sha256": "198b4d9197c3b1ff2bde0f0649180d37a56d9cfa2dfd1a7e61e33c2e76e606a1",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "example_typeahead_07.gif",
+      "size": 9395,
+      "sha256": "1c279f37ab63ae29ccc24aeed62fadf19139d432e0d7e0410d884942a1339bfb",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "icon_charlinemap.gif",
+      "size": 1714,
+      "sha256": "2a36791600c0d2a08246baec485b1b6aef3a771c50195bd764cc99309a859377",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "icon_FixedTable.gif",
+      "size": 1789,
+      "sha256": "0ce8b831510c27fe862f66abcfe95c6609f9952faf4f880ebf314d9e6993d6b3",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "icon_GroupTable.gif",
+      "size": 2104,
+      "sha256": "86ff133ff202c5c200884c2e255cfdfd5038041a1c0747be418e12ff7bb484b6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/BUTTON.GIF",
+      "size": 844,
+      "sha256": "6d10387853fe90ec87f720a6460a8cd1d2559683e66c81683a705a5e0e6f2ea9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/button_down.gif",
+      "size": 995,
+      "sha256": "bf571f22b8c27cef7b6465c59d99ba4d1df5303c5bd61fa6cbaddb8b0a187bcf",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/button_left.gif",
+      "size": 987,
+      "sha256": "671abcbedd00c49b56e1cf7a76f620479aa742b8760ab2feebf95a4844739d58",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/button_right.gif",
+      "size": 994,
+      "sha256": "dd0deab8cc3592ddd36cea03a5db83ee14cc269739d7c762d18c38a76365af62",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/button_up.gif",
+      "size": 993,
+      "sha256": "b8c8144cacb229e1a1bbba6264c434c8a6ec4f244a0899ca27a1f95e144da98f",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/DIA0068.bmp",
+      "size": 310998,
+      "sha256": "a7e5227c9d5f4f8a1494d184c54eea49c68aaae0793c3570c05f72598574b379",
+      "extension": ".bmp"
+    },
+    {
+      "relative_path": "images/exp_minus.gif",
+      "size": 837,
+      "sha256": "18a8ea974d756d370d6f7067283fc8c0b26f235c8e98bdaaf13a63e7dca8b1c4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exp_plus.gif",
+      "size": 842,
+      "sha256": "9ff1991cf9c6de621e2672bebf74fbc56680e3413f74d6cf18e25238701651be",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/statisch.gif",
+      "size": 831,
+      "sha256": "481cd3e8b966f0a4398b853efce140287877173b926b53d710791675a1b15aa4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ins_compatibilitycheck_arraysmatrices.htm",
+      "size": 3763,
+      "sha256": "c3262834b51bbcba19460c47f8d79b139ac31b48832821c31dd60c013e61f74d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Array.htm",
+      "size": 5398,
+      "sha256": "95ac649dbea785175a92d7dfc7d9444a53547ed4ee597298857e48e48d6ef6f4",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_ASCETAutomationAPI.htm",
+      "size": 1503,
+      "sha256": "81d0f3e503a98da6cbec5db209abdde70c957fba3daa60e67c79b38fd0c7fecf",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "int_ascetlinks.htm",
+      "size": 16815,
+      "sha256": "2fc33e197713a5ffced85fa6157b3a38d260e2e36044d269bd2c74fdeae89c91",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_ASCETLinks_AddressableObjects.htm",
+      "size": 12297,
+      "sha256": "733f745f0cbaa547d0cec429b4ee23aea71a2bbc4cdf9806d543f82b95acd55d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_ASCETLinks_Examples.htm",
+      "size": 31454,
+      "sha256": "0d7cfd62627642eed801e6394adba72fd6b26a604fc20ed566be482666e80556",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_ASCETRPWindows.htm",
+      "size": 2789,
+      "sha256": "ed7ff171acded3d74b2b08608b4a88470987ab536f5e71ffdd6842e65aa2b104",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_characteristic_lines_and_maps.htm",
+      "size": 6020,
+      "sha256": "9dec08e4d38d53baab30bce42f9164377e21076c4406126e81f8a216d5c7a379",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Classes.htm",
+      "size": 1903,
+      "sha256": "3a90e8a40c230760df04595c42d5b682c1a872c110c46373510fc85a78070699",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_CodeGen_RedundantDataStorage.htm",
+      "size": 21520,
+      "sha256": "0c2d3779455db195848e3828f1a4b5032bbb70a0fa3d15ee78a5a42f0e7460db",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "int_compatibilitycomponentinstances.htm",
+      "size": 3185,
+      "sha256": "2ac024a79c139751f8078ee363d6777ef7d5ce9cf850a914d0615e0bc8ef6290",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_ComplementService_RDS.htm",
+      "size": 6805,
+      "sha256": "f87c254d2bcf81fd1df28d59bed8dc05977195b5b8948dc0a29f56838c845709",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Component_Types.htm",
+      "size": 2120,
+      "sha256": "0e58be73b4c6e2f41840035106064a990c9a8d497714a980e1ecd1633ffecb51",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "int_componentsrescalableelements.htm",
+      "size": 2896,
+      "sha256": "51c4424d88f4945ab43a29d90fee3095350b5a0a6d7c00bfb900f110a12ee61c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_composite_summaryct.htm",
+      "size": 3827,
+      "sha256": "7c8bb450ac819cbbd833d34d5f6924792255e42e74b9d81318bb2c986a60b04e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Configuring_Toolbar.htm",
+      "size": 16649,
+      "sha256": "08e28015dc3562e4a3155c94c1f5a9450a80001271570ecf393983768a722284",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_constants_and_system_constants.htm",
+      "size": 3782,
+      "sha256": "6954f92521115308c4d1c761c917cf9eb539557c79461318a98147ccf63c1d74",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Convert_SdiscUdisc_to_limitInt_wrapInt.htm",
+      "size": 6221,
+      "sha256": "1f693aae17ea2ea39c628d1226c9332b1ae5c53945152c6bd2b92d929cfeda9d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "int_copyingelements_outlinetab.htm",
+      "size": 3520,
+      "sha256": "3240665ff012d590af73bceed9e9e990e5f2d416d79b226a9359eb0699a76b68",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_CreateMapping_UDIR.htm",
+      "size": 9304,
+      "sha256": "744105683d57a23a71675ab4ae5798573bbaf7899b2e1b6ca7f4aa1afcf8f763",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_CreateOptionSet_UDIR.htm",
+      "size": 11442,
+      "sha256": "f5d36a806e4f410d3e8524b6b70b5d562d7ad5f94a5d0c22a989d4c3ca6c8144",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Data.htm",
+      "size": 2718,
+      "sha256": "41948b511bb3e6500d18ebc2ec2f871700c2de83fbaa4c35b9d8dc3031ee62b6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_DataTypeNames.htm",
+      "size": 5235,
+      "sha256": "11ab1739800f4c2205ce2db707fea1dfae00c0ac8bb292bb8a4dfee4580f011d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Definition_and_Instantiation_of_Components.htm",
+      "size": 2991,
+      "sha256": "ddfc9170e2e3400dde2713136554566f835ccdd99bb5dd02eebfb34977703047",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_dependent_parameters.htm",
+      "size": 2914,
+      "sha256": "d5907d7a8aa9b1499e136eff5b544992681b7d05d3533e44fc9decceecd88da6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_dt_parameter.htm",
+      "size": 1669,
+      "sha256": "a8c01752bb525246db393cea7bc1e1eb6f635a2bc2406fa8cb5f6eb13ed0f7d2",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_ElementsRescalableImpl.htm",
+      "size": 4274,
+      "sha256": "cd89e5630d736ea14c3b164007784e2af3469784c3fc42df850b4e964beeac5c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_enumeration.htm",
+      "size": 896,
+      "sha256": "91736db5eebf1cd3933e20cce6797b84ba65f4d6be680f0bc9bbdc9e0f461562",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Example__Code_Generation_for_an_Addition.htm",
+      "size": 2316,
+      "sha256": "579959163b912b02c2e616a5cbd489e6513f2fadfe7959bcfab1293144da723a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Example__Data.htm",
+      "size": 1580,
+      "sha256": "43b3a4b4b2325de0b78e31cd3ea13c059c8bf9cb05a5d943abaa8a90658b0055",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Example__Implementation_Casts.htm",
+      "size": 2731,
+      "sha256": "3edb217511c916f3f35de23a116dc150ea2c237c9c532621225e2487e1f40546",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Example_a_user_def.h.htm",
+      "size": 4475,
+      "sha256": "70cfee1f2a89dd023fa307bc4aaf0617fc28a684476b555f76bede7f7cd753ed",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Example_CopyElementsOutlineTab.htm",
+      "size": 2216,
+      "sha256": "90c02512c8c1070adc54a52f6581079f314d9693ec23705b9e18a9fd157e5870",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Example_Implementations_ScalarTypes.htm",
+      "size": 2741,
+      "sha256": "cbb8e6a700793ce63a457645c9453626000eff3b3ac042273c3c17db5933788f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Example_MemClassRedundantDataStorage.htm",
+      "size": 11395,
+      "sha256": "38da2041cea156a118b421848f405856f0174d740d1b03f9d027f430b15196b0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Example_SearchOutline_TypeAhead.htm",
+      "size": 12738,
+      "sha256": "2b5d3ac3fb875d367dde7840d5038ae929abe80c8367272eac8ae17c07ac064e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_ExplicitReferences.htm",
+      "size": 8010,
+      "sha256": "08f19f1b205363a6073740007f3271a32a383fae18758e9dd241767d80b7610c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_FindReplace_Window.htm",
+      "size": 11754,
+      "sha256": "4b36d0f1661cbcf1be8a0776a35878b7f7c844b97283e0617111b2cc5c43b28a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_fixed_table.htm",
+      "size": 2456,
+      "sha256": "0cbf4398bb1e7b309cdfac3537ab2a1611f85226813b57d553134fcdb50ce9d5",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_General_Rules_for_the_Implementation_Transformation.htm",
+      "size": 2624,
+      "sha256": "a31379f8a201f9d687798cd06ea28ff8178a2e13c27f1231b8545dfc70db26e5",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_group_table_and_distribution.htm",
+      "size": 3525,
+      "sha256": "f9dea6c44f4db6ba81732f430e14accf6606e646799dec55a5f2fbccef42cdf1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Hierarchical_Class_Structure.htm",
+      "size": 1446,
+      "sha256": "65e10a4a90af2b5f46f3cc0816e100c4aa2f328f63e65cdf6f14d8f366e4c61a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Hierarchical_Module_Structure.htm",
+      "size": 2154,
+      "sha256": "c4afa6824a2f8e5b0c5f204f1ee8daf70d72c3319cd7bc249fd84f79e897ec5d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_HighRes_InterpolationRoutines.htm",
+      "size": 5491,
+      "sha256": "1888594837c26b8cc1ec4143a5638264d0e712fe89beffbae483d402ca237be0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_implementation_casts.htm",
+      "size": 1502,
+      "sha256": "bedccb43f65d37429218fd8a63bf4145dd7a9693e5ef5b7b8117faa27399c22c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Implementations_for_Scalar_Types.htm",
+      "size": 2337,
+      "sha256": "d8c049d2eebcdc9b724662466ea98eccd3f17f759c07b51cd594b0c4fad4bf1c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Importing_Dependent_Parameters.htm",
+      "size": 2153,
+      "sha256": "fb8321af808d5554c02bd4152a8b7ab4d701f1521b27d31e24a4d70ccd87dba3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_IncludeUDIR.htm",
+      "size": 1206,
+      "sha256": "7589e4c5887274ad64435295716a31eb4839a0cbf27578e1186514439ec7039c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_InitExplicitReferences.htm",
+      "size": 16088,
+      "sha256": "5e9a7708ee3a5afab7b9df14f65edc0e076f37f27d8b3eae0d95cea773d3dc69",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Int_IntegerArithmetic_RescalableElements.htm",
+      "size": 4029,
+      "sha256": "de6a60f81f8cf311bd25b9f1013c529facf1eaf161ff0d29360bc927c471b72a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_InterpolationRoutines.htm",
+      "size": 3062,
+      "sha256": "d7812e6b49b3e036103e0d4ae3c5915fdf1c36db991dcc52d485b4939a4f2e73",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Launching_ASCET.htm",
+      "size": 2068,
+      "sha256": "e13b55bc4f1b4d3fb91ffab9ae7e2fad3a6ba0b419f8f6e6d066fd9e6e927463",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Licensing.htm",
+      "size": 1581,
+      "sha256": "56e91848999d56ba5e48551955411ffb856db5ff30ad601415e6d9e5c27393b5",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_literals.htm",
+      "size": 1617,
+      "sha256": "0249781042e4761924996ff8cd48ccd0aa0cdd7616ab98c1f3961fbb4e6409aa",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_MappingAdaptiveTables.htm",
+      "size": 15899,
+      "sha256": "89bc53d32f6fc82027a21fea6d6078e6880d20cfd2da3374400537a3a3967726",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_MappingFileUDIR.htm",
+      "size": 12651,
+      "sha256": "492cc5c5eba6d6e32cf2b8bce988fa9a67690b36c011727d8dec1f8006c0be52",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_MappingNormalTables.htm",
+      "size": 4342,
+      "sha256": "0e616664ba6dd5cdf9921a627af55f1c1bcfbd1b07d4407d13e40b3423d70413",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_matrix.htm",
+      "size": 6231,
+      "sha256": "58a4c765daf555a59c2dafff3f9574bd691280dc61690763794e828fcb6d6911",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_MemoryClasses_RedundantDataStorage.htm",
+      "size": 2498,
+      "sha256": "c4ec304e7f99f4e2fa02740a63de00abd13b631b4553a146fd6cf4c2a33789d0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_messages.htm",
+      "size": 3513,
+      "sha256": "632d0dda2e82cf381c96bbdcdeea3521bc8b1b85eaec5d01ecbcce3840e7ab8c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_MigrationConversion_of_References.htm",
+      "size": 2999,
+      "sha256": "c1b67e0b5d6b36247b14bfccf52e71128622a9b1611c53be645816a281e4f910",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "int_modules.htm",
+      "size": 1721,
+      "sha256": "d2cc2b87798ea96ebe657262bd25d2e61374298098d9a2540805a1148115d5a6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Modules_vs._Classes.htm",
+      "size": 3873,
+      "sha256": "55e7d844b5d663b80d0c99279ddda2ccf640da982b3c7e9e2ebeb8a150e6f5d6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_OperationsRescalableElements.htm",
+      "size": 4231,
+      "sha256": "13bb5352ffcdc83223ec576d50e5f8d50b77ead951a7a3629551a07d4f3af7ce",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Overview.htm",
+      "size": 908,
+      "sha256": "3d5713db8a920f25f5031cba6cd90a8a8993150c15ffe314ced603577b5e2794",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Overview_CodeGen_w_Implementations.htm",
+      "size": 1761,
+      "sha256": "0d29187cb559bf85fffd45e15193b7c3bfe8d8b861aea76ef22fc9680b74b1c9",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Overview_ComponentInterface.htm",
+      "size": 1703,
+      "sha256": "aa0fa3edf34f9bb92243ee13f8d7bf8d78595f535c3df225c40093b877a44e3c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Overview_Components.htm",
+      "size": 1803,
+      "sha256": "47c206d876441243e73f1a233130ba96e78814cf9e52c382b60b8e49851078be",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "int_overview_DataImplementations.htm",
+      "size": 2551,
+      "sha256": "7aec4a95b6de6d7ac78228c7383374b9ade77568c1975daca9a90a40de57bc05",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "int_overview_implementation_casts.htm",
+      "size": 2977,
+      "sha256": "fb1799ff89948fd4275e2f03371eb95ba833ec8114a604e0160508c5b5665401",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Overview_Implementations.htm",
+      "size": 2043,
+      "sha256": "2d465b9e5a7036b535eb0d5f620b79e6916fd75365f7095516b712ab84da676e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Overview_ReusingComponents.htm",
+      "size": 3880,
+      "sha256": "00624e6774c9469cfa83477f0dfe25fb97a2bbbc061d636fc00f0643dcbb55d8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_parameters.htm",
+      "size": 1160,
+      "sha256": "078c18b753a713f4026cd50b072cd55d79bc57bdf51196ec89a7e8ae5b37689d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Properties_of_Implementation_Casts.htm",
+      "size": 3063,
+      "sha256": "f9e31f623b20a13ae10a68649f4b8aacf5d0482beaefc7d436c313ec0bb0bbf9",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_RedundantDataStorage.htm",
+      "size": 5836,
+      "sha256": "8d20137fc1903033249314cc7107659916256102d7520b1bb34d907c9f5828ee",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_RescalableImplementations.htm",
+      "size": 2592,
+      "sha256": "21971a3fa9cfbee35d2d94261c60cbe06ceff6449e598f8156f130e4e37e96f5",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Reserved_Keywords.htm",
+      "size": 10384,
+      "sha256": "8ed90f5cd48c28a8ef6b68a7e420ba4cc1cc5ee3227b22d9c508429d03716002",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_resources.htm",
+      "size": 2265,
+      "sha256": "a0bed2b539faad29710a44ee2b7010bf13028ca5b5abc338b9c694bb4ee40dec",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "int_safetyadvicegeneral.htm",
+      "size": 4207,
+      "sha256": "f8f482d3ffa9e48e8893c41112582ecfe99c6af80dcafa6e7c715e5dddd5929d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "int_safetyinformation.htm",
+      "size": 1032,
+      "sha256": "702d2f4b52652344c68f861c16bfd433802407d64dd7e0ad0375b0fb125e5c31",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_scalar_summary.htm",
+      "size": 14084,
+      "sha256": "5f6f8638dffb87d703aaf42e2162272c3f8907a584fb81da171f8b3b5f4a5a8a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_scalar_types__continuous.htm",
+      "size": 1564,
+      "sha256": "9b94cff5e38e6cbe2249dfdf3207cf7258eab822f26a0af07cdb28580f9e733d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_scalar_types__logical.htm",
+      "size": 1018,
+      "sha256": "ac90aff89803e0ec08dfda3615290c2acf5a1e4e630db6cf73322cb762f3193c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_scalar_types__signed_discrete.htm",
+      "size": 2270,
+      "sha256": "3aa679260d241ebd05875748c789b97de9cf7e028a4aeef6b46012352e15fd84",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_scalar_types__unsigned_discrete.htm",
+      "size": 2417,
+      "sha256": "97904405d7c75abb44974bce3acb7f51cd8baa736eab025371687aa627e58626",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_ScalarTypes_LimitedInteger.htm",
+      "size": 11118,
+      "sha256": "70cf0eef893a26f9ca16566d054c1b8ffa77d6993961ead3227a742b0481d590",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_ScalarTypes_WrapAroundInteger.htm",
+      "size": 2140,
+      "sha256": "181450579dbde18bfd1c6d106de48630787f7816807e7c31a1263bcb640dccc8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_SearchDelete_Unused_ProcessesMethodsRunnables.htm",
+      "size": 546,
+      "sha256": "013104dfc62cee6bf573734d97224513828b1b0a0b9a78b0368a069daa76af1c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_SearchTreePane.htm",
+      "size": 13905,
+      "sha256": "784783072466ec3a7f2c02d20418c5cad80b2a2cf36bc86653233537f2772a41",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_SearchTreeWindow.htm",
+      "size": 6739,
+      "sha256": "165115c7cb51a5b4292b4ba48b38b747c45f884d041420b5b5e47f5abda67635",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Starting_the_ETAS_License_Manager.htm",
+      "size": 1368,
+      "sha256": "c86857dc88634ed3ab1721f83443c5c2c38264600d56ed46e6de8b9d7bdd1870",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_summaryke.htm",
+      "size": 15253,
+      "sha256": "13eb3d722c1be0e134a29923e88b47158ddb83e3e6e8978622c48731c1a61db5",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_summaryrt.htm",
+      "size": 1217,
+      "sha256": "ed9daa08cac346353b87cf8d6887844051ccc6820f7e1f4f06ca5ad42dcc2ee6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_temporary_variables.htm",
+      "size": 2464,
+      "sha256": "00ac428cb29bfdc90935b4e63a3db03096927c05b389653582dbf114e46262a8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Test_NewBehavior_IntegerTypes.htm",
+      "size": 11402,
+      "sha256": "aa44ef3077f314a1d8f109cce61606f046f16823bb377dbd2f89db3c6a7c841a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "int_the_implementation_of_composite_types.htm",
+      "size": 1112,
+      "sha256": "87c9c96372885f19b6bcb7e0c74fa2e4a4d65dc5989381c21ec6aa33d943c6fd",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_The_Implementation_of_Methods_and_Processes.htm",
+      "size": 1310,
+      "sha256": "88c2e88d3706b221fd1225c4271fa7c54f679b33efc33bd7b7800e825143dc4a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "int_the_implementation_of_user-defined_types.htm",
+      "size": 1828,
+      "sha256": "38272ca3cb9bfe018d8caa42c705d5c9ff3625bf6e4887dbd419a8b5193b7e14",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "int_the_interface_of_classes.htm",
+      "size": 2589,
+      "sha256": "32c421d246b8301b62672c4ba9b51682802f1d2f07c5a148598da19994b49ea6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_The_Interface_of_Modules.htm",
+      "size": 1930,
+      "sha256": "fdadb704620d93bdc5b8285e78c57760ae99fdfa245ec70074fd62539d784c09",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_the_scope_of_elements.htm",
+      "size": 2304,
+      "sha256": "d56c9e04d888d842d004771ff1b08277590526c2654c0c34cf17eae549ff2335",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Toolbar_Configuration_Window.htm",
+      "size": 11200,
+      "sha256": "24c6dbc014303033498ce117162d0af78739db0f48b98a0a223fc439d6d333f8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Transformation_of_Data_under_Implementation.htm",
+      "size": 2035,
+      "sha256": "af7842d87e326208f51d878a1d1c95773c17b377d3528e6af1530b25b88d02e8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "int_types_and_elements.htm",
+      "size": 3189,
+      "sha256": "f242b6352cf711f35970bdbc4629e6c5ba2a23bc54dca373739cf561898aef7a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_Typical_Workflow.htm",
+      "size": 1851,
+      "sha256": "ed8def42db60f86898b028565b626c967f5c239c7e3bafa7bb2688123ee7ea25",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_User-Defined_Model_Types.htm",
+      "size": 1412,
+      "sha256": "46af872341564004f077da40f212d86242527c348521e8bc19709fc445a73cf0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_UserDefinedInterpolationRoutines.htm",
+      "size": 4766,
+      "sha256": "c3f962dcc1951257c0e15e7835e36ec0400521feb5d1dc679cb6210f810e714f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_UseReferencesWithoutInit.htm",
+      "size": 3264,
+      "sha256": "dedde558ade30e385e8f95905714851e7a34b7300d7b626683d8e05842e431a1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_ValueTypes_ReferenceTypes.htm",
+      "size": 2160,
+      "sha256": "5f336f1e388b5c312581bca3fe656f48d867c23a4a626fff5eedad3e55b692a6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_variables.htm",
+      "size": 2127,
+      "sha256": "680f3676c5fbedef44eff7feb50944145aefb85e35eda0c9f7e30659bf18f169",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_VariableSize_ArraysMatrices.htm",
+      "size": 4726,
+      "sha256": "efc745d021d7201e179b33f91c6c1dbb1ccbb934f3ee44031f2047adfae8777c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_VariantSize_ArraysMatrices.htm",
+      "size": 13900,
+      "sha256": "6533b96d2b9a50934bec35339e13c0734345d6277e693b946ef0f8c4c783d75b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INT_virtual_variables_parameters.htm",
+      "size": 2618,
+      "sha256": "c7fe620cfe973b730d53d4faa78f2a72bddf659b94bf88cdf62011b393dcec63",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IntroductionEnglishUS.brs",
+      "size": 2,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "extension": ".brs"
+    },
+    {
+      "relative_path": "IntroductionEnglishUS.glo",
+      "size": 77,
+      "sha256": "309b43712d2bb5ceb5d9c38fe207d5553905ff7a65295e76c86e16d091d3b5c8",
+      "extension": ".glo"
+    },
+    {
+      "relative_path": "IntroductionEnglishUS.hhc",
+      "size": 24094,
+      "sha256": "ec7a9581fa2587fe44ac5aa908a077b62012fbc119115a558fc612b82d235614",
+      "extension": ".hhc"
+    },
+    {
+      "relative_path": "IntroductionEnglishUS.hhk",
+      "size": 49726,
+      "sha256": "c4e7c7cf28ca000fc90f5c242894da6b305d8f7394886f4bdd384c95e5f87c73",
+      "extension": ".hhk"
+    },
+    {
+      "relative_path": "Layout.css",
+      "size": 12012,
+      "sha256": "73013a0596e65a5e52602e3178834eea6398e8198c1acd97d93fa0a365defcf0",
+      "extension": ".css"
+    },
+    {
+      "relative_path": "RDS_example1_a.gif",
+      "size": 9700,
+      "sha256": "6d91f411c2be9aafd430768bc4cd639052df9a04a683510c8c0130092b1902ec",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "RDS_example1_b.gif",
+      "size": 2085,
+      "sha256": "76bd780dfdcbb8e417358b98ce7ee82a449278a4f5e9cad8548b7226da4ca903",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "RDS_example2_a.gif",
+      "size": 2411,
+      "sha256": "a388ef57536d00c9c504bd8b2d591285447b76decb0f3ff8f125d54db13690b5",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "RDS_example2_b.gif",
+      "size": 1953,
+      "sha256": "7c30957564c1b01cce1012311d148db2bd72a3fa633fbb48d56244383e731e20",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "RDS_example3_a.gif",
+      "size": 2229,
+      "sha256": "021d1d25f4499a2cb919ad3a972f4f14bf826c85d2d5cf731e5cd9581534e774",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "RDS_example4_a.gif",
+      "size": 2667,
+      "sha256": "55927696e42aa17b8f611be0ab92855bf18874751f460c07cd1d9bf83959d99a",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "RDS_example4_b.gif",
+      "size": 2971,
+      "sha256": "60ddce8dd222c85ac7e1de840e6c740baef7399430e744ae1265a76dc261893c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "RDS_memClassExample_1.gif",
+      "size": 15956,
+      "sha256": "20fab2a0484c484e4cd7e7fcc621d9d07a852c978487c24226f4c10c6f6009d6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "RoboHHRE.lng",
+      "size": 3586,
+      "sha256": "607e16623990c7b694bb11537edbecfbd7057fda1739bba5173e9d8a4942b18f",
+      "extension": ".lng"
+    },
+    {
+      "relative_path": "safety_grey.bmp",
+      "size": 77970,
+      "sha256": "2997337635ecd96bac077ab743ec7746964b42fea23f0246e5db7bb86b46994a",
+      "extension": ".bmp"
+    },
+    {
+      "relative_path": "symbol_constexport.gif",
+      "size": 967,
+      "sha256": "486bed59a24d0419c9327c7ce920ce13d982cc2154360a2f72909c909132a282",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_constimport.gif",
+      "size": 969,
+      "sha256": "007d5bf403b71096d84a6280aa61648af26e91f35cb329dba87656253861794c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_constlocal.gif",
+      "size": 961,
+      "sha256": "9969a43b109659d778320cf9bcf24549df61124995ffe6c91e4b9e4917c8b06c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_dt.gif",
+      "size": 967,
+      "sha256": "bdffb9e7fa53c610ea5174562a3f8192741a567a19291b63c692e7ccda91a6b7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_dtEx.gif",
+      "size": 961,
+      "sha256": "b9f7d4c60f4f50e13ab290ccc266f288bb8c8df5b6a7b3cecad92b09aad26000",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_implcast.gif",
+      "size": 966,
+      "sha256": "e666e6dbb2b65f9f3ff2961ed36df1b89866557e69b47d7ad87e7cb0df6caf27",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_msgexport.gif",
+      "size": 989,
+      "sha256": "abcc7705f476ad6353276d9e8d3627cfbcb376aeb15f8679d8c5f1c7b85d137f",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_msgimport.gif",
+      "size": 979,
+      "sha256": "a32151f65c8425e01082d16293232262a8180268b335f58a57653f1491c9d83d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_msglocal.gif",
+      "size": 962,
+      "sha256": "fa8c0df97bc45609f1d47a06f638065c1ab4af47724c61b9cc99fffc75e6ec05",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_msgRec.gif",
+      "size": 893,
+      "sha256": "8a7f19833afa5cd614b0d6faffd9f613bd8a2f2b7189922852cfa83ea0339385",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_msgSend.gif",
+      "size": 914,
+      "sha256": "60e056d626c717d98d850b188177b87c0cf1a8cc948d46ae4df81e8086f5d1cb",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_msgSendRec.gif",
+      "size": 902,
+      "sha256": "73f6f8cc29f2823933ad0b894099783cfe18dc71d4fe4dac3bee0f9d53f04cb6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_pardepend.gif",
+      "size": 960,
+      "sha256": "0818bbb5faf30890bbcbe8e91afcbe49daa318186d684bd286fc75f350f415ea",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_parexport.gif",
+      "size": 973,
+      "sha256": "9efe411ac730516b84cdfa98dfa180be16bcf8726a2ae7b952f881ed34aa4333",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_parimport.gif",
+      "size": 975,
+      "sha256": "2b891e075718509488b9385053682b7c483b2531c10beece2db6c5e2b92e7aaf",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_parlocal.gif",
+      "size": 961,
+      "sha256": "1bc0d0eb3e75de0f4588db107c0ec85394bca2c0cd6c7025187aa86c11c7a546",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_parvirt.gif",
+      "size": 960,
+      "sha256": "e23a8c9d376042166e82baba2a440065afca1c44ba1ed722ed1031de103e3bd0",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_parvirtex.gif",
+      "size": 966,
+      "sha256": "fa625c8f9c7d5a5d22b872d65c4bcaa26b60bcf3fcb9bcaa74996656fea80efa",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_parvirtimp.gif",
+      "size": 967,
+      "sha256": "a7c2de3540d117f9689bd6607e620c9ea142c570aed1711b092d03823c2e5ae3",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_reference_exp.gif",
+      "size": 981,
+      "sha256": "ff8017382da34cebb6a692cd1d612fbc0c140fefbf8b4896b2ded6be53281503",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_reference_imp.gif",
+      "size": 976,
+      "sha256": "27f764ba08dce365e83dd3984ab87522051a51994911328c85ceff5a7a354c17",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_reference_local.gif",
+      "size": 966,
+      "sha256": "7e04dc8ccf570af9d9b83dde9e278828e6da88d85930016d58e888018551aee1",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_sysconstexport.gif",
+      "size": 970,
+      "sha256": "7df22d371b943272688aa30f25c9318c331d3ffe8e2c4cc79481f454d7a1d416",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_sysconstimport.gif",
+      "size": 977,
+      "sha256": "a6f7ab1689eedf590793a711f9fe7da9901ab4b729037138fa7129534c43acdb",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_sysconstlocal.gif",
+      "size": 967,
+      "sha256": "b684b9b2e3c37b4ff204a439098ee2592381fcc00e102ba838ed828dab0a46f8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_varNVexport.gif",
+      "size": 943,
+      "sha256": "ce8f74f82806401b7bf3131473325d84a86a244a0a8b6a0d79cb48004070e579",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_varNVimport.gif",
+      "size": 948,
+      "sha256": "20495c71c27eaa4c371ef38dcc9eabed0d5c664d120ef21c3a9d898ff6f1fee9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_varNVlocal.gif",
+      "size": 966,
+      "sha256": "173f291338c237567bd60c861cd525d21971c2c0df47a32b5bcde7beb6f00522",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_varvirtual.gif",
+      "size": 967,
+      "sha256": "669d7f1049e08ca1aca2bd32c0cc8bd083bde4760003ffd3184350a93663b6e5",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_varvirtualex.gif",
+      "size": 979,
+      "sha256": "cef511ba7abc3a4722f95afac822e4afff15e9088a5e068dd835c91cd288f01e",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symbol_varvirtualimp.gif",
+      "size": 973,
+      "sha256": "1724940d6e8a8042253683c7d9e3758306ab52e281bced8381d2f2a38943f745",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symboltyp_array.gif",
+      "size": 904,
+      "sha256": "2b7630c753e7239d160934da7c91800442776577fb25a40feb3b5867816836fb",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symboltyp_charfield.gif",
+      "size": 935,
+      "sha256": "1a292b59c7906b16ad3652f0482a55a2f36e98a9da9b14e7e914360efa25b0cd",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symboltyp_charline.gif",
+      "size": 912,
+      "sha256": "2cc8079c2d1ec7b0e6aa109acb70787cf561cdddf2f0df5d42f30075eceaf021",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symboltyp_cont.gif",
+      "size": 885,
+      "sha256": "73f5b628b6e6dc0a435cdb5bc1457d97209b3df354803715db0e5c21b104ccd4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symboltyp_distrib.gif",
+      "size": 916,
+      "sha256": "3e26d30d6c396d940250d02b175d3d1e8c70810bee60758b63aed12a9b80d197",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symboltyp_dt.gif",
+      "size": 942,
+      "sha256": "ae6d2d0a1f00dbbec36c44c2075210478caef796bb30cadfd44b7e273155c5e3",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symboltyp_enum.gif",
+      "size": 948,
+      "sha256": "596b36f0a2c355564fe333374603e7dca7977d8514d5acd5a361922ac9b36965",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symboltyp_limitInt.gif",
+      "size": 883,
+      "sha256": "8d38ac5d6eec1858e22ef4b856b98406b678a302ab6824b0ec82c94a164c6738",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symboltyp_log.gif",
+      "size": 883,
+      "sha256": "39c44affc8241307e74c4373814a2650e048ccc8371fce43bd8127687e21f88b",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symboltyp_matrix.gif",
+      "size": 936,
+      "sha256": "be97184b3be1f81b3a624be942c700fd9884b451c8d7ce896c867da476c93a36",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symboltyp_msgrec.gif",
+      "size": 952,
+      "sha256": "ca62edc0518001db221664a1a36a3aa53bc32afad70f8e4da6d318574684f84d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symboltyp_msgsend.gif",
+      "size": 961,
+      "sha256": "ffb428ad58500ee8db60c1c852d6a5de6ea230ca0ba6e327f542fa631b98062c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symboltyp_msgsendrec.gif",
+      "size": 928,
+      "sha256": "0535852932cbf60105462edeffba6880c1d6881a29c602c71ff680f544241992",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symboltyp_ressource.gif",
+      "size": 942,
+      "sha256": "4daca2365f230a8e8f3ea7bc48660e08447bd489c13091b0173346a315f75545",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symboltyp_sdisc.gif",
+      "size": 888,
+      "sha256": "d7553550b01e52b913b60115dea9f8f6c6ebba66a22702fad03b6fa99501d1c4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "symboltyp_udisc.gif",
+      "size": 890,
+      "sha256": "fed48b4f05329c28fdbf18725a0918eb1c218fafda8d7b843322328bb5f81aa3",
+      "extension": ".gif"
+    }
+  ]
+}

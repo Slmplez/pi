@@ -1,0 +1,219 @@
+{
+  "generated_at": "2026-04-01T03:08:16.510220Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\OperationHintsEnglishUS.chm",
+  "unpack_dir": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\OperationHintsEnglishUS\\unpacked",
+  "total_files": 33,
+  "total_size_bytes": 205322,
+  "counts_by_extension": {
+    ".js": 2,
+    ".xml": 1,
+    ".gif": 3,
+    ".htm": 21,
+    ".css": 1,
+    ".brs": 1,
+    ".glo": 1,
+    ".hhc": 1,
+    ".hhk": 1,
+    ".lng": 1
+  },
+  "files": [
+    {
+      "relative_path": "display.js",
+      "size": 5656,
+      "sha256": "85712144c31aac1d2706f3b60475055a673961f71bc37c0f4c9e9c4b85fa9b31",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "eHelp.xml",
+      "size": 371,
+      "sha256": "bf19cf43b40477c0fbd7a41bdd25f3bdad791042aef1aa75dba3a6dfa911abdd",
+      "extension": ".xml"
+    },
+    {
+      "relative_path": "ehlpdhtm.js",
+      "size": 125813,
+      "sha256": "1e13c2071ebc97f706eb53b7ef2c63517a9f2f35895ab495dde8db90af0baec7",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "images/exp_minus.gif",
+      "size": 837,
+      "sha256": "18a8ea974d756d370d6f7067283fc8c0b26f235c8e98bdaaf13a63e7dca8b1c4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exp_plus.gif",
+      "size": 842,
+      "sha256": "9ff1991cf9c6de621e2672bebf74fbc56680e3413f74d6cf18e25238701651be",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/statisch.gif",
+      "size": 831,
+      "sha256": "481cd3e8b966f0a4398b853efce140287877173b926b53d710791675a1b15aa4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "keyboard_commands_comp_manager.htm",
+      "size": 3196,
+      "sha256": "802868ddee78dbd37d2dacbbda7c4a54a273e90282f7279ad3fd01fec5596513",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "keyboard_commands_editors.htm",
+      "size": 1087,
+      "sha256": "1c6b2493931b44a9978c03ea2c88d6d252f80299d027f680bb54331cc199a800",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Keyboard_Commands_in_Numerical_Display_Bit__Display_Bar_Display.htm",
+      "size": 1624,
+      "sha256": "70841c65db2bbb1bfe41ba7997ac8c0576a8d6b970ab1bc52caef3f321e6018c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Keyboard_Commands_in_Oscilloscope_and_Recorder.htm",
+      "size": 2510,
+      "sha256": "93d1f50f9ffa11fab4b9155aca46518169ca0c5cd38722446a041dd7a7a34ef0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Keyboard_Commands_in_the_1D_2D_Graphical_Editors.htm",
+      "size": 1331,
+      "sha256": "eafdd31ebb8954be8a17896e2eb69b37fc22bb7be922e14788defdbc4235051b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Keyboard_Commands_in_the_3D_Graphical_Editor.htm",
+      "size": 1290,
+      "sha256": "67c964f4aa949ea33c79c297397b23e70468ca1c1ee8c6d329c0a927ed223bb1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Keyboard_Commands_in_the_AS_Editor.htm",
+      "size": 945,
+      "sha256": "bb2bd5130e51b8ab828ca480b807c28a0b23929eeb48609d03fc6d5ffd5a9237",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Keyboard_Commands_in_the_C_Code___ESDL_Editors.htm",
+      "size": 862,
+      "sha256": "64b20a281633ba653c3023db6213a5e9c924223396bed53089fb972ae9396179",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Keyboard_Commands_in_the_Data___Implementation_Editors_for_Components_and_Projects.htm",
+      "size": 1027,
+      "sha256": "547c265ec8c9258e400180d6719dc867bda3d6f5903cc8d3a97fea4c38b62050",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Keyboard_Commands_in_the_Table_Editor.htm",
+      "size": 2059,
+      "sha256": "e27b35770a945d190851620a0e912dfac0b432f79ba7cc06f7c81fca0d98a56a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "keyboard_commands_monitor_window.htm",
+      "size": 1530,
+      "sha256": "e2363d01e03fb0c061687e520c9e3f3a58c001ff5ce7de6ecc9eecc09cceb90c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "keyboard_commands_offline.htm",
+      "size": 1855,
+      "sha256": "58864f5254e512dfa17a6ec8746713258875a3a74eeeb912cf81b275640c39f6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Layout.css",
+      "size": 9786,
+      "sha256": "fa7b5a6453a21a0fb428753bb054c98f2002a31eaef5306319201e3e2a2673c5",
+      "extension": ".css"
+    },
+    {
+      "relative_path": "measure_calibration_windows_general.htm",
+      "size": 1790,
+      "sha256": "ea66ee201b6863c9a9d7acf727764ff1a0422e80095690abf6c998894c3baae3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "OH_calibration_windows.htm",
+      "size": 2518,
+      "sha256": "e6379639516c56b4b88670008364317c3a47cd7b550e18bbea4fc2108b136b7d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "OH_KeyboardCommands_Editors.htm",
+      "size": 1166,
+      "sha256": "c006c71b81301ee1235245fe303960b4036260ca6f75eeb8f435d3c4cfd5fbe8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "OH_KeyboardControl.htm",
+      "size": 1423,
+      "sha256": "c65f8547d09a547f020b92b548719aa244d346d24d2f91fba46ac588a2f2e168",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "OH_measure_windows.htm",
+      "size": 1546,
+      "sha256": "2ad9239c6901471eccc2407abecbf0674a132acceadc5f7346f97c9acde8a03b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "OH_OperationHints_Overview.htm",
+      "size": 905,
+      "sha256": "cbf5438f2d22005208dbd41597530542c2c14f04e88821b1cbee26222b46ec38",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "OH_Staged_Build_Settings.htm",
+      "size": 1577,
+      "sha256": "0487736084dd3ff60bd7dfacf34dd763c31a78529ebe43c45524b1c393cad4a5",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "OH_Use_Staged_Build.htm",
+      "size": 2031,
+      "sha256": "a8fa8dd33eb78df03377006cf8af96d490952c7d560374be53d47dde771bf617",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Operation_Using_the_Keyboard.htm",
+      "size": 10181,
+      "sha256": "527ac9d27b725b4324d527c97ca67ab0402b8f9784872635d655f04e351f7680",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "OperationHintsEnglishUS.brs",
+      "size": 2,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "extension": ".brs"
+    },
+    {
+      "relative_path": "OperationHintsEnglishUS.glo",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "extension": ".glo"
+    },
+    {
+      "relative_path": "OperationHintsEnglishUS.hhc",
+      "size": 5164,
+      "sha256": "e3e50c161b76c991d10cba0b0b85f639a5731ee4c8802141fa5d5becea6ad927",
+      "extension": ".hhc"
+    },
+    {
+      "relative_path": "OperationHintsEnglishUS.hhk",
+      "size": 9981,
+      "sha256": "21ac06ef82e4980e7d2574562a16f2f4e3161d658fbbca5164a24a06d3c18708",
+      "extension": ".hhk"
+    },
+    {
+      "relative_path": "RoboHHRE.lng",
+      "size": 3586,
+      "sha256": "607e16623990c7b694bb11537edbecfbd7057fda1739bba5173e9d8a4942b18f",
+      "extension": ".lng"
+    }
+  ]
+}

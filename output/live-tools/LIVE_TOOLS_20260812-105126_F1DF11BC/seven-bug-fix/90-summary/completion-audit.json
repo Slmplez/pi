@@ -1,0 +1,52 @@
+﻿{
+    "status":  "BLOCKED",
+    "runId":  "LIVE_TOOLS_20260812-105126_F1DF11BC",
+    "completedAt":  "2026-08-12T11:17:06.4304739+08:00",
+    "liveWritesExecuted":  0,
+    "phase0":  {
+                   "focusedNodeTests":  "79/79 passed",
+                   "bridgeNonLive":  "passed",
+                   "npmRunCheck":  "passed"
+               },
+    "runtime":  {
+                    "status":  "ready",
+                    "scheduler":  "healthy",
+                    "cliLock":  "none",
+                    "toolApi":  "ready"
+                },
+    "database":  {
+                     "identityAction":  "unavailable_in_current_profile",
+                     "treeCoverage":  "complete",
+                     "source":  "live",
+                     "scope":  "C:\\Repo\\11_ASCETCopilotLiveTest\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\ASW\\Db\\"
+                 },
+    "sharedOid":  {
+                      "oid":  "040gpc83142g1no70o90q9iltgggg",
+                      "impactEvidence":  "complete",
+                      "aliases":  3,
+                      "advisoryEmitted":  false,
+                      "reason":  "read_only_operations"
+                  },
+    "resolver":  {
+                     "status":  "failed",
+                     "failingAction":  "ascet_get.tree exact Project child",
+                     "code":  "target_not_found",
+                     "passingActions":  [
+                                            "ascet_get.elements",
+                                            "ascet_get.component_refs",
+                                            "ascet_read.read_implementation",
+                                            "ascet_edit.check"
+                                        ],
+                     "packageAliasAllPassing":  true
+                 },
+    "blockers":  [
+                     "ascet_get.tree exact Project child path remains inconsistent with elements/read/edit",
+                     "ascet_get.database_identity is unavailable in the current profile",
+                     "public reconcile action is not implemented",
+                     "fixture-scoped Live failure injection is not implemented"
+                 ],
+    "mutationGate":  "not_entered",
+    "fixtureCreated":  false,
+    "cleanupRequired":  false,
+    "unexpectedWrites":  0
+}

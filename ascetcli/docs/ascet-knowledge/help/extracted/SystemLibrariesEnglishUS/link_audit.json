@@ -1,0 +1,14 @@
+{
+  "generated_at": "2026-04-01T03:08:36.001997Z",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\SystemLibrariesEnglishUS",
+  "checked_files": 150,
+  "checked_links": 724,
+  "broken_links": [
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\SystemLibrariesEnglishUS\\SystemLibrariesEnglishUS.full.md",
+      "kind": "link",
+      "target": "msp",
+      "reason": "target_not_found"
+    }
+  ]
+}

@@ -25,7 +25,16 @@ function successfulExecution(request: AscetCliRequest): AscetCliExecutionResult 
 						truncated: false,
 						database: { name: "DB", path: "C:/Repo/DB" },
 					}
-				: { writeSucceeded: true, verifyReadbackRequested: true, readbackVerified: true };
+				: operation === "preflight_create_folder"
+					? {
+							folderPath: request.args[2],
+							existing: ["DEMO"],
+							willCreate: [request.args[2]],
+							conflicts: [],
+							capability: { status: "supported", saveAvailable: true, readbackAvailable: true },
+							noOp: false,
+						}
+					: { writeSucceeded: true, verifyReadbackRequested: true, readbackVerified: true };
 	return {
 		exitCode: 0,
 		stdout: JSON.stringify({ ok: true, result, error: null }),
@@ -46,7 +55,7 @@ test("regular approved mutations emit Event v2 telemetry", async () => {
 	const root = mkdtempSync(join(tmpdir(), "pi-ascet-telemetry-write-"));
 	try {
 		const result = await runAscetEdit(
-			{ action: "create_folder", folderPath: "DEMO\\New", executeWrite: true },
+			{ action: "create_folder", folderPath: "DEMO\\New", intent: "apply" },
 			{
 				cwd: root,
 				env: {
@@ -87,7 +96,7 @@ test("read-only preflight Bridge calls do not mark a blocked mutation as entered
 	const root = mkdtempSync(join(tmpdir(), "pi-ascet-telemetry-blocked-"));
 	try {
 		const result = await runAscetEdit(
-			{ action: "create_folder", folderPath: "DEMO\\New", executeWrite: true },
+			{ action: "create_folder", folderPath: "DEMO\\New", intent: "apply" },
 			{
 				cwd: root,
 				env: { PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts") },
@@ -136,7 +145,7 @@ test("post-Bridge exceptions emit outcome_unknown telemetry", async () => {
 		mkdirSync(stored.observation.dataPath);
 		await assert.rejects(
 			runAscetEdit(
-				{ action: "create_folder", folderPath: "DEMO\\New", executeWrite: true },
+				{ action: "create_folder", folderPath: "DEMO\\New", intent: "apply" },
 				{
 					cwd: root,
 					env: { PI_ASCET_EXTENSION_ARTIFACT_ROOT: artifactRoot },

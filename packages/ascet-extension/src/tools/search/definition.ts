@@ -1,4 +1,4 @@
-import { type AscetToolContext, defineSequentialAscetTool } from "../../core/tool.ts";
+﻿import { type AscetToolContext, defineSequentialAscetTool } from "../../core/tool.ts";
 import {
 	type AscetSearchParams,
 	ascetSearchParameters,
@@ -39,7 +39,8 @@ export const ascetSearchTool = defineSequentialAscetTool({
 				content: [{ type: "text", text: JSON.stringify({ error: normalized.error }) }],
 				details: {
 					tool: "ascet_search",
-					action: params.mode,
+					action: "search",
+					mode: params.mode,
 					error: normalized.error,
 					diagnostics: {
 						exitCode: result.exitCode,
@@ -58,7 +59,8 @@ export const ascetSearchTool = defineSequentialAscetTool({
 			content: [{ type: "text", text: JSON.stringify(output) }],
 			details: {
 				tool: "ascet_search",
-				action: params.mode,
+				action: "search",
+				mode: params.mode,
 
 				diagnostics: {
 					searchMs: normalized.data.searchMs,

@@ -1,0 +1,718 @@
+{
+  "startedAt": "2026-08-09T01:45:35.328Z",
+  "database": "C:\\Repo\\F05_IPB_L2_0429",
+  "cliPath": "ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+  "artifactRoot": "output/ascet-get-tools-live-artifacts",
+  "serial": true,
+  "cases": [
+    {
+      "name": "tree_project_scope",
+      "action": "tree",
+      "request": {
+        "action": "tree",
+        "target": {
+          "targetPathPrefix": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral"
+        },
+        "traversal": {
+          "depth": 3,
+          "maxFolders": 500,
+          "maxComponents": 2000
+        },
+        "delivery": "stored"
+      },
+      "expectedOk": true,
+      "ok": true,
+      "pass": true,
+      "elapsedMs": 723,
+      "itemCount": 84,
+      "coverage": {
+        "status": "complete_for_scope",
+        "foldersVisited": 1,
+        "componentsScanned": 83
+      },
+      "truncated": false,
+      "delivery": "stored",
+      "observation": {
+        "resultId": "obs-tree-41372-1786239936053-0",
+        "domain": "tree",
+        "format": "ndjson",
+        "dataPath": "output\\ascet-get-tools-live-artifacts\\obs-tree-41372-1786239936053-0.tree.ndjson",
+        "metaPath": "output\\ascet-get-tools-live-artifacts\\obs-tree-41372-1786239936053-0.meta.json",
+        "itemCount": 84
+      },
+      "assertions": []
+    },
+    {
+      "name": "tree_scm_scope",
+      "action": "tree",
+      "request": {
+        "action": "tree",
+        "target": {
+          "targetPathPrefix": "PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation"
+        },
+        "traversal": {
+          "depth": 4,
+          "maxFolders": 500,
+          "maxComponents": 3000
+        },
+        "delivery": "stored"
+      },
+      "expectedOk": true,
+      "ok": true,
+      "pass": true,
+      "elapsedMs": 615,
+      "itemCount": 64,
+      "coverage": {
+        "status": "complete_for_scope",
+        "foldersVisited": 12,
+        "componentsScanned": 50
+      },
+      "truncated": false,
+      "delivery": "stored",
+      "observation": {
+        "resultId": "obs-tree-41372-1786239936672-3",
+        "domain": "tree",
+        "format": "ndjson",
+        "dataPath": "output\\ascet-get-tools-live-artifacts\\obs-tree-41372-1786239936672-3.tree.ndjson",
+        "metaPath": "output\\ascet-get-tools-live-artifacts\\obs-tree-41372-1786239936672-3.meta.json",
+        "itemCount": 64
+      },
+      "assertions": []
+    },
+    {
+      "name": "component_refs_project",
+      "action": "component_refs",
+      "request": {
+        "action": "component_refs",
+        "target": {
+          "path": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010"
+        },
+        "delivery": "stored"
+      },
+      "expectedOk": true,
+      "ok": true,
+      "pass": true,
+      "elapsedMs": 643,
+      "itemCount": 95,
+      "coverage": {
+        "status": "complete_for_scope",
+        "foldersVisited": 0,
+        "componentsScanned": 1
+      },
+      "truncated": false,
+      "delivery": "stored",
+      "observation": {
+        "resultId": "obs-component_refs-41372-1786239937317-6",
+        "domain": "component_refs",
+        "format": "ndjson",
+        "dataPath": "output\\ascet-get-tools-live-artifacts\\obs-component_refs-41372-1786239937317-6.component_refs.ndjson",
+        "metaPath": "output\\ascet-get-tools-live-artifacts\\obs-component_refs-41372-1786239937317-6.meta.json",
+        "itemCount": 95
+      },
+      "assertions": []
+    },
+    {
+      "name": "elements_cm_scm",
+      "action": "elements",
+      "request": {
+        "action": "elements",
+        "target": {
+          "path": "PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\Config\\CM_SCM"
+        },
+        "delivery": "stored"
+      },
+      "expectedOk": true,
+      "ok": true,
+      "pass": true,
+      "elapsedMs": 455,
+      "itemCount": 11,
+      "coverage": {
+        "status": "complete_for_scope",
+        "foldersVisited": 0,
+        "componentsScanned": 1
+      },
+      "truncated": false,
+      "delivery": "stored",
+      "observation": {
+        "resultId": "obs-elements-41372-1786239937774-9",
+        "domain": "elements",
+        "format": "ndjson",
+        "dataPath": "output\\ascet-get-tools-live-artifacts\\obs-elements-41372-1786239937774-9.elements.ndjson",
+        "metaPath": "output\\ascet-get-tools-live-artifacts\\obs-elements-41372-1786239937774-9.meta.json",
+        "itemCount": 11
+      },
+      "assertions": []
+    },
+    {
+      "name": "formulas_project_1",
+      "action": "formulas",
+      "request": {
+        "action": "formulas",
+        "target": {
+          "path": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010"
+        },
+        "delivery": "stored"
+      },
+      "expectedOk": true,
+      "ok": true,
+      "pass": true,
+      "elapsedMs": 2142,
+      "itemCount": 581,
+      "coverage": {
+        "status": "complete_for_scope",
+        "foldersVisited": 0,
+        "componentsScanned": 0
+      },
+      "truncated": false,
+      "delivery": "stored",
+      "observation": {
+        "resultId": "obs-formulas-41372-1786239939919-12",
+        "domain": "formulas",
+        "format": "ndjson",
+        "dataPath": "output\\ascet-get-tools-live-artifacts\\obs-formulas-41372-1786239939919-12.formulas.ndjson",
+        "metaPath": "output\\ascet-get-tools-live-artifacts\\obs-formulas-41372-1786239939919-12.meta.json",
+        "itemCount": 581
+      },
+      "assertions": []
+    },
+    {
+      "name": "bde_edges_emc_main",
+      "action": "bde_edges",
+      "request": {
+        "action": "bde_edges",
+        "target": {
+          "path": "PlatformLibrary\\Package\\EMC_EmergencyModeControl\\Component\\Main\\EMC_Drive_Main20ms"
+        },
+        "diagramName": "Main",
+        "delivery": "stored"
+      },
+      "expectedOk": true,
+      "ok": true,
+      "pass": true,
+      "elapsedMs": 619,
+      "itemCount": 44,
+      "coverage": {
+        "status": "complete_for_scope",
+        "foldersVisited": 0,
+        "componentsScanned": 1
+      },
+      "truncated": false,
+      "delivery": "stored",
+      "observation": {
+        "resultId": "obs-bde_edges-41372-1786239940541-15",
+        "domain": "bde_edges",
+        "format": "ndjson",
+        "dataPath": "output\\ascet-get-tools-live-artifacts\\obs-bde_edges-41372-1786239940541-15.bde_edges.ndjson",
+        "metaPath": "output\\ascet-get-tools-live-artifacts\\obs-bde_edges-41372-1786239940541-15.meta.json",
+        "itemCount": 44
+      },
+      "assertions": []
+    },
+    {
+      "name": "dbitem_refs_cm_scm",
+      "action": "dbitem_refs",
+      "request": {
+        "action": "dbitem_refs",
+        "target": {
+          "path": "PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\Config\\CM_SCM"
+        },
+        "delivery": "stored"
+      },
+      "expectedOk": true,
+      "ok": true,
+      "pass": true,
+      "elapsedMs": 355,
+      "itemCount": 4,
+      "coverage": {
+        "status": "complete_for_scope",
+        "foldersVisited": 0,
+        "componentsScanned": 0
+      },
+      "truncated": false,
+      "delivery": "stored",
+      "observation": {
+        "resultId": "obs-dbitem_refs-41372-1786239940899-18",
+        "domain": "dbitem_refs",
+        "format": "ndjson",
+        "dataPath": "output\\ascet-get-tools-live-artifacts\\obs-dbitem_refs-41372-1786239940899-18.dbitem_refs.ndjson",
+        "metaPath": "output\\ascet-get-tools-live-artifacts\\obs-dbitem_refs-41372-1786239940899-18.meta.json",
+        "itemCount": 4
+      },
+      "assertions": []
+    },
+    {
+      "name": "database_catalog_local_module_enum",
+      "action": "database_catalog",
+      "request": {
+        "action": "database_catalog",
+        "sourceTreeResultId": "obs-tree-live-20260808-full-database",
+        "include": [
+          "module",
+          "enumeration"
+        ],
+        "delivery": "stored"
+      },
+      "expectedOk": true,
+      "ok": true,
+      "pass": true,
+      "elapsedMs": 60,
+      "itemCount": 0,
+      "coverage": {
+        "status": "complete_for_scope"
+      },
+      "truncated": false,
+      "delivery": "stored",
+      "catalog": {
+        "resultId": "obs-database-catalog-42316-1786240007102-0",
+        "sourceTreeResultId": "obs-tree-live-20260808-full-database",
+        "include": [
+          "module",
+          "enumeration"
+        ],
+        "artifacts": {
+          "catalog": {
+            "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-42316-1786240007102-0.database-model-catalog.ndjson",
+            "itemCount": 1136
+          },
+          "relations": {
+            "projectComplexEdges": {
+              "notCreatedReason": "scan_not_requested"
+            },
+            "parameterClassEdges": {
+              "notCreatedReason": "scan_not_requested"
+            },
+            "parameterEnumEdges": {
+              "notCreatedReason": "scan_not_requested"
+            },
+            "projectModuleEdges": {
+              "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-42316-1786240007102-0.project-module-edges.ndjson",
+              "itemCount": 431
+            },
+            "moduleMessageEdges": {
+              "notCreatedReason": "scan_not_requested"
+            },
+            "messageEnumEdges": {
+              "notCreatedReason": "scan_not_requested"
+            }
+          },
+          "summaryPath": "output\\database-catalog-baseline\\obs-database-catalog-42316-1786240007102-0.database-model-summary.json",
+          "metaPath": "output\\database-catalog-baseline\\obs-database-catalog-42316-1786240007102-0.database-model.meta.json",
+          "enumerations": {
+            "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-42316-1786240007102-0.enumerations.ndjson",
+            "itemCount": 708
+          },
+          "modules": {
+            "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-42316-1786240007102-0.modules.ndjson",
+            "itemCount": 428
+          }
+        }
+      },
+      "assertions": []
+    },
+    {
+      "name": "database_catalog_live_message",
+      "action": "database_catalog",
+      "request": {
+        "action": "database_catalog",
+        "sourceTreeResultId": "obs-tree-live-20260808-full-database",
+        "include": [
+          "message"
+        ],
+        "messageDepth": 0,
+        "delivery": "stored"
+      },
+      "expectedOk": true,
+      "ok": true,
+      "pass": true,
+      "elapsedMs": 87342,
+      "itemCount": 0,
+      "coverage": {
+        "status": "complete_for_scope",
+        "failureCount": 0
+      },
+      "truncated": false,
+      "delivery": "stored",
+      "catalog": {
+        "resultId": "obs-database-catalog-42316-1786240094297-1",
+        "sourceTreeResultId": "obs-tree-live-20260808-full-database",
+        "include": [
+          "message"
+        ],
+        "artifacts": {
+          "catalog": {
+            "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-42316-1786240094297-1.database-model-catalog.ndjson",
+            "itemCount": 24656
+          },
+          "relations": {
+            "projectComplexEdges": {
+              "notCreatedReason": "scan_not_requested"
+            },
+            "parameterClassEdges": {
+              "notCreatedReason": "scan_not_requested"
+            },
+            "parameterEnumEdges": {
+              "notCreatedReason": "scan_not_requested"
+            },
+            "projectModuleEdges": {
+              "notCreatedReason": "scan_not_requested"
+            },
+            "moduleMessageEdges": {
+              "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-42316-1786240094297-1.module-message-edges.ndjson",
+              "itemCount": 24656
+            },
+            "messageEnumEdges": {
+              "notCreatedReason": "scan_not_requested"
+            }
+          },
+          "summaryPath": "output\\database-catalog-baseline\\obs-database-catalog-42316-1786240094297-1.database-model-summary.json",
+          "metaPath": "output\\database-catalog-baseline\\obs-database-catalog-42316-1786240094297-1.database-model.meta.json",
+          "messages": {
+            "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-42316-1786240094297-1.messages.ndjson",
+            "itemCount": 24656
+          }
+        }
+      },
+      "assertions": []
+    },
+    {
+      "name": "error_formulas_requires_project",
+      "action": "formulas",
+      "request": {
+        "action": "formulas",
+        "target": {
+          "path": "PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\Config\\CM_SCM"
+        },
+        "delivery": "inline"
+      },
+      "expectedOk": false,
+      "ok": false,
+      "pass": true,
+      "elapsedMs": 597,
+      "itemCount": 0,
+      "truncated": false,
+      "error": {
+        "code": "unsupported_project_kind",
+        "message": "The target must be an ASCET project."
+      },
+      "assertions": []
+    },
+    {
+      "name": "error_bde_diagram_not_found",
+      "action": "bde_edges",
+      "request": {
+        "action": "bde_edges",
+        "target": {
+          "path": "PlatformLibrary\\Package\\EMC_EmergencyModeControl\\Component\\Main\\EMC_Drive_Main20ms"
+        },
+        "diagramName": "MissingDiagram",
+        "delivery": "inline"
+      },
+      "expectedOk": false,
+      "ok": false,
+      "pass": true,
+      "elapsedMs": 514,
+      "itemCount": 0,
+      "truncated": false,
+      "error": {
+        "code": "diagram_not_found",
+        "message": "Diagram 'MissingDiagram' was not found."
+      },
+      "assertions": []
+    },
+    {
+      "name": "error_database_catalog_source_missing",
+      "action": "database_catalog",
+      "request": {
+        "action": "database_catalog",
+        "sourceTreeResultId": "obs-tree-does-not-exist",
+        "include": [
+          "module"
+        ],
+        "delivery": "stored"
+      },
+      "expectedOk": false,
+      "ok": false,
+      "pass": true,
+      "elapsedMs": 0,
+      "itemCount": 0,
+      "truncated": false,
+      "error": {
+        "code": "source_tree_not_found",
+        "message": "Stored Tree observation 'obs-tree-does-not-exist' was not found.",
+        "details": "Stored ASCET observation 'obs-tree-does-not-exist' was not found."
+      },
+      "assertions": []
+    },
+    {
+      "name": "elements_exact_oid",
+      "action": "elements",
+      "request": {
+        "action": "elements",
+        "target": {
+          "oid": "040gpc8345201o070k64iliu68i20"
+        },
+        "elementName": "DrvPedalPos",
+        "filters": {
+          "scope": [
+            "imported"
+          ]
+        },
+        "delivery": "inline"
+      },
+      "expectedOk": true,
+      "ok": true,
+      "pass": true,
+      "elapsedMs": 486,
+      "itemCount": 1,
+      "coverage": {
+        "status": "complete_for_scope",
+        "foldersVisited": 0,
+        "componentsScanned": 1
+      },
+      "truncated": false,
+      "delivery": "inline",
+      "assertions": []
+    },
+    {
+      "name": "formulas_exact_name",
+      "action": "formulas",
+      "request": {
+        "action": "formulas",
+        "target": {
+          "path": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010"
+        },
+        "formulaName": "Acceleration_mPERs2_P2exp14",
+        "delivery": "inline"
+      },
+      "expectedOk": true,
+      "ok": true,
+      "pass": true,
+      "elapsedMs": 479,
+      "itemCount": 1,
+      "coverage": {
+        "status": "complete_for_scope",
+        "foldersVisited": 0,
+        "componentsScanned": 0
+      },
+      "truncated": false,
+      "delivery": "inline",
+      "assertions": []
+    },
+    {
+      "name": "component_refs_name_filter",
+      "action": "component_refs",
+      "request": {
+        "action": "component_refs",
+        "target": {
+          "path": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010"
+        },
+        "filters": {
+          "name": "CM_SCM"
+        },
+        "delivery": "inline"
+      },
+      "expectedOk": true,
+      "ok": true,
+      "pass": true,
+      "elapsedMs": 546,
+      "itemCount": 1,
+      "coverage": {
+        "status": "complete_for_scope",
+        "foldersVisited": 0,
+        "componentsScanned": 1
+      },
+      "truncated": false,
+      "delivery": "inline",
+      "assertions": [],
+      "fixedBy": "GetComponentRefs name/scope filtering"
+    },
+    {
+      "name": "import_binding_exact",
+      "action": "import_binding",
+      "request": {
+        "action": "import_binding",
+        "target": {
+          "path": "PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\Config\\CM_SCM"
+        },
+        "elementName": "DrvPedalPos",
+        "provider": {
+          "path": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\Asw2Asw_IPBCustGen_BB88010"
+        },
+        "delivery": "inline"
+      },
+      "expectedOk": true,
+      "ok": true,
+      "pass": true,
+      "elapsedMs": 415,
+      "itemCount": 1,
+      "coverage": {
+        "status": "complete_for_scope",
+        "foldersVisited": 0,
+        "componentsScanned": 2
+      },
+      "truncated": false,
+      "delivery": "inline",
+      "assertions": []
+    },
+    {
+      "name": "component_refs_scope_exported",
+      "action": "component_refs",
+      "request": {
+        "action": "component_refs",
+        "target": {
+          "path": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010"
+        },
+        "filters": {
+          "scope": [
+            "exported"
+          ]
+        },
+        "delivery": "inline"
+      },
+      "expectedOk": true,
+      "ok": true,
+      "pass": true,
+      "elapsedMs": 559,
+      "itemCount": 95,
+      "coverage": {
+        "status": "complete_for_scope",
+        "foldersVisited": 0,
+        "componentsScanned": 1
+      },
+      "truncated": false,
+      "assertions": []
+    },
+    {
+      "name": "component_refs_scope_imported",
+      "action": "component_refs",
+      "request": {
+        "action": "component_refs",
+        "target": {
+          "path": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010"
+        },
+        "filters": {
+          "scope": [
+            "imported"
+          ]
+        },
+        "delivery": "inline"
+      },
+      "expectedOk": true,
+      "ok": true,
+      "pass": true,
+      "elapsedMs": 555,
+      "itemCount": 0,
+      "coverage": {
+        "status": "complete_for_scope",
+        "foldersVisited": 0,
+        "componentsScanned": 1
+      },
+      "truncated": false,
+      "assertions": []
+    },
+    {
+      "name": "component_refs_name_scope_match",
+      "action": "component_refs",
+      "request": {
+        "action": "component_refs",
+        "target": {
+          "path": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010"
+        },
+        "filters": {
+          "name": "CM_SCM",
+          "scope": [
+            "exported"
+          ]
+        },
+        "delivery": "inline"
+      },
+      "expectedOk": true,
+      "ok": true,
+      "pass": true,
+      "elapsedMs": 563,
+      "itemCount": 1,
+      "coverage": {
+        "status": "complete_for_scope",
+        "foldersVisited": 0,
+        "componentsScanned": 1
+      },
+      "truncated": false,
+      "assertions": []
+    },
+    {
+      "name": "component_refs_name_scope_mismatch",
+      "action": "component_refs",
+      "request": {
+        "action": "component_refs",
+        "target": {
+          "path": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010"
+        },
+        "filters": {
+          "name": "CM_SCM",
+          "scope": [
+            "imported"
+          ]
+        },
+        "delivery": "inline"
+      },
+      "expectedOk": true,
+      "ok": true,
+      "pass": true,
+      "elapsedMs": 459,
+      "itemCount": 0,
+      "coverage": {
+        "status": "complete_for_scope",
+        "foldersVisited": 0,
+        "componentsScanned": 1
+      },
+      "truncated": false,
+      "assertions": []
+    }
+  ],
+  "importBindingDiscovery": {
+    "importedElementCandidates": 4,
+    "providerCandidates": 94,
+    "probeCount": 54,
+    "request": {
+      "action": "import_binding",
+      "target": {
+        "path": "PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\Config\\CM_SCM"
+      },
+      "elementName": "DrvPedalPos",
+      "provider": {
+        "path": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\Asw2Asw_IPBCustGen_BB88010"
+      }
+    },
+    "payload": {
+      "items": [
+        {
+          "matched": true,
+          "importPath": "PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\Config\\CM_SCM::DrvPedalPos",
+          "exportPath": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\Asw2Asw_IPBCustGen_BB88010::DrvPedalPos"
+        }
+      ],
+      "coverage": {
+        "status": "complete_for_scope",
+        "foldersVisited": 0,
+        "componentsScanned": 2
+      },
+      "truncated": false,
+      "source": "live",
+      "database": {
+        "name": "C:\\Repo\\F05_IPB_L2_0429",
+        "path": "C:\\Repo\\"
+      }
+    },
+    "aggregateDiscoveryElapsedMs": 19892
+  },
+  "completedAt": "2026-08-09T02:07:17.978Z",
+  "catalogRerunArtifactRoot": "output/database-catalog-baseline",
+  "functionalFix": {
+    "status": "pass",
+    "implementation": "ascetcli/src/AscetCopilot/Services/Get/AscetGetService.cs",
+    "unitReport": "AscetGetFilterContractTest passed",
+    "liveReport": "output/ascet-component-refs-filter-live-20260809.json",
+    "liveCases": 6,
+    "liveFailures": 0
+  }
+}

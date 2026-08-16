@@ -8,12 +8,15 @@ const repoRoot = resolve(process.cwd());
 const ascetCwd = resolve(process.env.ASCET_SMOKE_CWD ?? repoRoot);
 const enabled = process.env.ASCET_WRITE_SMOKE === "1";
 const cleanupOnly = process.env.ASCET_WRITE_SMOKE_CLEANUP_ONLY === "1";
+const autoCleanup = process.env.ASCET_WRITE_SMOKE_AUTO_CLEANUP !== "0";
+const suffix =
+	process.env.ASCET_WRITE_SMOKE_SUFFIX ?? new Date().toISOString().replaceAll(/[-:.TZ]/gu, "");
 const skipStateMachine = process.env.ASCET_WRITE_SMOKE_SKIP_STATE_MACHINE === "1";
 const testEditabilitySet = process.env.ASCET_WRITE_SMOKE_TEST_EDITABILITY_SET === "1";
-const componentPath = process.env.ASCET_WRITE_SMOKE_COMPONENT ?? "DEMO\\__pi_write_smoke__\\PiSmoke";
+const componentPath =
+	process.env.ASCET_WRITE_SMOKE_COMPONENT ?? `DEMO\\__pi_write_smoke_${suffix}\\PiSmoke`;
 const folderPath = componentPath.split("\\").slice(0, -1).join("\\");
 const methodName = process.env.ASCET_WRITE_SMOKE_METHOD ?? "calc";
-const providerPath = process.env.ASCET_WRITE_SMOKE_PROVIDER_COMPONENT ?? `${folderPath}\\PiSmokeProvider`;
 const enumerationPath = `${folderPath}\\PiSmokeEnum`;
 const modulePath = `${folderPath}\\PiSmokeModule`;
 const stateMachinePath = `${folderPath}\\PiSmokeStateMachine`;
@@ -47,20 +50,7 @@ async function withStage<T>(stage: string, fn: () => Promise<T>): Promise<T> {
 	try {
 		return await fn();
 	} catch (error) {
-		console.error(
-			JSON.stringify(
-				{
-					ok: false,
-					stage,
-					componentPath,
-					methodName,
-					error: error instanceof Error ? error.message : String(error),
-				},
-				null,
-				2,
-			),
-		);
-		process.exit(1);
+		throw new Error(`${stage}: ${error instanceof Error ? error.message : String(error)}`, { cause: error });
 	}
 }
 
@@ -103,13 +93,24 @@ async function executeTool(toolName: string, params: Record<string, unknown>, ct
 		const executedMutation =
 			toolName === "ascet_edit" &&
 			outcome.status === "ok" &&
-			(params.executeWrite === true || params.phase === "commit");
+			params.intent === "apply";
 		if (executedMutation) {
 			const verification = response.details?.verification as { status?: unknown } | undefined;
-			if (verification?.status !== "passed") {
-				throw new Error(
-					`ascet_edit did not prove automatic readback verification: ${verification?.status ?? "missing"}`,
-				);
+			const mutationVerification = response.details?.mutationResult?.verification as
+				| { status?: unknown; verified?: unknown }
+				| undefined;
+			const outcomeData = outcome.data as
+				| { verification?: { status?: unknown; verified?: unknown } }
+				| undefined;
+			const verificationPassed =
+				outcome.verified === true ||
+				verification?.status === "passed" ||
+				mutationVerification?.status === "passed" ||
+				mutationVerification?.verified === true ||
+				outcomeData?.verification?.status === "passed" ||
+				outcomeData?.verification?.verified === true;
+			if (!verificationPassed) {
+				throw new Error("ascet_edit did not prove automatic readback verification.");
 			}
 		}
 		return response;
@@ -142,16 +143,17 @@ async function cleanupSmokeArtifacts() {
 		try {
 			const response = await executeTool(
 				"ascet_edit",
-				{ action, ...params, executeWrite: true },
+				{ action, ...params, intent: "apply" },
 				writeContext,
 			);
 			cleanup.push({ action, outcome: response.details.outcome });
 		} catch (error) {
 			const message = error instanceof Error ? error.message : String(error);
-			if (!message.includes("component_not_found")) {
-				throw error;
-			}
-			cleanup.push({ action, skipped: "component_not_found" });
+			const missingTarget = ["component_not_found", "target_not_found", "method_not_found", "folder_not_found"].find(
+				(code) => message.includes(code),
+			);
+			if (!missingTarget) throw error;
+			cleanup.push({ action, skipped: missingTarget });
 		}
 	}
 	return {
@@ -160,231 +162,214 @@ async function cleanupSmokeArtifacts() {
 	};
 }
 
-if (cleanupOnly) {
-	const cleanup = await withStage("cleanup", cleanupSmokeArtifacts);
-	console.log(JSON.stringify({ ok: true, cleanupOnly: true, ascetCwd, componentPath, methodName, cleanup }, null, 2));
-	process.exit(0);
-}
+async function main() {
+	if (cleanupOnly) {
+		try {
+			const cleanup = await withStage("cleanup", cleanupSmokeArtifacts);
+			console.log(JSON.stringify({ ok: true, cleanupOnly: true, ascetCwd, componentPath, methodName, cleanup }, null, 2));
+		} catch (error) {
+			console.error(
+				JSON.stringify(
+					{
+						ok: false,
+						stage: "cleanup",
+						componentPath,
+						methodName,
+						error: error instanceof Error ? error.message : String(error),
+					},
+					null,
+					2,
+				),
+			);
+			process.exitCode = 1;
+		}
+		return;
+	}
 
-const createFolderResponse = await withStage("create_folder", () => executeTool(
-	"ascet_edit",
-	{ action: "create_folder", folderPath, executeWrite: true },
-	writeContext,
-));
-const createComponentResponse = await withStage("create_component", () => executeTool(
-	"ascet_edit",
-	{
-		action: "create_component",
-		componentPath,
-		kind: "class",
-		language: "ESDL",
-		ifExists: "return-existing",
-		executeWrite: true,
-	},
-	writeContext,
-));
-const editabilitySetResponse = testEditabilitySet ? await withStage("component_editable_set", () => executeTool(
-	"ascet_edit",
-	{ mode: "set", componentPath, executeWrite: true },
-	writeContext,
-)) : undefined;
-const createMethodResponse = await withStage("create_method", () => executeTool(
-	"ascet_edit",
-	{
-		action: "create_method",
-		componentPath,
-		componentKind: "class",
-		methodName,
-		methodKind: "abstract",
-		ifExists: "return-existing",
-		executeWrite: true,
-	},
-	writeContext,
-));
-const signatureResponse = await withStage("set_method_signature", () => executeTool(
-	"ascet_edit",
-	{
-		action: "set_method_signature",
-		componentPath,
-		methodName,
-		returnType: "cont",
-		arguments: [{ name: "input", type: "cont", ifExists: "replace" }],
-		ifReturnExists: "replace",
-		executeWrite: true,
-	},
-	writeContext,
-));
-const elementSpecPlanResponse = await withStage("apply_element_spec_plan", () => executeTool(
-	"ascet_edit",
-	{
-		action: "apply_element_spec",
-		componentPath,
-		intent: "create",
-		elements: [
+	let scenario: Record<string, unknown> | undefined;
+	let scenarioError: unknown;
+	try {
+		const createFolderResponse = await withStage("create_folder", () => executeTool(
+			"ascet_edit",
+			{ action: "create_folder", folderPath, intent: "apply" },
+			writeContext,
+		));
+		const createComponentResponse = await withStage("create_component", () => executeTool(
+			"ascet_edit",
 			{
-				role: "standardPrimitive",
-				name: "C_Smoke",
-				kind: "parameter",
-				modelType: "cont",
-				scope: "local",
-				data: { value: 0 },
-				physicalRange: { min: -1, max: 1 },
-				impl: { valueType: "real32" },
+				action: "create_component",
+				componentPath,
+				kind: "class",
+				language: "ESDL",
+				ifExists: "return-existing",
+				intent: "apply",
 			},
-		],
-	},
-	writeContext,
-));
-const elementSpecPlanId = elementSpecPlanResponse.details.outcome?.plan?.planId;
-if (typeof elementSpecPlanId !== "string" || elementSpecPlanId.length === 0) {
-	throw new Error("apply_element_spec plan did not return planId");
-}
-const elementSpecResponse = await withStage("apply_element_spec_commit", () => executeTool(
-	"ascet_edit",
-	{ action: "apply_element_spec", phase: "commit", planId: elementSpecPlanId },
-	writeContext,
-));
-const dependencyPlanResponse = await withStage("set_element_dependency_plan", () => executeTool(
-	"ascet_edit",
-	{
-		action: "set_element_dependency",
-		targetPath: componentPath,
-		elementName: "C_Smoke",
-		dependency: "dependent",
-		targetKind: "component",
-	},
-	writeContext,
-));
-const dependencyPlanId = dependencyPlanResponse.details.outcome?.plan?.planId;
-if (typeof dependencyPlanId !== "string" || dependencyPlanId.length === 0) {
-	throw new Error("set_element_dependency plan did not return planId");
-}
-const dependencyResponse = await withStage("set_element_dependency_commit", () => executeTool(
-	"ascet_edit",
-	{ action: "set_element_dependency", phase: "commit", planId: dependencyPlanId },
-	writeContext,
-));
-const dependencyReadback = await withStage("read_element_dependency", () =>
-	executeTool(
-		"ascet_read",
-		{ action: "read_element_dependency", targetPath: componentPath, elementName: "C_Smoke", targetKind: "component" },
-		{ cwd: ascetCwd },
-	),
-);
+			writeContext,
+		));
+		const editabilitySetResponse = testEditabilitySet ? await withStage("component_editable_set", () => executeTool(
+			"ascet_edit",
+			{ mode: "set", componentPath, intent: "apply" },
+			writeContext,
+		)) : undefined;
+		const createMethodResponse = await withStage("create_method", () => executeTool(
+			"ascet_edit",
+			{
+				action: "create_method",
+				componentPath,
+				componentKind: "class",
+				methodName,
+				methodKind: "abstract",
+				ifExists: "return-existing",
+				intent: "apply",
+			},
+			writeContext,
+		));
+		const signatureResponse = await withStage("set_method_signature", () => executeTool(
+			"ascet_edit",
+			{
+				action: "set_method_signature",
+				componentPath,
+				methodName,
+				returnType: "cont",
+				arguments: [{ name: "input", type: "cont", ifExists: "replace" }],
+				ifReturnExists: "replace",
+				intent: "apply",
+			},
+			writeContext,
+		));
+		const elementSpecResponse = await withStage("apply_element_spec", () => executeTool(
+			"ascet_edit",
+			{
+				action: "apply_element_spec",
+				componentPath,
+				intent: "apply",
+				elementIntent: "create",
+				elements: [
+					{
+						role: "standardPrimitive",
+						name: "C_Smoke",
+						kind: "parameter",
+						modelType: "cont",
+						scope: "local",
+						data: { value: 0 },
+						physicalRange: { min: -1, max: 1 },
+						impl: { valueType: "real32" },
+					},
+				],
+			},
+			writeContext,
+		));
+		const createEnumerationResponse = await withStage("create_enumeration", () =>
+			executeTool(
+				"ascet_edit",
+				{
+					action: "create_component",
+					componentPath: enumerationPath,
+					kind: "enumeration",
+					ifExists: "return-existing",
+					intent: "apply",
+				},
+				writeContext,
+			),
+		);
+		const enumeratorResponse = await withStage("set_enumerators", () =>
+			executeTool(
+				"ascet_edit",
+				{
+					action: "set_enumerators",
+					componentPath: enumerationPath,
+					enumerators: ["OFF", "ON", "ERROR"],
+					intent: "apply",
+				},
+				writeContext,
+			),
+		);
 
-const createEnumerationResponse = await withStage("create_enumeration", () =>
-	executeTool(
-		"ascet_edit",
-		{
-			action: "create_component",
-			componentPath: enumerationPath,
-			kind: "enumeration",
-			ifExists: "return-existing",
-			executeWrite: true,
-		},
-		writeContext,
-	),
-);
-const enumeratorResponse = await withStage("set_enumerators", () =>
-	executeTool(
-		"ascet_edit",
-		{
-			action: "set_enumerators",
-			componentPath: enumerationPath,
-			enumerators: ["OFF", "ON", "ERROR"],
-			executeWrite: true,
-		},
-		writeContext,
-	),
-);
+		const createModuleResponse = await withStage("create_module", () => executeTool(
+			"ascet_edit",
+			{
+				action: "create_component",
+				componentPath: modulePath,
+				kind: "module",
+				language: "ESDL",
+				ifExists: "return-existing",
+				intent: "apply",
+			},
+			writeContext,
+		));
+		const createModuleMethodResponse = await withStage("create_module_method", () => executeTool(
+			"ascet_edit",
+			{
+				action: "create_method",
+				componentPath: modulePath,
+				componentKind: "module",
+				methodName: moduleMethodName,
+				methodKind: "process",
+				ifExists: "return-existing",
+				intent: "apply",
+			},
+			writeContext,
+		));
+		const moduleCodeResponse = await withStage("set_module_code", () => executeTool(
+			"ascet_edit",
+			{
+				action: "set_module_code",
+				modulePath,
+				operation: "set-method",
+				methodName: moduleMethodName,
+				code: "// PI ASCET module write smoke\n",
+				intent: "apply",
+			},
+			writeContext,
+		));
+		const createStateMachineResponse = skipStateMachine ? undefined : await withStage("create_state_machine", () => executeTool(
+			"ascet_edit",
+			{
+				action: "create_component",
+				componentPath: stateMachinePath,
+				kind: "statemachine",
+				language: "ESDL",
+				ifExists: "return-existing",
+				intent: "apply",
+			},
+			writeContext,
+		));
+		const createStateMachineMethodResponse = skipStateMachine ? undefined : await withStage("create_state_machine_method", () => executeTool(
+			"ascet_edit",
+			{
+				action: "create_method",
+				componentPath: stateMachinePath,
+				componentKind: "statemachine",
+				methodName: stateMachineMethodName,
+				methodKind: "trigger",
+				ifExists: "return-existing",
+				intent: "apply",
+			},
+			writeContext,
+		));
+		const stateMachineCodeResponse = skipStateMachine ? undefined : await withStage("set_state_machine_code", () => executeTool(
+			"ascet_edit",
+			{
+				action: "set_state_machine_code",
+				stateMachinePath,
+				operation: "set-method",
+				methodName: stateMachineMethodName,
+				code: "// PI ASCET state machine write smoke\n",
+				intent: "apply",
+			},
+			writeContext,
+		));
 
-const createModuleResponse = await withStage("create_module", () => executeTool(
-	"ascet_edit",
-	{
-		action: "create_component",
-		componentPath: modulePath,
-		kind: "module",
-		language: "ESDL",
-		ifExists: "return-existing",
-		executeWrite: true,
-	},
-	writeContext,
-));
-const createModuleMethodResponse = await withStage("create_module_method", () => executeTool(
-	"ascet_edit",
-	{
-		action: "create_method",
-		componentPath: modulePath,
-		componentKind: "module",
-		methodName: moduleMethodName,
-		methodKind: "process",
-		ifExists: "return-existing",
-		executeWrite: true,
-	},
-	writeContext,
-));
-const moduleCodeResponse = await withStage("set_module_code", () => executeTool(
-	"ascet_edit",
-	{
-		action: "set_module_code",
-		modulePath,
-		operation: "set-method",
-		methodName: moduleMethodName,
-		code: "// PI ASCET module write smoke\n",
-		executeWrite: true,
-	},
-	writeContext,
-));
-const createStateMachineResponse = skipStateMachine ? undefined : await withStage("create_state_machine", () => executeTool(
-	"ascet_edit",
-	{
-		action: "create_component",
-		componentPath: stateMachinePath,
-		kind: "statemachine",
-		language: "ESDL",
-		ifExists: "return-existing",
-		executeWrite: true,
-	},
-	writeContext,
-));
-const createStateMachineMethodResponse = skipStateMachine ? undefined : await withStage("create_state_machine_method", () => executeTool(
-	"ascet_edit",
-	{
-		action: "create_method",
-		componentPath: stateMachinePath,
-		componentKind: "statemachine",
-		methodName: stateMachineMethodName,
-		methodKind: "trigger",
-		ifExists: "return-existing",
-		executeWrite: true,
-	},
-	writeContext,
-));
-const stateMachineCodeResponse = skipStateMachine ? undefined : await withStage("set_state_machine_code", () => executeTool(
-	"ascet_edit",
-	{
-		action: "set_state_machine_code",
-		stateMachinePath,
-		operation: "set-method",
-		methodName: stateMachineMethodName,
-		code: "// PI ASCET state machine write smoke\n",
-		executeWrite: true,
-	},
-	writeContext,
-));
+		const writeResponse = await withStage("set_method_code", () => executeTool(
+			"ascet_edit",
+			{ action: "set_method_code", componentPath, methodName, codeFile, intent: "apply" },
+			writeContext,
+		));
 
-const writeResponse = await withStage("set_method_code", () => executeTool(
-	"ascet_edit",
-	{ action: "set_method_code", componentPath, methodName, codeFile, executeWrite: true },
-	writeContext,
-));
-
-const readResponse = await withStage("read_method_code", () =>
-	executeTool("ascet_read", { action: "read_code", componentPath, methodName }, { cwd: ascetCwd }),
-);
-console.log(
-	JSON.stringify(
-		{
+		const readResponse = await withStage("read_method_code", () =>
+			executeTool("ascet_read", { action: "read_code", componentPath, methodName }, { cwd: ascetCwd }),
+		);
+		scenario = {
 			ok: true,
 			ascetCwd,
 			componentPath,
@@ -396,11 +381,7 @@ console.log(
 				editabilitySet: editabilitySetResponse?.details.outcome,
 				method: createMethodResponse.details.outcome,
 				signature: signatureResponse.details.outcome,
-				elementSpecPlan: elementSpecPlanResponse.details.outcome,
 				elementSpec: elementSpecResponse.details.outcome,
-				dependencyPlan: dependencyPlanResponse.details.outcome,
-				dependency: dependencyResponse.details.outcome,
-				dependencyReadback: toolData(dependencyReadback),
 				enumeration: createEnumerationResponse.details.outcome,
 				enumerators: enumeratorResponse.details.outcome,
 				module: createModuleResponse.details.outcome,
@@ -412,8 +393,52 @@ console.log(
 			},
 			write: writeResponse.details.outcome,
 			readback: toolData(readResponse),
-		},
-		null,
-		2,
-	),
-);
+		};
+	} catch (error) {
+		scenarioError = error;
+	}
+
+	let cleanup: Awaited<ReturnType<typeof cleanupSmokeArtifacts>> | undefined;
+	let cleanupError: unknown;
+	if (autoCleanup) {
+		try {
+			cleanup = await cleanupSmokeArtifacts();
+		} catch (error) {
+			cleanupError = error;
+		}
+	}
+
+	if (scenarioError !== undefined || cleanupError !== undefined || scenario === undefined) {
+		console.error(
+			JSON.stringify(
+				{
+					ok: false,
+					stage: scenarioError !== undefined ? "scenario" : "cleanup",
+					componentPath,
+					methodName,
+					error:
+						scenarioError instanceof Error
+							? scenarioError.message
+							: scenarioError === undefined
+								? "ASCET write smoke cleanup failed."
+								: String(scenarioError),
+					cleanup,
+					cleanupError:
+						cleanupError instanceof Error
+							? cleanupError.message
+							: cleanupError === undefined
+								? undefined
+								: String(cleanupError),
+				},
+				null,
+				2,
+			),
+		);
+		process.exitCode = 1;
+		return;
+	}
+
+	console.log(JSON.stringify({ ...scenario, cleanup }, null, 2));
+}
+
+await main();

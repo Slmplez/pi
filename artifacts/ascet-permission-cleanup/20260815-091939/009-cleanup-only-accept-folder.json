@@ -1,0 +1,75 @@
+{
+  "stage": "cleanup-only-accept-folder",
+  "startedAt": "2026-08-15T01:24:49.700Z",
+  "finishedAt": "2026-08-15T01:26:17.165Z",
+  "request": {
+    "toolName": "ascet_edit",
+    "params": {
+      "action": "delete_folder",
+      "folderPath": "DEMO\\__pi_permission_smoke__20260814-191154\\AcceptEdits",
+      "ifMissing": "ignore",
+      "intent": "apply"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"status\": \"error\",\n  \"permission\": {\n    \"mode\": \"default\",\n    \"decision\": \"not_evaluated\"\n  },\n  \"preflight\": {\n    \"status\": \"failed\"\n  },\n  \"editability\": {\n    \"status\": \"not_applicable\"\n  },\n  \"mutation\": {\n    \"status\": \"not_started\"\n  },\n  \"verification\": {\n    \"status\": \"not_applicable\"\n  },\n  \"error\": {\n    \"code\": \"plan_target_identity_missing\",\n    \"message\": \"The mutation anchor for delete_folder was not found in the complete database Tree.\"\n  },\n  \"bridge\": {\n    \"beforeBridge\": false,\n    \"bridgeEntered\": false,\n    \"backendResponseReceived\": false\n  },\n  \"recovery\": {\n    \"required\": false\n  }\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "error",
+        "error": {
+          "code": "plan_target_identity_missing",
+          "message": "The mutation anchor for delete_folder was not found in the complete database Tree."
+        }
+      },
+      "error": {
+        "code": "plan_target_identity_missing",
+        "message": "The mutation anchor for delete_folder was not found in the complete database Tree."
+      },
+      "mutationResult": {
+        "status": "error",
+        "permission": {
+          "mode": "default",
+          "decision": "not_evaluated"
+        },
+        "preflight": {
+          "status": "failed"
+        },
+        "editability": {
+          "status": "not_applicable"
+        },
+        "mutation": {
+          "status": "not_started"
+        },
+        "verification": {
+          "status": "not_applicable"
+        },
+        "error": {
+          "code": "plan_target_identity_missing",
+          "message": "The mutation anchor for delete_folder was not found in the complete database Tree."
+        },
+        "bridge": {
+          "beforeBridge": false,
+          "bridgeEntered": false,
+          "backendResponseReceived": false
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      },
+      "tool": "ascet_edit",
+      "action": "delete_folder",
+      "command": {
+        "logicalCommandId": "AscetDeleteFolder",
+        "backendCommandId": "AscetDeleteFolder",
+        "operation": "delete_folder"
+      },
+      "diagnostics": {}
+    }
+  }
+}

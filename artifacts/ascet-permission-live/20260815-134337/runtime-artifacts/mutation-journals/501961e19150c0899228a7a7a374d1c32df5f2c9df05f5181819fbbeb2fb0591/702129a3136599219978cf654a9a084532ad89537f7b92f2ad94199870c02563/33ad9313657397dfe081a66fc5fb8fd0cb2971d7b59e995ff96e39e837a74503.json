@@ -1,0 +1,142 @@
+{
+  "version": 1,
+  "status": "applied",
+  "databaseFingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c",
+  "targetOid": "040qm00f0s001og70sfg77aupvbge",
+  "targetKind": "class",
+  "canonicalPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_GenericTCSFunctions",
+  "action": "create_method",
+  "planId": "6cc1161f-c780-4b39-84ff-a1b2453aaf0f",
+  "planFingerprint": "31dec1c36b7e50871eceb2da5ecc8d7eb8c51a5c3976603d9e54b9fd0fc39c76",
+  "targetImpactFingerprint": "sha256:4c8d50155d1577c5e46231dfa0cd700f7c53c5c61dd037a0210836aed1457925",
+  "guardGeneration": 0,
+  "beforeSnapshotFingerprint": "sha256:6f5ea0c79573885d2e3ebf5fe57043458ecfff2fce8647a94e0a3664fba51ea5",
+  "desiredFingerprint": "sha256:4c9f6ef684e9320ad1d74a043fb7d28dd0b9d6430d4eccffa9638f6b040a8d6a",
+  "beforeSnapshot": {
+    "operation": "authoritative_single_call_preflight",
+    "validated": true,
+    "authoritativePlan": {
+      "operation": "preflight_create_method",
+      "validated": true,
+      "result": {
+        "databasePath": "C:\\Repo\\F05_IPB_L2_0429",
+        "componentPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_GenericTCSFunctions",
+        "componentOid": "040qm00f0s001og70sfg77aupvbge",
+        "componentKind": "Class",
+        "languageKind": "BDE",
+        "diagramName": "Main",
+        "diagramExists": true,
+        "diagramRuntimeType": "de.etas.cebra.toolAPI.Ascet.DiscreteMethodDiagram",
+        "requiredMethod": "AddMethod",
+        "requiredSignature": "AddMethod(String)",
+        "requiredMethodAvailable": true,
+        "addDiagramAvailable": false,
+        "futureMethodCapabilityProven": true,
+        "editable": false,
+        "readbackAvailable": true,
+        "noOp": false,
+        "existingMethod": null,
+        "plannedEffects": [
+          {
+            "kind": "create_method",
+            "target": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_GenericTCSFunctions::PiCompoundMethod",
+            "methodKind": "AbstractMethod"
+          }
+        ],
+        "capability": {
+          "status": "supported",
+          "operation": "AddMethod",
+          "failureCode": "",
+          "failureMessage": ""
+        }
+      }
+    },
+    "normalizedEvidence": {
+      "version": 1,
+      "action": "create_method",
+      "paramsFingerprint": "4c9f6ef684e9320ad1d74a043fb7d28dd0b9d6430d4eccffa9638f6b040a8d6a",
+      "database": {
+        "path": "C:\\Repo\\F05_IPB_L2_0429",
+        "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+      },
+      "target": {
+        "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_GenericTCSFunctions",
+        "oid": "040qm00f0s001og70sfg77aupvbge",
+        "kind": "class"
+      },
+      "impact": {
+        "complete": true,
+        "sharedObject": false,
+        "ownerPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_GenericTCSFunctions",
+        "affectedProjects": [],
+        "fingerprint": "sha256:4c8d50155d1577c5e46231dfa0cd700f7c53c5c61dd037a0210836aed1457925"
+      },
+      "capability": {
+        "status": "supported",
+        "operation": "AddMethod",
+        "evidence": {
+          "status": "supported",
+          "operation": "AddMethod",
+          "failureCode": "",
+          "failureMessage": ""
+        }
+      },
+      "editability": {
+        "applicable": true,
+        "status": "read_only",
+        "canRequestEditable": true
+      },
+      "effects": [
+        {
+          "kind": "request_editability",
+          "target": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_GenericTCSFunctions",
+          "description": "Request component editability for Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_GenericTCSFunctions"
+        },
+        {
+          "kind": "create_method",
+          "target": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_GenericTCSFunctions::PiCompoundMethod",
+          "description": "create_method: Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_GenericTCSFunctions::PiCompoundMethod"
+        }
+      ],
+      "verification": {
+        "available": true,
+        "operation": "create_method_readback",
+        "target": {
+          "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_GenericTCSFunctions"
+        }
+      },
+      "riskModifiers": [],
+      "noOp": false,
+      "generatedAt": "2026-08-15T05:48:56.208Z",
+      "approvalMaterialFingerprint": "ddf27409d29a304ac0f1ba9cd248abc81bcd20bd9c5ec9c4005d141c59234e07"
+    },
+    "permissionMode": "acceptEdits",
+    "permissionDecision": "ask",
+    "risk": "medium",
+    "approvedAt": "2026-08-15T05:48:32.630Z",
+    "revalidatedAt": "2026-08-15T05:48:56.208Z",
+    "targetIdentity": {
+      "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_GenericTCSFunctions",
+      "oid": "040qm00f0s001og70sfg77aupvbge",
+      "kind": "class"
+    },
+    "targetImpactFingerprint": "sha256:4c8d50155d1577c5e46231dfa0cd700f7c53c5c61dd037a0210836aed1457925"
+  },
+  "attemptedMutation": {
+    "action": "create_method",
+    "componentPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_GenericTCSFunctions",
+    "methodName": "PiCompoundMethod",
+    "methodKind": "abstract",
+    "ifExists": "fail"
+  },
+  "createdAt": "2026-08-15T05:48:56.225Z",
+  "updatedAt": "2026-08-15T05:49:28.277Z",
+  "evidence": {
+    "bridgeEntered": true,
+    "backendResponseReceived": true,
+    "mutationStarted": true
+  },
+  "outcome": {
+    "operationId": "guarded_create_method"
+  }
+}

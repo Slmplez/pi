@@ -1,0 +1,16 @@
+{
+  "resultId": "obs-formulas-41372-1786239939919-12",
+  "domain": "formulas",
+  "target": {
+    "path": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010"
+  },
+  "itemCount": 581,
+  "coverage": {
+    "status": "complete_for_scope",
+    "foldersVisited": 0,
+    "componentsScanned": 0
+  },
+  "truncated": false,
+  "source": "live",
+  "capturedAt": "2026-08-09T01:45:39.919Z"
+}

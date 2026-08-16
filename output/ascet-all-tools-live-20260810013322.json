@@ -1,0 +1,1117 @@
+{
+  "ok": true,
+  "startedDatabase": "C:\\Repo\\F05_IPB_L2_0429",
+  "root": "TEST\\__pi_all_tools_live_20260810013322",
+  "projectPath": "PlatformLibrary\\Package\\RBF_RemoteBrakeFacade\\Component\\Main\\RBF_Main_ECU_CSW_BB00001",
+  "expectedActionCount": 50,
+  "coveredActionCount": 50,
+  "missing": [],
+  "failed": [],
+  "cleanupErrors": [],
+  "registered": {
+    "base": [
+      "ascet_status",
+      "ascet_capabilities",
+      "ascet_recover",
+      "ascet_scheduler_status",
+      "ascet_get",
+      "ascet_read",
+      "ascet_diff",
+      "ascet_edit",
+      "configure_parameter_dependency_chain"
+    ],
+    "batch": []
+  },
+  "originalFormulaCount": 6,
+  "calls": [
+    {
+      "key": "ascet_status.status",
+      "stage": "status",
+      "tool": "ascet_status",
+      "action": "status",
+      "success": true,
+      "elapsedMs": 767,
+      "status": "ok",
+      "summary": {
+        "summary": "ASCET status: ready\nASCET installation: ready\nASCET mode: bundle\nASCET extension: C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\nASCET source: unresolved\nASCET Bridge: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe\nASCET contracts: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts\ncli-catalog.json: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts\\cli-catalog.json\nASCET DLL: ready\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\Ascetapidll\\Etas.AscetNET.dll\nASCET ToolAPI: ready\n  ASCET live ToolAPI quick self-test\n  elapsedMs: 751\nASCET scheduler: ready\nASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none"
+      }
+    },
+    {
+      "key": "ascet_capabilities.search_actions",
+      "stage": "search_actions",
+      "tool": "ascet_capabilities",
+      "action": "search_actions",
+      "success": true,
+      "elapsedMs": 29,
+      "status": "ok",
+      "summary": {
+        "result": {
+          "items": {
+            "arrayLength": 50,
+            "sample": [
+              {
+                "object": true
+              },
+              {
+                "object": true
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "key": "ascet_scheduler_status.status",
+      "stage": "status",
+      "tool": "ascet_scheduler_status",
+      "action": "status",
+      "success": true,
+      "elapsedMs": 2,
+      "status": "ok",
+      "summary": {
+        "summary": "ASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nRecent:\n- ascet-job-1 ascet_status/selftest agent=system state=succeeded (queueWait=1ms, exec=746ms)\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none"
+      }
+    },
+    {
+      "key": "ascet_scheduler_status.recover",
+      "stage": "recover",
+      "tool": "ascet_scheduler_status",
+      "action": "recover",
+      "success": true,
+      "elapsedMs": 25,
+      "status": "ok",
+      "summary": {
+        "summary": "Recovery: succeeded\n\nASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nRecent:\n- ascet-job-1 ascet_status/selftest agent=system state=succeeded (queueWait=1ms, exec=746ms)\n- ascet-job-2 AscetSchedulerMaintenance/recover agent=system state=succeeded (queueWait=0ms, exec=23ms)\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none"
+      }
+    },
+    {
+      "key": "ascet_recover.status",
+      "stage": "status",
+      "tool": "ascet_recover",
+      "action": "status",
+      "success": true,
+      "elapsedMs": 381,
+      "status": "ok",
+      "summary": {
+        "status": {
+          "summary": "ASCET status: ready\nASCET installation: ready\nASCET mode: bundle\nASCET extension: C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\nASCET source: unresolved\nASCET Bridge: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe\nASCET contracts: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts\ncli-catalog.json: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts\\cli-catalog.json\nASCET DLL: ready\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\Ascetapidll\\Etas.AscetNET.dll\nASCET ToolAPI: ready\n  ASCET live ToolAPI quick self-test\n  elapsedMs: 378\nASCET scheduler: ready\nASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nRecent:\n- ascet-job-1 ascet_status/selftest agent=system state=succeeded (queueWait=1ms, exec=746ms)\n- ascet-job-2 AscetSchedulerMaintenance/recover agent=system state=succeeded (queueWait=0ms, exec=23ms)\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none"
+        }
+      }
+    },
+    {
+      "key": "ascet_recover.scheduler_status",
+      "stage": "scheduler_status",
+      "tool": "ascet_recover",
+      "action": "scheduler_status",
+      "success": true,
+      "elapsedMs": 1,
+      "status": "ok",
+      "summary": {
+        "schedulerStatus": {
+          "summary": "ASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nRecent:\n- ascet-job-1 ascet_status/selftest agent=system state=succeeded (queueWait=1ms, exec=746ms)\n- ascet-job-2 AscetSchedulerMaintenance/recover agent=system state=succeeded (queueWait=0ms, exec=23ms)\n- ascet-job-3 ascet_status/selftest agent=system state=succeeded (queueWait=0ms, exec=376ms)\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none"
+        }
+      }
+    },
+    {
+      "key": "ascet_recover.scheduler_recover",
+      "stage": "scheduler_recover",
+      "tool": "ascet_recover",
+      "action": "scheduler_recover",
+      "success": true,
+      "elapsedMs": 20,
+      "status": "ok",
+      "summary": {
+        "schedulerStatus": {
+          "summary": "Recovery: succeeded\n\nASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nRecent:\n- ascet-job-1 ascet_status/selftest agent=system state=succeeded (queueWait=1ms, exec=746ms)\n- ascet-job-2 AscetSchedulerMaintenance/recover agent=system state=succeeded (queueWait=0ms, exec=23ms)\n- ascet-job-3 ascet_status/selftest agent=system state=succeeded (queueWait=0ms, exec=376ms)\n- ascet-job-4 AscetSchedulerMaintenance/recover agent=system state=succeeded (queueWait=0ms, exec=19ms)\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none"
+        }
+      }
+    },
+    {
+      "key": "ascet_recover.clear_stale_cli_lock",
+      "stage": "clear_stale_cli_lock",
+      "tool": "ascet_recover",
+      "action": "clear_stale_cli_lock",
+      "success": true,
+      "elapsedMs": 0,
+      "status": "ok",
+      "summary": {
+        "staleLockCleared": false
+      }
+    },
+    {
+      "key": "ascet_get.formulas",
+      "stage": "formulas",
+      "tool": "ascet_get",
+      "action": "formulas",
+      "success": true,
+      "elapsedMs": 563,
+      "summary": {
+        "coverage": {
+          "status": "complete_for_scope"
+        },
+        "truncated": false,
+        "items": {
+          "arrayLength": 6,
+          "sample": [
+            {
+              "path": "PlatformLibrary/Package/RBF_RemoteBrakeFacade/Component/Main/RBF_Main_ECU_CSW_BB00001::IDENTITY",
+              "oid": "040gpc86cpqg1og70kah02dslo300",
+              "name": "IDENTITY",
+              "type": "identity",
+              "unit": "-",
+              "contents": "f(phys) = phys"
+            },
+            {
+              "path": "PlatformLibrary/Package/RBF_RemoteBrakeFacade/Component/Main/RBF_Main_ECU_CSW_BB00001::Revolution_RPM_P2expNEG2",
+              "oid": "040gpc86cpqg1og70kah02dslo300",
+              "name": "Revolution_RPM_P2expNEG2",
+              "type": "linear",
+              "unit": "rpm",
+              "contents": "f(phys) = 0.0 + 0.25 * phys",
+              "parameters": {
+                "arrayLength": 2
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "key": "ascet_edit.create_folder",
+      "stage": "create_root",
+      "tool": "ascet_edit",
+      "action": "create_folder",
+      "success": true,
+      "elapsedMs": 713,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.create_component",
+      "stage": "create_component:TEST\\__pi_all_tools_live_20260810013322\\ClassA",
+      "tool": "ascet_edit",
+      "action": "create_component",
+      "success": true,
+      "elapsedMs": 771,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.create_component",
+      "stage": "create_component:TEST\\__pi_all_tools_live_20260810013322\\ClassB",
+      "tool": "ascet_edit",
+      "action": "create_component",
+      "success": true,
+      "elapsedMs": 786,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.create_component",
+      "stage": "create_component:TEST\\__pi_all_tools_live_20260810013322\\ModuleA",
+      "tool": "ascet_edit",
+      "action": "create_component",
+      "success": true,
+      "elapsedMs": 589,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.create_component",
+      "stage": "create_component:TEST\\__pi_all_tools_live_20260810013322\\StateMachineA",
+      "tool": "ascet_edit",
+      "action": "create_component",
+      "success": true,
+      "elapsedMs": 825,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.create_component",
+      "stage": "create_component:TEST\\__pi_all_tools_live_20260810013322\\EnumA",
+      "tool": "ascet_edit",
+      "action": "create_component",
+      "success": true,
+      "elapsedMs": 945,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.create_component",
+      "stage": "create_component:TEST\\__pi_all_tools_live_20260810013322\\Provider",
+      "tool": "ascet_edit",
+      "action": "create_component",
+      "success": true,
+      "elapsedMs": 810,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.create_component",
+      "stage": "create_component:TEST\\__pi_all_tools_live_20260810013322\\Consumer",
+      "tool": "ascet_edit",
+      "action": "create_component",
+      "success": true,
+      "elapsedMs": 788,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.check",
+      "stage": "check",
+      "tool": "ascet_edit",
+      "action": "check",
+      "success": true,
+      "elapsedMs": 398,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.set",
+      "stage": "set_editable",
+      "tool": "ascet_edit",
+      "action": "set",
+      "success": true,
+      "elapsedMs": 532,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.create_method",
+      "stage": "create_method:TEST\\__pi_all_tools_live_20260810013322\\ClassA",
+      "tool": "ascet_edit",
+      "action": "create_method",
+      "success": true,
+      "elapsedMs": 994,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.set_method_signature",
+      "stage": "set_signature:TEST\\__pi_all_tools_live_20260810013322\\ClassA",
+      "tool": "ascet_edit",
+      "action": "set_method_signature",
+      "success": true,
+      "elapsedMs": 697,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.create_method",
+      "stage": "create_method:TEST\\__pi_all_tools_live_20260810013322\\ClassB",
+      "tool": "ascet_edit",
+      "action": "create_method",
+      "success": true,
+      "elapsedMs": 755,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.set_method_signature",
+      "stage": "set_signature:TEST\\__pi_all_tools_live_20260810013322\\ClassB",
+      "tool": "ascet_edit",
+      "action": "set_method_signature",
+      "success": true,
+      "elapsedMs": 872,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.set_method_code",
+      "stage": "set_method_code:A",
+      "tool": "ascet_edit",
+      "action": "set_method_code",
+      "success": true,
+      "elapsedMs": 1076,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.set_method_code",
+      "stage": "set_method_code:B",
+      "tool": "ascet_edit",
+      "action": "set_method_code",
+      "success": true,
+      "elapsedMs": 1089,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.create_method",
+      "stage": "create_module_method",
+      "tool": "ascet_edit",
+      "action": "create_method",
+      "success": true,
+      "elapsedMs": 770,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.set_module_code",
+      "stage": "set_module_code",
+      "tool": "ascet_edit",
+      "action": "set_module_code",
+      "success": true,
+      "elapsedMs": 947,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.create_method",
+      "stage": "create_state_method",
+      "tool": "ascet_edit",
+      "action": "create_method",
+      "success": true,
+      "elapsedMs": 511,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.set_state_machine_code",
+      "stage": "set_state_machine_code",
+      "tool": "ascet_edit",
+      "action": "set_state_machine_code",
+      "success": true,
+      "elapsedMs": 996,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.set_enumerators",
+      "stage": "set_enumerators",
+      "tool": "ascet_edit",
+      "action": "set_enumerators",
+      "success": true,
+      "elapsedMs": 631,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.apply_element_spec",
+      "stage": "apply_element_spec:plan",
+      "tool": "ascet_edit",
+      "action": "apply_element_spec",
+      "success": true,
+      "elapsedMs": 1127,
+      "status": "preflight",
+      "summary": {
+        "status": "preflight"
+      }
+    },
+    {
+      "key": "ascet_edit.apply_element_spec",
+      "stage": "apply_element_spec:commit",
+      "tool": "ascet_edit",
+      "action": "apply_element_spec",
+      "success": true,
+      "elapsedMs": 2723,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.set_element_dependency",
+      "stage": "set_element_dependency:plan",
+      "tool": "ascet_edit",
+      "action": "set_element_dependency",
+      "success": true,
+      "elapsedMs": 1013,
+      "status": "preflight",
+      "summary": {
+        "status": "preflight"
+      }
+    },
+    {
+      "key": "ascet_edit.set_element_dependency",
+      "stage": "set_element_dependency:commit",
+      "tool": "ascet_edit",
+      "action": "set_element_dependency",
+      "success": true,
+      "elapsedMs": 1785,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "configure_parameter_dependency_chain.plan",
+      "stage": "chain:plan",
+      "tool": "configure_parameter_dependency_chain",
+      "action": "plan",
+      "success": true,
+      "elapsedMs": 4932,
+      "status": "planned",
+      "summary": {
+        "status": "planned",
+        "mode": "plan",
+        "planId": "adb963c3-34d8-4c60-b20e-a093f1b7101d"
+      }
+    },
+    {
+      "key": "configure_parameter_dependency_chain.commit",
+      "stage": "chain:commit",
+      "tool": "configure_parameter_dependency_chain",
+      "action": "commit",
+      "success": true,
+      "elapsedMs": 10252,
+      "status": "committed",
+      "summary": {
+        "status": "committed",
+        "mode": "commit",
+        "planId": "adb963c3-34d8-4c60-b20e-a093f1b7101d"
+      }
+    },
+    {
+      "key": "ascet_edit.apply_project_formula",
+      "stage": "apply_project_formula:direct",
+      "tool": "ascet_edit",
+      "action": "apply_project_formula",
+      "success": true,
+      "elapsedMs": 868,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_get.tree",
+      "stage": "tree:fixture",
+      "tool": "ascet_get",
+      "action": "tree",
+      "success": true,
+      "elapsedMs": 544,
+      "summary": {
+        "coverage": {
+          "status": "complete_for_scope"
+        },
+        "truncated": false,
+        "items": {
+          "arrayLength": 8,
+          "sample": [
+            {
+              "path": "TEST/__pi_all_tools_live_20260810013322",
+              "oid": "040g00001g001qg71051nm4ll8a06",
+              "kind": "folder"
+            },
+            {
+              "path": "TEST/__pi_all_tools_live_20260810013322/ClassB",
+              "oid": "040g00001g001qg71051nm4s2ce06",
+              "kind": "class"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "key": "ascet_get.tree",
+      "stage": "tree:full",
+      "tool": "ascet_get",
+      "action": "tree",
+      "success": true,
+      "elapsedMs": 635,
+      "summary": {
+        "coverage": {
+          "status": "complete_for_scope"
+        },
+        "truncated": false,
+        "items": {
+          "arrayLength": 25,
+          "sample": [
+            {
+              "path": "CN_Library/BrakeRedundancy",
+              "oid": "040g006135cg1qg70geh61vrnd5p6",
+              "kind": "folder"
+            },
+            {
+              "path": "TEST/__pi_all_tools_live_20260810013322",
+              "oid": "040g00001g001qg71051nm4ll8a06",
+              "kind": "folder"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "key": "ascet_get.database_catalog",
+      "stage": "database_catalog",
+      "tool": "ascet_get",
+      "action": "database_catalog",
+      "success": true,
+      "elapsedMs": 26,
+      "summary": {
+        "delivery": "stored",
+        "coverage": {
+          "status": "complete_for_scope"
+        }
+      }
+    },
+    {
+      "key": "ascet_get.elements",
+      "stage": "elements",
+      "tool": "ascet_get",
+      "action": "elements",
+      "success": true,
+      "elapsedMs": 557,
+      "summary": {
+        "coverage": {
+          "status": "complete_for_scope"
+        },
+        "truncated": false,
+        "items": {
+          "arrayLength": 3,
+          "sample": [
+            {
+              "path": "TEST/__pi_all_tools_live_20260810013322/ClassA::P_Smoke",
+              "componentOid": "040g00001g001qg71051nm4p2kag6",
+              "scope": "local"
+            },
+            {
+              "path": "TEST/__pi_all_tools_live_20260810013322/ClassA::compute_live/input",
+              "componentOid": "040g00001g001qg71051nm4p2kag6",
+              "scope": "local"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "key": "ascet_get.component_refs",
+      "stage": "component_refs",
+      "tool": "ascet_get",
+      "action": "component_refs",
+      "success": true,
+      "elapsedMs": 527,
+      "summary": {
+        "coverage": {
+          "status": "complete_for_scope"
+        },
+        "truncated": false,
+        "items": {
+          "arrayLength": 0,
+          "sample": []
+        }
+      }
+    },
+    {
+      "key": "ascet_get.bde_edges",
+      "stage": "bde_edges",
+      "tool": "ascet_get",
+      "action": "bde_edges",
+      "success": true,
+      "elapsedMs": 724,
+      "summary": {
+        "coverage": {
+          "status": "complete_for_scope"
+        },
+        "truncated": false,
+        "items": {
+          "arrayLength": 44,
+          "sample": [
+            {
+              "fromPath": "PlatformLibrary/Package/EMC_EmergencyModeControl/Component/Main/EMC_Drive_Main20ms::/get/get",
+              "toPath": "PlatformLibrary/Package/EMC_EmergencyModeControl/Component/Main/EMC_Drive_Main20ms::/calc/ComAvailability"
+            },
+            {
+              "fromPath": "PlatformLibrary/Package/EMC_EmergencyModeControl/Component/Main/EMC_Drive_Main20ms::/get/get",
+              "toPath": "PlatformLibrary/Package/EMC_EmergencyModeControl/Component/Main/EMC_Drive_Main20ms::/calc/ArchInfo"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "key": "ascet_get.import_binding",
+      "stage": "import_binding",
+      "tool": "ascet_get",
+      "action": "import_binding",
+      "success": true,
+      "elapsedMs": 418,
+      "summary": {
+        "coverage": {
+          "status": "complete_for_scope"
+        },
+        "truncated": false,
+        "items": {
+          "arrayLength": 1,
+          "sample": [
+            {
+              "matched": true,
+              "importPath": "TEST/__pi_all_tools_live_20260810013322/Consumer::P_Shared",
+              "exportPath": "TEST/__pi_all_tools_live_20260810013322/Provider::P_Shared"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "key": "ascet_get.dbitem_refs",
+      "stage": "dbitem_refs",
+      "tool": "ascet_get",
+      "action": "dbitem_refs",
+      "success": true,
+      "elapsedMs": 486,
+      "summary": {
+        "coverage": {
+          "status": "complete_for_scope"
+        },
+        "truncated": false,
+        "items": {
+          "arrayLength": 0,
+          "sample": []
+        }
+      }
+    },
+    {
+      "key": "ascet_read.read_code",
+      "stage": "read_code",
+      "tool": "ascet_read",
+      "action": "read_code",
+      "success": true,
+      "elapsedMs": 512,
+      "summary": {
+        "component": "TEST/__pi_all_tools_live_20260810013322/ClassA",
+        "kind": "Class",
+        "language": "ESDL",
+        "section": "body",
+        "text": "// PI all-tools live ClassA\nreturn 1.0;\n",
+        "name": "compute_live"
+      }
+    },
+    {
+      "key": "ascet_read.read_method_signature",
+      "stage": "read_method_signature",
+      "tool": "ascet_read",
+      "action": "read_method_signature",
+      "success": true,
+      "elapsedMs": 556,
+      "summary": {
+        "summary": "Read method signature for 'compute_live' in TEST\\__pi_all_tools_live_20260810013322\\ClassA: return 'cont', 1 argument(s).",
+        "counts": {
+          "arguments": 1,
+          "return": 1
+        }
+      }
+    },
+    {
+      "key": "ascet_read.read_element",
+      "stage": "read_element",
+      "tool": "ascet_read",
+      "action": "read_element",
+      "success": true,
+      "elapsedMs": 564,
+      "summary": {
+        "component": "TEST/__pi_all_tools_live_20260810013322/ClassA",
+        "element": {
+          "name": "P_Smoke",
+          "kind": "parameter",
+          "modelType": "cont",
+          "scope": "local",
+          "physicalRange": {
+            "min": -1,
+            "max": 1
+          },
+          "calibration": true,
+          "configurationProvenance": {
+            "dataConfiguration": {
+              "object": true
+            },
+            "implementationConfiguration": {
+              "object": true
+            }
+          },
+          "data": {
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "key": "ascet_read.read_implementation",
+      "stage": "read_implementation",
+      "tool": "ascet_read",
+      "action": "read_implementation",
+      "success": true,
+      "elapsedMs": 820,
+      "summary": {
+        "mode": "Default"
+      }
+    },
+    {
+      "key": "ascet_read.read_block_diagram",
+      "stage": "read_block_diagram",
+      "tool": "ascet_read",
+      "action": "read_block_diagram",
+      "success": true,
+      "elapsedMs": 4001,
+      "summary": {
+        "summary": "read_block_diagram returned large ASCET JSON output."
+      }
+    },
+    {
+      "key": "ascet_read.read_state_machine_flow",
+      "stage": "read_state_machine_flow",
+      "tool": "ascet_read",
+      "action": "read_state_machine_flow",
+      "success": true,
+      "elapsedMs": 1150,
+      "summary": {
+        "summary": "No dependency chains found.",
+        "counts": {
+          "stateFlows": 0,
+          "transitionFlows": 0,
+          "dependencyChains": 0,
+          "referenceTraceRoots": 1
+        }
+      }
+    },
+    {
+      "key": "ascet_read.read_dependent_chain",
+      "stage": "read_dependent_chain",
+      "tool": "ascet_read",
+      "action": "read_dependent_chain",
+      "success": true,
+      "elapsedMs": 650,
+      "summary": {
+        "component": "TEST/__pi_all_tools_live_20260810013322/Consumer",
+        "exporter": "TEST\\__pi_all_tools_live_20260810013322\\Provider",
+        "direction": "forward",
+        "dependent": {
+          "name": "C_Local",
+          "scope": "local",
+          "kind": "parameter",
+          "dependency": "dependent",
+          "formula": "P_Shared"
+        },
+        "dependencyFormula": {
+          "exists": true,
+          "code": "P_Shared",
+          "references": {
+            "arrayLength": 1,
+            "sample": [
+              "P_Shared"
+            ]
+          },
+          "mappings": {
+            "arrayLength": 1,
+            "sample": [
+              {
+                "object": true
+              }
+            ]
+          }
+        },
+        "inputs": {
+          "arrayLength": 1,
+          "sample": [
+            {
+              "variant": "default",
+              "formal": {
+                "object": true
+              },
+              "value": {
+                "object": true
+              },
+              "export": {
+                "object": true
+              }
+            }
+          ]
+        },
+        "complete": true
+      }
+    },
+    {
+      "key": "ascet_read.read_element_dependency",
+      "stage": "read_element_dependency",
+      "tool": "ascet_read",
+      "action": "read_element_dependency",
+      "success": true,
+      "elapsedMs": 453,
+      "summary": {
+        "items": {
+          "arrayLength": 1,
+          "sample": [
+            {
+              "component": "TEST/__pi_all_tools_live_20260810013322/ClassA",
+              "element": "P_Smoke",
+              "kind": "parameter",
+              "scope": "local",
+              "schema": "primitive-parameter-dependent-flag",
+              "dependency": "dependent",
+              "supported": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "key": "ascet_read.read",
+      "stage": "read",
+      "tool": "ascet_read",
+      "action": "read",
+      "success": true,
+      "elapsedMs": 567,
+      "summary": {
+        "summary": "Class ClassA has 0 references and 1 diagram",
+        "counts": {
+          "diagrams": 1,
+          "methods": 2,
+          "implementationElements": 3,
+          "references": 0
+        }
+      }
+    },
+    {
+      "key": "ascet_diff.diff",
+      "stage": "diff",
+      "tool": "ascet_diff",
+      "action": "diff",
+      "success": true,
+      "elapsedMs": 1983,
+      "summary": {
+        "summary": "1 method changed, 1 implementation element removed"
+      }
+    },
+    {
+      "key": "ascet_diff.diff_method",
+      "stage": "diff_method",
+      "tool": "ascet_diff",
+      "action": "diff_method",
+      "success": true,
+      "elapsedMs": 999,
+      "summary": {
+        "changed": true,
+        "summary": "Method 'compute_live' changed between the two components."
+      }
+    },
+    {
+      "key": "ascet_diff.diff_component_snapshot",
+      "stage": "diff_component_snapshot",
+      "tool": "ascet_diff",
+      "action": "diff_component_snapshot",
+      "success": true,
+      "elapsedMs": 2829,
+      "summary": {
+        "summary": "Compared component child snapshots.",
+        "counts": {
+          "changedSections": 1,
+          "methodDiffs": 0,
+          "implementationDiffs": 1,
+          "referenceDiffs": 0,
+          "blockDiffs": 0,
+          "stateDiffs": 0,
+          "transitionDiffs": 0,
+          "linkedDiffs": 0
+        }
+      }
+    },
+    {
+      "key": "ascet_diff.diff_state_machine_domain",
+      "stage": "diff_state_machine_domain",
+      "tool": "ascet_diff",
+      "action": "diff_state_machine_domain",
+      "success": true,
+      "elapsedMs": 1784,
+      "summary": {
+        "summary": "0 state changes, 0 transition changes, 0 method changes, 0 implementation element changes"
+      }
+    },
+    {
+      "key": "ascet_diff.diff_element_spec",
+      "stage": "diff_element_spec",
+      "tool": "ascet_diff",
+      "action": "diff_element_spec",
+      "success": true,
+      "elapsedMs": 699,
+      "summary": {
+        "summary": "0 added, 2 removed, 0 modified, 0 incompatible"
+      }
+    },
+    {
+      "key": "ascet_diff.diff_project_formulas",
+      "stage": "diff_project_formulas",
+      "tool": "ascet_diff",
+      "action": "diff_project_formulas",
+      "success": true,
+      "elapsedMs": 873,
+      "summary": {
+        "summary": "0 added, 0 removed, 0 modified"
+      }
+    },
+    {
+      "key": "ascet_edit.apply_project_formula",
+      "stage": "apply_project_formula:restore",
+      "tool": "ascet_edit",
+      "action": "apply_project_formula",
+      "success": true,
+      "elapsedMs": 793,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.delete_method",
+      "stage": "delete_method",
+      "tool": "ascet_edit",
+      "action": "delete_method",
+      "success": true,
+      "elapsedMs": 569,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.delete_component",
+      "stage": "delete_component:TEST\\__pi_all_tools_live_20260810013322\\Consumer",
+      "tool": "ascet_edit",
+      "action": "delete_component",
+      "success": true,
+      "elapsedMs": 754,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.delete_component",
+      "stage": "delete_component:TEST\\__pi_all_tools_live_20260810013322\\Provider",
+      "tool": "ascet_edit",
+      "action": "delete_component",
+      "success": true,
+      "elapsedMs": 709,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.delete_component",
+      "stage": "delete_component:TEST\\__pi_all_tools_live_20260810013322\\EnumA",
+      "tool": "ascet_edit",
+      "action": "delete_component",
+      "success": true,
+      "elapsedMs": 464,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.delete_component",
+      "stage": "delete_component:TEST\\__pi_all_tools_live_20260810013322\\StateMachineA",
+      "tool": "ascet_edit",
+      "action": "delete_component",
+      "success": true,
+      "elapsedMs": 706,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.delete_component",
+      "stage": "delete_component:TEST\\__pi_all_tools_live_20260810013322\\ModuleA",
+      "tool": "ascet_edit",
+      "action": "delete_component",
+      "success": true,
+      "elapsedMs": 686,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.delete_component",
+      "stage": "delete_component:TEST\\__pi_all_tools_live_20260810013322\\ClassB",
+      "tool": "ascet_edit",
+      "action": "delete_component",
+      "success": true,
+      "elapsedMs": 640,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.delete_component",
+      "stage": "delete_component:TEST\\__pi_all_tools_live_20260810013322\\ClassA",
+      "tool": "ascet_edit",
+      "action": "delete_component",
+      "success": true,
+      "elapsedMs": 738,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.delete_folder",
+      "stage": "delete_root",
+      "tool": "ascet_edit",
+      "action": "delete_folder",
+      "success": true,
+      "elapsedMs": 865,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_recover.clear_extension_temp",
+      "stage": "clear_extension_temp",
+      "tool": "ascet_recover",
+      "action": "clear_extension_temp",
+      "success": true,
+      "elapsedMs": 34,
+      "status": "ok",
+      "summary": {
+        "cleared": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "error": {
+    "code": "folder_not_found",
+    "message": "Folder 'PI_LIVE_ROOTFIX_20260811_ED3C9BC9' was not found.",
+    "details": {
+      "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"folder_not_found\",\"message\":\"Folder \\u0027PI_LIVE_ROOTFIX_20260811_ED3C9BC9\\u0027 was not found.\"},\"meta\":{\"bridgePid\":36152,\"bridgeGeneration\":\"d57eabf6-8603-40f0-a2d5-bf9535bf3356\",\"durationMs\":231,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"get_tree\"}}",
+      "exitCode": 2,
+      "operationId": "get_tree",
+      "stage": "cli_process",
+      "retryable": false,
+      "stdoutSummary": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"folder_not_found\",\"message\":\"Folder \\u0027PI_LIVE_ROOTFIX_20260811_ED3C9BC9\\u0027 was not found.\"},\"meta\":{\"bridgePid\":36152,\"bridgeGeneration\":\"d57eabf6-8603-40f0-a2d5-bf9535bf3356\",\"durationMs\":231,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"get_tree\"}}"
+    }
+  }
+}

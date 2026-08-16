@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "approvalId": "7aefc902-5d3c-4d89-afa6-924e3b142db2",
+  "tokenHash": "55ce6037d94c8267c6f73a07f7fbac014283ebfb80f2cf7d8d837c16cca52c1b",
+  "action": "create_folder",
+  "planId": "8dbaa949-196a-4d7a-be3a-e0d4229facab",
+  "planFingerprint": "5ede1283954f69643247c7745a9216e8db2e2671c1129e4e4bfecef36f0fc4a0",
+  "databaseFingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c",
+  "targetOid": "040g00001g001qg7107g8595a09g0",
+  "targetImpactFingerprint": "sha256:4d12f1d4d2ad4c6a4a165c5703152527a0cd8252163af42b53779c635a7858ef",
+  "guardGeneration": 0,
+  "sessionId": "bd27dd61-d172-4bbd-97cf-3a1c27f13638",
+  "approvedAt": "2026-08-15T05:50:34.629Z",
+  "expiresAt": "2026-08-15T05:55:34.628Z",
+  "consumedAt": "2026-08-15T05:50:34.640Z"
+}

@@ -1,0 +1,20 @@
+{
+  "capturedAt": "2026-08-11T09:05:00.507Z",
+  "databaseIdentity": {
+    "name": "C:\\Repo\\F05_IPB_L2_0429",
+    "path": "C:\\Repo\\",
+    "fingerprint": "def9e68cc955cc916cdfa1a2d26c32c8d2b16503cdcc4d337b3c7ba9a5643bf8"
+  },
+  "fixtureAbsent": true,
+  "fixtureRead": {
+    "ok": false,
+    "error": {
+      "code": "folder_not_found",
+      "message": "Folder 'PI_LIVE_FIX_20260811_13947C09' was not found."
+    }
+  },
+  "runtimeHealthy": true,
+  "schedulerHealthy": true,
+  "cliLockFree": true,
+  "degradedOperations": []
+}

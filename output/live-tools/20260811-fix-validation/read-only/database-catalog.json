@@ -1,0 +1,80 @@
+{
+  "delivery": "stored",
+  "catalog": {
+    "resultId": "obs-database-catalog-19552-1786435204394-0",
+    "sourceTreeResultId": "obs-tree-19552-1786435058334-0",
+    "include": [
+      "parameter_class",
+      "enumeration",
+      "module",
+      "message"
+    ],
+    "artifacts": {
+      "catalog": {
+        "dataPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\20260811-fix-validation\\artifacts\\obs-database-catalog-19552-1786435204394-0.database-model-catalog.ndjson",
+        "itemCount": 26743
+      },
+      "relations": {
+        "projectComplexEdges": {
+          "dataPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\20260811-fix-validation\\artifacts\\obs-database-catalog-19552-1786435204394-0.project-complex-edges.ndjson",
+          "itemCount": 696
+        },
+        "parameterClassEdges": {
+          "dataPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\20260811-fix-validation\\artifacts\\obs-database-catalog-19552-1786435204394-0.parameter-class-edges.ndjson",
+          "itemCount": 1335
+        },
+        "parameterEnumEdges": {
+          "dataPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\20260811-fix-validation\\artifacts\\obs-database-catalog-19552-1786435204394-0.parameter-enum-edges.ndjson",
+          "itemCount": 315
+        },
+        "projectModuleEdges": {
+          "dataPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\20260811-fix-validation\\artifacts\\obs-database-catalog-19552-1786435204394-0.project-module-edges.ndjson",
+          "itemCount": 431
+        },
+        "moduleMessageEdges": {
+          "dataPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\20260811-fix-validation\\artifacts\\obs-database-catalog-19552-1786435204394-0.module-message-edges.ndjson",
+          "itemCount": 24656
+        },
+        "messageEnumEdges": {
+          "dataPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\20260811-fix-validation\\artifacts\\obs-database-catalog-19552-1786435204394-0.message-enum-edges.ndjson",
+          "itemCount": 4851
+        }
+      },
+      "summaryPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\20260811-fix-validation\\artifacts\\obs-database-catalog-19552-1786435204394-0.database-model-summary.json",
+      "metaPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\20260811-fix-validation\\artifacts\\obs-database-catalog-19552-1786435204394-0.database-model.meta.json",
+      "parameterClasses": {
+        "dataPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\20260811-fix-validation\\artifacts\\obs-database-catalog-19552-1786435204394-0.parameter-classes.ndjson",
+        "itemCount": 951
+      },
+      "enumerations": {
+        "dataPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\20260811-fix-validation\\artifacts\\obs-database-catalog-19552-1786435204394-0.enumerations.ndjson",
+        "itemCount": 708
+      },
+      "modules": {
+        "dataPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\20260811-fix-validation\\artifacts\\obs-database-catalog-19552-1786435204394-0.modules.ndjson",
+        "itemCount": 428
+      },
+      "messages": {
+        "dataPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\20260811-fix-validation\\artifacts\\obs-database-catalog-19552-1786435204394-0.messages.ndjson",
+        "itemCount": 24656
+      }
+    }
+  },
+  "coverage": {
+    "status": "complete_for_scope",
+    "failureCount": 0
+  },
+  "timings": {
+    "projectScanMs": 3026,
+    "parameterProjectClosureScanMs": 31866,
+    "parameterOrphanScanMs": 8634,
+    "parameterClassificationMs": 5,
+    "parameterClosureMs": 40511,
+    "moduleScanMs": 101018,
+    "totalServiceMs": 144556,
+    "sessionOpenMs": 264,
+    "sessionCloseMs": 2,
+    "sourceTreeScanMs": 67.23570000000007,
+    "liveScanMs": 145968.3539
+  }
+}

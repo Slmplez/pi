@@ -1,0 +1,223 @@
+{
+  "stage": "accept-edits-create-folder",
+  "startedAt": "2026-08-15T02:22:12.017Z",
+  "finishedAt": "2026-08-15T02:23:00.065Z",
+  "request": {
+    "toolName": "ascet_edit",
+    "params": {
+      "action": "create_folder",
+      "folderPath": "DEMO\\__pi_permission_smoke__20260815-101950\\AcceptEdits",
+      "intent": "apply"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"status\": \"ok\",\n  \"permission\": {\n    \"mode\": \"acceptEdits\",\n    \"decision\": \"allow\",\n    \"risk\": \"safe\",\n    \"reason\": \"Accept Edits allows safe, single-target, verified edits.\"\n  },\n  \"preflight\": {\n    \"status\": \"passed\",\n    \"evidence\": {\n      \"version\": 1,\n      \"action\": \"create_folder\",\n      \"paramsFingerprint\": \"9540a02321b803871f7f9860b36fc308ffcef20b1d5ec5e2e311ee9ec0055ba7\",\n      \"database\": {\n        \"path\": \"C:/Repo/F05_IPB_L2_0429\",\n        \"fingerprint\": \"71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c\"\n      },\n      \"target\": {\n        \"path\": \"DEMO/__pi_permission_smoke__20260815-101950\",\n        \"oid\": \"040g00001g001qg7107g6mo85g6g0\",\n        \"kind\": \"folder\"\n      },\n      \"impact\": {\n        \"complete\": true,\n        \"sharedObject\": false,\n        \"ownerPath\": \"DEMO/__pi_permission_smoke__20260815-101950\",\n        \"fingerprint\": \"sha256:cd045751567e5782feaa057c18b8ec71911d684111adeac5e6ee63f48e8d68e4\"\n      },\n      \"capability\": {\n        \"status\": \"supported\",\n        \"operation\": \"preflight_create_folder\",\n        \"evidence\": {\n          \"status\": \"supported\",\n          \"methods\": [\n            \"de.etas.cebra.toolAPI.Ascet.AscetFolder.AddAscetSubFolder(String)\"\n          ],\n          \"saveAvailable\": true,\n          \"readbackAvailable\": true\n        }\n      },\n      \"editability\": {\n        \"applicable\": false,\n        \"status\": \"not_applicable\",\n        \"canRequestEditable\": false\n      },\n      \"effects\": [\n        {\n          \"kind\": \"create_folder\",\n          \"target\": \"DEMO/__pi_permission_smoke__20260815-101950/AcceptEdits\",\n          \"description\": \"Create folder DEMO\\\\__pi_permission_smoke__20260815-101950\\\\AcceptEdits\"\n        }\n      ],\n      \"verification\": {\n        \"available\": true,\n        \"operation\": \"create_folder_readback\",\n        \"target\": {\n          \"path\": \"DEMO/__pi_permission_smoke__20260815-101950\"\n        }\n      },\n      \"noOp\": false,\n      \"generatedAt\": \"2026-08-15T02:22:59.031Z\",\n      \"approvalMaterialFingerprint\": \"25f36a47eeb4799171d9530ae1d67a5d286019188dc4e050174c712e630cdff8\"\n    }\n  },\n  \"editability\": {\n    \"status\": \"not_applicable\"\n  },\n  \"mutation\": {\n    \"status\": \"applied\"\n  },\n  \"verification\": {\n    \"status\": \"passed\"\n  },\n  \"audit\": {\n    \"revalidatedAt\": \"2026-08-15T02:22:59.031Z\",\n    \"preflightFingerprint\": \"9540a02321b803871f7f9860b36fc308ffcef20b1d5ec5e2e311ee9ec0055ba7\",\n    \"approvalMaterialFingerprint\": \"25f36a47eeb4799171d9530ae1d67a5d286019188dc4e050174c712e630cdff8\"\n  },\n  \"bridge\": {\n    \"beforeBridge\": true,\n    \"bridgeEntered\": true,\n    \"backendResponseReceived\": true\n  },\n  \"recovery\": {\n    \"required\": false\n  }\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "ok",
+        "verified": true,
+        "data": {
+          "changed": {
+            "folderPath": "DEMO\\__pi_permission_smoke__20260815-101950\\AcceptEdits",
+            "created": true,
+            "createdCount": 1,
+            "existingCount": 2,
+            "summary": "Created folder path 'DEMO\\__pi_permission_smoke__20260815-101950\\AcceptEdits' (1 created, 2 existing)."
+          },
+          "verification": {
+            "mode": "automatic_readback",
+            "source": "write_command",
+            "required": true,
+            "requested": true,
+            "verified": true,
+            "status": "passed"
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      },
+      "raw": {
+        "ok": true,
+        "data": {
+          "type": "response",
+          "protocolVersion": 1,
+          "ok": true,
+          "result": {
+            "folderPath": "DEMO\\__pi_permission_smoke__20260815-101950\\AcceptEdits",
+            "created": true,
+            "createdCount": 1,
+            "existingCount": 2,
+            "verifyReadbackRequested": true,
+            "readbackVerified": true,
+            "summary": "Created folder path 'DEMO\\__pi_permission_smoke__20260815-101950\\AcceptEdits' (1 created, 2 existing)."
+          },
+          "error": null,
+          "meta": {
+            "bridgePid": 29652,
+            "bridgeGeneration": "b347a245-7334-4516-be91-f222d8ea2628",
+            "durationMs": 587,
+            "sessionPolicy": "fresh_session",
+            "mutationStarted": true,
+            "mode": "exec",
+            "operation": "create_folder"
+          }
+        },
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "create_folder",
+            "DEMO\\__pi_permission_smoke__20260815-101950\\AcceptEdits",
+            "--verify-readback",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "write",
+          "mutatesDatabase": true
+        },
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"folderPath\":\"DEMO\\\\__pi_permission_smoke__20260815-101950\\\\AcceptEdits\",\"created\":true,\"createdCount\":1,\"existingCount\":2,\"verifyReadbackRequested\":true,\"readbackVerified\":true,\"summary\":\"Created folder path \\u0027DEMO\\\\__pi_permission_smoke__20260815-101950\\\\AcceptEdits\\u0027 (1 created, 2 existing).\"},\"error\":null,\"meta\":{\"bridgePid\":29652,\"bridgeGeneration\":\"b347a245-7334-4516-be91-f222d8ea2628\",\"durationMs\":587,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":true,\"mode\":\"exec\",\"operation\":\"create_folder\"}}\r\n",
+        "stderr": "",
+        "exitCode": 0,
+        "timedOut": false,
+        "aborted": false,
+        "operationId": "create_folder"
+      },
+      "observations": {
+        "invalidated": []
+      },
+      "verification": {
+        "mode": "automatic_readback",
+        "source": "write_command",
+        "required": true,
+        "requested": true,
+        "verified": true,
+        "status": "passed"
+      },
+      "mutationResult": {
+        "status": "ok",
+        "permission": {
+          "mode": "acceptEdits",
+          "decision": "allow",
+          "risk": "safe",
+          "reason": "Accept Edits allows safe, single-target, verified edits."
+        },
+        "preflight": {
+          "status": "passed",
+          "evidence": {
+            "version": 1,
+            "action": "create_folder",
+            "paramsFingerprint": "9540a02321b803871f7f9860b36fc308ffcef20b1d5ec5e2e311ee9ec0055ba7",
+            "database": {
+              "path": "C:\\Repo\\F05_IPB_L2_0429",
+              "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+            },
+            "target": {
+              "path": "DEMO\\__pi_permission_smoke__20260815-101950",
+              "oid": "040g00001g001qg7107g6mo85g6g0",
+              "kind": "folder"
+            },
+            "impact": {
+              "complete": true,
+              "sharedObject": false,
+              "ownerPath": "DEMO\\__pi_permission_smoke__20260815-101950",
+              "affectedProjects": [],
+              "fingerprint": "sha256:cd045751567e5782feaa057c18b8ec71911d684111adeac5e6ee63f48e8d68e4"
+            },
+            "capability": {
+              "status": "supported",
+              "operation": "preflight_create_folder",
+              "evidence": {
+                "status": "supported",
+                "methods": [
+                  "de.etas.cebra.toolAPI.Ascet.AscetFolder.AddAscetSubFolder(String)"
+                ],
+                "saveAvailable": true,
+                "readbackAvailable": true
+              }
+            },
+            "editability": {
+              "applicable": false,
+              "status": "not_applicable",
+              "canRequestEditable": false
+            },
+            "effects": [
+              {
+                "kind": "create_folder",
+                "target": "DEMO\\__pi_permission_smoke__20260815-101950\\AcceptEdits",
+                "description": "Create folder DEMO\\__pi_permission_smoke__20260815-101950\\AcceptEdits"
+              }
+            ],
+            "verification": {
+              "available": true,
+              "operation": "create_folder_readback",
+              "target": {
+                "path": "DEMO\\__pi_permission_smoke__20260815-101950"
+              }
+            },
+            "riskModifiers": [],
+            "noOp": false,
+            "generatedAt": "2026-08-15T02:22:59.031Z",
+            "approvalMaterialFingerprint": "25f36a47eeb4799171d9530ae1d67a5d286019188dc4e050174c712e630cdff8"
+          }
+        },
+        "editability": {
+          "status": "not_applicable"
+        },
+        "mutation": {
+          "status": "applied"
+        },
+        "verification": {
+          "status": "passed"
+        },
+        "audit": {
+          "revalidatedAt": "2026-08-15T02:22:59.031Z",
+          "preflightFingerprint": "9540a02321b803871f7f9860b36fc308ffcef20b1d5ec5e2e311ee9ec0055ba7",
+          "approvalMaterialFingerprint": "25f36a47eeb4799171d9530ae1d67a5d286019188dc4e050174c712e630cdff8"
+        },
+        "bridge": {
+          "beforeBridge": true,
+          "bridgeEntered": true,
+          "backendResponseReceived": true
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      },
+      "tool": "ascet_edit",
+      "action": "create_folder",
+      "command": {
+        "logicalCommandId": "AscetCreateFolder",
+        "backendCommandId": "AscetCreateFolder",
+        "operation": "create_folder"
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "create_folder",
+            "DEMO\\__pi_permission_smoke__20260815-101950\\AcceptEdits",
+            "--verify-readback",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "write",
+          "mutatesDatabase": true
+        },
+        "exitCode": 0,
+        "timedOut": false,
+        "stderr": ""
+      }
+    }
+  }
+}

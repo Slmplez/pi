@@ -1,0 +1,273 @@
+{
+  "generated_at": "2026-03-28T03:18:02.168685Z",
+  "input_chm": "E:\\ETAS\\ASCET6.4\\Help\\SenderReceiverEditorEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\sender-receiver-editor-p5gyeh_t\\export",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\sender-receiver-editor-p5gyeh_t\\export\\markdown",
+  "input_html_count": 43,
+  "converted_html_count": 43,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 50,
+  "toc_entries_count": 55,
+  "index_entries_count": 66,
+  "index_required": false,
+  "mappings": [
+    {
+      "html_rel_path": "asi_contextmenu_diagrammethod.htm",
+      "md_rel_path": "asi_contextmenu_diagrammethod.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "codegen_dbtoolarge.htm",
+      "md_rel_path": "codegen_dbtoolarge.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SRE_EditClientServerInterfaces.htm",
+      "md_rel_path": "SRE_EditClientServerInterfaces.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SRE_Editing_Calibration_Interfaces.htm",
+      "md_rel_path": "SRE_Editing_Calibration_Interfaces.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SRE_EditOperation.htm",
+      "md_rel_path": "SRE_EditOperation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SRE_editOperationReturnValue.htm",
+      "md_rel_path": "SRE_editOperationReturnValue.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "sre_EditSenderReceiverInterfaces.htm",
+      "md_rel_path": "sre_EditSenderReceiverInterfaces.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SRE_ImplementOperationArguments.htm",
+      "md_rel_path": "SRE_ImplementOperationArguments.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SRE_ImplementSRInterfaceElements.htm",
+      "md_rel_path": "SRE_ImplementSRInterfaceElements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SRE_SetUp_ClientServerInterface.htm",
+      "md_rel_path": "SRE_SetUp_ClientServerInterface.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREBasicsCalibrationInterfaces.htm",
+      "md_rel_path": "SREBasicsCalibrationInterfaces.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREBasicsClientServerInterfaces.htm",
+      "md_rel_path": "SREBasicsClientServerInterfaces.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREcomponentPane.htm",
+      "md_rel_path": "SREcomponentPane.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREcontextMenuBrowseView.htm",
+      "md_rel_path": "SREcontextMenuBrowseView.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREcontextMenuCPcomponentsAndElements.htm",
+      "md_rel_path": "SREcontextMenuCPcomponentsAndElements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREcreateModeGroup.htm",
+      "md_rel_path": "SREcreateModeGroup.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREcreateSenderReceiverInterface.htm",
+      "md_rel_path": "SREcreateSenderReceiverInterface.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREeditMenu.htm",
+      "md_rel_path": "SREeditMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREeditModeGroup.htm",
+      "md_rel_path": "SREeditModeGroup.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREeditorOverview.htm",
+      "md_rel_path": "SREeditorOverview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREextrasMenu.htm",
+      "md_rel_path": "SREextrasMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREfileMenu.htm",
+      "md_rel_path": "SREfileMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREfilterComponentPane.htm",
+      "md_rel_path": "SREfilterComponentPane.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREhelpMenu.htm",
+      "md_rel_path": "SREhelpMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREimplementCalibrationParameters.htm",
+      "md_rel_path": "SREimplementCalibrationParameters.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "sreincludecomponent_blocklibrary.htm",
+      "md_rel_path": "sreincludecomponent_blocklibrary.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREinsertMenu.htm",
+      "md_rel_path": "SREinsertMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "srelibrarypalette.htm",
+      "md_rel_path": "srelibrarypalette.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREmenuBar.htm",
+      "md_rel_path": "SREmenuBar.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREmodesModeGroups.htm",
+      "md_rel_path": "SREmodesModeGroups.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREopenSRIEditor.htm",
+      "md_rel_path": "SREopenSRIEditor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREOverviewAUTOSARInterfaces.htm",
+      "md_rel_path": "SREOverviewAUTOSARInterfaces.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREpalettesPane.htm",
+      "md_rel_path": "SREpalettesPane.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREsetupCalibrationInterface.htm",
+      "md_rel_path": "SREsetupCalibrationInterface.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREsetupSenderReceiverInterface.htm",
+      "md_rel_path": "SREsetupSenderReceiverInterface.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREtoolbarElements.htm",
+      "md_rel_path": "SREtoolbarElements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREtoolbarGeneral.htm",
+      "md_rel_path": "SREtoolbarGeneral.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREtoolbars.htm",
+      "md_rel_path": "SREtoolbars.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREtoolsMenu.htm",
+      "md_rel_path": "SREtoolsMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREviewBrowse.htm",
+      "md_rel_path": "SREviewBrowse.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREviewMenu.htm",
+      "md_rel_path": "SREviewMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SREwindowsDescription.htm",
+      "md_rel_path": "SREwindowsDescription.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SRI_CreateSRIfromExistingItem.htm",
+      "md_rel_path": "SRI_CreateSRIfromExistingItem.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

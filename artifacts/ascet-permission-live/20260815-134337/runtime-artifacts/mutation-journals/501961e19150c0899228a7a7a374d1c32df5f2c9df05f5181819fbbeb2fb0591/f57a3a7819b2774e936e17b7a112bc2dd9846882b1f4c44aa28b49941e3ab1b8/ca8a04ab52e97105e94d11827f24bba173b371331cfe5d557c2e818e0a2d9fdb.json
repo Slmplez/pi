@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "status": "applied",
+  "databaseFingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c",
+  "targetOid": "040g08k2e0001k87086g3rcb99236",
+  "targetKind": "statemachine",
+  "canonicalPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+  "action": "delete_method",
+  "planId": "f2bd5113-f082-4583-b2c5-62e37d66d3e5",
+  "planFingerprint": "d2e0e5fbcbc4d6747a6472e3f0403ff906455da22703140e7c31a5054417fe29",
+  "targetImpactFingerprint": "sha256:2787a9100acc7722004d56841b5f9e0ff4a21d797b2dc91480b327892a2e667d",
+  "guardGeneration": 0,
+  "beforeSnapshotFingerprint": "sha256:ea32832bed23db788adad1845d356d94e751131348fbe1f82ce4663a7d8d7347",
+  "desiredFingerprint": "sha256:49684d34b3f7981c66041803ccf8c30e996b6c75ba1274abe0dbb8e7f6b30e4c",
+  "beforeSnapshot": {
+    "operation": "authoritative_single_call_preflight",
+    "validated": true,
+    "authoritativePlan": {
+      "operation": "registered_guarded_operation_preflight",
+      "validated": true,
+      "result": {
+        "targetPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+        "editable": true,
+        "capability": {
+          "status": "supported",
+          "source": "registered_closed_operation"
+        },
+        "readbackAvailable": true,
+        "noOp": false
+      }
+    },
+    "normalizedEvidence": {
+      "version": 1,
+      "action": "delete_method",
+      "paramsFingerprint": "49684d34b3f7981c66041803ccf8c30e996b6c75ba1274abe0dbb8e7f6b30e4c",
+      "database": {
+        "path": "C:\\Repo\\F05_IPB_L2_0429",
+        "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+      },
+      "target": {
+        "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+        "oid": "040g08k2e0001k87086g3rcb99236",
+        "kind": "statemachine"
+      },
+      "impact": {
+        "complete": true,
+        "sharedObject": false,
+        "ownerPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+        "affectedProjects": [],
+        "fingerprint": "sha256:2787a9100acc7722004d56841b5f9e0ff4a21d797b2dc91480b327892a2e667d"
+      },
+      "capability": {
+        "status": "supported",
+        "operation": "registered_guarded_operation_preflight",
+        "evidence": {
+          "status": "supported",
+          "source": "registered_closed_operation"
+        }
+      },
+      "editability": {
+        "applicable": true,
+        "status": "editable",
+        "canRequestEditable": false
+      },
+      "effects": [
+        {
+          "kind": "delete_method",
+          "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+          "description": "delete_method: PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller"
+        }
+      ],
+      "verification": {
+        "available": true,
+        "operation": "delete_method_readback",
+        "target": {
+          "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller"
+        }
+      },
+      "riskModifiers": [],
+      "noOp": false,
+      "generatedAt": "2026-08-15T05:56:55.037Z",
+      "approvalMaterialFingerprint": "b73ad4b11baa369b34fb6f87baa20ae6b25f3e2f14b0799b513f218d7c8aee0f"
+    },
+    "permissionMode": "default",
+    "permissionDecision": "ask",
+    "risk": "high",
+    "approvedAt": "2026-08-15T05:56:31.618Z",
+    "revalidatedAt": "2026-08-15T05:56:55.037Z",
+    "targetIdentity": {
+      "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+      "oid": "040g08k2e0001k87086g3rcb99236",
+      "kind": "statemachine"
+    },
+    "targetImpactFingerprint": "sha256:2787a9100acc7722004d56841b5f9e0ff4a21d797b2dc91480b327892a2e667d"
+  },
+  "attemptedMutation": {
+    "action": "delete_method",
+    "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+    "methodName": "PiForcedFailure",
+    "ifMissing": "ignore"
+  },
+  "createdAt": "2026-08-15T05:56:55.053Z",
+  "updatedAt": "2026-08-15T05:56:56.060Z",
+  "evidence": {
+    "bridgeEntered": true,
+    "backendResponseReceived": true,
+    "mutationStarted": true
+  },
+  "outcome": {
+    "operationId": "delete_method"
+  }
+}

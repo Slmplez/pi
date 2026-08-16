@@ -1,0 +1,309 @@
+{
+  "generated_at": "2026-04-01T03:07:34.748645Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\AutomaticDocumentationEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AutomaticDocumentationEnglishUS",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AutomaticDocumentationEnglishUS\\markdown",
+  "input_html_count": 49,
+  "converted_html_count": 49,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 31,
+  "toc_entries_count": 53,
+  "index_entries_count": 41,
+  "index_required": true,
+  "mappings": [
+    {
+      "html_rel_path": "AD_ASCET_DocContents_Window.htm",
+      "md_rel_path": "AD_ASCET_DocContents_Window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AD_BDE_Tab.htm",
+      "md_rel_path": "AD_BDE_Tab.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AD_create_docu_views.htm",
+      "md_rel_path": "AD_create_docu_views.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AD_CreateUseDefaultViewConfiguration.htm",
+      "md_rel_path": "AD_CreateUseDefaultViewConfiguration.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AD_Document_Menu.htm",
+      "md_rel_path": "AD_Document_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AD_Documentation_Contents_Window.htm",
+      "md_rel_path": "AD_Documentation_Contents_Window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AD_Documentation_Tab.htm",
+      "md_rel_path": "AD_Documentation_Tab.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AD_EditMenu_NotesEditor.htm",
+      "md_rel_path": "AD_EditMenu_NotesEditor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AD_EditView_of_DiagramItem.htm",
+      "md_rel_path": "AD_EditView_of_DiagramItem.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AD_Element_Properties_Window.htm",
+      "md_rel_path": "AD_Element_Properties_Window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AD_Elements_Tab.htm",
+      "md_rel_path": "AD_Elements_Tab.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AD_ExampleViewExportFile.htm",
+      "md_rel_path": "AD_ExampleViewExportFile.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AD_InstallMiKTeX.htm",
+      "md_rel_path": "AD_InstallMiKTeX.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AD_notes.htm",
+      "md_rel_path": "AD_notes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AD_NotesEditorWindow.htm",
+      "md_rel_path": "AD_NotesEditorWindow.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AD_Overview.htm",
+      "md_rel_path": "AD_Overview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AD_ProvidePathLaTeX.htm",
+      "md_rel_path": "AD_ProvidePathLaTeX.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AD_TextSegmentsMenu.htm",
+      "md_rel_path": "AD_TextSegmentsMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AD_views.htm",
+      "md_rel_path": "AD_views.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AD_Views_Window.htm",
+      "md_rel_path": "AD_Views_Window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AD_ViewsMenu_NotesEditor.htm",
+      "md_rel_path": "AD_ViewsMenu_NotesEditor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AD_ViewsWindow_GraphicalEditors.htm",
+      "md_rel_path": "AD_ViewsWindow_GraphicalEditors.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AD_Working_on_Notes.htm",
+      "md_rel_path": "AD_Working_on_Notes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AD_Working_on_Views.htm",
+      "md_rel_path": "AD_Working_on_Views.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascii_format.htm",
+      "md_rel_path": "ascii_format.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "assign_text_segment.htm",
+      "md_rel_path": "assign_text_segment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "change_selection.htm",
+      "md_rel_path": "change_selection.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "change_view_display_diagram.htm",
+      "md_rel_path": "change_view_display_diagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "create_note.htm",
+      "md_rel_path": "create_note.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "create_text_segment.htm",
+      "md_rel_path": "create_text_segment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "deassign_view.htm",
+      "md_rel_path": "deassign_view.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "determine_content_docu_file.htm",
+      "md_rel_path": "determine_content_docu_file.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "docu_file_output_formats.htm",
+      "md_rel_path": "docu_file_output_formats.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "edit_text_segment.htm",
+      "md_rel_path": "edit_text_segment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Exporting_Views.htm",
+      "md_rel_path": "Exporting_Views.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "generate_docu_folder_database.htm",
+      "md_rel_path": "generate_docu_folder_database.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "generating_documentation.htm",
+      "md_rel_path": "generating_documentation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Global_Settings_Elem_Grps.htm",
+      "md_rel_path": "Global_Settings_Elem_Grps.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "html_format.htm",
+      "md_rel_path": "html_format.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Importing_Views.htm",
+      "md_rel_path": "Importing_Views.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Options_for_Element_Types.htm",
+      "md_rel_path": "Options_for_Element_Types.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "postscript_format.htm",
+      "md_rel_path": "postscript_format.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "rtf_format.htm",
+      "md_rel_path": "rtf_format.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "select_default_view.htm",
+      "md_rel_path": "select_default_view.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "select_items_gen_docu.htm",
+      "md_rel_path": "select_items_gen_docu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "set_options_docu_generation.htm",
+      "md_rel_path": "set_options_docu_generation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "store_docu_contents.htm",
+      "md_rel_path": "store_docu_contents.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "view_generated_docu.htm",
+      "md_rel_path": "view_generated_docu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "view_text_segment_assignments.htm",
+      "md_rel_path": "view_text_segment_assignments.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

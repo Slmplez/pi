@@ -1,0 +1,40 @@
+{
+  "delivery": "inline",
+  "items": [
+    {
+      "path": "PI_LIVE_FIX_20260811_13947C09\\ClassUnderTest::P_Input",
+      "componentOid": "040g00001g001qg7105g94f0sjvg0",
+      "scope": "exported"
+    },
+    {
+      "path": "PI_LIVE_FIX_20260811_13947C09\\ClassUnderTest::P_Dependent",
+      "componentOid": "040g00001g001qg7105g94f0sjvg0",
+      "scope": "local"
+    }
+  ],
+  "coverage": {
+    "status": "partial",
+    "scopeKind": "item",
+    "scopeId": "path:PI_LIVE_FIX_20260811_13947C09\\ClassUnderTest",
+    "completeness": "bounded",
+    "truncated": false,
+    "foldersVisited": 0,
+    "componentsScanned": 1,
+    "identityKinds": [],
+    "collectorStarted": false,
+    "collectorCompleted": false,
+    "rootCollectionAvailable": false,
+    "projectCollectionAvailable": true,
+    "missingOidCount": 2,
+    "missingPathCount": 0
+  },
+  "truncated": false,
+  "source": "live",
+  "sourceIdentity": {
+    "database": {
+      "name": "C:\\Repo\\F05_IPB_L2_0429",
+      "path": "C:\\Repo\\",
+      "fingerprint": "def9e68cc955cc916cdfa1a2d26c32c8d2b16503cdcc4d337b3c7ba9a5643bf8"
+    }
+  }
+}

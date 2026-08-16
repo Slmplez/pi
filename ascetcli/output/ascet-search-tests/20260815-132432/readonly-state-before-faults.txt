@@ -1,0 +1,5 @@
+﻿Log File: C:\ProgramData\ETAS\LogFiles\GetAscetReadOnlyState\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+database=C:\Repo\F05_IPB_L2_0429
+unsavedEditors=0
+openWindows=0

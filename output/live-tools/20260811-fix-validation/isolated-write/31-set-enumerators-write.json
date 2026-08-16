@@ -1,0 +1,109 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"changed\": {\n    \"component\": \"PI_LIVE_FIX_20260811_13947C09/EnumerationUnderTest\",\n    \"kind\": \"enumeration\",\n    \"previousEnumerators\": [\n      \"enumerator\"\n    ],\n    \"enumerators\": [\n      \"FIX_OFF\",\n      \"FIX_ON\",\n      \"FIX_DIAG\"\n    ],\n    \"writeSucceeded\": true,\n    \"summary\": \"Set 3 enumerators for PI_LIVE_FIX_20260811_13947C09\\\\EnumerationUnderTest.\"\n  },\n  \"verification\": {\n    \"mode\": \"automatic_readback\",\n    \"source\": \"write_command\",\n    \"required\": true,\n    \"requested\": true,\n    \"verified\": true,\n    \"status\": \"passed\"\n  }\n}"
+    }
+  ],
+  "details": {
+    "outcome": {
+      "status": "ok",
+      "verified": true,
+      "data": {
+        "changed": {
+          "componentPath": "PI_LIVE_FIX_20260811_13947C09\\EnumerationUnderTest",
+          "kind": "enumeration",
+          "previousEnumerators": [
+            "enumerator"
+          ],
+          "enumerators": [
+            "FIX_OFF",
+            "FIX_ON",
+            "FIX_DIAG"
+          ],
+          "writeSucceeded": true,
+          "summary": "Set 3 enumerators for PI_LIVE_FIX_20260811_13947C09\\EnumerationUnderTest."
+        },
+        "verification": {
+          "mode": "automatic_readback",
+          "source": "write_command",
+          "required": true,
+          "requested": true,
+          "verified": true,
+          "status": "passed"
+        },
+        "observations": {
+          "invalidated": []
+        }
+      },
+      "warnings": []
+    },
+    "raw": {
+      "ok": true,
+      "data": {
+        "type": "response",
+        "protocolVersion": 1,
+        "ok": true,
+        "result": {
+          "componentPath": "PI_LIVE_FIX_20260811_13947C09\\EnumerationUnderTest",
+          "kind": "enumeration",
+          "previousEnumerators": [
+            "enumerator"
+          ],
+          "enumerators": [
+            "FIX_OFF",
+            "FIX_ON",
+            "FIX_DIAG"
+          ],
+          "writeSucceeded": true,
+          "verifyReadbackRequested": true,
+          "readbackVerified": true,
+          "summary": "Set 3 enumerators for PI_LIVE_FIX_20260811_13947C09\\EnumerationUnderTest."
+        },
+        "error": null,
+        "meta": {
+          "bridgePid": 5808,
+          "bridgeGeneration": "1152145c-bf8b-4428-bf63-2931442d6773",
+          "durationMs": 564,
+          "sessionPolicy": "fresh_session",
+          "mutationStarted": true,
+          "mode": "exec",
+          "operation": "set_enumerators"
+        }
+      },
+      "request": {
+        "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+        "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+        "args": [
+          "exec",
+          "set_enumerators",
+          "PI_LIVE_FIX_20260811_13947C09\\EnumerationUnderTest",
+          "--items",
+          "FIX_OFF,FIX_ON,FIX_DIAG",
+          "--verify-readback",
+          "--json"
+        ],
+        "timeoutMs": 240000,
+        "jobKind": "write",
+        "mutatesDatabase": true
+      },
+      "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"componentPath\":\"PI_LIVE_FIX_20260811_13947C09\\\\EnumerationUnderTest\",\"kind\":\"enumeration\",\"previousEnumerators\":[\"enumerator\"],\"enumerators\":[\"FIX_OFF\",\"FIX_ON\",\"FIX_DIAG\"],\"writeSucceeded\":true,\"verifyReadbackRequested\":true,\"readbackVerified\":true,\"summary\":\"Set 3 enumerators for PI_LIVE_FIX_20260811_13947C09\\\\EnumerationUnderTest.\"},\"error\":null,\"meta\":{\"bridgePid\":5808,\"bridgeGeneration\":\"1152145c-bf8b-4428-bf63-2931442d6773\",\"durationMs\":564,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":true,\"mode\":\"exec\",\"operation\":\"set_enumerators\"}}\r\n",
+      "stderr": "",
+      "exitCode": 0,
+      "timedOut": false,
+      "aborted": false,
+      "operationId": "set_enumerators"
+    },
+    "observations": {
+      "invalidated": []
+    },
+    "verification": {
+      "mode": "automatic_readback",
+      "source": "write_command",
+      "required": true,
+      "requested": true,
+      "verified": true,
+      "status": "passed"
+    }
+  }
+}

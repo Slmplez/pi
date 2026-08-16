@@ -1,0 +1,11 @@
+{"path":"PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\Config\\CM_SCM::DrvPedalPos","componentOid":"040gpc8345201o070k64iliu68i20","scope":"imported"}
+{"path":"PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\Config\\CM_SCM::CM_SCM_DrvPedalPos","componentOid":"040gpc8345201o070k64iliu68i20","scope":"exported"}
+{"path":"PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\Config\\CM_SCM::CM_SCM_StateDrvUnitPtNotValid","componentOid":"040gpc8345201o070k64iliu68i20","scope":"exported"}
+{"path":"PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\Config\\CM_SCM::CM_SCM_VminReachedEna","componentOid":"040gpc8345201o070k64iliu68i20","scope":"exported"}
+{"path":"PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\Config\\CM_SCM::CM_SCM_DiaStatusSCMRequest","componentOid":"040gpc8345201o070k64iliu68i20","scope":"exported"}
+{"path":"PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\Config\\CM_SCM::SCMRequest","componentOid":"040gpc8345201o070k64iliu68i20","scope":"imported"}
+{"path":"PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\Config\\CM_SCM::StateDrvUnitPt","componentOid":"040gpc8345201o070k64iliu68i20","scope":"imported"}
+{"path":"PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\Config\\CM_SCM::CM_SCM_SCMRequest","componentOid":"040gpc8345201o070k64iliu68i20","scope":"exported"}
+{"path":"PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\Config\\CM_SCM::DiaStatusSCMRequest","componentOid":"040gpc8345201o070k64iliu68i20","scope":"imported"}
+{"path":"PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\Config\\CM_SCM::CM_SCM_CustDeactType","componentOid":"040gpc8345201o070k64iliu68i20","scope":"exported"}
+{"path":"PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\Config\\CM_SCM::SCM_MotPedalPosDriverNotValid","componentOid":"040gpc8345201o070k64iliu68i20","scope":"local"}

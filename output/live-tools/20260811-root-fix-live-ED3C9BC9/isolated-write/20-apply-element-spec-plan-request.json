@@ -1,0 +1,40 @@
+{
+  "action": "apply_element_spec",
+  "phase": "plan",
+  "componentPath": "PI_LIVE_ROOTFIX_20260811_ED3C9BC9\\ClassUnderTest",
+  "intent": "create",
+  "executeWrite": false,
+  "elements": [
+    {
+      "role": "providerExportedParameter",
+      "name": "P_Input",
+      "modelType": "cont",
+      "unit": "",
+      "comment": "ASCET root-fix live validation input",
+      "calibration": false,
+      "range": {
+        "mode": "none"
+      },
+      "data": {
+        "mode": "ascetDefault"
+      },
+      "implementation": {
+        "mode": "ascetDefault"
+      }
+    },
+    {
+      "role": "localDependentParameter",
+      "name": "P_Dependent",
+      "modelType": "cont",
+      "unit": "",
+      "comment": "ASCET root-fix live validation dependent",
+      "calibration": false,
+      "range": {
+        "mode": "none"
+      },
+      "implementation": {
+        "mode": "ascetDefault"
+      }
+    }
+  ]
+}

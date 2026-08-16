@@ -1,0 +1,399 @@
+{
+  "generated_at": "2026-03-28T03:17:56.927385Z",
+  "input_chm": "E:\\ETAS\\ASCET6.4\\Help\\DataEditorEnglishUS.chm",
+  "unpack_dir": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\data-editor-tgodxx2n\\export\\unpacked",
+  "total_files": 63,
+  "total_size_bytes": 308323,
+  "counts_by_extension": {
+    ".gif": 7,
+    ".brs": 1,
+    ".glo": 1,
+    ".hhc": 1,
+    ".hhk": 1,
+    ".htm": 47,
+    ".js": 2,
+    ".xml": 1,
+    ".css": 1,
+    ".lng": 1
+  },
+  "files": [
+    {
+      "relative_path": "BUTTON.GIF",
+      "size": 844,
+      "sha256": "6d10387853fe90ec87f720a6460a8cd1d2559683e66c81683a705a5e0e6f2ea9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "DataEditorEnglishUS.brs",
+      "size": 2,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "extension": ".brs"
+    },
+    {
+      "relative_path": "DataEditorEnglishUS.glo",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "extension": ".glo"
+    },
+    {
+      "relative_path": "DataEditorEnglishUS.hhc",
+      "size": 10476,
+      "sha256": "3b4c582b425ae23a1622048eada7f54c0c4695d5552d450f2e488fa5f50a83f6",
+      "extension": ".hhc"
+    },
+    {
+      "relative_path": "DataEditorEnglishUS.hhk",
+      "size": 13958,
+      "sha256": "feb4d5984c4532ff12106afbef9670f8cfc908cfb1eb79a9af00a36dc5ebd62b",
+      "extension": ".hhk"
+    },
+    {
+      "relative_path": "DEd_AxisMenuTableEditor.htm",
+      "size": 2829,
+      "sha256": "c6b53a8d37385f343a022e410b003b3cf97487095e120e8621d9bb7b3eb97d3a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_browse_dataset.htm",
+      "size": 1817,
+      "sha256": "18137c3bba1149dd911c9e7706f2b70c66278504dc54fe566fecd27396a3f35b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_copy_data.htm",
+      "size": 2244,
+      "sha256": "441bf3fca4c5fe1580342f13b0818a6730c6a0eaf8ebf254f27ef5d667875d81",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_create_copy_data.htm",
+      "size": 2531,
+      "sha256": "5cdc65493fddd3f404386c0c9d995b9e7e6cca3f0ecf4b468e25e12cb2faadbc",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_Data_for___Component__Window.htm",
+      "size": 3891,
+      "sha256": "ad5c68dcd426633106d0745b3f91d75086f255fe060eb7ef6c15471a86fd1d87",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_Data_Menu.htm",
+      "size": 4628,
+      "sha256": "f8d104ce3a193bce592835aa94a690b18e11c11bb79600f8c50688e76c44808b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_data_sets.htm",
+      "size": 3222,
+      "sha256": "789a840697b3422a807c99b8e5ab1dc3321ae97f579e6e9eef8567cef964055e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_DataEditor_CombinedTypes.htm",
+      "size": 6977,
+      "sha256": "801d292aab074e3dc4b226cbdf17397e61c4cbf9ca8041070c2302e313e5434b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Ded_DataEditor_ExplicitReferences.htm",
+      "size": 2077,
+      "sha256": "827b6287177aadb21e10f1f16ff7b1a3b33fac88bfd3b1ff6fc244b0a8873656",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_delete_data_set.htm",
+      "size": 1131,
+      "sha256": "b7ecf76b81ebc6690bfcaf4c89cb6862e5df50b38dc7925a2c809d958d808551",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_edit_1d_table.htm",
+      "size": 3392,
+      "sha256": "94afd96ca7a12a219fa96c9c4fceb8bafab1ca4c609be1dabbef5f7077d1b804",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_Edit_Dependency_for__Window.htm",
+      "size": 4418,
+      "sha256": "1fa266b0b15fec44e3e86b95f4cd96c08c189ffb033d8b330516c6ec4ef2a488",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_edit_logical_editor.htm",
+      "size": 1238,
+      "sha256": "5b5d484c441229fdfda5b7709b642e31460d756a6bdec5b4de163b70e78dde54",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_edit_value.htm",
+      "size": 1089,
+      "sha256": "7085aeadbbbdf605bcc9dcee5d68ea18a89a6179fc5688e026394c9cd15a70b3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_EditCharacteristicMap.htm",
+      "size": 3848,
+      "sha256": "339a9394cb857e1950ab6485497f64f4fdd165016e02d9d12b3fb6206d5f2ac2",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_EditDataSets.htm",
+      "size": 1501,
+      "sha256": "3b03fcc4308900d7b74fd1c30b7522abca56f19e98a8b414cf734fe9a970b4d2",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_Editing_Dependent_Parameters.htm",
+      "size": 10977,
+      "sha256": "cff5c5361eeb788e5a9b450f54d52fbe6334319a0d940dedefe146de69b64158",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_EditingCombinedTypes.htm",
+      "size": 1013,
+      "sha256": "b319368475566888d8359d21ced7e4bebe01b6433d1c3702f4dbdbd0d6fb6afa",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_EditingScalarTypes.htm",
+      "size": 849,
+      "sha256": "4602f71681c18e00cc41b2e079ffc00c505a9c717cbc8063a46be35a3cd21edc",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_EditMenuTableEditor.htm",
+      "size": 2262,
+      "sha256": "32ce0962930b625d352fe97b3d620ed1de74ba1620d394334d893ca76a42453a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_editor_combined_types.htm",
+      "size": 3052,
+      "sha256": "d2aaa3f84961118ab8983ffff311618773fa5b3664cb7cee3eb3b9ca5f3de592",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_editors_scalar_types.htm",
+      "size": 846,
+      "sha256": "def82434c8230f48556b96770fca6bac872997b350969eb7adbebe8edb5c7829",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_Element_Menu.htm",
+      "size": 1182,
+      "sha256": "8325614ff74d2c9def0e356e3ca42df0b04989ac3a3dbd7689d257100d251cc1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_enumeration_editor.htm",
+      "size": 1753,
+      "sha256": "9e9b5ec80cf8819f9c647a4af957db5a74653d593cc15549de5b7749dd6c0c34",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_export_dataset.htm",
+      "size": 1791,
+      "sha256": "683692d11a4356c1695680a554887f47ee2538edd2e235133812ac13f9717a48",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_ExtrasMenuTableEditor.htm",
+      "size": 1732,
+      "sha256": "9bb0b21290a3130f0311200a497170b393abe609a30b524ac23e1fb526790be3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_logical-editor.htm",
+      "size": 1672,
+      "sha256": "3e033d0f1f20f58aba2dfdcf06fda3a824e5a52896955211a677d9af9fdb04d0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_make_dataset_default.htm",
+      "size": 1354,
+      "sha256": "2ba21c29fdeb7ea3d247555c4131d14a1e9da6febde511203e8d3c34287a2efd",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_MappingReference.htm",
+      "size": 3680,
+      "sha256": "ab4d3fc110417b01c377b50b608d53f17c1835bf9cc4e01a12e206a7240c3acc",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_numerical_editor.htm",
+      "size": 1548,
+      "sha256": "e20e3b9aba0453d9c24f00e5b3d4b808e62ad122b703faba5cb7f3b3a0a286a1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_open_data_editor.htm",
+      "size": 1863,
+      "sha256": "d9819d63a23506d48ffe2314d0daafb6247c33c78459320777593c569ae58061",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_open_editor.htm",
+      "size": 1965,
+      "sha256": "ef17d481441c7f9aedd82525ad098d6811bb0e0249dd1d37afe55de65b860c7e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_Overview.htm",
+      "size": 2759,
+      "sha256": "b5e461acb46125c3f8b0a4015d97dd98698fc97b91ce85037effee31e2ba2134",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_read_data_array_table.htm",
+      "size": 9667,
+      "sha256": "6ec0b4d9527a303832ed45cc1f13040397892cc7897fe473c8e0c34f90268441",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_rename_data_set.htm",
+      "size": 1539,
+      "sha256": "b63c9419f52ae497a426b69c8a4335be246a95ec10c4540bf2b16e2584c18b86",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_select-enumerator.htm",
+      "size": 1183,
+      "sha256": "15c906aa957a81f75caf5acf98b417cd3edc184c497de36a53d79a76e6ec0e6d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_SelectDataSet.htm",
+      "size": 1959,
+      "sha256": "5f96e89fef75218f455966f018592fd0bed1ae8818e975e02547b3f919237e7c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_set_data_exchange_option.htm",
+      "size": 1295,
+      "sha256": "edd147d382b5c4c2dbd752cbaa6f80809b1c4e5d0e48cd450701d717838e72fd",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_setup_array.htm",
+      "size": 2307,
+      "sha256": "667f07a7bf810ba848ff6dd78bf82ca51940dc2afe86021ce41a97d99b326d46",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_setup_axis_points.htm",
+      "size": 3283,
+      "sha256": "53248f86c0dc7feb5740253733156be2a2a20964a682ff6d7162d9f318348015",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_show_difference_2datasets.htm",
+      "size": 2704,
+      "sha256": "e4402342b2d1b3042f81f1cb56adf90f2c1a5184f5fbe36ef43255b2408e0569",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_specCharTables.htm",
+      "size": 3277,
+      "sha256": "aea4d66a9b6f3f32581d895f982e965b9e7d13a9abd98aea2447ba03b04fea92",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_use_data_exchange_toolset.htm",
+      "size": 2259,
+      "sha256": "620f021c99205819b7c844abe1520635fab89da8547abe7e80daf55bb7650bb1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_view_data.htm",
+      "size": 2280,
+      "sha256": "1b689b64fb7a6b03575145f62c026ac92f15f7f2cb0158754a37cde38f92d4d7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_ViewMenuTableEditor.htm",
+      "size": 784,
+      "sha256": "09d05cd4aef8dc7482ebbdf0328a55ff68e0cffd02a9318dfe7f0a75781e634a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_work_globalelement_dataset.htm",
+      "size": 1197,
+      "sha256": "e757b06e9c76104f831cbc67b6f4437a0e0583a1ece5f58acb24e85d5c6649da",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DEd_write_array_tabledata.htm",
+      "size": 9380,
+      "sha256": "ba3d4beaec7a51b8e02eb978bbb18425655aba87eb81631fd84fedc7a9d52a5b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "display.js",
+      "size": 5656,
+      "sha256": "85712144c31aac1d2706f3b60475055a673961f71bc37c0f4c9e9c4b85fa9b31",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "eHelp.xml",
+      "size": 371,
+      "sha256": "c5556464ffc0a2e8a4278b72f72f412dbfc2ac7fc31ed0db4ced61717355e56a",
+      "extension": ".xml"
+    },
+    {
+      "relative_path": "ehlpdhtm.js",
+      "size": 125797,
+      "sha256": "9edef12c391c105551c033c4d17bda41ebb502ea145f124efc4986586d1e401f",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "icon_defImpl.gif",
+      "size": 964,
+      "sha256": "a0d746afa460251425656129724fa76d1370dafe6309cb03710c2fb9c94a52f3",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "icons_editedtablevalues.gif",
+      "size": 1307,
+      "sha256": "4f049bcd6cf42098cb41dde2186d614e13053b112d8681bedb0f22e6a62b2311",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "image4.gif",
+      "size": 2821,
+      "sha256": "48c554b3e59772adbfe4a16ac7c68a42eaea72d467f0167f957aeb4adcb78298",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exp_minus.gif",
+      "size": 837,
+      "sha256": "18a8ea974d756d370d6f7067283fc8c0b26f235c8e98bdaaf13a63e7dca8b1c4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exp_plus.gif",
+      "size": 842,
+      "sha256": "9ff1991cf9c6de621e2672bebf74fbc56680e3413f74d6cf18e25238701651be",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/statisch.gif",
+      "size": 831,
+      "sha256": "481cd3e8b966f0a4398b853efce140287877173b926b53d710791675a1b15aa4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Layout.css",
+      "size": 9786,
+      "sha256": "15b8ecb694f0faf615cf7acf82397ee41f6f70902a3ad07c33fb415c4fd77b9a",
+      "extension": ".css"
+    },
+    {
+      "relative_path": "RoboHHRE.lng",
+      "size": 3586,
+      "sha256": "607e16623990c7b694bb11537edbecfbd7057fda1739bba5173e9d8a4942b18f",
+      "extension": ".lng"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "resultId": "obs-tree-32320-1786434405932-0",
+  "domain": "tree",
+  "target": {
+    "scope": "database"
+  },
+  "itemCount": 10681,
+  "coverage": {
+    "status": "complete_for_scope",
+    "scopeKind": "database",
+    "scopeId": "database:C:\\Repo\\",
+    "completeness": "complete",
+    "truncated": false,
+    "foldersVisited": 1855,
+    "componentsScanned": 8065,
+    "identityKinds": [
+      "asceticon",
+      "class",
+      "enumeration",
+      "folder",
+      "module",
+      "project",
+      "signal",
+      "statemachine"
+    ],
+    "collectorStarted": true,
+    "collectorCompleted": true,
+    "rootCollectionAvailable": true,
+    "projectCollectionAvailable": true,
+    "missingOidCount": 0,
+    "missingPathCount": 0,
+    "collectors": {
+      "database": {
+        "started": true,
+        "completed": true,
+        "itemCount": 1
+      },
+      "projects": {
+        "started": true,
+        "completed": true,
+        "itemCount": 75
+      },
+      "folders": {
+        "started": true,
+        "completed": true,
+        "itemCount": 1855
+      },
+      "components": {
+        "started": true,
+        "completed": true,
+        "itemCount": 7990
+      },
+      "enumerations": {
+        "started": true,
+        "completed": true,
+        "itemCount": 708
+      }
+    }
+  },
+  "truncated": false,
+  "source": "live",
+  "sourceIdentity": {
+    "database": {
+      "name": "C:\\Repo\\F05_IPB_L2_0429",
+      "path": "C:\\Repo\\",
+      "fingerprint": "def9e68cc955cc916cdfa1a2d26c32c8d2b16503cdcc4d337b3c7ba9a5643bf8"
+    }
+  },
+  "capturedAt": "2026-08-11T07:46:45.931Z"
+}

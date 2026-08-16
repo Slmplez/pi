@@ -1,0 +1,18 @@
+{
+  "action": "set_element_dependency",
+  "phase": "plan",
+  "targetPath": "PI_LIVE_FIX_20260811_13947C09\\ClassUnderTest",
+  "elementName": "P_Dependent",
+  "dependency": "dependent",
+  "dependencyFormula": "P_Input",
+  "dependencyMappings": {
+    "P_Input": {
+      "kind": "parameter",
+      "name": "P_Input"
+    }
+  },
+  "variantPolicy": "default",
+  "targetKind": "component",
+  "match": "exact",
+  "executeWrite": false
+}

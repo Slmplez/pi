@@ -1,0 +1,117 @@
+{
+  "generated_at": "2026-04-01T03:08:26.286796Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\SignalsandIconsEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\SignalsandIconsEnglishUS",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\SignalsandIconsEnglishUS\\markdown",
+  "input_html_count": 17,
+  "converted_html_count": 17,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 22,
+  "toc_entries_count": 21,
+  "index_entries_count": 16,
+  "index_required": true,
+  "mappings": [
+    {
+      "html_rel_path": "SI_create_open_signal.htm",
+      "md_rel_path": "SI_create_open_signal.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SI_Creating_a_Signal.htm",
+      "md_rel_path": "SI_Creating_a_Signal.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SI_Creating_Icon.htm",
+      "md_rel_path": "SI_Creating_Icon.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SI_Exporting_Signal.htm",
+      "md_rel_path": "SI_Exporting_Signal.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SI_File_Menu.htm",
+      "md_rel_path": "SI_File_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SI_icon_editor.htm",
+      "md_rel_path": "SI_icon_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SI_import_measurement_data.htm",
+      "md_rel_path": "SI_import_measurement_data.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SI_load_icon.htm",
+      "md_rel_path": "SI_load_icon.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SI_Navigation_Menu.htm",
+      "md_rel_path": "SI_Navigation_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SI_Overview.htm",
+      "md_rel_path": "SI_Overview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SI_save_icon.htm",
+      "md_rel_path": "SI_save_icon.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SI_scale_icon.htm",
+      "md_rel_path": "SI_scale_icon.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SI_signal_viewer.htm",
+      "md_rel_path": "SI_signal_viewer.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SI_start_icon_editor.htm",
+      "md_rel_path": "SI_start_icon_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SI_Toolbar.htm",
+      "md_rel_path": "SI_Toolbar.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SI_view_measurment_data.htm",
+      "md_rel_path": "SI_view_measurment_data.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SI_View_Signal_Item_Window.htm",
+      "md_rel_path": "SI_View_Signal_Item_Window.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

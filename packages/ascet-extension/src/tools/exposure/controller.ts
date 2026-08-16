@@ -1,4 +1,5 @@
 import type { AscetExtensionAPI } from "../../core/tool.ts";
+import type { AscetPermissionProvider } from "../../permissions/types.ts";
 import { allAscetToolNameSet } from "../registry.ts";
 import { buildProfiledAscetTools } from "./profiled-tools.ts";
 import {
@@ -24,7 +25,11 @@ export function resolveInitialProfile(env: Record<string, string | undefined> = 
 
 export function createAscetExposureController(
 	pi: Pick<AscetExtensionAPI, "registerTool" | "getActiveTools" | "setActiveTools">,
-	options: { env?: Record<string, string | undefined>; initialProfile?: AscetProfile } = {},
+	options: {
+		env?: Record<string, string | undefined>;
+		initialProfile?: AscetProfile;
+		permissionProvider?: AscetPermissionProvider;
+	} = {},
 ): AscetExposureController {
 	const env = options.env ?? process.env;
 	let activeProfile = options.initialProfile ?? resolveInitialProfile(env);
@@ -43,7 +48,7 @@ export function createAscetExposureController(
 			return;
 		}
 		const activeAscetTools = resolveProfileTools(profile, env);
-		for (const tool of buildProfiledAscetTools(profile, activeAscetTools, env)) {
+		for (const tool of buildProfiledAscetTools(profile, activeAscetTools, env, options.permissionProvider)) {
 			pi.registerTool(tool);
 		}
 		registeredProfile = profile;

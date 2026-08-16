@@ -1,0 +1,3 @@
+﻿Log File: C:\ProgramData\ETAS\LogFiles\Probe\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+[{"name":"FS_HostedApcMotionUsed","type":"de.etas.cebra.toolAPI.Ascet.ScalarElement","isParameter":true,"isImported":false,"isExported":true,"scope":"exported","interestingMethods":["Boolean ClearVariant()","Boolean SetVariant()","Boolean IsDependentParameter()","Boolean IsVariant()","Boolean IsFormula()"]}]

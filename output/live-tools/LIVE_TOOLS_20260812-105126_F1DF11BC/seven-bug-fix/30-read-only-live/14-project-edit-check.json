@@ -1,0 +1,78 @@
+{
+  "tool": "ascet_edit",
+  "params": {
+    "mode": "check",
+    "componentPath": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010::CM_AVH"
+  },
+  "elapsedMs": 421,
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"error\": {\n    \"code\": \"legacy_operation_failed\",\n    \"message\": \"target_not_found:resolve_target:No ASCET item was found at 'CN_Libary\\\\CNMS_IPB20\\\\IPBCustGeneral\\\\IPBCustGeneral_ECU_CSW_BB88010'.\",\n    \"details\": {\n      \"stderr\": \"target_not_found:resolve_target:No ASCET item was found at 'CN_Libary\\\\CNMS_IPB20\\\\IPBCustGeneral\\\\IPBCustGeneral_ECU_CSW_BB88010'.\",\n      \"stdout\": \"{\\\"type\\\":\\\"response\\\",\\\"protocolVersion\\\":1,\\\"ok\\\":false,\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":\\\"legacy_operation_failed\\\",\\\"message\\\":\\\"target_not_found:resolve_target:No ASCET item was found at \\\\u0027CN_Libary\\\\\\\\CNMS_IPB20\\\\\\\\IPBCustGeneral\\\\\\\\IPBCustGeneral_ECU_CSW_BB88010\\\\u0027.\\\"},\\\"meta\\\":{\\\"bridgePid\\\":15072,\\\"bridgeGeneration\\\":\\\"45d23386-db25-4181-bead-83dd66e2457e\\\",\\\"durationMs\\\":307,\\\"sessionPolicy\\\":\\\"fresh_session\\\",\\\"mutationStarted\\\":false,\\\"mode\\\":\\\"exec\\\",\\\"operation\\\":\\\"component_editable_check\\\"}}\",\n      \"exitCode\": 2,\n      \"operationId\": \"component_editable_check\",\n      \"stage\": \"cli_process\",\n      \"retryable\": false,\n      \"stderrSummary\": \"target_not_found:resolve_target:No ASCET item was found at 'CN_Libary\\\\CNMS_IPB20\\\\IPBCustGeneral\\\\IPBCustGeneral_ECU_CSW_BB88010'.\",\n      \"stdoutSummary\": \"{\\\"type\\\":\\\"response\\\",\\\"protocolVersion\\\":1,\\\"ok\\\":false,\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":\\\"legacy_operation_failed\\\",\\\"message\\\":\\\"target_not_found:resolve_target:No ASCET item was found at \\\\u0027CN_Libary\\\\\\\\CNMS_IPB20\\\\\\\\IPBCustGeneral\\\\\\\\IPBCustGeneral_ECU_CSW_BB88010\\\\u0027.\\\"},\\\"meta\\\":{\\\"bridgePid\\\":15072,\\\"bridgeGeneration\\\":\\\"45d23386-db25-4181-bead-83dd66e2457e\\\",\\\"durationMs\\\":307,\\\"sessionPolicy\\\":\\\"fresh_session\\\",\\\"mutationStarted\\\":false,\\\"mode\\\":\\\"exec\\\",\\\"operation\\\":\\\"component_editable_check\\\"}}\"\n    }\n  }\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "error",
+        "error": {
+          "code": "legacy_operation_failed",
+          "message": "target_not_found:resolve_target:No ASCET item was found at 'CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010'."
+        }
+      },
+      "raw": {
+        "ok": false,
+        "data": null,
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "component_editable_check",
+            "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010::CM_AVH",
+            "--json"
+          ],
+          "timeoutMs": 60000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"legacy_operation_failed\",\"message\":\"target_not_found:resolve_target:No ASCET item was found at \\u0027CN_Libary\\\\CNMS_IPB20\\\\IPBCustGeneral\\\\IPBCustGeneral_ECU_CSW_BB88010\\u0027.\"},\"meta\":{\"bridgePid\":15072,\"bridgeGeneration\":\"45d23386-db25-4181-bead-83dd66e2457e\",\"durationMs\":307,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"component_editable_check\"}}\r\n",
+        "stderr": "target_not_found:resolve_target:No ASCET item was found at 'CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010'.\r\n",
+        "exitCode": 2,
+        "timedOut": false,
+        "aborted": false,
+        "operationId": "component_editable_check",
+        "stage": "cli_process",
+        "diagnostics": {
+          "operationId": "component_editable_check",
+          "stage": "cli_process",
+          "exitCode": 2,
+          "timedOut": false,
+          "aborted": false,
+          "stderrSummary": "target_not_found:resolve_target:No ASCET item was found at 'CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010'.",
+          "stdoutSummary": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"legacy_operation_failed\",\"message\":\"target_not_found:resolve_target:No ASCET item was found at \\u0027CN_Libary\\\\CNMS_IPB20\\\\IPBCustGeneral\\\\IPBCustGeneral_ECU_CSW_BB88010\\u0027.\"},\"meta\":{\"bridgePid\":15072,\"bridgeGeneration\":\"45d23386-db25-4181-bead-83dd66e2457e\",\"durationMs\":307,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"component_editable_check\"}}",
+          "retryable": false
+        },
+        "error": {
+          "code": "legacy_operation_failed",
+          "message": "target_not_found:resolve_target:No ASCET item was found at 'CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010'."
+        }
+      },
+      "error": "[Circular]",
+      "tool": "ascet_edit",
+      "action": "check",
+      "mode": "check",
+      "command": {
+        "logicalCommandId": "AscetComponentEditableCheck",
+        "backendCommandId": "AscetComponentEditableCheck",
+        "operation": "component_editable_check"
+      },
+      "diagnostics": {
+        "request": "[Circular]",
+        "exitCode": 2,
+        "timedOut": false,
+        "stderr": "target_not_found:resolve_target:No ASCET item was found at 'CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010'.\r\n"
+      }
+    }
+  }
+}

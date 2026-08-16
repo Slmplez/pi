@@ -1,0 +1,156 @@
+{
+  "version": 1,
+  "status": "partially_applied",
+  "databaseFingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c",
+  "targetOid": "040g08k2e0001k87086g3rcb99236",
+  "targetKind": "statemachine",
+  "canonicalPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+  "action": "create_method",
+  "planId": "2520a4b7-1cff-49f0-a356-4333023f2c0c",
+  "planFingerprint": "230f838d9e07e635892a60764fc14f1663cfce60f21d99cb181464227f2433dd",
+  "targetImpactFingerprint": "sha256:2787a9100acc7722004d56841b5f9e0ff4a21d797b2dc91480b327892a2e667d",
+  "guardGeneration": 0,
+  "beforeSnapshotFingerprint": "sha256:910d61eee804f5092bae6cc88f8b231d7eca8c33839cc9d606585765e04d4224",
+  "desiredFingerprint": "sha256:d04b40adff43e734af490e8b6812d98806f846b4c9f1b02aef32c880242b1969",
+  "beforeSnapshot": {
+    "operation": "authoritative_single_call_preflight",
+    "validated": true,
+    "authoritativePlan": {
+      "operation": "preflight_create_method",
+      "validated": true,
+      "result": {
+        "databasePath": "C:\\Repo\\F05_IPB_L2_0429",
+        "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+        "componentOid": "040g08k2e0001k87086g3rcb99236",
+        "componentKind": "StateMachine",
+        "languageKind": "ESDL",
+        "diagramName": "Main",
+        "diagramExists": false,
+        "diagramRuntimeType": "",
+        "requiredMethod": "AddAction",
+        "requiredSignature": "AddAction(String)",
+        "requiredMethodAvailable": false,
+        "addDiagramAvailable": true,
+        "futureMethodCapabilityProven": false,
+        "editable": false,
+        "readbackAvailable": true,
+        "noOp": false,
+        "existingMethod": null,
+        "plannedEffects": [
+          {
+            "kind": "create_diagram",
+            "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller::Main"
+          },
+          {
+            "kind": "create_method",
+            "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller::PiForcedFailure",
+            "methodKind": "Action"
+          }
+        ],
+        "capability": {
+          "status": "supported",
+          "operation": "AddAction",
+          "failureCode": "",
+          "failureMessage": ""
+        }
+      }
+    },
+    "normalizedEvidence": {
+      "version": 1,
+      "action": "create_method",
+      "paramsFingerprint": "d04b40adff43e734af490e8b6812d98806f846b4c9f1b02aef32c880242b1969",
+      "database": {
+        "path": "C:\\Repo\\F05_IPB_L2_0429",
+        "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+      },
+      "target": {
+        "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+        "oid": "040g08k2e0001k87086g3rcb99236",
+        "kind": "statemachine"
+      },
+      "impact": {
+        "complete": true,
+        "sharedObject": false,
+        "ownerPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+        "affectedProjects": [],
+        "fingerprint": "sha256:2787a9100acc7722004d56841b5f9e0ff4a21d797b2dc91480b327892a2e667d"
+      },
+      "capability": {
+        "status": "supported",
+        "operation": "AddAction",
+        "evidence": {
+          "status": "supported",
+          "operation": "AddAction",
+          "failureCode": "",
+          "failureMessage": ""
+        }
+      },
+      "editability": {
+        "applicable": true,
+        "status": "read_only",
+        "canRequestEditable": true
+      },
+      "effects": [
+        {
+          "kind": "request_editability",
+          "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+          "description": "Request component editability for PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller"
+        },
+        {
+          "kind": "create_diagram",
+          "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller::Main",
+          "description": "create_diagram: PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller::Main"
+        },
+        {
+          "kind": "create_method",
+          "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller::PiForcedFailure",
+          "description": "create_method: PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller::PiForcedFailure"
+        }
+      ],
+      "verification": {
+        "available": true,
+        "operation": "create_method_readback",
+        "target": {
+          "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller"
+        }
+      },
+      "riskModifiers": [
+        "minimum_risk:medium",
+        "missing_diagram_creation"
+      ],
+      "noOp": false,
+      "generatedAt": "2026-08-15T05:54:37.763Z",
+      "approvalMaterialFingerprint": "f4ed332d151167e165dfc2e8b6f0ef5be20fa0f8e554743453de0b41325657ad"
+    },
+    "permissionMode": "default",
+    "permissionDecision": "ask",
+    "risk": "medium",
+    "approvedAt": "2026-08-15T05:54:15.388Z",
+    "revalidatedAt": "2026-08-15T05:54:37.763Z",
+    "targetIdentity": {
+      "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+      "oid": "040g08k2e0001k87086g3rcb99236",
+      "kind": "statemachine"
+    },
+    "targetImpactFingerprint": "sha256:2787a9100acc7722004d56841b5f9e0ff4a21d797b2dc91480b327892a2e667d"
+  },
+  "attemptedMutation": {
+    "action": "create_method",
+    "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+    "componentKind": "statemachine",
+    "methodName": "PiForcedFailure",
+    "methodKind": "action",
+    "ifExists": "fail"
+  },
+  "createdAt": "2026-08-15T05:54:37.781Z",
+  "updatedAt": "2026-08-15T05:55:21.434Z",
+  "evidence": {
+    "bridgeEntered": true,
+    "backendResponseReceived": true,
+    "mutationStarted": true
+  },
+  "outcome": {
+    "operationId": "guarded_create_method",
+    "errorCode": "create_method_failed"
+  }
+}

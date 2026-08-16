@@ -1,0 +1,28 @@
+﻿{
+    "elementKeep":  {
+                        "count":  2,
+                        "childCount":  1,
+                        "childClass":  "SGListWindow",
+                        "visible":  true
+                    },
+    "textKeep":  {
+                     "count":  26,
+                     "childCount":  1,
+                     "childClass":  "SGFindReplaceWindow",
+                     "visible":  true
+                 },
+    "empty":  {
+                  "ui":  false,
+                  "count":  0,
+                  "childCount":  0
+              },
+    "limits":  {
+                   "allCount":  2,
+                   "limitedCount":  1,
+                   "more":  true
+               },
+    "pid":  {
+                "before":  25888,
+                "after":  25888
+            }
+}

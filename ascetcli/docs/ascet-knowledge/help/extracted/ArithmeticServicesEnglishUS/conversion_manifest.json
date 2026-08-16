@@ -1,0 +1,321 @@
+{
+  "generated_at": "2026-04-01T03:07:16.957286Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\ArithmeticServicesEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ArithmeticServicesEnglishUS",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ArithmeticServicesEnglishUS\\markdown",
+  "input_html_count": 51,
+  "converted_html_count": 51,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 33,
+  "toc_entries_count": 55,
+  "index_entries_count": 41,
+  "index_required": true,
+  "mappings": [
+    {
+      "html_rel_path": "Arithmetic_Services_and_Constants.htm",
+      "md_rel_path": "Arithmetic_Services_and_Constants.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_about_menu.htm",
+      "md_rel_path": "AS_about_menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_Allowable_Arithmetic_Services.htm",
+      "md_rel_path": "AS_Allowable_Arithmetic_Services.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_Allowable_Types.htm",
+      "md_rel_path": "AS_Allowable_Types.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_Creating_and_Saving_Arith_Ser.htm",
+      "md_rel_path": "AS_Creating_and_Saving_Arith_Ser.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_Def_Arith_Serv_.htm",
+      "md_rel_path": "AS_Def_Arith_Serv_.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_deleting_entry.htm",
+      "md_rel_path": "AS_deleting_entry.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_file_menu.htm",
+      "md_rel_path": "AS_file_menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_Function_Declaration.htm",
+      "md_rel_path": "AS_Function_Declaration.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_Function_Key.htm",
+      "md_rel_path": "AS_Function_Key.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_Functionality_of_an_Arithmetic_Service.htm",
+      "md_rel_path": "AS_Functionality_of_an_Arithmetic_Service.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_Launching_the_AS_Editor.htm",
+      "md_rel_path": "AS_Launching_the_AS_Editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_Managing_Entries.htm",
+      "md_rel_path": "AS_Managing_Entries.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_Managing_Entries_instr.htm",
+      "md_rel_path": "AS_Managing_Entries_instr.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_Managing_Sets.htm",
+      "md_rel_path": "AS_Managing_Sets.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_Managing_Sets_instr.htm",
+      "md_rel_path": "AS_Managing_Sets_instr.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_menu_bar.htm",
+      "md_rel_path": "AS_menu_bar.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_Overview.htm",
+      "md_rel_path": "AS_Overview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_Potential_Error_Conditions.htm",
+      "md_rel_path": "AS_Potential_Error_Conditions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_Selecting_a_Set.htm",
+      "md_rel_path": "AS_Selecting_a_Set.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_selecting_entry.htm",
+      "md_rel_path": "AS_selecting_entry.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_sets__menu.htm",
+      "md_rel_path": "AS_sets__menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_status_bar.htm",
+      "md_rel_path": "AS_status_bar.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_tool_bars.htm",
+      "md_rel_path": "AS_tool_bars.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_Using_Arith_Serv_ASCET.htm",
+      "md_rel_path": "AS_Using_Arith_Serv_ASCET.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AS_view_menu.htm",
+      "md_rel_path": "AS_view_menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "change_view_as_editor.htm",
+      "md_rel_path": "change_view_as_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "converting_comment_entry.htm",
+      "md_rel_path": "converting_comment_entry.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "converting_entry_comment.htm",
+      "md_rel_path": "converting_entry_comment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "creating_entry.htm",
+      "md_rel_path": "creating_entry.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "creating_set.htm",
+      "md_rel_path": "creating_set.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "deleting_set.htm",
+      "md_rel_path": "deleting_set.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "duplicating_set.htm",
+      "md_rel_path": "duplicating_set.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "elements_browse_area.htm",
+      "md_rel_path": "elements_browse_area.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "elements_button_area.htm",
+      "md_rel_path": "elements_button_area.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "elements_edit_area.htm",
+      "md_rel_path": "elements_edit_area.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "enteries_menu.htm",
+      "md_rel_path": "enteries_menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "functions_as_editor.htm",
+      "md_rel_path": "functions_as_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "interface_editor_as.htm",
+      "md_rel_path": "interface_editor_as.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "launching_as_ascet.htm",
+      "md_rel_path": "launching_as_ascet.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "launching_as_ascet_start.htm",
+      "md_rel_path": "launching_as_ascet_start.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "launching_as_windows.htm",
+      "md_rel_path": "launching_as_windows.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "loading_file.htm",
+      "md_rel_path": "loading_file.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "renaming_set.htm",
+      "md_rel_path": "renaming_set.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "saving_file.htm",
+      "md_rel_path": "saving_file.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "searching_entry.htm",
+      "md_rel_path": "searching_entry.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "select_set_arith_services.htm",
+      "md_rel_path": "select_set_arith_services.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "selecting_a_set.htm",
+      "md_rel_path": "selecting_a_set.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "specifying_entry.htm",
+      "md_rel_path": "specifying_entry.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "updating_entry.htm",
+      "md_rel_path": "updating_entry.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "user_interface_as-editor.htm",
+      "md_rel_path": "user_interface_as-editor.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

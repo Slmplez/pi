@@ -1,0 +1,44 @@
+{
+  "generated_at": "2026-04-01T03:07:56.325460Z",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\DataEditorEnglishUS",
+  "checked_files": 50,
+  "checked_links": 413,
+  "broken_links": [
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\DataEditorEnglishUS\\markdown\\DEd_Editing_Dependent_Parameters.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\DataEditorEnglishUS\\markdown\\DEd_read_data_array_table.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\DataEditorEnglishUS\\markdown\\DEd_write_array_tabledata.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\DataEditorEnglishUS\\DataEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\DataEditorEnglishUS\\DataEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\DataEditorEnglishUS\\DataEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    }
+  ]
+}

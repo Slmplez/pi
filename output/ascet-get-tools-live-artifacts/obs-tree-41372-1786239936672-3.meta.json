@@ -1,0 +1,19 @@
+{
+  "resultId": "obs-tree-41372-1786239936672-3",
+  "domain": "tree",
+  "target": {
+    "targetPathPrefix": "PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation",
+    "depth": 4,
+    "maxFolders": 500,
+    "maxComponents": 3000
+  },
+  "itemCount": 64,
+  "coverage": {
+    "status": "complete_for_scope",
+    "foldersVisited": 12,
+    "componentsScanned": 50
+  },
+  "truncated": false,
+  "source": "live",
+  "capturedAt": "2026-08-09T01:45:36.672Z"
+}

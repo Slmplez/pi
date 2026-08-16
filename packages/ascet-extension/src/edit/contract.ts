@@ -1,23 +1,4 @@
-import { getAscetEditPermissionDescriptor } from "../permissions/descriptors.ts";
-
-export type AscetEditActionId =
-	| "create_folder"
-	| "create_component"
-	| "create_method"
-	| "create_dependent_chain"
-	| "set_method_signature"
-	| "delete_component"
-	| "delete_method"
-	| "delete_folder"
-	| "set_method_code"
-	| "set_module_code"
-	| "set_state_machine_code"
-	| "set_enumerators"
-	| "apply_element_spec"
-	| "apply_project_formula"
-	| "set_element_dependency"
-	| "check"
-	| "set";
+﻿import { getAscetEditPermissionDescriptor } from "../permissions/descriptors.ts";
 
 export interface AscetEditPermissionDescriptor {
 	baseRisk: "safe" | "medium" | "high";
@@ -29,246 +10,63 @@ export interface AscetEditPermissionDescriptor {
 	requiresReadback: boolean;
 }
 
-export interface AscetEditActionContract {
+const editExecutorByAction = {
+	create_folder: "createFolder",
+	create_component: "createComponent",
+	create_method: "createMethod",
+	create_dependent_chain: "createDependentChain",
+	set_method_signature: "setMethodSignature",
+	delete_component: "deleteComponent",
+	delete_method: "deleteMethod",
+	delete_folder: "deleteFolder",
+	set_method_code: "setMethodCode",
+	set_module_code: "setModuleCode",
+	set_state_machine_code: "setStateMachineCode",
+	set_enumerators: "setEnumerators",
+	apply_element_spec: "applyElementSpec",
+	apply_project_formula: "applyProjectFormula",
+	set_element_dependency: "setElementDependency",
+	check: "editability",
+	set: "editability",
+} as const;
+
+export type AscetEditActionId = keyof typeof editExecutorByAction;
+
+export interface AscetEditRuntimeAction {
 	id: AscetEditActionId;
-	discriminator: {
-		field: "action" | "mode";
-		value: AscetEditActionId;
-	};
-	logicalCommandId: string;
-	operation: string;
+	discriminator: { field: "action" | "mode"; value: AscetEditActionId };
 	jobKind: "read" | "write";
 	permission?: AscetEditPermissionDescriptor;
-	profileNames: readonly string[];
-	executor: string;
-	schemaKey: string;
-	promptKey: string;
+	executor: (typeof editExecutorByAction)[AscetEditActionId];
 }
 
-const mutationProfiles = ["write-preflight", "batch-write"] as const;
-const editabilityProfiles = ["component-edit"] as const;
-
-const ascetEditActions = [
-	{
-		id: "create_folder",
-		discriminator: { field: "action", value: "create_folder" },
-		logicalCommandId: "AscetCreateFolder",
-		operation: "create_folder",
-		jobKind: "write",
-		permission: getAscetEditPermissionDescriptor("create_folder")!,
-		profileNames: mutationProfiles,
-		executor: "createFolder",
-		schemaKey: "create_folder",
-		promptKey: "create_folder",
-	},
-	{
-		id: "create_component",
-		discriminator: { field: "action", value: "create_component" },
-		logicalCommandId: "AscetCreateComponent",
-		operation: "create_component",
-		jobKind: "write",
-		permission: getAscetEditPermissionDescriptor("create_component")!,
-		profileNames: mutationProfiles,
-		executor: "createComponent",
-		schemaKey: "create_component",
-		promptKey: "create_component",
-	},
-	{
-		id: "create_method",
-		discriminator: { field: "action", value: "create_method" },
-		logicalCommandId: "AscetCreateMethod",
-		operation: "create_method",
-		jobKind: "write",
-		permission: getAscetEditPermissionDescriptor("create_method")!,
-		profileNames: mutationProfiles,
-		executor: "createMethod",
-		schemaKey: "create_method",
-		promptKey: "create_method",
-	},
-	{
-		id: "create_dependent_chain",
-		discriminator: { field: "action", value: "create_dependent_chain" },
-		logicalCommandId: "AscetCreateDependentChain",
-		operation: "configure_parameter_dependency_chain_execute",
-		jobKind: "write",
-		permission: getAscetEditPermissionDescriptor("create_dependent_chain")!,
-		profileNames: mutationProfiles,
-		executor: "createDependentChain",
-		schemaKey: "create_dependent_chain",
-		promptKey: "create_dependent_chain",
-	},
-	{
-		id: "set_method_signature",
-		discriminator: { field: "action", value: "set_method_signature" },
-		logicalCommandId: "AscetSetMethodSignature",
-		operation: "set_method_signature",
-		jobKind: "write",
-		permission: getAscetEditPermissionDescriptor("set_method_signature")!,
-		profileNames: mutationProfiles,
-		executor: "setMethodSignature",
-		schemaKey: "set_method_signature",
-		promptKey: "set_method_signature",
-	},
-	{
-		id: "delete_component",
-		discriminator: { field: "action", value: "delete_component" },
-		logicalCommandId: "AscetDeleteComponent",
-		operation: "delete_component",
-		jobKind: "write",
-		permission: getAscetEditPermissionDescriptor("delete_component")!,
-		profileNames: mutationProfiles,
-		executor: "deleteComponent",
-		schemaKey: "delete_component",
-		promptKey: "delete_component",
-	},
-	{
-		id: "delete_method",
-		discriminator: { field: "action", value: "delete_method" },
-		logicalCommandId: "AscetDeleteMethod",
-		operation: "delete_method",
-		jobKind: "write",
-		permission: getAscetEditPermissionDescriptor("delete_method")!,
-		profileNames: mutationProfiles,
-		executor: "deleteMethod",
-		schemaKey: "delete_method",
-		promptKey: "delete_method",
-	},
-	{
-		id: "delete_folder",
-		discriminator: { field: "action", value: "delete_folder" },
-		logicalCommandId: "AscetDeleteFolder",
-		operation: "delete_folder",
-		jobKind: "write",
-		permission: getAscetEditPermissionDescriptor("delete_folder")!,
-		profileNames: mutationProfiles,
-		executor: "deleteFolder",
-		schemaKey: "delete_folder",
-		promptKey: "delete_folder",
-	},
-	{
-		id: "set_method_code",
-		discriminator: { field: "action", value: "set_method_code" },
-		logicalCommandId: "AscetSetMethodCode",
-		operation: "set_method_code",
-		jobKind: "write",
-		permission: getAscetEditPermissionDescriptor("set_method_code")!,
-		profileNames: mutationProfiles,
-		executor: "setMethodCode",
-		schemaKey: "set_method_code",
-		promptKey: "set_method_code",
-	},
-	{
-		id: "set_module_code",
-		discriminator: { field: "action", value: "set_module_code" },
-		logicalCommandId: "AscetSetModuleCode",
-		operation: "set_module_code",
-		jobKind: "write",
-		permission: getAscetEditPermissionDescriptor("set_module_code")!,
-		profileNames: mutationProfiles,
-		executor: "setModuleCode",
-		schemaKey: "set_module_code",
-		promptKey: "set_module_code",
-	},
-	{
-		id: "set_state_machine_code",
-		discriminator: { field: "action", value: "set_state_machine_code" },
-		logicalCommandId: "AscetSetStateMachineCode",
-		operation: "set_state_machine_code",
-		jobKind: "write",
-		permission: getAscetEditPermissionDescriptor("set_state_machine_code")!,
-		profileNames: mutationProfiles,
-		executor: "setStateMachineCode",
-		schemaKey: "set_state_machine_code",
-		promptKey: "set_state_machine_code",
-	},
-	{
-		id: "set_enumerators",
-		discriminator: { field: "action", value: "set_enumerators" },
-		logicalCommandId: "AscetSetEnumerators",
-		operation: "set_enumerators",
-		jobKind: "write",
-		permission: getAscetEditPermissionDescriptor("set_enumerators")!,
-		profileNames: mutationProfiles,
-		executor: "setEnumerators",
-		schemaKey: "set_enumerators",
-		promptKey: "set_enumerators",
-	},
-	{
-		id: "apply_element_spec",
-		discriminator: { field: "action", value: "apply_element_spec" },
-		logicalCommandId: "AscetApplyElementSpec",
-		operation: "apply_element_spec",
-		jobKind: "write",
-		permission: getAscetEditPermissionDescriptor("apply_element_spec")!,
-		profileNames: mutationProfiles,
-		executor: "applyElementSpec",
-		schemaKey: "apply_element_spec",
-		promptKey: "apply_element_spec",
-	},
-	{
-		id: "apply_project_formula",
-		discriminator: { field: "action", value: "apply_project_formula" },
-		logicalCommandId: "AscetApplyProjectFormula",
-		operation: "apply_project_formula",
-		jobKind: "write",
-		permission: getAscetEditPermissionDescriptor("apply_project_formula")!,
-		profileNames: mutationProfiles,
-		executor: "applyProjectFormula",
-		schemaKey: "apply_project_formula",
-		promptKey: "apply_project_formula",
-	},
-	{
-		id: "set_element_dependency",
-		discriminator: { field: "action", value: "set_element_dependency" },
-		logicalCommandId: "AscetSetElementDependency",
-		operation: "set_element_dependency",
-		jobKind: "write",
-		permission: getAscetEditPermissionDescriptor("set_element_dependency")!,
-		profileNames: mutationProfiles,
-		executor: "setElementDependency",
-		schemaKey: "set_element_dependency",
-		promptKey: "set_element_dependency",
-	},
-	{
-		id: "check",
-		discriminator: { field: "mode", value: "check" },
-		logicalCommandId: "AscetComponentEditableCheck",
-		operation: "component_editable_check",
-		jobKind: "read",
-		profileNames: editabilityProfiles,
-		executor: "editability",
-		schemaKey: "check",
-		promptKey: "check",
-	},
-	{
-		id: "set",
-		discriminator: { field: "mode", value: "set" },
-		logicalCommandId: "AscetComponentEditableSet",
-		operation: "component_editable_set",
-		jobKind: "write",
-		permission: getAscetEditPermissionDescriptor("set")!,
-		profileNames: editabilityProfiles,
-		executor: "editability",
-		schemaKey: "set",
-		promptKey: "set",
-	},
-] as const satisfies readonly AscetEditActionContract[];
-
-const actionById = new Map(ascetEditActions.map((action) => [action.id, action]));
-
-export function listAscetEditActions(): readonly AscetEditActionContract[] {
-	return ascetEditActions;
+function isAscetEditActionId(value: string): value is AscetEditActionId {
+	return Object.hasOwn(editExecutorByAction, value);
 }
 
-export function getAscetEditAction(id: AscetEditActionId): AscetEditActionContract | undefined {
-	return actionById.get(id);
+function toRuntimeAction(id: AscetEditActionId): AscetEditRuntimeAction {
+	return {
+		id,
+		discriminator: { field: id === "check" || id === "set" ? "mode" : "action", value: id },
+		jobKind: id === "check" ? "read" : "write",
+		permission: getAscetEditPermissionDescriptor(id),
+		executor: editExecutorByAction[id],
+	};
+}
+
+export function listAscetEditActions(): readonly AscetEditRuntimeAction[] {
+	return Object.keys(editExecutorByAction).map((id) => toRuntimeAction(id as AscetEditActionId));
+}
+
+export function getAscetEditAction(id: AscetEditActionId): AscetEditRuntimeAction {
+	return toRuntimeAction(id);
 }
 
 export function getAscetEditActionByDiscriminator(
-	field: AscetEditActionContract["discriminator"]["field"],
+	field: AscetEditRuntimeAction["discriminator"]["field"],
 	value: string,
-): AscetEditActionContract | undefined {
-	return ascetEditActions.find(
-		(action) => action.discriminator.field === field && action.discriminator.value === value,
-	);
+): AscetEditRuntimeAction | undefined {
+	if (!isAscetEditActionId(value)) return undefined;
+	const action = toRuntimeAction(value);
+	return action.discriminator.field === field ? action : undefined;
 }

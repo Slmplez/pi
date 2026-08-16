@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using de.etas.cebra.toolAPI.Ascet;
 
@@ -288,7 +289,9 @@ public sealed class AscetLiveContext : IDisposable
 
         return
             String.Equals(left.Name ?? String.Empty, right.Name ?? String.Empty, StringComparison.Ordinal) &&
-            String.Equals(left.Path ?? String.Empty, right.Path ?? String.Empty, StringComparison.Ordinal);
+            String.Equals(left.Path ?? String.Empty, right.Path ?? String.Empty, StringComparison.Ordinal) &&
+            String.Equals(left.CanonicalPath ?? String.Empty, right.CanonicalPath ?? String.Empty, StringComparison.Ordinal) &&
+            String.Equals(left.IdentityStatus ?? String.Empty, right.IdentityStatus ?? String.Empty, StringComparison.Ordinal);
     }
 
     private sealed class DefaultAscetLiveSessionAdapter : IAscetLiveSessionAdapter
@@ -327,11 +330,10 @@ public sealed class AscetLiveContext : IDisposable
                 throw new AscetReadException("database_not_open", operation, "GetCurrentDataBase returned null. Open a database in ASCET first.");
             }
 
-            AscetDatabaseRef databaseRef = new AscetDatabaseRef();
+            AscetDatabaseRef databaseRef;
             try
             {
-                databaseRef.Name = databaseHandle.GetName();
-                databaseRef.Path = tool.GetDataBasePath();
+                databaseRef = AscetDatabaseIdentityResolver.Resolve(databaseHandle, tool);
             }
             catch (Exception ex)
             {
@@ -386,6 +388,9 @@ public sealed class AscetLiveContextSnapshot
         AscetDatabaseRef clone = new AscetDatabaseRef();
         clone.Name = databaseRef.Name;
         clone.Path = databaseRef.Path;
+        clone.CanonicalPath = databaseRef.CanonicalPath;
+        clone.IdentityStatus = databaseRef.IdentityStatus;
+        clone.IdentityIssues = databaseRef.IdentityIssues == null ? null : new List<string>(databaseRef.IdentityIssues);
         return clone;
     }
 }
@@ -427,6 +432,9 @@ internal sealed class AscetLiveBindingSnapshot
         AscetDatabaseRef clone = new AscetDatabaseRef();
         clone.Name = databaseRef.Name;
         clone.Path = databaseRef.Path;
+        clone.CanonicalPath = databaseRef.CanonicalPath;
+        clone.IdentityStatus = databaseRef.IdentityStatus;
+        clone.IdentityIssues = databaseRef.IdentityIssues == null ? null : new List<string>(databaseRef.IdentityIssues);
         return clone;
     }
 }

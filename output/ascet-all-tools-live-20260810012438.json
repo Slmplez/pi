@@ -1,0 +1,829 @@
+{
+  "ok": false,
+  "startedDatabase": "C:\\Repo\\F05_IPB_L2_0429",
+  "root": "TEST\\__pi_all_tools_live_20260810012438",
+  "projectPath": "PlatformLibrary\\Package\\RBF_RemoteBrakeFacade\\Component\\Main\\RBF_Main_ECU_CSW_BB00001",
+  "expectedActionCount": 59,
+  "coveredActionCount": 25,
+  "missing": [
+    "ascet_get.database_catalog",
+    "ascet_get.elements",
+    "ascet_get.component_refs",
+    "ascet_get.bde_edges",
+    "ascet_get.import_binding",
+    "ascet_get.dbitem_refs",
+    "ascet_read.read_code",
+    "ascet_read.read_method_signature",
+    "ascet_read.read_element",
+    "ascet_read.read_implementation",
+    "ascet_read.read_block_diagram",
+    "ascet_read.read_state_machine_flow",
+    "ascet_read.read_dependent_chain",
+    "ascet_read.read_element_dependency",
+    "ascet_read.read",
+    "ascet_diff.diff",
+    "ascet_diff.diff_method",
+    "ascet_diff.diff_component_snapshot",
+    "ascet_diff.diff_state_machine_domain",
+    "ascet_diff.diff_element_spec",
+    "ascet_diff.diff_project_formulas",
+    "ascet_edit.delete_component",
+    "ascet_edit.delete_method",
+    "ascet_edit.delete_folder",
+    "ascet_recover.clear_extension_temp",
+    "ascet_batch_write.batch_set_method_code",
+    "ascet_batch_write.batch_set_element_spec",
+    "ascet_batch_write.batch_create_component",
+    "ascet_batch_write.batch_create_method",
+    "ascet_batch_write.batch_set_project_formula",
+    "ascet_batch_write.batch_delete_component",
+    "ascet_batch_write.batch_delete_method",
+    "ascet_batch_write.batch_create_folder",
+    "ascet_batch_write.batch_delete_folder"
+  ],
+  "failed": [
+    {
+      "key": "ascet_get.database_catalog",
+      "stage": "database_catalog",
+      "tool": "ascet_get",
+      "action": "database_catalog",
+      "success": false,
+      "elapsedMs": 4,
+      "error": {
+        "code": "full_tree_required",
+        "message": "Tree observation 'obs-tree-38760-1786325140647-4' is bounded, partial, or truncated. A complete full Database Tree is required."
+      },
+      "summary": {
+        "tool": "ascet_get",
+        "action": "database_catalog",
+        "command": {
+          "logicalCommandId": "AscetGetDatabaseCatalog",
+          "backendCommandId": "AscetGetDatabaseCatalog",
+          "operation": "get_database_catalog"
+        },
+        "error": {
+          "code": "full_tree_required",
+          "message": "Tree observation 'obs-tree-38760-1786325140647-4' is bounded, partial, or truncated. A complete full Database Tree is required.",
+          "details": {
+            "exitCode": 1
+          }
+        },
+        "diagnostics": {
+          "request": {
+            "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+            "cliPath": "AscetBridge.exe",
+            "args": {
+              "arrayLength": 5
+            }
+          },
+          "exitCode": 1,
+          "timedOut": false
+        }
+      }
+    }
+  ],
+  "cleanupErrors": [
+    {
+      "stage": "main",
+      "message": "ascet_get.database_catalog failed: full_tree_required Tree observation 'obs-tree-38760-1786325140647-4' is bounded, partial, or truncated. A complete full Database Tree is required."
+    }
+  ],
+  "registered": {
+    "base": [
+      "ascet_status",
+      "ascet_capabilities",
+      "ascet_recover",
+      "ascet_scheduler_status",
+      "ascet_get",
+      "ascet_read",
+      "ascet_diff",
+      "ascet_edit",
+      "configure_parameter_dependency_chain"
+    ],
+    "batch": []
+  },
+  "originalFormulaCount": 6,
+  "calls": [
+    {
+      "key": "ascet_status.status",
+      "stage": "status",
+      "tool": "ascet_status",
+      "action": "status",
+      "success": true,
+      "elapsedMs": 746,
+      "status": "ok",
+      "summary": {
+        "summary": "ASCET status: ready\nASCET installation: ready\nASCET mode: bundle\nASCET extension: C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\nASCET source: unresolved\nASCET Bridge: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe\nASCET contracts: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts\ncli-catalog.json: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts\\cli-catalog.json\nASCET DLL: ready\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\Ascetapidll\\Etas.AscetNET.dll\nASCET ToolAPI: ready\n  ASCET live ToolAPI quick self-test\n  elapsedMs: 730\nASCET scheduler: ready\nASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none"
+      }
+    },
+    {
+      "key": "ascet_capabilities.search_actions",
+      "stage": "search_actions",
+      "tool": "ascet_capabilities",
+      "action": "search_actions",
+      "success": true,
+      "elapsedMs": 33,
+      "status": "ok",
+      "summary": {
+        "result": {
+          "items": {
+            "arrayLength": 50,
+            "sample": [
+              {
+                "object": true
+              },
+              {
+                "object": true
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "key": "ascet_scheduler_status.status",
+      "stage": "status",
+      "tool": "ascet_scheduler_status",
+      "action": "status",
+      "success": true,
+      "elapsedMs": 3,
+      "status": "ok",
+      "summary": {
+        "summary": "ASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nRecent:\n- ascet-job-1 ascet_status/selftest agent=system state=succeeded (queueWait=1ms, exec=726ms)\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none"
+      }
+    },
+    {
+      "key": "ascet_scheduler_status.recover",
+      "stage": "recover",
+      "tool": "ascet_scheduler_status",
+      "action": "recover",
+      "success": true,
+      "elapsedMs": 25,
+      "status": "ok",
+      "summary": {
+        "summary": "Recovery: succeeded\n\nASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nRecent:\n- ascet-job-1 ascet_status/selftest agent=system state=succeeded (queueWait=1ms, exec=726ms)\n- ascet-job-2 AscetSchedulerMaintenance/recover agent=system state=succeeded (queueWait=0ms, exec=22ms)\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none"
+      }
+    },
+    {
+      "key": "ascet_recover.status",
+      "stage": "status",
+      "tool": "ascet_recover",
+      "action": "status",
+      "success": true,
+      "elapsedMs": 378,
+      "status": "ok",
+      "summary": {
+        "status": {
+          "summary": "ASCET status: ready\nASCET installation: ready\nASCET mode: bundle\nASCET extension: C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\nASCET source: unresolved\nASCET Bridge: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe\nASCET contracts: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts\ncli-catalog.json: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts\\cli-catalog.json\nASCET DLL: ready\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\Ascetapidll\\Etas.AscetNET.dll\nASCET ToolAPI: ready\n  ASCET live ToolAPI quick self-test\n  elapsedMs: 376\nASCET scheduler: ready\nASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nRecent:\n- ascet-job-1 ascet_status/selftest agent=system state=succeeded (queueWait=1ms, exec=726ms)\n- ascet-job-2 AscetSchedulerMaintenance/recover agent=system state=succeeded (queueWait=0ms, exec=22ms)\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none"
+        }
+      }
+    },
+    {
+      "key": "ascet_recover.scheduler_status",
+      "stage": "scheduler_status",
+      "tool": "ascet_recover",
+      "action": "scheduler_status",
+      "success": true,
+      "elapsedMs": 2,
+      "status": "ok",
+      "summary": {
+        "schedulerStatus": {
+          "summary": "ASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nRecent:\n- ascet-job-1 ascet_status/selftest agent=system state=succeeded (queueWait=1ms, exec=726ms)\n- ascet-job-2 AscetSchedulerMaintenance/recover agent=system state=succeeded (queueWait=0ms, exec=22ms)\n- ascet-job-3 ascet_status/selftest agent=system state=succeeded (queueWait=0ms, exec=374ms)\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none"
+        }
+      }
+    },
+    {
+      "key": "ascet_recover.scheduler_recover",
+      "stage": "scheduler_recover",
+      "tool": "ascet_recover",
+      "action": "scheduler_recover",
+      "success": true,
+      "elapsedMs": 22,
+      "status": "ok",
+      "summary": {
+        "schedulerStatus": {
+          "summary": "Recovery: succeeded\n\nASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nRecent:\n- ascet-job-1 ascet_status/selftest agent=system state=succeeded (queueWait=1ms, exec=726ms)\n- ascet-job-2 AscetSchedulerMaintenance/recover agent=system state=succeeded (queueWait=0ms, exec=22ms)\n- ascet-job-3 ascet_status/selftest agent=system state=succeeded (queueWait=0ms, exec=374ms)\n- ascet-job-4 AscetSchedulerMaintenance/recover agent=system state=succeeded (queueWait=0ms, exec=19ms)\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none"
+        }
+      }
+    },
+    {
+      "key": "ascet_recover.clear_stale_cli_lock",
+      "stage": "clear_stale_cli_lock",
+      "tool": "ascet_recover",
+      "action": "clear_stale_cli_lock",
+      "success": true,
+      "elapsedMs": 0,
+      "status": "ok",
+      "summary": {
+        "staleLockCleared": false
+      }
+    },
+    {
+      "key": "ascet_get.formulas",
+      "stage": "formulas",
+      "tool": "ascet_get",
+      "action": "formulas",
+      "success": true,
+      "elapsedMs": 526,
+      "summary": {
+        "coverage": {
+          "status": "complete_for_scope"
+        },
+        "truncated": false,
+        "items": {
+          "arrayLength": 6,
+          "sample": [
+            {
+              "path": "PlatformLibrary/Package/RBF_RemoteBrakeFacade/Component/Main/RBF_Main_ECU_CSW_BB00001::IDENTITY",
+              "oid": "040gpc86cpqg1og70kah02dslo300",
+              "name": "IDENTITY",
+              "type": "identity",
+              "unit": "-",
+              "contents": "f(phys) = phys"
+            },
+            {
+              "path": "PlatformLibrary/Package/RBF_RemoteBrakeFacade/Component/Main/RBF_Main_ECU_CSW_BB00001::Revolution_RPM_P2expNEG2",
+              "oid": "040gpc86cpqg1og70kah02dslo300",
+              "name": "Revolution_RPM_P2expNEG2",
+              "type": "linear",
+              "unit": "rpm",
+              "contents": "f(phys) = 0 + 0.25 * phys",
+              "parameters": {
+                "arrayLength": 2
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "key": "ascet_edit.create_folder",
+      "stage": "create_root",
+      "tool": "ascet_edit",
+      "action": "create_folder",
+      "success": true,
+      "elapsedMs": 585,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.create_component",
+      "stage": "create_component:TEST\\__pi_all_tools_live_20260810012438\\ClassA",
+      "tool": "ascet_edit",
+      "action": "create_component",
+      "success": true,
+      "elapsedMs": 739,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.create_component",
+      "stage": "create_component:TEST\\__pi_all_tools_live_20260810012438\\ClassB",
+      "tool": "ascet_edit",
+      "action": "create_component",
+      "success": true,
+      "elapsedMs": 724,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.create_component",
+      "stage": "create_component:TEST\\__pi_all_tools_live_20260810012438\\ModuleA",
+      "tool": "ascet_edit",
+      "action": "create_component",
+      "success": true,
+      "elapsedMs": 428,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.create_component",
+      "stage": "create_component:TEST\\__pi_all_tools_live_20260810012438\\StateMachineA",
+      "tool": "ascet_edit",
+      "action": "create_component",
+      "success": true,
+      "elapsedMs": 652,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.create_component",
+      "stage": "create_component:TEST\\__pi_all_tools_live_20260810012438\\EnumA",
+      "tool": "ascet_edit",
+      "action": "create_component",
+      "success": true,
+      "elapsedMs": 453,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.create_component",
+      "stage": "create_component:TEST\\__pi_all_tools_live_20260810012438\\Provider",
+      "tool": "ascet_edit",
+      "action": "create_component",
+      "success": true,
+      "elapsedMs": 806,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.create_component",
+      "stage": "create_component:TEST\\__pi_all_tools_live_20260810012438\\Consumer",
+      "tool": "ascet_edit",
+      "action": "create_component",
+      "success": true,
+      "elapsedMs": 632,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.check",
+      "stage": "check",
+      "tool": "ascet_edit",
+      "action": "check",
+      "success": true,
+      "elapsedMs": 312,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.set",
+      "stage": "set_editable",
+      "tool": "ascet_edit",
+      "action": "set",
+      "success": true,
+      "elapsedMs": 441,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.create_method",
+      "stage": "create_method:TEST\\__pi_all_tools_live_20260810012438\\ClassA",
+      "tool": "ascet_edit",
+      "action": "create_method",
+      "success": true,
+      "elapsedMs": 762,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.set_method_signature",
+      "stage": "set_signature:TEST\\__pi_all_tools_live_20260810012438\\ClassA",
+      "tool": "ascet_edit",
+      "action": "set_method_signature",
+      "success": true,
+      "elapsedMs": 552,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.create_method",
+      "stage": "create_method:TEST\\__pi_all_tools_live_20260810012438\\ClassB",
+      "tool": "ascet_edit",
+      "action": "create_method",
+      "success": true,
+      "elapsedMs": 463,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.set_method_signature",
+      "stage": "set_signature:TEST\\__pi_all_tools_live_20260810012438\\ClassB",
+      "tool": "ascet_edit",
+      "action": "set_method_signature",
+      "success": true,
+      "elapsedMs": 618,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.set_method_code",
+      "stage": "set_method_code:A",
+      "tool": "ascet_edit",
+      "action": "set_method_code",
+      "success": true,
+      "elapsedMs": 712,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.set_method_code",
+      "stage": "set_method_code:B",
+      "tool": "ascet_edit",
+      "action": "set_method_code",
+      "success": true,
+      "elapsedMs": 1113,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.create_method",
+      "stage": "create_module_method",
+      "tool": "ascet_edit",
+      "action": "create_method",
+      "success": true,
+      "elapsedMs": 767,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.set_module_code",
+      "stage": "set_module_code",
+      "tool": "ascet_edit",
+      "action": "set_module_code",
+      "success": true,
+      "elapsedMs": 826,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.create_method",
+      "stage": "create_state_method",
+      "tool": "ascet_edit",
+      "action": "create_method",
+      "success": true,
+      "elapsedMs": 705,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.set_state_machine_code",
+      "stage": "set_state_machine_code",
+      "tool": "ascet_edit",
+      "action": "set_state_machine_code",
+      "success": true,
+      "elapsedMs": 833,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.set_enumerators",
+      "stage": "set_enumerators",
+      "tool": "ascet_edit",
+      "action": "set_enumerators",
+      "success": true,
+      "elapsedMs": 405,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.apply_element_spec",
+      "stage": "apply_element_spec:plan",
+      "tool": "ascet_edit",
+      "action": "apply_element_spec",
+      "success": true,
+      "elapsedMs": 1706,
+      "status": "preflight",
+      "summary": {
+        "status": "preflight"
+      }
+    },
+    {
+      "key": "ascet_edit.apply_element_spec",
+      "stage": "apply_element_spec:commit",
+      "tool": "ascet_edit",
+      "action": "apply_element_spec",
+      "success": true,
+      "elapsedMs": 2732,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.set_element_dependency",
+      "stage": "set_element_dependency:plan",
+      "tool": "ascet_edit",
+      "action": "set_element_dependency",
+      "success": true,
+      "elapsedMs": 664,
+      "status": "preflight",
+      "summary": {
+        "status": "preflight"
+      }
+    },
+    {
+      "key": "ascet_edit.set_element_dependency",
+      "stage": "set_element_dependency:commit",
+      "tool": "ascet_edit",
+      "action": "set_element_dependency",
+      "success": true,
+      "elapsedMs": 1811,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "configure_parameter_dependency_chain.plan",
+      "stage": "chain:plan",
+      "tool": "configure_parameter_dependency_chain",
+      "action": "plan",
+      "success": true,
+      "elapsedMs": 3196,
+      "status": "planned",
+      "summary": {
+        "status": "planned",
+        "mode": "plan",
+        "planId": "a7df36b5-d3a6-41ae-a324-71b5790e6c28"
+      }
+    },
+    {
+      "key": "configure_parameter_dependency_chain.commit",
+      "stage": "chain:commit",
+      "tool": "configure_parameter_dependency_chain",
+      "action": "commit",
+      "success": true,
+      "elapsedMs": 7361,
+      "status": "committed",
+      "summary": {
+        "status": "committed",
+        "mode": "commit",
+        "planId": "a7df36b5-d3a6-41ae-a324-71b5790e6c28"
+      }
+    },
+    {
+      "key": "ascet_edit.apply_project_formula",
+      "stage": "apply_project_formula:direct",
+      "tool": "ascet_edit",
+      "action": "apply_project_formula",
+      "success": true,
+      "elapsedMs": 1061,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_get.tree",
+      "stage": "tree:fixture",
+      "tool": "ascet_get",
+      "action": "tree",
+      "success": true,
+      "elapsedMs": 351,
+      "summary": {
+        "coverage": {
+          "status": "complete_for_scope"
+        },
+        "truncated": false,
+        "items": {
+          "arrayLength": 8,
+          "sample": [
+            {
+              "path": "TEST/__pi_all_tools_live_20260810012438",
+              "oid": "040g00001g001qg71051nk4ncpu04",
+              "kind": "folder"
+            },
+            {
+              "path": "TEST/__pi_all_tools_live_20260810012438/ClassB",
+              "oid": "040g00001g001qg71051nk4te6204",
+              "kind": "class"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "key": "ascet_get.tree",
+      "stage": "tree:full",
+      "tool": "ascet_get",
+      "action": "tree",
+      "success": true,
+      "elapsedMs": 27623,
+      "summary": {
+        "coverage": {
+          "status": "complete_for_scope"
+        },
+        "truncated": false,
+        "items": {
+          "arrayLength": 10678,
+          "sample": [
+            {
+              "path": "CN_Library/BrakeRedundancy",
+              "oid": "040g006135cg1qg70geh61vrnd5p6",
+              "kind": "folder"
+            },
+            {
+              "path": "CN_Library/BrakeRedundancy/Parameter",
+              "oid": "040g006135cg1qg70geh61vrnd696",
+              "kind": "folder"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "key": "ascet_get.database_catalog",
+      "stage": "database_catalog",
+      "tool": "ascet_get",
+      "action": "database_catalog",
+      "success": false,
+      "elapsedMs": 4,
+      "error": {
+        "code": "full_tree_required",
+        "message": "Tree observation 'obs-tree-38760-1786325140647-4' is bounded, partial, or truncated. A complete full Database Tree is required."
+      },
+      "summary": {
+        "tool": "ascet_get",
+        "action": "database_catalog",
+        "command": {
+          "logicalCommandId": "AscetGetDatabaseCatalog",
+          "backendCommandId": "AscetGetDatabaseCatalog",
+          "operation": "get_database_catalog"
+        },
+        "error": {
+          "code": "full_tree_required",
+          "message": "Tree observation 'obs-tree-38760-1786325140647-4' is bounded, partial, or truncated. A complete full Database Tree is required.",
+          "details": {
+            "exitCode": 1
+          }
+        },
+        "diagnostics": {
+          "request": {
+            "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+            "cliPath": "AscetBridge.exe",
+            "args": {
+              "arrayLength": 5
+            }
+          },
+          "exitCode": 1,
+          "timedOut": false
+        }
+      }
+    },
+    {
+      "key": "ascet_edit.apply_project_formula",
+      "stage": "cleanup:restore_formulas",
+      "tool": "ascet_edit",
+      "action": "apply_project_formula",
+      "success": true,
+      "elapsedMs": 931,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.delete_component",
+      "stage": "cleanup:delete_component:TEST\\__pi_all_tools_live_20260810012438\\Batch\\BatchClass",
+      "tool": "ascet_edit",
+      "action": "delete_component",
+      "success": true,
+      "elapsedMs": 393,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.delete_component",
+      "stage": "cleanup:delete_component:TEST\\__pi_all_tools_live_20260810012438\\Consumer",
+      "tool": "ascet_edit",
+      "action": "delete_component",
+      "success": true,
+      "elapsedMs": 697,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.delete_component",
+      "stage": "cleanup:delete_component:TEST\\__pi_all_tools_live_20260810012438\\Provider",
+      "tool": "ascet_edit",
+      "action": "delete_component",
+      "success": true,
+      "elapsedMs": 494,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.delete_component",
+      "stage": "cleanup:delete_component:TEST\\__pi_all_tools_live_20260810012438\\EnumA",
+      "tool": "ascet_edit",
+      "action": "delete_component",
+      "success": true,
+      "elapsedMs": 692,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.delete_component",
+      "stage": "cleanup:delete_component:TEST\\__pi_all_tools_live_20260810012438\\StateMachineA",
+      "tool": "ascet_edit",
+      "action": "delete_component",
+      "success": true,
+      "elapsedMs": 738,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.delete_component",
+      "stage": "cleanup:delete_component:TEST\\__pi_all_tools_live_20260810012438\\ModuleA",
+      "tool": "ascet_edit",
+      "action": "delete_component",
+      "success": true,
+      "elapsedMs": 509,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.delete_component",
+      "stage": "cleanup:delete_component:TEST\\__pi_all_tools_live_20260810012438\\ClassB",
+      "tool": "ascet_edit",
+      "action": "delete_component",
+      "success": true,
+      "elapsedMs": 752,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.delete_component",
+      "stage": "cleanup:delete_component:TEST\\__pi_all_tools_live_20260810012438\\ClassA",
+      "tool": "ascet_edit",
+      "action": "delete_component",
+      "success": true,
+      "elapsedMs": 771,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.delete_folder",
+      "stage": "cleanup:delete_batch_root",
+      "tool": "ascet_edit",
+      "action": "delete_folder",
+      "success": true,
+      "elapsedMs": 424,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    },
+    {
+      "key": "ascet_edit.delete_folder",
+      "stage": "cleanup:delete_root",
+      "tool": "ascet_edit",
+      "action": "delete_folder",
+      "success": true,
+      "elapsedMs": 680,
+      "status": "ok",
+      "summary": {
+        "status": "ok"
+      }
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "status": "applied",
+  "databaseFingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c",
+  "targetOid": "040qm00000001p870c4hh6qubos40",
+  "targetKind": "class",
+  "canonicalPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill",
+  "action": "delete_method",
+  "planId": "72bc63c5-9ab9-44fc-856e-29a39557699f",
+  "planFingerprint": "aa193fe9b5028778aab2f932b658b2df94fe029600fab1b294f18b76aff70449",
+  "targetImpactFingerprint": "sha256:3642a712820cb426f71721a8b2d378cef6948f8b5a6cbb6b6fa88e05455e7b75",
+  "guardGeneration": 0,
+  "beforeSnapshotFingerprint": "sha256:7eef1bbc46d20139132ba45568a1c14b15f688f9393a506b9aa1e72e4048fabb",
+  "desiredFingerprint": "sha256:a0d449291828ea1aa2ef194889b946780fd6134ca50f151551cbd5dba85bdf7b",
+  "beforeSnapshot": {
+    "operation": "authoritative_single_call_preflight",
+    "validated": true,
+    "authoritativePlan": {
+      "operation": "registered_guarded_operation_preflight",
+      "validated": true,
+      "result": {
+        "targetPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill",
+        "editable": true,
+        "capability": {
+          "status": "supported",
+          "source": "registered_closed_operation"
+        },
+        "readbackAvailable": true,
+        "noOp": false
+      }
+    },
+    "normalizedEvidence": {
+      "version": 1,
+      "action": "delete_method",
+      "paramsFingerprint": "a0d449291828ea1aa2ef194889b946780fd6134ca50f151551cbd5dba85bdf7b",
+      "database": {
+        "path": "C:\\Repo\\F05_IPB_L2_0429",
+        "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+      },
+      "target": {
+        "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill",
+        "oid": "040qm00000001p870c4hh6qubos40",
+        "kind": "class"
+      },
+      "impact": {
+        "complete": true,
+        "sharedObject": false,
+        "ownerPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill",
+        "affectedProjects": [],
+        "fingerprint": "sha256:3642a712820cb426f71721a8b2d378cef6948f8b5a6cbb6b6fa88e05455e7b75"
+      },
+      "capability": {
+        "status": "supported",
+        "operation": "registered_guarded_operation_preflight",
+        "evidence": {
+          "status": "supported",
+          "source": "registered_closed_operation"
+        }
+      },
+      "editability": {
+        "applicable": true,
+        "status": "editable",
+        "canRequestEditable": false
+      },
+      "effects": [
+        {
+          "kind": "delete_method",
+          "target": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill",
+          "description": "delete_method: Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill"
+        }
+      ],
+      "verification": {
+        "available": true,
+        "operation": "delete_method_readback",
+        "target": {
+          "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill"
+        }
+      },
+      "riskModifiers": [],
+      "noOp": false,
+      "generatedAt": "2026-08-15T04:57:05.848Z",
+      "approvalMaterialFingerprint": "7d642000cfa0429fe92dcbb082fc481bfcb7aae8c42acf65014933f7022df46a"
+    },
+    "permissionMode": "default",
+    "permissionDecision": "ask",
+    "risk": "high",
+    "approvedAt": "2026-08-15T04:55:55.948Z",
+    "revalidatedAt": "2026-08-15T04:57:05.849Z",
+    "targetIdentity": {
+      "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill",
+      "oid": "040qm00000001p870c4hh6qubos40",
+      "kind": "class"
+    },
+    "targetImpactFingerprint": "sha256:3642a712820cb426f71721a8b2d378cef6948f8b5a6cbb6b6fa88e05455e7b75"
+  },
+  "attemptedMutation": {
+    "action": "delete_method",
+    "componentPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill",
+    "methodName": "PiCompoundMethod",
+    "ifMissing": "ignore"
+  },
+  "createdAt": "2026-08-15T04:57:05.873Z",
+  "updatedAt": "2026-08-15T04:57:07.121Z",
+  "evidence": {
+    "bridgeEntered": true,
+    "backendResponseReceived": true,
+    "mutationStarted": true
+  },
+  "outcome": {
+    "operationId": "delete_method"
+  }
+}

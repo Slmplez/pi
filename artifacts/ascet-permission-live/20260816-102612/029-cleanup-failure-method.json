@@ -1,0 +1,72 @@
+{
+  "stage": "cleanup-failure-method",
+  "startedAt": "2026-08-16T02:38:46.082Z",
+  "finishedAt": "2026-08-16T02:39:07.901Z",
+  "request": {
+    "toolName": "ascet_edit",
+    "params": {
+      "action": "delete_method",
+      "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+      "methodName": "PiForcedFailure",
+      "ifMissing": "ignore",
+      "intent": "apply"
+    },
+    "permissionMode": "default",
+    "rules": []
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"status\": \"blocked\",\n  \"permission\": {\n    \"mode\": \"default\",\n    \"decision\": \"not_evaluated\"\n  },\n  \"preflight\": {\n    \"status\": \"not_run\"\n  },\n  \"editability\": {\n    \"status\": \"not_applicable\"\n  },\n  \"mutation\": {\n    \"status\": \"not_started\"\n  },\n  \"verification\": {\n    \"status\": \"not_applicable\"\n  },\n  \"error\": {\n    \"code\": \"mutation_target_quarantined\",\n    \"message\": \"Target OID 040g060kg0001k070o6g5us4p0eg2 is quarantined and requires reconciliation.\"\n  },\n  \"bridge\": {\n    \"beforeBridge\": false,\n    \"bridgeEntered\": false,\n    \"backendResponseReceived\": false\n  },\n  \"recovery\": {\n    \"required\": false\n  }\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "blocked",
+        "code": "mutation_target_quarantined",
+        "message": "Target OID 040g060kg0001k070o6g5us4p0eg2 is quarantined and requires reconciliation."
+      },
+      "mutationResult": {
+        "status": "blocked",
+        "permission": {
+          "mode": "default",
+          "decision": "not_evaluated"
+        },
+        "preflight": {
+          "status": "not_run"
+        },
+        "editability": {
+          "status": "not_applicable"
+        },
+        "mutation": {
+          "status": "not_started"
+        },
+        "verification": {
+          "status": "not_applicable"
+        },
+        "error": {
+          "code": "mutation_target_quarantined",
+          "message": "Target OID 040g060kg0001k070o6g5us4p0eg2 is quarantined and requires reconciliation."
+        },
+        "bridge": {
+          "beforeBridge": false,
+          "bridgeEntered": false,
+          "backendResponseReceived": false
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      },
+      "tool": "ascet_edit",
+      "action": "delete_method",
+      "command": {
+        "logicalCommandId": "AscetDeleteMethod",
+        "backendCommandId": "AscetDeleteMethod",
+        "operation": "delete_method"
+      },
+      "diagnostics": {}
+    }
+  }
+}

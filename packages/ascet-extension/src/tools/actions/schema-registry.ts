@@ -1,6 +1,14 @@
 import type { TSchema } from "typebox";
 
-export const ascetSchemaDiscriminatorKeys = ["action", "mode", "phase", "intent", "scope", "objectKind"] as const;
+export const ascetSchemaDiscriminatorKeys = [
+	"action",
+	"mode",
+	"operation",
+	"phase",
+	"intent",
+	"scope",
+	"objectKind",
+] as const;
 
 export type AscetSchemaDiscriminatorKey = (typeof ascetSchemaDiscriminatorKeys)[number];
 
@@ -26,7 +34,7 @@ export type AscetSchemaVariantSelection =
 	  }
 	| {
 			status: "unknown_discriminator";
-			field: "action" | "mode";
+			field: "action" | "mode" | "operation";
 			value: string;
 			expected: readonly string[];
 	  }
@@ -119,7 +127,13 @@ export function selectAscetPublicSchemaVariants(schema: TSchema, params: unknown
 
 	let selected = variants;
 	const primaryField =
-		typeof params.action === "string" ? "action" : typeof params.mode === "string" ? "mode" : undefined;
+		typeof params.action === "string"
+			? "action"
+			: typeof params.mode === "string"
+				? "mode"
+				: typeof params.operation === "string"
+					? "operation"
+					: undefined;
 	if (primaryField) {
 		const primaryValue = params[primaryField] as string;
 		const matching = variantsMatching(selected, primaryField, primaryValue);

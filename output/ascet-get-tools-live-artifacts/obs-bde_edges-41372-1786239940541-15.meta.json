@@ -1,0 +1,17 @@
+{
+  "resultId": "obs-bde_edges-41372-1786239940541-15",
+  "domain": "bde_edges",
+  "target": {
+    "path": "PlatformLibrary\\Package\\EMC_EmergencyModeControl\\Component\\Main\\EMC_Drive_Main20ms",
+    "diagramName": "Main"
+  },
+  "itemCount": 44,
+  "coverage": {
+    "status": "complete_for_scope",
+    "foldersVisited": 0,
+    "componentsScanned": 1
+  },
+  "truncated": false,
+  "source": "live",
+  "capturedAt": "2026-08-09T01:45:40.541Z"
+}

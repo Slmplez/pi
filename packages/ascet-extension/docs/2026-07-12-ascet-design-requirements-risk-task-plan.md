@@ -298,7 +298,7 @@ Refresh the cache when source file size or `mtimeMs` changes.
 
 **Steps:**
 
-1. Add `exceljs` to `@zeerke/ascet-copilot-extension` dependencies.
+1. Add `exceljs` to `@vaf-agentworks/ascet-copilot-extension` dependencies.
 2. Run the workspace install command used by this repository.
 3. Confirm `exceljs` is present in the lockfile.
 
@@ -698,7 +698,7 @@ Status: implemented in first pass.
 
 Completed:
 
-- Added exact `exceljs` dependency to `@zeerke/ascet-copilot-extension`.
+- Added exact `exceljs` dependency to `@vaf-agentworks/ascet-copilot-extension`.
 - Added `ascet_requirements` as a registered sequential read-only model tool.
 - Added `.xlsx` reader, schema profiler, workspace discovery, row normalizer, search/scoring, relation expansion, and risk-context builder.
 - Added evidence-bearing risk output for Supplier Comments, Bosch Defect, COEM SWIM, LL, direct relations, and inferred relation leads.

@@ -1,0 +1,477 @@
+{
+  "generated_at": "2026-04-01T03:07:44.025810Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\CCodeEditorEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\markdown",
+  "input_html_count": 77,
+  "converted_html_count": 77,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 79,
+  "toc_entries_count": 93,
+  "index_entries_count": 109,
+  "index_required": true,
+  "mappings": [
+    {
+      "html_rel_path": "adding_headerfile.htm",
+      "md_rel_path": "adding_headerfile.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Accessing_Elements.htm",
+      "md_rel_path": "CC_Accessing_Elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Acess_to_Private_Methods.htm",
+      "md_rel_path": "CC_Acess_to_Private_Methods.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Arguments.htm",
+      "md_rel_path": "CC_Arguments.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Arrays_and_Matrices.htm",
+      "md_rel_path": "CC_Arrays_and_Matrices.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Automatic_define_Statements_InstanceVariables.htm",
+      "md_rel_path": "CC_Automatic_define_Statements_InstanceVariables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Browse_View.htm",
+      "md_rel_path": "CC_Browse_View.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Build_Menu.htm",
+      "md_rel_path": "CC_Build_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "cc_c_code_components.htm",
+      "md_rel_path": "cc_c_code_components.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Characteristic_Lines.htm",
+      "md_rel_path": "CC_Characteristic_Lines.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Characteristic_Maps.htm",
+      "md_rel_path": "CC_Characteristic_Maps.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_close_external_editor.htm",
+      "md_rel_path": "CC_close_external_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "cc_componentpane.htm",
+      "md_rel_path": "cc_componentpane.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "cc_contextmenu_browseview.htm",
+      "md_rel_path": "cc_contextmenu_browseview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "cc_contextmenu_componentselements.htm",
+      "md_rel_path": "cc_contextmenu_componentselements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "cc_contextmenu_diagrammethods.htm",
+      "md_rel_path": "cc_contextmenu_diagrammethods.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_ContextMenu_SpecificationView.htm",
+      "md_rel_path": "CC_ContextMenu_SpecificationView.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_copy_code_from.htm",
+      "md_rel_path": "CC_copy_code_from.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Description_of_Window_Elements.htm",
+      "md_rel_path": "CC_Description_of_Window_Elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Direct_Acess.htm",
+      "md_rel_path": "CC_Direct_Acess.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_edit.htm",
+      "md_rel_path": "CC_edit.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_edit_code.htm",
+      "md_rel_path": "CC_edit_code.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_EditMenu_ExternalSourceEditor.htm",
+      "md_rel_path": "CC_EditMenu_ExternalSourceEditor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Elements_Palette.htm",
+      "md_rel_path": "CC_Elements_Palette.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Example__Messages.htm",
+      "md_rel_path": "CC_Example__Messages.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_External_Editor_View.htm",
+      "md_rel_path": "CC_External_Editor_View.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_External_Source_Code.htm",
+      "md_rel_path": "CC_External_Source_Code.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_External_Source_Editor.htm",
+      "md_rel_path": "CC_External_Source_Editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Extras_Menu.htm",
+      "md_rel_path": "CC_Extras_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_File_Menu.htm",
+      "md_rel_path": "CC_File_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_FileMenu_ExternalSourceEditor.htm",
+      "md_rel_path": "CC_FileMenu_ExternalSourceEditor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "cc_filtering_the_component_pane.htm",
+      "md_rel_path": "cc_filtering_the_component_pane.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Header.htm",
+      "md_rel_path": "CC_Header.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Help_Menu.htm",
+      "md_rel_path": "CC_Help_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "cc_includecomponent_blocklibrary.htm",
+      "md_rel_path": "cc_includecomponent_blocklibrary.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Insert_Menu.htm",
+      "md_rel_path": "CC_Insert_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Length_of_Arrays.htm",
+      "md_rel_path": "CC_Length_of_Arrays.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Library_Palette.htm",
+      "md_rel_path": "CC_Library_Palette.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Local_Variables.htm",
+      "md_rel_path": "CC_Local_Variables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Making_Arrays_Avaiable_for_Usage_in_External_C-Code.htm",
+      "md_rel_path": "CC_Making_Arrays_Avaiable_for_Usage_in_External_C-Code.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_menu_bar.htm",
+      "md_rel_path": "CC_menu_bar.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Messages.htm",
+      "md_rel_path": "CC_Messages.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "cc_methods_and_processes.htm",
+      "md_rel_path": "cc_methods_and_processes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Overview.htm",
+      "md_rel_path": "CC_Overview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Overview_-_Access_Macros.htm",
+      "md_rel_path": "CC_Overview_-_Access_Macros.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Overview_VariablesFunctionParameters.htm",
+      "md_rel_path": "CC_Overview_VariablesFunctionParameters.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Palettes.htm",
+      "md_rel_path": "CC_Palettes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "cc_programming_model_interface.htm",
+      "md_rel_path": "cc_programming_model_interface.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Resource_Access.htm",
+      "md_rel_path": "CC_Resource_Access.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_saving_method.htm",
+      "md_rel_path": "CC_saving_method.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_SearchDeleteUnusedElements.htm",
+      "md_rel_path": "CC_SearchDeleteUnusedElements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_SearchResultsView.htm",
+      "md_rel_path": "CC_SearchResultsView.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "cc_selectdefaultmethodprocess.htm",
+      "md_rel_path": "cc_selectdefaultmethodprocess.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Specification_View.htm",
+      "md_rel_path": "CC_Specification_View.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_specifying_method.htm",
+      "md_rel_path": "CC_specifying_method.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "cc_structure.htm",
+      "md_rel_path": "cc_structure.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Toolbar_Elements.htm",
+      "md_rel_path": "CC_Toolbar_Elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Toolbar_General.htm",
+      "md_rel_path": "CC_Toolbar_General.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Toolbars.htm",
+      "md_rel_path": "CC_Toolbars.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Tools_Menu.htm",
+      "md_rel_path": "CC_Tools_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "cc_used.htm",
+      "md_rel_path": "cc_used.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_using_CCode_component.htm",
+      "md_rel_path": "CC_using_CCode_component.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_view.htm",
+      "md_rel_path": "CC_view.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Window_Menu.htm",
+      "md_rel_path": "CC_Window_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CC_Working_with_Basic_Elements.htm",
+      "md_rel_path": "CC_Working_with_Basic_Elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "codegen_dbtoolarge.htm",
+      "md_rel_path": "codegen_dbtoolarge.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "copy_ccode_single.htm",
+      "md_rel_path": "copy_ccode_single.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "creating_c_code.htm",
+      "md_rel_path": "creating_c_code.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "creating_method_process.htm",
+      "md_rel_path": "creating_method_process.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "end-external-editor.htm",
+      "md_rel_path": "end-external-editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "external_editor.htm",
+      "md_rel_path": "external_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "integrating_external_source.htm",
+      "md_rel_path": "integrating_external_source.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "open-external-editor.htm",
+      "md_rel_path": "open-external-editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "printing_ccode.htm",
+      "md_rel_path": "printing_ccode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "search_replace_ccode.htm",
+      "md_rel_path": "search_replace_ccode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "testing-external_module.htm",
+      "md_rel_path": "testing-external_module.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "using_external_source.htm",
+      "md_rel_path": "using_external_source.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

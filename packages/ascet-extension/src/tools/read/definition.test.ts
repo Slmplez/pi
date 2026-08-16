@@ -27,7 +27,17 @@ function makeDependentChainExecution(request: AscetCliRequest): AscetCliExecutio
 			result: {
 				component: "DEMO\\Consumer",
 				dependent: { name: "K_Effective" },
-				inputs: [],
+				inputs: [
+					{
+						value: { name: "P_K_Effective", scope: "imported" },
+						export: {
+							exists: true,
+							name: "P_K_Effective",
+							scope: "exported",
+							owner: "DEMO\\Provider",
+						},
+					},
+				],
 				complete: true,
 			},
 			error: null,
@@ -224,6 +234,7 @@ describe("ascet_read tool", () => {
 				action: "read_dependent_chain",
 				componentPath: "DEMO\\Consumer",
 				dependentElement: "C_K_Effective",
+				exporterComponentPath: "DEMO\\Provider",
 			},
 			new AbortController().signal,
 			undefined,
@@ -287,10 +298,14 @@ describe("ascet_read tool", () => {
 			calls.map((args) => args[1]),
 			["read_dependent_chain", "read_element_catalog", "read_element_dependency"],
 		);
-		const text = result.content[0]?.text ?? "";
-		assert.match(text, /"status": "partial"/);
-		assert.match(text, /xml_export_failed/);
-		assert.match(text, /F_K_Effective/);
+		assert.deepEqual(JSON.parse(result.content[0]?.text ?? "{}"), {
+			found: false,
+			error: {
+				code: "incomplete_chain",
+				message: "The existing dependency metadata is incomplete.",
+			},
+		});
+		assert.equal("data" in result.details, false);
 	});
 
 	test("read_dependent_chain performs one exact live read without provider discovery", async () => {
@@ -317,6 +332,14 @@ describe("ascet_read tool", () => {
 		assert.deepEqual(calls, [
 			["exec", "read_dependent_chain", "DEMO\\Consumer", "K_Effective", "--exporter", "DEMO\\Provider", "--json"],
 		]);
-		assert.match(result.content[0]?.text ?? "", /DEMO[\\/]Consumer/);
+		assert.deepEqual(JSON.parse(result.content[0]?.text ?? "{}"), {
+			found: true,
+			chain: {
+				local: { componentPath: "DEMO\\Consumer", element: "K_Effective" },
+				imported: { componentPath: "DEMO\\Consumer", element: "P_K_Effective" },
+				exported: { componentPath: "DEMO\\Provider", element: "P_K_Effective" },
+			},
+		});
+		assert.equal("data" in result.details, false);
 	});
 });

@@ -1,0 +1,442 @@
+{
+  "ok": false,
+  "folder": "TEST\\__pi_element_live_20260808054044",
+  "stages": [
+    {
+      "name": "create_folder",
+      "data": {
+        "status": "ok",
+        "data": {
+          "changed": {
+            "folderPath": "TEST\\__pi_element_live_20260808054044",
+            "created": true,
+            "createdCount": 1,
+            "existingCount": 1,
+            "verifyReadbackRequested": true,
+            "readbackVerified": true,
+            "summary": "Created folder path 'TEST\\__pi_element_live_20260808054044' (1 created, 1 existing)."
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    },
+    {
+      "name": "create:TEST\\__pi_element_live_20260808054044\\Inline",
+      "data": {
+        "status": "ok",
+        "data": {
+          "changed": {
+            "operationName": "create_component",
+            "sequenceNumber": 1,
+            "writeSucceeded": true,
+            "summary": "Created ESDL class TEST\\__pi_element_live_20260808054044\\Inline.",
+            "payload": {
+              "componentPath": "TEST\\__pi_element_live_20260808054044\\Inline",
+              "folderPath": "TEST\\__pi_element_live_20260808054044",
+              "componentName": "Inline",
+              "kind": "class",
+              "languageKind": "ESDL",
+              "created": true,
+              "alreadyExisted": false,
+              "verifyReadbackRequested": true,
+              "rollbackOnFailureRequested": false,
+              "readbackVerified": true,
+              "summary": "Created ESDL class TEST\\__pi_element_live_20260808054044\\Inline.",
+              "expectedDefaultScaffold": {
+                "verified": false,
+                "generatedItems": [
+                  {
+                    "kind": "method",
+                    "name": "calc"
+                  }
+                ],
+                "defaultEntryMethod": "calc"
+              }
+            }
+          },
+          "readback": {
+            "requested": true,
+            "attempted": true,
+            "succeeded": true,
+            "summary": "component_exists",
+            "details": {}
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    },
+    {
+      "name": "create:TEST\\__pi_element_live_20260808054044\\Provider",
+      "data": {
+        "status": "ok",
+        "data": {
+          "changed": {
+            "operationName": "create_component",
+            "sequenceNumber": 1,
+            "writeSucceeded": true,
+            "summary": "Created ESDL class TEST\\__pi_element_live_20260808054044\\Provider.",
+            "payload": {
+              "componentPath": "TEST\\__pi_element_live_20260808054044\\Provider",
+              "folderPath": "TEST\\__pi_element_live_20260808054044",
+              "componentName": "Provider",
+              "kind": "class",
+              "languageKind": "ESDL",
+              "created": true,
+              "alreadyExisted": false,
+              "verifyReadbackRequested": true,
+              "rollbackOnFailureRequested": false,
+              "readbackVerified": true,
+              "summary": "Created ESDL class TEST\\__pi_element_live_20260808054044\\Provider.",
+              "expectedDefaultScaffold": {
+                "verified": false,
+                "generatedItems": [
+                  {
+                    "kind": "method",
+                    "name": "calc"
+                  }
+                ],
+                "defaultEntryMethod": "calc"
+              }
+            }
+          },
+          "readback": {
+            "requested": true,
+            "attempted": true,
+            "succeeded": true,
+            "summary": "component_exists",
+            "details": {}
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    },
+    {
+      "name": "create:TEST\\__pi_element_live_20260808054044\\Consumer",
+      "data": {
+        "status": "ok",
+        "data": {
+          "changed": {
+            "operationName": "create_component",
+            "sequenceNumber": 1,
+            "writeSucceeded": true,
+            "summary": "Created ESDL class TEST\\__pi_element_live_20260808054044\\Consumer.",
+            "payload": {
+              "componentPath": "TEST\\__pi_element_live_20260808054044\\Consumer",
+              "folderPath": "TEST\\__pi_element_live_20260808054044",
+              "componentName": "Consumer",
+              "kind": "class",
+              "languageKind": "ESDL",
+              "created": true,
+              "alreadyExisted": false,
+              "verifyReadbackRequested": true,
+              "rollbackOnFailureRequested": false,
+              "readbackVerified": true,
+              "summary": "Created ESDL class TEST\\__pi_element_live_20260808054044\\Consumer.",
+              "expectedDefaultScaffold": {
+                "verified": false,
+                "generatedItems": [
+                  {
+                    "kind": "method",
+                    "name": "calc"
+                  }
+                ],
+                "defaultEntryMethod": "calc"
+              }
+            }
+          },
+          "readback": {
+            "requested": true,
+            "attempted": true,
+            "succeeded": true,
+            "summary": "component_exists",
+            "details": {}
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    },
+    {
+      "name": "inline_apply",
+      "data": {
+        "plan": {
+          "status": "preflight",
+          "plan": {
+            "action": "apply_element_spec",
+            "params": {
+              "action": "apply_element_spec",
+              "phase": "plan",
+              "componentPath": "TEST\\__pi_element_live_20260808054044\\Inline",
+              "intent": "create",
+              "elements": [
+                {
+                  "role": "standardPrimitive",
+                  "name": "P_Input",
+                  "kind": "parameter",
+                  "modelType": "cont",
+                  "scope": "local",
+                  "data": {
+                    "value": 1
+                  },
+                  "impl": {
+                    "valueType": "real32"
+                  }
+                },
+                {
+                  "role": "localDependentParameter",
+                  "name": "P_Local",
+                  "modelType": "cont",
+                  "scope": "local"
+                }
+              ],
+              "verifyReadback": true
+            },
+            "backendPreflight": {
+              "operation": "diff_element_spec",
+              "validated": true,
+              "liveElementCount": 0,
+              "liveSnapshotHash": "a91d7cc1eff74cb5a904d6073dd7724daedc69c4d432de62a1630a2e51bf94a6",
+              "catalogSnapshot": {
+                "elements": []
+              },
+              "normalizedSpecHash": "d4f7ae7a6ecb18ec2c09a3c45a1e6370288d91cd734937f32eab40a2da40cbf6",
+              "resolvedIntent": "create",
+              "resolvedOperations": [
+                {
+                  "name": "P_Input",
+                  "operation": "create"
+                },
+                {
+                  "name": "P_Local",
+                  "operation": "create"
+                }
+              ],
+              "warnings": [],
+              "normalizedSpec": {
+                "elements": [
+                  {
+                    "name": "P_Input",
+                    "kind": "parameter",
+                    "modelType": "cont",
+                    "scope": "local",
+                    "data": {
+                      "value": 1
+                    },
+                    "impl": {
+                      "valueType": "real32"
+                    }
+                  },
+                  {
+                    "name": "P_Local",
+                    "kind": "parameter",
+                    "modelType": "cont",
+                    "scope": "local"
+                  }
+                ]
+              },
+              "result": {
+                "ComponentPath": "TEST\\__pi_element_live_20260808054044\\Inline",
+                "AddedElements": [
+                  {
+                    "Name": "P_Input",
+                    "Kind": "Parameter",
+                    "Signature": "Parameter ModelType=cont Scope=local"
+                  },
+                  {
+                    "Name": "P_Local",
+                    "Kind": "Parameter",
+                    "Signature": "Parameter ModelType=cont Scope=local"
+                  }
+                ],
+                "RemovedElements": [],
+                "ModifiedElements": [],
+                "IncompatibleElements": [],
+                "SkippedElements": [],
+                "Summary": "2 added, 0 removed, 0 modified, 0 incompatible"
+              },
+              "limitations": [
+                "diff_element_spec validates and plans the spec without applying Data/Implementation writes or readback."
+              ]
+            },
+            "planId": "c3f283b5-d6e1-4f30-abc2-187081f0750f",
+            "fingerprint": "dd0ce42323ecc298d3800453718a3f14b55d29906621760cf1ed56abd07faf39",
+            "expiresAt": "2026-08-08T05:45:48.667Z"
+          },
+          "nextStep": "Call apply_element_spec with phase=commit and planId=c3f283b5-d6e1-4f30-abc2-187081f0750f."
+        },
+        "commit": {
+          "status": "ok",
+          "data": {
+            "changed": {
+              "operationName": "apply_element_spec",
+              "sequenceNumber": 1,
+              "writeSucceeded": true,
+              "summary": "2 created, 0 updated, 0 incompatible.",
+              "payload": {
+                "ComponentPath": "TEST\\__pi_element_live_20260808054044\\Inline",
+                "ComponentKind": "Class",
+                "LanguageKind": "ESDL",
+                "Mode": "Apply",
+                "DeleteMissingRequested": false,
+                "RecreateIncompatibleRequested": false,
+                "ElementResults": [
+                  {
+                    "name": "P_Input",
+                    "kind": "parameter",
+                    "status": "created",
+                    "changedFields": [
+                      "data.value",
+                      "impl.valueType"
+                    ],
+                    "readbackVerified": true
+                  },
+                  {
+                    "name": "P_Local",
+                    "kind": "parameter",
+                    "status": "created",
+                    "changedFields": [],
+                    "readbackVerified": true
+                  }
+                ],
+                "Summary": {
+                  "created": 2,
+                  "updated": 0,
+                  "skipped": 0,
+                  "failed": 0,
+                  "removed": 0,
+                  "incompatible": 0
+                },
+                "CreatedElements": [
+                  "P_Input",
+                  "P_Local"
+                ],
+                "UpdatedElements": [],
+                "SkippedElements": [],
+                "RemovedElements": [],
+                "IncompatibleElements": [],
+                "Issues": [],
+                "WriteSucceeded": true,
+                "VerifyReadbackRequested": true,
+                "ReadbackVerified": true
+              }
+            },
+            "readback": {
+              "requested": true,
+              "attempted": true,
+              "succeeded": true,
+              "summary": "element_spec_matches",
+              "details": {}
+            },
+            "observations": {
+              "invalidated": []
+            }
+          },
+          "warnings": []
+        }
+      }
+    }
+  ],
+  "cleanup": [
+    {
+      "componentPath": "TEST\\__pi_element_live_20260808054044\\Consumer",
+      "result": {
+        "status": "ok",
+        "data": {
+          "changed": {
+            "componentPath": "TEST\\__pi_element_live_20260808054044\\Consumer",
+            "folderPath": "TEST\\__pi_element_live_20260808054044",
+            "componentName": "Consumer",
+            "deleted": true,
+            "alreadyMissing": false,
+            "verifyReadbackRequested": true,
+            "readbackVerified": true,
+            "summary": "Deleted component TEST\\__pi_element_live_20260808054044\\Consumer."
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    },
+    {
+      "componentPath": "TEST\\__pi_element_live_20260808054044\\Provider",
+      "result": {
+        "status": "ok",
+        "data": {
+          "changed": {
+            "componentPath": "TEST\\__pi_element_live_20260808054044\\Provider",
+            "folderPath": "TEST\\__pi_element_live_20260808054044",
+            "componentName": "Provider",
+            "deleted": true,
+            "alreadyMissing": false,
+            "verifyReadbackRequested": true,
+            "readbackVerified": true,
+            "summary": "Deleted component TEST\\__pi_element_live_20260808054044\\Provider."
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    },
+    {
+      "componentPath": "TEST\\__pi_element_live_20260808054044\\Inline",
+      "result": {
+        "status": "ok",
+        "data": {
+          "changed": {
+            "componentPath": "TEST\\__pi_element_live_20260808054044\\Inline",
+            "folderPath": "TEST\\__pi_element_live_20260808054044",
+            "componentName": "Inline",
+            "deleted": true,
+            "alreadyMissing": false,
+            "verifyReadbackRequested": true,
+            "readbackVerified": true,
+            "summary": "Deleted component TEST\\__pi_element_live_20260808054044\\Inline."
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    },
+    {
+      "folder": "TEST\\__pi_element_live_20260808054044",
+      "result": {
+        "status": "ok",
+        "data": {
+          "changed": {
+            "folderPath": "TEST\\__pi_element_live_20260808054044",
+            "deleted": true,
+            "alreadyMissing": false,
+            "verifyReadbackRequested": true,
+            "readbackVerified": true,
+            "summary": "Deleted folder TEST\\__pi_element_live_20260808054044."
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    }
+  ],
+  "error": {
+    "message": "set_element_dependency: {\"status\":\"error\",\"error\":{\"code\":\"ascet_edit_invalid_parameter\",\"message\":\"Invalid parameters for ascet_edit action 'set_element_dependency'. Unknown properties and values not accepted by the action contract are rejected.\"}}",
+    "stack": "Error: set_element_dependency: {\"status\":\"error\",\"error\":{\"code\":\"ascet_edit_invalid_parameter\",\"message\":\"Invalid parameters for ascet_edit action 'set_element_dependency'. Unknown properties and values not accepted by the action contract are rejected.\"}}\n    at outcome (C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\ascet-element-write-live-smoke.ts:20:93)\n    at edit (C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\ascet-element-write-live-smoke.ts:21:29)\n    at async planCommit (C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\ascet-element-write-live-smoke.ts:23:369)\n    at async test (C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\ascet-element-write-live-smoke.ts:33:18)\n    at async <anonymous> (C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\ascet-element-write-live-smoke.ts:52:5)"
+  }
+}

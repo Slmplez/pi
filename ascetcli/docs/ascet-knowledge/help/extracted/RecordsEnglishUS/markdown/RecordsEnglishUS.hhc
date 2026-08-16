@@ -1,0 +1,213 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="toc">
+  <param name="Image Width" value="16">
+  <param name="Window Styles" value="0x800427">
+  <param name="ExWindow Styles" value="0x100">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Records">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Records - Overview">
+      <param name="Local" value="RC_overview.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Basics">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Allowed Record Content">
+        <param name="Local" value="RC_Allowed_Content.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Records in Block Diagrams">
+        <param name="Local" value="RC_Records_in_Block_Diagrams.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Records in ESDL and C Code">
+        <param name="Local" value="RC_Records_in_ESDL_CCode.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Externally Declared Records">
+        <param name="Local" value="RC_ExternallyDeclaredRecords.htm">
+      </object>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Instructions">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Creating a Record">
+        <param name="Local" value="RC_Creating_a_Record.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Creating a Record from an Existing Class">
+        <param name="Local" value="RC_Create_Record_from_Class.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Opening a Record">
+        <param name="Local" value="RC_Opening_a_Record.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Specifying a Record">
+        <param name="Local" value="RC_Specifying_a_Record.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Including a Component via the Block Library">
+        <param name="Local" value="rceIncludeComponent_via_BlockLibrary.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Opening the Implementation Editor for Records">
+        <param name="Local" value="RC_Open_ImplementationEditor_Record.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Editing a Record Implementation">
+        <param name="Local" value="RC_Edit_RecordImplementation.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Implementing a Record Element">
+        <param name="Local" value="RC_Implementing_RecordElement.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Implementing a Record Instance">
+        <param name="Local" value="RC_Implementing_RecordInstance.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Configuring a Toolbar">
+        <param name="Local" value="IntroductionEnglishUS.chm::/INT_Configuring_Toolbar.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Filtering the Outline Tab">
+        <param name="Local" value="rc_filter_component_pane.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Searching the Tree Pane">
+        <param name="Local" value="IntroductionEnglishUS.chm::/INT_SearchTreePane.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Copying Elements in the Outline Tab">
+        <param name="Local" value="IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm">
+      </object>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Reference to User Interface">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Description of the Window Elements">
+        <param name="Local" value="rcewindowsdescription.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Menus">
+        <param name="Local" value="rcemenubar.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="File Menu">
+          <param name="Local" value="RCEfileMenu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Edit Menu">
+          <param name="Local" value="rceeditmenu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="View Menu">
+          <param name="Local" value="RCEviewMenu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Insert Menu">
+          <param name="Local" value="RCEinsertMenu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Extras Menu">
+          <param name="Local" value="RCEextrasMenu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Tools Menu">
+          <param name="Local" value="RCEtoolsMenu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Help Menu">
+          <param name="Local" value="RCEhelpMenu.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Toolbars">
+        <param name="Local" value="RE_Toolbars.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Toolbar General">
+          <param name="Local" value="rcetoolbargeneral.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Toolbar Elements">
+          <param name="Local" value="rcetoolbarelements.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Tree Pane">
+        <param name="Local" value="rcecomponentpane.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Context Menu Tree Pane">
+          <param name="Local" value="rcecontextmenucpcomponentsandelements.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Browse View">
+        <param name="Local" value="rceviewbrowse.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Context Menu Browse View">
+          <param name="Local" value="rcecontextmenubrowseview.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Palettes">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Elements Palette">
+          <param name="Local" value="rcepalettespane.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Library Palette">
+          <param name="Local" value="rceLibraryPalette.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Miscellaneous">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Implementation Editor for Components and Projects">
+          <param name="Local" value="ImplementationEditorEnglishUS.chm::/IEd_ImplementationEditor_for_ComponentsProjects.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="External Struct Tab">
+          <param name="Local" value="ImplementationEditorEnglishUS.chm::/IEd_ExternalStruct_Tab.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Implementation Editor for Referenced Components">
+          <param name="Local" value="ImplementationEditorEnglishUS.chm::/IEd_ImplRefEditor.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Toolbar Configuration Window">
+          <param name="Local" value="IntroductionEnglishUS.chm::/INT_Toolbar_Configuration_Window.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Select Item Window">
+          <param name="Local" value="BlockDiagramEditorEnglishUS.chm::/bde_select_item_window.htm">
+        </object>
+        </ul>
+      </ul>
+    </ul>
+</ul>
+</html>

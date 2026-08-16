@@ -1,0 +1,22 @@
+{
+  "expected": [
+    "ROOTFIX_OFF",
+    "ROOTFIX_ON",
+    "ROOTFIX_DIAG"
+  ],
+  "readback": {
+    "enumerators": [
+      "ROOTFIX_OFF",
+      "ROOTFIX_ON",
+      "ROOTFIX_DIAG"
+    ]
+  },
+  "comparison": {
+    "matches": true,
+    "actual": [
+      "ROOTFIX_OFF",
+      "ROOTFIX_ON",
+      "ROOTFIX_DIAG"
+    ]
+  }
+}

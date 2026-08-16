@@ -1,0 +1,232 @@
+Log File: C:\ProgramData\ETAS\LogFiles\AscetBridge\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Component: PlatformLibrary\Package\AVH_AutomaticVehicleHold\private\AVH_CustStateLogic
+Kind: Class
+Language: ESDL
+Diagrams: 1
+  - BlockDiagram: Main
+Methods: 9
+  - AbstractMethod: calc
+  - AbstractMethod: CM_AVH_CustCondDisableHold
+  - AbstractMethod: CM_AVH_CustDeactType
+  - AbstractMethod: CM_AVH_CustjDeact
+  - AbstractMethod: CM_AVH_CustTDeact
+  - AbstractMethod: CM_AVH_CustTrigHold
+  - AbstractMethod: CM_AVH_CustTrigRelease
+  - AbstractMethod: CM_AVH_CustTrigStandbyService
+  - AbstractMethod: CM_AVH_CustTrigTakeOver
+
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+=== Method: calc (AbstractMethod) ===
+/* The purpose of this class is to specify customer specific          */
+/* trigger conditions of AVH state handling                           */
+
+
+/* Release Conditions												*/
+
+/* 1: Define customer specific deactivation condition
+	  CM_AVH_CustTrigRelease is used to trigger deactivation of
+	  function
+
+
+   2: Define customer specifc deactivation strategy
+	  CM_AVH_CustDeactType will be considered in Core Module and
+	  to CSM.
+      Default-Strategy, means CSM itslef decides about the used ramp
+	  
+   3: Define customer specific gradients
+	  the gradients CM_AVH_CustjDeact and CM_AVH_CustTDeact will only
+	  be considered in case related ramps (RampjCus, RampTCus) are
+	  selected														   */
+
+// Default values for Deactivation Type
+CM_AVH_CustDeactType = CSMDeactType_Default;		// Default, CSM decides how to release
+CM_AVH_CustjDeact = 10;								// Fast default values, but they are only considered in case matching ramp is triggered
+CM_AVH_CustTDeact = 0.1;							// Fast default values, but they are only considered in case matching ramp is triggered
+// AVH Shall deactivate in case of skid  
+if (SkidDetected == true) 
+{
+	CM_AVH_CustTrigRelease = true;
+	// in case of Skid CSM considers plain ramp by default
+
+// AVH might deactivate in case park release is triggered by button
+}else if(		ParkBrakeBttnReleaseReq == true
+			&&	FS_AVH_ReleaseByAPBButton == true
+			&&	(	DriverBrakeApplied == true
+				||	DriverAccelPedalApplied == true))
+{
+	CM_AVH_CustTrigRelease = true;
+	// CSM by default considers RampTime in case there is no reason for other ramp
+	
+// AVH deactivates in case AVH Button is pressed to disabled AVH with applied pedal
+}else if(
+		   FS_AVH_HMIType    == AVHHMIType_Button
+		&& AVHButtonPressed  == true
+		&& AvhStandby        == true
+		&&	(	DriverBrakeApplied 		== true
+			||	DriverAccelPedalApplied == true))
+{
+	CM_AVH_CustTrigRelease = true;
+	// CSM by default considers RampTime in case there is no reason for other ramp
+	
+// AVH deactivates in case AVH Switch is pressed to disabled AVH with applied pedal
+}else if(
+		   FS_AVH_HMIType	== AVHHMIType_Switch
+		&& AVHSwitchOn		== false
+		&& AvhState 		== AVHState_Hold
+		&&	(	DriverBrakeApplied 		== true
+			||	DriverAccelPedalApplied == true))
+{
+	CM_AVH_CustTrigRelease = true;
+	// CSM by default considers RampTime in case there is no reason for other ramp
+}else if(
+          GearBoxValid == true
+		  && ( AvhGear== 0))
+{
+	CM_AVH_CustTrigRelease = true;
+	// From XiaoMi Requirement that N gear trigger release holding pressure.
+}else if(
+          AVHDeactivationByBrakePedal == true)
+{
+	CM_AVH_CustTrigRelease = true;
+	// From XiaoMi Requirement that deep brake to deactivate AVH.
+}
+else
+{
+	CM_AVH_CustTrigRelease = false;
+}
+
+
+/* Conditions to prohibit an activation of hold						*/
+
+/* 1: Define customer specific conditions to avoid an activation of
+	  AVH, CM_AVH_CustCondDisableHold is used to disable hold */
+	  
+// AVH Hold shall be disabled
+if(		CM_AVH_CustTrigRelease == true		// In case release is triggered activation is avoided
+	||	SkidRisk == true					// in case there is a risk that skid might happen, AVH shall not activate in case it's not already active
+	||	ParkBrakeBttnReleaseReq == true		// Avoid activation as long as apb button is pushed in release direction
+	||  (GearBoxValid == true && ((AvhGear == 0) || (AvhGear == -3))) // N/P Gear disabled Hold
+	// here more conditions might be set
+	)
+{
+	CM_AVH_CustCondDisableHold = true;
+}else
+{
+	CM_AVH_CustCondDisableHold = false;
+}
+
+
+/* Hold Trigger conditions											*/
+
+/* 1: Define customer specific trigger conditions for hold
+	  CM_AVH_CustTrigHold is used to trigger Hold					*/
+	  
+// AVH shall trigger hold if, ... (only allowed in case no disable and deactivation conditions are detected)
+if(        CM_AVH_CustTrigRelease == true
+    ||    CM_AVH_CustCondDisableHold == true)
+{
+    // so far no customer specific hold conditions
+    CM_AVH_CustTrigHold = false;
+}else if (LDMSelectedController == LDMSelectedController_AEB &&
+		  AVH_Standstill == true &&		  OnePedalToStop_Active == false &&
+          CsmHoldState != CSMHoldState_NotActive && 
+          CsmHoldState != CSMHoldState_Deact && 
+          CsmHoldState != CSMHoldState_DriveOff && 
+          CsmHoldState != CSMHoldState_DriveOffTrqBal)
+{
+        CM_AVH_CustTrigHold = true;
+}else
+{
+    CM_AVH_CustTrigHold = false;
+}
+
+/* Take Over conditions												*/
+
+/* 1: Define customer specific take over condition
+	  CM_AVH_CustTrigTakeOver is used to trigger takeover to 
+	  park brake													*/
+	  
+// AVH shall take over to park brake in case AVH Button is pressed while Avh is enabled and no pedal is applied
+// Core logic already considers to allow secure trigger only in case Hold is also applied
+if(
+		   FS_AVH_HMIType    == AVHHMIType_Button
+		&& AVHButtonPressed  == true
+		&& AvhStandby        == true
+		&& DriverBrakeApplied == false
+		&& DriverAccelPedalApplied == false)
+{
+	CM_AVH_CustTrigTakeOver = true;
+	
+// AVH shall take over to park brake in case AVH Switch shows disabled AVH while AVH is enabled and no pedal is applied
+// Core logic already considers to allow secure trigger only in case Hold is also applied
+}else if(
+		   FS_AVH_HMIType    == AVHHMIType_Switch
+		&& AVHSwitchOn 		 == false
+		&& AvhStandby        == true
+		&& DriverBrakeApplied == false
+		&& DriverAccelPedalApplied == false)
+{
+	CM_AVH_CustTrigTakeOver = true;
+	
+	
+// P gear request APB take over by LDM even if APB don't request AutoApply itself due to VCCD failure.
+}else if(
+		  GearBoxValid == true 
+		  && (AvhGear == -3))
+{
+	CM_AVH_CustTrigTakeOver = true;
+	
+}else
+{
+	CM_AVH_CustTrigTakeOver = false;
+}
+
+/* Standby Service Conditions */
+// might be used for rollout conditions
+if(		CM_AVH_CustTrigRelease == false
+	&&	CM_AVH_CustCondDisableHold == false)
+{
+	// not used so far
+	CM_AVH_CustTrigStandbyService = false;
+
+}else
+{
+	CM_AVH_CustTrigStandbyService = false;
+}
+
+
+=== Method: CM_AVH_CustCondDisableHold (AbstractMethod) ===
+return CM_AVH_CustCondDisableHold;
+
+
+=== Method: CM_AVH_CustDeactType (AbstractMethod) ===
+return CM_AVH_CustDeactType;
+
+
+=== Method: CM_AVH_CustjDeact (AbstractMethod) ===
+return CM_AVH_CustjDeact;
+
+
+=== Method: CM_AVH_CustTDeact (AbstractMethod) ===
+return CM_AVH_CustTDeact;
+
+
+=== Method: CM_AVH_CustTrigHold (AbstractMethod) ===
+return CM_AVH_CustTrigHold;
+
+
+=== Method: CM_AVH_CustTrigRelease (AbstractMethod) ===
+return CM_AVH_CustTrigRelease;
+
+
+=== Method: CM_AVH_CustTrigStandbyService (AbstractMethod) ===
+return CM_AVH_CustTrigStandbyService;
+
+
+=== Method: CM_AVH_CustTrigTakeOver (AbstractMethod) ===
+return CM_AVH_CustTrigTakeOver;
+
+

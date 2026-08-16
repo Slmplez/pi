@@ -73,7 +73,7 @@ Use the branch/commit that contains `7861ac7a`.
 If testing through the published package flow:
 
 ```powershell
-pi update --extension npm:@zeerke/ascet-copilot
+pi update --extension npm:@vaf-agentworks/ascet-copilot
 ```
 
 If testing from the checked-out repo or a packed tarball, record the exact install command here:

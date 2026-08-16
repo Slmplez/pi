@@ -1,0 +1,2047 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="index">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="while">
+    <param name="Name" value="While">
+    <param name="Local" value="while.htm">
+    <param name="Name" value="Example: Do...While">
+    <param name="Local" value="ESDL_ExampleDoWhile.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="unary operators">
+    <param name="Name" value="Unary Operators">
+    <param name="Local" value="Unary_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="this">
+    <param name="Name" value="This">
+    <param name="Local" value="this.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="switch…case…default">
+    <param name="Name" value="Switch…Case…Default">
+    <param name="Local" value="switchasedefault.htm">
+    <param name="Name" value="Example: Switch...Case...Default">
+    <param name="Local" value="ESDL_Example__SwitchCaseDefault.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="fall through">
+      <param name="Name" value="Switch…Case…Default">
+      <param name="Local" value="switchasedefault.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="shorthand assignment operator">
+    <param name="Name" value="Shorthand Assignment Operators">
+    <param name="Local" value="Shorthand_Assignment_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="self">
+    <param name="Name" value="this">
+    <param name="Local" value="this.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="precedence">
+    <param name="See Also" value="precedence">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="~ of operators">
+      <param name="Name" value="Operators - Summary ">
+      <param name="Local" value="summary.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="OR">
+    <param name="Name" value="Logical Operators">
+    <param name="Local" value="Logical_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="operator">
+    <param name="Name" value="Operators - Summary">
+    <param name="Local" value="summary.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="arithmetic">
+      <param name="Name" value="Arithmetic Operators">
+      <param name="Local" value="Arithmetic_Operators.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="comparison">
+      <param name="Name" value="Comparison Operators">
+      <param name="Local" value="Comparison_Operators.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="conditional">
+      <param name="Name" value="Conditional Operator (MUX)">
+      <param name="Local" value="conditional_operator_mux.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="logical">
+      <param name="Name" value="Logical Operators">
+      <param name="Local" value="Logical_Operators.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="shorthand assignment">
+      <param name="Name" value="Shorthand Assignment Operators">
+      <param name="Local" value="Shorthand_Assignment_Operators.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="unary">
+      <param name="Name" value="Unary Operators">
+      <param name="Local" value="Unary_Operators.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="verify">
+      <param name="Name" value="Verify Operation">
+      <param name="Local" value="ESDL_VerifyOperator.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="conversion">
+      <param name="Name" value="Conversion Operations">
+      <param name="Local" value="ESDL_ConversionOperations.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="assert">
+      <param name="Name" value="Assert Operation">
+      <param name="Local" value="ESDL_AssertOperation.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="object reference">
+    <param name="See Also" value="object reference">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="this in method calls">
+      <param name="Name" value="This">
+      <param name="Local" value="this.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="MUX">
+    <param name="Name" value="Conditional Operator (MUX)">
+    <param name="Local" value="conditional_operator_mux.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="methods">
+    <param name="Name" value="Working with Methods and Processes">
+    <param name="Local" value="esdl_working_with_methods_and_processes.htm">
+    <param name="Name" value="Methods">
+    <param name="Local" value="ESDL_Methods.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="precedence of method calls">
+      <param name="Name" value="Operators - Summary ">
+      <param name="Local" value="summary.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="argument">
+      <param name="Name" value="Working with Methods and Processes">
+      <param name="Local" value="esdl_working_with_methods_and_processes.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="direct access ~">
+      <param name="Name" value="Direct Access Methods">
+      <param name="Local" value="ESDL_Direct_Access_Methods.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="header">
+      <param name="Name" value="Working with Methods and Processes">
+      <param name="Local" value="esdl_working_with_methods_and_processes.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="interface">
+      <param name="Name" value="Working with Methods and Processes">
+      <param name="Local" value="esdl_working_with_methods_and_processes.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="method calls">
+      <param name="Name" value="Methods">
+      <param name="Local" value="ESDL_Methods.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="naming convention">
+      <param name="Name" value="Working with Methods and Processes">
+      <param name="Local" value="esdl_working_with_methods_and_processes.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="nested">
+      <param name="Name" value="Nested Methods">
+      <param name="Local" value="ESDL_Nested_Methods.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="nesting method calls">
+      <param name="Name" value="Methods">
+      <param name="Local" value="ESDL_Methods.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="overloading">
+      <param name="Name" value="Working with Methods and Processes">
+      <param name="Local" value="esdl_working_with_methods_and_processes.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="primitive ~">
+      <param name="Name" value="Primitive Methods">
+      <param name="Local" value="ESDL_Primitive_Methods.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="private">
+      <param name="Name" value="Access Control">
+      <param name="Local" value="esdl_access_control.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="public">
+      <param name="Name" value="Access Control">
+      <param name="Local" value="esdl_access_control.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="return value">
+      <param name="Name" value="Working with Methods and Processes">
+      <param name="Local" value="esdl_working_with_methods_and_processes.htm">
+      <param name="Name" value="Methods with a Return Value">
+      <param name="Local" value="ESDL_Methods_with_a_Return_Value.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="convert">
+      <param name="Name" value="Converting a Method or Process">
+      <param name="Local" value="BlockDiagramEditorEnglishUS.chm::/BDE_Convert_MethodProcess.htm">
+      <param name="Name" value="Conversion of Methods or Processes">
+      <param name="Local" value="BlockDiagramEditorEnglishUS.chm::/BDE_Conversion_MethodsProcesses.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="loops">
+    <param name="Name" value="for">
+    <param name="Local" value="for.htm">
+    <param name="Name" value="while">
+    <param name="Local" value="while.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="logical operator">
+    <param name="Name" value="Logical Operators">
+    <param name="Local" value="Logical_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="literal">
+    <param name="Name" value="Literals and Constants">
+    <param name="Local" value="literals_and_constants.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="if…else">
+    <param name="Name" value="If…Else">
+    <param name="Local" value="ifelse.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="for">
+    <param name="Name" value="For">
+    <param name="Local" value="for.htm">
+    <param name="Name" value="Example: For">
+    <param name="Local" value="ESDL_Example__For.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="control flow">
+    <param name="Name" value="Control Flow - Summary">
+    <param name="Local" value="ESDL_ControlFlow_Summary.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="break">
+      <param name="Name" value="Break">
+      <param name="Local" value="break.htm">
+      <param name="Name" value="Switch…Case…Default">
+      <param name="Local" value="switchasedefault.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="switch…case…default">
+      <param name="Name" value="Switch…Case…Default">
+      <param name="Local" value="switchasedefault.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="while">
+      <param name="Name" value="While">
+      <param name="Local" value="while.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="if…else">
+      <param name="Name" value="If…Else">
+      <param name="Local" value="ifelse.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="for">
+      <param name="Name" value="For">
+      <param name="Local" value="for.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="return">
+      <param name="Name" value="Methods with a Return Value">
+      <param name="Local" value="ESDL_Methods_with_a_Return_Value.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="conventions">
+    <param name="See Also" value="conventions">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="method names">
+      <param name="Name" value="Working with Methods and Processes">
+      <param name="Local" value="esdl_working_with_methods_and_processes.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="variable names">
+      <param name="Name" value="Variable Names">
+      <param name="Local" value="ESDL_Variable_Names.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="copy">
+    <param name="See Also" value="copy">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="element">
+      <param name="Name" value="Copying Elements in the Outline Tab">
+      <param name="Local" value="IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="constant">
+    <param name="Name" value="Literals and Constants">
+    <param name="Local" value="literals_and_constants.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="compound statement">
+    <param name="Name" value="ESDL Syntax">
+    <param name="Local" value="ESDL_ESDL_Syntax.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="conditional operator">
+    <param name="Name" value="Conditional Operator (MUX)">
+    <param name="Local" value="conditional_operator_mux.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="comparison operator">
+    <param name="Name" value="Comparison Operators">
+    <param name="Local" value="Comparison_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="break">
+    <param name="Name" value="Break">
+    <param name="Local" value="break.htm">
+    <param name="Name" value="Example: Switch...Case...Default">
+    <param name="Local" value="ESDL_Example__SwitchCaseDefault.htm">
+    <param name="Name" value="Switch…Case…Default">
+    <param name="Local" value="switchasedefault.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="arithmetic operator">
+    <param name="Name" value="Arithmetic Operators">
+    <param name="Local" value="Arithmetic_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="assignment">
+    <param name="Name" value="ESDL Syntax">
+    <param name="Local" value="ESDL_ESDL_Syntax.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="shorthand assignment operator">
+      <param name="Name" value="Shorthand Assignment Operators">
+      <param name="Local" value="Shorthand_Assignment_Operators.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="accessing objects">
+    <param name="Name" value="Methods">
+    <param name="Local" value="ESDL_Methods.htm">
+    <param name="Name" value="Access Control">
+    <param name="Local" value="esdl_access_control.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="this">
+      <param name="Name" value="This">
+      <param name="Local" value="this.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="access control">
+      <param name="Name" value="Access Control">
+      <param name="Local" value="esdl_access_control.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="block diagrams">
+      <param name="Name" value="Accessing Block Diagrams from ESDL">
+      <param name="Local" value="esdl_accessing_block_diagrams_from_esdl.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="direct access methods">
+      <param name="Name" value="Direct Access Methods">
+      <param name="Local" value="ESDL_Direct_Access_Methods.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="library functions">
+      <param name="Name" value="Mathematical Functions">
+      <param name="Local" value="ESDL_Mathematical_Functions.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="action">
+    <param name="Name" value="Using ESDL in State Machines">
+    <param name="Local" value="esdl_using_esdl_in_state_machines.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="||">
+    <param name="Name" value="Logical Operators">
+    <param name="Local" value="Logical_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="?:">
+    <param name="Name" value="Conditional Operator (MUX)">
+    <param name="Local" value="conditional_operator_mux.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="&gt;=">
+    <param name="Name" value="Comparison Operators">
+    <param name="Local" value="Comparison_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="&gt;">
+    <param name="Name" value="Comparison Operators">
+    <param name="Local" value="Comparison_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="==">
+    <param name="Name" value="Comparison Operators">
+    <param name="Local" value="Comparison_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="-=">
+    <param name="Name" value="Shorthand Assignment Operators">
+    <param name="Local" value="Shorthand_Assignment_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="&lt;=">
+    <param name="Name" value="Comparison Operators">
+    <param name="Local" value="Comparison_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="&lt;">
+    <param name="Name" value="Comparison Operators">
+    <param name="Local" value="Comparison_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="/=">
+    <param name="Name" value="Shorthand Assignment Operators">
+    <param name="Local" value="Shorthand_Assignment_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="/">
+    <param name="Name" value="Arithmetic Operators">
+    <param name="Local" value="Arithmetic_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="+=">
+    <param name="Name" value="Shorthand Assignment Operators">
+    <param name="Local" value="Shorthand_Assignment_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="++">
+    <param name="Name" value="Unary Operators">
+    <param name="Local" value="Unary_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="+">
+    <param name="Name" value="Arithmetic Operators">
+    <param name="Local" value="Arithmetic_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="*=">
+    <param name="Name" value="Shorthand Assignment Operators">
+    <param name="Local" value="Shorthand_Assignment_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="*">
+    <param name="Name" value="Arithmetic Operators">
+    <param name="Local" value="Arithmetic_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="&amp;&amp;">
+    <param name="Name" value="Logical Operators">
+    <param name="Local" value="Logical_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="%=">
+    <param name="Name" value="Shorthand Assignment Operators">
+    <param name="Local" value="Shorthand_Assignment_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="%">
+    <param name="Name" value="Arithmetic Operators">
+    <param name="Local" value="Arithmetic_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="!=">
+    <param name="Name" value="Comparison Operators">
+    <param name="Local" value="Comparison_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="--">
+    <param name="Name" value="Unary Operators">
+    <param name="Local" value="Unary_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="-">
+    <param name="Name" value="Unary Operators">
+    <param name="Local" value="Unary_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="!">
+    <param name="Name" value="Unary Operators">
+    <param name="Local" value="Unary_Operators.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="ESDL">
+    <param name="Name" value="Overview - ESDL Editor">
+    <param name="Local" value="ESDL_Overview.htm">
+    <param name="Name" value="ESDL as a Modelling Language">
+    <param name="Local" value="esdl_esdl_as_modellinglanguage.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="editor">
+      <param name="Name" value="ESDL Editor - Window Elements">
+      <param name="Local" value="ESDL_Description_of_WindowElement.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="specify modules">
+      <param name="Name" value="Specifying Modules in ESDL">
+      <param name="Local" value="specifying_modules.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="in state machine">
+      <param name="Name" value="Using ESDL in State Machines">
+      <param name="Local" value="esdl_using_esdl_in_state_machines.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="syntax">
+      <param name="Name" value="ESDL Syntax">
+      <param name="Local" value="ESDL_ESDL_Syntax.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="block statement">
+      <param name="Name" value="ESDL Syntax">
+      <param name="Local" value="ESDL_ESDL_Syntax.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="compound statement">
+      <param name="Name" value="ESDL Syntax">
+      <param name="Local" value="ESDL_ESDL_Syntax.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="access block diagram">
+      <param name="Name" value="Accessing Block Diagrams from ESDL">
+      <param name="Local" value="esdl_accessing_block_diagrams_from_esdl.htm">
+      <param name="Name" value="Example: To Build the Integrator Element">
+      <param name="Local" value="ESDL_Example__To_Build_the_Integrator_Element.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="description">
+      <param name="Name" value="ESDL as a Modelling Language">
+      <param name="Local" value="esdl_esdl_as_modellinglanguage.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="direct access methods">
+      <param name="Name" value="Direct Access Methods">
+      <param name="Local" value="ESDL_Direct_Access_Methods.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="expression">
+      <param name="Name" value="ESDL Syntax">
+      <param name="Local" value="ESDL_ESDL_Syntax.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="implementation cast">
+      <param name="Name" value="Implementation Casts in ESDL">
+      <param name="Local" value="ESDL_Implementation_Casts_in_ESDL.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="instantiation">
+      <param name="Name" value="ESDL as a Modelling Language">
+      <param name="Local" value="esdl_esdl_as_modellinglanguage.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Java syntax in ~">
+      <param name="Name" value="ESDL as a Modelling Language">
+      <param name="Local" value="esdl_esdl_as_modellinglanguage.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="reserved keywords">
+      <param name="Name" value="Variable Names">
+      <param name="Local" value="ESDL_Variable_Names.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="external editor">
+      <param name="Name" value="External Editor">
+      <param name="Local" value="external_editor.htm">
+      <param name="Name" value="Using an External Editor">
+      <param name="Local" value="open-external-editor.htm">
+      <param name="Name" value="Ending the External Editor Mode">
+      <param name="Local" value="end-external-editor.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="programming language">
+    <param name="Name" value="ESDL as a Modelling Language">
+    <param name="Local" value="esdl_esdl_as_modellinglanguage.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="C vs. ESDL">
+      <param name="Name" value="Reference: ESDL vs. ANSI C">
+      <param name="Local" value="esdl_reference__esdl_vs._ansi_c.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Java vs. ESDL">
+      <param name="Name" value="Reference: ESDL vs. Java">
+      <param name="Local" value="esdl_reference__esdl_vs._java.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="ESDL code">
+    <param name="See Also" value="ESDL code">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="editing">
+      <param name="Name" value="Editing ESDL Code">
+      <param name="Local" value="editing_esdl_code.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="replace">
+      <param name="Name" value="Finding/Replacing ESDL Code">
+      <param name="Local" value="ESDL_FindReplace_code.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="find">
+      <param name="Name" value="Finding/Replacing ESDL Code">
+      <param name="Local" value="ESDL_FindReplace_code.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="buttons">
+      <param name="Name" value="Toolbars">
+      <param name="Local" value="ESDL_Toolbars.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="creating">
+      <param name="Name" value="Creating ESDL Code">
+      <param name="Local" value="creating_esdl_code.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="ESDL editor">
+    <param name="Name" value="Overview - ESDL Editor">
+    <param name="Local" value="ESDL_Overview.htm">
+    <param name="Name" value="ESDL Editor - Window Elements">
+    <param name="Local" value="ESDL_Description_of_WindowElement.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Implementation cast">
+    <param name="See Also" value="Implementation cast">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="in ESDL">
+      <param name="Name" value="Using Implementation Casts in ESDL">
+      <param name="Local" value="use_impl.casts.htm">
+      <param name="Name" value="Implementation Casts in ESDL">
+      <param name="Local" value="ESDL_Implementation_Casts_in_ESDL.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="signature editor">
+    <param name="Name" value="Working with Methods and Processes">
+    <param name="Local" value="esdl_working_with_methods_and_processes.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="module">
+    <param name="See Also" value="module">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="specify in ESDL">
+      <param name="Name" value="Specifying Modules in ESDL">
+      <param name="Local" value="specifying_modules.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="replace">
+    <param name="See Also" value="replace">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="ESDL">
+      <param name="Name" value="Finding/Replacing ESDL Code">
+      <param name="Local" value="ESDL_FindReplace_code.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="reserved keywords">
+    <param name="Name" value="Variable Names">
+    <param name="Local" value="ESDL_Variable_Names.htm">
+    <param name="Name" value="Reserved Keywords">
+    <param name="Local" value="IntroductionEnglishUS.chm::/INT_Reserved_Keywords.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="search">
+    <param name="See Also" value="search">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="ESDL">
+      <param name="Name" value="Finding/Replacing ESDL Code">
+      <param name="Local" value="ESDL_FindReplace_code.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Find">
+    <param name="See Also" value="Find">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="ESDL">
+      <param name="Name" value="Finding/Replacing ESDL Code">
+      <param name="Local" value="ESDL_FindReplace_code.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="user interface">
+    <param name="See Also" value="user interface">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="ESDL editor">
+      <param name="Name" value="Overview - ESDL Editor">
+      <param name="Local" value="ESDL_Overview.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="component">
+    <param name="See Also" value="component">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="ESDL">
+      <param name="Name" value="Overview - ESDL Editor">
+      <param name="Local" value="ESDL_Overview.htm">
+      <param name="Name" value="ESDL as a Modelling Language">
+      <param name="Local" value="esdl_esdl_as_modellinglanguage.htm">
+      <param name="Name" value="Creating a Class or Module in ESDL Code">
+      <param name="Local" value="Creating_class_module.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="buttons">
+    <param name="See Also" value="buttons">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="ESDL Editor">
+      <param name="Name" value="Toolbars">
+      <param name="Local" value="ESDL_Toolbars.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="toolbar">
+    <param name="See Also" value="toolbar">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="configure">
+      <param name="Name" value="Configuring a Toolbar">
+      <param name="Local" value="IntroductionEnglishUS.chm::/INT_Configuring_Toolbar.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="/* comment */">
+    <param name="Name" value="Comments">
+    <param name="Local" value="ESDL_Comments.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="// comment">
+    <param name="Name" value="Comments">
+    <param name="Local" value="ESDL_Comments.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="abs()">
+    <param name="Name" value="Primitive Methods">
+    <param name="Local" value="ESDL_Primitive_Methods.htm">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="max()">
+    <param name="Name" value="Primitive Methods">
+    <param name="Local" value="ESDL_Primitive_Methods.htm">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="min()">
+    <param name="Name" value="Primitive Methods">
+    <param name="Local" value="ESDL_Primitive_Methods.htm">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="acos()">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="between()">
+    <param name="Name" value="Primitive Methods">
+    <param name="Local" value="ESDL_Primitive_Methods.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="asin()">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="atan()">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="argument">
+    <param name="Name" value="Working with Methods and Processes">
+    <param name="Local" value="esdl_working_with_methods_and_processes.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Array">
+    <param name="Name" value="Arrays - Description">
+    <param name="Local" value="ESDL_Arrays_-_Description.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="access in ESDL">
+      <param name="Name" value="Arrays - Description">
+      <param name="Local" value="ESDL_Arrays_-_Description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="maximum size">
+      <param name="Name" value="Arrays - Description">
+      <param name="Local" value="ESDL_Arrays_-_Description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="public interface">
+      <param name="Name" value="Public Interface of Arrays">
+      <param name="Local" value="ESDL_Public_Interface_of_Arrays.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="table editor">
+      <param name="Name" value="Arrays - Description">
+      <param name="Local" value="ESDL_Arrays_-_Description.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="data type">
+    <param name="See Also" value="data type">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="array">
+      <param name="Name" value="Arrays - Description">
+      <param name="Local" value="ESDL_Arrays_-_Description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="cont">
+      <param name="Name" value="Data Types">
+      <param name="Local" value="ESDL_Data_Types.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="basic">
+      <param name="Name" value="Data Types">
+      <param name="Local" value="ESDL_Data_Types.htm">
+      <param name="Name" value="Primitive Methods">
+      <param name="Local" value="ESDL_Primitive_Methods.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="composite">
+      <param name="Name" value="Overview - Composite Data Types">
+      <param name="Local" value="ESDL_Overview_-_Composite_Data_Types.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="conversion">
+      <param name="Name" value="Type Conversion">
+      <param name="Local" value="ESDL_Type_Conversion.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="data structures">
+      <param name="Name" value="Structures">
+      <param name="Local" value="ESDL_Structures.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="distribution">
+      <param name="Name" value="Distributions and Group Tables - Description">
+      <param name="Local" value="esdl_distributions_and_group_tables_-_description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="group table">
+      <param name="Name" value="Distributions and Group Tables - Description">
+      <param name="Local" value="esdl_distributions_and_group_tables_-_description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="logical">
+      <param name="Name" value="Data Types">
+      <param name="Local" value="ESDL_Data_Types.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="matrix">
+      <param name="Name" value="Matrices - Description">
+      <param name="Local" value="esdl_matrices_-_description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="messages">
+      <param name="Name" value="Messages">
+      <param name="Local" value="ESDL_Messages.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="one-dimensional table">
+      <param name="Name" value="Characteristic Lines - Description">
+      <param name="Local" value="ESDL_One-Dimensional_Tables_-_Description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="signed discrete">
+      <param name="Name" value="Data Types">
+      <param name="Local" value="ESDL_Data_Types.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="strings">
+      <param name="Name" value="ESDL as a Modelling Language">
+      <param name="Local" value="esdl_esdl_as_modellinglanguage.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="two-dimensional table">
+      <param name="Name" value="Characteristic Maps - Description">
+      <param name="Local" value="ESDL_Two-Dimensional_Tables_-_Description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="unsigned discrete">
+      <param name="Name" value="Data Types">
+      <param name="Local" value="ESDL_Data_Types.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="characteristic line/map">
+      <param name="Name" value="Characteristic Lines - Description">
+      <param name="Local" value="ESDL_One-Dimensional_Tables_-_Description.htm">
+      <param name="Name" value="Characteristic Maps - Description">
+      <param name="Local" value="ESDL_Two-Dimensional_Tables_-_Description.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="composite data type">
+    <param name="Name" value="Overview - Composite Data Types">
+    <param name="Local" value="ESDL_Overview_-_Composite_Data_Types.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="array">
+      <param name="Name" value="Arrays - Description">
+      <param name="Local" value="ESDL_Arrays_-_Description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="data structures">
+      <param name="Name" value="Structures">
+      <param name="Local" value="ESDL_Structures.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="distributions">
+      <param name="Name" value="Distributions and Group Tables - Description">
+      <param name="Local" value="esdl_distributions_and_group_tables_-_description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="group table">
+      <param name="Name" value="Distributions and Group Tables - Description">
+      <param name="Local" value="esdl_distributions_and_group_tables_-_description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="matrix">
+      <param name="Name" value="Matrices - Description">
+      <param name="Local" value="esdl_matrices_-_description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="one-dimensional table">
+      <param name="Name" value="Characteristic Lines - Description">
+      <param name="Local" value="ESDL_One-Dimensional_Tables_-_Description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="two-dimensional table">
+      <param name="Name" value="Characteristic Maps - Description">
+      <param name="Local" value="ESDL_Two-Dimensional_Tables_-_Description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="characteristic line/map">
+      <param name="Name" value="Characteristic Lines - Description">
+      <param name="Local" value="ESDL_One-Dimensional_Tables_-_Description.htm">
+      <param name="Name" value="Characteristic Maps - Description">
+      <param name="Local" value="ESDL_Two-Dimensional_Tables_-_Description.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="atomic sequence">
+    <param name="Name" value="ESDL vs. Block Diagrams">
+    <param name="Local" value="esdl_esdl_vs._block_diagrams.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="block diagram">
+    <param name="See Also" value="block diagram">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="vs. ESDL">
+      <param name="Name" value="ESDL vs. Block Diagrams">
+      <param name="Local" value="esdl_esdl_vs._block_diagrams.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="access ~ in ESDL">
+      <param name="Name" value="Accessing Block Diagrams from ESDL">
+      <param name="Local" value="esdl_accessing_block_diagrams_from_esdl.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="ceil()">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="characteristic line">
+    <param name="Name" value="Characteristic Lines - Description">
+    <param name="Local" value="ESDL_One-Dimensional_Tables_-_Description.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="interpolation mode">
+      <param name="Name" value="Characteristic Lines - Description">
+      <param name="Local" value="ESDL_One-Dimensional_Tables_-_Description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="maximum size">
+      <param name="Name" value="Characteristic Lines - Description">
+      <param name="Local" value="ESDL_One-Dimensional_Tables_-_Description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="public interface">
+      <param name="Name" value="Public Interface of Characteristic Lines">
+      <param name="Local" value="ESDL_Public_Interface_of_One-Dimensional_Tables.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="adaptive">
+      <param name="Name" value="Public Interface of Characteristic Lines">
+      <param name="Local" value="ESDL_Public_Interface_of_One-Dimensional_Tables.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="characteristic map">
+    <param name="Name" value="Characteristic Maps - Description">
+    <param name="Local" value="ESDL_Two-Dimensional_Tables_-_Description.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="adaptive">
+      <param name="Name" value="Public Interface of Characteristic Maps">
+      <param name="Local" value="ESDL_Public_Interface_of_Two-Dimensional_Tables.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="maximum size">
+      <param name="Name" value="Characteristic Maps - Description">
+      <param name="Local" value="ESDL_Two-Dimensional_Tables_-_Description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="public interface">
+      <param name="Name" value="Public Interface of Characteristic Maps">
+      <param name="Local" value="ESDL_Public_Interface_of_Two-Dimensional_Tables.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="interpolation mode">
+      <param name="Name" value="Public Interface of Characteristic Maps">
+      <param name="Local" value="ESDL_Public_Interface_of_Two-Dimensional_Tables.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="comment">
+    <param name="Name" value="Comments">
+    <param name="Local" value="ESDL_Comments.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="in generated code">
+      <param name="Name" value="Comments">
+      <param name="Local" value="ESDL_Comments.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="conversion">
+    <param name="See Also" value="conversion">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="of data types">
+      <param name="Name" value="Type Conversion">
+      <param name="Local" value="ESDL_Type_Conversion.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="cos()">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="cosh()">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="coth()">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="csch()">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="data structure">
+    <param name="See Also" value="data structure">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="modeling ~ in ESDL">
+      <param name="Name" value="Structures">
+      <param name="Local" value="ESDL_Structures.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="direct access methods">
+    <param name="Name" value="Nested Methods">
+    <param name="Local" value="ESDL_Nested_Methods.htm">
+    <param name="Name" value="Direct Access Methods">
+    <param name="Local" value="ESDL_Direct_Access_Methods.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="distribution">
+    <param name="Name" value="Distributions and Group Tables - Description">
+    <param name="Local" value="esdl_distributions_and_group_tables_-_description.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="assign to group table">
+      <param name="Name" value="Distributions and Group Tables - Description">
+      <param name="Local" value="esdl_distributions_and_group_tables_-_description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="monotone sequence in ~">
+      <param name="Name" value="Distributions and Group Tables - Description">
+      <param name="Local" value="esdl_distributions_and_group_tables_-_description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="public interface">
+      <param name="Name" value="Public Interface of Distributions and Group Tables">
+      <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm#PIDistribution">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="adaptive">
+      <param name="Name" value="Public Interface of Distributions and Group Tables">
+      <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm#PIDistribution">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="entry action">
+    <param name="Name" value="Using ESDL in State Machines">
+    <param name="Local" value="esdl_using_esdl_in_state_machines.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="editor">
+    <param name="See Also" value="editor">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="ESDL">
+      <param name="Name" value="Overview - ESDL Editor">
+      <param name="Local" value="ESDL_Overview.htm">
+      <param name="Name" value="ESDL Editor - Window Elements">
+      <param name="Local" value="ESDL_Description_of_WindowElement.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="exit action">
+    <param name="Name" value="Using ESDL in State Machines">
+    <param name="Local" value="esdl_using_esdl_in_state_machines.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="exp()">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="floor()">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="fmod()">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="getAt()">
+    <param name="See Also" value="getAt()">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="array elements">
+      <param name="Name" value="Public Interface of Arrays">
+      <param name="Local" value="ESDL_Public_Interface_of_Arrays.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="matrix elements">
+      <param name="Name" value="Public Interface of Matrices">
+      <param name="Local" value="ESDL_Public_Interface_of_Matrices.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="table elements">
+      <param name="Name" value="Public Interface of Characteristic Maps">
+      <param name="Local" value="ESDL_Public_Interface_of_Two-Dimensional_Tables.htm">
+      <param name="Name" value="Public Interface of Characteristic Lines">
+      <param name="Local" value="ESDL_Public_Interface_of_One-Dimensional_Tables.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="group tables">
+    <param name="Name" value="Distributions and Group Tables - Description">
+    <param name="Local" value="esdl_distributions_and_group_tables_-_description.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="assign distribution">
+      <param name="Name" value="Distributions and Group Tables - Description">
+      <param name="Local" value="esdl_distributions_and_group_tables_-_description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="public interface">
+      <param name="Name" value="Public Interface of Distributions and Group Tables">
+      <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="adaptive">
+      <param name="Name" value="Public Interface of Distributions and Group Tables">
+      <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="interpolate()">
+    <param name="Name" value="Public Interface of Characteristic Maps">
+    <param name="Local" value="ESDL_Public_Interface_of_Two-Dimensional_Tables.htm">
+    <param name="Name" value="Public Interface of Characteristic Lines">
+    <param name="Local" value="ESDL_Public_Interface_of_One-Dimensional_Tables.htm">
+    <param name="Name" value="Public Interface of Distributions and Group Tables">
+    <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="interpolation">
+    <param name="Name" value="Characteristic Lines - Description">
+    <param name="Local" value="ESDL_One-Dimensional_Tables_-_Description.htm">
+    <param name="Name" value="Characteristic Maps - Description">
+    <param name="Local" value="ESDL_Two-Dimensional_Tables_-_Description.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="linear">
+      <param name="Name" value="Linear Interpolation (2D)">
+      <param name="Local" value="esdl_linear_interpolation_(2d).htm">
+      <param name="Name" value="Linear Interpolation (1D)">
+      <param name="Local" value="esdl_linear_interpolation(1d).htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Java programming language">
+    <param name="Name" value="ESDL as a Modelling Language">
+    <param name="Local" value="esdl_esdl_as_modellinglanguage.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="keyword">
+    <param name="See Also" value="keyword">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="reserved">
+      <param name="Name" value="Variable Names">
+      <param name="Local" value="ESDL_Variable_Names.htm">
+      <param name="Name" value="Reserved Keywords">
+      <param name="Local" value="IntroductionEnglishUS.chm::/INT_Reserved_Keywords.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="length()">
+    <param name="Name" value="Public Interface of Arrays">
+    <param name="Local" value="ESDL_Public_Interface_of_Arrays.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="library functions">
+    <param name="See Also" value="library functions">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="access">
+      <param name="Name" value="Mathematical Functions">
+      <param name="Local" value="ESDL_Mathematical_Functions.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="limit()">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="linear interpolation">
+    <param name="Name" value="Linear Interpolation (2D)">
+    <param name="Local" value="esdl_linear_interpolation_(2d).htm">
+    <param name="Name" value="Linear Interpolation (1D)">
+    <param name="Local" value="esdl_linear_interpolation(1d).htm">
+    <param name="Name" value="Characteristic Lines - Description">
+    <param name="Local" value="ESDL_One-Dimensional_Tables_-_Description.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="log()">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="log">
+    <param name="Name" value="Data Types">
+    <param name="Local" value="ESDL_Data_Types.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="log10()">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="mathematical functions">
+    <param name="See Also" value="mathematical functions">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="access library functions">
+      <param name="Name" value="Mathematical Functions">
+      <param name="Local" value="ESDL_Mathematical_Functions.htm">
+      <param name="Name" value="Example: Access to Mathematical Functions">
+      <param name="Local" value="esdl_example__access_to_mathematical_functions.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="primitive methods">
+      <param name="Name" value="Primitive Methods">
+      <param name="Local" value="ESDL_Primitive_Methods.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="summary">
+      <param name="Name" value="Mathematical Functions: Summary">
+      <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="MathFcn">
+    <param name="Name" value="Mathematical Functions">
+    <param name="Local" value="ESDL_Mathematical_Functions.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="matrix">
+    <param name="Name" value="Matrices - Description">
+    <param name="Local" value="esdl_matrices_-_description.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="access in ESDL">
+      <param name="Name" value="Matrices - Description">
+      <param name="Local" value="esdl_matrices_-_description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="maximum size">
+      <param name="Name" value="Matrices - Description">
+      <param name="Local" value="esdl_matrices_-_description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="public interface">
+      <param name="Name" value="Public Interface of Matrices">
+      <param name="Local" value="ESDL_Public_Interface_of_Matrices.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="message">
+    <param name="See Also" value="message">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="access in ESDL">
+      <param name="Name" value="Messages">
+      <param name="Local" value="ESDL_Messages.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="in processes">
+      <param name="Name" value="Messages">
+      <param name="Local" value="ESDL_Messages.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="object">
+    <param name="See Also" value="object">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="access control">
+      <param name="Name" value="Access Control">
+      <param name="Local" value="esdl_access_control.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="object-oriented concept">
+    <param name="Name" value="ESDL as a Modelling Language">
+    <param name="Local" value="esdl_esdl_as_modellinglanguage.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="one-dimensional table">
+    <param name="Name" value="Characteristic Lines - Description">
+    <param name="Local" value="ESDL_One-Dimensional_Tables_-_Description.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="interpolation mode">
+      <param name="Name" value="Characteristic Lines - Description">
+      <param name="Local" value="ESDL_One-Dimensional_Tables_-_Description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="linear interpolation">
+      <param name="Name" value="Linear Interpolation (1D)">
+      <param name="Local" value="esdl_linear_interpolation(1d).htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="maximum size">
+      <param name="Name" value="Characteristic Lines - Description">
+      <param name="Local" value="ESDL_One-Dimensional_Tables_-_Description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="public interface">
+      <param name="Name" value="Public Interface of One-Dimensional Tables">
+      <param name="Local" value="ESDL_Public_Interface_of_One-Dimensional_Tables.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="pi()">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="pointers">
+    <param name="Name" value="ESDL as a Modelling Language">
+    <param name="Local" value="esdl_esdl_as_modellinglanguage.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="pow()">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="private">
+    <param name="Name" value="Access Control">
+    <param name="Local" value="esdl_access_control.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="public">
+    <param name="Name" value="Access Control">
+    <param name="Local" value="esdl_access_control.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="process">
+    <param name="Name" value="Working with Methods and Processes">
+    <param name="Local" value="esdl_working_with_methods_and_processes.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="using messages">
+      <param name="Name" value="Messages">
+      <param name="Local" value="ESDL_Messages.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="convert">
+      <param name="Name" value="Converting a Method or Process">
+      <param name="Local" value="BlockDiagramEditorEnglishUS.chm::/BDE_Convert_MethodProcess.htm">
+      <param name="Name" value="Conversion of Methods or Processes">
+      <param name="Local" value="BlockDiagramEditorEnglishUS.chm::/BDE_Conversion_MethodsProcesses.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="record">
+    <param name="Name" value="Structures">
+    <param name="Local" value="ESDL_Structures.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="return">
+    <param name="Name" value="Methods with a Return Value">
+    <param name="Local" value="ESDL_Methods_with_a_Return_Value.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="return value">
+    <param name="Name" value="Methods with a Return Value">
+    <param name="Local" value="ESDL_Methods_with_a_Return_Value.htm">
+    <param name="Name" value="Working with Methods and Processes">
+    <param name="Local" value="esdl_working_with_methods_and_processes.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="rounded interpolation">
+    <param name="Name" value="Characteristic Lines - Description">
+    <param name="Local" value="ESDL_One-Dimensional_Tables_-_Description.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="sch()">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="sdisc">
+    <param name="Name" value="Data Types">
+    <param name="Local" value="ESDL_Data_Types.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="search()">
+    <param name="Name" value="Public Interface of Two-Dimensional Tables">
+    <param name="Local" value="ESDL_Public_Interface_of_Two-Dimensional_Tables.htm">
+    <param name="Name" value="Public Interface of One-Dimensional Tables">
+    <param name="Local" value="ESDL_Public_Interface_of_One-Dimensional_Tables.htm">
+    <param name="Name" value="Public Interface of Distributions and Group Tables">
+    <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="sequence">
+    <param name="See Also" value="sequence">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="atomic">
+      <param name="Name" value="ESDL vs. Block Diagrams">
+      <param name="Local" value="esdl_esdl_vs._block_diagrams.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="setAt()">
+    <param name="See Also" value="setAt()">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="array">
+      <param name="Name" value="Public Interface of Arrays">
+      <param name="Local" value="ESDL_Public_Interface_of_Arrays.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="matrix">
+      <param name="Name" value="Public Interface of Matrices">
+      <param name="Local" value="ESDL_Public_Interface_of_Matrices.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="sign()">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="sin()">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="sinh()">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="sqrt()">
+    <param name="Name" value="Mathematical Functions: Summary">
+    <param name="Local" value="ESDL_Mathematical_Functions__Summary.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="State editors">
+    <param name="Name" value="Using ESDL in State Machines">
+    <param name="Local" value="esdl_using_esdl_in_state_machines.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="State machine">
+    <param name="See Also" value="State machine">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="ESDL in ~">
+      <param name="Name" value="Using ESDL in State Machines">
+      <param name="Local" value="esdl_using_esdl_in_state_machines.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Statement">
+    <param name="Name" value="ESDL Syntax">
+    <param name="Local" value="ESDL_ESDL_Syntax.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="block statement">
+      <param name="Name" value="ESDL Syntax">
+      <param name="Local" value="ESDL_ESDL_Syntax.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="static action">
+    <param name="Name" value="Using ESDL in State Machines">
+    <param name="Local" value="esdl_using_esdl_in_state_machines.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="strings">
+    <param name="Name" value="ESDL as a Modelling Language">
+    <param name="Local" value="esdl_esdl_as_modellinglanguage.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="syntax">
+    <param name="See Also" value="syntax">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="ESDL">
+      <param name="Name" value="ESDL Syntax">
+      <param name="Local" value="ESDL_ESDL_Syntax.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="method calls">
+      <param name="Name" value="Methods">
+      <param name="Local" value="ESDL_Methods.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="table">
+    <param name="See Also" value="table">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="group ~">
+      <param name="Name" value="Distributions and Group Tables - Description">
+      <param name="Local" value="esdl_distributions_and_group_tables_-_description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="interpolation mode">
+      <param name="Name" value="Characteristic Lines - Description">
+      <param name="Local" value="ESDL_One-Dimensional_Tables_-_Description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="linear interpolation">
+      <param name="Name" value="Linear Interpolation (2D)">
+      <param name="Local" value="esdl_linear_interpolation_(2d).htm">
+      <param name="Name" value="Linear Interpolation (1D)">
+      <param name="Local" value="esdl_linear_interpolation(1d).htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="one-dimensional">
+      <param name="Name" value="Characteristic Lines - Description">
+      <param name="Local" value="ESDL_One-Dimensional_Tables_-_Description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="two-dimensional">
+      <param name="Name" value="Characteristic Maps - Description">
+      <param name="Local" value="ESDL_Two-Dimensional_Tables_-_Description.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="tan()">
+    <param name="Name" value="Mathematical Functions">
+    <param name="Local" value="ESDL_Mathematical_Functions.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="tanh()">
+    <param name="Name" value="Mathematical Functions">
+    <param name="Local" value="ESDL_Mathematical_Functions.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Transition">
+    <param name="Name" value="Using ESDL in State Machines">
+    <param name="Local" value="esdl_using_esdl_in_state_machines.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Transition editor">
+    <param name="Name" value="Using ESDL in State Machines">
+    <param name="Local" value="esdl_using_esdl_in_state_machines.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="two-dimensional table">
+    <param name="Name" value="Characteristic Maps - Description">
+    <param name="Local" value="ESDL_Two-Dimensional_Tables_-_Description.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="linear interpolation">
+      <param name="Name" value="Linear Interpolation (2D)">
+      <param name="Local" value="esdl_linear_interpolation_(2d).htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="maximum size">
+      <param name="Name" value="Characteristic Maps - Description">
+      <param name="Local" value="ESDL_Two-Dimensional_Tables_-_Description.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="public interface">
+      <param name="Name" value="Characteristic Maps - Description">
+      <param name="Local" value="ESDL_Public_Interface_of_Two-Dimensional_Tables.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="type casting">
+    <param name="Name" value="Type Conversion">
+    <param name="Local" value="ESDL_Type_Conversion.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="udisc">
+    <param name="Name" value="Data Types">
+    <param name="Local" value="ESDL_Data_Types.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="variables">
+    <param name="See Also" value="variables">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="declaration">
+      <param name="Name" value="Data Types">
+      <param name="Local" value="ESDL_Data_Types.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="direct access methods">
+      <param name="Name" value="Direct Access Methods">
+      <param name="Local" value="ESDL_Direct_Access_Methods.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="naming conventions">
+      <param name="Name" value="Variable Names">
+      <param name="Local" value="ESDL_Variable_Names.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="public and private">
+      <param name="Name" value="Access Control">
+      <param name="Local" value="esdl_access_control.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="reserved keywords">
+      <param name="Name" value="Reserved Keywords">
+      <param name="Local" value="IntroductionEnglishUS.chm::/INT_Reserved_Keywords.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="xLength()">
+    <param name="Name" value="Public Interface of Matrices">
+    <param name="Local" value="ESDL_Public_Interface_of_Matrices.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="yLength()">
+    <param name="Name" value="Public Interface of Matrices">
+    <param name="Local" value="ESDL_Public_Interface_of_Matrices.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="element">
+    <param name="See Also" value="element">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="show unused">
+      <param name="Name" value="Searching/Deleting Unused Elements">
+      <param name="Local" value="ESDL_SearchDeleteUnusedElements.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="delete">
+      <param name="Name" value="Searching/Deleting Unused Elements">
+      <param name="Local" value="ESDL_SearchDeleteUnusedElements.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="copy">
+      <param name="Name" value="Copying Elements in the Outline Tab">
+      <param name="Local" value="IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="getX()">
+    <param name="Name" value="Public Interface of Characteristic Lines">
+    <param name="Local" value="ESDL_Public_Interface_of_One-Dimensional_Tables.htm">
+    <param name="Name" value="Public Interface of Distributions and Group Tables">
+    <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm">
+    <param name="Name" value="Public Interface of Characteristic Maps">
+    <param name="Local" value="ESDL_Public_Interface_of_Two-Dimensional_Tables.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="SetX()">
+    <param name="Name" value="Public Interface of Characteristic Lines">
+    <param name="Local" value="ESDL_Public_Interface_of_One-Dimensional_Tables.htm">
+    <param name="Name" value="Public Interface of Distributions and Group Tables">
+    <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="getValue()">
+    <param name="Name" value="Public Interface of Characteristic Lines">
+    <param name="Local" value="ESDL_Public_Interface_of_One-Dimensional_Tables.htm">
+    <param name="Name" value="Public Interface of Distributions and Group Tables">
+    <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm">
+    <param name="Name" value="Public Interface of Characteristic Maps">
+    <param name="Local" value="ESDL_Public_Interface_of_Two-Dimensional_Tables.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="setValue()">
+    <param name="Name" value="Public Interface of Characteristic Lines">
+    <param name="Local" value="ESDL_Public_Interface_of_One-Dimensional_Tables.htm">
+    <param name="Name" value="Public Interface of Distributions and Group Tables">
+    <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="getMaxSize()">
+    <param name="Name" value="Public Interface of Characteristic Lines">
+    <param name="Local" value="ESDL_Public_Interface_of_One-Dimensional_Tables.htm">
+    <param name="Name" value="Public Interface of Distributions and Group Tables">
+    <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="getCurrentSize()">
+    <param name="Name" value="Public Interface of Characteristic Lines">
+    <param name="Local" value="ESDL_Public_Interface_of_One-Dimensional_Tables.htm">
+    <param name="Name" value="Public Interface of Distributions and Group Tables">
+    <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="getCurrentSizeY()">
+    <param name="Name" value="Public Interface of Distributions and Group Tables">
+    <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm">
+    <param name="Name" value="Public Interface of Characteristic Maps">
+    <param name="Local" value="ESDL_Public_Interface_of_Two-Dimensional_Tables.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="setCurrentSize()">
+    <param name="Name" value="Public Interface of Characteristic Lines">
+    <param name="Local" value="ESDL_Public_Interface_of_One-Dimensional_Tables.htm">
+    <param name="Name" value="Public Interface of Distributions and Group Tables">
+    <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="group characteristic line">
+    <param name="See Also" value="group characteristic line">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="public interface">
+      <param name="Name" value="Public Interface of Distributions and Group Tables">
+      <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm#PIGroupLine">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="adaptive">
+      <param name="Name" value="Public Interface of Distributions and Group Tables">
+      <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm#PIGroupLine">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="group characteristic map">
+    <param name="See Also" value="group characteristic map">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="public interface">
+      <param name="Name" value="Public Interface of Distributions and Group Tables">
+      <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm#PIGroupMap">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="adaptive">
+      <param name="Name" value="Public Interface of Distributions and Group Tables">
+      <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm#PIGroupMap">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="getMaxSizeX()">
+    <param name="Name" value="Public Interface of Distributions and Group Tables">
+    <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm">
+    <param name="Name" value="Public Interface of Characteristic Maps">
+    <param name="Local" value="ESDL_Public_Interface_of_Two-Dimensional_Tables.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="getMaxSizeY()">
+    <param name="Name" value="Public Interface of Distributions and Group Tables">
+    <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm">
+    <param name="Name" value="Public Interface of Characteristic Maps">
+    <param name="Local" value="ESDL_Public_Interface_of_Two-Dimensional_Tables.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="getCurrentSizeX()">
+    <param name="Name" value="Public Interface of Distributions and Group Tables">
+    <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm">
+    <param name="Name" value="Public Interface of Two-Dimensional Tables">
+    <param name="Local" value="ESDL_Public_Interface_of_Two-Dimensional_Tables.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="getCurrentSizeY()">
+    <param name="Name" value="Public Interface of Distributions and Group Tables">
+    <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm">
+    <param name="Name" value="Public Interface of Characteristic Maps">
+    <param name="Local" value="ESDL_Public_Interface_of_Two-Dimensional_Tables.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="setCurrentSizeX()">
+    <param name="Name" value="Public Interface of Distributions and Group Tables">
+    <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm">
+    <param name="Name" value="Public Interface of Characteristic Maps">
+    <param name="Local" value="ESDL_Public_Interface_of_Two-Dimensional_Tables.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="setCurrentSizeY()">
+    <param name="Name" value="Public Interface of Distributions and Group Tables">
+    <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm">
+    <param name="Name" value="Public Interface of Characteristic Maps">
+    <param name="Local" value="ESDL_Public_Interface_of_Two-Dimensional_Tables.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="getY()">
+    <param name="Name" value="Public Interface of Characteristic Maps">
+    <param name="Local" value="ESDL_Public_Interface_of_Two-Dimensional_Tables.htm">
+    <param name="Name" value="Public Interface of Distributions and Group Tables">
+    <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="adaptive characteristic line/map">
+    <param name="Name" value="Public Interface of Distributions and Group Tables">
+    <param name="Local" value="ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm">
+    <param name="Name" value="Public Interface of Characteristic Lines">
+    <param name="Local" value="ESDL_Public_Interface_of_One-Dimensional_Tables.htm">
+    <param name="Name" value="Public Interface of Characteristic Maps">
+    <param name="Local" value="ESDL_Public_Interface_of_Two-Dimensional_Tables.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="restrictions">
+      <param name="Name" value="Adaptive Characteristic Lines/Maps: Restrictions">
+      <param name="Local" value="ESDL_AdaptiveCharacteristic_Restrictions.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="fixed characteristic map">
+    <param name="See Also" value="fixed characteristic map">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="adaptive">
+      <param name="Name" value="Public Interface of Characteristic Maps">
+      <param name="Local" value="ESDL_Public_Interface_of_Two-Dimensional_Tables.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="fixed characteristic line">
+    <param name="See Also" value="fixed characteristic line">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="adaptive">
+      <param name="Name" value="Public Interface of Characteristic Lines">
+      <param name="Local" value="ESDL_Public_Interface_of_One-Dimensional_Tables.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="external editor">
+    <param name="Name" value="External Editor">
+    <param name="Local" value="external_editor.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="use">
+      <param name="Name" value="Using an External Editor">
+      <param name="Local" value="open-external-editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="end ~ mode">
+      <param name="Name" value="Ending the External Editor Mode">
+      <param name="Local" value="end-external-editor.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Tree pane">
+    <param name="See Also" value="Tree pane">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="filter">
+      <param name="Name" value="Filtering the Tree Pane">
+      <param name="Local" value="esdl_filtering_the_component_pane.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="search">
+      <param name="Name" value="Searching the Tree Pane">
+      <param name="Local" value="IntroductionEnglishUS.chm::/INT_SearchTreePane.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Redundant data storage">
+    <param name="See Also" value="Redundant data storage">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="verify operator">
+      <param name="Name" value="Verify Operation">
+      <param name="Local" value="ESDL_VerifyOperator.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="verify">
+    <param name="See Also" value="verify">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="redundant data storage">
+      <param name="Name" value="Verify Operation">
+      <param name="Local" value="ESDL_VerifyOperator.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="convert">
+    <param name="See Also" value="convert">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="method">
+      <param name="Name" value="Converting a Method or Process">
+      <param name="Local" value="BlockDiagramEditorEnglishUS.chm::/BDE_Convert_MethodProcess.htm">
+      <param name="Name" value="Conversion of Methods or Processes">
+      <param name="Local" value="BlockDiagramEditorEnglishUS.chm::/BDE_Conversion_MethodsProcesses.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="process">
+      <param name="Name" value="Converting a Method or Process">
+      <param name="Local" value="BlockDiagramEditorEnglishUS.chm::/BDE_Convert_MethodProcess.htm">
+      <param name="Name" value="Conversion of Methods or Processes">
+      <param name="Local" value="BlockDiagramEditorEnglishUS.chm::/BDE_Conversion_MethodsProcesses.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Conversion operations">
+    <param name="Name" value="Conversion Operations">
+    <param name="Local" value="ESDL_ConversionOperations.htm">
+    <param name="Name" value="Examples: Conversion Operations">
+    <param name="Local" value="ESDL_Example_ConversionOperations.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Assert operation">
+    <param name="Name" value="Assert Operation">
+    <param name="Local" value="ESDL_AssertOperation.htm">
+  </object>
+</ul>
+</html>

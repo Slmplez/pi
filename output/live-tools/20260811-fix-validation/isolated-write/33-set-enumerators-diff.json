@@ -1,0 +1,27 @@
+{
+  "expected": [
+    "FIX_OFF",
+    "FIX_ON",
+    "FIX_DIAG"
+  ],
+  "readback": {
+    "enumerators": [
+      "FIX_OFF",
+      "FIX_ON",
+      "FIX_DIAG"
+    ]
+  },
+  "comparison": {
+    "matches": true,
+    "expected": [
+      "FIX_OFF",
+      "FIX_ON",
+      "FIX_DIAG"
+    ],
+    "actual": [
+      "FIX_OFF",
+      "FIX_ON",
+      "FIX_DIAG"
+    ]
+  }
+}

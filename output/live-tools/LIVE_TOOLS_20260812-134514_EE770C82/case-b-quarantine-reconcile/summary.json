@@ -1,0 +1,12 @@
+{
+  "planStatus": "preflight",
+  "commitStatus": "partial",
+  "quarantined": true,
+  "journalStatus": "unknown",
+  "blockedStatus": "blocked",
+  "blockedCode": "mutation_target_quarantined",
+  "reconcileStatus": "rolled_back",
+  "guardCleared": true,
+  "databaseFingerprint": "49be9da8ddaa5ac7b09b24a394229cbbd9a9dc3dbabadf9704da7ff25633274a",
+  "targetOid": "040g00001g001qg71060i85ff2002"
+}

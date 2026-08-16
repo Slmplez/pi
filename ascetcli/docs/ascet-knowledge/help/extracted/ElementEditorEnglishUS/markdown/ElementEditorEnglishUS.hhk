@@ -1,0 +1,329 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="index">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="dependent parameter">
+    <param name="Name" value="Dependent Elements">
+    <param name="Local" value="EEd_dependent_elements.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="create formula">
+      <param name="Name" value="Creating the Formula for Dependent Parameters">
+      <param name="Local" value="EEd_create_fromula_dependent.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit formula">
+      <param name="Name" value="Editing the Formula of a Dependent Parameter">
+      <param name="Local" value="EEd_edit_formula_dependent.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="specify formal parameter">
+      <param name="Name" value="Data Editor - Editing Dependent Parameters">
+      <param name="Local" value="DataEditorEnglishUS.chm::/DEd_Editing_Dependent_Parameters.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit data">
+      <param name="Name" value="Data Editor - Editing Dependent Parameters">
+      <param name="Local" value="DataEditorEnglishUS.chm::/DEd_Editing_Dependent_Parameters.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="editor">
+    <param name="See Also" value="editor">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="properties">
+      <param name="Name" value="Opening the Properties Editor">
+      <param name="Local" value="EEd_open_element_editor.htm">
+      <param name="Name" value="Overview - Properties Editor">
+      <param name="Local" value="EEd_Overview.htm">
+      <param name="Name" value="Reference to User Interface">
+      <param name="Local" value="EEd_Reference_to_User_Interface.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="element">
+    <param name="See Also" value="element">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="dimension">
+      <param name="Name" value="Editing the Configuration of a Composite Element">
+      <param name="Local" value="eed_editconfiguration_compositeelement.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="disable">
+      <param name="Name" value="Enabling or Disabling Elements">
+      <param name="Local" value="EEd_enable_diabale_elements.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="enable">
+      <param name="Name" value="Enabling or Disabling Elements">
+      <param name="Local" value="EEd_enable_diabale_elements.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Get/Set port">
+      <param name="Name" value="Enabling or Disabling Elements">
+      <param name="Local" value="EEd_enable_diabale_elements.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="instance">
+      <param name="Name" value="Instances and Occurrences">
+      <param name="Local" value="EEd_instances_occurrences.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="kind">
+      <param name="Name" value="Editing the Configuration of a Scalar Element">
+      <param name="Local" value="EEd_edit_element_configuration.htm">
+      <param name="Name" value="Editing the Configuration of a Composite Element">
+      <param name="Local" value="eed_editconfiguration_compositeelement.htm">
+      <param name="Name" value="Editing the Configuration of a Complex Element">
+      <param name="Local" value="eed_editconfiguration_complexelement.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="occurrence">
+      <param name="Name" value="Instances and Occurrences">
+      <param name="Local" value="EEd_instances_occurrences.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="properties">
+      <param name="Name" value="Overview">
+      <param name="Local" value="EEd_Overview.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="scope">
+      <param name="Name" value="Editing the Configuration of a Scalar Element">
+      <param name="Local" value="EEd_edit_element_configuration.htm">
+      <param name="Name" value="Editing the Configuration of a Composite Element">
+      <param name="Local" value="eed_editconfiguration_compositeelement.htm">
+      <param name="Name" value="Editing the Configuration of a Complex Element">
+      <param name="Local" value="eed_editconfiguration_complexelement.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="type">
+      <param name="Name" value="Editing the Configuration of a Scalar Element">
+      <param name="Local" value="EEd_edit_element_configuration.htm">
+      <param name="Name" value="Editing the Configuration of a Composite Element">
+      <param name="Local" value="eed_editconfiguration_compositeelement.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="imported">
+      <param name="Name" value="Imported Elements">
+      <param name="Local" value="EEd_ImportedElements.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="calibration access">
+      <param name="Name" value="Calibration Access">
+      <param name="Local" value="eed_calibrationaccess.htm">
+      <param name="Name" value="Editing the Calibration Access">
+      <param name="Local" value="EEd_EditCalibrationAccess.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="properties editor">
+    <param name="See Also" value="properties editor">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit configuration">
+      <param name="Name" value="Editing the Configuration of a Scalar Element">
+      <param name="Local" value="EEd_edit_element_configuration.htm">
+      <param name="Name" value="Editing the Configuration of a Composite Element">
+      <param name="Local" value="eed_editconfiguration_compositeelement.htm">
+      <param name="Name" value="Editing the Configuration of a Complex Element">
+      <param name="Local" value="eed_editconfiguration_complexelement.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="open">
+      <param name="Name" value="Opening the Properties Editor">
+      <param name="Local" value="EEd_open_element_editor.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Get/Set ports">
+    <param name="See Also" value="Get/Set ports">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="element">
+      <param name="Name" value="Enabling or Disabling Elements">
+      <param name="Local" value="EEd_enable_diabale_elements.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Implementation cast">
+    <param name="See Also" value="Implementation cast">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="properties editor">
+      <param name="Name" value="Properties Editor for Implementation Casts, Record Elements and Mode Groups">
+      <param name="Local" value="EEd_PropertiesEditor_ModeGroups.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="mode group">
+    <param name="See Also" value="mode group">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="properties editor">
+      <param name="Name" value="Properties Editor for Implementation Casts, Record Elements and Mode Groups">
+      <param name="Local" value="EEd_PropertiesEditor_ModeGroups.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="memory">
+    <param name="See Also" value="memory">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="non-volatile">
+      <param name="Name" value="Editing the Configuration of a Scalar Element ">
+      <param name="Local" value="EEd_edit_element_configuration.htm">
+      <param name="Name" value="Editing the Configuration of a Composite Element">
+      <param name="Local" value="eed_editconfiguration_compositeelement.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="volatile">
+      <param name="Name" value="Editing the Configuration of a Scalar Element ">
+      <param name="Local" value="EEd_edit_element_configuration.htm">
+      <param name="Name" value="Editing the Configuration of a Composite Element">
+      <param name="Local" value="eed_editconfiguration_compositeelement.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="object">
+    <param name="See Also" value="object">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="access control">
+      <param name="Name" value="Enabling or Disabling Elements">
+      <param name="Local" value="EEd_enable_diabale_elements.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="non-volatile">
+    <param name="Name" value="Editing the Configuration of a Scalar Element ">
+    <param name="Local" value="EEd_edit_element_configuration.htm">
+    <param name="Name" value="Editing the Configuration of a Composite Element">
+    <param name="Local" value="eed_editconfiguration_compositeelement.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="parameter">
+    <param name="See Also" value="parameter">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="dependent ~">
+      <param name="Name" value="Creating the Formula for Dependent Parameters">
+      <param name="Local" value="EEd_create_fromula_dependent.htm">
+      <param name="Name" value="Dependent Elements">
+      <param name="Local" value="EEd_dependent_elements.htm">
+      <param name="Name" value="Editing the Formula of a Dependent Parameter">
+      <param name="Local" value="EEd_edit_formula_dependent.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="temporary variable">
+    <param name="See Also" value="temporary variable">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="use">
+      <param name="Name" value="Using Temporary Variables">
+      <param name="Local" value="EEd_use_temporary_variables.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="variable">
+    <param name="See Also" value="variable">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="public and private">
+      <param name="Name" value="Enabling or Disabling Elements">
+      <param name="Local" value="EEd_enable_diabale_elements.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="temporary ~">
+      <param name="Name" value="Using Temporary Variables">
+      <param name="Local" value="EEd_use_temporary_variables.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="volatile">
+    <param name="Name" value="Editing the Configuration of a Scalar Element">
+    <param name="Local" value="EEd_edit_element_configuration.htm">
+    <param name="Name" value="Editing the Configuration of a Composite Element">
+    <param name="Local" value="eed_editconfiguration_compositeelement.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="reference">
+    <param name="See Also" value="reference">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="specify">
+      <param name="Name" value="Specifying a Reference">
+      <param name="Local" value="EEd_Specifying_a_Reference.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="imported element">
+    <param name="Name" value="Imported Elements">
+    <param name="Local" value="EEd_ImportedElements.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="synchronize with export">
+      <param name="Name" value="Imported Elements">
+      <param name="Local" value="EEd_ImportedElements.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Interrunnable variable">
+    <param name="See Also" value="Interrunnable variable">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="properties editor">
+      <param name="Name" value="Properties Editor for Interrunnable Variables">
+      <param name="Local" value="eed_for_interrunnablevariables.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="matrix">
+    <param name="See Also" value="matrix">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="variable size">
+      <param name="Name" value="Specifying an Array or Matrix with Variable Size">
+      <param name="Local" value="Eed_SpecifyArrayMatrix_VariableSize.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Array">
+    <param name="See Also" value="Array">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="variable size">
+      <param name="Name" value="Specifying an Array or Matrix with Variable Size">
+      <param name="Local" value="Eed_SpecifyArrayMatrix_VariableSize.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="variable size">
+    <param name="Name" value="Specifying an Array or Matrix with Variable Size">
+    <param name="Local" value="Eed_SpecifyArrayMatrix_VariableSize.htm">
+  </object>
+</ul>
+</html>

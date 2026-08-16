@@ -1,0 +1,118 @@
+{
+  "entries": [
+    {
+      "customType": "ascet.permission_mode",
+      "data": {
+        "mode": "default"
+      }
+    },
+    {
+      "customType": "ascet.permission_mode",
+      "data": {
+        "mode": "default"
+      }
+    },
+    {
+      "customType": "ascet.permission_mode",
+      "data": {
+        "mode": "acceptEdits"
+      }
+    },
+    {
+      "customType": "ascet.permission_mode",
+      "data": {
+        "mode": "acceptEdits"
+      }
+    },
+    {
+      "customType": "ascet.permission_mode",
+      "data": {
+        "mode": "acceptEdits"
+      }
+    },
+    {
+      "customType": "ascet.permission_mode",
+      "data": {
+        "mode": "acceptEdits"
+      }
+    },
+    {
+      "customType": "ascet.permission_mode",
+      "data": {
+        "mode": "auto"
+      }
+    },
+    {
+      "customType": "ascet.permission_mode",
+      "data": {
+        "mode": "auto"
+      }
+    },
+    {
+      "customType": "ascet.permission_mode",
+      "data": {
+        "mode": "acceptEdits"
+      }
+    },
+    {
+      "customType": "ascet.permission_mode",
+      "data": {
+        "mode": "auto"
+      }
+    },
+    {
+      "customType": "ascet.permission_mode",
+      "data": {
+        "mode": "auto"
+      }
+    },
+    {
+      "customType": "ascet.permission_mode",
+      "data": {
+        "mode": "default"
+      }
+    },
+    {
+      "customType": "ascet.permission_mode",
+      "data": {
+        "mode": "default"
+      }
+    },
+    {
+      "customType": "ascet.permission_mode",
+      "data": {
+        "mode": "default"
+      }
+    },
+    {
+      "customType": "ascet.permission_mode",
+      "data": {
+        "mode": "default"
+      }
+    },
+    {
+      "customType": "ascet.permission_mode",
+      "data": {
+        "mode": "default"
+      }
+    },
+    {
+      "customType": "ascet.permission_mode",
+      "data": {
+        "mode": "default"
+      }
+    },
+    {
+      "customType": "ascet.permission_mode",
+      "data": {
+        "mode": "default"
+      }
+    },
+    {
+      "customType": "ascet.permission_mode",
+      "data": {
+        "mode": "default"
+      }
+    }
+  ]
+}

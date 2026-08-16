@@ -1,0 +1,11 @@
+{
+  "ok": false,
+  "mode": "cleanup_only",
+  "ascetCwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+  "smokeRoot": "DEMO\\__pi_permission_smoke__20260815-101950",
+  "expectedDatabaseFingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c",
+  "cleanupMethodComponent": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill",
+  "cleanupMethodName": "PiCompoundMethod",
+  "cleanupResults": [],
+  "error": "ASCET runtime status is not healthy enough for cleanup."
+}

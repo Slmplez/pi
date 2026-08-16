@@ -1,0 +1,591 @@
+{
+  "generated_at": "2026-03-28T03:18:04.011326Z",
+  "input_chm": "E:\\ETAS\\ASCET6.4\\Help\\ImplementationEditorEnglishUS.chm",
+  "unpack_dir": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\implementation-editor-rbwcclb3\\export\\unpacked",
+  "total_files": 95,
+  "total_size_bytes": 531674,
+  "counts_by_extension": {
+    ".gif": 12,
+    ".htm": 74,
+    ".js": 2,
+    ".xml": 1,
+    ".brs": 1,
+    ".glo": 1,
+    ".hhc": 1,
+    ".hhk": 1,
+    ".css": 1,
+    ".lng": 1
+  },
+  "files": [
+    {
+      "relative_path": "3b0126 copy.gif",
+      "size": 991,
+      "sha256": "bb622e78ecf84fc618fb5ca1fbbbf1fdc0a4945256408d9014a88605b2929a2b",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "activate_automatic_impl.htm",
+      "size": 1919,
+      "sha256": "0f759c58bd52e728caa29ca6dc583ed6679f872d9b37fab80bd7d949c6cd4f91",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "adjust_impl.htm",
+      "size": 3469,
+      "sha256": "3d08e65cd76af71b4426f23a4652989c0e3e0d070b790e5d88b4db2769c1a114",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "assign_impl_type.htm",
+      "size": 2310,
+      "sha256": "617644e5707fd97886f7cec3f35dae2ff1524cd4c49da6e96694d2f219235245",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "automatic_conversion_op_impl.htm",
+      "size": 4632,
+      "sha256": "98b421306e36cf8c611f468ff95cb13e39d36ce672e1cf57e3a9054124b35be3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "BUTTON.GIF",
+      "size": 844,
+      "sha256": "6d10387853fe90ec87f720a6460a8cd1d2559683e66c81683a705a5e0e6f2ea9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_editimplementation.gif",
+      "size": 1052,
+      "sha256": "deeedcdfe2832786848012bae9161a8b166119a041d09c6f719ee8054073e17e",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "define_impl_tables.htm",
+      "size": 3178,
+      "sha256": "51a4a8cb00c5655957e435f6662cf769a6f958a243e81a2eddf618961394431f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "display.js",
+      "size": 5656,
+      "sha256": "85712144c31aac1d2706f3b60475055a673961f71bc37c0f4c9e9c4b85fa9b31",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "eHelp.xml",
+      "size": 371,
+      "sha256": "566e1da20a792a163ad3452d9735aa00a9cb895c3b443ad67fc3d4b9ad797a00",
+      "extension": ".xml"
+    },
+    {
+      "relative_path": "ehlpdhtm.js",
+      "size": 125852,
+      "sha256": "eb4282273a13b7a65ce6a5acd889e54f339a377e60545b003cb950c659761558",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "example_Ied_cont_b.gif",
+      "size": 25984,
+      "sha256": "00ecc399ce04ea16b0c093ea1cda1168014fc791a43b1f36826fa96467a614c8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "example_Ied_input_b.gif",
+      "size": 26976,
+      "sha256": "329181789032478af65a734a4d0e38ef7b9c5bc9412a4d28714c8cbdcba547b0",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Excluding_Zero.htm",
+      "size": 2016,
+      "sha256": "06d309ed40e55fbf6a660646359c16f858fc6de4d271fc88c43c9e4b57f2825c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "icon_defImpl.gif",
+      "size": 964,
+      "sha256": "a0d746afa460251425656129724fa76d1370dafe6309cb03710c2fb9c94a52f3",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "icon_error.gif",
+      "size": 1017,
+      "sha256": "055d304e1b1c286166e6da5e896d937f04bcb5312bcb3d71e8fdd03141e967f8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "icon_info.gif",
+      "size": 982,
+      "sha256": "2e1403fc5468dd9ab6861dfe694d5362ae3b5f57b340893a63f0a98b6a7c4711",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "icon_smvariable.gif",
+      "size": 1090,
+      "sha256": "f03ba0a47f95a20a6ab40b457e84103af8e25437c32bead067ee691c9659faf2",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Ied_AutomaticConversion_OperatorImplementation_ResultsA.htm",
+      "size": 15218,
+      "sha256": "7863b92e3f687613a4d4e85a054e1e91cc687a91ad76b6ac54c3954ec5802b65",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ied_autosartab.htm",
+      "size": 6468,
+      "sha256": "397ea2fa9f2c45b3aa7307e71661c01d9b57dcf5a265b8b675920120f369ad26",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_Consistency_Checks.htm",
+      "size": 7797,
+      "sha256": "8a82de4379ea5297c1d46e5a7dd11b7d46d1df47bade0e3b4113473c608052fc",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ied_create_copy_implementation.htm",
+      "size": 3757,
+      "sha256": "aa6b7cae1458c9cf04887abbd579009e4dc5a99603caaa9f4e34764d854fff90",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_DealingWithOperatorImpl.htm",
+      "size": 1310,
+      "sha256": "66a3cb69b6335bbe0af15319e797a0becc72ce282d920489afae5f5a834fa387",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_Deleting_Implementation.htm",
+      "size": 1335,
+      "sha256": "f4520a3d1e0f96d0e0e08aafd0e5fad2a120eaf4f021b3fdb229e574624e8d3e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_division.htm",
+      "size": 2658,
+      "sha256": "476f9cf66a27e9824fb0557190b4c4ea04d7741e985225f9deaed3eeadbcdeae",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_edit_process_method.htm",
+      "size": 4154,
+      "sha256": "8f482684f7ec7cc432a0009395f9f8d3610c848c044d4315c479f7918ea5d3cb",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_Element_Menu.htm",
+      "size": 1893,
+      "sha256": "872590a82f6ff8e802217eeb0b174a492d29084e8e28a39b748d40423fabf432",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_Examples_RulesFormulas.htm",
+      "size": 10497,
+      "sha256": "4358d323bbb3d7c9280814c6471847f8344783d2b2ca5864678fc40232cb5ad2",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_ExternalStruct_Tab.htm",
+      "size": 1851,
+      "sha256": "e06e33284ebd47f02d9dc82e0961a91bee6fe5d2e65d801b624102c53a16ab78",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_Formulas.htm",
+      "size": 4548,
+      "sha256": "24b204e7df762e3bb8f1122dd157440a864fab50ed371b897ef59a98ef4ecdcc",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_Impl_Argu_ReturnValues_of_Methods.htm",
+      "size": 2468,
+      "sha256": "ee6aa61a3ac5bbe48ff249374f774a7f80ab860fada2790ebd0d0e09a9448b41",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_impl_arrays_matrices_tables.htm",
+      "size": 1163,
+      "sha256": "a5921137d11aa6d38e2acff66df69eedfcc25c153123610db1937e68b59af40f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_impl_comp_proj_s.htm",
+      "size": 2375,
+      "sha256": "1cb13f2b16576ab20287a642cf8920a23541f1e17b563aa26c819339df18ef0d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_Impl_Editor_for_Scalar_Nonlogical_Elements.htm",
+      "size": 2755,
+      "sha256": "cf94bd77f4aa1a3886499dedb63e876579e504b0a1a7fb17086acf2ad83ca230",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ied_implementation_editor_methodsprocesses.htm",
+      "size": 6849,
+      "sha256": "dd249c478ff784b0fe090cf1628f35f327905a4c15f1ec38fbb3628533a271e9",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ied_implementation_editor_non-scalar_elements.htm",
+      "size": 2916,
+      "sha256": "098fa3327d1e3e1145e140df3fd0758eee9161a50642738d7471f6c092758e0c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_Implementation_for_AddSubWindow.htm",
+      "size": 3625,
+      "sha256": "0962f6eef6394005a7a2f2dee450d6740464ce3d06b6452e52984956c53b433e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_Implementation_Menu.htm",
+      "size": 2968,
+      "sha256": "5db364fe9f4d4f4e603e3950c5553fbb35cdefcd6264b16b2b98b9d1bd75c1c7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IED_Implementation_NonLogicalElements.htm",
+      "size": 1558,
+      "sha256": "cc408efb860b9bf313212ddd77054923202b3eb2f54983450ad03098630ea2e2",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IED_ImplementationComponents.htm",
+      "size": 1523,
+      "sha256": "9fc91c8b18d07a6c56dfcf49623869301a0524867a263599c4a7ac58b1966b9d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_ImplementationEditor_for_ComponentsProjects.htm",
+      "size": 13529,
+      "sha256": "9337224647a3edef9b183bf92bf17cd119f6261e7f848e3e6188758b274eef47",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_ImplementationforOperatorWindow.htm",
+      "size": 1109,
+      "sha256": "0acde4bfe64b2e4d53eedb1654e0a3f1a0108c53a0dadbceacd9f55b80df0e0f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_Implementing_Records.htm",
+      "size": 1067,
+      "sha256": "c65d718b83e8c1d769584ea5b99db7ae1cbfd21e43d0123a6d8f4669b74d45bb",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IED_ImplementingReferences.htm",
+      "size": 10911,
+      "sha256": "9d952abf61ff39a9ce06bcd5a784c7360d1c26835d37bcd4b3953382be4a5608",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_ImplRefEditor.htm",
+      "size": 3421,
+      "sha256": "6997da9870b3043b73d1dbefa652062a6237509d2aabe49e53c75095b751120c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_Limitations.htm",
+      "size": 2674,
+      "sha256": "4ce7298c67225eb36ce294f694ea7b4e1a95d6606b6566100e481d54b49bfb90",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Ied_multiplexer_max_min.htm",
+      "size": 2728,
+      "sha256": "aafce7684b134fa04e83feeb0506c9294fd3d1358fb4cd5786fa87da520bdc1e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_multiplication.htm",
+      "size": 2505,
+      "sha256": "b774500c9f47ab43b854b638338cd103594f327c0f6510b9c40e0c1b35c6bfab",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_open_compo_project.htm",
+      "size": 2774,
+      "sha256": "6e7529beaafe20f16315424fe21e84e26fd67c9a438e5b672df1670aaa37d058",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_open_impl.htm",
+      "size": 2787,
+      "sha256": "e1511bbc4d699d56c9e8390b4f052e9f9d1f0ff518302afdbf004e616ba594c3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_open_impl_editor.htm",
+      "size": 1917,
+      "sha256": "bc5b5a565a3fb54e1dc363ad2f0cc74c9ab22e95e993b7f338d8f655c012d4e5",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_open_impleditor_for_element.htm",
+      "size": 2680,
+      "sha256": "f444526d598899a5189cfd7178c48d66519a583630c3b396418040096ccd6ec6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_open_impleditor_includedcomponent.htm",
+      "size": 2923,
+      "sha256": "b2afb4940ade27140136888418999cc372536b64281e4209debc381d3afbb878",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_Overview.htm",
+      "size": 2991,
+      "sha256": "424262bb89da2c40f15537a9aecec6707ebc0f85782bb84c621a1bb33894843b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_Reference_to_UserInterface.htm",
+      "size": 1487,
+      "sha256": "55181d4588a3664812685d317302af5e8b03bd1558a264e9d7a7d61c53a502ae",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_ReferencesWindow.htm",
+      "size": 1908,
+      "sha256": "7c816ed52c6b13f338cfa49cf3f102b11feb9af2c81a88f3ecbf5d29a015a1cb",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_Select_DefaultImplementation.htm",
+      "size": 1666,
+      "sha256": "6a850fce1b06df1b74b605fb5063e2bb8e5cc3313094ab81b5f238895915e88e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_select_formula.htm",
+      "size": 3089,
+      "sha256": "0944a578d082da54a3308620ba34fa4c809db63a0f95d0e8eeff257c8c2937f1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_select_impl.htm",
+      "size": 3677,
+      "sha256": "efd77965e955429b88c9ba3d5519920fe588874b9898858055c6b0078fb30749",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_Settings_Tab.htm",
+      "size": 8090,
+      "sha256": "f5119535e9f6462fe01023193cdcf068360dcde5511ae871e965640c720780c3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IEd_SpecifyMemLoc_StateVariables.htm",
+      "size": 3482,
+      "sha256": "35de29ed37210b943a002088eabf6cc96266a3280abc01a326f1629b6dd1b273",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ied_specifyrescalableimplementations.htm",
+      "size": 5814,
+      "sha256": "cbfe87a1cc420ebd66aeb04be1ec6f31e9badf36650d13e243b7ec0cabf40f53",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "images/exp_minus.gif",
+      "size": 837,
+      "sha256": "18a8ea974d756d370d6f7067283fc8c0b26f235c8e98bdaaf13a63e7dca8b1c4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exp_plus.gif",
+      "size": 842,
+      "sha256": "9ff1991cf9c6de621e2672bebf74fbc56680e3413f74d6cf18e25238701651be",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/statisch.gif",
+      "size": 831,
+      "sha256": "481cd3e8b966f0a4398b853efce140287877173b926b53d710791675a1b15aa4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "impl_impl_casts.htm",
+      "size": 1299,
+      "sha256": "5d71cb8289739264930a216ac1d8a97bafc3860937fee2d19494a4a0baca2797",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "impl_localvariables.htm",
+      "size": 11289,
+      "sha256": "db032ddbb748826a15493b11dca4881f645f230b27d5859a1e17c94f5a1cb040",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "impl_method_process.htm",
+      "size": 2134,
+      "sha256": "9a95494fd6d24751adafc8fee5eb8bd179bcc986247f9408dcd4062b6906530f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "impl_scalar_nonlogical.htm",
+      "size": 1611,
+      "sha256": "c19415f2b3d5761bee42fe5a2a1b51e72b7ac09d67d80f523f092d7c1c6ce601",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "impl_temporary_variables.htm",
+      "size": 2144,
+      "sha256": "f3f8e5405f82a81fd7fc1f45c308e2df6f6873fb28b7ddf53616396e1f4a5d4a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ImplementationEditorEnglishUS.brs",
+      "size": 2,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "extension": ".brs"
+    },
+    {
+      "relative_path": "ImplementationEditorEnglishUS.glo",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "extension": ".glo"
+    },
+    {
+      "relative_path": "ImplementationEditorEnglishUS.hhc",
+      "size": 16955,
+      "sha256": "22786333680c559859e139b01707ccde3db83db4c8512050b39af45402e88d48",
+      "extension": ".hhc"
+    },
+    {
+      "relative_path": "ImplementationEditorEnglishUS.hhk",
+      "size": 28654,
+      "sha256": "c1d119b29acc0e64c4ed3106363f8056ab084be44b483702fc6e20c0c4708dbb",
+      "extension": ".hhk"
+    },
+    {
+      "relative_path": "Layout.css",
+      "size": 9851,
+      "sha256": "cdfc361b808ca868f0ae4987ed068c1c02c3122bd9d967d8fad4c1bcda550e5b",
+      "extension": ".css"
+    },
+    {
+      "relative_path": "Master_Page.htm",
+      "size": 1417,
+      "sha256": "989fde0e3992b04839c1f4325159fba7fd05987b3a19f3d61d9614af7335c14f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "method_process_impl.htm",
+      "size": 1650,
+      "sha256": "6ba937f3678f68d3ff88c79432830a49faadbc4b3cdcec986e8853d80809aaf2",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "open_incld_impl.htm",
+      "size": 2191,
+      "sha256": "70e7c86091e52d8539334e056c3e1446e8ee165cb2c2a2a2fe3add07f6490ff3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "operator_impl.htm",
+      "size": 2918,
+      "sha256": "a8f6821bc0ef1fe699b7453afe8be6c55afe8c440c149eacbde89ece7cd61a1f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "rename_individual_op_impl.htm",
+      "size": 2077,
+      "sha256": "f3cf5e221453e9256a367d39573d5358eed8930edcef519c82c5d77714b0a2cd",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "replace_op_impl.htm",
+      "size": 1856,
+      "sha256": "3ddbdde0ef8858f3d47470107b69d2c5943e962742c272cc68a28c476d4ba70d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "RoboHHRE.lng",
+      "size": 3586,
+      "sha256": "607e16623990c7b694bb11537edbecfbd7057fda1739bba5173e9d8a4942b18f",
+      "extension": ".lng"
+    },
+    {
+      "relative_path": "search_op_impl.htm",
+      "size": 1863,
+      "sha256": "c2737ff2f0a0483b5a4ec79d0790ea3a42cd2fc7026f5f74d84cb8d9c0d5cecc",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "select_memory_location.htm",
+      "size": 1329,
+      "sha256": "1c44f397b09d31c3d60ab2a499873a7d3dc03ac187788855d420fe0298e71d55",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "set_limitation.htm",
+      "size": 1944,
+      "sha256": "69caabff6bbc83df0c3ebb33fb3e18e6b79a93428866db4382533c3baf25b403",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "set_masterpg_impl.htm",
+      "size": 3249,
+      "sha256": "6ff6cb0ef9ff0617587a242c9a500606c825bb6281fa45b71f9ddcc0f7016c27",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "set_overflow_handling.htm",
+      "size": 2961,
+      "sha256": "f35ecae0dd6e4fab35d509fd3f4007da110ca0f18c1e9eea074f6ddba03deef7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "specify_enum_impl.htm",
+      "size": 2533,
+      "sha256": "c525a5c59ec3eedaff357e89ca776d253a5f22cca3b84de821dbc6560c5a2432",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "specify_impl-logicalelement.htm",
+      "size": 3071,
+      "sha256": "a420bf072c6f1bb39ebd526bbd23e3407c3e6815ae8861868a88e36a1af0cec9",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "specify_impl-master.htm",
+      "size": 12640,
+      "sha256": "3425f7f1ab7aa8b2665933c95390020791807d0c1bb4efbaabfeea28dcc9f991",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "specify_impl_mode.htm",
+      "size": 10123,
+      "sha256": "2ba483a96b98b74f5e16fccdc343339e9b67df0eb5cd4a396e6a093bee560b32",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "specifying_individual_impl.htm",
+      "size": 2140,
+      "sha256": "aa8c50e0b85260f7c65b9c760c19760b5f4c7b001650a129c20947810371b0e4",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "using_impl_types.htm",
+      "size": 2652,
+      "sha256": "24fc834feb2fba901dc290fcba71a02a9269efbd464bf5219e9e8587e126700b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Value_Tab.htm",
+      "size": 10193,
+      "sha256": "b8eab0c91ac677dfb651324d10f8e43e8521b120de722a9a7bd7f6bc4c5fb91c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "view_op_impl.htm",
+      "size": 2614,
+      "sha256": "74622179d7c7d0715826f6a4f02262a5b38f6a73cec0d3c41817275d634761ee",
+      "extension": ".htm"
+    }
+  ]
+}

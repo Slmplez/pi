@@ -1,0 +1,166 @@
+{
+  "stage": "preview-PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller-action",
+  "request": {
+    "toolName": "ascet_edit",
+    "params": {
+      "action": "create_method",
+      "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+      "componentKind": "statemachine",
+      "methodName": "__PiPermissionProbe__",
+      "methodKind": "action",
+      "ifExists": "fail",
+      "intent": "preview"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"status\": \"error\",\n  \"permission\": {\n    \"mode\": \"default\",\n    \"decision\": \"not_evaluated\"\n  },\n  \"preflight\": {\n    \"status\": \"failed\"\n  },\n  \"editability\": {\n    \"status\": \"unknown\"\n  },\n  \"mutation\": {\n    \"status\": \"not_started\"\n  },\n  \"verification\": {\n    \"status\": \"missing\"\n  },\n  \"error\": {\n    \"code\": \"create_method_capability_not_supported\",\n    \"message\": \"Diagram 'Main' does not support creating 'Action'.\"\n  },\n  \"bridge\": {\n    \"beforeBridge\": false,\n    \"bridgeEntered\": false,\n    \"backendResponseReceived\": false\n  },\n  \"recovery\": {\n    \"required\": false\n  }\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "error",
+        "error": {
+          "code": "create_method_capability_not_supported",
+          "message": "Diagram 'Main' does not support creating 'Action'."
+        }
+      },
+      "raw": {
+        "ok": true,
+        "data": {
+          "type": "response",
+          "protocolVersion": 1,
+          "ok": true,
+          "result": {
+            "databasePath": "C:\\Repo\\F05_IPB_L2_0429",
+            "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+            "componentOid": "040g08k2e0001k87086g3rcb99236",
+            "componentKind": "StateMachine",
+            "languageKind": "ESDL",
+            "diagramName": "Main",
+            "diagramExists": true,
+            "diagramRuntimeType": "de.etas.cebra.toolAPI.Ascet.DiscreteMethodDiagram",
+            "requiredMethod": "AddAction",
+            "requiredSignature": "AddAction(String)",
+            "requiredMethodAvailable": false,
+            "addDiagramAvailable": false,
+            "futureMethodCapabilityProven": true,
+            "editable": true,
+            "readbackAvailable": true,
+            "noOp": false,
+            "existingMethod": null,
+            "plannedEffects": [],
+            "capability": {
+              "status": "unsupported",
+              "operation": "AddAction",
+              "failureCode": "create_method_capability_not_supported",
+              "failureMessage": "Diagram 'Main' does not support creating 'Action'."
+            }
+          },
+          "error": null,
+          "meta": {
+            "bridgePid": 14316,
+            "bridgeGeneration": "5dc5d499-fc6d-4156-ad30-706fc671c32d",
+            "durationMs": 402,
+            "sessionPolicy": "fresh_session",
+            "mutationStarted": false,
+            "mode": "exec",
+            "operation": "preflight_create_method"
+          }
+        },
+        "request": {
+          "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "preflight_create_method",
+            "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+            "__PiPermissionProbe__",
+            "--method-kind",
+            "action",
+            "--if-exists",
+            "fail",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"databasePath\":\"C:\\\\Repo\\\\F05_IPB_L2_0429\",\"componentPath\":\"PlatformLibrary\\\\Package\\\\AntiLockController\\\\Private\\\\SMC\\\\KeepAlive\\\\KeepAlive_PSoll_Controller\",\"componentOid\":\"040g08k2e0001k87086g3rcb99236\",\"componentKind\":\"StateMachine\",\"languageKind\":\"ESDL\",\"diagramName\":\"Main\",\"diagramExists\":true,\"diagramRuntimeType\":\"de.etas.cebra.toolAPI.Ascet.DiscreteMethodDiagram\",\"requiredMethod\":\"AddAction\",\"requiredSignature\":\"AddAction(String)\",\"requiredMethodAvailable\":false,\"addDiagramAvailable\":false,\"futureMethodCapabilityProven\":true,\"editable\":true,\"readbackAvailable\":true,\"noOp\":false,\"existingMethod\":null,\"plannedEffects\":[],\"capability\":{\"status\":\"unsupported\",\"operation\":\"AddAction\",\"failureCode\":\"create_method_capability_not_supported\",\"failureMessage\":\"Diagram \\u0027Main\\u0027 does not support creating \\u0027Action\\u0027.\"}},\"error\":null,\"meta\":{\"bridgePid\":14316,\"bridgeGeneration\":\"5dc5d499-fc6d-4156-ad30-706fc671c32d\",\"durationMs\":402,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"preflight_create_method\"}}\r\n",
+        "stderr": "",
+        "exitCode": 0,
+        "timedOut": false,
+        "aborted": false,
+        "operationId": "preflight_create_method"
+      },
+      "error": {
+        "code": "create_method_capability_not_supported",
+        "message": "Diagram 'Main' does not support creating 'Action'."
+      },
+      "mutationResult": {
+        "status": "error",
+        "permission": {
+          "mode": "default",
+          "decision": "not_evaluated"
+        },
+        "preflight": {
+          "status": "failed"
+        },
+        "editability": {
+          "status": "unknown"
+        },
+        "mutation": {
+          "status": "not_started"
+        },
+        "verification": {
+          "status": "missing"
+        },
+        "error": {
+          "code": "create_method_capability_not_supported",
+          "message": "Diagram 'Main' does not support creating 'Action'."
+        },
+        "bridge": {
+          "beforeBridge": false,
+          "bridgeEntered": false,
+          "backendResponseReceived": false
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      },
+      "tool": "ascet_edit",
+      "action": "create_method",
+      "command": {
+        "logicalCommandId": "AscetCreateMethod",
+        "backendCommandId": "AscetCreateMethod",
+        "operation": "create_method"
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "preflight_create_method",
+            "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+            "__PiPermissionProbe__",
+            "--method-kind",
+            "action",
+            "--if-exists",
+            "fail",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 0,
+        "timedOut": false,
+        "stderr": ""
+      }
+    }
+  }
+}

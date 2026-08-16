@@ -1,0 +1,21 @@
+Log File: C:\ProgramData\ETAS\LogFiles\AscetBridge\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Component: PlatformLibrary\Package\AVH_AutomaticVehicleHold\Component\Config\CM_AVH
+Kind: Module
+Language: BDE
+Diagrams: 2
+  - BlockDiagram: AVH_Pre
+  - BlockDiagram: AVH_Post
+Methods: 2
+  - Process: CM_AVH20ms_Pre
+  - Process: CM_AVH20ms_Post
+
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+=== Method: CM_AVH20ms_Pre (Process) ===
+
+
+=== Method: CM_AVH20ms_Post (Process) ===
+
+

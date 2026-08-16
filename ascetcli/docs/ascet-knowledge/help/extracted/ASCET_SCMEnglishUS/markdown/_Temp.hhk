@@ -1,0 +1,910 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+	<param name="SiteType" value="index">
+	<param name="Window Styles" value="0x0">
+	<param name="ExWindow Styles" value="0x0">
+	</object>
+<ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Appearance Options">
+		<param name="Name" value="Appearance Options for ASCET-SCM">
+		<param name="Local" value="SCM_Appearance_Options_for_ASCET-SCM.htm">
+			</object>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="ASCET-SCM">
+		<param name="Name" value="Appearance Options for ASCET-SCM">
+		<param name="Local" value="SCM_Appearance_Options_for_ASCET-SCM.htm">
+			</object>
+	<ul>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Appearance Options">
+			<param name="Name" value="Appearance Options for ASCET-SCM">
+			<param name="Local" value="SCM_Appearance_Options_for_ASCET-SCM.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Architecture">
+			<param name="Name" value="ASCET-SCM Architecture">
+			<param name="Local" value="SCM_ASCET-SCM_Architecture.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Checking out">
+			<param name="Name" value="Checking out">
+			<param name="Local" value="SCM_Checking_out.htm">
+					</object>
+		<ul>
+			<li><object type="text/sitemap">
+				<param name="Name" value="Configurations (Advanced Mode)">
+				<param name="Name" value="Checking out a Configuration">
+				<param name="Local" value="SCM_Checking_out_a_Configuration.htm">
+							</object>
+			</li>
+			<li><object type="text/sitemap">
+				<param name="Name" value="Items (Advanced Mode)">
+				<param name="Name" value="Checking out Items">
+				<param name="Local" value="SCM_Checking_out_Items.htm">
+							</object>
+			</li>
+			<li><object type="text/sitemap">
+				<param name="Name" value="Items (Simple Mode)">
+				<param name="Name" value="Checking Out Items (Simple Mode)">
+				<param name="Local" value="SCM_Checking_out_Items_Simple_Mode.htm">
+							</object>
+			</li>
+					</ul>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Committing">
+			<param name="Name" value="Committing">
+			<param name="Local" value="SCM_Committing.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Connection ASCET--Version Control System">
+			<param name="Name" value="Connection between ASCET and the Software Version Control System">
+			<param name="Local" value="SCM_Connection_between_ASCET_and_the_Software_Version_Control_System.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Managing ASCET Folders">
+			<param name="Name" value="Managing ASCET Folders">
+			<param name="Local" value="SCM_Managing_ASCET_Folders.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Menu">
+			<param name="Name" value="SCM Menu (with Version Management)">
+			<param name="Local" value="SCM_ASCET-SCM_Menu.htm">
+			<param name="Name" value="SCM Menu (without Version Management)">
+			<param name="Local" value="SCM_Menu_withoutVersionManagement.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Online versus Offline Mode">
+			<param name="Name" value="Online versus Offline Mode">
+			<param name="Local" value="SCM_Online_versus_Offline_Mode.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Scripting Interface">
+			<param name="Name" value="ASCET-SCM Scripting Interface">
+			<param name="Local" value="SCM_ASCET-SCM_Scripting_Interface.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Typical Workflow">
+			<param name="Name" value="Typical Workflow - Using Subversion for Revision Control">
+			<param name="Local" value="SCM_Typical_Workflow_-_Using_Subversion_for_Revision_Control.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Updating">
+			<param name="Name" value="Updating">
+			<param name="Local" value="SCM_Updating.htm">
+					</object>
+		</li>
+			</ul>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Attribute Values">
+		<param name="Name" value="Edit Attribute Value Dialog Box">
+		<param name="Local" value="SCM_Edit_Attribute_Value_Dialog_Box.htm">
+			</object>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="buttons">
+		<param name="Name" value="Customizing Menus and Icons">
+		<param name="Local" value="SCM_CustomizingMenusIcons.htm">
+			</object>
+	<ul>
+		<li><object type="text/sitemap">
+			<param name="Name" value="ASCET-SCM">
+			<param name="Name" value="Customizing Menus and Icons">
+			<param name="Local" value="SCM_CustomizingMenusIcons.htm">
+			<param name="Name" value="Toolbar Icons">
+			<param name="Local" value="SCM_Toolbar_Icons.htm">
+					</object>
+		</li>
+			</ul>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Checkout">
+		<param name="Name" value="Checking out">
+		<param name="Local" value="SCM_Checking_out.htm">
+		<param name="Name" value="Checking out Items">
+		<param name="Local" value="SCM_Checking_out_Items.htm">
+		<param name="Name" value="Checking out a Configuration">
+		<param name="Local" value="SCM_Checking_out_a_Configuration.htm">
+		<param name="Name" value="SCM Menu (with Version Management)">
+		<param name="Local" value="SCM_ASCET-SCM_Menu.htm">
+			</object>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Components">
+		<param name="Name" value="Special Use Case: Handling Imported Components">
+		<param name="Local" value="SCM_Special_Use_Case__Handling_Imported_Components.htm">
+			</object>
+	<ul>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Importing">
+			<param name="Name" value="Special Use Case: Handling Imported Components">
+			<param name="Local" value="SCM_Special_Use_Case__Handling_Imported_Components.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="OID Handling">
+			<param name="Name" value="Special Use Case: Handling Imported Components">
+			<param name="Local" value="SCM_Special_Use_Case__Handling_Imported_Components.htm">
+					</object>
+		</li>
+			</ul>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Configuration Examples">
+		<param name="Name" value="Configuration Examples - Overview">
+		<param name="Local" value="SCM_ConfigurationExamplesOverview.htm">
+			</object>
+	<ul>
+		<li><object type="text/sitemap">
+			<param name="Name" value="ClearCase">
+			<param name="Name" value="Configuration Example - ClearCase">
+			<param name="Local" value="SCM_ConfigurationExampleClearCase.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="MKS">
+			<param name="Name" value="Configuration Example - MKS">
+			<param name="Local" value="SCM_ConfigurationExampleMKS.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Perforce">
+			<param name="Name" value="Configuration Example - Perforce">
+			<param name="Local" value="SCM_ConfigurationExamplePerforce.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="SourceSafe">
+			<param name="Name" value="Configuration Example - SourceSafe">
+			<param name="Local" value="SCM_ConfigurationExampleSourceSafe.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Team Foundation Server">
+			<param name="Name" value="Configuration Example - Team Foundation Server">
+			<param name="Local" value="SCM_ConfigurationExampleTFS.htm">
+					</object>
+		</li>
+			</ul>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Configurations">
+		<param name="Name" value="Creating a Configuration">
+		<param name="Local" value="SCM_Creating_a_Configuration.htm">
+			</object>
+	<ul>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Adding and Committing (Advanced Mode)">
+			<param name="Name" value="Creating a Configuration">
+			<param name="Local" value="SCM_Creating_a_Configuration.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Adding and Committing (Simple Mode)">
+			<param name="Name" value="Creating a Configuration (Simple Mode)">
+			<param name="Local" value="SCM_Creating_a_Configuration_Simple_Mode.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Checking out (Advanced Mode)">
+			<param name="Name" value="Checking out a Configuration">
+			<param name="Local" value="SCM_Checking_out_a_Configuration.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Committing (Advanced Mode)">
+			<param name="Name" value="Committing a Configuration">
+			<param name="Local" value="SCM_Committing_a_Configuration.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Committing (Simple Mode)">
+			<param name="Name" value="Committing a Configuration (Simple Mode)">
+			<param name="Local" value="SCM_Committing_a_Configuration_Simple_Mode.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Comparing Configuration Versions (Advanced Mode)">
+			<param name="Name" value="Comparing Configuration Versions">
+			<param name="Local" value="SCM_Comparing_Configuration_Versions.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Comparing Configuration Versions (Simple Mode)">
+			<param name="Name" value="Comparing Configuration Versions (Simple Mode)">
+			<param name="Local" value="SCM_Comparing_Configuration_Versions_Simple_Mode.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Creating (Advanced Mode)">
+			<param name="Name" value="Creating a Configuration">
+			<param name="Local" value="SCM_Creating_a_Configuration.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Creating (Simple Mode)">
+			<param name="Name" value="Creating a Configuration (Simple Mode)">
+			<param name="Local" value="SCM_Creating_a_Configuration_Simple_Mode.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Fundamentals">
+			<param name="Name" value="Fundamentals of Software Configuration Management">
+			<param name="Local" value="SCM_Fundamentals_of_Software_Configuration_Management.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="General Description">
+			<param name="Name" value="Configurations">
+			<param name="Local" value="SCM_Configurations.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Handling">
+			<param name="Name" value="Handling Configurations">
+			<param name="Local" value="SCM_Handling_Configurations.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Loading">
+			<param name="Name" value="Loading a Configuration">
+			<param name="Local" value="SCM_Loading_a_Configuration.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Locking">
+			<param name="Name" value="Locking a Configuration">
+			<param name="Local" value="SCM_Locking_a_Configuration.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Managing">
+			<param name="Name" value="SCM Menu (with Version Management)">
+			<param name="Local" value="SCM_ASCET-SCM_Menu.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Unlocking">
+			<param name="Name" value="Unlocking a Configuration">
+			<param name="Local" value="SCM_Unlocking_a_Configuration.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Updating (Advanced Mode)">
+			<param name="Name" value="Updating a Configuration">
+			<param name="Local" value="SCM_Updating_a_Configuration.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Updating to latest revision (Advanced Mode)">
+			<param name="Name" value="Updating Configurations to Latest Revision">
+			<param name="Local" value="SCM_UpdateConfigurations_LatestRevision.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Updating to latest revision (Simple Mode)">
+			<param name="Name" value="Updating Configurations to Latest Revision (Simple Mode)">
+			<param name="Local" value="SCM_Updating_Configurations_to_Latest_Revision_Simple_Mode.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Verifying (Advanced Mode)">
+			<param name="Name" value="Verify Configuration Dialog Box">
+			<param name="Local" value="SCM_VerifyConfiguration_DialogBox.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Verifying (Simple Mode)">
+			<param name="Name" value="Verify Configuration Dialog Box (Simple Mode)">
+			<param name="Local" value="SCM_Verify_Configuration_Dialog_Box.htm">
+					</object>
+		</li>
+			</ul>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Conflicts">
+		<param name="Name" value="Conflicts">
+		<param name="Local" value="SCM_Conflicts.htm">
+			</object>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Context Menus">
+		<param name="Name" value="Context Menu for Added Items">
+		<param name="Local" value="SCM_Context_Menu_for_Added_Items.htm">
+			</object>
+	<ul>
+		<li><object type="text/sitemap">
+			<param name="Name" value="For Added Items">
+			<param name="Name" value="Context Menu for Added Items">
+			<param name="Local" value="SCM_Context_Menu_for_Added_Items.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="For Selected Items">
+			<param name="Name" value="Context Menu for Selected Items">
+			<param name="Local" value="SCM_Context_Menu_for_Selected_Items.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="For the Result Dialog Box">
+			<param name="Name" value="Context Menu for the Result Dialog Box">
+			<param name="Local" value="SCM_Context_Menu_for_the_Result_Dialog_Box.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="For the Update and Commit Dialog Boxes">
+			<param name="Name" value="Context Menu for the Update and Commit Dialog Boxes">
+			<param name="Local" value="SCM_Context_Menu_for_the_Update_and_Commit_Dialog_Boxes.htm">
+					</object>
+		</li>
+			</ul>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Database Compatibility">
+		<param name="Name" value="SCM Menu (without Version Management)">
+		<param name="Local" value="SCM_Menu_withoutVersionManagement.htm">
+			</object>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Diff Tool">
+		<param name="Name" value="Tool Options for ASCET-SCM">
+		<param name="Local" value="SCM_Tool_Options_for_ASCET-SCM.htm">
+			</object>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="FAQs">
+		<param name="Name" value="FAQs">
+		<param name="Local" value="SCM_FAQs.htm">
+			</object>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Importing Components from an Export File">
+		<param name="Name" value="Handling Imported Components">
+		<param name="Local" value="SCM_Handling_Imported_Components.htm">
+			</object>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Importing Data from the Subversion Repository">
+		<param name="Name" value="Importing Data from the Subversion Repository">
+		<param name="Local" value="SCM_Importing_Data_from_the_Subversion_Repository.htm">
+			</object>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Invalid Item">
+		<param name="Name" value="Overlay Icons">
+		<param name="Local" value="SCM_Overlay_Icons.htm">
+			</object>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Items">
+		<param name="Name" value="Adding and Committing an Item">
+		<param name="Local" value="SCM_Adding_and_Committing_an_Item.htm">
+			</object>
+	<ul>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Adding and committing (Advanced Mode)">
+			<param name="Name" value="Adding and Committing an Item">
+			<param name="Local" value="SCM_Adding_and_Committing_an_Item.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Adding and committing (Simple Mode)">
+			<param name="Name" value="Adding and Committing an Item (Simple Mode)">
+			<param name="Local" value="SCM_Adding_and_Committing_an_Item_Simple_Mode.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Committing">
+			<param name="Name" value="Committing an Item">
+			<param name="Local" value="SCM_Committing_an_Item.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Deleting">
+			<param name="Name" value="Deleting an Item from the Repository">
+			<param name="Local" value="SCM_DeleteItemFromRepository.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Details">
+			<param name="Name" value="Item Details Dialog Box">
+			<param name="Local" value="SCM_Item_Details_Dialog_Box.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Editing in Offline Mode">
+			<param name="Name" value="Editing Items in Offline Mode">
+			<param name="Local" value="SCM_Editing_Items_in_Offline_Mode.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Importing">
+			<param name="Name" value="Handling Imported Components">
+			<param name="Local" value="SCM_Handling_Imported_Components.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Invalid">
+			<param name="Name" value="Overlay Icons">
+			<param name="Local" value="SCM_Overlay_Icons.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Locking">
+			<param name="Name" value="Locking an Item">
+			<param name="Local" value="SCM_Locking_an_Item.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Manually Placing under Version Control">
+			<param name="Name" value="Adding and Committing an Item">
+			<param name="Local" value="SCM_Adding_and_Committing_an_Item.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Unlocking">
+			<param name="Name" value="Unlocking an Item">
+			<param name="Local" value="SCM_Unlocking_an_Item.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Updating (Advanced Mode)">
+			<param name="Name" value="Updating Items">
+			<param name="Local" value="SCM_Updating_Items.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Updating (Simple Mode)">
+			<param name="Name" value="Updating Items (Simple Mode)">
+			<param name="Local" value="SCM_Updating_Items_Simple_Mode.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Updating to latest revision (Advanced Mode)">
+			<param name="Name" value="Updating Items to Latest Revision">
+			<param name="Local" value="SCM_Update_to_LatestRevision.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Updating to latest revision (Simple Mode)">
+			<param name="Name" value="Updating Items to Latest Revision (Simple Mode)">
+			<param name="Local" value="SCM_Updating_Items_to_Latest_Revision_Simple_Mode.htm">
+					</object>
+		</li>
+			</ul>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Keyboard Operation">
+		<param name="Name" value="Keyboard Operation in Simple Mode User Interface">
+		<param name="Local" value="SCM_Keyboard_Operation_Simple_mode.htm">
+			</object>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Local Modifications Detected">
+		<param name="Name" value="Conflicts">
+		<param name="Local" value="SCM_Conflicts.htm">
+			</object>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Locking">
+		<param name="Name" value="Locking a Configuration">
+		<param name="Local" value="SCM_Locking_a_Configuration.htm">
+			</object>
+	<ul>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Configurations">
+			<param name="Name" value="Locking a Configuration">
+			<param name="Local" value="SCM_Locking_a_Configuration.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="General Description">
+			<param name="Name" value="Locking and Unlocking">
+			<param name="Local" value="SCM_Locking_and_Unlocking.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Items">
+			<param name="Name" value="Locking an Item">
+			<param name="Local" value="SCM_Locking_an_Item.htm">
+					</object>
+		</li>
+			</ul>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Log">
+		<param name="Name" value="Show Log / Configuration Log Dialog Box">
+		<param name="Local" value="SCM_Show_Log_Dialog_Box.htm">
+			</object>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="menu options">
+		<param name="Name" value="Customizing Menus and Icons">
+		<param name="Local" value="SCM_CustomizingMenusIcons.htm">
+			</object>
+	<ul>
+		<li><object type="text/sitemap">
+			<param name="Name" value="ASCET-SCM">
+			<param name="Name" value="Customizing Menus and Icons">
+			<param name="Local" value="SCM_CustomizingMenusIcons.htm">
+			<param name="Name" value="SCM Menu (with Version Management)">
+			<param name="Local" value="SCM_ASCET-SCM_Menu.htm">
+			<param name="Name" value="SCM Menu (without Version Management)">
+			<param name="Local" value="SCM_Menu_withoutVersionManagement.htm">
+					</object>
+		</li>
+			</ul>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Modifications">
+		<param name="Name" value="SCM Menu (with Version Management)">
+		<param name="Local" value="SCM_ASCET-SCM_Menu.htm">
+			</object>
+	<ul>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Checking for">
+			<param name="Name" value="SCM Menu (with Version Management)">
+			<param name="Local" value="SCM_ASCET-SCM_Menu.htm">
+					</object>
+		</li>
+			</ul>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="MSSCCI">
+		<param name="Name" value="Configuration Examples - Overview">
+		<param name="Local" value="SCM_ConfigurationExamplesOverview.htm">
+			</object>
+	<ul>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Configuration Examples">
+			<param name="Name" value="Configuration Examples - Overview">
+			<param name="Local" value="SCM_ConfigurationExamplesOverview.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Version Handling">
+			<param name="Name" value="Version Handling based on MSSCCI">
+			<param name="Local" value="SCM_Version_Handling_based_on_MSSCCI.htm">
+					</object>
+		</li>
+			</ul>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="OID">
+		<param name="Name" value="Special Use Case: Handling Imported Components">
+		<param name="Local" value="SCM_Special_Use_Case__Handling_Imported_Components.htm">
+			</object>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="References">
+		<param name="Name" value="SCM Menu (with Version Management)">
+		<param name="Local" value="SCM_ASCET-SCM_Menu.htm">
+			</object>
+	<ul>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Including">
+			<param name="Name" value="SCM Menu (with Version Management)">
+			<param name="Local" value="SCM_ASCET-SCM_Menu.htm">
+					</object>
+		</li>
+			</ul>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Repository">
+		<param name="Name" value="SCM Menu (with Version Management)">
+		<param name="Local" value="SCM_ASCET-SCM_Menu.htm">
+			</object>
+	<ul>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Connecting">
+			<param name="Name" value="SCM Menu (with Version Management)">
+			<param name="Local" value="SCM_ASCET-SCM_Menu.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Disconnecting">
+			<param name="Name" value="Additional Commands Submenu">
+			<param name="Local" value="SCM_AdditionalCommandsSubmenu.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="General Description">
+			<param name="Name" value="Repository">
+			<param name="Local" value="SCM_Repository.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Selecting">
+			<param name="Name" value="Selecting a Repository">
+			<param name="Local" value="SCM_Selecting_a_Repository.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Selecting or Creating a Folder">
+			<param name="Name" value="Selecting or Creating a Repository Folder for an Item">
+			<param name="Local" value="SCM_Selecting_or_Creating_a_Repository_Folder_for_an_Item.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Testing the Connection">
+			<param name="Name" value="Subversion Settings Dialog Box">
+			<param name="Local" value="SCM_Subversion_Settings_Dialog_Box.htm">
+					</object>
+		</li>
+			</ul>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Result Dialog Box">
+		<param name="Name" value="Result Dialog Box">
+		<param name="Local" value="SCM_Result_Dialog_Box.htm">
+			</object>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Revision">
+		<param name="Name" value="Select Revision Dialog Box">
+		<param name="Local" value="SCM_Select_Revision_Dialog_Box.htm">
+			</object>
+	<ul>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Selecting">
+			<param name="Name" value="Select Revision Dialog Box">
+			<param name="Local" value="SCM_Select_Revision_Dialog_Box.htm">
+					</object>
+		</li>
+			</ul>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Scripting Interface">
+		<param name="Name" value="ASCET-SCM Scripting Interface">
+		<param name="Local" value="SCM_ASCET-SCM_Scripting_Interface.htm">
+			</object>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Show">
+		<param name="Name" value="SCM Menu (with Version Management)">
+		<param name="Local" value="SCM_ASCET-SCM_Menu.htm">
+			</object>
+	<ul>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Options">
+			<param name="Name" value="SCM Menu (with Version Management)">
+			<param name="Local" value="SCM_ASCET-SCM_Menu.htm">
+					</object>
+		</li>
+			</ul>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Simple Mode User Interface">
+		<param name="Name" value="Simple Mode User Interface">
+		<param name="Local" value="SCM_SimpleUI.htm">
+			</object>
+	<ul>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Activation/Deactivation">
+			<param name="Name" value="Activating/Deactivating the Simple Mode User Interface">
+			<param name="Local" value="SCM_Activating_Deactivating_SimpleMode.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Keyboard Operation">
+			<param name="Name" value="Keyboard Operation in Simple Mode User Interface">
+			<param name="Local" value="SCM_Keyboard_Operation_Simple_mode.htm">
+					</object>
+		</li>
+			</ul>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Software Version Management Systems">
+		<param name="Name" value="Software Version Management Systems">
+		<param name="Local" value="SCM_Software_Version_Management_Systems.htm">
+			</object>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Source Control">
+		<param name="Name" value="SCM Menu (without Version Management)">
+		<param name="Local" value="SCM_Menu_withoutVersionManagement.htm">
+			</object>
+	<ul>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Configuring">
+			<param name="Name" value="SCM Menu (without Version Management)">
+			<param name="Local" value="SCM_Menu_withoutVersionManagement.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Removing Bindings for Database">
+			<param name="Name" value="Source Control Submenu">
+			<param name="Local" value="SCM_SourceControlSubmenu.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Removing Bindings for Selection">
+			<param name="Name" value="Source Control Submenu">
+			<param name="Local" value="SCM_SourceControlSubmenu.htm">
+					</object>
+		</li>
+			</ul>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Subversion">
+		<param name="Name" value="Setting up an ASCET-Subversion Connection">
+		<param name="Local" value="SCM_Setting_up_an_ASCET-Subversion_Connection.htm">
+			</object>
+	<ul>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Connecting to ASCET">
+			<param name="Name" value="Setting up an ASCET-Subversion Connection">
+			<param name="Local" value="SCM_Setting_up_an_ASCET-Subversion_Connection.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Selecting the Driver">
+			<param name="Name" value="Driver Selection Dialog Box">
+			<param name="Local" value="SCM_Driver_Selection_Dialog_Box.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Setting up for Use with ASCET-SCM">
+			<param name="Name" value="Setting up Subversion for Use with ASCET-SCM">
+			<param name="Local" value="SCM_Setting_up_Subversion_for_Use_with_ASCET-SCM.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Settings">
+			<param name="Name" value="Subversion Settings Dialog Box">
+			<param name="Local" value="SCM_Subversion_Settings_Dialog_Box.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Version Handling">
+			<param name="Name" value="Version Handling based on Subversion">
+			<param name="Local" value="SCM_Version_Handling_based_on_Subversion.htm">
+					</object>
+		</li>
+			</ul>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Test Connection">
+		<param name="Name" value="Subversion Settings Dialog Box">
+		<param name="Local" value="SCM_Subversion_Settings_Dialog_Box.htm">
+			</object>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Unlocking">
+		<param name="Name" value="Unlocking a Configuration">
+		<param name="Local" value="SCM_Unlocking_a_Configuration.htm">
+			</object>
+	<ul>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Configurations">
+			<param name="Name" value="Unlocking a Configuration">
+			<param name="Local" value="SCM_Unlocking_a_Configuration.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="General Description">
+			<param name="Name" value="Locking and Unlocking">
+			<param name="Local" value="SCM_Locking_and_Unlocking.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Items">
+			<param name="Name" value="Unlocking an Item">
+			<param name="Local" value="SCM_Unlocking_an_Item.htm">
+					</object>
+		</li>
+			</ul>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Update">
+		<param name="Name" value="Updating">
+		<param name="Local" value="SCM_Updating.htm">
+			</object>
+	<ul>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Items (Advanced Mode)">
+			<param name="Name" value="Updating Items">
+			<param name="Local" value="SCM_Updating_Items.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Items (Simple Mode)">
+			<param name="Name" value="Updating Items (Simple Mode)">
+			<param name="Local" value="SCM_Updating_Items_Simple_Mode.htm">
+					</object>
+		</li>
+			</ul>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Version">
+		<param name="Name" value="Select Revision Dialog Box">
+		<param name="Local" value="SCM_Select_Revision_Dialog_Box.htm">
+			</object>
+	<ul>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Selecting">
+			<param name="Name" value="Select Revision Dialog Box">
+			<param name="Local" value="SCM_Select_Revision_Dialog_Box.htm">
+					</object>
+		</li>
+			</ul>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Version Control">
+		<param name="Name" value="Checking out">
+		<param name="Local" value="SCM_Checking_out.htm">
+			</object>
+	<ul>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Checking out">
+			<param name="Name" value="Checking out">
+			<param name="Local" value="SCM_Checking_out.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Manual Method">
+			<param name="Name" value="Adding and Committing an Item">
+			<param name="Local" value="SCM_Adding_and_Committing_an_Item.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Software Version Management Systems">
+			<param name="Name" value="Software Version Management Systems">
+			<param name="Local" value="SCM_Software_Version_Management_Systems.htm">
+					</object>
+		</li>
+		<li><object type="text/sitemap">
+			<param name="Name" value="Updating">
+			<param name="Name" value="Updating">
+			<param name="Local" value="SCM_Updating.htm">
+					</object>
+		</li>
+			</ul>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Version Handling using MSSCCI">
+		<param name="Name" value="Version Handling based on MSSCCI">
+		<param name="Local" value="SCM_Version_Handling_based_on_MSSCCI.htm">
+			</object>
+	</li>
+	<li><object type="text/sitemap">
+		<param name="Name" value="Version Handling using Subversion">
+		<param name="Name" value="Version Handling based on Subversion">
+		<param name="Local" value="SCM_Version_Handling_based_on_Subversion.htm">
+			</object>
+	</li>
+	</ul>
+</html>

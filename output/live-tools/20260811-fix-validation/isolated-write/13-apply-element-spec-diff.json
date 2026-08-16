@@ -1,0 +1,93 @@
+{
+  "expected": [
+    {
+      "name": "P_Input",
+      "kind": "parameter",
+      "modelType": "cont",
+      "scope": "exported"
+    },
+    {
+      "name": "P_Dependent",
+      "kind": "parameter",
+      "modelType": "cont",
+      "scope": "local"
+    }
+  ],
+  "directoryNames": [
+    "P_Input",
+    "P_Dependent"
+  ],
+  "missing": [],
+  "inputReadOk": true,
+  "dependentReadOk": true,
+  "input": {
+    "ok": true,
+    "result": {
+      "componentPath": "PI_LIVE_FIX_20260811_13947C09\\ClassUnderTest",
+      "element": {
+        "name": "P_Input",
+        "kind": "parameter",
+        "modelType": "cont",
+        "scope": "exported",
+        "comment": "ASCET isolated live validation input",
+        "calibration": false,
+        "configurationProvenance": {
+          "dataConfiguration": {
+            "source": "classDataConfiguration",
+            "configurationName": "ClassUnderTest",
+            "selected": true
+          },
+          "implementationConfiguration": {
+            "source": "classImplementationConfiguration",
+            "configurationName": "ClassUnderTest",
+            "selected": true
+          }
+        },
+        "data": {
+          "value": 0
+        },
+        "impl": {
+          "memoryLocation": "Default",
+          "valueType": "real64",
+          "formula": "ident",
+          "limitAssignments": false
+        }
+      }
+    }
+  },
+  "dependent": {
+    "ok": true,
+    "result": {
+      "componentPath": "PI_LIVE_FIX_20260811_13947C09\\ClassUnderTest",
+      "element": {
+        "name": "P_Dependent",
+        "kind": "parameter",
+        "modelType": "cont",
+        "scope": "local",
+        "comment": "ASCET isolated live validation dependent",
+        "calibration": false,
+        "configurationProvenance": {
+          "dataConfiguration": {
+            "source": "defaultDataConfiguration",
+            "configurationName": "Data",
+            "selected": true
+          },
+          "implementationConfiguration": {
+            "source": "defaultImplementationConfiguration",
+            "configurationName": "Impl",
+            "selected": true
+          }
+        },
+        "data": {
+          "value": 0
+        },
+        "impl": {
+          "memoryLocation": "Default",
+          "valueType": "real64",
+          "formula": "ident",
+          "limitAssignments": false
+        }
+      }
+    }
+  }
+}

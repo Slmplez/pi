@@ -1,0 +1,975 @@
+{
+  "generated_at": "2026-04-01T03:08:32.659396Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\StateMachineEditorEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\markdown",
+  "input_html_count": 160,
+  "converted_html_count": 160,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 144,
+  "toc_entries_count": 179,
+  "index_entries_count": 130,
+  "index_required": true,
+  "mappings": [
+    {
+      "html_rel_path": "add_public_method.htm",
+      "md_rel_path": "add_public_method.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "adding_arguments.htm",
+      "md_rel_path": "adding_arguments.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "adding_inputs.htm",
+      "md_rel_path": "adding_inputs.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "adding_triggerargument.htm",
+      "md_rel_path": "adding_triggerargument.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "addopenhierarchy.htm",
+      "md_rel_path": "addopenhierarchy.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "addpin.htm",
+      "md_rel_path": "addpin.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "analyze_diagram.htm",
+      "md_rel_path": "analyze_diagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "animation_color.htm",
+      "md_rel_path": "animation_color.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "automatic_insertion.htm",
+      "md_rel_path": "automatic_insertion.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "change_appearance_transition.htm",
+      "md_rel_path": "change_appearance_transition.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "change_path_transition.htm",
+      "md_rel_path": "change_path_transition.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "codegen_dbtoolarge.htm",
+      "md_rel_path": "codegen_dbtoolarge.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "communications_components.htm",
+      "md_rel_path": "communications_components.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "conditions_actions_state.htm",
+      "md_rel_path": "conditions_actions_state.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "copy_statelayout.htm",
+      "md_rel_path": "copy_statelayout.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "create_transition.htm",
+      "md_rel_path": "create_transition.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "creating_junctions.htm",
+      "md_rel_path": "creating_junctions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "cut_copyand paste.htm",
+      "md_rel_path": "cut_copyand paste.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "editing_junctions.htm",
+      "md_rel_path": "editing_junctions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "editing_state.htm",
+      "md_rel_path": "editing_state.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "layout_states.htm",
+      "md_rel_path": "layout_states.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "renaming_state.htm",
+      "md_rel_path": "renaming_state.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ResolveHirearchy.htm",
+      "md_rel_path": "ResolveHirearchy.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SetupHierarchy.htm",
+      "md_rel_path": "SetupHierarchy.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Action_Tab.htm",
+      "md_rel_path": "SM_Action_Tab.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_actions.htm",
+      "md_rel_path": "SM_actions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Actions_or_Conditions.htm",
+      "md_rel_path": "SM_Actions_or_Conditions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Actions_or_Conditions1.htm",
+      "md_rel_path": "SM_Actions_or_Conditions1.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_ActionsConditions_SeparateDiagrams.htm",
+      "md_rel_path": "SM_ActionsConditions_SeparateDiagrams.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_ActionsConditions_StateDiagram.htm",
+      "md_rel_path": "SM_ActionsConditions_StateDiagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_ActionTrans_Tab.htm",
+      "md_rel_path": "SM_ActionTrans_Tab.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_activate_deactivate_outlining_of_actions_conditions_.htm",
+      "md_rel_path": "SM_activate_deactivate_outlining_of_actions_conditions_.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_add_condition.htm",
+      "md_rel_path": "SM_add_condition.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_AssignActions.htm",
+      "md_rel_path": "SM_AssignActions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_AssignTriggers.htm",
+      "md_rel_path": "SM_AssignTriggers.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Basic_Blocks.htm",
+      "md_rel_path": "SM_Basic_Blocks.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_blockDiagram.htm",
+      "md_rel_path": "SM_blockDiagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_browse_view.htm",
+      "md_rel_path": "SM_browse_view.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Build_Menu.htm",
+      "md_rel_path": "SM_Build_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_ClosedHierarchy.htm",
+      "md_rel_path": "SM_ClosedHierarchy.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Condition_Tab.htm",
+      "md_rel_path": "SM_Condition_Tab.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_conditions.htm",
+      "md_rel_path": "SM_conditions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_conditions_actions.htm",
+      "md_rel_path": "SM_conditions_actions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "sm_contextmenu_componentelement.htm",
+      "md_rel_path": "sm_contextmenu_componentelement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "sm_contextmenu_diagrammethod.htm",
+      "md_rel_path": "sm_contextmenu_diagrammethod.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_ContextMenu_SpecificationView.htm",
+      "md_rel_path": "SM_ContextMenu_SpecificationView.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "sm_contextmenubrowseview.htm",
+      "md_rel_path": "sm_contextmenubrowseview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Create_ESDL_Diagram_for_ActionsConditions.htm",
+      "md_rel_path": "SM_Create_ESDL_Diagram_for_ActionsConditions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_create_public_diagram.htm",
+      "md_rel_path": "SM_create_public_diagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_creating_new.htm",
+      "md_rel_path": "SM_creating_new.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_data.htm",
+      "md_rel_path": "SM_data.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Define_StartState.htm",
+      "md_rel_path": "SM_Define_StartState.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_description_of_window_elements.htm",
+      "md_rel_path": "SM_description_of_window_elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_display_info.htm",
+      "md_rel_path": "SM_display_info.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_edit_actions_conditions.htm",
+      "md_rel_path": "SM_edit_actions_conditions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Edit_Menu.htm",
+      "md_rel_path": "SM_Edit_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_EditMenuStateTransitionEditor.htm",
+      "md_rel_path": "SM_EditMenuStateTransitionEditor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Elements_Palette.htm",
+      "md_rel_path": "SM_Elements_Palette.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Entering_a_State.htm",
+      "md_rel_path": "SM_Entering_a_State.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example_10__Transition_to_a_Hierarchy_State_Without_History.htm",
+      "md_rel_path": "SM_Example_10__Transition_to_a_Hierarchy_State_Without_History.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example_11__Transition_to_a_Hierarchy_State_With_History.htm",
+      "md_rel_path": "SM_Example_11__Transition_to_a_Hierarchy_State_With_History.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example_12__Transition_Within_a_Hierarchy_State.htm",
+      "md_rel_path": "SM_Example_12__Transition_Within_a_Hierarchy_State.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example_13__Transition_Between_Hierarchy_States.htm",
+      "md_rel_path": "SM_Example_13__Transition_Between_Hierarchy_States.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example_14__Loop.htm",
+      "md_rel_path": "SM_Example_14__Loop.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example_15__Transition_Between_Substates_of_Different_Hierarchies.htm",
+      "md_rel_path": "SM_Example_15__Transition_Between_Substates_of_Different_Hierarchies.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example_16__Transition_From_a_Substate_to_a_Hierarchy_State.htm",
+      "md_rel_path": "SM_Example_16__Transition_From_a_Substate_to_a_Hierarchy_State.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example_17__No_Transition.htm",
+      "md_rel_path": "SM_Example_17__No_Transition.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example_1__Transition_Between_States.htm",
+      "md_rel_path": "SM_Example_1__Transition_Between_States.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example_1_CodeGeneration.htm",
+      "md_rel_path": "SM_Example_1_CodeGeneration.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example_2__Transitions_from_One_State.htm",
+      "md_rel_path": "SM_Example_2__Transitions_from_One_State.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example_2_Static_action_of_Hierarchy_States.htm",
+      "md_rel_path": "SM_Example_2_Static_action_of_Hierarchy_States.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example_3__Loop.htm",
+      "md_rel_path": "SM_Example_3__Loop.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example_4_If_Then_Else_Construction.htm",
+      "md_rel_path": "SM_Example_4_If_Then_Else_Construction.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example_5__No_transition.htm",
+      "md_rel_path": "SM_Example_5__No_transition.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example_6__Loop_construction.htm",
+      "md_rel_path": "SM_Example_6__Loop_construction.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example_7__Transitions_from_Multiple_Start_States_to_a_Destination_State_(One_Trigger).htm",
+      "md_rel_path": "SM_Example_7__Transitions_from_Multiple_Start_States_to_a_Destination_State_(One_Trigger).md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example_8__Transitions_from_a_Start_State_to_Different_Destination_States_(Multiple_Triggers).htm",
+      "md_rel_path": "SM_Example_8__Transitions_from_a_Start_State_to_Different_Destination_States_(Multiple_Triggers).md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example_9__Transitions_from_Different_Start_States_to_the_Same_Destination_State_(Multiple_Triggers).htm",
+      "md_rel_path": "SM_Example_9__Transitions_from_Different_Start_States_to_the_Same_Destination_State_(Multiple_Triggers).md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example__Actions.htm",
+      "md_rel_path": "SM_Example__Actions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example__Condition.htm",
+      "md_rel_path": "SM_Example__Condition.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example__Hierarchy_State.htm",
+      "md_rel_path": "SM_Example__Hierarchy_State.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example__History.htm",
+      "md_rel_path": "SM_Example__History.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Example__Start_State.htm",
+      "md_rel_path": "SM_Example__Start_State.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_ExecuteBasisState.htm",
+      "md_rel_path": "SM_ExecuteBasisState.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Executing_a_Transition.htm",
+      "md_rel_path": "SM_Executing_a_Transition.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_experiment_with_state_machines.htm",
+      "md_rel_path": "SM_experiment_with_state_machines.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Extras_Menu.htm",
+      "md_rel_path": "SM_Extras_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_File_Menu.htm",
+      "md_rel_path": "SM_File_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "sm_filtering_the_component_pane.htm",
+      "md_rel_path": "sm_filtering_the_component_pane.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Help_Menu.htm",
+      "md_rel_path": "SM_Help_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Hierarchical_Code_Generation.htm",
+      "md_rel_path": "SM_Hierarchical_Code_Generation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Hierarchical_Code_Generation_Exapmle_1.htm",
+      "md_rel_path": "SM_Hierarchical_Code_Generation_Exapmle_1.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Hierarchical_State.htm",
+      "md_rel_path": "SM_Hierarchical_State.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_hierarchy.htm",
+      "md_rel_path": "SM_hierarchy.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_hierarchystates.htm",
+      "md_rel_path": "SM_hierarchystates.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_History.htm",
+      "md_rel_path": "SM_History.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Initialization_of_the_State_Diagram.htm",
+      "md_rel_path": "SM_Initialization_of_the_State_Diagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Insert_Menu.htm",
+      "md_rel_path": "SM_Insert_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_insert_trigger.htm",
+      "md_rel_path": "SM_insert_trigger.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "sm_junctions.htm",
+      "md_rel_path": "sm_junctions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Junctions_1.htm",
+      "md_rel_path": "SM_Junctions_1.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Junctions_in_State_Machines.htm",
+      "md_rel_path": "SM_Junctions_in_State_Machines.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Leaving_a_State.htm",
+      "md_rel_path": "SM_Leaving_a_State.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Loops.htm",
+      "md_rel_path": "SM_Loops.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_menubar.htm",
+      "md_rel_path": "SM_menubar.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Move_between_hierarchies.htm",
+      "md_rel_path": "SM_Move_between_hierarchies.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_opening_diagram.htm",
+      "md_rel_path": "SM_opening_diagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Optimized_for_Code_Size.htm",
+      "md_rel_path": "SM_Optimized_for_Code_Size.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Optimized_for_Response_Time.htm",
+      "md_rel_path": "SM_Optimized_for_Response_Time.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Optimized_for_Run_Time.htm",
+      "md_rel_path": "SM_Optimized_for_Run_Time.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Optimizing_the_State_Machine.htm",
+      "md_rel_path": "SM_Optimizing_the_State_Machine.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_overview.htm",
+      "md_rel_path": "SM_overview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Palettes.htm",
+      "md_rel_path": "SM_Palettes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_public_methods.htm",
+      "md_rel_path": "SM_public_methods.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_representing_colors.htm",
+      "md_rel_path": "SM_representing_colors.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_resetting.htm",
+      "md_rel_path": "SM_resetting.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Rules_for_Trigger_Arguments.htm",
+      "md_rel_path": "SM_Rules_for_Trigger_Arguments.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_SearchResultsView.htm",
+      "md_rel_path": "SM_SearchResultsView.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Semantics_of_State_Machines.htm",
+      "md_rel_path": "SM_Semantics_of_State_Machines.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "sm_semanticssimplestatemachines.htm",
+      "md_rel_path": "sm_semanticssimplestatemachines.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "sm_showoccurrences.htm",
+      "md_rel_path": "sm_showoccurrences.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Specification_View.htm",
+      "md_rel_path": "SM_Specification_View.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "sm_specifyresetmethod_statevariables.htm",
+      "md_rel_path": "sm_specifyresetmethod_statevariables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_start_state.htm",
+      "md_rel_path": "SM_start_state.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_State_Editor_Window.htm",
+      "md_rel_path": "SM_State_Editor_Window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_State_Machines_as_Classes.htm",
+      "md_rel_path": "SM_State_Machines_as_Classes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_states.htm",
+      "md_rel_path": "SM_states.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_StateVariables.htm",
+      "md_rel_path": "SM_StateVariables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_To_Activate_Deactivate_Auto-Inlining.htm",
+      "md_rel_path": "SM_To_Activate_Deactivate_Auto-Inlining.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_To_Activate_Deactivate_Hierarchical_Code_Generation.htm",
+      "md_rel_path": "SM_To_Activate_Deactivate_Hierarchical_Code_Generation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Toolbar.htm",
+      "md_rel_path": "SM_Toolbar.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Toolbar_Basic_Blocks.htm",
+      "md_rel_path": "SM_Toolbar_Basic_Blocks.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Toolbar_Elements.htm",
+      "md_rel_path": "SM_Toolbar_Elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Toolbar_General.htm",
+      "md_rel_path": "SM_Toolbar_General.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Tools_Menu.htm",
+      "md_rel_path": "SM_Tools_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Transition_Editor_Window.htm",
+      "md_rel_path": "SM_Transition_Editor_Window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_transitions.htm",
+      "md_rel_path": "SM_transitions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Transitions_between_base_states.htm",
+      "md_rel_path": "SM_Transitions_between_base_states.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Transitions_between_substates_of_different_hierarchies.htm",
+      "md_rel_path": "SM_Transitions_between_substates_of_different_hierarchies.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Transitions_from_and_to_hierarchy_states.htm",
+      "md_rel_path": "SM_Transitions_from_and_to_hierarchy_states.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Transitions_with_junction.htm",
+      "md_rel_path": "SM_Transitions_with_junction.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_TreePane.htm",
+      "md_rel_path": "SM_TreePane.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Trigger_Arguments_for_Communication.htm",
+      "md_rel_path": "SM_Trigger_Arguments_for_Communication.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_triggers.htm",
+      "md_rel_path": "SM_triggers.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Triggers_and_trigger_arguments.htm",
+      "md_rel_path": "SM_Triggers_and_trigger_arguments.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "sm_unusedelements.htm",
+      "md_rel_path": "sm_unusedelements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_View_Menu.htm",
+      "md_rel_path": "SM_View_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SM_Window_Menu.htm",
+      "md_rel_path": "SM_Window_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "specifying_actions.htm",
+      "md_rel_path": "specifying_actions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "specifying_conditions.htm",
+      "md_rel_path": "specifying_conditions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "specifying_conditions_transition.htm",
+      "md_rel_path": "specifying_conditions_transition.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Static_actions_of_hierarchy_states_1.htm",
+      "md_rel_path": "Static_actions_of_hierarchy_states_1.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "To_Activate_Deactivate_Optimization_of_Static_Actions.htm",
+      "md_rel_path": "To_Activate_Deactivate_Optimization_of_Static_Actions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "use_pm_actions.htm",
+      "md_rel_path": "use_pm_actions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "using-statemachine.htm",
+      "md_rel_path": "using-statemachine.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "using_conditions_actions.htm",
+      "md_rel_path": "using_conditions_actions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "using_pm_external.htm",
+      "md_rel_path": "using_pm_external.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ZA_Example_ShowOccurrence.htm",
+      "md_rel_path": "ZA_Example_ShowOccurrence.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "za_searchdel_unused_methodstriggers.htm",
+      "md_rel_path": "za_searchdel_unused_methodstriggers.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "za_used.htm",
+      "md_rel_path": "za_used.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

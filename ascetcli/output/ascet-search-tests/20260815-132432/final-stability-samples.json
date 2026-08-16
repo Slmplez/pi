@@ -1,0 +1,26 @@
+﻿[
+    {
+        "sample":  1,
+        "timestamp":  "2026-08-15T14:08:50.1566452+08:00",
+        "openWindows":  0,
+        "unsavedEditors":  0,
+        "publicSearchWindows":  0,
+        "remoteSearchWindows":  0
+    },
+    {
+        "sample":  2,
+        "timestamp":  "2026-08-15T14:08:54.2352647+08:00",
+        "openWindows":  0,
+        "unsavedEditors":  0,
+        "publicSearchWindows":  0,
+        "remoteSearchWindows":  0
+    },
+    {
+        "sample":  3,
+        "timestamp":  "2026-08-15T14:08:58.0288738+08:00",
+        "openWindows":  0,
+        "unsavedEditors":  0,
+        "publicSearchWindows":  0,
+        "remoteSearchWindows":  0
+    }
+]

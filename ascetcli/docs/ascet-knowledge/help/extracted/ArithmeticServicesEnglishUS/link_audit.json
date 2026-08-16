@@ -1,0 +1,32 @@
+{
+  "generated_at": "2026-04-01T03:07:16.957286Z",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ArithmeticServicesEnglishUS",
+  "checked_files": 54,
+  "checked_links": 314,
+  "broken_links": [
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ArithmeticServicesEnglishUS\\markdown\\AS_Creating_and_Saving_Arith_Ser.md",
+      "kind": "link",
+      "target": "„|“[OPERAND]",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ArithmeticServicesEnglishUS\\markdown\\AS_Function_Declaration.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ArithmeticServicesEnglishUS\\ArithmeticServicesEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ArithmeticServicesEnglishUS\\ArithmeticServicesEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/„|“[OPERAND]",
+      "reason": "target_not_found"
+    }
+  ]
+}

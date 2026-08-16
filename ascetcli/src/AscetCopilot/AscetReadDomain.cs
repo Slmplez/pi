@@ -98,6 +98,117 @@ public sealed class AscetDatabaseRef
 {
     public string Name { get; set; }
     public string Path { get; set; }
+    public string CanonicalPath { get; set; }
+    public string IdentityStatus { get; set; }
+    public IList<string> IdentityIssues { get; set; }
+}
+
+public static class AscetDatabaseIdentityResolver
+{
+    public static AscetDatabaseRef Resolve(AscetDataBase database, Ascet tool)
+    {
+        return Resolve(
+            database == null ? String.Empty : database.GetName(),
+            tool == null ? String.Empty : tool.GetDataBasePath());
+    }
+
+    public static AscetDatabaseRef Resolve(string name, string reportedPath)
+    {
+        string normalizedName = NormalizePath(name);
+        string normalizedReportedPath = NormalizePath(reportedPath);
+        List<string> issues = new List<string>();
+        string canonicalPath = String.Empty;
+        string status = "unknown";
+
+        bool nameRooted = IsRootedPath(normalizedName);
+        bool nameExists = nameRooted && Directory.Exists(normalizedName);
+        bool reportedExists = !String.IsNullOrWhiteSpace(normalizedReportedPath) && Directory.Exists(normalizedReportedPath);
+
+        if (nameRooted)
+        {
+            canonicalPath = normalizedName;
+            if (String.IsNullOrWhiteSpace(normalizedName) || String.IsNullOrWhiteSpace(normalizedReportedPath))
+            {
+                status = "unknown";
+                issues.Add("database_identity_path_missing");
+            }
+            else if (IsPathWithin(normalizedName, normalizedReportedPath))
+            {
+                status = "consistent";
+            }
+            else if (nameExists && reportedExists)
+            {
+                status = "inconsistent";
+                issues.Add("database_name_path_mismatch");
+            }
+            else
+            {
+                status = "unknown";
+                issues.Add("database_identity_path_unverified");
+            }
+        }
+        else if (!String.IsNullOrWhiteSpace(normalizedReportedPath))
+        {
+            string reportedName = Path.GetFileName(normalizedReportedPath);
+            string combined = NormalizePath(Path.Combine(normalizedReportedPath, normalizedName));
+            if (!String.IsNullOrWhiteSpace(normalizedName) &&
+                String.Equals(reportedName, normalizedName, StringComparison.OrdinalIgnoreCase) &&
+                reportedExists)
+            {
+                canonicalPath = normalizedReportedPath;
+                status = "consistent";
+            }
+            else if (!String.IsNullOrWhiteSpace(normalizedName) && Directory.Exists(combined))
+            {
+                canonicalPath = combined;
+                status = "consistent";
+            }
+            else
+            {
+                canonicalPath = normalizedReportedPath;
+                status = "unknown";
+                issues.Add("database_name_path_unverified");
+            }
+        }
+        else
+        {
+            canonicalPath = normalizedName;
+            issues.Add("database_identity_path_missing");
+        }
+
+        return new AscetDatabaseRef
+        {
+            Name = name == null ? String.Empty : name.Trim(),
+            Path = reportedPath == null ? String.Empty : reportedPath.Trim(),
+            CanonicalPath = canonicalPath,
+            IdentityStatus = status,
+            IdentityIssues = issues
+        };
+    }
+
+    private static string NormalizePath(string value)
+    {
+        string normalized = (value ?? String.Empty).Trim().Replace('/', '\\');
+        while (normalized.EndsWith("\\", StringComparison.Ordinal) && normalized.Length > 3)
+        {
+            normalized = normalized.Substring(0, normalized.Length - 1);
+        }
+        return normalized;
+    }
+
+    private static bool IsRootedPath(string value)
+    {
+        return !String.IsNullOrWhiteSpace(value) && Path.IsPathRooted(value);
+    }
+
+    private static bool IsPathWithin(string child, string parent)
+    {
+        string normalizedChild = NormalizePath(child);
+        string normalizedParent = NormalizePath(parent);
+        if (String.IsNullOrWhiteSpace(normalizedChild) || String.IsNullOrWhiteSpace(normalizedParent)) return false;
+        if (String.Equals(normalizedChild, normalizedParent, StringComparison.OrdinalIgnoreCase)) return true;
+        return normalizedChild.StartsWith(normalizedParent + "\\", StringComparison.OrdinalIgnoreCase);
+    }
 }
 
 public sealed class AscetItemRef
@@ -514,11 +625,7 @@ public sealed class AscetSession : IAscetSession
     public AscetDatabaseRef GetCurrentDatabase()
     {
         AscetDataBase database = GetCurrentDatabaseHandle();
-        return new AscetDatabaseRef
-        {
-            Name = database.GetName(),
-            Path = _tool.GetDataBasePath()
-        };
+        return AscetDatabaseIdentityResolver.Resolve(database, _tool);
     }
 
     internal AscetDataBase GetCurrentDatabaseHandle()
@@ -1004,6 +1111,12 @@ public abstract class AscetReadDomainServiceBase
         if (action == null)
         {
             throw new ArgumentNullException("action");
+        }
+
+        AscetSession boundSession = AscetBoundSessionContext.Current;
+        if (boundSession != null)
+        {
+            return ExecuteWithBoundSession(operation, boundSession, action);
         }
 
         try

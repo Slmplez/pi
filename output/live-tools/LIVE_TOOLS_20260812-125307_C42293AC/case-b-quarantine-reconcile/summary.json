@@ -1,0 +1,11 @@
+{
+  "planStatus": "preflight",
+  "commitStatus": "partial",
+  "quarantined": true,
+  "quarantineGeneration": 1,
+  "journalStatus": "unknown",
+  "blockedPlanStatus": "blocked",
+  "blockedPlanCode": "mutation_target_quarantined",
+  "reconcileStatus": "rolled_back",
+  "guardCleared": true
+}

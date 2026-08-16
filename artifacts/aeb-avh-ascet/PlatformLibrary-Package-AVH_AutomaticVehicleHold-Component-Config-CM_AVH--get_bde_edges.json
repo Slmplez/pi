@@ -1,0 +1,1 @@
+{"type":"response","protocolVersion":1,"ok":false,"result":null,"error":{"code":"tool_connect_failed","message":"Failed to connect to ASCET ToolAPI."},"meta":{"bridgePid":12056,"bridgeGeneration":"1e5869c8-d4e4-40c9-acaf-cab7e78eb4ff","durationMs":90,"sessionPolicy":"fresh_session","mutationStarted":false,"mode":"exec","operation":"get_bde_edges"}}

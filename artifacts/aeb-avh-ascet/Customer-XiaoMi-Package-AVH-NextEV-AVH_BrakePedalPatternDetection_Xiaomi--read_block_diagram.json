@@ -1,0 +1,1 @@
+{"type":"response","protocolVersion":1,"ok":false,"result":null,"error":{"code":"tool_connect_failed","message":"Failed to connect to ASCET ToolAPI."},"meta":{"bridgePid":26040,"bridgeGeneration":"fe177198-a4da-437e-bfa5-ee41eacf086e","durationMs":64,"sessionPolicy":"fresh_session","mutationStarted":false,"mode":"exec","operation":"read_block_diagram"}}

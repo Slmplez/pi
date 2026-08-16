@@ -1,0 +1,1 @@
+﻿{"type":"response","protocolVersion":1,"ok":false,"result":null,"error":{"code":"unhandled_exception","message":"Invalid JSON primitive: PlatformLibrary."},"meta":{"bridgePid":14272,"bridgeGeneration":"3da99605-0a1d-43f6-9430-7740e2510205","durationMs":45,"sessionPolicy":"fresh_session","mutationStarted":false,"mode":"exec","operation":"get_tree"}}

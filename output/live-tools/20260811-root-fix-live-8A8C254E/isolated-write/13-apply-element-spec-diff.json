@@ -1,0 +1,78 @@
+{
+  "expected": {
+    "input": {
+      "name": "P_Input",
+      "scope": "exported"
+    },
+    "dependent": {
+      "name": "P_Dependent",
+      "scope": "local"
+    }
+  },
+  "actual": {
+    "input": {
+      "name": "P_Input",
+      "kind": "parameter",
+      "modelType": "cont",
+      "scope": "exported",
+      "comment": "ASCET root-fix live validation input",
+      "calibration": false,
+      "configurationProvenance": {
+        "dataConfiguration": {
+          "source": "classDataConfiguration",
+          "configurationName": "ClassUnderTest",
+          "selected": true
+        },
+        "implementationConfiguration": {
+          "source": "classImplementationConfiguration",
+          "configurationName": "ClassUnderTest",
+          "selected": true
+        }
+      },
+      "data": {
+        "value": 0
+      },
+      "impl": {
+        "memoryLocation": "Default",
+        "valueType": "real64",
+        "formula": "ident",
+        "limitAssignments": false
+      }
+    },
+    "dependent": {
+      "name": "P_Dependent",
+      "kind": "parameter",
+      "modelType": "cont",
+      "scope": "local",
+      "comment": "ASCET root-fix live validation dependent",
+      "calibration": false,
+      "configurationProvenance": {
+        "dataConfiguration": {
+          "source": "defaultDataConfiguration",
+          "configurationName": "Data",
+          "selected": true
+        },
+        "implementationConfiguration": {
+          "source": "defaultImplementationConfiguration",
+          "configurationName": "Impl",
+          "selected": true
+        }
+      },
+      "data": {
+        "value": 0
+      },
+      "impl": {
+        "memoryLocation": "Default",
+        "valueType": "real64",
+        "formula": "ident",
+        "limitAssignments": false
+      }
+    }
+  },
+  "checks": {
+    "inputName": true,
+    "inputScope": true,
+    "dependentName": true,
+    "dependentScope": true
+  }
+}

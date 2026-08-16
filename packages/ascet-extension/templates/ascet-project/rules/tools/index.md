@@ -23,7 +23,7 @@ Load after `core/workflow.md` and `core/routing.md`.
 | Dependency, caller, or usage questions matter | `reference.md` |
 | Two exact targets or surfaces must be compared | `diff.md` |
 | One exact mutation must be applied | `write.md` |
-| Complete Provider -> Imported -> Local dependency chain | `write.md`, then one `configure_parameter_dependency_chain` call |
+| Create, complete, or verify a Provider -> Imported -> Local dependency chain | `write.md`, then `ascet_edit.create_dependent_chain` |
 | Many aligned mutations must be applied | `batch-write.md` |
 | An executed write has returned | inspect `ascet_edit` automatic verification |
 | Folder-scale or project-scale checking is requested | `autocheck.md` |

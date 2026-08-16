@@ -1,0 +1,111 @@
+{
+  "generated_at": "2026-04-01T03:08:15.026982Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\LayoutEditorEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\LayoutEditorEnglishUS",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\LayoutEditorEnglishUS\\markdown",
+  "input_html_count": 16,
+  "converted_html_count": 16,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 11,
+  "toc_entries_count": 20,
+  "index_entries_count": 19,
+  "index_required": true,
+  "mappings": [
+    {
+      "html_rel_path": "assign_icon_class.htm",
+      "md_rel_path": "assign_icon_class.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "change_default_newblocks.htm",
+      "md_rel_path": "change_default_newblocks.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "editing_class_layout.htm",
+      "md_rel_path": "editing_class_layout.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "editing_layout_other_comp.htm",
+      "md_rel_path": "editing_layout_other_comp.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "enable_disable_methods.htm",
+      "md_rel_path": "enable_disable_methods.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "LDe_View_Menu.htm",
+      "md_rel_path": "LDe_View_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "LEd_Description_of_Window_Elements.htm",
+      "md_rel_path": "LEd_Description_of_Window_Elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "led_flexiblelayout.htm",
+      "md_rel_path": "led_flexiblelayout.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "LEd_Layout_Menu.htm",
+      "md_rel_path": "LEd_Layout_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "LEd_Layout_Settings_for_Window.htm",
+      "md_rel_path": "LEd_Layout_Settings_for_Window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "LEd_modify_diagram_block.htm",
+      "md_rel_path": "LEd_modify_diagram_block.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "LEd_open_layout_editor.htm",
+      "md_rel_path": "LEd_open_layout_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "LEd_Overview.htm",
+      "md_rel_path": "LEd_Overview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "modify_block_attributes.htm",
+      "md_rel_path": "modify_block_attributes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "modify_layout_editor_display.htm",
+      "md_rel_path": "modify_layout_editor_display.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "move_ports.htm",
+      "md_rel_path": "move_ports.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

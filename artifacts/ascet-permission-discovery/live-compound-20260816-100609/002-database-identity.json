@@ -1,0 +1,38 @@
+{
+  "stage": "database-identity",
+  "request": {
+    "toolName": "ascet_get",
+    "params": {
+      "action": "database_identity"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"error\":{\"code\":\"unknown_action\",\"message\":\"Unknown ascet_get action 'database_identity'.\",\"details\":{\"action\":\"database_identity\",\"field\":\"action\",\"expected\":[\"formulas\",\"tree\"]}},\"recover\":{\"tool\":\"ascet_capabilities\",\"action\":\"search_actions\",\"query\":\"ascet_get.database_identity\"}}"
+      }
+    ],
+    "details": {
+      "ok": false,
+      "tool": "ascet_get",
+      "error": {
+        "code": "unknown_action",
+        "message": "Unknown ascet_get action 'database_identity'.",
+        "details": {
+          "action": "database_identity",
+          "field": "action",
+          "expected": [
+            "formulas",
+            "tree"
+          ]
+        }
+      },
+      "recover": {
+        "tool": "ascet_capabilities",
+        "action": "search_actions",
+        "query": "ascet_get.database_identity"
+      }
+    }
+  }
+}

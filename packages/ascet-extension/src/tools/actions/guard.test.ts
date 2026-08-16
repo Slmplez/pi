@@ -1,4 +1,4 @@
-import assert from "node:assert/strict";
+﻿import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import { resolveProfileTools } from "../exposure/profiles.ts";
 import { AscetActionUnavailableError, assertActionActive, extractToolAction } from "./guard.ts";
@@ -23,7 +23,7 @@ const opsContext = {
 describe("ASCET action runtime guard", () => {
 	test("extracts action or mode without retired tool special cases", () => {
 		assert.equal(extractToolAction("ascet_get", { action: "tree" }), "tree");
-		assert.equal(extractToolAction("ascet_search", { mode: "element" }), "element");
+		assert.equal(extractToolAction("ascet_search", { action: "search", mode: "element" }), "search");
 		assert.equal(extractToolAction("ascet_capabilities", {}), "search_actions");
 		assert.equal(extractToolAction("ascet_scheduler_status", {}), "status");
 		assert.equal(extractToolAction("ascet_status", {}), "status");

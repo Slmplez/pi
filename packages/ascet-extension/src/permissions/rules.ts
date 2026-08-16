@@ -55,7 +55,7 @@ export function findAscetPermissionRule(input: {
 			action: rule.action,
 			path: rule.path,
 			databaseFingerprint: rule.databaseFingerprint,
-			reason: `Matched ascetPermissions.rules[${index}] (${rule.behavior}).`,
+			reason: `Matched .ascet/permissions.json rules[${index}] (${rule.behavior}).`,
 		};
 		if (!selected || BEHAVIOR_PRIORITY[match.behavior] > BEHAVIOR_PRIORITY[selected.behavior]) {
 			selected = match;

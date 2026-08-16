@@ -1,0 +1,75 @@
+{
+  "stage": "editable-PlatformLibrary\\Package\\StandstillLibrary\\private\\SSMStatemachineClasses\\SsmStatemachine",
+  "request": {
+    "toolName": "ascet_edit",
+    "params": {
+      "mode": "check",
+      "componentPath": "PlatformLibrary\\Package\\StandstillLibrary\\private\\SSMStatemachineClasses\\SsmStatemachine"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"editable\": false\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "ok",
+        "data": false,
+        "warnings": []
+      },
+      "raw": {
+        "ok": true,
+        "data": false,
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "component_editable_check",
+            "PlatformLibrary\\Package\\StandstillLibrary\\private\\SSMStatemachineClasses\\SsmStatemachine",
+            "--json"
+          ],
+          "timeoutMs": 60000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"editable\":false},\"error\":null,\"meta\":{\"bridgePid\":7472,\"bridgeGeneration\":\"7a464c11-7236-44bb-b02c-7160df1827d3\",\"durationMs\":250,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"component_editable_check\"}}\r\n",
+        "stderr": "",
+        "exitCode": 0,
+        "timedOut": false,
+        "aborted": false,
+        "operationId": "component_editable_check"
+      },
+      "tool": "ascet_edit",
+      "action": "check",
+      "mode": "check",
+      "value": false,
+      "command": {
+        "logicalCommandId": "AscetComponentEditableCheck",
+        "backendCommandId": "AscetComponentEditableCheck",
+        "operation": "component_editable_check"
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "component_editable_check",
+            "PlatformLibrary\\Package\\StandstillLibrary\\private\\SSMStatemachineClasses\\SsmStatemachine",
+            "--json"
+          ],
+          "timeoutMs": 60000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 0,
+        "timedOut": false,
+        "stderr": ""
+      }
+    }
+  }
+}

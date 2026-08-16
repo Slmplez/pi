@@ -1,0 +1,64 @@
+{
+  "stage": "cleanup-read-only-method-readback",
+  "startedAt": "2026-08-15T02:54:48.519Z",
+  "finishedAt": "2026-08-15T02:54:49.087Z",
+  "request": {
+    "toolName": "ascet_read",
+    "params": {
+      "action": "read_method_signature",
+      "componentPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill",
+      "methodName": "PiCompoundMethod"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"component\": \"Customer/JLR_FMC/Package/JLR_LeanTCS/Private/TCS_CUS_GenericTCSFunctions/TCS_CUS_RefSuppSuppress/TCS_CUS_RefSuppSuppress_Hill\",\n  \"kind\": \"Class\",\n  \"language\": \"BDE\",\n  \"name\": \"PiCompoundMethod\",\n  \"type\": \"AbstractMethod\",\n  \"supportsPrimitiveSignature\": true,\n  \"return\": {\n    \"exists\": false,\n    \"name\": \"return\",\n    \"isMethodReturn\": false,\n    \"isMethodArgument\": false\n  },\n  \"targetKey\": \"Customer\\\\JLR_FMC\\\\Package\\\\JLR_LeanTCS\\\\Private\\\\TCS_CUS_GenericTCSFunctions\\\\TCS_CUS_RefSuppSuppress\\\\TCS_CUS_RefSuppSuppress_Hill::PiCompoundMethod::signature\",\n  \"summary\": \"Read method signature for 'PiCompoundMethod' in Customer\\\\JLR_FMC\\\\Package\\\\JLR_LeanTCS\\\\Private\\\\TCS_CUS_GenericTCSFunctions\\\\TCS_CUS_RefSuppSuppress\\\\TCS_CUS_RefSuppSuppress_Hill: no return, 0 argument(s).\"\n}"
+      }
+    ],
+    "details": {
+      "tool": "ascet_read",
+      "action": "read_method_signature",
+      "command": {
+        "logicalCommandId": "AscetReadMethodSignature",
+        "backendCommandId": "AscetReadMethodSignature",
+        "operation": "read_method_signature"
+      },
+      "data": {
+        "component": "Customer/JLR_FMC/Package/JLR_LeanTCS/Private/TCS_CUS_GenericTCSFunctions/TCS_CUS_RefSuppSuppress/TCS_CUS_RefSuppSuppress_Hill",
+        "kind": "Class",
+        "language": "BDE",
+        "name": "PiCompoundMethod",
+        "type": "AbstractMethod",
+        "supportsPrimitiveSignature": true,
+        "return": {
+          "exists": false,
+          "name": "return",
+          "isMethodReturn": false,
+          "isMethodArgument": false
+        },
+        "targetKey": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill::PiCompoundMethod::signature",
+        "summary": "Read method signature for 'PiCompoundMethod' in Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill: no return, 0 argument(s)."
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:/Repo/09_ASCETCopilot/pi-ascet-extension-prototype/packages/ascet-extension/ascet-cli/bin/AscetBridge.exe",
+          "args": [
+            "exec",
+            "read_method_signature",
+            "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill",
+            "PiCompoundMethod",
+            "--json"
+          ],
+          "timeoutMs": 90000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 0,
+        "timedOut": false
+      }
+    }
+  }
+}

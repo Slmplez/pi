@@ -1,0 +1,681 @@
+{
+  "generated_at": "2026-04-01T03:07:52.091214Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\ConditionalTableEditorEnglishUS.chm",
+  "unpack_dir": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ConditionalTableEditorEnglishUS\\unpacked",
+  "total_files": 110,
+  "total_size_bytes": 454287,
+  "counts_by_extension": {
+    ".htm": 54,
+    ".gif": 47,
+    ".brs": 1,
+    ".glo": 1,
+    ".hhc": 1,
+    ".hhk": 1,
+    ".js": 2,
+    ".xml": 1,
+    ".css": 1,
+    ".lng": 1
+  },
+  "files": [
+    {
+      "relative_path": "add_elements.htm",
+      "size": 3381,
+      "sha256": "25371520131335ad088cda929ac6e4cc7fea41b5b2aa6dddda8731ac9820c188",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "alter_column_width.htm",
+      "size": 1470,
+      "sha256": "54cca977a1a1a238d1f1522ddb5a84753538a1e98e04b28566f8f53fc7b3ebfe",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "arguments_variables.htm",
+      "size": 2762,
+      "sha256": "1c54e6aea21f43f56407d3a3d22ce1b9d54b4addb1157b25069c24c5405da9fc",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "button_compilegeneratedcode.gif",
+      "size": 1096,
+      "sha256": "0471757cc6f039d5929905dc6242ee8b4ae53b5a015933df971c4f1e2ce637a2",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_copy.gif",
+      "size": 1009,
+      "sha256": "b88cd450eab91c0821ec055fccc722cc002628f675194f7f83a54b2ea9b9012d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_ctab_coladd.gif",
+      "size": 1682,
+      "sha256": "9ebb2297692770e0191c02eab4646252fdff0e84f3a5800db0fd69ec1abe9def",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_ctab_colleft.gif",
+      "size": 1929,
+      "sha256": "bb3ec4fd8972f111b630623e2acaf63d47ae4d79372c0a87e793955006a4982b",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_ctab_colremove.gif",
+      "size": 1952,
+      "sha256": "93da06b7f5e07a46e8e5fb63868e6a12723a552fd6fb8848e6b96532f3154f31",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_ctab_colright.gif",
+      "size": 1814,
+      "sha256": "53cdf5f70ce016ad6e6940aaff33668a66a5e1a1aca7eeb4bbc67fb39fae74c6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_ctab_rowadd.gif",
+      "size": 1397,
+      "sha256": "f47011983c8394628b6e03cab4685e8b2f944f2dbe0e0af3f1b1475f15393a23",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_ctab_rowdel.gif",
+      "size": 1561,
+      "sha256": "21bd62cb85071cb4135ba4cc9eace68af41a8a387de02036d0393708854d82e7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_ctab_rowdown.gif",
+      "size": 1553,
+      "sha256": "e798d92c4514cfcc577e65ed832c8868202f4b7e83b6faf1e1ae9c5deb10dccb",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_ctab_rowup.gif",
+      "size": 1526,
+      "sha256": "78593434691707c54cabfcf7ccf0830bb263d41c976ea386c729063ce13eb092",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_cut.gif",
+      "size": 986,
+      "sha256": "7544d626acf6f55b2f3676e5811bde3787c34eaa41da2b88e7754d5946d433ae",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_delete.gif",
+      "size": 937,
+      "sha256": "a72fc899b2e46f8599fda6345dfe2497f844a212157df0675ab0928baa01e447",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_deltat.gif",
+      "size": 1004,
+      "sha256": "15d30e6e42395de874292361ec463eb99d5f7f4d1a8b266edf4986ff4d7b9c31",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_editcomponentdata.gif",
+      "size": 1090,
+      "sha256": "f5276c6b7881795e46ddf9c0b2f22ed613ee046beccfcc9f97a9988066f990fb",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_editcomponentimplementation.gif",
+      "size": 1064,
+      "sha256": "882c7322d7d16fdcc61363670fb8568b6b5cb154d79d1a751e9fa23203441c76",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_generatecode.gif",
+      "size": 1061,
+      "sha256": "81866824526dd40c0349f35d3501cb610df5592b5581c8b9cbfa812ae4e69b46",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_insertcomponent.gif",
+      "size": 1063,
+      "sha256": "96855bb89ab40aae8843c5194c916b643814ea1396a262502099629bfd3b1082",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_openexperiment.gif",
+      "size": 989,
+      "sha256": "5978c6514b8d6c301b48428592a28b9e4f2e248f9950d0155698e3a85902d575",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_paste.gif",
+      "size": 1012,
+      "sha256": "691ac19212c69bf5ef6caf233a71b9a159cd231afbef73ee91ecc0538181f939",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_variable.gif",
+      "size": 949,
+      "sha256": "beef532b0a8b9720c3a324711f769128361b776ecbd8ac6ace204300c8012853",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonArrow.gif",
+      "size": 894,
+      "sha256": "19009d7d9f9913e358296d682bc6c85a0c1189cc3a38e5e32ebbf2d8205943e7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonInsertCondtab.gif",
+      "size": 986,
+      "sha256": "cf3ba974fc0a96fe7919851e917dc6fd234887d2d4ddf36f8b74d619f6751307",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableC.gif",
+      "size": 1001,
+      "sha256": "4ea17f01be456b0c83a804b239d27faba8be84914da851655c8e46a2cab56bf6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableE.gif",
+      "size": 1001,
+      "sha256": "e4e2341315b59ba9aa8c6272e61a3ef6fa788fd50d0f24ae10cc6dcef556f7b1",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableI.gif",
+      "size": 1007,
+      "sha256": "2099b24318b7f035d00b459dbe4edee4bedbf0a4aab06cd78399cda2c5c21185",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableL.gif",
+      "size": 1002,
+      "sha256": "bc2fdec10179b6f6781d11f27df6ec11d913e2aba58bd25b5c94e779d4db031a",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableS.gif",
+      "size": 1006,
+      "sha256": "1aa33ece46fe9c9932a6178895c25016d800d5983274216c80111400acf05f1c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableU.gif",
+      "size": 1004,
+      "sha256": "41a8f43bceee6c000e8b35efc8a1dee1707e84161e1e662cb79663b41c8b464f",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableW.gif",
+      "size": 1011,
+      "sha256": "f28662aca44c31b5f396def6df5dccc44c56845fb9217a630032e9cee47ce23a",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "codegen_dbtoolarge.htm",
+      "size": 2826,
+      "sha256": "2c503c782fa77d7222ff5b5d14b2861d8a21ab87696dca57f45463f8867da3af",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "column_menu.htm",
+      "size": 2355,
+      "sha256": "89e08ba0fe2547d5b9c5c5e505d8cf372666b27bed509c4126651f32a77e749b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "complex_elements.htm",
+      "size": 1314,
+      "sha256": "6dbf71ea0276f4c32854f0b180a0e037b46df77670b4a26a691065afe46efac3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ConditionalTableEditorEnglishUS.brs",
+      "size": 2,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "extension": ".brs"
+    },
+    {
+      "relative_path": "ConditionalTableEditorEnglishUS.glo",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "extension": ".glo"
+    },
+    {
+      "relative_path": "ConditionalTableEditorEnglishUS.hhc",
+      "size": 11450,
+      "sha256": "bd90162345f4897febde5694ed52acd41c4e1dd2408abc16580080b6f582ba2e",
+      "extension": ".hhc"
+    },
+    {
+      "relative_path": "ConditionalTableEditorEnglishUS.hhk",
+      "size": 10895,
+      "sha256": "8f1f8b47fb3c39c9b980b51f4ecb3e229aab0a8e38dbe39f1b2858c90059bf21",
+      "extension": ".hhk"
+    },
+    {
+      "relative_path": "condtab_actioncell copy.gif",
+      "size": 2217,
+      "sha256": "7e3a38a8c1438ac48a00560d808eddd5d44d9b97cfcd5406336f13bdc39c043d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "condtab_conditioncell copy.gif",
+      "size": 1328,
+      "sha256": "0427c09fc2eda114cf7dec6708e08a56130009038d23e2c6be7352c41da7e2f6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "condtab_input copy.gif",
+      "size": 1740,
+      "sha256": "cab91650d511332a249a0110452119fa6e6f065166643fb3ef6cc11f08193c29",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "condtab_layout copy.gif",
+      "size": 786,
+      "sha256": "f44deadf57670b133e2c9482a09fb19b142411515074ae0e91f0a4b9250aeb3e",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "condtab_table.gif",
+      "size": 7870,
+      "sha256": "975845cce1de0a1bb86bc013f9794280c519a5b18f0ae9f9a2fac3a860e8ff5a",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "condtab_width1 copy.gif",
+      "size": 1196,
+      "sha256": "9d40b5078af4c36bdc86e7d343189d1addea5deff80f96867fda66a923326a25",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "create-column_instrusction.htm",
+      "size": 3040,
+      "sha256": "433cf76360555ba830570f2cefcd4c8066ec4df0458a510c87f5d0cb504027aa",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "create_column_condition.htm",
+      "size": 2778,
+      "sha256": "e4d8e6d34b220ef724dc56797547af20161834c59d28de0588ff14b9a958f307",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "create_ct.htm",
+      "size": 3791,
+      "sha256": "65570660fc46c3246695f28a240e6cb7e94173f94ee6e36e6bc1769519e13c71",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CTab_Browse_View.htm",
+      "size": 2144,
+      "sha256": "e965d96c4ce5e91572725e2f84b88bd0e28a6ff8a00a76f531e88def7c6f7e91",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CTab_Build_Menu.htm",
+      "size": 2940,
+      "sha256": "e785c389270d341fa4b1be4ec10897aaff57481b1e299c248c63409f042b9025",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ctab_component_pane.htm",
+      "size": 6822,
+      "sha256": "54e2c6930ec884610fc032694f0ed7695c0ba9caeed07d2ab680655021a14819",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ctab_contextmenu_componentelement.htm",
+      "size": 7963,
+      "sha256": "74c19963d80bcf7c009165333b2602afbbb1dfb16bf825b8f73f924afcf638db",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ctab_contextmenu_diagrammethod.htm",
+      "size": 1470,
+      "sha256": "6f7777ed2e69189b1562397aa268bb1d9af3049506b71e0dcd8a61cf2390c134",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ctab_contextmenu_specificationview.htm",
+      "size": 1649,
+      "sha256": "392378ff17155223bcbbff9029edefaf15ec887f5527321d6032e808da4c70ef",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ctab_contextmenubrowseview.htm",
+      "size": 4459,
+      "sha256": "7e2bc97eed9b9374d3675f02c3a54cdf4236e1402b59b3291b85ca2fa4d8113b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CTab_create_rows.htm",
+      "size": 2057,
+      "sha256": "c11f68a546ec7f1cd2d7797a4a162efe98cebc970e31a7b26a5c554193e30421",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CTab_delete_rows.htm",
+      "size": 1403,
+      "sha256": "7f438d94afe93d6e2918e7c49335baef220367e62042ffae40b92f5067addbc9",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CTab_description_buttons.htm",
+      "size": 8483,
+      "sha256": "339312e518dee31e2da414dd95ef7b6a5b03adf11168da0642e54e05a5c31a3b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CTab_Description_of_Window_Elements.htm",
+      "size": 2991,
+      "sha256": "7ffc1a0b44b4de21109646c874b301c6bb97b5a506fb3c48f451e8c1f7bfcf03",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CTab_Edit_Menu.htm",
+      "size": 4252,
+      "sha256": "edc8ea095d1f92b5ab639c317135b981d831807a4edaf2e9e9c8610814508970",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CTab_Elements_Palette.htm",
+      "size": 5173,
+      "sha256": "3bca05ad48f9a8226ef153ebf41b1476f87980287f257f84b215d2ee71ff09ef",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CTab_Extras_Menu.htm",
+      "size": 5178,
+      "sha256": "c692be1ce10b4665a8b083cc578bcb77a880fb9b888dc015d5fae407a743949c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CTab_File_Menu.htm",
+      "size": 4365,
+      "sha256": "0713bf69760ed0c3b8615c79d31b88f8658dbf2c309a37f2f2b21ae312670640",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ctab_filtering_the_component_pane.htm",
+      "size": 2128,
+      "sha256": "98a88bc966e2cad0c55436539481c27a8d541aa05a29e159848e4255cfa337a7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CTab_Help_Menu.htm",
+      "size": 916,
+      "sha256": "3d61186d58174621a6148865a59ccf05b5447b6fb82b2f01066b92b11c57d4d9",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ctab_includecomponent_blocklibrary.htm",
+      "size": 1767,
+      "sha256": "d41614181c75b1eea064edd8b58fe67afa9ae2f195a947c2f8a30471239f9360",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CTab_Insert_Menu.htm",
+      "size": 767,
+      "sha256": "0a332374320738f7105e014116b72e131862ce860afc925ae1b084ad15b87c15",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CTab_Library_Palette.htm",
+      "size": 1272,
+      "sha256": "48e42561d3797fe632932b25c0ccef18bd38adf0e785ee1bc7312420417d8587",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CTab_menu_bar.htm",
+      "size": 1453,
+      "sha256": "cd635228eac3652397431a1469d69a103541d8c9eded23c2a06866750e2058a9",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CTab_move_columns.htm",
+      "size": 1881,
+      "sha256": "cc674b2ba1f9aae2f510904054e7223b044d47a8c1a1359fd4d624019b40fc44",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CTab_move_rows.htm",
+      "size": 1893,
+      "sha256": "ba415d7a7c4b47fdc5bba82c3d7acbd7b2bf5bc40e29ff9dcd59781a521d2a11",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CTab_overview.htm",
+      "size": 10800,
+      "sha256": "7d25536884f2b548c55e7dc511dbb98dfe439f02d5083d67a7fcf947d4526fea",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CTab_Palettes.htm",
+      "size": 774,
+      "sha256": "e702ffb0d1b7e90ecc72e16bed0d8b6152e792f3ee12e7482802a6bcc72927c0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CTab_remove_columns.htm",
+      "size": 1653,
+      "sha256": "4034fbb2c9b9b8d103a7d18b6fc8afaac6acb54d3bd391d16f237c4ca790cb02",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CTab_RenameDelete_elements.htm",
+      "size": 2815,
+      "sha256": "8713938380261d63127a892f852908f8259d78cc5d3a14c0202628f1efb393af",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ctab_searchresultsview.htm",
+      "size": 1773,
+      "sha256": "440d64f46dc05d3ed04fba0db0668326aa2ab0c25cce5f8eb0c0c531dc0a3322",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Ctab_SetUp_ConditionalTable.htm",
+      "size": 2050,
+      "sha256": "ae9bb78820d5f97789a1bafb010b8f2ac81199c765ff346c45cbe124e8bbda24",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ctab_showdeleteunusedElements.htm",
+      "size": 8872,
+      "sha256": "1ebdae339fa5a52ff07c9a6b19f3aaebc6266012af61e2ef215911cab114e6e6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CTab_Specification_View.htm",
+      "size": 1420,
+      "sha256": "a1df894d8735bb2f77f9a6049cfde5e4a7ff1f53accd05f51e870075480f9c2f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Ctab_SpecifyConditionalTable.htm",
+      "size": 998,
+      "sha256": "13ed0c860720522ef305c0fc7725cf204c0ea8d05ec68c9a09cc4a4254edaf63",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CTab_Starting_an_Offline_Experiment.htm",
+      "size": 8707,
+      "sha256": "cbbbb6603f7addef780918b7e4e187fa38441aac650620c536835111c599bf2d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CTab_Tools_Menu.htm",
+      "size": 794,
+      "sha256": "5fd547cb3591914c9dac37380a0e3364f6247b5b4f9f45a9f57dbf9e4f4628e6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Ctab_unused.htm",
+      "size": 3868,
+      "sha256": "5fb9b6316bc4bef998e2441b066c80648204208285d40e8a4f56d3f03d43fc0c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Ctab_unused2.htm",
+      "size": 1840,
+      "sha256": "22c2d99bc99a4d311f2e965a597899400a5dd11bfca6894e0760b85403981263",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ctab_unusedElements.gif",
+      "size": 40750,
+      "sha256": "027e8129e3a2407e49d01a6ca14e0590b09a43371b24b60b8f92b032188f0d9d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "CTab_view_menu.htm",
+      "size": 3373,
+      "sha256": "0e7ad467ee52466bbc441ee1aa489b5437d9d915cfc0f81af2b702f590ef59ed",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "display.js",
+      "size": 5656,
+      "sha256": "85712144c31aac1d2706f3b60475055a673961f71bc37c0f4c9e9c4b85fa9b31",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "eHelp.xml",
+      "size": 371,
+      "sha256": "d6feeafcf85219799cc1a29c810560a9ae672dbb2773a4b146bbb07948f7f4ef",
+      "extension": ".xml"
+    },
+    {
+      "relative_path": "ehlpdhtm.js",
+      "size": 125847,
+      "sha256": "308972e456069e1c0667dfbbf2a3d1ce3bbe0b6253b224497265dffd9e4e2018",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "enter_condition_instruction.htm",
+      "size": 2265,
+      "sha256": "5220b417909c61bb19c30bb754e84349821cd3f8f84015a54a3158b91885de95",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "experimenting_ct.htm",
+      "size": 4251,
+      "sha256": "db6895a79c832f5a644d10c9a5051c2e780bf9a55d761976b85b9a7c489c2fba",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "images/button_filtertab.gif",
+      "size": 1036,
+      "sha256": "7964c2e4fa9542b8098bc1aa6ab3a14b2a612dbea3cae7fc1e2f97d12be1eb78",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/button_filtertab2.gif",
+      "size": 1076,
+      "sha256": "7283bee7576e1399b14d4b413b5004d224ea2908794e82a1c912512c1a5e19f6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/buttonCollapse.gif",
+      "size": 980,
+      "sha256": "c7a6e0d9af6b0e27b9ab870ca2ccb70f15e8cfa326ea1d5db99fa7a6cb1c3645",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/buttonExpand.gif",
+      "size": 982,
+      "sha256": "3b381ad805bf80fc3fa8d6cb7ccef8f03a17d9a90e52b767c345bc293664f0ae",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/buttonSearch.gif",
+      "size": 1724,
+      "sha256": "1f19089e422bbbd75e9e3a0f4b03600abea8cff5ddab442d99db8beddc2ce81d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/buttonSortCriteria.gif",
+      "size": 1735,
+      "sha256": "bd29e4c075d1ffa8223a2e9e84f349db0d6b6415271a3b3027da7c86f4edb015",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/comboboxSearch.gif",
+      "size": 1851,
+      "sha256": "f72a86b501685b3e8065edddd7c972c5d2284a4321b9a3d95ba5c718caa798c8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exp_minus.gif",
+      "size": 837,
+      "sha256": "18a8ea974d756d370d6f7067283fc8c0b26f235c8e98bdaaf13a63e7dca8b1c4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exp_plus.gif",
+      "size": 842,
+      "sha256": "9ff1991cf9c6de621e2672bebf74fbc56680e3413f74d6cf18e25238701651be",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/statisch.gif",
+      "size": 831,
+      "sha256": "481cd3e8b966f0a4398b853efce140287877173b926b53d710791675a1b15aa4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Layout.css",
+      "size": 10489,
+      "sha256": "cb926a4131751ea36dd53eca862f372a8e1d4904b00e53f1c46460ffca0a253b",
+      "extension": ".css"
+    },
+    {
+      "relative_path": "make_elements_accessible.htm",
+      "size": 10599,
+      "sha256": "7ec4a2bd7b0b7e278ff812fade2a640e2d25322f69bd07f4c909f22b5dab1a4a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "RoboHHRE.lng",
+      "size": 3586,
+      "sha256": "607e16623990c7b694bb11537edbecfbd7057fda1739bba5173e9d8a4942b18f",
+      "extension": ".lng"
+    },
+    {
+      "relative_path": "row_menu.htm",
+      "size": 1108,
+      "sha256": "320e11f44df5590d0f0b536923caba165ad905a8ba3bf620bb495d3cb54d7e6c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Setting_the_Background_Color.htm",
+      "size": 2530,
+      "sha256": "70b3f2adf7965860d3ecdc0e0a18c5224db421a50c3402b43081ace1f3f5015b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "setting_up_ct.htm",
+      "size": 2692,
+      "sha256": "8619d8e08867e89e6e0b460439855c95c5bcfdafc82e685dd74a3aebfa389335",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "specifying_ct.htm",
+      "size": 4119,
+      "sha256": "071ffdc6cdfb9172dc52d03a57ca4f03b9b40b5aff0dfcf53ad27963b87bf0ba",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "use_methods_c_i.htm",
+      "size": 2375,
+      "sha256": "04ecfee88fa3df78f7725819fdeb836e4257ff13f006c4c2b1335438783a2c1f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "usopt_colors.gif",
+      "size": 6805,
+      "sha256": "3cf8cd65997202b83a0b20e59f556d8438cdcc32217568dfcbd87aa1865ed3c6",
+      "extension": ".gif"
+    }
+  ]
+}

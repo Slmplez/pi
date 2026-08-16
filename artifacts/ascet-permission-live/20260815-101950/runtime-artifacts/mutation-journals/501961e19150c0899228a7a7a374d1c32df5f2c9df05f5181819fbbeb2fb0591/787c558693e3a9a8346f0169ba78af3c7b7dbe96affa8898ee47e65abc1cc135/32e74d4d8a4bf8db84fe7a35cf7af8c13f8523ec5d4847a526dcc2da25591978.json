@@ -1,0 +1,137 @@
+{
+  "version": 1,
+  "status": "applied",
+  "databaseFingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c",
+  "targetOid": "040g00001g001qg7107g6n8jnc7g0",
+  "targetKind": "class",
+  "canonicalPath": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass",
+  "action": "create_method",
+  "planId": "1689a0bd-c5d6-4022-8869-c70d9c0c8f21",
+  "planFingerprint": "59d033cf28cf7a3d9ccea1d6aa21161772bb2084ec27c17f44049010a4aeda5b",
+  "targetImpactFingerprint": "sha256:c4232b9c5bb42d2a01a43a727e3d3f0234d40a160e3bb8672d7c37820d445691",
+  "guardGeneration": 0,
+  "beforeSnapshotFingerprint": "sha256:a4ed5f5b8fada4010dc39e9ae75915b167855fa6d310d784b8d33f2f591360a3",
+  "desiredFingerprint": "sha256:092f9ad6f2687862aaeb13abb37e0cb4463853f908ba783351bae1663a5742a1",
+  "beforeSnapshot": {
+    "operation": "authoritative_single_call_preflight",
+    "validated": true,
+    "authoritativePlan": {
+      "operation": "preflight_create_method",
+      "validated": true,
+      "result": {
+        "databasePath": "C:\\Repo\\F05_IPB_L2_0429",
+        "componentPath": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass",
+        "componentOid": "040g00001g001qg7107g6n8jnc7g0",
+        "componentKind": "Class",
+        "languageKind": "ESDL",
+        "diagramName": "Main",
+        "diagramExists": true,
+        "diagramRuntimeType": "de.etas.cebra.toolAPI.Ascet.DiscreteMethodDiagram",
+        "requiredMethod": "AddMethod",
+        "requiredSignature": "AddMethod(String)",
+        "requiredMethodAvailable": true,
+        "addDiagramAvailable": false,
+        "futureMethodCapabilityProven": true,
+        "editable": true,
+        "readbackAvailable": true,
+        "noOp": false,
+        "existingMethod": null,
+        "plannedEffects": [
+          {
+            "kind": "create_method",
+            "target": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass::PiHighRiskMethod",
+            "methodKind": "AbstractMethod"
+          }
+        ],
+        "capability": {
+          "status": "supported",
+          "operation": "AddMethod",
+          "failureCode": "",
+          "failureMessage": ""
+        }
+      }
+    },
+    "normalizedEvidence": {
+      "version": 1,
+      "action": "create_method",
+      "paramsFingerprint": "092f9ad6f2687862aaeb13abb37e0cb4463853f908ba783351bae1663a5742a1",
+      "database": {
+        "path": "C:\\Repo\\F05_IPB_L2_0429",
+        "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+      },
+      "target": {
+        "path": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass",
+        "oid": "040g00001g001qg7107g6n8jnc7g0",
+        "kind": "class"
+      },
+      "impact": {
+        "complete": true,
+        "sharedObject": false,
+        "ownerPath": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass",
+        "affectedProjects": [],
+        "fingerprint": "sha256:c4232b9c5bb42d2a01a43a727e3d3f0234d40a160e3bb8672d7c37820d445691"
+      },
+      "capability": {
+        "status": "supported",
+        "operation": "AddMethod",
+        "evidence": {
+          "status": "supported",
+          "operation": "AddMethod",
+          "failureCode": "",
+          "failureMessage": ""
+        }
+      },
+      "editability": {
+        "applicable": true,
+        "status": "editable",
+        "canRequestEditable": false
+      },
+      "effects": [
+        {
+          "kind": "create_method",
+          "target": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass::PiHighRiskMethod",
+          "description": "create_method: DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass::PiHighRiskMethod"
+        }
+      ],
+      "verification": {
+        "available": true,
+        "operation": "create_method_readback",
+        "target": {
+          "path": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass"
+        }
+      },
+      "riskModifiers": [],
+      "noOp": false,
+      "generatedAt": "2026-08-15T02:39:47.258Z",
+      "approvalMaterialFingerprint": "d97d65af855debd1c48a27db33cbb910bd2ff60e51a3db092db2cfabf2399fcf"
+    },
+    "permissionMode": "acceptEdits",
+    "permissionDecision": "allow",
+    "risk": "safe",
+    "revalidatedAt": "2026-08-15T02:39:47.258Z",
+    "targetIdentity": {
+      "path": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass",
+      "oid": "040g00001g001qg7107g6n8jnc7g0",
+      "kind": "class"
+    },
+    "targetImpactFingerprint": "sha256:c4232b9c5bb42d2a01a43a727e3d3f0234d40a160e3bb8672d7c37820d445691"
+  },
+  "attemptedMutation": {
+    "action": "create_method",
+    "componentPath": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass",
+    "componentKind": "class",
+    "methodName": "PiHighRiskMethod",
+    "methodKind": "abstract",
+    "ifExists": "fail"
+  },
+  "createdAt": "2026-08-15T02:39:47.274Z",
+  "updatedAt": "2026-08-15T02:39:48.239Z",
+  "evidence": {
+    "bridgeEntered": true,
+    "backendResponseReceived": true,
+    "mutationStarted": true
+  },
+  "outcome": {
+    "operationId": "guarded_create_method"
+  }
+}

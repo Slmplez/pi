@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ComponentImplementation toolVersion="V6.1.5_2.2.0" schemaVersion="6.1.0.1">
+	<ImplementationSet name="PiSmoke" default="false" classConfig="true" memoryLocation="Default" generateMethodBody="true" optimizeMethodCalls="true" usingServiceRoutines="false" hierarchicalGenerationForSM="true" outlineMethodsSM="true" inlinePrivateMethodsSM="true" generateDataStructures="true" cacheLocking="automatic" userDefinedOrder="false" OID="_040g00001g001qg71051sci86or08">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-10T12:30:44" timeStampCounter="2924"/>
+	</ImplementationSet>
+	<ImplementationSet name="Impl" default="true" classConfig="false" memoryLocation="Default" generateMethodBody="true" optimizeMethodCalls="true" usingServiceRoutines="false" hierarchicalGenerationForSM="true" outlineMethodsSM="true" inlinePrivateMethodsSM="true" generateDataStructures="true" cacheLocking="automatic" userDefinedOrder="false" OID="_040g00001g001qg71051sci84oqg8">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-10T12:30:44" timeStampCounter="2925"/>
+		<ImplementationEntry>
+			<ImplementationVariant name="default">
+				<ElementImplementation elementName="C_Smoke" elementOID="_040g00001g001qg71051scirhsu08">
+					<ScalarImplementation>
+						<NumericImplementation limitAssignments="true" isLimitOverflow="true" limitOverflow="automatic" memoryLocationInstance="Default" additionalInformation="" cacheLocking="automatic" quantization="0" formula="ident" master="Model" physType="real64" implType="real32" zeroNotIncluded="false">
+							<PhysicalInterval min="-1" max="1"/>
+							<ImplementationInterval min="-1.0" max="1.0"/>
+						</NumericImplementation>
+					</ScalarImplementation>
+				</ElementImplementation>
+			</ImplementationVariant>
+		</ImplementationEntry>
+		<ImplementationEntry>
+			<ImplementationVariant name="default">
+				<ElementImplementation elementName="input" methodName="calc" elementOID="_040g00001g001qg71051scidcotg8">
+					<ScalarImplementation>
+						<NumericImplementation limitAssignments="true" isLimitOverflow="true" limitOverflow="automatic" memoryLocationInstance="Default" additionalInformation="" cacheLocking="automatic" quantization="0" formula="ident" master="Model" physType="real64" implType="real64" zeroNotIncluded="false">
+							<PhysicalInterval min="-INF" max="INF"/>
+							<ImplementationInterval min="-INF" max="INF"/>
+						</NumericImplementation>
+					</ScalarImplementation>
+				</ElementImplementation>
+			</ImplementationVariant>
+		</ImplementationEntry>
+		<ImplementationEntry>
+			<ImplementationVariant name="default">
+				<ElementImplementation elementName="return" methodName="calc" elementOID="_040g00001g001qg71051scid10t08">
+					<ScalarImplementation>
+						<NumericImplementation limitAssignments="true" isLimitOverflow="true" limitOverflow="automatic" memoryLocationInstance="Default" additionalInformation="" cacheLocking="automatic" quantization="0" formula="ident" master="Model" physType="real64" implType="real64" zeroNotIncluded="false">
+							<PhysicalInterval min="-INF" max="INF"/>
+							<ImplementationInterval min="-INF" max="INF"/>
+						</NumericImplementation>
+					</ScalarImplementation>
+				</ElementImplementation>
+			</ImplementationVariant>
+		</ImplementationEntry>
+	</ImplementationSet>
+	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+		<SignedInfo>
+			<CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+			<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+			<Reference>
+				<Transforms>
+					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+				</Transforms>
+				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+				<DigestValue>WDJSuDKzmOaDZ9WfeNL3cXcre9s=</DigestValue>
+			</Reference>
+		</SignedInfo>
+		<SignatureValue>IKGU5OZkyYLv5w+XcLj/RL4YHQOEPL1a/SUorhchy0HToHiaRnYy7P7NQXATHTrp
+x22gZaBBLSSJX61EnsxgqnNVkaG7cfQEcn7LqWCIHGXY82e902cCMA6tQJQDq8Uv
+IXyDVjO8tePP2j0t7liuOgz7zIF+gUJ18+KE5iZJzwBdrXZ2Et/oSPJQTf8F1y6z
+ZHhbQ7Wip0wtO54M1p3JzqkA/i1yJcch+OlIpBUhLtzzuac2g7yT2Qwl/tUvQakF
+SHGnHXgsfofJ903CHnWlwzJiUBrGOlvUdzVts47M64K9xrN1ItMd/ie2sFkUsZIJ
+m1EGZxRbUdmrFsnrxx5qiQ==</SignatureValue>
+		<KeyInfo>
+			<KeyName>Etas Ascet Verification</KeyName>
+		</KeyInfo>
+	</Signature>
+</ComponentImplementation>

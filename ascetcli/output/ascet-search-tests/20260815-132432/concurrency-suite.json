@@ -1,0 +1,47 @@
+﻿{
+    "basic":  {
+                  "firstWaitMs":  4,
+                  "firstMs":  3189,
+                  "secondWaitMs":  3827,
+                  "secondMs":  1171
+              },
+    "mixed":  [
+                  {
+                      "mode":  "method",
+                      "count":  5929,
+                      "waitMs":  5,
+                      "ms":  19155
+                  },
+                  {
+                      "mode":  "element-ref",
+                      "count":  2,
+                      "waitMs":  22417,
+                      "ms":  838
+                  },
+                  {
+                      "mode":  "sender",
+                      "count":  4,
+                      "waitMs":  24255,
+                      "ms":  629
+                  },
+                  {
+                      "mode":  "receiver",
+                      "count":  4,
+                      "waitMs":  25887,
+                      "ms":  607
+                  }
+              ],
+    "timeout":  {
+                    "code":  "TimeoutException",
+                    "holderMs":  13577
+                },
+    "abandonedMutex":  {
+                           "recovered":  true,
+                           "waitMs":  4,
+                           "count":  2
+                       },
+    "pid":  {
+                "before":  25888,
+                "after":  25888
+            }
+}

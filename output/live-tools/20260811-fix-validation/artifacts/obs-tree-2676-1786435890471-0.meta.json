@@ -1,0 +1,70 @@
+{
+  "resultId": "obs-tree-2676-1786435890471-0",
+  "domain": "tree",
+  "target": {
+    "scope": "database"
+  },
+  "itemCount": 10681,
+  "coverage": {
+    "status": "complete_for_scope",
+    "scopeKind": "database",
+    "scopeId": "database:C:\\Repo\\",
+    "completeness": "complete",
+    "truncated": false,
+    "foldersVisited": 1855,
+    "componentsScanned": 8065,
+    "identityKinds": [
+      "asceticon",
+      "class",
+      "enumeration",
+      "folder",
+      "module",
+      "project",
+      "signal",
+      "statemachine"
+    ],
+    "collectorStarted": true,
+    "collectorCompleted": true,
+    "rootCollectionAvailable": true,
+    "projectCollectionAvailable": true,
+    "missingOidCount": 0,
+    "missingPathCount": 0,
+    "collectors": {
+      "database": {
+        "started": true,
+        "completed": true,
+        "itemCount": 1
+      },
+      "projects": {
+        "started": true,
+        "completed": true,
+        "itemCount": 75
+      },
+      "folders": {
+        "started": true,
+        "completed": true,
+        "itemCount": 1855
+      },
+      "components": {
+        "started": true,
+        "completed": true,
+        "itemCount": 7990
+      },
+      "enumerations": {
+        "started": true,
+        "completed": true,
+        "itemCount": 708
+      }
+    }
+  },
+  "truncated": false,
+  "source": "live",
+  "sourceIdentity": {
+    "database": {
+      "name": "INTENTIONAL_MISMATCH",
+      "path": "C:\\IntentionalMismatch\\",
+      "fingerprint": "e6c1aaeb2619c9c33503fd7e0dd75e61e7f0cd6b462c33f0f675dd541d3c3fa6"
+    }
+  },
+  "capturedAt": "2026-08-11T08:11:30.470Z"
+}

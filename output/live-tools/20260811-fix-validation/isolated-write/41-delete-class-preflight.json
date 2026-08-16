@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"status\": \"preflight\",\n  \"plan\": {\n    \"action\": \"delete_component\",\n    \"params\": {\n      \"action\": \"delete_component\",\n      \"component\": \"PI_LIVE_FIX_20260811_13947C09/ClassUnderTest\",\n      \"ifMissing\": \"fail\",\n      \"executeWrite\": false\n    }\n  },\n  \"nextStep\": \"Set executeWrite=true and confirm in the UI to apply this ASCET write.\"\n}"
+    }
+  ],
+  "details": {
+    "outcome": {
+      "status": "preflight",
+      "plan": {
+        "action": "delete_component",
+        "params": {
+          "action": "delete_component",
+          "componentPath": "PI_LIVE_FIX_20260811_13947C09\\ClassUnderTest",
+          "ifMissing": "fail",
+          "executeWrite": false
+        }
+      },
+      "nextStep": "Set executeWrite=true and confirm in the UI to apply this ASCET write."
+    }
+  }
+}

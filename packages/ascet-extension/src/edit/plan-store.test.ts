@@ -226,6 +226,28 @@ describe("AscetPlanStore v3", () => {
 		}
 	});
 
+	test("starts the execution authorization TTL after approval even when planning expired while waiting", () => {
+		const root = createRoot();
+		let now = new Date("2026-08-12T00:00:00.000Z");
+		try {
+			const store = new AscetPlanStore({
+				artifactRoot: root,
+				now: () => now,
+				generatePlanId: () => "plan-approved",
+			});
+			const created = store.create({ ...createInput(), ttlMs: 1_000 });
+			now = new Date("2026-08-12T00:10:00.000Z");
+			const authorized = store.startExecutionAuthorization(verifyInput(created.planId), 30_000);
+
+			assert.equal(authorized.state, "planned");
+			assert.equal(authorized.expiresAt, "2026-08-12T00:10:30.000Z");
+			assert.equal(authorized.planFingerprint, created.planFingerprint);
+			assert.equal(store.beginExecution(verifyInput(created.planId)).state, "executing");
+		} finally {
+			rmSync(root, { recursive: true, force: true });
+		}
+	});
+
 	test("consume is lock-protected, marks the plan atomically, and prevents replay", () => {
 		const root = createRoot();
 		let now = new Date("2026-08-11T00:00:00.000Z");

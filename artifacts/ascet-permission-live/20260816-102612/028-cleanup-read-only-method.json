@@ -1,0 +1,236 @@
+{
+  "stage": "cleanup-read-only-method",
+  "startedAt": "2026-08-16T02:37:57.441Z",
+  "finishedAt": "2026-08-16T02:38:46.082Z",
+  "request": {
+    "toolName": "ascet_edit",
+    "params": {
+      "action": "delete_method",
+      "componentPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW",
+      "methodName": "PiCompoundMethod",
+      "ifMissing": "ignore",
+      "intent": "apply"
+    },
+    "permissionMode": "default",
+    "rules": []
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"status\": \"ok\",\n  \"permission\": {\n    \"mode\": \"default\",\n    \"decision\": \"ask\",\n    \"risk\": \"high\",\n    \"reason\": \"Default mode requires confirmation for every actual ASCET write.\"\n  },\n  \"preflight\": {\n    \"status\": \"passed\",\n    \"evidence\": {\n      \"version\": 1,\n      \"action\": \"delete_method\",\n      \"paramsFingerprint\": \"cbc14b2d5e77fb6247426fc08ba9d253036af7baeea912f952a68acd870ee766\",\n      \"database\": {\n        \"path\": \"C:/Repo/F05_IPB_L2_0429\",\n        \"fingerprint\": \"71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c\"\n      },\n      \"target\": {\n        \"path\": \"Customer/JLR_FMC/Package/JLR_LeanTCS/Private/TCS_CUS_GenericTCSFunctions/TCS_CUS_EnableTCSwithoutPW/TCS_CUS_EnableTCSwithoutPW\",\n        \"oid\": \"040qm00000001og71g9060v0i6m5c\",\n        \"kind\": \"class\"\n      },\n      \"impact\": {\n        \"complete\": true,\n        \"sharedObject\": false,\n        \"ownerPath\": \"Customer/JLR_FMC/Package/JLR_LeanTCS/Private/TCS_CUS_GenericTCSFunctions/TCS_CUS_EnableTCSwithoutPW/TCS_CUS_EnableTCSwithoutPW\",\n        \"fingerprint\": \"sha256:0959846eab0d01dc6e863f219c84eeb75fcb1a4872d3cd197967f0af42490c14\"\n      },\n      \"capability\": {\n        \"status\": \"supported\",\n        \"operation\": \"registered_guarded_operation_preflight\",\n        \"evidence\": {\n          \"status\": \"supported\",\n          \"source\": \"registered_closed_operation\"\n        }\n      },\n      \"editability\": {\n        \"applicable\": true,\n        \"status\": \"editable\",\n        \"canRequestEditable\": false\n      },\n      \"effects\": [\n        {\n          \"kind\": \"delete_method\",\n          \"target\": \"Customer/JLR_FMC/Package/JLR_LeanTCS/Private/TCS_CUS_GenericTCSFunctions/TCS_CUS_EnableTCSwithoutPW/TCS_CUS_EnableTCSwithoutPW\",\n          \"description\": \"delete_method: Customer\\\\JLR_FMC\\\\Package\\\\JLR_LeanTCS\\\\Private\\\\TCS_CUS_GenericTCSFunctions\\\\TCS_CUS_EnableTCSwithoutPW\\\\TCS_CUS_EnableTCSwithoutPW\"\n        }\n      ],\n      \"verification\": {\n        \"available\": true,\n        \"operation\": \"delete_method_readback\",\n        \"target\": {\n          \"path\": \"Customer/JLR_FMC/Package/JLR_LeanTCS/Private/TCS_CUS_GenericTCSFunctions/TCS_CUS_EnableTCSwithoutPW/TCS_CUS_EnableTCSwithoutPW\"\n        }\n      },\n      \"noOp\": false,\n      \"generatedAt\": \"2026-08-16T02:38:44.993Z\",\n      \"approvalMaterialFingerprint\": \"acb8253cfda6429873ae6d9295ca7679e91d900f972f6396b7c4df86754271d7\"\n    }\n  },\n  \"editability\": {\n    \"status\": \"editable\"\n  },\n  \"mutation\": {\n    \"status\": \"applied\"\n  },\n  \"verification\": {\n    \"status\": \"passed\"\n  },\n  \"audit\": {\n    \"approvedAt\": \"2026-08-16T02:38:22.747Z\",\n    \"revalidatedAt\": \"2026-08-16T02:38:44.993Z\",\n    \"preflightFingerprint\": \"cbc14b2d5e77fb6247426fc08ba9d253036af7baeea912f952a68acd870ee766\",\n    \"approvalMaterialFingerprint\": \"acb8253cfda6429873ae6d9295ca7679e91d900f972f6396b7c4df86754271d7\"\n  },\n  \"bridge\": {\n    \"beforeBridge\": true,\n    \"bridgeEntered\": true,\n    \"backendResponseReceived\": true\n  },\n  \"recovery\": {\n    \"required\": false\n  }\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "ok",
+        "verified": true,
+        "data": {
+          "changed": {
+            "componentPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW",
+            "methodName": "PiCompoundMethod",
+            "methodKind": "AbstractMethod",
+            "diagram": "Main",
+            "deleted": true,
+            "alreadyMissing": false,
+            "targetKey": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW::PiCompoundMethod",
+            "summary": "Deleted method PiCompoundMethod in Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW."
+          },
+          "verification": {
+            "mode": "automatic_readback",
+            "source": "write_command",
+            "required": true,
+            "requested": true,
+            "verified": true,
+            "status": "passed"
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      },
+      "raw": {
+        "ok": true,
+        "data": {
+          "type": "response",
+          "protocolVersion": 1,
+          "ok": true,
+          "result": {
+            "componentPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW",
+            "methodName": "PiCompoundMethod",
+            "methodKind": "AbstractMethod",
+            "diagram": "Main",
+            "deleted": true,
+            "alreadyMissing": false,
+            "targetKey": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW::PiCompoundMethod",
+            "verifyReadbackRequested": true,
+            "readbackVerified": true,
+            "summary": "Deleted method PiCompoundMethod in Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW."
+          },
+          "error": null,
+          "meta": {
+            "bridgePid": 23560,
+            "bridgeGeneration": "4d84b43c-eac9-4dd3-969d-61bc0cc0797f",
+            "durationMs": 530,
+            "sessionPolicy": "fresh_session",
+            "mutationStarted": true,
+            "mode": "exec",
+            "operation": "delete_method"
+          }
+        },
+        "request": {
+          "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "delete_method",
+            "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW",
+            "PiCompoundMethod",
+            "--if-missing",
+            "ignore",
+            "--verify-readback",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "write",
+          "mutatesDatabase": true
+        },
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"componentPath\":\"Customer\\\\JLR_FMC\\\\Package\\\\JLR_LeanTCS\\\\Private\\\\TCS_CUS_GenericTCSFunctions\\\\TCS_CUS_EnableTCSwithoutPW\\\\TCS_CUS_EnableTCSwithoutPW\",\"methodName\":\"PiCompoundMethod\",\"methodKind\":\"AbstractMethod\",\"diagram\":\"Main\",\"deleted\":true,\"alreadyMissing\":false,\"targetKey\":\"Customer\\\\JLR_FMC\\\\Package\\\\JLR_LeanTCS\\\\Private\\\\TCS_CUS_GenericTCSFunctions\\\\TCS_CUS_EnableTCSwithoutPW\\\\TCS_CUS_EnableTCSwithoutPW::PiCompoundMethod\",\"verifyReadbackRequested\":true,\"readbackVerified\":true,\"summary\":\"Deleted method PiCompoundMethod in Customer\\\\JLR_FMC\\\\Package\\\\JLR_LeanTCS\\\\Private\\\\TCS_CUS_GenericTCSFunctions\\\\TCS_CUS_EnableTCSwithoutPW\\\\TCS_CUS_EnableTCSwithoutPW.\"},\"error\":null,\"meta\":{\"bridgePid\":23560,\"bridgeGeneration\":\"4d84b43c-eac9-4dd3-969d-61bc0cc0797f\",\"durationMs\":530,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":true,\"mode\":\"exec\",\"operation\":\"delete_method\"}}\r\n",
+        "stderr": "",
+        "exitCode": 0,
+        "timedOut": false,
+        "aborted": false,
+        "operationId": "delete_method"
+      },
+      "observations": {
+        "invalidated": []
+      },
+      "verification": {
+        "mode": "automatic_readback",
+        "source": "write_command",
+        "required": true,
+        "requested": true,
+        "verified": true,
+        "status": "passed"
+      },
+      "mutationResult": {
+        "status": "ok",
+        "permission": {
+          "mode": "default",
+          "decision": "ask",
+          "risk": "high",
+          "reason": "Default mode requires confirmation for every actual ASCET write."
+        },
+        "preflight": {
+          "status": "passed",
+          "evidence": {
+            "version": 1,
+            "action": "delete_method",
+            "paramsFingerprint": "cbc14b2d5e77fb6247426fc08ba9d253036af7baeea912f952a68acd870ee766",
+            "database": {
+              "path": "C:\\Repo\\F05_IPB_L2_0429",
+              "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+            },
+            "target": {
+              "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW",
+              "oid": "040qm00000001og71g9060v0i6m5c",
+              "kind": "class"
+            },
+            "impact": {
+              "complete": true,
+              "sharedObject": false,
+              "ownerPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW",
+              "affectedProjects": [],
+              "fingerprint": "sha256:0959846eab0d01dc6e863f219c84eeb75fcb1a4872d3cd197967f0af42490c14"
+            },
+            "capability": {
+              "status": "supported",
+              "operation": "registered_guarded_operation_preflight",
+              "evidence": {
+                "status": "supported",
+                "source": "registered_closed_operation"
+              }
+            },
+            "editability": {
+              "applicable": true,
+              "status": "editable",
+              "canRequestEditable": false
+            },
+            "effects": [
+              {
+                "kind": "delete_method",
+                "target": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW",
+                "description": "delete_method: Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW"
+              }
+            ],
+            "verification": {
+              "available": true,
+              "operation": "delete_method_readback",
+              "target": {
+                "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW"
+              }
+            },
+            "riskModifiers": [],
+            "noOp": false,
+            "generatedAt": "2026-08-16T02:38:44.993Z",
+            "approvalMaterialFingerprint": "acb8253cfda6429873ae6d9295ca7679e91d900f972f6396b7c4df86754271d7"
+          }
+        },
+        "editability": {
+          "status": "editable"
+        },
+        "mutation": {
+          "status": "applied"
+        },
+        "verification": {
+          "status": "passed"
+        },
+        "audit": {
+          "approvedAt": "2026-08-16T02:38:22.747Z",
+          "revalidatedAt": "2026-08-16T02:38:44.993Z",
+          "preflightFingerprint": "cbc14b2d5e77fb6247426fc08ba9d253036af7baeea912f952a68acd870ee766",
+          "approvalMaterialFingerprint": "acb8253cfda6429873ae6d9295ca7679e91d900f972f6396b7c4df86754271d7"
+        },
+        "bridge": {
+          "beforeBridge": true,
+          "bridgeEntered": true,
+          "backendResponseReceived": true
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      },
+      "tool": "ascet_edit",
+      "action": "delete_method",
+      "command": {
+        "logicalCommandId": "AscetDeleteMethod",
+        "backendCommandId": "AscetDeleteMethod",
+        "operation": "delete_method"
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "delete_method",
+            "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW",
+            "PiCompoundMethod",
+            "--if-missing",
+            "ignore",
+            "--verify-readback",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "write",
+          "mutatesDatabase": true
+        },
+        "exitCode": 0,
+        "timedOut": false,
+        "stderr": ""
+      }
+    }
+  }
+}

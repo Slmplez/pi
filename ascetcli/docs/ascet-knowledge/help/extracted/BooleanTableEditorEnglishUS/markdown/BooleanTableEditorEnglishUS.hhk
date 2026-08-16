@@ -1,0 +1,176 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="index">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Boolean table">
+    <param name="Name" value="Overview">
+    <param name="Local" value="BT_Overview.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="add combination">
+      <param name="Name" value="Adding Inputs, Outputs and Combinations">
+      <param name="Local" value="BT_adding_ip_op.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="add in-/output">
+      <param name="Name" value="Adding Inputs, Outputs and Combinations">
+      <param name="Local" value="BT_adding_ip_op.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="check">
+      <param name="Name" value="Checking the Table">
+      <param name="Local" value="BT_checking_table.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="combination">
+      <param name="Name" value="Adding Inputs, Outputs and Combinations">
+      <param name="Local" value="BT_adding_ip_op.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="create">
+      <param name="Name" value="Creating a Boolean Table">
+      <param name="Local" value="create_boolean_table.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="create default matrix">
+      <param name="Name" value="Generating a Default Matrix">
+      <param name="Local" value="BT_generate_default-matrix.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="delete combination">
+      <param name="Name" value="Deleting Inputs and Outputs or Combinations">
+      <param name="Local" value="BT_deleting_ip_op.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="delete in-/output">
+      <param name="Name" value="Deleting Inputs and Outputs or Combinations">
+      <param name="Local" value="BT_deleting_ip_op.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="experiment">
+      <param name="Name" value="Starting an Offline Experiment">
+      <param name="Local" value="BT_Starting_an_Offline_Experiment.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="rename in-/output">
+      <param name="Name" value="Renaming Inputs or Outputs">
+      <param name="Local" value="BT_renaming_ip_op.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="shift column">
+      <param name="Name" value="Shifting Table Columns and Rows">
+      <param name="Local" value="BT_shift_table_columns.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="shift row">
+      <param name="Name" value="Shifting Table Columns and Rows">
+      <param name="Local" value="BT_shift_table_columns.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="specify in-/outputs">
+      <param name="Name" value="Specifying Inputs and Outputs">
+      <param name="Local" value="BT_Specifying_Inputs_Outputs.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="unused input">
+      <param name="Name" value="Showing and Deleting Unused Inputs">
+      <param name="Local" value="bt_showdeleteunusedInputts.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Boolean Table Editor">
+    <param name="Name" value="Overview">
+    <param name="Local" value="BT_Overview.htm">
+    <param name="Name" value="Boolean Table Editor - Window Elements">
+    <param name="Local" value="BT_Description_of_Window_Elements.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="menu options">
+      <param name="Name" value="Menu Bar (Boolean Table Editor)">
+      <param name="Local" value="BT_menu_bar.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="editor">
+    <param name="See Also" value="editor">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Boolean table">
+      <param name="Name" value="Overview - Boolean Table Editor">
+      <param name="Local" value="BT_Overview.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="menu options">
+    <param name="See Also" value="menu options">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Boolean table editor">
+      <param name="Name" value="Menu Bar (Boolean Table Editor)">
+      <param name="Local" value="BT_menu_bar.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="table">
+    <param name="See Also" value="table">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Boolean">
+      <param name="Name" value="Creating a Boolean Table">
+      <param name="Local" value="create_boolean_table.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="user interface">
+    <param name="See Also" value="user interface">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="boolean table editor">
+      <param name="Name" value="Boolean Table Editor - Window Elements">
+      <param name="Local" value="BT_Description_of_Window_Elements.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="toolbar">
+    <param name="See Also" value="toolbar">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="configure">
+      <param name="Name" value="Configuring a Toolbar">
+      <param name="Local" value="IntroductionEnglishUS.chm::/INT_Configuring_Toolbar.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="buttons">
+    <param name="See Also" value="buttons">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Boolean Table Editor">
+      <param name="Name" value="Toolbar (Boolean Table Editor)">
+      <param name="Local" value="BT_Toolbar_BoolTable_Editor.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="component">
+    <param name="See Also" value="component">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Boolean table">
+      <param name="Name" value="Overview - Boolean Table Editor">
+      <param name="Local" value="BT_Overview.htm">
+    </object>
+    </ul>
+</ul>
+</html>

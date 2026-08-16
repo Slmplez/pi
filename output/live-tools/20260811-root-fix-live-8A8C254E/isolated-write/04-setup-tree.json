@@ -1,0 +1,49 @@
+{
+  "delivery": "inline",
+  "items": [
+    {
+      "path": "PI_LIVE_ROOTFIX_20260811_8A8C254E",
+      "oid": "040g00001g001qg7105gbkvcnk802",
+      "kind": "folder"
+    },
+    {
+      "path": "PI_LIVE_ROOTFIX_20260811_8A8C254E\\ClassUnderTest",
+      "oid": "040g00001g001qg7105gbkvgqg8g2",
+      "kind": "class"
+    },
+    {
+      "path": "PI_LIVE_ROOTFIX_20260811_8A8C254E\\EnumerationUnderTest",
+      "oid": "040g00001g001qg7105gbkvjq8c02",
+      "kind": "enumeration"
+    }
+  ],
+  "coverage": {
+    "status": "complete_for_scope",
+    "scopeKind": "folder",
+    "scopeId": "path:PI_LIVE_ROOTFIX_20260811_8A8C254E",
+    "completeness": "bounded",
+    "truncated": false,
+    "foldersVisited": 1,
+    "componentsScanned": 1,
+    "identityKinds": [
+      "class",
+      "enumeration",
+      "folder"
+    ],
+    "collectorStarted": false,
+    "collectorCompleted": true,
+    "rootCollectionAvailable": false,
+    "projectCollectionAvailable": false,
+    "missingOidCount": 0,
+    "missingPathCount": 0
+  },
+  "truncated": false,
+  "source": "live",
+  "sourceIdentity": {
+    "database": {
+      "name": "C:\\Repo\\F05_IPB_L2_0429",
+      "path": "C:\\Repo\\",
+      "fingerprint": "def9e68cc955cc916cdfa1a2d26c32c8d2b16503cdcc4d337b3c7ba9a5643bf8"
+    }
+  }
+}

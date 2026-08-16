@@ -1,0 +1,152 @@
+{
+  "generated_at": "2026-04-01T03:08:07.187069Z",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS",
+  "checked_files": 77,
+  "checked_links": 1002,
+  "broken_links": [
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\markdown\\Ied_AutomaticConversion_OperatorImplementation_ResultsA.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\markdown\\IEd_Examples_RulesFormulas.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\markdown\\IEd_ImplementationEditor_for_ComponentsProjects.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\markdown\\IED_ImplementingReferences.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\markdown\\impl_localvariables.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\markdown\\specify_impl-master.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\markdown\\specify_impl_mode.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/RecordsEnglishUS.chm::/RC_Edit_RecordImplementation.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/RecordsEnglishUS.chm::/RC_Implementing_RecordElement.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/RecordsEnglishUS.chm::/RC_Implementing_RecordInstance.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/AtomicSoftwareComponentEditorEnglishUS.chm::/ASCeditImplementationRunnable.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/RecordsEnglishUS.chm::/RC_Edit_RecordImplementation.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/RecordsEnglishUS.chm::/RC_Implementing_RecordElement.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/RecordsEnglishUS.chm::/RC_Implementing_RecordInstance.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/AtomicSoftwareComponentEditorEnglishUS.chm::/ASCeditImplementationRunnable.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/AtomicSoftwareComponentEditorEnglishUS.chm::/ASCeditImplementationRunnable.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/RecordsEnglishUS.chm::/RC_Edit_RecordImplementation.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\ImplementationEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\ImplementationEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\ImplementationEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\ImplementationEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\ImplementationEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\ImplementationEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\ImplementationEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    }
+  ]
+}

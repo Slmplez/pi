@@ -1,0 +1,230 @@
+{
+  "sourceTreeResultId": "obs-tree-live-20260808-full-database",
+  "cliPath": "ascetcli/output/ascet-csharp/bin/AscetCli.exe",
+  "results": [
+    {
+      "include": [
+        "parameter_class"
+      ],
+      "elapsedMs": 34379,
+      "ok": true,
+      "output": {
+        "delivery": "stored",
+        "catalog": {
+          "resultId": "obs-database-catalog-25568-1786237682575-0",
+          "sourceTreeResultId": "obs-tree-live-20260808-full-database",
+          "include": [
+            "parameter_class"
+          ],
+          "artifacts": {
+            "catalog": {
+              "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237682575-0.database-model-catalog.ndjson",
+              "itemCount": 951
+            },
+            "relations": {
+              "projectComplexEdges": {
+                "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237682575-0.project-complex-edges.ndjson",
+                "itemCount": 696
+              },
+              "parameterClassEdges": {
+                "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237682575-0.parameter-class-edges.ndjson",
+                "itemCount": 1335
+              },
+              "parameterEnumEdges": {
+                "notCreatedReason": "scan_not_requested"
+              },
+              "projectModuleEdges": {
+                "notCreatedReason": "scan_not_requested"
+              },
+              "moduleMessageEdges": {
+                "notCreatedReason": "scan_not_requested"
+              },
+              "messageEnumEdges": {
+                "notCreatedReason": "scan_not_requested"
+              }
+            },
+            "summaryPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237682575-0.database-model-summary.json",
+            "metaPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237682575-0.database-model.meta.json",
+            "parameterClasses": {
+              "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237682575-0.parameter-classes.ndjson",
+              "itemCount": 951
+            }
+          }
+        },
+        "coverage": {
+          "status": "complete_for_scope",
+          "failureCount": 0
+        },
+        "timings": {
+          "projectScanMs": 2504,
+          "parameterClosureMs": 28982,
+          "moduleScanMs": 0,
+          "totalServiceMs": 31487,
+          "sessionOpenMs": 213,
+          "sessionCloseMs": 2,
+          "sourceTreeScanMs": 47.02779999999996,
+          "liveScanMs": 34307.8399
+        }
+      }
+    },
+    {
+      "include": [
+        "parameter_class",
+        "enumeration"
+      ],
+      "elapsedMs": 38703,
+      "ok": true,
+      "output": {
+        "delivery": "stored",
+        "catalog": {
+          "resultId": "obs-database-catalog-25568-1786237721275-1",
+          "sourceTreeResultId": "obs-tree-live-20260808-full-database",
+          "include": [
+            "parameter_class",
+            "enumeration"
+          ],
+          "artifacts": {
+            "catalog": {
+              "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237721275-1.database-model-catalog.ndjson",
+              "itemCount": 1659
+            },
+            "relations": {
+              "projectComplexEdges": {
+                "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237721275-1.project-complex-edges.ndjson",
+                "itemCount": 696
+              },
+              "parameterClassEdges": {
+                "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237721275-1.parameter-class-edges.ndjson",
+                "itemCount": 1335
+              },
+              "parameterEnumEdges": {
+                "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237721275-1.parameter-enum-edges.ndjson",
+                "itemCount": 315
+              },
+              "projectModuleEdges": {
+                "notCreatedReason": "scan_not_requested"
+              },
+              "moduleMessageEdges": {
+                "notCreatedReason": "scan_not_requested"
+              },
+              "messageEnumEdges": {
+                "notCreatedReason": "scan_not_requested"
+              }
+            },
+            "summaryPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237721275-1.database-model-summary.json",
+            "metaPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237721275-1.database-model.meta.json",
+            "parameterClasses": {
+              "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237721275-1.parameter-classes.ndjson",
+              "itemCount": 951
+            },
+            "enumerations": {
+              "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237721275-1.enumerations.ndjson",
+              "itemCount": 708
+            }
+          }
+        },
+        "coverage": {
+          "status": "complete_for_scope",
+          "failureCount": 0
+        },
+        "timings": {
+          "projectScanMs": 2491,
+          "parameterClosureMs": 35618,
+          "moduleScanMs": 0,
+          "totalServiceMs": 38110,
+          "sessionOpenMs": 220,
+          "sessionCloseMs": 1,
+          "sourceTreeScanMs": 41.80489999999554,
+          "liveScanMs": 38631.5205
+        }
+      }
+    },
+    {
+      "include": [
+        "parameter_class",
+        "enumeration",
+        "module",
+        "message"
+      ],
+      "elapsedMs": 122245,
+      "ok": true,
+      "output": {
+        "delivery": "stored",
+        "catalog": {
+          "resultId": "obs-database-catalog-25568-1786237843372-2",
+          "sourceTreeResultId": "obs-tree-live-20260808-full-database",
+          "include": [
+            "parameter_class",
+            "enumeration",
+            "module",
+            "message"
+          ],
+          "artifacts": {
+            "catalog": {
+              "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237843372-2.database-model-catalog.ndjson",
+              "itemCount": 26743
+            },
+            "relations": {
+              "projectComplexEdges": {
+                "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237843372-2.project-complex-edges.ndjson",
+                "itemCount": 696
+              },
+              "parameterClassEdges": {
+                "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237843372-2.parameter-class-edges.ndjson",
+                "itemCount": 1335
+              },
+              "parameterEnumEdges": {
+                "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237843372-2.parameter-enum-edges.ndjson",
+                "itemCount": 315
+              },
+              "projectModuleEdges": {
+                "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237843372-2.project-module-edges.ndjson",
+                "itemCount": 431
+              },
+              "moduleMessageEdges": {
+                "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237843372-2.module-message-edges.ndjson",
+                "itemCount": 24656
+              },
+              "messageEnumEdges": {
+                "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237843372-2.message-enum-edges.ndjson",
+                "itemCount": 4851
+              }
+            },
+            "summaryPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237843372-2.database-model-summary.json",
+            "metaPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237843372-2.database-model.meta.json",
+            "parameterClasses": {
+              "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237843372-2.parameter-classes.ndjson",
+              "itemCount": 951
+            },
+            "enumerations": {
+              "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237843372-2.enumerations.ndjson",
+              "itemCount": 708
+            },
+            "modules": {
+              "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237843372-2.modules.ndjson",
+              "itemCount": 428
+            },
+            "messages": {
+              "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-25568-1786237843372-2.messages.ndjson",
+              "itemCount": 24656
+            }
+          }
+        },
+        "coverage": {
+          "status": "complete_for_scope",
+          "failureCount": 0
+        },
+        "timings": {
+          "projectScanMs": 2418,
+          "parameterClosureMs": 34155,
+          "moduleScanMs": 84414,
+          "totalServiceMs": 120989,
+          "sessionOpenMs": 216,
+          "sessionCloseMs": 2,
+          "sourceTreeScanMs": 38.20769999999902,
+          "liveScanMs": 122031.06689999999
+        }
+      }
+    }
+  ]
+}

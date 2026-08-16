@@ -1,0 +1,348 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="index">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Array">
+    <param name="See Also" value="Array">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit">
+      <param name="Name" value="Editing an Array or Matrix">
+      <param name="Local" value="DEd_setup_array.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="characteristic line">
+    <param name="Name" value="The Table Editor (Editor for Combined Types)">
+    <param name="Local" value="DEd_editor_combined_types.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit">
+      <param name="Name" value="Editing a Characteristic Line">
+      <param name="Local" value="DEd_edit_1d_table.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="characteristic map">
+    <param name="Name" value="The Table Editor (Editor for Combined Types)">
+    <param name="Local" value="DEd_editor_combined_types.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit">
+      <param name="Name" value="Editing a Characteristic Map">
+      <param name="Local" value="DEd_EditCharacteristicMap.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="data set">
+    <param name="Name" value="Data Sets">
+    <param name="Local" value="DEd_data_sets.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="copy">
+      <param name="Name" value="Creating or Copying a New Data Set">
+      <param name="Local" value="DEd_create_copy_data.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="create">
+      <param name="Name" value="Creating or Copying a New Data Set">
+      <param name="Local" value="DEd_create_copy_data.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="default">
+      <param name="Name" value="Selecting a Default Data Set">
+      <param name="Local" value="DEd_make_dataset_default.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="delete">
+      <param name="Name" value="Deleting a Data Set">
+      <param name="Local" value="DEd_delete_data_set.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="differences">
+      <param name="Name" value="Showing the Differences Between Two Data Sets">
+      <param name="Local" value="DEd_show_difference_2datasets.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit data">
+      <param name="Name" value="Editing Data in a Data Set (A)">
+      <param name="Local" value="DEd_open_data_editor.htm">
+      <param name="Name" value="Editing Data in a Data Set (B)">
+      <param name="Local" value="DEd_copy_data.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="export">
+      <param name="Name" value="Exporting a Data Set">
+      <param name="Local" value="DEd_export_dataset.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="for global elements">
+      <param name="Name" value="Working with the Global Elements Data Set">
+      <param name="Local" value="DEd_work_globalelement_dataset.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="reference to">
+      <param name="Name" value="Creating or Copying a New Data Set">
+      <param name="Local" value="DEd_create_copy_data.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="editor">
+    <param name="See Also" value="editor">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="enumeration">
+      <param name="Name" value="Enumeration Editor">
+      <param name="Local" value="DEd_enumeration_editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="logical">
+      <param name="Name" value="Logical Editor">
+      <param name="Local" value="DEd_logical-editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="numerical">
+      <param name="Name" value="Numerical Editor">
+      <param name="Local" value="DEd_numerical_editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="characteristic line/map">
+      <param name="Name" value="The Table Editor (Editor for Combined Types)">
+      <param name="Local" value="DEd_editor_combined_types.htm">
+      <param name="Name" value="Description of the Table Editor">
+      <param name="Local" value="DEd_DataEditor_CombinedTypes.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="array">
+      <param name="Name" value="The Table Editor (Editor for Combined Types)">
+      <param name="Local" value="DEd_editor_combined_types.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="matrix">
+      <param name="Name" value="The Table Editor (Editor for Combined Types)">
+      <param name="Local" value="DEd_editor_combined_types.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="element">
+    <param name="See Also" value="element">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="calibration">
+      <param name="Name" value="Overview">
+      <param name="Local" value="DEd_Overview.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="data">
+      <param name="Name" value="Overview">
+      <param name="Local" value="DEd_Overview.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Enumeration editor">
+    <param name="Name" value="Enumeration Editor">
+    <param name="Local" value="DEd_enumeration_editor.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="export">
+    <param name="See Also" value="export">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="data set">
+      <param name="Name" value="Exporting a Data Set">
+      <param name="Local" value="DEd_export_dataset.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="fixed table">
+    <param name="Name" value="Special Characteristic Table Types">
+    <param name="Local" value="DEd_specCharTables.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit axis points">
+      <param name="Name" value="Editing the Axis Points of a Fixed Characteristic Line/Map">
+      <param name="Local" value="DEd_setup_axis_points.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="group tables">
+    <param name="Name" value="Special Characteristic Table Types">
+    <param name="Local" value="DEd_specCharTables.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="distribution">
+      <param name="Name" value="Special Characteristic Table Types">
+      <param name="Local" value="DEd_specCharTables.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Logical editor">
+    <param name="Name" value="Logical Editor">
+    <param name="Local" value="DEd_logical-editor.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit value">
+      <param name="Name" value="Editing a Logical Value">
+      <param name="Local" value="DEd_edit_logical_editor.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Numerical editor">
+    <param name="Name" value="Numerical Editor">
+    <param name="Local" value="DEd_numerical_editor.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit value">
+      <param name="Name" value="Editing a Numerical Value">
+      <param name="Local" value="DEd_edit_value.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="one-dimensional table">
+    <param name="Name" value="The Table Editor (Editor for Combined Types)">
+    <param name="Local" value="DEd_editor_combined_types.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit">
+      <param name="Name" value="Editing a Characteristic Line">
+      <param name="Local" value="DEd_edit_1d_table.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="table">
+    <param name="See Also" value="table">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="fixed">
+      <param name="Name" value="Special Characteristic Table Types">
+      <param name="Local" value="DEd_specCharTables.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="group">
+      <param name="Name" value="Special Characteristic Table Types">
+      <param name="Local" value="DEd_specCharTables.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="interpolation mode">
+      <param name="Name" value="The Table Editor (Editor for Combined Types)">
+      <param name="Local" value="DEd_editor_combined_types.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="one-dimensional">
+      <param name="Name" value="The Table Editor (Editor for Combined Types)">
+      <param name="Local" value="DEd_editor_combined_types.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="two-dimensional">
+      <param name="Name" value="The Table Editor (Editor for Combined Types)">
+      <param name="Local" value="DEd_editor_combined_types.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Table Editor">
+    <param name="Name" value="The Table Editor (Editor for Combined Types)">
+    <param name="Local" value="DEd_editor_combined_types.htm">
+    <param name="Name" value="Description of the Table Editor">
+    <param name="Local" value="DEd_DataEditor_CombinedTypes.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="two-dimensional table">
+    <param name="Name" value="The Table Editor (Editor for Combined Types)">
+    <param name="Local" value="DEd_editor_combined_types.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit">
+      <param name="Name" value="Editing a Characteristic Map">
+      <param name="Local" value="DEd_EditCharacteristicMap.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="dependent parameter">
+    <param name="See Also" value="dependent parameter">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit data">
+      <param name="Name" value="Edit Dependency for: Window">
+      <param name="Local" value="DEd_Edit_Dependency_for__Window.htm">
+      <param name="Name" value="Editing Dependent Parameters">
+      <param name="Local" value="DEd_Editing_Dependent_Parameters.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="reference">
+    <param name="See Also" value="reference">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="map">
+      <param name="Name" value="Mapping a Reference">
+      <param name="Local" value="DEd_MappingReference.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="fixed characteristic line">
+    <param name="Name" value="Special Characteristic Table Types">
+    <param name="Local" value="DEd_specCharTables.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit axis points">
+      <param name="Name" value="Editing the Axis Points of a Fixed Characteristic Line/Map">
+      <param name="Local" value="DEd_setup_axis_points.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="fixed characteristic map">
+    <param name="Name" value="Special Characteristic Table Types">
+    <param name="Local" value="DEd_specCharTables.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit axis points">
+      <param name="Name" value="Editing the Axis Points of a Fixed Characteristic Line/Map">
+      <param name="Local" value="DEd_setup_axis_points.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="distribution">
+    <param name="Name" value="Special Characteristic Table Types">
+    <param name="Local" value="DEd_specCharTables.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit">
+      <param name="Name" value="Editing the Axis Points of a Fixed Characteristic Line/Map">
+      <param name="Local" value="DEd_setup_axis_points.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="matrix">
+    <param name="See Also" value="matrix">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit">
+      <param name="Name" value="Editing an Array or Matrix">
+      <param name="Local" value="DEd_setup_array.htm">
+    </object>
+    </ul>
+</ul>
+</html>

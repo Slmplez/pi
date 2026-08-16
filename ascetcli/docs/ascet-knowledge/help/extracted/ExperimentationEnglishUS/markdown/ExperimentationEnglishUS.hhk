@@ -1,0 +1,2029 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="index">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="3-D map editor">
+    <param name="Name" value="3-D Graphical Editor">
+    <param name="Local" value="EE_3d_graphical_editor.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="rotate">
+      <param name="Name" value="Rotating the Coordination System">
+      <param name="Local" value="rotate_coordination_system.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Array">
+    <param name="See Also" value="Array">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit several output values">
+      <param name="Name" value="Editing Several Output Values">
+      <param name="Local" value="EE_edit_several_output_values.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit single output value">
+      <param name="Name" value="Editing a Single Output Value">
+      <param name="Local" value="EE_edit_single_output_value.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="measure">
+      <param name="Name" value="Assigning an Array or Matrix to a Measurement Window">
+      <param name="Local" value="EE_AssignArrayMatrix_MeasurementWindow.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="bar display">
+    <param name="Name" value="Horizontal and Vertical Bar Display">
+    <param name="Local" value="horizontal_vertical_bar_display.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="setup">
+      <param name="Name" value="Setting up the Bar Display">
+      <param name="Local" value="setup_bar_display.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Bit display">
+    <param name="Name" value="Bit Display">
+    <param name="Local" value="bit_display.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="calibration">
+    <param name="Name" value="Calibration Windows">
+    <param name="Local" value="calibration_windows.htm">
+    <param name="Name" value="Calibrating an Element">
+    <param name="Local" value="calibrating_element.htm">
+    <param name="Name" value="The Calibration System">
+    <param name="Local" value="calibration_system.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="array">
+      <param name="Name" value="Table Editor">
+      <param name="Local" value="EE_table_editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="numeric">
+      <param name="Name" value="Setting up a Numerical Editor">
+      <param name="Local" value="setup_numerical_editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="scalar">
+      <param name="Name" value="Numeric Editor">
+      <param name="Local" value="EE_numeric_editor.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Calibration System">
+    <param name="Name" value="The Calibration System">
+    <param name="Local" value="calibration_system.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="calibration windows">
+    <param name="Name" value="Calibration Windows">
+    <param name="Local" value="calibration_windows.htm">
+    <param name="Name" value="Data Editors for Calibration Variables">
+    <param name="Local" value="data_editors_calibration_variables.htm">
+    <param name="Name" value="The Calibration System">
+    <param name="Local" value="calibration_system.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="change title">
+      <param name="Name" value="Changing the Title of a Calibration Window">
+      <param name="Local" value="change_title_calibration_win.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="enumeration editor">
+      <param name="Name" value="Enumeration Editor">
+      <param name="Local" value="EE_enumeration_editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="graphical editor (1-D)">
+      <param name="Name" value="1-D Graphical Editor">
+      <param name="Local" value="EE_1d_graphical_editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="graphical editor (2-D)">
+      <param name="Name" value="2-D Graphical Editor">
+      <param name="Local" value="EE_2d_graphical_editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="graphical editor (3-D)">
+      <param name="Name" value="3-D Graphical Editor">
+      <param name="Local" value="EE_3d_graphical_editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="information about variables">
+      <param name="Name" value="Displaying Information about Variables">
+      <param name="Local" value="EE_display_informatiion_variables.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="logical editor">
+      <param name="Name" value="Logical Editor">
+      <param name="Local" value="EE_logical_editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="menu options">
+      <param name="Name" value="Description of Calibration Windows Menu Options">
+      <param name="Local" value="EE_calibration_menu_options.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="move variables">
+      <param name="Name" value="Moving Variables between Calibration Windows">
+      <param name="Local" value="moving_variables_calibration_win.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="numerical editor">
+      <param name="Name" value="Setting up a Numerical Editor">
+      <param name="Local" value="setup_numerical_editor.htm">
+      <param name="Name" value="Numeric Editor">
+      <param name="Local" value="EE_numeric_editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="remove variables">
+      <param name="Name" value="Removing Variables from a Calibration Window">
+      <param name="Local" value="remove_variables_calibration_win.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="table editor">
+      <param name="Name" value="Table Editor">
+      <param name="Local" value="EE_table_editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="work with ~">
+      <param name="Name" value="Inserting New Sample Points">
+      <param name="Local" value="insert_new_sample_points.htm">
+      <param name="Name" value="Moving Variables between Calibration Windows">
+      <param name="Local" value="moving_variables_calibration_win.htm">
+      <param name="Name" value="Removing Variables from a Calibration Window">
+      <param name="Local" value="remove_variables_calibration_win.htm">
+      <param name="Name" value="Setting up a Numerical Editor">
+      <param name="Local" value="setup_numerical_editor.htm">
+      <param name="Name" value="Setting up the Table Editor">
+      <param name="Local" value="setup_table_editor.htm">
+      <param name="Name" value="Working with Calibration Windows">
+      <param name="Local" value="working_calibration_window.htm">
+      <param name="Name" value="Changing the Title of a Calibration Window">
+      <param name="Local" value="change_title_calibration_win.htm">
+      <param name="Name" value="Displaying Information about Variables">
+      <param name="Local" value="EE_display_informatiion_variables.htm">
+      <param name="Name" value="Editing All Sample Points Simultaneously">
+      <param name="Local" value="EE_edit_all_sample_points.htm">
+      <param name="Name" value="Editing Existing Sample Points">
+      <param name="Local" value="EE_edit_exisiting_sample_points.htm">
+      <param name="Name" value="Editing a Numeric Value">
+      <param name="Local" value="EE_edit_numerical_value.htm">
+      <param name="Name" value="Editing Several Numerical Values">
+      <param name="Local" value="EE_edit_several_numerical_value.htm">
+      <param name="Name" value="Editing Several Output Values">
+      <param name="Local" value="EE_edit_several_output_values.htm">
+      <param name="Name" value="Editing a Single Output Value">
+      <param name="Local" value="EE_edit_single_output_value.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Axis Menu (Calibration Windows)">
+      <param name="Name" value="Axis Menu (Calibration Windows)">
+      <param name="Local" value="EE_axis_menu.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Edit Menu (Calibration Windows)">
+      <param name="Name" value="Edit Menu (Calibration Windows)">
+      <param name="Local" value="EE_edit_menu.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Extras Menu (Calibration Windows)">
+      <param name="Name" value="Extras Menu (Calibration Windows)">
+      <param name="Local" value="EE_extras_menu.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="View Menu (Calibration Windows)">
+      <param name="Name" value="View Menu (Calibration Windows)">
+      <param name="Local" value="EE_calibration_view_menu.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="channel">
+    <param name="See Also" value="channel">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="data ~">
+      <param name="Name" value="Setting up the Data Generator">
+      <param name="Local" value="setup_data_generator.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="measurement ~">
+      <param name="Name" value="The Measurement System">
+      <param name="Local" value="measurement_system.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="data">
+    <param name="See Also" value="data">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="exchange">
+      <param name="Name" value="Exchanging Data with Other Applications">
+      <param name="Local" value="exchange_data_applications.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="generate">
+      <param name="Name" value="Setting up the Event Generator">
+      <param name="Local" value="EE_setup_eventGenerator.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="logging">
+      <param name="Name" value="The Data Logger">
+      <param name="Local" value="data_logger.htm">
+      <param name="Name" value="Logging Data">
+      <param name="Local" value="log_data.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="read">
+      <param name="Name" value="Reading Data from External Files">
+      <param name="Local" value="EE_readData_externalFiles.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="read/write from current data set">
+      <param name="Name" value="Reading or Writing Data from the Current Data Set">
+      <param name="Local" value="read_write_current_dataset.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="stimulus">
+      <param name="Name" value="Setting up a Channel in the Data Generator">
+      <param name="Local" value="setup_channel_data_generator.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="write">
+      <param name="Name" value="Writing Data to External Files">
+      <param name="Local" value="write_data_external_files.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="write back">
+      <param name="Name" value="Reading or Writing Data from the Current Data Set">
+      <param name="Local" value="read_write_current_dataset.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="reinitialize">
+      <param name="Name" value="Reading or Writing Data from the Current Data Set">
+      <param name="Local" value="read_write_current_dataset.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="data generator">
+    <param name="Name" value="The Data Generator">
+    <param name="Local" value="data_generator.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="assign automatically">
+      <param name="Name" value="Assigning Channels with Identical Names">
+      <param name="Local" value="assign_channels_identical_names.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="define signal">
+      <param name="Name" value="Defining a Signal">
+      <param name="Local" value="EE_define_signal.htm">
+      <param name="Name" value="Defining Data Generator Channels as Signal Channels">
+      <param name="Local" value="define_data_generator_channels.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="interpolate signal">
+      <param name="Name" value="Interpolating the Signal">
+      <param name="Local" value="interpolate_signal.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="remove signal">
+      <param name="Name" value="Removing a Signal">
+      <param name="Local" value="remove_signal.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="set up stimulation mode">
+      <param name="Name" value="Setting up a Stimulation Mode">
+      <param name="Local" value="setup_stimulation_mode.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="setup">
+      <param name="Name" value="Setting up the Data Generator">
+      <param name="Local" value="setup_data_generator.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="channel">
+      <param name="Name" value="Setting up the Data Generator">
+      <param name="Local" value="setup_data_generator.htm">
+      <param name="Name" value="Assigning Channels with Identical Names">
+      <param name="Local" value="assign_channels_identical_names.htm">
+      <param name="Name" value="Setting up a Channel in the Data Generator">
+      <param name="Local" value="setup_channel_data_generator.htm">
+      <param name="Name" value="Defining Data Generator Channels as Signal Channels">
+      <param name="Local" value="define_data_generator_channels.htm">
+      <param name="Name" value="Deleting Data Generator Channels">
+      <param name="Local" value="delete_channels.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="delete channel">
+      <param name="Name" value="Deleting Data Generator Channels">
+      <param name="Local" value="delete_channels.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="set up channel">
+      <param name="Name" value="Setting up a Channel in the Data Generator">
+      <param name="Local" value="setup_channel_data_generator.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="signal repetition">
+      <param name="Name" value="Selecting Signal Repetition">
+      <param name="Local" value="select_signal_repitition.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="signal time behavior">
+      <param name="Name" value="Setting the Signal Time Behavior">
+      <param name="Local" value="EE_SettingTimeBehavior.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="signal offset time">
+      <param name="Name" value="Setting the Signal Time Behavior">
+      <param name="Local" value="EE_SettingTimeBehavior.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="automatic stop">
+      <param name="Name" value="Setting up the Automatic Stop">
+      <param name="Local" value="setup_automatic_stop.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="data logger">
+    <param name="Name" value="The Data Logger">
+    <param name="Local" value="data_logger.htm">
+    <param name="Name" value="Logging Mode">
+    <param name="Local" value="logging_mode.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="change log file">
+      <param name="Name" value="Changing the Log File">
+      <param name="Local" value="change_log_file.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="define trigger condition">
+      <param name="Name" value="Defining a Trigger Condition">
+      <param name="Local" value="define_trigger_condition.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="continuous polling">
+      <param name="Name" value="The Data Logger">
+      <param name="Local" value="data_logger.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="label list">
+      <param name="Name" value="Using Label Lists">
+      <param name="Local" value="EE_Using_Label_Lists.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="log data">
+      <param name="Name" value="Logging Data">
+      <param name="Local" value="log_data.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="options">
+      <param name="Name" value="Adjusting the Logging Options">
+      <param name="Local" value="adjust_logging_options.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="periodic sampling">
+      <param name="Name" value="The Data Logger">
+      <param name="Local" value="data_logger.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="log all value changes">
+      <param name="Name" value="Preparing to Log All Value Changes ">
+      <param name="Local" value="prepare_transient_sample.htm">
+      <param name="Name" value="The Data Logger">
+      <param name="Local" value="data_logger.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="set up channels">
+      <param name="Name" value="Setting up the Channels to be Logged">
+      <param name="Local" value="setup_channels_logged.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="open">
+      <param name="Name" value="Opening the Data Logger">
+      <param name="Local" value="open_data_logger.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="periodic to file">
+      <param name="Name" value="The Data Logger">
+      <param name="Local" value="data_logger.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="stop logging">
+      <param name="Name" value="Stopping Data Logging">
+      <param name="Local" value="stop_data_logging.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="convert data">
+      <param name="Name" value="Converting MDF Data to FAMOS Format">
+      <param name="Local" value="convert_mdf_famos.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="output">
+      <param name="Name" value="Selecting an Output Format">
+      <param name="Local" value="output_format.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="data manipulation">
+    <param name="Name" value="Data Manipulation">
+    <param name="Local" value="EE_data_manipulation.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="display">
+    <param name="See Also" value="display">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="critical bounds">
+      <param name="Name" value="Setting up a Numerical Display">
+      <param name="Local" value="setup_numerical_display.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="editor">
+    <param name="See Also" value="editor">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="array">
+      <param name="Name" value="Table Editor">
+      <param name="Local" value="EE_table_editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="table ~">
+      <param name="Name" value="Table Editor">
+      <param name="Local" value="EE_table_editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="graphical ~">
+      <param name="Name" value="1-D Graphical Editor">
+      <param name="Local" value="EE_1d_graphical_editor.htm">
+      <param name="Name" value="2-D Graphical Editor">
+      <param name="Local" value="EE_2d_graphical_editor.htm">
+      <param name="Name" value="3-D Graphical Editor">
+      <param name="Local" value="EE_3d_graphical_editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="matrix">
+      <param name="Name" value="Table Editor">
+      <param name="Local" value="EE_table_editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="characteristic line/map">
+      <param name="Name" value="Table Editor">
+      <param name="Local" value="EE_table_editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="distribution">
+      <param name="Name" value="Table Editor">
+      <param name="Local" value="EE_table_editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="enumeration ~">
+      <param name="Name" value="Enumeration Editor">
+      <param name="Local" value="EE_enumeration_editor.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="element">
+    <param name="See Also" value="element">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="assign to measurement window">
+      <param name="Name" value="Assigning an Element to a New Measurement Window">
+      <param name="Local" value="assign_element_measurement.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="calibration">
+      <param name="Name" value="Calibration Windows">
+      <param name="Local" value="calibration_windows.htm">
+      <param name="Name" value="Calibrating an Element">
+      <param name="Local" value="calibrating_element.htm">
+      <param name="Name" value="The Calibration System">
+      <param name="Local" value="calibration_system.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="data">
+      <param name="Name" value="Calibration Windows">
+      <param name="Local" value="calibration_windows.htm">
+      <param name="Name" value="The Calibration System">
+      <param name="Local" value="calibration_system.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="monitor">
+      <param name="Name" value="Monitor">
+      <param name="Local" value="EE_monitor.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Enumeration editor">
+    <param name="Name" value="Enumeration Editor">
+    <param name="Local" value="EE_enumeration_editor.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit value">
+      <param name="Name" value="Editing an Enumeration">
+      <param name="Local" value="EE_edit_enumeration.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="environment">
+    <param name="Name" value="Loading and Saving Environments">
+    <param name="Local" value="loading_saving_experi.htm">
+    <param name="Name" value="Opening and Setting up the Experimentation Environment">
+    <param name="Local" value="opening_settingup_experi_environ.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="export">
+      <param name="Name" value="Exporting Environments">
+      <param name="Local" value="export_environment.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="load">
+      <param name="Name" value="Loading an Environment upon Experiment Start">
+      <param name="Local" value="load_environment.htm">
+      <param name="Name" value="Switching Environments during Experiments">
+      <param name="Local" value="switch_environment.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="save">
+      <param name="Name" value="Saving an Environment">
+      <param name="Local" value="save_environment.htm">
+      <param name="Name" value="Saving an Environment under a Different Name">
+      <param name="Local" value="save_environment_different_name.htm">
+      <param name="Name" value="Saving an Environment for Another Component">
+      <param name="Local" value="EE_SaveEnvironment_for_Component.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="switch between ~">
+      <param name="Name" value="Switching Environments during Experiments">
+      <param name="Local" value="switch_environment.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="event">
+    <param name="See Also" value="event">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="asynchronous">
+      <param name="Name" value="Event Options">
+      <param name="Local" value="event_options.htm">
+      <param name="Name" value="Setting up an Asynchronous Event">
+      <param name="Local" value="setup_asynchronous_event.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="generate">
+      <param name="Name" value="The Event Generator">
+      <param name="Local" value="event_generator.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="priority">
+      <param name="Name" value="Event Options">
+      <param name="Local" value="event_options.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="segment">
+      <param name="Name" value="Event Options">
+      <param name="Local" value="event_options.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="segment variable">
+      <param name="Name" value="Setting up a Segment Event">
+      <param name="Local" value="setup_segment_event.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="setup">
+      <param name="Name" value="Setting up an Event">
+      <param name="Local" value="setup_event.htm">
+      <param name="Name" value="Setting up an Event Directly">
+      <param name="Local" value="setup_event_directly.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="single shot">
+      <param name="Name" value="Event Options">
+      <param name="Local" value="event_options.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="stimulate">
+      <param name="Name" value="Setting up an Event Directly">
+      <param name="Local" value="setup_event_directly.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="time synchronous">
+      <param name="Name" value="Event Options">
+      <param name="Local" value="event_options.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="tracing">
+      <param name="Name" value="Monitoring Events with the Event Tracer">
+      <param name="Local" value="monitor_events_events_tracer.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="dependent">
+      <param name="Name" value="Setting up a Dependent Event">
+      <param name="Local" value="setup_dependent_event.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="event generator">
+    <param name="Name" value="Event for Dialog Window">
+    <param name="Local" value="event_options.htm">
+    <param name="Name" value="The Event Generator">
+    <param name="Local" value="event_generator.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="set up event">
+      <param name="Name" value="Setting up an Event">
+      <param name="Local" value="setup_event.htm">
+      <param name="Name" value="Setting up an Event Directly">
+      <param name="Local" value="setup_event_directly.htm">
+      <param name="Name" value="Setting up a Dependent Event">
+      <param name="Local" value="setup_dependent_event.htm">
+      <param name="Name" value="Setting up a Segment Event">
+      <param name="Local" value="setup_segment_event.htm">
+      <param name="Name" value="Setting up an Asynchronous Event">
+      <param name="Local" value="setup_asynchronous_event.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="setup">
+      <param name="Name" value="Setting up the Event Generator">
+      <param name="Local" value="EE_setup_eventGenerator.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="event tracer">
+    <param name="Name" value="Monitoring Events with the Event Tracer">
+    <param name="Local" value="monitor_events_events_tracer.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Experimentation environment">
+    <param name="Name" value="Defining Global Elements in the Default Project">
+    <param name="Local" value="define_global_elements_default.htm">
+    <param name="Name" value="Monitoring Events with the Event Tracer">
+    <param name="Local" value="monitor_events_events_tracer.htm">
+    <param name="Name" value="Experimentation - Overview">
+    <param name="Local" value="EE_Overview.htm">
+    <param name="Name" value="Reading Data from External Files">
+    <param name="Local" value="EE_readData_externalFiles.htm">
+    <param name="Name" value="Reading or Writing Data from the Current Data Set">
+    <param name="Local" value="read_write_current_dataset.htm">
+    <param name="Name" value="Writing Data to External Files">
+    <param name="Local" value="write_data_external_files.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="calibration system">
+      <param name="Name" value="The Calibration System">
+      <param name="Local" value="calibration_system.htm">
+      <param name="Name" value="Calibrating an Element">
+      <param name="Local" value="calibrating_element.htm">
+      <param name="Name" value="Calibration Windows">
+      <param name="Local" value="calibration_windows.htm">
+      <param name="Name" value="Data Manipulation">
+      <param name="Local" value="EE_data_manipulation.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="C code debugger">
+      <param name="Name" value="Viewing Debug Information">
+      <param name="Local" value="view_debug_info.htm">
+      <param name="Name" value="Manual Display">
+      <param name="Local" value="view_manual_display.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="data logger">
+      <param name="Name" value="Adjusting the Logging Options">
+      <param name="Local" value="adjust_logging_options.htm">
+      <param name="Name" value="Changing the Log File">
+      <param name="Local" value="change_log_file.htm">
+      <param name="Name" value="Defining a Trigger Condition">
+      <param name="Local" value="define_trigger_condition.htm">
+      <param name="Name" value="Logging Data">
+      <param name="Local" value="log_data.htm">
+      <param name="Name" value="Opening the Data Logger">
+      <param name="Local" value="open_data_logger.htm">
+      <param name="Name" value="Preparing for Transient Sampling">
+      <param name="Local" value="prepare_transient_sample.htm">
+      <param name="Name" value="Setting up the Channels to be Logged">
+      <param name="Local" value="setup_channels_logged.htm">
+      <param name="Name" value="Stopping Data Logging">
+      <param name="Local" value="stop_data_logging.htm">
+      <param name="Name" value="The Data Logger">
+      <param name="Local" value="data_logger.htm">
+      <param name="Name" value="Setting Up Data Transfer to the Host">
+      <param name="Local" value="data_transfer_host.htm">
+      <param name="Name" value="Setting Up the Target Buffer">
+      <param name="Local" value="target_register_buffer.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="measurement system">
+      <param name="Name" value="Assigning an Element to a New Measurement Window">
+      <param name="Local" value="assign_element_measurement.htm">
+      <param name="Name" value="Assigning an Element to an Existing Measurement Window">
+      <param name="Local" value="assign_element_existing_measu.htm">
+      <param name="Name" value="Closing all Measurement Windows">
+      <param name="Local" value="close_all_measure_window.htm">
+      <param name="Name" value="The Measurement System">
+      <param name="Local" value="measurement_system.htm">
+      <param name="Name" value="Assigning an Array or Matrix to a Measurement Window">
+      <param name="Local" value="EE_AssignArrayMatrix_MeasurementWindow.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="navigation">
+      <param name="Name" value="Block Diagram Navigation">
+      <param name="Local" value="EE_block_diagram_navigation.htm">
+      <param name="Name" value="Switching between the Diagrams of a Component">
+      <param name="Local" value="switch_between_diagrams_compo.htm">
+      <param name="Name" value="Navigating Up between Components">
+      <param name="Local" value="navigate_up_blockdiagram.htm">
+      <param name="Name" value="Navigating Down between Components">
+      <param name="Local" value="navigate_down_blockdiagram.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="online experiment">
+      <param name="Name" value="Experimentation - Overview">
+      <param name="Local" value="EE_Overview.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="open offline experiment">
+      <param name="Name" value="Opening the Experimentation Environment for an Offline Experiment">
+      <param name="Local" value="open_experi_environ_offline.htm">
+      <param name="Name" value="Opening and Setting up the Experimentation Environment">
+      <param name="Local" value="opening_settingup_experi_environ.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="set up">
+      <param name="Name" value="Opening and Setting up the Experimentation Environment">
+      <param name="Local" value="opening_settingup_experi_environ.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="start">
+      <param name="Name" value="Opening and Setting up the Experimentation Environment">
+      <param name="Local" value="opening_settingup_experi_environ.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="view implementation">
+      <param name="Name" value="Viewing the Implementation">
+      <param name="Local" value="view_implementation.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="environment">
+      <param name="Name" value="Loading and Saving Environments">
+      <param name="Local" value="loading_saving_experi.htm">
+      <param name="Name" value="Loading an Environment upon Experiment Start">
+      <param name="Local" value="load_environment.htm">
+      <param name="Name" value="Switching Environments during Experiments">
+      <param name="Local" value="switch_environment.htm">
+      <param name="Name" value="Saving an Environment">
+      <param name="Local" value="save_environment.htm">
+      <param name="Name" value="Exporting Environments">
+      <param name="Local" value="export_environment.htm">
+      <param name="Name" value="Saving an Environment under a Different Name">
+      <param name="Local" value="save_environment_different_name.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="menu options">
+      <param name="Name" value="Menu Bar">
+      <param name="Local" value="EE_menu_bar.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="offline experiment">
+      <param name="Name" value="Experimentation - Overview">
+      <param name="Local" value="EE_Overview.htm">
+      <param name="Name" value="Running Offline Experiments">
+      <param name="Local" value="EE_running_offline_experiments.htm">
+      <param name="Name" value="Stepping through an Experiment">
+      <param name="Local" value="step_experiment.htm">
+      <param name="Name" value="Starting the Offline Experiment">
+      <param name="Local" value="start-offline_experiment.htm">
+      <param name="Name" value="Stopping the Offline Experiment">
+      <param name="Local" value="stop-offline_experiment.htm">
+      <param name="Name" value="Switching to Timed Step Mode">
+      <param name="Local" value="switch_timed_stepmode.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="leave">
+      <param name="Name" value="Leaving the Experiment Environment">
+      <param name="Local" value="EE_Leaving_the_Experiment_Environment.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="data generator">
+      <param name="Name" value="Setting up the Data Generator">
+      <param name="Local" value="setup_data_generator.htm">
+      <param name="Name" value="The Data Generator">
+      <param name="Local" value="data_generator.htm">
+      <param name="Name" value="Defining a Signal">
+      <param name="Local" value="EE_define_signal.htm">
+      <param name="Name" value="Interpolating the Signal">
+      <param name="Local" value="interpolate_signal.htm">
+      <param name="Name" value="Selecting Signal Repetition">
+      <param name="Local" value="select_signal_repitition.htm">
+      <param name="Name" value="Assigning Channels with Identical Names">
+      <param name="Local" value="assign_channels_identical_names.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="event generator">
+      <param name="Name" value="Setting up the Event Generator">
+      <param name="Local" value="EE_setup_eventGenerator.htm">
+      <param name="Name" value="The Event Generator">
+      <param name="Local" value="event_generator.htm">
+      <param name="Name" value="Event Options">
+      <param name="Local" value="event_options.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="buttons">
+    <param name="See Also" value="buttons">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="offline experiment">
+      <param name="Name" value="Toolbar - Offline Experiment">
+      <param name="Local" value="EE_button_bar_offline_experiment.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="experimenting">
+    <param name="Name" value="Adjusting the Logging Options">
+    <param name="Local" value="adjust_logging_options.htm">
+    <param name="Name" value="Assigning Channels with Identical Names">
+    <param name="Local" value="assign_channels_identical_names.htm">
+    <param name="Name" value="Assigning an Element to an Existing Measurement Window">
+    <param name="Local" value="assign_element_existing_measu.htm">
+    <param name="Name" value="Assigning an Element to a New Measurement Window">
+    <param name="Local" value="assign_element_measurement.htm">
+    <param name="Name" value="Block Diagram Navigation">
+    <param name="Local" value="EE_block_diagram_navigation.htm">
+    <param name="Name" value="Calibrating an Element">
+    <param name="Local" value="calibrating_element.htm">
+    <param name="Name" value="Calibration Windows">
+    <param name="Local" value="calibration_windows.htm">
+    <param name="Name" value="Changing the Log File">
+    <param name="Local" value="change_log_file.htm">
+    <param name="Name" value="Closing all Measurement Windows">
+    <param name="Local" value="close_all_measure_window.htm">
+    <param name="Name" value="Converting MDF Data to FAMOS Format">
+    <param name="Local" value="convert_mdf_famos.htm">
+    <param name="Name" value="Data Manipulation">
+    <param name="Local" value="EE_data_manipulation.htm">
+    <param name="Name" value="Defining a Trigger Condition">
+    <param name="Local" value="define_trigger_condition.htm">
+    <param name="Name" value="Defining a Signal">
+    <param name="Local" value="EE_define_signal.htm">
+    <param name="Name" value="Defining Data Generator Channels as Signal Channels">
+    <param name="Local" value="define_data_generator_channels.htm">
+    <param name="Name" value="Defining Global Elements in the Default Project">
+    <param name="Local" value="define_global_elements_default.htm">
+    <param name="Name" value="Deleting Channels">
+    <param name="Local" value="delete_channels.htm">
+    <param name="Name" value="Event Options">
+    <param name="Local" value="event_options.htm">
+    <param name="Name" value="Exporting Environments">
+    <param name="Local" value="export_environment.htm">
+    <param name="Name" value="Interpolating the Signal">
+    <param name="Local" value="interpolate_signal.htm">
+    <param name="Name" value="Loading an Environment">
+    <param name="Local" value="load_environment.htm">
+    <param name="Name" value="Loading and Saving Environments">
+    <param name="Local" value="loading_saving_experi.htm">
+    <param name="Name" value="Logging Data">
+    <param name="Local" value="log_data.htm">
+    <param name="Name" value="Menu Bar">
+    <param name="Local" value="EE_menu_bar.htm">
+    <param name="Name" value="Monitoring Events with the Event Tracer">
+    <param name="Local" value="monitor_events_events_tracer.htm">
+    <param name="Name" value="Opening the Data Logger">
+    <param name="Local" value="open_data_logger.htm">
+    <param name="Name" value="Opening the Experimentation Environment for an Offline Experiment">
+    <param name="Local" value="open_experi_environ_offline.htm">
+    <param name="Name" value="Opening and Setting up the Experimentation Environment">
+    <param name="Local" value="opening_settingup_experi_environ.htm">
+    <param name="Name" value="Overview">
+    <param name="Local" value="EE_Overview.htm">
+    <param name="Name" value="Preparing for Transient Sampling">
+    <param name="Local" value="prepare_transient_sample.htm">
+    <param name="Name" value="Reading Data from External Files">
+    <param name="Local" value="EE_readData_externalFiles.htm">
+    <param name="Name" value="Reading or Writing Data from the Current Data Set">
+    <param name="Local" value="read_write_current_dataset.htm">
+    <param name="Name" value="Removing a Signal">
+    <param name="Local" value="remove_signal.htm">
+    <param name="Name" value="Running Offline Experiments">
+    <param name="Local" value="EE_running_offline_experiments.htm">
+    <param name="Name" value="Saving an Environment">
+    <param name="Local" value="save_environment.htm">
+    <param name="Name" value="Saving an Environment under a Different Name">
+    <param name="Local" value="save_environment_different_name.htm">
+    <param name="Name" value="Selecting Signal Repetition">
+    <param name="Local" value="select_signal_repitition.htm">
+    <param name="Name" value="Setting up a Channel in the Data Generator">
+    <param name="Local" value="setup_channel_data_generator.htm">
+    <param name="Name" value="Setting up a Dependent Event">
+    <param name="Local" value="setup_dependent_event.htm">
+    <param name="Name" value="Setting up a Segment Event">
+    <param name="Local" value="setup_segment_event.htm">
+    <param name="Name" value="Setting up a Stimulation Mode">
+    <param name="Local" value="setup_stimulation_mode.htm">
+    <param name="Name" value="Setting up an Asynchronous Event">
+    <param name="Local" value="setup_asynchronous_event.htm">
+    <param name="Name" value="Setting up an Event">
+    <param name="Local" value="setup_event.htm">
+    <param name="Name" value="Setting up an Event Directly">
+    <param name="Local" value="setup_event_directly.htm">
+    <param name="Name" value="Setting up the Automatic Stop">
+    <param name="Local" value="setup_automatic_stop.htm">
+    <param name="Name" value="Setting up the Data Generator">
+    <param name="Local" value="setup_data_generator.htm">
+    <param name="Name" value="Setting up the Event Generator">
+    <param name="Local" value="EE_setup_eventGenerator.htm">
+    <param name="Name" value="Setting up the Channels to be Logged">
+    <param name="Local" value="setup_channels_logged.htm">
+    <param name="Name" value="Setting up Data Exchange Options">
+    <param name="Local" value="EE_setup_dataExchange_Options.htm">
+    <param name="Name" value="Setting up a Breakpoint Condition">
+    <param name="Local" value="setup_breakpoint_condi.htm">
+    <param name="Name" value="Starting the offline Experiment">
+    <param name="Local" value="start-offline_experiment.htm">
+    <param name="Name" value="Stepping through an Experiment">
+    <param name="Local" value="step_experiment.htm">
+    <param name="Name" value="Stopping Data Logging">
+    <param name="Local" value="stop_data_logging.htm">
+    <param name="Name" value="Stopping the Offline Experiment">
+    <param name="Local" value="stop-offline_experiment.htm">
+    <param name="Name" value="Switching to Timed Step Mode">
+    <param name="Local" value="switch_timed_stepmode.htm">
+    <param name="Name" value="The Data Generator">
+    <param name="Local" value="data_generator.htm">
+    <param name="Name" value="Switching Environments">
+    <param name="Local" value="switch_environment.htm">
+    <param name="Name" value="The Data Logger">
+    <param name="Local" value="data_logger.htm">
+    <param name="Name" value="The Event Generator">
+    <param name="Local" value="event_generator.htm">
+    <param name="Name" value="The Measurement System">
+    <param name="Local" value="measurement_system.htm">
+    <param name="Name" value="Viewing Debug Information">
+    <param name="Local" value="view_debug_info.htm">
+    <param name="Name" value="Viewing the Implementation">
+    <param name="Local" value="view_implementation.htm">
+    <param name="Name" value="Writing Data to External Files">
+    <param name="Local" value="write_data_external_files.htm">
+    <param name="Name" value="Setting the Signal Time Behavior">
+    <param name="Local" value="EE_SettingTimeBehavior.htm">
+    <param name="Name" value="Assigning an Array or Matrix to a Measurement Window">
+    <param name="Local" value="EE_AssignArrayMatrix_MeasurementWindow.htm">
+    <param name="Name" value="The Calibration System">
+    <param name="Local" value="calibration_system.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Graphical editor (1-D)">
+    <param name="Name" value="1-D Graphical Editor">
+    <param name="Local" value="EE_1d_graphical_editor.htm">
+    <param name="Name" value="Graphical Editors">
+    <param name="Local" value="EE_GraphicalEditors.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="change display">
+      <param name="Name" value="Changing the Graphical Table Editor Display">
+      <param name="Local" value="change_graphical_table_display.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit table">
+      <param name="Name" value="Editing a Table in the 1-D Graphical Editor">
+      <param name="Local" value="EE_edit_table_1d_g_e.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="set up display">
+      <param name="Name" value="Setting up the 1-D Graphical Editor">
+      <param name="Local" value="setup_1d_g_e.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="start">
+      <param name="Name" value="Launching the 1-D Graphical Editor">
+      <param name="Local" value="launch_1d_graphical_editor.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Graphical editor (2-D)">
+    <param name="Name" value="2-D Graphical Editor">
+    <param name="Local" value="EE_2d_graphical_editor.htm">
+    <param name="Name" value="Graphical Editors">
+    <param name="Local" value="EE_GraphicalEditors.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit table">
+      <param name="Name" value="Editing a Table in the 2-D Graphical Editor">
+      <param name="Local" value="EE_edit_table_2d_g_e.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="toggle perspective">
+      <param name="Name" value="Toggling the Perspective of the 2-D Editor">
+      <param name="Local" value="toggle_perspective_2d_editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="change display">
+      <param name="Name" value="Setting up the 2-D Graphical Editor">
+      <param name="Local" value="change_2d_editor_display.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="start">
+      <param name="Name" value="Starting the 2-D Graphical Editor">
+      <param name="Local" value="start_2d_g_e.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Graphical editor (3-D)">
+    <param name="Name" value="3-D Graphical Editor">
+    <param name="Local" value="EE_3d_graphical_editor.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="highlight/measure net points">
+      <param name="Name" value="Highlighting the Net Points in the 3-D Editor">
+      <param name="Local" value="highlight_netpoints_3d_editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="rotate">
+      <param name="Name" value="Rotating the Coordination System">
+      <param name="Local" value="rotate_coordination_system.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="start">
+      <param name="Name" value="Starting the 3-D Graphical Editor">
+      <param name="Local" value="start_3d_grraphical_editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Select Access Point">
+      <param name="Name" value="Highlighting the Net Points in the 3-D Editor">
+      <param name="Local" value="highlight_netpoints_3d_editor.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Logical editor">
+    <param name="Name" value="Logical Editor">
+    <param name="Local" value="EE_logical_editor.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit value">
+      <param name="Name" value="Editing a Logical Value">
+      <param name="Local" value="EE_edit_logical_value.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="measurement">
+    <param name="Name" value="The Measurement System">
+    <param name="Local" value="measurement_system.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="bar display">
+      <param name="Name" value="The Measurement System">
+      <param name="Local" value="measurement_system.htm">
+      <param name="Name" value="Horizontal and Vertical Bar Display">
+      <param name="Local" value="horizontal_vertical_bar_display.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="channel">
+      <param name="Name" value="The Measurement System">
+      <param name="Local" value="measurement_system.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="monitor">
+      <param name="Name" value="Monitoring Elements Manually">
+      <param name="Local" value="monitor-element.htm">
+      <param name="Name" value="Monitor">
+      <param name="Local" value="EE_monitor.htm">
+      <param name="Name" value="Activating Automatic Monitoring Mode">
+      <param name="Local" value="EE_Activate_AutomaticMonitorMode.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="numerical display">
+      <param name="Name" value="The Measurement System">
+      <param name="Local" value="measurement_system.htm">
+      <param name="Name" value="Numerical Display">
+      <param name="Local" value="numerical_display.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="oscilloscope">
+      <param name="Name" value="The Measurement System">
+      <param name="Local" value="measurement_system.htm">
+      <param name="Name" value="Oscilloscope">
+      <param name="Local" value="oscilloscope.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="window">
+      <param name="Name" value="The Measurement System">
+      <param name="Local" value="measurement_system.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="non-regular value">
+      <param name="Name" value="The Measurement System">
+      <param name="Local" value="measurement_system.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="measurement data">
+    <param name="See Also" value="measurement data">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="analyze">
+      <param name="Name" value="Analyzing Measurement Data">
+      <param name="Local" value="analyze_measur_data.htm">
+      <param name="Name" value="Starting the Analysis Mode">
+      <param name="Local" value="start_analysis_mode.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="measurement windows">
+    <param name="Name" value="Analyzing Measurement Data">
+    <param name="Local" value="analyze_measur_data.htm">
+    <param name="Name" value="Changing the Display of a Measurement Window">
+    <param name="Local" value="change_display_measur_win.htm">
+    <param name="Name" value="Displaying Information about Variables">
+    <param name="Local" value="EE_display_informatiion_variables.htm">
+    <param name="Name" value="Displaying Keyboard Commands">
+    <param name="Local" value="display_keyboard_commands.htm">
+    <param name="Name" value="Displaying the Setup">
+    <param name="Local" value="display_setup.htm">
+    <param name="Name" value="Setting up Measurement Channels">
+    <param name="Local" value="setup_measur_channels.htm">
+    <param name="Name" value="The Measurement System">
+    <param name="Local" value="measurement_system.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="bar display">
+      <param name="Name" value="Horizontal and Vertical Bar Display">
+      <param name="Local" value="horizontal_vertical_bar_display.htm">
+      <param name="Name" value="Setting up the Bar Display">
+      <param name="Local" value="setup_bar_display.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="change display">
+      <param name="Name" value="Changing the Display of a Measurement Window">
+      <param name="Local" value="change_display_measur_win.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Bit display">
+      <param name="Name" value="Bit Display">
+      <param name="Local" value="bit_display.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="changing the title">
+      <param name="Name" value="Changing a Measurement Window Title">
+      <param name="Local" value="change_measur_win_title.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="delete channels">
+      <param name="Name" value="Deleting Channels from Measurement Windows">
+      <param name="Local" value="delete_channes_measur_win.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="copy channels">
+      <param name="Name" value="Copying Channels between Measurement Windows">
+      <param name="Local" value="copy_channels_measur_win.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="exchange attributes">
+      <param name="Name" value="Exchanging Attributes between Measurement Windows">
+      <param name="Local" value="exchange_attributes_measur_win.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="information about variables">
+      <param name="Name" value="Displaying Information about Variables">
+      <param name="Local" value="EE_display_informatiion_variables.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="monitor">
+      <param name="Name" value="Monitor">
+      <param name="Local" value="EE_monitor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="move channels">
+      <param name="Name" value="Moving Channels between Measurement Windows">
+      <param name="Local" value="move_channels_measur_win.htm">
+      <param name="Name" value="Shifting Channels in a Measurement Window">
+      <param name="Local" value="EE_ShiftChannels_in_MeasurementWindow.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Oscilloscope">
+      <param name="Name" value="Activating/Deactivating a Trigger">
+      <param name="Local" value="activate_deactivate_trigger.htm">
+      <param name="Name" value="Actuating the Trigger Manually">
+      <param name="Local" value="actuate_trigger_manually.htm">
+      <param name="Name" value="Analyzing Measurement Data">
+      <param name="Local" value="analyze_measur_data.htm">
+      <param name="Name" value="Changing the Color Settings for the Oscilloscope">
+      <param name="Local" value="change_color_settings_oscilloscope.htm">
+      <param name="Name" value="Changing the Oscilloscope Display">
+      <param name="Local" value="EE_SetupUse_oscilloscope.htm">
+      <param name="Name" value="Copying the Oscilloscope Window">
+      <param name="Local" value="copy_oscilloscope_win.htm">
+      <param name="Name" value="Defining a Multipart Trigger">
+      <param name="Local" value="define_multipart_trigger.htm">
+      <param name="Name" value="Displaying Keyboard Commands">
+      <param name="Local" value="display_keyboard_commands.htm">
+      <param name="Name" value="Displaying the Setup">
+      <param name="Local" value="display_setup.htm">
+      <param name="Name" value="oscilloscope">
+      <param name="Local" value="oscilloscope.htm">
+      <param name="Name" value="Printing the Oscilloscope Output">
+      <param name="Local" value="print_oscilloscope_output.htm">
+      <param name="Name" value="Saving the Oscilloscope Data in a File">
+      <param name="Local" value="save_oscilloscope_data_file.htm">
+      <param name="Name" value="Setting Pre-/Post-Trigger Time">
+      <param name="Local" value="set_pre_post_trigger_time.htm">
+      <param name="Name" value="Setting up Analysis">
+      <param name="Local" value="setup_analysis.htm">
+      <param name="Name" value="Setting up Measurement Channels">
+      <param name="Local" value="setup_measur_channels.htm">
+      <param name="Name" value="Setting up the Oscilloscope Window">
+      <param name="Local" value="setup_oscilloscope_window.htm">
+      <param name="Name" value="Showing/Hiding Measurement Channels">
+      <param name="Local" value="show_hide_measur_channels.htm">
+      <param name="Name" value="Starting the Analysis Mode">
+      <param name="Local" value="start_analysis_mode.htm">
+      <param name="Name" value="Defining Simple Trigger Events">
+      <param name="Local" value="define_simple_trigger_events.htm">
+      <param name="Name" value="Setting up the Acquisition Mode Lists">
+      <param name="Local" value="setup_acquisition_lists.htm">
+      <param name="Name" value="Scaling Measurement Channels">
+      <param name="Local" value="scale_measur_channels.htm">
+      <param name="Name" value="Setting up the Analysis Mode Lists">
+      <param name="Local" value="setup_analysis_lists.htm">
+      <param name="Name" value="Showing/Hiding lists">
+      <param name="Local" value="show_hide_lists.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="select">
+      <param name="Name" value="Assigning an Element to an Existing Measurement Window">
+      <param name="Local" value="assign_element_existing_measu.htm">
+      <param name="Name" value="Assigning an Element to a New Measurement Window">
+      <param name="Local" value="assign_element_measurement.htm">
+      <param name="Name" value="Assigning an Array or Matrix to a Measurement Window">
+      <param name="Local" value="EE_AssignArrayMatrix_MeasurementWindow.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="types">
+      <param name="Name" value="Numerical Display">
+      <param name="Local" value="numerical_display.htm">
+      <param name="Name" value="oscilloscope">
+      <param name="Local" value="oscilloscope.htm">
+      <param name="Name" value="recorder">
+      <param name="Local" value="recorder.htm">
+      <param name="Name" value="Horizontal and Vertical Bar Display">
+      <param name="Local" value="horizontal_vertical_bar_display.htm">
+      <param name="Name" value="Bit Display">
+      <param name="Local" value="bit_display.htm">
+      <param name="Name" value="monitor">
+      <param name="Local" value="EE_monitor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="menu options">
+      <param name="Name" value="General Description of Menu Options">
+      <param name="Local" value="EE_calibration_menu_options.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="numerical display">
+      <param name="Name" value="Numerical Display">
+      <param name="Local" value="numerical_display.htm">
+      <param name="Name" value="Changing the Display Options for a Numerical Display">
+      <param name="Local" value="change_display_ooptions_numerical.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Recorder">
+      <param name="Name" value="recorder">
+      <param name="Local" value="recorder.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="work with ~">
+      <param name="Name" value="Working with Measurement Windows">
+      <param name="Local" value="working_measur_win.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="menu options">
+    <param name="See Also" value="menu options">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="calibration windows">
+      <param name="Name" value="Extras Menu (Calibration Windows)">
+      <param name="Local" value="EE_extras_menu.htm">
+      <param name="Name" value="Edit Menu (Calibration Windows)">
+      <param name="Local" value="EE_edit_menu.htm">
+      <param name="Name" value="Axis Menu (Calibration Windows)">
+      <param name="Local" value="EE_axis_menu.htm">
+      <param name="Name" value="View Menu (Calibration Windows)">
+      <param name="Local" value="EE_calibration_view_menu.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="experiment">
+      <param name="Name" value="Menu Bar (Back-Animation Experiment)">
+      <param name="Local" value="EE_MenuBar_BackAnimationExperiment.htm">
+      <param name="Name" value="Menu Bar (Offline Experiment)">
+      <param name="Local" value="EE_menu_bar.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="measurement windows">
+      <param name="Name" value="File Menu (Measurement Windows)">
+      <param name="Local" value="EE_file_measur_win.htm">
+      <param name="Name" value="Extras Menu (Measurement Windows)">
+      <param name="Local" value="EE_extras_measur_win.htm">
+      <param name="Name" value="Edit Menu (Measurement Windows)">
+      <param name="Local" value="EE_edit_measur_win.htm">
+      <param name="Name" value="View Menu (Measurement Windows)">
+      <param name="Local" value="EE_view_measur_win.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="data logger">
+      <param name="Name" value="Options Menu (Data Logger)">
+      <param name="Local" value="EE_OptionsMenu_DataLoggerWindow_Experiment.htm">
+      <param name="Name" value="Control Menu (Data Logger)">
+      <param name="Local" value="EE_ControlMenu_DataLoggerWindow_Experiment.htm">
+      <param name="Name" value="Extras Menu (Data Logger)">
+      <param name="Local" value="EE_ExtrasMenu_DataLoggerWindow_Experiment.htm">
+      <param name="Name" value="File Menu (Data Logger)">
+      <param name="Local" value="EE_FileMenu_DataLoggerWindow_Experiment.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="monitor">
+    <param name="Name" value="Monitor">
+    <param name="Local" value="EE_monitor.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="manually">
+      <param name="Name" value="Monitoring Elements Manually">
+      <param name="Local" value="monitor-element.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="automatic">
+      <param name="Name" value="Monitor">
+      <param name="Local" value="EE_monitor.htm">
+      <param name="Name" value="Activating Automatic Monitoring Mode">
+      <param name="Local" value="EE_Activate_AutomaticMonitorMode.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="numerical display">
+    <param name="Name" value="Numerical Display">
+    <param name="Local" value="numerical_display.htm">
+    <param name="Name" value="Setting up a Numerical Display">
+    <param name="Local" value="setup_numerical_display.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="numerical editor (experiment)">
+    <param name="Name" value="Numeric Editor">
+    <param name="Local" value="EE_numeric_editor.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit value">
+      <param name="Name" value="Editing a Numeric Value">
+      <param name="Local" value="EE_edit_numerical_value.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="set up">
+      <param name="Name" value="Setting up a Numerical Editor">
+      <param name="Local" value="setup_numerical_editor.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="offline experiment">
+    <param name="Name" value="Experimentation - Overview">
+    <param name="Local" value="EE_Overview.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="breakpoint condition">
+      <param name="Name" value="Setting up a Breakpoint Condition">
+      <param name="Local" value="setup_breakpoint_condi.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="data generator">
+      <param name="Name" value="Assigning Channels with Identical Names">
+      <param name="Local" value="assign_channels_identical_names.htm">
+      <param name="Name" value="Defining a Signal">
+      <param name="Local" value="EE_define_signal.htm">
+      <param name="Name" value="Defining Data Generator Channels as Signal Channels">
+      <param name="Local" value="define_data_generator_channels.htm">
+      <param name="Name" value="Deleting Channels">
+      <param name="Local" value="delete_channels.htm">
+      <param name="Name" value="Interpolating the Signal">
+      <param name="Local" value="interpolate_signal.htm">
+      <param name="Name" value="Removing a Signal">
+      <param name="Local" value="remove_signal.htm">
+      <param name="Name" value="Selecting Signal Repetition">
+      <param name="Local" value="select_signal_repitition.htm">
+      <param name="Name" value="Setting up a Channel in the Data Generator">
+      <param name="Local" value="setup_channel_data_generator.htm">
+      <param name="Name" value="Setting up a Stimulation Mode">
+      <param name="Local" value="setup_stimulation_mode.htm">
+      <param name="Name" value="Setting up the Automatic Stop">
+      <param name="Local" value="setup_automatic_stop.htm">
+      <param name="Name" value="Setting up the Data Generator">
+      <param name="Local" value="setup_data_generator.htm">
+      <param name="Name" value="The Data Generator">
+      <param name="Local" value="data_generator.htm">
+      <param name="Name" value="Setting the Signal Time Behavior">
+      <param name="Local" value="EE_SettingTimeBehavior.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="data manipulation">
+      <param name="Name" value="Data Manipulation">
+      <param name="Local" value="EE_data_manipulation.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="event generator">
+      <param name="Name" value="Setting up a Dependent Event">
+      <param name="Local" value="setup_dependent_event.htm">
+      <param name="Name" value="Setting up a Segment Event">
+      <param name="Local" value="setup_segment_event.htm">
+      <param name="Name" value="Setting up an Asynchronous Event">
+      <param name="Local" value="setup_asynchronous_event.htm">
+      <param name="Name" value="Setting up an Event">
+      <param name="Local" value="setup_event.htm">
+      <param name="Name" value="Setting up an Event Directly">
+      <param name="Local" value="setup_event_directly.htm">
+      <param name="Name" value="The Event Generator">
+      <param name="Local" value="event_generator.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="event tracer">
+      <param name="Name" value="Monitoring Events with the Event Tracer">
+      <param name="Local" value="monitor_events_events_tracer.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="open">
+      <param name="Name" value="Opening the Experimentation Environment for an Offline Experiment">
+      <param name="Local" value="open_experi_environ_offline.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="pause of">
+      <param name="Name" value="Stepping through an Experiment">
+      <param name="Local" value="step_experiment.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="run">
+      <param name="Name" value="Running Offline Experiments">
+      <param name="Local" value="EE_running_offline_experiments.htm">
+      <param name="Name" value="Starting the offline Experiment">
+      <param name="Local" value="start-offline_experiment.htm">
+      <param name="Name" value="Stepping through an Experiment">
+      <param name="Local" value="step_experiment.htm">
+      <param name="Name" value="Stopping the Offline Experiment">
+      <param name="Local" value="stop-offline_experiment.htm">
+      <param name="Name" value="Switching to Timed Step Mode">
+      <param name="Local" value="switch_timed_stepmode.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="start">
+      <param name="Name" value="Starting the offline Experiment">
+      <param name="Local" value="start-offline_experiment.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="step mode">
+      <param name="Name" value="Stepping through an Experiment">
+      <param name="Local" value="step_experiment.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="stop">
+      <param name="Name" value="Stopping the Offline Experiment">
+      <param name="Local" value="stop-offline_experiment.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="timed step mode">
+      <param name="Name" value="Switching to Timed Step Mode">
+      <param name="Local" value="switch_timed_stepmode.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="display options">
+      <param name="Name" value="Changing the Block Diagram Display">
+      <param name="Local" value="change_blockdia_display.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="leave">
+      <param name="Name" value="Leaving the Experiment Environment">
+      <param name="Local" value="EE_Leaving_the_Experiment_Environment.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="online experiment">
+    <param name="Name" value="Experimentation - Overview">
+    <param name="Local" value="EE_Overview.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Oscilloscope">
+    <param name="Name" value="oscilloscope">
+    <param name="Local" value="oscilloscope.htm">
+    <param name="Name" value="recorder">
+    <param name="Local" value="recorder.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="acquisition mode">
+      <param name="Name" value="Displaying the Setup">
+      <param name="Local" value="display_setup.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="activate trigger">
+      <param name="Name" value="Activating/Deactivating a Trigger">
+      <param name="Local" value="activate_deactivate_trigger.htm">
+      <param name="Name" value="Actuating the Trigger Manually">
+      <param name="Local" value="actuate_trigger_manually.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="actuate trigger manually">
+      <param name="Name" value="Actuating the Trigger Manually">
+      <param name="Local" value="actuate_trigger_manually.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="analysis mode">
+      <param name="Name" value="Starting the Analysis Mode">
+      <param name="Local" value="start_analysis_mode.htm">
+      <param name="Name" value="Analyzing Measurement Data">
+      <param name="Local" value="analyze_measur_data.htm">
+      <param name="Name" value="Setting up Analysis">
+      <param name="Local" value="setup_analysis.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="analyze data">
+      <param name="Name" value="Analyzing Measurement Data">
+      <param name="Local" value="analyze_measur_data.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="autoscale">
+      <param name="Name" value="Scaling Measurement Channels">
+      <param name="Local" value="scale_measur_channels.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Bit display">
+      <param name="Name" value="oscilloscope">
+      <param name="Local" value="oscilloscope.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="change display">
+      <param name="Name" value="Changing the Oscilloscope Display">
+      <param name="Local" value="EE_SetupUse_oscilloscope.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="color settings">
+      <param name="Name" value="Changing the Color Settings for the Oscilloscope">
+      <param name="Local" value="change_color_settings_oscilloscope.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="copy ~ window">
+      <param name="Name" value="Copying the Oscilloscope Window">
+      <param name="Local" value="copy_oscilloscope_win.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="deactivate trigger">
+      <param name="Name" value="Activating/Deactivating a Trigger">
+      <param name="Local" value="activate_deactivate_trigger.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="define simple trigger">
+      <param name="Name" value="Defining Simple Trigger Events">
+      <param name="Local" value="define_simple_trigger_events.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="grid">
+      <param name="Name" value="Setting up the Oscilloscope Window">
+      <param name="Local" value="setup_oscilloscope_window.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="numerical display">
+      <param name="Name" value="oscilloscope">
+      <param name="Local" value="oscilloscope.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="print output">
+      <param name="Name" value="Printing the Oscilloscope Output">
+      <param name="Local" value="print_oscilloscope_output.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="save data">
+      <param name="Name" value="Saving the Oscilloscope Data in a File">
+      <param name="Local" value="save_oscilloscope_data_file.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="set up ~ window">
+      <param name="Name" value="Setting up the Oscilloscope Window">
+      <param name="Local" value="setup_oscilloscope_window.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="set up analysis">
+      <param name="Name" value="Setting up Analysis">
+      <param name="Local" value="setup_analysis.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="set up lists (acquisition)">
+      <param name="Name" value="Setting up the Analysis Mode Lists">
+      <param name="Local" value="setup_analysis_lists.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="set up lists (analysis)">
+      <param name="Name" value="Setting up Analysis">
+      <param name="Local" value="setup_analysis.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="measurement channels">
+      <param name="Name" value="Setting up Measurement Channels">
+      <param name="Local" value="setup_measur_channels.htm">
+      <param name="Name" value="Showing/Hiding Measurement Channels">
+      <param name="Local" value="show_hide_measur_channels.htm">
+      <param name="Name" value="Scaling Measurement Channels">
+      <param name="Local" value="scale_measur_channels.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="keyboard commands">
+      <param name="Name" value="Displaying Keyboard Commands">
+      <param name="Local" value="display_keyboard_commands.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="show setup">
+      <param name="Name" value="Displaying the Setup">
+      <param name="Local" value="display_setup.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="show/hide lists">
+      <param name="Name" value="Showing/Hiding lists">
+      <param name="Local" value="show_hide_lists.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="trigger">
+      <param name="Name" value="Activating/Deactivating a Trigger">
+      <param name="Local" value="activate_deactivate_trigger.htm">
+      <param name="Name" value="Actuating the Trigger Manually">
+      <param name="Local" value="actuate_trigger_manually.htm">
+      <param name="Name" value="Defining a Multipart Trigger">
+      <param name="Local" value="define_multipart_trigger.htm">
+      <param name="Name" value="Setting Pre-/Post-Trigger Time">
+      <param name="Local" value="set_pre_post_trigger_time.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="periodic sampling">
+    <param name="Name" value="The Data Logger">
+    <param name="Local" value="data_logger.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="periodic to file">
+    <param name="Name" value="The Data Logger">
+    <param name="Local" value="data_logger.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Recorder">
+    <param name="Name" value="recorder">
+    <param name="Local" value="recorder.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="signal">
+    <param name="See Also" value="signal">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="as stimulus">
+      <param name="Name" value="Defining Data Generator Channels as Signal Channels">
+      <param name="Local" value="define_data_generator_channels.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="automatic stop">
+      <param name="Name" value="Setting up the Automatic Stop">
+      <param name="Local" value="setup_automatic_stop.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="define">
+      <param name="Name" value="Defining a Signal">
+      <param name="Local" value="EE_define_signal.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="interpolate">
+      <param name="Name" value="Interpolating the Signal">
+      <param name="Local" value="interpolate_signal.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="repetition">
+      <param name="Name" value="Selecting Signal Repetition">
+      <param name="Local" value="select_signal_repitition.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="time behavior">
+      <param name="Name" value="Setting the Signal Time Behavior">
+      <param name="Local" value="EE_SettingTimeBehavior.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="offset time">
+      <param name="Name" value="Setting the Signal Time Behavior">
+      <param name="Local" value="EE_SettingTimeBehavior.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="stimulate">
+    <param name="See Also" value="stimulate">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="constant mode">
+      <param name="Name" value="Setting up a Constant Stimulation Mode">
+      <param name="Local" value="constant_mode.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="cyclic modes">
+      <param name="Name" value="Setting up a Cyclic or Random Stimulation Mode ">
+      <param name="Local" value="cyclic_mode.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="gaussian mode">
+      <param name="Name" value="Setting up a Gaussian Stimulation Mode">
+      <param name="Local" value="gaussian_mode.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="signal mode">
+      <param name="Name" value="Setting up a Signal Stimulation Mode">
+      <param name="Local" value="matrix_mode.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="random generator">
+      <param name="Name" value="Setting up a Cyclic or Random Stimulation Mode ">
+      <param name="Local" value="cyclic_mode.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="set up stimulation mode">
+      <param name="Name" value="Setting up a Stimulation Mode">
+      <param name="Local" value="setup_stimulation_mode.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="table mode">
+      <param name="Name" value="Setting up a Table Stimulation Mode">
+      <param name="Local" value="table_mode.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="stimulus">
+    <param name="See Also" value="stimulus">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="of data">
+      <param name="Name" value="Setting up a Stimulation Mode">
+      <param name="Local" value="setup_stimulation_mode.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="of event">
+      <param name="Name" value="Setting up an Event Directly">
+      <param name="Local" value="setup_event_directly.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="stimulus signal">
+      <param name="Name" value="Setting up a Signal Stimulation Mode">
+      <param name="Local" value="matrix_mode.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="table">
+    <param name="See Also" value="table">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="sample point">
+      <param name="Name" value="Editing Existing Sample Points">
+      <param name="Local" value="EE_edit_exisiting_sample_points.htm">
+      <param name="Name" value="Adding or Removing Sample Points">
+      <param name="Local" value="add_remove_sample_points.htm">
+      <param name="Name" value="Inserting and Deleting Sample Points">
+      <param name="Local" value="insert_new_sample_points.htm">
+      <param name="Name" value="Editing All Sample Points Simultaneously">
+      <param name="Local" value="EE_edit_all_sample_points.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="size">
+      <param name="Name" value="Setting Table Size and Interpolation Routine">
+      <param name="Local" value="EE_SetTableSizeInterpolationRoutine.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="interpolation routine">
+      <param name="Name" value="Setting Table Size and Interpolation Routine">
+      <param name="Local" value="EE_SetTableSizeInterpolationRoutine.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="output value">
+      <param name="Name" value="Editing Several Output Values">
+      <param name="Local" value="EE_edit_several_output_values.htm">
+      <param name="Name" value="Editing a Single Output Value">
+      <param name="Local" value="EE_edit_single_output_value.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Table Editor">
+    <param name="Name" value="Table Editor">
+    <param name="Local" value="EE_table_editor.htm">
+    <param name="Name" value="Table Editor (Editor for Combined Types)">
+    <param name="Local" value="ee_editor_combinedtypes.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit several output values">
+      <param name="Name" value="Editing Several Output Values">
+      <param name="Local" value="EE_edit_several_output_values.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit single output value">
+      <param name="Name" value="Editing a Single Output Value">
+      <param name="Local" value="EE_edit_single_output_value.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="transient sampling">
+    <param name="Name" value="The Data Logger">
+    <param name="Local" value="data_logger.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="prepare">
+      <param name="Name" value="Preparing for Transient Sampling">
+      <param name="Local" value="prepare_transient_sample.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Trigger">
+    <param name="See Also" value="Trigger">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Oscilloscope">
+      <param name="Name" value="Defining Simple Trigger Events">
+      <param name="Local" value="define_simple_trigger_events.htm">
+      <param name="Name" value="Activating/Deactivating a Trigger">
+      <param name="Local" value="activate_deactivate_trigger.htm">
+      <param name="Name" value="Actuating the Trigger Manually">
+      <param name="Local" value="actuate_trigger_manually.htm">
+      <param name="Name" value="Defining a Multipart Trigger">
+      <param name="Local" value="define_multipart_trigger.htm">
+      <param name="Name" value="Setting Pre-/Post-Trigger Time">
+      <param name="Local" value="set_pre_post_trigger_time.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="C code debugger">
+    <param name="See Also" value="C code debugger">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="view information">
+      <param name="Name" value="Viewing Debug Information">
+      <param name="Local" value="view_debug_info.htm">
+      <param name="Name" value="Automatic Display">
+      <param name="Local" value="view_automatic_display.htm">
+      <param name="Name" value="Manual Display">
+      <param name="Local" value="view_manual_display.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="save text">
+      <param name="Name" value="Saving the Debug Text">
+      <param name="Local" value="view_save_text_window.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="clear text">
+      <param name="Name" value="Clearing the Debug Text">
+      <param name="Local" value="view_clear_text_window.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="experiment">
+    <param name="See Also" value="experiment">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="automatic stop">
+      <param name="Name" value="Setting up the Automatic Stop">
+      <param name="Local" value="setup_automatic_stop.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="offline">
+      <param name="Name" value="Overview">
+      <param name="Local" value="EE_Overview.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="online">
+      <param name="Name" value="Overview">
+      <param name="Local" value="EE_Overview.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="run offline ~">
+      <param name="Name" value="Monitoring Events with the Event Tracer">
+      <param name="Local" value="monitor_events_events_tracer.htm">
+      <param name="Name" value="Running Offline Experiments">
+      <param name="Local" value="EE_running_offline_experiments.htm">
+      <param name="Name" value="Setting up a Breakpoint Condition">
+      <param name="Local" value="setup_breakpoint_condi.htm">
+      <param name="Name" value="Starting the offline Experiment">
+      <param name="Local" value="start-offline_experiment.htm">
+      <param name="Name" value="Stepping through an Experiment">
+      <param name="Local" value="step_experiment.htm">
+      <param name="Name" value="Stopping the Offline Experiment">
+      <param name="Local" value="stop-offline_experiment.htm">
+      <param name="Name" value="Viewing Debug Information">
+      <param name="Local" value="view_debug_info.htm">
+      <param name="Name" value="Viewing the Implementation">
+      <param name="Local" value="view_implementation.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="configure integration method">
+      <param name="Name" value="Configuring the Integration Method">
+      <param name="Local" value="SpecifyingCTBlocksEnglishUS.chm::/CTB_Configuring_the_Solver.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="dependent parameter">
+      <param name="Name" value="Dependent Parameters in the Experiment">
+      <param name="Local" value="EE_DepParam_in_Experiment.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="back-animation">
+      <param name="Name" value="Starting and Stopping a Back-Animation Experiment">
+      <param name="Local" value="EE_StartStop_BackAnimationExperiment.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="multi editor">
+    <param name="Name" value="Table Editor">
+    <param name="Local" value="EE_table_editor.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="parameter">
+    <param name="See Also" value="parameter">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="reinitialize">
+      <param name="Name" value="Reading or Writing Data from the Current Data Set">
+      <param name="Local" value="read_write_current_dataset.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="variables">
+    <param name="See Also" value="variables">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="reinitialize">
+      <param name="Name" value="Reading or Writing Data from the Current Data Set">
+      <param name="Local" value="read_write_current_dataset.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="dependent parameter">
+    <param name="Name" value="Dependent Parameters in the Experiment">
+    <param name="Local" value="EE_DepParam_in_Experiment.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="back-animation (INTECRIO)">
+    <param name="See Also" value="back-animation (INTECRIO)">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="experiment">
+      <param name="Name" value="Running a Back-Animation Experiment">
+      <param name="Local" value="EE_Run_BackAnimationExperiment.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="experiment window">
+      <param name="Name" value="Back-Animation Experiment Window">
+      <param name="Local" value="EE_BackAnimationExperimentWindow.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="measurement">
+      <param name="Name" value="Starting and Stopping a Back-Animation Measurement">
+      <param name="Local" value="EE_StartStop_BackAnimationExperiment.htm">
+    </object>
+    </ul>
+</ul>
+</html>

@@ -7,64 +7,46 @@ const request = {
 	message: "Apply one edit.",
 };
 
-describe("ASCET edit approval", () => {
-	test("returns a canonical preflight result without calling the UI", async () => {
-		let confirmationCalls = 0;
-		const result = await requestAscetEditApproval(request, {
-			hasUI: true,
-			ui: {
-				async confirm() {
-					confirmationCalls += 1;
-					return true;
-				},
-			},
-		});
+describe("ASCET edit approval adapter", () => {
+	test("maps a missing UI to approval_required", async () => {
+		const result = await requestAscetEditApproval(request, {});
 
 		assert.deepEqual(result, {
 			approved: false,
-			code: "ascet_edit_preflight_required",
-			message: "ASCET edit was not executed. Re-run with executeWrite=true to request interactive confirmation.",
-		});
-		assert.equal(confirmationCalls, 0);
-	});
-
-	test("requires a confirmation UI for requested edits", async () => {
-		const result = await requestAscetEditApproval({ ...request, executeWrite: true }, {});
-
-		assert.deepEqual(result, {
-			approved: false,
-			code: "ascet_edit_ui_required",
-			message: "ASCET edit requires interactive confirmation; this context has no confirmation UI.",
+			code: "ascet_edit_approval_required",
+			message: "This operation requires an interactive approval channel.",
 		});
 	});
 
-	test("does not pass an already-cancelled tool-run signal to the confirmation UI", async () => {
+	test("passes the tool-run signal to the confirmation UI without a fixed timeout", async () => {
 		const toolRun = new AbortController();
-		toolRun.abort();
 		let confirmationSignal: AbortSignal | undefined;
+		let confirmationTimeout: number | undefined;
 
 		await requestAscetEditApproval(
-			{ ...request, executeWrite: true, signal: toolRun.signal },
+			{ ...request, signal: toolRun.signal },
 			{
 				hasUI: true,
 				ui: {
 					async confirm(_title, _message, options) {
 						confirmationSignal = options?.signal;
+						confirmationTimeout = options?.timeout;
 						return true;
 					},
 				},
 			},
 		);
 
-		assert.equal(confirmationSignal, undefined);
+		assert.equal(confirmationSignal, toolRun.signal);
+		assert.equal(confirmationTimeout, undefined);
 	});
 
-	test("blocks the write after confirmation when its tool run was already cancelled", async () => {
+	test("does not open the dialog when the tool run is already cancelled", async () => {
 		const toolRun = new AbortController();
 		toolRun.abort();
 		let confirmationCalls = 0;
 		const result = await requestAscetEditApproval(
-			{ ...request, executeWrite: true, signal: toolRun.signal },
+			{ ...request, signal: toolRun.signal },
 			{
 				hasUI: true,
 				ui: {
@@ -76,22 +58,18 @@ describe("ASCET edit approval", () => {
 			},
 		);
 
-		assert.equal(confirmationCalls, 1);
-		assert.equal(result.approved, false);
-		assert.equal(result.code, "ascet_edit_operation_aborted_before_write");
+		assert.equal(confirmationCalls, 0);
+		assert.deepEqual(result, {
+			approved: false,
+			code: "ascet_edit_operation_aborted_before_write",
+			message: "The operation was cancelled before mutation began.",
+		});
 	});
 
-	test("reports a confirmation that was not granted without claiming user rejection", async () => {
+	test("maps rejection with the requested error prefix", async () => {
 		const result = await requestAscetEditApproval(
-			{ ...request, executeWrite: true, errorPrefix: "ascet_batch_write" },
-			{
-				hasUI: true,
-				ui: {
-					async confirm() {
-						return false;
-					},
-				},
-			},
+			{ ...request, errorPrefix: "ascet_batch_write" },
+			{ hasUI: true, ui: { confirm: async () => false } },
 		);
 
 		assert.deepEqual(result, {
@@ -101,18 +79,15 @@ describe("ASCET edit approval", () => {
 		});
 	});
 
-	test("reports a confirmation UI failure separately from a response that was not granted", async () => {
-		const result = await requestAscetEditApproval(
-			{ ...request, executeWrite: true },
-			{
-				hasUI: true,
-				ui: {
-					async confirm() {
-						throw new Error("renderer disconnected");
-					},
+	test("maps a UI transport failure without implying approval", async () => {
+		const result = await requestAscetEditApproval(request, {
+			hasUI: true,
+			ui: {
+				confirm: async () => {
+					throw new Error("renderer disconnected");
 				},
 			},
-		);
+		});
 
 		assert.deepEqual(result, {
 			approved: false,

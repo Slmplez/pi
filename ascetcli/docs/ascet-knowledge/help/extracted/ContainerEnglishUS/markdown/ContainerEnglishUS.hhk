@@ -1,0 +1,62 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="index">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Containers">
+    <param name="Name" value="Overview">
+    <param name="Local" value="CNT_Overview.htm">
+    <param name="Name" value="Working with Containers">
+    <param name="Local" value="CNT_working_containers.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="convert networks to ~">
+      <param name="Name" value="Overview">
+      <param name="Local" value="CNT_Overview.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="add item">
+      <param name="Name" value="Adding a Database/Workspace Item (Context Menu)">
+      <param name="Local" value="CNT_add_databaseitem.htm">
+      <param name="Name" value="Adding a Database/Workspace Item (Drag &amp; Drop)">
+      <param name="Local" value="CNT_add_database_dd.htm">
+      <param name="Name" value="Adding Items via the Container View">
+      <param name="Local" value="CNT_AddItemsViaContainerView.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="delete items">
+      <param name="Name" value="Deleting Items from the Container">
+      <param name="Local" value="CNT_delete_item_container.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit items">
+      <param name="Name" value="Editing Items">
+      <param name="Local" value="CNT_edit_items.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="rename items">
+      <param name="Name" value="Renaming Added Items">
+      <param name="Local" value="CNT_rename_added_items.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="select ~ view">
+      <param name="Name" value="Selecting the Container View">
+      <param name="Local" value="CNT_invoke_containerview.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Component Manager">
+    <param name="See Also" value="Component Manager">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="container view">
+      <param name="Name" value="Selecting the Container View">
+      <param name="Local" value="CNT_invoke_containerview.htm">
+    </object>
+    </ul>
+</ul>
+</html>

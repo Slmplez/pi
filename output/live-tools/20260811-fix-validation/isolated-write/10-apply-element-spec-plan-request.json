@@ -1,0 +1,40 @@
+{
+  "action": "apply_element_spec",
+  "phase": "plan",
+  "componentPath": "PI_LIVE_FIX_20260811_13947C09\\ClassUnderTest",
+  "intent": "create",
+  "elements": [
+    {
+      "role": "providerExportedParameter",
+      "name": "P_Input",
+      "modelType": "cont",
+      "unit": "",
+      "comment": "ASCET isolated live validation input",
+      "calibration": false,
+      "range": {
+        "mode": "none"
+      },
+      "data": {
+        "mode": "ascetDefault"
+      },
+      "implementation": {
+        "mode": "ascetDefault"
+      }
+    },
+    {
+      "role": "localDependentParameter",
+      "name": "P_Dependent",
+      "modelType": "cont",
+      "unit": "",
+      "comment": "ASCET isolated live validation dependent",
+      "calibration": false,
+      "range": {
+        "mode": "none"
+      },
+      "implementation": {
+        "mode": "ascetDefault"
+      }
+    }
+  ],
+  "executeWrite": false
+}

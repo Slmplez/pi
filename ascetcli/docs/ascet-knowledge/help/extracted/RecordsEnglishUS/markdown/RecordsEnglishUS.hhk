@@ -1,0 +1,186 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="index">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="toolbar">
+    <param name="See Also" value="toolbar">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="configure">
+      <param name="Name" value="Configuring a Toolbar">
+      <param name="Local" value="IntroductionEnglishUS.chm::/INT_Configuring_Toolbar.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="record">
+    <param name="Name" value="Records - Overview">
+    <param name="Local" value="RC_overview.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="create">
+      <param name="Name" value="Creating a Record">
+      <param name="Local" value="RC_Creating_a_Record.htm">
+      <param name="Name" value="Creating a Record from an Existing Class">
+      <param name="Local" value="RC_Create_Record_from_Class.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="in ESDL">
+      <param name="Name" value="Records in ESDL">
+      <param name="Local" value="RC_Records_in_ESDL_CCode.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="in block diagram">
+      <param name="Name" value="Records in Block Diagrams">
+      <param name="Local" value="RC_Records_in_Block_Diagrams.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="content">
+      <param name="Name" value="Allowed Content">
+      <param name="Local" value="RC_Allowed_Content.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="open">
+      <param name="Name" value="Opening a Record">
+      <param name="Local" value="RC_Opening_a_Record.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="implementation">
+      <param name="Name" value="Implementing a Record Element">
+      <param name="Local" value="RC_Implementing_RecordElement.htm">
+      <param name="Name" value="Implementing a Record Instance">
+      <param name="Local" value="RC_Implementing_RecordInstance.htm">
+      <param name="Name" value="Editing a Record Implementation">
+      <param name="Local" value="RC_Edit_RecordImplementation.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="palettes">
+    <param name="See Also" value="palettes">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="record editor">
+      <param name="Name" value="Elements Palette">
+      <param name="Local" value="rcepalettespane.htm">
+      <param name="Name" value="Library Palette">
+      <param name="Local" value="rceLibraryPalette.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Implementation">
+    <param name="See Also" value="Implementation">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="record">
+      <param name="Name" value="Editing a Record Implementation">
+      <param name="Local" value="RC_Edit_RecordImplementation.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="record element">
+      <param name="Name" value="Implementing a Record Element">
+      <param name="Local" value="RC_Implementing_RecordElement.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="record instance">
+      <param name="Name" value="Implementing a Record Instance">
+      <param name="Local" value="RC_Implementing_RecordInstance.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="buttons">
+    <param name="See Also" value="buttons">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="record editor">
+      <param name="Name" value="Toolbar General">
+      <param name="Local" value="rcetoolbargeneral.htm">
+      <param name="Name" value="Toolbar Elements">
+      <param name="Local" value="rcetoolbarelements.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="editor">
+    <param name="See Also" value="editor">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="records">
+      <param name="Name" value="Records - Overview">
+      <param name="Local" value="RC_overview.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="element">
+    <param name="See Also" value="element">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="copy">
+      <param name="Name" value="Copying Elements in the Outline Tab">
+      <param name="Local" value="IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="implementation editor">
+    <param name="See Also" value="implementation editor">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="records">
+      <param name="Name" value="Implementation Editor for Components and Projects">
+      <param name="Local" value="ImplementationEditorEnglishUS.chm::/IEd_ImplementationEditor_for_ComponentsProjects.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="menu options">
+    <param name="See Also" value="menu options">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="record editor">
+      <param name="Name" value="Menu Bar">
+      <param name="Local" value="rcemenubar.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="copy">
+    <param name="See Also" value="copy">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="element">
+      <param name="Name" value="Copying Elements in the Outline Tab">
+      <param name="Local" value="IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="AUTOSAR">
+    <param name="See Also" value="AUTOSAR">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="records">
+      <param name="Name" value="Records - Overview">
+      <param name="Local" value="RC_overview.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Tree pane">
+    <param name="See Also" value="Tree pane">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="filter">
+      <param name="Name" value="Filtering the Outline Tab">
+      <param name="Local" value="rc_filter_component_pane.htm">
+    </object>
+    </ul>
+</ul>
+</html>

@@ -28,7 +28,7 @@ export const ascetSetModuleCodeParameters = Type.Object({
 	operation: Type.Union([Type.Literal("set-method"), Type.Literal("set-header"), Type.Literal("set-external-c-code")]),
 	methodName: Type.Optional(Type.String({ description: "Method name for set-method operations." })),
 	codeFile: Type.String({ description: "Path to replacement code file.", minLength: 1 }),
-	executeWrite: Type.Optional(Type.Boolean({ description: "When true, PI still requires interactive confirmation." })),
+	intent: Type.Union([Type.Literal("preview"), Type.Literal("apply")]),
 });
 
 export function buildSetModuleCodeArgs(params: AscetSetModuleCodeParams): string[] {

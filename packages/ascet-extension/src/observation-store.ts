@@ -25,6 +25,9 @@ export interface AscetObservationCoverage {
 export interface AscetObservationDatabaseIdentity {
 	name?: string;
 	path: string;
+	reportedPath?: string;
+	status: "consistent" | "inconsistent" | "unknown";
+	issues: string[];
 	fingerprint: string;
 }
 

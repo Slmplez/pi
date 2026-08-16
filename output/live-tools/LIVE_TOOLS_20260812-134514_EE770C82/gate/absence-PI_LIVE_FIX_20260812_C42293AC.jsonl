@@ -1,0 +1,1 @@
+{"type":"response","protocolVersion":1,"ok":false,"result":null,"error":{"code":"target_not_found","message":"No ASCET item was found at \u0027PI_LIVE_FIX_20260812_C42293AC\u0027."},"meta":{"bridgePid":24700,"bridgeGeneration":"a31f6ca8-0075-4365-83fb-00312693fb13","durationMs":368,"sessionPolicy":"fresh_session","mutationStarted":false,"mode":"exec","operation":"get_tree"}}

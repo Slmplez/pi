@@ -1,0 +1,158 @@
+{
+  "generated_at": "2026-04-01T03:07:44.025810Z",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS",
+  "checked_files": 80,
+  "checked_links": 885,
+  "broken_links": [
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\markdown\\CC_SearchDeleteUnusedElements.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\markdown\\CC_SearchResultsView.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\markdown\\testing-external_module.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/int_safetyinformation.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/int_safetyadvicegeneral.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_Conversion_MethodsProcesses.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_SearchTreePane.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_Configuring_Toolbar.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_Convert_MethodProcess.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_FindReplace_Window.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_Toolbar_Configuration_Window.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_Configuring_Toolbar.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_SearchTreePane.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/int_safetyinformation.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/int_safetyadvicegeneral.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_Convert_MethodProcess.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_Conversion_MethodsProcesses.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_Convert_MethodProcess.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_Convert_MethodProcess.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\CCodeEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\CCodeEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\CCodeEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    }
+  ]
+}

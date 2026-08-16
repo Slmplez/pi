@@ -1,0 +1,649 @@
+
+<html>
+  <head>
+    <META http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="GENERATOR" content="Adivo TechWriter 2012"><!-- Sitemap 1.0 --></head>
+  <body>
+    <ul><LI><OBJECT type="text/sitemap">
+<param name="Name" value="ASCETAutomationAPI">
+      <param name="Local" value="Overview.html">
+      <param name="ImageNumber" value="11"></OBJECT>
+<ul><LI><OBJECT type="text/sitemap">
+<param name="Name" value="ASCET Automation API Build-Interface">
+        <param name="Local" value="WS-ASCET_Automation_API_Build-Interface.html">
+        <param name="ImageNumber" value="11"></OBJECT>
+<ul><LI><OBJECT type="text/sitemap">
+<param name="Name" value="Methods">
+          <param name="Local" value="ME-ASCET_Automation_API_Build-Interface.html">
+          <param name="ImageNumber" value="11"></OBJECT>
+<ul><LI><OBJECT type="text/sitemap">
+<param name="Name" value="Build">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-Build.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="CleanProject">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-CleanProject.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="CloseMessageDialog">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-CloseMessageDialog.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="Compile">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-Compile.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="CompileUsingProject">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-CompileUsingProject.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ExportBuildResults">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-ExportBuildResults.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ExportGeneratedCode">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-ExportGeneratedCode.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ExportGeneratedCodeRecursive">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-ExportGeneratedCodeRecursive.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ExportGeneratedGenericCode">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-ExportGeneratedGenericCode.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="GenerateCode">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-GenerateCode.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="GenerateCodeUsingProject">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-GenerateCodeUsingProject.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="GetLastErrorNumber">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-GetLastErrorNumber.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="GetLastErrorText">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-GetLastErrorText.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="OpenMessageDialog">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-OpenMessageDialog.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ReadProjectProperties">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-ReadProjectProperties.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="Rebuild">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-Rebuild.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="Touch">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-Touch.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="TouchRecursive">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-TouchRecursive.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="TouchRecursiveUsingProject">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-TouchRecursiveUsingProject.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="TouchUsingProject">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-TouchUsingProject.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="TransferFiles">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-TransferFiles.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="WriteAsam2MCToFile">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-WriteAsam2MCToFile.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="WriteAsam2MCToPath">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-WriteAsam2MCToPath.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="WriteProjectProperties">
+            <param name="Local" value="ME-ASCET_Automation_API_Build-Interface-WriteProjectProperties.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+</ul></LI>
+</ul></LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ASCET Automation API Editor-Interface">
+        <param name="Local" value="WS-ASCET_Automation_API_Editor-Interface.html">
+        <param name="ImageNumber" value="11"></OBJECT>
+<ul><LI><OBJECT type="text/sitemap">
+<param name="Name" value="Methods">
+          <param name="Local" value="ME-ASCET_Automation_API_Editor-Interface.html">
+          <param name="ImageNumber" value="11"></OBJECT>
+<ul><LI><OBJECT type="text/sitemap">
+<param name="Name" value="AscetLink">
+            <param name="Local" value="ME-ASCET_Automation_API_Editor-Interface-AscetLink.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="CloseComponentEditor">
+            <param name="Local" value="ME-ASCET_Automation_API_Editor-Interface-CloseComponentEditor.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="CloseComponentEditorForElement">
+            <param name="Local" value="ME-ASCET_Automation_API_Editor-Interface-CloseComponentEditorForElement.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="CloseEditorForElement">
+            <param name="Local" value="ME-ASCET_Automation_API_Editor-Interface-CloseEditorForElement.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="CloseMessageDialog">
+            <param name="Local" value="ME-ASCET_Automation_API_Editor-Interface-CloseMessageDialog.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="DetectUnusedElements">
+            <param name="Local" value="ME-ASCET_Automation_API_Editor-Interface-DetectUnusedElements.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="DetectUnusedElementsInProject">
+            <param name="Local" value="ME-ASCET_Automation_API_Editor-Interface-DetectUnusedElementsInProject.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="GetLastErrorNumber">
+            <param name="Local" value="ME-ASCET_Automation_API_Editor-Interface-GetLastErrorNumber.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="GetLastErrorText">
+            <param name="Local" value="ME-ASCET_Automation_API_Editor-Interface-GetLastErrorText.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="OpenComponentEditor">
+            <param name="Local" value="ME-ASCET_Automation_API_Editor-Interface-OpenComponentEditor.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="OpenComponentEditorForElement">
+            <param name="Local" value="ME-ASCET_Automation_API_Editor-Interface-OpenComponentEditorForElement.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="OpenDataEditorForElement">
+            <param name="Local" value="ME-ASCET_Automation_API_Editor-Interface-OpenDataEditorForElement.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="OpenImplementationEditorForElement">
+            <param name="Local" value="ME-ASCET_Automation_API_Editor-Interface-OpenImplementationEditorForElement.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="OpenMessageDialog">
+            <param name="Local" value="ME-ASCET_Automation_API_Editor-Interface-OpenMessageDialog.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="OpenPropertyEditorForElement">
+            <param name="Local" value="ME-ASCET_Automation_API_Editor-Interface-OpenPropertyEditorForElement.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="SelectComponent">
+            <param name="Local" value="ME-ASCET_Automation_API_Editor-Interface-SelectComponent.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="WriteAllProjectFiles">
+            <param name="Local" value="ME-ASCET_Automation_API_Editor-Interface-WriteAllProjectFiles.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+</ul></LI>
+</ul></LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ASCET Automation API Experiment-Interface">
+        <param name="Local" value="WS-ASCET_Automation_API_Experiment-Interface.html">
+        <param name="ImageNumber" value="11"></OBJECT>
+<ul><LI><OBJECT type="text/sitemap">
+<param name="Name" value="Methods">
+          <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface.html">
+          <param name="ImageNumber" value="11"></OBJECT>
+<ul><LI><OBJECT type="text/sitemap">
+<param name="Name" value="CloseExperiment">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-CloseExperiment.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="CloseMessageDialog">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-CloseMessageDialog.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="GetLastErrorNumber">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-GetLastErrorNumber.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="GetLastErrorText">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-GetLastErrorText.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="IsExperimentOpen">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-IsExperimentOpen.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="LoadParameters">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-LoadParameters.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="OpenExperiment">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-OpenExperiment.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="OpenExperimentConfiguration">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-OpenExperimentConfiguration.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="OpenMessageDialog">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-OpenMessageDialog.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="PauseExperiment">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-PauseExperiment.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ReadHexScalarValue">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-ReadHexScalarValue.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ReadPhysicalScalarValue">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-ReadPhysicalScalarValue.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ReconnectExperiment">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-ReconnectExperiment.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ReinitializeParameters">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-ReinitializeParameters.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ReinitializeVariables">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-ReinitializeVariables.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="SaveParameters">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-SaveParameters.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="SetDataLoggerFile">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-SetDataLoggerFile.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="SetStepMode">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-SetStepMode.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="StartDataLogging">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-StartDataLogging.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="StartExperiment">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-StartExperiment.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="StartMeasurement">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-StartMeasurement.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="StartOperatingSystem">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-StartOperatingSystem.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="StepExperiment">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-StepExperiment.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="StopDataLogging">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-StopDataLogging.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="StopExperiment">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-StopExperiment.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="StopMeasurement">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-StopMeasurement.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="StopOperatingSystem">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-StopOperatingSystem.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="UpdateDependentParameters">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-UpdateDependentParameters.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="WriteHexScalarValue">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-WriteHexScalarValue.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="WritePhysicalScalarValue">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-WritePhysicalScalarValue.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="WriteTargetDebuggerContentsToFile">
+            <param name="Local" value="ME-ASCET_Automation_API_Experiment-Interface-WriteTargetDebuggerContentsToFile.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+</ul></LI>
+</ul></LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ASCET Automation API Tool-Interface">
+        <param name="Local" value="WS-ASCET_Automation_API_Tool-Interface.html">
+        <param name="ImageNumber" value="11"></OBJECT>
+<ul><LI><OBJECT type="text/sitemap">
+<param name="Name" value="Methods">
+          <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface.html">
+          <param name="ImageNumber" value="11"></OBJECT>
+<ul><LI><OBJECT type="text/sitemap">
+<param name="Name" value="About">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-About.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ActivateNoSaveMode">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-ActivateNoSaveMode.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ApiVersion">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-ApiVersion.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ClearMonitorContents">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-ClearMonitorContents.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="CloseCurrentDatabase">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-CloseCurrentDatabase.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="CloseDataStorage">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-CloseDataStorage.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="CloseMessageDialog">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-CloseMessageDialog.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ConvertDatabaseToWorkspace">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-ConvertDatabaseToWorkspace.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="CreateDatabase">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-CreateDatabase.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="CreateWorkspace">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-CreateWorkspace.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="DatabasePath">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-DatabasePath.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="DataStoragePath">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-DataStoragePath.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ExportBuildMessagesAsXMLToFile">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-ExportBuildMessagesAsXMLToFile.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ExportItemToPath">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-ExportItemToPath.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ExportItemToPathWithOptions">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-ExportItemToPathWithOptions.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ExportItemToZipFile">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-ExportItemToZipFile.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ExportItemToZipFileWithOptions">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-ExportItemToZipFileWithOptions.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ExportItemWithReferencesToPath">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-ExportItemWithReferencesToPath.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ExportItemWithReferencesToZipFile">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-ExportItemWithReferencesToZipFile.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ExportMappingForComponentToFile">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-ExportMappingForComponentToFile.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="exportMappingForSoftwareComponent_toFile">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-exportMappingForSoftwareComponent_toFile.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="FlashTarget">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-FlashTarget.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="GetLastErrorNumber">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-GetLastErrorNumber.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="GetLastErrorText">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-GetLastErrorText.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="GetProcessId">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-GetProcessId.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ImportFromFile">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-ImportFromFile.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ImportFromPath">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-ImportFromPath.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ImportFromZipFile">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-ImportFromZipFile.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ImportMappingForComponentFromFile">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-ImportMappingForComponentFromFile.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="importMappingForSoftwareComponent_fromFile">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-importMappingForSoftwareComponent_fromFile.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ImportWithReferencesFromFile">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-ImportWithReferencesFromFile.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ImportWithReferencesFromPath">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-ImportWithReferencesFromPath.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="OpenAndConvertDatabase">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-OpenAndConvertDatabase.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="OpenDatabase">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-OpenDatabase.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="OpenMessageDialog">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-OpenMessageDialog.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="OpenWorkspace">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-OpenWorkspace.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="Ping">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-Ping.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ReadToolOptions">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-ReadToolOptions.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="SearchForHardware">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-SearchForHardware.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="SelectHardwareForProject">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-SelectHardwareForProject.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="Shutdown">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-Shutdown.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="SwitchLoggingOff">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-SwitchLoggingOff.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="SwitchLoggingOn">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-SwitchLoggingOn.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="ToolVersion">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-ToolVersion.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="WriteMonitorContentsToPath">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-WriteMonitorContentsToPath.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="WriteTextToMonitor">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-WriteTextToMonitor.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+<LI><OBJECT type="text/sitemap">
+<param name="Name" value="WriteToolOptions">
+            <param name="Local" value="ME-ASCET_Automation_API_Tool-Interface-WriteToolOptions.html">
+            <param name="ImageNumber" value="11"></OBJECT>
+</LI>
+</ul></LI>
+</ul></LI>
+</ul></LI>
+</ul>
+  </body>
+</html>

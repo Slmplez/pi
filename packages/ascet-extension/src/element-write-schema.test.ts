@@ -41,7 +41,8 @@ test("apply_element_spec standalone schema rejects unsupported write-control fie
 		Value.Check(ascetApplyElementSpecParameters, {
 			action: "apply_element_spec",
 			componentPath: "DEMO/PID",
-			intent: "create",
+			elementIntent: "create",
+			intent: "preview",
 			elements: [],
 			dryRun: true,
 		}),
@@ -51,7 +52,8 @@ test("apply_element_spec standalone schema rejects unsupported write-control fie
 		Value.Check(ascetApplyElementSpecParameters, {
 			action: "apply_element_spec",
 			componentPath: "DEMO/PID",
-			intent: "create",
+			elementIntent: "create",
+			intent: "preview",
 			elements: [],
 			verifyReadback: true,
 		}),
@@ -60,7 +62,8 @@ test("apply_element_spec standalone schema rejects unsupported write-control fie
 	assert.equal(
 		Value.Check(ascetApplyElementSpecParameters, {
 			componentPath: "DEMO/PID",
-			intent: "create",
+			elementIntent: "create",
+			intent: "preview",
 			elements: [],
 			backupDir: "backup",
 		}),
@@ -94,7 +97,8 @@ test("standalone write schemas continue accepting supported requests", () => {
 		Value.Check(ascetApplyElementSpecParameters, {
 			action: "apply_element_spec",
 			componentPath: "DEMO/PID",
-			intent: "create",
+			elementIntent: "create",
+			intent: "preview",
 			elements: [{ role: "standardPrimitive", name: "P", kind: "parameter", modelType: "cont", scope: "local" }],
 		}),
 		true,
@@ -108,6 +112,7 @@ test("standalone write schemas continue accepting supported requests", () => {
 			dependencyMappings: { P_Input: { kind: "parameter", name: "P_Input" } },
 			variantPolicy: "default",
 			targetKind: "component",
+			intent: "preview",
 		}),
 		true,
 	);
@@ -128,7 +133,8 @@ test("apply_element_spec uses strict role-discriminated element schemas", () => 
 		Value.Check(ascetApplyElementSpecParameters, {
 			action: "apply_element_spec",
 			componentPath: "DEMO/PID",
-			intent: "create",
+			elementIntent: "create",
+			intent: "preview",
 			elements: validRoles,
 		}),
 		true,
@@ -148,7 +154,8 @@ test("apply_element_spec uses strict role-discriminated element schemas", () => 
 			Value.Check(ascetApplyElementSpecParameters, {
 				action: "apply_element_spec",
 				componentPath: "DEMO/PID",
-				intent: "create",
+				elementIntent: "create",
+				intent: "preview",
 				elements: [invalidElement],
 			}),
 			false,
@@ -200,20 +207,21 @@ test("normalizes explicit Provider and Local parameter decisions to the backend 
 	assert.ok(normalized.warnings.some((warning) => warning.includes("implementation.mode=ascetDefault")));
 });
 
-test("apply_element_spec commit is planId-only and patch accepts partial fields", () => {
+test("apply_element_spec rejects public commit controls and patch accepts partial fields", () => {
 	assert.equal(
 		Value.Check(ascetApplyElementSpecParameters, {
 			action: "apply_element_spec",
 			phase: "commit",
 			planId: "plan-1",
 		}),
-		true,
+		false,
 	);
 	assert.equal(
 		Value.Check(ascetApplyElementSpecParameters, {
 			action: "apply_element_spec",
 			componentPath: "DEMO/PID",
-			intent: "create",
+			elementIntent: "create",
+			intent: "preview",
 			elements: [],
 			dataTarget: { mode: "named", name: "NotSupported" },
 		}),
@@ -222,7 +230,8 @@ test("apply_element_spec commit is planId-only and patch accepts partial fields"
 	assert.equal(
 		Value.Check(ascetApplyElementSpecParameters, {
 			action: "apply_element_spec",
-			intent: "patch",
+			elementIntent: "patch",
+			intent: "preview",
 			componentPath: "DEMO/PID",
 			elements: [{ name: "P", comment: "Updated" }],
 		}),
@@ -231,7 +240,8 @@ test("apply_element_spec commit is planId-only and patch accepts partial fields"
 	assert.equal(
 		Value.Check(ascetApplyElementSpecParameters, {
 			action: "apply_element_spec",
-			intent: "patch",
+			elementIntent: "patch",
+			intent: "preview",
 			componentPath: "DEMO/PID",
 			elements: [{ role: "consumerImportedParameter", name: "P", data: { value: 1 } }],
 		}),
@@ -240,7 +250,8 @@ test("apply_element_spec commit is planId-only and patch accepts partial fields"
 	assert.equal(
 		Value.Check(ascetApplyElementSpecParameters, {
 			action: "apply_element_spec",
-			intent: "patch",
+			elementIntent: "patch",
+			intent: "preview",
 			componentPath: "DEMO/PID",
 			elements: [{ role: "consumerImportedParameter", name: "P", comment: "unsupported" }],
 		}),
@@ -300,6 +311,7 @@ test("set_element_dependency supports deterministic autoExactName with explicit 
 		dependencyFormals: ["A", "B"],
 		bindingPolicy: "autoExactName" as const,
 		variantPolicy: "default" as const,
+		intent: "preview" as const,
 	};
 	assert.equal(Value.Check(ascetSetElementDependencyParameters, params), true);
 	const args = buildSetElementDependencyArgs(params);

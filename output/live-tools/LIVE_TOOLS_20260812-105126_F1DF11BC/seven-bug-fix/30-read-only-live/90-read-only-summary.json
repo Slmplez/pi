@@ -1,0 +1,472 @@
+{
+  "ok": true,
+  "runId": "LIVE_TOOLS_20260812-105126_F1DF11BC",
+  "liveWritesExecuted": 0,
+  "projectPath": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010::CM_AVH",
+  "packagePath": "PlatformLibrary\\Package\\AVH_AutomaticVehicleHold\\Component\\Config\\CM_AVH",
+  "projectTreeItems": [],
+  "packageTreeItems": [
+    {
+      "path": "PlatformLibrary\\Package\\AVH_AutomaticVehicleHold\\Component\\Config\\CM_AVH",
+      "oid": "040gpc83142g1no70o90q9iltgggg",
+      "kind": "module"
+    }
+  ],
+  "sharedEntries": [
+    {
+      "path": "PlatformLibrary\\Package\\AVH_AutomaticVehicleHold\\Component\\Config\\CM_AVH",
+      "oid": "040gpc83142g1no70o90q9iltgggg",
+      "kind": "module"
+    },
+    {
+      "path": "PlatformProjects\\Gen10\\ESP10\\ESP4DPB\\Product\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+      "oid": "040gpc83142g1no70o90q9iltgggg",
+      "kind": "module"
+    },
+    {
+      "path": "PlatformProjects\\Gen10\\ESP10\\ESP4DPB\\Product\\ESP4DPBCust2MotAWDAxleSplit_ECU_CSW_BB88962::CM_AVH_2MotAWDAxleSplit",
+      "oid": "040gpc83142g1no70o90q9iltgggg",
+      "kind": "module"
+    }
+  ],
+  "projectOidCandidates": [],
+  "packageOidCandidates": [
+    {
+      "path": "packageTree.details.data.items[0].oid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[0].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[1].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[2].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[3].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[4].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[5].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[6].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[7].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[8].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[9].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[10].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[11].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[12].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[13].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[14].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[15].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[16].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[17].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[18].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[19].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[20].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[21].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[22].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[23].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[24].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[25].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[26].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[27].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[28].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[29].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[30].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[31].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[32].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[33].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[34].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[35].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[36].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[37].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[38].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[39].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[40].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[41].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[42].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[43].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[44].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[45].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[46].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[47].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[48].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[49].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[50].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[51].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[52].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[53].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[54].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[55].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[56].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[57].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[58].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[59].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[60].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[61].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[62].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[63].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[64].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[65].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[66].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[67].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[68].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[69].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[70].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[71].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[72].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[73].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[74].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[75].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[76].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[77].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[78].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[79].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[80].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[81].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[82].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    },
+    {
+      "path": "packageElements.details.data.items[83].componentOid",
+      "value": "040gpc83142g1no70o90q9iltgggg"
+    }
+  ],
+  "responseStatuses": {
+    "status": {
+      "error": null,
+      "outcomeStatus": null,
+      "ok": true
+    },
+    "scheduler": {
+      "error": null,
+      "outcomeStatus": null,
+      "ok": true
+    },
+    "databaseIdentity": {
+      "error": {
+        "code": "ascet_action_unavailable",
+        "message": "ASCET action ascet_get.database_identity is not active in the current profile."
+      },
+      "outcomeStatus": null,
+      "ok": null
+    },
+    "projectTree": {
+      "error": {
+        "code": "target_not_found",
+        "message": "No ASCET database item was found at 'CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010::CM_AVH'.",
+        "details": {
+          "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"target_not_found\",\"message\":\"No ASCET database item was found at \\u0027CN_Libary\\\\CNMS_IPB20\\\\IPBCustGeneral\\\\IPBCustGeneral_ECU_CSW_BB88010::CM_AVH\\u0027.\"},\"meta\":{\"bridgePid\":28048,\"bridgeGeneration\":\"33a18466-b2c6-423d-ba4c-2613283d00cc\",\"durationMs\":396,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"get_tree\"}}\r\n",
+          "exitCode": 2
+        }
+      },
+      "outcomeStatus": null,
+      "ok": null
+    },
+    "projectElements": {
+      "error": {
+        "code": "target_not_found",
+        "message": "No ASCET database item was found at 'CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010'.",
+        "details": {
+          "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"target_not_found\",\"message\":\"No ASCET database item was found at \\u0027CN_Libary\\\\CNMS_IPB20\\\\IPBCustGeneral\\\\IPBCustGeneral_ECU_CSW_BB88010\\u0027.\"},\"meta\":{\"bridgePid\":38480,\"bridgeGeneration\":\"e24fb962-25cb-45d2-88c8-5ccbc368d111\",\"durationMs\":379,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"get_elements\"}}\r\n",
+          "exitCode": 2
+        }
+      },
+      "outcomeStatus": null,
+      "ok": null
+    },
+    "projectRefs": {
+      "error": {
+        "code": "target_not_found",
+        "message": "No ASCET database item was found at 'CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010'.",
+        "details": {
+          "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"target_not_found\",\"message\":\"No ASCET database item was found at \\u0027CN_Libary\\\\CNMS_IPB20\\\\IPBCustGeneral\\\\IPBCustGeneral_ECU_CSW_BB88010\\u0027.\"},\"meta\":{\"bridgePid\":31132,\"bridgeGeneration\":\"0c0ec719-b0dc-455e-9db3-c09112860cab\",\"durationMs\":217,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"get_component_refs\"}}\r\n",
+          "exitCode": 2
+        }
+      },
+      "outcomeStatus": null,
+      "ok": null
+    },
+    "projectImplementation": {
+      "error": {
+        "code": "legacy_operation_failed",
+        "message": "target_not_found [resolve_target]: No ASCET item was found at 'CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010'.",
+        "details": {
+          "stderr": "target_not_found [resolve_target]: No ASCET item was found at 'CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010'.\r\n",
+          "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"legacy_operation_failed\",\"message\":\"target_not_found [resolve_target]: No ASCET item was found at \\u0027CN_Libary\\\\CNMS_IPB20\\\\IPBCustGeneral\\\\IPBCustGeneral_ECU_CSW_BB88010\\u0027.\"},\"meta\":{\"bridgePid\":34516,\"bridgeGeneration\":\"b7c0479a-4ed0-44a2-bde2-b1780bc4ea93\",\"durationMs\":199,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"read_implementation\"}}\r\n",
+          "exitCode": 2
+        }
+      },
+      "outcomeStatus": null,
+      "ok": null
+    },
+    "projectEditable": {
+      "error": {
+        "code": "legacy_operation_failed",
+        "message": "target_not_found:resolve_target:No ASCET item was found at 'CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010'."
+      },
+      "outcomeStatus": "error",
+      "ok": null
+    },
+    "packageTree": {
+      "error": null,
+      "outcomeStatus": null,
+      "ok": null
+    },
+    "packageElements": {
+      "error": null,
+      "outcomeStatus": null,
+      "ok": null
+    },
+    "packageImplementation": {
+      "error": null,
+      "outcomeStatus": null,
+      "ok": null
+    },
+    "packageEditable": {
+      "error": null,
+      "outcomeStatus": "ok",
+      "ok": null
+    }
+  }
+}

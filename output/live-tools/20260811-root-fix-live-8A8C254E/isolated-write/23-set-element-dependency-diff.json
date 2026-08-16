@@ -1,0 +1,30 @@
+{
+  "expected": {
+    "dependency": "dependent",
+    "formula": "P_Input"
+  },
+  "actual": {
+    "target": "PI_LIVE_ROOTFIX_20260811_8A8C254E\\ClassUnderTest",
+    "kind": "component",
+    "element": "P_Dependent",
+    "count": 1,
+    "matches": [
+      {
+        "component": "PI_LIVE_ROOTFIX_20260811_8A8C254E\\ClassUnderTest",
+        "element": "P_Dependent",
+        "kind": "parameter",
+        "scope": "local",
+        "schema": "primitive-parameter-dependent-flag",
+        "dependency": "dependent",
+        "formula": "P_Input",
+        "supported": true
+      }
+    ],
+    "issues": []
+  },
+  "checks": {
+    "matchFound": true,
+    "dependency": true,
+    "formula": true
+  }
+}

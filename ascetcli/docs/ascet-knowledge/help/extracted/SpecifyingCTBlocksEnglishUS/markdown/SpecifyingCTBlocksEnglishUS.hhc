@@ -1,0 +1,648 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="toc">
+  <param name="Image Width" value="16">
+  <param name="Window Styles" value="0x800427">
+  <param name="ExWindow Styles" value="0x100">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Specifying CT Blocks">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Overview">
+      <param name="Local" value="CTB_Overview.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Basics">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="CT Blocks">
+        <param name="Local" value="ctb_ct_blocks.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Continuous Time Basic Blocks">
+        <param name="Local" value="CTB_Overview_CT_Basic_Blocks.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Block Interfaces (Basic Blocks)">
+          <param name="Local" value="CTB_summary.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Dimensions, Scopes, and Data Types (Basic Blocks)">
+            <param name="Local" value="CTB_Dimensions_Scopes_DataTypes.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Inputs">
+            <param name="Local" value="CTB_Inputs.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Outputs">
+            <param name="Local" value="CTB_Outputs.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Continuous State">
+            <param name="Local" value="CTB_Continuous_State.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Discrete State">
+            <param name="Local" value="CTB_Discrete_State.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Steplocal Variables">
+            <param name="Local" value="CTB_Steplocal_Variables.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Parameters">
+            <param name="Local" value="CTB_Parameters.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Dependent Parameters">
+            <param name="Local" value="CTB_Dependent_Parameters.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Constants">
+            <param name="Local" value="CTB_Constants.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Block Methods">
+          <param name="Local" value="CTB_SummaryBlock_Methods.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="init() Method">
+            <param name="Local" value="CTB_init_Method_.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="terminate() Method">
+            <param name="Local" value="CTB_terminate_Method_.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="derivatives() Method">
+            <param name="Local" value="CTB_derivatives_Method.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="update() Method">
+            <param name="Local" value="CTB_update_Method.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="directOutputs() Method">
+            <param name="Local" value="CTB_directOutputs_Method.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="nondirectOutputs() Method">
+            <param name="Local" value="CTB_nondirectOutputs_Method.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="dependentParameters() Method">
+            <param name="Local" value="CTB_dependentParameters_Method.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="stateEvents() Method">
+            <param name="Local" value="CTB_stateEvents_Method.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="events() Method">
+            <param name="Local" value="CTB_events_Method.htm">
+          </object>
+          </ul>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Structure of Continuous Time Models">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Modeling with CT Blocks">
+          <param name="Local" value="CTB_Modeling_with_CT_Blocks.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Structure Blocks">
+          <param name="Local" value="CTB_Structure_Blocks.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Usage of CT Blocks">
+          <param name="Local" value="CTB_Usage_of_CT_Blocks.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Modeling with Graphical Hierarchies">
+          <param name="Local" value="CTB_Modeling_with_Graphical_Hierarchies.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Experiments">
+          <param name="Local" value="CTB_Experiments.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Projects and Hybrid Projects">
+          <param name="Local" value="CTB_Projects_and_Hybrid_Projects.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Solving Differential Equations - Integration Algorithms">
+        <param name="Local" value="ctb_overview_differential_equations_and_integration_algorithms.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Overview – Integration Methods">
+          <param name="Local" value="CTB_OverviewIntegrationMethods.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Euler">
+          <param name="Local" value="ctb_euler.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Mulstep">
+          <param name="Local" value="ctb_mulstep.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Heun">
+          <param name="Local" value="ctb_heun.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Adams-Moulton">
+          <param name="Local" value="ctb_adams-moulton.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Runge-Kutta 4">
+          <param name="Local" value="ctb_runge-kutta_4.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Integration Methods With Variable Step Width">
+          <param name="Local" value="ctb_integration_methods_with_variable_step_width.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Modeling With Continuous Time Basic Blocks">
+        <param name="Local" value="CTB_Modeling_With_CT_Basic_Blocks.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Continuous Time Blocks as C Code">
+        <param name="Local" value="CTB_ct_ccode.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Continuous Time Blocks in ESDL">
+        <param name="Local" value="CTB_ct_esdl.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Computing Sequence">
+        <param name="Local" value="ctb_overview_computing_sequence.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="External Communication Interval dT">
+          <param name="Local" value="CTB_External_Communication_Interval_dT.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Integration Step Size h">
+          <param name="Local" value="CTB_Integration_Step_Size_h.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Step Size Depending on the Internal Integration Method: h/n">
+          <param name="Local" value="CTB_StepSize_Depending_on_Internal_IntegrationMethod_h_n.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Execution Sequence of All Methods">
+          <param name="Local" value="CTB_Execution_Sequence_of_All_Methods.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Modeling with ESDL">
+        <param name="Local" value="CTB_Overview_Modeling_with_ESDL.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Differential Equations in ESDL">
+          <param name="Local" value="CTB_Differential_Equations_in_ESDL.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Semantic Checks in ESDL">
+          <param name="Local" value="CTB_Semantic_Checks_in_ESDL.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Additional Library Functions">
+          <param name="Local" value="CTB_Overview_Additional_Library_Functions.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="getTime( )">
+            <param name="Local" value="CTB_getTime.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="getdT( )">
+            <param name="Local" value="CTB_getdT.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="getIntegrationStepsize( )">
+            <param name="Local" value="CTB_getIntegrationStepsize.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="resetContinuousState( state, new value)">
+            <param name="Local" value="CTB_resetContinuousState_state_newValue.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="resetCTSolver( )">
+            <param name="Local" value="CTB_resetCTSolver.htm">
+          </object>
+          </ul>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Modeling in C">
+        <param name="Local" value="CTB_Overview_Modeling_in_C.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Differential Equations in C">
+          <param name="Local" value="CTB_Differential_Equations_in_C.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Additional C Routines">
+          <param name="Local" value="CTB_Overview_Additional_C_Routines.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="real64 getTime(CTSimExperiment *)">
+            <param name="Local" value="CTB_real64_getTime_CTSimExperiment.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="real64 getdT ()">
+            <param name="Local" value="CTB_real64_getdT.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="real64 getIntegrationStepsize(CTSimExperiment *)">
+            <param name="Local" value="CTB_real64_getIntegrationStepsize_CTSimExperiment.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="void resetCTSolver(CTSimExperiment *)">
+            <param name="Local" value="CTB_void_resetCTSolver_CTSimExperiment.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="int_32 sizeU (CTSimExperiment *)">
+            <param name="Local" value="CTB_int_32_sizeU_CTSimExperiment.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="int_32 sizeY (CTSimExperiment *)">
+            <param name="Local" value="CTB_int_32_sizeY_CTSimExperiment.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="int_32 sizeV (CTSimExperiment *)">
+            <param name="Local" value="CTB_int_32_sizeV_CTSimExperiment.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="int_32 sizeX (CTSimExperiment *)">
+            <param name="Local" value="CTB_int_32_sizeX_CTSimExperiment.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="int_32 sizeXK (CTSimExperiment *)">
+            <param name="Local" value="CTB_int_32_sizeXK_CTSimExperiment.htm">
+          </object>
+          </ul>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Continuous Time Structure Blocks and Graphical Hierarchies">
+        <param name="Local" value="CTB_Continuous_Time_Structure_Blocks.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Reuse of Structure Blocks">
+          <param name="Local" value="ctb_reuse_of_structure_blocks.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Elements of a Continuous Time Structure Block">
+          <param name="Local" value="CTB_Elements_of_a_Continuous_Time_Structure_Block.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Block Interfaces (Structure Blocks)">
+          <param name="Local" value="CTB_Summary_Structure_Block_Interfaces.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Inputs">
+            <param name="Local" value="CTB_Inputs.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Outputs">
+            <param name="Local" value="CTB_Outputs.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Global Parameters">
+            <param name="Local" value="CTB_Global_Parameters.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Constants">
+            <param name="Local" value="CTB_Constants.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Dimensions, Scopes, and Data Types (Structure Blocks)">
+            <param name="Local" value="ctb_dimensions_scopes_data_types_structureblocks.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Operators">
+          <param name="Local" value="CTB_Operators.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Algebraic Loops">
+          <param name="Local" value="CTB_Algebraic_Loops.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Summary - Direct and Nondirect Output">
+          <param name="Local" value="CTB_Summary_Direct_and_Nondirect_Output.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Behavior of Direct and Nondirect Output">
+          <param name="Local" value="CTB_Behavior_of_Direct_and_Nondirect_Output.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Difference Between Graphical Hierarchies and CT Structure Blocks">
+          <param name="Local" value="CTB_Difference_GraphicalHierarchies_CTStructureBlocks.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Computing Sequence of Methods Within a Structure">
+          <param name="Local" value="CTB_Computing_Sequence_of_Methods_Within_a_Structure.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Example: Computing Sequence">
+          <param name="Local" value="CTB_Example__Computing_Sequence.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Example: Execution Not Possible">
+          <param name="Local" value="CTB_Example__Execution_Not_Possible.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Projects and Hybrid Projects">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Overview - Projects and Hybrid Projects">
+          <param name="Local" value="ctb_overview_projects_and_hybrid_projects.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Combining Continuous Time Blocks With Modules">
+          <param name="Local" value="CTB_Combining_Continuous_Time_Blocks_With_Modules.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="simulate_CTn Tasks">
+            <param name="Local" value="CTB_simulate_CTn_Tasks.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="event_CTn Tasks">
+            <param name="Local" value="CTB_event_CTn_Tasks.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="initialize_CT Task">
+            <param name="Local" value="CTB_initialize_CT_Task.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="terminate_CT Task">
+            <param name="Local" value="CTB_terminate_CT_Task.htm">
+          </object>
+          </ul>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Continuous Time Blocks as Block Diagrams">
+        <param name="Local" value="CTB_CT_Blocks_as_Block_Diagrams.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Experimenting with Continuous Time Blocks">
+        <param name="Local" value="CTB_Experimenting_with_CT_Blocks.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Monitoring the Cycle Time">
+        <param name="Local" value="CTB_Monitoring_the_Cycle_Time.htm">
+      </object>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Instructions">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Creating a Continuous Time Block in C Code">
+        <param name="Local" value="CTB_create_ct_block_in_c.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Creating a Continuous Time Block in ESDL">
+        <param name="Local" value="CTB_create_ctb_in_esdl.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Specifying a Continuous Time Block as Block Diagram">
+        <param name="Local" value="CTB_specify_ct.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Including a Component via the Block Library">
+        <param name="Local" value="ctb_IncludeComponent_BlockLibrary.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Finding/Replacing C and ESDL Code">
+        <param name="Local" value="CTB_findreplace.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Searching/Deleting Unused Elements">
+        <param name="Local" value="CTB_SearchDeleteUnusedElements.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Filtering the Tree Pane">
+        <param name="Local" value="ctb_filtering_the_component_pane.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Searching the Tree Pane">
+        <param name="Local" value="IntroductionEnglishUS.chm::/INT_SearchTreePane.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Copying Elements in the Outline Tab">
+        <param name="Local" value="IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Configuring a Toolbar">
+        <param name="Local" value="IntroductionEnglishUS.chm::/INT_Configuring_Toolbar.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Experimenting with CT Blocks">
+        <param name="Local" value="CTB_Experiment_with_a_CT_Bock.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Configuring the Integration Method">
+          <param name="Local" value="CTB_Configuring_the_Solver.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Activating the Cycle Time Monitoring">
+          <param name="Local" value="CTB_Activating_Cycle_Time_Monitoring.htm">
+        </object>
+        </ul>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Reference to User Interface">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="CT Block Editors - Window Elements">
+        <param name="Local" value="CTB_Description_of_Window_Elements.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Menu Bar">
+          <param name="Local" value="CTB_Menu_Bars.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="File Menu">
+            <param name="Local" value="CTB_filemenu.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Edit Menu">
+            <param name="Local" value="ctb_editmenu.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="View Menu">
+            <param name="Local" value="ctb_viewmenu.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Insert Menu">
+            <param name="Local" value="ctb_insertmenu.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Build Menu">
+            <param name="Local" value="ctb_buildmenu.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Extras Menu">
+            <param name="Local" value="ctb_extrasmenu.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Tools Menu">
+            <param name="Local" value="ctb_toolsmenu.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Window Menu">
+            <param name="Local" value="CTB_windowmenu.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Help Menu">
+            <param name="Local" value="ctb_helpmenu.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Toolbars">
+          <param name="Local" value="ctb_toolbars.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Toolbar General - CT Block Editors">
+            <param name="Local" value="ctb_toolbargeneral.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Toolbar Elements - CT Block Editors">
+            <param name="Local" value="ctb_toolbarelements.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Toolbar Basic Blocks - CT Block Editors">
+            <param name="Local" value="ctb_toolbarbasicblocks.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Tree Pane">
+          <param name="Local" value="ctb_component_pane.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Context Menu for Components and Elements">
+            <param name="Local" value="ctb_contextmenu_componentelement.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Context Menu for Diagrams and Methods">
+            <param name="Local" value="ctb_contextmenu_diagrammethod.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Palettes">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Elements Palette">
+            <param name="Local" value="ctb_elementspalette.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Basic Blocks Palette">
+            <param name="Local" value="ctb_basicblockspalette.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Library Palette">
+            <param name="Local" value="ctb_librarypalette.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Views">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Specification View (ESDL for CT Blocks)">
+            <param name="Local" value="CTB_Specification_View_ESDL_for_CT_Blocks.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Specification View (C Code for CT Blocks)">
+            <param name="Local" value="CTB_Specification_View_CCode_for_CTB.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Context Menu Specification View (ESDL and C)">
+            <param name="Local" value="ctb_contextmenu_specificationview.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Specification View (Block Diagrams for CT Blocks)">
+            <param name="Local" value="CTB_Specification_View_BlockDiagrams_CT_Blocks.htm">
+          </object>
+          <ul>
+            <li><object type="text/sitemap">
+              <param name="Name" value="Context Menu - Elements and Included Components">
+              <param name="Local" value="ctb_contextmenu_elementinclcomp.htm">
+            </object>
+            <li><object type="text/sitemap">
+              <param name="Name" value="Context Menu - Miscellaneous Elements">
+              <param name="Local" value="ctb_contextmenu_misc.htm">
+            </object>
+            </ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Search Results View">
+            <param name="Local" value="CTB_SearchResultsView.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Browse View">
+            <param name="Local" value="CTB_browse_view.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Context Menu Browse and Search Results View">
+            <param name="Local" value="ctb_contextmenubrowseview.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="External Editor View">
+            <param name="Local" value="CTB_External_Editor_View.htm">
+          </object>
+          </ul>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Miscellaneous">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Find/Replace Dialog Window">
+          <param name="Local" value="IntroductionEnglishUS.chm::/INT_FindReplace_Window.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Solver configuration Window">
+          <param name="Local" value="CTB_Solvers.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Toolbar Configuration Window">
+          <param name="Local" value="IntroductionEnglishUS.chm::/INT_Toolbar_Configuration_Window.htm">
+        </object>
+        </ul>
+      </ul>
+    </ul>
+</ul>
+</html>

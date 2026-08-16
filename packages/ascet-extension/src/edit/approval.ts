@@ -8,8 +8,7 @@ export interface AscetEditApprovalContext {
 export type AscetEditErrorPrefix = "ascet_edit" | "ascet_batch_write" | "configure_parameter_dependency_chain";
 
 type AscetEditApprovalFailureKind =
-	| "preflight_required"
-	| "ui_required"
+	| "approval_required"
 	| "confirmation_not_granted"
 	| "operation_aborted_before_write"
 	| "confirmation_ui_failed";
@@ -21,30 +20,28 @@ export type AscetEditApprovalFailure = {
 };
 
 export interface AscetEditApprovalRequest {
-	executeWrite?: boolean;
 	title: string;
 	message: string;
 	signal?: AbortSignal;
 	errorPrefix?: AscetEditErrorPrefix;
 }
 
-export type AscetEditApprovalResult = { approved: true } | AscetEditApprovalFailure;
+export type AscetEditApprovalResult = { approved: true; approvedAt: string } | AscetEditApprovalFailure;
 
 export function createAscetEditApprovalResultData(approval: AscetEditApprovalFailure): Record<string, unknown> {
-	if (approval.code.endsWith("_preflight_required")) {
-		return { preflightOnly: true };
-	}
 	return {
 		writeExecuted: false,
 		confirmation: { code: approval.code },
+		mutation: { status: "not_started" },
 	};
 }
 
 export function isAscetEditApprovalBlockedCode(code: string): boolean {
 	return (
-		code.endsWith("_ui_required") ||
+		code.endsWith("_approval_required") ||
 		code.endsWith("_confirmation_not_granted") ||
-		code.endsWith("_operation_aborted_before_write")
+		code.endsWith("_operation_aborted_before_write") ||
+		code.endsWith("_confirmation_ui_failed")
 	);
 }
 
@@ -53,50 +50,61 @@ export async function requestAscetEditApproval(
 	ctx: AscetEditApprovalContext,
 ): Promise<AscetEditApprovalResult> {
 	const errorPrefix = request.errorPrefix ?? "ascet_edit";
-	if (!request.executeWrite) {
+	const approval = await requestAscetMutationApproval(request, ctx);
+	if (approval.status === "approved") return { approved: true, approvedAt: approval.approvedAt };
+	if (approval.status === "ui_unavailable") {
 		return {
 			approved: false,
-			code: `${errorPrefix}_preflight_required`,
-			message: "ASCET edit was not executed. Re-run with executeWrite=true to request interactive confirmation.",
+			code: `${errorPrefix}_approval_required`,
+			message: "This operation requires an interactive approval channel.",
 		};
 	}
-
-	if (!ctx.hasUI || !ctx.ui?.confirm) {
-		return {
-			approved: false,
-			code: `${errorPrefix}_ui_required`,
-			message: "ASCET edit requires interactive confirmation; this context has no confirmation UI.",
-		};
-	}
-
-	let approved: boolean;
-	try {
-		approved = await ctx.ui.confirm(request.title, request.message, {
-			timeout: 30_000,
-		});
-	} catch (error) {
-		return {
-			approved: false,
-			code: `${errorPrefix}_confirmation_ui_failed`,
-			message: `ASCET edit confirmation UI failed: ${error instanceof Error ? error.message : String(error)}`,
-		};
-	}
-
-	if (request.signal?.aborted) {
+	if (approval.status === "cancelled") {
 		return {
 			approved: false,
 			code: `${errorPrefix}_operation_aborted_before_write`,
-			message: "ASCET edit was not started because its tool run was cancelled before the write could begin.",
+			message: "The operation was cancelled before mutation began.",
 		};
 	}
-
-	if (!approved) {
+	if (approval.status === "ui_failed") {
 		return {
 			approved: false,
-			code: `${errorPrefix}_confirmation_not_granted`,
-			message: "ASCET edit confirmation was not granted.",
+			code: `${errorPrefix}_confirmation_ui_failed`,
+			message: `ASCET edit confirmation UI failed: ${approval.message}`,
 		};
 	}
+	return {
+		approved: false,
+		code: `${errorPrefix}_confirmation_not_granted`,
+		message: "ASCET edit confirmation was not granted.",
+	};
+}
 
-	return { approved: true };
+export type AscetMutationApprovalResult =
+	| { status: "approved"; approvedAt: string }
+	| { status: "rejected" }
+	| { status: "cancelled" }
+	| { status: "ui_unavailable" }
+	| { status: "ui_failed"; message: string };
+
+export interface AscetMutationApprovalRequest {
+	title: string;
+	message: string;
+	signal?: AbortSignal;
+}
+
+export async function requestAscetMutationApproval(
+	request: AscetMutationApprovalRequest,
+	ctx: AscetEditApprovalContext,
+): Promise<AscetMutationApprovalResult> {
+	if (!ctx.hasUI || !ctx.ui?.confirm) return { status: "ui_unavailable" };
+	if (request.signal?.aborted) return { status: "cancelled" };
+	try {
+		const approved = await ctx.ui.confirm(request.title, request.message, { signal: request.signal });
+		if (request.signal?.aborted) return { status: "cancelled" };
+		return approved ? { status: "approved", approvedAt: new Date().toISOString() } : { status: "rejected" };
+	} catch (error) {
+		if (request.signal?.aborted) return { status: "cancelled" };
+		return { status: "ui_failed", message: error instanceof Error ? error.message : String(error) };
+	}
 }

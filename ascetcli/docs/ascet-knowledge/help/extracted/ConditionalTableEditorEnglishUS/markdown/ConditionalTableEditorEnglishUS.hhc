@@ -1,0 +1,266 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="toc">
+  <param name="Image Width" value="16">
+  <param name="Window Styles" value="0x800427">
+  <param name="ExWindow Styles" value="0x100">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Conditional Table Editor">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Overview">
+      <param name="Local" value="CTab_overview.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Basics">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Setting Up Conditional Tables">
+        <param name="Local" value="setting_up_ct.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Specifying Conditional Tables">
+        <param name="Local" value="specifying_ct.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Experimenting with Conditional Tables">
+        <param name="Local" value="experimenting_ct.htm">
+      </object>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Instructions">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Creating a Conditional Table">
+        <param name="Local" value="create_ct.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Filtering the Tree Pane">
+        <param name="Local" value="ctab_filtering_the_component_pane.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Searching the Tree Pane">
+        <param name="Local" value="IntroductionEnglishUS.chm::/INT_SearchTreePane.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Copying Elements in the Outline Tab">
+        <param name="Local" value="IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Configuring a Toolbar">
+        <param name="Local" value="IntroductionEnglishUS.chm::/INT_Configuring_Toolbar.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Setting the Background Color">
+        <param name="Local" value="Setting_the_Background_Color.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Setting up a Conditional Table">
+        <param name="Local" value="Ctab_SetUp_ConditionalTable.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Adding Basic Elements, Enumerations">
+          <param name="Local" value="add_elements.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Adding Complex Elements">
+          <param name="Local" value="complex_elements.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Including a Component via the Block Library">
+          <param name="Local" value="ctab_includecomponent_blocklibrary.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Adding Arguments and Method-Local Variables to the Trigger Method">
+          <param name="Local" value="arguments_variables.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Making Elements Accessible for External Communication">
+          <param name="Local" value="make_elements_accessible.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Creating Columns in the Condition Area">
+          <param name="Local" value="create_column_condition.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Creating Columns in the Instruction Area">
+          <param name="Local" value="create-column_instrusction.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Creating Rows">
+          <param name="Local" value="CTab_create_rows.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Moving Columns">
+          <param name="Local" value="CTab_move_columns.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Moving Rows">
+          <param name="Local" value="CTab_move_rows.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Removing Columns">
+          <param name="Local" value="CTab_remove_columns.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Deleting Rows">
+          <param name="Local" value="CTab_delete_rows.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Renaming and Deleting Elements">
+          <param name="Local" value="CTab_RenameDelete_elements.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Showing and Deleting Unused Elements">
+          <param name="Local" value="ctab_showdeleteunusedElements.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Specifying a Conditional Table">
+        <param name="Local" value="Ctab_SpecifyConditionalTable.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Entering a Condition or an Instruction">
+          <param name="Local" value="enter_condition_instruction.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Using Methods in Conditions/Instructions">
+          <param name="Local" value="use_methods_c_i.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Altering Column Width">
+          <param name="Local" value="alter_column_width.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Starting an Offline Experiment">
+        <param name="Local" value="CTab_Starting_an_Offline_Experiment.htm">
+      </object>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Reference to User Interface">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Conditional Table Editor - Window Elements">
+        <param name="Local" value="CTab_Description_of_Window_Elements.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Menus">
+        <param name="Local" value="CTab_menu_bar.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="File Menu">
+          <param name="Local" value="CTab_File_Menu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Edit Menu">
+          <param name="Local" value="CTab_Edit_Menu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="View Menu">
+          <param name="Local" value="CTab_view_menu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Column Menu">
+          <param name="Local" value="column_menu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Row Menu">
+          <param name="Local" value="row_menu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Insert Menu">
+          <param name="Local" value="CTab_Insert_Menu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Build Menu">
+          <param name="Local" value="CTab_Build_Menu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Extras Menu">
+          <param name="Local" value="CTab_Extras_Menu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Tools Menu">
+          <param name="Local" value="CTab_Tools_Menu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Help Menu">
+          <param name="Local" value="CTab_Help_Menu.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Toolbars">
+        <param name="Local" value="CTab_description_buttons.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Tree Pane">
+        <param name="Local" value="ctab_component_pane.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Context Menu for Components and Elements">
+          <param name="Local" value="ctab_contextmenu_componentelement.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Context Menu for Diagrams and Methods">
+          <param name="Local" value="ctab_contextmenu_diagrammethod.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Palettes">
+        <param name="Local" value="CTab_Palettes.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Elements Palette">
+          <param name="Local" value="CTab_Elements_Palette.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Library Palette">
+          <param name="Local" value="CTab_Library_Palette.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Views">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Specification View">
+          <param name="Local" value="CTab_Specification_View.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Context Menu Specification View">
+          <param name="Local" value="ctab_contextmenu_specificationview.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Search Results View">
+          <param name="Local" value="ctab_searchresultsview.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Browse View">
+          <param name="Local" value="CTab_Browse_View.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Context Menu Browse View">
+          <param name="Local" value="ctab_contextmenubrowseview.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Toolbar Configuration Window">
+        <param name="Local" value="IntroductionEnglishUS.chm::/INT_Toolbar_Configuration_Window.htm">
+      </object>
+      </ul>
+    </ul>
+</ul>
+</html>

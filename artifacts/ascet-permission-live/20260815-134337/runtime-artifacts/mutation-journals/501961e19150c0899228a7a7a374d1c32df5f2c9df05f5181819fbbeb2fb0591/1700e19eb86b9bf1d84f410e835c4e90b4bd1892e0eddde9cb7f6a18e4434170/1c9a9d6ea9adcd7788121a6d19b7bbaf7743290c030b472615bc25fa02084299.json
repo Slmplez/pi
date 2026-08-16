@@ -1,0 +1,235 @@
+{
+  "version": 1,
+  "status": "applied",
+  "databaseFingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c",
+  "targetOid": "040g00001g001qg7107g85oogkag0",
+  "targetKind": "component",
+  "canonicalPath": "DEMO\\__pi_permission_smoke__20260815-134337\\EditableClass",
+  "action": "apply_element_spec",
+  "planId": "4514ce06-176b-4f3c-aa91-2b102abad149",
+  "planFingerprint": "5bc926bf6890ee0c8a41b841d019878f3095b2abbc2414e97bf1d817085cd13a",
+  "targetImpactFingerprint": "sha256:adf1ccf22115471ab223b0a48f3eb6a31436bb77dcd8749573bb4cbcacc1ec40",
+  "guardGeneration": 0,
+  "beforeSnapshotFingerprint": "sha256:764a105f58d42989ca8135045426c6c424de19f62098dfd09210c7f212aff434",
+  "desiredFingerprint": "sha256:38b0aae51715d601566c5b273ee2addebd48b852b300e67e50e90c10de3274af",
+  "beforeSnapshot": {
+    "approvalMaterialFingerprint": "630379f6afa1a238d9c1d14103e6f9adfdab4e6d72670059ba963fd2d1382f57",
+    "approvedAt": "2026-08-15T05:51:08.085Z",
+    "authoritativePlan": {
+      "capabilities": {
+        "elements": [
+          {
+            "blockingCodes": [],
+            "capabilityStatus": "validated",
+            "dataConfiguration": {
+              "configurationName": "Data",
+              "selected": true,
+              "source": "defaultDataConfiguration"
+            },
+            "dataItemResolvable": true,
+            "implementationConfiguration": {
+              "configurationName": "Impl",
+              "selected": true,
+              "source": "defaultImplementationConfiguration"
+            },
+            "implementationItemResolvable": true,
+            "name": "P_AutoMedium",
+            "operation": "create"
+          }
+        ],
+        "validated": true
+      },
+      "catalogIdentity": {
+        "componentOID": "040g00001g001qg7107g85oogkag0"
+      },
+      "catalogSnapshot": {
+        "componentConfigurationProvenance": {
+          "classDataConfiguration": {
+            "configurationName": "EditableClass",
+            "selected": true,
+            "source": "classDataConfiguration"
+          },
+          "classImplementationConfiguration": {
+            "configurationName": "EditableClass",
+            "selected": true,
+            "source": "classImplementationConfiguration"
+          },
+          "defaultDataConfiguration": {
+            "configurationName": "Data",
+            "selected": true,
+            "source": "defaultDataConfiguration"
+          },
+          "defaultImplementationConfiguration": {
+            "configurationName": "Impl",
+            "selected": true,
+            "source": "defaultImplementationConfiguration"
+          }
+        },
+        "elements": [],
+        "identity": {
+          "componentOID": "040g00001g001qg7107g85oogkag0"
+        }
+      },
+      "limitations": [],
+      "liveElementCount": 0,
+      "liveSnapshotHash": "a98c114f0ee2c6ead0f3f05423283077f1504cd82168fb3c31e695b841d36335",
+      "normalizedSpec": {
+        "elements": [
+          {
+            "data": {
+              "value": 0
+            },
+            "impl": {
+              "valueType": "real32"
+            },
+            "kind": "parameter",
+            "modelType": "cont",
+            "name": "P_AutoMedium",
+            "physicalRange": {
+              "max": 1,
+              "min": -1
+            },
+            "scope": "local"
+          }
+        ]
+      },
+      "normalizedSpecHash": "bbce5f94ec72e011c645e9632de8a64202cc98da15ce3a58ff80ee67212e7936",
+      "operation": "authoritative_element_preflight",
+      "resolvedIntent": "create",
+      "resolvedOperations": [
+        {
+          "name": "P_AutoMedium",
+          "operation": "create"
+        }
+      ],
+      "result": {
+        "AddedElements": [
+          {
+            "Kind": "Parameter",
+            "Name": "P_AutoMedium",
+            "Signature": "Parameter ModelType=cont Scope=local"
+          }
+        ],
+        "ComponentPath": "DEMO\\__pi_permission_smoke__20260815-134337\\EditableClass",
+        "IncompatibleElements": [],
+        "ModifiedElements": [],
+        "RemovedElements": [],
+        "SkippedElements": [],
+        "Summary": "1 added, 0 removed, 0 modified, 0 incompatible"
+      },
+      "validated": true,
+      "warnings": []
+    },
+    "editabilityInitiallyEditable": true,
+    "normalizedEvidence": {
+      "action": "apply_element_spec",
+      "approvalMaterialFingerprint": "630379f6afa1a238d9c1d14103e6f9adfdab4e6d72670059ba963fd2d1382f57",
+      "capability": {
+        "evidence": {
+          "AddedElements": [
+            {
+              "Kind": "Parameter",
+              "Name": "P_AutoMedium",
+              "Signature": "Parameter ModelType=cont Scope=local"
+            }
+          ],
+          "ComponentPath": "DEMO\\__pi_permission_smoke__20260815-134337\\EditableClass",
+          "IncompatibleElements": [],
+          "ModifiedElements": [],
+          "RemovedElements": [],
+          "SkippedElements": [],
+          "Summary": "1 added, 0 removed, 0 modified, 0 incompatible"
+        },
+        "operation": "authoritative_element_preflight",
+        "status": "supported"
+      },
+      "database": {
+        "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c",
+        "path": "C:\\Repo\\F05_IPB_L2_0429"
+      },
+      "editability": {
+        "applicable": true,
+        "canRequestEditable": false,
+        "status": "editable"
+      },
+      "effects": [
+        {
+          "description": "ASCET edit request:\noperation: apply_element_spec\ncomponentPath: DEMO\\__pi_permission_smoke__20260815-134337\\EditableClass\nelementIntent: create\nelements: 1\nprojectPath: \ndeleteMissing: false\nrecreateIncompatible: false\nverifyReadback: false",
+          "kind": "apply_element_spec",
+          "target": "DEMO\\__pi_permission_smoke__20260815-134337\\EditableClass"
+        }
+      ],
+      "generatedAt": "2026-08-15T05:51:32.563Z",
+      "impact": {
+        "affectedProjects": [],
+        "complete": true,
+        "fingerprint": "sha256:adf1ccf22115471ab223b0a48f3eb6a31436bb77dcd8749573bb4cbcacc1ec40",
+        "ownerPath": "DEMO\\__pi_permission_smoke__20260815-134337\\EditableClass",
+        "sharedObject": false
+      },
+      "noOp": false,
+      "paramsFingerprint": "38b0aae51715d601566c5b273ee2addebd48b852b300e67e50e90c10de3274af",
+      "riskModifiers": [],
+      "target": {
+        "kind": "component",
+        "oid": "040g00001g001qg7107g85oogkag0",
+        "path": "DEMO\\__pi_permission_smoke__20260815-134337\\EditableClass"
+      },
+      "verification": {
+        "available": true,
+        "operation": "apply_element_spec_readback",
+        "target": {
+          "path": "DEMO\\__pi_permission_smoke__20260815-134337\\EditableClass"
+        }
+      },
+      "version": 1
+    },
+    "operation": "authoritative_single_call_preflight",
+    "permissionDecision": "ask",
+    "permissionMode": "auto",
+    "revalidatedAt": "2026-08-15T05:51:32.563Z",
+    "risk": "medium",
+    "targetIdentity": {
+      "kind": "component",
+      "oid": "040g00001g001qg7107g85oogkag0",
+      "path": "DEMO\\__pi_permission_smoke__20260815-134337\\EditableClass"
+    },
+    "targetImpactFingerprint": "sha256:adf1ccf22115471ab223b0a48f3eb6a31436bb77dcd8749573bb4cbcacc1ec40",
+    "validated": true
+  },
+  "attemptedMutation": {
+    "action": "apply_element_spec",
+    "componentPath": "DEMO\\__pi_permission_smoke__20260815-134337\\EditableClass",
+    "elementIntent": "create",
+    "elements": [
+      {
+        "data": {
+          "value": 0
+        },
+        "impl": {
+          "valueType": "real32"
+        },
+        "kind": "parameter",
+        "modelType": "cont",
+        "name": "P_AutoMedium",
+        "physicalRange": {
+          "max": 1,
+          "min": -1
+        },
+        "role": "standardPrimitive",
+        "scope": "local"
+      }
+    ],
+    "intent": "apply"
+  },
+  "createdAt": "2026-08-15T05:51:32.591Z",
+  "updatedAt": "2026-08-15T05:51:34.571Z",
+  "evidence": {
+    "bridgeEntered": true,
+    "backendResponseReceived": true,
+    "mutationStarted": true
+  },
+  "outcome": {
+    "operationId": "apply_element_spec"
+  }
+}

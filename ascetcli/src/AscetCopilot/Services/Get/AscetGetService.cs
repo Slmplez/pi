@@ -958,6 +958,12 @@ public sealed class AscetGetService
         Dictionary<string, object> result = new Dictionary<string, object>();
         result["name"] = databaseRef == null ? String.Empty : (databaseRef.Name ?? String.Empty);
         result["path"] = databaseRef == null ? String.Empty : (databaseRef.Path ?? String.Empty);
+        result["canonicalPath"] = databaseRef == null ? String.Empty : (databaseRef.CanonicalPath ?? String.Empty);
+        result["identityStatus"] = databaseRef == null ? "unknown" : (databaseRef.IdentityStatus ?? "unknown");
+        if (databaseRef != null && databaseRef.IdentityIssues != null && databaseRef.IdentityIssues.Count > 0)
+        {
+            result["identityIssues"] = databaseRef.IdentityIssues;
+        }
         return result;
     }
 
@@ -1927,6 +1933,12 @@ public sealed class DatabaseCatalogService
         Dictionary<string, object> result = new Dictionary<string, object>(StringComparer.Ordinal);
         result["name"] = databaseRef == null ? String.Empty : (databaseRef.Name ?? String.Empty);
         result["path"] = databaseRef == null ? String.Empty : (databaseRef.Path ?? String.Empty);
+        result["canonicalPath"] = databaseRef == null ? String.Empty : (databaseRef.CanonicalPath ?? String.Empty);
+        result["identityStatus"] = databaseRef == null ? "unknown" : (databaseRef.IdentityStatus ?? "unknown");
+        if (databaseRef != null && databaseRef.IdentityIssues != null && databaseRef.IdentityIssues.Count > 0)
+        {
+            result["identityIssues"] = databaseRef.IdentityIssues;
+        }
         return result;
     }
 

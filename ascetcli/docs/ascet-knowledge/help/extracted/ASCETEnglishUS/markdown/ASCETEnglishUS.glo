@@ -1,0 +1,224 @@
+NAME=Action
+An action is part of a state machine and associated with states or transitions of the state machine. An action is a piece of functionality, whose execution is triggered by the state machine.
+NAME=Application Modes
+An application mode is part of the operating system of ASCET. An operating mode describes different conditions a system can be in, e.g. EEPROM-programming mode, warm-up, or normal mode.
+NAME=Argument
+An argument is the input to a method of a class. Arguments can only be used in the specification of the method they belong to, and not in other methods of the class.
+NAME=Arithmetic Services
+User-defined C functions to optimize elementary operations, such as addition operations, and to extend such operations with special properties, such as value limits.
+NAME=Array
+An array is a one dimensional static list of elements of the basic scalar type continuous or discrete, indexed by the basic scalar type discrete.
+NAME=ASAM-MCD
+Association for Standardisation of Automation- and Measuring Systems, with the working groups Measuring, Calibration, Diagnosis (German: Arbeitskreis zur Standardisierung von Automations- und Messsystemen, mit den Arbeitsgruppen Messen, Calibrieren und Diagnose)
+NAME=ASAM-MCD-2MC file
+Default exchange format used for projects in ASCII format for the description of measurement and calibration values. The files have the extension *.a2l.
+NAME=ASCET
+Development tool for control unit software
+NAME=ASCET-MD
+ASCET Modeling and Design
+NAME=ASCET-RP
+ASCET Rapid Prototyping
+NAME=ASCET-SE
+ASCET Software Engineering
+NAME=Basic Model Types
+Basic model types are used to model physical behavior. There are three types: continuous, discrete and logical. A number of operations, such as addition or comparison, are defined for the basic model types. The implementation is used to transform the model types to implementation types.
+NAME=BDE
+Block Diagram Editor
+NAME=Block Diagram
+A block diagram is a graphical description for a component in which the various elements, operators and inputs/arguments and outputs/return values are connected by directed lines. A block diagram consists of several diagrams. The description in terms of block diagrams is a physical description in contrast to the description with C-Code.
+NAME=Bypass Experiment
+In a bypass experiment, ASCET is directly connected to a microcontroller, and parts of the microcontroller software are simulated by ASCET.
+NAME=C Code
+C code is an implementation dependent description of a component.
+NAME=Calibration
+Calibration is the manipulation of the values (physical / implementation) of elements during the execution of an ASCET model (experiment).
+NAME=Calibration Window
+ASCET working window which can be used to modify parameters.
+NAME=Characteristic
+General term used for characteristic map, curve and value (see also "Parameter").
+NAME=Characteristic Line
+Two-dimensional parameter.
+NAME=Characteristic Map
+Three-dimensional parameter.
+NAME=Characteristic value
+One-dimensional parameter (constant).
+NAME=Class
+A class is one of the component types in ASCET. Classes in ASCET are like object-oriented classes. The functionality of a class is described by methods.
+NAME=Code
+The executable code is the "actual" program with the exception of the data (contains the actual algorithms). The code is the program part which can be executed by the CPU.
+NAME=Code Generation
+Code generation is the first step in the transformation of a physical model to executable code. The physical model is transformed into ANSI C-Code. Since the C-Code is compiler (and therefore target) dependent, different code for each target is produced.
+NAME=Component
+A component is the basic unit of reusable functionality in ASCET. Components can be specified as classes, modules, or state machines. Each component is built up of elements which are combined with operators to build up the functionality.
+NAME=Component Manager
+Working environment in which the user can set up ASCET and manage the data he created and which are stored in the database.
+NAME=Condition
+A condition is used to describe the control flow in a state machine. It returns a logical value which determines, whether a transition from one state to another takes place.
+NAME=Configuration dialog box
+Dialog box used to configure the individual measuring and calibration windows as well as the variables contained therein.
+NAME=Constant
+A constant is an element that cannot be changed during execution of an ASCET model.
+NAME=Container
+Containers serve as containers for projects, classes and modules. Their purpose is to structure models and databases and place different database items under a common version control.
+NAME=CPU
+Central Processing Unit
+NAME=Data
+The data is the variables of a program used for calibration.
+NAME=Data Generator
+The data generator is part of the experimentation environment. It is used to stimulate the inputs or variables in the model under experimentation.
+NAME=Data Logger
+With the data logger measurement data can be read from an experiment and stored to disk for further analysis.
+NAME=Data Set
+A data set contains/references the initial data for all elements of a component or project.
+NAME=Database
+All information specified or produced with ASCET is stored in a database. A database is structured into folders.
+NAME=Description file
+Contains the physical description of the characteristics and measured values in the control unit (names, addresses, conversion formulae, functional assignments, etc.).
+NAME=Diagram
+A diagram is used for the graphical specification of components as block diagrams or state machines.
+NAME=Dimension
+The dimension is used to describe the ‘size’ of basic elements. The dimension can either be scalar (zero dimensional), array (one dimensional) or characteristic line/table.
+NAME=Distribution
+A distribution contains the sample points for one or more group characteristic lines/maps.
+NAME=ECU
+Embedded Control Unit
+NAME=Editor
+See Calibration Window.
+NAME=Element
+An element is a part of a component which reads or writes data, for instance a variable, parameter or other component used within a component.
+NAME=ERCOSEK
+ETAS real-time operating system, OSEK-compliant
+NAME=ESDL
+Embedded Software Description Language
+NAME=ETK
+emulator test probe (German: Emulatortastkopf)
+NAME=Event
+An event is an (external) trigger that starts an action of the operating system, e.g., a task.
+NAME=Event Generator
+The event generator is part of the experimentation environment. It is used to describe the order and the timing in which events are generated for the activation of tasks (methods/processes/time frames) in the case of an offline experiment.
+NAME=Experiment
+An experiment defines the settings in the experiment environment that are used to test the proper functioning of components or projects. It contains information about the size, position and content of the measurement and calibration windows, as well as the settings of the event generator, data generator and the data logger. An experiment can be executed either offline (non real-time) or online (real-time) and can be used to control a technical process in a bypass or fullpass application. In all cases, instrumented code generated from an ASCET specification is used for experiment execution.
+NAME=Experiment environment
+Main working environment in which the user performs his experiments.
+NAME=Fixed Point Code
+From the physical specification, fixed point code can be generated which can be executed on processors without a floating point unit.
+NAME=Folder
+A folder is a management unit for structuring an ASCET database. A folder contains items of any kind.
+NAME=Formula
+A formula is part of an implementation describing the transformation from the model types to the implementation (data) types.
+NAME=FPU
+Floating Point Unit
+NAME=Fullpass Experiment
+In a fullpass experiment, ASCET is directly connected with an experimental microcontroller, and the entire application is simulated by ASCET.
+NAME=Group Characteristic Line/Map
+Group characteristic lines/maps are characteristic lines/maps that share the same distribution of axis points but have different return values. The distribution of axis points and the individual group tables are specified as separate elements.
+NAME=HEX file
+Exchange format of a program version as Intel Hex or Motorola S Record file.
+NAME=Hierarchy
+A hierarchy block is used to structure the graphical specification of a block diagram.
+NAME=HTML
+Hypertext Markup Language
+NAME=Icon
+Icons can be used to illustrate the function of ASCET components.
+NAME=Implementation
+An implementation describes the transformation of the physical specification (model) to executable fixed point code. An implementation consists of a (linear) transformation formula and a bounding interval for the model values.
+NAME=Implementation Cast
+Element that provides the users the possibility to control the implementations of intermediate results in arithmetic chains without changing the physical representation of the elements in question.
+NAME=Implementation Data Types
+Implementation data types are the data types of the underlying C programming language, e.g., unsigned byte (uint8), signed word (sint16), float.
+NAME=Implementation Types
+Implementation templates. Implementation types contain the main specifications of an implementation; they are defined in the project editor and can be assigned to individual elements in the implementation editors.
+NAME=INCA
+Integrated Calibration and Acquisition Systems
+NAME=INTECRIO
+A new ETAS product family. INTECRIO integrates code from various behavioral modeling tools, facilitates all necessary configurations, allows the generation of executable code, and provides an experiment environment for the execution of the Rapid Prototyping experiment.
+NAME=Intel Hex
+Exchange format used for program versions.
+NAME=Interface
+An interface of a component describes how the component exchanges data with other components. It can be compared to the .h file in C.
+NAME=Kind
+There are three kinds of elements: variables, parameters, and constants. Variables can be read and written. Parameters can only be read but can calibrated during experimentation. Constants can only be read and not written to during experiments.
+NAME=L1
+The message format for exchanging data between the host and the target, where the experiment is run. Data is transferred, e.g. for displaying values in measure windows.
+NAME=Layout
+A component has a graphical representation that shows pins for the inputs/arguments, outputs/return values and time frames/methods/processes. Additionally, the layout contains an icon that graphically represents the component when used within other components.
+NAME=Literal
+A literal is used in the description of components. A literal contains a string that is interpreted as a value, e.g. as a continuous or logical value.
+NAME=Measure window
+ASCET working window which displays measured signals during a measurement.
+NAME=Measured signal
+A variable to be measured.
+NAME=Measurement
+A measurement is the representation of values (physical / implementation) of variables/parameter during an experiment. The values can be displayed with various different measurement windows like oscilloscopes, numeric displays, etc.
+NAME=Measuring
+Recording of data which is either displayed or stored, or both displayed and stored.
+NAME=Measuring channel parameters
+Parameters which can be set for the individual channels of a measuring module.
+NAME=Message
+A message is a real time language construct of ASCET for protected data exchange between concurrent processes.
+NAME=Method
+A method is part of the description of the functionality of a class in terms of object oriented programming. A method has arguments and one return value.
+NAME=Model Type
+Each element of an ASCET component specification is either a component of its own or is of a model type In contrast to implementation types, model types represent physical values.
+NAME=Module
+A module is one of the component types in ASCET. It describes a number of processes that can be activated by the operating system. A module cannot be used as a subcomponent within other components.
+NAME=Monitor
+With a monitor the data value of an element can be displayed in a diagram during an experiment.
+NAME=Motorola-S-Record
+Exchange format used for program versions.
+NAME=Offline experiment
+During offline experimentation the code generated by ASCET can be run on the PC or an experimental target, but it does not run in real-time. Offline experimentation focuses on testing the functional specification of a system.
+NAME=Online experiment
+In the online experiment the projects are executed in real-time with the behavior defined in the real-time operating system. The code always runs on an experimental target in real-time. The online experiment focuses on the operating system schedule and the corresponding real-time behavior of the control system.
+NAME=Operating System
+The operating system is used to schedule the execution/activation of an   ASCET software system. The operating system also provides services for communication (messages) and access to reserved parts of the hardware (resources). The ASCET operating system is based on the real-time operating system ERCOSEK.
+NAME=OS
+Operating System
+NAME=Oscilloscope
+An oscilloscope is a type of measurement window that graphically displays data values during experiments.
+NAME=OSEK
+Working group "open systems for electronics in automobiles"  (German: Arbeitskreis Offene Systeme für die Elektronik im Kraftfahrzeug)
+NAME=Parameter
+A parameter (characteristic value, curve and map) is an element whose value cannot be changed by the calculations executed in an ASCET model. It can, however, be calibrated during an experiment.
+NAME=Priority
+Every task has a priority in the form of a number. The higher the number, the higher the priority. The priority determines the order in which tasks are scheduled.
+NAME=Process
+A process is a concurrently executable piece of functionality that is activated by the operating system. Processes are specified in modules and do not have any arguments/inputs or return values/outputs.
+NAME=Program
+A program consists of code and data and is executed as a unit by the CPU of the control unit.
+NAME=Project
+A project describes an entire embedded software system. It conains components which define the functionality, an operating system specification, and a binding mechanism which defines the communication.
+NAME=RAM
+Random Access Memory
+NAME=Resource
+A resource is used to model parts of an embedded system that can be used only mutually exclusively, e.g. timers. When such a part is accessed, it has to be reserved and then released again, which is done using resources.
+NAME=ROM
+Read-Only Memory
+NAME=Scheduling
+Scheduling is the assigning of processes to tasks and the definition of task activation by the operating system.
+NAME=Scope
+An element has one of two scopes: local (only visible inside a component) or global (defined inside a project).
+NAME=State
+A state is a part of a state machine. A state machine is always in a one of its states. One of the states is marked as the start state which is the initial state of the state machine. Each state is connected to other states by arcs. A state has an entry action (that is executed upon entry of a state), an static action (that is executed the state remains unchanged) and an exit action (that is executed upon exit of the state).
+NAME=State Machine
+A state machine is one of the component types in ASCET. The behavior is described with a state graph consisting of states connected by transitions.
+NAME=Target
+A target is the hardware an experiment runs on. A target can either be an experimental target (PC, Transputer, PowerPC) or a microcontroller target.
+NAME=Task
+A task is an ordered collection of processes that can be activated by the operating system. Attributes of a task are its operating modes, its activation trigger, its priority, the mode of scheduling. On activation the processes of the task are executed in the given order.
+NAME=Transition
+A transition is a connection between states. Transitions describe possible state changes. Each transition is assigned to a trigger of the state machine, has a priority, a condition, and an action.
+NAME=Trigger
+A trigger activates the execution of a task (in the scope of the operating system) or of a state machine.
+NAME=Type
+Variables and parameters are of type cont (continuous), udisc (unsigned discrete), sdisc (signed discrete) or log (logic). Cont is used for physical quantities that can assume any value; udisc for positive integer values, sdisc for negative integer values, and log is used for Boolean values (true or false).
+NAME=UML
+Unified Modeling Language
+NAME=User profile
+A set of user-specific option settings.
+NAME=Variable
+A variable is an element that can be read and written during the execution of an ASCET model. The value of a variable can also be changed with the calibration system.  Also: General term used for parameters (characteristics) and measured signals.
+NAME=Window elements
+General term used for calibration and display elements.
+NAME=XML
+Extensible Markup Language

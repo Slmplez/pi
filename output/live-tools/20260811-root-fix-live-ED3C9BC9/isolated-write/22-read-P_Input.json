@@ -1,0 +1,57 @@
+{
+  "ok": true,
+  "data": {
+    "ok": true,
+    "result": {
+      "componentPath": "PI_LIVE_ROOTFIX_20260811_ED3C9BC9\\ClassUnderTest",
+      "element": {
+        "name": "P_Input",
+        "kind": "parameter",
+        "modelType": "cont",
+        "scope": "exported",
+        "comment": "ASCET root-fix live validation input",
+        "calibration": false,
+        "configurationProvenance": {
+          "dataConfiguration": {
+            "source": "classDataConfiguration",
+            "configurationName": "ClassUnderTest",
+            "selected": true
+          },
+          "implementationConfiguration": {
+            "source": "classImplementationConfiguration",
+            "configurationName": "ClassUnderTest",
+            "selected": true
+          }
+        },
+        "data": {
+          "value": 0
+        },
+        "impl": {
+          "memoryLocation": "Default",
+          "valueType": "real64",
+          "formula": "ident",
+          "limitAssignments": false
+        }
+      }
+    }
+  },
+  "request": {
+    "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+    "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+    "args": [
+      "exec",
+      "read_element_catalog",
+      "PI_LIVE_ROOTFIX_20260811_ED3C9BC9\\ClassUnderTest",
+      "--json"
+    ],
+    "timeoutMs": 180000,
+    "jobKind": "read",
+    "mutatesDatabase": false
+  },
+  "stdout": "{\"ok\":true,\"result\":{\"componentPath\":\"PI_LIVE_ROOTFIX_20260811_ED3C9BC9\\\\ClassUnderTest\",\"element\":{\"name\":\"P_Input\",\"kind\":\"parameter\",\"modelType\":\"cont\",\"scope\":\"exported\",\"comment\":\"ASCET root-fix live validation input\",\"calibration\":false,\"configurationProvenance\":{\"dataConfiguration\":{\"source\":\"classDataConfiguration\",\"configurationName\":\"ClassUnderTest\",\"selected\":true},\"implementationConfiguration\":{\"source\":\"classImplementationConfiguration\",\"configurationName\":\"ClassUnderTest\",\"selected\":true}},\"data\":{\"value\":0},\"impl\":{\"memoryLocation\":\"Default\",\"valueType\":\"real64\",\"formula\":\"ident\",\"limitAssignments\":false}}}}",
+  "stderr": "",
+  "exitCode": 0,
+  "timedOut": false,
+  "aborted": false,
+  "operationId": "read_element_catalog"
+}

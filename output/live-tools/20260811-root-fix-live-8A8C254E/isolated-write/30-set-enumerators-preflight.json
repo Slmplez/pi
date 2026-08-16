@@ -1,0 +1,27 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"status\": \"preflight\",\n  \"plan\": {\n    \"action\": \"set_enumerators\",\n    \"params\": {\n      \"action\": \"set_enumerators\",\n      \"component\": \"PI_LIVE_ROOTFIX_20260811_8A8C254E/EnumerationUnderTest\",\n      \"enumerators\": [\n        \"ROOTFIX_OFF\",\n        \"ROOTFIX_ON\",\n        \"ROOTFIX_DIAG\"\n      ],\n      \"executeWrite\": false\n    }\n  },\n  \"nextStep\": \"Set executeWrite=true and confirm in the UI to apply this ASCET write.\"\n}"
+    }
+  ],
+  "details": {
+    "outcome": {
+      "status": "preflight",
+      "plan": {
+        "action": "set_enumerators",
+        "params": {
+          "action": "set_enumerators",
+          "componentPath": "PI_LIVE_ROOTFIX_20260811_8A8C254E\\EnumerationUnderTest",
+          "enumerators": [
+            "ROOTFIX_OFF",
+            "ROOTFIX_ON",
+            "ROOTFIX_DIAG"
+          ],
+          "executeWrite": false
+        }
+      },
+      "nextStep": "Set executeWrite=true and confirm in the UI to apply this ASCET write."
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "resultId": "obs-tree-41372-1786239936053-0",
+  "domain": "tree",
+  "target": {
+    "targetPathPrefix": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral",
+    "depth": 3,
+    "maxFolders": 500,
+    "maxComponents": 2000
+  },
+  "itemCount": 84,
+  "coverage": {
+    "status": "complete_for_scope",
+    "foldersVisited": 1,
+    "componentsScanned": 83
+  },
+  "truncated": false,
+  "source": "live",
+  "capturedAt": "2026-08-09T01:45:36.053Z"
+}

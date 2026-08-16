@@ -1,0 +1,201 @@
+{
+  "generated_at": "2026-04-01T03:07:54.179318Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\ContainerEnglishUS.chm",
+  "unpack_dir": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ContainerEnglishUS\\unpacked",
+  "total_files": 30,
+  "total_size_bytes": 223037,
+  "counts_by_extension": {
+    ".gif": 9,
+    ".htm": 12,
+    ".brs": 1,
+    ".glo": 1,
+    ".hhc": 1,
+    ".hhk": 1,
+    ".js": 2,
+    ".xml": 1,
+    ".css": 1,
+    ".lng": 1
+  },
+  "files": [
+    {
+      "relative_path": "button_container.gif",
+      "size": 1068,
+      "sha256": "d0c55c20a803a966249116343a424f7536750fecac328c9150cf9c87291592df",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "CNT_add_database_dd.htm",
+      "size": 9452,
+      "sha256": "872e535c281cd477daadb68312a52a0fe6913c6d67d28d0ff729f878a99c725d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CNT_add_databaseitem.htm",
+      "size": 1775,
+      "sha256": "5e80092cbc0d669ef201f0b35e354657f7a249c8cab2c0bed0437594be6b3465",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CNT_AddItemsViaContainerView.htm",
+      "size": 10498,
+      "sha256": "ba8ad7ed37e5ed9cdee107240ab52f6e455136eeff1bff66b57cba95c267d64a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CNT_Container_View.htm",
+      "size": 12908,
+      "sha256": "f466b94808b925ac60ecb5f4271c13ddd6d0035f7aa2954dcc701b43449976bb",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CNT_Creating_a_Container.htm",
+      "size": 1788,
+      "sha256": "f4e96a3d971449abdffeab35ab983b36d71725ad4882d6db1b4813c024444352",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CNT_delete_item_container.htm",
+      "size": 1671,
+      "sha256": "170e78c84fb3ea9294608de387742582bb5b799e6ddcb6236ed2297919a9b265",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CNT_edit_items.htm",
+      "size": 1749,
+      "sha256": "9310fb9539dfae03e7ffdcd732b1518f279d59113f3c1f148ebed90c7ae7db6b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CNT_invoke_containerview.htm",
+      "size": 2265,
+      "sha256": "8ed0ae5e8216dbf962122bc98af6bd721490f63038c72a73bf8bfb4b847a56cc",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CNT_Overview.htm",
+      "size": 1815,
+      "sha256": "537d30fa2bd69e00c81564fbc02f001e0e5295c2aef8717885c161f2ac649c81",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CNT_rename_added_items.htm",
+      "size": 2164,
+      "sha256": "54aa7320dc112f5319acc1dc7b88eb1de4218f4c8f86f172538308d33c216a04",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CNT_sort_container_view.htm",
+      "size": 954,
+      "sha256": "fe609295ac8d5e09416f4e297c2f4d2ac1508adf399e4223431ee34667839916",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CNT_working_containers.htm",
+      "size": 1656,
+      "sha256": "77214aa46e0f44907059b79b40a4d748ce418e08de5bcbd5d8bc80fc711cb6ca",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "container_5 copy.gif",
+      "size": 415,
+      "sha256": "33056fdd3939717768785ac417e7937364bbccb5ceb77112234f32e80b45925e",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "container_addmode.gif",
+      "size": 13636,
+      "sha256": "e8517bb34de850ac6654074ea88793de4db7eda721baaa26fb0c4ad0a6091dea",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ContainerEnglishUS.brs",
+      "size": 2,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "extension": ".brs"
+    },
+    {
+      "relative_path": "ContainerEnglishUS.glo",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "extension": ".glo"
+    },
+    {
+      "relative_path": "ContainerEnglishUS.hhc",
+      "size": 2947,
+      "sha256": "32c40470388875fc24797dfb31fecf4b243e605a0ec101a783eb2eab79d8a62c",
+      "extension": ".hhc"
+    },
+    {
+      "relative_path": "ContainerEnglishUS.hhk",
+      "size": 2493,
+      "sha256": "e357200c1a468b6bc3ff410394e569959954c21b33c3273a302969c1081d0af4",
+      "extension": ".hhk"
+    },
+    {
+      "relative_path": "display.js",
+      "size": 5656,
+      "sha256": "85712144c31aac1d2706f3b60475055a673961f71bc37c0f4c9e9c4b85fa9b31",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "eHelp.xml",
+      "size": 371,
+      "sha256": "5c4388a87578f59178e1786c5a2a76890f2abca04b8af65aade20c11b1244add",
+      "extension": ".xml"
+    },
+    {
+      "relative_path": "ehlpdhtm.js",
+      "size": 125791,
+      "sha256": "0c9c75d67c62fddebe1834c39ff0fadad125bb4a91d8073d6aa404ca7639c1fa",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "icon_closedlock.gif",
+      "size": 921,
+      "sha256": "f9c66b93b3dfbc93749caf25402da039228b8ea43d9620cd967c00479af60d34",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "icon_openlock.gif",
+      "size": 921,
+      "sha256": "eb1fedd5c575c7d77975d424940bf679e9df4c108d1efd28d921feaa6ae1fad0",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "image1.gif",
+      "size": 4239,
+      "sha256": "af06276c0c1068bac8afccd2d5dadcff53191926524b01749c3f3aed7ab52171",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exp_minus.gif",
+      "size": 837,
+      "sha256": "18a8ea974d756d370d6f7067283fc8c0b26f235c8e98bdaaf13a63e7dca8b1c4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exp_plus.gif",
+      "size": 842,
+      "sha256": "9ff1991cf9c6de621e2672bebf74fbc56680e3413f74d6cf18e25238701651be",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/statisch.gif",
+      "size": 831,
+      "sha256": "481cd3e8b966f0a4398b853efce140287877173b926b53d710791675a1b15aa4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Layout.css",
+      "size": 9786,
+      "sha256": "15b8ecb694f0faf615cf7acf82397ee41f6f70902a3ad07c33fb415c4fd77b9a",
+      "extension": ".css"
+    },
+    {
+      "relative_path": "RoboHHRE.lng",
+      "size": 3586,
+      "sha256": "607e16623990c7b694bb11537edbecfbd7057fda1739bba5173e9d8a4942b18f",
+      "extension": ".lng"
+    }
+  ]
+}

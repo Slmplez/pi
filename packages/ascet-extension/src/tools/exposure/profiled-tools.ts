@@ -1,3 +1,4 @@
+import type { AscetPermissionProvider } from "../../permissions/types.ts";
 import { allAscetTools } from "../registry.ts";
 import type { AscetProfile } from "./profiles.ts";
 
@@ -57,6 +58,7 @@ export function buildProfiledAscetTools(
 	profile: AscetProfile,
 	toolNames: readonly string[],
 	env: Record<string, string | undefined> = process.env,
+	permissionProvider?: AscetPermissionProvider,
 ): AscetToolDefinition[] {
 	const extraGuidelines = getProfileGuidelines(profile);
 	const activeNames = new Set(toolNames);
@@ -74,6 +76,9 @@ export function buildProfiledAscetTools(
 								const toolContext = isRecord(nextArgs[4]) ? nextArgs[4] : {};
 								nextArgs[4] = {
 									...toolContext,
+									...(permissionProvider && typeof toolContext.cwd === "string"
+										? { ascetPermission: permissionProvider.getSnapshot(toolContext.cwd) }
+										: {}),
 									actionActivationContext: {
 										env,
 										activeProfile: profile,

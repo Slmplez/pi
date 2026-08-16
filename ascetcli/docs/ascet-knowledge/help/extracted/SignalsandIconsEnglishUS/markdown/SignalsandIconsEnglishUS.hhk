@@ -1,0 +1,97 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="index">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="editor">
+    <param name="See Also" value="editor">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="icon ~">
+      <param name="Name" value="Icon Editor">
+      <param name="Local" value="SI_icon_editor.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="icon">
+    <param name="Name" value="Overview">
+    <param name="Local" value="SI_Overview.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="editor">
+      <param name="Name" value="Icon Editor">
+      <param name="Local" value="SI_icon_editor.htm">
+      <param name="Name" value="Starting the Icon Editor">
+      <param name="Local" value="SI_start_icon_editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="format">
+      <param name="Name" value="Saving an Icon to a File">
+      <param name="Local" value="SI_save_icon.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="load">
+      <param name="Name" value="Loading an Image">
+      <param name="Local" value="SI_load_icon.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="save to file">
+      <param name="Name" value="Saving an Icon to a File">
+      <param name="Local" value="SI_save_icon.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="scaling">
+      <param name="Name" value="Scaling an Icon">
+      <param name="Local" value="SI_scale_icon.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="create">
+      <param name="Name" value="Creating an Icon">
+      <param name="Local" value="SI_Creating_Icon.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="signal">
+    <param name="Name" value="Overview">
+    <param name="Local" value="SI_Overview.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="create">
+      <param name="Name" value="Creating a Signal">
+      <param name="Local" value="SI_Creating_a_Signal.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="import measurement data to ~">
+      <param name="Name" value="Importing Measurement Data to a Signal">
+      <param name="Local" value="SI_import_measurement_data.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="load">
+      <param name="Name" value="Signal Viewer">
+      <param name="Local" value="SI_signal_viewer.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="open">
+      <param name="Name" value="Opening a Signal">
+      <param name="Local" value="SI_create_open_signal.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="view">
+      <param name="Name" value="Viewing Measurement Data">
+      <param name="Local" value="SI_view_measurment_data.htm">
+      <param name="Name" value="View Signal Item Window">
+      <param name="Local" value="SI_View_Signal_Item_Window.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="export">
+      <param name="Name" value="Exporting a Signal">
+      <param name="Local" value="SI_Exporting_Signal.htm">
+    </object>
+    </ul>
+</ul>
+</html>

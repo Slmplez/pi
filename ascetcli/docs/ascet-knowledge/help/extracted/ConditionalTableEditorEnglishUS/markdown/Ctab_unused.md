@@ -1,0 +1,4 @@
+| Column 1 |
+| --- |
+| Neither Get port nor Set port of the element is activated in the element's properties editor . AND The element is not assigned to a column AND does not appear in the specification of a condition or instruction ( log in the screenshot) OR appears in a specification of an instruction, but all conditions in that row (except default ) are set to * ( log_2 in the screenshot). OR The element is assigned to one or two columns AND all cells of the assigned column(s) are set to * AND the element does not appear in the specification of a condition or instruction ( limitInt in the screenshot) OR the element appears in the specification of a non-default instruction, but all conditions in that row are set to * ( cont in the screenshot) OR The element is assigned to an instruction column AND one or more instruction cells are != * , but all respective condition cells are * ( log_1 in the screenshot) |
+|  |

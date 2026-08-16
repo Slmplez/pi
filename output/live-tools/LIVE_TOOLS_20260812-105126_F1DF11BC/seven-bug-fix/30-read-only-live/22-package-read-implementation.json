@@ -1,0 +1,57 @@
+{
+  "tool": "ascet_read",
+  "params": {
+    "action": "read_implementation",
+    "componentPath": "PlatformLibrary\\Package\\AVH_AutomaticVehicleHold\\Component\\Config\\CM_AVH",
+    "implementationMode": "default",
+    "timeoutMs": 300000
+  },
+  "elapsedMs": 5345,
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "read_implementation returned large ASCET JSON output.\nStored full ASCET output for read_implementation at C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\LIVE_TOOLS_20260812-105126_F1DF11BC\\seven-bug-fix\\30-read-only-live\\artifacts\\read_implementation-10600-1786504422659-0.json (233520 bytes).\nSearch locally with rg -n '<pattern>' 'C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\LIVE_TOOLS_20260812-105126_F1DF11BC\\seven-bug-fix\\30-read-only-live\\artifacts\\read_implementation-10600-1786504422659-0.json'; preview with Get-Content -Path 'C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\LIVE_TOOLS_20260812-105126_F1DF11BC\\seven-bug-fix\\30-read-only-live\\artifacts\\read_implementation-10600-1786504422659-0.json' -TotalCount 120."
+      }
+    ],
+    "details": {
+      "tool": "ascet_read",
+      "action": "read_implementation",
+      "command": {
+        "logicalCommandId": "AscetReadImplementation",
+        "backendCommandId": "AscetReadImplementation",
+        "operation": "read_implementation"
+      },
+      "summary": "read_implementation returned large ASCET JSON output.",
+      "artifact": {
+        "operation": "read_implementation",
+        "path": "C:/Repo/09_ASCETCopilot/pi-ascet-extension-prototype/output/live-tools/LIVE_TOOLS_20260812-105126_F1DF11BC/seven-bug-fix/30-read-only-live/artifacts/read_implementation-10600-1786504422659-0.json",
+        "sizeBytes": 233520,
+        "thresholdBytes": 4096,
+        "searchHint": "Search locally with rg -n '<pattern>' 'C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\LIVE_TOOLS_20260812-105126_F1DF11BC\\seven-bug-fix\\30-read-only-live\\artifacts\\read_implementation-10600-1786504422659-0.json'; preview with Get-Content -Path 'C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\LIVE_TOOLS_20260812-105126_F1DF11BC\\seven-bug-fix\\30-read-only-live\\artifacts\\read_implementation-10600-1786504422659-0.json' -TotalCount 120."
+      },
+      "omittedFields": [
+        "data",
+        "stdout"
+      ],
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:/Repo/09_ASCETCopilot/pi-ascet-extension-prototype/packages/ascet-extension/ascet-cli/bin/AscetBridge.exe",
+          "args": [
+            "exec",
+            "read_implementation",
+            "PlatformLibrary\\Package\\AVH_AutomaticVehicleHold\\Component\\Config\\CM_AVH",
+            "--default",
+            "--json"
+          ],
+          "timeoutMs": 300000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 0,
+        "timedOut": false
+      }
+    }
+  }
+}

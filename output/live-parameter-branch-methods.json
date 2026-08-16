@@ -1,0 +1,281 @@
+{
+  "summary": {
+    "classCount": 38,
+    "methodlessCount": 38,
+    "methodsPositiveCount": 0,
+    "failedCount": 0,
+    "totalElapsedMs": 12233,
+    "maxCallMs": 460,
+    "averageCallMs": 322,
+    "positiveMethods": [],
+    "failures": []
+  },
+  "records": [
+    {
+      "path": "CN_Libary\\CNMS_IPB20\\IPBCustNonHADHAP\\Parameter\\Calibration\\IPBCustNonHADHAP_BB88010_Parameter_Calibration",
+      "status": 0,
+      "elapsedMs": 460,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "CN_Libary\\CNMS_IPB20\\IPBCustNonHADHAP\\Parameter\\Constant\\IPBCustNonHADHAP_BB88010_Parameter_Constant",
+      "status": 0,
+      "elapsedMs": 273,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "CN_Libary\\Package\\LDM\\ADC\\Component\\Main\\_ADCMain_Calibration",
+      "status": 0,
+      "elapsedMs": 385,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "CN_Libary\\Package\\LDM\\ADC\\Component\\Main\\_ADCMain_Constant",
+      "status": 0,
+      "elapsedMs": 263,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "CN_Libary\\Package\\LDM\\ADC\\Parameter\\Private\\_ADCMain_Private_Calibration",
+      "status": 0,
+      "elapsedMs": 264,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "CN_Libary\\Package\\LDM\\ADC\\Parameter\\Private\\_ADCMain_Private_Constant",
+      "status": 0,
+      "elapsedMs": 332,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "CN_Library\\BrakeRedundancy\\Parameter\\Calibration\\Main\\_CM_EMC_Parameter",
+      "status": 0,
+      "elapsedMs": 372,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "CN_Library\\BrakeRedundancy\\Parameter\\Calibration\\Main\\_CM_LFI_Parameter",
+      "status": 0,
+      "elapsedMs": 269,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Package\\AVH_AutomaticVehicleHold\\Component\\_Calibration_AVH",
+      "status": 0,
+      "elapsedMs": 266,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Package\\AVH_AutomaticVehicleHold\\Component\\_Constant_AVH",
+      "status": 0,
+      "elapsedMs": 391,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Package\\AVH_AutomaticVehicleHold\\parameter\\private\\_AVH_Private_Calibration",
+      "status": 0,
+      "elapsedMs": 295,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Package\\AVH_AutomaticVehicleHold\\parameter\\private\\_AVH_Private_Constant",
+      "status": 0,
+      "elapsedMs": 269,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Package\\AVH_AutomaticVehicleHold\\parameter\\private\\_AVH_Private_FunctionSwitches",
+      "status": 0,
+      "elapsedMs": 408,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Package\\AntiLockController\\Parameter\\public\\States_Commands\\_StateABS",
+      "status": 0,
+      "elapsedMs": 277,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Package\\CSM_CentralizedStandstillManagement\\Parameter\\Public\\_CSM_Public_Constant",
+      "status": 0,
+      "elapsedMs": 289,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Package\\EMC_EmergencyModeControl\\Parameter\\Public\\_EMC_ParameterCalibration",
+      "status": 0,
+      "elapsedMs": 378,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Package\\LDMCoor_LongitudinalDynamicArbitrator\\public\\IDs\\_LdmId_LFI",
+      "status": 0,
+      "elapsedMs": 321,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Package\\LDMCoor_LongitudinalDynamicArbitrator\\public\\IDs\\_LdmId_None",
+      "status": 0,
+      "elapsedMs": 258,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Package\\LDMCoor_LongitudinalDynamicArbitrator\\public\\IDs\\_LdmId_VLC",
+      "status": 0,
+      "elapsedMs": 386,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Package\\LDMCoor_LongitudinalDynamicArbitrator\\public\\parameter\\_LDM_BSA_BitPosListAVH",
+      "status": 0,
+      "elapsedMs": 294,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Package\\LDMCoor_LongitudinalDynamicArbitrator\\public\\parameter\\_LDM_BSA_BitPosListLFI",
+      "status": 0,
+      "elapsedMs": 275,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Package\\LDMCoor_LongitudinalDynamicArbitrator\\public\\parameter\\_LDM_Parameter",
+      "status": 0,
+      "elapsedMs": 393,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Package\\LDMLibrary\\parameter\\public\\_ADAS_Lib_Calibration",
+      "status": 0,
+      "elapsedMs": 269,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Package\\LDMLibrary\\parameter\\public\\_FxDist_Parameter",
+      "status": 0,
+      "elapsedMs": 282,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Package\\LDMLibrary\\parameter\\public\\_LDM_Lib_Constant",
+      "status": 0,
+      "elapsedMs": 400,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Package\\RBF_RemoteBrakeFacade\\Parameter\\Private\\_RBF_Private_Calibration",
+      "status": 0,
+      "elapsedMs": 285,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Package\\VLC_VehicleLongitudinalControl\\VLC_ACC\\parameter\\private\\VLC_ACC_LimitationParameter",
+      "status": 0,
+      "elapsedMs": 257,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Package\\VLC_VehicleLongitudinalControl\\VLC_ACC\\parameter\\private\\VLC_ACC_StandStillParameter",
+      "status": 0,
+      "elapsedMs": 258,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Package\\VLC_VehicleLongitudinalControl\\VLC_ACC\\parameter\\private\\VLC_VlcCdd_Calibration",
+      "status": 0,
+      "elapsedMs": 364,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Parameter\\Environment\\_Environment_Constants",
+      "status": 0,
+      "elapsedMs": 269,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Parameter\\Environment\\_Environment_QualityGrades",
+      "status": 0,
+      "elapsedMs": 251,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Parameter\\ExternModel\\_ExternModel_BrakeFA",
+      "status": 0,
+      "elapsedMs": 365,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Parameter\\ExternModel\\_ExternModel_BrakeRA",
+      "status": 0,
+      "elapsedMs": 282,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Parameter\\ExternModel\\_ExternModel_VehicleMass",
+      "status": 0,
+      "elapsedMs": 319,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary\\Parameter\\ExternModel\\_ExternModel_Wheel",
+      "status": 0,
+      "elapsedMs": 409,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary_NewBrakeSystems\\Package\\CRB_CooperativeRegenerativeBraking\\Parameter\\Public\\CRB_Public_Constants",
+      "status": 0,
+      "elapsedMs": 321,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary_NewBrakeSystems\\Parameter\\ENV_Environment\\ENV_Constants",
+      "status": 0,
+      "elapsedMs": 379,
+      "methodCount": 0,
+      "error": ""
+    },
+    {
+      "path": "PlatformLibrary_NewBrakeSystems\\Parameter\\ENV_Environment\\ENV_CycleTimes",
+      "status": 0,
+      "elapsedMs": 403,
+      "methodCount": 0,
+      "error": ""
+    }
+  ]
+}

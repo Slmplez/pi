@@ -548,6 +548,37 @@ export class AscetPlanStore {
 		return record;
 	}
 
+	public startExecutionAuthorization(input: VerifyAscetPlanInput, ttlMs = this.defaultTtlMs): AscetPlanRecord {
+		if (!Number.isFinite(ttlMs) || ttlMs <= 0) {
+			throw new AscetPlanStoreError("invalid_plan_input", "Execution authorization ttlMs must be positive.", {
+				ttlMs,
+			});
+		}
+		return this.withTransitionLock(input.planId, () => {
+			const record = this.readRecord(input.planId);
+			if (record.state === "consumed") {
+				throw new AscetPlanStoreError("plan_consumed", `Plan has already been consumed: ${record.planId}`, {
+					planId: record.planId,
+					consumedAt: record.consumedAt,
+				});
+			}
+			if (record.state === "executing") {
+				throw new AscetPlanStoreError("plan_executing", `Plan execution has already started: ${record.planId}`, {
+					planId: record.planId,
+					executingAt: record.executingAt,
+				});
+			}
+			this.assertMatches(record, input);
+			const authorizedAt = assertDate(this.now(), "now");
+			const authorizedRecord: AscetPlanRecord = {
+				...record,
+				expiresAt: new Date(authorizedAt.getTime() + ttlMs).toISOString(),
+			};
+			this.writeRecord(this.planPath(input.planId), authorizedRecord);
+			return authorizedRecord;
+		});
+	}
+
 	public beginExecution(input: VerifyAscetPlanInput): AscetPlanRecord {
 		return this.withTransitionLock(input.planId, () => {
 			const record = this.readRecord(input.planId);

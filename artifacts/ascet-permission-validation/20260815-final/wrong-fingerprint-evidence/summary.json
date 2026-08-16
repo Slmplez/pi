@@ -1,0 +1,9 @@
+{
+  "ok": false,
+  "mode": "cleanup_only",
+  "ascetCwd": "C:\\Repo\\F05_IPB_L2_0429",
+  "smokeRoot": "DEMO\\__pi_permission_smoke__20260815-134337",
+  "expectedDatabaseFingerprint": "0000000000000000000000000000000000000000000000000000000000000000",
+  "cleanupResults": [],
+  "error": "Live database fingerprint '71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c' does not match authorized fingerprint '0000000000000000000000000000000000000000000000000000000000000000'."
+}

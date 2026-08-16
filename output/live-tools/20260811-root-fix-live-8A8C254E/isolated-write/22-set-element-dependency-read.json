@@ -1,0 +1,59 @@
+{
+  "ok": true,
+  "data": {
+    "type": "response",
+    "protocolVersion": 1,
+    "ok": true,
+    "result": {
+      "target": "PI_LIVE_ROOTFIX_20260811_8A8C254E\\ClassUnderTest",
+      "kind": "component",
+      "element": "P_Dependent",
+      "count": 1,
+      "matches": [
+        {
+          "component": "PI_LIVE_ROOTFIX_20260811_8A8C254E\\ClassUnderTest",
+          "element": "P_Dependent",
+          "kind": "parameter",
+          "scope": "local",
+          "schema": "primitive-parameter-dependent-flag",
+          "dependency": "dependent",
+          "formula": "P_Input",
+          "supported": true
+        }
+      ],
+      "issues": []
+    },
+    "error": null,
+    "meta": {
+      "bridgePid": 26872,
+      "bridgeGeneration": "fe5e5f71-bc54-42fb-bc5a-4a77fdcedb0a",
+      "durationMs": 424,
+      "sessionPolicy": "fresh_session",
+      "mutationStarted": false,
+      "mode": "exec",
+      "operation": "read_element_dependency"
+    }
+  },
+  "request": {
+    "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+    "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+    "args": [
+      "exec",
+      "read_element_dependency",
+      "PI_LIVE_ROOTFIX_20260811_8A8C254E\\ClassUnderTest",
+      "P_Dependent",
+      "--target-kind",
+      "component",
+      "--json"
+    ],
+    "timeoutMs": 240000,
+    "jobKind": "read",
+    "mutatesDatabase": false
+  },
+  "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"target\":\"PI_LIVE_ROOTFIX_20260811_8A8C254E\\\\ClassUnderTest\",\"kind\":\"component\",\"element\":\"P_Dependent\",\"count\":1,\"matches\":[{\"component\":\"PI_LIVE_ROOTFIX_20260811_8A8C254E\\\\ClassUnderTest\",\"element\":\"P_Dependent\",\"kind\":\"parameter\",\"scope\":\"local\",\"schema\":\"primitive-parameter-dependent-flag\",\"dependency\":\"dependent\",\"formula\":\"P_Input\",\"supported\":true}],\"issues\":[]},\"error\":null,\"meta\":{\"bridgePid\":26872,\"bridgeGeneration\":\"fe5e5f71-bc54-42fb-bc5a-4a77fdcedb0a\",\"durationMs\":424,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"read_element_dependency\"}}\r\n",
+  "stderr": "",
+  "exitCode": 0,
+  "timedOut": false,
+  "aborted": false,
+  "operationId": "read_element_dependency"
+}

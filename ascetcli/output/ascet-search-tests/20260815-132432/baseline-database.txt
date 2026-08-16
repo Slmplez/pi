@@ -1,0 +1,4 @@
+﻿Log File: C:\ProgramData\ETAS\LogFiles\GetAscetDatabaseIdentity\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+path=C:\Repo\
+name=C:\Repo\F05_IPB_L2_0429

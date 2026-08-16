@@ -1,0 +1,1 @@
+{"type":"response","protocolVersion":1,"ok":false,"result":null,"error":{"code":"unhandled_exception","message":"Invalid JSON primitive: AVH_ActivationByBrakePedal_Xiaomi_test."},"meta":{"bridgePid":23996,"bridgeGeneration":"e87d9a21-1c5f-477e-92c9-26ed9b2efdc2","durationMs":37,"sessionPolicy":"fresh_session","mutationStarted":false,"mode":"exec","operation":"get_formulas"}}

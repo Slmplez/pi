@@ -1,4 +1,4 @@
-import assert from "node:assert/strict";
+﻿import assert from "node:assert/strict";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -31,22 +31,49 @@ function createEnvironment(): { root: string; env: Record<string, string | undef
 }
 
 function createExecution(request: AscetCliRequest, ok: boolean): AscetCliExecutionResult {
-	return {
-		exitCode: ok ? 0 : 1,
-		stdout: JSON.stringify({
-			ok,
-			result: ok
+	const operation = request.args[1];
+	const result =
+		operation === "get_database_identity"
+			? { database: { name: "DB", path: "C:/Repo/DB" } }
+			: operation === "get_tree"
 				? {
-						componentPath: "DEMO\\Controller",
-						writeSucceeded: true,
-						verifyReadbackRequested: true,
-						readbackVerified: true,
+						items: [{ path: "DEMO\\Controller", oid: "C-1", kind: "class" }],
+						coverage: { status: "complete_for_scope", completeness: "complete", collectorCompleted: true },
+						truncated: false,
+						database: { name: "DB", path: "C:/Repo/DB" },
 					}
-				: null,
-			error: ok ? null : { code: "ascet_edit_failed", message: "write failed" },
-			meta: { mode: "exec", operation: request.args[1] },
+				: operation === "component_editable_check"
+					? true
+					: operation === "set_element_dependency"
+						? {
+								dryRun: request.args.includes("--dry-run"),
+								validated: true,
+								target: "DEMO/Controller",
+								kind: "component",
+								identity: { componentOID: "C-1", elementOID: "" },
+								definitionHash: "definition-1",
+								writeSucceeded: true,
+								verifyReadbackRequested: true,
+								readbackVerified: true,
+							}
+						: ok
+							? {
+									componentPath: "DEMO\\Controller",
+									writeSucceeded: true,
+									verifyReadbackRequested: true,
+									readbackVerified: true,
+								}
+							: null;
+	const isPrimaryFailure = operation === "set_method_code" && !ok;
+	return {
+		exitCode: isPrimaryFailure ? 1 : 0,
+		stdout: JSON.stringify({
+			ok: !isPrimaryFailure,
+			result,
+			error: isPrimaryFailure ? { code: "ascet_edit_failed", message: "write failed" } : null,
+			meta: { mode: "exec", operation, mutationStarted: isPrimaryFailure },
 		}),
-		stderr: ok ? "" : "write failed",
+		stderr: isPrimaryFailure ? "write failed" : "",
 		timedOut: false,
 		request,
 	};
@@ -73,19 +100,21 @@ describe("ASCET edit observation invalidation", () => {
 					componentPath: "DEMO/Controller",
 					methodName: "Main",
 					code: "return;",
-					executeWrite: true,
+					intent: "apply",
 				},
 				{
 					cwd: environment.root,
 					env: environment.env,
 					executeCli: async (request) => {
-						assert.equal(request.args.includes("--verify-readback"), true);
+						if (request.args[1] === "set_method_code") {
+							assert.equal(request.args.includes("--verify-readback"), true);
+						}
 						return createExecution(request, true);
 					},
 				},
 				approvingContext,
 			);
-			assert.equal(result.details.outcome.status, "ok");
+			assert.equal(result.details.outcome.status, "ok", JSON.stringify(result.details));
 			assert.deepEqual(result.details.observations, { invalidated: ["obs-success"] });
 			if (result.details.outcome.status === "ok") {
 				const data = result.details.outcome.data as {
@@ -115,7 +144,7 @@ describe("ASCET edit observation invalidation", () => {
 					componentPath: "DEMO/Controller",
 					methodName: "Main",
 					code: "return;",
-					executeWrite: true,
+					intent: "apply",
 				},
 				{
 					cwd: environment.root,
@@ -137,7 +166,7 @@ describe("ASCET edit observation invalidation", () => {
 					dependencyMappings: { P_Input: { kind: "parameter", name: "P_Input" } },
 					variantPolicy: "default",
 					dryRun: true,
-					executeWrite: true,
+					intent: "apply",
 				},
 				{
 					cwd: environment.root,
@@ -166,22 +195,26 @@ describe("ASCET edit observation invalidation", () => {
 					componentPath: "DEMO/Controller",
 					methodName: "Main",
 					code: "return;",
-					executeWrite: true,
+					intent: "apply",
 				},
 				{
 					cwd: environment.root,
 					env: environment.env,
-					executeCli: async (request) => ({
-						exitCode: 1,
-						stdout: JSON.stringify({
-							ok: false,
-							result: null,
-							error: { code: "write_not_started", message: "write did not start" },
-						}),
-						stderr: "write did not start",
-						timedOut: false,
-						request,
-					}),
+					executeCli: async (request) => {
+						if (request.args[1] !== "set_method_code") return createExecution(request, true);
+						return {
+							exitCode: 1,
+							stdout: JSON.stringify({
+								ok: false,
+								result: null,
+								error: { code: "write_not_started", message: "write did not start" },
+								meta: { mutationStarted: false },
+							}),
+							stderr: "write did not start",
+							timedOut: false,
+							request,
+						};
+					},
 				},
 				approvingContext,
 			);

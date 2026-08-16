@@ -1,4 +1,3 @@
-import { Type } from "typebox";
 import { toToolFailurePayload } from "../tool-response-contract.ts";
 import {
 	type SearchActionParams,
@@ -30,21 +29,6 @@ export interface AscetCapabilitiesResult {
 		message: string;
 	};
 }
-
-export const ascetCapabilitiesParameters = Type.Unsafe<AscetCapabilitiesParams>({
-	type: "object",
-	required: ["action"],
-	additionalProperties: false,
-	properties: {
-		action: { type: "string", enum: ["search_actions"] },
-		query: { type: "string" },
-		tool: { type: "string" },
-		name: { type: "string" },
-		limit: { type: "number", minimum: 1, maximum: 50 },
-		includeHidden: { type: "boolean" },
-		detailLevel: { type: "string", enum: ["summary", "full"] },
-	},
-});
 
 export function runAscetCapabilities(
 	params: AscetCapabilitiesParams,

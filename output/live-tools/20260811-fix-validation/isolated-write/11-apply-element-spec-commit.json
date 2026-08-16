@@ -1,0 +1,197 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"changed\": {\n    \"operationName\": \"apply_element_spec\",\n    \"sequenceNumber\": 1,\n    \"writeSucceeded\": true,\n    \"summary\": \"2 created, 0 updated, 0 incompatible.\",\n    \"payload\": {\n      \"component\": \"PI_LIVE_FIX_20260811_13947C09/ClassUnderTest\",\n      \"kind\": \"Class\",\n      \"language\": \"ESDL\",\n      \"mode\": \"Apply\",\n      \"deleteMissingRequested\": false,\n      \"recreateIncompatibleRequested\": false,\n      \"elementResults\": [\n        {\n          \"name\": \"P_Input\",\n          \"kind\": \"parameter\",\n          \"status\": \"created\",\n          \"changedFields\": [\n            \"comment\",\n            \"calibration\"\n          ],\n          \"readbackVerified\": true\n        },\n        {\n          \"name\": \"P_Dependent\",\n          \"kind\": \"parameter\",\n          \"status\": \"created\",\n          \"changedFields\": [\n            \"comment\",\n            \"calibration\"\n          ],\n          \"readbackVerified\": true\n        }\n      ],\n      \"summary\": {\n        \"created\": 2,\n        \"updated\": 0,\n        \"skipped\": 0,\n        \"failed\": 0,\n        \"removed\": 0,\n        \"incompatible\": 0\n      },\n      \"createdElements\": [\n        \"P_Input\",\n        \"P_Dependent\"\n      ],\n      \"writeSucceeded\": true,\n      \"verifyReadbackRequested\": true,\n      \"readbackVerified\": true\n    }\n  },\n  \"verification\": {\n    \"mode\": \"automatic_readback\",\n    \"source\": \"write_command\",\n    \"required\": true,\n    \"requested\": true,\n    \"verified\": true,\n    \"status\": \"passed\"\n  }\n}"
+    }
+  ],
+  "details": {
+    "outcome": {
+      "status": "ok",
+      "verified": true,
+      "data": {
+        "changed": {
+          "operationName": "apply_element_spec",
+          "sequenceNumber": 1,
+          "writeSucceeded": true,
+          "summary": "2 created, 0 updated, 0 incompatible.",
+          "payload": {
+            "ComponentPath": "PI_LIVE_FIX_20260811_13947C09\\ClassUnderTest",
+            "ComponentKind": "Class",
+            "LanguageKind": "ESDL",
+            "Mode": "Apply",
+            "DeleteMissingRequested": false,
+            "RecreateIncompatibleRequested": false,
+            "ElementResults": [
+              {
+                "name": "P_Input",
+                "kind": "parameter",
+                "status": "created",
+                "changedFields": [
+                  "comment",
+                  "calibration"
+                ],
+                "readbackVerified": true
+              },
+              {
+                "name": "P_Dependent",
+                "kind": "parameter",
+                "status": "created",
+                "changedFields": [
+                  "comment",
+                  "calibration"
+                ],
+                "readbackVerified": true
+              }
+            ],
+            "Summary": {
+              "created": 2,
+              "updated": 0,
+              "skipped": 0,
+              "failed": 0,
+              "removed": 0,
+              "incompatible": 0
+            },
+            "CreatedElements": [
+              "P_Input",
+              "P_Dependent"
+            ],
+            "UpdatedElements": [],
+            "SkippedElements": [],
+            "RemovedElements": [],
+            "IncompatibleElements": [],
+            "Issues": [],
+            "WriteSucceeded": true,
+            "VerifyReadbackRequested": true,
+            "ReadbackVerified": true
+          }
+        },
+        "verification": {
+          "mode": "automatic_readback",
+          "source": "write_command",
+          "required": true,
+          "requested": true,
+          "verified": true,
+          "status": "passed"
+        },
+        "observations": {
+          "invalidated": []
+        }
+      },
+      "warnings": []
+    },
+    "raw": {
+      "ok": true,
+      "data": {
+        "type": "response",
+        "protocolVersion": 1,
+        "ok": true,
+        "result": {
+          "operationName": "apply_element_spec",
+          "sequenceNumber": 1,
+          "writeSucceeded": true,
+          "summary": "2 created, 0 updated, 0 incompatible.",
+          "payload": {
+            "ComponentPath": "PI_LIVE_FIX_20260811_13947C09\\ClassUnderTest",
+            "ComponentKind": "Class",
+            "LanguageKind": "ESDL",
+            "Mode": "Apply",
+            "DeleteMissingRequested": false,
+            "RecreateIncompatibleRequested": false,
+            "ElementResults": [
+              {
+                "name": "P_Input",
+                "kind": "parameter",
+                "status": "created",
+                "changedFields": [
+                  "comment",
+                  "calibration"
+                ],
+                "readbackVerified": true
+              },
+              {
+                "name": "P_Dependent",
+                "kind": "parameter",
+                "status": "created",
+                "changedFields": [
+                  "comment",
+                  "calibration"
+                ],
+                "readbackVerified": true
+              }
+            ],
+            "Summary": {
+              "created": 2,
+              "updated": 0,
+              "skipped": 0,
+              "failed": 0,
+              "removed": 0,
+              "incompatible": 0
+            },
+            "CreatedElements": [
+              "P_Input",
+              "P_Dependent"
+            ],
+            "UpdatedElements": [],
+            "SkippedElements": [],
+            "RemovedElements": [],
+            "IncompatibleElements": [],
+            "Issues": [],
+            "WriteSucceeded": true,
+            "VerifyReadbackRequested": true,
+            "ReadbackVerified": true
+          },
+          "verification": {
+            "requested": true,
+            "attempted": true,
+            "succeeded": true,
+            "summary": "element_spec_matches",
+            "details": {}
+          }
+        },
+        "error": null,
+        "meta": {
+          "bridgePid": 36648,
+          "bridgeGeneration": "9405551a-7088-4349-b600-7a671731f626",
+          "durationMs": 924,
+          "sessionPolicy": "fresh_session",
+          "mutationStarted": true,
+          "mode": "exec",
+          "operation": "apply_element_spec"
+        }
+      },
+      "request": {
+        "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+        "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+        "args": [
+          "exec",
+          "apply_element_spec",
+          "PI_LIVE_FIX_20260811_13947C09\\ClassUnderTest",
+          "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\20260811-fix-validation\\artifacts\\element-spec-plans\\inline-28296-1786437385960-5d4924c4-82a8-4847-b4ae-dbc52f1aae1f.json",
+          "--verify-readback",
+          "--json"
+        ],
+        "timeoutMs": 240000,
+        "jobKind": "write",
+        "mutatesDatabase": true
+      },
+      "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"operationName\":\"apply_element_spec\",\"sequenceNumber\":1,\"writeSucceeded\":true,\"summary\":\"2 created, 0 updated, 0 incompatible.\",\"payload\":{\"ComponentPath\":\"PI_LIVE_FIX_20260811_13947C09\\\\ClassUnderTest\",\"ComponentKind\":\"Class\",\"LanguageKind\":\"ESDL\",\"Mode\":\"Apply\",\"DeleteMissingRequested\":false,\"RecreateIncompatibleRequested\":false,\"ElementResults\":[{\"name\":\"P_Input\",\"kind\":\"parameter\",\"status\":\"created\",\"changedFields\":[\"comment\",\"calibration\"],\"readbackVerified\":true},{\"name\":\"P_Dependent\",\"kind\":\"parameter\",\"status\":\"created\",\"changedFields\":[\"comment\",\"calibration\"],\"readbackVerified\":true}],\"Summary\":{\"created\":2,\"updated\":0,\"skipped\":0,\"failed\":0,\"removed\":0,\"incompatible\":0},\"CreatedElements\":[\"P_Input\",\"P_Dependent\"],\"UpdatedElements\":[],\"SkippedElements\":[],\"RemovedElements\":[],\"IncompatibleElements\":[],\"Issues\":[],\"WriteSucceeded\":true,\"VerifyReadbackRequested\":true,\"ReadbackVerified\":true},\"verification\":{\"requested\":true,\"attempted\":true,\"succeeded\":true,\"summary\":\"element_spec_matches\",\"details\":{}}},\"error\":null,\"meta\":{\"bridgePid\":36648,\"bridgeGeneration\":\"9405551a-7088-4349-b600-7a671731f626\",\"durationMs\":924,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":true,\"mode\":\"exec\",\"operation\":\"apply_element_spec\"}}\r\n",
+      "stderr": "",
+      "exitCode": 0,
+      "timedOut": false,
+      "aborted": false,
+      "operationId": "apply_element_spec"
+    },
+    "observations": {
+      "invalidated": []
+    },
+    "verification": {
+      "mode": "automatic_readback",
+      "source": "write_command",
+      "required": true,
+      "requested": true,
+      "verified": true,
+      "status": "passed"
+    }
+  }
+}

@@ -74,6 +74,27 @@ describe("ASCET mutation coordinator", () => {
 		}
 	});
 
+	test("does not dispatch when execution authorization cannot start", async () => {
+		const root = mkdtempSync(join(tmpdir(), "pi-ascet-coordinator-auth-"));
+		try {
+			const events: string[] = [];
+			let dispatched = false;
+			const coordinator = new AscetMutationCoordinator({ artifactRoot: root });
+			const coordinatorInput = input(events, async () => {
+				dispatched = true;
+				return rawResult({ ok: true });
+			});
+			coordinatorInput.beginExecution = () => {
+				throw new Error("execution authorization expired");
+			};
+
+			await assert.rejects(coordinator.execute(coordinatorInput), /execution authorization expired/u);
+			assert.equal(dispatched, false);
+			assert.equal(existsSync(coordinator.getTargetLockPath("db-1", "oid-1")), false);
+		} finally {
+			rmSync(root, { recursive: true, force: true });
+		}
+	});
 	test("quarantines a stale target lock without deleting a lock it does not own", async () => {
 		const root = mkdtempSync(join(tmpdir(), "pi-ascet-coordinator-stale-"));
 		try {
@@ -122,7 +143,7 @@ describe("ASCET mutation coordinator", () => {
 				),
 				/local preparation failed/u,
 			);
-			assert.deepEqual(events, []);
+			assert.deepEqual(events, ["plan:executing"]);
 			assert.equal(new AscetMutationGuardStore({ artifactRoot: root }).assertClear("db-1", "oid-1").clear, true);
 		} finally {
 			rmSync(root, { recursive: true, force: true });

@@ -1,0 +1,111 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="index">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="component">
+    <param name="See Also" value="component">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="layout">
+      <param name="Name" value="Overview">
+      <param name="Local" value="LEd_Overview.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="editor">
+    <param name="See Also" value="editor">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="layout">
+      <param name="Name" value="Opening the Layout Editor">
+      <param name="Local" value="LEd_open_layout_editor.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="layout">
+    <param name="Name" value="Opening the Layout Editor">
+    <param name="Local" value="LEd_open_layout_editor.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="assign icon">
+      <param name="Name" value="Assigning an Icon to a Class">
+      <param name="Local" value="assign_icon_class.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="attributes">
+      <param name="Name" value="Modifying the Block Attributes">
+      <param name="Local" value="modify_block_attributes.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="default attributes">
+      <param name="Name" value="Changing the Default Attributes for New Blocks">
+      <param name="Local" value="change_default_newblocks.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit">
+      <param name="Name" value="Editing a Class Layout">
+      <param name="Local" value="editing_class_layout.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="grid">
+      <param name="Name" value="Modifying the Layout Editor Display">
+      <param name="Local" value="modify_layout_editor_display.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="pin">
+      <param name="Name" value="Overview">
+      <param name="Local" value="LEd_Overview.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="flexible">
+      <param name="Name" value="Flexible Layout">
+      <param name="Local" value="led_flexiblelayout.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="layout editor">
+    <param name="Name" value="Overview">
+    <param name="Local" value="LEd_Overview.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="methods">
+    <param name="See Also" value="methods">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="disable">
+      <param name="Name" value="Enabling and Disabling Methods, Processes, Runnable Entities">
+      <param name="Local" value="enable_disable_methods.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="enable">
+      <param name="Name" value="Enabling and Disabling Methods, Processes, Runnable Entities">
+      <param name="Local" value="enable_disable_methods.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="menu options">
+    <param name="See Also" value="menu options">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="layout editor">
+      <param name="Name" value="View Menu">
+      <param name="Local" value="LDe_View_Menu.htm">
+      <param name="Name" value="Layout Menu">
+      <param name="Local" value="LEd_Layout_Menu.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="flexible layout">
+    <param name="Name" value="Flexible Layout">
+    <param name="Local" value="led_flexiblelayout.htm">
+  </object>
+</ul>
+</html>

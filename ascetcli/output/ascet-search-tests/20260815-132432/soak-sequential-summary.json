@@ -1,0 +1,16 @@
+﻿{
+    "iterations":  100,
+    "failures":  0,
+    "wallMs":  764304,
+    "pidBefore":  25888,
+    "pidAfter":  25888,
+    "workingSetBefore":  464875520,
+    "workingSetAfter":  463527936,
+    "workingSetDelta":  -1347584,
+    "handlesBefore":  344,
+    "handlesAfter":  344,
+    "handleDelta":  0,
+    "childWindows":  0,
+    "averageWallMs":  7582.17,
+    "maxWallMs":  44889
+}

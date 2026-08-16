@@ -1,0 +1,33 @@
+# Index
+
+- [Overview](markdown/BT_Overview.md)
+  - [Adding Inputs, Outputs and Combinations](markdown/BT_adding_ip_op.md)
+  - [Adding Inputs, Outputs and Combinations](markdown/BT_adding_ip_op.md)
+  - [Checking the Table](markdown/BT_checking_table.md)
+  - [Adding Inputs, Outputs and Combinations](markdown/BT_adding_ip_op.md)
+  - [Creating a Boolean Table](markdown/create_boolean_table.md)
+  - [Generating a Default Matrix](markdown/BT_generate_default-matrix.md)
+  - [Deleting Inputs and Outputs or Combinations](markdown/BT_deleting_ip_op.md)
+  - [Deleting Inputs and Outputs or Combinations](markdown/BT_deleting_ip_op.md)
+  - [Starting an Offline Experiment](markdown/BT_Starting_an_Offline_Experiment.md)
+  - [Renaming Inputs or Outputs](markdown/BT_renaming_ip_op.md)
+  - [Shifting Table Columns and Rows](markdown/BT_shift_table_columns.md)
+  - [Shifting Table Columns and Rows](markdown/BT_shift_table_columns.md)
+  - [Specifying Inputs and Outputs](markdown/BT_Specifying_Inputs_Outputs.md)
+  - [Showing and Deleting Unused Inputs](markdown/bt_showdeleteunusedInputts.md)
+- [Boolean Table Editor - Window Elements](markdown/BT_Description_of_Window_Elements.md)
+  - [Menu Bar (Boolean Table Editor)](markdown/BT_menu_bar.md)
+- editor
+  - [Overview - Boolean Table Editor](markdown/BT_Overview.md)
+- menu options
+  - [Menu Bar (Boolean Table Editor)](markdown/BT_menu_bar.md)
+- table
+  - [Creating a Boolean Table](markdown/create_boolean_table.md)
+- user interface
+  - [Boolean Table Editor - Window Elements](markdown/BT_Description_of_Window_Elements.md)
+- toolbar
+  - [Configuring a Toolbar](markdown/IntroductionEnglishUS.chm::/INT_Configuring_Toolbar.htm)
+- buttons
+  - [Toolbar (Boolean Table Editor)](markdown/BT_Toolbar_BoolTable_Editor.md)
+- component
+  - [Overview - Boolean Table Editor](markdown/BT_Overview.md)

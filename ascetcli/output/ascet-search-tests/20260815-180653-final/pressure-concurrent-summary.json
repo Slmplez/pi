@@ -1,0 +1,11 @@
+{
+  "calls": 400,
+  "failures": 0,
+  "queued": 400,
+  "averageMs": 20221.23,
+  "maxMs": 27078,
+  "averageWaitMs": 8475.82,
+  "maxWaitMs": 23205,
+  "startedEpoch": 1786790202.2879343,
+  "finishedEpoch": 1786791221.2563086
+}

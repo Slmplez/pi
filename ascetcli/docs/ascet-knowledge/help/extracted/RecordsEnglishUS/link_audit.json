@@ -1,0 +1,104 @@
+{
+  "generated_at": "2026-04-01T03:08:22.451620Z",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\RecordsEnglishUS",
+  "checked_files": 37,
+  "checked_links": 327,
+  "broken_links": [
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\RecordsEnglishUS\\markdown\\RC_Creating_a_Record.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\RecordsEnglishUS\\markdown\\RC_Edit_RecordImplementation.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\RecordsEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_Configuring_Toolbar.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\RecordsEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_SearchTreePane.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\RecordsEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\RecordsEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/ImplementationEditorEnglishUS.chm::/IEd_ImplementationEditor_for_ComponentsProjects.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\RecordsEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/ImplementationEditorEnglishUS.chm::/IEd_ExternalStruct_Tab.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\RecordsEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/ImplementationEditorEnglishUS.chm::/IEd_ImplRefEditor.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\RecordsEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_Toolbar_Configuration_Window.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\RecordsEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/bde_select_item_window.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\RecordsEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_Configuring_Toolbar.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\RecordsEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\RecordsEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/ImplementationEditorEnglishUS.chm::/IEd_ImplementationEditor_for_ComponentsProjects.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\RecordsEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\RecordsEnglishUS\\RecordsEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\RecordsEnglishUS\\RecordsEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    }
+  ]
+}

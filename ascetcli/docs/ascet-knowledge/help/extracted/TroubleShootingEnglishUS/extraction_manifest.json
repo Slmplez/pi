@@ -1,0 +1,338 @@
+{
+  "generated_at": "2026-04-01T03:08:37.552666Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\TroubleShootingEnglishUS.chm",
+  "unpack_dir": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\TroubleShootingEnglishUS\\unpacked",
+  "total_files": 53,
+  "total_size_bytes": 221430,
+  "counts_by_extension": {
+    ".htm": 45,
+    ".xml": 1,
+    ".js": 1,
+    ".css": 1,
+    ".lng": 1,
+    ".brs": 1,
+    ".glo": 1,
+    ".hhc": 1,
+    ".hhk": 1
+  },
+  "files": [
+    {
+      "relative_path": "ASCET_does_not_compute_correctly_when_using_temporary_variables.htm",
+      "size": 1814,
+      "sha256": "ccf76c8bd5d2be2faec47e7ece7c94c848b349fb86e6985b782b032e1123b9aa",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Busy_ASCET.htm",
+      "size": 740,
+      "sha256": "c7fa9ea99448b3b4986b84a0a48945fa561e44a263ee15d62d49f97162423172",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Conversion_of_Database.htm",
+      "size": 1638,
+      "sha256": "210e842532b7db06724bdee5297b7b8fe5d8f521bd413d1c87cda0772853f75c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Double_Sequence_Number.htm",
+      "size": 1010,
+      "sha256": "f5540c5cd2d1ba9290a907d313536151b3910a961283c03e2d8074549f562441",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "eHelp.xml",
+      "size": 371,
+      "sha256": "04b977f8374c8f397955d39c0f0d61a1a9f0d53ad062ce6864cde8aa071778a6",
+      "extension": ".xml"
+    },
+    {
+      "relative_path": "ehlpdhtm.js",
+      "size": 125817,
+      "sha256": "2756a1e96ff80718df0b69b05f6bcaae4d1237c04bee82e81609c9608f1c960d",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "Error_Message_2.htm",
+      "size": 1165,
+      "sha256": "fc59b949a0998e08b87187bedfc92869bf3dbbc5d912d4cb8c8091e6be62c4ae",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Error_Messages_1.htm",
+      "size": 1094,
+      "sha256": "2a1dff1eabebbc72805b16a071f0b63f53c2973a15a6532f77d47c0c9ad6a042",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Layout.css",
+      "size": 9786,
+      "sha256": "fa7b5a6453a21a0fb428753bb054c98f2002a31eaef5306319201e3e2a2673c5",
+      "extension": ".css"
+    },
+    {
+      "relative_path": "Limit_Size_Database.htm",
+      "size": 1143,
+      "sha256": "61a6ceb8cec211d82957c8127c870c72c7c7b892993e93d510c10f720c1f5871",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Loop_Detected_at_Block.htm",
+      "size": 872,
+      "sha256": "51d1ba2e9a7d5fee10560e01937929eeb8bebb79ee7daed0c529a5fb6ea53e21",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Method_Has_No_Argument.htm",
+      "size": 1018,
+      "sha256": "d42c803e4bd436b50d7f9f9e5b9a418cc6d2313e78685c2f449c4f52dda2c748",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Offline_Experiment_Runs_Out_Time.htm",
+      "size": 769,
+      "sha256": "e878e91917abf77f6539ecccfd3ed92d77881f7bc5df5afdc827cc3d6695fbaf",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Problems_External_Experiment_Target.htm",
+      "size": 845,
+      "sha256": "6abd137c756d8a9113764f0663dd73b9490a547bbf755894c95544df25be3414",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Problems_Graphics_Cards.htm",
+      "size": 937,
+      "sha256": "af82ed444fbb7a6bcbbe02ba40afd7372d33e7c650e2f2925593319bf2c32c25",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Return_Value_Does_not_Belong_Name.htm",
+      "size": 1161,
+      "sha256": "0180904a5f27e4dbc45d2d2ed78be0a7995a196fd0976e7563d65961ae3464d6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "RoboHHRE.lng",
+      "size": 3586,
+      "sha256": "607e16623990c7b694bb11537edbecfbd7057fda1739bba5173e9d8a4942b18f",
+      "extension": ".lng"
+    },
+    {
+      "relative_path": "Some_ASCET_Experiments_do_not_End_or_do_not_Run_Properly.htm",
+      "size": 1345,
+      "sha256": "61ed7d6b15b537e81db2672c37424f8a3d542f5f3be0e5c17593bb01bb76700c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TroubleShootingEnglishUS.brs",
+      "size": 2,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "extension": ".brs"
+    },
+    {
+      "relative_path": "TroubleShootingEnglishUS.glo",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "extension": ".glo"
+    },
+    {
+      "relative_path": "TroubleShootingEnglishUS.hhc",
+      "size": 10814,
+      "sha256": "8670c244ea580898a9c4a59bd6f01a2e0908fc06da29537d15486f3e00e24228",
+      "extension": ".hhc"
+    },
+    {
+      "relative_path": "TroubleShootingEnglishUS.hhk",
+      "size": 21008,
+      "sha256": "c4ffe6e6349b51b6884cc6aac8a1a6d01628fd4247cca2fe0ee63cf2e4561e3a",
+      "extension": ".hhk"
+    },
+    {
+      "relative_path": "TS_Application_Mode_Not_Specified.htm",
+      "size": 1246,
+      "sha256": "7f9eb47b3fb91ee1ce6395aea78c79604607bb228643e1b8fdf2d0b9ad022776",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_Application_Modes_Missing.htm",
+      "size": 1036,
+      "sha256": "763b5a384af1ccd994d1dbbf4c4baf1e5e863577b0e266af5731ec3e0a545889",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_Argument_of_Method_Not_Used.htm",
+      "size": 1058,
+      "sha256": "8a81dc9b4ab42c20ef20187283edba828740172aa8ef2f6d2e28af3f16d634b0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_Black_Icons_in_ASCET.htm",
+      "size": 1102,
+      "sha256": "50e3190bae2daf1b2a18c0eeb040b25368d1bc17ce4448eb2c3499db9c0befd3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_CompilationReturnsUnexplainableErrorMessages_or_DoesNotEnd.htm",
+      "size": 1158,
+      "sha256": "6cb148c5cf7677ba38e8e1388eebb0f9a596b147a3fb96ce3e138c37063b6d54",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_DocumentationGeneration_RTFformat_does_not_work_properly.htm",
+      "size": 838,
+      "sha256": "d58bdf4f7d77ff4e03569578a2d2041d8ad5ace0d9e99c562bcf42be71791f66",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_FixedPointCode_for_NonLinearFormula.htm",
+      "size": 1089,
+      "sha256": "e39a5a93e3d46d4e7342745ad124d2bd7dd9e1a9403ecd2d93b5cc5c00a9a224",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_Formula_in_Implementation_unknown.htm",
+      "size": 1056,
+      "sha256": "b7e99c4cfb9b7bd21659c7f40afdc393ba091fa7c1c28dc89000d32023522809",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_General_Hints.htm",
+      "size": 1622,
+      "sha256": "67accfd892d0f1827628bc6955008c43a9c7955641b648aee98ecf27f9803a8f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_Integer_Interval_of_Variable.htm",
+      "size": 1129,
+      "sha256": "d8376b63afe963cfd9db97092cda97b16ffcb851d7027cae600e21f16fbaa8bf",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_IntervalMismatch_in_Assignment.htm",
+      "size": 1510,
+      "sha256": "24f200c1c9f42d0ea788074fd5f1d3552040f6067269fe589fa31a2e555cb6bf",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_L1CommunicationErrors_occur_during_OnlineExperiments.htm",
+      "size": 1234,
+      "sha256": "05fdef90c12eccfc40f811ad1f9d1aabb22e133ccd29723db1a186a0e020e870",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_Last_Operation_.htm",
+      "size": 1054,
+      "sha256": "9b11015131b7751df4c02e99321496700624edd879a32436d141d477d4d57c69",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_Literal_Value_Does_Not_Fit_Type.htm",
+      "size": 1205,
+      "sha256": "438200cf37a4cd002617e51b6d37f59580d3d55db38ce3858bd61080fae3859c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_Method_Not_Defined_as_Public.htm",
+      "size": 1055,
+      "sha256": "a64a1bbfda8e686dbc81bcb53d74490fb96620b51b87fff459a123f8f5deb0c8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_Missing_Trigger_Event.htm",
+      "size": 810,
+      "sha256": "74bf54b4af1639c3f0e5417148f9717f029694b6d87e1fd154a8358b4353c147",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_Multiple_Prior_for_Trigger.htm",
+      "size": 1464,
+      "sha256": "de7d16e232917775f7badc8ae18cfd203fd45749885fa21298216cc226afb1e7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_NameNotDefined.htm",
+      "size": 1001,
+      "sha256": "6ccb099b9a1b1e97f8e0c819f90abdeff539166d5cbd00a8a7272107df7647f4",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_NeedBinding_for_ImportedElement.htm",
+      "size": 888,
+      "sha256": "5b3130e796864a580a1f7516f4adfbacdef81cc36502ba5391fc03f4fdff1df4",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_Overview_CGM.htm",
+      "size": 988,
+      "sha256": "362ec5aebef6fe1f690a737d42518989197714f9ecba80b1ab32673055124bc0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_Physical_Interval_of_Divisor.htm",
+      "size": 981,
+      "sha256": "f256503cd7506f73ceb3dd6384dac04f1413084bfff268d4b79063667d7ce2ed",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_Problems_with_ASCET.htm",
+      "size": 1491,
+      "sha256": "061c5aa4f84165f660e82509317a6b155f3b3ada839a79dda635bcaf504c5dab",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_Specification_of_IF_BLock.htm",
+      "size": 858,
+      "sha256": "6edc09a75ee4d3f36ee8197c9a98b9f4debb18210cc6ac5e3d065df575af6e20",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_Start_State_Needed_to_State_Machine.htm",
+      "size": 810,
+      "sha256": "6d0d0e2d4f2943594607f1d90d10c2545c2ced5d05c3991ca254d7a937ee5928",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_Trouble_Shooting.htm",
+      "size": 902,
+      "sha256": "e0e0ccbcf214a1055ba062e5931756a16e0c44011ba76bef94f9e65af564eae3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_Type_Mismatch_Name.htm",
+      "size": 1333,
+      "sha256": "94d3ba078982ae9e25a1f6bffbce9a547f974ccba5c0d6b4a883a7394085b8fd",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_Type_Mismatch_with_Casting.htm",
+      "size": 1357,
+      "sha256": "645c0cc7b4d25e99c22af6d994a5533aaa5aca96c8cf8c0e2599b4ce8ea37070",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_Unbalanced_Number.htm",
+      "size": 949,
+      "sha256": "9a54575b38d6cb3487a632f04e8ac02382540516f5a6c0e0e3489f3b5d832a43",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "TS_Unreachable_State.htm",
+      "size": 911,
+      "sha256": "46debaa5f4a48dbe338fcf14f7f0111c288841d2836f494ffb897091ad9b9691",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Type_Mismatch.htm",
+      "size": 1104,
+      "sha256": "7c878e232e20c0bedee69214076be48df4df9725106fada0d26b13585c6e396f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Unpredictable_Effects_when_Using_Complex_Assignments.htm",
+      "size": 1256,
+      "sha256": "c32523c99ad2825a0e0a0c048ac5cf9e6368452e7e8ecdcce4f540ea68f091ef",
+      "extension": ".htm"
+    }
+  ]
+}

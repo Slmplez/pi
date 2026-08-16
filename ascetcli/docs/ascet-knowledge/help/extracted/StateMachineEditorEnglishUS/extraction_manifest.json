@@ -1,0 +1,1846 @@
+{
+  "generated_at": "2026-04-01T03:08:31.047931Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\StateMachineEditorEnglishUS.chm",
+  "unpack_dir": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\unpacked",
+  "total_files": 304,
+  "total_size_bytes": 1818447,
+  "counts_by_extension": {
+    ".htm": 160,
+    ".gif": 134,
+    ".js": 2,
+    ".xml": 1,
+    ".bmp": 1,
+    ".css": 1,
+    ".lng": 1,
+    ".brs": 1,
+    ".glo": 1,
+    ".hhc": 1,
+    ".hhk": 1
+  },
+  "files": [
+    {
+      "relative_path": "add_public_method.htm",
+      "size": 1541,
+      "sha256": "0e00fca1e7eb74fbe767e23b3163b76dcc5ed754c7631b595ce14e85b59db167",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "adding_arguments.htm",
+      "size": 2445,
+      "sha256": "1b7846c56a1768e7d774f7c9575dbfa09be52e70a383f66f4f9e97fed04840a8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "adding_inputs.htm",
+      "size": 2951,
+      "sha256": "2bdc1b687f21adae4c238ca0872541bc01588f644c66d4a288e600aea1f6328f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "adding_triggerargument.htm",
+      "size": 1755,
+      "sha256": "8c7c4b2506b1449694b5b2b92ff2477db12cdc052c05d88d12fd6fa18fb7cc02",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "addopenhierarchy.htm",
+      "size": 2428,
+      "sha256": "eb20b71dc8cbe6b660cc5304b3e99f36e27c684afa7cb82591271dcdef0cb1e7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "addpin.htm",
+      "size": 1126,
+      "sha256": "25226f2c0fc12c3dedab3e779fa590c1a573605ee45c64384c6e20414550c242",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "analyze_diagram.htm",
+      "size": 8143,
+      "sha256": "e09d85f479244696b05872b398c15f43d8853ce48c06ff24b3022fbdc1806ec6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "animation_color.htm",
+      "size": 1849,
+      "sha256": "51972b03fb8447718eea53bf30e0f1795c36cc923e9d7db52cfe17bdfb1a71b7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "automatic_insertion.htm",
+      "size": 1075,
+      "sha256": "2fc08964cd14594f60c0399deef875beaf2a01e499da65bf01b45fbcc450e700",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "BUTTON.GIF",
+      "size": 844,
+      "sha256": "6d10387853fe90ec87f720a6460a8cd1d2559683e66c81683a705a5e0e6f2ea9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_comment.gif",
+      "size": 966,
+      "sha256": "a314df000e40b862a54146ad55b624ff62abc19581274fab439ea6d401fc5b26",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_connect.gif",
+      "size": 918,
+      "sha256": "765e90c3fdfdb9a851d9abdabcea510aa566c3ddbef119fa0d8306ee437d1815",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_input.gif",
+      "size": 972,
+      "sha256": "f7f0f4f08ca8524fe8a35d8403273455266d4436c5a522b411aa6c28e39629d7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_insertstate.gif",
+      "size": 999,
+      "sha256": "734ff439503df8ef7e62a6111aedf116885481dba362e22c56afa97feb7ff961",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_junction.gif",
+      "size": 951,
+      "sha256": "35e52ce6f7f8ddcceeb0e85d14e51f54265963061d998d0550c08ba2a153c69e",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_openexp.gif",
+      "size": 989,
+      "sha256": "5978c6514b8d6c301b48428592a28b9e4f2e248f9950d0155698e3a85902d575",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_output.gif",
+      "size": 978,
+      "sha256": "34947ee3d443dab19ac1831d0c614dcba795def62f19be36eb52b6d34134a76e",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_c.gif",
+      "size": 1002,
+      "sha256": "7ad80aff3fb70a873236fd793f5f589ec72d5b0bb95f87e90cd54bf3184bbf7d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_e.gif",
+      "size": 1001,
+      "sha256": "d0759184f7598fb88928c75e893f42ecebc0b5f33c9ab1a3fa3ba78ca8f9fdb1",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_i.gif",
+      "size": 1013,
+      "sha256": "d1816cf14d7bdff3b1e11803ef4ac3f5a2b4fad8d7025463b685d2c48a311beb",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_l.gif",
+      "size": 1001,
+      "sha256": "69a65242f34882704f77be0a6539d8eea99be793c37b257be21e7650900be9a7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_s.gif",
+      "size": 1002,
+      "sha256": "74dc245c7e5037607ac2fd1a7309bc186107ff7960b8dcf7d55916c75395a715",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_u.gif",
+      "size": 1004,
+      "sha256": "baecac5c5c1ff2e4f627ab5bfe948e9616b83188073306ea79add915d44c9956",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_w.gif",
+      "size": 1006,
+      "sha256": "441d66eade67b3d631a1fd270830bc46e8238ac1804f65627c69c98a0bfd48bf",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_state.gif",
+      "size": 937,
+      "sha256": "e961eed0d8aa00c1ac9b372e42cb9c541b81a69a058f7ba071d7e5f8f4f63684",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ButtonArray.gif",
+      "size": 964,
+      "sha256": "51af871c26bc2a68715cce40f28e6b0f5fcc62ec2e2e26f7a78266b826af179c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonArrow.gif",
+      "size": 894,
+      "sha256": "19009d7d9f9913e358296d682bc6c85a0c1189cc3a38e5e32ebbf2d8205943e7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonBrowseParentComponent.gif",
+      "size": 986,
+      "sha256": "b65e9a9e4cb7dc8baa4e7a61a6ac78e029603f3b5eb7945c76924625e3db0a5d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonCollapse.gif",
+      "size": 980,
+      "sha256": "c7a6e0d9af6b0e27b9ab870ca2ccb70f15e8cfa326ea1d5db99fa7a6cb1c3645",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonCompile.gif",
+      "size": 1068,
+      "sha256": "398c7b79a092b52feca2bb655f07aed02c221a876c9ab7e237264fbbcd7773fb",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonConnect.gif",
+      "size": 909,
+      "sha256": "c2aaa9d9a8c0f154c95086980f567277cd4fd0c16ca8f80f67a2d69695e14508",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonCopy.gif",
+      "size": 1781,
+      "sha256": "8b32c6c0cc6624dca24d75af2fce3675d476e1ab69c6aa6e0e96642e54d2cc26",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonCut.gif",
+      "size": 1731,
+      "sha256": "292e729494c6099ba14c1f24d7a9575e4bf77e3eafbcbde18e441309bf5d797a",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonDelete.gif",
+      "size": 1744,
+      "sha256": "8883cc24137874984dbfaf9ad1bad3185c5b1897d79b8ad7b5c72e31d6ea135c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ButtonDeltaT.gif",
+      "size": 957,
+      "sha256": "2dd3c85a666f0aa446e354eb552fc9f7644ae129775c542946b75bae7a7eed67",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ButtonDistribution.gif",
+      "size": 973,
+      "sha256": "298248a3424430b7d415bd6406a820f4134ace578f5a9985f5ca1032f5bce227",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonEditdata.gif",
+      "size": 1086,
+      "sha256": "5dea1aca3d69bf99a877b2b64d7ceb6524b8fb3ec8c328d9ea4aec070ba94594",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonEditimplementation.gif",
+      "size": 1087,
+      "sha256": "ca8557d03dd5c637967a1b66d9aae624def32fb5a37accb6f6101938a3f15485",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonExpand.gif",
+      "size": 982,
+      "sha256": "3b381ad805bf80fc3fa8d6cb7ccef8f03a17d9a90e52b767c345bc293664f0ae",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonFiltersettings.gif",
+      "size": 1757,
+      "sha256": "d28b0610a3023580c0ba2cc6266af494d67a71ddaec7675a3474489f4487a657",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonGenerateCode.gif",
+      "size": 1048,
+      "sha256": "2f3357c9b3817b6dec1d42383ae47f4ed00c4781cb690b3741e4023b51f514a4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ButtonImplementationCast.gif",
+      "size": 966,
+      "sha256": "0ae66bfef859d0744c34728eed174c59f53c127a2ccf802a90898a2b19ddab74",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonInsertComponent.gif",
+      "size": 1038,
+      "sha256": "0a2174e040d5b1bb8b7b3f49aed8cd44c914088cdb74881c5846f5979d5a14e7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ButtonInsertMethod.gif",
+      "size": 1112,
+      "sha256": "f70b7164182f09acf11a468f1bcc9ce4078fea092c1a21a771aa78501291be64",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ButtonMatrix.gif",
+      "size": 987,
+      "sha256": "a5288715052141c19e059e45ca58826540e8a052b0ec90f123729be8ffdaa5c6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonOpenDefProject.gif",
+      "size": 1017,
+      "sha256": "418425fb23d81d2e4204afc4c510d1e35825e7dcf6f540f26b62422948d766a8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonOptions.gif",
+      "size": 1783,
+      "sha256": "d827f8e049745ed94b3e2a7f5fb68dcf965765928a860aee49e86d1f3827f1a3",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ButtonParameter.gif",
+      "size": 1061,
+      "sha256": "96fbf56b615075d1a54634067ebf82a7cd16472fd4f2f92f80c1734c99c1a176",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonPaste.gif",
+      "size": 1773,
+      "sha256": "decd5d4d7b140e91e5ee47e25ad3f9c3f18ec01abd2ec29917c328e13a608e65",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonPrint.gif",
+      "size": 1774,
+      "sha256": "0187fb121a80c8c4c81595b4b21503144ff8d6d5e11b5947a72ee557c01f4856",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonRedo.gif",
+      "size": 1730,
+      "sha256": "4a41199a94cd29c899a51073a020c5f33bdd6e7496ee19187ed67065549132f5",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonRedraw.gif",
+      "size": 1712,
+      "sha256": "6fbd7b084db1f6afb273a6b005c986c89f7a431738265f4efb0cd3f575252cf8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonSave.gif",
+      "size": 1795,
+      "sha256": "f8510abfccc38092b5bdf99d9e499b3723e03a8cf1547af1d0fcc5ffef265f65",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonSearch.gif",
+      "size": 1724,
+      "sha256": "1f19089e422bbbd75e9e3a0f4b03600abea8cff5ddab442d99db8beddc2ce81d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonSortCriteria.gif",
+      "size": 1735,
+      "sha256": "bd29e4c075d1ffa8223a2e9e84f349db0d6b6415271a3b3027da7c86f4edb015",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttontable1.gif",
+      "size": 1066,
+      "sha256": "e4b3540564d5922e26792d2413180f73765630935ccc5513e8838d8d90bde6b7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttontable2.gif",
+      "size": 1063,
+      "sha256": "04505829276fd92668c890c31b2eb7142ab565556933e96c32abd22742afdf54",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonUndo.gif",
+      "size": 1737,
+      "sha256": "8ae27df361e92ca9f0305b59356ec1ece1c950a5d78f4f4b4c78b4259b53ea90",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ButtonVariable.gif",
+      "size": 1064,
+      "sha256": "4583df0940c296269e661ca896a5b9631c758fb6b3ec98699caabf502c991d10",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableC.gif",
+      "size": 1001,
+      "sha256": "4ea17f01be456b0c83a804b239d27faba8be84914da851655c8e46a2cab56bf6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableE.gif",
+      "size": 1001,
+      "sha256": "e4e2341315b59ba9aa8c6272e61a3ef6fa788fd50d0f24ae10cc6dcef556f7b1",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableI.gif",
+      "size": 1007,
+      "sha256": "2099b24318b7f035d00b459dbe4edee4bedbf0a4aab06cd78399cda2c5c21185",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableL.gif",
+      "size": 1002,
+      "sha256": "bc2fdec10179b6f6781d11f27df6ec11d913e2aba58bd25b5c94e779d4db031a",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableS.gif",
+      "size": 1006,
+      "sha256": "1aa33ece46fe9c9932a6178895c25016d800d5983274216c80111400acf05f1c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableU.gif",
+      "size": 1004,
+      "sha256": "41a8f43bceee6c000e8b35efc8a1dee1707e84161e1e662cb79663b41c8b464f",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableW.gif",
+      "size": 1011,
+      "sha256": "f28662aca44c31b5f396def6df5dccc44c56845fb9217a630032e9cee47ce23a",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonZoom100.gif",
+      "size": 1008,
+      "sha256": "d91c74ce8df47461b073f02d41e2d8ef12f78fc8b88af91d2aaab6d8e971b8af",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonZoomFit.gif",
+      "size": 1004,
+      "sha256": "5b88ea06d6a2c314188b51dcb2f340c73c5c64496f2422bcf9188333e5dca5bc",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonZoomPage.gif",
+      "size": 1000,
+      "sha256": "d209f6e5773c5c8205d4c9168ed48d2f65b4dcaef4c23f49f1eb9df153efba5e",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ch447_a.gif",
+      "size": 4790,
+      "sha256": "d900398ffc3d667e4c34ad7d461f52cd1f5a1bdd2994f7bd64300b16a6a5cec6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ch447_d.gif",
+      "size": 13214,
+      "sha256": "d1fdfe4988e0a20dfed004dedcde5a16b13c7dabc3bce041ec78fa3731b0b195",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "change_appearance_transition.htm",
+      "size": 1564,
+      "sha256": "30b54e07dc15515f16e0874e067f535eaa1c229a7ee7c85df650fbb041845d25",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "change_path_transition.htm",
+      "size": 1476,
+      "sha256": "fbd40d23735138979213801474bc6ee74e3826094b7591c3cb7c73896759aead",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "codegen_dbtoolarge.htm",
+      "size": 2826,
+      "sha256": "2c503c782fa77d7222ff5b5d14b2861d8a21ab87696dca57f45463f8867da3af",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "comboboxExperiment.gif",
+      "size": 1137,
+      "sha256": "2f193573cb528e8d1bb12c581c46711179144c2a5d4c618c476036c91e2cbf50",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "comboboxSearch.gif",
+      "size": 1851,
+      "sha256": "f72a86b501685b3e8065edddd7c972c5d2284a4321b9a3d95ba5c718caa798c8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "comboboxShowAll.gif",
+      "size": 1114,
+      "sha256": "4b29fbe7fc0e039b29d5d36e8aa44916842dee23094cbc5bace98769011fc6ea",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "comboboxZoom.gif",
+      "size": 1084,
+      "sha256": "3334e9c739e99fb5ba1bacb98812f122b5cc66d2d69c8566dd0c6acff33f526b",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "communications_components.htm",
+      "size": 2515,
+      "sha256": "dcd54c70667c8fb191f86eb77a46ff688086e74f904cfba052ded93551096f3e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "conditions_actions_state.htm",
+      "size": 2233,
+      "sha256": "aa7df4a873261d89fd25466add803390b95b3b911d45a3c3689999df7485aec3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "copy_statelayout.htm",
+      "size": 1483,
+      "sha256": "acac4eac77744238c7e116f855dca64e240ad3186a8dc6459857ffed97865fb4",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "create_transition.htm",
+      "size": 2740,
+      "sha256": "3238b52b73306858cf7ca5ec77a22e17bbe8b749e373cf7dc58d5c49ccfe2455",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "creating_junctions.htm",
+      "size": 2032,
+      "sha256": "99b8717846ee0c20c4ed8c4286e515de14d7798ae5c17674506a5fca52144fbe",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "cut_copyand paste.htm",
+      "size": 2396,
+      "sha256": "5bb77eb404bee31567da5ff682051d7230dcb80356350ac8f6f5cfb92d005921",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "display.js",
+      "size": 5656,
+      "sha256": "85712144c31aac1d2706f3b60475055a673961f71bc37c0f4c9e9c4b85fa9b31",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "editing_junctions.htm",
+      "size": 2548,
+      "sha256": "cc6e8c1808bd2f204b25df6b4cba2df2674879ee7f65abca4e46bc8c095d8c0b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "editing_state.htm",
+      "size": 1467,
+      "sha256": "d4fbbaea68cd2a06d05b86098ddc208a79a948221806aa896ab046364b7024ed",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "eHelp.xml",
+      "size": 371,
+      "sha256": "6ad364c922834eed68acd82d5e327cdd562e6791cf4d4c46b4ffe15f174cceb1",
+      "extension": ".xml"
+    },
+    {
+      "relative_path": "ehlpdhtm.js",
+      "size": 125831,
+      "sha256": "78a3c61c36c141369d5fea8af238b5d49f2c2f38b02515b4a80aa4a354e46543",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "icon_smvariable.gif",
+      "size": 1090,
+      "sha256": "f03ba0a47f95a20a6ab40b457e84103af8e25437c32bead067ee691c9659faf2",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/button_filtertab.gif",
+      "size": 1036,
+      "sha256": "7964c2e4fa9542b8098bc1aa6ab3a14b2a612dbea3cae7fc1e2f97d12be1eb78",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/button_filtertab2.gif",
+      "size": 1076,
+      "sha256": "7283bee7576e1399b14d4b413b5004d224ea2908794e82a1c912512c1a5e19f6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exp_minus.gif",
+      "size": 837,
+      "sha256": "18a8ea974d756d370d6f7067283fc8c0b26f235c8e98bdaaf13a63e7dca8b1c4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exp_plus.gif",
+      "size": 842,
+      "sha256": "9ff1991cf9c6de621e2672bebf74fbc56680e3413f74d6cf18e25238701651be",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/state_hier.gif",
+      "size": 3023,
+      "sha256": "24a62c8fbe0166c81adc7f991aa210d99ecc906f8433e7f5c39d69a69d945646",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/state_hier1.gif",
+      "size": 3522,
+      "sha256": "2f603436c5ccc50b375658e07f79eafd2f89cb7915d77d815b53104449fcffd9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/state_hier2.gif",
+      "size": 3546,
+      "sha256": "c3573ff131ab650d9a25495d68a05982943c7669ab8a3fd93f68fef64c63a60e",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/state_hier3.gif",
+      "size": 3692,
+      "sha256": "ff1023fff1b97c9074d8587da078732c4108152981c32aa726d3128ad93c7302",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/state_hier4.gif",
+      "size": 3932,
+      "sha256": "88a2ce007865e18ddfa60ead3102d47014166841a8becdd8ef38935461397751",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/statisch.gif",
+      "size": 831,
+      "sha256": "481cd3e8b966f0a4398b853efce140287877173b926b53d710791675a1b15aa4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/Zeichnung1.bmp",
+      "size": 702294,
+      "sha256": "835b047f9e318c84e022d4287309876ad23f7ca980321b3d84f4b1ff7c660626",
+      "extension": ".bmp"
+    },
+    {
+      "relative_path": "Layout.css",
+      "size": 9903,
+      "sha256": "89346ddcbdfe6427f97233efcc0308bb18336cb5a67fe7da01ae4143f8cfb7ac",
+      "extension": ".css"
+    },
+    {
+      "relative_path": "layout_states.htm",
+      "size": 1711,
+      "sha256": "41d2ce460c0f1f6b054f2c63622ee47e809dac6924fed98ae6ca573c0c1bb4ea",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "optimizeHierState_1.gif",
+      "size": 4545,
+      "sha256": "828f3af14f7bd0a90cf27f0c3528d839cfa64b32e10ff27df42f326491473645",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "optimizeHierState_2.gif",
+      "size": 4678,
+      "sha256": "3ac06ff6e7b67024af9c7c612ff6cfe24c1e8dfe02e863c7f8a2cf4351e23323",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "optimizeHierState_3.gif",
+      "size": 5433,
+      "sha256": "849992fe2c9a0a120147ecfc39456df57002c1768b1c9b219113ecafa80ee458",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "pbutton_deltat.gif",
+      "size": 991,
+      "sha256": "0d673cb4845cb9366e231b50e3c7b71af34524a49b58055ec5eeac95c1696d66",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "pbutton_implementationcast.gif",
+      "size": 995,
+      "sha256": "d90b82c191487b8a34fe87e0904178b144a116191ef88f82dbab1f81994edbf2",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "pbutton_onedtable.gif",
+      "size": 963,
+      "sha256": "5dc14fb377a0aad010923bffac64b6a87b3def6fd5cab01634841af3df1777a7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "pbutton_twodtable.gif",
+      "size": 980,
+      "sha256": "afd4af8cbd642fc2843d5dcad05d29299ef2d99e75ba0d6ac2a1d319f489cb67",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "pcombobox_typeoftable.gif",
+      "size": 1060,
+      "sha256": "a30f263d26e5602a28e8eb35b56d486857912eaec138f399663ed84cc33f5d22",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "PREL_state_junction_1A2.gif",
+      "size": 2411,
+      "sha256": "d16ca8661fd8da04bbd406944c3ee3dd720fdf1b9708dcd9a681cf8578ec5057",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "PREL_state_junction_2C.gif",
+      "size": 2212,
+      "sha256": "3fedadfb300ea534329fe54ba7c8c36f0a273ed6befad2a0287a2598da7df282",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "renaming_state.htm",
+      "size": 2005,
+      "sha256": "fc3d6b0846c0d475d61154427809a998f2a427b90dc927b18dc1dc35aa606fbd",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "resolve_hier_2.gif",
+      "size": 5210,
+      "sha256": "e465494fef10388af3e0086d3606c0082e969235067e11d8ef025e39b763674d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ResolveHirearchy.htm",
+      "size": 2149,
+      "sha256": "4eb7eff57ccdbbb852082d3c61daf11ba5ed337a899e3ad36a4159165d3da018",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "RoboHHRE.lng",
+      "size": 3586,
+      "sha256": "607e16623990c7b694bb11537edbecfbd7057fda1739bba5173e9d8a4942b18f",
+      "extension": ".lng"
+    },
+    {
+      "relative_path": "SearchView_PotentiallyUsed.gif",
+      "size": 7429,
+      "sha256": "b2543974f852a11829edac37c227bb52885e8671c0943628649190d7b2a79416",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "SetupHierarchy.htm",
+      "size": 1318,
+      "sha256": "5fa63bdcab1197ac19370f3ea94611a0736e2a577905e29498da7278b501a32e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "sm-state copy.gif",
+      "size": 215,
+      "sha256": "4c1025039821230699787fedd3f0fe2a0907a0887ee4412961cca6cd6334c645",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "sm-verbindung copy.gif",
+      "size": 829,
+      "sha256": "2cb5e12bdf9dcb18aae2d3d752f01166301d569917e776ff3f7477b2e2994c31",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "SM_Action_Tab.htm",
+      "size": 3027,
+      "sha256": "a9d06e3cd641160082de887a32d26db15b4b66adabdc8d12ab9b5d49e12674c4",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_actions.htm",
+      "size": 2050,
+      "sha256": "ba0696ef02844235cbd7dac617b5e8ef70a9675df99b21e346f606ffd795beba",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Actions_or_Conditions.htm",
+      "size": 2245,
+      "sha256": "4d238601af1022cbb8daeda46353b4af60730d935bb85d344b4d175407f357d8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Actions_or_Conditions1.htm",
+      "size": 2198,
+      "sha256": "384f8cf697fc763d1b03e247eab447ba6e5d7a3ec931d8876f31919a992309be",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_ActionsConditions_SeparateDiagrams.htm",
+      "size": 1544,
+      "sha256": "63073bf01b1cc73e8a75500c2f3c0efaaf8926c4d66258436a58a681cb277d69",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_ActionsConditions_StateDiagram.htm",
+      "size": 1490,
+      "sha256": "0989e29fa5bbc047ef9008b23666816e9a34fe052f9bf64c82bb38d2f4ed2427",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_ActionTrans_Tab.htm",
+      "size": 3078,
+      "sha256": "8e3871475fbbf17a5b97fbb698332412005048a9b1ff9181d5143e83a7f6186a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_activate_deactivate_outlining_of_actions_conditions_.htm",
+      "size": 10690,
+      "sha256": "342c6afcf7b29ce2c1333efd8830fde0accff8f4ffd46d329524f8a665082996",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_add_condition.htm",
+      "size": 2268,
+      "sha256": "db548d1a9f8b32abbbd3f1305c962aac35267d1e470c1e7d5af8a48a77c7b5b2",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_AssignActions.htm",
+      "size": 3221,
+      "sha256": "a52c527aa31945370114ae78c77a1c4babb327a43a608df433b0e2d2be12fa8d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_AssignTriggers.htm",
+      "size": 3295,
+      "sha256": "a5faac40b5660011a805e194e8bcd983f3471f64054ad1b4e13386b06d8f7b44",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Basic_Blocks.htm",
+      "size": 2025,
+      "sha256": "db01ee80e2477c43be36cc8cb6a960eee86bf56d4e8c087d03dd73a916d9a355",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_blockDiagram.htm",
+      "size": 2321,
+      "sha256": "75b5d4e9dcf0ccc02b052557fc4820fa7359ff97a53be641dd7ca70d6c5316ca",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_browse_view.htm",
+      "size": 2218,
+      "sha256": "fd892d4266f3ca4cb1fd85d31ce4f1406a86ba3a0a13fff49e87774a9790c94b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Build_Menu.htm",
+      "size": 3599,
+      "sha256": "9eae658010de9468a75907df8a85f0e188606ae943993e542bc1e68c19c12a80",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_ClosedHierarchy.htm",
+      "size": 1549,
+      "sha256": "ba040e16c44b9e8ed53de7859db32cb3986e9cad066bed6d6de5b4bf5055cfbd",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Condition_Tab.htm",
+      "size": 3009,
+      "sha256": "61d174b0904bb8f97b0eb443597a898b711c73cf68c72e59c42486d78e109654",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_conditions.htm",
+      "size": 1561,
+      "sha256": "a962cf21378e7fb6283ad1e6b88f710f04083411d671f4ac7237826d5477eacd",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_conditions_actions.htm",
+      "size": 1763,
+      "sha256": "9a9ab3fc7350e61f0ea40b1ceb405c08526fc8e02391aa1597782c6fc76a6400",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "sm_contextmenu_componentelement.htm",
+      "size": 9252,
+      "sha256": "3484940af97a9c57f7d6850a3140517940f99bc34538b4cd4f4f14f379cb1d18",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "sm_contextmenu_diagrammethod.htm",
+      "size": 5424,
+      "sha256": "3891b9eb022c84ad622ef7026818b99efd61b456c2d4b2f416c6c2f060f00ffd",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_ContextMenu_SpecificationView.htm",
+      "size": 5957,
+      "sha256": "f1eb1ce0f12bcdce255d325a3233824446c0c4597562b2c22cbf2c301338d3fb",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "sm_contextmenubrowseview.htm",
+      "size": 7526,
+      "sha256": "b3fe7b70ae3ba4876420c58fa3755703bb2a4943be31fc0f7ff02496348e00e8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Create_ESDL_Diagram_for_ActionsConditions.htm",
+      "size": 2294,
+      "sha256": "58342f54c76f0d9bcae538892d7f1b4605c2c3498f3c54b0c3b97d7af4de1843",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_create_public_diagram.htm",
+      "size": 2173,
+      "sha256": "fd206e3f224dbfab550346e88cc5531b8172f967689200aa26dd7418549c60a3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_creating_new.htm",
+      "size": 2920,
+      "sha256": "bd1687f054810dc215a11d1b9b7db195596cc21fd29bd8becb192d7a4b652afa",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_data.htm",
+      "size": 1807,
+      "sha256": "49fdfa2b7289bad5032c66be3b3e5e8b2ba2dbd90c8f41fc22f885529e2e89d8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Define_StartState.htm",
+      "size": 1867,
+      "sha256": "be68c237f66912b9ff1dcc92e2dafb83d8255221476a33728d9aee0130eeadd2",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_description_of_window_elements.htm",
+      "size": 3258,
+      "sha256": "aff611eb7602e46771ac7a616eeea725f4accfd7e350340af85e3e844b1d8aac",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_display_info.htm",
+      "size": 1690,
+      "sha256": "ca8cf20086fb3bde2b9f7d1a4aea99ddbbf44efc2ab9dea406e83abef18577c8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_edit_actions_conditions.htm",
+      "size": 1670,
+      "sha256": "cd29f41311adacf74558ea59dd0153d0660c7d21c982d5671310d761bf0d88da",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Edit_Menu.htm",
+      "size": 5220,
+      "sha256": "e67aa2902f783a5de2574fedd6197257b7fa7bf06cd3585084b5acfe792e7ef7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_EditMenuStateTransitionEditor.htm",
+      "size": 2208,
+      "sha256": "902d1322c623e58fe8317f757092318be67e17102f452dc6643efdb81138208c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Elements_Palette.htm",
+      "size": 11341,
+      "sha256": "972f255914f9cfe033d091b88e312db3e08c7fdef2e17d8feb916432db91c1c4",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Entering_a_State.htm",
+      "size": 1412,
+      "sha256": "15e2b5a78e6e02b873298854aa1d2e01405b36fad01794e7f93eb49cd305e96f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_ESDL_crowd_cut copy.gif",
+      "size": 3511,
+      "sha256": "4b4a92cbce7e9460e643d5661d4f6cc74878ff73044932417e228ac07b728838",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "SM_Example_10__Transition_to_a_Hierarchy_State_Without_History.htm",
+      "size": 4718,
+      "sha256": "ac34a6c6f15c226f356f31e5075312941aac9141603fd7243f988b3f442d7339",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Example_11__Transition_to_a_Hierarchy_State_With_History.htm",
+      "size": 3685,
+      "sha256": "68cefaf2e7b2e315ac9ada97481b8760654b47011e53dd2e43b19900faaa55ec",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Example_12__Transition_Within_a_Hierarchy_State.htm",
+      "size": 3726,
+      "sha256": "30ffc62006c337348022e75d57fb276d3bb2e9ae0fa377fea995a282a388b58e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Example_13__Transition_Between_Hierarchy_States.htm",
+      "size": 3968,
+      "sha256": "d1064acddadec0bf66c050086a41aeb8744a39977f74f43df91ceb573fa1562f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Example_14__Loop.htm",
+      "size": 3650,
+      "sha256": "4451070123f07b9327274e71eb5a748a4b2f002701ef85f03ad225ec197a830d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Example_15__Transition_Between_Substates_of_Different_Hierarchies.htm",
+      "size": 4417,
+      "sha256": "b6f8f89f1f0cf6540110db83c63e4e6d5c975b2a260cf43ae9f3f3441c43720c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Example_16__Transition_From_a_Substate_to_a_Hierarchy_State.htm",
+      "size": 4445,
+      "sha256": "ccb9e115eb14f32ed9c01b525ddba5e98557cd7c68d67bd1354b20c40e199ad2",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Example_17__No_Transition.htm",
+      "size": 2706,
+      "sha256": "f9614b7e5446c2cbd2606051e786a9b092feba9ed1766d02b5b64fee0df8da85",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Example_1__Transition_Between_States.htm",
+      "size": 3097,
+      "sha256": "a8ebe7b6ead1ce9e7c9892fe199106c4d9f02c5cd9b27c195b929b733b888a2c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Example_1_CodeGeneration.htm",
+      "size": 6890,
+      "sha256": "c30963eb2c3e65949554d27a5329c62621e27b1029d3bc3b14f946ceb8110502",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Example_2__Transitions_from_One_State.htm",
+      "size": 2924,
+      "sha256": "c3a335aeda38a9f3ae298789b8ab038e7d7117eb83cc329d0ba4c52c5c0742f6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Example_2_Static_action_of_Hierarchy_States.htm",
+      "size": 4375,
+      "sha256": "6379523f6ff70fc85a5ba7099de869a3c4963bc39ba2223c2273c44fda7e9dc4",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Example_3__Loop.htm",
+      "size": 2765,
+      "sha256": "7dedb3b680be5f75278f905cf04a26a9387ef8024ca13ba66dba51af3d4e8caf",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Example_4_If_Then_Else_Construction.htm",
+      "size": 2858,
+      "sha256": "e6a9d90d1b188f7ca6f686df30ba06cf46f7f65dbf72b463c2a009fefbf4d3f1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Example_5__No_transition.htm",
+      "size": 2043,
+      "sha256": "6ceab27d34971674065b28a058ff7961226c6574dc5c885e31b5a1b511246f2e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Example_6__Loop_construction.htm",
+      "size": 3353,
+      "sha256": "16b9c6f441c0b67b62dafcdac094345070c7f38c34af3df05a262528def50cc0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Example_7__Transitions_from_Multiple_Start_States_to_a_Destination_State_(One_Trigger).htm",
+      "size": 2837,
+      "sha256": "b600429007a6543e5c59fcbcfc54fc0dc8aadb7b97f149466c841524f20e4fea",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Example_8__Transitions_from_a_Start_State_to_Different_Destination_States_(Multiple_Triggers).htm",
+      "size": 3237,
+      "sha256": "1ee8e3d46653827177aabf240b08f5847f1139f4c74c9395ae68f5b347fba061",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Example_9__Transitions_from_Different_Start_States_to_the_Same_Destination_State_(Multiple_Triggers).htm",
+      "size": 3303,
+      "sha256": "31cd2d30c504155ffb4c7b0bda68039ea56abba806f12b6608a9a589e3379a2f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Example__Actions.htm",
+      "size": 1098,
+      "sha256": "f281f68cf54a8f2b5da16245f140370650821997e3802f368f35f91ad37a5be1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Example__Condition.htm",
+      "size": 979,
+      "sha256": "5036e4716f6a2e8bbf8e02f3a44cab5b7b3346f3c8ea2921de6dd7f81913c9a9",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Example__Hierarchy_State.htm",
+      "size": 1546,
+      "sha256": "a8f7dafc4b7d6f18d945cda4140da3b56ade640145af84ef361c55366fdc2baf",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Example__History.htm",
+      "size": 1116,
+      "sha256": "a9251953d10aff676bdda7bd3bc3fb10c0e993fefabc9dccca4b3d217dd4a2f5",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Example__Start_State.htm",
+      "size": 1469,
+      "sha256": "eff6be6c587799d1408b57428f05b68b3132a5d74f13608e814032795a554ad6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_ExecuteBasisState.htm",
+      "size": 1078,
+      "sha256": "0c0f4a8bd824b9817303dbfa7dbc456e1c595755de8b2306efaf5e376c0e1f53",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Executing_a_Transition.htm",
+      "size": 3169,
+      "sha256": "ef367b4e0b6762247d403251f37e340d77e751e3a0ac01e0555aea13ebf6392f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_experiment_with_state_machines.htm",
+      "size": 2096,
+      "sha256": "bfa2c7d776e6178bd9530488252a74af9e3a0c313e1bb541995ebd82b04770ca",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Extras_Menu.htm",
+      "size": 5845,
+      "sha256": "078bb6479b1ac7a725378563058db9008016f4d32c68f87d6ee2adf431fd71f5",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_File_Menu.htm",
+      "size": 5413,
+      "sha256": "1bb5fa0363db93eb380d6529ed3872f82c01a797ee353f7420acde25ba60a68d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "sm_filtering_the_component_pane.htm",
+      "size": 2308,
+      "sha256": "1aee83ad433ebbb815365677d883849177e6229c16f53ec2a5f15d59c650b566",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Help_Menu.htm",
+      "size": 966,
+      "sha256": "9000d8f83fb9c51290f099288748d515b2d335ea180549d6053532e0601bab6e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Hierarchical_Code_Generation.htm",
+      "size": 2391,
+      "sha256": "c5fb8058df46d3ee0bee1d1ebfef65f4193ed1478f567d9a37af36ed500b391c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Hierarchical_Code_Generation_Exapmle_1.htm",
+      "size": 7824,
+      "sha256": "279d1efff7b5f869f291333d5f27bb090be0cfd45978922a64d66d457d9bf11b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Hierarchical_State.htm",
+      "size": 3064,
+      "sha256": "3f59a448449ffd6d2bd350fecb8ffe9765701f2fb13cc64b6b31d4eb06756527",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_hierarchy.htm",
+      "size": 2965,
+      "sha256": "6d98bb8eaeb24df92658d0dac483162ce56ef4f159a06b36f815b57b05dab41e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_hierarchystates.htm",
+      "size": 3201,
+      "sha256": "9bff459a24ac4be98a573eba3c2bc15346c7e126d94cbedc9946ff49dad84955",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_History.htm",
+      "size": 1181,
+      "sha256": "167dc14f6551347bbd5797b66a487ec08bfa046cfcd88cd65f1b4322849fb4ea",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Initialization_of_the_State_Diagram.htm",
+      "size": 648,
+      "sha256": "544db90f026c0c4f5927b8cf9effeb873697b56dac83f01eb062c1e45b49fdf5",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Insert_Menu.htm",
+      "size": 3150,
+      "sha256": "2ba44c7859eac9d1cee9e5a295f301849c27f89e0fb1d159e3940de8505d9aeb",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_insert_trigger.htm",
+      "size": 1550,
+      "sha256": "195878be8a7fb86a5a2b0979d952c4d178cc030e97f9554b79dd3a6e4c284089",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "sm_junctions.htm",
+      "size": 7576,
+      "sha256": "7581f173d5f2e53d4da998257c7693b1e2142e52ae1fd02a271324c88134f529",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Junctions_1.htm",
+      "size": 1086,
+      "sha256": "51ca41e1c1d167c9d6a9d396a84f6c5c0ab04d9a50888717034690cc8a89fc19",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Junctions_in_State_Machines.htm",
+      "size": 1824,
+      "sha256": "217fa11fbc830ad310a88e9964354bc0951000c8c3e511543fa945747fd11a77",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Leaving_a_State.htm",
+      "size": 816,
+      "sha256": "c7ae77c2ee3f043d1b3816ac499913dba0cac54293205c531f0aa5ddcc186b64",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Loops.htm",
+      "size": 1099,
+      "sha256": "bb70fcd04e4ee505dca7151ad8bbcf96dbc14bf18f38fe37102d64e027a2fa4b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_menubar.htm",
+      "size": 1404,
+      "sha256": "1caae6b741aacae55cd940902b07edf70a33196f77693a27441df26d74487966",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Move_between_hierarchies.htm",
+      "size": 1377,
+      "sha256": "a477b9f932c7cc3091301f3968792ac16f7b11c754c749396183e0558d23c0e0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_opening_diagram.htm",
+      "size": 2843,
+      "sha256": "1d3d5c46312573d760c439d20f16d824492012823c4504e25145f97b5c8342e1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Optimized_for_Code_Size.htm",
+      "size": 1488,
+      "sha256": "0c0741a67cf09994028728cf0373c939e6bc98c02545c97856192995394d5462",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Optimized_for_Response_Time.htm",
+      "size": 2174,
+      "sha256": "f60cfca369d13a8070845ff6c0cfb87137a23bc3a521fcb358de9e81b0def244",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Optimized_for_Run_Time.htm",
+      "size": 857,
+      "sha256": "96fe03d624f28f8841534758a4cf00813cf9154d208b407b8928e5299e2f3e44",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Optimizing_the_State_Machine.htm",
+      "size": 4981,
+      "sha256": "b60c201388eb19f834658a2cec99aa0a13caf9c78286d7832171d9f3ebcc7f3f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_overview.htm",
+      "size": 6113,
+      "sha256": "9d1a32253fa7b56d25962b8f328a5cdaa38655ee8593b72ae1c5a0b2f4b35ae1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Palettes.htm",
+      "size": 825,
+      "sha256": "037859680ab29b3a9f7240a429594403da9ce658c32f202623deb4a7ad1c0f3b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_public_methods.htm",
+      "size": 1050,
+      "sha256": "d9cb1ffb34f16685a64a9d1affa5b9d26da9e5f762b6cc46ad97af5ef42709f3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_representing_colors.htm",
+      "size": 1003,
+      "sha256": "cbd3fa7e1ad6b0346a8ddf5227a98a76213d5d8253018873d25c2f09fa3d2486",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_resetting.htm",
+      "size": 1096,
+      "sha256": "7c9f8e5507b0b0cb4a7e46c50dfa3e54811d95e5c3cea28385a626b3a6a4c4fb",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Rules_for_Trigger_Arguments.htm",
+      "size": 2274,
+      "sha256": "a0de09217613335f66a4fd34d524d5916cf1fa99e13acfeaa811e08ade3beb2b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_SearchResultsView.htm",
+      "size": 10256,
+      "sha256": "12b07fecc15b2139b3fc648a93f82ce8037bc4b4b98de529d7324db8d8c7d4cd",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Semantics_of_State_Machines.htm",
+      "size": 3907,
+      "sha256": "58e20d18bca8982ab5e312011627e863e9b9bde1b9b1af6e99af950f068f980c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "sm_semanticssimplestatemachines.htm",
+      "size": 964,
+      "sha256": "41dab32f3a04736c32a7e823c0a5823fef73fb06a4f9355f91a8c60bee5998d8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "sm_showoccurrences.htm",
+      "size": 8994,
+      "sha256": "3b4eaed0e10f10a0041d6381b6452638fd2ba8bd55fe2abb361f4889d32c8e78",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Specification_View.htm",
+      "size": 2198,
+      "sha256": "e4f5a4535e6bbe57fbc379b46e5b769643c1b496485196152729484d068366a7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "sm_specifyresetmethod_statevariables.htm",
+      "size": 10965,
+      "sha256": "d768ec51d6e591088199ce571a41e32ca6e2e2812db5ec67c0ea21b13bd90960",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_start_state.htm",
+      "size": 1251,
+      "sha256": "e388d31a855937354fe03d3afe71793ff4c1055c824ecdb30a90ac1e8b08cad8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_State_Editor_Window.htm",
+      "size": 2559,
+      "sha256": "45e8a606d04165936f3041219cca0aa35245007c000667a99fcc87c6e351dd34",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_State_Machines_as_Classes.htm",
+      "size": 3236,
+      "sha256": "731d72d3a2f3ce2315cdd6eb27983ebfc72b6c4bb1903413c94a8fadc9cb1e0c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_states.htm",
+      "size": 2700,
+      "sha256": "a3b24d47c8f20883b2fcc0cfea697308c39155f6713c8032dc2076c77ed6917a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_StateVariables.htm",
+      "size": 3707,
+      "sha256": "3523ef575ab90f4ad06aa5affb8345a610fe470802c7b19dff5f11b355557d3a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_To_Activate_Deactivate_Auto-Inlining.htm",
+      "size": 10216,
+      "sha256": "2e3b1faa5d5b7e7179283576cc61cfe087d4f851ed300a1e8cf2bb07d94efd74",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_To_Activate_Deactivate_Hierarchical_Code_Generation.htm",
+      "size": 10250,
+      "sha256": "f88a6c358bd5755af44725ed4f81da1a20fba0d13e547428b039a2fb76136d0a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Toolbar.htm",
+      "size": 883,
+      "sha256": "c8136045cf9bccbe85ab9f6228d035e8ed07413f9d885006d91c3272c4810b06",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Toolbar_Basic_Blocks.htm",
+      "size": 2307,
+      "sha256": "db893782e13de2c9fa0216431fd764eba6cfaddf3b708585c2b0d82f7d3360ee",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Toolbar_Elements.htm",
+      "size": 7077,
+      "sha256": "4498267ac80d31feb039780ba4062f930a9b6d124e1d53e084b995401e072afa",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Toolbar_General.htm",
+      "size": 9577,
+      "sha256": "e698d4c3c4ce19f8f60282eb2bac5e1730697d312f3973b378ddaa6fc820976e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Tools_Menu.htm",
+      "size": 1341,
+      "sha256": "9940985262146336c44a2de01c709c6ad0116c3f1f7c37bb2c666bd14862324e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Transition_Editor_Window.htm",
+      "size": 3737,
+      "sha256": "f84e9daa05a5bd71f510927190ab51d571416b32f81de3bb1b9e4c50b5a5576e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_transitions.htm",
+      "size": 2757,
+      "sha256": "9f4aa5930a3b87ee582e72fe17c16bfc4226f0216ad6a5932425063676680ac3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Transitions_between_base_states.htm",
+      "size": 889,
+      "sha256": "9abdffb49ef119174fd5b3b5b0a147cb092eb8ebd704d6038ca38bf58ec8ef4d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Transitions_between_substates_of_different_hierarchies.htm",
+      "size": 1291,
+      "sha256": "be2b4858bccff3ed4a7eab874e5c62d6d75f25ae93bd8f5bc4d8855797b8a1ac",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Transitions_from_and_to_hierarchy_states.htm",
+      "size": 1734,
+      "sha256": "7cac6830b47fa18e3c68f966253b5691886871747dffae2639e402976ed96181",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Transitions_with_junction.htm",
+      "size": 1452,
+      "sha256": "c24a817dc9df8ef9c843a70880b924d62b52a00b93ee1d40c889788ca7b45feb",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_TreePane.htm",
+      "size": 9195,
+      "sha256": "2329eb8b90fe3dc26d595bb0a7191083551f3749319d1ef671c503657e478028",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Trigger_Arguments_for_Communication.htm",
+      "size": 2583,
+      "sha256": "6720364d968d3a9b76f8022462d6aaeddccecb3759c241ee42840214c37dc22a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_triggers.htm",
+      "size": 1428,
+      "sha256": "f26ae6ebfa9b99cf1b9dccb72b936b4f0f4552b21b81672f17ecadd5b263c328",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Triggers_and_trigger_arguments.htm",
+      "size": 866,
+      "sha256": "bd70ac3a3f62538d14de8728f8f906375b56a599d278d08fe17744017cc5e01b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "sm_unusedelements.htm",
+      "size": 10796,
+      "sha256": "c4f0ca8602681d9838474c684f0c446119b2a9cd7cc4304c116824102611bc86",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_View_Menu.htm",
+      "size": 4119,
+      "sha256": "361badc3cd9cc0a21a27a87ee410ea38d8b453a03ab5a46eacbe08ddf35a9dde",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SM_Window_Menu.htm",
+      "size": 1697,
+      "sha256": "2383190523758b632b87afaf97b1527801c7d527de2660bb2a9cee4bcf65c4d9",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "specifying_actions.htm",
+      "size": 2360,
+      "sha256": "24dce2a408abd6c076248749ac427d03ed5a1b33d7e2f1da060aa88650b1f6fe",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "specifying_conditions.htm",
+      "size": 2479,
+      "sha256": "ad94eb8075f23977651fce5feecdaa158ea1fc1d35f9e5d73158f62632c86b7f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "specifying_conditions_transition.htm",
+      "size": 3271,
+      "sha256": "992bd8c4b471f05649e59fb11635f77316fa604af8f0fd05d1aa2da6b310a8f3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "state_exec1b.gif",
+      "size": 2629,
+      "sha256": "b55e414092c2f7dde097e46d83ad8ad7a53cbac45c636b2c5e3194371b5c0115",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_exec2b.gif",
+      "size": 7448,
+      "sha256": "d8f607f81aac7ae8b66b947ea4b86e653d4db2ffb11744657ec88409a0c42a50",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_exec2c.gif",
+      "size": 5975,
+      "sha256": "d855be578b6944ef8fcd3f6afa235ca48f9ddd220b2a5278da4183c262b2c8a8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_exec3bneu.gif",
+      "size": 10326,
+      "sha256": "9567d1e02520ee7eac3c06dbd150bbb8dc29f9e2652a0399e015206f5ad157a0",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_exec3cneu.gif",
+      "size": 6447,
+      "sha256": "2eab121591de37085ea654fc5b3cb153cffe529d51fbfa03f02fe71fce2a1bb1",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_exec4n.gif",
+      "size": 10716,
+      "sha256": "836065ade1f80262402e4836f9032e43601d455e1eab0831b76bc66be68f736a",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_exec4n2.gif",
+      "size": 10690,
+      "sha256": "5a81a7fb391886680262fab76a100a262948a6bcb5b83414614652ec16e810a4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_exec5n.gif",
+      "size": 10046,
+      "sha256": "f7b12ee45b4a3c249e0a2eb5c245fe5b1bdda3eb4b8cb41f9fe437758df19d13",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_exec6bneu.gif",
+      "size": 8978,
+      "sha256": "71280b34ba6e5812f9dffcc62a92ba5259e371bb66056438b1d56a58b22774e7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_exec8n.gif",
+      "size": 9587,
+      "sha256": "5c1c00655c5d6ad83cfa8f444d7d2e8799ab702f0ae1e1fbe69115d634c15292",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_exec_junc1c.gif",
+      "size": 5312,
+      "sha256": "b128c9ef00de8bd39c2c159090cc282b0a69350419e5898bbeb418984db6350a",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_exec_junc2.gif",
+      "size": 5775,
+      "sha256": "d2f1ec5306257630440d551a6f9285f0581c5cf8dc9105c04a3fa71debec143b",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_exec_junc3.gif",
+      "size": 4919,
+      "sha256": "2508664ed605e9d6c7b8d907b21668a21aafd76c7fe06385cc3744b0ebf1a428",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_exec_junc4.gif",
+      "size": 4983,
+      "sha256": "2941c6b6b956e73d5171f5d9ad9dbb2f27ccd178a99ff70d410d94ef926a006e",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_exec_junc5.gif",
+      "size": 5050,
+      "sha256": "d4e02cf548c5dfef6c924205ceef11b84c9c56a368a42e7631cf1a0117e2f312",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_junction_1A.gif",
+      "size": 2439,
+      "sha256": "00160c2949042ac4607a4e5020574bc0fb7c32714cf37994cc6d20f71cdd3bf8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_junction_2.gif",
+      "size": 2589,
+      "sha256": "e8eb355c8496007a2c347d1e8fd19202ef20cd67685f10105f92a63f0d795969",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_junction_2A.gif",
+      "size": 2179,
+      "sha256": "cf06ff0b23d1f08195bb66825098e58c65b20f931e942d8b298ddd5d37c1164f",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_junction_3c.gif",
+      "size": 2243,
+      "sha256": "84a30240c42b5154671d6f69f64b36b0adeca52f89e837b6f946c000da85d196",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_junction_4b.gif",
+      "size": 1746,
+      "sha256": "a3499b4bec6e379af45f020af786fd877cae50d0a17ece64ee915b8c743edb2b",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_junction_5b.gif",
+      "size": 1638,
+      "sha256": "f43799d4003e111372a5bf22ae4afbd3a0b0c9a28bfa53925e5fceb646528a35",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_junction_6.gif",
+      "size": 2365,
+      "sha256": "665421f6a3d38799ef7885195a1eaf02bdf51696f08f704437321ecacc768923",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_junction_6b.gif",
+      "size": 2020,
+      "sha256": "1d9bc3216c4f30f3a35130edd1611be74b11b5a52f2987439b2f47f6d406c6c3",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_opt1.gif",
+      "size": 3724,
+      "sha256": "5cd26a0ec324bf341fb7dcf68dc3a0fbf4b48116887424ab5d0dea0f9b12400b",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_opt4b.gif",
+      "size": 3531,
+      "sha256": "1a819b1e9e22a64b62960f1ac3451a86739a867c37052b2e56133c217f995402",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_trans1.gif",
+      "size": 1861,
+      "sha256": "f142c00270161f15b78958d4951f87498d74f1a3ab073e05b073cfd7e19992bc",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_trans2.gif",
+      "size": 2735,
+      "sha256": "626dcf76dceb00de65f39b06f63856d49a2fd8c4a40140829e567739d4eecf5f",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_trans3.gif",
+      "size": 3225,
+      "sha256": "bdcca5adfa115e4e8652998ab77108e7e6a907d33f03978c72f5db0ba17c2906",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_trans4.gif",
+      "size": 2503,
+      "sha256": "6d8403b7fa5d380d1d40130b224f64fc507f1dda193de37859004a9806fbad61",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "state_trans5c.gif",
+      "size": 2470,
+      "sha256": "d08b5e5b11846259e82361ca3877b47ff897f236c5dc25bb5c1077c98bda2afd",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "StateMachineEditorEnglishUS.brs",
+      "size": 2,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "extension": ".brs"
+    },
+    {
+      "relative_path": "StateMachineEditorEnglishUS.glo",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "extension": ".glo"
+    },
+    {
+      "relative_path": "StateMachineEditorEnglishUS.hhc",
+      "size": 36048,
+      "sha256": "4534585b1d452b6f39b06a1429abcf8288fff3385396e734934cac469c6cb661",
+      "extension": ".hhc"
+    },
+    {
+      "relative_path": "StateMachineEditorEnglishUS.hhk",
+      "size": 31291,
+      "sha256": "721d91b09a38dd767a8934e723a375c5a77020afab57ca802fd3484f269a5425",
+      "extension": ".hhk"
+    },
+    {
+      "relative_path": "Static_actions_of_hierarchy_states_1.htm",
+      "size": 3400,
+      "sha256": "0e4db8011f22004eff80c238827b33b424b5567efaa5bbd480c3949873edcbc5",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "To_Activate_Deactivate_Optimization_of_Static_Actions.htm",
+      "size": 9894,
+      "sha256": "d79a0cce760c509b94008bf55900e20d1b92d9549394e5938ec629b3b41b8f63",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "use_pm_actions.htm",
+      "size": 1915,
+      "sha256": "f0c5b54547d518f369335d51190712d99d0cad0944d2592efaf932b119f5abd8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "using-statemachine.htm",
+      "size": 1750,
+      "sha256": "b656561fd5b5194886cc264a2ea5908359bc10290befae38bd0392fc818ef38f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "using_conditions_actions.htm",
+      "size": 996,
+      "sha256": "8a30aa788acc5e00277805b86d3bc923a527ac8d5d9b960ac90737666f5ed675",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "using_pm_external.htm",
+      "size": 2694,
+      "sha256": "ebbb47ae68e5d094440df357825c885e2bb7e1122c4ea102bb01980f6cc74ba0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "za_clhier_hist.gif",
+      "size": 1095,
+      "sha256": "c80e5150b433efe0dceb468357f56b77f0da9c3182b620de2a139d1d5297d490",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ZA_Example_ShowOccurrence.htm",
+      "size": 1327,
+      "sha256": "7b98325f7a1a83e4dad527f39c4f3a82f096c58ea36905ad1d049b68ce0af434",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "za_hierlevel_neu.gif",
+      "size": 8261,
+      "sha256": "663017ee771f9f919e24746ccba72df0e30ab2cd30de7abb93bfc294429bf97d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "za_inputs2.gif",
+      "size": 16384,
+      "sha256": "f80d9393b3a21f98952ac5e736b7202aee34205a175c579da6735ae12fc05847",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "za_juncoverlap.gif",
+      "size": 1337,
+      "sha256": "601e1a230cfae41214bd7198ddec9639746072b8bc4dffcede6b28bfc0ff6e06",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "za_junctiontrans.gif",
+      "size": 2207,
+      "sha256": "37979139b52b8e1a91ee004ef4ead573fb25ed4cef02af134db72a68df83ca83",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "za_openhier.gif",
+      "size": 4171,
+      "sha256": "c5bfe0aa0c59b1ea0a0d33a0b6f0afc1736070d2ed17fb3b6fa163be74b774ee",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "za_publicmeth2.gif",
+      "size": 3927,
+      "sha256": "e3aa7043c1d4e6aaa7921be8e439348caa38d98fb8861a9dfeff938ec094e877",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "za_searchdel_unused_methodstriggers.htm",
+      "size": 13789,
+      "sha256": "711f43dfa02d0529b8e50d6929a6c7f7e9ae06e6e077fb3f324fa8252b2d45f0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ZA_showOccurrence.gif",
+      "size": 14991,
+      "sha256": "7874bb7a845b58f4c02d51f1683a3e67582d790afdeb0b84274752dfc41cba5c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ZA_showOccurrence0.gif",
+      "size": 21065,
+      "sha256": "18fcce9fadbcdc102179d25db29debebb49837b8b4ec216ac0ae242d3c56f9f5",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "za_simpleza.gif",
+      "size": 2720,
+      "sha256": "eea8893d0d303498791796ad01b64c429c5549a2f6433988dd12b57496f91d93",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "za_startstate.gif",
+      "size": 1511,
+      "sha256": "0c6bf5392a9216ded4acfdc131f4d5063414f8eab03809d15b7109bafacf29b3",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "za_triggerarg_1.gif",
+      "size": 4552,
+      "sha256": "2a271a14d1cec74e7e62b7272d6ae5e85ff1e34814893106826b8e5750d8ee70",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "za_used.htm",
+      "size": 3612,
+      "sha256": "a6c11fa0efe4612e2f3904de2e24e42271a3817ff6504b48ec5c150ffb765fb1",
+      "extension": ".htm"
+    }
+  ]
+}

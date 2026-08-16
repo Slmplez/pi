@@ -1,0 +1,1461 @@
+{
+  "generated_at": "2026-04-01T03:07:39.719625Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\BlockDiagramEditorEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\BlockDiagramEditorEnglishUS",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\BlockDiagramEditorEnglishUS\\markdown",
+  "input_html_count": 241,
+  "converted_html_count": 241,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 241,
+  "toc_entries_count": 268,
+  "index_entries_count": 358,
+  "index_required": true,
+  "mappings": [
+    {
+      "html_rel_path": "abs_operator.htm",
+      "md_rel_path": "abs_operator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Addargument.htm",
+      "md_rel_path": "Addargument.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Addcomment.htm",
+      "md_rel_path": "Addcomment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Addimplementation.htm",
+      "md_rel_path": "Addimplementation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Addinputhiera.htm",
+      "md_rel_path": "Addinputhiera.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AddSequence.htm",
+      "md_rel_path": "AddSequence.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Addtoconnect.htm",
+      "md_rel_path": "Addtoconnect.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AnalyzeDiagram.htm",
+      "md_rel_path": "AnalyzeDiagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AnalyzingComponents.htm",
+      "md_rel_path": "AnalyzingComponents.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "appearancehierarchy.htm",
+      "md_rel_path": "appearancehierarchy.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Assignindividual.htm",
+      "md_rel_path": "Assignindividual.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AssignSequence.htm",
+      "md_rel_path": "AssignSequence.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Automatic_Naming__of_Implementation_Casts.htm",
+      "md_rel_path": "Automatic_Naming__of_Implementation_Casts.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BasicElement.htm",
+      "md_rel_path": "BasicElement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_AddHierarchy.htm",
+      "md_rel_path": "BDE_AddHierarchy.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_AddLiteral.htm",
+      "md_rel_path": "BDE_AddLiteral.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_AddStatementBlock.htm",
+      "md_rel_path": "BDE_AddStatementBlock.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Arguments_Menu.htm",
+      "md_rel_path": "BDE_Arguments_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Arguments_Tab.htm",
+      "md_rel_path": "BDE_Arguments_Tab.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_arithmeticoperators.htm",
+      "md_rel_path": "bde_arithmeticoperators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Arrays_and_Matrices.htm",
+      "md_rel_path": "BDE_Arrays_and_Matrices.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_ArraysMatrices.htm",
+      "md_rel_path": "BDE_ArraysMatrices.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Assert_Operator.htm",
+      "md_rel_path": "BDE_Assert_Operator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_AssertAttributes_Window.htm",
+      "md_rel_path": "BDE_AssertAttributes_Window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_AssignComponent.htm",
+      "md_rel_path": "BDE_AssignComponent.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Assignment.htm",
+      "md_rel_path": "BDE_Assignment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_AutomaticallyAssign.htm",
+      "md_rel_path": "BDE_AutomaticallyAssign.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Basic_Scalar_Elements.htm",
+      "md_rel_path": "BDE_Basic_Scalar_Elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_basicblockspalette.htm",
+      "md_rel_path": "bde_basicblockspalette.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_between_operator.htm",
+      "md_rel_path": "BDE_between_operator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_BlockLocal_SequenceCalls.htm",
+      "md_rel_path": "BDE_BlockLocal_SequenceCalls.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Browse_View.htm",
+      "md_rel_path": "BDE_Browse_View.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_BuildMenu.htm",
+      "md_rel_path": "BDE_BuildMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_case_operator.htm",
+      "md_rel_path": "BDE_case_operator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Characteristic_Tables.htm",
+      "md_rel_path": "BDE_Characteristic_Tables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_CharacteristicLineArgument_Example.htm",
+      "md_rel_path": "BDE_CharacteristicLineArgument_Example.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Classes.htm",
+      "md_rel_path": "BDE_Classes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_comparisonOperators.htm",
+      "md_rel_path": "BDE_comparisonOperators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_ComplexElements.htm",
+      "md_rel_path": "BDE_ComplexElements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_ComplexTypes.htm",
+      "md_rel_path": "BDE_ComplexTypes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Component_Pane.htm",
+      "md_rel_path": "BDE_Component_Pane.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_conditionalOperators.htm",
+      "md_rel_path": "BDE_conditionalOperators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_ConnectionPopupWindow.htm",
+      "md_rel_path": "BDE_ConnectionPopupWindow.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_ContextMenu_BrowseView.htm",
+      "md_rel_path": "BDE_ContextMenu_BrowseView.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_ContextMenu_ComponentsElements.htm",
+      "md_rel_path": "BDE_ContextMenu_ComponentsElements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_ContextMenu_DiagramMethods.htm",
+      "md_rel_path": "BDE_ContextMenu_DiagramMethods.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_contextmenu_elementincludedcomponent.htm",
+      "md_rel_path": "bde_contextmenu_elementincludedcomponent.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_ContextMenu_Hierarchies_StatementBlocks.htm",
+      "md_rel_path": "BDE_ContextMenu_Hierarchies_StatementBlocks.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_contextmenu_miscdiagramelements.htm",
+      "md_rel_path": "bde_contextmenu_miscdiagramelements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_ContextMenu_OperatorsControlflow.htm",
+      "md_rel_path": "BDE_ContextMenu_OperatorsControlflow.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_contextmenus.htm",
+      "md_rel_path": "bde_contextmenus.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_ControlFlow_Summary.htm",
+      "md_rel_path": "BDE_ControlFlow_Summary.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_controlFlowOperators.htm",
+      "md_rel_path": "BDE_controlFlowOperators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Conversion_MethodsProcesses.htm",
+      "md_rel_path": "BDE_Conversion_MethodsProcesses.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_ConversionAttributesWindow.htm",
+      "md_rel_path": "BDE_ConversionAttributesWindow.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_ConversionOperator.htm",
+      "md_rel_path": "BDE_ConversionOperator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Convert_Connector_SequenceCall.htm",
+      "md_rel_path": "BDE_Convert_Connector_SequenceCall.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Convert_DiagramElements_StatementBlock.htm",
+      "md_rel_path": "BDE_Convert_DiagramElements_StatementBlock.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Convert_MethodProcess.htm",
+      "md_rel_path": "BDE_Convert_MethodProcess.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_CopyMove_GraphicItems.htm",
+      "md_rel_path": "BDE_CopyMove_GraphicItems.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_CopyMove_Items_betweenDiagram.htm",
+      "md_rel_path": "BDE_CopyMove_Items_betweenDiagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_createcontent.htm",
+      "md_rel_path": "bde_createcontent.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_CreateMessage.htm",
+      "md_rel_path": "BDE_CreateMessage.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Createnew.htm",
+      "md_rel_path": "BDE_Createnew.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Cutcopypaste.htm",
+      "md_rel_path": "BDE_Cutcopypaste.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Defaultlayout.htm",
+      "md_rel_path": "BDE_Defaultlayout.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_DefineComponentSignature.htm",
+      "md_rel_path": "BDE_DefineComponentSignature.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Description_of_Window_Elements.htm",
+      "md_rel_path": "BDE_Description_of_Window_Elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_DirectionsMethodArguments.htm",
+      "md_rel_path": "BDE_DirectionsMethodArguments.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_DistributionforDialogWindow.htm",
+      "md_rel_path": "BDE_DistributionforDialogWindow.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Editcomponent.htm",
+      "md_rel_path": "BDE_Editcomponent.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_EditIndividualSequenceCalls.htm",
+      "md_rel_path": "BDE_EditIndividualSequenceCalls.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_EditMenu.htm",
+      "md_rel_path": "BDE_EditMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Editnotes.htm",
+      "md_rel_path": "BDE_Editnotes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_elements_of_user-defined_type.htm",
+      "md_rel_path": "bde_elements_of_user-defined_type.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_elementspalette.htm",
+      "md_rel_path": "bde_elementspalette.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_enumeration_selection_window.htm",
+      "md_rel_path": "bde_enumeration_selection_window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Example_AssertOperator.htm",
+      "md_rel_path": "BDE_Example_AssertOperator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Example_ConversionOperator.htm",
+      "md_rel_path": "BDE_Example_ConversionOperator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Example_StatementBlock.htm",
+      "md_rel_path": "BDE_Example_StatementBlock.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Examples_Elements_NavigationTab.htm",
+      "md_rel_path": "BDE_Examples_Elements_NavigationTab.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Export_BlockDiagram.htm",
+      "md_rel_path": "BDE_Export_BlockDiagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Expressions.htm",
+      "md_rel_path": "BDE_Expressions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_ExtrasMenu.htm",
+      "md_rel_path": "BDE_ExtrasMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_FileMenu.htm",
+      "md_rel_path": "BDE_FileMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Filtering_the_Component_Pane.htm",
+      "md_rel_path": "BDE_Filtering_the_Component_Pane.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Flowchart_CopyMoveItems.htm",
+      "md_rel_path": "BDE_Flowchart_CopyMoveItems.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Get_and_Set_Ports_for_Arrays_and_Matrices.htm",
+      "md_rel_path": "BDE_Get_and_Set_Ports_for_Arrays_and_Matrices.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Globalelements.htm",
+      "md_rel_path": "BDE_Globalelements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_graphical_description_of_elements.htm",
+      "md_rel_path": "bde_graphical_description_of_elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_HelpMenu.htm",
+      "md_rel_path": "BDE_HelpMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_ifthen.htm",
+      "md_rel_path": "BDE_ifthen.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Implementation_Casts.htm",
+      "md_rel_path": "BDE_Implementation_Casts.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_ImplementationCasts.htm",
+      "md_rel_path": "BDE_ImplementationCasts.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_IncludeComponent_BlockLibrary.htm",
+      "md_rel_path": "BDE_IncludeComponent_BlockLibrary.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_inputOperators.htm",
+      "md_rel_path": "BDE_inputOperators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_InsertEditComment_Window.htm",
+      "md_rel_path": "BDE_InsertEditComment_Window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_InsertElement_in_Connection.htm",
+      "md_rel_path": "BDE_InsertElement_in_Connection.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_InsertMenu.htm",
+      "md_rel_path": "BDE_InsertMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_interface_editor.htm",
+      "md_rel_path": "bde_interface_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Layout.htm",
+      "md_rel_path": "BDE_Layout.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_librarypalette.htm",
+      "md_rel_path": "bde_librarypalette.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Local_Variable_Menu.htm",
+      "md_rel_path": "BDE_Local_Variable_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_locals_tab.htm",
+      "md_rel_path": "bde_locals_tab.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Localvariables.htm",
+      "md_rel_path": "BDE_Localvariables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_logicalOperators.htm",
+      "md_rel_path": "BDE_logicalOperators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_maxvariantsize_window.htm",
+      "md_rel_path": "bde_maxvariantsize_window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_MenuBar.htm",
+      "md_rel_path": "BDE_MenuBar.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Messages.htm",
+      "md_rel_path": "BDE_Messages.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_MiscBasicBlocks.htm",
+      "md_rel_path": "BDE_MiscBasicBlocks.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Modules.htm",
+      "md_rel_path": "BDE_Modules.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_OccurrencesDialogWindow.htm",
+      "md_rel_path": "BDE_OccurrencesDialogWindow.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Opening_an_Oversized_Component.htm",
+      "md_rel_path": "BDE_Opening_an_Oversized_Component.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_OperatorsSummary.htm",
+      "md_rel_path": "BDE_OperatorsSummary.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Overview.htm",
+      "md_rel_path": "BDE_Overview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_overview_-_basic_elements.htm",
+      "md_rel_path": "bde_overview_-_basic_elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_PathsForWindow.htm",
+      "md_rel_path": "BDE_PathsForWindow.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Print_Diagrams_Window.htm",
+      "md_rel_path": "BDE_Print_Diagrams_Window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_RemoveElement.htm",
+      "md_rel_path": "BDE_RemoveElement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_rename_delete.htm",
+      "md_rel_path": "BDE_rename_delete.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_replaceincludedcomponent.htm",
+      "md_rel_path": "bde_replaceincludedcomponent.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Resources.htm",
+      "md_rel_path": "BDE_Resources.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Return_Menu.htm",
+      "md_rel_path": "BDE_Return_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_return_tab.htm",
+      "md_rel_path": "bde_return_tab.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_searchdel_unused_procsmethodsrunnables.htm",
+      "md_rel_path": "bde_searchdel_unused_procsmethodsrunnables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_SearchDeleteUnusedElements.htm",
+      "md_rel_path": "BDE_SearchDeleteUnusedElements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_SearchResultsView.htm",
+      "md_rel_path": "bde_SearchResultsView.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_select_item_window.htm",
+      "md_rel_path": "bde_select_item_window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_SelectDefaultMethodProcess.htm",
+      "md_rel_path": "BDE_SelectDefaultMethodProcess.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Selecting_View_the_Diagram.htm",
+      "md_rel_path": "BDE_Selecting_View_the_Diagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_SequenceCalls.htm",
+      "md_rel_path": "BDE_SequenceCalls.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_SequencingRules.htm",
+      "md_rel_path": "BDE_SequencingRules.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Setting_the_Size_of_the_Drawing_Area.htm",
+      "md_rel_path": "BDE_Setting_the_Size_of_the_Drawing_Area.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Setting_up_the_Printing_Area.htm",
+      "md_rel_path": "BDE_Setting_up_the_Printing_Area.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_SettingsTab.htm",
+      "md_rel_path": "BDE_SettingsTab.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_StatementBlocks.htm",
+      "md_rel_path": "BDE_StatementBlocks.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Statements.htm",
+      "md_rel_path": "BDE_Statements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_switch.htm",
+      "md_rel_path": "BDE_switch.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_the_semantics_of_block_diagrams.htm",
+      "md_rel_path": "bde_the_semantics_of_block_diagrams.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_toolbarbasicblocks.htm",
+      "md_rel_path": "bde_toolbarbasicblocks.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_toolbarelements.htm",
+      "md_rel_path": "bde_toolbarelements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_toolbargeneral.htm",
+      "md_rel_path": "bde_toolbargeneral.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_toolbars.htm",
+      "md_rel_path": "bde_toolbars.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_ToolsMenu.htm",
+      "md_rel_path": "BDE_ToolsMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Use_AssertOperator.htm",
+      "md_rel_path": "BDE_Use_AssertOperator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_UseConversionOperator.htm",
+      "md_rel_path": "BDE_UseConversionOperator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_used.htm",
+      "md_rel_path": "bde_used.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_UseHierarchiesStatementBlocks.htm",
+      "md_rel_path": "BDE_UseHierarchiesStatementBlocks.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_UseMatrixArgument_Example.htm",
+      "md_rel_path": "BDE_UseMatrixArgument_Example.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_UseVerifyOperator.htm",
+      "md_rel_path": "BDE_UseVerifyOperator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_ViewMenu.htm",
+      "md_rel_path": "BDE_ViewMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_while.htm",
+      "md_rel_path": "BDE_while.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_WindowMenu.htm",
+      "md_rel_path": "BDE_WindowMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bde_work_includedcomponents.htm",
+      "md_rel_path": "bde_work_includedcomponents.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_Working_on_BlockDiagrams.htm",
+      "md_rel_path": "BDE_Working_on_BlockDiagrams.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BDE_WorkingOnSequenceCalls.htm",
+      "md_rel_path": "BDE_WorkingOnSequenceCalls.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Changeappearance.htm",
+      "md_rel_path": "Changeappearance.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Changeinputpins.htm",
+      "md_rel_path": "Changeinputpins.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ChangeSequence.htm",
+      "md_rel_path": "ChangeSequence.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Changevisibility.htm",
+      "md_rel_path": "Changevisibility.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Changing_Grid_Drawing_Area.htm",
+      "md_rel_path": "Changing_Grid_Drawing_Area.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "codegen_dbtoolarge.htm",
+      "md_rel_path": "codegen_dbtoolarge.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CommentsandNotes.htm",
+      "md_rel_path": "CommentsandNotes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ComponentsMultiple.htm",
+      "md_rel_path": "ComponentsMultiple.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Computationclass.htm",
+      "md_rel_path": "Computationclass.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Connectdiagram.htm",
+      "md_rel_path": "Connectdiagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Connectors.htm",
+      "md_rel_path": "Connectors.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Converthierarchy.htm",
+      "md_rel_path": "Converthierarchy.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CreateArray.htm",
+      "md_rel_path": "CreateArray.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CreateConnectors.htm",
+      "md_rel_path": "CreateConnectors.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CreateDistribution.htm",
+      "md_rel_path": "CreateDistribution.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Creategroup.htm",
+      "md_rel_path": "Creategroup.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CreateMethod.htm",
+      "md_rel_path": "CreateMethod.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Createnormal.htm",
+      "md_rel_path": "Createnormal.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Createprocess.htm",
+      "md_rel_path": "Createprocess.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Createsequence.htm",
+      "md_rel_path": "Createsequence.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Creatingblockdiagram.htm",
+      "md_rel_path": "Creatingblockdiagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DataExchange.htm",
+      "md_rel_path": "DataExchange.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DefiningInterface.htm",
+      "md_rel_path": "DefiningInterface.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Deleteconnection.htm",
+      "md_rel_path": "Deleteconnection.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EditArguments.htm",
+      "md_rel_path": "EditArguments.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EditingBlockDiagram.htm",
+      "md_rel_path": "EditingBlockDiagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Editingindividual.htm",
+      "md_rel_path": "Editingindividual.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Editingsequence.htm",
+      "md_rel_path": "Editingsequence.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EditMethod.htm",
+      "md_rel_path": "EditMethod.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Editports.htm",
+      "md_rel_path": "Editports.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EditSequence.htm",
+      "md_rel_path": "EditSequence.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Editsize.htm",
+      "md_rel_path": "Editsize.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Exiting.htm",
+      "md_rel_path": "Exiting.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ExportData.htm",
+      "md_rel_path": "ExportData.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "GenerateCode.htm",
+      "md_rel_path": "GenerateCode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "GraphicalHierarchies.htm",
+      "md_rel_path": "GraphicalHierarchies.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ifthenelse.htm",
+      "md_rel_path": "ifthenelse.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IncludeComponent.htm",
+      "md_rel_path": "IncludeComponent.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Incrementordecrement.htm",
+      "md_rel_path": "Incrementordecrement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "InsertEnumeration.htm",
+      "md_rel_path": "InsertEnumeration.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "LoadDiagram.htm",
+      "md_rel_path": "LoadDiagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Matrixaddition.htm",
+      "md_rel_path": "Matrixaddition.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Matrixargument.htm",
+      "md_rel_path": "Matrixargument.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "max_and_min_operators.htm",
+      "md_rel_path": "max_and_min_operators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MoveDiagram.htm",
+      "md_rel_path": "MoveDiagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Moveelements.htm",
+      "md_rel_path": "Moveelements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MoveMethods.htm",
+      "md_rel_path": "MoveMethods.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Movesequence.htm",
+      "md_rel_path": "Movesequence.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "multiplex_operator.htm",
+      "md_rel_path": "multiplex_operator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Navigatedifferent.htm",
+      "md_rel_path": "Navigatedifferent.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Navigatehierarchy.htm",
+      "md_rel_path": "Navigatehierarchy.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "NavigatingComponents.htm",
+      "md_rel_path": "NavigatingComponents.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "negation_operator.htm",
+      "md_rel_path": "negation_operator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Opening.htm",
+      "md_rel_path": "Opening.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Passcharacteristic.htm",
+      "md_rel_path": "Passcharacteristic.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Performcalculation.htm",
+      "md_rel_path": "Performcalculation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "PlaceElement.htm",
+      "md_rel_path": "PlaceElement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "PositionOperator.htm",
+      "md_rel_path": "PositionOperator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Preparations.htm",
+      "md_rel_path": "Preparations.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Printblock.htm",
+      "md_rel_path": "Printblock.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Public_Methods.htm",
+      "md_rel_path": "Public_Methods.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ReadData.htm",
+      "md_rel_path": "ReadData.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RenameorDelete.htm",
+      "md_rel_path": "RenameorDelete.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ReplaceDiagram.htm",
+      "md_rel_path": "ReplaceDiagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Resetindividual.htm",
+      "md_rel_path": "Resetindividual.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ResetSequence.htm",
+      "md_rel_path": "ResetSequence.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Resolvinghierarchy.htm",
+      "md_rel_path": "Resolvinghierarchy.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Restoredefault.htm",
+      "md_rel_path": "Restoredefault.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Returnvalue.htm",
+      "md_rel_path": "Returnvalue.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SavingDiagrams.htm",
+      "md_rel_path": "SavingDiagrams.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ScaleSequence.htm",
+      "md_rel_path": "ScaleSequence.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ShiftSequence.htm",
+      "md_rel_path": "ShiftSequence.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ShoworHide.htm",
+      "md_rel_path": "ShoworHide.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "startoffline.htm",
+      "md_rel_path": "startoffline.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "the_break_statement.htm",
+      "md_rel_path": "the_break_statement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Usecharacteristic.htm",
+      "md_rel_path": "Usecharacteristic.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "UseIf.htm",
+      "md_rel_path": "UseIf.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Usenumbers.htm",
+      "md_rel_path": "Usenumbers.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "UseSwitch.htm",
+      "md_rel_path": "UseSwitch.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Usewhileloop.htm",
+      "md_rel_path": "Usewhileloop.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Viewcode.htm",
+      "md_rel_path": "Viewcode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ViewElements.htm",
+      "md_rel_path": "ViewElements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ViewingandPrinting.htm",
+      "md_rel_path": "ViewingandPrinting.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ViewItem.htm",
+      "md_rel_path": "ViewItem.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "WriteData.htm",
+      "md_rel_path": "WriteData.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

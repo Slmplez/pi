@@ -1,0 +1,43 @@
+Log File: C:\ProgramData\ETAS\LogFiles\AscetBridge\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Component: Customer\XiaoMi\Package\AVH\NextEV\AVH_PrevImmDeactivation_Xiaomi
+Kind: Class
+Language: ESDL
+Diagrams: 1
+  - BlockDiagram: Main
+Methods: 2
+  - AbstractMethod: calc
+  - AbstractMethod: DeactivationAllowedAfterActivation
+
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+=== Method: calc (AbstractMethod) ===
+/*  This class prevents AVH from an immediate deactivation. A deactivation  */
+/*  is only allowed after the driver has completely lifted the brake pedal. */
+
+if  (   (AvhState == AVHState_Hold || LfcHoldActive == true)
+     && BrakePedalIsApplied == false
+     )	
+{
+    loc_DeactivationAllowedAfterActivation = true;
+}
+else if (   (AvhState == AVHState_NotActive
+		  || AvhState == AVHState_MechHold
+		  || AvhState == AVHState_DriveOff
+		  || AvhState == AVHState_Release)
+		  && LfcHoldActive == false
+         )
+{
+    loc_DeactivationAllowedAfterActivation = false;
+}
+else
+{
+    // Do nothing
+}
+
+
+=== Method: DeactivationAllowedAfterActivation (AbstractMethod) ===
+return loc_DeactivationAllowedAfterActivation;
+
+

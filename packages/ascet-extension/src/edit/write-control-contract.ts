@@ -1,9 +1,11 @@
 import { Type } from "typebox";
 
+export type AscetMutationIntent = "preview" | "apply";
+
 export interface AscetPublicWriteControl {
-	executeWrite?: boolean;
+	intent: AscetMutationIntent;
 }
 
 export const ascetWriteControlProperties = {
-	executeWrite: Type.Optional(Type.Boolean()),
+	intent: Type.Union([Type.Literal("preview"), Type.Literal("apply")]),
 };

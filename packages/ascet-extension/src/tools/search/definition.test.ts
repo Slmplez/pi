@@ -1,4 +1,4 @@
-import assert from "node:assert/strict";
+﻿import assert from "node:assert/strict";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -31,7 +31,7 @@ describe("ascet_search tool", () => {
 		try {
 			const result = await ascetSearchTool.execute(
 				"call-1",
-				{ mode: "text", q: "VLC3IsInControl", limit: 1 },
+				{ action: "search", mode: "text", q: "VLC3IsInControl", limit: 1 },
 				new AbortController().signal,
 				undefined,
 				{
@@ -50,6 +50,8 @@ describe("ascet_search tool", () => {
 				more: true,
 			});
 			assert.equal("data" in result.details, false);
+			assert.equal(result.details.action, "search");
+			assert.equal(result.details.mode, "text");
 			assert.deepEqual(result.details.diagnostics, { searchMs: 100, queueWaitMs: 4, exitCode: 0 });
 		} finally {
 			rmSync(root, { recursive: true, force: true });

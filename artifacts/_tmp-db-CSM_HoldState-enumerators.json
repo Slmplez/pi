@@ -1,0 +1,1 @@
+﻿{"type":"response","protocolVersion":1,"ok":false,"result":null,"error":{"code":"unsupported_component_kind","message":"The target must be a code component or folder."},"meta":{"bridgePid":34736,"bridgeGeneration":"e18ecc34-927a-4ade-b782-310473645fa2","durationMs":350,"sessionPolicy":"fresh_session","mutationStarted":false,"mode":"exec","operation":"get_elements"}}

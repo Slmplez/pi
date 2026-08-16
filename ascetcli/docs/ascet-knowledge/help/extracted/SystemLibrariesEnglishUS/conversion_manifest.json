@@ -1,0 +1,897 @@
+{
+  "generated_at": "2026-04-01T03:08:36.001997Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\SystemLibrariesEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\SystemLibrariesEnglishUS",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\SystemLibrariesEnglishUS\\markdown",
+  "input_html_count": 147,
+  "converted_html_count": 147,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 138,
+  "toc_entries_count": 147,
+  "index_entries_count": 289,
+  "index_required": true,
+  "mappings": [
+    {
+      "html_rel_path": "Accumulator.htm",
+      "md_rel_path": "Accumulator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AccumulatorEnabled.htm",
+      "md_rel_path": "AccumulatorEnabled.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "AccumulatorLimited.htm",
+      "md_rel_path": "AccumulatorLimited.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "And.htm",
+      "md_rel_path": "And.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ClearBit.htm",
+      "md_rel_path": "ClearBit.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ClosedInterval.htm",
+      "md_rel_path": "ClosedInterval.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CountDown.htm",
+      "md_rel_path": "CountDown.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CountDownEnabled.htm",
+      "md_rel_path": "CountDownEnabled.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Counter.htm",
+      "md_rel_path": "Counter.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CounterEnabled.htm",
+      "md_rel_path": "CounterEnabled.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DelaySignal.htm",
+      "md_rel_path": "DelaySignal.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DelaySignalEnabled.htm",
+      "md_rel_path": "DelaySignalEnabled.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DelayValue.htm",
+      "md_rel_path": "DelayValue.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DelayValueEnabled.htm",
+      "md_rel_path": "DelayValueEnabled.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DeltaOneStep.htm",
+      "md_rel_path": "DeltaOneStep.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DifferenceQuotient.htm",
+      "md_rel_path": "DifferenceQuotient.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DigitalLowpass.htm",
+      "md_rel_path": "DigitalLowpass.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "dT1.htm",
+      "md_rel_path": "dT1.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EdgeBi.htm",
+      "md_rel_path": "EdgeBi.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EdgeFalling.htm",
+      "md_rel_path": "EdgeFalling.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EdgeRising.htm",
+      "md_rel_path": "EdgeRising.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "GetBit.htm",
+      "md_rel_path": "GetBit.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "GreaterZero.htm",
+      "md_rel_path": "GreaterZero.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Hysteresis_Delta_RSP.htm",
+      "md_rel_path": "Hysteresis_Delta_RSP.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Hysteresis_LSP_Delta.htm",
+      "md_rel_path": "Hysteresis_LSP_Delta.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Hysteresis_LSP_RSP.htm",
+      "md_rel_path": "Hysteresis_LSP_RSP.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Hysteresis_MSP_DeltaHalf.htm",
+      "md_rel_path": "Hysteresis_MSP_DeltaHalf.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IntegratorK.htm",
+      "md_rel_path": "IntegratorK.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IntegratorKEnabled.htm",
+      "md_rel_path": "IntegratorKEnabled.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IntegratorKLimited.htm",
+      "md_rel_path": "IntegratorKLimited.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IntegratorT.htm",
+      "md_rel_path": "IntegratorT.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IntegratorTEnabled.htm",
+      "md_rel_path": "IntegratorTEnabled.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IntegratorTLimited.htm",
+      "md_rel_path": "IntegratorTLimited.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "LeftOpenInterval.htm",
+      "md_rel_path": "LeftOpenInterval.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Limiter.htm",
+      "md_rel_path": "Limiter.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "LowpassK.htm",
+      "md_rel_path": "LowpassK.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "LowpassKEnabled.htm",
+      "md_rel_path": "LowpassKEnabled.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "LowpassT.htm",
+      "md_rel_path": "LowpassT.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "LowpassTEnabled.htm",
+      "md_rel_path": "LowpassTEnabled.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_AbsoluteValue.htm",
+      "md_rel_path": "MBFS_AbsoluteValue.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_Accumulator_REL.htm",
+      "md_rel_path": "MBFS_Accumulator_REL.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_Closed_Interval.htm",
+      "md_rel_path": "MBFS_Closed_Interval.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_CountDown_RE.htm",
+      "md_rel_path": "MBFS_CountDown_RE.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_CountDown_RTE.htm",
+      "md_rel_path": "MBFS_CountDown_RTE.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_Counter_RE.htm",
+      "md_rel_path": "MBFS_Counter_RE.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_Counter_RTE.htm",
+      "md_rel_path": "MBFS_Counter_RTE.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_DeadBand.htm",
+      "md_rel_path": "MBFS_DeadBand.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_Delay_RE_Logic.htm",
+      "md_rel_path": "MBFS_Delay_RE_Logic.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_Delay_RE_Real.htm",
+      "md_rel_path": "MBFS_Delay_RE_Real.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_DeltaOneStep.htm",
+      "md_rel_path": "MBFS_DeltaOneStep.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_DifferenceLimiter.htm",
+      "md_rel_path": "MBFS_DifferenceLimiter.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_DifferenceQuotient.htm",
+      "md_rel_path": "MBFS_DifferenceQuotient.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_DigitalLowPass_RE.htm",
+      "md_rel_path": "MBFS_DigitalLowPass_RE.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_EdgeBi.htm",
+      "md_rel_path": "MBFS_EdgeBi.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_EdgeFalling.htm",
+      "md_rel_path": "MBFS_EdgeFalling.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_EdgeRising.htm",
+      "md_rel_path": "MBFS_EdgeRising.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_Gain.htm",
+      "md_rel_path": "MBFS_Gain.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_Gradient_Limiter.htm",
+      "md_rel_path": "MBFS_Gradient_Limiter.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_HighPassT_RE.htm",
+      "md_rel_path": "MBFS_HighPassT_RE.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_Hysteresis.htm",
+      "md_rel_path": "MBFS_Hysteresis.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_IntegratorK_REL.htm",
+      "md_rel_path": "MBFS_IntegratorK_REL.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_IntegratorT_REL.htm",
+      "md_rel_path": "MBFS_IntegratorT_REL.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_Left_Open_Interval.htm",
+      "md_rel_path": "MBFS_Left_Open_Interval.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_Limiter.htm",
+      "md_rel_path": "MBFS_Limiter.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_LowPassK_RE.htm",
+      "md_rel_path": "MBFS_LowPassK_RE.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_LowPassSecond_RE.htm",
+      "md_rel_path": "MBFS_LowPassSecond_RE.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_LowPassT_RE.htm",
+      "md_rel_path": "MBFS_LowPassT_RE.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_MaxLog_RE.htm",
+      "md_rel_path": "MBFS_MaxLog_RE.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_MeanValueT_RE.htm",
+      "md_rel_path": "MBFS_MeanValueT_RE.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_MinLog_RE.htm",
+      "md_rel_path": "MBFS_MinLog_RE.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_OpenInterval.htm",
+      "md_rel_path": "MBFS_OpenInterval.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_RightOpenInterval.htm",
+      "md_rel_path": "MBFS_RightOpenInterval.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_RSFlipFlop.htm",
+      "md_rel_path": "MBFS_RSFlipFlop.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_SampleAndHold_RE.htm",
+      "md_rel_path": "MBFS_SampleAndHold_RE.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_Sign.htm",
+      "md_rel_path": "MBFS_Sign.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_SQR.htm",
+      "md_rel_path": "MBFS_SQR.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_SQRT.htm",
+      "md_rel_path": "MBFS_SQRT.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_StopWatch_RE.htm",
+      "md_rel_path": "MBFS_StopWatch_RE.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_StopWatch_RTE.htm",
+      "md_rel_path": "MBFS_StopWatch_RTE.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_Switch_logic.htm",
+      "md_rel_path": "MBFS_Switch_logic.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_Switch_Real.htm",
+      "md_rel_path": "MBFS_Switch_Real.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_SystemLibraryArithmeticOperators.htm",
+      "md_rel_path": "MBFS_SystemLibraryArithmeticOperators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_SystemLibraryComparisonOperators.htm",
+      "md_rel_path": "MBFS_SystemLibraryComparisonOperators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_SystemLibraryCountersTimers.htm",
+      "md_rel_path": "MBFS_SystemLibraryCountersTimers.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_SystemLibraryDelayBlocks.htm",
+      "md_rel_path": "MBFS_SystemLibraryDelayBlocks.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_SystemLibraryIntegrators.htm",
+      "md_rel_path": "MBFS_SystemLibraryIntegrators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_SystemLibraryLogicalOperators.htm",
+      "md_rel_path": "MBFS_SystemLibraryLogicalOperators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_SystemLibraryLowHighPass.htm",
+      "md_rel_path": "MBFS_SystemLibraryLowHighPass.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_SystemLibraryMathematicalFunctions.htm",
+      "md_rel_path": "MBFS_SystemLibraryMathematicalFunctions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_SystemLibraryMemoryBlocks.htm",
+      "md_rel_path": "MBFS_SystemLibraryMemoryBlocks.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_SystemLibraryNonlinearBlocks.htm",
+      "md_rel_path": "MBFS_SystemLibraryNonlinearBlocks.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_SystemLibraryOverview.htm",
+      "md_rel_path": "MBFS_SystemLibraryOverview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_SystemLibrarySignalPathSwitches.htm",
+      "md_rel_path": "MBFS_SystemLibrarySignalPathSwitches.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_Timer_RE.htm",
+      "md_rel_path": "MBFS_Timer_RE.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_Timer_Retrigger_RE.htm",
+      "md_rel_path": "MBFS_Timer_Retrigger_RE.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_Timer_RTE.htm",
+      "md_rel_path": "MBFS_Timer_RTE.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_TimerRetrigger_RTE.htm",
+      "md_rel_path": "MBFS_TimerRetrigger_RTE.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_TurnOffDelaySample.htm",
+      "md_rel_path": "MBFS_TurnOffDelaySample.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_TurnOffDelayTime.htm",
+      "md_rel_path": "MBFS_TurnOffDelayTime.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_TurnOnDelaySample.htm",
+      "md_rel_path": "MBFS_TurnOnDelaySample.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_TurnOnDelayTime.htm",
+      "md_rel_path": "MBFS_TurnOnDelayTime.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "MBFS_XOR.htm",
+      "md_rel_path": "MBFS_XOR.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Mux1of4.htm",
+      "md_rel_path": "Mux1of4.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Mux1of8.htm",
+      "md_rel_path": "Mux1of8.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "OpenInterval.htm",
+      "md_rel_path": "OpenInterval.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Or.htm",
+      "md_rel_path": "Or.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "P.htm",
+      "md_rel_path": "P.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "PI.htm",
+      "md_rel_path": "PI.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "PID.htm",
+      "md_rel_path": "PID.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "PIDLimited.htm",
+      "md_rel_path": "PIDLimited.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "PILimited.htm",
+      "md_rel_path": "PILimited.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "PT1.htm",
+      "md_rel_path": "PT1.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "PT2.htm",
+      "md_rel_path": "PT2.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RightOpenInterval.htm",
+      "md_rel_path": "RightOpenInterval.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Rotate.htm",
+      "md_rel_path": "Rotate.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RSFlipFlop.htm",
+      "md_rel_path": "RSFlipFlop.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SetBit.htm",
+      "md_rel_path": "SetBit.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ShiftLeft.htm",
+      "md_rel_path": "ShiftLeft.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ShiftRight.htm",
+      "md_rel_path": "ShiftRight.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Signum.htm",
+      "md_rel_path": "Signum.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SL_ASCETSystemLibrary.htm",
+      "md_rel_path": "SL_ASCETSystemLibrary.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SL_BitOperators.htm",
+      "md_rel_path": "SL_BitOperators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SL_Comparators.htm",
+      "md_rel_path": "SL_Comparators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SL_ControlBlocks.htm",
+      "md_rel_path": "SL_ControlBlocks.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SL_CounterTimer.htm",
+      "md_rel_path": "SL_CounterTimer.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SL_DelayBlocks.htm",
+      "md_rel_path": "SL_DelayBlocks.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SL_Integrators.htm",
+      "md_rel_path": "SL_Integrators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SL_Lowpass.htm",
+      "md_rel_path": "SL_Lowpass.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SL_Memory.htm",
+      "md_rel_path": "SL_Memory.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SL_Miscellaneous.htm",
+      "md_rel_path": "SL_Miscellaneous.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SL_Nonlinears.htm",
+      "md_rel_path": "SL_Nonlinears.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SL_SystemLibrariesOverview.htm",
+      "md_rel_path": "SL_SystemLibrariesOverview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SL_TransferFunction.htm",
+      "md_rel_path": "SL_TransferFunction.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "StopWatch.htm",
+      "md_rel_path": "StopWatch.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "StopWatchEnabled.htm",
+      "md_rel_path": "StopWatchEnabled.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Timer.htm",
+      "md_rel_path": "Timer.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TimerEnabled.htm",
+      "md_rel_path": "TimerEnabled.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TimerRetrigger.htm",
+      "md_rel_path": "TimerRetrigger.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TimerRetriggerEnabled.htm",
+      "md_rel_path": "TimerRetriggerEnabled.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ToggleBit.htm",
+      "md_rel_path": "ToggleBit.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TurnOffDelay.htm",
+      "md_rel_path": "TurnOffDelay.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TurnOffDelayVariable.htm",
+      "md_rel_path": "TurnOffDelayVariable.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TurnOnDelay.htm",
+      "md_rel_path": "TurnOnDelay.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TurnOnDelayVariable.htm",
+      "md_rel_path": "TurnOnDelayVariable.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "WriteBit.htm",
+      "md_rel_path": "WriteBit.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "WriteByte.htm",
+      "md_rel_path": "WriteByte.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Xor.htm",
+      "md_rel_path": "Xor.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

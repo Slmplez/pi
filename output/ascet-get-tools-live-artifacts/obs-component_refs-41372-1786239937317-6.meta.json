@@ -1,0 +1,16 @@
+{
+  "resultId": "obs-component_refs-41372-1786239937317-6",
+  "domain": "component_refs",
+  "target": {
+    "path": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010"
+  },
+  "itemCount": 95,
+  "coverage": {
+    "status": "complete_for_scope",
+    "foldersVisited": 0,
+    "componentsScanned": 1
+  },
+  "truncated": false,
+  "source": "live",
+  "capturedAt": "2026-08-09T01:45:37.317Z"
+}

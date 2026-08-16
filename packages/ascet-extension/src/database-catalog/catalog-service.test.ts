@@ -1,4 +1,4 @@
-import assert from "node:assert/strict";
+﻿import assert from "node:assert/strict";
 import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -13,7 +13,7 @@ function createCatalogStore(root: string): AscetObservationStore {
 		domain: "tree",
 		target: {},
 		sourceIdentity: {
-			database: { name: "DB", path: "C:/Repo/DB", fingerprint: "a".repeat(64) },
+			database: { name: "DB", path: "C:/Repo/DB", status: "consistent", issues: [], fingerprint: "a".repeat(64) },
 		},
 		items: [
 			{ path: "DB\\Project", oid: "project-1", kind: "project" },

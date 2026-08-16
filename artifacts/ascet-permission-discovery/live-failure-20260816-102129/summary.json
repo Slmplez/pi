@@ -1,0 +1,564 @@
+{
+  "ok": true,
+  "readOnly": true,
+  "ascetCwd": "C:\\Repo\\F05_IPB_L2_0429",
+  "prefix": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive",
+  "candidateLimit": 120,
+  "database": {
+    "outcome": {
+      "status": "ok",
+      "verified": true,
+      "data": {
+        "type": "response",
+        "protocolVersion": 1,
+        "ok": true,
+        "result": {
+          "items": [],
+          "coverage": {
+            "status": "complete_for_scope",
+            "scopeKind": "database",
+            "scopeId": "database:C:\\Repo\\",
+            "completeness": "complete",
+            "truncated": false,
+            "foldersVisited": 0,
+            "componentsScanned": 0,
+            "identityKinds": [],
+            "collectorStarted": true,
+            "collectorCompleted": true,
+            "rootCollectionAvailable": true,
+            "projectCollectionAvailable": false,
+            "missingOidCount": 0,
+            "missingPathCount": 0,
+            "collectors": {
+              "database": {
+                "started": true,
+                "completed": true,
+                "itemCount": 1
+              },
+              "projects": {
+                "started": false,
+                "completed": false,
+                "itemCount": 0
+              },
+              "folders": {
+                "started": false,
+                "completed": false,
+                "itemCount": 0
+              },
+              "components": {
+                "started": false,
+                "completed": false,
+                "itemCount": 0
+              },
+              "enumerations": {
+                "started": false,
+                "completed": false,
+                "itemCount": 0
+              }
+            }
+          },
+          "truncated": false,
+          "source": "live",
+          "database": {
+            "name": "C:\\Repo\\F05_IPB_L2_0429",
+            "path": "C:\\Repo\\",
+            "canonicalPath": "C:\\Repo\\F05_IPB_L2_0429",
+            "identityStatus": "consistent"
+          }
+        },
+        "error": null,
+        "meta": {
+          "bridgePid": 36748,
+          "bridgeGeneration": "96712f52-5beb-48e3-bc02-9e0de9e343c4",
+          "durationMs": 275,
+          "sessionPolicy": "fresh_session",
+          "mutationStarted": false,
+          "mode": "exec",
+          "operation": "get_database_identity"
+        }
+      }
+    },
+    "data": {
+      "type": "response",
+      "protocolVersion": 1,
+      "ok": true,
+      "result": {
+        "items": [],
+        "coverage": {
+          "status": "complete_for_scope",
+          "scopeKind": "database",
+          "scopeId": "database:C:\\Repo\\",
+          "completeness": "complete",
+          "truncated": false,
+          "foldersVisited": 0,
+          "componentsScanned": 0,
+          "identityKinds": [],
+          "collectorStarted": true,
+          "collectorCompleted": true,
+          "rootCollectionAvailable": true,
+          "projectCollectionAvailable": false,
+          "missingOidCount": 0,
+          "missingPathCount": 0,
+          "collectors": {
+            "database": {
+              "started": true,
+              "completed": true,
+              "itemCount": 1
+            },
+            "projects": {
+              "started": false,
+              "completed": false,
+              "itemCount": 0
+            },
+            "folders": {
+              "started": false,
+              "completed": false,
+              "itemCount": 0
+            },
+            "components": {
+              "started": false,
+              "completed": false,
+              "itemCount": 0
+            },
+            "enumerations": {
+              "started": false,
+              "completed": false,
+              "itemCount": 0
+            }
+          }
+        },
+        "truncated": false,
+        "source": "live",
+        "database": {
+          "name": "C:\\Repo\\F05_IPB_L2_0429",
+          "path": "C:\\Repo\\",
+          "canonicalPath": "C:\\Repo\\F05_IPB_L2_0429",
+          "identityStatus": "consistent"
+        }
+      },
+      "error": null,
+      "meta": {
+        "bridgePid": 36748,
+        "bridgeGeneration": "96712f52-5beb-48e3-bc02-9e0de9e343c4",
+        "durationMs": 275,
+        "sessionPolicy": "fresh_session",
+        "mutationStarted": false,
+        "mode": "exec",
+        "operation": "get_database_identity"
+      }
+    },
+    "raw": {
+      "ok": true,
+      "data": {
+        "type": "response",
+        "protocolVersion": 1,
+        "ok": true,
+        "result": {
+          "items": [],
+          "coverage": {
+            "status": "complete_for_scope",
+            "scopeKind": "database",
+            "scopeId": "database:C:\\Repo\\",
+            "completeness": "complete",
+            "truncated": false,
+            "foldersVisited": 0,
+            "componentsScanned": 0,
+            "identityKinds": [],
+            "collectorStarted": true,
+            "collectorCompleted": true,
+            "rootCollectionAvailable": true,
+            "projectCollectionAvailable": false,
+            "missingOidCount": 0,
+            "missingPathCount": 0,
+            "collectors": {
+              "database": {
+                "started": true,
+                "completed": true,
+                "itemCount": 1
+              },
+              "projects": {
+                "started": false,
+                "completed": false,
+                "itemCount": 0
+              },
+              "folders": {
+                "started": false,
+                "completed": false,
+                "itemCount": 0
+              },
+              "components": {
+                "started": false,
+                "completed": false,
+                "itemCount": 0
+              },
+              "enumerations": {
+                "started": false,
+                "completed": false,
+                "itemCount": 0
+              }
+            }
+          },
+          "truncated": false,
+          "source": "live",
+          "database": {
+            "name": "C:\\Repo\\F05_IPB_L2_0429",
+            "path": "C:\\Repo\\",
+            "canonicalPath": "C:\\Repo\\F05_IPB_L2_0429",
+            "identityStatus": "consistent"
+          }
+        },
+        "error": null,
+        "meta": {
+          "bridgePid": 36748,
+          "bridgeGeneration": "96712f52-5beb-48e3-bc02-9e0de9e343c4",
+          "durationMs": 275,
+          "sessionPolicy": "fresh_session",
+          "mutationStarted": false,
+          "mode": "exec",
+          "operation": "get_database_identity"
+        }
+      },
+      "request": {
+        "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+        "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+        "args": [
+          "exec",
+          "get_database_identity",
+          "--request-json",
+          "{}",
+          "--json"
+        ],
+        "timeoutMs": 120000,
+        "jobKind": "read",
+        "mutatesDatabase": false
+      },
+      "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"items\":[],\"coverage\":{\"status\":\"complete_for_scope\",\"scopeKind\":\"database\",\"scopeId\":\"database:C:\\\\Repo\\\\\",\"completeness\":\"complete\",\"truncated\":false,\"foldersVisited\":0,\"componentsScanned\":0,\"identityKinds\":[],\"collectorStarted\":true,\"collectorCompleted\":true,\"rootCollectionAvailable\":true,\"projectCollectionAvailable\":false,\"missingOidCount\":0,\"missingPathCount\":0,\"collectors\":{\"database\":{\"started\":true,\"completed\":true,\"itemCount\":1},\"projects\":{\"started\":false,\"completed\":false,\"itemCount\":0},\"folders\":{\"started\":false,\"completed\":false,\"itemCount\":0},\"components\":{\"started\":false,\"completed\":false,\"itemCount\":0},\"enumerations\":{\"started\":false,\"completed\":false,\"itemCount\":0}}},\"truncated\":false,\"source\":\"live\",\"database\":{\"name\":\"C:\\\\Repo\\\\F05_IPB_L2_0429\",\"path\":\"C:\\\\Repo\\\\\",\"canonicalPath\":\"C:\\\\Repo\\\\F05_IPB_L2_0429\",\"identityStatus\":\"consistent\"}},\"error\":null,\"meta\":{\"bridgePid\":36748,\"bridgeGeneration\":\"96712f52-5beb-48e3-bc02-9e0de9e343c4\",\"durationMs\":275,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"get_database_identity\"}}\r\n",
+      "stderr": "",
+      "exitCode": 0,
+      "timedOut": false,
+      "aborted": false,
+      "operationId": "get_database_identity"
+    }
+  },
+  "tree": {
+    "delivery": "stored",
+    "itemCount": 10681,
+    "observation": {
+      "resultId": "obs-tree-38940-1786846915103-0",
+      "domain": "tree",
+      "format": "ndjson",
+      "dataPath": "C:\\Users\\NHJ3SZH\\AppData\\Local\\Temp\\pi-ascet-extension\\artifacts\\obs-tree-38940-1786846915103-0.tree.ndjson",
+      "metaPath": "C:\\Users\\NHJ3SZH\\AppData\\Local\\Temp\\pi-ascet-extension\\artifacts\\obs-tree-38940-1786846915103-0.meta.json",
+      "itemCount": 10681
+    }
+  },
+  "selected": {
+    "readOnlyComponent": {
+      "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_CntAV_FA",
+      "kind": "class",
+      "editable": false,
+      "previewStatus": "preflight"
+    },
+    "regressionComponent": {
+      "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+      "kind": "statemachine",
+      "editable": true,
+      "previewStatus": "error",
+      "previewErrorCode": "create_method_capability_not_supported",
+      "diagramStatus": "present"
+    }
+  },
+  "databaseSafetyWarning": "Do not authorize writes until this fingerprint is confirmed to belong to a disposable database.",
+  "topLevelCounts": {
+    "TEST": 1,
+    "DEMO": 1,
+    "Customer": 143,
+    "PlatformLibrary_iBoosterG2": 6,
+    "CN_Library": 15,
+    "PlatformLibrary": 8992,
+    "PlatformLibrary_NewBrakeSystems": 812,
+    "PlatformLibraryVmc": 5,
+    "PlatformProjects": 19,
+    "PlatformProjects_NewBrakeSystems": 9,
+    "CN_Libary": 678
+  },
+  "environmentSuggestion": {
+    "ASCET_PERMISSION_SMOKE_DATABASE_FINGERPRINT": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c",
+    "ASCET_PERMISSION_SMOKE_READ_ONLY_COMPONENT": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_CntAV_FA",
+    "ASCET_PERMISSION_SMOKE_REGRESSION_COMPONENT": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+    "ASCET_PERMISSION_SMOKE_REGRESSION_CODE": "create_method_capability_not_supported"
+  },
+  "inspected": [
+    {
+      "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+      "kind": "statemachine",
+      "editable": true,
+      "previewStatus": "error",
+      "previewErrorCode": "create_method_capability_not_supported",
+      "diagramStatus": "present"
+    },
+    {
+      "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_CntAV_FA",
+      "kind": "class",
+      "editable": false,
+      "previewStatus": "preflight"
+    },
+    {
+      "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_ControlSensitivity",
+      "kind": "class",
+      "editable": false
+    },
+    {
+      "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_Control",
+      "kind": "class",
+      "editable": false
+    },
+    {
+      "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_Enable",
+      "kind": "class",
+      "editable": false
+    },
+    {
+      "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_Signalprocessing",
+      "kind": "class",
+      "editable": false
+    },
+    {
+      "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_Preprocessing",
+      "kind": "class",
+      "editable": false
+    },
+    {
+      "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_AV_Timer",
+      "kind": "class",
+      "editable": false
+    }
+  ],
+  "scheduler": {
+    "ok": true,
+    "scheduler": {
+      "hostState": "healthy",
+      "runningJob": null,
+      "queuedJobs": [],
+      "recentJobs": [
+        {
+          "jobId": "ascet-job-1",
+          "agentId": "system",
+          "toolName": "ascet_status",
+          "commandId": "selftest",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786846893279,
+          "startedAt": 1786846893279,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846894122,
+          "executionMs": 843
+        },
+        {
+          "jobId": "ascet-job-2",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "component_editable_check",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786846915156,
+          "startedAt": 1786846915156,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846915927,
+          "executionMs": 771
+        },
+        {
+          "jobId": "ascet-job-3",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "preflight_create_method",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786846915932,
+          "startedAt": 1786846915932,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846916671,
+          "executionMs": 739
+        },
+        {
+          "jobId": "ascet-job-4",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "component_editable_check",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786846916675,
+          "startedAt": 1786846916675,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846917242,
+          "executionMs": 567
+        },
+        {
+          "jobId": "ascet-job-5",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "preflight_create_method",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786846917245,
+          "startedAt": 1786846917245,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846917942,
+          "executionMs": 697
+        },
+        {
+          "jobId": "ascet-job-6",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "get_database_identity",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786846917943,
+          "startedAt": 1786846917944,
+          "queueWaitMs": 1,
+          "finishedAt": 1786846918548,
+          "executionMs": 604
+        },
+        {
+          "jobId": "ascet-job-7",
+          "agentId": "system",
+          "toolName": "ascet_get",
+          "commandId": "get_tree",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786846918550,
+          "startedAt": 1786846918550,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846938726,
+          "executionMs": 20176
+        },
+        {
+          "jobId": "ascet-job-8",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "component_editable_check",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786846938744,
+          "startedAt": 1786846938744,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846939634,
+          "executionMs": 890
+        },
+        {
+          "jobId": "ascet-job-9",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "component_editable_check",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786846939636,
+          "startedAt": 1786846939637,
+          "queueWaitMs": 1,
+          "finishedAt": 1786846940226,
+          "executionMs": 589
+        },
+        {
+          "jobId": "ascet-job-10",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "component_editable_check",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786846940228,
+          "startedAt": 1786846940228,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846940934,
+          "executionMs": 706
+        },
+        {
+          "jobId": "ascet-job-11",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "component_editable_check",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786846940937,
+          "startedAt": 1786846940938,
+          "queueWaitMs": 1,
+          "finishedAt": 1786846941669,
+          "executionMs": 731
+        },
+        {
+          "jobId": "ascet-job-12",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "component_editable_check",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786846941674,
+          "startedAt": 1786846941674,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846942293,
+          "executionMs": 619
+        },
+        {
+          "jobId": "ascet-job-13",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "component_editable_check",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786846942295,
+          "startedAt": 1786846942295,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846943025,
+          "executionMs": 730
+        }
+      ],
+      "pendingByAgent": {},
+      "activeCount": 0,
+      "resource": {
+        "key": "ascet.toolapi.global",
+        "active": 0,
+        "queued": 0,
+        "concurrency": 1,
+        "runningJob": null
+      }
+    },
+    "cliLock": {
+      "locked": false,
+      "path": "C:\\Users\\NHJ3SZH\\AppData\\Local\\PI\\ascet\\locks\\ascet-toolapi.lock"
+    },
+    "operationHealth": [],
+    "summary": "ASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nRecent:\n- ascet-job-4 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=0ms, exec=567ms)\n- ascet-job-5 ascet_edit/preflight_create_method agent=system state=succeeded (queueWait=0ms, exec=697ms)\n- ascet-job-6 ascet_edit/get_database_identity agent=system state=succeeded (queueWait=1ms, exec=604ms)\n- ascet-job-7 ascet_get/get_tree agent=system state=succeeded (queueWait=0ms, exec=20176ms)\n- ascet-job-8 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=0ms, exec=890ms)\n- ascet-job-9 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=1ms, exec=589ms)\n- ascet-job-10 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=0ms, exec=706ms)\n- ascet-job-11 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=1ms, exec=731ms)\n- ascet-job-12 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=0ms, exec=619ms)\n- ascet-job-13 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=0ms, exec=730ms)\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none",
+    "tool": "ascet_scheduler_status",
+    "action": "status",
+    "command": {
+      "logicalCommandId": "PiAscetSchedulerStatus",
+      "backendCommandId": "PiAscetSchedulerStatus",
+      "operation": "scheduler_status"
+    }
+  }
+}

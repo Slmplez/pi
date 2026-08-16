@@ -1,0 +1,92 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"changed\": {\n    \"folderPath\": \"PI_LIVE_ROOTFIX_20260811_8A8C254E\",\n    \"deleted\": true,\n    \"alreadyMissing\": false,\n    \"summary\": \"Deleted folder PI_LIVE_ROOTFIX_20260811_8A8C254E.\"\n  },\n  \"verification\": {\n    \"mode\": \"automatic_readback\",\n    \"source\": \"write_command\",\n    \"required\": true,\n    \"requested\": true,\n    \"verified\": true,\n    \"status\": \"passed\"\n  }\n}"
+    }
+  ],
+  "details": {
+    "outcome": {
+      "status": "ok",
+      "verified": true,
+      "data": {
+        "changed": {
+          "folderPath": "PI_LIVE_ROOTFIX_20260811_8A8C254E",
+          "deleted": true,
+          "alreadyMissing": false,
+          "summary": "Deleted folder PI_LIVE_ROOTFIX_20260811_8A8C254E."
+        },
+        "verification": {
+          "mode": "automatic_readback",
+          "source": "write_command",
+          "required": true,
+          "requested": true,
+          "verified": true,
+          "status": "passed"
+        },
+        "observations": {
+          "invalidated": []
+        }
+      },
+      "warnings": []
+    },
+    "raw": {
+      "ok": true,
+      "data": {
+        "type": "response",
+        "protocolVersion": 1,
+        "ok": true,
+        "result": {
+          "folderPath": "PI_LIVE_ROOTFIX_20260811_8A8C254E",
+          "deleted": true,
+          "alreadyMissing": false,
+          "verifyReadbackRequested": true,
+          "readbackVerified": true,
+          "summary": "Deleted folder PI_LIVE_ROOTFIX_20260811_8A8C254E."
+        },
+        "error": null,
+        "meta": {
+          "bridgePid": 19552,
+          "bridgeGeneration": "5679e9de-e9ed-4b1a-8cd0-fe9e25ca42cc",
+          "durationMs": 400,
+          "sessionPolicy": "fresh_session",
+          "mutationStarted": true,
+          "mode": "exec",
+          "operation": "delete_folder"
+        }
+      },
+      "request": {
+        "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+        "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+        "args": [
+          "exec",
+          "delete_folder",
+          "PI_LIVE_ROOTFIX_20260811_8A8C254E",
+          "--if-missing",
+          "ignore",
+          "--verify-readback",
+          "--json"
+        ],
+        "jobKind": "write",
+        "mutatesDatabase": true
+      },
+      "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"folderPath\":\"PI_LIVE_ROOTFIX_20260811_8A8C254E\",\"deleted\":true,\"alreadyMissing\":false,\"verifyReadbackRequested\":true,\"readbackVerified\":true,\"summary\":\"Deleted folder PI_LIVE_ROOTFIX_20260811_8A8C254E.\"},\"error\":null,\"meta\":{\"bridgePid\":19552,\"bridgeGeneration\":\"5679e9de-e9ed-4b1a-8cd0-fe9e25ca42cc\",\"durationMs\":400,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":true,\"mode\":\"exec\",\"operation\":\"delete_folder\"}}\r\n",
+      "stderr": "",
+      "exitCode": 0,
+      "timedOut": false,
+      "aborted": false,
+      "operationId": "delete_folder"
+    },
+    "observations": {
+      "invalidated": []
+    },
+    "verification": {
+      "mode": "automatic_readback",
+      "source": "write_command",
+      "required": true,
+      "requested": true,
+      "verified": true,
+      "status": "passed"
+    }
+  }
+}

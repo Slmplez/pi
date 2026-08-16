@@ -1,0 +1,355 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"status\": \"preflight\",\n  \"plan\": {\n    \"action\": \"apply_element_spec\",\n    \"params\": {\n      \"action\": \"apply_element_spec\",\n      \"phase\": \"plan\",\n      \"component\": \"PI_LIVE_FIX_20260812_C42293AC/ClassUnderTest\",\n      \"intent\": \"create\",\n      \"elements\": [\n        {\n          \"role\": \"standardPrimitive\",\n          \"name\": \"C_FIX_B_One\",\n          \"kind\": \"variable\",\n          \"modelType\": \"cont\",\n          \"scope\": \"local\"\n        },\n        {\n          \"role\": \"standardPrimitive\",\n          \"name\": \"C_FIX_B_Two\",\n          \"kind\": \"variable\",\n          \"modelType\": \"cont\",\n          \"scope\": \"local\"\n        },\n        {\n          \"role\": \"standardPrimitive\",\n          \"name\": \"C_FIX_B_Three\",\n          \"kind\": \"variable\",\n          \"modelType\": \"cont\",\n          \"scope\": \"local\"\n        },\n        {\n          \"role\": \"standardPrimitive\",\n          \"name\": \"C_FIX_B_Four\",\n          \"kind\": \"variable\",\n          \"modelType\": \"cont\",\n          \"scope\": \"local\"\n        }\n      ],\n      \"executeWrite\": false\n    },\n    \"backendPreflight\": {\n      \"operation\": \"authoritative_element_preflight\",\n      \"validated\": true,\n      \"capabilities\": {\n        \"validated\": true,\n        \"elements\": [\n          {\n            \"name\": \"C_FIX_B_One\",\n            \"operation\": \"create\",\n            \"dataConfiguration\": {\n              \"source\": \"defaultDataConfiguration\",\n              \"configurationName\": \"Data\",\n              \"selected\": true\n            },\n            \"implementationConfiguration\": {\n              \"source\": \"defaultImplementationConfiguration\",\n              \"configurationName\": \"Impl\",\n              \"selected\": true\n            },\n            \"dataItemResolvable\": true,\n            \"implementationItemResolvable\": true,\n            \"capabilityStatus\": \"validated\"\n          },\n          {\n            \"name\": \"C_FIX_B_Two\",\n            \"operation\": \"create\",\n            \"dataConfiguration\": {\n              \"source\": \"defaultDataConfiguration\",\n              \"configurationName\": \"Data\",\n              \"selected\": true\n            },\n            \"implementationConfiguration\": {\n              \"source\": \"defaultImplementationConfiguration\",\n              \"configurationName\": \"Impl\",\n              \"selected\": true\n            },\n            \"dataItemResolvable\": true,\n            \"implementationItemResolvable\": true,\n            \"capabilityStatus\": \"validated\"\n          },\n          {\n            \"name\": \"C_FIX_B_Three\",\n            \"operation\": \"create\",\n            \"dataConfiguration\": {\n              \"source\": \"defaultDataConfiguration\",\n              \"configurationName\": \"Data\",\n              \"selected\": true\n            },\n            \"implementationConfiguration\": {\n              \"source\": \"defaultImplementationConfiguration\",\n              \"configurationName\": \"Impl\",\n              \"selected\": true\n            },\n            \"dataItemResolvable\": true,\n            \"implementationItemResolvable\": true,\n            \"capabilityStatus\": \"validated\"\n          },\n          {\n            \"name\": \"C_FIX_B_Four\",\n            \"operation\": \"create\",\n            \"dataConfiguration\": {\n              \"source\": \"defaultDataConfiguration\",\n              \"configurationName\": \"Data\",\n              \"selected\": true\n            },\n            \"implementationConfiguration\": {\n              \"source\": \"defaultImplementationConfiguration\",\n              \"configurationName\": \"Impl\",\n              \"selected\": true\n            },\n            \"dataItemResolvable\": true,\n            \"implementationItemResolvable\": true,\n            \"capabilityStatus\": \"validated\"\n          }\n        ]\n      },\n      \"liveElementCount\": 0,\n      \"liveSnapshotHash\": \"ea8525d83ee63cc2b633b9045372a61edffc999a7257a35827814d2ed38502b1\",\n      \"catalogSnapshot\": {\n        \"identity\": {\n          \"componentOID\": \"040g00001g001qg71060i1966pf02\"\n        },\n        \"componentConfigurationProvenance\": {\n          \"defaultDataConfiguration\": {\n            \"source\": \"defaultDataConfiguration\",\n            \"configurationName\": \"Data\",\n            \"selected\": true\n          },\n          \"classDataConfiguration\": {\n            \"source\": \"classDataConfiguration\",\n            \"configurationName\": \"ClassUnderTest\",\n            \"selected\": true\n          },\n          \"defaultImplementationConfiguration\": {\n            \"source\": \"defaultImplementationConfiguration\",\n            \"configurationName\": \"Impl\",\n            \"selected\": true\n          },\n          \"classImplementationConfiguration\": {\n            \"source\": \"classImplementationConfiguration\",\n            \"configurationName\": \"ClassUnderTest\",\n            \"selected\": true\n          }\n        }\n      },\n      \"catalogIdentity\": {\n        \"componentOID\": \"040g00001g001qg71060i1966pf02\"\n      },\n      \"normalizedSpecHash\": \"698767abef8d7658381a34ddf818f41e0b879712a5f73f9c060598d4ec515f16\",\n      \"resolvedIntent\": \"create\",\n      \"resolvedOperations\": [\n        {\n          \"name\": \"C_FIX_B_One\",\n          \"operation\": \"create\"\n        },\n        {\n          \"name\": \"C_FIX_B_Two\",\n          \"operation\": \"create\"\n        },\n        {\n          \"name\": \"C_FIX_B_Three\",\n          \"operation\": \"create\"\n        },\n        {\n          \"name\": \"C_FIX_B_Four\",\n          \"operation\": \"create\"\n        }\n      ],\n      \"warnings\": [\n        \"C_FIX_B_One: data.value omitted; ASCET default data will be used.\",\n        \"C_FIX_B_One: implementation omitted; ASCET default implementation will be used.\",\n        \"C_FIX_B_Two: data.value omitted; ASCET default data will be used.\",\n        \"C_FIX_B_Two: implementation omitted; ASCET default implementation will be used.\",\n        \"C_FIX_B_Three: data.value omitted; ASCET default data will be used.\",\n        \"C_FIX_B_Three: implementation omitted; ASCET default implementation will be used.\",\n        \"C_FIX_B_Four: data.value omitted; ASCET default data will be used.\",\n        \"C_FIX_B_Four: implementation omitted; ASCET default implementation will be used.\"\n      ],\n      \"normalizedSpec\": {\n        \"elements\": [\n          {\n            \"name\": \"C_FIX_B_One\",\n            \"kind\": \"variable\",\n            \"modelType\": \"cont\",\n            \"scope\": \"local\"\n          },\n          {\n            \"name\": \"C_FIX_B_Two\",\n            \"kind\": \"variable\",\n            \"modelType\": \"cont\",\n            \"scope\": \"local\"\n          },\n          {\n            \"name\": \"C_FIX_B_Three\",\n            \"kind\": \"variable\",\n            \"modelType\": \"cont\",\n            \"scope\": \"local\"\n          },\n          {\n            \"name\": \"C_FIX_B_Four\",\n            \"kind\": \"variable\",\n            \"modelType\": \"cont\",\n            \"scope\": \"local\"\n          }\n        ]\n      },\n      \"result\": {\n        \"component\": \"PI_LIVE_FIX_20260812_C42293AC/ClassUnderTest\",\n        \"addedElements\": [\n          {\n            \"name\": \"C_FIX_B_One\",\n            \"kind\": \"Variable\",\n            \"signature\": \"Variable ModelType=cont Scope=local\"\n          },\n          {\n            \"name\": \"C_FIX_B_Two\",\n            \"kind\": \"Variable\",\n            \"signature\": \"Variable ModelType=cont Scope=local\"\n          },\n          {\n            \"name\": \"C_FIX_B_Three\",\n            \"kind\": \"Variable\",\n            \"signature\": \"Variable ModelType=cont Scope=local\"\n          },\n          {\n            \"name\": \"C_FIX_B_Four\",\n            \"kind\": \"Variable\",\n            \"signature\": \"Variable ModelType=cont Scope=local\"\n          }\n        ],\n        \"summary\": \"4 added, 0 removed, 0 modified, 0 incompatible\"\n      }\n    },\n    \"version\": 3,\n    \"planId\": \"5006b4a6-b6a9-4e7a-b1c0-64064aafa38e\",\n    \"planFingerprint\": \"ac019b19ed53fa2cbd4fcfe3cd7eebb560f0be5e795d8422b032a3f9ab37ecdf\",\n    \"contractFingerprint\": \"fecd7bc6891d2f7f201490e54d970ab90f6e38dd3e3e4315c728164f6d2b2496\",\n    \"evidenceFingerprint\": \"ac88eb78d8ffee56783c5c798d2c26c296ded79db74328441cfe4c02788bf41f\",\n    \"databaseIdentity\": {\n      \"name\": \"C:\\\\Repo\\\\11_ASCETCopilotLiveTest\\\\AscetDb_Xiaomi_DPB_48V_For_Upgrade_Int_MM21xD5EDxED840001xECCL_6870\\\\ASW\\\\Db\\\\AscetDb_20260205055732\",\n      \"path\": \"C:/Repo/11_ASCETCopilotLiveTest/AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599/ASW/Db/\",\n      \"fingerprint\": \"82d15c1e563d8f43061868480858221d57264355d2699bc9c969ea86a210cc03\"\n    },\n    \"targetIdentity\": {\n      \"path\": \"PI_LIVE_FIX_20260812_C42293AC/ClassUnderTest\",\n      \"oid\": \"040g00001g001qg71060i1966pf02\",\n      \"kind\": \"component\"\n    },\n    \"targetImpact\": {\n      \"sharedObject\": false,\n      \"requestedPath\": \"PI_LIVE_FIX_20260812_C42293AC/ClassUnderTest\",\n      \"ownerPath\": \"PI_LIVE_FIX_20260812_C42293AC/ClassUnderTest\",\n      \"targetOid\": \"040g00001g001qg71060i1966pf02\",\n      \"aliasPaths\": [\n        \"PI_LIVE_FIX_20260812_C42293AC\\\\ClassUnderTest\"\n      ],\n      \"completeness\": \"complete\",\n      \"writeAllowed\": true,\n      \"fingerprint\": \"sha256:1f565b5318c434cb0cbfbce5324b5dae6de687b86b4e36c81b36811f2a04a99e\"\n    },\n    \"guardGeneration\": 0,\n    \"expiresAt\": \"2026-08-12T05:26:09.685Z\"\n  },\n  \"nextStep\": \"Call apply_element_spec with phase=commit and planId=5006b4a6-b6a9-4e7a-b1c0-64064aafa38e.\"\n}"
+    }
+  ],
+  "details": {
+    "outcome": {
+      "status": "preflight",
+      "plan": {
+        "action": "apply_element_spec",
+        "params": {
+          "action": "apply_element_spec",
+          "phase": "plan",
+          "componentPath": "PI_LIVE_FIX_20260812_C42293AC\\ClassUnderTest",
+          "intent": "create",
+          "elements": [
+            {
+              "role": "standardPrimitive",
+              "name": "C_FIX_B_One",
+              "kind": "variable",
+              "modelType": "cont",
+              "scope": "local"
+            },
+            {
+              "role": "standardPrimitive",
+              "name": "C_FIX_B_Two",
+              "kind": "variable",
+              "modelType": "cont",
+              "scope": "local"
+            },
+            {
+              "role": "standardPrimitive",
+              "name": "C_FIX_B_Three",
+              "kind": "variable",
+              "modelType": "cont",
+              "scope": "local"
+            },
+            {
+              "role": "standardPrimitive",
+              "name": "C_FIX_B_Four",
+              "kind": "variable",
+              "modelType": "cont",
+              "scope": "local"
+            }
+          ],
+          "executeWrite": false
+        },
+        "backendPreflight": {
+          "operation": "authoritative_element_preflight",
+          "validated": true,
+          "capabilities": {
+            "validated": true,
+            "elements": [
+              {
+                "name": "C_FIX_B_One",
+                "operation": "create",
+                "dataConfiguration": {
+                  "source": "defaultDataConfiguration",
+                  "configurationName": "Data",
+                  "selected": true
+                },
+                "implementationConfiguration": {
+                  "source": "defaultImplementationConfiguration",
+                  "configurationName": "Impl",
+                  "selected": true
+                },
+                "dataItemResolvable": true,
+                "implementationItemResolvable": true,
+                "capabilityStatus": "validated",
+                "blockingCodes": []
+              },
+              {
+                "name": "C_FIX_B_Two",
+                "operation": "create",
+                "dataConfiguration": {
+                  "source": "defaultDataConfiguration",
+                  "configurationName": "Data",
+                  "selected": true
+                },
+                "implementationConfiguration": {
+                  "source": "defaultImplementationConfiguration",
+                  "configurationName": "Impl",
+                  "selected": true
+                },
+                "dataItemResolvable": true,
+                "implementationItemResolvable": true,
+                "capabilityStatus": "validated",
+                "blockingCodes": []
+              },
+              {
+                "name": "C_FIX_B_Three",
+                "operation": "create",
+                "dataConfiguration": {
+                  "source": "defaultDataConfiguration",
+                  "configurationName": "Data",
+                  "selected": true
+                },
+                "implementationConfiguration": {
+                  "source": "defaultImplementationConfiguration",
+                  "configurationName": "Impl",
+                  "selected": true
+                },
+                "dataItemResolvable": true,
+                "implementationItemResolvable": true,
+                "capabilityStatus": "validated",
+                "blockingCodes": []
+              },
+              {
+                "name": "C_FIX_B_Four",
+                "operation": "create",
+                "dataConfiguration": {
+                  "source": "defaultDataConfiguration",
+                  "configurationName": "Data",
+                  "selected": true
+                },
+                "implementationConfiguration": {
+                  "source": "defaultImplementationConfiguration",
+                  "configurationName": "Impl",
+                  "selected": true
+                },
+                "dataItemResolvable": true,
+                "implementationItemResolvable": true,
+                "capabilityStatus": "validated",
+                "blockingCodes": []
+              }
+            ]
+          },
+          "liveElementCount": 0,
+          "liveSnapshotHash": "ea8525d83ee63cc2b633b9045372a61edffc999a7257a35827814d2ed38502b1",
+          "catalogSnapshot": {
+            "elements": [],
+            "identity": {
+              "componentOID": "040g00001g001qg71060i1966pf02"
+            },
+            "componentConfigurationProvenance": {
+              "defaultDataConfiguration": {
+                "source": "defaultDataConfiguration",
+                "configurationName": "Data",
+                "selected": true
+              },
+              "classDataConfiguration": {
+                "source": "classDataConfiguration",
+                "configurationName": "ClassUnderTest",
+                "selected": true
+              },
+              "defaultImplementationConfiguration": {
+                "source": "defaultImplementationConfiguration",
+                "configurationName": "Impl",
+                "selected": true
+              },
+              "classImplementationConfiguration": {
+                "source": "classImplementationConfiguration",
+                "configurationName": "ClassUnderTest",
+                "selected": true
+              }
+            }
+          },
+          "catalogIdentity": {
+            "componentOID": "040g00001g001qg71060i1966pf02"
+          },
+          "normalizedSpecHash": "698767abef8d7658381a34ddf818f41e0b879712a5f73f9c060598d4ec515f16",
+          "resolvedIntent": "create",
+          "resolvedOperations": [
+            {
+              "name": "C_FIX_B_One",
+              "operation": "create"
+            },
+            {
+              "name": "C_FIX_B_Two",
+              "operation": "create"
+            },
+            {
+              "name": "C_FIX_B_Three",
+              "operation": "create"
+            },
+            {
+              "name": "C_FIX_B_Four",
+              "operation": "create"
+            }
+          ],
+          "warnings": [
+            "C_FIX_B_One: data.value omitted; ASCET default data will be used.",
+            "C_FIX_B_One: implementation omitted; ASCET default implementation will be used.",
+            "C_FIX_B_Two: data.value omitted; ASCET default data will be used.",
+            "C_FIX_B_Two: implementation omitted; ASCET default implementation will be used.",
+            "C_FIX_B_Three: data.value omitted; ASCET default data will be used.",
+            "C_FIX_B_Three: implementation omitted; ASCET default implementation will be used.",
+            "C_FIX_B_Four: data.value omitted; ASCET default data will be used.",
+            "C_FIX_B_Four: implementation omitted; ASCET default implementation will be used."
+          ],
+          "normalizedSpec": {
+            "elements": [
+              {
+                "name": "C_FIX_B_One",
+                "kind": "variable",
+                "modelType": "cont",
+                "scope": "local"
+              },
+              {
+                "name": "C_FIX_B_Two",
+                "kind": "variable",
+                "modelType": "cont",
+                "scope": "local"
+              },
+              {
+                "name": "C_FIX_B_Three",
+                "kind": "variable",
+                "modelType": "cont",
+                "scope": "local"
+              },
+              {
+                "name": "C_FIX_B_Four",
+                "kind": "variable",
+                "modelType": "cont",
+                "scope": "local"
+              }
+            ]
+          },
+          "result": {
+            "ComponentPath": "PI_LIVE_FIX_20260812_C42293AC\\ClassUnderTest",
+            "AddedElements": [
+              {
+                "Name": "C_FIX_B_One",
+                "Kind": "Variable",
+                "Signature": "Variable ModelType=cont Scope=local"
+              },
+              {
+                "Name": "C_FIX_B_Two",
+                "Kind": "Variable",
+                "Signature": "Variable ModelType=cont Scope=local"
+              },
+              {
+                "Name": "C_FIX_B_Three",
+                "Kind": "Variable",
+                "Signature": "Variable ModelType=cont Scope=local"
+              },
+              {
+                "Name": "C_FIX_B_Four",
+                "Kind": "Variable",
+                "Signature": "Variable ModelType=cont Scope=local"
+              }
+            ],
+            "RemovedElements": [],
+            "ModifiedElements": [],
+            "IncompatibleElements": [],
+            "SkippedElements": [],
+            "Summary": "4 added, 0 removed, 0 modified, 0 incompatible"
+          },
+          "limitations": []
+        },
+        "version": 3,
+        "planId": "5006b4a6-b6a9-4e7a-b1c0-64064aafa38e",
+        "planFingerprint": "ac019b19ed53fa2cbd4fcfe3cd7eebb560f0be5e795d8422b032a3f9ab37ecdf",
+        "contractFingerprint": "fecd7bc6891d2f7f201490e54d970ab90f6e38dd3e3e4315c728164f6d2b2496",
+        "evidenceFingerprint": "ac88eb78d8ffee56783c5c798d2c26c296ded79db74328441cfe4c02788bf41f",
+        "databaseIdentity": {
+          "name": "C:\\Repo\\11_ASCETCopilotLiveTest\\AscetDb_Xiaomi_DPB_48V_For_Upgrade_Int_MM21xD5EDxED840001xECCL_6870\\ASW\\Db\\AscetDb_20260205055732",
+          "path": "C:\\Repo\\11_ASCETCopilotLiveTest\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\ASW\\Db\\",
+          "fingerprint": "82d15c1e563d8f43061868480858221d57264355d2699bc9c969ea86a210cc03"
+        },
+        "targetIdentity": {
+          "path": "PI_LIVE_FIX_20260812_C42293AC\\ClassUnderTest",
+          "oid": "040g00001g001qg71060i1966pf02",
+          "kind": "component"
+        },
+        "targetImpact": {
+          "sharedObject": false,
+          "requestedPath": "PI_LIVE_FIX_20260812_C42293AC\\ClassUnderTest",
+          "ownerPath": "PI_LIVE_FIX_20260812_C42293AC\\ClassUnderTest",
+          "targetOid": "040g00001g001qg71060i1966pf02",
+          "aliasPaths": [
+            "PI_LIVE_FIX_20260812_C42293AC\\ClassUnderTest"
+          ],
+          "affectedProjects": [],
+          "completeness": "complete",
+          "writeAllowed": true,
+          "fingerprint": "sha256:1f565b5318c434cb0cbfbce5324b5dae6de687b86b4e36c81b36811f2a04a99e"
+        },
+        "guardGeneration": 0,
+        "expiresAt": "2026-08-12T05:26:09.685Z"
+      },
+      "nextStep": "Call apply_element_spec with phase=commit and planId=5006b4a6-b6a9-4e7a-b1c0-64064aafa38e."
+    },
+    "raw": {
+      "ok": true,
+      "data": {
+        "type": "response",
+        "protocolVersion": 1,
+        "ok": true,
+        "result": {
+          "ComponentPath": "PI_LIVE_FIX_20260812_C42293AC\\ClassUnderTest",
+          "AddedElements": [
+            {
+              "Name": "C_FIX_B_One",
+              "Kind": "Variable",
+              "Signature": "Variable ModelType=cont Scope=local"
+            },
+            {
+              "Name": "C_FIX_B_Two",
+              "Kind": "Variable",
+              "Signature": "Variable ModelType=cont Scope=local"
+            },
+            {
+              "Name": "C_FIX_B_Three",
+              "Kind": "Variable",
+              "Signature": "Variable ModelType=cont Scope=local"
+            },
+            {
+              "Name": "C_FIX_B_Four",
+              "Kind": "Variable",
+              "Signature": "Variable ModelType=cont Scope=local"
+            }
+          ],
+          "RemovedElements": [],
+          "ModifiedElements": [],
+          "IncompatibleElements": [],
+          "SkippedElements": [],
+          "Summary": "4 added, 0 removed, 0 modified, 0 incompatible"
+        },
+        "error": null,
+        "meta": {
+          "bridgePid": 43920,
+          "bridgeGeneration": "1a9da3d9-a95a-45c5-9dc7-1ff9cfa061e2",
+          "durationMs": 585,
+          "sessionPolicy": "fresh_session",
+          "mutationStarted": false,
+          "mode": "exec",
+          "operation": "diff_element_spec"
+        }
+      },
+      "request": {
+        "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+        "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+        "args": [
+          "exec",
+          "diff_element_spec",
+          "PI_LIVE_FIX_20260812_C42293AC\\ClassUnderTest",
+          "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\LIVE_TOOLS_20260812-125307_C42293AC\\artifacts\\element-spec-plans\\inline-34644-1786512025072-3d3575b6-8d23-4e6b-b56b-732402dfc2df.json",
+          "--json"
+        ],
+        "timeoutMs": 240000,
+        "jobKind": "read",
+        "mutatesDatabase": false
+      },
+      "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"ComponentPath\":\"PI_LIVE_FIX_20260812_C42293AC\\\\ClassUnderTest\",\"AddedElements\":[{\"Name\":\"C_FIX_B_One\",\"Kind\":\"Variable\",\"Signature\":\"Variable ModelType=cont Scope=local\"},{\"Name\":\"C_FIX_B_Two\",\"Kind\":\"Variable\",\"Signature\":\"Variable ModelType=cont Scope=local\"},{\"Name\":\"C_FIX_B_Three\",\"Kind\":\"Variable\",\"Signature\":\"Variable ModelType=cont Scope=local\"},{\"Name\":\"C_FIX_B_Four\",\"Kind\":\"Variable\",\"Signature\":\"Variable ModelType=cont Scope=local\"}],\"RemovedElements\":[],\"ModifiedElements\":[],\"IncompatibleElements\":[],\"SkippedElements\":[],\"Summary\":\"4 added, 0 removed, 0 modified, 0 incompatible\"},\"error\":null,\"meta\":{\"bridgePid\":43920,\"bridgeGeneration\":\"1a9da3d9-a95a-45c5-9dc7-1ff9cfa061e2\",\"durationMs\":585,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"diff_element_spec\"}}\r\n",
+      "stderr": "",
+      "exitCode": 0,
+      "timedOut": false,
+      "aborted": false,
+      "operationId": "diff_element_spec"
+    }
+  }
+}

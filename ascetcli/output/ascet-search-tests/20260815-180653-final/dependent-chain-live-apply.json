@@ -1,0 +1,226 @@
+{
+  "before": {
+    "found": true,
+    "chain": {
+      "local": {
+        "componentPath": "CN_Libary\\Package\\LDM\\ADC\\Private\\ADC_VLCDriveOffAndStandstillPostCalc",
+        "element": "C_ACC_vRollOutReq"
+      },
+      "imported": {
+        "componentPath": "CN_Libary\\Package\\LDM\\ADC\\Private\\ADC_VLCDriveOffAndStandstillPostCalc",
+        "element": "P_ACC_vRollOutReq"
+      },
+      "exported": {
+        "componentPath": "PlatformLibrary\\Package\\VLC_VehicleLongitudinalControl\\VLC_ACC\\parameter\\private\\VLC_ACC_StandStillParameter",
+        "element": "P_ACC_vRollOutReq"
+      }
+    }
+  },
+  "apply": {
+    "changed": false,
+    "error": {
+      "code": "ascet_edit_approval_required",
+      "message": "This operation requires an interactive approval channel."
+    }
+  },
+  "applyDetails": {
+    "edit": {
+      "outcome": {
+        "status": "blocked",
+        "code": "ascet_edit_approval_required",
+        "message": "This operation requires an interactive approval channel."
+      },
+      "mutationResult": {
+        "status": "blocked",
+        "permission": {
+          "mode": "auto",
+          "decision": "ask",
+          "risk": "high",
+          "reason": "High-risk ASCET writes always require confirmation."
+        },
+        "preflight": {
+          "status": "passed",
+          "evidence": {
+            "version": 1,
+            "action": "set_element_dependency",
+            "paramsFingerprint": "7caeb866c7575eb73bdaff6b62d3304e9d717f852ca89ef3f432513234c47f33",
+            "database": {
+              "path": "C:\\Repo\\13_XIAOMIAVH\\px_Backup\\px_Backup",
+              "fingerprint": "51aa8fd8a5142d0676a4d65d9c2f5dd75e31923d115912be320e0c0f35c82532"
+            },
+            "target": {
+              "path": "CN_Libary\\Package\\LDM\\ADC\\Private\\ADC_VLCDriveOffAndStandstillPostCalc::C_ACC_vRollOutReq",
+              "oid": "040g00001g001pg70k2ivh4v77p7k",
+              "kind": "component_element"
+            },
+            "impact": {
+              "complete": true,
+              "sharedObject": true,
+              "ownerPath": "CN_Libary\\Package\\LDM\\ADC\\Private\\ADC_VLCDriveOffAndStandstillPostCalc",
+              "affectedProjects": [
+                "CN_Libary\\Package\\LDM\\ADC\\Private\\ADC_VLCDriveOffAndStandstillPostCalc"
+              ],
+              "fingerprint": "sha256:3c7c55d9e847e6c378b5f36b368ee177cf7ff9ff09626944ca3ca44df9447649"
+            },
+            "capability": {
+              "status": "supported",
+              "operation": "set_element_dependency",
+              "evidence": {
+                "operationName": "set_element_dependency",
+                "sequenceNumber": 1,
+                "writeSucceeded": true,
+                "summary": "planned set C_ACC_vRollOutReq dependency to dependent",
+                "payload": {
+                  "target": "CN_Libary\\Package\\LDM\\ADC\\Private\\ADC_VLCDriveOffAndStandstillPostCalc",
+                  "kind": "component",
+                  "element": "C_ACC_vRollOutReq",
+                  "identity": {
+                    "componentOID": "040g00001g001pg70k2ivh4v77p7k",
+                    "elementOID": ""
+                  },
+                  "definitionHash": "ed34377ca48e34fa6230fcb6a64b14d8f610c76335b642a0b478f6f85582d1e6",
+                  "dataConfiguration": {
+                    "source": "defaultDataConfiguration",
+                    "name": "Data"
+                  },
+                  "dataVariants": [
+                    "default"
+                  ],
+                  "requested": "dependent",
+                  "write": {
+                    "dryRun": true,
+                    "succeeded": false,
+                    "changed": 0,
+                    "verifyReadbackRequested": false,
+                    "readbackVerified": false
+                  },
+                  "dependency": {
+                    "before": "dependent",
+                    "after": "dependent"
+                  },
+                  "formula": {
+                    "before": "P_ACC_vRollOutReq",
+                    "after": "P_ACC_vRollOutReq",
+                    "changed": true,
+                    "cleared": false
+                  },
+                  "beforeMappings": [
+                    {
+                      "formal": "P_ACC_vRollOutReq",
+                      "valueName": "P_ACC_vRollOutReq",
+                      "verified": true,
+                      "variant": "default",
+                      "formalOID": "_040g00001g001pg70k440bcts2iuo",
+                      "valueOID": "_040g00001g001pg70k2j028sliurc"
+                    }
+                  ],
+                  "mappings": [
+                    {
+                      "formal": "P_ACC_vRollOutReq",
+                      "valueName": "P_ACC_vRollOutReq",
+                      "targetKind": "parameter",
+                      "targetScope": "imported",
+                      "verified": true,
+                      "variant": "default",
+                      "formalOID": "_040g00001g001pg70k440bcts2iuo",
+                      "valueOID": "_040g00001g001pg70k2j028sliurc"
+                    }
+                  ],
+                  "plan": {
+                    "count": 1,
+                    "matches": [
+                      {
+                        "component": "CN_Libary\\Package\\LDM\\ADC\\Private\\ADC_VLCDriveOffAndStandstillPostCalc",
+                        "element": "C_ACC_vRollOutReq",
+                        "kind": "parameter",
+                        "scope": "local",
+                        "schema": "primitive-parameter-dependent-flag",
+                        "dependency": "dependent",
+                        "formula": "P_ACC_vRollOutReq",
+                        "supported": true
+                      }
+                    ]
+                  }
+                },
+                "verification": {
+                  "requested": false,
+                  "attempted": false,
+                  "succeeded": true,
+                  "summary": "verification_not_requested",
+                  "details": {}
+                }
+              }
+            },
+            "editability": {
+              "applicable": true,
+              "status": "read_only",
+              "canRequestEditable": true
+            },
+            "effects": [
+              {
+                "kind": "request_editability",
+                "target": "CN_Libary\\Package\\LDM\\ADC\\Private\\ADC_VLCDriveOffAndStandstillPostCalc",
+                "description": "Request component editability for CN_Libary\\Package\\LDM\\ADC\\Private\\ADC_VLCDriveOffAndStandstillPostCalc"
+              },
+              {
+                "kind": "set_element_dependency",
+                "target": "CN_Libary\\Package\\LDM\\ADC\\Private\\ADC_VLCDriveOffAndStandstillPostCalc::C_ACC_vRollOutReq",
+                "description": "ASCET edit request:\noperation: set_element_dependency\ntargetPath: CN_Libary\\Package\\LDM\\ADC\\Private\\ADC_VLCDriveOffAndStandstillPostCalc\nelementName: C_ACC_vRollOutReq\ndependency: dependent\ndependencyFormula: P_ACC_vRollOutReq\ndependencyFormals: []\nbindingPolicy: explicit\ndependencyMappings: {\"P_ACC_vRollOutReq\":{\"kind\":\"parameter\",\"name\":\"P_ACC_vRollOutReq\"}}\nvariantMappings: {}\nvariantPolicy: default\nvariants: []\nvalueRestoration: {}\ntargetKind: \nmatch: \ndryRun: false\nbackupDir: \nverifyReadback: false"
+              }
+            ],
+            "verification": {
+              "available": true,
+              "operation": "set_element_dependency_readback",
+              "target": {
+                "path": "CN_Libary\\Package\\LDM\\ADC\\Private\\ADC_VLCDriveOffAndStandstillPostCalc::C_ACC_vRollOutReq"
+              }
+            },
+            "riskModifiers": [],
+            "noOp": false,
+            "generatedAt": "2026-08-15T11:10:54.907Z",
+            "approvalMaterialFingerprint": "535075417a9738ee8b9350a9a44ace8abae4589ed2df5072b187363809a2bc54"
+          }
+        },
+        "editability": {
+          "status": "not_applicable"
+        },
+        "mutation": {
+          "status": "not_started"
+        },
+        "verification": {
+          "status": "not_applicable"
+        },
+        "error": {
+          "code": "ascet_edit_approval_required",
+          "message": "This operation requires an interactive approval channel."
+        },
+        "bridge": {
+          "beforeBridge": false,
+          "bridgeEntered": false,
+          "backendResponseReceived": false
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      }
+    }
+  },
+  "after": {
+    "found": true,
+    "chain": {
+      "local": {
+        "componentPath": "CN_Libary\\Package\\LDM\\ADC\\Private\\ADC_VLCDriveOffAndStandstillPostCalc",
+        "element": "C_ACC_vRollOutReq"
+      },
+      "imported": {
+        "componentPath": "CN_Libary\\Package\\LDM\\ADC\\Private\\ADC_VLCDriveOffAndStandstillPostCalc",
+        "element": "P_ACC_vRollOutReq"
+      },
+      "exported": {
+        "componentPath": "PlatformLibrary\\Package\\VLC_VehicleLongitudinalControl\\VLC_ACC\\parameter\\private\\VLC_ACC_StandStillParameter",
+        "element": "P_ACC_vRollOutReq"
+      }
+    }
+  }
+}

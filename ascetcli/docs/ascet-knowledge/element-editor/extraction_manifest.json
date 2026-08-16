@@ -1,0 +1,315 @@
+{
+  "generated_at": "2026-03-28T03:17:55.117102Z",
+  "input_chm": "E:\\ETAS\\ASCET6.4\\Help\\ElementEditorEnglishUS.chm",
+  "unpack_dir": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\element-editor-6sv5h8rc\\export\\unpacked",
+  "total_files": 49,
+  "total_size_bytes": 426905,
+  "counts_by_extension": {
+    ".gif": 15,
+    ".js": 2,
+    ".htm": 25,
+    ".xml": 1,
+    ".brs": 1,
+    ".glo": 1,
+    ".hhc": 1,
+    ".hhk": 1,
+    ".css": 1,
+    ".lng": 1
+  },
+  "files": [
+    {
+      "relative_path": "BUTTON.GIF",
+      "size": 844,
+      "sha256": "6d10387853fe90ec87f720a6460a8cd1d2559683e66c81683a705a5e0e6f2ea9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_formula.gif",
+      "size": 1679,
+      "sha256": "57c6ce4b5335c7a5668a4d734c883c537299ee2787ec7d5605d762d9210421fb",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_formula_active.gif",
+      "size": 1684,
+      "sha256": "9c6111d84180e4dfa0a611e7a082eaf527f1ffa9bd10298416b409986706c630",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonGoToExport.gif",
+      "size": 1082,
+      "sha256": "09b2ec730c23aedd50aba266d5080ef0bc06d3befdbf706d7121de30f48ab5c2",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonSynchrWithExport.gif",
+      "size": 1055,
+      "sha256": "c1488ef463e474790a1e974a41fc6c708180507a9c54c1e3329d5da358f278cd",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "display.js",
+      "size": 5656,
+      "sha256": "85712144c31aac1d2706f3b60475055a673961f71bc37c0f4c9e9c4b85fa9b31",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "eed_calibrationaccess.htm",
+      "size": 5126,
+      "sha256": "a2f210bbde973c917f678e3fa2eb7da209ed0c3d0e9431dc96d0179b9d2d336f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "EEd_create_fromula_dependent.htm",
+      "size": 4369,
+      "sha256": "feb08ac9e916f4af8910189fde936babffbc2ac25af8410ed0fd0b5216c34e73",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "EEd_dependent_elements.htm",
+      "size": 1911,
+      "sha256": "52809733d52ed11b8240111bc5dc202fea6aa46e4b9d91c0792ff0e5cdf8d303",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "EEd_edit_element_configuration.htm",
+      "size": 13928,
+      "sha256": "0fdbe598e2bc6fe4122b2a13e0c7757907007e2b13b20ba00824fe2345071f73",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "EEd_edit_formula_dependent.htm",
+      "size": 2112,
+      "sha256": "ac765e6169e0698bfbe71f8fb9acf1d259461fd90ee2a0c1d6b5618a5f38d8f1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "EEd_EditCalibrationAccess.htm",
+      "size": 4180,
+      "sha256": "7961a06d9229acefd204971de0b23513c9cb70b9c912c3d6e78660433794d046",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "eed_editconfiguration_complexelement.htm",
+      "size": 5287,
+      "sha256": "cd5779a65fbb5c2816b5a08fa5cf7fd128ef91bb9103b16cd671dc9bba6a86e1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "eed_editconfiguration_compositeelement.htm",
+      "size": 14365,
+      "sha256": "a51c3c9f49880e4f111e9595478c5e69dfbee9a322a77761d0cb0462400619fd",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "EEd_EditElementScope.htm",
+      "size": 4664,
+      "sha256": "5e32db1fd1ceac035df676b57efa9863a5595e3076de5b73b832997c24af2a57",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "EEd_element_configuration.htm",
+      "size": 2158,
+      "sha256": "0508b73c68c2de9b0877a6fa608e114ef1ae097ca3b95d770263f6d4306af7db",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "EED_Element_Editor_Basic_Elements.htm",
+      "size": 30055,
+      "sha256": "69e09c02e63399c206603486fc7accd12533f595b5d67e987bbb86b6dd51876a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "EEd_Element_Editor_CT_Block_Elements.htm",
+      "size": 16229,
+      "sha256": "bef7e40329f011552e71924964451f5d9c190e3915da93ad5c8caa426324e4b6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "EEd_Element_Editor_Included_Component.htm",
+      "size": 11503,
+      "sha256": "affff9619373fcef737221bb521fadd993550b90e57875021ed14e125a6a51be",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "EEd_enable_diabale_elements.htm",
+      "size": 3200,
+      "sha256": "e55ca665184be30659ef9a972144c5e3dba62c00151474d558c744a17ca2beaa",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "eed_for_interrunnablevariables.htm",
+      "size": 15748,
+      "sha256": "b6eae4c3637e4acb3e4c395fd5d7eff5d91001192b8e3f1dbf570e0fff6baf28",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "EEd_Formula_Editor_Dependent_Parameters.htm",
+      "size": 11085,
+      "sha256": "415426e6cf4e3b38ade6f11721e8131eb912321467e8e566f8ff2fc24b191fa6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "EEd_ImportedElements.htm",
+      "size": 11330,
+      "sha256": "c57a9ce71adfa42a7f06e652a897b783d3e18fe2218ee914ba069b2e06354b1a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "EEd_instances_occurrences.htm",
+      "size": 1355,
+      "sha256": "15dad71c54060201f008b05f294fc80fdaa5cf3a3624337572bb39074b05883e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "EEd_open_element_editor.htm",
+      "size": 3964,
+      "sha256": "90317fca9809072cb91e01fb84dd8ee2b9ae6dbcc947d4343798f383d8849dde",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "EEd_Overview.htm",
+      "size": 1390,
+      "sha256": "adb1bc74800994e66e0f6134f881c27b93439f0e6dbfb4139332819da907fdf3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "EEd_PropertiesEditor_ModeGroups.htm",
+      "size": 16265,
+      "sha256": "d319041bd629574001281ef74e2eb47fd69554b3468cea8810399e8386f47c3a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "EEd_Reference_to_User_Interface.htm",
+      "size": 1587,
+      "sha256": "2b695e1d25a78b340ab37d8d3319cdea7afc4b7f839d522bb3ffef857ad8fa92",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Eed_SpecifyArrayMatrix_VariableSize.htm",
+      "size": 10178,
+      "sha256": "a071e7894c359c7840538a768e34c62c7df046a3ae5905af691f5dfefeacf26b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "EEd_Specifying_a_Reference.htm",
+      "size": 4133,
+      "sha256": "4da4b74c535e4ee2541e1d21069a41e6ded516b9a42d817523ce2562ae6ef463",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "EEd_use_temporary_variables.htm",
+      "size": 2236,
+      "sha256": "6f0078b1819219e6689ce8c3028d096f13a839bbaa22b916273ec4654cb3a953",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "eHelp.xml",
+      "size": 371,
+      "sha256": "3d96a815721c788cd26276b7abe4c809f94525817d12918703f25e57f823b184",
+      "extension": ".xml"
+    },
+    {
+      "relative_path": "ehlpdhtm.js",
+      "size": 125809,
+      "sha256": "80a0bcd7e19fb5c164f47356516b5c8a8519f6cb0cfaf5150785fd6aeb34067e",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "ElementEditorEnglishUS.brs",
+      "size": 2,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "extension": ".brs"
+    },
+    {
+      "relative_path": "ElementEditorEnglishUS.glo",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "extension": ".glo"
+    },
+    {
+      "relative_path": "ElementEditorEnglishUS.hhc",
+      "size": 6126,
+      "sha256": "5db54f7958e717d56b6060d843a52ad6221eeb2c5419fcfe2f508b90709464bb",
+      "extension": ".hhc"
+    },
+    {
+      "relative_path": "ElementEditorEnglishUS.hhk",
+      "size": 14445,
+      "sha256": "1700852370dbb9aa526a2f777d485f8f88bfe27538ef88e70b28f471decfea76",
+      "extension": ".hhk"
+    },
+    {
+      "relative_path": "example_formula.gif",
+      "size": 6320,
+      "sha256": "2bb1ad22c57de2940ee2ac130e01948c31122f2ccbf6790ebfc29bc0d8469afb",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "image5.gif",
+      "size": 1806,
+      "sha256": "9560f8299a3ba3c2f09e837abf4820d09d866277155d50ce7f5dc4886b4de2a8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exp_minus.gif",
+      "size": 837,
+      "sha256": "18a8ea974d756d370d6f7067283fc8c0b26f235c8e98bdaaf13a63e7dca8b1c4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exp_plus.gif",
+      "size": 842,
+      "sha256": "9ff1991cf9c6de621e2672bebf74fbc56680e3413f74d6cf18e25238701651be",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/statisch.gif",
+      "size": 831,
+      "sha256": "481cd3e8b966f0a4398b853efce140287877173b926b53d710791675a1b15aa4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "importedElement_1.gif",
+      "size": 6246,
+      "sha256": "1a1ca23e3841106e617989cdc83ab6b2d12176379c6d15c12cdc073d4f76e1eb",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "importedElement_2.gif",
+      "size": 6609,
+      "sha256": "fd166c699ae3d82240f35784b166307a4ca98cebd6bb06e7a946f7dd6563e342",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "importedElement_3.gif",
+      "size": 12953,
+      "sha256": "36319b51daa614aba69a425116a3fed14d169c4f355ad49bb8e39b9af5d5e9c7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "importedElement_4.gif",
+      "size": 6631,
+      "sha256": "f25cfd41ac99069ac07ec01312d6b037b2d4791b2aa4282cdcc7867859ffeef8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "importedElement_5.gif",
+      "size": 12928,
+      "sha256": "c3a13fc9f136e4731e0ca42d04fee2f23ea05863e08283d7c7579f49343db96f",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Layout.css",
+      "size": 10205,
+      "sha256": "f33a196fa3c4ffd0ec517e6c547bec21ca929f2361ed99c44fd9889fd7a2a4d2",
+      "extension": ".css"
+    },
+    {
+      "relative_path": "RoboHHRE.lng",
+      "size": 3586,
+      "sha256": "607e16623990c7b694bb11537edbecfbd7057fda1739bba5173e9d8a4942b18f",
+      "extension": ".lng"
+    }
+  ]
+}

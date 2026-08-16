@@ -1,0 +1,217 @@
+﻿ M .agents/skills/ascet-copilot-npm-release/SKILL.md
+ M ascetcli/contracts/playbooks/diff-module.json
+ M ascetcli/contracts/playbooks/read-component.json
+ M ascetcli/src/AscetCli/AscetApplyElementSpec.cs
+ M ascetcli/src/AscetCli/AscetApplyProjectFormula.cs
+ M ascetcli/src/AscetCli/AscetCreateFolder.cs
+ M ascetcli/src/AscetCli/AscetCreateMethod.cs
+ M ascetcli/src/AscetCli/AscetDeleteComponent.cs
+ M ascetcli/src/AscetCli/AscetDeleteFolder.cs
+ M ascetcli/src/AscetCli/AscetDeleteMethod.cs
+ M ascetcli/src/AscetCli/AscetDiffClass.cs
+ M ascetcli/src/AscetCli/AscetDiffComponentSnapshot.cs
+ M ascetcli/src/AscetCli/AscetDiffElementSpec.cs
+ M ascetcli/src/AscetCli/AscetDiffModule.cs
+ M ascetcli/src/AscetCli/AscetDiffProjectFormulas.cs
+ M ascetcli/src/AscetCli/AscetDiffStateMachine.cs
+ M ascetcli/src/AscetCli/AscetDiffStateMachineDomain.cs
+ M ascetcli/src/AscetCli/AscetReadBlockDiagram.cs
+ M ascetcli/src/AscetCli/AscetReadClassSnapshot.cs
+ M ascetcli/src/AscetCli/AscetReadClassSummary.cs
+ M ascetcli/src/AscetCli/AscetReadComponentCode.cs
+ M ascetcli/src/AscetCli/AscetReadComponentSnapshot.cs
+ M ascetcli/src/AscetCli/AscetReadComponentUsedBy.cs
+ M ascetcli/src/AscetCli/AscetReadElementRefs.cs
+ M ascetcli/src/AscetCli/AscetReadImplementation.cs
+ M ascetcli/src/AscetCli/AscetReadMethodCode.cs
+ M ascetcli/src/AscetCli/AscetReadMethodSignature.cs
+ M ascetcli/src/AscetCli/AscetReadModuleClosure.cs
+ M ascetcli/src/AscetCli/AscetReadModuleSnapshot.cs
+ M ascetcli/src/AscetCli/AscetReadModuleSummary.cs
+ M ascetcli/src/AscetCli/AscetReadReferences.cs
+ M ascetcli/src/AscetCli/AscetReadStateMachine.cs
+ M ascetcli/src/AscetCli/AscetReadStateMachineFlow.cs
+ M ascetcli/src/AscetCli/AscetReadStateMachineSnapshot.cs
+ M ascetcli/src/AscetCli/AscetReadStateMachineSummary.cs
+ M ascetcli/src/AscetCli/AscetReadTextCode.cs
+ M ascetcli/src/AscetCli/AscetSetClassMethodCode.cs
+ M ascetcli/src/AscetCli/AscetSetMethodCode.cs
+ M ascetcli/src/AscetCli/AscetSetMethodSignature.cs
+ M ascetcli/src/AscetCli/AscetSetModuleCode.cs
+ M ascetcli/src/AscetCli/AscetSetStateMachineCode.cs
+ M ascetcli/src/AscetCli/AscetWorker.cs
+ M ascetcli/src/AscetCli/Compat/LegacyShimGenerator.cs
+ M ascetcli/src/AscetCopilot/Services/Read/ComponentReadService.cs
+ M ascetcli/src/AscetCopilot/Services/Read/FindElementsReadService.cs
+ M ascetcli/src/AscetCopilot/Services/Read/MethodReadService.cs
+ M ascetcli/src/AscetCopilot/Services/Read/SummaryReadService.cs
+ M ascetcli/src/AscetCopilot/Services/Write/MethodWriteService.cs
+ M docs/2026-07-11-ascet-copilot-npm-bundle-implementation-plan.md
+ M docs/2026-07-11-ascet-copilot-npm-publish-task-plan.md
+ M docs/2026-08-11-ascet-live-tools-bug-fix-plan.md
+ M docs/bosch-llmfarm-company-validation.md
+ M docs/bosch-llmfarm-system-ca-task-plan.md
+ M package-lock.json
+ M packages/Pi-ascet-ui-extension/extensions/releaseInfo.test.ts
+ M packages/Pi-ascet-ui-extension/extensions/releaseInfo.ts
+ M packages/Pi-ascet-ui-extension/package.json
+ M packages/ascet-extension/CHANGELOG.md
+ M packages/ascet-extension/ascet-cli/bin/AscetBridge.exe
+ M packages/ascet-extension/docs/2026-07-12-ascet-design-requirements-risk-task-plan.md
+ M packages/ascet-extension/package.json
+ M packages/ascet-extension/skills/ascet-engineering/SKILL.md
+ M packages/ascet-extension/skills/ascet-engineering/references/dependency-advanced-path.md
+ M packages/ascet-extension/skills/ascet-engineering/references/parameter-naming.md
+ M packages/ascet-extension/skills/ascet-engineering/references/tool-recipes.md
+ M packages/ascet-extension/src/ascet-engineering-skill.test.ts
+ M packages/ascet-extension/src/configure-parameter-dependency-chain.test.ts
+ M packages/ascet-extension/src/configure-parameter-dependency-chain.ts
+ M packages/ascet-extension/src/edit/service-telemetry.test.ts
+ M packages/ascet-extension/src/edit/service.test.ts
+ M packages/ascet-extension/src/edit/service.ts
+ M release/ascet-copilot/package-lock.json
+ M release/ascet-copilot/package.json
+?? .workbuddy/
+?? 2026-08-11-100802-1.txt
+?? artifacts/
+?? ascet-tool-prompts-dump-zh.md
+?? ascet-tool-prompts-dump.md
+?? ascetcli/docs/
+?? ascetcli/output/
+?? ascetcli/src/AscetCopilot/Resolution/
+?? ascetcli/src/AscetCopilot/Services/Write/MethodCodeConsistencyValidator.cs
+?? ascetcli/src/AscetCopilot/Services/Write/MethodConsistencyService.cs
+?? ascetcli/src/AscetCopilot/Transactions/
+?? ascetcli/tests/AscetElementMutationTransactionTest.cs
+?? ascetcli/tests/AscetMethodConsistencyTest.cs
+?? ascetcli/tests/AscetTargetResolverContractTest.cs
+?? docs/2026-08-09-ascet-copilot-npm-publish-process.md
+?? docs/2026-08-10-ascet-database-adc-brake-disc-temperature-test-plan.md
+?? docs/2026-08-10-ascet-extension-system-prompt-tools-skills-joint-test-plan.md
+?? docs/2026-08-11-ascet-live-tools-seven-bug-development-test-plan.md
+?? output/analyze-component-refs.mjs
+?? output/analyze-live-tree.mjs
+?? output/analyze-project-parameter-branches.mjs
+?? output/analyze-project-sibling-classes.mjs
+?? output/ascet-all-tools-live-20260810011424.json
+?? output/ascet-all-tools-live-20260810011610.json
+?? output/ascet-all-tools-live-20260810012438.json
+?? output/ascet-all-tools-live-20260810012631.json
+?? output/ascet-all-tools-live-20260810013322-summary.md
+?? output/ascet-all-tools-live-20260810013322.json
+?? output/ascet-component-refs-filter-live-20260809.json
+?? output/ascet-element-write-live-20260808053624.json
+?? output/ascet-element-write-live-20260808053707.json
+?? output/ascet-element-write-live-20260808054044.json
+?? output/ascet-element-write-live-20260808054353.json
+?? output/ascet-element-write-live-20260808055217.json
+?? output/ascet-get-tools-live-artifacts/
+?? output/ascet-get-tools-live-validation-20260809.json
+?? output/ascet-inline-chain-live-20260808072310.json
+?? output/ascet-inline-chain-live-20260808105605.json
+?? output/ascet-xml/
+?? output/bridge-release-audit.zip
+?? output/bridge-release-audit/
+?? output/database-catalog-baseline/
+?? output/database-catalog-live-rerun-20260809.json
+?? output/database-catalog-live-timing-20260809.json
+?? output/database-catalog-live-validation-20260809.json
+?? output/live-class-implementation-adc-calibration.json
+?? output/live-class-implementation-adc-constant.json
+?? output/live-class-implementation-avh-calibration.json
+?? output/live-class-implementation-avh-constant.json
+?? output/live-class-implementation-nonhadhap-calibration.json
+?? output/live-class-implementation-nonhadhap-constant.json
+?? output/live-component-refs-adc-main.json
+?? output/live-component-refs-cm-lfi.json
+?? output/live-full-tree-analysis.json
+?? output/live-full-tree.json
+?? output/live-get-tree.json
+?? output/live-methods-calibration-avh.json
+?? output/live-parameter-branch-methods.json
+?? output/live-project-implementation-adc.json
+?? output/live-project-implementation-avh.json
+?? output/live-project-implementation-nonhadhap.json
+?? output/live-project-tree.json
+?? output/live-projects.json
+?? output/live-request.json
+?? output/live-root-tree.json
+?? output/live-tools/20260811-fix-validation/
+?? output/live-tools/20260811-root-fix-live-8A8C254E/
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/artifacts/obs-database-catalog-13276-1786458914345-0.database-model-catalog.ndjson
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/artifacts/obs-database-catalog-13276-1786458914345-0.database-model-summary.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/artifacts/obs-database-catalog-13276-1786458914345-0.database-model.meta.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/artifacts/obs-database-catalog-13276-1786458914345-0.enumerations.ndjson
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/artifacts/obs-database-catalog-13276-1786458914345-0.modules.ndjson
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/artifacts/obs-database-catalog-13276-1786458914345-0.project-module-edges.ndjson
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/artifacts/obs-tree-13276-1786458914278-0.meta.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/artifacts/obs-tree-13276-1786458914278-0.tree.ndjson
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/fixture-name.txt
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/10-create-folder-preflight-request.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/10-create-folder-preflight.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/10-create-folder-write-request.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/10-create-folder-write.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/11-create-class-preflight-request.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/11-create-class-preflight.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/11-create-class-write-request.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/11-create-class-write.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/12-create-enumeration-preflight-request.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/12-create-enumeration-preflight.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/12-create-enumeration-write-request.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/12-create-enumeration-write.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/13-setup-tree-raw.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/13-setup-tree.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/20-apply-element-spec-plan-request.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/20-apply-element-spec-plan.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/21-apply-element-spec-commit-request.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/21-apply-element-spec-commit.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/22-read-P_Dependent.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/22-read-P_Input.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/23-apply-element-spec-diff.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/30-set-element-dependency-plan-request.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/30-set-element-dependency-plan.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/31-set-element-dependency-commit-request.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/31-set-element-dependency-commit.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/32-set-element-dependency-read.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/33-set-element-dependency-diff.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/40-set-enumerators-preflight-request.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/40-set-enumerators-preflight.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/41-set-enumerators-write-request.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/41-set-enumerators-write.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/42-set-enumerators-read.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/43-set-enumerators-diff.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/50-delete-enumeration-preflight-request.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/50-delete-enumeration-preflight.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/50-delete-enumeration-write-request.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/50-delete-enumeration-write.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/51-delete-class-preflight-request.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/51-delete-class-preflight.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/51-delete-class-write-request.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/51-delete-class-write.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/52-delete-folder-preflight-request.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/52-delete-folder-preflight.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/52-delete-folder-write-request.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/52-delete-folder-write.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/53-cleanup-tree-raw.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/53-cleanup-tree.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/54-final-database-identity-raw.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/54-final-database-identity.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/isolated-write/56-final-runtime-status.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/operation-health.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/read-only/00-runtime-status.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/read-only/01-database-identity-raw.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/read-only/01-database-identity.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/read-only/02-fixture-absence-raw.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/read-only/02-fixture-absence.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/read-only/03-database-tree-raw.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/read-only/04-database-catalog-raw.json
+?? output/live-tools/20260811-root-fix-live-ED3C9BC9/read-only/04-database-catalog.json
+?? output/live-tools/20260811-root-fix-non-live/
+?? output/live-tools/LIVE_TOOLS_20260812-105126_F1DF11BC/
+?? output/live-verify-parameter-branches.mjs
+?? output/parameter-chain-cleanup-latest.json
+?? output/parameter-chain-cleanup-verified-latest.json
+?? output/parameter-chain-execute-live-latest.json
+?? output/run-live-call.mjs
+?? output/shared-oid-skill-test-20260812/
+?? packages/coding-agent/.tmp/

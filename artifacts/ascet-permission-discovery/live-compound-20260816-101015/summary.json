@@ -1,0 +1,633 @@
+{
+  "ok": true,
+  "readOnly": true,
+  "ascetCwd": "C:\\Repo\\F05_IPB_L2_0429",
+  "prefix": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions",
+  "candidateLimit": 120,
+  "database": {
+    "outcome": {
+      "status": "ok",
+      "verified": true,
+      "data": {
+        "type": "response",
+        "protocolVersion": 1,
+        "ok": true,
+        "result": {
+          "items": [],
+          "coverage": {
+            "status": "complete_for_scope",
+            "scopeKind": "database",
+            "scopeId": "database:C:\\Repo\\13_XIAOMIAVH\\px_Backup\\",
+            "completeness": "complete",
+            "truncated": false,
+            "foldersVisited": 0,
+            "componentsScanned": 0,
+            "identityKinds": [],
+            "collectorStarted": true,
+            "collectorCompleted": true,
+            "rootCollectionAvailable": true,
+            "projectCollectionAvailable": false,
+            "missingOidCount": 0,
+            "missingPathCount": 0,
+            "collectors": {
+              "database": {
+                "started": true,
+                "completed": true,
+                "itemCount": 1
+              },
+              "projects": {
+                "started": false,
+                "completed": false,
+                "itemCount": 0
+              },
+              "folders": {
+                "started": false,
+                "completed": false,
+                "itemCount": 0
+              },
+              "components": {
+                "started": false,
+                "completed": false,
+                "itemCount": 0
+              },
+              "enumerations": {
+                "started": false,
+                "completed": false,
+                "itemCount": 0
+              }
+            }
+          },
+          "truncated": false,
+          "source": "live",
+          "database": {
+            "name": "C:\\Repo\\13_XIAOMIAVH\\px_Backup\\px_Backup",
+            "path": "C:\\Repo\\13_XIAOMIAVH\\px_Backup\\"
+          }
+        },
+        "error": null,
+        "meta": {
+          "bridgePid": 39048,
+          "bridgeGeneration": "077be21c-e9a6-4759-88b7-bfb6bbc36f1b",
+          "durationMs": 303,
+          "sessionPolicy": "fresh_session",
+          "mutationStarted": false,
+          "mode": "exec",
+          "operation": "get_database_identity"
+        }
+      }
+    },
+    "data": {
+      "type": "response",
+      "protocolVersion": 1,
+      "ok": true,
+      "result": {
+        "items": [],
+        "coverage": {
+          "status": "complete_for_scope",
+          "scopeKind": "database",
+          "scopeId": "database:C:\\Repo\\13_XIAOMIAVH\\px_Backup\\",
+          "completeness": "complete",
+          "truncated": false,
+          "foldersVisited": 0,
+          "componentsScanned": 0,
+          "identityKinds": [],
+          "collectorStarted": true,
+          "collectorCompleted": true,
+          "rootCollectionAvailable": true,
+          "projectCollectionAvailable": false,
+          "missingOidCount": 0,
+          "missingPathCount": 0,
+          "collectors": {
+            "database": {
+              "started": true,
+              "completed": true,
+              "itemCount": 1
+            },
+            "projects": {
+              "started": false,
+              "completed": false,
+              "itemCount": 0
+            },
+            "folders": {
+              "started": false,
+              "completed": false,
+              "itemCount": 0
+            },
+            "components": {
+              "started": false,
+              "completed": false,
+              "itemCount": 0
+            },
+            "enumerations": {
+              "started": false,
+              "completed": false,
+              "itemCount": 0
+            }
+          }
+        },
+        "truncated": false,
+        "source": "live",
+        "database": {
+          "name": "C:\\Repo\\13_XIAOMIAVH\\px_Backup\\px_Backup",
+          "path": "C:\\Repo\\13_XIAOMIAVH\\px_Backup\\"
+        }
+      },
+      "error": null,
+      "meta": {
+        "bridgePid": 39048,
+        "bridgeGeneration": "077be21c-e9a6-4759-88b7-bfb6bbc36f1b",
+        "durationMs": 303,
+        "sessionPolicy": "fresh_session",
+        "mutationStarted": false,
+        "mode": "exec",
+        "operation": "get_database_identity"
+      }
+    },
+    "raw": {
+      "ok": true,
+      "data": {
+        "type": "response",
+        "protocolVersion": 1,
+        "ok": true,
+        "result": {
+          "items": [],
+          "coverage": {
+            "status": "complete_for_scope",
+            "scopeKind": "database",
+            "scopeId": "database:C:\\Repo\\13_XIAOMIAVH\\px_Backup\\",
+            "completeness": "complete",
+            "truncated": false,
+            "foldersVisited": 0,
+            "componentsScanned": 0,
+            "identityKinds": [],
+            "collectorStarted": true,
+            "collectorCompleted": true,
+            "rootCollectionAvailable": true,
+            "projectCollectionAvailable": false,
+            "missingOidCount": 0,
+            "missingPathCount": 0,
+            "collectors": {
+              "database": {
+                "started": true,
+                "completed": true,
+                "itemCount": 1
+              },
+              "projects": {
+                "started": false,
+                "completed": false,
+                "itemCount": 0
+              },
+              "folders": {
+                "started": false,
+                "completed": false,
+                "itemCount": 0
+              },
+              "components": {
+                "started": false,
+                "completed": false,
+                "itemCount": 0
+              },
+              "enumerations": {
+                "started": false,
+                "completed": false,
+                "itemCount": 0
+              }
+            }
+          },
+          "truncated": false,
+          "source": "live",
+          "database": {
+            "name": "C:\\Repo\\13_XIAOMIAVH\\px_Backup\\px_Backup",
+            "path": "C:\\Repo\\13_XIAOMIAVH\\px_Backup\\"
+          }
+        },
+        "error": null,
+        "meta": {
+          "bridgePid": 39048,
+          "bridgeGeneration": "077be21c-e9a6-4759-88b7-bfb6bbc36f1b",
+          "durationMs": 303,
+          "sessionPolicy": "fresh_session",
+          "mutationStarted": false,
+          "mode": "exec",
+          "operation": "get_database_identity"
+        }
+      },
+      "request": {
+        "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+        "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+        "args": [
+          "exec",
+          "get_database_identity",
+          "--request-json",
+          "{}",
+          "--json"
+        ],
+        "timeoutMs": 120000,
+        "jobKind": "read",
+        "mutatesDatabase": false
+      },
+      "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"items\":[],\"coverage\":{\"status\":\"complete_for_scope\",\"scopeKind\":\"database\",\"scopeId\":\"database:C:\\\\Repo\\\\13_XIAOMIAVH\\\\px_Backup\\\\\",\"completeness\":\"complete\",\"truncated\":false,\"foldersVisited\":0,\"componentsScanned\":0,\"identityKinds\":[],\"collectorStarted\":true,\"collectorCompleted\":true,\"rootCollectionAvailable\":true,\"projectCollectionAvailable\":false,\"missingOidCount\":0,\"missingPathCount\":0,\"collectors\":{\"database\":{\"started\":true,\"completed\":true,\"itemCount\":1},\"projects\":{\"started\":false,\"completed\":false,\"itemCount\":0},\"folders\":{\"started\":false,\"completed\":false,\"itemCount\":0},\"components\":{\"started\":false,\"completed\":false,\"itemCount\":0},\"enumerations\":{\"started\":false,\"completed\":false,\"itemCount\":0}}},\"truncated\":false,\"source\":\"live\",\"database\":{\"name\":\"C:\\\\Repo\\\\13_XIAOMIAVH\\\\px_Backup\\\\px_Backup\",\"path\":\"C:\\\\Repo\\\\13_XIAOMIAVH\\\\px_Backup\\\\\"}},\"error\":null,\"meta\":{\"bridgePid\":39048,\"bridgeGeneration\":\"077be21c-e9a6-4759-88b7-bfb6bbc36f1b\",\"durationMs\":303,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"get_database_identity\"}}\r\n",
+      "stderr": "",
+      "exitCode": 0,
+      "timedOut": false,
+      "aborted": false,
+      "operationId": "get_database_identity"
+    }
+  },
+  "tree": {
+    "delivery": "stored",
+    "itemCount": 10574,
+    "observation": {
+      "resultId": "obs-tree-39052-1786846300930-0",
+      "domain": "tree",
+      "format": "ndjson",
+      "dataPath": "C:\\Users\\NHJ3SZH\\AppData\\Local\\Temp\\pi-ascet-extension\\artifacts\\obs-tree-39052-1786846300930-0.tree.ndjson",
+      "metaPath": "C:\\Users\\NHJ3SZH\\AppData\\Local\\Temp\\pi-ascet-extension\\artifacts\\obs-tree-39052-1786846300930-0.meta.json",
+      "itemCount": 10574
+    }
+  },
+  "selected": {},
+  "databaseSafetyWarning": "Do not authorize writes until this fingerprint is confirmed to belong to a disposable database.",
+  "topLevelCounts": {
+    "PlatformLibrary_NewBrakeSystems": 558,
+    "DEMO": 1,
+    "PlatformProjects": 255,
+    "BypassLibrary": 5,
+    "CN_Libary": 479,
+    "AVH_TriggerAvhStatemachine_test": 4,
+    "PlatformLibrary_iBoosterG2": 12,
+    "Customer": 315,
+    "PlatformLibrary_iBooster": 5,
+    "EncapSWLibrary": 22,
+    "PlatformLibrary": 8881,
+    "PlatformProjects_NewBrakeSystems": 16,
+    "MT": 7,
+    "AVH_ActivationByBrakePedal_Xiaomi_test": 4,
+    "_MT": 5,
+    "_UT": 5
+  },
+  "environmentSuggestion": {
+    "ASCET_PERMISSION_SMOKE_DATABASE_FINGERPRINT": "51aa8fd8a5142d0676a4d65d9c2f5dd75e31923d115912be320e0c0f35c82532"
+  },
+  "inspected": [
+    {
+      "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_GenericTCSFunctions",
+      "kind": "class",
+      "editable": false,
+      "previewStatus": "error",
+      "previewErrorCode": "unsupported_operation"
+    },
+    {
+      "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_AxleSignals",
+      "kind": "class",
+      "editable": false,
+      "previewStatus": "error",
+      "previewErrorCode": "unsupported_operation"
+    },
+    {
+      "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_eDiff_LockingFactor",
+      "kind": "class",
+      "editable": false,
+      "previewStatus": "error",
+      "previewErrorCode": "unsupported_operation"
+    },
+    {
+      "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW",
+      "kind": "class",
+      "editable": false,
+      "previewStatus": "error",
+      "previewErrorCode": "unsupported_operation"
+    },
+    {
+      "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_DSCOFF",
+      "kind": "class",
+      "editable": false,
+      "previewStatus": "error",
+      "previewErrorCode": "unsupported_operation"
+    },
+    {
+      "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress",
+      "kind": "class",
+      "editable": false,
+      "previewStatus": "error",
+      "previewErrorCode": "unsupported_operation"
+    },
+    {
+      "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill",
+      "kind": "class",
+      "editable": false,
+      "previewStatus": "error",
+      "previewErrorCode": "unsupported_operation"
+    },
+    {
+      "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_CRC_Interface\\TCS_CUS_CRC_Interface",
+      "kind": "class",
+      "editable": false,
+      "previewStatus": "error",
+      "previewErrorCode": "unsupported_operation"
+    }
+  ],
+  "scheduler": {
+    "ok": true,
+    "scheduler": {
+      "hostState": "healthy",
+      "runningJob": null,
+      "queuedJobs": [],
+      "recentJobs": [
+        {
+          "jobId": "ascet-job-1",
+          "agentId": "system",
+          "toolName": "ascet_status",
+          "commandId": "selftest",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786846220122,
+          "startedAt": 1786846220123,
+          "queueWaitMs": 1,
+          "finishedAt": 1786846222194,
+          "executionMs": 2071
+        },
+        {
+          "jobId": "ascet-job-2",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "component_editable_check",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786846301006,
+          "startedAt": 1786846301006,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846301882,
+          "executionMs": 876
+        },
+        {
+          "jobId": "ascet-job-3",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "preflight_create_method",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "failed",
+          "queuedAt": 1786846301887,
+          "startedAt": 1786846301887,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846302322,
+          "executionMs": 435,
+          "errorCode": "unsupported_operation",
+          "errorMessage": "Operation 'preflight_create_method' is not registered in AscetBridge."
+        },
+        {
+          "jobId": "ascet-job-4",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "component_editable_check",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786846302329,
+          "startedAt": 1786846302329,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846303063,
+          "executionMs": 734
+        },
+        {
+          "jobId": "ascet-job-5",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "preflight_create_method",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "failed",
+          "queuedAt": 1786846303065,
+          "startedAt": 1786846303065,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846303478,
+          "executionMs": 413,
+          "errorCode": "unsupported_operation",
+          "errorMessage": "Operation 'preflight_create_method' is not registered in AscetBridge."
+        },
+        {
+          "jobId": "ascet-job-6",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "component_editable_check",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786846303482,
+          "startedAt": 1786846303482,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846304202,
+          "executionMs": 720
+        },
+        {
+          "jobId": "ascet-job-7",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "preflight_create_method",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "failed",
+          "queuedAt": 1786846304205,
+          "startedAt": 1786846304205,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846304603,
+          "executionMs": 398,
+          "errorCode": "unsupported_operation",
+          "errorMessage": "Operation 'preflight_create_method' is not registered in AscetBridge."
+        },
+        {
+          "jobId": "ascet-job-8",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "component_editable_check",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786846304606,
+          "startedAt": 1786846304606,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846305347,
+          "executionMs": 741
+        },
+        {
+          "jobId": "ascet-job-9",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "preflight_create_method",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "failed",
+          "queuedAt": 1786846305351,
+          "startedAt": 1786846305351,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846305791,
+          "executionMs": 440,
+          "errorCode": "unsupported_operation",
+          "errorMessage": "Operation 'preflight_create_method' is not registered in AscetBridge."
+        },
+        {
+          "jobId": "ascet-job-10",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "component_editable_check",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786846305794,
+          "startedAt": 1786846305794,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846306692,
+          "executionMs": 898
+        },
+        {
+          "jobId": "ascet-job-11",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "preflight_create_method",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "failed",
+          "queuedAt": 1786846306696,
+          "startedAt": 1786846306696,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846307241,
+          "executionMs": 545,
+          "errorCode": "unsupported_operation",
+          "errorMessage": "Operation 'preflight_create_method' is not registered in AscetBridge."
+        },
+        {
+          "jobId": "ascet-job-12",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "component_editable_check",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786846307244,
+          "startedAt": 1786846307245,
+          "queueWaitMs": 1,
+          "finishedAt": 1786846308041,
+          "executionMs": 796
+        },
+        {
+          "jobId": "ascet-job-13",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "preflight_create_method",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "failed",
+          "queuedAt": 1786846308045,
+          "startedAt": 1786846308045,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846308435,
+          "executionMs": 390,
+          "errorCode": "unsupported_operation",
+          "errorMessage": "Operation 'preflight_create_method' is not registered in AscetBridge."
+        },
+        {
+          "jobId": "ascet-job-14",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "component_editable_check",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786846308440,
+          "startedAt": 1786846308440,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846309116,
+          "executionMs": 676
+        },
+        {
+          "jobId": "ascet-job-15",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "preflight_create_method",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "failed",
+          "queuedAt": 1786846309119,
+          "startedAt": 1786846309119,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846309532,
+          "executionMs": 413,
+          "errorCode": "unsupported_operation",
+          "errorMessage": "Operation 'preflight_create_method' is not registered in AscetBridge."
+        },
+        {
+          "jobId": "ascet-job-16",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "component_editable_check",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786846309536,
+          "startedAt": 1786846309536,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846310489,
+          "executionMs": 953
+        },
+        {
+          "jobId": "ascet-job-17",
+          "agentId": "system",
+          "toolName": "ascet_edit",
+          "commandId": "preflight_create_method",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "failed",
+          "queuedAt": 1786846310501,
+          "startedAt": 1786846310501,
+          "queueWaitMs": 0,
+          "finishedAt": 1786846311733,
+          "executionMs": 1232,
+          "errorCode": "unsupported_operation",
+          "errorMessage": "Operation 'preflight_create_method' is not registered in AscetBridge."
+        }
+      ],
+      "pendingByAgent": {},
+      "activeCount": 0,
+      "resource": {
+        "key": "ascet.toolapi.global",
+        "active": 0,
+        "queued": 0,
+        "concurrency": 1,
+        "runningJob": null
+      }
+    },
+    "cliLock": {
+      "locked": false,
+      "path": "C:\\Users\\NHJ3SZH\\AppData\\Local\\PI\\ascet\\locks\\ascet-toolapi.lock"
+    },
+    "operationHealth": [],
+    "summary": "ASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nRecent:\n- ascet-job-8 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=0ms, exec=741ms)\n- ascet-job-9 ascet_edit/preflight_create_method agent=system state=failed (queueWait=0ms, exec=440ms) error=unsupported_operation\n- ascet-job-10 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=0ms, exec=898ms)\n- ascet-job-11 ascet_edit/preflight_create_method agent=system state=failed (queueWait=0ms, exec=545ms) error=unsupported_operation\n- ascet-job-12 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=1ms, exec=796ms)\n- ascet-job-13 ascet_edit/preflight_create_method agent=system state=failed (queueWait=0ms, exec=390ms) error=unsupported_operation\n- ascet-job-14 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=0ms, exec=676ms)\n- ascet-job-15 ascet_edit/preflight_create_method agent=system state=failed (queueWait=0ms, exec=413ms) error=unsupported_operation\n- ascet-job-16 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=0ms, exec=953ms)\n- ascet-job-17 ascet_edit/preflight_create_method agent=system state=failed (queueWait=0ms, exec=1232ms) error=unsupported_operation\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none",
+    "tool": "ascet_scheduler_status",
+    "action": "status",
+    "command": {
+      "logicalCommandId": "PiAscetSchedulerStatus",
+      "backendCommandId": "PiAscetSchedulerStatus",
+      "operation": "scheduler_status"
+    }
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"changed\": {\n    \"component\": \"PI_LIVE_ROOTFIX_20260811_8A8C254E/EnumerationUnderTest\",\n    \"kind\": \"enumeration\",\n    \"previousEnumerators\": [\n      \"enumerator\"\n    ],\n    \"enumerators\": [\n      \"ROOTFIX_OFF\",\n      \"ROOTFIX_ON\",\n      \"ROOTFIX_DIAG\"\n    ],\n    \"writeSucceeded\": true,\n    \"summary\": \"Set 3 enumerators for PI_LIVE_ROOTFIX_20260811_8A8C254E\\\\EnumerationUnderTest.\"\n  },\n  \"verification\": {\n    \"mode\": \"automatic_readback\",\n    \"source\": \"write_command\",\n    \"required\": true,\n    \"requested\": true,\n    \"verified\": true,\n    \"status\": \"passed\"\n  }\n}"
+    }
+  ],
+  "details": {
+    "outcome": {
+      "status": "ok",
+      "verified": true,
+      "data": {
+        "changed": {
+          "componentPath": "PI_LIVE_ROOTFIX_20260811_8A8C254E\\EnumerationUnderTest",
+          "kind": "enumeration",
+          "previousEnumerators": [
+            "enumerator"
+          ],
+          "enumerators": [
+            "ROOTFIX_OFF",
+            "ROOTFIX_ON",
+            "ROOTFIX_DIAG"
+          ],
+          "writeSucceeded": true,
+          "summary": "Set 3 enumerators for PI_LIVE_ROOTFIX_20260811_8A8C254E\\EnumerationUnderTest."
+        },
+        "verification": {
+          "mode": "automatic_readback",
+          "source": "write_command",
+          "required": true,
+          "requested": true,
+          "verified": true,
+          "status": "passed"
+        },
+        "observations": {
+          "invalidated": []
+        }
+      },
+      "warnings": []
+    },
+    "raw": {
+      "ok": true,
+      "data": {
+        "type": "response",
+        "protocolVersion": 1,
+        "ok": true,
+        "result": {
+          "componentPath": "PI_LIVE_ROOTFIX_20260811_8A8C254E\\EnumerationUnderTest",
+          "kind": "enumeration",
+          "previousEnumerators": [
+            "enumerator"
+          ],
+          "enumerators": [
+            "ROOTFIX_OFF",
+            "ROOTFIX_ON",
+            "ROOTFIX_DIAG"
+          ],
+          "writeSucceeded": true,
+          "verifyReadbackRequested": true,
+          "readbackVerified": true,
+          "summary": "Set 3 enumerators for PI_LIVE_ROOTFIX_20260811_8A8C254E\\EnumerationUnderTest."
+        },
+        "error": null,
+        "meta": {
+          "bridgePid": 4040,
+          "bridgeGeneration": "4c872506-df63-44b1-8d4b-e5f7eafa6c5b",
+          "durationMs": 497,
+          "sessionPolicy": "fresh_session",
+          "mutationStarted": true,
+          "mode": "exec",
+          "operation": "set_enumerators"
+        }
+      },
+      "request": {
+        "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+        "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+        "args": [
+          "exec",
+          "set_enumerators",
+          "PI_LIVE_ROOTFIX_20260811_8A8C254E\\EnumerationUnderTest",
+          "--items",
+          "ROOTFIX_OFF,ROOTFIX_ON,ROOTFIX_DIAG",
+          "--verify-readback",
+          "--json"
+        ],
+        "jobKind": "write",
+        "mutatesDatabase": true
+      },
+      "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"componentPath\":\"PI_LIVE_ROOTFIX_20260811_8A8C254E\\\\EnumerationUnderTest\",\"kind\":\"enumeration\",\"previousEnumerators\":[\"enumerator\"],\"enumerators\":[\"ROOTFIX_OFF\",\"ROOTFIX_ON\",\"ROOTFIX_DIAG\"],\"writeSucceeded\":true,\"verifyReadbackRequested\":true,\"readbackVerified\":true,\"summary\":\"Set 3 enumerators for PI_LIVE_ROOTFIX_20260811_8A8C254E\\\\EnumerationUnderTest.\"},\"error\":null,\"meta\":{\"bridgePid\":4040,\"bridgeGeneration\":\"4c872506-df63-44b1-8d4b-e5f7eafa6c5b\",\"durationMs\":497,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":true,\"mode\":\"exec\",\"operation\":\"set_enumerators\"}}\r\n",
+      "stderr": "",
+      "exitCode": 0,
+      "timedOut": false,
+      "aborted": false,
+      "operationId": "set_enumerators"
+    },
+    "observations": {
+      "invalidated": []
+    },
+    "verification": {
+      "mode": "automatic_readback",
+      "source": "write_command",
+      "required": true,
+      "requested": true,
+      "verified": true,
+      "status": "passed"
+    }
+  }
+}

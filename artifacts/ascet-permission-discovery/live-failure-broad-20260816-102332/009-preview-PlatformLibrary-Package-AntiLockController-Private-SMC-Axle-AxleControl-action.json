@@ -1,0 +1,330 @@
+{
+  "stage": "preview-PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl-action",
+  "request": {
+    "toolName": "ascet_edit",
+    "params": {
+      "action": "create_method",
+      "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+      "componentKind": "statemachine",
+      "methodName": "__PiPermissionProbe__",
+      "methodKind": "action",
+      "ifExists": "fail",
+      "intent": "preview"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"status\": \"ok\",\n  \"permission\": {\n    \"mode\": \"default\",\n    \"decision\": \"not_evaluated\"\n  },\n  \"preflight\": {\n    \"status\": \"passed\",\n    \"evidence\": {\n      \"action\": \"create_method\",\n      \"params\": {\n        \"action\": \"create_method\",\n        \"component\": \"PlatformLibrary/Package/AntiLockController/Private/SMC/Axle/AxleControl\",\n        \"kind\": \"statemachine\",\n        \"name\": \"__PiPermissionProbe__\",\n        \"type\": \"action\",\n        \"ifExists\": \"fail\",\n        \"intent\": \"preview\"\n      },\n      \"backendPreflight\": {\n        \"operation\": \"preflight_create_method\",\n        \"validated\": true,\n        \"result\": {\n          \"databasePath\": \"C:/Repo/F05_IPB_L2_0429\",\n          \"component\": \"PlatformLibrary/Package/AntiLockController/Private/SMC/Axle/AxleControl\",\n          \"componentOid\": \"040g060kg0001k070o6g5us4p0eg2\",\n          \"kind\": \"StateMachine\",\n          \"language\": \"ESDL\",\n          \"diagramName\": \"Main\",\n          \"diagramExists\": false,\n          \"requiredMethod\": \"AddAction\",\n          \"requiredSignature\": \"AddAction(String)\",\n          \"requiredMethodAvailable\": false,\n          \"addDiagramAvailable\": true,\n          \"futureMethodCapabilityProven\": false,\n          \"editable\": false,\n          \"readbackAvailable\": true,\n          \"noOp\": false,\n          \"plannedEffects\": [\n            {\n              \"kind\": \"create_diagram\",\n              \"target\": \"PlatformLibrary/Package/AntiLockController/Private/SMC/Axle/AxleControl::Main\"\n            },\n            {\n              \"kind\": \"create_method\",\n              \"target\": \"PlatformLibrary/Package/AntiLockController/Private/SMC/Axle/AxleControl::__PiPermissionProbe__\",\n              \"type\": \"Action\"\n            }\n          ],\n          \"capability\": {\n            \"status\": \"supported\",\n            \"operation\": \"AddAction\"\n          }\n        }\n      },\n      \"databaseIdentity\": {\n        \"name\": \"C:\\\\Repo\\\\F05_IPB_L2_0429\",\n        \"path\": \"C:/Repo/F05_IPB_L2_0429\",\n        \"reportedPath\": \"C:/Repo\",\n        \"status\": \"consistent\",\n        \"fingerprint\": \"71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c\"\n      },\n      \"targetIdentity\": {\n        \"path\": \"PlatformLibrary/Package/AntiLockController/Private/SMC/Axle/AxleControl\",\n        \"oid\": \"040g060kg0001k070o6g5us4p0eg2\",\n        \"kind\": \"statemachine\"\n      },\n      \"targetImpact\": {\n        \"sharedObject\": false,\n        \"requestedPath\": \"PlatformLibrary/Package/AntiLockController/Private/SMC/Axle/AxleControl\",\n        \"ownerPath\": \"PlatformLibrary/Package/AntiLockController/Private/SMC/Axle/AxleControl\",\n        \"targetOid\": \"040g060kg0001k070o6g5us4p0eg2\",\n        \"aliasPaths\": [\n          \"PlatformLibrary\\\\Package\\\\AntiLockController\\\\Private\\\\SMC\\\\Axle\\\\AxleControl\"\n        ],\n        \"completeness\": \"complete\",\n        \"writeAllowed\": true,\n        \"fingerprint\": \"sha256:f44640d6c73a5c49ab0f39e9269e744e497fb06068c6ec78c6a5ec9b2fe66bea\"\n      },\n      \"editability\": \"read_only\",\n      \"guardGeneration\": 0,\n      \"readbackAvailable\": true\n    }\n  },\n  \"editability\": {\n    \"status\": \"blocked\",\n    \"initiallyEditable\": false,\n    \"acquiredByThisOperation\": false\n  },\n  \"mutation\": {\n    \"status\": \"not_started\"\n  },\n  \"verification\": {\n    \"status\": \"not_applicable\"\n  },\n  \"bridge\": {\n    \"beforeBridge\": false,\n    \"bridgeEntered\": false,\n    \"backendResponseReceived\": false\n  },\n  \"recovery\": {\n    \"required\": false\n  }\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "preflight",
+        "plan": {
+          "action": "create_method",
+          "params": {
+            "action": "create_method",
+            "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+            "componentKind": "statemachine",
+            "methodName": "__PiPermissionProbe__",
+            "methodKind": "action",
+            "ifExists": "fail",
+            "intent": "preview"
+          },
+          "backendPreflight": {
+            "operation": "preflight_create_method",
+            "validated": true,
+            "result": {
+              "databasePath": "C:\\Repo\\F05_IPB_L2_0429",
+              "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+              "componentOid": "040g060kg0001k070o6g5us4p0eg2",
+              "componentKind": "StateMachine",
+              "languageKind": "ESDL",
+              "diagramName": "Main",
+              "diagramExists": false,
+              "diagramRuntimeType": "",
+              "requiredMethod": "AddAction",
+              "requiredSignature": "AddAction(String)",
+              "requiredMethodAvailable": false,
+              "addDiagramAvailable": true,
+              "futureMethodCapabilityProven": false,
+              "editable": false,
+              "readbackAvailable": true,
+              "noOp": false,
+              "existingMethod": null,
+              "plannedEffects": [
+                {
+                  "kind": "create_diagram",
+                  "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl::Main"
+                },
+                {
+                  "kind": "create_method",
+                  "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl::__PiPermissionProbe__",
+                  "methodKind": "Action"
+                }
+              ],
+              "capability": {
+                "status": "supported",
+                "operation": "AddAction",
+                "failureCode": "",
+                "failureMessage": ""
+              }
+            }
+          },
+          "databaseIdentity": {
+            "name": "C:\\Repo\\F05_IPB_L2_0429",
+            "path": "C:\\Repo\\F05_IPB_L2_0429",
+            "reportedPath": "C:\\Repo",
+            "status": "consistent",
+            "issues": [],
+            "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+          },
+          "targetIdentity": {
+            "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+            "oid": "040g060kg0001k070o6g5us4p0eg2",
+            "kind": "statemachine"
+          },
+          "targetImpact": {
+            "sharedObject": false,
+            "requestedPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+            "ownerPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+            "targetOid": "040g060kg0001k070o6g5us4p0eg2",
+            "aliasPaths": [
+              "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl"
+            ],
+            "affectedProjects": [],
+            "completeness": "complete",
+            "writeAllowed": true,
+            "fingerprint": "sha256:f44640d6c73a5c49ab0f39e9269e744e497fb06068c6ec78c6a5ec9b2fe66bea"
+          },
+          "editability": "read_only",
+          "guardGeneration": 0,
+          "readbackAvailable": true,
+          "preflightFingerprint": "d8f56d340e06a2182b289b07764abd5fcb43d9da1bffe6421c0b203a5059eac0"
+        },
+        "nextStep": "Preview complete. No ASCET mutation was performed."
+      },
+      "raw": {
+        "ok": true,
+        "data": {
+          "type": "response",
+          "protocolVersion": 1,
+          "ok": true,
+          "result": {
+            "databasePath": "C:\\Repo\\F05_IPB_L2_0429",
+            "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+            "componentOid": "040g060kg0001k070o6g5us4p0eg2",
+            "componentKind": "StateMachine",
+            "languageKind": "ESDL",
+            "diagramName": "Main",
+            "diagramExists": false,
+            "diagramRuntimeType": "",
+            "requiredMethod": "AddAction",
+            "requiredSignature": "AddAction(String)",
+            "requiredMethodAvailable": false,
+            "addDiagramAvailable": true,
+            "futureMethodCapabilityProven": false,
+            "editable": false,
+            "readbackAvailable": true,
+            "noOp": false,
+            "existingMethod": null,
+            "plannedEffects": [
+              {
+                "kind": "create_diagram",
+                "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl::Main"
+              },
+              {
+                "kind": "create_method",
+                "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl::__PiPermissionProbe__",
+                "methodKind": "Action"
+              }
+            ],
+            "capability": {
+              "status": "supported",
+              "operation": "AddAction",
+              "failureCode": "",
+              "failureMessage": ""
+            }
+          },
+          "error": null,
+          "meta": {
+            "bridgePid": 39140,
+            "bridgeGeneration": "a491d954-dbb4-4250-b2ef-93d3e3357ad0",
+            "durationMs": 300,
+            "sessionPolicy": "fresh_session",
+            "mutationStarted": false,
+            "mode": "exec",
+            "operation": "preflight_create_method"
+          }
+        },
+        "request": {
+          "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "preflight_create_method",
+            "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+            "__PiPermissionProbe__",
+            "--method-kind",
+            "action",
+            "--if-exists",
+            "fail",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"databasePath\":\"C:\\\\Repo\\\\F05_IPB_L2_0429\",\"componentPath\":\"PlatformLibrary\\\\Package\\\\AntiLockController\\\\Private\\\\SMC\\\\Axle\\\\AxleControl\",\"componentOid\":\"040g060kg0001k070o6g5us4p0eg2\",\"componentKind\":\"StateMachine\",\"languageKind\":\"ESDL\",\"diagramName\":\"Main\",\"diagramExists\":false,\"diagramRuntimeType\":\"\",\"requiredMethod\":\"AddAction\",\"requiredSignature\":\"AddAction(String)\",\"requiredMethodAvailable\":false,\"addDiagramAvailable\":true,\"futureMethodCapabilityProven\":false,\"editable\":false,\"readbackAvailable\":true,\"noOp\":false,\"existingMethod\":null,\"plannedEffects\":[{\"kind\":\"create_diagram\",\"target\":\"PlatformLibrary\\\\Package\\\\AntiLockController\\\\Private\\\\SMC\\\\Axle\\\\AxleControl::Main\"},{\"kind\":\"create_method\",\"target\":\"PlatformLibrary\\\\Package\\\\AntiLockController\\\\Private\\\\SMC\\\\Axle\\\\AxleControl::__PiPermissionProbe__\",\"methodKind\":\"Action\"}],\"capability\":{\"status\":\"supported\",\"operation\":\"AddAction\",\"failureCode\":\"\",\"failureMessage\":\"\"}},\"error\":null,\"meta\":{\"bridgePid\":39140,\"bridgeGeneration\":\"a491d954-dbb4-4250-b2ef-93d3e3357ad0\",\"durationMs\":300,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"preflight_create_method\"}}\r\n",
+        "stderr": "",
+        "exitCode": 0,
+        "timedOut": false,
+        "aborted": false,
+        "operationId": "preflight_create_method"
+      },
+      "mutationResult": {
+        "status": "ok",
+        "permission": {
+          "mode": "default",
+          "decision": "not_evaluated"
+        },
+        "preflight": {
+          "status": "passed",
+          "evidence": {
+            "action": "create_method",
+            "params": {
+              "action": "create_method",
+              "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+              "componentKind": "statemachine",
+              "methodName": "__PiPermissionProbe__",
+              "methodKind": "action",
+              "ifExists": "fail",
+              "intent": "preview"
+            },
+            "backendPreflight": {
+              "operation": "preflight_create_method",
+              "validated": true,
+              "result": {
+                "databasePath": "C:\\Repo\\F05_IPB_L2_0429",
+                "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+                "componentOid": "040g060kg0001k070o6g5us4p0eg2",
+                "componentKind": "StateMachine",
+                "languageKind": "ESDL",
+                "diagramName": "Main",
+                "diagramExists": false,
+                "diagramRuntimeType": "",
+                "requiredMethod": "AddAction",
+                "requiredSignature": "AddAction(String)",
+                "requiredMethodAvailable": false,
+                "addDiagramAvailable": true,
+                "futureMethodCapabilityProven": false,
+                "editable": false,
+                "readbackAvailable": true,
+                "noOp": false,
+                "existingMethod": null,
+                "plannedEffects": [
+                  {
+                    "kind": "create_diagram",
+                    "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl::Main"
+                  },
+                  {
+                    "kind": "create_method",
+                    "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl::__PiPermissionProbe__",
+                    "methodKind": "Action"
+                  }
+                ],
+                "capability": {
+                  "status": "supported",
+                  "operation": "AddAction",
+                  "failureCode": "",
+                  "failureMessage": ""
+                }
+              }
+            },
+            "databaseIdentity": {
+              "name": "C:\\Repo\\F05_IPB_L2_0429",
+              "path": "C:\\Repo\\F05_IPB_L2_0429",
+              "reportedPath": "C:\\Repo",
+              "status": "consistent",
+              "issues": [],
+              "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+            },
+            "targetIdentity": {
+              "path": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+              "oid": "040g060kg0001k070o6g5us4p0eg2",
+              "kind": "statemachine"
+            },
+            "targetImpact": {
+              "sharedObject": false,
+              "requestedPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+              "ownerPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+              "targetOid": "040g060kg0001k070o6g5us4p0eg2",
+              "aliasPaths": [
+                "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl"
+              ],
+              "affectedProjects": [],
+              "completeness": "complete",
+              "writeAllowed": true,
+              "fingerprint": "sha256:f44640d6c73a5c49ab0f39e9269e744e497fb06068c6ec78c6a5ec9b2fe66bea"
+            },
+            "editability": "read_only",
+            "guardGeneration": 0,
+            "readbackAvailable": true
+          }
+        },
+        "editability": {
+          "status": "blocked",
+          "initiallyEditable": false,
+          "acquiredByThisOperation": false
+        },
+        "mutation": {
+          "status": "not_started"
+        },
+        "verification": {
+          "status": "not_applicable"
+        },
+        "bridge": {
+          "beforeBridge": false,
+          "bridgeEntered": false,
+          "backendResponseReceived": false
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      },
+      "tool": "ascet_edit",
+      "action": "create_method",
+      "command": {
+        "logicalCommandId": "AscetCreateMethod",
+        "backendCommandId": "AscetCreateMethod",
+        "operation": "create_method"
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "preflight_create_method",
+            "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+            "__PiPermissionProbe__",
+            "--method-kind",
+            "action",
+            "--if-exists",
+            "fail",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 0,
+        "timedOut": false,
+        "stderr": ""
+      }
+    }
+  }
+}

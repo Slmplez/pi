@@ -113,6 +113,11 @@ public static class OperationRegistry
         RegisterTyped(descriptors, "create_component", ExecutionLane.SerialWrite, true, BatchSupportShape.Write);
         RegisterLegacy(descriptors, "create_folder", ExecutionLane.SerialWrite, false, BatchSupportShape.Write);
         RegisterLegacy(descriptors, "create_method", ExecutionLane.SerialWrite, true, BatchSupportShape.Write);
+        RegisterLegacy(descriptors, "guarded_batch_write", ExecutionLane.SerialWrite, false, BatchSupportShape.None);
+        RegisterLegacy(descriptors, "guarded_create_method", ExecutionLane.SerialWrite, true, BatchSupportShape.None);
+        RegisterLegacy(descriptors, "guarded_mutation", ExecutionLane.SerialWrite, false, BatchSupportShape.None);
+        RegisterLegacy(descriptors, "preflight_create_folder", ExecutionLane.LegacyRead, false, BatchSupportShape.None);
+        RegisterLegacy(descriptors, "preflight_create_method", ExecutionLane.LegacyRead, false, BatchSupportShape.None);
         RegisterLegacy(descriptors, "delete_component", ExecutionLane.SerialWrite, false, BatchSupportShape.Write);
         RegisterLegacy(descriptors, "delete_folder", ExecutionLane.SerialWrite, false, BatchSupportShape.Write);
         RegisterLegacy(descriptors, "delete_method", ExecutionLane.SerialWrite, false, BatchSupportShape.Write);
@@ -153,7 +158,7 @@ public static class OperationRegistry
         RegisterTyped(descriptors, "read_element_dependency", ExecutionLane.LegacyRead, false, BatchSupportShape.None, OperationExecutionProfile.ExpensiveScan(200));
         RegisterLegacy(descriptors, "read_element_refs", ExecutionLane.LegacyRead, false, BatchSupportShape.None);
         RegisterLegacy(descriptors, "read_implementation", ExecutionLane.PooledRead, true, BatchSupportShape.None);
-        RegisterTyped(descriptors, "read_dependent_chain", ExecutionLane.LegacyRead, false, BatchSupportShape.None, OperationExecutionProfile.ExpensiveScan(200));
+        RegisterTyped(descriptors, "read_dependent_chain", ExecutionLane.LegacyRead, false, BatchSupportShape.None);
         RegisterTyped(descriptors, "read_method_code", ExecutionLane.PooledRead, true, BatchSupportShape.None);
         RegisterTyped(descriptors, "read_method_signature", ExecutionLane.PooledRead, true, BatchSupportShape.None);
         RegisterLegacy(descriptors, "read_module_closure", ExecutionLane.LegacyRead, false, BatchSupportShape.None);
@@ -264,6 +269,8 @@ public static class OperationRegistry
         {
             case "component_editable_check":
             case "component_editable_set":
+            case "guarded_batch_write":
+            case "guarded_mutation":
             case "get_database_catalog":
             case "list_diagrams":
             case "list_folders":

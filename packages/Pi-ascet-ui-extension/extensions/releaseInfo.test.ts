@@ -148,7 +148,7 @@ test("classifies TLS update failures and renders the reason", async () => {
 	assert.deepEqual(state, { status: "unavailable", reason: "tls" });
 	assert.deepEqual(createReleaseRows(state), [
 		"Release",
-		"0.1.39 - update check unavailable (TLS)",
+		`${ASCET_COPILOT_RELEASE.version} - update check unavailable (TLS)`,
 		...ASCET_COPILOT_RELEASE.highlights,
 	]);
 });

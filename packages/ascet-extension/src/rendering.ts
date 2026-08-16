@@ -20,7 +20,19 @@ interface AscetRenderContext {
 	isError?: boolean;
 }
 
-type AscetStatus = "ARGS" | "QUEUED" | "RUNNING" | "READBACK" | "DONE" | "PARTIAL" | "BLOCKED" | "FAILED" | "TIMEOUT";
+type AscetStatus =
+	| "ARGS"
+	| "QUEUED"
+	| "RUNNING"
+	| "READBACK"
+	| "WAITING APPROVAL"
+	| "DONE"
+	| "PARTIAL"
+	| "ROLLED BACK"
+	| "UNKNOWN"
+	| "BLOCKED"
+	| "FAILED"
+	| "TIMEOUT";
 
 function truncateLine(text: string, width: number): string {
 	if (width <= 0 || text.length <= width) {
@@ -100,6 +112,12 @@ function readNumber(details: unknown, ...path: string[]): number | undefined {
 	return typeof value === "number" && Number.isFinite(value) ? value : undefined;
 }
 
+function getMutationEnvelope(details: unknown): Record<string, unknown> | undefined {
+	return (
+		asRecord(readPath(details, ["mutationResult"])) ?? asRecord(readPath(details, ["outcome"])) ?? asRecord(details)
+	);
+}
+
 function getTarget(args: unknown): string | undefined {
 	const left = readArg(args, "leftComponentPath");
 	const right = readArg(args, "rightComponentPath");
@@ -163,15 +181,29 @@ function normalizeStatus(value: unknown): AscetStatus | undefined {
 		case "readback":
 		case "verifying":
 			return "READBACK";
+		case "waiting_approval":
+		case "approval_pending":
+			return "WAITING APPROVAL";
 		case "done":
 		case "ok":
 		case "success":
 		case "succeeded":
 		case "verified":
+		case "committed":
+		case "no_change":
 			return "DONE";
 		case "partial":
+		case "partially_applied":
+		case "rollback_failed":
 			return "PARTIAL";
+		case "rolled_back":
+		case "rollback":
+			return "ROLLED BACK";
+		case "unknown":
+		case "unknown_outcome":
+			return "UNKNOWN";
 		case "blocked":
+		case "rejected":
 		case "preflight":
 		case "confirmation_required":
 		case "cancelled":
@@ -190,31 +222,55 @@ function normalizeStatus(value: unknown): AscetStatus | undefined {
 }
 
 function getStatus(details: unknown, options: { isPartial: boolean }, context?: AscetRenderContext): AscetStatus {
-	const explicit = normalizeStatus(readString(details, "status") ?? readString(details, "progress", "phase"));
-	if (explicit) {
-		return explicit;
-	}
-
 	if (options.isPartial) {
+		const partialStatus = normalizeStatus(readString(details, "status") ?? readString(details, "progress", "phase"));
+		if (partialStatus === "WAITING APPROVAL" || partialStatus === "READBACK") return partialStatus;
 		return context?.executionStarted ? "RUNNING" : context?.argsComplete ? "QUEUED" : "ARGS";
 	}
 
-	const errorCode = readString(details, "error", "code");
+	const envelope = getMutationEnvelope(details);
+	const errorCode = readString(envelope, "error", "code") ?? readString(details, "error", "code");
 	const stage = readString(details, "diagnostics", "stage");
-	if (errorCode?.includes("timeout") || stage?.includes("timeout")) {
-		return "TIMEOUT";
+	const mutationStatus = readString(envelope, "mutation", "status");
+	const verificationStatus = readString(envelope, "verification", "status");
+	const explicit = normalizeStatus(
+		readString(envelope, "status") ?? readString(details, "status") ?? readString(details, "progress", "phase"),
+	);
+
+	if (mutationStatus === "rolled_back" || explicit === "ROLLED BACK") return "ROLLED BACK";
+	if (mutationStatus === "unknown" || explicit === "UNKNOWN") return "UNKNOWN";
+	if (mutationStatus === "partially_applied") return "PARTIAL";
+	if (mutationStatus === "applied" && !["passed", "not_applicable"].includes(verificationStatus ?? "")) {
+		return "PARTIAL";
 	}
+
+	if (errorCode?.includes("timeout") || stage?.includes("timeout") || explicit === "TIMEOUT") return "TIMEOUT";
 	if (
 		errorCode?.includes("confirmation") ||
-		errorCode?.includes("preflight") ||
+		errorCode?.includes("approval_required") ||
+		errorCode?.includes("editable_write_gate_blocked") ||
 		errorCode?.includes("blocked") ||
-		errorCode?.includes("aborted_before")
+		errorCode?.includes("aborted_before") ||
+		explicit === "BLOCKED"
 	) {
 		return "BLOCKED";
 	}
-	if (context?.isError || readPath(details, ["ok"]) === false) {
+	if (context?.isError || readPath(details, ["ok"]) === false || errorCode || explicit === "FAILED") return "FAILED";
+
+	if (mutationStatus !== undefined) {
+		if (
+			(mutationStatus === "applied" || mutationStatus === "no_op") &&
+			(verificationStatus === "passed" || verificationStatus === "not_applicable")
+		) {
+			return "DONE";
+		}
+		if (mutationStatus === "not_started" && readString(envelope, "preflight", "status") === "passed") {
+			return "BLOCKED";
+		}
 		return "FAILED";
 	}
+
+	if (explicit) return explicit;
 	return "DONE";
 }
 
@@ -277,7 +333,8 @@ function formatDuration(ms: number | undefined): string | undefined {
 }
 
 function getErrorCode(details: unknown): string | undefined {
-	return readString(details, "error", "code");
+	const envelope = getMutationEnvelope(details);
+	return readString(envelope, "error", "code") ?? readString(details, "error", "code");
 }
 
 function isRetryable(details: unknown): boolean {
@@ -288,7 +345,9 @@ function isRetryable(details: unknown): boolean {
 }
 
 function isVerified(details: unknown): boolean {
+	const envelope = getMutationEnvelope(details);
 	return (
+		readString(envelope, "verification", "status") === "passed" ||
 		readBoolean(details, "verified") === true ||
 		readBoolean(details, "data", "verified") === true ||
 		readBoolean(details, "data", "result", "verified") === true ||
@@ -298,16 +357,28 @@ function isVerified(details: unknown): boolean {
 }
 
 function getRecoveryActions(details: unknown): string[] {
-	const value = readPath(details, ["error", "recoveryActions"]);
+	const envelope = getMutationEnvelope(details);
+	const value = readPath(envelope, ["recovery", "actions"]) ?? readPath(details, ["error", "recoveryActions"]);
 	return Array.isArray(value)
 		? value.filter((item): item is string => typeof item === "string" && item.length > 0)
 		: [];
 }
 
+function formatRule(rule: Record<string, unknown>): string {
+	const fragments = [
+		typeof rule.index === "number" ? `#${rule.index}` : undefined,
+		typeof rule.behavior === "string" ? rule.behavior : undefined,
+		typeof rule.action === "string" ? rule.action : undefined,
+		typeof rule.path === "string" ? `path=${rule.path}` : undefined,
+		typeof rule.databaseFingerprint === "string" ? `database=${rule.databaseFingerprint}` : undefined,
+	].filter((value): value is string => value !== undefined);
+	return fragments.join(" · ");
+}
+
 function statusRole(status: AscetStatus): string {
-	if (status === "DONE") return "success";
-	if (status === "FAILED" || status === "TIMEOUT") return "error";
-	if (status === "BLOCKED" || status === "PARTIAL") return "warning";
+	if (status === "DONE" || status === "ROLLED BACK") return "success";
+	if (status === "FAILED" || status === "TIMEOUT" || status === "UNKNOWN") return "error";
+	if (status === "BLOCKED" || status === "PARTIAL" || status === "WAITING APPROVAL") return "warning";
 	return "accent";
 }
 
@@ -323,7 +394,13 @@ function getStatusLine(details: unknown, options: { isPartial: boolean }, contex
 		if (summary) fragments.push(summary);
 		if (counts) fragments.push(counts);
 		if (isVerified(details)) fragments.push("Verified");
-	} else if (status === "FAILED" || status === "TIMEOUT" || status === "BLOCKED") {
+	} else if (
+		status === "FAILED" ||
+		status === "TIMEOUT" ||
+		status === "BLOCKED" ||
+		status === "PARTIAL" ||
+		status === "UNKNOWN"
+	) {
 		if (errorCode) fragments.push(errorCode);
 		if (isRetryable(details)) fragments.push("Retryable");
 		if (summary && !errorCode) fragments.push(summary);
@@ -337,15 +414,54 @@ function getStatusLine(details: unknown, options: { isPartial: boolean }, contex
 
 function getExpandedLines(details: unknown): string[] {
 	const lines: string[] = [];
+	const envelope = getMutationEnvelope(details);
 	const logical = readString(details, "command", "logicalCommandId");
 	const backend = readString(details, "command", "backendCommandId");
 	const queueWaitMs = readNumber(details, "diagnostics", "queueWaitMs") ?? readNumber(details, "queueWaitMs");
 	const executionMs = readNumber(details, "diagnostics", "executionMs") ?? readNumber(details, "executionMs");
 	const artifact = readString(details, "artifact", "path");
 	const stage = readString(details, "diagnostics", "stage");
-	const errorMessage = readString(details, "error", "message");
+	const errorMessage = readString(envelope, "error", "message") ?? readString(details, "error", "message");
 	const recoveryActions = getRecoveryActions(details);
+	const permissionMode = readString(envelope, "permission", "mode");
+	const permissionDecision = readString(envelope, "permission", "decision");
+	const risk = readString(envelope, "permission", "risk");
+	const rule = asRecord(readPath(envelope, ["permission", "rule"]));
+	const preflightStatus = readString(envelope, "preflight", "status");
+	const capabilityStatus =
+		readString(envelope, "preflight", "evidence", "capability", "status") ??
+		readString(envelope, "preflight", "evidence", "backendPreflight", "result", "capability", "status");
+	const capabilityOperation =
+		readString(envelope, "preflight", "evidence", "capability", "operation") ??
+		readString(envelope, "preflight", "evidence", "backendPreflight", "operation");
+	const editabilityStatus = readString(envelope, "editability", "status");
+	const finalEditableState = readString(envelope, "editability", "finalEditableState");
+	const mutationStatus = readString(envelope, "mutation", "status");
+	const verificationStatus = readString(envelope, "verification", "status");
+	const bridgeBefore = readBoolean(envelope, "bridge", "beforeBridge");
+	const bridgeEntered = readBoolean(envelope, "bridge", "bridgeEntered");
+	const bridgeResponse = readBoolean(envelope, "bridge", "backendResponseReceived");
+	const recoveryRequired = readBoolean(envelope, "recovery", "required");
 
+	if (permissionMode || permissionDecision) {
+		lines.push(`Permission: ${[permissionMode, permissionDecision].filter(Boolean).join(" · ")}`);
+	}
+	if (risk) lines.push(`Risk: ${risk}`);
+	if (rule) lines.push(`Rule: ${formatRule(rule)}`);
+	if (preflightStatus) {
+		const capability = [capabilityOperation, capabilityStatus].filter(Boolean).join(" · ");
+		lines.push(`Preflight: ${preflightStatus}${capability ? ` · ${capability}` : ""}`);
+	}
+	if (editabilityStatus) {
+		lines.push(`Editability: ${editabilityStatus}${finalEditableState ? ` · final=${finalEditableState}` : ""}`);
+	}
+	if (mutationStatus) lines.push(`Mutation: ${mutationStatus}`);
+	if (verificationStatus) lines.push(`Verification: ${verificationStatus}`);
+	if (bridgeBefore !== undefined || bridgeEntered !== undefined || bridgeResponse !== undefined) {
+		lines.push(
+			`Bridge: before=${bridgeBefore === true ? "yes" : "no"} · entered=${bridgeEntered === true ? "yes" : "no"} · response=${bridgeResponse === true ? "yes" : "no"}`,
+		);
+	}
 	if (logical) lines.push(`Logical: ${logical}`);
 	if (backend) lines.push(`Backend: ${backend}`);
 	if (stage) lines.push(`Stage: ${stage}`);
@@ -353,7 +469,9 @@ function getExpandedLines(details: unknown): string[] {
 	if (executionMs !== undefined) lines.push(`Execution: ${formatDuration(executionMs)}`);
 	if (artifact) lines.push(`Artifact: ${artifact}`);
 	if (errorMessage) lines.push(`Message: ${errorMessage}`);
-	if (recoveryActions.length > 0) lines.push(`Recovery: ${recoveryActions.join("; ")}`);
+	if (recoveryRequired === true || recoveryActions.length > 0) {
+		lines.push(`Recovery: ${recoveryActions.length > 0 ? recoveryActions.join("; ") : "required"}`);
+	}
 	return lines;
 }
 

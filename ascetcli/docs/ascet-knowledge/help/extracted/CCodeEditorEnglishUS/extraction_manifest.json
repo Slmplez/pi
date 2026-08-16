@@ -1,0 +1,958 @@
+{
+  "generated_at": "2026-04-01T03:07:43.251820Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\CCodeEditorEnglishUS.chm",
+  "unpack_dir": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\CCodeEditorEnglishUS\\unpacked",
+  "total_files": 156,
+  "total_size_bytes": 979383,
+  "counts_by_extension": {
+    ".htm": 77,
+    ".gif": 69,
+    ".brs": 1,
+    ".glo": 1,
+    ".hhc": 1,
+    ".hhk": 1,
+    ".bmp": 1,
+    ".js": 2,
+    ".xml": 1,
+    ".css": 1,
+    ".lng": 1
+  },
+  "files": [
+    {
+      "relative_path": "adding_headerfile.htm",
+      "size": 1971,
+      "sha256": "0e9865d9f7a8310677dab0a69b3bf8077ac66d758a1397e0454c36d845c524f6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "BUTTON.GIF",
+      "size": 844,
+      "sha256": "6d10387853fe90ec87f720a6460a8cd1d2559683e66c81683a705a5e0e6f2ea9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_c.gif",
+      "size": 1002,
+      "sha256": "7ad80aff3fb70a873236fd793f5f589ec72d5b0bb95f87e90cd54bf3184bbf7d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_e.gif",
+      "size": 1001,
+      "sha256": "d0759184f7598fb88928c75e893f42ecebc0b5f33c9ab1a3fa3ba78ca8f9fdb1",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_i.gif",
+      "size": 1013,
+      "sha256": "d1816cf14d7bdff3b1e11803ef4ac3f5a2b4fad8d7025463b685d2c48a311beb",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_l.gif",
+      "size": 1001,
+      "sha256": "69a65242f34882704f77be0a6539d8eea99be793c37b257be21e7650900be9a7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_s.gif",
+      "size": 1002,
+      "sha256": "74dc245c7e5037607ac2fd1a7309bc186107ff7960b8dcf7d55916c75395a715",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_u.gif",
+      "size": 1004,
+      "sha256": "baecac5c5c1ff2e4f627ab5bfe948e9616b83188073306ea79add915d44c9956",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_w.gif",
+      "size": 1006,
+      "sha256": "441d66eade67b3d631a1fd270830bc46e8238ac1804f65627c69c98a0bfd48bf",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonactivateexternaleditor.gif",
+      "size": 1112,
+      "sha256": "3f9e4f614ee020c8be0faa36bb8c1357126f50079e3e8e8c57fb850de04a1150",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonarray.gif",
+      "size": 954,
+      "sha256": "44fbecfd23bc7bd6b172d6480e5d286fc50c72640e7ee92fa7b879a63ec01625",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonArrow.gif",
+      "size": 894,
+      "sha256": "19009d7d9f9913e358296d682bc6c85a0c1189cc3a38e5e32ebbf2d8205943e7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttoncompile.gif",
+      "size": 1068,
+      "sha256": "398c7b79a092b52feca2bb655f07aed02c221a876c9ab7e237264fbbcd7773fb",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttoncopy.gif",
+      "size": 1781,
+      "sha256": "8b32c6c0cc6624dca24d75af2fce3675d476e1ab69c6aa6e0e96642e54d2cc26",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttoncut.gif",
+      "size": 1731,
+      "sha256": "292e729494c6099ba14c1f24d7a9575e4bf77e3eafbcbde18e441309bf5d797a",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttondelete.gif",
+      "size": 1744,
+      "sha256": "8883cc24137874984dbfaf9ad1bad3185c5b1897d79b8ad7b5c72e31d6ea135c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttondeltat.gif",
+      "size": 957,
+      "sha256": "2dd3c85a666f0aa446e354eb552fc9f7644ae129775c542946b75bae7a7eed67",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttondistribution.gif",
+      "size": 936,
+      "sha256": "8919c2b830a33ab6077aaaab40866de622e396025bd3abde39cce9988ee68231",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonEditdata.gif",
+      "size": 1086,
+      "sha256": "5dea1aca3d69bf99a877b2b64d7ceb6524b8fb3ec8c328d9ea4aec070ba94594",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttoneditimplementation.gif",
+      "size": 1087,
+      "sha256": "ca8557d03dd5c637967a1b66d9aae624def32fb5a37accb6f6101938a3f15485",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonExtSouEd.gif",
+      "size": 1067,
+      "sha256": "bd720af7a89c8148746676725540724a4acc47aca72a4f32b1d9d0b42a5d8e88",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttongeneratecode.gif",
+      "size": 1048,
+      "sha256": "2f3357c9b3817b6dec1d42383ae47f4ed00c4781cb690b3741e4023b51f514a4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttoninsertcomponent.gif",
+      "size": 995,
+      "sha256": "54d1c9bfac540f3fb2e4b97568c53beef958b9def9e0d6176e9eb7b2d06ac5a8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttoninsertmethod.gif",
+      "size": 1112,
+      "sha256": "f70b7164182f09acf11a468f1bcc9ce4078fea092c1a21a771aa78501291be64",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttoninsertprocess.gif",
+      "size": 1086,
+      "sha256": "42da41391eee9fdb07b0bd360d0ae3cbebd823f63671384c133e6e80d3e91b4b",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonmatrix.gif",
+      "size": 985,
+      "sha256": "c9bd73ee40ec64d126d27ebf59635426ac76c6d1561f036babaa68ad3b4479cf",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttononedtable.gif",
+      "size": 1066,
+      "sha256": "e4b3540564d5922e26792d2413180f73765630935ccc5513e8838d8d90bde6b7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonopenexperiment.gif",
+      "size": 989,
+      "sha256": "5978c6514b8d6c301b48428592a28b9e4f2e248f9950d0155698e3a85902d575",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonparameter.gif",
+      "size": 1061,
+      "sha256": "96fbf56b615075d1a54634067ebf82a7cd16472fd4f2f92f80c1734c99c1a176",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonpaste.gif",
+      "size": 1773,
+      "sha256": "decd5d4d7b140e91e5ee47e25ad3f9c3f18ec01abd2ec29917c328e13a608e65",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonprint.gif",
+      "size": 1774,
+      "sha256": "0187fb121a80c8c4c81595b4b21503144ff8d6d5e11b5947a72ee557c01f4856",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonreceivemessage.gif",
+      "size": 972,
+      "sha256": "e72f7da4fd415e0f3f6aea4e6533508de3bd656e1e9e1803d687cffa73d89b5d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonredo.gif",
+      "size": 1730,
+      "sha256": "4a41199a94cd29c899a51073a020c5f33bdd6e7496ee19187ed67065549132f5",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonressource.gif",
+      "size": 955,
+      "sha256": "3c5542e8806e89000cb78677624892fa9b2ba7200c48d8cfa3680111044af152",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ButtonSave.gif",
+      "size": 1795,
+      "sha256": "f8510abfccc38092b5bdf99d9e499b3723e03a8cf1547af1d0fcc5ffef265f65",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonsCbNormal.gif",
+      "size": 1060,
+      "sha256": "a30f263d26e5602a28e8eb35b56d486857912eaec138f399663ed84cc33f5d22",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonsendmessage.gif",
+      "size": 977,
+      "sha256": "5276f40b88d6e63de07d5755c5ee32d8ccd8f19cb2d9968c00ccf15580e3eb0f",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonsendreceivemessage.gif",
+      "size": 949,
+      "sha256": "940ee00355a4e874e8e29521511b15a111eb7bdda5e770d939f23b9d43b8507b",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttontwodtable.gif",
+      "size": 1063,
+      "sha256": "04505829276fd92668c890c31b2eb7142ab565556933e96c32abd22742afdf54",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonundo.gif",
+      "size": 1737,
+      "sha256": "8ae27df361e92ca9f0305b59356ec1ece1c950a5d78f4f4b4c78b4259b53ea90",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonvariable.gif",
+      "size": 1064,
+      "sha256": "4583df0940c296269e661ca896a5b9631c758fb6b3ec98699caabf502c991d10",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableC.gif",
+      "size": 1001,
+      "sha256": "4ea17f01be456b0c83a804b239d27faba8be84914da851655c8e46a2cab56bf6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableE.gif",
+      "size": 1001,
+      "sha256": "e4e2341315b59ba9aa8c6272e61a3ef6fa788fd50d0f24ae10cc6dcef556f7b1",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableI.gif",
+      "size": 1007,
+      "sha256": "2099b24318b7f035d00b459dbe4edee4bedbf0a4aab06cd78399cda2c5c21185",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableL.gif",
+      "size": 1002,
+      "sha256": "bc2fdec10179b6f6781d11f27df6ec11d913e2aba58bd25b5c94e779d4db031a",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableS.gif",
+      "size": 1006,
+      "sha256": "1aa33ece46fe9c9932a6178895c25016d800d5983274216c80111400acf05f1c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableU.gif",
+      "size": 1004,
+      "sha256": "41a8f43bceee6c000e8b35efc8a1dee1707e84161e1e662cb79663b41c8b464f",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableW.gif",
+      "size": 1011,
+      "sha256": "f28662aca44c31b5f396def6df5dccc44c56845fb9217a630032e9cee47ce23a",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "C_getset.gif",
+      "size": 13754,
+      "sha256": "e7db88d6fe6635c5671e418dadafbecb6fc541fc1eb988f3d9c01799ea348a46",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "CC_Accessing_Elements.htm",
+      "size": 1970,
+      "sha256": "21f317b18146c13eee70a6e49458ebdaed7a43c4e0aa059c121546e8f20ab428",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Acess_to_Private_Methods.htm",
+      "size": 1138,
+      "sha256": "5ebea2065bb586fef2a5a11d1040f0f3f330db94e01e503116b468b845e5d4e6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Arguments.htm",
+      "size": 1437,
+      "sha256": "f335c22b3f10b4d335da6f2ce9764c32981bb690533ec33574b6c2d6120d0650",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Arrays_and_Matrices.htm",
+      "size": 4975,
+      "sha256": "4da7989d603ad6592f51b00067fc51908f06fd6301e47990da57970810ba418e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Automatic_define_Statements_InstanceVariables.htm",
+      "size": 1755,
+      "sha256": "bf78614da5c11612fe07c4fbcc679bba7a235b637219df468325429588b4bd58",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Browse_View.htm",
+      "size": 1905,
+      "sha256": "af8a78f7bcfb02822e51dbc3b0b82e171678654eb961f0d1807b54fbffbd5b17",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Build_Menu.htm",
+      "size": 3542,
+      "sha256": "25a6ab051fc7904ae737585e25aab271ccbc8185d78451b8d732c4614745336d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "cc_c_code_components.htm",
+      "size": 2830,
+      "sha256": "a2f58ea075ac27012fdbff645ade22bb535c29f593cc7e2420aeb4e5a2148c52",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Characteristic_Lines.htm",
+      "size": 5850,
+      "sha256": "8f41bbd59da3cf72b35d8831317030e7d03a23b26bcbb7953ea0f819124b674e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Characteristic_Maps.htm",
+      "size": 6683,
+      "sha256": "8b6685c99f76a1d189b327bb10e1cfb3e92183002a11d0fa2f06788a7d292101",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_close_external_editor.htm",
+      "size": 2120,
+      "sha256": "6d3f142b39aef4c87f708083e85b9705aab859f9c3145694837d2c3a7a500b6a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "cc_componentpane.htm",
+      "size": 7937,
+      "sha256": "7e1d9cd8754cefc109f21112e1d001f50d7a037cbc9cb7a5582e350fe3e1ce78",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "cc_contextmenu_browseview.htm",
+      "size": 7349,
+      "sha256": "1ea446f9007681cc6bc7f8b1bf8113ef5ea414f837cb84f71e93ee895fffe2c8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "cc_contextmenu_componentselements.htm",
+      "size": 7947,
+      "sha256": "7dbc9ec9819c58d0e1f3b90a968e9601d70d0f0ac0e35332e200af888e9e9e26",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "cc_contextmenu_diagrammethods.htm",
+      "size": 4401,
+      "sha256": "96d1c021048e82d701ff6b23792a704a8f85046a912d50d46aa0486270d9a93c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_ContextMenu_SpecificationView.htm",
+      "size": 3580,
+      "sha256": "ab5ea9c1377c1494e76e8762e57ed528db58b945405909c5c93a6004f3c2f46b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_copy_code_from.htm",
+      "size": 3118,
+      "sha256": "734f2cb18743087230e7e559d1307346bc137732d50cccd783a9af5800bd382f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Description_of_Window_Elements.htm",
+      "size": 3769,
+      "sha256": "bf7d82e7cda9609067dc82efc8c152f94781fde86797980ba34e8012929ea40c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Direct_Acess.htm",
+      "size": 1548,
+      "sha256": "3f52ca9a18b2a81fb3d9bd7bcd8e287bade2c78596d7b3635ed8348b14657fa3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_edit.htm",
+      "size": 5385,
+      "sha256": "bb59a782578c5011569676fa8d28381f2a719562d36bf50c7c853296bc177ebb",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_edit_code.htm",
+      "size": 1786,
+      "sha256": "ea2a6b01fbd13244438c3c7c20a8789598f9a7475b84f71ca9827968938cb7bb",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_EditMenu_ExternalSourceEditor.htm",
+      "size": 1500,
+      "sha256": "ad34e08b7603c36ccc1a89a3577f3051bad9a7444eb1cb9a93be477246615c99",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Elements_Palette.htm",
+      "size": 11757,
+      "sha256": "19b2ec88bec4b7436a13e38bbe66d06a33a22a32903ab5c8282bb198a8e7e15a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Example__Messages.htm",
+      "size": 1646,
+      "sha256": "754e72829a2ccb90aa1eb9f72905820da6aa9d4861327bc3b9448c4d91164954",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_External_Editor_View.htm",
+      "size": 1836,
+      "sha256": "2bc8d8d6b48061abb9ada8c9219e239947a891d409956391c4aa9eb71b746781",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_External_Source_Code.htm",
+      "size": 3163,
+      "sha256": "ee6a7402198d089e2c0e738760b2d3bf22b99bd9f0ef72cd1feb94c3b340ccde",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_External_Source_Editor.htm",
+      "size": 3492,
+      "sha256": "869d92ca9d3219baa4ee3dc586e4d4f49b49c6526232c96243a1f260f1cec56c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Extras_Menu.htm",
+      "size": 5388,
+      "sha256": "615fa3905c8b06752df02ad445831ae09a7014bfa87c542864b4e9959949553d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_File_Menu.htm",
+      "size": 4354,
+      "sha256": "49ba0d92e7ceb34e02490ddf9d973d2c077c493f65bf4e266c9cecf23fa1cbb4",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_FileMenu_ExternalSourceEditor.htm",
+      "size": 706,
+      "sha256": "e07702db46a4fe3eb827c12c8e5d2e5df1b683de7ec086d473d5a154b629caf4",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "cc_filtering_the_component_pane.htm",
+      "size": 2129,
+      "sha256": "f3ed7395e5e49212dabe3712b089bd8ad5f8a39c976f7e1cdcc8e627a5966578",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Header.htm",
+      "size": 692,
+      "sha256": "f8966ba72cc4ceda65bb24e9f956408fb77d5b08c134d218a7c0e54a38d3cc46",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Help_Menu.htm",
+      "size": 916,
+      "sha256": "3d61186d58174621a6148865a59ccf05b5447b6fb82b2f01066b92b11c57d4d9",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "cc_includecomponent_blocklibrary.htm",
+      "size": 1586,
+      "sha256": "4c4857403bef43ef75c9d676887de22532f224dddc0a1a39dc68bffd62e3b68a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Insert_Menu.htm",
+      "size": 2937,
+      "sha256": "12aa2b42112c4a84c7b9433198d462a3e9e500078327e55ead39c7a2819a8837",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Length_of_Arrays.htm",
+      "size": 1182,
+      "sha256": "cc879d1a3650f81aa6b013910645339295c5c51de63a2f740df956f5acf85c54",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Library_Palette.htm",
+      "size": 1392,
+      "sha256": "a1a77048c0093c85c4bd0d8c7b904171ce1041d79f048d1d893e238ae81bcca0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Local_Variables.htm",
+      "size": 1962,
+      "sha256": "e474ff215067df4e007004b5809547b4018951c6b20a0bbd7b03928f84a2c5e9",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Making_Arrays_Avaiable_for_Usage_in_External_C-Code.htm",
+      "size": 1388,
+      "sha256": "9501bedefa2241ffe21f3faa94c743734619bbbd61c91f0fba1d2d9efac0bdc5",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_menu_bar.htm",
+      "size": 1315,
+      "sha256": "16f9f412fbb8de94d95dbf6543bb12a40792f4871cb479d17ff13b7e98226621",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Messages.htm",
+      "size": 3030,
+      "sha256": "795d097fd9b135f2d99ccb3eace95cf08b5caaf4d7c7b2ba53e990441161cbaa",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "cc_methods_and_processes.htm",
+      "size": 2506,
+      "sha256": "818714d6d70d2d4377e742c87a55921c1ac38143e93d5ac11c7ec3ce2ae80f66",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Overview.htm",
+      "size": 1693,
+      "sha256": "9b25a9fb539a40b40a650beb99eaf109950a6a7a44feea2abe800e2ec5eff07a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Overview_-_Access_Macros.htm",
+      "size": 1241,
+      "sha256": "7502e1e728e1e176b88b8e995af097d56f14df0c901929e1d8304af9c9ea47e1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Overview_VariablesFunctionParameters.htm",
+      "size": 2914,
+      "sha256": "70ce075eccef3721145db4608fa3c47ed2453464ea4ad96f4a8ef8276f98b3ba",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Palettes.htm",
+      "size": 655,
+      "sha256": "b3a3f1aa4c536ebb59c4cdc09798629d5e0a4da728dc272897e4129352333d45",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "cc_programming_model_interface.htm",
+      "size": 1185,
+      "sha256": "6c74be3b70c5c2ad2fbbc3f6db28bad7ed6ccd76b27e94bce4635c4d697a6626",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Resource_Access.htm",
+      "size": 1165,
+      "sha256": "b14933aeee18142d629d529493c0874410c210b250c53b0944451f25b319ef27",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_saving_method.htm",
+      "size": 1143,
+      "sha256": "7fb60711fc62cea86657ca41a2b65b69ec6d0da2b950b05b67164f1c2a7b2729",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_SearchDeleteUnusedElements.htm",
+      "size": 10172,
+      "sha256": "9a75335574ca6fbc99eae16ad90977224d1cceafbd278638e646e45f460a5588",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_SearchResultsView.htm",
+      "size": 10444,
+      "sha256": "1786371c95b3131eec3aa843c7f4b7eedcbf24ca84985e561d7f6178c12ca3c2",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "cc_selectdefaultmethodprocess.htm",
+      "size": 1652,
+      "sha256": "42e3210238bbd4c786e5e8734288c459225725e39c19e06904de6ea17fddf69b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Specification_View.htm",
+      "size": 4664,
+      "sha256": "73dc42c7c46a20b44261ec64bf50dc931895b00f2b8f6420c7d5fd2c90c9a339",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_specifying_method.htm",
+      "size": 2226,
+      "sha256": "7946a3521cfc78385c365501937b16f785bc2df3040eed32b84f03d757db7c58",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "cc_structure.htm",
+      "size": 2082,
+      "sha256": "cb708b5b718c7e58e2c0082cc5e4f78e95675ec5554ba726a82caedc7855eb01",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Toolbar_Elements.htm",
+      "size": 7387,
+      "sha256": "926b0b47bab8e52471ae34a98ca9ec5239741ceec8ade9851d72df3905e1f201",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Toolbar_General.htm",
+      "size": 10322,
+      "sha256": "054252d8f9bb927d0eeeda78ceca6df4d37472a5ca52ab6fccface814cfcb616",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Toolbars.htm",
+      "size": 740,
+      "sha256": "6264c5cc9e1c60a3fc2d7bfd68ece2d2130efda347bcb93fd48c459021551067",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Tools_Menu.htm",
+      "size": 2856,
+      "sha256": "a90dc7d2c0b3d15f2542bbf1f390c818d5b476f2d6c93e128ed2be1e8cee7e7a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "cc_used.htm",
+      "size": 3501,
+      "sha256": "b0a4a936a82f2914613532d1aff4a04b18d08e879b2639bd547d44265a77ce22",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_using_CCode_component.htm",
+      "size": 4848,
+      "sha256": "e757acc89665b032356c95a750fbe847439f7b3ee1ae26c4f54138495245b60a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_view.htm",
+      "size": 3927,
+      "sha256": "320104edaea4f171469a2049e856f82d8fd6867f3a9addf2cacf5f38da37edd5",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Window_Menu.htm",
+      "size": 968,
+      "sha256": "7b63d212af6073f40c65f8f6dcac050f2807a05954f47435c7e6d0fb6eb09a0e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CC_Working_with_Basic_Elements.htm",
+      "size": 3535,
+      "sha256": "58a475eae7e773ce8ca09cffa166e7b0bb1b5f095c2cd77066767ede1d39de53",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "CCodeEditorEnglishUS.brs",
+      "size": 2,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "extension": ".brs"
+    },
+    {
+      "relative_path": "CCodeEditorEnglishUS.glo",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "extension": ".glo"
+    },
+    {
+      "relative_path": "CCodeEditorEnglishUS.hhc",
+      "size": 18067,
+      "sha256": "b992901709497c6363a5f0bf5cd32076e5902d4be185c9f3aba5e0730fd8ee9a",
+      "extension": ".hhc"
+    },
+    {
+      "relative_path": "CCodeEditorEnglishUS.hhk",
+      "size": 25324,
+      "sha256": "0baf9d9bc302477734b73dfbc8d188ab12af46820c2591b9e79833ff3d59bd95",
+      "extension": ".hhk"
+    },
+    {
+      "relative_path": "ceditor_ext2.gif",
+      "size": 1277,
+      "sha256": "a741fc4d3c9040940abb19bcd8b8e5541f9d597e74717c0630fb54bf69a49f66",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "codegen_dbtoolarge.htm",
+      "size": 2826,
+      "sha256": "2c503c782fa77d7222ff5b5d14b2861d8a21ab87696dca57f45463f8867da3af",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "comboboxselectonlinetype.gif",
+      "size": 1122,
+      "sha256": "ce152f585a19be925e718064083166391bb08e8ac3a9619a5c21bf6ff8dea317",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "copy_ccode_single.htm",
+      "size": 4005,
+      "sha256": "2a7f11308d83f6e5c8566369f3e2a58c43289fc433f921c411af707fd73a8cc0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "creating_c_code.htm",
+      "size": 2602,
+      "sha256": "d9e7a8f9af59310b1b46c866bdf259a349609388518bd3089bedeafb8a6448ac",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "creating_method_process.htm",
+      "size": 2749,
+      "sha256": "26d5ad1060a800ae7457c4e1f1f62d78137b367b7f367e6455c6a622f5d74149",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "DIA0076.gif",
+      "size": 7405,
+      "sha256": "b8d143e62ba02ed015772e1fbb6b30e64b34c2c7a75474ebc5f7b1d0a93f0bf5",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "DIA0077.bmp",
+      "size": 412254,
+      "sha256": "6340a3f7015c37fe78e4db1f7f606d98a3f3b736a3c13268bee501b497d06629",
+      "extension": ".bmp"
+    },
+    {
+      "relative_path": "display.js",
+      "size": 5656,
+      "sha256": "85712144c31aac1d2706f3b60475055a673961f71bc37c0f4c9e9c4b85fa9b31",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "eHelp.xml",
+      "size": 371,
+      "sha256": "d52ec40f028dedc587cccb511e861631abf3b1b116eb78047259391447b29de1",
+      "extension": ".xml"
+    },
+    {
+      "relative_path": "ehlpdhtm.js",
+      "size": 125803,
+      "sha256": "31297ade81579b5db98b9cb6cd54d05d5a92de251dd3c853036a21c71148b0ee",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "end-external-editor.htm",
+      "size": 1677,
+      "sha256": "913eff679253f6eed531690a210757334bc108ec91a4eef1ea6ad4db5fdb729a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "external_editor.htm",
+      "size": 2517,
+      "sha256": "543ad78af54e9f42d60bdd4bb6f3dac6d86e2674ba7bae120e3170956972add8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "images/button_filtertab.gif",
+      "size": 1036,
+      "sha256": "7964c2e4fa9542b8098bc1aa6ab3a14b2a612dbea3cae7fc1e2f97d12be1eb78",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/button_filtertab2.gif",
+      "size": 1076,
+      "sha256": "7283bee7576e1399b14d4b413b5004d224ea2908794e82a1c912512c1a5e19f6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/buttonCollapse.gif",
+      "size": 980,
+      "sha256": "c7a6e0d9af6b0e27b9ab870ca2ccb70f15e8cfa326ea1d5db99fa7a6cb1c3645",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/buttonExpand.gif",
+      "size": 982,
+      "sha256": "3b381ad805bf80fc3fa8d6cb7ccef8f03a17d9a90e52b767c345bc293664f0ae",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/buttonSearch.gif",
+      "size": 1724,
+      "sha256": "1f19089e422bbbd75e9e3a0f4b03600abea8cff5ddab442d99db8beddc2ce81d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/buttonSortCriteria.gif",
+      "size": 1735,
+      "sha256": "bd29e4c075d1ffa8223a2e9e84f349db0d6b6415271a3b3027da7c86f4edb015",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/comboboxSearch.gif",
+      "size": 1851,
+      "sha256": "f72a86b501685b3e8065edddd7c972c5d2284a4321b9a3d95ba5c718caa798c8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exp_minus.gif",
+      "size": 837,
+      "sha256": "18a8ea974d756d370d6f7067283fc8c0b26f235c8e98bdaaf13a63e7dca8b1c4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exp_plus.gif",
+      "size": 842,
+      "sha256": "9ff1991cf9c6de621e2672bebf74fbc56680e3413f74d6cf18e25238701651be",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/statisch.gif",
+      "size": 831,
+      "sha256": "481cd3e8b966f0a4398b853efce140287877173b926b53d710791675a1b15aa4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "insertClass copy.gif",
+      "size": 1014,
+      "sha256": "a3e8c0bc011dbfcf4982ba2a5c3ca7c3a11fe03f6590ea54c4fa20c8710b4142",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "InsertModule copy.gif",
+      "size": 1015,
+      "sha256": "d4fcfbe4a97defe2f7eb7158445f92b692aa70af0a0db9d342c2f6162c057f45",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "integrating_external_source.htm",
+      "size": 3219,
+      "sha256": "2eac430e100370b0ca5f98471324bf223ee9750b8474299b83c031a36726a6ab",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Layout.css",
+      "size": 10263,
+      "sha256": "5bc59a5fca85e3a14a5acec376e467130480ecf84edc5e58046da729ce6ff779",
+      "extension": ".css"
+    },
+    {
+      "relative_path": "msg_in_Ccode_1.gif",
+      "size": 11976,
+      "sha256": "1e4b76bd3eda4c82ae8ee5f8c8e5783dea76405c95250910a3ae3a6f6c03c0bc",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "msg_in_Ccode_2 copy.gif",
+      "size": 9903,
+      "sha256": "a6caa32ed54c56b3c0d5adc7f81049656a749785438f2b6491f1a86acdb23a61",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "open-external-editor.htm",
+      "size": 2304,
+      "sha256": "599c554e504bca53f49d4800764f20e4eacda0931e8f718856a7e67f9fef9f0e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "pbutton_deltat.gif",
+      "size": 991,
+      "sha256": "0d673cb4845cb9366e231b50e3c7b71af34524a49b58055ec5eeac95c1696d66",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "pbutton_onedtable.gif",
+      "size": 963,
+      "sha256": "5dc14fb377a0aad010923bffac64b6a87b3def6fd5cab01634841af3df1777a7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "pbutton_twodtable.gif",
+      "size": 980,
+      "sha256": "afd4af8cbd642fc2843d5dcad05d29299ef2d99e75ba0d6ac2a1d319f489cb67",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "printing_ccode.htm",
+      "size": 1823,
+      "sha256": "afbf3a00aa73474adefc9b91fd6052944cde070453b9af156becd924911f648d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "RoboHHRE.lng",
+      "size": 3586,
+      "sha256": "607e16623990c7b694bb11537edbecfbd7057fda1739bba5173e9d8a4942b18f",
+      "extension": ".lng"
+    },
+    {
+      "relative_path": "search_replace_ccode.htm",
+      "size": 3780,
+      "sha256": "521a15cbc0231965eee2c742e516ea44eb57c7235846a03cb4d1ef0d31a4b505",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SearchView_PotentiallyUsed.gif",
+      "size": 7456,
+      "sha256": "74d7ef71a4816527d004a240cb0e48cd0a3497d02a90f5a0a022ced95b220b2e",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "testing-external_module.htm",
+      "size": 8782,
+      "sha256": "d14648b84ac1bcc6c6b345b5693ee1f76868d2bee5454fed8dd6cc785b62bf64",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "using_external_source.htm",
+      "size": 1317,
+      "sha256": "3a21121348acb8ba046ff02c9da961c8f21a0ba6bb1e11ff623e05d7dd4e2a38",
+      "extension": ".htm"
+    }
+  ]
+}

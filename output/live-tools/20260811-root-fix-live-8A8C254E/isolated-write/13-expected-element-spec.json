@@ -1,0 +1,22 @@
+{
+  "elements": [
+    {
+      "name": "P_Input",
+      "kind": "parameter",
+      "modelType": "cont",
+      "scope": "exported",
+      "unit": "",
+      "comment": "ASCET root-fix live validation input",
+      "calibration": false
+    },
+    {
+      "name": "P_Dependent",
+      "kind": "parameter",
+      "modelType": "cont",
+      "scope": "local",
+      "unit": "",
+      "comment": "ASCET root-fix live validation dependent",
+      "calibration": false
+    }
+  ]
+}

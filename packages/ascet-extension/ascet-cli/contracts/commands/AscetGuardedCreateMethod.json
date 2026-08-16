@@ -1,0 +1,31 @@
+{
+  "id": "AscetGuardedCreateMethod",
+  "family": "write",
+  "summary": "Atomically revalidate editability, optionally acquire editability, create one method, and read it back",
+  "usage": "<component-path> <method-name> --method-kind <abstract|process|action|condition|trigger> [--diagram <name>] [--if-exists <fail|return-existing>] [--acquire-editability] [--json]",
+  "execution": { "kind": "bridge", "protocolVersion": 1, "subcommand": "exec", "operation": "guarded_create_method", "sessionPolicy": "fresh_session", "transportPolicy": "one_shot_only" },
+  "supportsJson": true,
+  "defaultOutputMode": "json",
+  "risk": "write",
+  "requiresSerialLiveAccess": true,
+  "objectKinds": ["component", "method"],
+  "args": [
+    { "name": "component-path", "kind": "positional", "type": "string", "required": true, "description": "Component path" },
+    { "name": "method-name", "kind": "positional", "type": "string", "required": true, "description": "Method name" },
+    { "name": "--method-kind", "kind": "option", "type": "string", "required": true, "description": "Method kind" },
+    { "name": "--diagram", "kind": "option", "type": "string", "required": false, "description": "Diagram name" },
+    { "name": "--if-exists", "kind": "option", "type": "string", "required": false, "description": "Existing-method policy" },
+    { "name": "--acquire-editability", "kind": "flag", "type": "boolean", "required": false, "description": "Authorize editability acquisition in the same serialized ToolAPI session" },
+    { "name": "--json", "kind": "flag", "type": "boolean", "required": false, "description": "Emit JSON" }
+  ],
+  "preconditions": ["A fresh authoritative preflight and permission decision must exist.", "The request must enter the serial write lane immediately after authorization."],
+  "failureModes": ["editable_write_gate_blocked", "component_not_editable", "create_method_failed", "readback_mismatch"],
+  "examples": [{ "description": "Guarded action creation", "command": "AscetBridge.exe exec guarded_create_method Demo\\SM stateProbe --method-kind action --acquire-editability --json" }],
+  "pitfalls": ["Editability acquisition may persist when no verified release API is available."],
+  "operation": "guarded_create_method",
+  "lane": "serial_write",
+  "hostEligible": false,
+  "supportsBatch": false,
+  "executionProfile": { "hostSafety": "write", "hostPolicy": "force_one_shot", "timeoutClass": "write" },
+  "hiddenFromModel": true
+}

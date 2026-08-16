@@ -1,0 +1,78 @@
+{
+  "stage": "accept-edits-create-method",
+  "startedAt": "2026-08-15T01:57:00.581Z",
+  "finishedAt": "2026-08-15T01:59:02.377Z",
+  "request": {
+    "toolName": "ascet_edit",
+    "params": {
+      "action": "create_method",
+      "componentPath": "DEMO\\__pi_permission_smoke__20260815-094449\\EditableClass",
+      "componentKind": "class",
+      "methodName": "PiAcceptMethod",
+      "methodKind": "abstract",
+      "ifExists": "fail",
+      "intent": "apply"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"status\": \"error\",\n  \"permission\": {\n    \"mode\": \"acceptEdits\",\n    \"decision\": \"not_evaluated\"\n  },\n  \"preflight\": {\n    \"status\": \"failed\"\n  },\n  \"editability\": {\n    \"status\": \"not_applicable\"\n  },\n  \"mutation\": {\n    \"status\": \"not_started\"\n  },\n  \"verification\": {\n    \"status\": \"not_applicable\"\n  },\n  \"error\": {\n    \"code\": \"shared_object_impact_unknown\",\n    \"message\": \"Complete current-database Tree evidence is required before executing create_method.\"\n  },\n  \"bridge\": {\n    \"beforeBridge\": false,\n    \"bridgeEntered\": false,\n    \"backendResponseReceived\": false\n  },\n  \"recovery\": {\n    \"required\": false\n  }\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "error",
+        "error": {
+          "code": "shared_object_impact_unknown",
+          "message": "Complete current-database Tree evidence is required before executing create_method."
+        }
+      },
+      "error": {
+        "code": "shared_object_impact_unknown",
+        "message": "Complete current-database Tree evidence is required before executing create_method."
+      },
+      "mutationResult": {
+        "status": "error",
+        "permission": {
+          "mode": "acceptEdits",
+          "decision": "not_evaluated"
+        },
+        "preflight": {
+          "status": "failed"
+        },
+        "editability": {
+          "status": "not_applicable"
+        },
+        "mutation": {
+          "status": "not_started"
+        },
+        "verification": {
+          "status": "not_applicable"
+        },
+        "error": {
+          "code": "shared_object_impact_unknown",
+          "message": "Complete current-database Tree evidence is required before executing create_method."
+        },
+        "bridge": {
+          "beforeBridge": false,
+          "bridgeEntered": false,
+          "backendResponseReceived": false
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      },
+      "tool": "ascet_edit",
+      "action": "create_method",
+      "command": {
+        "logicalCommandId": "AscetCreateMethod",
+        "backendCommandId": "AscetCreateMethod",
+        "operation": "create_method"
+      },
+      "diagnostics": {}
+    }
+  }
+}

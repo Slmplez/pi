@@ -1,0 +1,6 @@
+NAME=DB
+database
+NAME=SWC
+AUTOSAR software component
+NAME=WS
+workspace

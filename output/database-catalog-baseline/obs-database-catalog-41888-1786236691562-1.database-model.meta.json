@@ -1,0 +1,76 @@
+{
+  "catalogResultId": "obs-database-catalog-41888-1786236691562-1",
+  "sourceTreeResultId": "obs-tree-live-20260808-full-database",
+  "include": [
+    "module"
+  ],
+  "messageDepth": 0,
+  "capturedAt": "2026-08-09T00:51:31.562Z",
+  "coverage": {
+    "status": "complete_for_scope"
+  },
+  "sourceTreeCounts": {
+    "sourceTreeRowCount": 10670,
+    "projectCount": 75,
+    "moduleRowCount": 859,
+    "uniqueModuleCount": 428,
+    "moduleAliasCount": 431,
+    "enumerationCount": 708,
+    "classRowCount": 7069,
+    "invalidRowCount": 0
+  },
+  "perTypeCounts": {
+    "parameterClasses": 0,
+    "enumerations": 0,
+    "modules": 428,
+    "messages": 0
+  },
+  "perRelationCounts": {
+    "projectModuleEdges": 431
+  },
+  "liveCounts": {},
+  "perStageTimings": {
+    "sourceTreeScanMs": 27.80749999999989,
+    "liveScanMs": 0
+  },
+  "warnings": [],
+  "failures": [],
+  "lineage": {
+    "sourceTreeResultId": "obs-tree-live-20260808-full-database",
+    "sourceTreeDataPath": "output\\database-catalog-baseline\\obs-tree-live-20260808-full-database.tree.ndjson",
+    "sourceTreeMetaPath": "output\\database-catalog-baseline\\obs-tree-live-20260808-full-database.meta.json"
+  },
+  "artifacts": {
+    "catalog": {
+      "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-41888-1786236691562-1.database-model-catalog.ndjson",
+      "itemCount": 428
+    },
+    "relations": {
+      "projectComplexEdges": {
+        "notCreatedReason": "scan_not_requested"
+      },
+      "parameterClassEdges": {
+        "notCreatedReason": "scan_not_requested"
+      },
+      "parameterEnumEdges": {
+        "notCreatedReason": "scan_not_requested"
+      },
+      "projectModuleEdges": {
+        "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-41888-1786236691562-1.project-module-edges.ndjson",
+        "itemCount": 431
+      },
+      "moduleMessageEdges": {
+        "notCreatedReason": "scan_not_requested"
+      },
+      "messageEnumEdges": {
+        "notCreatedReason": "scan_not_requested"
+      }
+    },
+    "summaryPath": "output\\database-catalog-baseline\\obs-database-catalog-41888-1786236691562-1.database-model-summary.json",
+    "metaPath": "output\\database-catalog-baseline\\obs-database-catalog-41888-1786236691562-1.database-model.meta.json",
+    "modules": {
+      "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-41888-1786236691562-1.modules.ndjson",
+      "itemCount": 428
+    }
+  }
+}

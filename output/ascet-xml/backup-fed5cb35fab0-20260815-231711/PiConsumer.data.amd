@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ComponentData toolVersion="V6.1.5_2.2.0" schemaVersion="6.1.0.0">
+	<DataSet name="PiConsumer" OID="_040g00001g001qg7107gc7919031e" default="false" classConfig="true">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-15T15:17:12" timeStampCounter="753"/>
+	</DataSet>
+	<DataSet name="Data" OID="_040g00001g001qg7107gc791701he" default="true" classConfig="false">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-15T15:17:12" timeStampCounter="752"/>
+		<DataEntry elementName="C_PI_ChainTest_20260815230930237" elementOID="_040g00001g001qg7107gc7a5d85he">
+			<DataVariant name="default">
+				<Dependency>
+					<Parameter formalName="P_PI_ChainTest_20260815230930237" formalOID="_040g0h48bncf2kctj18ce2017hgnn" valueName="P_PI_ChainTest_20260815230930237" valueOID="_040g00001g001qg7107gc7a4rk51e"/>
+				</Dependency>
+			</DataVariant>
+		</DataEntry>
+		<DataEntry elementName="C_PI_Partial_20260815230930237" elementOID="_040g00001g001qg7107gc87brghhe">
+			<DataVariant name="default">
+				<ScalarType>
+					<Numeric value="0.0"/>
+				</ScalarType>
+			</DataVariant>
+		</DataEntry>
+		<DataEntry elementName="C_PI_SetOnly_20260815230930237" elementOID="_040g00001g001qg7107gc7s0s8ahe">
+			<DataVariant name="default">
+				<Dependency>
+					<Parameter formalName="P_PI_SetOnly_20260815230930237" formalOID="_040g0h725rr4pt30bp6g375p8c1fs" valueName="P_PI_SetOnly_20260815230930237" valueOID="_040g00001g001qg7107gc7s0iga1e"/>
+				</Dependency>
+			</DataVariant>
+		</DataEntry>
+	</DataSet>
+	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+		<SignedInfo>
+			<CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+			<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+			<Reference>
+				<Transforms>
+					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+				</Transforms>
+				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+				<DigestValue>JCK44PnX8vShLxa2SjLRJB51uH4=</DigestValue>
+			</Reference>
+		</SignedInfo>
+		<SignatureValue>EdSLfQJAhdIetCksYb/1W8YZhsnP9rC/1gAH6EXyaCLFPS+2F2iiGx/DukRgiIQc
+AWPtr63jEMqC0lUK6WXLhHsmC7kx2c25TTz/IPqBcHYLxqNUTFruLrdNdF3schtZ
+xDCpr36f396xSTUk+qy1MuTYZEEh67t0dVIlg4q2OrDYHEOD/bUCr7j1O+OZst8q
+luFIKLSljeFO/VEUnVtBiAfKByHS6VvqwwUvCmtTSOYAF7fC1dbu67yn6L/9YeGE
+ivIV7126d8iXsrrFZRp/XLq5u+G/YI2dPLEOSlRBcXgz/J+2vqt84GWoiPZ0kOUD
+bwwnc18Vz+YUWL2yUL/S1w==</SignatureValue>
+		<KeyInfo>
+			<KeyName>Etas Ascet Verification</KeyName>
+		</KeyInfo>
+	</Signature>
+</ComponentData>

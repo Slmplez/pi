@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ComponentImplementation toolVersion="V6.1.5_2.2.0" schemaVersion="6.1.0.1">
+	<ImplementationSet name="PiConsumer" default="false" classConfig="true" memoryLocation="Default" generateMethodBody="true" optimizeMethodCalls="true" usingServiceRoutines="false" hierarchicalGenerationForSM="true" outlineMethodsSM="true" inlinePrivateMethodsSM="true" generateDataStructures="true" cacheLocking="automatic" userDefinedOrder="false" OID="_040g00001g001qg71080hedhe79he">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-16T03:23:27" timeStampCounter="1164"/>
+	</ImplementationSet>
+	<ImplementationSet name="Impl" default="true" classConfig="false" memoryLocation="Default" generateMethodBody="true" optimizeMethodCalls="true" usingServiceRoutines="false" hierarchicalGenerationForSM="true" outlineMethodsSM="true" inlinePrivateMethodsSM="true" generateDataStructures="true" cacheLocking="automatic" userDefinedOrder="false" OID="_040g00001g001qg71080hedhe791e">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-16T03:23:27" timeStampCounter="1163"/>
+		<ImplementationEntry>
+			<ImplementationVariant name="default">
+				<ElementImplementation elementName="C_PI_ChainTest_20260816031953239" elementOID="_040g00001g001qg71080heej67che">
+					<ScalarImplementation>
+						<NumericImplementation limitAssignments="true" isLimitOverflow="true" limitOverflow="automatic" memoryLocationInstance="Default" additionalInformation="" cacheLocking="automatic" quantization="0" formula="ident" master="Model" physType="real64" implType="real64" zeroNotIncluded="false">
+							<PhysicalInterval min="0" max="10"/>
+							<ImplementationInterval min="0.0" max="10.0"/>
+						</NumericImplementation>
+					</ScalarImplementation>
+				</ElementImplementation>
+			</ImplementationVariant>
+		</ImplementationEntry>
+	</ImplementationSet>
+	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+		<SignedInfo>
+			<CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+			<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+			<Reference>
+				<Transforms>
+					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+				</Transforms>
+				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+				<DigestValue>6cjBkym+/eX7MLdc7JevnpyO9R0=</DigestValue>
+			</Reference>
+		</SignedInfo>
+		<SignatureValue>XvwbzIvFpLTmMNM5jH2Qej3dwTlgs1LS/YAxX9pcHskMM2mg2xas+tRaTcPoraQU
+eQnJguWoUULJz8rSOjDGEYwhtbzpR5cpCu9o5KV3Nmw4Owl1pCCl7ADNCuliVeXf
+rRy4LIaLyGmBn7RqwObEvPJZrxHZc9EkIluN1ATycw5iyTXVeB+WQNUG7/Mec+jB
+hujQd+Lhg3dUTR4C8cXyUkxqXJ0TtrU8EB26IWqlcY1HlvIPc2tS5HkLnDVyztvV
+I3Pxb6zb3+dDpLd6au4xysug4K/LOKgqVmqTRvwhB7hBIRoOE60IRsMkN/Jg2VyV
+bT47Dxj5oM7y8P4M7M6JzA==</SignatureValue>
+		<KeyInfo>
+			<KeyName>Etas Ascet Verification</KeyName>
+		</KeyInfo>
+	</Signature>
+</ComponentImplementation>

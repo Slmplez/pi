@@ -1,0 +1,297 @@
+{
+  "generated_at": "2026-03-28T03:17:57.021662Z",
+  "input_chm": "E:\\ETAS\\ASCET6.4\\Help\\DataEditorEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\data-editor-tgodxx2n\\export",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\data-editor-tgodxx2n\\export\\markdown",
+  "input_html_count": 47,
+  "converted_html_count": 47,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 16,
+  "toc_entries_count": 54,
+  "index_entries_count": 60,
+  "index_required": false,
+  "mappings": [
+    {
+      "html_rel_path": "DEd_AxisMenuTableEditor.htm",
+      "md_rel_path": "DEd_AxisMenuTableEditor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_browse_dataset.htm",
+      "md_rel_path": "DEd_browse_dataset.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_copy_data.htm",
+      "md_rel_path": "DEd_copy_data.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_create_copy_data.htm",
+      "md_rel_path": "DEd_create_copy_data.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_Data_for___Component__Window.htm",
+      "md_rel_path": "DEd_Data_for___Component__Window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_Data_Menu.htm",
+      "md_rel_path": "DEd_Data_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_data_sets.htm",
+      "md_rel_path": "DEd_data_sets.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_DataEditor_CombinedTypes.htm",
+      "md_rel_path": "DEd_DataEditor_CombinedTypes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Ded_DataEditor_ExplicitReferences.htm",
+      "md_rel_path": "Ded_DataEditor_ExplicitReferences.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_delete_data_set.htm",
+      "md_rel_path": "DEd_delete_data_set.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_edit_1d_table.htm",
+      "md_rel_path": "DEd_edit_1d_table.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_Edit_Dependency_for__Window.htm",
+      "md_rel_path": "DEd_Edit_Dependency_for__Window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_edit_logical_editor.htm",
+      "md_rel_path": "DEd_edit_logical_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_edit_value.htm",
+      "md_rel_path": "DEd_edit_value.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_EditCharacteristicMap.htm",
+      "md_rel_path": "DEd_EditCharacteristicMap.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_EditDataSets.htm",
+      "md_rel_path": "DEd_EditDataSets.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_Editing_Dependent_Parameters.htm",
+      "md_rel_path": "DEd_Editing_Dependent_Parameters.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_EditingCombinedTypes.htm",
+      "md_rel_path": "DEd_EditingCombinedTypes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_EditingScalarTypes.htm",
+      "md_rel_path": "DEd_EditingScalarTypes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_EditMenuTableEditor.htm",
+      "md_rel_path": "DEd_EditMenuTableEditor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_editor_combined_types.htm",
+      "md_rel_path": "DEd_editor_combined_types.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_editors_scalar_types.htm",
+      "md_rel_path": "DEd_editors_scalar_types.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_Element_Menu.htm",
+      "md_rel_path": "DEd_Element_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_enumeration_editor.htm",
+      "md_rel_path": "DEd_enumeration_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_export_dataset.htm",
+      "md_rel_path": "DEd_export_dataset.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_ExtrasMenuTableEditor.htm",
+      "md_rel_path": "DEd_ExtrasMenuTableEditor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_logical-editor.htm",
+      "md_rel_path": "DEd_logical-editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_make_dataset_default.htm",
+      "md_rel_path": "DEd_make_dataset_default.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_MappingReference.htm",
+      "md_rel_path": "DEd_MappingReference.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_numerical_editor.htm",
+      "md_rel_path": "DEd_numerical_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_open_data_editor.htm",
+      "md_rel_path": "DEd_open_data_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_open_editor.htm",
+      "md_rel_path": "DEd_open_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_Overview.htm",
+      "md_rel_path": "DEd_Overview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_read_data_array_table.htm",
+      "md_rel_path": "DEd_read_data_array_table.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_rename_data_set.htm",
+      "md_rel_path": "DEd_rename_data_set.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_select-enumerator.htm",
+      "md_rel_path": "DEd_select-enumerator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_SelectDataSet.htm",
+      "md_rel_path": "DEd_SelectDataSet.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_set_data_exchange_option.htm",
+      "md_rel_path": "DEd_set_data_exchange_option.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_setup_array.htm",
+      "md_rel_path": "DEd_setup_array.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_setup_axis_points.htm",
+      "md_rel_path": "DEd_setup_axis_points.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_show_difference_2datasets.htm",
+      "md_rel_path": "DEd_show_difference_2datasets.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_specCharTables.htm",
+      "md_rel_path": "DEd_specCharTables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_use_data_exchange_toolset.htm",
+      "md_rel_path": "DEd_use_data_exchange_toolset.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_view_data.htm",
+      "md_rel_path": "DEd_view_data.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_ViewMenuTableEditor.htm",
+      "md_rel_path": "DEd_ViewMenuTableEditor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_work_globalelement_dataset.htm",
+      "md_rel_path": "DEd_work_globalelement_dataset.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "DEd_write_array_tabledata.htm",
+      "md_rel_path": "DEd_write_array_tabledata.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

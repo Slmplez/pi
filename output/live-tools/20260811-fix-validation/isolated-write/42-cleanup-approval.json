@@ -1,0 +1,16 @@
+{
+  "approvals": [
+    {
+      "title": "Confirm ASCET component deletion",
+      "message": "ASCET edit request:\noperation: delete_component\ncomponentPath: PI_LIVE_FIX_20260811_13947C09\\EnumerationUnderTest\nifMissing: fail\nverifyReadback: true"
+    },
+    {
+      "title": "Confirm ASCET component deletion",
+      "message": "ASCET edit request:\noperation: delete_component\ncomponentPath: PI_LIVE_FIX_20260811_13947C09\\ClassUnderTest\nifMissing: fail\nverifyReadback: true"
+    },
+    {
+      "title": "Confirm ASCET folder deletion",
+      "message": "ASCET edit request:\noperation: delete_folder\nfolderPath: PI_LIVE_FIX_20260811_13947C09\nifMissing: fail\nverifyReadback: true"
+    }
+  ]
+}

@@ -4,15 +4,15 @@
 
 目标不是发布 `@earendil-works/pi-coding-agent` 的 fork，而是在官方 Pi agent 之上发布 ASCET Copilot 的 Pi package。为了让别人安装 ASCET Copilot 时同时带上当前项目已经配置好的全部 extension，发布结构改为“三包”：
 
-- `@zeerke/ascet-copilot-extension`：ASCET 工具、命令、skills、subagents、templates、ASCET CLI contracts/bin。
-- `@zeerke/ascet-copilot-ui`：ASCET Copilot 启动 UI、header、tips、theme。
-- `@zeerke/ascet-copilot`：组合包，依赖并转发当前 `.pi/settings.json` 里的全部 Pi package 资源。
+- `@vaf-agentworks/ascet-copilot-extension`：ASCET 工具、命令、skills、subagents、templates、ASCET CLI contracts/bin。
+- `@vaf-agentworks/ascet-copilot-ui`：ASCET Copilot 启动 UI、header、tips、theme。
+- `@vaf-agentworks/ascet-copilot`：组合包，依赖并转发当前 `.pi/settings.json` 里的全部 Pi package 资源。
 
 用户安装路径：
 
 ```powershell
 npm install -g @earendil-works/pi-coding-agent
-pi install npm:@zeerke/ascet-copilot
+pi install npm:@vaf-agentworks/ascet-copilot
 pi
 ```
 
@@ -64,7 +64,7 @@ packages\ascet-copilot-bundle
 ## 3. 非目标
 
 - 不改 `packages/coding-agent/package.json` 的包名。
-- 不把 `@earendil-works/pi-coding-agent` 改成 `@zeerke/ascet-copilot`。
+- 不把 `@earendil-works/pi-coding-agent` 改成 `@vaf-agentworks/ascet-copilot`。
 - 不改 `packages/orchestrator` 对 `@earendil-works/pi-coding-agent` 的依赖。
 - 不新增默认包自动安装机制到 Pi agent 主体。
 - 不提交 `.pi\npm\node_modules`、`tmp`、运行报告、日志、个人缓存。
@@ -83,7 +83,7 @@ packages\ascet-extension\package.json
 
 ```json
 {
-  "name": "@zeerke/ascet-copilot-extension",
+  "name": "@vaf-agentworks/ascet-copilot-extension",
   "version": "0.1.0",
   "description": "ASCET Copilot tool extension for Pi.",
   "private": false,
@@ -130,7 +130,7 @@ packages\ascet-extension\package.json
 发布前必须刷新 ASCET 资产：
 
 ```powershell
-npm --workspace @zeerke/ascet-copilot-extension run copy-assets
+npm --workspace @vaf-agentworks/ascet-copilot-extension run copy-assets
 ```
 
 预期包含：
@@ -152,7 +152,7 @@ packages\Pi-ascet-ui-extension\package.json
 
 ```json
 {
-  "name": "@zeerke/ascet-copilot-ui",
+  "name": "@vaf-agentworks/ascet-copilot-ui",
   "version": "0.1.0",
   "description": "ASCET Copilot startup UI extension for Pi.",
   "publishConfig": {
@@ -201,7 +201,7 @@ packages\ascet-copilot-bundle\package.json
 
 ```json
 {
-  "name": "@zeerke/ascet-copilot",
+  "name": "@vaf-agentworks/ascet-copilot",
   "version": "0.1.0",
   "description": "ASCET Copilot package bundle for Pi.",
   "private": false,
@@ -215,8 +215,8 @@ packages\ascet-copilot-bundle\package.json
 
 ```json
 "dependencies": {
-  "@zeerke/ascet-copilot-extension": "0.1.0",
-  "@zeerke/ascet-copilot-ui": "0.1.0",
+  "@vaf-agentworks/ascet-copilot-extension": "0.1.0",
+  "@vaf-agentworks/ascet-copilot-ui": "0.1.0",
   "pi-subagents": "0.34.0",
   "@juicesharp/rpiv-todo": "1.20.0",
   "@juicesharp/rpiv-ask-user-question": "1.20.0",
@@ -230,8 +230,8 @@ packages\ascet-copilot-bundle\package.json
 
 ```json
 "bundledDependencies": [
-  "@zeerke/ascet-copilot-extension",
-  "@zeerke/ascet-copilot-ui",
+  "@vaf-agentworks/ascet-copilot-extension",
+  "@vaf-agentworks/ascet-copilot-ui",
   "pi-subagents",
   "@juicesharp/rpiv-todo",
   "@juicesharp/rpiv-ask-user-question",
@@ -241,8 +241,8 @@ packages\ascet-copilot-bundle\package.json
 ],
 "pi": {
   "extensions": [
-    "node_modules/@zeerke/ascet-copilot-extension/src/index.ts",
-    "node_modules/@zeerke/ascet-copilot-ui/extensions/index.ts",
+    "node_modules/@vaf-agentworks/ascet-copilot-extension/src/index.ts",
+    "node_modules/@vaf-agentworks/ascet-copilot-ui/extensions/index.ts",
     "node_modules/pi-subagents/src/extension/index.ts",
     "node_modules/@juicesharp/rpiv-todo/index.ts",
     "node_modules/@juicesharp/rpiv-ask-user-question/index.ts",
@@ -251,7 +251,7 @@ packages\ascet-copilot-bundle\package.json
     "node_modules/pi-web-access/index.ts"
   ],
   "skills": [
-    "node_modules/@zeerke/ascet-copilot-extension/skills",
+    "node_modules/@vaf-agentworks/ascet-copilot-extension/skills",
     "node_modules/pi-subagents/skills",
     "node_modules/pi-web-access/skills"
   ],
@@ -259,11 +259,11 @@ packages\ascet-copilot-bundle\package.json
     "node_modules/pi-subagents/prompts"
   ],
   "themes": [
-    "node_modules/@zeerke/ascet-copilot-ui/themes"
+    "node_modules/@vaf-agentworks/ascet-copilot-ui/themes"
   ],
   "subagents": {
     "agents": [
-      "node_modules/@zeerke/ascet-copilot-extension/agents"
+      "node_modules/@vaf-agentworks/ascet-copilot-extension/agents"
     ]
   }
 }
@@ -284,16 +284,16 @@ packages\ascet-copilot-bundle\package.json
 ### 阶段 A：发布前元数据修改
 
 - [ ] 修改 `packages\ascet-extension\package.json`：
-  - [ ] `name` 改为 `@zeerke/ascet-copilot-extension`
+  - [ ] `name` 改为 `@vaf-agentworks/ascet-copilot-extension`
   - [ ] `description` 改为 `ASCET Copilot tool extension for Pi.`
   - [ ] `private` 改为 `false`
   - [ ] 增加 `publishConfig.access = public`
 - [ ] 修改 `packages\Pi-ascet-ui-extension\package.json`：
-  - [ ] `name` 改为 `@zeerke/ascet-copilot-ui`
+  - [ ] `name` 改为 `@vaf-agentworks/ascet-copilot-ui`
   - [ ] `description` 改为 `ASCET Copilot startup UI extension for Pi.`
   - [ ] 增加 `publishConfig.access = public`
 - [ ] 新增 `packages\ascet-copilot-bundle\package.json`：
-  - [ ] `name` 设置为 `@zeerke/ascet-copilot`
+  - [ ] `name` 设置为 `@vaf-agentworks/ascet-copilot`
   - [ ] 写入当前项目配置里的全部 8 个 package 依赖
   - [ ] 写入 `bundledDependencies`
   - [ ] 写入转发后的 `pi.extensions`、`pi.skills`、`pi.prompts`、`pi.themes`、`pi.subagents`
@@ -314,7 +314,7 @@ npm install --package-lock-only --ignore-scripts
 - [ ] 检查 lockfile 只出现新的 workspace 包名，不应引入无关 registry 依赖漂移：
 
 ```powershell
-rg -n "@zeerke/ascet-copilot|@ascet/pi-extension|pi-ascet-ui-extension" package-lock.json packages
+rg -n "@vaf-agentworks/ascet-copilot|@ascet/pi-extension|pi-ascet-ui-extension" package-lock.json packages
 ```
 
 ### 阶段 C：复制 ASCET 后端资产
@@ -322,7 +322,7 @@ rg -n "@zeerke/ascet-copilot|@ascet/pi-extension|pi-ascet-ui-extension" package-
 - [ ] 执行：
 
 ```powershell
-npm --workspace @zeerke/ascet-copilot-extension run copy-assets
+npm --workspace @vaf-agentworks/ascet-copilot-extension run copy-assets
 ```
 
 - [ ] 检查核心资产：
@@ -349,7 +349,7 @@ npx biome check packages/ascet-extension packages/Pi-ascet-ui-extension
 - [ ] UI extension 自测：
 
 ```powershell
-npm --workspace @zeerke/ascet-copilot-ui test
+npm --workspace @vaf-agentworks/ascet-copilot-ui test
 ```
 
 如 workspace 名变更后命令不可用，先用路径方式：
@@ -363,7 +363,7 @@ npm --prefix packages\Pi-ascet-ui-extension test
 - [ ] ASCET extension dry-run：
 
 ```powershell
-npm pack --workspace @zeerke/ascet-copilot-extension --dry-run
+npm pack --workspace @vaf-agentworks/ascet-copilot-extension --dry-run
 ```
 
 必须看到：
@@ -382,7 +382,7 @@ package.json
 - [ ] UI extension dry-run：
 
 ```powershell
-npm pack --workspace @zeerke/ascet-copilot-ui --dry-run
+npm pack --workspace @vaf-agentworks/ascet-copilot-ui --dry-run
 ```
 
 必须看到：
@@ -398,14 +398,14 @@ package.json
 - [ ] 组合包 dry-run：
 
 ```powershell
-npm pack --workspace @zeerke/ascet-copilot --dry-run
+npm pack --workspace @vaf-agentworks/ascet-copilot --dry-run
 ```
 
 必须看到：
 
 ```text
-node_modules/@zeerke/ascet-copilot-extension/
-node_modules/@zeerke/ascet-copilot-ui/
+node_modules/@vaf-agentworks/ascet-copilot-extension/
+node_modules/@vaf-agentworks/ascet-copilot-ui/
 node_modules/pi-subagents/
 node_modules/@juicesharp/rpiv-todo/
 node_modules/@juicesharp/rpiv-ask-user-question/
@@ -445,9 +445,9 @@ zeerke
 - [ ] 确认包名未占用：
 
 ```powershell
-npm view @zeerke/ascet-copilot-extension version
-npm view @zeerke/ascet-copilot-ui version
-npm view @zeerke/ascet-copilot version
+npm view @vaf-agentworks/ascet-copilot-extension version
+npm view @vaf-agentworks/ascet-copilot-ui version
+npm view @vaf-agentworks/ascet-copilot version
 ```
 
 如果返回 `E404 Not Found`，说明首次发布可用。
@@ -457,27 +457,27 @@ npm view @zeerke/ascet-copilot version
 - [ ] 发布工具扩展：
 
 ```powershell
-npm publish --workspace @zeerke/ascet-copilot-extension --access public
+npm publish --workspace @vaf-agentworks/ascet-copilot-extension --access public
 ```
 
 - [ ] 发布 UI 扩展：
 
 ```powershell
-npm publish --workspace @zeerke/ascet-copilot-ui --access public
+npm publish --workspace @vaf-agentworks/ascet-copilot-ui --access public
 ```
 
 - [ ] 发布组合包：
 
 ```powershell
-npm publish --workspace @zeerke/ascet-copilot --access public
+npm publish --workspace @vaf-agentworks/ascet-copilot --access public
 ```
 
 如启用 npm 2FA：
 
 ```powershell
-npm publish --workspace @zeerke/ascet-copilot-extension --access public --otp 123456
-npm publish --workspace @zeerke/ascet-copilot-ui --access public --otp 123456
-npm publish --workspace @zeerke/ascet-copilot --access public --otp 123456
+npm publish --workspace @vaf-agentworks/ascet-copilot-extension --access public --otp 123456
+npm publish --workspace @vaf-agentworks/ascet-copilot-ui --access public --otp 123456
+npm publish --workspace @vaf-agentworks/ascet-copilot --access public --otp 123456
 ```
 
 ### 阶段 H：发布后验证
@@ -488,14 +488,14 @@ npm publish --workspace @zeerke/ascet-copilot --access public --otp 123456
 mkdir C:\Temp\ascet-copilot-smoke
 cd C:\Temp\ascet-copilot-smoke
 npm install -g @earendil-works/pi-coding-agent
-pi install npm:@zeerke/ascet-copilot
+pi install npm:@vaf-agentworks/ascet-copilot
 pi list
 ```
 
 期望 `pi list` 出现：
 
 ```text
-npm:@zeerke/ascet-copilot
+npm:@vaf-agentworks/ascet-copilot
 ```
 
 启动：
@@ -545,8 +545,8 @@ git push
 
 ```powershell
 npm install -g @earendil-works/pi-coding-agent
-pi install npm:@zeerke/ascet-copilot-extension
-pi install npm:@zeerke/ascet-copilot-ui
+pi install npm:@vaf-agentworks/ascet-copilot-extension
+pi install npm:@vaf-agentworks/ascet-copilot-ui
 pi
 ```
 
@@ -559,8 +559,8 @@ pi update --extensions
 卸载：
 
 ```powershell
-pi remove npm:@zeerke/ascet-copilot-extension
-pi remove npm:@zeerke/ascet-copilot-ui
+pi remove npm:@vaf-agentworks/ascet-copilot-extension
+pi remove npm:@vaf-agentworks/ascet-copilot-ui
 ```
 
 ## 7. 版本升级策略
@@ -568,22 +568,22 @@ pi remove npm:@zeerke/ascet-copilot-ui
 首发：
 
 ```text
-@zeerke/ascet-copilot-extension@0.1.0
-@zeerke/ascet-copilot-ui@0.1.0
+@vaf-agentworks/ascet-copilot-extension@0.1.0
+@vaf-agentworks/ascet-copilot-ui@0.1.0
 ```
 
 补丁更新：
 
 ```powershell
-npm version patch --workspace @zeerke/ascet-copilot-extension --no-git-tag-version
-npm publish --workspace @zeerke/ascet-copilot-extension --access public
+npm version patch --workspace @vaf-agentworks/ascet-copilot-extension --no-git-tag-version
+npm publish --workspace @vaf-agentworks/ascet-copilot-extension --access public
 ```
 
 UI 更新：
 
 ```powershell
-npm version patch --workspace @zeerke/ascet-copilot-ui --no-git-tag-version
-npm publish --workspace @zeerke/ascet-copilot-ui --access public
+npm version patch --workspace @vaf-agentworks/ascet-copilot-ui --no-git-tag-version
+npm publish --workspace @vaf-agentworks/ascet-copilot-ui --access public
 ```
 
 重要原则：
@@ -608,7 +608,7 @@ npm publish --workspace @zeerke/ascet-copilot-ui --access public
 处理：
 
 ```powershell
-npm --workspace @zeerke/ascet-copilot-extension run copy-assets
+npm --workspace @vaf-agentworks/ascet-copilot-extension run copy-assets
 ```
 
 并检查：
@@ -624,8 +624,8 @@ Test-Path packages\ascet-extension\ascet-cli\bin\AscetCli.exe
 
 ```powershell
 pi list
-pi install npm:@zeerke/ascet-copilot-extension
-pi install npm:@zeerke/ascet-copilot-ui
+pi install npm:@vaf-agentworks/ascet-copilot-extension
+pi install npm:@vaf-agentworks/ascet-copilot-ui
 ```
 
 确认 package.json 中有 `pi.extensions`。
@@ -634,8 +634,8 @@ pi install npm:@zeerke/ascet-copilot-ui
 
 处理：
 
-- 改为 `@zeerke/ascet-copilot-tools`
-- 或改为 `@zeerke/ascet-pi-extension`
+- 改为 `@vaf-agentworks/ascet-copilot-tools`
+- 或改为 `@vaf-agentworks/ascet-pi-extension`
 
 ### 风险：pre-commit 钩子被 `.pi\npm\package.json` 生成依赖挡住
 
@@ -653,25 +653,25 @@ pi install npm:@zeerke/ascet-copilot-ui
 2. 立即发布 patch 修复版：
 
 ```powershell
-npm version patch --workspace @zeerke/ascet-copilot-extension --no-git-tag-version
-npm publish --workspace @zeerke/ascet-copilot-extension --access public
+npm version patch --workspace @vaf-agentworks/ascet-copilot-extension --no-git-tag-version
+npm publish --workspace @vaf-agentworks/ascet-copilot-extension --access public
 ```
 
 3. 如果必须阻止安装某个坏版本，可考虑 npm deprecate：
 
 ```powershell
-npm deprecate @zeerke/ascet-copilot-extension@0.1.0 "Use 0.1.1 instead."
+npm deprecate @vaf-agentworks/ascet-copilot-extension@0.1.0 "Use 0.1.1 instead."
 ```
 
 4. 用户侧更新：
 
 ```powershell
-pi update --extension npm:@zeerke/ascet-copilot-extension
+pi update --extension npm:@vaf-agentworks/ascet-copilot-extension
 ```
 
 ## 10. 完成标准
 
-- [ ] 两个 package.json 已改为 `@zeerke` scope。
+- [ ] 两个 package.json 已改为 `@vaf-agentworks` scope。
 - [ ] `private` 不阻止发布。
 - [ ] `publishConfig.access` 为 `public`。
 - [ ] ASCET assets 已复制。

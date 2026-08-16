@@ -1,0 +1,98 @@
+{
+  "case": "database_catalog_source_database_mismatch",
+  "sourceTreeResultId": "obs-tree-2676-1786435890471-0",
+  "result": {
+    "ok": false,
+    "error": {
+      "code": "database_identity_mismatch",
+      "message": "Stored Tree source database does not match the current live ASCET database.",
+      "details": {
+        "source": {
+          "name": "INTENTIONAL_MISMATCH",
+          "path": "C:\\IntentionalMismatch\\",
+          "fingerprint": "e6c1aaeb2619c9c33503fd7e0dd75e61e7f0cd6b462c33f0f675dd541d3c3fa6"
+        },
+        "current": {
+          "name": "C:\\Repo\\F05_IPB_L2_0429",
+          "path": "C:\\Repo\\",
+          "fingerprint": "def9e68cc955cc916cdfa1a2d26c32c8d2b16503cdcc4d337b3c7ba9a5643bf8"
+        }
+      }
+    },
+    "requestArgs": [
+      "exec",
+      "get_database_identity",
+      "--request-json",
+      "{}",
+      "--json"
+    ]
+  },
+  "bridge": {
+    "type": "response",
+    "protocolVersion": 1,
+    "ok": true,
+    "result": {
+      "items": [],
+      "coverage": {
+        "status": "complete_for_scope",
+        "scopeKind": "database",
+        "scopeId": "database:C:\\Repo\\",
+        "completeness": "complete",
+        "truncated": false,
+        "foldersVisited": 0,
+        "componentsScanned": 0,
+        "identityKinds": [],
+        "collectorStarted": true,
+        "collectorCompleted": true,
+        "rootCollectionAvailable": true,
+        "projectCollectionAvailable": true,
+        "missingOidCount": 0,
+        "missingPathCount": 0,
+        "collectors": {
+          "database": {
+            "started": true,
+            "completed": true,
+            "itemCount": 1
+          },
+          "projects": {
+            "started": false,
+            "completed": false,
+            "itemCount": 0
+          },
+          "folders": {
+            "started": false,
+            "completed": false,
+            "itemCount": 0
+          },
+          "components": {
+            "started": false,
+            "completed": false,
+            "itemCount": 0
+          },
+          "enumerations": {
+            "started": false,
+            "completed": false,
+            "itemCount": 0
+          }
+        }
+      },
+      "truncated": false,
+      "source": "live",
+      "database": {
+        "name": "C:\\Repo\\F05_IPB_L2_0429",
+        "path": "C:\\Repo\\"
+      }
+    },
+    "error": null,
+    "meta": {
+      "bridgePid": 35892,
+      "bridgeGeneration": "0dca0ac4-28f2-4264-9aa4-f0d4d80fc177",
+      "durationMs": 347,
+      "sessionPolicy": "fresh_session",
+      "mutationStarted": false,
+      "mode": "exec",
+      "operation": "get_database_identity"
+    }
+  },
+  "rejectedBeforeCatalogScan": true
+}

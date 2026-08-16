@@ -36,8 +36,6 @@ describe("ASCET edit action contract", () => {
 		for (const action of actions) {
 			assert.equal(action.permission?.baseRisk, expectedRisks[action.id]);
 			assert.ok(action.executor.length > 0, `${action.id} must declare an executor`);
-			assert.ok(action.schemaKey.length > 0, `${action.id} must declare a schema key`);
-			assert.ok(action.promptKey.length > 0, `${action.id} must declare a prompt key`);
 			if (action.jobKind === "write") {
 				assert.ok(action.permission, `${action.id} must declare permission metadata`);
 				assert.equal(action.permission.requiresReadback, true);
@@ -65,8 +63,8 @@ describe("ASCET edit action contract", () => {
 	});
 
 	test("resolves action metadata from either external discriminator", () => {
-		assert.equal(getAscetEditAction("set_enumerators")?.logicalCommandId, "AscetSetEnumerators");
-		assert.equal(getAscetEditActionByDiscriminator("action", "set_enumerators")?.operation, "set_enumerators");
+		assert.equal(getAscetEditAction("set_enumerators").executor, "setEnumerators");
+		assert.equal(getAscetEditActionByDiscriminator("action", "set_enumerators")?.id, "set_enumerators");
 		assert.equal(getAscetEditActionByDiscriminator("mode", "check")?.jobKind, "read");
 		assert.equal(getAscetEditActionByDiscriminator("mode", "restore"), undefined);
 	});

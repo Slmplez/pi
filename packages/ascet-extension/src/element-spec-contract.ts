@@ -76,21 +76,14 @@ export interface AscetImplementationTarget {
 
 export interface AscetApplyElementPlanParams extends AscetPublicWriteControl {
 	action: "apply_element_spec";
-	phase?: "plan";
 	componentPath: string;
-	intent: AscetApplyElementIntent;
+	elementIntent: AscetApplyElementIntent;
 	elements: AscetElementInput[];
 	projectPath?: string;
 	dataTarget?: AscetDataTarget;
 	implementationTarget?: AscetImplementationTarget;
 	deleteMissing?: boolean;
 	recreateIncompatible?: boolean;
-}
-
-export interface AscetApplyElementCommitParams extends AscetPublicWriteControl {
-	action: "apply_element_spec";
-	phase: "commit";
-	planId: string;
 }
 
 const strictObject = <T extends TProperties>(properties: T) => Type.Object(properties, { additionalProperties: false });
@@ -333,7 +326,6 @@ export const ascetImplementationTargetSchema = Type.Union([strictObject({ mode: 
 
 const planCommonProperties = {
 	action: Type.Literal("apply_element_spec"),
-	phase: Type.Optional(Type.Literal("plan")),
 	componentPath: Type.String({ minLength: 1 }),
 	projectPath: Type.Optional(Type.String({ minLength: 1 })),
 	dataTarget: Type.Optional(ascetDataTargetSchema),
@@ -346,37 +338,27 @@ const planCommonProperties = {
 export const ascetApplyElementSpecPlanSchema = Type.Union([
 	strictObject({
 		...planCommonProperties,
-		intent: Type.Literal("create"),
+		elementIntent: Type.Literal("create"),
 		elements: Type.Array(ascetElementCreateSchema),
 	}),
 	strictObject({
 		...planCommonProperties,
-		intent: Type.Literal("patch"),
+		elementIntent: Type.Literal("patch"),
 		elements: Type.Array(ascetElementPatchSchema),
 	}),
 	strictObject({
 		...planCommonProperties,
-		intent: Type.Literal("upsert"),
+		elementIntent: Type.Literal("upsert"),
 		elements: Type.Array(Type.Union([ascetElementCreateSchema, ascetElementPatchSchema])),
 	}),
 	strictObject({
 		...planCommonProperties,
-		intent: Type.Literal("restore"),
+		elementIntent: Type.Literal("restore"),
 		elements: Type.Array(ascetElementCreateSchema),
 	}),
 ]);
 
-export const ascetApplyElementSpecCommitSchema = strictObject({
-	action: Type.Literal("apply_element_spec"),
-	phase: Type.Literal("commit"),
-	planId: Type.String({ minLength: 1 }),
-	...ascetWriteControlProperties,
-});
-
-export const ascetApplyElementSpecParameters = Type.Union([
-	ascetApplyElementSpecPlanSchema,
-	ascetApplyElementSpecCommitSchema,
-]);
+export const ascetApplyElementSpecParameters = ascetApplyElementSpecPlanSchema;
 
 export interface NormalizedElementSpecResult {
 	spec: { elements: Record<string, unknown>[] };

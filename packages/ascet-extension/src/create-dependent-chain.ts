@@ -1,5 +1,4 @@
-import { Type } from "typebox";
-import { Value } from "typebox/value";
+﻿import { Value } from "typebox/value";
 import type { AscetCliJsonResult } from "./cli.ts";
 import {
 	type ConfigureParameterDependencyChainOptions,
@@ -14,20 +13,26 @@ import type { AscetMutationResultEnvelope } from "./edit/mutation-result.ts";
 import { fingerprintAscetValue } from "./edit/preflight/fingerprint.ts";
 import { createAscetMutationPreflightEvidence } from "./edit/preflight/service.ts";
 import type { AscetMutationPreflightResult, AscetPlannedEffect } from "./edit/preflight/types.ts";
-import {
-	type AscetConsumerImportedParameterCreateInput,
-	type AscetLocalDependentParameterCreateInput,
-	type AscetParameterDataDecision,
-	type AscetParameterImplementationDecision,
-	type AscetParameterRangeDecision,
-	type AscetProviderExportedParameterCreateInput,
-	ascetParameterDataDecisionSchema,
-	ascetParameterImplementationDecisionSchema,
-	ascetParameterRangeDecisionSchema,
+import type {
+	AscetConsumerImportedParameterCreateInput,
+	AscetLocalDependentParameterCreateInput,
+	AscetProviderExportedParameterCreateInput,
 } from "./element-spec-contract.ts";
 import { getAscetDatabaseIdentity, runAscetGet } from "./get.ts";
-import { parseAscetPermissionRules } from "./permissions/settings.ts";
-import type { PermissionMode } from "./permissions/types.ts";
+import {
+	type AscetCreateDependentChainParams,
+	ascetCreateDependentChainActionSchema,
+} from "./tools/actions/contracts/dependency.ts";
+
+export {
+	type AscetCreateDependentChainImportedElement,
+	type AscetCreateDependentChainLocalElement,
+	type AscetCreateDependentChainParams,
+	type AscetCreateDependentChainProviderElement,
+	ascetCreateDependentChainActionSchema,
+} from "./tools/actions/contracts/dependency.ts";
+
+import { type AscetPermissionSnapshot, resolveAscetPermissionSnapshot } from "./permissions/types.ts";
 import { parseAscetElementSearchHint } from "./read-dependent-chain.ts";
 import { runAscetReadElement } from "./read-element.ts";
 import { normalizeAscetSearchResult, runAscetSearch } from "./search.ts";
@@ -37,56 +42,8 @@ const PROVIDER_SEARCH_LIMIT = 20;
 const BRIDGE_OPERATION = "configure_parameter_dependency_chain_execute";
 type JsonRecord = Record<string, unknown>;
 
-export interface AscetCreateDependentChainProviderElement {
-	name: string;
-	modelType: string;
-	unit: string;
-	comment: string;
-	calibration: boolean;
-	range: AscetParameterRangeDecision;
-	data: AscetParameterDataDecision;
-	implementation: AscetParameterImplementationDecision;
-}
-
-export interface AscetCreateDependentChainImportedElement {
-	name: string;
-	modelType: string;
-	unit?: string;
-}
-
-export interface AscetCreateDependentChainLocalElement {
-	name: string;
-	modelType: string;
-	unit: string;
-	comment: string;
-	calibration: boolean;
-	range: AscetParameterRangeDecision;
-	implementation: AscetParameterImplementationDecision;
-}
-
-export interface AscetCreateDependentChainParams {
-	action: "create_dependent_chain";
-	provider: {
-		componentPath?: string;
-		element: AscetCreateDependentChainProviderElement;
-	};
-	consumer: {
-		componentPath: string;
-		importedElement: AscetCreateDependentChainImportedElement;
-		localElement: AscetCreateDependentChainLocalElement;
-	};
-	binding: {
-		formula: string;
-		formal: string;
-		variantPolicy: "default" | "selected" | "all";
-		variants?: string[];
-	};
-	intent: "preview" | "apply";
-}
-
 export interface AscetCreateDependentChainContext extends AscetEditApprovalContext {
-	permissionMode?: PermissionMode;
-	getSettings?: () => Readonly<Record<string, unknown>>;
+	ascetPermission?: AscetPermissionSnapshot;
 }
 
 export interface AscetCreateDependentChainResult {
@@ -121,74 +78,6 @@ interface CollectedPreflight {
 	bridge?: ConfigureParameterDependencyChainResult;
 }
 
-const providerElementSchema = Type.Object(
-	{
-		name: Type.String({ minLength: 1 }),
-		modelType: Type.String({ minLength: 1 }),
-		unit: Type.String(),
-		comment: Type.String(),
-		calibration: Type.Boolean(),
-		range: ascetParameterRangeDecisionSchema,
-		data: ascetParameterDataDecisionSchema,
-		implementation: ascetParameterImplementationDecisionSchema,
-	},
-	{ additionalProperties: false },
-);
-
-const importedElementSchema = Type.Object(
-	{
-		name: Type.String({ minLength: 1 }),
-		modelType: Type.String({ minLength: 1 }),
-		unit: Type.Optional(Type.String()),
-	},
-	{ additionalProperties: false },
-);
-
-const localElementSchema = Type.Object(
-	{
-		name: Type.String({ minLength: 1 }),
-		modelType: Type.String({ minLength: 1 }),
-		unit: Type.String(),
-		comment: Type.String(),
-		calibration: Type.Boolean(),
-		range: ascetParameterRangeDecisionSchema,
-		implementation: ascetParameterImplementationDecisionSchema,
-	},
-	{ additionalProperties: false },
-);
-
-export const ascetCreateDependentChainActionSchema = Type.Object(
-	{
-		action: Type.Literal("create_dependent_chain"),
-		provider: Type.Object(
-			{
-				componentPath: Type.Optional(Type.String({ minLength: 1 })),
-				element: providerElementSchema,
-			},
-			{ additionalProperties: false },
-		),
-		consumer: Type.Object(
-			{
-				componentPath: Type.String({ minLength: 1 }),
-				importedElement: importedElementSchema,
-				localElement: localElementSchema,
-			},
-			{ additionalProperties: false },
-		),
-		binding: Type.Object(
-			{
-				formula: Type.String({ minLength: 1 }),
-				formal: Type.String({ minLength: 1 }),
-				variantPolicy: Type.Union([Type.Literal("default"), Type.Literal("selected"), Type.Literal("all")]),
-				variants: Type.Optional(Type.Array(Type.String({ minLength: 1 }), { minItems: 1, uniqueItems: true })),
-			},
-			{ additionalProperties: false },
-		),
-		intent: Type.Union([Type.Literal("preview"), Type.Literal("apply")]),
-	},
-	{ additionalProperties: false },
-);
-
 export async function runAscetCreateDependentChain(
 	params: AscetCreateDependentChainParams,
 	options: ConfigureParameterDependencyChainOptions,
@@ -214,11 +103,12 @@ export async function runAscetCreateDependentChain(
 		latestBridge = collected.bridge;
 		return collected.result;
 	};
+	const permission = resolveAscetPermissionSnapshot(ctx);
 	const guarded = await runGuardedAscetMutation({
 		action: "create_dependent_chain",
 		intent: params.intent,
-		permissionMode: ctx.permissionMode ?? "default",
-		rules: parseAscetPermissionRules(ctx.getSettings?.()),
+		permissionMode: permission.mode,
+		rules: permission.rules,
 		signal: options.signal,
 		ctx,
 		maxMaterialChanges: 0,

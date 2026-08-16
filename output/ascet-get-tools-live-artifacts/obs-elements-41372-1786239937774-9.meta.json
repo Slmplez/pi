@@ -1,0 +1,16 @@
+{
+  "resultId": "obs-elements-41372-1786239937774-9",
+  "domain": "elements",
+  "target": {
+    "path": "PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\Config\\CM_SCM"
+  },
+  "itemCount": 11,
+  "coverage": {
+    "status": "complete_for_scope",
+    "foldersVisited": 0,
+    "componentsScanned": 1
+  },
+  "truncated": false,
+  "source": "live",
+  "capturedAt": "2026-08-09T01:45:37.774Z"
+}

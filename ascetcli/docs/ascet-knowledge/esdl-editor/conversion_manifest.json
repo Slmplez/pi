@@ -1,0 +1,675 @@
+{
+  "generated_at": "2026-03-28T03:17:52.885266Z",
+  "input_chm": "E:\\ETAS\\ASCET6.4\\Help\\ESDLEditorEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\esdl-editor-5pehz05s\\export",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\esdl-editor-5pehz05s\\export\\markdown",
+  "input_html_count": 110,
+  "converted_html_count": 110,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 82,
+  "toc_entries_count": 126,
+  "index_entries_count": 365,
+  "index_required": false,
+  "mappings": [
+    {
+      "html_rel_path": "Arithmetic_Operators.htm",
+      "md_rel_path": "Arithmetic_Operators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "break.htm",
+      "md_rel_path": "break.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "codegen_dbtoolarge.htm",
+      "md_rel_path": "codegen_dbtoolarge.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Comparison_Operators.htm",
+      "md_rel_path": "Comparison_Operators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "conditional_operator_mux.htm",
+      "md_rel_path": "conditional_operator_mux.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Creating_class_module.htm",
+      "md_rel_path": "Creating_class_module.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "creating_esdl_code.htm",
+      "md_rel_path": "creating_esdl_code.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "editing_esdl_code.htm",
+      "md_rel_path": "editing_esdl_code.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "end-external-editor.htm",
+      "md_rel_path": "end-external-editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "esdl_access_control.htm",
+      "md_rel_path": "esdl_access_control.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "esdl_accessing_block_diagrams_from_esdl.htm",
+      "md_rel_path": "esdl_accessing_block_diagrams_from_esdl.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_AdaptiveCharacteristic_Restrictions.htm",
+      "md_rel_path": "ESDL_AdaptiveCharacteristic_Restrictions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_analyze_diagram.htm",
+      "md_rel_path": "ESDL_analyze_diagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_analyzing_esdl_components.htm",
+      "md_rel_path": "ESDL_analyzing_esdl_components.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Arrays_-_Description.htm",
+      "md_rel_path": "ESDL_Arrays_-_Description.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_AssertOperation.htm",
+      "md_rel_path": "ESDL_AssertOperation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Browse_View.htm",
+      "md_rel_path": "ESDL_Browse_View.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Build_Menu.htm",
+      "md_rel_path": "ESDL_Build_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Comments.htm",
+      "md_rel_path": "ESDL_Comments.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "esdl_contextmenu_browseview.htm",
+      "md_rel_path": "esdl_contextmenu_browseview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "esdl_contextmenu_componentselements.htm",
+      "md_rel_path": "esdl_contextmenu_componentselements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "esdl_contextmenu_diagrammethods.htm",
+      "md_rel_path": "esdl_contextmenu_diagrammethods.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_ControlFlow_Summary.htm",
+      "md_rel_path": "ESDL_ControlFlow_Summary.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_ConversionOperations.htm",
+      "md_rel_path": "ESDL_ConversionOperations.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Data_Types.htm",
+      "md_rel_path": "ESDL_Data_Types.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Description_of_WindowElement.htm",
+      "md_rel_path": "ESDL_Description_of_WindowElement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Direct_Access_Methods.htm",
+      "md_rel_path": "ESDL_Direct_Access_Methods.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "esdl_distributions_and_group_tables_-_description.htm",
+      "md_rel_path": "esdl_distributions_and_group_tables_-_description.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_DoWhile.htm",
+      "md_rel_path": "ESDL_DoWhile.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Edit_Menu.htm",
+      "md_rel_path": "ESDL_Edit_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Elements_Palette.htm",
+      "md_rel_path": "ESDL_Elements_Palette.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Enumerations.htm",
+      "md_rel_path": "ESDL_Enumerations.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "esdl_esdl_as_modellinglanguage.htm",
+      "md_rel_path": "esdl_esdl_as_modellinglanguage.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_ESDL_Syntax.htm",
+      "md_rel_path": "ESDL_ESDL_Syntax.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "esdl_esdl_vs._block_diagrams.htm",
+      "md_rel_path": "esdl_esdl_vs._block_diagrams.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "esdl_example__access_to_mathematical_functions.htm",
+      "md_rel_path": "esdl_example__access_to_mathematical_functions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Example__For.htm",
+      "md_rel_path": "ESDL_Example__For.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Example__SwitchCaseDefault.htm",
+      "md_rel_path": "ESDL_Example__SwitchCaseDefault.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Example__To_Build_the_Integrator_Element.htm",
+      "md_rel_path": "ESDL_Example__To_Build_the_Integrator_Element.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Example_AssertOperation.htm",
+      "md_rel_path": "ESDL_Example_AssertOperation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Example_ConversionOperations.htm",
+      "md_rel_path": "ESDL_Example_ConversionOperations.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_ExampleDoWhile.htm",
+      "md_rel_path": "ESDL_ExampleDoWhile.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_External_Editor_View.htm",
+      "md_rel_path": "ESDL_External_Editor_View.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Extras_Menu.htm",
+      "md_rel_path": "ESDL_Extras_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_File_Menu.htm",
+      "md_rel_path": "ESDL_File_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "esdl_filtering_the_component_pane.htm",
+      "md_rel_path": "esdl_filtering_the_component_pane.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_FindReplace_code.htm",
+      "md_rel_path": "ESDL_FindReplace_code.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Help_Menu.htm",
+      "md_rel_path": "ESDL_Help_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Implementation_Casts_in_ESDL.htm",
+      "md_rel_path": "ESDL_Implementation_Casts_in_ESDL.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_IncludeComponent_BlockLibrary.htm",
+      "md_rel_path": "ESDL_IncludeComponent_BlockLibrary.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Insert_Menu.htm",
+      "md_rel_path": "ESDL_Insert_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Library_Palette.htm",
+      "md_rel_path": "ESDL_Library_Palette.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "esdl_linear_interpolation(1d).htm",
+      "md_rel_path": "esdl_linear_interpolation(1d).md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "esdl_linear_interpolation_(2d).htm",
+      "md_rel_path": "esdl_linear_interpolation_(2d).md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Mathematical_Functions.htm",
+      "md_rel_path": "ESDL_Mathematical_Functions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Mathematical_Functions__Summary.htm",
+      "md_rel_path": "ESDL_Mathematical_Functions__Summary.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "esdl_matrices_-_description.htm",
+      "md_rel_path": "esdl_matrices_-_description.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Menu_Bar.htm",
+      "md_rel_path": "ESDL_Menu_Bar.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Messages.htm",
+      "md_rel_path": "ESDL_Messages.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Methods.htm",
+      "md_rel_path": "ESDL_Methods.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Methods_with_a_Return_Value.htm",
+      "md_rel_path": "ESDL_Methods_with_a_Return_Value.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Nested_Methods.htm",
+      "md_rel_path": "ESDL_Nested_Methods.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_One-Dimensional_Tables_-_Description.htm",
+      "md_rel_path": "ESDL_One-Dimensional_Tables_-_Description.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Overview.htm",
+      "md_rel_path": "ESDL_Overview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Overview_-_Composite_Data_Types.htm",
+      "md_rel_path": "ESDL_Overview_-_Composite_Data_Types.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Palettes.htm",
+      "md_rel_path": "ESDL_Palettes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Primitive_Methods.htm",
+      "md_rel_path": "ESDL_Primitive_Methods.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Public_Interface_of_Arrays.htm",
+      "md_rel_path": "ESDL_Public_Interface_of_Arrays.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Public_Interface_of_Distributions_and_Group_Tables.htm",
+      "md_rel_path": "ESDL_Public_Interface_of_Distributions_and_Group_Tables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Public_Interface_of_Matrices.htm",
+      "md_rel_path": "ESDL_Public_Interface_of_Matrices.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Public_Interface_of_One-Dimensional_Tables.htm",
+      "md_rel_path": "ESDL_Public_Interface_of_One-Dimensional_Tables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Public_Interface_of_Two-Dimensional_Tables.htm",
+      "md_rel_path": "ESDL_Public_Interface_of_Two-Dimensional_Tables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "esdl_reference__esdl_vs._ansi_c.htm",
+      "md_rel_path": "esdl_reference__esdl_vs._ansi_c.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "esdl_reference__esdl_vs._java.htm",
+      "md_rel_path": "esdl_reference__esdl_vs._java.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "esdl_resources.htm",
+      "md_rel_path": "esdl_resources.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Search_replace_print_code.htm",
+      "md_rel_path": "ESDL_Search_replace_print_code.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_SearchDeleteUnusedElements.htm",
+      "md_rel_path": "ESDL_SearchDeleteUnusedElements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_SearchResultsView.htm",
+      "md_rel_path": "ESDL_SearchResultsView.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "esdl_selectdefaultmethodprocess.htm",
+      "md_rel_path": "esdl_selectdefaultmethodprocess.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Specification_View.htm",
+      "md_rel_path": "ESDL_Specification_View.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Structures.htm",
+      "md_rel_path": "ESDL_Structures.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Toolbar_Elements.htm",
+      "md_rel_path": "ESDL_Toolbar_Elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Toolbar_General.htm",
+      "md_rel_path": "ESDL_Toolbar_General.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Toolbars.htm",
+      "md_rel_path": "ESDL_Toolbars.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Tools_Menu.htm",
+      "md_rel_path": "ESDL_Tools_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_TreePane.htm",
+      "md_rel_path": "ESDL_TreePane.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Two-Dimensional_Tables_-_Description.htm",
+      "md_rel_path": "ESDL_Two-Dimensional_Tables_-_Description.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Type_Conversion.htm",
+      "md_rel_path": "ESDL_Type_Conversion.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "esdl_used.htm",
+      "md_rel_path": "esdl_used.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "esdl_using_esdl_in_state_machines.htm",
+      "md_rel_path": "esdl_using_esdl_in_state_machines.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Variable_Names.htm",
+      "md_rel_path": "ESDL_Variable_Names.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_VerifyOperator.htm",
+      "md_rel_path": "ESDL_VerifyOperator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_View_Menu.htm",
+      "md_rel_path": "ESDL_View_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ESDL_Window_Menu.htm",
+      "md_rel_path": "ESDL_Window_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "esdl_working_with_methods_and_processes.htm",
+      "md_rel_path": "esdl_working_with_methods_and_processes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "external_editor.htm",
+      "md_rel_path": "external_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "for.htm",
+      "md_rel_path": "for.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ifelse.htm",
+      "md_rel_path": "ifelse.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "literals_and_constants.htm",
+      "md_rel_path": "literals_and_constants.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Logical_Operators.htm",
+      "md_rel_path": "Logical_Operators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "open-external-editor.htm",
+      "md_rel_path": "open-external-editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Printing_the_C_Code.htm",
+      "md_rel_path": "Printing_the_C_Code.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Shorthand_Assignment_Operators.htm",
+      "md_rel_path": "Shorthand_Assignment_Operators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "specifying_modules.htm",
+      "md_rel_path": "specifying_modules.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "summary.htm",
+      "md_rel_path": "summary.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "switchasedefault.htm",
+      "md_rel_path": "switchasedefault.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "this.htm",
+      "md_rel_path": "this.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Unary_Operators.htm",
+      "md_rel_path": "Unary_Operators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "use_impl.casts.htm",
+      "md_rel_path": "use_impl.casts.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "while.htm",
+      "md_rel_path": "while.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

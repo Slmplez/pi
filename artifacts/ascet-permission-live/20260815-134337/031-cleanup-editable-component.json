@@ -1,0 +1,227 @@
+{
+  "stage": "cleanup-editable-component",
+  "startedAt": "2026-08-15T05:56:56.066Z",
+  "finishedAt": "2026-08-15T05:57:43.082Z",
+  "request": {
+    "toolName": "ascet_edit",
+    "params": {
+      "action": "delete_component",
+      "componentPath": "DEMO\\__pi_permission_smoke__20260815-134337\\EditableClass",
+      "ifMissing": "ignore",
+      "intent": "apply"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"status\": \"ok\",\n  \"permission\": {\n    \"mode\": \"default\",\n    \"decision\": \"ask\",\n    \"risk\": \"high\",\n    \"reason\": \"Default mode requires confirmation for every actual ASCET write.\"\n  },\n  \"preflight\": {\n    \"status\": \"passed\",\n    \"evidence\": {\n      \"version\": 1,\n      \"action\": \"delete_component\",\n      \"paramsFingerprint\": \"88a705bf9b63440b723e445aa05ac43aa1f08323a537befebc1e3c58f0225ad3\",\n      \"database\": {\n        \"path\": \"C:/Repo/F05_IPB_L2_0429\",\n        \"fingerprint\": \"71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c\"\n      },\n      \"target\": {\n        \"path\": \"DEMO/__pi_permission_smoke__20260815-134337/EditableClass\",\n        \"oid\": \"040g00001g001qg7107g85oogkag0\",\n        \"kind\": \"class\"\n      },\n      \"impact\": {\n        \"complete\": true,\n        \"sharedObject\": false,\n        \"ownerPath\": \"DEMO/__pi_permission_smoke__20260815-134337/EditableClass\",\n        \"fingerprint\": \"sha256:adf1ccf22115471ab223b0a48f3eb6a31436bb77dcd8749573bb4cbcacc1ec40\"\n      },\n      \"capability\": {\n        \"status\": \"supported\",\n        \"operation\": \"registered_guarded_operation_preflight\",\n        \"evidence\": {\n          \"status\": \"supported\",\n          \"source\": \"registered_closed_operation\"\n        }\n      },\n      \"editability\": {\n        \"applicable\": true,\n        \"status\": \"editable\",\n        \"canRequestEditable\": false\n      },\n      \"effects\": [\n        {\n          \"kind\": \"delete_component\",\n          \"target\": \"DEMO/__pi_permission_smoke__20260815-134337/EditableClass\",\n          \"description\": \"delete_component: DEMO\\\\__pi_permission_smoke__20260815-134337\\\\EditableClass\"\n        }\n      ],\n      \"verification\": {\n        \"available\": true,\n        \"operation\": \"delete_component_readback\",\n        \"target\": {\n          \"path\": \"DEMO/__pi_permission_smoke__20260815-134337/EditableClass\"\n        }\n      },\n      \"noOp\": false,\n      \"generatedAt\": \"2026-08-15T05:57:42.002Z\",\n      \"approvalMaterialFingerprint\": \"1c05c2d27908b8b4566e87860ce8e98debd72d93fab37eff0e118a4f96b7d9bc\"\n    }\n  },\n  \"editability\": {\n    \"status\": \"editable\"\n  },\n  \"mutation\": {\n    \"status\": \"applied\"\n  },\n  \"verification\": {\n    \"status\": \"passed\"\n  },\n  \"audit\": {\n    \"approvedAt\": \"2026-08-15T05:57:18.663Z\",\n    \"revalidatedAt\": \"2026-08-15T05:57:42.002Z\",\n    \"preflightFingerprint\": \"88a705bf9b63440b723e445aa05ac43aa1f08323a537befebc1e3c58f0225ad3\",\n    \"approvalMaterialFingerprint\": \"1c05c2d27908b8b4566e87860ce8e98debd72d93fab37eff0e118a4f96b7d9bc\"\n  },\n  \"bridge\": {\n    \"beforeBridge\": true,\n    \"bridgeEntered\": true,\n    \"backendResponseReceived\": true\n  },\n  \"recovery\": {\n    \"required\": false\n  }\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "ok",
+        "verified": true,
+        "data": {
+          "changed": {
+            "componentPath": "DEMO\\__pi_permission_smoke__20260815-134337\\EditableClass",
+            "folderPath": "DEMO\\__pi_permission_smoke__20260815-134337",
+            "componentName": "EditableClass",
+            "deleted": true,
+            "alreadyMissing": false,
+            "summary": "Deleted component DEMO\\__pi_permission_smoke__20260815-134337\\EditableClass."
+          },
+          "verification": {
+            "mode": "automatic_readback",
+            "source": "write_command",
+            "required": true,
+            "requested": true,
+            "verified": true,
+            "status": "passed"
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      },
+      "raw": {
+        "ok": true,
+        "data": {
+          "type": "response",
+          "protocolVersion": 1,
+          "ok": true,
+          "result": {
+            "componentPath": "DEMO\\__pi_permission_smoke__20260815-134337\\EditableClass",
+            "folderPath": "DEMO\\__pi_permission_smoke__20260815-134337",
+            "componentName": "EditableClass",
+            "deleted": true,
+            "alreadyMissing": false,
+            "verifyReadbackRequested": true,
+            "readbackVerified": true,
+            "summary": "Deleted component DEMO\\__pi_permission_smoke__20260815-134337\\EditableClass."
+          },
+          "error": null,
+          "meta": {
+            "bridgePid": 2184,
+            "bridgeGeneration": "b11be72e-7e58-4ca3-8411-7f5ec5d0abf3",
+            "durationMs": 566,
+            "sessionPolicy": "fresh_session",
+            "mutationStarted": true,
+            "mode": "exec",
+            "operation": "delete_component"
+          }
+        },
+        "request": {
+          "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "delete_component",
+            "DEMO\\__pi_permission_smoke__20260815-134337\\EditableClass",
+            "--if-missing",
+            "ignore",
+            "--verify-readback",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "write",
+          "mutatesDatabase": true
+        },
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"componentPath\":\"DEMO\\\\__pi_permission_smoke__20260815-134337\\\\EditableClass\",\"folderPath\":\"DEMO\\\\__pi_permission_smoke__20260815-134337\",\"componentName\":\"EditableClass\",\"deleted\":true,\"alreadyMissing\":false,\"verifyReadbackRequested\":true,\"readbackVerified\":true,\"summary\":\"Deleted component DEMO\\\\__pi_permission_smoke__20260815-134337\\\\EditableClass.\"},\"error\":null,\"meta\":{\"bridgePid\":2184,\"bridgeGeneration\":\"b11be72e-7e58-4ca3-8411-7f5ec5d0abf3\",\"durationMs\":566,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":true,\"mode\":\"exec\",\"operation\":\"delete_component\"}}\r\n",
+        "stderr": "",
+        "exitCode": 0,
+        "timedOut": false,
+        "aborted": false,
+        "operationId": "delete_component"
+      },
+      "observations": {
+        "invalidated": []
+      },
+      "verification": {
+        "mode": "automatic_readback",
+        "source": "write_command",
+        "required": true,
+        "requested": true,
+        "verified": true,
+        "status": "passed"
+      },
+      "mutationResult": {
+        "status": "ok",
+        "permission": {
+          "mode": "default",
+          "decision": "ask",
+          "risk": "high",
+          "reason": "Default mode requires confirmation for every actual ASCET write."
+        },
+        "preflight": {
+          "status": "passed",
+          "evidence": {
+            "version": 1,
+            "action": "delete_component",
+            "paramsFingerprint": "88a705bf9b63440b723e445aa05ac43aa1f08323a537befebc1e3c58f0225ad3",
+            "database": {
+              "path": "C:\\Repo\\F05_IPB_L2_0429",
+              "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+            },
+            "target": {
+              "path": "DEMO\\__pi_permission_smoke__20260815-134337\\EditableClass",
+              "oid": "040g00001g001qg7107g85oogkag0",
+              "kind": "class"
+            },
+            "impact": {
+              "complete": true,
+              "sharedObject": false,
+              "ownerPath": "DEMO\\__pi_permission_smoke__20260815-134337\\EditableClass",
+              "affectedProjects": [],
+              "fingerprint": "sha256:adf1ccf22115471ab223b0a48f3eb6a31436bb77dcd8749573bb4cbcacc1ec40"
+            },
+            "capability": {
+              "status": "supported",
+              "operation": "registered_guarded_operation_preflight",
+              "evidence": {
+                "status": "supported",
+                "source": "registered_closed_operation"
+              }
+            },
+            "editability": {
+              "applicable": true,
+              "status": "editable",
+              "canRequestEditable": false
+            },
+            "effects": [
+              {
+                "kind": "delete_component",
+                "target": "DEMO\\__pi_permission_smoke__20260815-134337\\EditableClass",
+                "description": "delete_component: DEMO\\__pi_permission_smoke__20260815-134337\\EditableClass"
+              }
+            ],
+            "verification": {
+              "available": true,
+              "operation": "delete_component_readback",
+              "target": {
+                "path": "DEMO\\__pi_permission_smoke__20260815-134337\\EditableClass"
+              }
+            },
+            "riskModifiers": [],
+            "noOp": false,
+            "generatedAt": "2026-08-15T05:57:42.002Z",
+            "approvalMaterialFingerprint": "1c05c2d27908b8b4566e87860ce8e98debd72d93fab37eff0e118a4f96b7d9bc"
+          }
+        },
+        "editability": {
+          "status": "editable"
+        },
+        "mutation": {
+          "status": "applied"
+        },
+        "verification": {
+          "status": "passed"
+        },
+        "audit": {
+          "approvedAt": "2026-08-15T05:57:18.663Z",
+          "revalidatedAt": "2026-08-15T05:57:42.002Z",
+          "preflightFingerprint": "88a705bf9b63440b723e445aa05ac43aa1f08323a537befebc1e3c58f0225ad3",
+          "approvalMaterialFingerprint": "1c05c2d27908b8b4566e87860ce8e98debd72d93fab37eff0e118a4f96b7d9bc"
+        },
+        "bridge": {
+          "beforeBridge": true,
+          "bridgeEntered": true,
+          "backendResponseReceived": true
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      },
+      "tool": "ascet_edit",
+      "action": "delete_component",
+      "command": {
+        "logicalCommandId": "AscetDeleteComponent",
+        "backendCommandId": "AscetDeleteComponent",
+        "operation": "delete_component"
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "delete_component",
+            "DEMO\\__pi_permission_smoke__20260815-134337\\EditableClass",
+            "--if-missing",
+            "ignore",
+            "--verify-readback",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "write",
+          "mutatesDatabase": true
+        },
+        "exitCode": 0,
+        "timedOut": false,
+        "stderr": ""
+      }
+    }
+  }
+}

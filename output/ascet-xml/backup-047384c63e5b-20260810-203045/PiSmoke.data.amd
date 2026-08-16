@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ComponentData toolVersion="V6.1.5_2.2.0" schemaVersion="6.1.0.0">
+	<DataSet name="PiSmoke" OID="_040g00001g001qg71051sci86org8" default="false" classConfig="true">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-10T12:30:44" timeStampCounter="2926"/>
+	</DataSet>
+	<DataSet name="Data" OID="_040g00001g001qg71051sci84oq08" default="true" classConfig="false">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-10T12:30:43" timeStampCounter="2911"/>
+		<DataEntry elementName="C_Smoke" elementOID="_040g00001g001qg71051scirhsu08">
+			<DataVariant name="default">
+				<ScalarType>
+					<Numeric value="0.0"/>
+				</ScalarType>
+			</DataVariant>
+		</DataEntry>
+	</DataSet>
+	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+		<SignedInfo>
+			<CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+			<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+			<Reference>
+				<Transforms>
+					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+				</Transforms>
+				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+				<DigestValue>40zyPxHLynVQuWtOGEm2PmKml+s=</DigestValue>
+			</Reference>
+		</SignedInfo>
+		<SignatureValue>lEiguUXiapCpDuPxrqq6abdACNV+/yaK0Z8TYK+HD5Dx+jJO1MJMeodRZKC6PDvk
+7dQBkdnM++sLzjgG4M8ylgi0en3HXHZfHiZumgxOxRL2LsKk1AlXCMq1UCbgK6c2
+XVvcoGofhreuflT9VK52U3CF+i8YevygJTKFcXWRJGGwvrV5FwywgVTa/dmaPjT2
+64inUvjvy2451baaz6i2IonwE5onl9pF90YG9esO2sJ1oXnmM21LIyVsMaPDHYCk
+p9Y/UjZbe1nUj+90JS6/sbjA/7QWjJqD+68oqSX9Xp9cYAWs6XEL5Cr4g/ZrSvi1
+wMPa1bKxtpDiht2sXUVrog==</SignatureValue>
+		<KeyInfo>
+			<KeyName>Etas Ascet Verification</KeyName>
+		</KeyInfo>
+	</Signature>
+</ComponentData>

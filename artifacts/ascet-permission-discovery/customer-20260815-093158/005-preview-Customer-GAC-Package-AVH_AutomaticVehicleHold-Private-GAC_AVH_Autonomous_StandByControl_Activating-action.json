@@ -1,0 +1,166 @@
+{
+  "stage": "preview-Customer\\GAC\\Package\\AVH_AutomaticVehicleHold\\Private\\GAC_AVH_Autonomous_StandByControl_Activating-action",
+  "request": {
+    "toolName": "ascet_edit",
+    "params": {
+      "action": "create_method",
+      "componentPath": "Customer\\GAC\\Package\\AVH_AutomaticVehicleHold\\Private\\GAC_AVH_Autonomous_StandByControl_Activating",
+      "componentKind": "statemachine",
+      "methodName": "__PiPermissionProbe__",
+      "methodKind": "action",
+      "ifExists": "fail",
+      "intent": "preview"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"status\": \"error\",\n  \"permission\": {\n    \"mode\": \"default\",\n    \"decision\": \"not_evaluated\"\n  },\n  \"preflight\": {\n    \"status\": \"failed\"\n  },\n  \"editability\": {\n    \"status\": \"unknown\"\n  },\n  \"mutation\": {\n    \"status\": \"not_started\"\n  },\n  \"verification\": {\n    \"status\": \"missing\"\n  },\n  \"error\": {\n    \"code\": \"create_method_capability_not_supported\",\n    \"message\": \"Diagram 'Main' does not support creating 'Action'.\"\n  },\n  \"bridge\": {\n    \"beforeBridge\": false,\n    \"bridgeEntered\": false,\n    \"backendResponseReceived\": false\n  },\n  \"recovery\": {\n    \"required\": false\n  }\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "error",
+        "error": {
+          "code": "create_method_capability_not_supported",
+          "message": "Diagram 'Main' does not support creating 'Action'."
+        }
+      },
+      "raw": {
+        "ok": true,
+        "data": {
+          "type": "response",
+          "protocolVersion": 1,
+          "ok": true,
+          "result": {
+            "databasePath": "C:\\Repo\\F05_IPB_L2_0429",
+            "componentPath": "Customer\\GAC\\Package\\AVH_AutomaticVehicleHold\\Private\\GAC_AVH_Autonomous_StandByControl_Activating",
+            "componentOid": "040g00001g001pg710cq9pgdbpu06",
+            "componentKind": "StateMachine",
+            "languageKind": "ESDL",
+            "diagramName": "Main",
+            "diagramExists": true,
+            "diagramRuntimeType": "de.etas.cebra.toolAPI.Ascet.StateMachineDiagram",
+            "requiredMethod": "AddAction",
+            "requiredSignature": "AddAction(String)",
+            "requiredMethodAvailable": false,
+            "addDiagramAvailable": false,
+            "futureMethodCapabilityProven": true,
+            "editable": false,
+            "readbackAvailable": true,
+            "noOp": false,
+            "existingMethod": null,
+            "plannedEffects": [],
+            "capability": {
+              "status": "unsupported",
+              "operation": "AddAction",
+              "failureCode": "create_method_capability_not_supported",
+              "failureMessage": "Diagram 'Main' does not support creating 'Action'."
+            }
+          },
+          "error": null,
+          "meta": {
+            "bridgePid": 20652,
+            "bridgeGeneration": "9cbd085b-e19b-4626-a15c-f2c33961c14b",
+            "durationMs": 414,
+            "sessionPolicy": "fresh_session",
+            "mutationStarted": false,
+            "mode": "exec",
+            "operation": "preflight_create_method"
+          }
+        },
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "preflight_create_method",
+            "Customer\\GAC\\Package\\AVH_AutomaticVehicleHold\\Private\\GAC_AVH_Autonomous_StandByControl_Activating",
+            "__PiPermissionProbe__",
+            "--method-kind",
+            "action",
+            "--if-exists",
+            "fail",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"databasePath\":\"C:\\\\Repo\\\\F05_IPB_L2_0429\",\"componentPath\":\"Customer\\\\GAC\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Private\\\\GAC_AVH_Autonomous_StandByControl_Activating\",\"componentOid\":\"040g00001g001pg710cq9pgdbpu06\",\"componentKind\":\"StateMachine\",\"languageKind\":\"ESDL\",\"diagramName\":\"Main\",\"diagramExists\":true,\"diagramRuntimeType\":\"de.etas.cebra.toolAPI.Ascet.StateMachineDiagram\",\"requiredMethod\":\"AddAction\",\"requiredSignature\":\"AddAction(String)\",\"requiredMethodAvailable\":false,\"addDiagramAvailable\":false,\"futureMethodCapabilityProven\":true,\"editable\":false,\"readbackAvailable\":true,\"noOp\":false,\"existingMethod\":null,\"plannedEffects\":[],\"capability\":{\"status\":\"unsupported\",\"operation\":\"AddAction\",\"failureCode\":\"create_method_capability_not_supported\",\"failureMessage\":\"Diagram \\u0027Main\\u0027 does not support creating \\u0027Action\\u0027.\"}},\"error\":null,\"meta\":{\"bridgePid\":20652,\"bridgeGeneration\":\"9cbd085b-e19b-4626-a15c-f2c33961c14b\",\"durationMs\":414,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"preflight_create_method\"}}\r\n",
+        "stderr": "",
+        "exitCode": 0,
+        "timedOut": false,
+        "aborted": false,
+        "operationId": "preflight_create_method"
+      },
+      "error": {
+        "code": "create_method_capability_not_supported",
+        "message": "Diagram 'Main' does not support creating 'Action'."
+      },
+      "mutationResult": {
+        "status": "error",
+        "permission": {
+          "mode": "default",
+          "decision": "not_evaluated"
+        },
+        "preflight": {
+          "status": "failed"
+        },
+        "editability": {
+          "status": "unknown"
+        },
+        "mutation": {
+          "status": "not_started"
+        },
+        "verification": {
+          "status": "missing"
+        },
+        "error": {
+          "code": "create_method_capability_not_supported",
+          "message": "Diagram 'Main' does not support creating 'Action'."
+        },
+        "bridge": {
+          "beforeBridge": false,
+          "bridgeEntered": false,
+          "backendResponseReceived": false
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      },
+      "tool": "ascet_edit",
+      "action": "create_method",
+      "command": {
+        "logicalCommandId": "AscetCreateMethod",
+        "backendCommandId": "AscetCreateMethod",
+        "operation": "create_method"
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "preflight_create_method",
+            "Customer\\GAC\\Package\\AVH_AutomaticVehicleHold\\Private\\GAC_AVH_Autonomous_StandByControl_Activating",
+            "__PiPermissionProbe__",
+            "--method-kind",
+            "action",
+            "--if-exists",
+            "fail",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 0,
+        "timedOut": false,
+        "stderr": ""
+      }
+    }
+  }
+}

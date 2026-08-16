@@ -1,0 +1,142 @@
+{
+  "version": 1,
+  "status": "applied",
+  "databaseFingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c",
+  "targetOid": "040qm00000001og71g9060v0i6m5c",
+  "targetKind": "class",
+  "canonicalPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW",
+  "action": "create_method",
+  "planId": "93774a67-0a7c-4098-a6f1-6bc5895402e5",
+  "planFingerprint": "29a41ae0228f04e4dac7ccb55aebe9c50aa7329503727325007ef22e80eeff2d",
+  "targetImpactFingerprint": "sha256:0959846eab0d01dc6e863f219c84eeb75fcb1a4872d3cd197967f0af42490c14",
+  "guardGeneration": 0,
+  "beforeSnapshotFingerprint": "sha256:32b4731db9ef750b78757d674e1ec4a981aacbae24be7988a3b6b6816e5cdf43",
+  "desiredFingerprint": "sha256:eea05b93c4397d97ed3be6270dec33be5b592ffbc2d4ea1f0c983553afcb893f",
+  "beforeSnapshot": {
+    "operation": "authoritative_single_call_preflight",
+    "validated": true,
+    "authoritativePlan": {
+      "operation": "preflight_create_method",
+      "validated": true,
+      "result": {
+        "databasePath": "C:\\Repo\\F05_IPB_L2_0429",
+        "componentPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW",
+        "componentOid": "040qm00000001og71g9060v0i6m5c",
+        "componentKind": "Class",
+        "languageKind": "ESDL",
+        "diagramName": "Main",
+        "diagramExists": true,
+        "diagramRuntimeType": "de.etas.cebra.toolAPI.Ascet.DiscreteMethodDiagram",
+        "requiredMethod": "AddMethod",
+        "requiredSignature": "AddMethod(String)",
+        "requiredMethodAvailable": true,
+        "addDiagramAvailable": false,
+        "futureMethodCapabilityProven": true,
+        "editable": false,
+        "readbackAvailable": true,
+        "noOp": false,
+        "existingMethod": null,
+        "plannedEffects": [
+          {
+            "kind": "create_method",
+            "target": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW::PiCompoundMethod",
+            "methodKind": "AbstractMethod"
+          }
+        ],
+        "capability": {
+          "status": "supported",
+          "operation": "AddMethod",
+          "failureCode": "",
+          "failureMessage": ""
+        }
+      }
+    },
+    "normalizedEvidence": {
+      "version": 1,
+      "action": "create_method",
+      "paramsFingerprint": "eea05b93c4397d97ed3be6270dec33be5b592ffbc2d4ea1f0c983553afcb893f",
+      "database": {
+        "path": "C:\\Repo\\F05_IPB_L2_0429",
+        "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+      },
+      "target": {
+        "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW",
+        "oid": "040qm00000001og71g9060v0i6m5c",
+        "kind": "class"
+      },
+      "impact": {
+        "complete": true,
+        "sharedObject": false,
+        "ownerPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW",
+        "affectedProjects": [],
+        "fingerprint": "sha256:0959846eab0d01dc6e863f219c84eeb75fcb1a4872d3cd197967f0af42490c14"
+      },
+      "capability": {
+        "status": "supported",
+        "operation": "AddMethod",
+        "evidence": {
+          "status": "supported",
+          "operation": "AddMethod",
+          "failureCode": "",
+          "failureMessage": ""
+        }
+      },
+      "editability": {
+        "applicable": true,
+        "status": "read_only",
+        "canRequestEditable": true
+      },
+      "effects": [
+        {
+          "kind": "request_editability",
+          "target": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW",
+          "description": "Request component editability for Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW"
+        },
+        {
+          "kind": "create_method",
+          "target": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW::PiCompoundMethod",
+          "description": "create_method: Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW::PiCompoundMethod"
+        }
+      ],
+      "verification": {
+        "available": true,
+        "operation": "create_method_readback",
+        "target": {
+          "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW"
+        }
+      },
+      "riskModifiers": [],
+      "noOp": false,
+      "generatedAt": "2026-08-16T02:31:10.402Z",
+      "approvalMaterialFingerprint": "6c571902fa74d623f364df6c794b2d9b1422b4623088d5f942016ba04eff0d02"
+    },
+    "permissionMode": "acceptEdits",
+    "permissionDecision": "ask",
+    "risk": "medium",
+    "approvedAt": "2026-08-16T02:30:45.604Z",
+    "revalidatedAt": "2026-08-16T02:31:10.402Z",
+    "targetIdentity": {
+      "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW",
+      "oid": "040qm00000001og71g9060v0i6m5c",
+      "kind": "class"
+    },
+    "targetImpactFingerprint": "sha256:0959846eab0d01dc6e863f219c84eeb75fcb1a4872d3cd197967f0af42490c14"
+  },
+  "attemptedMutation": {
+    "action": "create_method",
+    "componentPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW",
+    "methodName": "PiCompoundMethod",
+    "methodKind": "abstract",
+    "ifExists": "fail"
+  },
+  "createdAt": "2026-08-16T02:31:10.419Z",
+  "updatedAt": "2026-08-16T02:31:43.766Z",
+  "evidence": {
+    "bridgeEntered": true,
+    "backendResponseReceived": true,
+    "mutationStarted": true
+  },
+  "outcome": {
+    "operationId": "guarded_create_method"
+  }
+}

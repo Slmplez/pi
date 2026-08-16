@@ -1,0 +1,214 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"status\": \"preflight\",\n  \"plan\": {\n    \"action\": \"apply_element_spec\",\n    \"params\": {\n      \"action\": \"apply_element_spec\",\n      \"phase\": \"plan\",\n      \"component\": \"PI_LIVE_FIX_20260812_EE770C82/ClassUnderTest\",\n      \"intent\": \"create\",\n      \"elements\": [\n        {\n          \"role\": \"standardPrimitive\",\n          \"name\": \"C_FIX_PostReconcile\",\n          \"kind\": \"variable\",\n          \"modelType\": \"cont\",\n          \"scope\": \"local\"\n        }\n      ],\n      \"executeWrite\": false\n    },\n    \"backendPreflight\": {\n      \"operation\": \"authoritative_element_preflight\",\n      \"validated\": true,\n      \"capabilities\": {\n        \"validated\": true,\n        \"elements\": [\n          {\n            \"name\": \"C_FIX_PostReconcile\",\n            \"operation\": \"create\",\n            \"dataConfiguration\": {\n              \"source\": \"defaultDataConfiguration\",\n              \"configurationName\": \"Data\",\n              \"selected\": true\n            },\n            \"implementationConfiguration\": {\n              \"source\": \"defaultImplementationConfiguration\",\n              \"configurationName\": \"Impl\",\n              \"selected\": true\n            },\n            \"dataItemResolvable\": true,\n            \"implementationItemResolvable\": true,\n            \"capabilityStatus\": \"validated\"\n          }\n        ]\n      },\n      \"liveElementCount\": 0,\n      \"liveSnapshotHash\": \"3577c3da806c30180dbb5ff04d6ee46d2cb982e254e6a3c6e14f7b6f2e190705\",\n      \"catalogSnapshot\": {\n        \"identity\": {\n          \"componentOID\": \"040g00001g001qg71060i85ff2002\"\n        },\n        \"componentConfigurationProvenance\": {\n          \"defaultDataConfiguration\": {\n            \"source\": \"defaultDataConfiguration\",\n            \"configurationName\": \"Data\",\n            \"selected\": true\n          },\n          \"classDataConfiguration\": {\n            \"source\": \"classDataConfiguration\",\n            \"configurationName\": \"ClassUnderTest\",\n            \"selected\": true\n          },\n          \"defaultImplementationConfiguration\": {\n            \"source\": \"defaultImplementationConfiguration\",\n            \"configurationName\": \"Impl\",\n            \"selected\": true\n          },\n          \"classImplementationConfiguration\": {\n            \"source\": \"classImplementationConfiguration\",\n            \"configurationName\": \"ClassUnderTest\",\n            \"selected\": true\n          }\n        }\n      },\n      \"catalogIdentity\": {\n        \"componentOID\": \"040g00001g001qg71060i85ff2002\"\n      },\n      \"normalizedSpecHash\": \"0c8b87c0d5d68e3b13b55bd0ff30b03374ab38e630c94c82b2592900fc540ab2\",\n      \"resolvedIntent\": \"create\",\n      \"resolvedOperations\": [\n        {\n          \"name\": \"C_FIX_PostReconcile\",\n          \"operation\": \"create\"\n        }\n      ],\n      \"warnings\": [\n        \"C_FIX_PostReconcile: data.value omitted; ASCET default data will be used.\",\n        \"C_FIX_PostReconcile: implementation omitted; ASCET default implementation will be used.\"\n      ],\n      \"normalizedSpec\": {\n        \"elements\": [\n          {\n            \"name\": \"C_FIX_PostReconcile\",\n            \"kind\": \"variable\",\n            \"modelType\": \"cont\",\n            \"scope\": \"local\"\n          }\n        ]\n      },\n      \"result\": {\n        \"component\": \"PI_LIVE_FIX_20260812_EE770C82/ClassUnderTest\",\n        \"addedElements\": [\n          {\n            \"name\": \"C_FIX_PostReconcile\",\n            \"kind\": \"Variable\",\n            \"signature\": \"Variable ModelType=cont Scope=local\"\n          }\n        ],\n        \"summary\": \"1 added, 0 removed, 0 modified, 0 incompatible\"\n      }\n    },\n    \"version\": 3,\n    \"planId\": \"a7718bf1-5eb3-4527-8c73-43a332d83699\",\n    \"planFingerprint\": \"e265b87c636f925725d7d38b7f9c5218238dd44d38a334610910fa98c78f14f4\",\n    \"contractFingerprint\": \"fecd7bc6891d2f7f201490e54d970ab90f6e38dd3e3e4315c728164f6d2b2496\",\n    \"evidenceFingerprint\": \"c8c879acab08d8add0edf138f99543d5f3174c9a03d713288f3f89c8dc6bfedb\",\n    \"databaseIdentity\": {\n      \"name\": \"C:\\\\Repo\\\\11_ASCETCopilotLiveTest\\\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\\\ASW\\\\Db\\\\AscetDb_20260707223121\",\n      \"path\": \"C:/Repo/11_ASCETCopilotLiveTest/AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599/ASW/Db/\",\n      \"fingerprint\": \"49be9da8ddaa5ac7b09b24a394229cbbd9a9dc3dbabadf9704da7ff25633274a\"\n    },\n    \"targetIdentity\": {\n      \"path\": \"PI_LIVE_FIX_20260812_EE770C82/ClassUnderTest\",\n      \"oid\": \"040g00001g001qg71060i85ff2002\",\n      \"kind\": \"component\"\n    },\n    \"targetImpact\": {\n      \"sharedObject\": false,\n      \"requestedPath\": \"PI_LIVE_FIX_20260812_EE770C82/ClassUnderTest\",\n      \"ownerPath\": \"PI_LIVE_FIX_20260812_EE770C82/ClassUnderTest\",\n      \"targetOid\": \"040g00001g001qg71060i85ff2002\",\n      \"aliasPaths\": [\n        \"PI_LIVE_FIX_20260812_EE770C82\\\\ClassUnderTest\"\n      ],\n      \"completeness\": \"complete\",\n      \"writeAllowed\": true,\n      \"fingerprint\": \"sha256:0d81277e0b76a4629a04fa14d63f7f1f949ea8eaba542f3095b615e2475253cc\"\n    },\n    \"guardGeneration\": 3,\n    \"expiresAt\": \"2026-08-12T06:02:30.729Z\"\n  },\n  \"nextStep\": \"Call apply_element_spec with phase=commit and planId=a7718bf1-5eb3-4527-8c73-43a332d83699.\"\n}"
+    }
+  ],
+  "details": {
+    "outcome": {
+      "status": "preflight",
+      "plan": {
+        "action": "apply_element_spec",
+        "params": {
+          "action": "apply_element_spec",
+          "phase": "plan",
+          "componentPath": "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+          "intent": "create",
+          "elements": [
+            {
+              "role": "standardPrimitive",
+              "name": "C_FIX_PostReconcile",
+              "kind": "variable",
+              "modelType": "cont",
+              "scope": "local"
+            }
+          ],
+          "executeWrite": false
+        },
+        "backendPreflight": {
+          "operation": "authoritative_element_preflight",
+          "validated": true,
+          "capabilities": {
+            "validated": true,
+            "elements": [
+              {
+                "name": "C_FIX_PostReconcile",
+                "operation": "create",
+                "dataConfiguration": {
+                  "source": "defaultDataConfiguration",
+                  "configurationName": "Data",
+                  "selected": true
+                },
+                "implementationConfiguration": {
+                  "source": "defaultImplementationConfiguration",
+                  "configurationName": "Impl",
+                  "selected": true
+                },
+                "dataItemResolvable": true,
+                "implementationItemResolvable": true,
+                "capabilityStatus": "validated",
+                "blockingCodes": []
+              }
+            ]
+          },
+          "liveElementCount": 0,
+          "liveSnapshotHash": "3577c3da806c30180dbb5ff04d6ee46d2cb982e254e6a3c6e14f7b6f2e190705",
+          "catalogSnapshot": {
+            "elements": [],
+            "identity": {
+              "componentOID": "040g00001g001qg71060i85ff2002"
+            },
+            "componentConfigurationProvenance": {
+              "defaultDataConfiguration": {
+                "source": "defaultDataConfiguration",
+                "configurationName": "Data",
+                "selected": true
+              },
+              "classDataConfiguration": {
+                "source": "classDataConfiguration",
+                "configurationName": "ClassUnderTest",
+                "selected": true
+              },
+              "defaultImplementationConfiguration": {
+                "source": "defaultImplementationConfiguration",
+                "configurationName": "Impl",
+                "selected": true
+              },
+              "classImplementationConfiguration": {
+                "source": "classImplementationConfiguration",
+                "configurationName": "ClassUnderTest",
+                "selected": true
+              }
+            }
+          },
+          "catalogIdentity": {
+            "componentOID": "040g00001g001qg71060i85ff2002"
+          },
+          "normalizedSpecHash": "0c8b87c0d5d68e3b13b55bd0ff30b03374ab38e630c94c82b2592900fc540ab2",
+          "resolvedIntent": "create",
+          "resolvedOperations": [
+            {
+              "name": "C_FIX_PostReconcile",
+              "operation": "create"
+            }
+          ],
+          "warnings": [
+            "C_FIX_PostReconcile: data.value omitted; ASCET default data will be used.",
+            "C_FIX_PostReconcile: implementation omitted; ASCET default implementation will be used."
+          ],
+          "normalizedSpec": {
+            "elements": [
+              {
+                "name": "C_FIX_PostReconcile",
+                "kind": "variable",
+                "modelType": "cont",
+                "scope": "local"
+              }
+            ]
+          },
+          "result": {
+            "ComponentPath": "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+            "AddedElements": [
+              {
+                "Name": "C_FIX_PostReconcile",
+                "Kind": "Variable",
+                "Signature": "Variable ModelType=cont Scope=local"
+              }
+            ],
+            "RemovedElements": [],
+            "ModifiedElements": [],
+            "IncompatibleElements": [],
+            "SkippedElements": [],
+            "Summary": "1 added, 0 removed, 0 modified, 0 incompatible"
+          },
+          "limitations": []
+        },
+        "version": 3,
+        "planId": "a7718bf1-5eb3-4527-8c73-43a332d83699",
+        "planFingerprint": "e265b87c636f925725d7d38b7f9c5218238dd44d38a334610910fa98c78f14f4",
+        "contractFingerprint": "fecd7bc6891d2f7f201490e54d970ab90f6e38dd3e3e4315c728164f6d2b2496",
+        "evidenceFingerprint": "c8c879acab08d8add0edf138f99543d5f3174c9a03d713288f3f89c8dc6bfedb",
+        "databaseIdentity": {
+          "name": "C:\\Repo\\11_ASCETCopilotLiveTest\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\ASW\\Db\\AscetDb_20260707223121",
+          "path": "C:\\Repo\\11_ASCETCopilotLiveTest\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\ASW\\Db\\",
+          "fingerprint": "49be9da8ddaa5ac7b09b24a394229cbbd9a9dc3dbabadf9704da7ff25633274a"
+        },
+        "targetIdentity": {
+          "path": "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+          "oid": "040g00001g001qg71060i85ff2002",
+          "kind": "component"
+        },
+        "targetImpact": {
+          "sharedObject": false,
+          "requestedPath": "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+          "ownerPath": "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+          "targetOid": "040g00001g001qg71060i85ff2002",
+          "aliasPaths": [
+            "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest"
+          ],
+          "affectedProjects": [],
+          "completeness": "complete",
+          "writeAllowed": true,
+          "fingerprint": "sha256:0d81277e0b76a4629a04fa14d63f7f1f949ea8eaba542f3095b615e2475253cc"
+        },
+        "guardGeneration": 3,
+        "expiresAt": "2026-08-12T06:02:30.729Z"
+      },
+      "nextStep": "Call apply_element_spec with phase=commit and planId=a7718bf1-5eb3-4527-8c73-43a332d83699."
+    },
+    "raw": {
+      "ok": true,
+      "data": {
+        "type": "response",
+        "protocolVersion": 1,
+        "ok": true,
+        "result": {
+          "ComponentPath": "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+          "AddedElements": [
+            {
+              "Name": "C_FIX_PostReconcile",
+              "Kind": "Variable",
+              "Signature": "Variable ModelType=cont Scope=local"
+            }
+          ],
+          "RemovedElements": [],
+          "ModifiedElements": [],
+          "IncompatibleElements": [],
+          "SkippedElements": [],
+          "Summary": "1 added, 0 removed, 0 modified, 0 incompatible"
+        },
+        "error": null,
+        "meta": {
+          "bridgePid": 31960,
+          "bridgeGeneration": "337aa01a-f275-4d5d-a9bf-65438734d550",
+          "durationMs": 287,
+          "sessionPolicy": "fresh_session",
+          "mutationStarted": false,
+          "mode": "exec",
+          "operation": "diff_element_spec"
+        }
+      },
+      "request": {
+        "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+        "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+        "args": [
+          "exec",
+          "diff_element_spec",
+          "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+          "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\LIVE_TOOLS_20260812-134514_EE770C82\\artifacts\\element-spec-plans\\inline-39808-1786514231564-97f2d12a-b66c-4928-aa9a-8cf6c2245c07.json",
+          "--json"
+        ],
+        "timeoutMs": 240000,
+        "jobKind": "read",
+        "mutatesDatabase": false
+      },
+      "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"ComponentPath\":\"PI_LIVE_FIX_20260812_EE770C82\\\\ClassUnderTest\",\"AddedElements\":[{\"Name\":\"C_FIX_PostReconcile\",\"Kind\":\"Variable\",\"Signature\":\"Variable ModelType=cont Scope=local\"}],\"RemovedElements\":[],\"ModifiedElements\":[],\"IncompatibleElements\":[],\"SkippedElements\":[],\"Summary\":\"1 added, 0 removed, 0 modified, 0 incompatible\"},\"error\":null,\"meta\":{\"bridgePid\":31960,\"bridgeGeneration\":\"337aa01a-f275-4d5d-a9bf-65438734d550\",\"durationMs\":287,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"diff_element_spec\"}}\r\n",
+      "stderr": "",
+      "exitCode": 0,
+      "timedOut": false,
+      "aborted": false,
+      "operationId": "diff_element_spec"
+    }
+  }
+}

@@ -1,4 +1,4 @@
-{
+﻿{
   "version": 1,
   "generatedAt": "2026-04-06T00:00:00Z",
   "commands": [
@@ -351,7 +351,7 @@
     {
       "id": "AscetConfigureParameterDependencyChainExecute",
       "family": "write",
-      "summary": "Execute one guarded Provider to Imported to Local parameter dependency chain",
+      "summary": "Preview or apply one create-or-verify Provider to Imported to Local parameter dependency chain",
       "risk": "write",
       "objectKinds": [
         "class",
@@ -359,7 +359,7 @@
       ],
       "supportsJson": true,
       "requiresSerialLiveAccess": true,
-      "hiddenFromModel": false,
+      "hiddenFromModel": true,
       "operation": "configure_parameter_dependency_chain_execute",
       "lane": "serial_write",
       "hostEligible": false,
@@ -411,6 +411,35 @@
       }
     },
     {
+      "id": "AscetPreflightCreateFolder",
+      "family": "read",
+      "summary": "Resolve the authoritative create-folder path plan and capabilities without mutation",
+      "risk": "read",
+      "objectKinds": [
+        "generic"
+      ],
+      "supportsJson": true,
+      "requiresSerialLiveAccess": true,
+      "hiddenFromModel": true,
+      "execution": {
+        "kind": "bridge",
+        "protocolVersion": 1,
+        "subcommand": "exec",
+        "operation": "preflight_create_folder",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
+      },
+      "operation": "preflight_create_folder",
+      "lane": "legacy_read",
+      "hostEligible": false,
+      "supportsBatch": false,
+      "executionProfile": {
+        "hostSafety": "read",
+        "hostPolicy": "force_one_shot",
+        "timeoutClass": "read"
+      }
+    },
+    {
       "id": "AscetCreateFolder",
       "family": "write",
       "summary": "Create an ASCET folder path",
@@ -437,6 +466,36 @@
         "hostSafety": "write",
         "hostPolicy": "force_one_shot",
         "timeoutClass": "write"
+      }
+    },
+    {
+      "id": "AscetPreflightCreateMethod",
+      "family": "read",
+      "summary": "Resolve create-method capability and safety evidence without mutation",
+      "risk": "read",
+      "objectKinds": [
+        "component",
+        "method"
+      ],
+      "supportsJson": true,
+      "requiresSerialLiveAccess": true,
+      "hiddenFromModel": true,
+      "execution": {
+        "kind": "bridge",
+        "protocolVersion": 1,
+        "subcommand": "exec",
+        "operation": "preflight_create_method",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
+      },
+      "operation": "preflight_create_method",
+      "lane": "legacy_read",
+      "hostEligible": false,
+      "supportsBatch": false,
+      "executionProfile": {
+        "hostSafety": "read",
+        "hostPolicy": "force_one_shot",
+        "timeoutClass": "read"
       }
     },
     {
@@ -467,6 +526,36 @@
       "executionProfile": {
         "hostSafety": "write",
         "hostPolicy": "prefer_host",
+        "timeoutClass": "write"
+      }
+    },
+    {
+      "id": "AscetGuardedCreateMethod",
+      "family": "write",
+      "summary": "Atomically acquire editability when authorized, create one method, and read it back",
+      "risk": "write",
+      "objectKinds": [
+        "component",
+        "method"
+      ],
+      "supportsJson": true,
+      "requiresSerialLiveAccess": true,
+      "hiddenFromModel": true,
+      "execution": {
+        "kind": "bridge",
+        "protocolVersion": 1,
+        "subcommand": "exec",
+        "operation": "guarded_create_method",
+        "sessionPolicy": "fresh_session",
+        "transportPolicy": "one_shot_only"
+      },
+      "operation": "guarded_create_method",
+      "lane": "serial_write",
+      "hostEligible": false,
+      "supportsBatch": false,
+      "executionProfile": {
+        "hostSafety": "write",
+        "hostPolicy": "force_one_shot",
         "timeoutClass": "write"
       }
     },
@@ -1957,3 +2046,4 @@
     }
   ]
 }
+

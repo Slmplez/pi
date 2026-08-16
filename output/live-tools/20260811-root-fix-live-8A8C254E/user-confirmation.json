@@ -1,0 +1,8 @@
+﻿{
+    "authorizedAt":  "2026-08-11T14:22:12.6366598Z",
+    "authorization":  "授权执行最小 Live 写入验证",
+    "runId":  "20260811-root-fix-live-8A8C254E",
+    "fixtureRoot":  "PI_LIVE_ROOTFIX_20260811_8A8C254E",
+    "scope":  "isolated fixture only",
+    "liveWriteAuthorized":  true
+}

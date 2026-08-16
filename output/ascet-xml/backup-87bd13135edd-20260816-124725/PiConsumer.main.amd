@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ComponentMain toolVersion="V6.1.5_2.2.0" schemaVersion="6.1.1.0">
+	<Component name="PiConsumer" nameSpace="/DEMO/__pi_create_dependent_chain_20260816044033001" OID="_040g00001g001qg71080i12ca7h1g" timeStamp="2026-08-16T04:47:16" componentType="ASCET_Class" specificationType="ESDL">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-16T04:47:16" timeStampCounter="1979"/>
+		<CustomerSpecificAttributes>
+			<ConfigurationManagement edition="true" versionID="" configurationID=""/>
+			<RequirementsManagement requirementsID=""/>
+			<AccessManagement read="true" write="true" import="true"/>
+		</CustomerSpecificAttributes>
+		<Elements>
+			<Element name="C_PI_ChainTest_20260816044033001" OID="_040g00001g001qg71080i13dmjlhg" ignore="false">
+				<Comment>Disposable ASCET create_dependent_chain acceptance Local.</Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="local" virtual="false" dependent="true" volatile="false" calibrated="false" set="false" get="false" read="true" write="false" reference="false">
+							<Formula code="P_PI_ChainTest_20260816044033001">
+								<Formal name="P_PI_ChainTest_20260816044033001" OID="_040g0mrj2ifq00bi8vsueqm88b1rg"/>
+							</Formula>
+						</PrimitiveAttributes>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+			<Element name="C_PI_SetOnly_20260816044033001" OID="_040g00001g001qg71080i1khdvqhg" ignore="false">
+				<Comment>Disposable ASCET create_dependent_chain acceptance Local.</Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="local" virtual="false" dependent="false" volatile="false" calibrated="false" set="false" get="false" read="true" write="false" reference="false"/>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+			<Element name="P_PI_ChainTest_20260816044033001" OID="_040g00001g001qg71080i13d8vl1g" ignore="false">
+				<Comment></Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="imported" virtual="false" dependent="false" volatile="false" calibrated="true" set="false" get="false" read="true" write="false" reference="false"/>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+			<Element name="P_PI_SetOnly_20260816044033001" OID="_040g00001g001qg71080i1kha3q1g" ignore="false">
+				<Comment></Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="imported" virtual="false" dependent="false" volatile="false" calibrated="true" set="false" get="false" read="true" write="false" reference="false"/>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+		</Elements>
+		<MethodSignatures>
+			<MethodSignature name="calc" OID="_040g00001g001qg71080i12cg3k1g" public="true" default="false" defaultMethod="false" hidden="false" availableForOS="false"/>
+		</MethodSignatures>
+		<TimeStamps>
+			<TimeStamp timeStampKey="directAccessTimeStampKey" timeStampValue="2026-08-16T04:44:56"/>
+			<TimeStamp timeStampKey="exportImportTimeStampKey" timeStampValue="2026-08-16T04:44:56"/>
+			<TimeStamp timeStampKey="formulaTimeStampKey" timeStampValue="2026-08-16T04:44:56"/>
+			<TimeStamp timeStampKey="implementationCastTimeStampKey" timeStampValue="2026-08-16T04:44:56"/>
+			<TimeStamp timeStampKey="implementationTypeTimeStampKey" timeStampValue="2026-08-16T04:44:56"/>
+			<TimeStamp timeStampKey="methodsTimeStampKey" timeStampValue="2026-08-16T04:44:56"/>
+		</TimeStamps>
+	</Component>
+	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+		<SignedInfo>
+			<CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+			<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+			<Reference>
+				<Transforms>
+					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+				</Transforms>
+				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+				<DigestValue>J+yFMZuY1/dySmkO7Nwd0DJHxFE=</DigestValue>
+			</Reference>
+		</SignedInfo>
+		<SignatureValue>F9J0DFrJNMkDPK1///nd6BS1/no5BFFxOOjHa/cEsUNGvytIHa33W2ySJ/FSP94l
+a1Qma5dHZhRYmwgkRXRr+0G9D+7CcsPahFiYuBsFhVeGyKitnLXFLv5BwjteBLeE
+t2Xwz1yGGZlgIxbSkyjMhttUPX5nfbK2BS4sNLp4NHBHioaFZjDTWhAhCLCSiwH1
+6GMh5lzGTgMLILjcztkXmX+7RejV5YDclpN33Zp2GImcupZNLT64bevfXNAm7UYG
+ArlQwJuL7x8uhlGIV8h9opVIDu0sW/4gVubI3o52KJV2PnrVOt4lE5tbMoN85GJh
+o9lXk32uemmlvrcAi8tabQ==</SignatureValue>
+		<KeyInfo>
+			<KeyName>Etas Ascet Verification</KeyName>
+		</KeyInfo>
+	</Signature>
+</ComponentMain>

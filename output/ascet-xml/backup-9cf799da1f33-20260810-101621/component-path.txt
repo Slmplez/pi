@@ -1,0 +1,1 @@
+﻿DEMO\__pi_parameter_chain_smoke__\PiSmokeConsumer

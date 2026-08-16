@@ -1,0 +1,2095 @@
+{
+  "ok": true,
+  "folder": "TEST\\__pi_element_live_20260808055217",
+  "stages": [
+    {
+      "name": "create_folder",
+      "data": {
+        "status": "ok",
+        "data": {
+          "changed": {
+            "folderPath": "TEST\\__pi_element_live_20260808055217",
+            "created": true,
+            "createdCount": 1,
+            "existingCount": 1,
+            "verifyReadbackRequested": true,
+            "readbackVerified": true,
+            "summary": "Created folder path 'TEST\\__pi_element_live_20260808055217' (1 created, 1 existing)."
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    },
+    {
+      "name": "create:TEST\\__pi_element_live_20260808055217\\Inline",
+      "data": {
+        "status": "ok",
+        "data": {
+          "changed": {
+            "operationName": "create_component",
+            "sequenceNumber": 1,
+            "writeSucceeded": true,
+            "summary": "Created ESDL class TEST\\__pi_element_live_20260808055217\\Inline.",
+            "payload": {
+              "componentPath": "TEST\\__pi_element_live_20260808055217\\Inline",
+              "folderPath": "TEST\\__pi_element_live_20260808055217",
+              "componentName": "Inline",
+              "kind": "class",
+              "languageKind": "ESDL",
+              "created": true,
+              "alreadyExisted": false,
+              "verifyReadbackRequested": true,
+              "rollbackOnFailureRequested": false,
+              "readbackVerified": true,
+              "summary": "Created ESDL class TEST\\__pi_element_live_20260808055217\\Inline.",
+              "expectedDefaultScaffold": {
+                "verified": false,
+                "generatedItems": [
+                  {
+                    "kind": "method",
+                    "name": "calc"
+                  }
+                ],
+                "defaultEntryMethod": "calc"
+              }
+            }
+          },
+          "readback": {
+            "requested": true,
+            "attempted": true,
+            "succeeded": true,
+            "summary": "component_exists",
+            "details": {}
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    },
+    {
+      "name": "create:TEST\\__pi_element_live_20260808055217\\Provider",
+      "data": {
+        "status": "ok",
+        "data": {
+          "changed": {
+            "operationName": "create_component",
+            "sequenceNumber": 1,
+            "writeSucceeded": true,
+            "summary": "Created ESDL class TEST\\__pi_element_live_20260808055217\\Provider.",
+            "payload": {
+              "componentPath": "TEST\\__pi_element_live_20260808055217\\Provider",
+              "folderPath": "TEST\\__pi_element_live_20260808055217",
+              "componentName": "Provider",
+              "kind": "class",
+              "languageKind": "ESDL",
+              "created": true,
+              "alreadyExisted": false,
+              "verifyReadbackRequested": true,
+              "rollbackOnFailureRequested": false,
+              "readbackVerified": true,
+              "summary": "Created ESDL class TEST\\__pi_element_live_20260808055217\\Provider.",
+              "expectedDefaultScaffold": {
+                "verified": false,
+                "generatedItems": [
+                  {
+                    "kind": "method",
+                    "name": "calc"
+                  }
+                ],
+                "defaultEntryMethod": "calc"
+              }
+            }
+          },
+          "readback": {
+            "requested": true,
+            "attempted": true,
+            "succeeded": true,
+            "summary": "component_exists",
+            "details": {}
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    },
+    {
+      "name": "create:TEST\\__pi_element_live_20260808055217\\Consumer",
+      "data": {
+        "status": "ok",
+        "data": {
+          "changed": {
+            "operationName": "create_component",
+            "sequenceNumber": 1,
+            "writeSucceeded": true,
+            "summary": "Created ESDL class TEST\\__pi_element_live_20260808055217\\Consumer.",
+            "payload": {
+              "componentPath": "TEST\\__pi_element_live_20260808055217\\Consumer",
+              "folderPath": "TEST\\__pi_element_live_20260808055217",
+              "componentName": "Consumer",
+              "kind": "class",
+              "languageKind": "ESDL",
+              "created": true,
+              "alreadyExisted": false,
+              "verifyReadbackRequested": true,
+              "rollbackOnFailureRequested": false,
+              "readbackVerified": true,
+              "summary": "Created ESDL class TEST\\__pi_element_live_20260808055217\\Consumer.",
+              "expectedDefaultScaffold": {
+                "verified": false,
+                "generatedItems": [
+                  {
+                    "kind": "method",
+                    "name": "calc"
+                  }
+                ],
+                "defaultEntryMethod": "calc"
+              }
+            }
+          },
+          "readback": {
+            "requested": true,
+            "attempted": true,
+            "succeeded": true,
+            "summary": "component_exists",
+            "details": {}
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    },
+    {
+      "name": "inline_apply",
+      "data": {
+        "plan": {
+          "status": "preflight",
+          "plan": {
+            "action": "apply_element_spec",
+            "params": {
+              "action": "apply_element_spec",
+              "phase": "plan",
+              "componentPath": "TEST\\__pi_element_live_20260808055217\\Inline",
+              "intent": "create",
+              "elements": [
+                {
+                  "role": "standardPrimitive",
+                  "name": "P_Input",
+                  "kind": "parameter",
+                  "modelType": "cont",
+                  "scope": "local",
+                  "data": {
+                    "value": 1
+                  },
+                  "impl": {
+                    "valueType": "real32"
+                  }
+                },
+                {
+                  "role": "localDependentParameter",
+                  "name": "P_Local",
+                  "modelType": "cont",
+                  "scope": "local"
+                }
+              ],
+              "verifyReadback": true
+            },
+            "backendPreflight": {
+              "operation": "diff_element_spec",
+              "validated": true,
+              "liveElementCount": 0,
+              "liveSnapshotHash": "a91d7cc1eff74cb5a904d6073dd7724daedc69c4d432de62a1630a2e51bf94a6",
+              "catalogSnapshot": {
+                "elements": []
+              },
+              "normalizedSpecHash": "d4f7ae7a6ecb18ec2c09a3c45a1e6370288d91cd734937f32eab40a2da40cbf6",
+              "resolvedIntent": "create",
+              "resolvedOperations": [
+                {
+                  "name": "P_Input",
+                  "operation": "create"
+                },
+                {
+                  "name": "P_Local",
+                  "operation": "create"
+                }
+              ],
+              "warnings": [],
+              "normalizedSpec": {
+                "elements": [
+                  {
+                    "name": "P_Input",
+                    "kind": "parameter",
+                    "modelType": "cont",
+                    "scope": "local",
+                    "data": {
+                      "value": 1
+                    },
+                    "impl": {
+                      "valueType": "real32"
+                    }
+                  },
+                  {
+                    "name": "P_Local",
+                    "kind": "parameter",
+                    "modelType": "cont",
+                    "scope": "local"
+                  }
+                ]
+              },
+              "result": {
+                "ComponentPath": "TEST\\__pi_element_live_20260808055217\\Inline",
+                "AddedElements": [
+                  {
+                    "Name": "P_Input",
+                    "Kind": "Parameter",
+                    "Signature": "Parameter ModelType=cont Scope=local"
+                  },
+                  {
+                    "Name": "P_Local",
+                    "Kind": "Parameter",
+                    "Signature": "Parameter ModelType=cont Scope=local"
+                  }
+                ],
+                "RemovedElements": [],
+                "ModifiedElements": [],
+                "IncompatibleElements": [],
+                "SkippedElements": [],
+                "Summary": "2 added, 0 removed, 0 modified, 0 incompatible"
+              },
+              "limitations": [
+                "diff_element_spec validates and plans the spec without applying Data/Implementation writes or readback."
+              ]
+            },
+            "planId": "c45f22ef-aa53-48e1-ab1d-678ad47a336d",
+            "fingerprint": "a61ca85b7a4040faa70075a7acfe8111becb08203a85a25f2204852a5a209faa",
+            "expiresAt": "2026-08-08T05:57:23.232Z"
+          },
+          "nextStep": "Call apply_element_spec with phase=commit and planId=c45f22ef-aa53-48e1-ab1d-678ad47a336d."
+        },
+        "commit": {
+          "status": "ok",
+          "data": {
+            "changed": {
+              "operationName": "apply_element_spec",
+              "sequenceNumber": 1,
+              "writeSucceeded": true,
+              "summary": "2 created, 0 updated, 0 incompatible.",
+              "payload": {
+                "ComponentPath": "TEST\\__pi_element_live_20260808055217\\Inline",
+                "ComponentKind": "Class",
+                "LanguageKind": "ESDL",
+                "Mode": "Apply",
+                "DeleteMissingRequested": false,
+                "RecreateIncompatibleRequested": false,
+                "ElementResults": [
+                  {
+                    "name": "P_Input",
+                    "kind": "parameter",
+                    "status": "created",
+                    "changedFields": [
+                      "data.value",
+                      "impl.valueType"
+                    ],
+                    "readbackVerified": true
+                  },
+                  {
+                    "name": "P_Local",
+                    "kind": "parameter",
+                    "status": "created",
+                    "changedFields": [],
+                    "readbackVerified": true
+                  }
+                ],
+                "Summary": {
+                  "created": 2,
+                  "updated": 0,
+                  "skipped": 0,
+                  "failed": 0,
+                  "removed": 0,
+                  "incompatible": 0
+                },
+                "CreatedElements": [
+                  "P_Input",
+                  "P_Local"
+                ],
+                "UpdatedElements": [],
+                "SkippedElements": [],
+                "RemovedElements": [],
+                "IncompatibleElements": [],
+                "Issues": [],
+                "WriteSucceeded": true,
+                "VerifyReadbackRequested": true,
+                "ReadbackVerified": true
+              }
+            },
+            "readback": {
+              "requested": true,
+              "attempted": true,
+              "succeeded": true,
+              "summary": "element_spec_matches",
+              "details": {}
+            },
+            "observations": {
+              "invalidated": []
+            }
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "name": "standalone_dependent",
+      "data": {
+        "plan": {
+          "status": "preflight",
+          "plan": {
+            "action": "set_element_dependency",
+            "params": {
+              "action": "set_element_dependency",
+              "phase": "plan",
+              "targetPath": "TEST\\__pi_element_live_20260808055217\\Inline",
+              "elementName": "P_Local",
+              "dependency": "dependent",
+              "dependencyFormula": "P_Input",
+              "dependencyMappings": {
+                "P_Input": {
+                  "kind": "parameter",
+                  "name": "P_Input"
+                }
+              },
+              "variantPolicy": "default",
+              "verifyReadback": true
+            },
+            "backendPreflight": {
+              "operation": "set_element_dependency",
+              "validated": true,
+              "dryRun": true,
+              "result": {
+                "operationName": "set_element_dependency",
+                "sequenceNumber": 1,
+                "writeSucceeded": true,
+                "summary": "planned set P_Local dependency to dependent",
+                "payload": {
+                  "target": "TEST\\__pi_element_live_20260808055217\\Inline",
+                  "kind": "component",
+                  "element": "P_Local",
+                  "identity": {
+                    "componentOID": "040g00001g001qg710414u7ee9800",
+                    "elementOID": ""
+                  },
+                  "definitionHash": "c40071259f6efed2a76a835dbd60ba69b2feb8dae8356e7dc03ac149e4d9d03c",
+                  "dataConfiguration": {
+                    "source": "defaultDataConfiguration",
+                    "name": "Data"
+                  },
+                  "dataVariants": [
+                    "default"
+                  ],
+                  "requested": "dependent",
+                  "write": {
+                    "dryRun": true,
+                    "succeeded": false,
+                    "changed": 0,
+                    "readbackVerified": false
+                  },
+                  "dependency": {
+                    "before": "independent",
+                    "after": "dependent"
+                  },
+                  "formula": {
+                    "after": "P_Input",
+                    "changed": true,
+                    "cleared": false
+                  },
+                  "beforeMappings": [],
+                  "mappings": [
+                    {
+                      "formal": "P_Input",
+                      "valueName": "P_Input",
+                      "targetKind": "parameter",
+                      "targetScope": "local",
+                      "verified": true,
+                      "variant": "default",
+                      "formalOID": "_040g0muj72zd51y2uj7dlhopqict2",
+                      "valueOID": "_040g00001g001qg710414u7sr9ig0"
+                    }
+                  ],
+                  "snapshot": {
+                    "mode": "capture",
+                    "path": "C:\\Users\\NHJ3SZH\\AppData\\Local\\Temp\\pi-ascet-extension\\dependency-snapshots\\07482a86207369436d8f9628707425ea.xml",
+                    "hash": "0724b67a3eebe8bce48e7a61da322d421fb2ab7555cbe37eb35cb305bceb3c5d"
+                  },
+                  "plan": {
+                    "count": 1,
+                    "matches": [
+                      {
+                        "component": "TEST\\__pi_element_live_20260808055217\\Inline",
+                        "element": "P_Local",
+                        "kind": "parameter",
+                        "scope": "local",
+                        "schema": "primitive-parameter-dependent-flag",
+                        "dependency": "independent",
+                        "supported": true
+                      }
+                    ]
+                  }
+                },
+                "verification": {
+                  "requested": true,
+                  "attempted": false,
+                  "succeeded": true,
+                  "summary": "dependency_dry_run",
+                  "details": {
+                    "after": "dependent",
+                    "requested": "dependent",
+                    "formulaAfter": "P_Input",
+                    "formulaRequested": "P_Input"
+                  }
+                }
+              },
+              "limitations": [
+                "Preflight uses the existing backend dry-run contract; XML mutation/readback coverage remains owned by that backend implementation."
+              ]
+            },
+            "planId": "19934422-2119-4026-90b7-8ed9dfd620ec",
+            "fingerprint": "fbae399edcc28fb73cd06cdc4ddf3c42749c421c30d2cf2ad740bc5544745c1e",
+            "expiresAt": "2026-08-08T05:57:25.884Z"
+          },
+          "nextStep": "Call set_element_dependency with phase=commit and planId=19934422-2119-4026-90b7-8ed9dfd620ec."
+        },
+        "commit": {
+          "status": "ok",
+          "data": {
+            "changed": {
+              "operationName": "set_element_dependency",
+              "sequenceNumber": 1,
+              "writeSucceeded": true,
+              "summary": "set P_Local dependency to dependent",
+              "payload": {
+                "target": "TEST\\__pi_element_live_20260808055217\\Inline",
+                "kind": "component",
+                "element": "P_Local",
+                "identity": {
+                  "componentOID": "040g00001g001qg710414u7ee9800",
+                  "elementOID": ""
+                },
+                "definitionHash": "c40071259f6efed2a76a835dbd60ba69b2feb8dae8356e7dc03ac149e4d9d03c",
+                "dataConfiguration": {
+                  "source": "defaultDataConfiguration",
+                  "name": "Data"
+                },
+                "dataVariants": [
+                  "default"
+                ],
+                "requested": "dependent",
+                "write": {
+                  "dryRun": false,
+                  "succeeded": true,
+                  "changed": 1,
+                  "readbackVerified": true
+                },
+                "dependency": {
+                  "before": "independent",
+                  "after": "dependent"
+                },
+                "formula": {
+                  "after": "P_Input",
+                  "changed": true,
+                  "cleared": false
+                },
+                "beforeMappings": [],
+                "mappings": [
+                  {
+                    "formal": "P_Input",
+                    "valueName": "P_Input",
+                    "targetKind": "parameter",
+                    "targetScope": "local",
+                    "verified": true,
+                    "variant": "default",
+                    "formalOID": "_040g0muj723d5122uj7dlhopqict2",
+                    "valueOID": "_040g00001g001qg710414u7sr9ig0"
+                  }
+                ],
+                "backup": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\ascet-xml\\backup-ffea08a61a2b-20260808-135226",
+                "snapshot": {
+                  "mode": "capture",
+                  "path": "C:\\Users\\NHJ3SZH\\AppData\\Local\\Temp\\pi-ascet-extension\\dependency-snapshots\\07482a86207369436d8f9628707425ea.xml",
+                  "hash": "dcfcdd4f3a075670052c602cc2f2c709770edba3469cea03ba31eb2061662107"
+                },
+                "plan": {
+                  "count": 1,
+                  "matches": [
+                    {
+                      "component": "TEST\\__pi_element_live_20260808055217\\Inline",
+                      "element": "P_Local",
+                      "kind": "parameter",
+                      "scope": "local",
+                      "schema": "primitive-parameter-dependent-flag",
+                      "dependency": "independent",
+                      "supported": true
+                    }
+                  ]
+                }
+              }
+            },
+            "readback": {
+              "requested": true,
+              "attempted": true,
+              "succeeded": true,
+              "summary": "dependency_readback_matches",
+              "details": {
+                "after": "dependent",
+                "requested": "dependent",
+                "formulaAfter": "P_Input",
+                "formulaRequested": "P_Input"
+              }
+            },
+            "observations": {
+              "invalidated": []
+            }
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "name": "dependent_readback",
+      "data": {
+        "target": "TEST/__pi_element_live_20260808055217/Inline",
+        "kind": "component",
+        "element": "P_Local",
+        "total": 1,
+        "items": [
+          {
+            "component": "TEST/__pi_element_live_20260808055217/Inline",
+            "element": "P_Local",
+            "kind": "parameter",
+            "scope": "local",
+            "schema": "primitive-parameter-dependent-flag",
+            "dependency": "dependent",
+            "formula": "P_Input",
+            "supported": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "standalone_restored",
+      "data": {
+        "plan": {
+          "status": "preflight",
+          "plan": {
+            "action": "set_element_dependency",
+            "params": {
+              "action": "set_element_dependency",
+              "phase": "plan",
+              "targetPath": "TEST\\__pi_element_live_20260808055217\\Inline",
+              "elementName": "P_Local",
+              "dependency": "independent",
+              "variantPolicy": "default",
+              "valueRestoration": {
+                "policy": "fromSnapshot"
+              },
+              "verifyReadback": true
+            },
+            "backendPreflight": {
+              "operation": "set_element_dependency",
+              "validated": true,
+              "dryRun": true,
+              "result": {
+                "operationName": "set_element_dependency",
+                "sequenceNumber": 1,
+                "writeSucceeded": true,
+                "summary": "planned set P_Local dependency to independent",
+                "payload": {
+                  "target": "TEST\\__pi_element_live_20260808055217\\Inline",
+                  "kind": "component",
+                  "element": "P_Local",
+                  "identity": {
+                    "componentOID": "040g00001g001qg710414u7ee9800",
+                    "elementOID": ""
+                  },
+                  "definitionHash": "47d6effbcd69c472c80689446c221e8dc923a2b35262f443a8e44bfb9893694c",
+                  "dataConfiguration": {
+                    "source": "defaultDataConfiguration",
+                    "name": "Data"
+                  },
+                  "dataVariants": [
+                    "default"
+                  ],
+                  "requested": "independent",
+                  "write": {
+                    "dryRun": true,
+                    "succeeded": false,
+                    "changed": 0,
+                    "readbackVerified": false
+                  },
+                  "dependency": {
+                    "before": "dependent",
+                    "after": "independent"
+                  },
+                  "formula": {
+                    "before": "P_Input",
+                    "changed": true,
+                    "cleared": true
+                  },
+                  "beforeMappings": [
+                    {
+                      "formal": "P_Input",
+                      "valueName": "P_Input",
+                      "verified": true,
+                      "variant": "default",
+                      "formalOID": "_040g0muj723d5122uj7dlhopqict2",
+                      "valueOID": "_040g00001g001qg710414u7sr9ig0"
+                    }
+                  ],
+                  "mappings": [],
+                  "snapshot": {
+                    "mode": "restore",
+                    "path": "C:\\Users\\NHJ3SZH\\AppData\\Local\\Temp\\pi-ascet-extension\\dependency-snapshots\\07482a86207369436d8f9628707425ea.xml",
+                    "hash": "dcfcdd4f3a075670052c602cc2f2c709770edba3469cea03ba31eb2061662107"
+                  },
+                  "plan": {
+                    "count": 1,
+                    "matches": [
+                      {
+                        "component": "TEST\\__pi_element_live_20260808055217\\Inline",
+                        "element": "P_Local",
+                        "kind": "parameter",
+                        "scope": "local",
+                        "schema": "primitive-parameter-dependent-flag",
+                        "dependency": "dependent",
+                        "formula": "P_Input",
+                        "supported": true
+                      }
+                    ]
+                  }
+                },
+                "verification": {
+                  "requested": true,
+                  "attempted": false,
+                  "succeeded": true,
+                  "summary": "dependency_dry_run",
+                  "details": {
+                    "after": "independent",
+                    "requested": "independent",
+                    "formulaAfter": "",
+                    "formulaRequested": ""
+                  }
+                }
+              },
+              "limitations": [
+                "Preflight uses the existing backend dry-run contract; XML mutation/readback coverage remains owned by that backend implementation."
+              ]
+            },
+            "planId": "3656f842-1974-485a-b07a-e2e877d56acf",
+            "fingerprint": "6788f3e3beed545a4638fc6ecfd8cbb01f164e3e044ab36b99fbf387f786e30f",
+            "expiresAt": "2026-08-08T05:57:28.543Z"
+          },
+          "nextStep": "Call set_element_dependency with phase=commit and planId=3656f842-1974-485a-b07a-e2e877d56acf."
+        },
+        "commit": {
+          "status": "ok",
+          "data": {
+            "changed": {
+              "operationName": "set_element_dependency",
+              "sequenceNumber": 1,
+              "writeSucceeded": true,
+              "summary": "set P_Local dependency to independent",
+              "payload": {
+                "target": "TEST\\__pi_element_live_20260808055217\\Inline",
+                "kind": "component",
+                "element": "P_Local",
+                "identity": {
+                  "componentOID": "040g00001g001qg710414u7ee9800",
+                  "elementOID": ""
+                },
+                "definitionHash": "47d6effbcd69c472c80689446c221e8dc923a2b35262f443a8e44bfb9893694c",
+                "dataConfiguration": {
+                  "source": "defaultDataConfiguration",
+                  "name": "Data"
+                },
+                "dataVariants": [
+                  "default"
+                ],
+                "requested": "independent",
+                "write": {
+                  "dryRun": false,
+                  "succeeded": true,
+                  "changed": 1,
+                  "readbackVerified": true
+                },
+                "dependency": {
+                  "before": "dependent",
+                  "after": "independent"
+                },
+                "formula": {
+                  "before": "P_Input",
+                  "changed": true,
+                  "cleared": true
+                },
+                "beforeMappings": [
+                  {
+                    "formal": "P_Input",
+                    "valueName": "P_Input",
+                    "verified": true,
+                    "variant": "default",
+                    "formalOID": "_040g0muj723d5122uj7dlhopqict2",
+                    "valueOID": "_040g00001g001qg710414u7sr9ig0"
+                  }
+                ],
+                "mappings": [],
+                "backup": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\ascet-xml\\backup-ffea08a61a2b-20260808-135229",
+                "snapshot": {
+                  "mode": "consumed",
+                  "path": "C:\\Users\\NHJ3SZH\\AppData\\Local\\Temp\\pi-ascet-extension\\dependency-snapshots\\07482a86207369436d8f9628707425ea.xml",
+                  "hash": "dcfcdd4f3a075670052c602cc2f2c709770edba3469cea03ba31eb2061662107"
+                },
+                "plan": {
+                  "count": 1,
+                  "matches": [
+                    {
+                      "component": "TEST\\__pi_element_live_20260808055217\\Inline",
+                      "element": "P_Local",
+                      "kind": "parameter",
+                      "scope": "local",
+                      "schema": "primitive-parameter-dependent-flag",
+                      "dependency": "dependent",
+                      "formula": "P_Input",
+                      "supported": true
+                    }
+                  ]
+                }
+              }
+            },
+            "readback": {
+              "requested": true,
+              "attempted": true,
+              "succeeded": true,
+              "summary": "dependency_readback_matches",
+              "details": {
+                "after": "independent",
+                "requested": "independent",
+                "formulaAfter": "",
+                "formulaRequested": ""
+              }
+            },
+            "observations": {
+              "invalidated": []
+            }
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "name": "restore_readback",
+      "data": {
+        "target": "TEST/__pi_element_live_20260808055217/Inline",
+        "kind": "component",
+        "element": "P_Local",
+        "total": 1,
+        "items": [
+          {
+            "component": "TEST/__pi_element_live_20260808055217/Inline",
+            "element": "P_Local",
+            "kind": "parameter",
+            "scope": "local",
+            "schema": "primitive-parameter-dependent-flag",
+            "dependency": "independent",
+            "supported": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "composite_plan",
+      "data": {
+        "status": "planned",
+        "mode": "plan",
+        "planId": "d88f0f9e-29f8-4f2c-9824-7ef08616999b",
+        "fingerprint": "67914c69cc0919553b048d98abed4591311c6d1fbdc222ddb61779a6f9367b96",
+        "stages": [
+          {
+            "stage": "provider_spec",
+            "operation": "apply_element_spec",
+            "target": "TEST\\__pi_element_live_20260808055217\\Provider",
+            "status": "preflighted",
+            "result": {
+              "ok": true,
+              "result": {
+                "ComponentPath": "TEST\\__pi_element_live_20260808055217\\Provider",
+                "AddedElements": [
+                  {
+                    "Name": "P_Provider",
+                    "Kind": "Parameter",
+                    "Signature": "Parameter ModelType=cont Scope=exported"
+                  }
+                ],
+                "RemovedElements": [],
+                "ModifiedElements": [],
+                "IncompatibleElements": [],
+                "SkippedElements": [],
+                "Summary": "1 added, 0 removed, 0 modified, 0 incompatible"
+              },
+              "error": null,
+              "meta": {
+                "mode": "exec",
+                "operation": "diff_element_spec"
+              }
+            },
+            "specFileHash": "3da05b67f134890dffef93e5e14907200ed522b26f52596b5520f8f25d8d9c26",
+            "rollbackEvidence": {
+              "kind": "element-spec",
+              "stage": "provider_spec",
+              "target": "TEST\\__pi_element_live_20260808055217\\Provider",
+              "componentPath": "TEST\\__pi_element_live_20260808055217\\Provider",
+              "elementName": "P_Provider",
+              "specDocument": {
+                "elements": []
+              }
+            }
+          },
+          {
+            "stage": "consumer_spec",
+            "operation": "apply_element_spec",
+            "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+            "status": "preflighted",
+            "result": {
+              "ok": true,
+              "result": {
+                "ComponentPath": "TEST\\__pi_element_live_20260808055217\\Consumer",
+                "AddedElements": [
+                  {
+                    "Name": "P_Imported",
+                    "Kind": "Parameter",
+                    "Signature": "Parameter ModelType=cont Scope=imported"
+                  }
+                ],
+                "RemovedElements": [],
+                "ModifiedElements": [],
+                "IncompatibleElements": [],
+                "SkippedElements": [],
+                "Summary": "1 added, 0 removed, 0 modified, 0 incompatible"
+              },
+              "error": null,
+              "meta": {
+                "mode": "exec",
+                "operation": "diff_element_spec"
+              }
+            },
+            "specFileHash": "3e468cde94ee77b7e45149f7f4a61bae0237b0deb5d8afebc4953dfe31e62c97",
+            "rollbackEvidence": {
+              "kind": "element-spec",
+              "stage": "consumer_spec",
+              "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+              "componentPath": "TEST\\__pi_element_live_20260808055217\\Consumer",
+              "elementName": "P_Imported",
+              "specDocument": {
+                "elements": []
+              }
+            }
+          },
+          {
+            "stage": "local_spec",
+            "operation": "apply_element_spec",
+            "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+            "status": "preflighted",
+            "result": {
+              "ok": true,
+              "result": {
+                "ComponentPath": "TEST\\__pi_element_live_20260808055217\\Consumer",
+                "AddedElements": [
+                  {
+                    "Name": "P_Local",
+                    "Kind": "Parameter",
+                    "Signature": "Parameter ModelType=cont Scope=local"
+                  }
+                ],
+                "RemovedElements": [],
+                "ModifiedElements": [],
+                "IncompatibleElements": [],
+                "SkippedElements": [],
+                "Summary": "1 added, 0 removed, 0 modified, 0 incompatible"
+              },
+              "error": null,
+              "meta": {
+                "mode": "exec",
+                "operation": "diff_element_spec"
+              }
+            },
+            "specFileHash": "8c8cee187c50f648a5193fa5071151aa2a7b942d54895826c45d2162ba3c76c6",
+            "rollbackEvidence": {
+              "kind": "element-spec",
+              "stage": "local_spec",
+              "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+              "componentPath": "TEST\\__pi_element_live_20260808055217\\Consumer",
+              "elementName": "P_Local",
+              "specDocument": {
+                "elements": []
+              }
+            }
+          },
+          {
+            "stage": "dependency",
+            "operation": "set_element_dependency",
+            "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+            "status": "preflighted",
+            "result": {
+              "ok": true,
+              "result": {
+                "operationName": "set_element_dependency",
+                "sequenceNumber": 1,
+                "writeSucceeded": true,
+                "summary": "planned set P_Local dependency to dependent",
+                "payload": {
+                  "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+                  "kind": "component",
+                  "element": "P_Local",
+                  "identity": {
+                    "componentOID": "040g00001g001qg710414u7ij5f00",
+                    "elementOID": "_040ov468c9f679a947803a0e74d78"
+                  },
+                  "definitionHash": "09d9536d21b116d958538ca1fb27c3f8ddd3a86c690ed1d014c7ae60b8f5c049",
+                  "dataConfiguration": {
+                    "source": "defaultDataConfiguration",
+                    "name": "Data"
+                  },
+                  "dataVariants": [
+                    "default"
+                  ],
+                  "requested": "dependent",
+                  "write": {
+                    "dryRun": true,
+                    "succeeded": false,
+                    "changed": 0,
+                    "readbackVerified": false
+                  },
+                  "dependency": {
+                    "before": "independent",
+                    "after": "dependent"
+                  },
+                  "formula": {
+                    "after": "P_Imported",
+                    "changed": true,
+                    "cleared": false
+                  },
+                  "beforeMappings": [],
+                  "mappings": [
+                    {
+                      "formal": "P_Imported",
+                      "valueName": "P_Imported",
+                      "targetKind": "parameter",
+                      "targetScope": "imported",
+                      "verified": true,
+                      "variant": "default",
+                      "formalOID": "_040g01ow6d0bhk4agdm8u07rssr64",
+                      "valueOID": "_040ove2e9089eee5bd261b2210bff"
+                    }
+                  ],
+                  "snapshot": {
+                    "mode": "capture",
+                    "path": "C:\\Users\\NHJ3SZH\\AppData\\Local\\Temp\\pi-ascet-extension\\dependency-snapshots\\da939127f302d819fcfdf21d6e782c97.xml",
+                    "hash": "0724b67a3eebe8bce48e7a61da322d421fb2ab7555cbe37eb35cb305bceb3c5d"
+                  },
+                  "elementOverlay": {
+                    "mode": "temporaryAmd",
+                    "specHashes": [
+                      "82a82cf41810817081a50b008982386b7b3f5870ddf210f4e2816514f96a3502",
+                      "344e9d74e02477b582dfb40a8c2b46b37a82f459ef48ec8b4221e69cd7830c89"
+                    ],
+                    "elementOIDs": {
+                      "P_Imported": "_040ove2e9089eee5bd261b2210bff",
+                      "P_Local": "_040ov468c9f679a947803a0e74d78"
+                    }
+                  },
+                  "plan": {
+                    "count": 1,
+                    "matches": [
+                      {
+                        "component": "TEST\\__pi_element_live_20260808055217\\Consumer",
+                        "element": "P_Local",
+                        "kind": "parameter",
+                        "scope": "local",
+                        "schema": "scalar-parameter-dependent-flag",
+                        "dependency": "independent",
+                        "supported": true
+                      }
+                    ]
+                  }
+                },
+                "verification": {
+                  "requested": true,
+                  "attempted": false,
+                  "succeeded": true,
+                  "summary": "dependency_dry_run",
+                  "details": {
+                    "after": "dependent",
+                    "requested": "dependent",
+                    "formulaAfter": "P_Imported",
+                    "formulaRequested": "P_Imported"
+                  }
+                }
+              },
+              "error": null,
+              "meta": {
+                "mode": "exec",
+                "operation": "set_element_dependency"
+              }
+            },
+            "rollbackEvidence": {
+              "kind": "dependency",
+              "stage": "dependency",
+              "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+              "targetPath": "TEST\\__pi_element_live_20260808055217\\Consumer",
+              "elementName": "P_Local",
+              "beforeDependency": "independent",
+              "beforeFormula": "",
+              "preflightResult": {
+                "ok": true,
+                "result": {
+                  "operationName": "set_element_dependency",
+                  "sequenceNumber": 1,
+                  "writeSucceeded": true,
+                  "summary": "planned set P_Local dependency to dependent",
+                  "payload": {
+                    "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+                    "kind": "component",
+                    "element": "P_Local",
+                    "identity": {
+                      "componentOID": "040g00001g001qg710414u7ij5f00",
+                      "elementOID": "_040ov468c9f679a947803a0e74d78"
+                    },
+                    "definitionHash": "09d9536d21b116d958538ca1fb27c3f8ddd3a86c690ed1d014c7ae60b8f5c049",
+                    "dataConfiguration": {
+                      "source": "defaultDataConfiguration",
+                      "name": "Data"
+                    },
+                    "dataVariants": [
+                      "default"
+                    ],
+                    "requested": "dependent",
+                    "write": {
+                      "dryRun": true,
+                      "succeeded": false,
+                      "changed": 0,
+                      "readbackVerified": false
+                    },
+                    "dependency": {
+                      "before": "independent",
+                      "after": "dependent"
+                    },
+                    "formula": {
+                      "after": "P_Imported",
+                      "changed": true,
+                      "cleared": false
+                    },
+                    "beforeMappings": [],
+                    "mappings": [
+                      {
+                        "formal": "P_Imported",
+                        "valueName": "P_Imported",
+                        "targetKind": "parameter",
+                        "targetScope": "imported",
+                        "verified": true,
+                        "variant": "default",
+                        "formalOID": "_040g01ow6d0bhk4agdm8u07rssr64",
+                        "valueOID": "_040ove2e9089eee5bd261b2210bff"
+                      }
+                    ],
+                    "snapshot": {
+                      "mode": "capture",
+                      "path": "C:\\Users\\NHJ3SZH\\AppData\\Local\\Temp\\pi-ascet-extension\\dependency-snapshots\\da939127f302d819fcfdf21d6e782c97.xml",
+                      "hash": "0724b67a3eebe8bce48e7a61da322d421fb2ab7555cbe37eb35cb305bceb3c5d"
+                    },
+                    "elementOverlay": {
+                      "mode": "temporaryAmd",
+                      "specHashes": [
+                        "82a82cf41810817081a50b008982386b7b3f5870ddf210f4e2816514f96a3502",
+                        "344e9d74e02477b582dfb40a8c2b46b37a82f459ef48ec8b4221e69cd7830c89"
+                      ],
+                      "elementOIDs": {
+                        "P_Imported": "_040ove2e9089eee5bd261b2210bff",
+                        "P_Local": "_040ov468c9f679a947803a0e74d78"
+                      }
+                    },
+                    "plan": {
+                      "count": 1,
+                      "matches": [
+                        {
+                          "component": "TEST\\__pi_element_live_20260808055217\\Consumer",
+                          "element": "P_Local",
+                          "kind": "parameter",
+                          "scope": "local",
+                          "schema": "scalar-parameter-dependent-flag",
+                          "dependency": "independent",
+                          "supported": true
+                        }
+                      ]
+                    }
+                  },
+                  "verification": {
+                    "requested": true,
+                    "attempted": false,
+                    "succeeded": true,
+                    "summary": "dependency_dry_run",
+                    "details": {
+                      "after": "dependent",
+                      "requested": "dependent",
+                      "formulaAfter": "P_Imported",
+                      "formulaRequested": "P_Imported"
+                    }
+                  }
+                },
+                "error": null,
+                "meta": {
+                  "mode": "exec",
+                  "operation": "set_element_dependency"
+                }
+              }
+            }
+          }
+        ],
+        "writesPerformed": false,
+        "atomic": false,
+        "rollback": {
+          "required": false,
+          "evidenceCaptured": true,
+          "result": {
+            "status": "succeeded",
+            "attempted": false,
+            "stages": []
+          }
+        },
+        "limitations": [
+          "Dependency preflight exports temporary main/data AMD files, overlays the pending Consumer and Local Element specs, and validates the real XML dependency mutation without importing it.",
+          "The common AscetPlanStore fingerprint includes the complete definition and all four backend preflight payloads.",
+          "The chain uses compensating rollback, not a cross-command ASCET transaction; rollback evidence is captured before commit."
+        ]
+      }
+    },
+    {
+      "name": "composite_commit",
+      "data": {
+        "status": "committed",
+        "mode": "commit",
+        "planId": "d88f0f9e-29f8-4f2c-9824-7ef08616999b",
+        "fingerprint": "67914c69cc0919553b048d98abed4591311c6d1fbdc222ddb61779a6f9367b96",
+        "stages": [
+          {
+            "stage": "provider_spec",
+            "operation": "apply_element_spec",
+            "target": "TEST\\__pi_element_live_20260808055217\\Provider",
+            "status": "preflighted",
+            "result": {
+              "ok": true,
+              "result": {
+                "ComponentPath": "TEST\\__pi_element_live_20260808055217\\Provider",
+                "AddedElements": [
+                  {
+                    "Name": "P_Provider",
+                    "Kind": "Parameter",
+                    "Signature": "Parameter ModelType=cont Scope=exported"
+                  }
+                ],
+                "RemovedElements": [],
+                "ModifiedElements": [],
+                "IncompatibleElements": [],
+                "SkippedElements": [],
+                "Summary": "1 added, 0 removed, 0 modified, 0 incompatible"
+              },
+              "error": null,
+              "meta": {
+                "mode": "exec",
+                "operation": "diff_element_spec"
+              }
+            },
+            "specFileHash": "3da05b67f134890dffef93e5e14907200ed522b26f52596b5520f8f25d8d9c26",
+            "rollbackEvidence": {
+              "kind": "element-spec",
+              "stage": "provider_spec",
+              "target": "TEST\\__pi_element_live_20260808055217\\Provider",
+              "componentPath": "TEST\\__pi_element_live_20260808055217\\Provider",
+              "elementName": "P_Provider",
+              "specDocument": {
+                "elements": []
+              }
+            }
+          },
+          {
+            "stage": "consumer_spec",
+            "operation": "apply_element_spec",
+            "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+            "status": "preflighted",
+            "result": {
+              "ok": true,
+              "result": {
+                "ComponentPath": "TEST\\__pi_element_live_20260808055217\\Consumer",
+                "AddedElements": [
+                  {
+                    "Name": "P_Imported",
+                    "Kind": "Parameter",
+                    "Signature": "Parameter ModelType=cont Scope=imported"
+                  }
+                ],
+                "RemovedElements": [],
+                "ModifiedElements": [],
+                "IncompatibleElements": [],
+                "SkippedElements": [],
+                "Summary": "1 added, 0 removed, 0 modified, 0 incompatible"
+              },
+              "error": null,
+              "meta": {
+                "mode": "exec",
+                "operation": "diff_element_spec"
+              }
+            },
+            "specFileHash": "3e468cde94ee77b7e45149f7f4a61bae0237b0deb5d8afebc4953dfe31e62c97",
+            "rollbackEvidence": {
+              "kind": "element-spec",
+              "stage": "consumer_spec",
+              "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+              "componentPath": "TEST\\__pi_element_live_20260808055217\\Consumer",
+              "elementName": "P_Imported",
+              "specDocument": {
+                "elements": []
+              }
+            }
+          },
+          {
+            "stage": "local_spec",
+            "operation": "apply_element_spec",
+            "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+            "status": "preflighted",
+            "result": {
+              "ok": true,
+              "result": {
+                "ComponentPath": "TEST\\__pi_element_live_20260808055217\\Consumer",
+                "AddedElements": [
+                  {
+                    "Name": "P_Local",
+                    "Kind": "Parameter",
+                    "Signature": "Parameter ModelType=cont Scope=local"
+                  }
+                ],
+                "RemovedElements": [],
+                "ModifiedElements": [],
+                "IncompatibleElements": [],
+                "SkippedElements": [],
+                "Summary": "1 added, 0 removed, 0 modified, 0 incompatible"
+              },
+              "error": null,
+              "meta": {
+                "mode": "exec",
+                "operation": "diff_element_spec"
+              }
+            },
+            "specFileHash": "8c8cee187c50f648a5193fa5071151aa2a7b942d54895826c45d2162ba3c76c6",
+            "rollbackEvidence": {
+              "kind": "element-spec",
+              "stage": "local_spec",
+              "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+              "componentPath": "TEST\\__pi_element_live_20260808055217\\Consumer",
+              "elementName": "P_Local",
+              "specDocument": {
+                "elements": []
+              }
+            }
+          },
+          {
+            "stage": "dependency",
+            "operation": "set_element_dependency",
+            "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+            "status": "preflighted",
+            "result": {
+              "ok": true,
+              "result": {
+                "operationName": "set_element_dependency",
+                "sequenceNumber": 1,
+                "writeSucceeded": true,
+                "summary": "planned set P_Local dependency to dependent",
+                "payload": {
+                  "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+                  "kind": "component",
+                  "element": "P_Local",
+                  "identity": {
+                    "componentOID": "040g00001g001qg710414u7ij5f00",
+                    "elementOID": "_040ov468c9f679a947803a0e74d78"
+                  },
+                  "definitionHash": "09d9536d21b116d958538ca1fb27c3f8ddd3a86c690ed1d014c7ae60b8f5c049",
+                  "dataConfiguration": {
+                    "source": "defaultDataConfiguration",
+                    "name": "Data"
+                  },
+                  "dataVariants": [
+                    "default"
+                  ],
+                  "requested": "dependent",
+                  "write": {
+                    "dryRun": true,
+                    "succeeded": false,
+                    "changed": 0,
+                    "readbackVerified": false
+                  },
+                  "dependency": {
+                    "before": "independent",
+                    "after": "dependent"
+                  },
+                  "formula": {
+                    "after": "P_Imported",
+                    "changed": true,
+                    "cleared": false
+                  },
+                  "beforeMappings": [],
+                  "mappings": [
+                    {
+                      "formal": "P_Imported",
+                      "valueName": "P_Imported",
+                      "targetKind": "parameter",
+                      "targetScope": "imported",
+                      "verified": true,
+                      "variant": "default",
+                      "formalOID": "_040g01ow6d0bhk4agdm8u07rssr64",
+                      "valueOID": "_040ove2e9089eee5bd261b2210bff"
+                    }
+                  ],
+                  "snapshot": {
+                    "mode": "capture",
+                    "path": "C:\\Users\\NHJ3SZH\\AppData\\Local\\Temp\\pi-ascet-extension\\dependency-snapshots\\da939127f302d819fcfdf21d6e782c97.xml",
+                    "hash": "0724b67a3eebe8bce48e7a61da322d421fb2ab7555cbe37eb35cb305bceb3c5d"
+                  },
+                  "elementOverlay": {
+                    "mode": "temporaryAmd",
+                    "specHashes": [
+                      "82a82cf41810817081a50b008982386b7b3f5870ddf210f4e2816514f96a3502",
+                      "344e9d74e02477b582dfb40a8c2b46b37a82f459ef48ec8b4221e69cd7830c89"
+                    ],
+                    "elementOIDs": {
+                      "P_Imported": "_040ove2e9089eee5bd261b2210bff",
+                      "P_Local": "_040ov468c9f679a947803a0e74d78"
+                    }
+                  },
+                  "plan": {
+                    "count": 1,
+                    "matches": [
+                      {
+                        "component": "TEST\\__pi_element_live_20260808055217\\Consumer",
+                        "element": "P_Local",
+                        "kind": "parameter",
+                        "scope": "local",
+                        "schema": "scalar-parameter-dependent-flag",
+                        "dependency": "independent",
+                        "supported": true
+                      }
+                    ]
+                  }
+                },
+                "verification": {
+                  "requested": true,
+                  "attempted": false,
+                  "succeeded": true,
+                  "summary": "dependency_dry_run",
+                  "details": {
+                    "after": "dependent",
+                    "requested": "dependent",
+                    "formulaAfter": "P_Imported",
+                    "formulaRequested": "P_Imported"
+                  }
+                }
+              },
+              "error": null,
+              "meta": {
+                "mode": "exec",
+                "operation": "set_element_dependency"
+              }
+            },
+            "rollbackEvidence": {
+              "kind": "dependency",
+              "stage": "dependency",
+              "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+              "targetPath": "TEST\\__pi_element_live_20260808055217\\Consumer",
+              "elementName": "P_Local",
+              "beforeDependency": "independent",
+              "beforeFormula": "",
+              "preflightResult": {
+                "ok": true,
+                "result": {
+                  "operationName": "set_element_dependency",
+                  "sequenceNumber": 1,
+                  "writeSucceeded": true,
+                  "summary": "planned set P_Local dependency to dependent",
+                  "payload": {
+                    "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+                    "kind": "component",
+                    "element": "P_Local",
+                    "identity": {
+                      "componentOID": "040g00001g001qg710414u7ij5f00",
+                      "elementOID": "_040ov468c9f679a947803a0e74d78"
+                    },
+                    "definitionHash": "09d9536d21b116d958538ca1fb27c3f8ddd3a86c690ed1d014c7ae60b8f5c049",
+                    "dataConfiguration": {
+                      "source": "defaultDataConfiguration",
+                      "name": "Data"
+                    },
+                    "dataVariants": [
+                      "default"
+                    ],
+                    "requested": "dependent",
+                    "write": {
+                      "dryRun": true,
+                      "succeeded": false,
+                      "changed": 0,
+                      "readbackVerified": false
+                    },
+                    "dependency": {
+                      "before": "independent",
+                      "after": "dependent"
+                    },
+                    "formula": {
+                      "after": "P_Imported",
+                      "changed": true,
+                      "cleared": false
+                    },
+                    "beforeMappings": [],
+                    "mappings": [
+                      {
+                        "formal": "P_Imported",
+                        "valueName": "P_Imported",
+                        "targetKind": "parameter",
+                        "targetScope": "imported",
+                        "verified": true,
+                        "variant": "default",
+                        "formalOID": "_040g01ow6d0bhk4agdm8u07rssr64",
+                        "valueOID": "_040ove2e9089eee5bd261b2210bff"
+                      }
+                    ],
+                    "snapshot": {
+                      "mode": "capture",
+                      "path": "C:\\Users\\NHJ3SZH\\AppData\\Local\\Temp\\pi-ascet-extension\\dependency-snapshots\\da939127f302d819fcfdf21d6e782c97.xml",
+                      "hash": "0724b67a3eebe8bce48e7a61da322d421fb2ab7555cbe37eb35cb305bceb3c5d"
+                    },
+                    "elementOverlay": {
+                      "mode": "temporaryAmd",
+                      "specHashes": [
+                        "82a82cf41810817081a50b008982386b7b3f5870ddf210f4e2816514f96a3502",
+                        "344e9d74e02477b582dfb40a8c2b46b37a82f459ef48ec8b4221e69cd7830c89"
+                      ],
+                      "elementOIDs": {
+                        "P_Imported": "_040ove2e9089eee5bd261b2210bff",
+                        "P_Local": "_040ov468c9f679a947803a0e74d78"
+                      }
+                    },
+                    "plan": {
+                      "count": 1,
+                      "matches": [
+                        {
+                          "component": "TEST\\__pi_element_live_20260808055217\\Consumer",
+                          "element": "P_Local",
+                          "kind": "parameter",
+                          "scope": "local",
+                          "schema": "scalar-parameter-dependent-flag",
+                          "dependency": "independent",
+                          "supported": true
+                        }
+                      ]
+                    }
+                  },
+                  "verification": {
+                    "requested": true,
+                    "attempted": false,
+                    "succeeded": true,
+                    "summary": "dependency_dry_run",
+                    "details": {
+                      "after": "dependent",
+                      "requested": "dependent",
+                      "formulaAfter": "P_Imported",
+                      "formulaRequested": "P_Imported"
+                    }
+                  }
+                },
+                "error": null,
+                "meta": {
+                  "mode": "exec",
+                  "operation": "set_element_dependency"
+                }
+              }
+            }
+          },
+          {
+            "stage": "provider_spec",
+            "operation": "apply_element_spec",
+            "target": "TEST\\__pi_element_live_20260808055217\\Provider",
+            "status": "committed",
+            "rollbackEligible": true,
+            "result": {
+              "ok": true,
+              "result": {
+                "operationName": "apply_element_spec",
+                "sequenceNumber": 1,
+                "writeSucceeded": true,
+                "summary": "1 created, 0 updated, 0 incompatible.",
+                "payload": {
+                  "ComponentPath": "TEST\\__pi_element_live_20260808055217\\Provider",
+                  "ComponentKind": "Class",
+                  "LanguageKind": "ESDL",
+                  "Mode": "Apply",
+                  "DeleteMissingRequested": false,
+                  "RecreateIncompatibleRequested": false,
+                  "ElementResults": [
+                    {
+                      "name": "P_Provider",
+                      "kind": "parameter",
+                      "status": "created",
+                      "changedFields": [
+                        "data.value",
+                        "impl.valueType"
+                      ],
+                      "readbackVerified": true
+                    }
+                  ],
+                  "Summary": {
+                    "created": 1,
+                    "updated": 0,
+                    "skipped": 0,
+                    "failed": 0,
+                    "removed": 0,
+                    "incompatible": 0
+                  },
+                  "CreatedElements": [
+                    "P_Provider"
+                  ],
+                  "UpdatedElements": [],
+                  "SkippedElements": [],
+                  "RemovedElements": [],
+                  "IncompatibleElements": [],
+                  "Issues": [],
+                  "WriteSucceeded": true,
+                  "VerifyReadbackRequested": true,
+                  "ReadbackVerified": true
+                },
+                "verification": {
+                  "requested": true,
+                  "attempted": true,
+                  "succeeded": true,
+                  "summary": "element_spec_matches",
+                  "details": {}
+                }
+              },
+              "error": null,
+              "meta": {
+                "mode": "exec",
+                "operation": "apply_element_spec"
+              }
+            },
+            "readbackVerified": true,
+            "rollbackEvidence": {
+              "kind": "element-spec",
+              "stage": "provider_spec",
+              "target": "TEST\\__pi_element_live_20260808055217\\Provider",
+              "componentPath": "TEST\\__pi_element_live_20260808055217\\Provider",
+              "elementName": "P_Provider",
+              "specDocument": {
+                "elements": []
+              }
+            }
+          },
+          {
+            "stage": "consumer_spec",
+            "operation": "apply_element_spec",
+            "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+            "status": "committed",
+            "rollbackEligible": true,
+            "result": {
+              "ok": true,
+              "result": {
+                "operationName": "apply_element_spec",
+                "sequenceNumber": 1,
+                "writeSucceeded": true,
+                "summary": "1 created, 0 updated, 0 incompatible.",
+                "payload": {
+                  "ComponentPath": "TEST\\__pi_element_live_20260808055217\\Consumer",
+                  "ComponentKind": "Class",
+                  "LanguageKind": "ESDL",
+                  "Mode": "Apply",
+                  "DeleteMissingRequested": false,
+                  "RecreateIncompatibleRequested": false,
+                  "ElementResults": [
+                    {
+                      "name": "P_Imported",
+                      "kind": "parameter",
+                      "status": "created",
+                      "changedFields": [],
+                      "readbackVerified": true
+                    }
+                  ],
+                  "Summary": {
+                    "created": 1,
+                    "updated": 0,
+                    "skipped": 0,
+                    "failed": 0,
+                    "removed": 0,
+                    "incompatible": 0
+                  },
+                  "CreatedElements": [
+                    "P_Imported"
+                  ],
+                  "UpdatedElements": [],
+                  "SkippedElements": [],
+                  "RemovedElements": [],
+                  "IncompatibleElements": [],
+                  "Issues": [],
+                  "WriteSucceeded": true,
+                  "VerifyReadbackRequested": true,
+                  "ReadbackVerified": true
+                },
+                "verification": {
+                  "requested": true,
+                  "attempted": true,
+                  "succeeded": true,
+                  "summary": "element_spec_matches",
+                  "details": {}
+                }
+              },
+              "error": null,
+              "meta": {
+                "mode": "exec",
+                "operation": "apply_element_spec"
+              }
+            },
+            "readbackVerified": true,
+            "rollbackEvidence": {
+              "kind": "element-spec",
+              "stage": "consumer_spec",
+              "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+              "componentPath": "TEST\\__pi_element_live_20260808055217\\Consumer",
+              "elementName": "P_Imported",
+              "specDocument": {
+                "elements": []
+              }
+            }
+          },
+          {
+            "stage": "local_spec",
+            "operation": "apply_element_spec",
+            "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+            "status": "committed",
+            "rollbackEligible": true,
+            "result": {
+              "ok": true,
+              "result": {
+                "operationName": "apply_element_spec",
+                "sequenceNumber": 1,
+                "writeSucceeded": true,
+                "summary": "1 created, 0 updated, 0 incompatible.",
+                "payload": {
+                  "ComponentPath": "TEST\\__pi_element_live_20260808055217\\Consumer",
+                  "ComponentKind": "Class",
+                  "LanguageKind": "ESDL",
+                  "Mode": "Apply",
+                  "DeleteMissingRequested": false,
+                  "RecreateIncompatibleRequested": false,
+                  "ElementResults": [
+                    {
+                      "name": "P_Local",
+                      "kind": "parameter",
+                      "status": "created",
+                      "changedFields": [],
+                      "readbackVerified": true
+                    }
+                  ],
+                  "Summary": {
+                    "created": 1,
+                    "updated": 0,
+                    "skipped": 0,
+                    "failed": 0,
+                    "removed": 0,
+                    "incompatible": 0
+                  },
+                  "CreatedElements": [
+                    "P_Local"
+                  ],
+                  "UpdatedElements": [],
+                  "SkippedElements": [],
+                  "RemovedElements": [],
+                  "IncompatibleElements": [],
+                  "Issues": [],
+                  "WriteSucceeded": true,
+                  "VerifyReadbackRequested": true,
+                  "ReadbackVerified": true
+                },
+                "verification": {
+                  "requested": true,
+                  "attempted": true,
+                  "succeeded": true,
+                  "summary": "element_spec_matches",
+                  "details": {}
+                }
+              },
+              "error": null,
+              "meta": {
+                "mode": "exec",
+                "operation": "apply_element_spec"
+              }
+            },
+            "readbackVerified": true,
+            "rollbackEvidence": {
+              "kind": "element-spec",
+              "stage": "local_spec",
+              "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+              "componentPath": "TEST\\__pi_element_live_20260808055217\\Consumer",
+              "elementName": "P_Local",
+              "specDocument": {
+                "elements": []
+              }
+            }
+          },
+          {
+            "stage": "dependency",
+            "operation": "set_element_dependency",
+            "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+            "status": "committed",
+            "rollbackEligible": true,
+            "result": {
+              "ok": true,
+              "result": {
+                "operationName": "set_element_dependency",
+                "sequenceNumber": 1,
+                "writeSucceeded": true,
+                "summary": "set P_Local dependency to dependent",
+                "payload": {
+                  "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+                  "kind": "component",
+                  "element": "P_Local",
+                  "identity": {
+                    "componentOID": "040g00001g001qg710414u7ij5f00",
+                    "elementOID": ""
+                  },
+                  "definitionHash": "2df1af42f61f9f12bf4022be0b39431d36632d1c39c5a54aedb4cd394b76c145",
+                  "dataConfiguration": {
+                    "source": "defaultDataConfiguration",
+                    "name": "Data"
+                  },
+                  "dataVariants": [
+                    "default"
+                  ],
+                  "requested": "dependent",
+                  "write": {
+                    "dryRun": false,
+                    "succeeded": true,
+                    "changed": 1,
+                    "readbackVerified": true
+                  },
+                  "dependency": {
+                    "before": "independent",
+                    "after": "dependent"
+                  },
+                  "formula": {
+                    "after": "P_Imported",
+                    "changed": true,
+                    "cleared": false
+                  },
+                  "beforeMappings": [],
+                  "mappings": [
+                    {
+                      "formal": "P_Imported",
+                      "valueName": "P_Imported",
+                      "targetKind": "parameter",
+                      "targetScope": "imported",
+                      "verified": true,
+                      "variant": "default",
+                      "formalOID": "_040g01o06d0bhk4agdm8u07rssr64",
+                      "valueOID": "_040g00001g001qg710414u9ne9q00"
+                    }
+                  ],
+                  "backup": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\ascet-xml\\backup-f08b5c91cb18-20260808-135241",
+                  "snapshot": {
+                    "mode": "capture",
+                    "path": "C:\\Users\\NHJ3SZH\\AppData\\Local\\Temp\\pi-ascet-extension\\dependency-snapshots\\da939127f302d819fcfdf21d6e782c97.xml",
+                    "hash": "fe1e138462ea39e6755d1fd754d6b672479c98dc47d5e519305896be6ee10f9c"
+                  },
+                  "plan": {
+                    "count": 1,
+                    "matches": [
+                      {
+                        "component": "TEST\\__pi_element_live_20260808055217\\Consumer",
+                        "element": "P_Local",
+                        "kind": "parameter",
+                        "scope": "local",
+                        "schema": "primitive-parameter-dependent-flag",
+                        "dependency": "independent",
+                        "supported": true
+                      }
+                    ]
+                  }
+                },
+                "verification": {
+                  "requested": true,
+                  "attempted": true,
+                  "succeeded": true,
+                  "summary": "dependency_readback_matches",
+                  "details": {
+                    "after": "dependent",
+                    "requested": "dependent",
+                    "formulaAfter": "P_Imported",
+                    "formulaRequested": "P_Imported"
+                  }
+                }
+              },
+              "error": null,
+              "meta": {
+                "mode": "exec",
+                "operation": "set_element_dependency"
+              }
+            },
+            "readbackVerified": true,
+            "rollbackEvidence": {
+              "kind": "dependency",
+              "stage": "dependency",
+              "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+              "targetPath": "TEST\\__pi_element_live_20260808055217\\Consumer",
+              "elementName": "P_Local",
+              "beforeDependency": "independent",
+              "beforeFormula": "",
+              "preflightResult": {
+                "ok": true,
+                "result": {
+                  "operationName": "set_element_dependency",
+                  "sequenceNumber": 1,
+                  "writeSucceeded": true,
+                  "summary": "planned set P_Local dependency to dependent",
+                  "payload": {
+                    "target": "TEST\\__pi_element_live_20260808055217\\Consumer",
+                    "kind": "component",
+                    "element": "P_Local",
+                    "identity": {
+                      "componentOID": "040g00001g001qg710414u7ij5f00",
+                      "elementOID": "_040ov468c9f679a947803a0e74d78"
+                    },
+                    "definitionHash": "09d9536d21b116d958538ca1fb27c3f8ddd3a86c690ed1d014c7ae60b8f5c049",
+                    "dataConfiguration": {
+                      "source": "defaultDataConfiguration",
+                      "name": "Data"
+                    },
+                    "dataVariants": [
+                      "default"
+                    ],
+                    "requested": "dependent",
+                    "write": {
+                      "dryRun": true,
+                      "succeeded": false,
+                      "changed": 0,
+                      "readbackVerified": false
+                    },
+                    "dependency": {
+                      "before": "independent",
+                      "after": "dependent"
+                    },
+                    "formula": {
+                      "after": "P_Imported",
+                      "changed": true,
+                      "cleared": false
+                    },
+                    "beforeMappings": [],
+                    "mappings": [
+                      {
+                        "formal": "P_Imported",
+                        "valueName": "P_Imported",
+                        "targetKind": "parameter",
+                        "targetScope": "imported",
+                        "verified": true,
+                        "variant": "default",
+                        "formalOID": "_040g01ow6d0bhk4agdm8u07rssr64",
+                        "valueOID": "_040ove2e9089eee5bd261b2210bff"
+                      }
+                    ],
+                    "snapshot": {
+                      "mode": "capture",
+                      "path": "C:\\Users\\NHJ3SZH\\AppData\\Local\\Temp\\pi-ascet-extension\\dependency-snapshots\\da939127f302d819fcfdf21d6e782c97.xml",
+                      "hash": "0724b67a3eebe8bce48e7a61da322d421fb2ab7555cbe37eb35cb305bceb3c5d"
+                    },
+                    "elementOverlay": {
+                      "mode": "temporaryAmd",
+                      "specHashes": [
+                        "82a82cf41810817081a50b008982386b7b3f5870ddf210f4e2816514f96a3502",
+                        "344e9d74e02477b582dfb40a8c2b46b37a82f459ef48ec8b4221e69cd7830c89"
+                      ],
+                      "elementOIDs": {
+                        "P_Imported": "_040ove2e9089eee5bd261b2210bff",
+                        "P_Local": "_040ov468c9f679a947803a0e74d78"
+                      }
+                    },
+                    "plan": {
+                      "count": 1,
+                      "matches": [
+                        {
+                          "component": "TEST\\__pi_element_live_20260808055217\\Consumer",
+                          "element": "P_Local",
+                          "kind": "parameter",
+                          "scope": "local",
+                          "schema": "scalar-parameter-dependent-flag",
+                          "dependency": "independent",
+                          "supported": true
+                        }
+                      ]
+                    }
+                  },
+                  "verification": {
+                    "requested": true,
+                    "attempted": false,
+                    "succeeded": true,
+                    "summary": "dependency_dry_run",
+                    "details": {
+                      "after": "dependent",
+                      "requested": "dependent",
+                      "formulaAfter": "P_Imported",
+                      "formulaRequested": "P_Imported"
+                    }
+                  }
+                },
+                "error": null,
+                "meta": {
+                  "mode": "exec",
+                  "operation": "set_element_dependency"
+                }
+              }
+            }
+          }
+        ],
+        "writesPerformed": true,
+        "atomic": true,
+        "rollback": {
+          "required": false,
+          "evidenceCaptured": true,
+          "result": {
+            "status": "succeeded",
+            "attempted": false,
+            "stages": []
+          }
+        },
+        "limitations": [
+          "Dependency preflight exports temporary main/data AMD files, overlays the pending Consumer and Local Element specs, and validates the real XML dependency mutation without importing it.",
+          "The common AscetPlanStore fingerprint includes the complete definition and all four backend preflight payloads.",
+          "The chain uses compensating rollback, not a cross-command ASCET transaction; rollback evidence is captured before commit."
+        ]
+      }
+    },
+    {
+      "name": "composite_readback",
+      "data": {
+        "target": "TEST/__pi_element_live_20260808055217/Consumer",
+        "kind": "component",
+        "element": "P_Local",
+        "total": 1,
+        "items": [
+          {
+            "component": "TEST/__pi_element_live_20260808055217/Consumer",
+            "element": "P_Local",
+            "kind": "parameter",
+            "scope": "local",
+            "schema": "primitive-parameter-dependent-flag",
+            "dependency": "dependent",
+            "formula": "P_Imported",
+            "supported": true
+          }
+        ]
+      }
+    }
+  ],
+  "cleanup": [
+    {
+      "componentPath": "TEST\\__pi_element_live_20260808055217\\Consumer",
+      "result": {
+        "status": "ok",
+        "data": {
+          "changed": {
+            "componentPath": "TEST\\__pi_element_live_20260808055217\\Consumer",
+            "folderPath": "TEST\\__pi_element_live_20260808055217",
+            "componentName": "Consumer",
+            "deleted": true,
+            "alreadyMissing": false,
+            "verifyReadbackRequested": true,
+            "readbackVerified": true,
+            "summary": "Deleted component TEST\\__pi_element_live_20260808055217\\Consumer."
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    },
+    {
+      "componentPath": "TEST\\__pi_element_live_20260808055217\\Provider",
+      "result": {
+        "status": "ok",
+        "data": {
+          "changed": {
+            "componentPath": "TEST\\__pi_element_live_20260808055217\\Provider",
+            "folderPath": "TEST\\__pi_element_live_20260808055217",
+            "componentName": "Provider",
+            "deleted": true,
+            "alreadyMissing": false,
+            "verifyReadbackRequested": true,
+            "readbackVerified": true,
+            "summary": "Deleted component TEST\\__pi_element_live_20260808055217\\Provider."
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    },
+    {
+      "componentPath": "TEST\\__pi_element_live_20260808055217\\Inline",
+      "result": {
+        "status": "ok",
+        "data": {
+          "changed": {
+            "componentPath": "TEST\\__pi_element_live_20260808055217\\Inline",
+            "folderPath": "TEST\\__pi_element_live_20260808055217",
+            "componentName": "Inline",
+            "deleted": true,
+            "alreadyMissing": false,
+            "verifyReadbackRequested": true,
+            "readbackVerified": true,
+            "summary": "Deleted component TEST\\__pi_element_live_20260808055217\\Inline."
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    },
+    {
+      "folder": "TEST\\__pi_element_live_20260808055217",
+      "result": {
+        "status": "ok",
+        "data": {
+          "changed": {
+            "folderPath": "TEST\\__pi_element_live_20260808055217",
+            "deleted": true,
+            "alreadyMissing": false,
+            "verifyReadbackRequested": true,
+            "readbackVerified": true,
+            "summary": "Deleted folder TEST\\__pi_element_live_20260808055217."
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    }
+  ]
+}

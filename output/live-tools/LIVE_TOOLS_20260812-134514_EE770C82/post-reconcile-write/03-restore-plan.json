@@ -1,0 +1,202 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"status\": \"preflight\",\n  \"plan\": {\n    \"action\": \"apply_element_spec\",\n    \"params\": {\n      \"action\": \"apply_element_spec\",\n      \"phase\": \"plan\",\n      \"component\": \"PI_LIVE_FIX_20260812_EE770C82/ClassUnderTest\",\n      \"intent\": \"restore\",\n      \"deleteMissing\": true,\n      \"executeWrite\": false\n    },\n    \"backendPreflight\": {\n      \"operation\": \"authoritative_element_preflight\",\n      \"validated\": true,\n      \"capabilities\": {\n        \"validated\": true\n      },\n      \"liveElementCount\": 1,\n      \"liveSnapshotHash\": \"f42e5d4316795a6eb6e36296dcbbccdff106abc85e2fc50db4d6d6ca839c3220\",\n      \"catalogSnapshot\": {\n        \"elements\": [\n          {\n            \"name\": \"C_FIX_PostReconcile\",\n            \"kind\": \"variable\",\n            \"modelType\": \"cont\",\n            \"scope\": \"local\",\n            \"calibration\": true,\n            \"configurationProvenance\": {\n              \"dataConfiguration\": {\n                \"source\": \"defaultDataConfiguration\",\n                \"configurationName\": \"Data\",\n                \"selected\": true\n              },\n              \"implementationConfiguration\": {\n                \"source\": \"defaultImplementationConfiguration\",\n                \"configurationName\": \"Impl\",\n                \"selected\": true\n              }\n            },\n            \"data\": {\n              \"value\": 0\n            },\n            \"impl\": {\n              \"memoryLocation\": \"Default\",\n              \"valueType\": \"real64\",\n              \"formula\": \"ident\",\n              \"limitAssignments\": true\n            }\n          }\n        ],\n        \"identity\": {\n          \"componentOID\": \"040g00001g001qg71060i85ff2002\"\n        },\n        \"componentConfigurationProvenance\": {\n          \"defaultDataConfiguration\": {\n            \"source\": \"defaultDataConfiguration\",\n            \"configurationName\": \"Data\",\n            \"selected\": true\n          },\n          \"classDataConfiguration\": {\n            \"source\": \"classDataConfiguration\",\n            \"configurationName\": \"ClassUnderTest\",\n            \"selected\": true\n          },\n          \"defaultImplementationConfiguration\": {\n            \"source\": \"defaultImplementationConfiguration\",\n            \"configurationName\": \"Impl\",\n            \"selected\": true\n          },\n          \"classImplementationConfiguration\": {\n            \"source\": \"classImplementationConfiguration\",\n            \"configurationName\": \"ClassUnderTest\",\n            \"selected\": true\n          }\n        }\n      },\n      \"catalogIdentity\": {\n        \"componentOID\": \"040g00001g001qg71060i85ff2002\"\n      },\n      \"normalizedSpecHash\": \"a91d7cc1eff74cb5a904d6073dd7724daedc69c4d432de62a1630a2e51bf94a6\",\n      \"resolvedIntent\": \"restore\",\n      \"result\": {\n        \"component\": \"PI_LIVE_FIX_20260812_EE770C82/ClassUnderTest\",\n        \"removedElements\": [\n          {\n            \"name\": \"C_FIX_PostReconcile\",\n            \"kind\": \"Variable\",\n            \"signature\": \"Variable ModelType=cont Scope=local Calibration=True\"\n          }\n        ],\n        \"summary\": \"0 added, 1 removed, 0 modified, 0 incompatible\"\n      }\n    },\n    \"version\": 3,\n    \"planId\": \"4df03e27-e66f-4135-8195-87d06fa6d399\",\n    \"planFingerprint\": \"a2f3e44d12fa22b1b6177557173aa5d7b8ca0fb1b5b102d458eb3cb4360acac2\",\n    \"contractFingerprint\": \"bcfbc72a93be01b5f6f3b6554751b46f54337eb1708aa6e19f6295da36c1172f\",\n    \"evidenceFingerprint\": \"695e6014295e35312c2fef6c40fc553e5859570a629c0ab880cc7decd3d33960\",\n    \"databaseIdentity\": {\n      \"name\": \"C:\\\\Repo\\\\11_ASCETCopilotLiveTest\\\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\\\ASW\\\\Db\\\\AscetDb_20260707223121\",\n      \"path\": \"C:/Repo/11_ASCETCopilotLiveTest/AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599/ASW/Db/\",\n      \"fingerprint\": \"49be9da8ddaa5ac7b09b24a394229cbbd9a9dc3dbabadf9704da7ff25633274a\"\n    },\n    \"targetIdentity\": {\n      \"path\": \"PI_LIVE_FIX_20260812_EE770C82/ClassUnderTest\",\n      \"oid\": \"040g00001g001qg71060i85ff2002\",\n      \"kind\": \"component\"\n    },\n    \"targetImpact\": {\n      \"sharedObject\": false,\n      \"requestedPath\": \"PI_LIVE_FIX_20260812_EE770C82/ClassUnderTest\",\n      \"ownerPath\": \"PI_LIVE_FIX_20260812_EE770C82/ClassUnderTest\",\n      \"targetOid\": \"040g00001g001qg71060i85ff2002\",\n      \"aliasPaths\": [\n        \"PI_LIVE_FIX_20260812_EE770C82\\\\ClassUnderTest\"\n      ],\n      \"completeness\": \"complete\",\n      \"writeAllowed\": true,\n      \"fingerprint\": \"sha256:0d81277e0b76a4629a04fa14d63f7f1f949ea8eaba542f3095b615e2475253cc\"\n    },\n    \"guardGeneration\": 3,\n    \"expiresAt\": \"2026-08-12T06:03:15.930Z\"\n  },\n  \"nextStep\": \"Call apply_element_spec with phase=commit and planId=4df03e27-e66f-4135-8195-87d06fa6d399.\"\n}"
+    }
+  ],
+  "details": {
+    "outcome": {
+      "status": "preflight",
+      "plan": {
+        "action": "apply_element_spec",
+        "params": {
+          "action": "apply_element_spec",
+          "phase": "plan",
+          "componentPath": "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+          "intent": "restore",
+          "elements": [],
+          "deleteMissing": true,
+          "executeWrite": false
+        },
+        "backendPreflight": {
+          "operation": "authoritative_element_preflight",
+          "validated": true,
+          "capabilities": {
+            "validated": true,
+            "elements": []
+          },
+          "liveElementCount": 1,
+          "liveSnapshotHash": "f42e5d4316795a6eb6e36296dcbbccdff106abc85e2fc50db4d6d6ca839c3220",
+          "catalogSnapshot": {
+            "elements": [
+              {
+                "name": "C_FIX_PostReconcile",
+                "kind": "variable",
+                "modelType": "cont",
+                "scope": "local",
+                "calibration": true,
+                "configurationProvenance": {
+                  "dataConfiguration": {
+                    "source": "defaultDataConfiguration",
+                    "configurationName": "Data",
+                    "selected": true
+                  },
+                  "implementationConfiguration": {
+                    "source": "defaultImplementationConfiguration",
+                    "configurationName": "Impl",
+                    "selected": true
+                  }
+                },
+                "data": {
+                  "value": 0
+                },
+                "impl": {
+                  "memoryLocation": "Default",
+                  "valueType": "real64",
+                  "formula": "ident",
+                  "limitAssignments": true
+                }
+              }
+            ],
+            "identity": {
+              "componentOID": "040g00001g001qg71060i85ff2002"
+            },
+            "componentConfigurationProvenance": {
+              "defaultDataConfiguration": {
+                "source": "defaultDataConfiguration",
+                "configurationName": "Data",
+                "selected": true
+              },
+              "classDataConfiguration": {
+                "source": "classDataConfiguration",
+                "configurationName": "ClassUnderTest",
+                "selected": true
+              },
+              "defaultImplementationConfiguration": {
+                "source": "defaultImplementationConfiguration",
+                "configurationName": "Impl",
+                "selected": true
+              },
+              "classImplementationConfiguration": {
+                "source": "classImplementationConfiguration",
+                "configurationName": "ClassUnderTest",
+                "selected": true
+              }
+            }
+          },
+          "catalogIdentity": {
+            "componentOID": "040g00001g001qg71060i85ff2002"
+          },
+          "normalizedSpecHash": "a91d7cc1eff74cb5a904d6073dd7724daedc69c4d432de62a1630a2e51bf94a6",
+          "resolvedIntent": "restore",
+          "resolvedOperations": [],
+          "warnings": [],
+          "normalizedSpec": {
+            "elements": []
+          },
+          "result": {
+            "ComponentPath": "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+            "AddedElements": [],
+            "RemovedElements": [
+              {
+                "Name": "C_FIX_PostReconcile",
+                "Kind": "Variable",
+                "Signature": "Variable ModelType=cont Scope=local Calibration=True"
+              }
+            ],
+            "ModifiedElements": [],
+            "IncompatibleElements": [],
+            "SkippedElements": [],
+            "Summary": "0 added, 1 removed, 0 modified, 0 incompatible"
+          },
+          "limitations": []
+        },
+        "version": 3,
+        "planId": "4df03e27-e66f-4135-8195-87d06fa6d399",
+        "planFingerprint": "a2f3e44d12fa22b1b6177557173aa5d7b8ca0fb1b5b102d458eb3cb4360acac2",
+        "contractFingerprint": "bcfbc72a93be01b5f6f3b6554751b46f54337eb1708aa6e19f6295da36c1172f",
+        "evidenceFingerprint": "695e6014295e35312c2fef6c40fc553e5859570a629c0ab880cc7decd3d33960",
+        "databaseIdentity": {
+          "name": "C:\\Repo\\11_ASCETCopilotLiveTest\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\ASW\\Db\\AscetDb_20260707223121",
+          "path": "C:\\Repo\\11_ASCETCopilotLiveTest\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\ASW\\Db\\",
+          "fingerprint": "49be9da8ddaa5ac7b09b24a394229cbbd9a9dc3dbabadf9704da7ff25633274a"
+        },
+        "targetIdentity": {
+          "path": "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+          "oid": "040g00001g001qg71060i85ff2002",
+          "kind": "component"
+        },
+        "targetImpact": {
+          "sharedObject": false,
+          "requestedPath": "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+          "ownerPath": "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+          "targetOid": "040g00001g001qg71060i85ff2002",
+          "aliasPaths": [
+            "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest"
+          ],
+          "affectedProjects": [],
+          "completeness": "complete",
+          "writeAllowed": true,
+          "fingerprint": "sha256:0d81277e0b76a4629a04fa14d63f7f1f949ea8eaba542f3095b615e2475253cc"
+        },
+        "guardGeneration": 3,
+        "expiresAt": "2026-08-12T06:03:15.930Z"
+      },
+      "nextStep": "Call apply_element_spec with phase=commit and planId=4df03e27-e66f-4135-8195-87d06fa6d399."
+    },
+    "raw": {
+      "ok": true,
+      "data": {
+        "type": "response",
+        "protocolVersion": 1,
+        "ok": true,
+        "result": {
+          "ComponentPath": "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+          "AddedElements": [],
+          "RemovedElements": [
+            {
+              "Name": "C_FIX_PostReconcile",
+              "Kind": "Variable",
+              "Signature": "Variable ModelType=cont Scope=local Calibration=True"
+            }
+          ],
+          "ModifiedElements": [],
+          "IncompatibleElements": [],
+          "SkippedElements": [],
+          "Summary": "0 added, 1 removed, 0 modified, 0 incompatible"
+        },
+        "error": null,
+        "meta": {
+          "bridgePid": 6548,
+          "bridgeGeneration": "5f2e99b8-7061-450e-a315-2f0cc8799061",
+          "durationMs": 455,
+          "sessionPolicy": "fresh_session",
+          "mutationStarted": false,
+          "mode": "exec",
+          "operation": "diff_element_spec"
+        }
+      },
+      "request": {
+        "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+        "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+        "args": [
+          "exec",
+          "diff_element_spec",
+          "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+          "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\LIVE_TOOLS_20260812-134514_EE770C82\\artifacts\\element-spec-plans\\inline-39808-1786514274961-c41961ca-f0a5-41c0-b69e-d4b6d4669771.json",
+          "--json"
+        ],
+        "timeoutMs": 240000,
+        "jobKind": "read",
+        "mutatesDatabase": false
+      },
+      "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"ComponentPath\":\"PI_LIVE_FIX_20260812_EE770C82\\\\ClassUnderTest\",\"AddedElements\":[],\"RemovedElements\":[{\"Name\":\"C_FIX_PostReconcile\",\"Kind\":\"Variable\",\"Signature\":\"Variable ModelType=cont Scope=local Calibration=True\"}],\"ModifiedElements\":[],\"IncompatibleElements\":[],\"SkippedElements\":[],\"Summary\":\"0 added, 1 removed, 0 modified, 0 incompatible\"},\"error\":null,\"meta\":{\"bridgePid\":6548,\"bridgeGeneration\":\"5f2e99b8-7061-450e-a315-2f0cc8799061\",\"durationMs\":455,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"diff_element_spec\"}}\r\n",
+      "stderr": "",
+      "exitCode": 0,
+      "timedOut": false,
+      "aborted": false,
+      "operationId": "diff_element_spec"
+    }
+  }
+}

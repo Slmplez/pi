@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "status": "applied",
+  "databaseFingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c",
+  "targetOid": "040g00001g001qg7107g8595a09g0",
+  "targetKind": "folder",
+  "canonicalPath": "DEMO\\__pi_permission_smoke__20260815-134337",
+  "action": "create_component",
+  "planId": "7f3b1363-1a14-40f5-b7b6-993dd7d8e744",
+  "planFingerprint": "99450a3b761524ae0b5dcc231885af840ec4f1fce1033a3f82c0493b60b6c0b9",
+  "targetImpactFingerprint": "sha256:4d12f1d4d2ad4c6a4a165c5703152527a0cd8252163af42b53779c635a7858ef",
+  "guardGeneration": 0,
+  "beforeSnapshotFingerprint": "sha256:94c266e2b7037baa92780cdf358094772f0de68d7e7154412749ae55585953cd",
+  "desiredFingerprint": "sha256:d66a991019257abe0f19ae927a05b468b4036114f3b7123a279e99ebc9dddac8",
+  "beforeSnapshot": {
+    "operation": "authoritative_single_call_preflight",
+    "validated": true,
+    "authoritativePlan": {
+      "operation": "registered_guarded_operation_preflight",
+      "validated": true,
+      "result": {
+        "targetPath": "DEMO\\__pi_permission_smoke__20260815-134337",
+        "editable": "not_applicable",
+        "capability": {
+          "status": "supported",
+          "source": "registered_closed_operation"
+        },
+        "readbackAvailable": true,
+        "noOp": false
+      }
+    },
+    "normalizedEvidence": {
+      "version": 1,
+      "action": "create_component",
+      "paramsFingerprint": "d66a991019257abe0f19ae927a05b468b4036114f3b7123a279e99ebc9dddac8",
+      "database": {
+        "path": "C:\\Repo\\F05_IPB_L2_0429",
+        "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+      },
+      "target": {
+        "path": "DEMO\\__pi_permission_smoke__20260815-134337",
+        "oid": "040g00001g001qg7107g8595a09g0",
+        "kind": "folder"
+      },
+      "impact": {
+        "complete": true,
+        "sharedObject": false,
+        "ownerPath": "DEMO\\__pi_permission_smoke__20260815-134337",
+        "affectedProjects": [],
+        "fingerprint": "sha256:4d12f1d4d2ad4c6a4a165c5703152527a0cd8252163af42b53779c635a7858ef"
+      },
+      "capability": {
+        "status": "supported",
+        "operation": "registered_guarded_operation_preflight",
+        "evidence": {
+          "status": "supported",
+          "source": "registered_closed_operation"
+        }
+      },
+      "editability": {
+        "applicable": false,
+        "status": "not_applicable",
+        "canRequestEditable": false
+      },
+      "effects": [
+        {
+          "kind": "create_component",
+          "target": "DEMO\\__pi_permission_smoke__20260815-134337",
+          "description": "create_component: DEMO\\__pi_permission_smoke__20260815-134337"
+        }
+      ],
+      "verification": {
+        "available": true,
+        "operation": "create_component_readback",
+        "target": {
+          "path": "DEMO\\__pi_permission_smoke__20260815-134337"
+        }
+      },
+      "riskModifiers": [],
+      "noOp": false,
+      "generatedAt": "2026-08-15T05:47:12.372Z",
+      "approvalMaterialFingerprint": "2e96bb3c7a0bb4786fb54338b45ed60af6c925b0d34ff56353c2f6ceeb37e670"
+    },
+    "permissionMode": "acceptEdits",
+    "permissionDecision": "allow",
+    "risk": "safe",
+    "revalidatedAt": "2026-08-15T05:47:12.372Z",
+    "targetIdentity": {
+      "path": "DEMO\\__pi_permission_smoke__20260815-134337",
+      "oid": "040g00001g001qg7107g8595a09g0",
+      "kind": "folder"
+    },
+    "targetImpactFingerprint": "sha256:4d12f1d4d2ad4c6a4a165c5703152527a0cd8252163af42b53779c635a7858ef"
+  },
+  "attemptedMutation": {
+    "action": "create_component",
+    "componentPath": "DEMO\\__pi_permission_smoke__20260815-134337\\EditableClass",
+    "kind": "class",
+    "language": "ESDL",
+    "ifExists": "fail"
+  },
+  "createdAt": "2026-08-15T05:47:12.391Z",
+  "updatedAt": "2026-08-15T05:47:13.581Z",
+  "evidence": {
+    "bridgeEntered": true,
+    "backendResponseReceived": true,
+    "mutationStarted": true
+  },
+  "outcome": {
+    "operationId": "create_component"
+  }
+}

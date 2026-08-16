@@ -1,0 +1,225 @@
+{
+  "generated_at": "2026-04-01T03:07:41.632621Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\BooleanTableEditorEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\BooleanTableEditorEnglishUS",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\BooleanTableEditorEnglishUS\\markdown",
+  "input_html_count": 35,
+  "converted_html_count": 35,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 30,
+  "toc_entries_count": 41,
+  "index_entries_count": 31,
+  "index_required": true,
+  "mappings": [
+    {
+      "html_rel_path": "BT_adding_ip_op.htm",
+      "md_rel_path": "BT_adding_ip_op.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BT_Browse_View.htm",
+      "md_rel_path": "BT_Browse_View.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BT_Build_Menu.htm",
+      "md_rel_path": "BT_Build_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BT_checking_table.htm",
+      "md_rel_path": "BT_checking_table.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bt_component_pane.htm",
+      "md_rel_path": "bt_component_pane.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bt_contextmenu_browseview.htm",
+      "md_rel_path": "bt_contextmenu_browseview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bt_contextmenu_self.htm",
+      "md_rel_path": "bt_contextmenu_self.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BT_ContextMenu_SpecificationView.htm",
+      "md_rel_path": "BT_ContextMenu_SpecificationView.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BT_deleting_ip_op.htm",
+      "md_rel_path": "BT_deleting_ip_op.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BT_Description_of_Window_Elements.htm",
+      "md_rel_path": "BT_Description_of_Window_Elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BT_Edit_Menu.htm",
+      "md_rel_path": "BT_Edit_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BT_Extras_Menu.htm",
+      "md_rel_path": "BT_Extras_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BT_File_Menu.htm",
+      "md_rel_path": "BT_File_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bt_filtering_the_component_pane.htm",
+      "md_rel_path": "bt_filtering_the_component_pane.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BT_generate_default-matrix.htm",
+      "md_rel_path": "BT_generate_default-matrix.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BT_Help_Menu.htm",
+      "md_rel_path": "BT_Help_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BT_menu_bar.htm",
+      "md_rel_path": "BT_menu_bar.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BT_Overview.htm",
+      "md_rel_path": "BT_Overview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BT_renaming_ip_op.htm",
+      "md_rel_path": "BT_renaming_ip_op.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bt_searchresultsview.htm",
+      "md_rel_path": "bt_searchresultsview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BT_Setting_the_Background_Color.htm",
+      "md_rel_path": "BT_Setting_the_Background_Color.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BT_shift_table_columns.htm",
+      "md_rel_path": "BT_shift_table_columns.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bt_showdeleteunusedInputts.htm",
+      "md_rel_path": "bt_showdeleteunusedInputts.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BT_Specification_View.htm",
+      "md_rel_path": "BT_Specification_View.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BT_Specifying_Boolean_Tables.htm",
+      "md_rel_path": "BT_Specifying_Boolean_Tables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BT_Specifying_Inputs_Outputs.htm",
+      "md_rel_path": "BT_Specifying_Inputs_Outputs.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BT_Starting_an_Offline_Experiment.htm",
+      "md_rel_path": "BT_Starting_an_Offline_Experiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BT_Toolbar_BoolTable_Editor.htm",
+      "md_rel_path": "BT_Toolbar_BoolTable_Editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BT_Tools_Menu.htm",
+      "md_rel_path": "BT_Tools_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "BT_view_menu.htm",
+      "md_rel_path": "BT_view_menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "codegen_dbtoolarge.htm",
+      "md_rel_path": "codegen_dbtoolarge.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "combinations_menu.htm",
+      "md_rel_path": "combinations_menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "create_boolean_table.htm",
+      "md_rel_path": "create_boolean_table.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "inputs_menu.htm",
+      "md_rel_path": "inputs_menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "outputs_menu.htm",
+      "md_rel_path": "outputs_menu.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

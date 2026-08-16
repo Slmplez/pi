@@ -1,0 +1,73 @@
+{
+  "catalogResultId": "obs-database-catalog-30004-1786236160476-0",
+  "sourceTreeResultId": "obs-tree-live-20260808-full-database",
+  "include": [
+    "enumeration"
+  ],
+  "messageDepth": 0,
+  "capturedAt": "2026-08-09T00:42:40.476Z",
+  "coverage": {
+    "status": "complete_for_scope"
+  },
+  "sourceTreeCounts": {
+    "sourceTreeRowCount": 10670,
+    "projectCount": 75,
+    "moduleRowCount": 859,
+    "uniqueModuleCount": 428,
+    "moduleAliasCount": 431,
+    "enumerationCount": 708,
+    "classRowCount": 7069,
+    "invalidRowCount": 0
+  },
+  "perTypeCounts": {
+    "parameterClasses": 0,
+    "enumerations": 708,
+    "modules": 0,
+    "messages": 0
+  },
+  "perRelationCounts": {},
+  "liveCounts": {},
+  "perStageTimings": {
+    "sourceTreeScanMs": 74.04570000000001,
+    "liveScanMs": 0
+  },
+  "warnings": [],
+  "failures": [],
+  "lineage": {
+    "sourceTreeResultId": "obs-tree-live-20260808-full-database",
+    "sourceTreeDataPath": "output\\database-catalog-baseline\\obs-tree-live-20260808-full-database.tree.ndjson",
+    "sourceTreeMetaPath": "output\\database-catalog-baseline\\obs-tree-live-20260808-full-database.meta.json"
+  },
+  "artifacts": {
+    "catalog": {
+      "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-30004-1786236160476-0.database-model-catalog.ndjson",
+      "itemCount": 708
+    },
+    "relations": {
+      "projectComplexEdges": {
+        "notCreatedReason": "scan_not_requested"
+      },
+      "parameterClassEdges": {
+        "notCreatedReason": "scan_not_requested"
+      },
+      "parameterEnumEdges": {
+        "notCreatedReason": "scan_not_requested"
+      },
+      "projectModuleEdges": {
+        "notCreatedReason": "scan_not_requested"
+      },
+      "moduleMessageEdges": {
+        "notCreatedReason": "scan_not_requested"
+      },
+      "messageEnumEdges": {
+        "notCreatedReason": "scan_not_requested"
+      }
+    },
+    "summaryPath": "output\\database-catalog-baseline\\obs-database-catalog-30004-1786236160476-0.database-model-summary.json",
+    "metaPath": "output\\database-catalog-baseline\\obs-database-catalog-30004-1786236160476-0.database-model.meta.json",
+    "enumerations": {
+      "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-30004-1786236160476-0.enumerations.ndjson",
+      "itemCount": 708
+    }
+  }
+}

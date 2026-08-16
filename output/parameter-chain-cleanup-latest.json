@@ -1,0 +1,134 @@
+﻿
+> pi-monorepo@0.0.3 smoke:ascet-extension:parameter-chain
+> tsx scripts/ascet-extension-parameter-chain-live-smoke.ts
+
+{
+  "ok": true,
+  "cleanupOnly": true,
+  "ascetCwd": "C:\\Repo\\F05_IPB_L2_0429",
+  "folderPath": "DEMO\\__pi_parameter_chain_smoke__",
+  "cleanup": {
+    "components": [
+      {
+        "componentPath": "DEMO\\__pi_parameter_chain_smoke__\\PiSmokeConsumer",
+        "preflight": {
+          "status": "preflight",
+          "plan": {
+            "action": "delete_component",
+            "params": {
+              "action": "delete_component",
+              "componentPath": "DEMO\\__pi_parameter_chain_smoke__\\PiSmokeConsumer",
+              "ifMissing": "ignore"
+            }
+          },
+          "nextStep": "Set executeWrite=true and confirm in the UI to apply this ASCET write."
+        },
+        "write": {
+          "status": "ok",
+          "verified": true,
+          "data": {
+            "changed": {
+              "componentPath": "DEMO\\__pi_parameter_chain_smoke__\\PiSmokeConsumer",
+              "folderPath": "DEMO\\__pi_parameter_chain_smoke__",
+              "componentName": "PiSmokeConsumer",
+              "deleted": true,
+              "alreadyMissing": false,
+              "summary": "Deleted component DEMO\\__pi_parameter_chain_smoke__\\PiSmokeConsumer."
+            },
+            "verification": {
+              "mode": "automatic_readback",
+              "source": "write_command",
+              "required": true,
+              "requested": true,
+              "verified": true,
+              "status": "passed"
+            },
+            "observations": {
+              "invalidated": []
+            }
+          },
+          "warnings": []
+        }
+      },
+      {
+        "componentPath": "DEMO\\__pi_parameter_chain_smoke__\\PiSmokeProvider",
+        "preflight": {
+          "status": "preflight",
+          "plan": {
+            "action": "delete_component",
+            "params": {
+              "action": "delete_component",
+              "componentPath": "DEMO\\__pi_parameter_chain_smoke__\\PiSmokeProvider",
+              "ifMissing": "ignore"
+            }
+          },
+          "nextStep": "Set executeWrite=true and confirm in the UI to apply this ASCET write."
+        },
+        "write": {
+          "status": "ok",
+          "verified": true,
+          "data": {
+            "changed": {
+              "componentPath": "DEMO\\__pi_parameter_chain_smoke__\\PiSmokeProvider",
+              "folderPath": "DEMO\\__pi_parameter_chain_smoke__",
+              "componentName": "PiSmokeProvider",
+              "deleted": true,
+              "alreadyMissing": false,
+              "summary": "Deleted component DEMO\\__pi_parameter_chain_smoke__\\PiSmokeProvider."
+            },
+            "verification": {
+              "mode": "automatic_readback",
+              "source": "write_command",
+              "required": true,
+              "requested": true,
+              "verified": true,
+              "status": "passed"
+            },
+            "observations": {
+              "invalidated": []
+            }
+          },
+          "warnings": []
+        }
+      }
+    ],
+    "folder": {
+      "preflight": {
+        "status": "preflight",
+        "plan": {
+          "action": "delete_folder",
+          "params": {
+            "action": "delete_folder",
+            "folderPath": "DEMO\\__pi_parameter_chain_smoke__",
+            "ifMissing": "ignore"
+          }
+        },
+        "nextStep": "Set executeWrite=true and confirm in the UI to apply this ASCET write."
+      },
+      "write": {
+        "status": "ok",
+        "verified": true,
+        "data": {
+          "changed": {
+            "folderPath": "DEMO\\__pi_parameter_chain_smoke__",
+            "deleted": true,
+            "alreadyMissing": false,
+            "summary": "Deleted folder DEMO\\__pi_parameter_chain_smoke__."
+          },
+          "verification": {
+            "mode": "automatic_readback",
+            "source": "write_command",
+            "required": true,
+            "requested": true,
+            "verified": true,
+            "status": "passed"
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    }
+  }
+}

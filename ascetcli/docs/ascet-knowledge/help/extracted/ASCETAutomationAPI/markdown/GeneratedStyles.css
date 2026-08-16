@@ -1,0 +1,205 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;
+font-style: normal;
+font-weight: normal;
+font-size: 10pt;
+color: Black;
+
+}
+div.toc {
+	font-family: Arial, Helvetica, sans-serif;
+font-style: normal;
+font-weight: bold;
+font-size: 9pt;
+color: Black;
+
+}
+div.toc ul {
+	font-family: Arial, Helvetica, sans-serif;
+font-style: normal;
+font-weight: normal;
+font-size: 9pt;
+color: Black;
+
+}
+div.toc ul ul {
+	font-family: Arial, Helvetica, sans-serif;
+font-style: normal;
+font-weight: normal;
+font-size: 9pt;
+color: Black;
+
+}
+div.toc ul ul ul {
+	font-family: Arial, Helvetica, sans-serif;
+font-style: normal;
+font-weight: normal;
+font-size: 9pt;
+color: Black;
+
+}
+h1 {
+    font-family: Arial, Helvetica, sans-serif;
+font-style: normal;
+font-weight: bold;
+font-size: 18pt;
+color: Black;
+
+}
+h1.title {
+    font-family: Arial, Helvetica, sans-serif;
+font-style: normal;
+font-weight: bold;
+font-size: 28pt;
+color: Black;
+text-align: right;
+
+}
+h2 {
+    font-family: Arial, Helvetica, sans-serif;
+font-style: normal;
+font-weight: bold;
+font-size: 16pt;
+color: Black;
+
+}
+h3 {
+    font-family: Arial, Helvetica, sans-serif;
+font-style: normal;
+font-weight: bold;
+font-size: 15pt;
+color: Black;
+
+}
+h3.toctitle {
+    font-family: Arial, Helvetica, sans-serif;
+font-style: normal;
+font-weight: bold;
+font-size: 14pt;
+color: Black;
+text-align: right;
+
+}
+h4 {
+    font-family: Arial, Helvetica, sans-serif;
+font-style: normal;
+font-weight: bold;
+font-size: 14pt;
+color: Black;
+
+}
+h5 {
+    font-family: Arial, Helvetica, sans-serif;
+font-style: normal;
+font-weight: bold;
+font-size: 10pt;
+color: Black;
+
+}
+pre	{
+	font-family: Courier New, Courier, Monospace;
+font-style: normal;
+font-weight: normal;
+font-size: 8pt;
+color: #000066;
+
+}
+table th { 
+	font-family: Arial, Helvetica, sans-serif;
+font-style: normal;
+font-weight: bold;
+font-size: 10pt;
+color: Black;
+
+}
+table td {
+	font-family: Arial, Helvetica, sans-serif;
+font-style: normal;
+font-weight: normal;
+font-size: 10pt;
+color: Black;
+
+}
+.header {
+    font-family: Arial, Helvetica, sans-serif;
+font-style: normal;
+font-weight: normal;
+font-size: 9pt;
+color: Black;
+
+}
+.footer {
+    font-family: Arial, Helvetica, sans-serif;
+font-style: normal;
+font-weight: normal;
+font-size: 9pt;
+color: Black;
+
+}
+span.xml-element {
+    color: #008b8b;
+
+}
+span.xml-attribute {
+    color: #FF0034;
+
+}
+span.xml-attvalue {
+    color: #0062FF;
+
+}
+span.xml-delimiter {
+    color: #0062FF;
+
+}
+span.xml-text {
+    color: #000000;
+
+}
+span.xml-comment {
+    color: #50F03C;
+
+}
+span.xml-pi {
+    color: #0062FF;
+
+}
+span.sql-other {
+    color: #0A7AD0;
+
+}
+span.sql-comment {
+    color: #50F03C;
+
+}
+span.sql-keyword {
+    color: #0062FF;
+
+}
+span.sql-identifier {
+    color: #000000;
+
+}
+span.sql-string {
+    color: #FF0034;
+
+}
+span.sql-number {
+    color: #000000;
+
+}
+strong {
+    font-weight: bold;
+
+}
+emphasis {
+    font-style: italic;
+
+}
+a, a:link, a:visited {
+    text-decoration: underline;
+color: #0062FF;
+
+    cursor: pointer;
+}
+    

@@ -1,0 +1,318 @@
+{
+  "stage": "preview-Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress-abstract",
+  "request": {
+    "toolName": "ascet_edit",
+    "params": {
+      "action": "create_method",
+      "componentPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress",
+      "componentKind": "class",
+      "methodName": "__PiPermissionProbe__",
+      "methodKind": "abstract",
+      "ifExists": "fail",
+      "intent": "preview"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"status\": \"ok\",\n  \"permission\": {\n    \"mode\": \"default\",\n    \"decision\": \"not_evaluated\"\n  },\n  \"preflight\": {\n    \"status\": \"passed\",\n    \"evidence\": {\n      \"action\": \"create_method\",\n      \"params\": {\n        \"action\": \"create_method\",\n        \"component\": \"Customer/JLR_FMC/Package/JLR_LeanTCS/Private/TCS_CUS_GenericTCSFunctions/TCS_CUS_RefSuppSuppress/TCS_CUS_RefSuppSuppress\",\n        \"kind\": \"class\",\n        \"name\": \"__PiPermissionProbe__\",\n        \"type\": \"abstract\",\n        \"ifExists\": \"fail\",\n        \"intent\": \"preview\"\n      },\n      \"backendPreflight\": {\n        \"operation\": \"preflight_create_method\",\n        \"validated\": true,\n        \"result\": {\n          \"databasePath\": \"C:/Repo/F05_IPB_L2_0429\",\n          \"component\": \"Customer/JLR_FMC/Package/JLR_LeanTCS/Private/TCS_CUS_GenericTCSFunctions/TCS_CUS_RefSuppSuppress/TCS_CUS_RefSuppSuppress\",\n          \"componentOid\": \"040qm00000001p870c4hh9q42lfka\",\n          \"kind\": \"Class\",\n          \"language\": \"BDE\",\n          \"diagramName\": \"Main\",\n          \"diagramExists\": true,\n          \"diagramRuntimeType\": \"de.etas.cebra.toolAPI.Ascet.DiscreteMethodDiagram\",\n          \"requiredMethod\": \"AddMethod\",\n          \"requiredSignature\": \"AddMethod(String)\",\n          \"requiredMethodAvailable\": true,\n          \"addDiagramAvailable\": false,\n          \"futureMethodCapabilityProven\": true,\n          \"editable\": false,\n          \"readbackAvailable\": true,\n          \"noOp\": false,\n          \"plannedEffects\": [\n            {\n              \"kind\": \"create_method\",\n              \"target\": \"Customer/JLR_FMC/Package/JLR_LeanTCS/Private/TCS_CUS_GenericTCSFunctions/TCS_CUS_RefSuppSuppress/TCS_CUS_RefSuppSuppress::__PiPermissionProbe__\",\n              \"type\": \"AbstractMethod\"\n            }\n          ],\n          \"capability\": {\n            \"status\": \"supported\",\n            \"operation\": \"AddMethod\"\n          }\n        }\n      },\n      \"databaseIdentity\": {\n        \"name\": \"C:\\\\Repo\\\\F05_IPB_L2_0429\",\n        \"path\": \"C:/Repo/F05_IPB_L2_0429\",\n        \"reportedPath\": \"C:/Repo\",\n        \"status\": \"consistent\",\n        \"fingerprint\": \"71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c\"\n      },\n      \"targetIdentity\": {\n        \"path\": \"Customer/JLR_FMC/Package/JLR_LeanTCS/Private/TCS_CUS_GenericTCSFunctions/TCS_CUS_RefSuppSuppress/TCS_CUS_RefSuppSuppress\",\n        \"oid\": \"040qm00000001p870c4hh9q42lfka\",\n        \"kind\": \"class\"\n      },\n      \"targetImpact\": {\n        \"sharedObject\": false,\n        \"requestedPath\": \"Customer/JLR_FMC/Package/JLR_LeanTCS/Private/TCS_CUS_GenericTCSFunctions/TCS_CUS_RefSuppSuppress/TCS_CUS_RefSuppSuppress\",\n        \"ownerPath\": \"Customer/JLR_FMC/Package/JLR_LeanTCS/Private/TCS_CUS_GenericTCSFunctions/TCS_CUS_RefSuppSuppress/TCS_CUS_RefSuppSuppress\",\n        \"targetOid\": \"040qm00000001p870c4hh9q42lfka\",\n        \"aliasPaths\": [\n          \"Customer\\\\JLR_FMC\\\\Package\\\\JLR_LeanTCS\\\\Private\\\\TCS_CUS_GenericTCSFunctions\\\\TCS_CUS_RefSuppSuppress\\\\TCS_CUS_RefSuppSuppress\"\n        ],\n        \"completeness\": \"complete\",\n        \"writeAllowed\": true,\n        \"fingerprint\": \"sha256:17a328d0d8094d303a4dc120b24852b02898bca4ddc638103c3c28a58825066b\"\n      },\n      \"editability\": \"read_only\",\n      \"guardGeneration\": 0,\n      \"readbackAvailable\": true\n    }\n  },\n  \"editability\": {\n    \"status\": \"blocked\",\n    \"initiallyEditable\": false,\n    \"acquiredByThisOperation\": false\n  },\n  \"mutation\": {\n    \"status\": \"not_started\"\n  },\n  \"verification\": {\n    \"status\": \"not_applicable\"\n  },\n  \"bridge\": {\n    \"beforeBridge\": false,\n    \"bridgeEntered\": false,\n    \"backendResponseReceived\": false\n  },\n  \"recovery\": {\n    \"required\": false\n  }\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "preflight",
+        "plan": {
+          "action": "create_method",
+          "params": {
+            "action": "create_method",
+            "componentPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress",
+            "componentKind": "class",
+            "methodName": "__PiPermissionProbe__",
+            "methodKind": "abstract",
+            "ifExists": "fail",
+            "intent": "preview"
+          },
+          "backendPreflight": {
+            "operation": "preflight_create_method",
+            "validated": true,
+            "result": {
+              "databasePath": "C:\\Repo\\F05_IPB_L2_0429",
+              "componentPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress",
+              "componentOid": "040qm00000001p870c4hh9q42lfka",
+              "componentKind": "Class",
+              "languageKind": "BDE",
+              "diagramName": "Main",
+              "diagramExists": true,
+              "diagramRuntimeType": "de.etas.cebra.toolAPI.Ascet.DiscreteMethodDiagram",
+              "requiredMethod": "AddMethod",
+              "requiredSignature": "AddMethod(String)",
+              "requiredMethodAvailable": true,
+              "addDiagramAvailable": false,
+              "futureMethodCapabilityProven": true,
+              "editable": false,
+              "readbackAvailable": true,
+              "noOp": false,
+              "existingMethod": null,
+              "plannedEffects": [
+                {
+                  "kind": "create_method",
+                  "target": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress::__PiPermissionProbe__",
+                  "methodKind": "AbstractMethod"
+                }
+              ],
+              "capability": {
+                "status": "supported",
+                "operation": "AddMethod",
+                "failureCode": "",
+                "failureMessage": ""
+              }
+            }
+          },
+          "databaseIdentity": {
+            "name": "C:\\Repo\\F05_IPB_L2_0429",
+            "path": "C:\\Repo\\F05_IPB_L2_0429",
+            "reportedPath": "C:\\Repo",
+            "status": "consistent",
+            "issues": [],
+            "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+          },
+          "targetIdentity": {
+            "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress",
+            "oid": "040qm00000001p870c4hh9q42lfka",
+            "kind": "class"
+          },
+          "targetImpact": {
+            "sharedObject": false,
+            "requestedPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress",
+            "ownerPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress",
+            "targetOid": "040qm00000001p870c4hh9q42lfka",
+            "aliasPaths": [
+              "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress"
+            ],
+            "affectedProjects": [],
+            "completeness": "complete",
+            "writeAllowed": true,
+            "fingerprint": "sha256:17a328d0d8094d303a4dc120b24852b02898bca4ddc638103c3c28a58825066b"
+          },
+          "editability": "read_only",
+          "guardGeneration": 0,
+          "readbackAvailable": true,
+          "preflightFingerprint": "89fd2bc4637bae6cae596135d0e0e317b3b078931dd13c06420dda4e49036f1a"
+        },
+        "nextStep": "Preview complete. No ASCET mutation was performed."
+      },
+      "raw": {
+        "ok": true,
+        "data": {
+          "type": "response",
+          "protocolVersion": 1,
+          "ok": true,
+          "result": {
+            "databasePath": "C:\\Repo\\F05_IPB_L2_0429",
+            "componentPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress",
+            "componentOid": "040qm00000001p870c4hh9q42lfka",
+            "componentKind": "Class",
+            "languageKind": "BDE",
+            "diagramName": "Main",
+            "diagramExists": true,
+            "diagramRuntimeType": "de.etas.cebra.toolAPI.Ascet.DiscreteMethodDiagram",
+            "requiredMethod": "AddMethod",
+            "requiredSignature": "AddMethod(String)",
+            "requiredMethodAvailable": true,
+            "addDiagramAvailable": false,
+            "futureMethodCapabilityProven": true,
+            "editable": false,
+            "readbackAvailable": true,
+            "noOp": false,
+            "existingMethod": null,
+            "plannedEffects": [
+              {
+                "kind": "create_method",
+                "target": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress::__PiPermissionProbe__",
+                "methodKind": "AbstractMethod"
+              }
+            ],
+            "capability": {
+              "status": "supported",
+              "operation": "AddMethod",
+              "failureCode": "",
+              "failureMessage": ""
+            }
+          },
+          "error": null,
+          "meta": {
+            "bridgePid": 25736,
+            "bridgeGeneration": "fc452c8f-60da-44cf-8ac5-69f4b6e09578",
+            "durationMs": 499,
+            "sessionPolicy": "fresh_session",
+            "mutationStarted": false,
+            "mode": "exec",
+            "operation": "preflight_create_method"
+          }
+        },
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "preflight_create_method",
+            "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress",
+            "__PiPermissionProbe__",
+            "--method-kind",
+            "abstract",
+            "--if-exists",
+            "fail",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"databasePath\":\"C:\\\\Repo\\\\F05_IPB_L2_0429\",\"componentPath\":\"Customer\\\\JLR_FMC\\\\Package\\\\JLR_LeanTCS\\\\Private\\\\TCS_CUS_GenericTCSFunctions\\\\TCS_CUS_RefSuppSuppress\\\\TCS_CUS_RefSuppSuppress\",\"componentOid\":\"040qm00000001p870c4hh9q42lfka\",\"componentKind\":\"Class\",\"languageKind\":\"BDE\",\"diagramName\":\"Main\",\"diagramExists\":true,\"diagramRuntimeType\":\"de.etas.cebra.toolAPI.Ascet.DiscreteMethodDiagram\",\"requiredMethod\":\"AddMethod\",\"requiredSignature\":\"AddMethod(String)\",\"requiredMethodAvailable\":true,\"addDiagramAvailable\":false,\"futureMethodCapabilityProven\":true,\"editable\":false,\"readbackAvailable\":true,\"noOp\":false,\"existingMethod\":null,\"plannedEffects\":[{\"kind\":\"create_method\",\"target\":\"Customer\\\\JLR_FMC\\\\Package\\\\JLR_LeanTCS\\\\Private\\\\TCS_CUS_GenericTCSFunctions\\\\TCS_CUS_RefSuppSuppress\\\\TCS_CUS_RefSuppSuppress::__PiPermissionProbe__\",\"methodKind\":\"AbstractMethod\"}],\"capability\":{\"status\":\"supported\",\"operation\":\"AddMethod\",\"failureCode\":\"\",\"failureMessage\":\"\"}},\"error\":null,\"meta\":{\"bridgePid\":25736,\"bridgeGeneration\":\"fc452c8f-60da-44cf-8ac5-69f4b6e09578\",\"durationMs\":499,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"preflight_create_method\"}}\r\n",
+        "stderr": "",
+        "exitCode": 0,
+        "timedOut": false,
+        "aborted": false,
+        "operationId": "preflight_create_method"
+      },
+      "mutationResult": {
+        "status": "ok",
+        "permission": {
+          "mode": "default",
+          "decision": "not_evaluated"
+        },
+        "preflight": {
+          "status": "passed",
+          "evidence": {
+            "action": "create_method",
+            "params": {
+              "action": "create_method",
+              "componentPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress",
+              "componentKind": "class",
+              "methodName": "__PiPermissionProbe__",
+              "methodKind": "abstract",
+              "ifExists": "fail",
+              "intent": "preview"
+            },
+            "backendPreflight": {
+              "operation": "preflight_create_method",
+              "validated": true,
+              "result": {
+                "databasePath": "C:\\Repo\\F05_IPB_L2_0429",
+                "componentPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress",
+                "componentOid": "040qm00000001p870c4hh9q42lfka",
+                "componentKind": "Class",
+                "languageKind": "BDE",
+                "diagramName": "Main",
+                "diagramExists": true,
+                "diagramRuntimeType": "de.etas.cebra.toolAPI.Ascet.DiscreteMethodDiagram",
+                "requiredMethod": "AddMethod",
+                "requiredSignature": "AddMethod(String)",
+                "requiredMethodAvailable": true,
+                "addDiagramAvailable": false,
+                "futureMethodCapabilityProven": true,
+                "editable": false,
+                "readbackAvailable": true,
+                "noOp": false,
+                "existingMethod": null,
+                "plannedEffects": [
+                  {
+                    "kind": "create_method",
+                    "target": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress::__PiPermissionProbe__",
+                    "methodKind": "AbstractMethod"
+                  }
+                ],
+                "capability": {
+                  "status": "supported",
+                  "operation": "AddMethod",
+                  "failureCode": "",
+                  "failureMessage": ""
+                }
+              }
+            },
+            "databaseIdentity": {
+              "name": "C:\\Repo\\F05_IPB_L2_0429",
+              "path": "C:\\Repo\\F05_IPB_L2_0429",
+              "reportedPath": "C:\\Repo",
+              "status": "consistent",
+              "issues": [],
+              "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+            },
+            "targetIdentity": {
+              "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress",
+              "oid": "040qm00000001p870c4hh9q42lfka",
+              "kind": "class"
+            },
+            "targetImpact": {
+              "sharedObject": false,
+              "requestedPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress",
+              "ownerPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress",
+              "targetOid": "040qm00000001p870c4hh9q42lfka",
+              "aliasPaths": [
+                "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress"
+              ],
+              "affectedProjects": [],
+              "completeness": "complete",
+              "writeAllowed": true,
+              "fingerprint": "sha256:17a328d0d8094d303a4dc120b24852b02898bca4ddc638103c3c28a58825066b"
+            },
+            "editability": "read_only",
+            "guardGeneration": 0,
+            "readbackAvailable": true
+          }
+        },
+        "editability": {
+          "status": "blocked",
+          "initiallyEditable": false,
+          "acquiredByThisOperation": false
+        },
+        "mutation": {
+          "status": "not_started"
+        },
+        "verification": {
+          "status": "not_applicable"
+        },
+        "bridge": {
+          "beforeBridge": false,
+          "bridgeEntered": false,
+          "backendResponseReceived": false
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      },
+      "tool": "ascet_edit",
+      "action": "create_method",
+      "command": {
+        "logicalCommandId": "AscetCreateMethod",
+        "backendCommandId": "AscetCreateMethod",
+        "operation": "create_method"
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "preflight_create_method",
+            "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress",
+            "__PiPermissionProbe__",
+            "--method-kind",
+            "abstract",
+            "--if-exists",
+            "fail",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 0,
+        "timedOut": false,
+        "stderr": ""
+      }
+    }
+  }
+}

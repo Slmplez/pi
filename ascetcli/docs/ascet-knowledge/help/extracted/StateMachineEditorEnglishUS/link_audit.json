@@ -1,0 +1,290 @@
+{
+  "generated_at": "2026-04-01T03:08:32.659396Z",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS",
+  "checked_files": 163,
+  "checked_links": 1508,
+  "broken_links": [
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\markdown\\analyze_diagram.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\markdown\\SM_activate_deactivate_outlining_of_actions_conditions_.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\markdown\\SM_Example_9__Transitions_from_Different_Start_States_to_the_Same_Destination_State_(Multiple_Triggers).md",
+      "kind": "link",
+      "target": "SM_Example_8__Transitions_from_a_Start_State_to_Different_Destination_States_(Multiple_Triggers",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\markdown\\SM_Example_9__Transitions_from_Different_Start_States_to_the_Same_Destination_State_(Multiple_Triggers).md",
+      "kind": "link",
+      "target": "SM_Example_8__Transitions_from_a_Start_State_to_Different_Destination_States_(Multiple_Triggers",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\markdown\\SM_Junctions_in_State_Machines.md",
+      "kind": "link",
+      "target": "SM_Example_7__Transitions_from_Multiple_Start_States_to_a_Destination_State_(One_Trigger",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\markdown\\SM_Junctions_in_State_Machines.md",
+      "kind": "link",
+      "target": "SM_Example_8__Transitions_from_a_Start_State_to_Different_Destination_States_(Multiple_Triggers",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\markdown\\SM_Junctions_in_State_Machines.md",
+      "kind": "link",
+      "target": "SM_Example_9__Transitions_from_Different_Start_States_to_the_Same_Destination_State_(Multiple_Triggers",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\markdown\\SM_SearchResultsView.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\markdown\\sm_showoccurrences.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\markdown\\sm_specifyresetmethod_statevariables.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\markdown\\SM_To_Activate_Deactivate_Auto-Inlining.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\markdown\\SM_To_Activate_Deactivate_Hierarchical_Code_Generation.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\markdown\\sm_unusedelements.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\markdown\\To_Activate_Deactivate_Optimization_of_Static_Actions.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\markdown\\za_searchdel_unused_methodstriggers.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/SM_Example_7__Transitions_from_Multiple_Start_States_to_a_Destination_State_(One_Trigger",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/SM_Example_8__Transitions_from_a_Start_State_to_Different_Destination_States_(Multiple_Triggers",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/SM_Example_9__Transitions_from_Different_Start_States_to_the_Same_Destination_State_(Multiple_Triggers",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_SearchTreePane.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_Configuring_Toolbar.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_Toolbar_Configuration_Window.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_Configuring_Toolbar.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/introductionenglishus.chm::/INT_Reserved_Keywords.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/introductionenglishus.chm::/INT_Reserved_Keywords.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/introductionenglishus.chm::/INT_Reserved_Keywords.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/ComponentManagerEnglishUS.chm::/List_of_Error_Messages.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/ComponentManagerEnglishUS.chm::/List_of_Error_Messages.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/ComponentManagerEnglishUS.chm::/List_of_Information_Messages.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/ComponentManagerEnglishUS.chm::/List_of_Warning_Messages.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\StateMachineEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/SM_Example_7__Transitions_from_Multiple_Start_States_to_a_Destination_State_(One_Trigger",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\StateMachineEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/SM_Example_8__Transitions_from_a_Start_State_to_Different_Destination_States_(Multiple_Triggers",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\StateMachineEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/SM_Example_9__Transitions_from_Different_Start_States_to_the_Same_Destination_State_(Multiple_Triggers",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\StateMachineEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/SM_Example_8__Transitions_from_a_Start_State_to_Different_Destination_States_(Multiple_Triggers",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\StateMachineEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/SM_Example_8__Transitions_from_a_Start_State_to_Different_Destination_States_(Multiple_Triggers",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\StateMachineEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\StateMachineEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\StateMachineEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\StateMachineEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\StateMachineEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\StateMachineEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\StateMachineEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\StateMachineEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\StateMachineEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\StateMachineEditorEnglishUS\\StateMachineEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    }
+  ]
+}

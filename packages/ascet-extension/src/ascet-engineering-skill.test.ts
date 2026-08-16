@@ -37,7 +37,7 @@ describe("ASCET engineering Skill", () => {
 			"todolist",
 			"complete implementation plan",
 			"Write readiness and stop conditions",
-			"executeWrite=true",
+			"intent=apply",
 			"automatic action-specific verification",
 		]) {
 			assert.match(skill, new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&"), "u"), phrase);

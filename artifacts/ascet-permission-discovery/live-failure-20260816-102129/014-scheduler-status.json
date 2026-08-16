@@ -1,0 +1,245 @@
+{
+  "stage": "scheduler-status",
+  "request": {
+    "toolName": "ascet_scheduler_status",
+    "params": {
+      "action": "status",
+      "format": "json"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"scheduler\": {\n    \"hostState\": \"healthy\",\n    \"recentJobs\": [\n      {\n        \"jobId\": \"ascet-job-1\",\n        \"agentId\": \"system\",\n        \"toolName\": \"ascet_status\",\n        \"commandId\": \"selftest\",\n        \"kind\": \"read\",\n        \"priority\": \"normal\",\n        \"resourceKey\": \"ascet.toolapi.global\",\n        \"state\": \"succeeded\",\n        \"queuedAt\": 1786846893279,\n        \"startedAt\": 1786846893279,\n        \"queueWaitMs\": 0,\n        \"finishedAt\": 1786846894122,\n        \"executionMs\": 843\n      },\n      {\n        \"jobId\": \"ascet-job-2\",\n        \"agentId\": \"system\",\n        \"toolName\": \"ascet_edit\",\n        \"commandId\": \"component_editable_check\",\n        \"kind\": \"read\",\n        \"priority\": \"normal\",\n        \"resourceKey\": \"ascet.toolapi.global\",\n        \"state\": \"succeeded\",\n        \"queuedAt\": 1786846915156,\n        \"startedAt\": 1786846915156,\n        \"queueWaitMs\": 0,\n        \"finishedAt\": 1786846915927,\n        \"executionMs\": 771\n      },\n      {\n        \"jobId\": \"ascet-job-3\",\n        \"agentId\": \"system\",\n        \"toolName\": \"ascet_edit\",\n        \"commandId\": \"preflight_create_method\",\n        \"kind\": \"read\",\n        \"priority\": \"normal\",\n        \"resourceKey\": \"ascet.toolapi.global\",\n        \"state\": \"succeeded\",\n        \"queuedAt\": 1786846915932,\n        \"startedAt\": 1786846915932,\n        \"queueWaitMs\": 0,\n        \"finishedAt\": 1786846916671,\n        \"executionMs\": 739\n      },\n      {\n        \"jobId\": \"ascet-job-4\",\n        \"agentId\": \"system\",\n        \"toolName\": \"ascet_edit\",\n        \"commandId\": \"component_editable_check\",\n        \"kind\": \"read\",\n        \"priority\": \"normal\",\n        \"resourceKey\": \"ascet.toolapi.global\",\n        \"state\": \"succeeded\",\n        \"queuedAt\": 1786846916675,\n        \"startedAt\": 1786846916675,\n        \"queueWaitMs\": 0,\n        \"finishedAt\": 1786846917242,\n        \"executionMs\": 567\n      },\n      {\n        \"jobId\": \"ascet-job-5\",\n        \"agentId\": \"system\",\n        \"toolName\": \"ascet_edit\",\n        \"commandId\": \"preflight_create_method\",\n        \"kind\": \"read\",\n        \"priority\": \"normal\",\n        \"resourceKey\": \"ascet.toolapi.global\",\n        \"state\": \"succeeded\",\n        \"queuedAt\": 1786846917245,\n        \"startedAt\": 1786846917245,\n        \"queueWaitMs\": 0,\n        \"finishedAt\": 1786846917942,\n        \"executionMs\": 697\n      },\n      {\n        \"jobId\": \"ascet-job-6\",\n        \"agentId\": \"system\",\n        \"toolName\": \"ascet_edit\",\n        \"commandId\": \"get_database_identity\",\n        \"kind\": \"read\",\n        \"priority\": \"normal\",\n        \"resourceKey\": \"ascet.toolapi.global\",\n        \"state\": \"succeeded\",\n        \"queuedAt\": 1786846917943,\n        \"startedAt\": 1786846917944,\n        \"queueWaitMs\": 1,\n        \"finishedAt\": 1786846918548,\n        \"executionMs\": 604\n      },\n      {\n        \"jobId\": \"ascet-job-7\",\n        \"agentId\": \"system\",\n        \"toolName\": \"ascet_get\",\n        \"commandId\": \"get_tree\",\n        \"kind\": \"read\",\n        \"priority\": \"normal\",\n        \"resourceKey\": \"ascet.toolapi.global\",\n        \"state\": \"succeeded\",\n        \"queuedAt\": 1786846918550,\n        \"startedAt\": 1786846918550,\n        \"queueWaitMs\": 0,\n        \"finishedAt\": 1786846938726,\n        \"executionMs\": 20176\n      },\n      {\n        \"jobId\": \"ascet-job-8\",\n        \"agentId\": \"system\",\n        \"toolName\": \"ascet_edit\",\n        \"commandId\": \"component_editable_check\",\n        \"kind\": \"read\",\n        \"priority\": \"normal\",\n        \"resourceKey\": \"ascet.toolapi.global\",\n        \"state\": \"succeeded\",\n        \"queuedAt\": 1786846938744,\n        \"startedAt\": 1786846938744,\n        \"queueWaitMs\": 0,\n        \"finishedAt\": 1786846939634,\n        \"executionMs\": 890\n      },\n      {\n        \"jobId\": \"ascet-job-9\",\n        \"agentId\": \"system\",\n        \"toolName\": \"ascet_edit\",\n        \"commandId\": \"component_editable_check\",\n        \"kind\": \"read\",\n        \"priority\": \"normal\",\n        \"resourceKey\": \"ascet.toolapi.global\",\n        \"state\": \"succeeded\",\n        \"queuedAt\": 1786846939636,\n        \"startedAt\": 1786846939637,\n        \"queueWaitMs\": 1,\n        \"finishedAt\": 1786846940226,\n        \"executionMs\": 589\n      },\n      {\n        \"jobId\": \"ascet-job-10\",\n        \"agentId\": \"system\",\n        \"toolName\": \"ascet_edit\",\n        \"commandId\": \"component_editable_check\",\n        \"kind\": \"read\",\n        \"priority\": \"normal\",\n        \"resourceKey\": \"ascet.toolapi.global\",\n        \"state\": \"succeeded\",\n        \"queuedAt\": 1786846940228,\n        \"startedAt\": 1786846940228,\n        \"queueWaitMs\": 0,\n        \"finishedAt\": 1786846940934,\n        \"executionMs\": 706\n      },\n      {\n        \"jobId\": \"ascet-job-11\",\n        \"agentId\": \"system\",\n        \"toolName\": \"ascet_edit\",\n        \"commandId\": \"component_editable_check\",\n        \"kind\": \"read\",\n        \"priority\": \"normal\",\n        \"resourceKey\": \"ascet.toolapi.global\",\n        \"state\": \"succeeded\",\n        \"queuedAt\": 1786846940937,\n        \"startedAt\": 1786846940938,\n        \"queueWaitMs\": 1,\n        \"finishedAt\": 1786846941669,\n        \"executionMs\": 731\n      },\n      {\n        \"jobId\": \"ascet-job-12\",\n        \"agentId\": \"system\",\n        \"toolName\": \"ascet_edit\",\n        \"commandId\": \"component_editable_check\",\n        \"kind\": \"read\",\n        \"priority\": \"normal\",\n        \"resourceKey\": \"ascet.toolapi.global\",\n        \"state\": \"succeeded\",\n        \"queuedAt\": 1786846941674,\n        \"startedAt\": 1786846941674,\n        \"queueWaitMs\": 0,\n        \"finishedAt\": 1786846942293,\n        \"executionMs\": 619\n      },\n      {\n        \"jobId\": \"ascet-job-13\",\n        \"agentId\": \"system\",\n        \"toolName\": \"ascet_edit\",\n        \"commandId\": \"component_editable_check\",\n        \"kind\": \"read\",\n        \"priority\": \"normal\",\n        \"resourceKey\": \"ascet.toolapi.global\",\n        \"state\": \"succeeded\",\n        \"queuedAt\": 1786846942295,\n        \"startedAt\": 1786846942295,\n        \"queueWaitMs\": 0,\n        \"finishedAt\": 1786846943025,\n        \"executionMs\": 730\n      }\n    ],\n    \"activeCount\": 0,\n    \"resource\": {\n      \"key\": \"ascet.toolapi.global\",\n      \"active\": 0,\n      \"queued\": 0,\n      \"concurrency\": 1\n    }\n  },\n  \"cliLock\": {\n    \"locked\": false,\n    \"path\": \"C:/Users/NHJ3SZH/AppData/Local/PI/ascet/locks/ascet-toolapi.lock\"\n  },\n  \"summary\": \"ASCET Scheduler Status\\n\\nHost: healthy\\nActive: 0\\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\\nPending: 0\\nRunning: none\\n\\nPending by agent: {}\\n\\nRecent:\\n- ascet-job-4 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=0ms, exec=567ms)\\n- ascet-job-5 ascet_edit/preflight_create_method agent=system state=succeeded (queueWait=0ms, exec=697ms)\\n- ascet-job-6 ascet_edit/get_database_identity agent=system state=succeeded (queueWait=1ms, exec=604ms)\\n- ascet-job-7 ascet_get/get_tree agent=system state=succeeded (queueWait=0ms, exec=20176ms)\\n- ascet-job-8 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=0ms, exec=890ms)\\n- ascet-job-9 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=1ms, exec=589ms)\\n- ascet-job-10 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=0ms, exec=706ms)\\n- ascet-job-11 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=1ms, exec=731ms)\\n- ascet-job-12 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=0ms, exec=619ms)\\n- ascet-job-13 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=0ms, exec=730ms)\\n\\nCLI Lock:\\n  owner: none\\n\\nOperation Health:\\n  degraded: none\"\n}"
+      }
+    ],
+    "details": {
+      "ok": true,
+      "scheduler": {
+        "hostState": "healthy",
+        "runningJob": null,
+        "queuedJobs": [],
+        "recentJobs": [
+          {
+            "jobId": "ascet-job-1",
+            "agentId": "system",
+            "toolName": "ascet_status",
+            "commandId": "selftest",
+            "kind": "read",
+            "priority": "normal",
+            "resourceKey": "ascet.toolapi.global",
+            "state": "succeeded",
+            "queuedAt": 1786846893279,
+            "startedAt": 1786846893279,
+            "queueWaitMs": 0,
+            "finishedAt": 1786846894122,
+            "executionMs": 843
+          },
+          {
+            "jobId": "ascet-job-2",
+            "agentId": "system",
+            "toolName": "ascet_edit",
+            "commandId": "component_editable_check",
+            "kind": "read",
+            "priority": "normal",
+            "resourceKey": "ascet.toolapi.global",
+            "state": "succeeded",
+            "queuedAt": 1786846915156,
+            "startedAt": 1786846915156,
+            "queueWaitMs": 0,
+            "finishedAt": 1786846915927,
+            "executionMs": 771
+          },
+          {
+            "jobId": "ascet-job-3",
+            "agentId": "system",
+            "toolName": "ascet_edit",
+            "commandId": "preflight_create_method",
+            "kind": "read",
+            "priority": "normal",
+            "resourceKey": "ascet.toolapi.global",
+            "state": "succeeded",
+            "queuedAt": 1786846915932,
+            "startedAt": 1786846915932,
+            "queueWaitMs": 0,
+            "finishedAt": 1786846916671,
+            "executionMs": 739
+          },
+          {
+            "jobId": "ascet-job-4",
+            "agentId": "system",
+            "toolName": "ascet_edit",
+            "commandId": "component_editable_check",
+            "kind": "read",
+            "priority": "normal",
+            "resourceKey": "ascet.toolapi.global",
+            "state": "succeeded",
+            "queuedAt": 1786846916675,
+            "startedAt": 1786846916675,
+            "queueWaitMs": 0,
+            "finishedAt": 1786846917242,
+            "executionMs": 567
+          },
+          {
+            "jobId": "ascet-job-5",
+            "agentId": "system",
+            "toolName": "ascet_edit",
+            "commandId": "preflight_create_method",
+            "kind": "read",
+            "priority": "normal",
+            "resourceKey": "ascet.toolapi.global",
+            "state": "succeeded",
+            "queuedAt": 1786846917245,
+            "startedAt": 1786846917245,
+            "queueWaitMs": 0,
+            "finishedAt": 1786846917942,
+            "executionMs": 697
+          },
+          {
+            "jobId": "ascet-job-6",
+            "agentId": "system",
+            "toolName": "ascet_edit",
+            "commandId": "get_database_identity",
+            "kind": "read",
+            "priority": "normal",
+            "resourceKey": "ascet.toolapi.global",
+            "state": "succeeded",
+            "queuedAt": 1786846917943,
+            "startedAt": 1786846917944,
+            "queueWaitMs": 1,
+            "finishedAt": 1786846918548,
+            "executionMs": 604
+          },
+          {
+            "jobId": "ascet-job-7",
+            "agentId": "system",
+            "toolName": "ascet_get",
+            "commandId": "get_tree",
+            "kind": "read",
+            "priority": "normal",
+            "resourceKey": "ascet.toolapi.global",
+            "state": "succeeded",
+            "queuedAt": 1786846918550,
+            "startedAt": 1786846918550,
+            "queueWaitMs": 0,
+            "finishedAt": 1786846938726,
+            "executionMs": 20176
+          },
+          {
+            "jobId": "ascet-job-8",
+            "agentId": "system",
+            "toolName": "ascet_edit",
+            "commandId": "component_editable_check",
+            "kind": "read",
+            "priority": "normal",
+            "resourceKey": "ascet.toolapi.global",
+            "state": "succeeded",
+            "queuedAt": 1786846938744,
+            "startedAt": 1786846938744,
+            "queueWaitMs": 0,
+            "finishedAt": 1786846939634,
+            "executionMs": 890
+          },
+          {
+            "jobId": "ascet-job-9",
+            "agentId": "system",
+            "toolName": "ascet_edit",
+            "commandId": "component_editable_check",
+            "kind": "read",
+            "priority": "normal",
+            "resourceKey": "ascet.toolapi.global",
+            "state": "succeeded",
+            "queuedAt": 1786846939636,
+            "startedAt": 1786846939637,
+            "queueWaitMs": 1,
+            "finishedAt": 1786846940226,
+            "executionMs": 589
+          },
+          {
+            "jobId": "ascet-job-10",
+            "agentId": "system",
+            "toolName": "ascet_edit",
+            "commandId": "component_editable_check",
+            "kind": "read",
+            "priority": "normal",
+            "resourceKey": "ascet.toolapi.global",
+            "state": "succeeded",
+            "queuedAt": 1786846940228,
+            "startedAt": 1786846940228,
+            "queueWaitMs": 0,
+            "finishedAt": 1786846940934,
+            "executionMs": 706
+          },
+          {
+            "jobId": "ascet-job-11",
+            "agentId": "system",
+            "toolName": "ascet_edit",
+            "commandId": "component_editable_check",
+            "kind": "read",
+            "priority": "normal",
+            "resourceKey": "ascet.toolapi.global",
+            "state": "succeeded",
+            "queuedAt": 1786846940937,
+            "startedAt": 1786846940938,
+            "queueWaitMs": 1,
+            "finishedAt": 1786846941669,
+            "executionMs": 731
+          },
+          {
+            "jobId": "ascet-job-12",
+            "agentId": "system",
+            "toolName": "ascet_edit",
+            "commandId": "component_editable_check",
+            "kind": "read",
+            "priority": "normal",
+            "resourceKey": "ascet.toolapi.global",
+            "state": "succeeded",
+            "queuedAt": 1786846941674,
+            "startedAt": 1786846941674,
+            "queueWaitMs": 0,
+            "finishedAt": 1786846942293,
+            "executionMs": 619
+          },
+          {
+            "jobId": "ascet-job-13",
+            "agentId": "system",
+            "toolName": "ascet_edit",
+            "commandId": "component_editable_check",
+            "kind": "read",
+            "priority": "normal",
+            "resourceKey": "ascet.toolapi.global",
+            "state": "succeeded",
+            "queuedAt": 1786846942295,
+            "startedAt": 1786846942295,
+            "queueWaitMs": 0,
+            "finishedAt": 1786846943025,
+            "executionMs": 730
+          }
+        ],
+        "pendingByAgent": {},
+        "activeCount": 0,
+        "resource": {
+          "key": "ascet.toolapi.global",
+          "active": 0,
+          "queued": 0,
+          "concurrency": 1,
+          "runningJob": null
+        }
+      },
+      "cliLock": {
+        "locked": false,
+        "path": "C:\\Users\\NHJ3SZH\\AppData\\Local\\PI\\ascet\\locks\\ascet-toolapi.lock"
+      },
+      "operationHealth": [],
+      "summary": "ASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nRecent:\n- ascet-job-4 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=0ms, exec=567ms)\n- ascet-job-5 ascet_edit/preflight_create_method agent=system state=succeeded (queueWait=0ms, exec=697ms)\n- ascet-job-6 ascet_edit/get_database_identity agent=system state=succeeded (queueWait=1ms, exec=604ms)\n- ascet-job-7 ascet_get/get_tree agent=system state=succeeded (queueWait=0ms, exec=20176ms)\n- ascet-job-8 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=0ms, exec=890ms)\n- ascet-job-9 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=1ms, exec=589ms)\n- ascet-job-10 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=0ms, exec=706ms)\n- ascet-job-11 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=1ms, exec=731ms)\n- ascet-job-12 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=0ms, exec=619ms)\n- ascet-job-13 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=0ms, exec=730ms)\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none",
+      "tool": "ascet_scheduler_status",
+      "action": "status",
+      "command": {
+        "logicalCommandId": "PiAscetSchedulerStatus",
+        "backendCommandId": "PiAscetSchedulerStatus",
+        "operation": "scheduler_status"
+      }
+    }
+  }
+}

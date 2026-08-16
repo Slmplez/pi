@@ -1,0 +1,363 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="toc">
+  <param name="Image Width" value="16">
+  <param name="Window Styles" value="0x800427">
+  <param name="ExWindow Styles" value="0x100">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Editing Implementations">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Overview">
+      <param name="Local" value="IEd_Overview.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Basics">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Implementations of Components/Projects">
+        <param name="Local" value="IEd_impl_comp_proj_s.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Implementation of Scalar, Non-logical Elements">
+        <param name="Local" value="impl_scalar_nonlogical.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Implementations of Implementation Casts">
+        <param name="Local" value="impl_impl_casts.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Implementations of Arrays, Matrices and Characteristic Lines/Maps">
+        <param name="Local" value="IEd_impl_arrays_matrices_tables.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Method/Process/Runnable Implementations">
+        <param name="Local" value="method_process_impl.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Implementations of Arguments and Return Values of Methods">
+        <param name="Local" value="IEd_Impl_Argu_ReturnValues_of_Methods.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Implementations of Method-/Process-/Runnable-Local Variables">
+        <param name="Local" value="impl_method_process.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Implementations for Temporary Variables">
+        <param name="Local" value="impl_temporary_variables.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Implementation Components">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Formulas">
+          <param name="Local" value="IEd_Formulas.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Examples: Rules for Formulas">
+          <param name="Local" value="IEd_Examples_RulesFormulas.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Master Page">
+          <param name="Local" value="Master_Page.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Consistency Checks">
+          <param name="Local" value="IEd_Consistency_Checks.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Limitations">
+          <param name="Local" value="IEd_Limitations.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Protection Against Division by Zero">
+        <param name="Local" value="Excluding_Zero.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Using Implementation Types">
+        <param name="Local" value="using_impl_types.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Operator Implementations">
+        <param name="Local" value="operator_impl.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Automatic Conversion of Operator Implementations">
+          <param name="Local" value="automatic_conversion_op_impl.htm">
+        </object>
+        </ul>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Instructions">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Implementing Components">
+        <param name="Local" value="IED_ImplementationComponents.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Opening the Implementation Editor of an Edited Component/Project">
+          <param name="Local" value="IEd_open_impl.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Opening the Implementation Editor of an Included Component (A)">
+          <param name="Local" value="IEd_open_impleditor_includedcomponent.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Opening the Implementation Editor of an Included Component (B)">
+          <param name="Local" value="open_incld_impl.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Selecting an Implementation">
+          <param name="Local" value="IEd_select_impl.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Creating or Copying an Implementation">
+          <param name="Local" value="ied_create_copy_implementation.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Selecting a Default Implementation">
+          <param name="Local" value="IEd_Select_DefaultImplementation.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Adjusting the Implementation Settings">
+          <param name="Local" value="adjust_impl.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Deleting an Implementation">
+          <param name="Local" value="IEd_Deleting_Implementation.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Implementing Records">
+        <param name="Local" value="IEd_Implementing_Records.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing a Record Implementation">
+          <param name="Local" value="RecordsEnglishUS.chm::/RC_Edit_RecordImplementation.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Implementing a Record Element">
+          <param name="Local" value="RecordsEnglishUS.chm::/RC_Implementing_RecordElement.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Implementing a Record Instance">
+          <param name="Local" value="RecordsEnglishUS.chm::/RC_Implementing_RecordInstance.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Implementing Scalar, Array or Matrix Elements">
+        <param name="Local" value="IED_Implementation_NonLogicalElements.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Opening the Implementation Editor for an Element (A)">
+          <param name="Local" value="IEd_open_impl_editor.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Opening the Implementation Editor for an Element (B)">
+          <param name="Local" value="IEd_open_impleditor_for_element.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Opening the Implementation Editor for an Element (C)">
+          <param name="Local" value="IEd_open_compo_project.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Specifying Individual Implementations">
+          <param name="Local" value="specifying_individual_impl.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Selecting a Formula">
+            <param name="Local" value="IEd_select_formula.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Setting the Master Page of an Implementation">
+            <param name="Local" value="set_masterpg_impl.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Specifying an Implementation (Master: Model)">
+            <param name="Local" value="specify_impl_mode.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Specifying an Implementation (Master: Implementation)">
+            <param name="Local" value="specify_impl-master.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Setting the Limitation">
+            <param name="Local" value="set_limitation.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Setting the Overflow Handling">
+            <param name="Local" value="set_overflow_handling.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Selecting a Memory Location">
+            <param name="Local" value="select_memory_location.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Assigning an Implementation Type">
+          <param name="Local" value="assign_impl_type.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Implementing Method-/Process-/Runnable-Local Variables">
+        <param name="Local" value="impl_localvariables.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Activating Automatic Implementation">
+          <param name="Local" value="activate_automatic_impl.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Implementing Characteristic Lines/Maps">
+        <param name="Local" value="define_impl_tables.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Implementing References">
+        <param name="Local" value="IED_ImplementingReferences.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Specifying the Implementation for a Logical Element">
+        <param name="Local" value="specify_impl-logicalelement.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Specifying the Memory Location for State Variables">
+        <param name="Local" value="IEd_SpecifyMemLoc_StateVariables.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Specifying an Enumeration Implementation">
+        <param name="Local" value="specify_enum_impl.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Editing a Process/Method Implementation">
+        <param name="Local" value="IEd_edit_process_method.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Editing the Implementation of a Runnable">
+        <param name="Local" value="AtomicSoftwareComponentEditorEnglishUS.chm::/ASCeditImplementationRunnable.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Specifying Rescalable Implementations">
+        <param name="Local" value="ied_specifyrescalableimplementations.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Dealing With Operator Implementations">
+        <param name="Local" value="IEd_DealingWithOperatorImpl.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Searching for Operator Implementations">
+          <param name="Local" value="search_op_impl.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Removing Operator Implementations">
+          <param name="Local" value="rename_individual_op_impl.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Viewing an Operator Implementation">
+          <param name="Local" value="view_op_impl.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Replacing Operator Implementations with Implementation Casts">
+          <param name="Local" value="replace_op_impl.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Automatic Conversion of Operator Implementation: Results">
+          <param name="Local" value="Ied_AutomaticConversion_OperatorImplementation_ResultsA.htm">
+        </object>
+        </ul>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Reference to User Interface">
+      <param name="Local" value="IEd_Reference_to_UserInterface.htm">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Implementation Editor for Scalar Elements, Arrays, Matrices">
+        <param name="Local" value="IEd_Impl_Editor_for_Scalar_Nonlogical_Elements.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Implementation Editor for Characteristic Lines/Maps">
+        <param name="Local" value="ied_implementation_editor_non-scalar_elements.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Value Tab">
+        <param name="Local" value="Value_Tab.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="AUTOSAR Tab">
+        <param name="Local" value="ied_autosartab.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Implementation Editor for Methods/Processes/Runnables">
+        <param name="Local" value="ied_implementation_editor_methodsprocesses.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Implementation Editor for Components/Projects">
+        <param name="Local" value="IEd_ImplementationEditor_for_ComponentsProjects.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Implementation Menu">
+          <param name="Local" value="IEd_Implementation_Menu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Element Menu">
+          <param name="Local" value="IEd_Element_Menu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Settings Tab">
+          <param name="Local" value="IEd_Settings_Tab.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="External Struct Tab">
+          <param name="Local" value="IEd_ExternalStruct_Tab.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="References Window">
+          <param name="Local" value="IEd_ReferencesWindow.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Implementation Editor for Component References">
+        <param name="Local" value="IEd_ImplRefEditor.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Implementation for &lt;operator&gt; Window">
+        <param name="Local" value="IEd_ImplementationforOperatorWindow.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Implementation for: +/- Window">
+          <param name="Local" value="IEd_Implementation_for_AddSubWindow.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Implementation for: * Window">
+          <param name="Local" value="IEd_multiplication.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Implementation for: / Window">
+          <param name="Local" value="IEd_division.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Implementation for: MUX/MAX/MIN Window ">
+          <param name="Local" value="Ied_multiplexer_max_min.htm">
+        </object>
+        </ul>
+      </ul>
+    </ul>
+</ul>
+</html>

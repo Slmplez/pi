@@ -1,0 +1,142 @@
+{
+  "version": 1,
+  "status": "applied",
+  "databaseFingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c",
+  "targetOid": "040qm00000001p870c4hh6qubos40",
+  "targetKind": "class",
+  "canonicalPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill",
+  "action": "create_method",
+  "planId": "0bca5336-b6aa-409e-8abe-e39a2f0709a5",
+  "planFingerprint": "bd7a4746208b47d356ffdc029baffeced29208cafc9a6e8c8b3b0f3d2b3ed348",
+  "targetImpactFingerprint": "sha256:3642a712820cb426f71721a8b2d378cef6948f8b5a6cbb6b6fa88e05455e7b75",
+  "guardGeneration": 0,
+  "beforeSnapshotFingerprint": "sha256:c5a80ee40fd07f7b939d036e19f714a3466ac30d127366d2f1e36178b2840784",
+  "desiredFingerprint": "sha256:1d7b0f454f3aedaf8bcdc23e5c47bdda3e83af855288adebc8281c6dd811cb73",
+  "beforeSnapshot": {
+    "operation": "authoritative_single_call_preflight",
+    "validated": true,
+    "authoritativePlan": {
+      "operation": "preflight_create_method",
+      "validated": true,
+      "result": {
+        "databasePath": "C:\\Repo\\F05_IPB_L2_0429",
+        "componentPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill",
+        "componentOid": "040qm00000001p870c4hh6qubos40",
+        "componentKind": "Class",
+        "languageKind": "BDE",
+        "diagramName": "Main",
+        "diagramExists": true,
+        "diagramRuntimeType": "de.etas.cebra.toolAPI.Ascet.DiscreteMethodDiagram",
+        "requiredMethod": "AddMethod",
+        "requiredSignature": "AddMethod(String)",
+        "requiredMethodAvailable": true,
+        "addDiagramAvailable": false,
+        "futureMethodCapabilityProven": true,
+        "editable": false,
+        "readbackAvailable": true,
+        "noOp": false,
+        "existingMethod": null,
+        "plannedEffects": [
+          {
+            "kind": "create_method",
+            "target": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill::PiCompoundMethod",
+            "methodKind": "AbstractMethod"
+          }
+        ],
+        "capability": {
+          "status": "supported",
+          "operation": "AddMethod",
+          "failureCode": "",
+          "failureMessage": ""
+        }
+      }
+    },
+    "normalizedEvidence": {
+      "version": 1,
+      "action": "create_method",
+      "paramsFingerprint": "1d7b0f454f3aedaf8bcdc23e5c47bdda3e83af855288adebc8281c6dd811cb73",
+      "database": {
+        "path": "C:\\Repo\\F05_IPB_L2_0429",
+        "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+      },
+      "target": {
+        "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill",
+        "oid": "040qm00000001p870c4hh6qubos40",
+        "kind": "class"
+      },
+      "impact": {
+        "complete": true,
+        "sharedObject": false,
+        "ownerPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill",
+        "affectedProjects": [],
+        "fingerprint": "sha256:3642a712820cb426f71721a8b2d378cef6948f8b5a6cbb6b6fa88e05455e7b75"
+      },
+      "capability": {
+        "status": "supported",
+        "operation": "AddMethod",
+        "evidence": {
+          "status": "supported",
+          "operation": "AddMethod",
+          "failureCode": "",
+          "failureMessage": ""
+        }
+      },
+      "editability": {
+        "applicable": true,
+        "status": "read_only",
+        "canRequestEditable": true
+      },
+      "effects": [
+        {
+          "kind": "request_editability",
+          "target": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill",
+          "description": "Request component editability for Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill"
+        },
+        {
+          "kind": "create_method",
+          "target": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill::PiCompoundMethod",
+          "description": "create_method: Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill::PiCompoundMethod"
+        }
+      ],
+      "verification": {
+        "available": true,
+        "operation": "create_method_readback",
+        "target": {
+          "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill"
+        }
+      },
+      "riskModifiers": [],
+      "noOp": false,
+      "generatedAt": "2026-08-15T02:28:22.311Z",
+      "approvalMaterialFingerprint": "a9da4a9ecf00190524d069b646c140a20cb24adeacf0fedc512e354013843750"
+    },
+    "permissionMode": "acceptEdits",
+    "permissionDecision": "ask",
+    "risk": "medium",
+    "approvedAt": "2026-08-15T02:27:19.364Z",
+    "revalidatedAt": "2026-08-15T02:28:22.311Z",
+    "targetIdentity": {
+      "path": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill",
+      "oid": "040qm00000001p870c4hh6qubos40",
+      "kind": "class"
+    },
+    "targetImpactFingerprint": "sha256:3642a712820cb426f71721a8b2d378cef6948f8b5a6cbb6b6fa88e05455e7b75"
+  },
+  "attemptedMutation": {
+    "action": "create_method",
+    "componentPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill",
+    "methodName": "PiCompoundMethod",
+    "methodKind": "abstract",
+    "ifExists": "fail"
+  },
+  "createdAt": "2026-08-15T02:28:22.330Z",
+  "updatedAt": "2026-08-15T02:28:46.181Z",
+  "evidence": {
+    "bridgeEntered": true,
+    "backendResponseReceived": true,
+    "mutationStarted": true
+  },
+  "outcome": {
+    "operationId": "guarded_create_method"
+  }
+}

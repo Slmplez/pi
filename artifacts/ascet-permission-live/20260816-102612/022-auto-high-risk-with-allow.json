@@ -1,0 +1,268 @@
+{
+  "stage": "auto-high-risk-with-allow",
+  "startedAt": "2026-08-16T02:34:03.087Z",
+  "finishedAt": "2026-08-16T02:34:49.113Z",
+  "request": {
+    "toolName": "ascet_edit",
+    "params": {
+      "action": "set_method_code",
+      "componentPath": "DEMO\\__pi_permission_smoke__20260816-102612\\EditableClass",
+      "methodName": "PiHighRiskMethod",
+      "codeFile": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\artifacts\\ascet-permission-live\\20260816-102612\\PiHighRiskMethod.esdl",
+      "intent": "apply"
+    },
+    "permissionMode": "auto",
+    "rules": [
+      {
+        "behavior": "allow",
+        "action": "set_method_code",
+        "path": "DEMO\\__pi_permission_smoke__20260816-102612\\EditableClass"
+      }
+    ]
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"status\": \"ok\",\n  \"permission\": {\n    \"mode\": \"auto\",\n    \"decision\": \"ask\",\n    \"risk\": \"high\",\n    \"reason\": \"High-risk ASCET writes always require confirmation.\",\n    \"rule\": {\n      \"index\": 0,\n      \"behavior\": \"allow\",\n      \"action\": \"set_method_code\",\n      \"path\": \"DEMO/__pi_permission_smoke__20260816-102612/EditableClass\",\n      \"reason\": \"Matched .ascet/permissions.json rules[0] (allow).\"\n    }\n  },\n  \"preflight\": {\n    \"status\": \"passed\",\n    \"evidence\": {\n      \"version\": 1,\n      \"action\": \"set_method_code\",\n      \"paramsFingerprint\": \"75ebe75b50e1a1d05c93221a9f32a8ff72850970a7e52fce39e0266d3976196c\",\n      \"database\": {\n        \"path\": \"C:/Repo/F05_IPB_L2_0429\",\n        \"fingerprint\": \"71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c\"\n      },\n      \"target\": {\n        \"path\": \"DEMO/__pi_permission_smoke__20260816-102612/EditableClass\",\n        \"oid\": \"040g00001g001qg71080h23j5qlhe\",\n        \"kind\": \"class\"\n      },\n      \"impact\": {\n        \"complete\": true,\n        \"sharedObject\": false,\n        \"ownerPath\": \"DEMO/__pi_permission_smoke__20260816-102612/EditableClass\",\n        \"fingerprint\": \"sha256:636cc350503f8ae6e41a9096694a5cb0c6fe731cbf90f4742e0e331942ad95ab\"\n      },\n      \"capability\": {\n        \"status\": \"supported\",\n        \"operation\": \"registered_guarded_operation_preflight\",\n        \"evidence\": {\n          \"status\": \"supported\",\n          \"source\": \"registered_closed_operation\"\n        }\n      },\n      \"editability\": {\n        \"applicable\": true,\n        \"status\": \"editable\",\n        \"canRequestEditable\": false\n      },\n      \"effects\": [\n        {\n          \"kind\": \"set_method_code\",\n          \"target\": \"DEMO/__pi_permission_smoke__20260816-102612/EditableClass\",\n          \"description\": \"set_method_code: DEMO\\\\__pi_permission_smoke__20260816-102612\\\\EditableClass\"\n        }\n      ],\n      \"verification\": {\n        \"available\": true,\n        \"operation\": \"set_method_code_readback\",\n        \"target\": {\n          \"path\": \"DEMO/__pi_permission_smoke__20260816-102612/EditableClass\"\n        }\n      },\n      \"noOp\": false,\n      \"generatedAt\": \"2026-08-16T02:34:46.697Z\",\n      \"approvalMaterialFingerprint\": \"2239c86bce6b178cdbaea7bd8b8ff401fc114b240679191436e33275e06055d1\"\n    }\n  },\n  \"editability\": {\n    \"status\": \"editable\"\n  },\n  \"mutation\": {\n    \"status\": \"applied\"\n  },\n  \"verification\": {\n    \"status\": \"passed\"\n  },\n  \"audit\": {\n    \"approvedAt\": \"2026-08-16T02:34:24.749Z\",\n    \"revalidatedAt\": \"2026-08-16T02:34:46.697Z\",\n    \"preflightFingerprint\": \"75ebe75b50e1a1d05c93221a9f32a8ff72850970a7e52fce39e0266d3976196c\",\n    \"approvalMaterialFingerprint\": \"2239c86bce6b178cdbaea7bd8b8ff401fc114b240679191436e33275e06055d1\"\n  },\n  \"bridge\": {\n    \"beforeBridge\": true,\n    \"bridgeEntered\": true,\n    \"backendResponseReceived\": true\n  },\n  \"recovery\": {\n    \"required\": false\n  }\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "ok",
+        "verified": true,
+        "data": {
+          "changed": {
+            "operationName": "set_method_code",
+            "sequenceNumber": 1,
+            "writeSucceeded": true,
+            "summary": "Updated method 'PiHighRiskMethod' in 'DEMO\\__pi_permission_smoke__20260816-102612\\EditableClass'.",
+            "payload": {
+              "ComponentPath": "DEMO\\__pi_permission_smoke__20260816-102612\\EditableClass",
+              "ComponentKind": "Class",
+              "LanguageKind": "ESDL",
+              "MethodName": "PiHighRiskMethod",
+              "MethodKind": "AbstractMethod",
+              "PreviousCodeLength": 0,
+              "NewCodeLength": 47,
+              "WriteSucceeded": true,
+              "VerifyReadbackRequested": true,
+              "ReadbackVerified": true
+            }
+          },
+          "verification": {
+            "mode": "automatic_readback",
+            "source": "write_command",
+            "required": true,
+            "requested": true,
+            "verified": true,
+            "status": "passed"
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      },
+      "raw": {
+        "ok": true,
+        "data": {
+          "type": "response",
+          "protocolVersion": 1,
+          "ok": true,
+          "result": {
+            "operationName": "set_method_code",
+            "sequenceNumber": 1,
+            "writeSucceeded": true,
+            "summary": "Updated method 'PiHighRiskMethod' in 'DEMO\\__pi_permission_smoke__20260816-102612\\EditableClass'.",
+            "payload": {
+              "ComponentPath": "DEMO\\__pi_permission_smoke__20260816-102612\\EditableClass",
+              "ComponentKind": "Class",
+              "LanguageKind": "ESDL",
+              "MethodName": "PiHighRiskMethod",
+              "MethodKind": "AbstractMethod",
+              "PreviousCodeLength": 0,
+              "NewCodeLength": 47,
+              "WriteSucceeded": true,
+              "VerifyReadbackRequested": true,
+              "ReadbackVerified": true
+            },
+            "verification": {
+              "requested": true,
+              "attempted": true,
+              "succeeded": true,
+              "summary": "method_code_matches",
+              "details": {}
+            }
+          },
+          "error": null,
+          "meta": {
+            "bridgePid": 41616,
+            "bridgeGeneration": "d0c88e72-2d4a-4c27-bd6f-8b3a3b3cc0ab",
+            "durationMs": 1628,
+            "sessionPolicy": "fresh_session",
+            "mutationStarted": true,
+            "mode": "exec",
+            "operation": "set_method_code"
+          }
+        },
+        "request": {
+          "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "set_method_code",
+            "DEMO\\__pi_permission_smoke__20260816-102612\\EditableClass",
+            "PiHighRiskMethod",
+            "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\artifacts\\ascet-permission-live\\20260816-102612\\PiHighRiskMethod.esdl",
+            "--verify-readback",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "write",
+          "mutatesDatabase": true
+        },
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"operationName\":\"set_method_code\",\"sequenceNumber\":1,\"writeSucceeded\":true,\"summary\":\"Updated method \\u0027PiHighRiskMethod\\u0027 in \\u0027DEMO\\\\__pi_permission_smoke__20260816-102612\\\\EditableClass\\u0027.\",\"payload\":{\"ComponentPath\":\"DEMO\\\\__pi_permission_smoke__20260816-102612\\\\EditableClass\",\"ComponentKind\":\"Class\",\"LanguageKind\":\"ESDL\",\"MethodName\":\"PiHighRiskMethod\",\"MethodKind\":\"AbstractMethod\",\"PreviousCodeLength\":0,\"NewCodeLength\":47,\"WriteSucceeded\":true,\"VerifyReadbackRequested\":true,\"ReadbackVerified\":true},\"verification\":{\"requested\":true,\"attempted\":true,\"succeeded\":true,\"summary\":\"method_code_matches\",\"details\":{}}},\"error\":null,\"meta\":{\"bridgePid\":41616,\"bridgeGeneration\":\"d0c88e72-2d4a-4c27-bd6f-8b3a3b3cc0ab\",\"durationMs\":1628,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":true,\"mode\":\"exec\",\"operation\":\"set_method_code\"}}\r\n",
+        "stderr": "",
+        "exitCode": 0,
+        "timedOut": false,
+        "aborted": false,
+        "operationId": "set_method_code"
+      },
+      "observations": {
+        "invalidated": []
+      },
+      "verification": {
+        "mode": "automatic_readback",
+        "source": "write_command",
+        "required": true,
+        "requested": true,
+        "verified": true,
+        "status": "passed"
+      },
+      "mutationResult": {
+        "status": "ok",
+        "permission": {
+          "mode": "auto",
+          "decision": "ask",
+          "risk": "high",
+          "reason": "High-risk ASCET writes always require confirmation.",
+          "rule": {
+            "index": 0,
+            "behavior": "allow",
+            "action": "set_method_code",
+            "path": "DEMO\\__pi_permission_smoke__20260816-102612\\EditableClass",
+            "reason": "Matched .ascet/permissions.json rules[0] (allow)."
+          }
+        },
+        "preflight": {
+          "status": "passed",
+          "evidence": {
+            "version": 1,
+            "action": "set_method_code",
+            "paramsFingerprint": "75ebe75b50e1a1d05c93221a9f32a8ff72850970a7e52fce39e0266d3976196c",
+            "database": {
+              "path": "C:\\Repo\\F05_IPB_L2_0429",
+              "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+            },
+            "target": {
+              "path": "DEMO\\__pi_permission_smoke__20260816-102612\\EditableClass",
+              "oid": "040g00001g001qg71080h23j5qlhe",
+              "kind": "class"
+            },
+            "impact": {
+              "complete": true,
+              "sharedObject": false,
+              "ownerPath": "DEMO\\__pi_permission_smoke__20260816-102612\\EditableClass",
+              "affectedProjects": [],
+              "fingerprint": "sha256:636cc350503f8ae6e41a9096694a5cb0c6fe731cbf90f4742e0e331942ad95ab"
+            },
+            "capability": {
+              "status": "supported",
+              "operation": "registered_guarded_operation_preflight",
+              "evidence": {
+                "status": "supported",
+                "source": "registered_closed_operation"
+              }
+            },
+            "editability": {
+              "applicable": true,
+              "status": "editable",
+              "canRequestEditable": false
+            },
+            "effects": [
+              {
+                "kind": "set_method_code",
+                "target": "DEMO\\__pi_permission_smoke__20260816-102612\\EditableClass",
+                "description": "set_method_code: DEMO\\__pi_permission_smoke__20260816-102612\\EditableClass"
+              }
+            ],
+            "verification": {
+              "available": true,
+              "operation": "set_method_code_readback",
+              "target": {
+                "path": "DEMO\\__pi_permission_smoke__20260816-102612\\EditableClass"
+              }
+            },
+            "riskModifiers": [],
+            "noOp": false,
+            "generatedAt": "2026-08-16T02:34:46.697Z",
+            "approvalMaterialFingerprint": "2239c86bce6b178cdbaea7bd8b8ff401fc114b240679191436e33275e06055d1"
+          }
+        },
+        "editability": {
+          "status": "editable"
+        },
+        "mutation": {
+          "status": "applied"
+        },
+        "verification": {
+          "status": "passed"
+        },
+        "audit": {
+          "approvedAt": "2026-08-16T02:34:24.749Z",
+          "revalidatedAt": "2026-08-16T02:34:46.697Z",
+          "preflightFingerprint": "75ebe75b50e1a1d05c93221a9f32a8ff72850970a7e52fce39e0266d3976196c",
+          "approvalMaterialFingerprint": "2239c86bce6b178cdbaea7bd8b8ff401fc114b240679191436e33275e06055d1"
+        },
+        "bridge": {
+          "beforeBridge": true,
+          "bridgeEntered": true,
+          "backendResponseReceived": true
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      },
+      "tool": "ascet_edit",
+      "action": "set_method_code",
+      "command": {
+        "logicalCommandId": "AscetSetMethodCode",
+        "backendCommandId": "AscetSetMethodCode",
+        "operation": "set_method_code"
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "set_method_code",
+            "DEMO\\__pi_permission_smoke__20260816-102612\\EditableClass",
+            "PiHighRiskMethod",
+            "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\artifacts\\ascet-permission-live\\20260816-102612\\PiHighRiskMethod.esdl",
+            "--verify-readback",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "write",
+          "mutatesDatabase": true
+        },
+        "exitCode": 0,
+        "timedOut": false,
+        "stderr": ""
+      }
+    }
+  }
+}

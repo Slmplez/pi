@@ -1,0 +1,219 @@
+{
+  "generated_at": "2026-04-01T03:08:22.451620Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\RecordsEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\RecordsEnglishUS",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\RecordsEnglishUS\\markdown",
+  "input_html_count": 34,
+  "converted_html_count": 34,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 41,
+  "toc_entries_count": 47,
+  "index_entries_count": 31,
+  "index_required": true,
+  "mappings": [
+    {
+      "html_rel_path": "codegen_dbtoolarge.htm",
+      "md_rel_path": "codegen_dbtoolarge.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RC_Allowed_Content.htm",
+      "md_rel_path": "RC_Allowed_Content.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RC_Create_Record_from_Class.htm",
+      "md_rel_path": "RC_Create_Record_from_Class.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RC_Creating_a_Record.htm",
+      "md_rel_path": "RC_Creating_a_Record.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RC_Edit_RecordImplementation.htm",
+      "md_rel_path": "RC_Edit_RecordImplementation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RC_ExternallyDeclaredRecords.htm",
+      "md_rel_path": "RC_ExternallyDeclaredRecords.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "rc_filter_component_pane.htm",
+      "md_rel_path": "rc_filter_component_pane.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RC_Implementing_RecordElement.htm",
+      "md_rel_path": "RC_Implementing_RecordElement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RC_Implementing_RecordInstance.htm",
+      "md_rel_path": "RC_Implementing_RecordInstance.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RC_Open_ImplementationEditor_Record.htm",
+      "md_rel_path": "RC_Open_ImplementationEditor_Record.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RC_Opening_a_Record.htm",
+      "md_rel_path": "RC_Opening_a_Record.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RC_overview.htm",
+      "md_rel_path": "RC_overview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RC_Records_in_Block_Diagrams.htm",
+      "md_rel_path": "RC_Records_in_Block_Diagrams.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RC_Records_in_ESDL_CCode.htm",
+      "md_rel_path": "RC_Records_in_ESDL_CCode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RC_Specifying_a_Record.htm",
+      "md_rel_path": "RC_Specifying_a_Record.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "rcecomponentpane.htm",
+      "md_rel_path": "rcecomponentpane.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "rcecontextmenubrowseview.htm",
+      "md_rel_path": "rcecontextmenubrowseview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "rcecontextmenucpcomponentsandelements.htm",
+      "md_rel_path": "rcecontextmenucpcomponentsandelements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "rceeditmenu.htm",
+      "md_rel_path": "rceeditmenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RCEextrasMenu.htm",
+      "md_rel_path": "RCEextrasMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RCEfileMenu.htm",
+      "md_rel_path": "RCEfileMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RCEhelpMenu.htm",
+      "md_rel_path": "RCEhelpMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "rceIncludeComponent_via_BlockLibrary.htm",
+      "md_rel_path": "rceIncludeComponent_via_BlockLibrary.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RCEinsertMenu.htm",
+      "md_rel_path": "RCEinsertMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "rceLibraryPalette.htm",
+      "md_rel_path": "rceLibraryPalette.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "rcemenubar.htm",
+      "md_rel_path": "rcemenubar.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "rcepalettespane.htm",
+      "md_rel_path": "rcepalettespane.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "rcetoolbarelements.htm",
+      "md_rel_path": "rcetoolbarelements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "rcetoolbargeneral.htm",
+      "md_rel_path": "rcetoolbargeneral.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RCEtoolsMenu.htm",
+      "md_rel_path": "RCEtoolsMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "rceviewbrowse.htm",
+      "md_rel_path": "rceviewbrowse.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RCEviewMenu.htm",
+      "md_rel_path": "RCEviewMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "rcewindowsdescription.htm",
+      "md_rel_path": "rcewindowsdescription.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RE_Toolbars.htm",
+      "md_rel_path": "RE_Toolbars.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

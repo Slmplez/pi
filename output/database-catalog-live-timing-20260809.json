@@ -1,0 +1,65 @@
+{
+  "elapsedMs": 33466,
+  "ok": true,
+  "output": {
+    "delivery": "stored",
+    "catalog": {
+      "resultId": "obs-database-catalog-37936-1786238694802-0",
+      "sourceTreeResultId": "obs-tree-live-20260808-full-database",
+      "include": [
+        "parameter_class"
+      ],
+      "artifacts": {
+        "catalog": {
+          "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-37936-1786238694802-0.database-model-catalog.ndjson",
+          "itemCount": 951
+        },
+        "relations": {
+          "projectComplexEdges": {
+            "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-37936-1786238694802-0.project-complex-edges.ndjson",
+            "itemCount": 696
+          },
+          "parameterClassEdges": {
+            "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-37936-1786238694802-0.parameter-class-edges.ndjson",
+            "itemCount": 1335
+          },
+          "parameterEnumEdges": {
+            "notCreatedReason": "scan_not_requested"
+          },
+          "projectModuleEdges": {
+            "notCreatedReason": "scan_not_requested"
+          },
+          "moduleMessageEdges": {
+            "notCreatedReason": "scan_not_requested"
+          },
+          "messageEnumEdges": {
+            "notCreatedReason": "scan_not_requested"
+          }
+        },
+        "summaryPath": "output\\database-catalog-baseline\\obs-database-catalog-37936-1786238694802-0.database-model-summary.json",
+        "metaPath": "output\\database-catalog-baseline\\obs-database-catalog-37936-1786238694802-0.database-model.meta.json",
+        "parameterClasses": {
+          "dataPath": "output\\database-catalog-baseline\\obs-database-catalog-37936-1786238694802-0.parameter-classes.ndjson",
+          "itemCount": 951
+        }
+      }
+    },
+    "coverage": {
+      "status": "complete_for_scope",
+      "failureCount": 0
+    },
+    "timings": {
+      "projectScanMs": 2414,
+      "parameterProjectClosureScanMs": 22020,
+      "parameterOrphanScanMs": 5910,
+      "parameterClassificationMs": 4,
+      "parameterClosureMs": 27938,
+      "moduleScanMs": 0,
+      "totalServiceMs": 30353,
+      "sessionOpenMs": 227,
+      "sessionCloseMs": 2,
+      "sourceTreeScanMs": 52.816599999999994,
+      "liveScanMs": 33392.1702
+    }
+  }
+}

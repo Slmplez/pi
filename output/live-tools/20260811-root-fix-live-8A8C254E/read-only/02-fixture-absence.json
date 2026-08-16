@@ -1,0 +1,8 @@
+{
+  "fixtureRoot": "PI_LIVE_ROOTFIX_20260811_8A8C254E",
+  "fixtureAbsent": true,
+  "error": {
+    "code": "folder_not_found",
+    "message": "Folder 'PI_LIVE_ROOTFIX_20260811_8A8C254E' was not found."
+  }
+}

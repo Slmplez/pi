@@ -646,7 +646,7 @@ miniFewShot: ascet_read({action:"read_dependent_chain",componentPath:"F/Consumer
 
 ```text
 ascet_write.set_element_dependency - Set dependency flag/formula on an existing local parameter only; does not create local/imported/exported elements; successful writes refresh element_decls/full element cache.
-miniFewShot: ascet_write({action:"set_element_dependency",targetPath:"F/Consumer",elementName:"K",dependency:"dependent",verifyReadback:true,executeWrite:true})
+miniFewShot: ascet_edit({action:"set_element_dependency",targetPath:"F/Consumer",elementName:"K",dependency:"dependent",intent:"apply"})
 ```
 
 ### 6.2 Full Action Prompt After `search_actions`
@@ -696,8 +696,7 @@ Full few-shot:
   "dependencyMappings": {
     "K_Exported": "K_Exported"
   },
-  "verifyReadback": true,
-  "executeWrite": true
+  "intent": "apply"
 }
 ```
 
@@ -1024,7 +1023,7 @@ Test:
 - Compact prompt mentions index-first `read_dependent_chain`.
 - Compact prompt says `set_element_dependency` does not create local/imported/exported elements.
 - `search_actions("dependent parameter")` returns full schema/rules/fewShots for both actions.
-- Few-shot for `set_element_dependency` includes `executeWrite:true` only in full/action-level details, not necessarily in minimal compact prompt.
+- Few-shot for `set_element_dependency` includes `intent:"apply"` only in full/action-level details, not necessarily in minimal compact prompt.
 
 **Step 2: Update descriptors**
 
@@ -1172,7 +1171,7 @@ Expected:
 
 ### 8.3 Writeback Refresh
 
-Call `set_element_dependency` on a safe test component with `executeWrite=true` and `verifyReadback=true`.
+Call `set_element_dependency` on a safe test component with `intent="apply"`; runtime readback verification is mandatory.
 
 Expected:
 

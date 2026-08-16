@@ -1,0 +1,57 @@
+{
+  "stage": "cleanup-only-failure-method-readback",
+  "startedAt": "2026-08-16T02:51:06.982Z",
+  "finishedAt": "2026-08-16T02:51:07.648Z",
+  "request": {
+    "toolName": "ascet_read",
+    "params": {
+      "action": "read_method_signature",
+      "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+      "methodName": "PiForcedFailure"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"error\": {\n    \"code\": \"method_not_found\",\n    \"message\": \"Method 'PiForcedFailure' was not found in component 'PlatformLibrary\\\\Package\\\\AntiLockController\\\\Private\\\\SMC\\\\Axle\\\\AxleControl'.\",\n    \"details\": {\n      \"stdout\": \"{\\\"type\\\":\\\"response\\\",\\\"protocolVersion\\\":1,\\\"ok\\\":false,\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":\\\"method_not_found\\\",\\\"message\\\":\\\"Method \\\\u0027PiForcedFailure\\\\u0027 was not found in component \\\\u0027PlatformLibrary\\\\\\\\Package\\\\\\\\AntiLockController\\\\\\\\Private\\\\\\\\SMC\\\\\\\\Axle\\\\\\\\AxleControl\\\\u0027.\\\"},\\\"meta\\\":{\\\"bridgePid\\\":5720,\\\"bridgeGeneration\\\":\\\"0527996d-03c2-43a9-a1ff-e6bc27d29a56\\\",\\\"durationMs\\\":346,\\\"sessionPolicy\\\":\\\"fresh_session\\\",\\\"mutationStarted\\\":false,\\\"mode\\\":\\\"exec\\\",\\\"operation\\\":\\\"read_method_signature\\\"}}\",\n      \"exitCode\": 2,\n      \"operationId\": \"read_method_signature\",\n      \"stage\": \"cli_process\",\n      \"retryable\": false,\n      \"stdoutSummary\": \"{\\\"type\\\":\\\"response\\\",\\\"protocolVersion\\\":1,\\\"ok\\\":false,\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":\\\"method_not_found\\\",\\\"message\\\":\\\"Method \\\\u0027PiForcedFailure\\\\u0027 was not found in component \\\\u0027PlatformLibrary\\\\\\\\Package\\\\\\\\AntiLockController\\\\\\\\Private\\\\\\\\SMC\\\\\\\\Axle\\\\\\\\AxleControl\\\\u0027.\\\"},\\\"meta\\\":{\\\"bridgePid\\\":5720,\\\"bridgeGeneration\\\":\\\"0527996d-03c2-43a9-a1ff-e6bc27d29a56\\\",\\\"durationMs\\\":346,\\\"sessionPolicy\\\":\\\"fresh_session\\\",\\\"mutationStarted\\\":false,\\\"mode\\\":\\\"exec\\\",\\\"operation\\\":\\\"read_method_signature\\\"}}\"\n    }\n  }\n}"
+      }
+    ],
+    "details": {
+      "tool": "ascet_read",
+      "action": "read_method_signature",
+      "command": {
+        "logicalCommandId": "AscetReadMethodSignature",
+        "backendCommandId": "AscetReadMethodSignature",
+        "operation": "read_method_signature"
+      },
+      "error": {
+        "code": "method_not_found",
+        "message": "Method 'PiForcedFailure' was not found in component 'PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl'.",
+        "details": {
+          "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"method_not_found\",\"message\":\"Method \\u0027PiForcedFailure\\u0027 was not found in component \\u0027PlatformLibrary\\\\Package\\\\AntiLockController\\\\Private\\\\SMC\\\\Axle\\\\AxleControl\\u0027.\"},\"meta\":{\"bridgePid\":5720,\"bridgeGeneration\":\"0527996d-03c2-43a9-a1ff-e6bc27d29a56\",\"durationMs\":346,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"read_method_signature\"}}\r\n",
+          "exitCode": 2
+        }
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+          "cliPath": "C:/Repo/09_ASCETCopilot/pi-ascet-extension-prototype/packages/ascet-extension/ascet-cli/bin/AscetBridge.exe",
+          "args": [
+            "exec",
+            "read_method_signature",
+            "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+            "PiForcedFailure",
+            "--json"
+          ],
+          "timeoutMs": 90000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 2,
+        "timedOut": false,
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"method_not_found\",\"message\":\"Method \\u0027PiForcedFailure\\u0027 was not found in component \\u0027PlatformLibrary\\\\Package\\\\AntiLockController\\\\Private\\\\SMC\\\\Axle\\\\AxleControl\\u0027.\"},\"meta\":{\"bridgePid\":5720,\"bridgeGeneration\":\"0527996d-03c2-43a9-a1ff-e6bc27d29a56\",\"durationMs\":346,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"read_method_signature\"}}\r\n"
+      }
+    }
+  }
+}

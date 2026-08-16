@@ -1,0 +1,55 @@
+{
+  "tool": "ascet_get",
+  "params": {
+    "action": "elements",
+    "target": {
+      "path": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010::CM_AVH"
+    },
+    "delivery": "inline"
+  },
+  "elapsedMs": 504,
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"error\": {\n    \"code\": \"target_not_found\",\n    \"message\": \"No ASCET database item was found at 'CN_Libary\\\\CNMS_IPB20\\\\IPBCustGeneral\\\\IPBCustGeneral_ECU_CSW_BB88010'.\",\n    \"details\": {\n      \"stdout\": \"{\\\"type\\\":\\\"response\\\",\\\"protocolVersion\\\":1,\\\"ok\\\":false,\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":\\\"target_not_found\\\",\\\"message\\\":\\\"No ASCET database item was found at \\\\u0027CN_Libary\\\\\\\\CNMS_IPB20\\\\\\\\IPBCustGeneral\\\\\\\\IPBCustGeneral_ECU_CSW_BB88010\\\\u0027.\\\"},\\\"meta\\\":{\\\"bridgePid\\\":38480,\\\"bridgeGeneration\\\":\\\"e24fb962-25cb-45d2-88c8-5ccbc368d111\\\",\\\"durationMs\\\":379,\\\"sessionPolicy\\\":\\\"fresh_session\\\",\\\"mutationStarted\\\":false,\\\"mode\\\":\\\"exec\\\",\\\"operation\\\":\\\"get_elements\\\"}}\",\n      \"exitCode\": 2,\n      \"operationId\": \"get_elements\",\n      \"stage\": \"cli_process\",\n      \"retryable\": false,\n      \"stdoutSummary\": \"{\\\"type\\\":\\\"response\\\",\\\"protocolVersion\\\":1,\\\"ok\\\":false,\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":\\\"target_not_found\\\",\\\"message\\\":\\\"No ASCET database item was found at \\\\u0027CN_Libary\\\\\\\\CNMS_IPB20\\\\\\\\IPBCustGeneral\\\\\\\\IPBCustGeneral_ECU_CSW_BB88010\\\\u0027.\\\"},\\\"meta\\\":{\\\"bridgePid\\\":38480,\\\"bridgeGeneration\\\":\\\"e24fb962-25cb-45d2-88c8-5ccbc368d111\\\",\\\"durationMs\\\":379,\\\"sessionPolicy\\\":\\\"fresh_session\\\",\\\"mutationStarted\\\":false,\\\"mode\\\":\\\"exec\\\",\\\"operation\\\":\\\"get_elements\\\"}}\"\n    }\n  }\n}"
+      }
+    ],
+    "details": {
+      "tool": "ascet_get",
+      "action": "elements",
+      "command": {
+        "logicalCommandId": "AscetGetElements",
+        "backendCommandId": "AscetGetElements",
+        "operation": "get_elements"
+      },
+      "error": {
+        "code": "target_not_found",
+        "message": "No ASCET database item was found at 'CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010'.",
+        "details": {
+          "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"target_not_found\",\"message\":\"No ASCET database item was found at \\u0027CN_Libary\\\\CNMS_IPB20\\\\IPBCustGeneral\\\\IPBCustGeneral_ECU_CSW_BB88010\\u0027.\"},\"meta\":{\"bridgePid\":38480,\"bridgeGeneration\":\"e24fb962-25cb-45d2-88c8-5ccbc368d111\",\"durationMs\":379,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"get_elements\"}}\r\n",
+          "exitCode": 2
+        }
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:/Repo/09_ASCETCopilot/pi-ascet-extension-prototype/packages/ascet-extension/ascet-cli/bin/AscetBridge.exe",
+          "args": [
+            "exec",
+            "get_elements",
+            "--request-json",
+            "{\"path\":\"CN_Libary\\\\CNMS_IPB20\\\\IPBCustGeneral\\\\IPBCustGeneral_ECU_CSW_BB88010::CM_AVH\"}",
+            "--json"
+          ],
+          "timeoutMs": 180000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 2,
+        "timedOut": false,
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"target_not_found\",\"message\":\"No ASCET database item was found at \\u0027CN_Libary\\\\CNMS_IPB20\\\\IPBCustGeneral\\\\IPBCustGeneral_ECU_CSW_BB88010\\u0027.\"},\"meta\":{\"bridgePid\":38480,\"bridgeGeneration\":\"e24fb962-25cb-45d2-88c8-5ccbc368d111\",\"durationMs\":379,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"get_elements\"}}\r\n"
+      }
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "stage": "cleanup-read-only-method-readback",
+  "startedAt": "2026-08-15T02:04:06.259Z",
+  "finishedAt": "2026-08-15T02:04:06.918Z",
+  "request": {
+    "toolName": "ascet_read",
+    "params": {
+      "action": "read_method_signature",
+      "componentPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill",
+      "methodName": "PiCompoundMethod"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"error\": {\n    \"code\": \"method_not_found\",\n    \"message\": \"Method 'PiCompoundMethod' was not found in component 'Customer\\\\JLR_FMC\\\\Package\\\\JLR_LeanTCS\\\\Private\\\\TCS_CUS_GenericTCSFunctions\\\\TCS_CUS_RefSuppSuppress\\\\TCS_CUS_RefSuppSuppress_Hill'.\",\n    \"details\": {\n      \"stdout\": \"{\\\"type\\\":\\\"response\\\",\\\"protocolVersion\\\":1,\\\"ok\\\":false,\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":\\\"method_not_found\\\",\\\"message\\\":\\\"Method \\\\u0027PiCompoundMethod\\\\u0027 was not found in component \\\\u0027Customer\\\\\\\\JLR_FMC\\\\\\\\Package\\\\\\\\JLR_LeanTCS\\\\\\\\Private\\\\\\\\TCS_CUS_GenericTCSFunctions\\\\\\\\TCS_CUS_RefSuppSuppress\\\\\\\\TCS_CUS_RefSuppSuppress_Hill\\\\u0027.\\\"},\\\"meta\\\":{\\\"bridgePid\\\":16556,\\\"bridgeGeneration\\\":\\\"53df099b-a82d-4167-91df-3f02b74213ff\\\",\\\"durationMs\\\":318,\\\"sessionPolicy\\\":\\\"fresh_session\\\",\\\"mutationStarted\\\":false,\\\"mode\\\":\\\"exec\\\",\\\"operation\\\":\\\"read_method_signature\\\"}}\",\n      \"exitCode\": 2,\n      \"operationId\": \"read_method_signature\",\n      \"stage\": \"cli_process\",\n      \"retryable\": false,\n      \"stdoutSummary\": \"{\\\"type\\\":\\\"response\\\",\\\"protocolVersion\\\":1,\\\"ok\\\":false,\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":\\\"method_not_found\\\",\\\"message\\\":\\\"Method \\\\u0027PiCompoundMethod\\\\u0027 was not found in component \\\\u0027Customer\\\\\\\\JLR_FMC\\\\\\\\Package\\\\\\\\JLR_LeanTCS\\\\\\\\Private\\\\\\\\TCS_CUS_GenericTCSFunctions\\\\\\\\TCS_CUS_RefSuppSuppress\\\\\\\\TCS_CUS_RefSuppSuppress_Hill\\\\u0027.\\\"},\\\"meta\\\":{\\\"bridgePid\\\":16556,\\\"bridgeGeneration\\\":\\\"53df099b-a82d-4167-91df-3f02b74213ff\\\",\\\"durationMs\\\":318,\\\"sessionPolicy\\\":\\\"fresh_session\\\",\\\"mutationStarted\\\":false,\\\"mode\\\":\\\"exec\\\",\\\"operation\\\":\\\"read_method_signature\\\"}}\"\n    }\n  }\n}"
+      }
+    ],
+    "details": {
+      "tool": "ascet_read",
+      "action": "read_method_signature",
+      "command": {
+        "logicalCommandId": "AscetReadMethodSignature",
+        "backendCommandId": "AscetReadMethodSignature",
+        "operation": "read_method_signature"
+      },
+      "error": {
+        "code": "method_not_found",
+        "message": "Method 'PiCompoundMethod' was not found in component 'Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill'.",
+        "details": {
+          "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"method_not_found\",\"message\":\"Method \\u0027PiCompoundMethod\\u0027 was not found in component \\u0027Customer\\\\JLR_FMC\\\\Package\\\\JLR_LeanTCS\\\\Private\\\\TCS_CUS_GenericTCSFunctions\\\\TCS_CUS_RefSuppSuppress\\\\TCS_CUS_RefSuppSuppress_Hill\\u0027.\"},\"meta\":{\"bridgePid\":16556,\"bridgeGeneration\":\"53df099b-a82d-4167-91df-3f02b74213ff\",\"durationMs\":318,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"read_method_signature\"}}\r\n",
+          "exitCode": 2
+        }
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:/Repo/09_ASCETCopilot/pi-ascet-extension-prototype/packages/ascet-extension/ascet-cli/bin/AscetBridge.exe",
+          "args": [
+            "exec",
+            "read_method_signature",
+            "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill",
+            "PiCompoundMethod",
+            "--json"
+          ],
+          "timeoutMs": 90000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 2,
+        "timedOut": false,
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"method_not_found\",\"message\":\"Method \\u0027PiCompoundMethod\\u0027 was not found in component \\u0027Customer\\\\JLR_FMC\\\\Package\\\\JLR_LeanTCS\\\\Private\\\\TCS_CUS_GenericTCSFunctions\\\\TCS_CUS_RefSuppSuppress\\\\TCS_CUS_RefSuppSuppress_Hill\\u0027.\"},\"meta\":{\"bridgePid\":16556,\"bridgeGeneration\":\"53df099b-a82d-4167-91df-3f02b74213ff\",\"durationMs\":318,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"read_method_signature\"}}\r\n"
+      }
+    }
+  }
+}

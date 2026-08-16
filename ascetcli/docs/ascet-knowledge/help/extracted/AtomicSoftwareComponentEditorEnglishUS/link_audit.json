@@ -1,0 +1,1136 @@
+{
+  "generated_at": "2026-04-01T03:07:32.610380Z",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS",
+  "checked_files": 233,
+  "checked_links": 4341,
+  "broken_links": [
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\asc_accessmessages.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\asc_conversionattributeswindow.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\asc_copymove_items_betweendiagram.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\asC_exampleselementsnavigationtab.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ASC_ExportMessageParameterMappings.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ASC_Filter_MappingViews.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ASC_ImportMessageParameterMappings.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ASC_MessageMapping.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ASC_MessageMappingView_ExternalAccess.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ASC_MessageMappingView_InternalAccess.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\asc_searchdel_unused_methodsrunnables.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ASC_SearchDeleteUnusedElements.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ASCaccessCalibrationParameters.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ascaddargument.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ascaddimplcasttoconnect.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ascaddimplementationcast.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ASCaddLocalvariables.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ascaddreturnvalue.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ascargumentstab.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ascchangeappearance.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ASCconditionaloperators.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ascconfigureautosarxmloutput.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ascconnectdiagram.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ASCcontextMenuDiagramMethodOrRunnable.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ASCcontrolFlowOperators.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\asccreatearray.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ASCcreateAtomicSoftwareComponent.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\asccreatedistribution.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\asccreatenormal.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ASCCreatesequence.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\asccutcopypaste.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ASCEditSequence.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ASCgenerateAUTOSARCode.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\asclocalstab.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ASCParameterMappingView.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ascreturntab.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ASCSearchResultsView.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ASCsenderReceiverCommunication.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ascsequencecalls.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ASCsetUpEvent.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ASCspecifyClientServerInterfacePrototype.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ascusenumbers.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ASCusingExclusiveAreas.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\ascviewconnectedelements.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown\\SWC_FilterCriteria_Window.md",
+      "kind": "link",
+      "target": ".+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/int_safetyinformation.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/int_safetyadvicegeneral.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/SenderReceiverEditorEnglishUS.chm::/SREmodesModeGroups.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_UseVerifyOperator.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/ElementEditorEnglishUS.chm::/EEd_use_temporary_variables.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/Addcomment.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_AddLiteral.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_InsertElement_in_Connection.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/Deleteconnection.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_RemoveElement.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/ReplaceDiagram.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/Changing_Grid_Drawing_Area.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/AutomaticDocumentationEnglishUS.chm::/AD_EditView_of_DiagramItem.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/WriteData.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/ReadData.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_Setting_up_the_Printing_Area.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_Export_BlockDiagram.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_Globalelements.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/Editsize.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/Editports.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/Public_Methods.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_Defaultlayout.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/Restoredefault.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/bde_replaceincludedcomponent.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/AnalyzeDiagram.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/Viewcode.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_Configuring_Toolbar.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_SearchTreePane.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/Changing_Grid_Drawing_Area.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_Example_ConversionOperator.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_ContextMenu_Hierarchies_StatementBlocks.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/bde_maxvariantsize_window.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_AssertAttributes_Window.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_ConnectionPopupWindow.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_DistributionforDialogWindow.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/bde_enumeration_selection_window.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_OccurrencesDialogWindow.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_PathsForWindow.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_Print_Diagrams_Window.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/bde_select_item_window.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/Editingindividual.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_Toolbar_Configuration_Window.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\TOC.md",
+      "kind": "link",
+      "target": "markdown/AutomaticDocumentationEnglishUS.chm::/AD_ViewsWindow_GraphicalEditors.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/AnalyzeDiagram.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/Viewcode.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/Changing_Grid_Drawing_Area.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_Configuring_Toolbar.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/Deleteconnection.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/senderreceivereditorenglishus.chm::/SREeditorOverview.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/SenderReceiverEditorEnglishUS.chm::/SREcreateSenderReceiverInterface.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/AnalyzeDiagram.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/AnalyzeDiagram.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_Globalelements.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_Globalelements.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_AddLiteral.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/AnalyzeDiagram.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/Viewcode.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_Defaultlayout.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/SenderReceiverEditorEnglishUS.chm::/SREsetupSenderReceiverInterface.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/SenderReceiverEditorEnglishUS.chm::/SREeditModeGroup.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/SenderReceiverEditorEnglishUS.chm::/SRE_SetUp_ClientServerInterface.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/SenderReceiverEditorEnglishUS.chm::/SREsetupCalibrationInterface.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/AutomaticDocumentationEnglishUS.chm::/AD_EditView_of_DiagramItem.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_RemoveElement.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_InsertElement_in_Connection.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/Deleteconnection.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_InsertElement_in_Connection.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/Addcomment.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/Addcomment.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/Changing_Grid_Drawing_Area.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/WriteData.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/ReadData.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/Editsize.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/Editports.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_Defaultlayout.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/Restoredefault.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/Public_Methods.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_Reserved_Keywords.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_Reserved_Keywords.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_Reserved_Keywords.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/SenderReceiverEditorEnglishUS.chm::/SREmodesModeGroups.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/SenderReceiverEditorEnglishUS.chm::/SREcreateModeGroup.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/SenderReceiverEditorEnglishUS.chm::/SREeditModeGroup.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/ComponentManagerEnglishUS.chm::/List_of_Error_Messages.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/ComponentManagerEnglishUS.chm::/List_of_Error_Messages.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/ComponentManagerEnglishUS.chm::/List_of_Information_Messages.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/ComponentManagerEnglishUS.chm::/List_of_Warning_Messages.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/SenderReceiverEditorEnglishUS.chm::/SREcreateSenderReceiverInterface.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/SenderReceiverEditorEnglishUS.chm::/SREcreateSenderReceiverInterface.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/SenderReceiverEditorEnglishUS.chm::/SREsetupCalibrationInterface.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/SenderReceiverEditorEnglishUS.chm::/SREcreateSenderReceiverInterface.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/IntroductionEnglishUS.chm::/INT_SearchTreePane.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_UseVerifyOperator.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/BlockDiagramEditorEnglishUS.chm::/BDE_UseVerifyOperator.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\Index.md",
+      "kind": "link",
+      "target": "markdown/ElementEditorEnglishUS.chm::/EEd_use_temporary_variables.htm",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    },
+    {
+      "source": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\AtomicSoftwareComponentEditorEnglishUS.full.md",
+      "kind": "link",
+      "target": "markdown/+",
+      "reason": "target_not_found"
+    }
+  ]
+}

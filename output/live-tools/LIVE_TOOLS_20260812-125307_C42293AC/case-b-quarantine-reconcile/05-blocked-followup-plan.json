@@ -1,0 +1,15 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"error\": {\n    \"code\": \"mutation_target_quarantined\",\n    \"message\": \"Target OID 040g00001g001qg71060i1966pf02 is quarantined and requires reconciliation.\"\n  }\n}"
+    }
+  ],
+  "details": {
+    "outcome": {
+      "status": "blocked",
+      "code": "mutation_target_quarantined",
+      "message": "Target OID 040g00001g001qg71060i1966pf02 is quarantined and requires reconciliation."
+    }
+  }
+}

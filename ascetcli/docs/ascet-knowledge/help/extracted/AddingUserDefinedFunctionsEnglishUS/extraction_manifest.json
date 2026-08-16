@@ -1,0 +1,201 @@
+{
+  "generated_at": "2026-04-01T03:07:14.708663Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\AddingUserDefinedFunctionsEnglishUS.chm",
+  "unpack_dir": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AddingUserDefinedFunctionsEnglishUS\\unpacked",
+  "total_files": 30,
+  "total_size_bytes": 230100,
+  "counts_by_extension": {
+    ".brs": 1,
+    ".glo": 1,
+    ".hhc": 1,
+    ".hhk": 1,
+    ".htm": 18,
+    ".xml": 1,
+    ".js": 1,
+    ".gif": 4,
+    ".css": 1,
+    ".lng": 1
+  },
+  "files": [
+    {
+      "relative_path": "AddingUserDefinedFunctionsEnglishUS.brs",
+      "size": 2,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "extension": ".brs"
+    },
+    {
+      "relative_path": "AddingUserDefinedFunctionsEnglishUS.glo",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "extension": ".glo"
+    },
+    {
+      "relative_path": "AddingUserDefinedFunctionsEnglishUS.hhc",
+      "size": 3859,
+      "sha256": "d042a81286ce5b37667e974286cb135a2c7074c7931f6132fe5ef5d9174e0884",
+      "extension": ".hhc"
+    },
+    {
+      "relative_path": "AddingUserDefinedFunctionsEnglishUS.hhk",
+      "size": 10220,
+      "sha256": "b4f91b756f3f5d9e0c6ce10bfabb5fcd403b670829374a6c5a56ddbdd33c923b",
+      "extension": ".hhk"
+    },
+    {
+      "relative_path": "AUD_defining_autostart_action.htm",
+      "size": 2092,
+      "sha256": "427ebdf0283d308187478de08f4a1f3099e26f2785da2392bdb5538c2420c72f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AUD_defining_shutdown_action.htm",
+      "size": 1155,
+      "sha256": "932c2d5d846516cdd731ecfd5c5f2eb02c50d6b8d9f042284f980c681ae26641",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AUD_Overview.htm",
+      "size": 3721,
+      "sha256": "e11868196334d2a186229195e9593e837db0873f7ea5ac4078b2f4a8539819c2",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Available_SELECTOR_Commands.htm",
+      "size": 6429,
+      "sha256": "2e550137fe76da00d922a65bffe4bee392934da7f3026b32d9ffe7ae875cda5e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "defining__menu_items.htm",
+      "size": 5849,
+      "sha256": "8b59477d8b8f38e66fc8ac25c8138bc36139075fd89a92afcb486e1e6a85b168",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "eHelp.xml",
+      "size": 371,
+      "sha256": "09937354144515e147dd46c134cb9eb9ccf9c3c609c040c3147d84c5eca5b8e6",
+      "extension": ".xml"
+    },
+    {
+      "relative_path": "ehlpdhtm.js",
+      "size": 125876,
+      "sha256": "125dd454f42ee443bfbe75cf400a863baa6c0c7399b187a9559812ee57d7e05e",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "execute.htm",
+      "size": 2267,
+      "sha256": "2b6d6889f44398f8b3ec211058964dafe2fc67bd0460e09d8253b20b4211c156",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "executer_menuitem.gif",
+      "size": 7090,
+      "sha256": "fcb7044e73b3b3beef0caaa53f42eaf66740f2e8a91fbe2e52ba0671d448c016",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "executer_message.gif",
+      "size": 2268,
+      "sha256": "df9b2f91d9c806c3d4e48effc2326cb9875e8259f0518cf3f7ec235ec39b9ecb",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "executer_notepad.gif",
+      "size": 7608,
+      "sha256": "a6984a764b9f52ed1ad0d538ba20853a927857c67961bbfe4b2df2499dbbb554",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "executer_once.gif",
+      "size": 5932,
+      "sha256": "b771825eb258af328f67569ee9e998ef130378f49ff388407d8462f9dbc62283",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "file.htm",
+      "size": 969,
+      "sha256": "98399c0b2b2940192c4cb9ed45ed0a4fbca4950b562286273ab4c7a64b345b0d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "fork.htm",
+      "size": 766,
+      "sha256": "87928b837a0f950f389aadb6d6c69e29acb42d2f90a3990e4bea011fa25c1d22",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Hints_for_Defining_Menu_Items.htm",
+      "size": 3284,
+      "sha256": "8e90c870d8fd2909261447561b0a8410706cb65fa429cc8aac96893bf224f751",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Layout.css",
+      "size": 9993,
+      "sha256": "ad637349cfcad5fbece508ab1035775df6368832c9241d45a2256c2e36eaa79c",
+      "extension": ".css"
+    },
+    {
+      "relative_path": "menu_item.htm",
+      "size": 1774,
+      "sha256": "8e94007643ef85ea589697e19a95d2cdc8d2b3dfa876bfe843800f10e37aa153",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Names_of_the_Windows.htm",
+      "size": 6970,
+      "sha256": "3cf4afb92161bf3717884693443977e8666595e949c1984bef627faddd161fc7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "nowait.htm",
+      "size": 1415,
+      "sha256": "cbe5614bd84ff852742a0efe50930a650f21e455a5066103ed13419d8bd74b12",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "object.htm",
+      "size": 4574,
+      "sha256": "f1eb9af116dfa97d35ea0f65b0be21e53b415b16f78f5acd819dab7b0abfbabf",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "post.htm",
+      "size": 914,
+      "sha256": "3e29463333d1c443782d12e1c7fcee9feead5f4fa287875bc50c552e79131229",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "RoboHHRE.lng",
+      "size": 3586,
+      "sha256": "607e16623990c7b694bb11537edbecfbd7057fda1739bba5173e9d8a4942b18f",
+      "extension": ".lng"
+    },
+    {
+      "relative_path": "selector.htm",
+      "size": 3064,
+      "sha256": "fb57d0b963e59beca2b1043dc0cf8f416da2823077f366869e373ba5ab0427fe",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "send.htm",
+      "size": 2863,
+      "sha256": "e5d70d97daf3e6a073445bdde916aaf16e497e76abc7fcf5de67b7d983f58767",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "structure_script_file.htm",
+      "size": 1553,
+      "sha256": "39a1ce62beaa77faa64a59c5683bfe06aa4b9bc99f6368daca6884a35c90e3eb",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "to_define_menu_items.htm",
+      "size": 3636,
+      "sha256": "aed4a3dd5b5caab7fb27296fbbf3f11f0c2ed93813aea6c01d4b57710731ffc8",
+      "extension": ".htm"
+    }
+  ]
+}

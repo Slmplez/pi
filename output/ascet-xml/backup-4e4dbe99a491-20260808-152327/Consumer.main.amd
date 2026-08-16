@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ComponentMain toolVersion="V6.1.5_2.2.0" schemaVersion="6.1.1.0">
+	<Component name="Consumer" nameSpace="/TEST/__pi_inline_chain_live_20260808072310" OID="_040g00001g001qg710415j19ei500" timeStamp="2026-08-08T07:23:27" componentType="ASCET_Class" specificationType="ESDL">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-08T07:23:27" timeStampCounter="468"/>
+		<CustomerSpecificAttributes>
+			<ConfigurationManagement edition="true" versionID="" configurationID=""/>
+			<RequirementsManagement requirementsID=""/>
+			<AccessManagement read="true" write="true" import="true"/>
+		</CustomerSpecificAttributes>
+		<Elements>
+			<Element name="P_Imported" OID="_040g00001g001qg710415j2h62900" ignore="false">
+				<Comment></Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="imported" virtual="false" dependent="false" volatile="false" calibrated="true" set="false" get="false" read="true" write="false" reference="false"/>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+			<Element name="P_Local" OID="_040g00001g001qg710415j2k5m9g0" ignore="false">
+				<Comment>Inline chain live dependent</Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="local" virtual="false" dependent="false" volatile="false" calibrated="false" set="false" get="false" read="true" write="false" reference="false"/>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+		</Elements>
+		<MethodSignatures>
+			<MethodSignature name="calc" OID="_040g00001g001qg710415j19ma800" public="true" default="false" defaultMethod="false" hidden="false" availableForOS="false"/>
+		</MethodSignatures>
+		<TimeStamps>
+			<TimeStamp timeStampKey="methodsTimeStampKey" timeStampValue="2026-08-08T07:23:16"/>
+		</TimeStamps>
+	</Component>
+	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+		<SignedInfo>
+			<CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+			<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+			<Reference>
+				<Transforms>
+					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+				</Transforms>
+				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+				<DigestValue>22hhIklDk48XX+qJrDwg69oxWLo=</DigestValue>
+			</Reference>
+		</SignedInfo>
+		<SignatureValue>VNFzvX6d3cXB745LkOq0g2ED6a9o3OOAYgH51TLuZSXLID2H7NpBddQY4ZjHwZDo
+RgiDbAyBJwaY2ILiIYh85pXhEsUuL6IJSbE4BOh80P+7DMlSFLIJgfDk4QOaYYfi
+Vwo4/JKp6RxDYAryNCmQjwpZa96sdz6P/xPGX+uMFGyUeeROh6U6emuus0xQCINt
+ho6tzah6wBToy3D5gAzD43QR6OBYsm6ampUJQUUbCaMA9H5TqeBkKKQD0GAbYZxE
+IZkuhl8/RpDIS/lK3JGxFu9VDikJSAvIOCk0PKNx1yQ2MF3NYKGY+fFuJrhxXZPq
+QyJTzPIAtL0m2MGfwIZDvg==</SignatureValue>
+		<KeyInfo>
+			<KeyName>Etas Ascet Verification</KeyName>
+		</KeyInfo>
+	</Signature>
+</ComponentMain>

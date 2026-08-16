@@ -1,0 +1,230 @@
+﻿{
+    "database":  {
+                     "name":  "C:\\Repo\\F05_IPB_L2_0429",
+                     "path":  "C:\\Repo\\11_ASCETCopilotLiveTest\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\ASW\\Db\\",
+                     "canonicalPath":  "C:\\Repo\\F05_IPB_L2_0429",
+                     "identityStatus":  "inconsistent",
+                     "identityIssues":  [
+                                            "database_name_path_mismatch"
+                                        ]
+                 },
+    "coverage":  {
+                     "treeItems":  10681,
+                     "physicalCodeComponents":  7559,
+                     "inventoryComponents":  7559,
+                     "allModelElements":  189118,
+                     "componentsWithLocalParameters":  3601,
+                     "rawDependentParameters":  14434,
+                     "physicalDependentParameters":  14249,
+                     "rawMappings":  17801,
+                     "physicalMappings":  17585,
+                     "physicalImportedMappings":  17166,
+                     "failures":  0
+                 },
+    "dependencyShape":  {
+                            "formulaNonEmpty":  14249,
+                            "formulaEmpty":  0,
+                            "multiVariant":  0,
+                            "noMappings":  33,
+                            "mappingScopes":  [
+                                                  {
+                                                      "scope":  "imported",
+                                                      "count":  17166
+                                                  },
+                                                  {
+                                                      "scope":  "local",
+                                                      "count":  392
+                                                  },
+                                                  {
+                                                      "scope":  "",
+                                                      "count":  26
+                                                  },
+                                                  {
+                                                      "scope":  "exported",
+                                                      "count":  1
+                                                  }
+                                              ]
+                        },
+    "resolution":  {
+                       "zeroCompatible":  24,
+                       "oneCompatible":  16571,
+                       "twoCompatible":  568,
+                       "threeCompatible":  3,
+                       "uniqueResolutionRate":  96.53,
+                       "ambiguousRate":  3.33,
+                       "unresolvedRate":  0.14,
+                       "withinCurrentParentEdges":  25,
+                       "allResolvedEdges":  17716,
+                       "withinCurrentParentRate":  0.14,
+                       "samePackageEdges":  13027,
+                       "samePackageRate":  73.53,
+                       "sameRootEdges":  16875,
+                       "sameRootRate":  95.25
+                   },
+    "providerTypes":  [
+                          {
+                              "type":  "ScalarElement",
+                              "count":  15825
+                          },
+                          {
+                              "type":  "OneDTableElement",
+                              "count":  1535
+                          },
+                          {
+                              "type":  "TwoDTableElement",
+                              "count":  319
+                          },
+                          {
+                              "type":  "ConstantElement",
+                              "count":  31
+                          },
+                          {
+                              "type":  "ArrayElement",
+                              "count":  5
+                          },
+                          {
+                              "type":  "SystemConstantElement",
+                              "count":  1
+                          }
+                      ],
+    "providerRoots":  [
+                          {
+                              "root":  "PlatformLibrary",
+                              "count":  15686
+                          },
+                          {
+                              "root":  "CN_Libary",
+                              "count":  1163
+                          },
+                          {
+                              "root":  "PlatformLibrary_NewBrakeSystems",
+                              "count":  798
+                          },
+                          {
+                              "root":  "Customer",
+                              "count":  68
+                          },
+                          {
+                              "root":  "CN_Library",
+                              "count":  1
+                          }
+                      ],
+    "providerCategories":  [
+                               {
+                                   "category":  "parameter_branch",
+                                   "count":  17652
+                               },
+                               {
+                                   "category":  "constant_component",
+                                   "count":  35
+                               },
+                               {
+                                   "category":  "other",
+                                   "count":  20
+                               },
+                               {
+                                   "category":  "private_branch",
+                                   "count":  9
+                               }
+                           ],
+    "candidateDistribution":  [
+                                  {
+                                      "count":  0,
+                                      "mappings":  24
+                                  },
+                                  {
+                                      "count":  1,
+                                      "mappings":  16571
+                                  },
+                                  {
+                                      "count":  2,
+                                      "mappings":  568
+                                  },
+                                  {
+                                      "count":  3,
+                                      "mappings":  3
+                                  }
+                              ],
+    "dependentPrefixes":  [
+                              {
+                                  "prefix":  "P",
+                                  "count":  5818
+                              },
+                              {
+                                  "prefix":  "C",
+                                  "count":  3512
+                              },
+                              {
+                                  "prefix":  "(none)",
+                                  "count":  1395
+                              },
+                              {
+                                  "prefix":  "DTC",
+                                  "count":  241
+                              },
+                              {
+                                  "prefix":  "T",
+                                  "count":  201
+                              },
+                              {
+                                  "prefix":  "dt",
+                                  "count":  141
+                              },
+                              {
+                                  "prefix":  "D",
+                                  "count":  101
+                              },
+                              {
+                                  "prefix":  "v",
+                                  "count":  79
+                              },
+                              {
+                                  "prefix":  "pDTC",
+                                  "count":  63
+                              },
+                              {
+                                  "prefix":  "aVeh",
+                                  "count":  59
+                              },
+                              {
+                                  "prefix":  "L",
+                                  "count":  53
+                              },
+                              {
+                                  "prefix":  "AY",
+                                  "count":  50
+                              },
+                              {
+                                  "prefix":  "Factor",
+                                  "count":  50
+                              },
+                              {
+                                  "prefix":  "vVeh",
+                                  "count":  47
+                              },
+                              {
+                                  "prefix":  "aWhl",
+                                  "count":  38
+                              },
+                              {
+                                  "prefix":  "Inv",
+                                  "count":  37
+                              },
+                              {
+                                  "prefix":  "dp",
+                                  "count":  35
+                              },
+                              {
+                                  "prefix":  "Select",
+                                  "count":  34
+                              },
+                              {
+                                  "prefix":  "HAZ",
+                                  "count":  29
+                              },
+                              {
+                                  "prefix":  "vDiff",
+                                  "count":  27
+                              }
+                          ]
+}

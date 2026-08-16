@@ -1,0 +1,579 @@
+{
+  "generated_at": "2026-04-01T03:08:23.999651Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\SenderReceiverEditorEnglishUS.chm",
+  "unpack_dir": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\SenderReceiverEditorEnglishUS\\unpacked",
+  "total_files": 93,
+  "total_size_bytes": 419432,
+  "counts_by_extension": {
+    ".htm": 43,
+    ".gif": 41,
+    ".js": 2,
+    ".xml": 1,
+    ".css": 1,
+    ".lng": 1,
+    ".brs": 1,
+    ".glo": 1,
+    ".hhc": 1,
+    ".hhk": 1
+  },
+  "files": [
+    {
+      "relative_path": "asi_contextmenu_diagrammethod.htm",
+      "size": 2093,
+      "sha256": "770e52a86d817af01daf778a79d3194e732fab76c32ad696d75ac74ad9010e03",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "button_insertmethod.gif",
+      "size": 1048,
+      "sha256": "d0b48c3b8face056aa426d86c72242fe8d68c58f9f3c7936bd3c85b6562f95f9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_c.gif",
+      "size": 1002,
+      "sha256": "7ad80aff3fb70a873236fd793f5f589ec72d5b0bb95f87e90cd54bf3184bbf7d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_e.gif",
+      "size": 1001,
+      "sha256": "d0759184f7598fb88928c75e893f42ecebc0b5f33c9ab1a3fa3ba78ca8f9fdb1",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_i.gif",
+      "size": 1013,
+      "sha256": "d1816cf14d7bdff3b1e11803ef4ac3f5a2b4fad8d7025463b685d2c48a311beb",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_l.gif",
+      "size": 1001,
+      "sha256": "69a65242f34882704f77be0a6539d8eea99be793c37b257be21e7650900be9a7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_s.gif",
+      "size": 1002,
+      "sha256": "74dc245c7e5037607ac2fd1a7309bc186107ff7960b8dcf7d55916c75395a715",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_u.gif",
+      "size": 1004,
+      "sha256": "baecac5c5c1ff2e4f627ab5bfe948e9616b83188073306ea79add915d44c9956",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_para_w.gif",
+      "size": 1006,
+      "sha256": "441d66eade67b3d631a1fd270830bc46e8238ac1804f65627c69c98a0bfd48bf",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_signature_editor_add.gif",
+      "size": 1049,
+      "sha256": "ebdf20208792eb8c63f69b2e66723ca4620b187357b54f427e835affd770e75e",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonArray.gif",
+      "size": 912,
+      "sha256": "f2a2bc17ea62913887f5a9959ebf5439e616d20df437b32efba60b0a7798f04c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonArrow.gif",
+      "size": 894,
+      "sha256": "19009d7d9f9913e358296d682bc6c85a0c1189cc3a38e5e32ebbf2d8205943e7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonBrowsetoParent.gif",
+      "size": 985,
+      "sha256": "67b4e8f61cce6277568302e0cb89b51fe77077f60d833530d7d65368901c1b42",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonChangeFilterSettings.gif",
+      "size": 1756,
+      "sha256": "da45b47dd32560b77dd42862c8a78162d7c71012adad56e187c346e21bced001",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonChangeSortCriteria.gif",
+      "size": 1735,
+      "sha256": "4dbab0a70fd4b60a2e053f97e64755b7b86dfc684ad1e31c327ac884394d552c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonCollapseAll.gif",
+      "size": 979,
+      "sha256": "4c0ea663a6ff19ddb2cab45edfee1ad28d62c4c95703e6d7deac0601fa1841cd",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonCopy.gif",
+      "size": 1781,
+      "sha256": "8b32c6c0cc6624dca24d75af2fce3675d476e1ab69c6aa6e0e96642e54d2cc26",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonDelete.gif",
+      "size": 1744,
+      "sha256": "8883cc24137874984dbfaf9ad1bad3185c5b1897d79b8ad7b5c72e31d6ea135c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonEditdata.gif",
+      "size": 998,
+      "sha256": "9355a1bdf5898f130c69ca8eb82f574d07af3bce43ab45f46053279702ad2998",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonEditimplementation.gif",
+      "size": 993,
+      "sha256": "c10ab32cd95e9322d70b8c8413a49e127648e03b32bdb94ee7268b3205139a2e",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonExpandAll.gif",
+      "size": 981,
+      "sha256": "89afe9ac20e536d429fb7aa35ef1b2a29afc992a0d78e3923d341e45cb09c0ac",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonInsertComponent.gif",
+      "size": 995,
+      "sha256": "54d1c9bfac540f3fb2e4b97568c53beef958b9def9e0d6176e9eb7b2d06ac5a8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonParameter.gif",
+      "size": 962,
+      "sha256": "def520ae1fbc7531f8c00338587148c9693dc11a6b850a5120939418d9ea678e",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonPaste.gif",
+      "size": 1773,
+      "sha256": "decd5d4d7b140e91e5ee47e25ad3f9c3f18ec01abd2ec29917c328e13a608e65",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonSearch.gif",
+      "size": 1724,
+      "sha256": "1f19089e422bbbd75e9e3a0f4b03600abea8cff5ddab442d99db8beddc2ce81d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonToolOptions.gif",
+      "size": 970,
+      "sha256": "4e9d1455d0b5cf5391ef90c4e301e8c586deb7781399afcb40e829b5062c3f8a",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariable.gif",
+      "size": 969,
+      "sha256": "31c62276b9880d7cf0a9d9fbafaa8c027fea6e6b16f1c442244e794671d71ad0",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableC.gif",
+      "size": 1001,
+      "sha256": "4ea17f01be456b0c83a804b239d27faba8be84914da851655c8e46a2cab56bf6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableE.gif",
+      "size": 1001,
+      "sha256": "e4e2341315b59ba9aa8c6272e61a3ef6fa788fd50d0f24ae10cc6dcef556f7b1",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableI.gif",
+      "size": 1007,
+      "sha256": "2099b24318b7f035d00b459dbe4edee4bedbf0a4aab06cd78399cda2c5c21185",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableL.gif",
+      "size": 1002,
+      "sha256": "bc2fdec10179b6f6781d11f27df6ec11d913e2aba58bd25b5c94e779d4db031a",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableM.gif",
+      "size": 993,
+      "sha256": "ce6619194a296bb6d7e67b8554890e604058f7ca36166e4368864e6bc1e1560a",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableS.gif",
+      "size": 1006,
+      "sha256": "1aa33ece46fe9c9932a6178895c25016d800d5983274216c80111400acf05f1c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableU.gif",
+      "size": 1004,
+      "sha256": "41a8f43bceee6c000e8b35efc8a1dee1707e84161e1e662cb79663b41c8b464f",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonVariableW.gif",
+      "size": 1011,
+      "sha256": "f28662aca44c31b5f396def6df5dccc44c56845fb9217a630032e9cee47ce23a",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "codegen_dbtoolarge.htm",
+      "size": 2826,
+      "sha256": "2c503c782fa77d7222ff5b5d14b2861d8a21ab87696dca57f45463f8867da3af",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "comboboxSearch.gif",
+      "size": 1851,
+      "sha256": "f72a86b501685b3e8065edddd7c972c5d2284a4321b9a3d95ba5c718caa798c8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "display.js",
+      "size": 5656,
+      "sha256": "85712144c31aac1d2706f3b60475055a673961f71bc37c0f4c9e9c4b85fa9b31",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "eHelp.xml",
+      "size": 371,
+      "sha256": "503f12bc15312bcae871066ae0ef1144e8fa782d8a468580f2d3a16499dcdcca",
+      "extension": ".xml"
+    },
+    {
+      "relative_path": "ehlpdhtm.js",
+      "size": 125829,
+      "sha256": "598019471e31547836cc6d121848ea25cae435647388533615bf72accf257412",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "images/button_filtertab.gif",
+      "size": 1036,
+      "sha256": "7964c2e4fa9542b8098bc1aa6ab3a14b2a612dbea3cae7fc1e2f97d12be1eb78",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/button_filtertab2.gif",
+      "size": 1076,
+      "sha256": "7283bee7576e1399b14d4b413b5004d224ea2908794e82a1c912512c1a5e19f6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exp_minus.gif",
+      "size": 837,
+      "sha256": "18a8ea974d756d370d6f7067283fc8c0b26f235c8e98bdaaf13a63e7dca8b1c4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exp_plus.gif",
+      "size": 842,
+      "sha256": "9ff1991cf9c6de621e2672bebf74fbc56680e3413f74d6cf18e25238701651be",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/statisch.gif",
+      "size": 831,
+      "sha256": "481cd3e8b966f0a4398b853efce140287877173b926b53d710791675a1b15aa4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Layout.css",
+      "size": 10100,
+      "sha256": "bc1987b8f92a0fd5f8bc6eef09b126d350fe7a76c3f15b0c27d925ca6bcb2a04",
+      "extension": ".css"
+    },
+    {
+      "relative_path": "RoboHHRE.lng",
+      "size": 3586,
+      "sha256": "607e16623990c7b694bb11537edbecfbd7057fda1739bba5173e9d8a4942b18f",
+      "extension": ".lng"
+    },
+    {
+      "relative_path": "SenderReceiverEditorEnglishUS.brs",
+      "size": 2,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "extension": ".brs"
+    },
+    {
+      "relative_path": "SenderReceiverEditorEnglishUS.glo",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "extension": ".glo"
+    },
+    {
+      "relative_path": "SenderReceiverEditorEnglishUS.hhc",
+      "size": 10675,
+      "sha256": "d38c0c3a4f8375f7b59de79529c0edd22b3b51475baef01799b07099a872ab11",
+      "extension": ".hhc"
+    },
+    {
+      "relative_path": "SenderReceiverEditorEnglishUS.hhk",
+      "size": 17721,
+      "sha256": "5c5fb738385947eeeec5d2a6fc985d89caaee16d02254a2d7d03545714f1a824",
+      "extension": ".hhk"
+    },
+    {
+      "relative_path": "SRE_EditClientServerInterfaces.htm",
+      "size": 1317,
+      "sha256": "67f09aa06d92a8f1f2003a91137866de22b9a939a07e25b2c47861dfc7b25977",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SRE_Editing_Calibration_Interfaces.htm",
+      "size": 1049,
+      "sha256": "1b01044b8f3673431b1a701f0023788d3d5f553a6ea9881d8525acc1d488ebf8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SRE_EditOperation.htm",
+      "size": 3764,
+      "sha256": "52d27886f86fffd7658333beebc70442a3d25f3c867babd0792f97f2567b0199",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SRE_editOperationReturnValue.htm",
+      "size": 3456,
+      "sha256": "4ad2df0ef3ae18e0c1c658464e7c8937e28473f8b33a0e3113ac5e7207f55fe9",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "sre_EditSenderReceiverInterfaces.htm",
+      "size": 1680,
+      "sha256": "5eb360a3c5bc52623d32ebac7024d82e82b5cd3d84b93c784a74760bdb25a3bd",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SRE_ImplementOperationArguments.htm",
+      "size": 2609,
+      "sha256": "14570c9cfc51a176648d09ad2a877bfcb3960fc1d1f180c50ca111afcb4cc5e6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SRE_ImplementSRInterfaceElements.htm",
+      "size": 2576,
+      "sha256": "52cecfc283d0542fc568bdbadbfef16cb7f8ac684d2336227824224f44b1f22d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SRE_SetUp_ClientServerInterface.htm",
+      "size": 2708,
+      "sha256": "2f8e4bfcb02ae41c2e2bc23de8f27c0d57991d761b1e68c727b73b1d5e54e38e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREBasicsCalibrationInterfaces.htm",
+      "size": 2279,
+      "sha256": "b8784cfad3affc78d9056d9254e2adc56dfbf7016da459332c016510b733422b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREBasicsClientServerInterfaces.htm",
+      "size": 2668,
+      "sha256": "fe19a6f1bc1391834670dc3e700da92a3a946663bda83c67a9e7e374e4a8750b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREcomponentPane.htm",
+      "size": 5533,
+      "sha256": "6ed537aaa213666e7e138354ebebf571b2a88cdd26f8d751efb950183616f11b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREcontextMenuBrowseView.htm",
+      "size": 3745,
+      "sha256": "94cad6f627ba53d79b61e49f2448e43c79291476335d07c140965005c9e5950a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREcontextMenuCPcomponentsAndElements.htm",
+      "size": 7257,
+      "sha256": "a389c400994149a99c3f6497c363aab6cedaaa194ece4aec605d69f6b9bd63c3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREcreateModeGroup.htm",
+      "size": 8540,
+      "sha256": "d538fc4e167a0cc74b800e5e69112593f54f6b16f299c124a0aabb6c7b4a7de3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREcreateSenderReceiverInterface.htm",
+      "size": 8912,
+      "sha256": "1139fe105b8d9ce509cc626d4d737c14b009ed73154dd35cdc3d94eea2fc1006",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREeditMenu.htm",
+      "size": 5626,
+      "sha256": "19d1372a242b8e3c86017d2997e7ae9db432b48b209f8fcd50b1b885c7264676",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREeditModeGroup.htm",
+      "size": 4416,
+      "sha256": "aa4739ea6c289fa3d1c524cfafdb6b5415f724f8365553efac99628276e29797",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREeditorOverview.htm",
+      "size": 3580,
+      "sha256": "fe39b023724ba338a365a3bc4a82720bd73304ceb511993251e4727306c3355b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREextrasMenu.htm",
+      "size": 3904,
+      "sha256": "368432b0d0db7b4b146a7073977553e42752f0edd30873f27002dfcdcbffbceb",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREfileMenu.htm",
+      "size": 3775,
+      "sha256": "4bc610dc1190b0c04ba4f380aa3bd7afdfb38ca95773118046b9036144eff79e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREfilterComponentPane.htm",
+      "size": 2114,
+      "sha256": "5c5c91d2bc333c81e76d1e7f00079f7af8417c510b499fb5b5209fc10ef0154b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREhelpMenu.htm",
+      "size": 1311,
+      "sha256": "c9a3fba4a284e87f1c9d8a97ce3f3d7f2fa838628e14a21a96112ebdccf1e162",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREimplementCalibrationParameters.htm",
+      "size": 2462,
+      "sha256": "e5f88e5159f65e6932962f10d735a7f43c5dd4c6f2c4d16fa11a5c26f3548edf",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "sreincludecomponent_blocklibrary.htm",
+      "size": 3218,
+      "sha256": "b35a8a3e06580b035bcc8afdb25dd7ba4263c82c699b05a1048ef9a5583f9168",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREinsertMenu.htm",
+      "size": 1489,
+      "sha256": "8b312123b13a7de7499622b8bd466385dbc9ddcd390ae1c7f53a2b038dd5aeab",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "srelibrarypalette.htm",
+      "size": 1477,
+      "sha256": "63aa920cb1aa20b629ce2b6906a95792eef776f088fc45077756b174f150accc",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREmenuBar.htm",
+      "size": 1152,
+      "sha256": "2e52495e5f0231fb08a52f8699d785dffcb061b5c610e819c3d1cd57a484f38a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREmodesModeGroups.htm",
+      "size": 2248,
+      "sha256": "8ed5f9dac1f6d3f748f9c63fe7745250ba73287b31228bbd0a9d1bea6592bca3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREopenSRIEditor.htm",
+      "size": 1762,
+      "sha256": "c99268b9e75e96866b7fd68f99e859e70c2e46042f05d9a50586fc1c6f4b6d9e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREOverviewAUTOSARInterfaces.htm",
+      "size": 1591,
+      "sha256": "82691b0ec0f853f4346589ebae68897e36fc4837894f65290c4f8747a0b1b715",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREpalettesPane.htm",
+      "size": 9573,
+      "sha256": "820906c1eff99fe72afba5951f7c6ceb7be8b8d4b95fb2031a06e9efc1a57225",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREsetupCalibrationInterface.htm",
+      "size": 15425,
+      "sha256": "f47060b6dcd80515ef4ba1fdf2d8af703403199988534b5e4d941c28cf096f68",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREsetupSenderReceiverInterface.htm",
+      "size": 17761,
+      "sha256": "d763198e42af32557eb2ad82180d4a51d7c22e907ce7f2c7f1472b1903c3e8b6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREtoolbarElements.htm",
+      "size": 5537,
+      "sha256": "32d74333e31f0940e1d72877287a9283d59b8508385866b8a2109018456bfc26",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREtoolbarGeneral.htm",
+      "size": 4155,
+      "sha256": "ae0afbed38613174754e038f65f9c90716e270a803bec7bcdee12ce98f790747",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREtoolbars.htm",
+      "size": 886,
+      "sha256": "b25b572957944c4f5e0c9584e1196122dfeab4abfc9404224552679af599e419",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREtoolsMenu.htm",
+      "size": 1427,
+      "sha256": "a00702b6ea52fa626d3497d21d7a0cc94d482e870d657baa9072ac358f844552",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREviewBrowse.htm",
+      "size": 2225,
+      "sha256": "7c5ca8e10feca2a3df342f33eff382adef9f94a84431098e22fb71423c3c1757",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREviewMenu.htm",
+      "size": 3756,
+      "sha256": "bb83593cc6040b1496c7d38cd06438aff2c73e75905d768685b2de5cf74cfc62",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SREwindowsDescription.gif",
+      "size": 31576,
+      "sha256": "708a361a5f717ba83cfed71c5d27998e1000d3a7c321882ee3caf45713377ca9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "SREwindowsDescription.htm",
+      "size": 2957,
+      "sha256": "8db0f913cd9f21cfe2df2ccc75006b2eacfc05c912621077dcb7bc27adad088a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SRI_CreateSRIfromExistingItem.htm",
+      "size": 2302,
+      "sha256": "538ad4b546cd98c010f2f7ff0977ccf82c9e0b4e1e18b504906c5978b6d560f9",
+      "extension": ".htm"
+    }
+  ]
+}

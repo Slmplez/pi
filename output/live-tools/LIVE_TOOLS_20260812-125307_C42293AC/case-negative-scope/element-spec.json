@@ -1,0 +1,10 @@
+﻿{
+    "elements":  [
+                     {
+                         "scope":  "local",
+                         "modelType":  "cont",
+                         "name":  "C_NEG_ShouldNotExist",
+                         "kind":  "variable"
+                     }
+                 ]
+}

@@ -3,7 +3,14 @@ import { mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve, sep } from "node:path";
 import type { AscetMutationGuardEvidence } from "./mutation-guard-store.ts";
 
-export type AscetMutationJournalStatus = "prepared" | "applied" | "rolled_back" | "unknown" | "not_started";
+export type AscetMutationJournalStatus =
+	| "prepared"
+	| "applied"
+	| "no_op"
+	| "partially_applied"
+	| "rolled_back"
+	| "unknown"
+	| "not_started";
 
 export interface AscetMutationJournalRecord {
 	version: 1;

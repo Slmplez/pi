@@ -1,0 +1,783 @@
+{
+  "generated_at": "2026-04-01T03:07:25.919550Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\ASCETAutomationAPI.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ASCETAutomationAPI",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ASCETAutomationAPI\\markdown",
+  "input_html_count": 128,
+  "converted_html_count": 128,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 17,
+  "toc_entries_count": 128,
+  "index_entries_count": 128,
+  "index_required": true,
+  "mappings": [
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-Build.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-Build.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-CleanProject.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-CleanProject.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-CloseMessageDialog.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-CloseMessageDialog.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-Compile.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-Compile.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-CompileUsingProject.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-CompileUsingProject.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-ExportBuildResults.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-ExportBuildResults.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-ExportGeneratedCode.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-ExportGeneratedCode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-ExportGeneratedCodeRecursive.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-ExportGeneratedCodeRecursive.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-ExportGeneratedGenericCode.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-ExportGeneratedGenericCode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-GenerateCode.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-GenerateCode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-GenerateCodeUsingProject.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-GenerateCodeUsingProject.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-GetLastErrorNumber.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-GetLastErrorNumber.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-GetLastErrorText.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-GetLastErrorText.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-OpenMessageDialog.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-OpenMessageDialog.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-ReadProjectProperties.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-ReadProjectProperties.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-Rebuild.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-Rebuild.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-Touch.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-Touch.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-TouchRecursive.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-TouchRecursive.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-TouchRecursiveUsingProject.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-TouchRecursiveUsingProject.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-TouchUsingProject.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-TouchUsingProject.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-TransferFiles.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-TransferFiles.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-WriteAsam2MCToFile.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-WriteAsam2MCToFile.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-WriteAsam2MCToPath.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-WriteAsam2MCToPath.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface-WriteProjectProperties.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface-WriteProjectProperties.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Build-Interface.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Build-Interface.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Editor-Interface-AscetLink.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Editor-Interface-AscetLink.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Editor-Interface-CloseComponentEditor.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Editor-Interface-CloseComponentEditor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Editor-Interface-CloseComponentEditorForElement.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Editor-Interface-CloseComponentEditorForElement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Editor-Interface-CloseEditorForElement.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Editor-Interface-CloseEditorForElement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Editor-Interface-CloseMessageDialog.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Editor-Interface-CloseMessageDialog.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Editor-Interface-DetectUnusedElements.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Editor-Interface-DetectUnusedElements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Editor-Interface-DetectUnusedElementsInProject.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Editor-Interface-DetectUnusedElementsInProject.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Editor-Interface-GetLastErrorNumber.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Editor-Interface-GetLastErrorNumber.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Editor-Interface-GetLastErrorText.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Editor-Interface-GetLastErrorText.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Editor-Interface-OpenComponentEditor.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Editor-Interface-OpenComponentEditor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Editor-Interface-OpenComponentEditorForElement.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Editor-Interface-OpenComponentEditorForElement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Editor-Interface-OpenDataEditorForElement.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Editor-Interface-OpenDataEditorForElement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Editor-Interface-OpenImplementationEditorForElement.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Editor-Interface-OpenImplementationEditorForElement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Editor-Interface-OpenMessageDialog.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Editor-Interface-OpenMessageDialog.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Editor-Interface-OpenPropertyEditorForElement.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Editor-Interface-OpenPropertyEditorForElement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Editor-Interface-SelectComponent.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Editor-Interface-SelectComponent.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Editor-Interface-WriteAllProjectFiles.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Editor-Interface-WriteAllProjectFiles.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Editor-Interface.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Editor-Interface.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-CloseExperiment.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-CloseExperiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-CloseMessageDialog.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-CloseMessageDialog.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-GetLastErrorNumber.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-GetLastErrorNumber.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-GetLastErrorText.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-GetLastErrorText.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-IsExperimentOpen.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-IsExperimentOpen.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-LoadParameters.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-LoadParameters.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-OpenExperiment.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-OpenExperiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-OpenExperimentConfiguration.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-OpenExperimentConfiguration.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-OpenMessageDialog.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-OpenMessageDialog.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-PauseExperiment.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-PauseExperiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-ReadHexScalarValue.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-ReadHexScalarValue.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-ReadPhysicalScalarValue.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-ReadPhysicalScalarValue.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-ReconnectExperiment.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-ReconnectExperiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-ReinitializeParameters.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-ReinitializeParameters.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-ReinitializeVariables.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-ReinitializeVariables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-SaveParameters.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-SaveParameters.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-SetDataLoggerFile.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-SetDataLoggerFile.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-SetStepMode.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-SetStepMode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-StartDataLogging.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-StartDataLogging.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-StartExperiment.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-StartExperiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-StartMeasurement.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-StartMeasurement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-StartOperatingSystem.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-StartOperatingSystem.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-StepExperiment.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-StepExperiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-StopDataLogging.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-StopDataLogging.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-StopExperiment.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-StopExperiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-StopMeasurement.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-StopMeasurement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-StopOperatingSystem.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-StopOperatingSystem.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-UpdateDependentParameters.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-UpdateDependentParameters.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-WriteHexScalarValue.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-WriteHexScalarValue.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-WritePhysicalScalarValue.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-WritePhysicalScalarValue.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-WriteTargetDebuggerContentsToFile.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface-WriteTargetDebuggerContentsToFile.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Experiment-Interface.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Experiment-Interface.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-About.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-About.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ActivateNoSaveMode.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ActivateNoSaveMode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ApiVersion.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ApiVersion.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ClearMonitorContents.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ClearMonitorContents.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-CloseCurrentDatabase.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-CloseCurrentDatabase.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-CloseDataStorage.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-CloseDataStorage.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-CloseMessageDialog.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-CloseMessageDialog.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ConvertDatabaseToWorkspace.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ConvertDatabaseToWorkspace.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-CreateDatabase.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-CreateDatabase.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-CreateWorkspace.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-CreateWorkspace.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-DatabasePath.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-DatabasePath.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-DataStoragePath.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-DataStoragePath.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ExportBuildMessagesAsXMLToFile.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ExportBuildMessagesAsXMLToFile.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ExportItemToPath.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ExportItemToPath.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ExportItemToPathWithOptions.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ExportItemToPathWithOptions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ExportItemToZipFile.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ExportItemToZipFile.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ExportItemToZipFileWithOptions.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ExportItemToZipFileWithOptions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ExportItemWithReferencesToPath.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ExportItemWithReferencesToPath.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ExportItemWithReferencesToZipFile.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ExportItemWithReferencesToZipFile.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ExportMappingForComponentToFile.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ExportMappingForComponentToFile.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-exportMappingForSoftwareComponent_toFile.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-exportMappingForSoftwareComponent_toFile.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-FlashTarget.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-FlashTarget.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-GetLastErrorNumber.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-GetLastErrorNumber.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-GetLastErrorText.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-GetLastErrorText.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-GetProcessId.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-GetProcessId.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ImportFromFile.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ImportFromFile.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ImportFromPath.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ImportFromPath.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ImportFromZipFile.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ImportFromZipFile.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ImportMappingForComponentFromFile.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ImportMappingForComponentFromFile.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-importMappingForSoftwareComponent_fromFile.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-importMappingForSoftwareComponent_fromFile.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ImportWithReferencesFromFile.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ImportWithReferencesFromFile.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ImportWithReferencesFromPath.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ImportWithReferencesFromPath.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-OpenAndConvertDatabase.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-OpenAndConvertDatabase.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-OpenDatabase.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-OpenDatabase.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-OpenMessageDialog.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-OpenMessageDialog.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-OpenWorkspace.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-OpenWorkspace.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-Ping.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-Ping.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ReadToolOptions.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ReadToolOptions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-SearchForHardware.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-SearchForHardware.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-SelectHardwareForProject.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-SelectHardwareForProject.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-Shutdown.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-Shutdown.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-SwitchLoggingOff.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-SwitchLoggingOff.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-SwitchLoggingOn.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-SwitchLoggingOn.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ToolVersion.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-ToolVersion.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-WriteMonitorContentsToPath.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-WriteMonitorContentsToPath.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-WriteTextToMonitor.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-WriteTextToMonitor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface-WriteToolOptions.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface-WriteToolOptions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ME-ASCET_Automation_API_Tool-Interface.html",
+      "md_rel_path": "ME-ASCET_Automation_API_Tool-Interface.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Overview.html",
+      "md_rel_path": "Overview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "WS-ASCET_Automation_API_Build-Interface.html",
+      "md_rel_path": "WS-ASCET_Automation_API_Build-Interface.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "WS-ASCET_Automation_API_Editor-Interface.html",
+      "md_rel_path": "WS-ASCET_Automation_API_Editor-Interface.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "WS-ASCET_Automation_API_Experiment-Interface.html",
+      "md_rel_path": "WS-ASCET_Automation_API_Experiment-Interface.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "WS-ASCET_Automation_API_Tool-Interface.html",
+      "md_rel_path": "WS-ASCET_Automation_API_Tool-Interface.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

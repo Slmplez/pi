@@ -1,0 +1,6 @@
+{
+  "action": "delete_component",
+  "componentPath": "PI_LIVE_ROOTFIX_20260811_ED3C9BC9\\ClassUnderTest",
+  "ifMissing": "ignore",
+  "executeWrite": true
+}

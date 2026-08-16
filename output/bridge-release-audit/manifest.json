@@ -1,0 +1,23 @@
+{
+    "packageRootName":  "ascet-csharp-runtime",
+    "generatedAtUtc":  "2026-08-09T05:20:33.9784247Z",
+    "sourceBinDirectory":  "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\ascetcli\\output\\ascet-csharp\\bin",
+    "releaseDirectory":  "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\bridge-release-audit",
+    "outputZipPath":  "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\bridge-release-audit.zip",
+    "executableCount":  1,
+    "handledLockingProcesses":  [
+
+                                ],
+    "testsSkipped":  false,
+    "keyDirectories":  [
+                           ".",
+                           "Ascetapidll"
+                       ],
+    "executables":  [
+                        {
+                            "Name":  "AscetBridge.exe",
+                            "RelativePath":  "AscetBridge.exe",
+                            "Length":  1209856
+                        }
+                    ]
+}

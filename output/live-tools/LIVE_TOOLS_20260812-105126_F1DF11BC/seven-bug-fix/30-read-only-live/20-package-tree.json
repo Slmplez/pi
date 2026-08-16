@@ -1,0 +1,84 @@
+{
+  "tool": "ascet_get",
+  "params": {
+    "action": "tree",
+    "target": {
+      "path": "PlatformLibrary\\Package\\AVH_AutomaticVehicleHold\\Component\\Config\\CM_AVH"
+    },
+    "traversal": {
+      "depth": 0,
+      "maxFolders": 5,
+      "maxComponents": 10
+    },
+    "delivery": "inline"
+  },
+  "elapsedMs": 361,
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"delivery\": \"inline\",\n  \"items\": [\n    {\n      \"path\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH\",\n      \"oid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"kind\": \"module\"\n    }\n  ],\n  \"coverage\": {\n    \"status\": \"complete_for_scope\",\n    \"scopeKind\": \"item\",\n    \"scopeId\": \"path:PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH\",\n    \"completeness\": \"bounded\",\n    \"truncated\": false,\n    \"foldersVisited\": 0,\n    \"componentsScanned\": 0,\n    \"identityKinds\": [\n      \"module\"\n    ],\n    \"collectorStarted\": false,\n    \"collectorCompleted\": true,\n    \"rootCollectionAvailable\": false,\n    \"projectCollectionAvailable\": false,\n    \"missingOidCount\": 0,\n    \"missingPathCount\": 0\n  },\n  \"truncated\": false,\n  \"source\": \"live\",\n  \"sourceIdentity\": {\n    \"database\": {\n      \"name\": \"C:\\\\Repo\\\\11_ASCETCopilotLiveTest\\\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\\\ASW\\\\Db\\\\AscetDb_20260707223121\",\n      \"path\": \"C:\\\\Repo\\\\11_ASCETCopilotLiveTest\\\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\\\ASW\\\\Db\\\\\",\n      \"fingerprint\": \"49be9da8ddaa5ac7b09b24a394229cbbd9a9dc3dbabadf9704da7ff25633274a\"\n    }\n  }\n}"
+      }
+    ],
+    "details": {
+      "tool": "ascet_get",
+      "action": "tree",
+      "command": {
+        "logicalCommandId": "AscetGetTree",
+        "backendCommandId": "AscetGetTree",
+        "operation": "get_tree"
+      },
+      "data": {
+        "items": [
+          {
+            "path": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/Component/Config/CM_AVH",
+            "oid": "040gpc83142g1no70o90q9iltgggg",
+            "kind": "module"
+          }
+        ],
+        "coverage": {
+          "status": "complete_for_scope",
+          "scopeKind": "item",
+          "scopeId": "path:PlatformLibrary\\Package\\AVH_AutomaticVehicleHold\\Component\\Config\\CM_AVH",
+          "completeness": "bounded",
+          "truncated": false,
+          "foldersVisited": 0,
+          "componentsScanned": 0,
+          "identityKinds": [
+            "module"
+          ],
+          "collectorStarted": false,
+          "collectorCompleted": true,
+          "rootCollectionAvailable": false,
+          "projectCollectionAvailable": false,
+          "missingOidCount": 0,
+          "missingPathCount": 0
+        },
+        "truncated": false,
+        "source": "live",
+        "database": {
+          "name": "C:\\Repo\\11_ASCETCopilotLiveTest\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\ASW\\Db\\AscetDb_20260707223121",
+          "path": "C:/Repo/11_ASCETCopilotLiveTest/AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599/ASW/Db/"
+        }
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:/Repo/09_ASCETCopilot/pi-ascet-extension-prototype/packages/ascet-extension/ascet-cli/bin/AscetBridge.exe",
+          "args": [
+            "exec",
+            "get_tree",
+            "--request-json",
+            "{\"path\":\"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Component\\\\Config\\\\CM_AVH\",\"depth\":0,\"maxFolders\":5,\"maxComponents\":10}",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 0,
+        "timedOut": false
+      }
+    }
+  }
+}

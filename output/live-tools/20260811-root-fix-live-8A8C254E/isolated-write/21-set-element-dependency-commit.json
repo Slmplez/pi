@@ -1,0 +1,246 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"changed\": {\n    \"operationName\": \"set_element_dependency\",\n    \"sequenceNumber\": 1,\n    \"writeSucceeded\": true,\n    \"summary\": \"set P_Dependent dependency to dependent\",\n    \"payload\": {\n      \"target\": \"PI_LIVE_ROOTFIX_20260811_8A8C254E/ClassUnderTest\",\n      \"kind\": \"component\",\n      \"element\": \"P_Dependent\",\n      \"identity\": {\n        \"componentOID\": \"040g00001g001qg7105gbkvgqg8g2\"\n      },\n      \"definitionHash\": \"ceaba29a190ee94e5082d0088788545b1504a7c586bda9ba32f292f64039fbd4\",\n      \"dataConfiguration\": {\n        \"source\": \"defaultDataConfiguration\",\n        \"name\": \"Data\"\n      },\n      \"dataVariants\": [\n        \"default\"\n      ],\n      \"requested\": \"dependent\",\n      \"write\": {\n        \"dryRun\": false,\n        \"succeeded\": true,\n        \"changed\": 1,\n        \"verifyReadbackRequested\": true,\n        \"readbackVerified\": true\n      },\n      \"dependency\": {\n        \"before\": \"independent\",\n        \"after\": \"dependent\"\n      },\n      \"formula\": {\n        \"after\": \"P_Input\",\n        \"changed\": true,\n        \"cleared\": false\n      },\n      \"mappings\": [\n        {\n          \"formal\": \"P_Input\",\n          \"valueName\": \"P_Input\",\n          \"targetScope\": \"exported\",\n          \"verified\": true,\n          \"variant\": \"default\",\n          \"formalOID\": \"_040g0d3q2eagb126s93nep7ah2jvk\",\n          \"valueOID\": \"_040g00001g001qg7105gbl03tscg2\"\n        }\n      ],\n      \"backup\": \"C:\\\\Repo\\\\09_ASCETCopilot\\\\pi-ascet-extension-prototype\\\\output\\\\ascet-xml\\\\backup-8eae5b0a2950-20260811-222721\",\n      \"snapshot\": {\n        \"mode\": \"capture\",\n        \"path\": \"C:/Users/NHJ3SZH/AppData/Local/Temp/pi-ascet-extension/dependency-snapshots/92970e6b953732869fbc5e60a04e8de5.xml\",\n        \"hash\": \"c5c8748bb5f4193ab9630c982183d6b525c646828a178c8b21fc177fb24f5c4a\"\n      },\n      \"plan\": {\n        \"total\": 1,\n        \"items\": [\n          {\n            \"component\": \"PI_LIVE_ROOTFIX_20260811_8A8C254E/ClassUnderTest\",\n            \"element\": \"P_Dependent\",\n            \"kind\": \"parameter\",\n            \"scope\": \"local\",\n            \"schema\": \"primitive-parameter-dependent-flag\",\n            \"dependency\": \"independent\",\n            \"supported\": true\n          }\n        ]\n      }\n    }\n  },\n  \"verification\": {\n    \"mode\": \"automatic_readback\",\n    \"source\": \"write_command\",\n    \"required\": true,\n    \"requested\": true,\n    \"verified\": true,\n    \"status\": \"passed\"\n  }\n}"
+    }
+  ],
+  "details": {
+    "outcome": {
+      "status": "ok",
+      "verified": true,
+      "data": {
+        "changed": {
+          "operationName": "set_element_dependency",
+          "sequenceNumber": 1,
+          "writeSucceeded": true,
+          "summary": "set P_Dependent dependency to dependent",
+          "payload": {
+            "target": "PI_LIVE_ROOTFIX_20260811_8A8C254E\\ClassUnderTest",
+            "kind": "component",
+            "element": "P_Dependent",
+            "identity": {
+              "componentOID": "040g00001g001qg7105gbkvgqg8g2",
+              "elementOID": ""
+            },
+            "definitionHash": "ceaba29a190ee94e5082d0088788545b1504a7c586bda9ba32f292f64039fbd4",
+            "dataConfiguration": {
+              "source": "defaultDataConfiguration",
+              "name": "Data"
+            },
+            "dataVariants": [
+              "default"
+            ],
+            "requested": "dependent",
+            "write": {
+              "dryRun": false,
+              "succeeded": true,
+              "changed": 1,
+              "verifyReadbackRequested": true,
+              "readbackVerified": true
+            },
+            "dependency": {
+              "before": "independent",
+              "after": "dependent"
+            },
+            "formula": {
+              "after": "P_Input",
+              "changed": true,
+              "cleared": false
+            },
+            "beforeMappings": [],
+            "mappings": [
+              {
+                "formal": "P_Input",
+                "valueName": "P_Input",
+                "targetKind": "parameter",
+                "targetScope": "exported",
+                "verified": true,
+                "variant": "default",
+                "formalOID": "_040g0d3q2eagb126s93nep7ah2jvk",
+                "valueOID": "_040g00001g001qg7105gbl03tscg2"
+              }
+            ],
+            "backup": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\ascet-xml\\backup-8eae5b0a2950-20260811-222721",
+            "snapshot": {
+              "mode": "capture",
+              "path": "C:\\Users\\NHJ3SZH\\AppData\\Local\\Temp\\pi-ascet-extension\\dependency-snapshots\\92970e6b953732869fbc5e60a04e8de5.xml",
+              "hash": "c5c8748bb5f4193ab9630c982183d6b525c646828a178c8b21fc177fb24f5c4a"
+            },
+            "plan": {
+              "count": 1,
+              "matches": [
+                {
+                  "component": "PI_LIVE_ROOTFIX_20260811_8A8C254E\\ClassUnderTest",
+                  "element": "P_Dependent",
+                  "kind": "parameter",
+                  "scope": "local",
+                  "schema": "primitive-parameter-dependent-flag",
+                  "dependency": "independent",
+                  "supported": true
+                }
+              ]
+            }
+          }
+        },
+        "verification": {
+          "mode": "automatic_readback",
+          "source": "write_command",
+          "required": true,
+          "requested": true,
+          "verified": true,
+          "status": "passed"
+        },
+        "observations": {
+          "invalidated": []
+        }
+      },
+      "warnings": []
+    },
+    "raw": {
+      "ok": true,
+      "data": {
+        "type": "response",
+        "protocolVersion": 1,
+        "ok": true,
+        "result": {
+          "operationName": "set_element_dependency",
+          "sequenceNumber": 1,
+          "writeSucceeded": true,
+          "summary": "set P_Dependent dependency to dependent",
+          "payload": {
+            "target": "PI_LIVE_ROOTFIX_20260811_8A8C254E\\ClassUnderTest",
+            "kind": "component",
+            "element": "P_Dependent",
+            "identity": {
+              "componentOID": "040g00001g001qg7105gbkvgqg8g2",
+              "elementOID": ""
+            },
+            "definitionHash": "ceaba29a190ee94e5082d0088788545b1504a7c586bda9ba32f292f64039fbd4",
+            "dataConfiguration": {
+              "source": "defaultDataConfiguration",
+              "name": "Data"
+            },
+            "dataVariants": [
+              "default"
+            ],
+            "requested": "dependent",
+            "write": {
+              "dryRun": false,
+              "succeeded": true,
+              "changed": 1,
+              "verifyReadbackRequested": true,
+              "readbackVerified": true
+            },
+            "dependency": {
+              "before": "independent",
+              "after": "dependent"
+            },
+            "formula": {
+              "after": "P_Input",
+              "changed": true,
+              "cleared": false
+            },
+            "beforeMappings": [],
+            "mappings": [
+              {
+                "formal": "P_Input",
+                "valueName": "P_Input",
+                "targetKind": "parameter",
+                "targetScope": "exported",
+                "verified": true,
+                "variant": "default",
+                "formalOID": "_040g0d3q2eagb126s93nep7ah2jvk",
+                "valueOID": "_040g00001g001qg7105gbl03tscg2"
+              }
+            ],
+            "backup": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\ascet-xml\\backup-8eae5b0a2950-20260811-222721",
+            "snapshot": {
+              "mode": "capture",
+              "path": "C:\\Users\\NHJ3SZH\\AppData\\Local\\Temp\\pi-ascet-extension\\dependency-snapshots\\92970e6b953732869fbc5e60a04e8de5.xml",
+              "hash": "c5c8748bb5f4193ab9630c982183d6b525c646828a178c8b21fc177fb24f5c4a"
+            },
+            "plan": {
+              "count": 1,
+              "matches": [
+                {
+                  "component": "PI_LIVE_ROOTFIX_20260811_8A8C254E\\ClassUnderTest",
+                  "element": "P_Dependent",
+                  "kind": "parameter",
+                  "scope": "local",
+                  "schema": "primitive-parameter-dependent-flag",
+                  "dependency": "independent",
+                  "supported": true
+                }
+              ]
+            }
+          },
+          "verification": {
+            "requested": true,
+            "attempted": true,
+            "succeeded": true,
+            "summary": "dependency_readback_matches",
+            "details": {
+              "after": "dependent",
+              "requested": "dependent",
+              "formulaAfter": "P_Input",
+              "formulaRequested": "P_Input"
+            }
+          }
+        },
+        "error": null,
+        "meta": {
+          "bridgePid": 34708,
+          "bridgeGeneration": "1fc2a00b-b384-4c02-ac22-29dae19d7d9d",
+          "durationMs": 1244,
+          "sessionPolicy": "fresh_session",
+          "mutationStarted": true,
+          "mode": "exec",
+          "operation": "set_element_dependency"
+        }
+      },
+      "request": {
+        "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+        "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+        "args": [
+          "exec",
+          "set_element_dependency",
+          "PI_LIVE_ROOTFIX_20260811_8A8C254E\\ClassUnderTest",
+          "P_Dependent",
+          "dependent",
+          "--formula",
+          "P_Input",
+          "--mapping",
+          "P_Input=parameter:P_Input",
+          "--variant-policy",
+          "default",
+          "--target-kind",
+          "component",
+          "--match",
+          "exact",
+          "--verify-readback",
+          "--json"
+        ],
+        "jobKind": "write",
+        "mutatesDatabase": true
+      },
+      "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"operationName\":\"set_element_dependency\",\"sequenceNumber\":1,\"writeSucceeded\":true,\"summary\":\"set P_Dependent dependency to dependent\",\"payload\":{\"target\":\"PI_LIVE_ROOTFIX_20260811_8A8C254E\\\\ClassUnderTest\",\"kind\":\"component\",\"element\":\"P_Dependent\",\"identity\":{\"componentOID\":\"040g00001g001qg7105gbkvgqg8g2\",\"elementOID\":\"\"},\"definitionHash\":\"ceaba29a190ee94e5082d0088788545b1504a7c586bda9ba32f292f64039fbd4\",\"dataConfiguration\":{\"source\":\"defaultDataConfiguration\",\"name\":\"Data\"},\"dataVariants\":[\"default\"],\"requested\":\"dependent\",\"write\":{\"dryRun\":false,\"succeeded\":true,\"changed\":1,\"verifyReadbackRequested\":true,\"readbackVerified\":true},\"dependency\":{\"before\":\"independent\",\"after\":\"dependent\"},\"formula\":{\"after\":\"P_Input\",\"changed\":true,\"cleared\":false},\"beforeMappings\":[],\"mappings\":[{\"formal\":\"P_Input\",\"valueName\":\"P_Input\",\"targetKind\":\"parameter\",\"targetScope\":\"exported\",\"verified\":true,\"variant\":\"default\",\"formalOID\":\"_040g0d3q2eagb126s93nep7ah2jvk\",\"valueOID\":\"_040g00001g001qg7105gbl03tscg2\"}],\"backup\":\"C:\\\\Repo\\\\09_ASCETCopilot\\\\pi-ascet-extension-prototype\\\\output\\\\ascet-xml\\\\backup-8eae5b0a2950-20260811-222721\",\"snapshot\":{\"mode\":\"capture\",\"path\":\"C:\\\\Users\\\\NHJ3SZH\\\\AppData\\\\Local\\\\Temp\\\\pi-ascet-extension\\\\dependency-snapshots\\\\92970e6b953732869fbc5e60a04e8de5.xml\",\"hash\":\"c5c8748bb5f4193ab9630c982183d6b525c646828a178c8b21fc177fb24f5c4a\"},\"plan\":{\"count\":1,\"matches\":[{\"component\":\"PI_LIVE_ROOTFIX_20260811_8A8C254E\\\\ClassUnderTest\",\"element\":\"P_Dependent\",\"kind\":\"parameter\",\"scope\":\"local\",\"schema\":\"primitive-parameter-dependent-flag\",\"dependency\":\"independent\",\"supported\":true}]}},\"verification\":{\"requested\":true,\"attempted\":true,\"succeeded\":true,\"summary\":\"dependency_readback_matches\",\"details\":{\"after\":\"dependent\",\"requested\":\"dependent\",\"formulaAfter\":\"P_Input\",\"formulaRequested\":\"P_Input\"}}},\"error\":null,\"meta\":{\"bridgePid\":34708,\"bridgeGeneration\":\"1fc2a00b-b384-4c02-ac22-29dae19d7d9d\",\"durationMs\":1244,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":true,\"mode\":\"exec\",\"operation\":\"set_element_dependency\"}}\r\n",
+      "stderr": "",
+      "exitCode": 0,
+      "timedOut": false,
+      "aborted": false,
+      "operationId": "set_element_dependency"
+    },
+    "observations": {
+      "invalidated": []
+    },
+    "verification": {
+      "mode": "automatic_readback",
+      "source": "write_command",
+      "required": true,
+      "requested": true,
+      "verified": true,
+      "status": "passed"
+    }
+  }
+}

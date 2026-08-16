@@ -111,20 +111,18 @@ export class AscetMutationCoordinator {
 				attemptedMutation: input.journal.attemptedMutation,
 			});
 
-			let executionStarted = false;
+			let beforeBridge = false;
 			let bridgeEntered = false;
 			let backendResponseReceived = false;
 			let quarantined = false;
 			try {
+				input.beginExecution();
 				const raw = await input.dispatch((event) => {
-					if (event.stage === "before_bridge" && !executionStarted) {
-						input.beginExecution();
-						executionStarted = true;
-					}
+					if (event.stage === "before_bridge") beforeBridge = true;
 					if (event.stage === "bridge_entered") bridgeEntered = true;
 					if (event.stage === "backend_response_received") backendResponseReceived = true;
 				});
-				if (!executionStarted) {
+				if (!beforeBridge) {
 					throw new Error("Mutation dispatch completed without before_bridge lifecycle evidence.");
 				}
 				const classification = classifyAscetEditExecution(raw);

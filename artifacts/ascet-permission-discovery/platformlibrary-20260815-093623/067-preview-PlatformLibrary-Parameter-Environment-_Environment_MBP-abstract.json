@@ -1,0 +1,318 @@
+{
+  "stage": "preview-PlatformLibrary\\Parameter\\Environment\\_Environment_MBP-abstract",
+  "request": {
+    "toolName": "ascet_edit",
+    "params": {
+      "action": "create_method",
+      "componentPath": "PlatformLibrary\\Parameter\\Environment\\_Environment_MBP",
+      "componentKind": "class",
+      "methodName": "__PiPermissionProbe__",
+      "methodKind": "abstract",
+      "ifExists": "fail",
+      "intent": "preview"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"status\": \"ok\",\n  \"permission\": {\n    \"mode\": \"default\",\n    \"decision\": \"not_evaluated\"\n  },\n  \"preflight\": {\n    \"status\": \"passed\",\n    \"evidence\": {\n      \"action\": \"create_method\",\n      \"params\": {\n        \"action\": \"create_method\",\n        \"component\": \"PlatformLibrary/Parameter/Environment/_Environment_MBP\",\n        \"kind\": \"class\",\n        \"name\": \"__PiPermissionProbe__\",\n        \"type\": \"abstract\",\n        \"ifExists\": \"fail\",\n        \"intent\": \"preview\"\n      },\n      \"backendPreflight\": {\n        \"operation\": \"preflight_create_method\",\n        \"validated\": true,\n        \"result\": {\n          \"databasePath\": \"C:/Repo/F05_IPB_L2_0429\",\n          \"component\": \"PlatformLibrary/Parameter/Environment/_Environment_MBP\",\n          \"componentOid\": \"040qm00600001n870c206e8d4ai48\",\n          \"kind\": \"Class\",\n          \"language\": \"ESDL\",\n          \"diagramName\": \"Main\",\n          \"diagramExists\": true,\n          \"diagramRuntimeType\": \"de.etas.cebra.toolAPI.Ascet.DiscreteMethodDiagram\",\n          \"requiredMethod\": \"AddMethod\",\n          \"requiredSignature\": \"AddMethod(String)\",\n          \"requiredMethodAvailable\": true,\n          \"addDiagramAvailable\": false,\n          \"futureMethodCapabilityProven\": true,\n          \"editable\": false,\n          \"readbackAvailable\": true,\n          \"noOp\": false,\n          \"plannedEffects\": [\n            {\n              \"kind\": \"create_method\",\n              \"target\": \"PlatformLibrary/Parameter/Environment/_Environment_MBP::__PiPermissionProbe__\",\n              \"type\": \"AbstractMethod\"\n            }\n          ],\n          \"capability\": {\n            \"status\": \"supported\",\n            \"operation\": \"AddMethod\"\n          }\n        }\n      },\n      \"databaseIdentity\": {\n        \"name\": \"C:\\\\Repo\\\\F05_IPB_L2_0429\",\n        \"path\": \"C:/Repo/F05_IPB_L2_0429\",\n        \"reportedPath\": \"C:/Repo\",\n        \"status\": \"consistent\",\n        \"fingerprint\": \"71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c\"\n      },\n      \"targetIdentity\": {\n        \"path\": \"PlatformLibrary/Parameter/Environment/_Environment_MBP\",\n        \"oid\": \"040qm00600001n870c206e8d4ai48\",\n        \"kind\": \"class\"\n      },\n      \"targetImpact\": {\n        \"sharedObject\": false,\n        \"requestedPath\": \"PlatformLibrary/Parameter/Environment/_Environment_MBP\",\n        \"ownerPath\": \"PlatformLibrary/Parameter/Environment/_Environment_MBP\",\n        \"targetOid\": \"040qm00600001n870c206e8d4ai48\",\n        \"aliasPaths\": [\n          \"PlatformLibrary\\\\Parameter\\\\Environment\\\\_Environment_MBP\"\n        ],\n        \"completeness\": \"complete\",\n        \"writeAllowed\": true,\n        \"fingerprint\": \"sha256:6a12194eb5c8de542bc4333d32f1884bfa5c748cb7e5db3fb2b1ec881205a325\"\n      },\n      \"editability\": \"read_only\",\n      \"guardGeneration\": 0,\n      \"readbackAvailable\": true\n    }\n  },\n  \"editability\": {\n    \"status\": \"blocked\",\n    \"initiallyEditable\": false,\n    \"acquiredByThisOperation\": false\n  },\n  \"mutation\": {\n    \"status\": \"not_started\"\n  },\n  \"verification\": {\n    \"status\": \"not_applicable\"\n  },\n  \"bridge\": {\n    \"beforeBridge\": false,\n    \"bridgeEntered\": false,\n    \"backendResponseReceived\": false\n  },\n  \"recovery\": {\n    \"required\": false\n  }\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "preflight",
+        "plan": {
+          "action": "create_method",
+          "params": {
+            "action": "create_method",
+            "componentPath": "PlatformLibrary\\Parameter\\Environment\\_Environment_MBP",
+            "componentKind": "class",
+            "methodName": "__PiPermissionProbe__",
+            "methodKind": "abstract",
+            "ifExists": "fail",
+            "intent": "preview"
+          },
+          "backendPreflight": {
+            "operation": "preflight_create_method",
+            "validated": true,
+            "result": {
+              "databasePath": "C:\\Repo\\F05_IPB_L2_0429",
+              "componentPath": "PlatformLibrary\\Parameter\\Environment\\_Environment_MBP",
+              "componentOid": "040qm00600001n870c206e8d4ai48",
+              "componentKind": "Class",
+              "languageKind": "ESDL",
+              "diagramName": "Main",
+              "diagramExists": true,
+              "diagramRuntimeType": "de.etas.cebra.toolAPI.Ascet.DiscreteMethodDiagram",
+              "requiredMethod": "AddMethod",
+              "requiredSignature": "AddMethod(String)",
+              "requiredMethodAvailable": true,
+              "addDiagramAvailable": false,
+              "futureMethodCapabilityProven": true,
+              "editable": false,
+              "readbackAvailable": true,
+              "noOp": false,
+              "existingMethod": null,
+              "plannedEffects": [
+                {
+                  "kind": "create_method",
+                  "target": "PlatformLibrary\\Parameter\\Environment\\_Environment_MBP::__PiPermissionProbe__",
+                  "methodKind": "AbstractMethod"
+                }
+              ],
+              "capability": {
+                "status": "supported",
+                "operation": "AddMethod",
+                "failureCode": "",
+                "failureMessage": ""
+              }
+            }
+          },
+          "databaseIdentity": {
+            "name": "C:\\Repo\\F05_IPB_L2_0429",
+            "path": "C:\\Repo\\F05_IPB_L2_0429",
+            "reportedPath": "C:\\Repo",
+            "status": "consistent",
+            "issues": [],
+            "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+          },
+          "targetIdentity": {
+            "path": "PlatformLibrary\\Parameter\\Environment\\_Environment_MBP",
+            "oid": "040qm00600001n870c206e8d4ai48",
+            "kind": "class"
+          },
+          "targetImpact": {
+            "sharedObject": false,
+            "requestedPath": "PlatformLibrary\\Parameter\\Environment\\_Environment_MBP",
+            "ownerPath": "PlatformLibrary\\Parameter\\Environment\\_Environment_MBP",
+            "targetOid": "040qm00600001n870c206e8d4ai48",
+            "aliasPaths": [
+              "PlatformLibrary\\Parameter\\Environment\\_Environment_MBP"
+            ],
+            "affectedProjects": [],
+            "completeness": "complete",
+            "writeAllowed": true,
+            "fingerprint": "sha256:6a12194eb5c8de542bc4333d32f1884bfa5c748cb7e5db3fb2b1ec881205a325"
+          },
+          "editability": "read_only",
+          "guardGeneration": 0,
+          "readbackAvailable": true,
+          "preflightFingerprint": "9d431cc35c76060ea11e050eea35f33150a86d3c44963693d32d00eeaf866f08"
+        },
+        "nextStep": "Preview complete. No ASCET mutation was performed."
+      },
+      "raw": {
+        "ok": true,
+        "data": {
+          "type": "response",
+          "protocolVersion": 1,
+          "ok": true,
+          "result": {
+            "databasePath": "C:\\Repo\\F05_IPB_L2_0429",
+            "componentPath": "PlatformLibrary\\Parameter\\Environment\\_Environment_MBP",
+            "componentOid": "040qm00600001n870c206e8d4ai48",
+            "componentKind": "Class",
+            "languageKind": "ESDL",
+            "diagramName": "Main",
+            "diagramExists": true,
+            "diagramRuntimeType": "de.etas.cebra.toolAPI.Ascet.DiscreteMethodDiagram",
+            "requiredMethod": "AddMethod",
+            "requiredSignature": "AddMethod(String)",
+            "requiredMethodAvailable": true,
+            "addDiagramAvailable": false,
+            "futureMethodCapabilityProven": true,
+            "editable": false,
+            "readbackAvailable": true,
+            "noOp": false,
+            "existingMethod": null,
+            "plannedEffects": [
+              {
+                "kind": "create_method",
+                "target": "PlatformLibrary\\Parameter\\Environment\\_Environment_MBP::__PiPermissionProbe__",
+                "methodKind": "AbstractMethod"
+              }
+            ],
+            "capability": {
+              "status": "supported",
+              "operation": "AddMethod",
+              "failureCode": "",
+              "failureMessage": ""
+            }
+          },
+          "error": null,
+          "meta": {
+            "bridgePid": 28152,
+            "bridgeGeneration": "e309da3c-5903-4540-adbe-b9d54f8fa17b",
+            "durationMs": 389,
+            "sessionPolicy": "fresh_session",
+            "mutationStarted": false,
+            "mode": "exec",
+            "operation": "preflight_create_method"
+          }
+        },
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "preflight_create_method",
+            "PlatformLibrary\\Parameter\\Environment\\_Environment_MBP",
+            "__PiPermissionProbe__",
+            "--method-kind",
+            "abstract",
+            "--if-exists",
+            "fail",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"databasePath\":\"C:\\\\Repo\\\\F05_IPB_L2_0429\",\"componentPath\":\"PlatformLibrary\\\\Parameter\\\\Environment\\\\_Environment_MBP\",\"componentOid\":\"040qm00600001n870c206e8d4ai48\",\"componentKind\":\"Class\",\"languageKind\":\"ESDL\",\"diagramName\":\"Main\",\"diagramExists\":true,\"diagramRuntimeType\":\"de.etas.cebra.toolAPI.Ascet.DiscreteMethodDiagram\",\"requiredMethod\":\"AddMethod\",\"requiredSignature\":\"AddMethod(String)\",\"requiredMethodAvailable\":true,\"addDiagramAvailable\":false,\"futureMethodCapabilityProven\":true,\"editable\":false,\"readbackAvailable\":true,\"noOp\":false,\"existingMethod\":null,\"plannedEffects\":[{\"kind\":\"create_method\",\"target\":\"PlatformLibrary\\\\Parameter\\\\Environment\\\\_Environment_MBP::__PiPermissionProbe__\",\"methodKind\":\"AbstractMethod\"}],\"capability\":{\"status\":\"supported\",\"operation\":\"AddMethod\",\"failureCode\":\"\",\"failureMessage\":\"\"}},\"error\":null,\"meta\":{\"bridgePid\":28152,\"bridgeGeneration\":\"e309da3c-5903-4540-adbe-b9d54f8fa17b\",\"durationMs\":389,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"preflight_create_method\"}}\r\n",
+        "stderr": "",
+        "exitCode": 0,
+        "timedOut": false,
+        "aborted": false,
+        "operationId": "preflight_create_method"
+      },
+      "mutationResult": {
+        "status": "ok",
+        "permission": {
+          "mode": "default",
+          "decision": "not_evaluated"
+        },
+        "preflight": {
+          "status": "passed",
+          "evidence": {
+            "action": "create_method",
+            "params": {
+              "action": "create_method",
+              "componentPath": "PlatformLibrary\\Parameter\\Environment\\_Environment_MBP",
+              "componentKind": "class",
+              "methodName": "__PiPermissionProbe__",
+              "methodKind": "abstract",
+              "ifExists": "fail",
+              "intent": "preview"
+            },
+            "backendPreflight": {
+              "operation": "preflight_create_method",
+              "validated": true,
+              "result": {
+                "databasePath": "C:\\Repo\\F05_IPB_L2_0429",
+                "componentPath": "PlatformLibrary\\Parameter\\Environment\\_Environment_MBP",
+                "componentOid": "040qm00600001n870c206e8d4ai48",
+                "componentKind": "Class",
+                "languageKind": "ESDL",
+                "diagramName": "Main",
+                "diagramExists": true,
+                "diagramRuntimeType": "de.etas.cebra.toolAPI.Ascet.DiscreteMethodDiagram",
+                "requiredMethod": "AddMethod",
+                "requiredSignature": "AddMethod(String)",
+                "requiredMethodAvailable": true,
+                "addDiagramAvailable": false,
+                "futureMethodCapabilityProven": true,
+                "editable": false,
+                "readbackAvailable": true,
+                "noOp": false,
+                "existingMethod": null,
+                "plannedEffects": [
+                  {
+                    "kind": "create_method",
+                    "target": "PlatformLibrary\\Parameter\\Environment\\_Environment_MBP::__PiPermissionProbe__",
+                    "methodKind": "AbstractMethod"
+                  }
+                ],
+                "capability": {
+                  "status": "supported",
+                  "operation": "AddMethod",
+                  "failureCode": "",
+                  "failureMessage": ""
+                }
+              }
+            },
+            "databaseIdentity": {
+              "name": "C:\\Repo\\F05_IPB_L2_0429",
+              "path": "C:\\Repo\\F05_IPB_L2_0429",
+              "reportedPath": "C:\\Repo",
+              "status": "consistent",
+              "issues": [],
+              "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+            },
+            "targetIdentity": {
+              "path": "PlatformLibrary\\Parameter\\Environment\\_Environment_MBP",
+              "oid": "040qm00600001n870c206e8d4ai48",
+              "kind": "class"
+            },
+            "targetImpact": {
+              "sharedObject": false,
+              "requestedPath": "PlatformLibrary\\Parameter\\Environment\\_Environment_MBP",
+              "ownerPath": "PlatformLibrary\\Parameter\\Environment\\_Environment_MBP",
+              "targetOid": "040qm00600001n870c206e8d4ai48",
+              "aliasPaths": [
+                "PlatformLibrary\\Parameter\\Environment\\_Environment_MBP"
+              ],
+              "affectedProjects": [],
+              "completeness": "complete",
+              "writeAllowed": true,
+              "fingerprint": "sha256:6a12194eb5c8de542bc4333d32f1884bfa5c748cb7e5db3fb2b1ec881205a325"
+            },
+            "editability": "read_only",
+            "guardGeneration": 0,
+            "readbackAvailable": true
+          }
+        },
+        "editability": {
+          "status": "blocked",
+          "initiallyEditable": false,
+          "acquiredByThisOperation": false
+        },
+        "mutation": {
+          "status": "not_started"
+        },
+        "verification": {
+          "status": "not_applicable"
+        },
+        "bridge": {
+          "beforeBridge": false,
+          "bridgeEntered": false,
+          "backendResponseReceived": false
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      },
+      "tool": "ascet_edit",
+      "action": "create_method",
+      "command": {
+        "logicalCommandId": "AscetCreateMethod",
+        "backendCommandId": "AscetCreateMethod",
+        "operation": "create_method"
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "preflight_create_method",
+            "PlatformLibrary\\Parameter\\Environment\\_Environment_MBP",
+            "__PiPermissionProbe__",
+            "--method-kind",
+            "abstract",
+            "--if-exists",
+            "fail",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 0,
+        "timedOut": false,
+        "stderr": ""
+      }
+    }
+  }
+}

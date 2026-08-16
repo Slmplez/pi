@@ -1,0 +1,145 @@
+Log File: C:\ProgramData\ETAS\LogFiles\AscetBridge\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Component: PlatformLibrary\Package\AVH_AutomaticVehicleHold\private\AVH_TriggerAvhStatemachine
+Kind: Class
+Language: ESDL
+Diagrams: 1
+  - BlockDiagram: Main
+Methods: 6
+  - AbstractMethod: calc
+  - AbstractMethod: req_DriveOff
+  - AbstractMethod: trig_Hold
+  - AbstractMethod: trig_MechHold
+  - AbstractMethod: trig_Release
+  - AbstractMethod: trig_StandbyService
+
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+=== Method: calc (AbstractMethod) ===
+/******************* Core Conditions for AVH Hold ***************************/
+HoldCoreConditions =
+(		TargetStateAvh     		== AVH_On					// if AVH is isn't degraded
+	&& 	CurrentSystemMode		== CSMCurSysMode_NORMAL		// ignition is ON
+	&& 	AbsActive               == false					// AND ABS is not active (Strongly Safety relevant)
+	&& 	Ena_AVH                 == true						// AND AVH is disabled due to SSM arbitration
+	&& 	AvhStandby              == true						// AND AVH is in StandbyON
+	&& 	DriverPresence			== true						// AND Driver is present
+	&& 	AVHActTempNotAvail      == false					// AND AVH is not temporarily disabled
+	&& 	AvhTimeUp				== false					// AND there is no time up of AVH detected
+	&& 	RollPrevOver 	  		== false					// OR maximum amount of roll preventions is reached
+	&& 	StateDrvUnit            != CSMStateDrvUnit_Off		// AND drivetrain is available
+	&& 	CsmParkBrakeState       != CSMApbSysState_Applied	// park brake is applied
+	&& 	CustCondDisableHold		== false					// AND no customer specific disable conditions are satisfied
+	&&	AvhValidityOk			== true						// Basic AVH Dependies are checked and OK
+
+);
+
+/*****************************************************************************/
+/***************Determination of relevant trigger*****************************/
+
+
+// trigger pressure release out of hydraulic hold if ...
+if(    Ena_AVH             		== false							// if AVH is disabled due to Standstill arbitration
+	|| CsmParkBrakeState        == CSMApbSysState_Applied			// park brake is applied
+	|| AvhParkReqTimeUp			== true								// TimeUp is identified
+	|| DriverAbsence		  	== true								// as soon as it must be assumed that driver is absent, release must be triggered
+	|| CustTrigRelease			== true								// customer specific release trigger
+	|| CsmHoldSafetyLimState	!= CSMSafeLimState_None				// deactivate in case hold safety limiter is active or might activate
+	)
+{
+	trig_Release = true;
+}else
+{
+	trig_Release = false;
+}
+
+
+// check if drive off request is allowed
+if(		trig_Release 		== false 					// Drive Off trigger is only allowed in case there is no release request
+	&&	TargetStateAvh     	== AVH_On					// if AVH is isn't degraded
+	&&	AvhValidityOk		== true						// Basic AVH Dependies are checked and OK
+	&&	CurrentSystemMode	== CSMCurSysMode_NORMAL		// ignition is ON
+	&&	DriveOffRequested	== true)
+{
+	req_DriveOff = true;
+}else
+{
+	req_DriveOff = false;
+}
+
+
+// trigger Hold by AVH if ...
+if(	   HoldCoreConditions           == true									// Core Conditions for hold are fulfilled
+	&& CustCondDisableHold				== false							// AND no customer specific disable conditions are satisfied
+	&& (	(	DriverBrakeApplied		== true								// AND if driver is braking
+			&&	VehStandstill			== true								// AND standstill is detected (low speed Safety relevant)
+			&&	HoldForceSufficient     == true								// AND current hold force is sufficient
+			&&  AVHActivationByBrakePedal == true                           // AND Xiaomi special requirement of activation
+			&&	FS_AVH_EnableStandardActivation == true					// only in case its enabled by function switch
+			&&	req_DriveOff			== false)    						// AND driver is not trying to accelerate
+		||	(	CustTrigHold			== true)                            // OR Customer specific conditions are satisfied		||  (   ADSRequestAVH_Trigger   == true))						
+	&& trig_Release		        == false				// (avoid toggeling behaviour of AVH)
+	)
+{
+	trig_Hold = true;
+}
+else
+{
+	trig_Hold = false;
+}
+
+
+
+// trigger park brake to close if ... (only allowed in case parallel Hold is also triggered)
+if(    TargetStateAvh     	!= AVH_On				// if AVH is degraded
+	|| AvhValidityOk		== false				// Some basic dependency shows invalidity
+	|| CurrentSystemMode	!= CSMCurSysMode_NORMAL	// ignition is OFF
+	|| DriverPresence     	== false				// OR if driver is not present
+	|| (AvhTimeUp	        == true					// OR maximum hold time has reached
+		&&	AvhState == AVHState_Hold)
+	|| RollPrevOver 	  	== true					// OR maximum amount of roll preventions is reached
+	|| StateDrvUnit			== CSMStateDrvUnit_Off	// OR if drivetrain is not active
+	|| CustTrigTakeOver		== true					// configuration/customer specific trigger is detected
+	)
+{
+	trig_MechHold = true;
+}else
+{
+	trig_MechHold = false;
+}
+
+// prepare trigger for standby functionality of CSM Hold Service (can be triggered by CM_AVH in case there are no release or mech-hold conditions detected)
+if(		trig_Release == false
+	&&	trig_Hold == false
+	&&	trig_MechHold == false
+	&&	HoldCoreConditions      == true						// Core Conditions for hold are fulfilled
+	&&	CustTrigStandbyService	== true)
+{
+	trig_StandbyService = true;
+}else
+{
+	trig_StandbyService = false;
+}
+
+
+=== Method: req_DriveOff (AbstractMethod) ===
+return req_DriveOff;
+
+
+=== Method: trig_Hold (AbstractMethod) ===
+return trig_Hold;
+
+
+=== Method: trig_MechHold (AbstractMethod) ===
+return trig_MechHold;
+
+
+=== Method: trig_Release (AbstractMethod) ===
+return trig_Release;
+
+
+=== Method: trig_StandbyService (AbstractMethod) ===
+return trig_StandbyService;
+
+

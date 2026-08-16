@@ -1,0 +1,253 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="toc">
+  <param name="Image Width" value="16">
+  <param name="Window Styles" value="0x800427">
+  <param name="ExWindow Styles" value="0x100">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="AUTOSAR Interfaces">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Overview - AUTOSAR Interfaces">
+      <param name="Local" value="SREOverviewAUTOSARInterfaces.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Basics - SenderReceiver and NVData Interfaces">
+      <param name="Local" value="SREeditorOverview.htm">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Modes and Mode Groups">
+        <param name="Local" value="SREmodesModeGroups.htm">
+      </object>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Basics - ClientServer Interfaces">
+      <param name="Local" value="SREBasicsClientServerInterfaces.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Basics - Calibration Interfaces">
+      <param name="Local" value="SREBasicsCalibrationInterfaces.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Instructions">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Creating an AUTOSAR Interface">
+        <param name="Local" value="SREcreateSenderReceiverInterface.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Opening an AUTOSAR Interface Editor">
+        <param name="Local" value="SREopenSRIEditor.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Including a Component via the Block Library">
+        <param name="Local" value="sreincludecomponent_blocklibrary.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="SenderReceiver and NVData Interfaces">
+        <param name="Local" value="sre_EditSenderReceiverInterfaces.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Setting Up a SenderReceiver/NVData Interface">
+          <param name="Local" value="SREsetupSenderReceiverInterface.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Implementing SenderReceiver/NVData Interface Elements">
+          <param name="Local" value="SRE_ImplementSRInterfaceElements.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Mode Groups">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Creating a Mode Group">
+            <param name="Local" value="SREcreateModeGroup.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Editing a Mode Group">
+            <param name="Local" value="SREeditModeGroup.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Creating a SenderReceiver/NVData Interface from an Existing Item">
+          <param name="Local" value="SRI_CreateSRIfromExistingItem.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="ClientServer Interfaces">
+        <param name="Local" value="SRE_EditClientServerInterfaces.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Setting Up a ClientServer Interface">
+          <param name="Local" value="SRE_SetUp_ClientServerInterface.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing an Operation">
+          <param name="Local" value="SRE_EditOperation.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing an Operation Return Value">
+          <param name="Local" value="SRE_editOperationReturnValue.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Implementing Operation Arguments">
+          <param name="Local" value="SRE_ImplementOperationArguments.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Calibration Interfaces">
+        <param name="Local" value="SRE_Editing_Calibration_Interfaces.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Setting Up a Calibration Interface">
+          <param name="Local" value="SREsetupCalibrationInterface.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Implementing Calibration Parameters">
+          <param name="Local" value="SREimplementCalibrationParameters.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="General Editor Settings">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Configuring a Toolbar">
+          <param name="Local" value="IntroductionEnglishUS.chm::/INT_Configuring_Toolbar.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Filtering the Tree Pane">
+          <param name="Local" value="SREfilterComponentPane.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Searching the Tree Pane">
+          <param name="Local" value="IntroductionEnglishUS.chm::/INT_SearchTreePane.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Copying Elements in the Outline Tab">
+          <param name="Local" value="IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm">
+        </object>
+        </ul>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Reference to User Interface">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="AUTOSAR Interface Editors - Window Elements">
+        <param name="Local" value="SREwindowsDescription.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Toolbars">
+        <param name="Local" value="SREtoolbars.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Toolbar General">
+          <param name="Local" value="SREtoolbarGeneral.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Toolbar Elements">
+          <param name="Local" value="SREtoolbarElements.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Menus">
+        <param name="Local" value="SREmenuBar.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="File Menu">
+          <param name="Local" value="SREfileMenu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Edit Menu">
+          <param name="Local" value="SREeditMenu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="View Menu">
+          <param name="Local" value="SREviewMenu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Insert Menu">
+          <param name="Local" value="SREinsertMenu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Extras Menu">
+          <param name="Local" value="SREextrasMenu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Tools Menu">
+          <param name="Local" value="SREtoolsMenu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Help Menu">
+          <param name="Local" value="SREhelpMenu.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Tree Pane">
+        <param name="Local" value="SREcomponentPane.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Context Menu Outline Tab">
+          <param name="Local" value="SREcontextMenuCPcomponentsAndElements.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Context Menu Diagram or Method">
+          <param name="Local" value="asi_contextmenu_diagrammethod.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Views">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Browse View ">
+          <param name="Local" value="SREviewBrowse.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Context Menu Browse View">
+          <param name="Local" value="SREcontextMenuBrowseView.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Palettes">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Elements Palette">
+          <param name="Local" value="SREpalettesPane.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Library Palette">
+          <param name="Local" value="srelibrarypalette.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Miscellaneous">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Implementation Editor for Components and Projects">
+          <param name="Local" value="ImplementationEditorEnglishUS.chm::/IEd_ImplementationEditor_for_ComponentsProjects.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Toolbar Configuration Window">
+          <param name="Local" value="IntroductionEnglishUS.chm::/INT_Toolbar_Configuration_Window.htm">
+        </object>
+        </ul>
+      </ul>
+    </ul>
+</ul>
+</html>

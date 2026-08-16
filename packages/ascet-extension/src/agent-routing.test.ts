@@ -14,7 +14,7 @@ describe("ASCET coding policy routing", () => {
 		assert.match(routed, /ascet-engineering Skill/);
 		assert.match(routed, /ascet_edit/);
 		assert.doesNotMatch(routed, /ascet_write/);
-		assert.match(routed, /executeWrite=true/);
+		assert.match(routed, /intent=apply/);
 		assert.match(routed, /complete implementation plan/);
 		assert.ok(policyLines.length <= 30);
 		assert.equal(appendAscetCodingPolicyPrompt(routed), routed);

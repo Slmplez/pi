@@ -1,5 +1,4 @@
-import { type TProperties, Type } from "typebox";
-import { Value } from "typebox/value";
+﻿import { Value } from "typebox/value";
 import {
 	type AscetApplyElementSpecParams,
 	buildApplyElementSpecArgs,
@@ -20,7 +19,6 @@ import { runAscetDeleteFolder } from "../delete-folder.ts";
 import { buildDeleteMethodArgs, runAscetDeleteMethod } from "../delete-method.ts";
 import {
 	type AscetApplyElementPlanParams,
-	ascetApplyElementSpecPlanSchema,
 	type NormalizedElementSpecResult,
 	normalizeAscetElementSpec,
 } from "../element-spec-contract.ts";
@@ -30,8 +28,7 @@ import {
 	validateCreateMethodKindCompatibility,
 } from "../method-kind-compatibility.ts";
 import { getAscetArtifactRoot } from "../observation-store.ts";
-import { parseAscetPermissionRules } from "../permissions/settings.ts";
-import type { PermissionMode } from "../permissions/types.ts";
+import { type AscetPermissionSnapshot, resolveAscetPermissionSnapshot } from "../permissions/types.ts";
 import {
 	type AscetDependencyMappingTarget,
 	type AscetDependencyRestorationValue,
@@ -55,6 +52,7 @@ import {
 } from "../set-state-machine-code.ts";
 import { compactObject, toToolFailurePayload, unwrapToolSuccessPayload } from "../tool-response-contract.ts";
 import { openAiObjectUnionSchema } from "../tools/_shared/openai-schema.ts";
+import { ascetMutationActionSchemas } from "../tools/actions/contracts/edit.ts";
 import { selectAscetPublicSchemaVariants } from "../tools/actions/schema-registry.ts";
 import { type AscetEditApprovalContext, isAscetEditApprovalBlockedCode } from "./approval.ts";
 import {
@@ -99,10 +97,7 @@ import {
 	type AscetEditVerification,
 	classifyAscetEditExecution,
 } from "./verification.ts";
-import {
-	type AscetMutationIntent,
-	ascetWriteControlProperties as writeControlSchema,
-} from "./write-control-contract.ts";
+import type { AscetMutationIntent } from "./write-control-contract.ts";
 import { recordAscetWriteTelemetry } from "./write-telemetry.ts";
 
 type CodeSource = { code?: string; codeFile?: string };
@@ -263,221 +258,8 @@ export interface AscetEditResult {
 }
 
 interface AscetEditRuntimeContext extends AscetEditApprovalContext {
-	permissionMode?: PermissionMode;
-	getSettings?: () => Readonly<Record<string, unknown>>;
+	ascetPermission?: AscetPermissionSnapshot;
 }
-
-function strictObject<T extends TProperties>(properties: T) {
-	return Type.Object(properties, { additionalProperties: false });
-}
-
-const codeSourceSchema = {
-	code: Type.Optional(Type.String()),
-	codeFile: Type.Optional(Type.String()),
-};
-const primitiveSignatureTypeSchema = Type.Union([
-	Type.Literal("cont"),
-	Type.Literal("sdisc"),
-	Type.Literal("udisc"),
-	Type.Literal("log"),
-]);
-const methodSignatureArgumentSchema = strictObject({
-	name: Type.String({ minLength: 1 }),
-	type: primitiveSignatureTypeSchema,
-	ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("keep"), Type.Literal("replace")])),
-});
-const componentKindSchema = Type.Union([Type.Literal("class"), Type.Literal("module"), Type.Literal("statemachine")]);
-const writeComponentKindSchema = Type.Union([
-	Type.Literal("class"),
-	Type.Literal("module"),
-	Type.Literal("statemachine"),
-	Type.Literal("enumeration"),
-]);
-const methodKindSchema = Type.Union([
-	Type.Literal("abstract"),
-	Type.Literal("process"),
-	Type.Literal("action"),
-	Type.Literal("condition"),
-	Type.Literal("trigger"),
-]);
-const stateMachineOperationSchema = Type.Union([
-	Type.Literal("set-method"),
-	Type.Literal("set-state-entry-esdl"),
-	Type.Literal("set-state-exit-esdl"),
-	Type.Literal("set-state-static-esdl"),
-	Type.Literal("bind-state-entry-method"),
-	Type.Literal("bind-state-exit-method"),
-	Type.Literal("bind-state-static-method"),
-	Type.Literal("set-transition-condition-esdl"),
-	Type.Literal("set-transition-action-esdl"),
-	Type.Literal("bind-transition-condition-method"),
-	Type.Literal("bind-transition-action-method"),
-	Type.Literal("set-start-state"),
-]);
-const moduleCodeOperationSchema = Type.Union([
-	Type.Literal("set-method"),
-	Type.Literal("set-header"),
-	Type.Literal("set-external-c-code"),
-]);
-
-export const ascetMutationActionSchemas = [
-	strictObject({
-		action: Type.Literal("create_folder"),
-		folderPath: Type.String({ minLength: 1 }),
-		...writeControlSchema,
-	}),
-	strictObject({
-		action: Type.Literal("create_component"),
-		componentPath: Type.String({ minLength: 1 }),
-		kind: writeComponentKindSchema,
-		language: Type.Optional(Type.Union([Type.Literal("ESDL"), Type.Literal("BDE"), Type.Literal("C")])),
-		ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("return-existing")])),
-		rollbackOnFailure: Type.Optional(Type.Boolean()),
-		...writeControlSchema,
-	}),
-	strictObject({
-		action: Type.Literal("create_method"),
-		componentPath: Type.String({ minLength: 1 }),
-		componentKind: Type.Optional(componentKindSchema),
-		methodName: Type.String({ minLength: 1 }),
-		methodKind: methodKindSchema,
-		diagram: Type.Optional(Type.String({ minLength: 1 })),
-		ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("return-existing")])),
-		...writeControlSchema,
-	}),
-	strictObject({
-		action: Type.Literal("set_method_signature"),
-		componentPath: Type.String({ minLength: 1 }),
-		methodName: Type.String({ minLength: 1 }),
-		returnType: Type.Optional(primitiveSignatureTypeSchema),
-		arguments: Type.Optional(Type.Array(methodSignatureArgumentSchema)),
-		ifReturnExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("keep"), Type.Literal("replace")])),
-		...writeControlSchema,
-	}),
-	strictObject({
-		action: Type.Literal("delete_component"),
-		componentPath: Type.String({ minLength: 1 }),
-		ifMissing: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")])),
-		...writeControlSchema,
-	}),
-	strictObject({
-		action: Type.Literal("delete_method"),
-		componentPath: Type.String({ minLength: 1 }),
-		methodName: Type.String({ minLength: 1 }),
-		ifMissing: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")])),
-		...writeControlSchema,
-	}),
-	strictObject({
-		action: Type.Literal("delete_folder"),
-		folderPath: Type.String({ minLength: 1 }),
-		ifMissing: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")])),
-		...writeControlSchema,
-	}),
-	strictObject({
-		action: Type.Literal("set_method_code"),
-		componentPath: Type.String({ minLength: 1 }),
-		methodName: Type.String({ minLength: 1 }),
-		...codeSourceSchema,
-		...writeControlSchema,
-	}),
-	strictObject({
-		action: Type.Literal("set_module_code"),
-		modulePath: Type.String({ minLength: 1 }),
-		operation: Type.Optional(moduleCodeOperationSchema),
-		section: Type.Optional(moduleCodeOperationSchema),
-		methodName: Type.Optional(Type.String({ minLength: 1 })),
-		...codeSourceSchema,
-		...writeControlSchema,
-	}),
-	strictObject({
-		action: Type.Literal("set_state_machine_code"),
-		stateMachinePath: Type.String({ minLength: 1 }),
-		operation: stateMachineOperationSchema,
-		stateName: Type.Optional(Type.String()),
-		sourceState: Type.Optional(Type.String()),
-		targetState: Type.Optional(Type.String()),
-		priority: Type.Optional(Type.Number()),
-		methodName: Type.Optional(Type.String({ minLength: 1 })),
-		...codeSourceSchema,
-		...writeControlSchema,
-	}),
-	strictObject({
-		action: Type.Literal("set_enumerators"),
-		componentPath: Type.String({ minLength: 1 }),
-		enumerators: Type.Array(Type.String({ minLength: 1 }), { minItems: 1 }),
-		...writeControlSchema,
-	}),
-	ascetApplyElementSpecPlanSchema,
-	strictObject({
-		action: Type.Literal("apply_project_formula"),
-		projectPath: Type.String({ minLength: 1 }),
-		specFile: Type.String({ minLength: 1 }),
-		mode: Type.Optional(Type.Literal("restore")),
-		deleteMissing: Type.Optional(Type.Boolean()),
-		...writeControlSchema,
-	}),
-	strictObject({
-		action: Type.Literal("set_element_dependency"),
-		targetPath: Type.Optional(Type.String({ minLength: 1 })),
-		componentPath: Type.Optional(Type.String({ minLength: 1 })),
-		elementName: Type.String({ minLength: 1 }),
-		dependency: Type.Union([Type.Literal("dependent"), Type.Literal("independent")]),
-		dependencyFormula: Type.Optional(Type.String({ minLength: 1 })),
-		dependencyFormals: Type.Optional(Type.Array(Type.String({ minLength: 1 }), { minItems: 1, uniqueItems: true })),
-		bindingPolicy: Type.Optional(Type.Union([Type.Literal("explicit"), Type.Literal("autoExactName")])),
-		dependencyMappings: Type.Optional(
-			Type.Record(
-				Type.String({ minLength: 1 }),
-				Type.Union([
-					Type.String({ minLength: 1 }),
-					strictObject({
-						kind: Type.Union([
-							Type.Literal("parameter"),
-							Type.Literal("constant"),
-							Type.Literal("systemConstant"),
-						]),
-						name: Type.String({ minLength: 1 }),
-					}),
-				]),
-			),
-		),
-		variantMappings: Type.Optional(
-			Type.Record(
-				Type.String({ minLength: 1 }),
-				Type.Record(
-					Type.String({ minLength: 1 }),
-					Type.Union([
-						Type.String({ minLength: 1 }),
-						strictObject({
-							kind: Type.Union([
-								Type.Literal("parameter"),
-								Type.Literal("constant"),
-								Type.Literal("systemConstant"),
-							]),
-							name: Type.String({ minLength: 1 }),
-						}),
-					]),
-				),
-			),
-		),
-		variantPolicy: Type.Optional(
-			Type.Union([Type.Literal("default"), Type.Literal("selected"), Type.Literal("all")]),
-		),
-		variants: Type.Optional(Type.Array(Type.String({ minLength: 1 }), { minItems: 1, uniqueItems: true })),
-		valueRestoration: Type.Optional(
-			strictObject({
-				policy: Type.Union([Type.Literal("fromSnapshot"), Type.Literal("explicit"), Type.Literal("ascetDefault")]),
-				valuesByVariant: Type.Optional(
-					Type.Record(Type.String({ minLength: 1 }), Type.Union([Type.String(), Type.Number(), Type.Boolean()])),
-				),
-			}),
-		),
-		clearDependencyFormula: Type.Optional(Type.Boolean()),
-		targetKind: Type.Optional(Type.Union([Type.Literal("auto"), Type.Literal("component"), Type.Literal("folder")])),
-		match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("all")])),
-		...writeControlSchema,
-	}),
-] as const;
 
 export const ascetMutationParameters = openAiObjectUnionSchema<AscetMutationParams>(ascetMutationActionSchemas);
 
@@ -645,7 +427,7 @@ function createMutationResultEnvelope(
 	const preflightEvidence = lifecycle.preflight ?? preflightPlan;
 	return {
 		status,
-		permission: lifecycle.permission ?? { mode: ctx.permissionMode ?? "default", decision: "not_evaluated" },
+		permission: lifecycle.permission ?? { mode: resolveAscetPermissionSnapshot(ctx).mode, decision: "not_evaluated" },
 		preflight: {
 			status: preflightEvidence
 				? "passed"
@@ -1476,11 +1258,12 @@ async function runPlanManagedCommit(
 		let latestCollected: PlanManagedCommitEvidence | undefined;
 		let preflightFailure: AscetEditResult | undefined;
 		let executionRaw: AscetCliJsonResult | undefined;
+		const permission = resolveAscetPermissionSnapshot(ctx);
 		const guarded = await runGuardedAscetMutation({
 			action: planned.action,
 			intent: "apply",
-			permissionMode: ctx.permissionMode ?? "default",
-			rules: parseAscetPermissionRules(ctx.getSettings?.()),
+			permissionMode: permission.mode,
+			rules: permission.rules,
 			signal: options.signal,
 			ctx,
 			maxMaterialChanges: 1,
@@ -1976,11 +1759,12 @@ async function runCoordinatedDirectMutation(
 		let latestCollected: CollectedDirectMutationEvidence | undefined;
 		let preflightFailure: AscetEditResult | undefined;
 		let executionRaw: AscetCliJsonResult | undefined;
+		const permission = resolveAscetPermissionSnapshot(ctx);
 		const guarded = await runGuardedAscetMutation({
 			action: params.action,
 			intent: "apply",
-			permissionMode: ctx.permissionMode ?? "default",
-			rules: parseAscetPermissionRules(ctx.getSettings?.()),
+			permissionMode: permission.mode,
+			rules: permission.rules,
 			signal: options.signal,
 			ctx,
 			maxMaterialChanges: 1,

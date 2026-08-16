@@ -1,0 +1,940 @@
+{
+  "generated_at": "2026-04-01T03:08:08.781146Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\INTECRIOConnectivityRPEnglishUS.chm",
+  "unpack_dir": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\INTECRIOConnectivityRPEnglishUS\\unpacked",
+  "total_files": 153,
+  "total_size_bytes": 983132,
+  "counts_by_extension": {
+    ".gif": 25,
+    ".js": 2,
+    ".xml": 1,
+    ".htm": 118,
+    ".brs": 1,
+    ".glo": 1,
+    ".hhc": 1,
+    ".hhk": 1,
+    ".css": 1,
+    ".lng": 1,
+    ".bmp": 1
+  },
+  "files": [
+    {
+      "relative_path": "BUTTON.GIF",
+      "size": 844,
+      "sha256": "6d10387853fe90ec87f720a6460a8cd1d2559683e66c81683a705a5e0e6f2ea9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonDt.gif",
+      "size": 951,
+      "sha256": "eef4deb5f25cf578951dbb614c041232276ddca726c32ff2342190f19b69c9bd",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonProjectProperties.gif",
+      "size": 1015,
+      "sha256": "619f649adcc2948038adfc049b7f892769a03f3fe5f386c8bb7713c6c387bbdf",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonReconnect.gif",
+      "size": 1060,
+      "sha256": "8612c5a00d51dde9eebf288aa259687e6148cf0109ed28b98d47998e920a3c42",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonSelectHW.gif",
+      "size": 1042,
+      "sha256": "757c0cc198f165de1c4ccb1c62896df7c992d82864f832a33d58f31fb808f393",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttonTransferProject.gif",
+      "size": 1112,
+      "sha256": "8c63d3253218594f13c10b46432ab62c049f87b595e302b38573ed008530a918",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "display.js",
+      "size": 5656,
+      "sha256": "85712144c31aac1d2706f3b60475055a673961f71bc37c0f4c9e9c4b85fa9b31",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "dt_scheme.gif",
+      "size": 6136,
+      "sha256": "f3316151f109376e9fbaf55d1cb303e6521eabaf3590a12c1d68707380039bd1",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "eHelp.xml",
+      "size": 371,
+      "sha256": "badcba17a4b1845831cfe34e24e190ad1c8ab52e80f3ed638c056bb7a0be0d6b",
+      "extension": ".xml"
+    },
+    {
+      "relative_path": "ehlpdhtm.js",
+      "size": 125830,
+      "sha256": "f3ccbbfc1e033d5d663f77ed0da22d1c431122895c6ed954a14b12ad6b2e268c",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "ES1135_Front.gif",
+      "size": 11370,
+      "sha256": "57beabd540eab6a210720b16b4f9d241a28aede389c57cc28e82e44909257d96",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ES900_EthernetSysConfig.gif",
+      "size": 10277,
+      "sha256": "ff35bf555410518a1a2d192339249b759c662b24d32abd207e5d215524bcd9a2",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ES900_portsettings.gif",
+      "size": 31638,
+      "sha256": "8c026fe3e79e331a7b85be0f79403ccade0db57ae2b10bfcf7b5089eea136fe9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ES900_systray.gif",
+      "size": 3764,
+      "sha256": "d66fcbfb5f8cc092ed470a6203bea78e18fad18f4d69c0f7fa75d638fc66e82d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ES900_WebInterface.gif",
+      "size": 23138,
+      "sha256": "09876d128915039afbe47147a04b31ea8f3169d79501ff2f542d1ce250d746c0",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "icon_boards.gif",
+      "size": 918,
+      "sha256": "706b0f9e192b203c80dd95b41538819c14a8e76f933ff82299f256052d1c37d3",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "icon_es11xx.gif",
+      "size": 1022,
+      "sha256": "1e8316810321f0709a976976b6a77ff7be5a442423c8835e5c1347cc98343803",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "icon_hwc.gif",
+      "size": 1018,
+      "sha256": "d108f11350d021c44686db229dee0183c60535bbfdf974c78005ca05c46e176e",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "IIO_ActivateETAS_NWM_Usage.htm",
+      "size": 2173,
+      "sha256": "6b645b5c65ea94daf9c2465bedf0850f1d79d4051a11e128a5260083b16ad17b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_ActivateTask.htm",
+      "size": 3776,
+      "sha256": "165e0ba64fed81c4a8855cdebd1fcb827acc48ed2c8bf356ea7c58dde03673f7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_APIfunctionsERCOSEK.htm",
+      "size": 13740,
+      "sha256": "3c7dedbed47b3bedb17ed7e38f24a21f4a946f7accbef6357b6224502be582d9",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_APIfunctionsES1135LEDs.htm",
+      "size": 1163,
+      "sha256": "096da9f6b727438b075b9b67b403cc4f6a52bd108b15c49fb9fb3cba93b0ae98",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_APIfunctionsMiscellaneous.htm",
+      "size": 735,
+      "sha256": "420261150ec60e9394223217972952f9e086f4611a822e3bacf6787ef4cebc00",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_APIfunctionsNVRAM.htm",
+      "size": 2454,
+      "sha256": "24b6098866758862b8d0efeefacc8b1aa03e64041d722635b3a2774dadda536b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_APIfunctionsWatchdog.htm",
+      "size": 2210,
+      "sha256": "f07b7477e648dbdfe18241aafe28225c5d3293b12c8fd74e54bc10d762159c1b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_App_CompilerSwitches_APIfunctions.htm",
+      "size": 1570,
+      "sha256": "c1bc9965d90075b84c4ce7a51e38e1e47b119c5e8e665b59faa5e0fa3035c151",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_ASCET_SCOOPIX.htm",
+      "size": 6033,
+      "sha256": "eff1ddd67089790e89dbd9b60b0cf53ffb69e45f6c8892b3bf4eb8312773a2e0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_asdWriteUserDebug.htm",
+      "size": 2672,
+      "sha256": "e606383802aa19b5391c93d67c83e8bfe3f58ec60c17b49e975eee7daf24c38a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_asdWriteUserError.htm",
+      "size": 2657,
+      "sha256": "752160e677bfd3ead04033ad62d94b80f1f1df1f8bcb0edb69b2e3277a65d261",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_BackAnimation.htm",
+      "size": 1336,
+      "sha256": "35201b88e7b8461b2c1d09115fbf4e3365698925314dab1a11563de7c3bf8241",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_BackAnimationExperiment.htm",
+      "size": 1479,
+      "sha256": "3401667357076e905df4fa9dff7174396ed175530971bea852b7b47b0c6964ef",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_CacheLocking_ComplexElement.htm",
+      "size": 3824,
+      "sha256": "1dd36128c8a98f4e24166072f1fdeb7673cfb8d69fee1a7f0d9cbbc088acfe66",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_CacheLocking_Component.htm",
+      "size": 3037,
+      "sha256": "55411b4672f293a9bad2896faeb544fa23db163538175da5f0d73382f21cdbb1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_CacheLocking_ElementMethodProcess.htm",
+      "size": 3047,
+      "sha256": "d0f0a60779db1e31aa48ab7b25b6fae24aa116bb56330497e63da4072ae84c84",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_CacheLocking_EntireProject.htm",
+      "size": 5188,
+      "sha256": "8a659d55a3d7b209eaab5f5bea5761dee1800b9381991c72725153aca77eb2a9",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_CacheLocking_OSeditor.htm",
+      "size": 3291,
+      "sha256": "fc2b831d454302011864c542e7897d829fce4a808a2828bee33286924ce57079",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_CompilerSwitches_ExternalCcode.htm",
+      "size": 1249,
+      "sha256": "2b5a5e6e4b3d7587102071e90fb857abf8180847e07e8cc2f1d801572f14cbec",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_ConfigureES910.htm",
+      "size": 10374,
+      "sha256": "dcfebe28663d0791ace4ce591e496ad9ece7540fa76ace77a410234ca88a39da",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_ConfigureRTPROPC_ES581.htm",
+      "size": 12439,
+      "sha256": "ab2b0c850b9c74a9551f174453d68734076a6cac0cf33b8ee2a3d4a44ee0d48e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_Convert_ES1000.1Project_to_SupportedTarget.htm",
+      "size": 2972,
+      "sha256": "fdc637f3b3529e09bc3e03c45bd2719a233009c783088c32dfefa04335fd57ec",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_DeclareAppMode.htm",
+      "size": 2873,
+      "sha256": "462b21146c27d0d67fd076190a50f1fab5c4c61a88e71d49d1f58e9e5c49acf7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_DeclareTask.htm",
+      "size": 2877,
+      "sha256": "2b7c0e827235a99037e6568e766c21ee72312bc8c1c05da5de235a980915c77f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_DescriptionStructure_APIfunctions.htm",
+      "size": 3410,
+      "sha256": "ac7e2072b537c35c249b37c216463273cc623bb6fb13d23caadf0c80f769260b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_DetermineES1000Connection.htm",
+      "size": 2406,
+      "sha256": "4ed4c36ca0b4c1c7588072b5ec1bbdb4157217941b30251f36077b8310d0f350",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_DisableAllInterrupts.htm",
+      "size": 2604,
+      "sha256": "15a5f81af95b03e88e0a8d3f45e67779672ee1aef8e151ee888ea5dabf571217",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_EnableAllInterrupts.htm",
+      "size": 2992,
+      "sha256": "e6d2cfdb633d50c1fb8c05b95000d1810bd560b91e52059ba62b9143699ccdbb",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_ES1000.xExperimentalSystem.htm",
+      "size": 3465,
+      "sha256": "e320fdd2973b299abccfd4653a0b8ab354bcc49e301da276429c99e77b474d78",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_ES1135_SetUp_CacheLocking.htm",
+      "size": 1300,
+      "sha256": "e2d2af10288844bcbbacfbfabc5711504072b5431ef62517518b1ffa9b293694",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_ES1135_Watchdog.htm",
+      "size": 4627,
+      "sha256": "2bba82bb936254edd936e4fe9ee3389fd73b93df92ac40dab1c08179db482c2a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_ES1135CacheLocking.htm",
+      "size": 4999,
+      "sha256": "2fe035f6576736886ffaa62f51cd210c160c1065b993037c615f58956da26d9a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_ES1135LEDs.htm",
+      "size": 1102,
+      "sha256": "3ba8dd409271820c3e720e54b0659344a24d7d1546a9a1b751da87527a9dd041",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_ES900ExperimentalSystem.htm",
+      "size": 792,
+      "sha256": "82a4005801d54cbffe9071671b95a1b7a17376e2827de67099ecea1f196db9c0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_Examples_Targets_in_HWselectionWindow.htm",
+      "size": 19913,
+      "sha256": "6a6ea03ccbd5791c4f7e184973839008cfdc6d3eb94c7e2ba3635c67425c7d48",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_ExperimentalTarget_HWselection.htm",
+      "size": 4917,
+      "sha256": "1763cd1363c444a97edfef4d96d790704f6ea075957af87d1913bbdbe616d612",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_ExperimentalTargetConfiguration.htm",
+      "size": 2554,
+      "sha256": "aec53f394ba495665d93ef910781b0f319dacbe28117a9cd05d2ecd3ffbc3589",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_Experimenting_with_INTECRIO.htm",
+      "size": 1144,
+      "sha256": "f29d1080e8e299a6a89486ad09a859be0d2b229f51727d6884cd93704c285df3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_GeneratedFiles_ProjectTransfer.htm",
+      "size": 4694,
+      "sha256": "d027a628149d2d7a4081c4886e8d780aeb22eaaf62434e12803d555b6d85f1c6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_GetDeltaT.htm",
+      "size": 3143,
+      "sha256": "da10cd44122bb4f96cacc211b4a3c0039248ed21fabf192f3f382624c53fa53f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_GetSystemTime.htm",
+      "size": 2967,
+      "sha256": "f9deac585d08137a58afee2c99de2ad83f4959a435f62ebecde0fcc63a166a74",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_GetSystemTimeHigh.htm",
+      "size": 3154,
+      "sha256": "69904341e9de085a6cc17da1f3c2ff2d857b7f3d3a642dafbf52102364c2a356",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_GetSystemTimeLow.htm",
+      "size": 3149,
+      "sha256": "9a6b508169aec8bef5ec02f022b5e430d645c6516a46cf176d8f762ec92a768e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_Hardware_Connection_with_the_ETAS_Network_Manager.htm",
+      "size": 1461,
+      "sha256": "ac52e6b4a8ec5085dfdfa93278091c19417497c363aab8eb2b63aa784a11a2f7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_Hardware_Systems.htm",
+      "size": 1279,
+      "sha256": "e1bb3265cc593585a91d103529ad6b7045018f5fba17c74d79bd206d4aa97ae4",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_Hints_INTECRIOconnectivity_ASCETRP.htm",
+      "size": 888,
+      "sha256": "06c53281fe3322628076db5b8cbebfa72824e54e24d4111794a0ba6ef3079b52",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_HWconfig_Without_ETASNWM_ES1000.htm",
+      "size": 2386,
+      "sha256": "7c5f303f91f1a088df0e1bcc6f9d545a32a4573020e9ec972a21d97779050221",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_INTECRIO_ProjectTransferWindow.htm",
+      "size": 3365,
+      "sha256": "3f5592cc7ca14f90a54a2195f5875efec53fda0213707160cace44ad4f2b9bee",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_INTECRIOConnectivityOverview.htm",
+      "size": 3219,
+      "sha256": "aa1a3ff7578a2d03371cd1264c9c5d74e8c9cade7c4e6b87e3f53ce04a6515d0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_INTECRIOExperiment.htm",
+      "size": 1796,
+      "sha256": "552a562f3406f9b863dd5d4910fdab26f138bba37c0881006cd351b2386c483b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_ItemSelectionWindow.htm",
+      "size": 2990,
+      "sha256": "b90993b2b99b6e68e6f83a9610b18adffb87fcad157ba040ba035d80ff9596cc",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_NonvolatileRAM.htm",
+      "size": 4323,
+      "sha256": "6ed618c54406b344565765cb0545533b270abd90eb63a6637d8f0011ed659287",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_NVRAM_DataConsistency.htm",
+      "size": 4606,
+      "sha256": "9016beefe72dcb96ad2f0a11379949e844e24ecdb3815403db7141252bf4f785",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_NVRAM_HardwareSupport.htm",
+      "size": 15868,
+      "sha256": "e4b7e613e5cc1dac8d28320320190a14680b744aed79469e18e56bb226aa8927",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_nvramCheckForAutoUpdate.htm",
+      "size": 2865,
+      "sha256": "b5bfd549e6f6c0fffefc0f5204d50ad68fbe3ac6acbff8f3e8d0d931e52077f3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_nvramCheckForInitializedVars.htm",
+      "size": 3330,
+      "sha256": "5b2af7d5cd575f8e27280ac87722685f0529f35a643713238c6cfc4117617111",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_nvramCheckRunningUpdate.htm",
+      "size": 3331,
+      "sha256": "a48943f932abaff1af610849f8402057d5eb10af4280ede132d00dda77672e1d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_nvramClear.htm",
+      "size": 2699,
+      "sha256": "d222bd94886ddec0e2966fb235c1ee283e337d2339e08baf2093d9004baa7198",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_NVRAMcockpit.htm",
+      "size": 1270,
+      "sha256": "d6f914a7c6b17b3aff5d1f76b884a07fcb69306e3a35424b320a26273c11dc87",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_NVRAMcockpitWindow.htm",
+      "size": 5544,
+      "sha256": "869fbfffda0407c08054bf2f3ba6b66e288bb90957c66f38187574b3db7875d8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_nvramDisableAutoUpdate.htm",
+      "size": 2953,
+      "sha256": "854694dfafc7313fd8718177bdb80970daccdf6c97499094323457befbfe7550",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_nvramEnableAutoUpdate.htm",
+      "size": 2949,
+      "sha256": "115f4c5b7e89a9b768e566fe201714949147a32683e0c5cdc3f64ef022e0b5db",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_nvramGetConsistencyLevel.htm",
+      "size": 4038,
+      "sha256": "6441bba60d53d613ff8ca61e88cac47f174c5b220403fc0712a0829af8cadc7a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_nvramGetUpdateAgeMs.htm",
+      "size": 2804,
+      "sha256": "8a6679878bb732b49be65faed11c1736c3ace351e5209e058fcdd235fd5916c7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_nvramGetUpdateInterval.htm",
+      "size": 3117,
+      "sha256": "8894f4d8cc1b827b954fb2440df3f5627f699f715dbb3bfcac6859dd8a6f2a9b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_nvramInitModelVars.htm",
+      "size": 3934,
+      "sha256": "4e6f2a733f1292b43b3f9076bbecb8ccc0547b31e4f3e77fd6eb49786b6e1750",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_nvramManualUpdateBackground.htm",
+      "size": 4536,
+      "sha256": "19b0d848b7db48dabbebb4dca96089c79997e3c69b746b3ceeedb741926cef88",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_nvramManualUpdateBlocked.htm",
+      "size": 5485,
+      "sha256": "83dca18a93341fabd9a4a5a100f83e2160eb7b41c38672b8fea2f8d486707df2",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_nvramManualUpdateExit.htm",
+      "size": 2901,
+      "sha256": "8ec6710d6b37ea6702d84f24eb55c05e0c37ab9f123d57b79901f0896e9fd972",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_NVRAMSafetyInformation.htm",
+      "size": 3141,
+      "sha256": "4a59a703b0f939a30c151b7b134f8924bc46b5f5ba39b74f5d9651341000ad58",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_nvramSetConsistencyLevel.htm",
+      "size": 4214,
+      "sha256": "817b8c5247fc8cfaa124c381529f5af85764e288f3e4775221cfdb3fe1626503",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_nvramSetUpdateInterval.htm",
+      "size": 3783,
+      "sha256": "41728d88a5d52e8e640b3310be036a946fbb63b9365195b757be7ac60a6f63a2",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_NVRAMtips.htm",
+      "size": 2127,
+      "sha256": "3b6709bf55648addf327bb6e00fc15cf0912c45c64ea0e98bee54f75aa2cce97",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_NVVariable_InitializationUpdate.htm",
+      "size": 3901,
+      "sha256": "91c6f0ffd1355aced2a4c0b59cd22d75b7d60362ca3eaad14398dc7973dd772b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_Open_BackAnimation_EE.htm",
+      "size": 2439,
+      "sha256": "216bf70295dc533cdb85e208fe8a7f6a28f6f7092f572fb8e6dcd19b0e5e46ec",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_Open_HWselectionWindow_Manually.htm",
+      "size": 1538,
+      "sha256": "bd08307e98544348d524a9bb77e723be203b268ac04d9f623b6f12f280e7be79",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_Perform_Transfer.htm",
+      "size": 11888,
+      "sha256": "b21c0e693ba0830ac167805a4ee9d8de78d392334a983f4029aa0079b9cd32c7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_PrepareProject.htm",
+      "size": 2793,
+      "sha256": "11c8d4fbd3f68cabe142e31f6549d4b80e2db4281a9cd5b6958ab6f81e9f04ed",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_PreprocessVeryOldDataBases.htm",
+      "size": 758,
+      "sha256": "b8290102abfbac3b0b9261599a568c8db6d5eb73cb5e38795945bde214967260",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_ProjectPreparation.htm",
+      "size": 4909,
+      "sha256": "3e941e12e47ab0286f4ba552f25705a6b6ca0fd6073cc4832ef0845c5ef52b96",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_ProjectTransfer_to_INTECRIO.htm",
+      "size": 9323,
+      "sha256": "2162cfdcc72d8873dff0abb58ba914bf13a5d5fe9cfa609b6e6eb794d24b1d0a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_ReferenceUserInterface.htm",
+      "size": 1118,
+      "sha256": "7d2890bc5021c1b35ba068e756388b4584105d8b23e9512464e1e9a0dae5c3b2",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_RTPROPC_ExperimentalSystem.htm",
+      "size": 3579,
+      "sha256": "e9b1abd260a832cc8abc7081abc8d659c09e246c4da042dfc1f0a62e46b4793a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_RTPROPC_Startup.htm",
+      "size": 1346,
+      "sha256": "2c59ba6ab3ae53b179545946084b31d229b73d1484d8568a648d77415361e0ad",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_SCOOPIX_Example.htm",
+      "size": 11527,
+      "sha256": "f86badabbd2f757335199f531c2482d84e3d5a75100df772a3946ad6a21757c2",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_Select_INTECRIO_SystemProject.htm",
+      "size": 2133,
+      "sha256": "049a1c99674f7f63a44a335f9c9f899f76fa81b706ecbeaafedd36942658ff92",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_Select_INTECRIO_Version.htm",
+      "size": 1414,
+      "sha256": "eacf15a71a837751305a0d64e45900fdd6e95852ea0c4b4376ce90cd1f802888",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_Select_INTECRIO_Workspace.htm",
+      "size": 1906,
+      "sha256": "23e1fd95b9a8cd0188570d9f5367a94833e2cb98374570c3d1c3971819c75564",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_SelectHardware_w_ETASnwm.htm",
+      "size": 2600,
+      "sha256": "7264c9756fb83c783ada964ec01c7b386bbb79914a2290b0717293d69c007355",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_SetNextAppMode.htm",
+      "size": 3695,
+      "sha256": "2f6aa5304ee5b7c0cd24a49b1a912e001842a6767de6d9c3871364461003c2bd",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_SetPath_for_GeneratedFiles.htm",
+      "size": 1924,
+      "sha256": "92431a5542d8bf2d96c20afba9f90821c6e6ba05b85190056ffa34cdc37f72fa",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_SpecialFeatures_ES1135.htm",
+      "size": 930,
+      "sha256": "2704c972d50e3098ac650bffd4204db5bc6e63a0aa9d55c71bb21d370464e460",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_Start_INTECRIOexperiment.htm",
+      "size": 1962,
+      "sha256": "62af51731a243c62cdb0d3272339fc8b5404382e92e06a57396e5f09ee31615c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_StartBackAnimation.htm",
+      "size": 2612,
+      "sha256": "6359ee358c91fdcc4bfbe3a5c6d8e0eed3497c0b77971d85ca5ade01189f4031",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_StartTransfer.htm",
+      "size": 2416,
+      "sha256": "436cdeea1d4ea68148b23f3ab009048d6ddbdb9d47b9bbc8b7e9ad0879b8f0d1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_Structure_TargetDirectories.htm",
+      "size": 4121,
+      "sha256": "5e4cb564dc63c6aff71ef16c4aca943e4bd06badad8e3d77af198c11022628d7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_Transfer_Project_to_INTECRIO.htm",
+      "size": 1589,
+      "sha256": "42d69d29d6c4916c6f438ddbd2787c93b5b0a98afd4b1bf256337d090f59e7fb",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_Trigger_INTECRIO_Build.htm",
+      "size": 1285,
+      "sha256": "8c0335b66a6ad2b8b0e141e3aae2f09693b8af7d6e8f7d25630277d02e6f1e9f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_userLed_n_Off.htm",
+      "size": 3373,
+      "sha256": "eef180f989a1e491abff7c05b5af7c6e55212a3d1cf5d20c6f059da0509c50c9",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_userLed_n_On.htm",
+      "size": 3344,
+      "sha256": "fb215836f6528ad47b953a01b7d80b5002a828cba6a199f5def94e2e06b72142",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_userLed_n_Toggle.htm",
+      "size": 3369,
+      "sha256": "a8541a8ce2be217a5499f0d6725af1522bb348c50b98ba758fefd3f832353f22",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_wdCheckActive.htm",
+      "size": 3718,
+      "sha256": "bf98467d7724ec8fd6a9a37e081d3183eb5e8895841d4b251eaa3dd17a222735",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_wdCheckReducedSafetyMode.htm",
+      "size": 3408,
+      "sha256": "10a3619ae03e5b5e8043a33a4a96e0df1f7c096478836a7c25ba7e7f1b87a201",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_wdDisableAutoService.htm",
+      "size": 3015,
+      "sha256": "5a05b86564fe0c3569c7a3e671b426a79eb2c0a51bae6a698ff6bb1f90c77fb1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_wdEnableAutoService.htm",
+      "size": 2827,
+      "sha256": "dc23e0707a61e244f3ce1522ecdc392a7b1cf93dd7cd67988d95d09636b1cae8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_wdIntAck.htm",
+      "size": 2910,
+      "sha256": "3b86431c7c18783250543426e80a77356d62fe62e33bad9b722c66bf185215ac",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_wdIntDisable.htm",
+      "size": 2286,
+      "sha256": "0923c5c1d56d0b96c64d45a08dfc0e99050a8e22357a417aa636f17a6fc9fec2",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_wdIntEnable.htm",
+      "size": 3055,
+      "sha256": "caea5f91311eec50c6928e78226cc6856d44bf3be2fec43f99f545b904368f97",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_wdIntPend.htm",
+      "size": 3349,
+      "sha256": "91332fae7e8920e385d21c6c74b435db7e4f0659f6c5ef319f550819510a3941",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_wdService.htm",
+      "size": 2708,
+      "sha256": "7fd75f8c464ed7e512f79e8e46eeb2c89217032029003d503ef364f34f90d03b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_wdSetEvent.htm",
+      "size": 4923,
+      "sha256": "63a0cab4a1a1151f6890c3b37e55250562e5305c02873800a4d58d4ed7afe4a8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_wdSetPeriod.htm",
+      "size": 4697,
+      "sha256": "58b099f12bff8a28ec95f41beabb9edb83cf0fa0c28baf1d1bd1023e35afe959",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_wdSetReducedSafetyMode.htm",
+      "size": 3735,
+      "sha256": "12fa70585593ac13c9bfd4265fdd45833c4d3ced0d0c224a344d99367daa3913",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_wdSetSafetyMode.htm",
+      "size": 5589,
+      "sha256": "6b2c32182c6bf235a4c620be2776fc2c4628b9fc01280c09aad03a9dd2668d33",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_WhatToDoInCaseOfError.htm",
+      "size": 2099,
+      "sha256": "7f31ea8d1b2ceefc9326c8065f18ef1f6402fbfb840b8a7c8cee01dd16f8778d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "IIO_Working_with_NVRAMCockpit.htm",
+      "size": 1844,
+      "sha256": "5ce0f1010a7169bfa9be21f501111a7a0b2fb24c564c0e263f559a16689e9155",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "images/exp_minus.gif",
+      "size": 837,
+      "sha256": "18a8ea974d756d370d6f7067283fc8c0b26f235c8e98bdaaf13a63e7dca8b1c4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exp_plus.gif",
+      "size": 842,
+      "sha256": "9ff1991cf9c6de621e2672bebf74fbc56680e3413f74d6cf18e25238701651be",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/statisch.gif",
+      "size": 831,
+      "sha256": "481cd3e8b966f0a4398b853efce140287877173b926b53d710791675a1b15aa4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "INT_ASCETRPoverview.htm",
+      "size": 1375,
+      "sha256": "f094e0c5cb3e1a915b6071b3995854f6616078fa48ba99cd5b27034f2283b0cc",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "INTECRIOConnectivityRPEnglishUS.brs",
+      "size": 2,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "extension": ".brs"
+    },
+    {
+      "relative_path": "INTECRIOConnectivityRPEnglishUS.glo",
+      "size": 130,
+      "sha256": "f5e355457d3dda316cbe36e28192341a75f80e075c909f08d64dfbac979c1175",
+      "extension": ".glo"
+    },
+    {
+      "relative_path": "INTECRIOConnectivityRPEnglishUS.hhc",
+      "size": 25574,
+      "sha256": "bb9935f6429437cf9b45b82f477a3102750f214032cb109304e145589b38c03b",
+      "extension": ".hhc"
+    },
+    {
+      "relative_path": "INTECRIOConnectivityRPEnglishUS.hhk",
+      "size": 54627,
+      "sha256": "7959f2bcb60cc517111f63f900501459cdcca8012e922e3152b000c3e46ee2fc",
+      "extension": ".hhk"
+    },
+    {
+      "relative_path": "integration.gif",
+      "size": 1693,
+      "sha256": "ee38b89d6352335a43d7c1a1670188f249dac4fdf1611b8ab2fe1efa90317a70",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Layout.css",
+      "size": 11978,
+      "sha256": "e259b8ef1d277ed6d6c66147a6b63c7637921f3f591beab4cf9847937ce58ed3",
+      "extension": ".css"
+    },
+    {
+      "relative_path": "nvram_initdisplay.gif",
+      "size": 898,
+      "sha256": "7780f4e6818f543e5dc0559502cc311f1fe19220e7eb7a01fc66e570652b144f",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "nvram_initdisplay_b.gif",
+      "size": 900,
+      "sha256": "e58be429d5cc10bed3b5a8d890ede0957c6c4853215f83db1712d14653f9e897",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "RoboHHRE.lng",
+      "size": 3586,
+      "sha256": "607e16623990c7b694bb11537edbecfbd7057fda1739bba5173e9d8a4942b18f",
+      "extension": ".lng"
+    },
+    {
+      "relative_path": "safety_grey.bmp",
+      "size": 77970,
+      "sha256": "2997337635ecd96bac077ab743ec7746964b42fea23f0246e5db7bb86b46994a",
+      "extension": ".bmp"
+    },
+    {
+      "relative_path": "SetnextAppMode.gif",
+      "size": 6132,
+      "sha256": "e88c5e9669357df633aa329b8eb966b849029c19740b6ded2ae5093ab9f26362",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Systemcontroller_ES1000.gif",
+      "size": 34995,
+      "sha256": "d8c78f0d3ccb9a61543ab7237998f5f3bd110f9716e2595d27a3498b9d4f5bdc",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Using_dT.htm",
+      "size": 2594,
+      "sha256": "b39c01722316966be4ceb569bd48625c73fa6a8bada8ed6c10675e90d404829d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "WebServer_01.gif",
+      "size": 69652,
+      "sha256": "5a34cb5b31f4f6e58126c78a5fe9fba3b569ee51a2a439cb8f2a5fa4aeba77a6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "WebServer_05s.gif",
+      "size": 43696,
+      "sha256": "5b923ccdb95be10234e7ef9216be10722fc82fd8f9b079c0e47a81b97db509ce",
+      "extension": ".gif"
+    }
+  ]
+}

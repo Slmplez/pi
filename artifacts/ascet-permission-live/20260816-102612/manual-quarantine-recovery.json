@@ -1,0 +1,107 @@
+{
+  "ok": true,
+  "database": {
+    "name": "C:\\Repo\\F05_IPB_L2_0429",
+    "path": "C:\\Repo\\F05_IPB_L2_0429",
+    "reportedPath": "C:\\Repo",
+    "status": "consistent",
+    "issues": [],
+    "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+  },
+  "guardBefore": {
+    "version": 1,
+    "databaseFingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c",
+    "targetOid": "040g060kg0001k070o6g5us4p0eg2",
+    "targetKind": "statemachine",
+    "canonicalPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+    "generation": 1,
+    "status": "quarantined",
+    "reason": "unknown_outcome",
+    "operation": "create_method",
+    "operationId": "guarded_create_method",
+    "planId": "a17c2ddb-fe97-498a-a465-36f26325848c",
+    "journalPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\artifacts\\ascet-permission-live\\20260816-102612\\runtime-artifacts\\mutation-journals\\501961e19150c0899228a7a7a374d1c32df5f2c9df05f5181819fbbeb2fb0591\\94765abc4ad34e755f59507768a0c286ee5b9b032d191dca9551df8bb8907d49\\583c679a58f0a9b59400e4048a47977c0ec15249bad86d1f878510ebbc1527dd.json",
+    "beforeSnapshotFingerprint": "sha256:c1dd1d9c4809a222f408af076a2647e5acfd26e884a1fae87d76e7b23aecbefe",
+    "desiredFingerprint": "sha256:9bf0e70081a5d3a4c0c8933371a09adab3a443ee1ae032995fe6073705fe97e5",
+    "detectedAt": "2026-08-16T02:37:57.417Z",
+    "evidence": {
+      "bridgeEntered": true,
+      "backendResponseReceived": true,
+      "mutationStarted": true
+    }
+  },
+  "journalPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\artifacts\\ascet-permission-live\\20260816-102612\\runtime-artifacts\\mutation-journals\\501961e19150c0899228a7a7a374d1c32df5f2c9df05f5181819fbbeb2fb0591\\94765abc4ad34e755f59507768a0c286ee5b9b032d191dca9551df8bb8907d49\\583c679a58f0a9b59400e4048a47977c0ec15249bad86d1f878510ebbc1527dd.json",
+  "before": {
+    "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+    "componentOid": "040g060kg0001k070o6g5us4p0eg2",
+    "componentKind": "StateMachine",
+    "diagramName": "Main",
+    "diagramExists": false,
+    "requiredMethod": "AddAction",
+    "requiredMethodAvailable": false,
+    "addDiagramAvailable": true,
+    "editable": false,
+    "existingMethod": null,
+    "plannedEffects": [
+      {
+        "kind": "create_diagram",
+        "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl::Main"
+      },
+      {
+        "kind": "create_method",
+        "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl::PiForcedFailure",
+        "methodKind": "Action"
+      }
+    ]
+  },
+  "current": {
+    "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+    "componentOid": "040g060kg0001k070o6g5us4p0eg2",
+    "componentKind": "StateMachine",
+    "diagramName": "Main",
+    "diagramExists": false,
+    "requiredMethod": "AddAction",
+    "requiredMethodAvailable": false,
+    "addDiagramAvailable": true,
+    "editable": false,
+    "existingMethod": null,
+    "plannedEffects": [
+      {
+        "kind": "create_diagram",
+        "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl::Main"
+      },
+      {
+        "kind": "create_method",
+        "target": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl::PiForcedFailure",
+        "methodKind": "Action"
+      }
+    ]
+  },
+  "evidenceFingerprint": "sha256:87aa588266895b7d4c357bbbdddfa15ed5f4441b1865d59ca4fb057bad88e053",
+  "guardAfter": {
+    "version": 1,
+    "databaseFingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c",
+    "targetOid": "040g060kg0001k070o6g5us4p0eg2",
+    "targetKind": "statemachine",
+    "canonicalPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+    "generation": 3,
+    "status": "clear",
+    "reason": "unknown_outcome",
+    "operation": "create_method",
+    "operationId": "guarded_create_method",
+    "planId": "a17c2ddb-fe97-498a-a465-36f26325848c",
+    "journalPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\artifacts\\ascet-permission-live\\20260816-102612\\runtime-artifacts\\mutation-journals\\501961e19150c0899228a7a7a374d1c32df5f2c9df05f5181819fbbeb2fb0591\\94765abc4ad34e755f59507768a0c286ee5b9b032d191dca9551df8bb8907d49\\583c679a58f0a9b59400e4048a47977c0ec15249bad86d1f878510ebbc1527dd.json",
+    "beforeSnapshotFingerprint": "sha256:c1dd1d9c4809a222f408af076a2647e5acfd26e884a1fae87d76e7b23aecbefe",
+    "desiredFingerprint": "sha256:9bf0e70081a5d3a4c0c8933371a09adab3a443ee1ae032995fe6073705fe97e5",
+    "detectedAt": "2026-08-16T02:37:57.417Z",
+    "evidence": {
+      "bridgeEntered": true,
+      "backendResponseReceived": true,
+      "mutationStarted": true
+    },
+    "reconciliationMode": "rollback_to_before",
+    "reconciliationStartedAt": "2026-08-16T02:49:27.170Z",
+    "reconciledAt": "2026-08-16T02:49:27.180Z",
+    "reconciliationEvidenceFingerprint": "sha256:87aa588266895b7d4c357bbbdddfa15ed5f4441b1865d59ca4fb057bad88e053"
+  }
+}

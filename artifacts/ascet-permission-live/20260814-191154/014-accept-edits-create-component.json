@@ -1,0 +1,283 @@
+{
+  "stage": "accept-edits-create-component",
+  "startedAt": "2026-08-14T11:20:54.869Z",
+  "finishedAt": "2026-08-14T11:23:45.601Z",
+  "request": {
+    "toolName": "ascet_edit",
+    "params": {
+      "action": "create_component",
+      "componentPath": "DEMO\\__pi_permission_smoke__20260814-191154\\EditableClass",
+      "kind": "class",
+      "language": "ESDL",
+      "ifExists": "fail",
+      "intent": "apply"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"status\": \"ok\",\n  \"permission\": {\n    \"mode\": \"acceptEdits\",\n    \"decision\": \"allow\",\n    \"risk\": \"safe\",\n    \"reason\": \"Accept Edits allows safe, single-target, verified edits.\"\n  },\n  \"preflight\": {\n    \"status\": \"passed\",\n    \"evidence\": {\n      \"version\": 1,\n      \"action\": \"create_component\",\n      \"paramsFingerprint\": \"2c432fd1a4d6233e70e1191fb23a7b20c94d741a2fd0d500cee7127eb9bf7eee\",\n      \"database\": {\n        \"path\": \"C:/Repo/F05_IPB_L2_0429\",\n        \"fingerprint\": \"71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c\"\n      },\n      \"target\": {\n        \"path\": \"DEMO/__pi_permission_smoke__20260814-191154\",\n        \"oid\": \"040g00001g001qg710719628581g0\",\n        \"kind\": \"folder\"\n      },\n      \"impact\": {\n        \"complete\": true,\n        \"sharedObject\": false,\n        \"ownerPath\": \"DEMO/__pi_permission_smoke__20260814-191154\",\n        \"fingerprint\": \"sha256:3f1d19d3dc7095d2d4e371b71602a282da2af9c4bb0cb70764a4897f4ff8a79a\"\n      },\n      \"capability\": {\n        \"status\": \"supported\",\n        \"operation\": \"registered_guarded_operation_preflight\",\n        \"evidence\": {\n          \"status\": \"supported\",\n          \"source\": \"registered_closed_operation\"\n        }\n      },\n      \"editability\": {\n        \"applicable\": false,\n        \"status\": \"not_applicable\",\n        \"canRequestEditable\": false\n      },\n      \"effects\": [\n        {\n          \"kind\": \"create_component\",\n          \"target\": \"DEMO/__pi_permission_smoke__20260814-191154\",\n          \"description\": \"create_component: DEMO\\\\__pi_permission_smoke__20260814-191154\"\n        }\n      ],\n      \"verification\": {\n        \"available\": true,\n        \"operation\": \"create_component_readback\",\n        \"target\": {\n          \"path\": \"DEMO/__pi_permission_smoke__20260814-191154\"\n        }\n      },\n      \"noOp\": false,\n      \"generatedAt\": \"2026-08-14T11:23:44.579Z\",\n      \"approvalMaterialFingerprint\": \"f8bb5fd59e72a297f836e073d5a9da370b47a172488f0d5554b6ec30a4f29d67\"\n    }\n  },\n  \"editability\": {\n    \"status\": \"not_applicable\"\n  },\n  \"mutation\": {\n    \"status\": \"applied\"\n  },\n  \"verification\": {\n    \"status\": \"passed\"\n  },\n  \"audit\": {\n    \"revalidatedAt\": \"2026-08-14T11:23:44.579Z\",\n    \"preflightFingerprint\": \"2c432fd1a4d6233e70e1191fb23a7b20c94d741a2fd0d500cee7127eb9bf7eee\",\n    \"approvalMaterialFingerprint\": \"f8bb5fd59e72a297f836e073d5a9da370b47a172488f0d5554b6ec30a4f29d67\"\n  },\n  \"bridge\": {\n    \"beforeBridge\": true,\n    \"bridgeEntered\": true,\n    \"backendResponseReceived\": true\n  },\n  \"recovery\": {\n    \"required\": false\n  }\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "ok",
+        "verified": true,
+        "data": {
+          "changed": {
+            "operationName": "create_component",
+            "sequenceNumber": 1,
+            "writeSucceeded": true,
+            "summary": "Created ESDL class DEMO\\__pi_permission_smoke__20260814-191154\\EditableClass.",
+            "payload": {
+              "componentPath": "DEMO\\__pi_permission_smoke__20260814-191154\\EditableClass",
+              "folderPath": "DEMO\\__pi_permission_smoke__20260814-191154",
+              "componentName": "EditableClass",
+              "kind": "class",
+              "languageKind": "ESDL",
+              "created": true,
+              "alreadyExisted": false,
+              "verifyReadbackRequested": true,
+              "rollbackOnFailureRequested": false,
+              "readbackVerified": true,
+              "summary": "Created ESDL class DEMO\\__pi_permission_smoke__20260814-191154\\EditableClass.",
+              "expectedDefaultScaffold": {
+                "verified": false,
+                "generatedItems": [
+                  {
+                    "kind": "method",
+                    "name": "calc"
+                  }
+                ],
+                "defaultEntryMethod": "calc"
+              }
+            }
+          },
+          "verification": {
+            "mode": "automatic_readback",
+            "source": "write_command",
+            "required": true,
+            "requested": true,
+            "verified": true,
+            "status": "passed"
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      },
+      "raw": {
+        "ok": true,
+        "data": {
+          "type": "response",
+          "protocolVersion": 1,
+          "ok": true,
+          "result": {
+            "operationName": "create_component",
+            "sequenceNumber": 1,
+            "writeSucceeded": true,
+            "summary": "Created ESDL class DEMO\\__pi_permission_smoke__20260814-191154\\EditableClass.",
+            "payload": {
+              "componentPath": "DEMO\\__pi_permission_smoke__20260814-191154\\EditableClass",
+              "folderPath": "DEMO\\__pi_permission_smoke__20260814-191154",
+              "componentName": "EditableClass",
+              "kind": "class",
+              "languageKind": "ESDL",
+              "created": true,
+              "alreadyExisted": false,
+              "verifyReadbackRequested": true,
+              "rollbackOnFailureRequested": false,
+              "readbackVerified": true,
+              "summary": "Created ESDL class DEMO\\__pi_permission_smoke__20260814-191154\\EditableClass.",
+              "expectedDefaultScaffold": {
+                "verified": false,
+                "generatedItems": [
+                  {
+                    "kind": "method",
+                    "name": "calc"
+                  }
+                ],
+                "defaultEntryMethod": "calc"
+              }
+            },
+            "verification": {
+              "requested": true,
+              "attempted": true,
+              "succeeded": true,
+              "summary": "component_exists",
+              "details": {}
+            }
+          },
+          "error": null,
+          "meta": {
+            "bridgePid": 27652,
+            "bridgeGeneration": "3b9403ea-0763-403d-94e5-613e9f29c5fd",
+            "durationMs": 514,
+            "sessionPolicy": "fresh_session",
+            "mutationStarted": true,
+            "mode": "exec",
+            "operation": "create_component"
+          }
+        },
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "create_component",
+            "DEMO\\__pi_permission_smoke__20260814-191154\\EditableClass",
+            "--kind",
+            "class",
+            "--language",
+            "ESDL",
+            "--if-exists",
+            "fail",
+            "--verify-readback",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "write",
+          "mutatesDatabase": true
+        },
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"operationName\":\"create_component\",\"sequenceNumber\":1,\"writeSucceeded\":true,\"summary\":\"Created ESDL class DEMO\\\\__pi_permission_smoke__20260814-191154\\\\EditableClass.\",\"payload\":{\"componentPath\":\"DEMO\\\\__pi_permission_smoke__20260814-191154\\\\EditableClass\",\"folderPath\":\"DEMO\\\\__pi_permission_smoke__20260814-191154\",\"componentName\":\"EditableClass\",\"kind\":\"class\",\"languageKind\":\"ESDL\",\"created\":true,\"alreadyExisted\":false,\"verifyReadbackRequested\":true,\"rollbackOnFailureRequested\":false,\"readbackVerified\":true,\"summary\":\"Created ESDL class DEMO\\\\__pi_permission_smoke__20260814-191154\\\\EditableClass.\",\"expectedDefaultScaffold\":{\"verified\":false,\"generatedItems\":[{\"kind\":\"method\",\"name\":\"calc\"}],\"defaultEntryMethod\":\"calc\"}},\"verification\":{\"requested\":true,\"attempted\":true,\"succeeded\":true,\"summary\":\"component_exists\",\"details\":{}}},\"error\":null,\"meta\":{\"bridgePid\":27652,\"bridgeGeneration\":\"3b9403ea-0763-403d-94e5-613e9f29c5fd\",\"durationMs\":514,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":true,\"mode\":\"exec\",\"operation\":\"create_component\"}}\r\n",
+        "stderr": "",
+        "exitCode": 0,
+        "timedOut": false,
+        "aborted": false,
+        "operationId": "create_component"
+      },
+      "observations": {
+        "invalidated": []
+      },
+      "verification": {
+        "mode": "automatic_readback",
+        "source": "write_command",
+        "required": true,
+        "requested": true,
+        "verified": true,
+        "status": "passed"
+      },
+      "mutationResult": {
+        "status": "ok",
+        "permission": {
+          "mode": "acceptEdits",
+          "decision": "allow",
+          "risk": "safe",
+          "reason": "Accept Edits allows safe, single-target, verified edits."
+        },
+        "preflight": {
+          "status": "passed",
+          "evidence": {
+            "version": 1,
+            "action": "create_component",
+            "paramsFingerprint": "2c432fd1a4d6233e70e1191fb23a7b20c94d741a2fd0d500cee7127eb9bf7eee",
+            "database": {
+              "path": "C:\\Repo\\F05_IPB_L2_0429",
+              "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+            },
+            "target": {
+              "path": "DEMO\\__pi_permission_smoke__20260814-191154",
+              "oid": "040g00001g001qg710719628581g0",
+              "kind": "folder"
+            },
+            "impact": {
+              "complete": true,
+              "sharedObject": false,
+              "ownerPath": "DEMO\\__pi_permission_smoke__20260814-191154",
+              "affectedProjects": [],
+              "fingerprint": "sha256:3f1d19d3dc7095d2d4e371b71602a282da2af9c4bb0cb70764a4897f4ff8a79a"
+            },
+            "capability": {
+              "status": "supported",
+              "operation": "registered_guarded_operation_preflight",
+              "evidence": {
+                "status": "supported",
+                "source": "registered_closed_operation"
+              }
+            },
+            "editability": {
+              "applicable": false,
+              "status": "not_applicable",
+              "canRequestEditable": false
+            },
+            "effects": [
+              {
+                "kind": "create_component",
+                "target": "DEMO\\__pi_permission_smoke__20260814-191154",
+                "description": "create_component: DEMO\\__pi_permission_smoke__20260814-191154"
+              }
+            ],
+            "verification": {
+              "available": true,
+              "operation": "create_component_readback",
+              "target": {
+                "path": "DEMO\\__pi_permission_smoke__20260814-191154"
+              }
+            },
+            "riskModifiers": [],
+            "noOp": false,
+            "generatedAt": "2026-08-14T11:23:44.579Z",
+            "approvalMaterialFingerprint": "f8bb5fd59e72a297f836e073d5a9da370b47a172488f0d5554b6ec30a4f29d67"
+          }
+        },
+        "editability": {
+          "status": "not_applicable"
+        },
+        "mutation": {
+          "status": "applied"
+        },
+        "verification": {
+          "status": "passed"
+        },
+        "audit": {
+          "revalidatedAt": "2026-08-14T11:23:44.579Z",
+          "preflightFingerprint": "2c432fd1a4d6233e70e1191fb23a7b20c94d741a2fd0d500cee7127eb9bf7eee",
+          "approvalMaterialFingerprint": "f8bb5fd59e72a297f836e073d5a9da370b47a172488f0d5554b6ec30a4f29d67"
+        },
+        "bridge": {
+          "beforeBridge": true,
+          "bridgeEntered": true,
+          "backendResponseReceived": true
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      },
+      "tool": "ascet_edit",
+      "action": "create_component",
+      "command": {
+        "logicalCommandId": "AscetCreateComponent",
+        "backendCommandId": "AscetCreateComponent",
+        "operation": "create_component"
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "create_component",
+            "DEMO\\__pi_permission_smoke__20260814-191154\\EditableClass",
+            "--kind",
+            "class",
+            "--language",
+            "ESDL",
+            "--if-exists",
+            "fail",
+            "--verify-readback",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "write",
+          "mutatesDatabase": true
+        },
+        "exitCode": 0,
+        "timedOut": false,
+        "stderr": ""
+      }
+    }
+  }
+}

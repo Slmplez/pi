@@ -45,14 +45,29 @@ function createObservation(root: string, componentPath: string, resultId: string
 }
 
 function createExecution(request: AscetCliRequest, exitCode: number): AscetCliExecutionResult {
-	const ok = exitCode === 0 || exitCode === 2;
+	const operation = request.args[1];
+	const result =
+		operation === "get_database_identity"
+			? { database: { name: "DB", path: "C:/Repo/DB" } }
+			: operation === "get_tree"
+				? {
+						items: [{ path: "DEMO\\A", oid: "C-1", kind: "class" }],
+						coverage: { status: "complete_for_scope", completeness: "complete", collectorCompleted: true },
+						truncated: false,
+						database: { name: "DB", path: "C:/Repo/DB" },
+					}
+				: operation === "component_editable_check"
+					? true
+					: { results: exitCode === 2 ? [{ ok: false, error: { code: "failed" } }] : [{ ok: true }] };
+	const isBatch = request.args[0] === "batch";
+	const actualExitCode = isBatch ? exitCode : 0;
 	return {
-		exitCode,
+		exitCode: actualExitCode,
 		stdout: JSON.stringify({
-			ok,
-			result: { results: exitCode === 2 ? [{ ok: false, error: { code: "failed" } }] : [{ ok: true }] },
+			ok: actualExitCode === 0 || actualExitCode === 2,
+			result,
 			error: null,
-			meta: { mode: "batch", operation: "set_method_code" },
+			meta: { mode: isBatch ? "batch" : "exec", operation },
 		}),
 		stderr: "",
 		timedOut: false,
@@ -61,6 +76,53 @@ function createExecution(request: AscetCliRequest, exitCode: number): AscetCliEx
 }
 
 describe("ASCET batch write outcome", () => {
+	test("returns preview as a successful non-mutating preflight outcome", async () => {
+		const environment = createEnvironment();
+		const codeFile = join(environment.root, "Main.esdl");
+		writeFileSync(codeFile, "return;", "utf8");
+		let confirmations = 0;
+		let batchCalls = 0;
+		try {
+			const result = await runApprovedAscetBatchWrite(
+				{
+					operation: "batch_set_method_code",
+					requests: [{ componentPath: "DEMO/A", methodName: "Main", codeFile }],
+					intent: "preview",
+				},
+				{
+					cwd: environment.root,
+					env: environment.env,
+					executeCli: async (request) => {
+						if (request.args[0] === "batch") batchCalls++;
+						return createExecution(request, 0);
+					},
+				},
+				{
+					hasUI: true,
+					ui: {
+						confirm: async () => {
+							confirmations++;
+							return true;
+						},
+					},
+				},
+			);
+
+			assert.equal(result.ok, true);
+			assert.equal(result.error, undefined);
+			assert.equal(result.exitCode, 0);
+			assert.equal(confirmations, 0);
+			assert.equal(batchCalls, 0);
+			assert.equal(result.mutationResult?.status, "ok");
+			assert.equal(result.mutationResult?.mutation.status, "not_started");
+			assert.equal(result.mutationResult?.verification.status, "not_applicable");
+			const outcome = createBatchWriteOutcome(result);
+			assert.equal(outcome.status, "preflight");
+		} finally {
+			environment.cleanup();
+		}
+	});
+
 	test("classifies the runtime editable gate as blocked without extra fields", () => {
 		const outcome = createBatchWriteOutcome({
 			ok: false,
@@ -118,12 +180,17 @@ describe("ASCET batch write observation invalidation", () => {
 				{
 					operation: "batch_set_method_code",
 					requests: [{ componentPath: "DEMO/A", methodName: "Main", codeFile }],
-					executeWrite: true,
+					intent: "apply",
 				},
 				{ cwd: environment.root, env: environment.env, executeCli: async (request) => createExecution(request, 2) },
 				approvingContext,
 			);
 			assert.equal(result.exitCode, 2);
+			assert.ok(result.mutationResult);
+			assert.equal(result.mutationResult.status, "unknown");
+			assert.equal(result.mutationResult.mutation.status, "unknown");
+			assert.equal(result.mutationResult.verification.status, "failed");
+			assert.equal(result.mutationResult.recovery.required, true);
 			const remaining = new AscetObservationStore({
 				root: environment.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT,
 			}).invalidate({ componentPath: "DEMO\\A" });

@@ -1,0 +1,7 @@
+﻿{
+    "componentPath":  "PI_LIVE_FIX_20260812_C42293AC\\ClassUnderTest",
+    "fixtureRoot":  "PI_LIVE_FIX_20260812_C42293AC",
+    "startedAt":  "2026-08-12T12:53:07.1239271+08:00",
+    "runId":  "LIVE_TOOLS_20260812-125307_C42293AC",
+    "bridge":  "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe"
+}

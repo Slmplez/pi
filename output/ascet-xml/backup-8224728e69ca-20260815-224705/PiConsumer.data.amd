@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ComponentData toolVersion="V6.1.5_2.2.0" schemaVersion="6.1.0.0">
+	<DataSet name="PiConsumer" OID="_040g00001g001qg7107gc16v0et1c" default="false" classConfig="true">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-15T14:47:06" timeStampCounter="398"/>
+	</DataSet>
+	<DataSet name="Data" OID="_040g00001g001qg7107gc16v0erhc" default="true" classConfig="false">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-15T14:47:05" timeStampCounter="397"/>
+		<DataEntry elementName="C_PI_ChainTest_20260815223421691" elementOID="_040g00001g001qg7107gc18b8ivhc">
+			<DataVariant name="default">
+				<Dependency>
+					<Parameter formalName="P_PI_ChainTest_20260815223421691" formalOID="_040g015qb9filsumhi8a28d1vrq4a" valueName="P_PI_ChainTest_20260815223421691" valueOID="_040g00001g001qg7107gc189vev1c"/>
+				</Dependency>
+			</DataVariant>
+		</DataEntry>
+		<DataEntry elementName="C_PI_Rollback_20260815223421691" elementOID="_040g00001g001qg7107gc1arir4hc">
+			<DataVariant name="default">
+				<ScalarType>
+					<Numeric value="0.0"/>
+				</ScalarType>
+			</DataVariant>
+		</DataEntry>
+	</DataSet>
+	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+		<SignedInfo>
+			<CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+			<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+			<Reference>
+				<Transforms>
+					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+				</Transforms>
+				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+				<DigestValue>u36jyQ4bWzzcMdcRae3KovSuXlY=</DigestValue>
+			</Reference>
+		</SignedInfo>
+		<SignatureValue>U/sukkkqPCsBS26o3qO2nFbpyyR/9Se62kcodupCA5rEJeUyNSN9QSjrZjvpuIYB
+LpvLGDXfzKaGOKOAI1Fhd7u07t2qO2+bkc2xPaqUw824G+aSv8GQUSf9q391Lwqe
+ZzfBG5gXZD1PvNvSy7skBgkxV1zGYtgS9zSvct9ziQ6k40Fcad6dgxcXMrCVhBUR
+XCWjJmPYxb5K40K/NOc72BBZr9TNWMoPOSzxuIfyE9G8jOwOr9vi21qUrE5CeUi9
+Pz1d0aNrzCPMCGoqcHYcrpZ9iPeAIIlCeqfWZE9kNUM3A7lsP/ukqpyex/nlyR0Y
+71qR0qD+rMV2owlXddJ2cA==</SignatureValue>
+		<KeyInfo>
+			<KeyName>Etas Ascet Verification</KeyName>
+		</KeyInfo>
+	</Signature>
+</ComponentData>

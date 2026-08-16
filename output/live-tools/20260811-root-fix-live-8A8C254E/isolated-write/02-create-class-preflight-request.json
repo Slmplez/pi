@@ -1,0 +1,7 @@
+{
+  "action": "create_component",
+  "componentPath": "PI_LIVE_ROOTFIX_20260811_8A8C254E\\ClassUnderTest",
+  "kind": "class",
+  "language": "ESDL",
+  "executeWrite": false
+}

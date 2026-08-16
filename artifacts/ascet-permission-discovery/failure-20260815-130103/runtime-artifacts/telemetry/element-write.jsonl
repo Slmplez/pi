@@ -1,0 +1,1 @@
+{"version":2,"timestamp":"2026-08-15T05:03:51.857Z","operation":"create_method","phase":"execute","outcome":"plan_ready","durationMs":81950,"mutationStatus":"not_started","bridgeEntered":false,"backendResponseReceived":false,"mutationStarted":false,"writesPerformed":false,"cleanupRequired":false,"writeClass":"read_only"}

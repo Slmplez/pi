@@ -1,0 +1,141 @@
+{
+  "generated_at": "2026-04-01T03:08:16.706709Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\OperationHintsEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\OperationHintsEnglishUS",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\OperationHintsEnglishUS\\markdown",
+  "input_html_count": 21,
+  "converted_html_count": 21,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 12,
+  "toc_entries_count": 23,
+  "index_entries_count": 25,
+  "index_required": true,
+  "mappings": [
+    {
+      "html_rel_path": "keyboard_commands_comp_manager.htm",
+      "md_rel_path": "keyboard_commands_comp_manager.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "keyboard_commands_editors.htm",
+      "md_rel_path": "keyboard_commands_editors.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Keyboard_Commands_in_Numerical_Display_Bit__Display_Bar_Display.htm",
+      "md_rel_path": "Keyboard_Commands_in_Numerical_Display_Bit__Display_Bar_Display.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Keyboard_Commands_in_Oscilloscope_and_Recorder.htm",
+      "md_rel_path": "Keyboard_Commands_in_Oscilloscope_and_Recorder.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Keyboard_Commands_in_the_1D_2D_Graphical_Editors.htm",
+      "md_rel_path": "Keyboard_Commands_in_the_1D_2D_Graphical_Editors.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Keyboard_Commands_in_the_3D_Graphical_Editor.htm",
+      "md_rel_path": "Keyboard_Commands_in_the_3D_Graphical_Editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Keyboard_Commands_in_the_AS_Editor.htm",
+      "md_rel_path": "Keyboard_Commands_in_the_AS_Editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Keyboard_Commands_in_the_C_Code___ESDL_Editors.htm",
+      "md_rel_path": "Keyboard_Commands_in_the_C_Code___ESDL_Editors.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Keyboard_Commands_in_the_Data___Implementation_Editors_for_Components_and_Projects.htm",
+      "md_rel_path": "Keyboard_Commands_in_the_Data___Implementation_Editors_for_Components_and_Projects.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Keyboard_Commands_in_the_Table_Editor.htm",
+      "md_rel_path": "Keyboard_Commands_in_the_Table_Editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "keyboard_commands_monitor_window.htm",
+      "md_rel_path": "keyboard_commands_monitor_window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "keyboard_commands_offline.htm",
+      "md_rel_path": "keyboard_commands_offline.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "measure_calibration_windows_general.htm",
+      "md_rel_path": "measure_calibration_windows_general.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "OH_calibration_windows.htm",
+      "md_rel_path": "OH_calibration_windows.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "OH_KeyboardCommands_Editors.htm",
+      "md_rel_path": "OH_KeyboardCommands_Editors.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "OH_KeyboardControl.htm",
+      "md_rel_path": "OH_KeyboardControl.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "OH_measure_windows.htm",
+      "md_rel_path": "OH_measure_windows.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "OH_OperationHints_Overview.htm",
+      "md_rel_path": "OH_OperationHints_Overview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "OH_Staged_Build_Settings.htm",
+      "md_rel_path": "OH_Staged_Build_Settings.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "OH_Use_Staged_Build.htm",
+      "md_rel_path": "OH_Use_Staged_Build.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Operation_Using_the_Keyboard.htm",
+      "md_rel_path": "Operation_Using_the_Keyboard.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

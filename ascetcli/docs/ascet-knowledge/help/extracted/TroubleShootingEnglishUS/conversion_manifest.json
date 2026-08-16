@@ -1,0 +1,285 @@
+{
+  "generated_at": "2026-04-01T03:08:37.899628Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\TroubleShootingEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\TroubleShootingEnglishUS",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\TroubleShootingEnglishUS\\markdown",
+  "input_html_count": 45,
+  "converted_html_count": 45,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 8,
+  "toc_entries_count": 54,
+  "index_entries_count": 86,
+  "index_required": true,
+  "mappings": [
+    {
+      "html_rel_path": "ASCET_does_not_compute_correctly_when_using_temporary_variables.htm",
+      "md_rel_path": "ASCET_does_not_compute_correctly_when_using_temporary_variables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Busy_ASCET.htm",
+      "md_rel_path": "Busy_ASCET.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Conversion_of_Database.htm",
+      "md_rel_path": "Conversion_of_Database.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Double_Sequence_Number.htm",
+      "md_rel_path": "Double_Sequence_Number.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Error_Message_2.htm",
+      "md_rel_path": "Error_Message_2.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Error_Messages_1.htm",
+      "md_rel_path": "Error_Messages_1.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Limit_Size_Database.htm",
+      "md_rel_path": "Limit_Size_Database.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Loop_Detected_at_Block.htm",
+      "md_rel_path": "Loop_Detected_at_Block.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Method_Has_No_Argument.htm",
+      "md_rel_path": "Method_Has_No_Argument.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Offline_Experiment_Runs_Out_Time.htm",
+      "md_rel_path": "Offline_Experiment_Runs_Out_Time.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Problems_External_Experiment_Target.htm",
+      "md_rel_path": "Problems_External_Experiment_Target.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Problems_Graphics_Cards.htm",
+      "md_rel_path": "Problems_Graphics_Cards.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Return_Value_Does_not_Belong_Name.htm",
+      "md_rel_path": "Return_Value_Does_not_Belong_Name.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Some_ASCET_Experiments_do_not_End_or_do_not_Run_Properly.htm",
+      "md_rel_path": "Some_ASCET_Experiments_do_not_End_or_do_not_Run_Properly.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_Application_Mode_Not_Specified.htm",
+      "md_rel_path": "TS_Application_Mode_Not_Specified.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_Application_Modes_Missing.htm",
+      "md_rel_path": "TS_Application_Modes_Missing.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_Argument_of_Method_Not_Used.htm",
+      "md_rel_path": "TS_Argument_of_Method_Not_Used.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_Black_Icons_in_ASCET.htm",
+      "md_rel_path": "TS_Black_Icons_in_ASCET.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_CompilationReturnsUnexplainableErrorMessages_or_DoesNotEnd.htm",
+      "md_rel_path": "TS_CompilationReturnsUnexplainableErrorMessages_or_DoesNotEnd.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_DocumentationGeneration_RTFformat_does_not_work_properly.htm",
+      "md_rel_path": "TS_DocumentationGeneration_RTFformat_does_not_work_properly.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_FixedPointCode_for_NonLinearFormula.htm",
+      "md_rel_path": "TS_FixedPointCode_for_NonLinearFormula.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_Formula_in_Implementation_unknown.htm",
+      "md_rel_path": "TS_Formula_in_Implementation_unknown.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_General_Hints.htm",
+      "md_rel_path": "TS_General_Hints.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_Integer_Interval_of_Variable.htm",
+      "md_rel_path": "TS_Integer_Interval_of_Variable.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_IntervalMismatch_in_Assignment.htm",
+      "md_rel_path": "TS_IntervalMismatch_in_Assignment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_L1CommunicationErrors_occur_during_OnlineExperiments.htm",
+      "md_rel_path": "TS_L1CommunicationErrors_occur_during_OnlineExperiments.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_Last_Operation_.htm",
+      "md_rel_path": "TS_Last_Operation_.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_Literal_Value_Does_Not_Fit_Type.htm",
+      "md_rel_path": "TS_Literal_Value_Does_Not_Fit_Type.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_Method_Not_Defined_as_Public.htm",
+      "md_rel_path": "TS_Method_Not_Defined_as_Public.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_Missing_Trigger_Event.htm",
+      "md_rel_path": "TS_Missing_Trigger_Event.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_Multiple_Prior_for_Trigger.htm",
+      "md_rel_path": "TS_Multiple_Prior_for_Trigger.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_NameNotDefined.htm",
+      "md_rel_path": "TS_NameNotDefined.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_NeedBinding_for_ImportedElement.htm",
+      "md_rel_path": "TS_NeedBinding_for_ImportedElement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_Overview_CGM.htm",
+      "md_rel_path": "TS_Overview_CGM.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_Physical_Interval_of_Divisor.htm",
+      "md_rel_path": "TS_Physical_Interval_of_Divisor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_Problems_with_ASCET.htm",
+      "md_rel_path": "TS_Problems_with_ASCET.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_Specification_of_IF_BLock.htm",
+      "md_rel_path": "TS_Specification_of_IF_BLock.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_Start_State_Needed_to_State_Machine.htm",
+      "md_rel_path": "TS_Start_State_Needed_to_State_Machine.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_Trouble_Shooting.htm",
+      "md_rel_path": "TS_Trouble_Shooting.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_Type_Mismatch_Name.htm",
+      "md_rel_path": "TS_Type_Mismatch_Name.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_Type_Mismatch_with_Casting.htm",
+      "md_rel_path": "TS_Type_Mismatch_with_Casting.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_Unbalanced_Number.htm",
+      "md_rel_path": "TS_Unbalanced_Number.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "TS_Unreachable_State.htm",
+      "md_rel_path": "TS_Unreachable_State.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Type_Mismatch.htm",
+      "md_rel_path": "Type_Mismatch.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Unpredictable_Effects_when_Using_Complex_Assignments.htm",
+      "md_rel_path": "Unpredictable_Effects_when_Using_Complex_Assignments.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

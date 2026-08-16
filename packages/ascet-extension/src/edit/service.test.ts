@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, test } from "node:test";
@@ -21,6 +21,12 @@ function completeTreeExecution(request: AscetCliRequest): AscetCliExecutionResul
 			result: {
 				items: [
 					{ path: "DEMO", oid: "F-1", kind: "folder" },
+					{ path: "DEMO\\New", oid: "F-2", kind: "folder" },
+					{ path: "DEMO\\C", oid: "C-2", kind: "module" },
+					{ path: "DEMO\\M", oid: "M-1", kind: "module" },
+					{ path: "DEMO\\SM", oid: "SM-1", kind: "statemachine" },
+					{ path: "DEMO\\E", oid: "E-1", kind: "enumeration" },
+					{ path: "DEMO\\P", oid: "P-1", kind: "project" },
 					{ path: "Package\\Shared\\Controller", oid: "C-1", kind: "module" },
 					{ path: "DEMO\\Project::Controller", oid: "C-1", kind: "module" },
 				],
@@ -40,12 +46,76 @@ function completeTreeExecution(request: AscetCliRequest): AscetCliExecutionResul
 	};
 }
 
+function incompleteTreeExecution(request: AscetCliRequest): AscetCliExecutionResult {
+	return {
+		exitCode: 0,
+		stdout: JSON.stringify({
+			ok: true,
+			result: {
+				items: [],
+				coverage: { status: "partial", completeness: "partial", collectorCompleted: false },
+				truncated: false,
+				database: { name: "DB", path: "C:/Repo/DB" },
+			},
+			error: null,
+		}),
+		stderr: "",
+		timedOut: false,
+		request,
+	};
+}
+
 function directMutationExecution(request: AscetCliRequest): AscetCliExecutionResult {
 	if (request.args[1] === "get_tree") return completeTreeExecution(request);
+	const operation = request.args[1];
 	const result =
-		request.args[1] === "get_database_identity"
+		operation === "get_database_identity"
 			? { database: { name: "DB", path: "C:/Repo/DB" } }
-			: { writeSucceeded: true, verifyReadbackRequested: true, readbackVerified: true };
+			: operation === "preflight_create_folder"
+				? {
+						folderPath: request.args[2],
+						databasePath: "C:/Repo/DB",
+						existing: ["DEMO"],
+						willCreate: [request.args[2]],
+						conflicts: [],
+						capability: {
+							status: "supported",
+							methods: ["AddFolder(String)"],
+							saveAvailable: true,
+							readbackAvailable: true,
+						},
+						noOp: false,
+					}
+				: operation === "preflight_create_method"
+					? {
+							databasePath: "C:/Repo/DB",
+							componentPath: request.args[2],
+							componentOid: "C-1",
+							componentKind: "StateMachine",
+							languageKind: "ESDL",
+							diagramName: "Main",
+							diagramExists: true,
+							diagramRuntimeType: "AscetDiagram",
+							requiredMethod: "AddAction",
+							requiredMethodAvailable: true,
+							editable: true,
+							readbackAvailable: true,
+							noOp: false,
+							capability: { status: "supported" },
+						}
+					: operation === "component_editable_check"
+						? true
+						: operation === "guarded_create_method"
+							? {
+									success: true,
+									initiallyEditable: true,
+									editabilityAcquired: false,
+									primaryMutationStarted: true,
+									mutationStatus: "applied",
+									verificationStatus: "passed",
+									method: { readbackVerified: true },
+								}
+							: { writeSucceeded: true, verifyReadbackRequested: true, readbackVerified: true };
 	return {
 		exitCode: 0,
 		stdout: JSON.stringify({ ok: true, result, error: null }),
@@ -66,7 +136,8 @@ describe("ASCET edit service", () => {
 			getAscetEditActionId({
 				action: "apply_element_spec",
 				componentPath: "DEMO/C",
-				intent: "create",
+				elementIntent: "create",
+				intent: "preview",
 				elements: [],
 			}),
 			"apply_element_spec",
@@ -89,7 +160,7 @@ describe("ASCET edit service", () => {
 	test("rejects unknown and ambiguous discriminators before dispatch", async () => {
 		for (const params of [
 			{ action: "not_a_real_edit" },
-			{ action: "not_a_real_edit", mode: "check", executeWrite: true },
+			{ action: "not_a_real_edit", mode: "check", intent: "apply" },
 			{ action: undefined, mode: "check" },
 			{ mode: "restore", componentPath: "DEMO/C" },
 			{ action: "create_folder", mode: "check", folderPath: "DEMO/New" },
@@ -115,7 +186,7 @@ describe("ASCET edit service", () => {
 				action: "create_folder",
 				folderPath: "DEMO/New",
 				verifyReadback: false,
-				executeWrite: true,
+				intent: "apply",
 			},
 			{
 				cwd: process.cwd(),
@@ -137,7 +208,7 @@ describe("ASCET edit service", () => {
 	test("does not dispatch an invalid action even when mode is valid", async () => {
 		let dispatches = 0;
 		const result = await runAscetEdit(
-			{ action: "not_a_real_edit", mode: "check", executeWrite: true },
+			{ action: "not_a_real_edit", mode: "check", intent: "apply" },
 			{
 				cwd: process.cwd(),
 				executeCli: async () => {
@@ -178,26 +249,52 @@ describe("ASCET edit service", () => {
 		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-all-preflight-"));
 		try {
 			const payloads: AscetMutationParams[] = [
-				{ action: "create_folder", folderPath: "DEMO/New" },
-				{ action: "create_component", componentPath: "DEMO/New/C", kind: "class" },
-				{ action: "create_method", componentPath: "DEMO/C", methodName: "calc" },
-				{ action: "set_method_signature", componentPath: "DEMO/C", methodName: "calc", returnType: "cont" },
-				{ action: "delete_component", componentPath: "DEMO/C" },
-				{ action: "delete_method", componentPath: "DEMO/C", methodName: "calc" },
-				{ action: "delete_folder", folderPath: "DEMO/New" },
-				{ action: "set_method_code", componentPath: "DEMO/C", methodName: "calc", code: "return;" },
-				{ action: "set_module_code", modulePath: "DEMO/M", operation: "set-header", code: "" },
+				{ action: "create_folder", intent: "preview", folderPath: "DEMO/New" },
+				{ action: "create_component", intent: "preview", componentPath: "DEMO/New/C", kind: "class" },
+				{
+					action: "create_method",
+					intent: "preview",
+					componentPath: "DEMO/C",
+					methodName: "calc",
+					methodKind: "abstract",
+				},
+				{
+					action: "set_method_signature",
+					intent: "preview",
+					componentPath: "DEMO/C",
+					methodName: "calc",
+					returnType: "cont",
+				},
+				{ action: "delete_component", intent: "preview", componentPath: "DEMO/C" },
+				{ action: "delete_method", intent: "preview", componentPath: "DEMO/C", methodName: "calc" },
+				{ action: "delete_folder", intent: "preview", folderPath: "DEMO/New" },
+				{
+					action: "set_method_code",
+					intent: "preview",
+					componentPath: "DEMO/C",
+					methodName: "calc",
+					code: "return;",
+				},
+				{ action: "set_module_code", intent: "preview", modulePath: "DEMO/M", operation: "set-header", code: "" },
 				{
 					action: "set_state_machine_code",
+					intent: "preview",
 					stateMachinePath: "DEMO/SM",
 					operation: "set-method",
 					methodName: "onTick",
 					code: "return;",
 				},
-				{ action: "set_enumerators", componentPath: "DEMO/E", enumerators: ["OFF", "ON"] },
-				{ action: "apply_project_formula", projectPath: "DEMO/P", specFile: "formula.json", mode: "restore" },
+				{ action: "set_enumerators", intent: "preview", componentPath: "DEMO/E", enumerators: ["OFF", "ON"] },
+				{
+					action: "apply_project_formula",
+					intent: "preview",
+					projectPath: "DEMO/P",
+					specFile: "formula.json",
+					mode: "restore",
+				},
 				{
 					action: "set_element_dependency",
+					intent: "preview",
 					targetPath: "DEMO/C",
 					elementName: "K",
 					dependency: "independent",
@@ -218,15 +315,42 @@ describe("ASCET edit service", () => {
 							const backendResult =
 								operation === "get_database_identity"
 									? { database: { name: "DB", path: "C:/Repo/DB" } }
-									: operation === "set_element_dependency"
+									: operation === "preflight_create_folder"
 										? {
-												validated: true,
-												target: "DEMO/C",
-												kind: "component",
-												identity: { componentOID: "C-1", elementOID: "" },
-												definitionHash: "definition-1",
+												folderPath: "DEMO\\New",
+												existing: ["DEMO"],
+												willCreate: ["DEMO\\New"],
+												conflicts: [],
+												capability: { status: "supported" },
+												noOp: false,
 											}
-										: { validated: true };
+										: operation === "preflight_create_method"
+											? {
+													componentPath: "DEMO\\C",
+													componentOid: "C-2",
+													componentKind: "Class",
+													languageKind: "ESDL",
+													diagramName: "Main",
+													diagramExists: true,
+													diagramRuntimeType: "AscetDiagram",
+													requiredMethod: "AddMethod",
+													requiredMethodAvailable: true,
+													editable: true,
+													readbackAvailable: true,
+													noOp: false,
+													capability: { status: "supported" },
+												}
+											: operation === "component_editable_check"
+												? true
+												: operation === "set_element_dependency"
+													? {
+															validated: true,
+															target: "DEMO/C",
+															kind: "component",
+															identity: { componentOID: "C-1", elementOID: "" },
+															definitionHash: "definition-1",
+														}
+													: { validated: true };
 							return {
 								exitCode: 0,
 								stdout: JSON.stringify({ ok: true, result: backendResult }),
@@ -240,6 +364,14 @@ describe("ASCET edit service", () => {
 				);
 				assert.equal(result.details.outcome.status, "preflight", params.action);
 				assert.equal(result.details.outcome.plan.action, params.action);
+				assert.ok(result.details.mutationResult);
+				assert.equal(result.details.mutationResult.preflight.status, "passed", params.action);
+				assert.equal(result.details.mutationResult.mutation.status, "not_started", params.action);
+				assert.equal(result.details.mutationResult.verification.status, "not_applicable", params.action);
+				assert.equal(result.details.mutationResult.bridge.bridgeEntered, false, params.action);
+				const renderedEnvelope = JSON.parse(result.content[0]?.text ?? "") as Record<string, unknown>;
+				assert.equal(renderedEnvelope.status, result.details.mutationResult.status);
+				assert.deepEqual(renderedEnvelope.mutation, result.details.mutationResult.mutation);
 			}
 		} finally {
 			rmSync(root, { recursive: true, force: true });
@@ -273,6 +405,7 @@ describe("ASCET edit service", () => {
 		const result = await runAscetEdit(
 			{
 				action: "set_element_dependency",
+				intent: "preview",
 				targetPath: "DEMO/C",
 				elementName: "P",
 				dependency: "independent",
@@ -291,6 +424,7 @@ describe("ASCET edit service", () => {
 		const result = await runAscetEdit(
 			{
 				action: "set_element_dependency",
+				intent: "preview",
 				targetPath: "DEMO/Provider",
 				componentPath: "DEMO/Consumer",
 				elementName: "P",
@@ -323,7 +457,8 @@ describe("ASCET edit service", () => {
 				{
 					action: "apply_element_spec",
 					componentPath: "DEMO/C",
-					intent: "create",
+					elementIntent: "create",
+					intent: "preview",
 					elements: [
 						{ role: "standardPrimitive", name: "K", kind: "parameter", modelType: "cont", scope: "local" },
 					],
@@ -389,7 +524,8 @@ describe("ASCET edit service", () => {
 				{
 					action: "apply_element_spec",
 					componentPath: "DEMO/C",
-					intent: "create",
+					elementIntent: "create",
+					intent: "preview",
 					elements: [
 						{ role: "standardPrimitive", name: "K", kind: "variable", modelType: "cont", scope: "local" },
 					],
@@ -468,7 +604,8 @@ describe("ASCET edit service", () => {
 				{
 					action: "apply_element_spec",
 					componentPath: "DEMO/C",
-					intent: "patch",
+					elementIntent: "patch",
+					intent: "preview",
 					elements: [{ name: "P", comment: "Updated" }],
 				},
 				{
@@ -540,7 +677,8 @@ describe("ASCET edit service", () => {
 				{
 					action: "apply_element_spec",
 					componentPath: "DEMO/C",
-					intent: "patch",
+					elementIntent: "patch",
+					intent: "preview",
 					elements: [{ name: "P", comment: "Updated" }],
 				},
 				{
@@ -616,7 +754,8 @@ describe("ASCET edit service", () => {
 				{
 					action: "apply_element_spec",
 					componentPath: "DEMO/C",
-					intent: "patch",
+					elementIntent: "patch",
+					intent: "preview",
 					elements: [{ name: "P", comment: "Updated" }],
 				},
 				{
@@ -743,6 +882,7 @@ describe("ASCET edit service", () => {
 			const result = await runAscetEdit(
 				{
 					action: "set_element_dependency",
+					intent: "preview",
 					targetPath: "DEMO/C",
 					elementName: "P",
 					dependency: "dependent",
@@ -805,6 +945,7 @@ describe("ASCET edit service", () => {
 			const result = await runAscetEdit(
 				{
 					action: "set_element_dependency",
+					intent: "preview",
 					targetPath: "DEMO/C",
 					elementName: "P",
 					dependency: "dependent",
@@ -861,6 +1002,7 @@ describe("ASCET edit service", () => {
 		const result = await runAscetEdit(
 			{
 				action: "set_element_dependency",
+				intent: "preview",
 				targetPath: "DEMO/Controller",
 				elementName: "P_Effective",
 				dependency: "dependent",
@@ -904,33 +1046,35 @@ describe("ASCET edit service", () => {
 					const result =
 						request.args[1] === "get_database_identity"
 							? { database: { name: "DB", path: "C:/Repo/DB" } }
-							: request.args[1] === "read_element_catalog"
-								? {
-										elements: [
-											{
-												name: "K",
-												kind: "parameter",
-												modelType: "cont",
-												scope: "local",
-												configurationProvenance: {
-													dataConfiguration: {
-														source: "defaultDataConfiguration",
-														configurationName: "DefaultData",
-														selected: true,
-													},
-													implementationConfiguration: {
-														source: "defaultImplementationConfiguration",
-														configurationName: "DefaultImpl",
-														selected: true,
+							: request.args[1] === "component_editable_check"
+								? true
+								: request.args[1] === "read_element_catalog"
+									? {
+											elements: [
+												{
+													name: "K",
+													kind: "parameter",
+													modelType: "cont",
+													scope: "local",
+													configurationProvenance: {
+														dataConfiguration: {
+															source: "defaultDataConfiguration",
+															configurationName: "DefaultData",
+															selected: true,
+														},
+														implementationConfiguration: {
+															source: "defaultImplementationConfiguration",
+															configurationName: "DefaultImpl",
+															selected: true,
+														},
 													},
 												},
-											},
-										],
-										identity: { componentOID: "C-1", elementOIDs: { K: "E-1" } },
-									}
-								: request.args[1] === "diff_element_spec"
-									? { changes: [] }
-									: { ReadbackVerified: false, ElementResults: [{ name: "K", readbackVerified: false }] };
+											],
+											identity: { componentOID: "C-1", elementOIDs: { K: "E-1" } },
+										}
+									: request.args[1] === "diff_element_spec"
+										? { changes: [] }
+										: { ReadbackVerified: false, ElementResults: [{ name: "K", readbackVerified: false }] };
 					return {
 						exitCode: 0,
 						stdout: JSON.stringify({ ok: true, result, error: null }),
@@ -940,47 +1084,45 @@ describe("ASCET edit service", () => {
 					};
 				},
 			};
-			const plan = await runAscetEdit(
+			const result = await runAscetEdit(
 				{
 					action: "apply_element_spec",
-					phase: "plan",
 					componentPath: "DEMO\\Controller",
-					intent: "patch",
+					elementIntent: "patch",
+					intent: "apply",
 					elements: [{ name: "K", comment: "Updated" }],
 				},
 				options,
-				{},
-			);
-			assert.equal(plan.details.outcome.status, "preflight");
-			if (plan.details.outcome.status !== "preflight") return;
-			const planId = plan.details.outcome.plan.planId as string;
-			const result = await runAscetEdit({ action: "apply_element_spec", phase: "commit", planId }, options, {
-				hasUI: true,
-				ui: {
-					confirm: async (_title, message) => {
-						confirmationMessage = message;
-						return true;
+				{
+					hasUI: true,
+					ui: {
+						confirm: async (_title, message) => {
+							confirmationMessage = message;
+							return true;
+						},
 					},
 				},
-			});
+			);
 
-			assert.match(confirmationMessage, /targetOid: C-1/u);
-			assert.match(confirmationMessage, /sharedObject: true/u);
-			assert.match(confirmationMessage, /ownerPath: DEMO\\Controller/u);
-			assert.match(confirmationMessage, /affectedProjects: DEMO\\Project/u);
+			assert.match(confirmationMessage, /Target OID: C-1/u);
+			assert.match(confirmationMessage, /Shared object: yes/u);
+			assert.match(confirmationMessage, /Owner path: DEMO\\Controller/u);
+			assert.match(confirmationMessage, /Affected projects: DEMO\\Project/u);
 			const outcome = result.details.outcome;
 			assert.equal(outcome.status, "partial");
 			assert.deepEqual(
 				calls.map((args) => args[1]),
 				[
-					"read_element_catalog",
-					"diff_element_spec",
-					"get_database_identity",
-					"get_tree",
 					"get_database_identity",
 					"read_element_catalog",
 					"diff_element_spec",
 					"get_tree",
+					"component_editable_check",
+					"get_database_identity",
+					"read_element_catalog",
+					"diff_element_spec",
+					"get_tree",
+					"component_editable_check",
 					"apply_element_spec",
 				],
 			);
@@ -997,13 +1139,14 @@ describe("ASCET edit service", () => {
 		}
 	});
 
-	test("commits a persisted set_element_dependency plan without leaking internal dryRun into the public contract", async () => {
+	test("applies set_element_dependency in one public call without leaking internal dryRun", async () => {
 		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-dependency-commit-"));
 		const contractsRoot = join(root, "contracts");
 		mkdirSync(contractsRoot, { recursive: true });
 		writeFileSync(join(root, "AscetBridge.exe"), "", "utf8");
 		writeFileSync(join(contractsRoot, "cli-catalog.json"), "{}", "utf8");
 		const calls: string[][] = [];
+		let planRecordExistedDuringApproval = false;
 		try {
 			const options = {
 				cwd: root,
@@ -1020,20 +1163,22 @@ describe("ASCET edit service", () => {
 					const result =
 						request.args[1] === "get_database_identity"
 							? { database: { name: "DB", path: "C:/Repo/DB" } }
-							: dryRun
-								? {
-										dryRun: true,
-										beforeDependency: "independent",
-										beforeFormula: "",
-										mappings: [],
-										payload: {
-											target: "DEMO/Controller",
-											kind: "component",
-											identity: { componentOID: "C-1", elementOID: "" },
-											definitionHash: "definition-1",
-										},
-									}
-								: { writeSucceeded: true, verifyReadbackRequested: true, readbackVerified: true };
+							: request.args[1] === "component_editable_check"
+								? true
+								: dryRun
+									? {
+											dryRun: true,
+											beforeDependency: "independent",
+											beforeFormula: "",
+											mappings: [],
+											payload: {
+												target: "DEMO/Controller",
+												kind: "component",
+												identity: { componentOID: "C-1", elementOID: "" },
+												definitionHash: "definition-1",
+											},
+										}
+									: { writeSucceeded: true, verifyReadbackRequested: true, readbackVerified: true };
 					return {
 						exitCode: 0,
 						stdout: JSON.stringify({
@@ -1047,10 +1192,10 @@ describe("ASCET edit service", () => {
 					};
 				},
 			};
-			const plan = await runAscetEdit(
+			const result = await runAscetEdit(
 				{
 					action: "set_element_dependency",
-					phase: "plan",
+					intent: "apply",
 					targetPath: "DEMO\\Controller",
 					elementName: "P_Local",
 					dependency: "dependent",
@@ -1059,29 +1204,55 @@ describe("ASCET edit service", () => {
 					variantPolicy: "default",
 				},
 				options,
-				{},
-			);
-			assert.equal(plan.details.outcome.status, "preflight");
-			if (plan.details.outcome.status !== "preflight") return;
-			assert.deepEqual(plan.details.outcome.plan.targetIdentity, {
-				path: "DEMO\\Controller::P_Local",
-				oid: "C-1",
-				kind: "component_element",
-			});
-			const result = await runAscetEdit(
-				{ action: "set_element_dependency", phase: "commit", planId: plan.details.outcome.plan.planId as string },
-				options,
-				approvingContext,
+				{
+					hasUI: true,
+					ui: {
+						confirm: async () => {
+							planRecordExistedDuringApproval = existsSync(join(root, "artifacts", "plans"));
+							return true;
+						},
+					},
+				},
 			);
 			assert.equal(result.details.outcome.status, "ok");
-			assert.equal(calls.length, 7);
-			assert.equal(calls[0]?.includes("--dry-run"), true);
-			assert.equal(calls[1]?.[1], "get_database_identity");
-			assert.equal(calls[2]?.[1], "get_tree");
-			assert.equal(calls[3]?.[1], "get_database_identity");
-			assert.equal(calls[4]?.includes("--dry-run"), true);
-			assert.equal(calls[5]?.[1], "get_tree");
-			assert.equal(calls[6]?.includes("--dry-run"), false);
+			assert.equal(planRecordExistedDuringApproval, false);
+			assert.ok(result.details.mutationResult);
+			assert.deepEqual(result.details.mutationResult.permission, {
+				mode: "default",
+				decision: "ask",
+				risk: "high",
+				reason: result.details.mutationResult.permission.reason,
+				rule: undefined,
+			});
+			assert.equal(result.details.mutationResult.preflight.status, "passed");
+			assert.equal(result.details.mutationResult.editability.status, "editable");
+			assert.equal(result.details.mutationResult.mutation.status, "applied");
+			assert.equal(result.details.mutationResult.verification.status, "passed");
+			assert.deepEqual(result.details.mutationResult.bridge, {
+				beforeBridge: true,
+				bridgeEntered: true,
+				backendResponseReceived: true,
+			});
+			assert.ok(result.details.mutationResult.audit?.approvedAt);
+			assert.ok(result.details.mutationResult.audit?.revalidatedAt);
+			assert.ok(result.details.mutationResult.audit?.preflightFingerprint);
+			assert.deepEqual(
+				calls.map((args) => args[1]),
+				[
+					"get_database_identity",
+					"set_element_dependency",
+					"get_tree",
+					"component_editable_check",
+					"get_database_identity",
+					"set_element_dependency",
+					"get_tree",
+					"component_editable_check",
+					"set_element_dependency",
+				],
+			);
+			assert.equal(calls[1]?.includes("--dry-run"), true);
+			assert.equal(calls[5]?.includes("--dry-run"), true);
+			assert.equal(calls[8]?.includes("--dry-run"), false);
 			const telemetry = readFileSync(join(root, "artifacts", "telemetry", "element-write.jsonl"), "utf8")
 				.trim()
 				.split("\n")
@@ -1096,14 +1267,6 @@ describe("ASCET edit service", () => {
 					writesPerformed: event.writesPerformed,
 				})),
 				[
-					{
-						phase: "plan",
-						bridgeEntered: false,
-						backendResponseReceived: false,
-						mutationStatus: "not_started",
-						mutationStarted: false,
-						writesPerformed: false,
-					},
 					{
 						phase: "commit",
 						bridgeEntered: true,
@@ -1131,16 +1294,13 @@ describe("ASCET edit service", () => {
 					componentPath: "DEMO\\Project::Controller",
 					methodName: "calc",
 					code: "result = 1;",
-					executeWrite: true,
+					intent: "apply",
 				},
 				{
 					cwd: root,
 					env: { PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts") },
 					executeCli: async (request: AscetCliRequest): Promise<AscetCliExecutionResult> => {
-						if (request.args[1] === "get_tree" || request.args[1] === "get_database_identity") {
-							return directMutationExecution(request);
-						}
-						mutationDispatches++;
+						if (request.args[1] === "set_method_code") mutationDispatches++;
 						return directMutationExecution(request);
 					},
 				},
@@ -1158,13 +1318,74 @@ describe("ASCET edit service", () => {
 			assert.equal(result.details.outcome.status, "ok");
 			assert.equal(confirmations, 1);
 			assert.equal(mutationDispatches, 1);
-			assert.match(confirmationMessage, /targetOid: C-1/u);
-			assert.match(confirmationMessage, /sharedObject: true/u);
-			assert.match(confirmationMessage, /ownerPath: Package\\Shared\\Controller/u);
-			assert.match(confirmationMessage, /affectedProjects: DEMO\\Project/u);
+			assert.match(confirmationMessage, /Risk: high/u);
+			assert.match(confirmationMessage, /Target: DEMO\\Project::Controller/u);
+			assert.match(confirmationMessage, /Shared object: yes/u);
+			assert.match(confirmationMessage, /Affected projects: DEMO\\Project/u);
 		} finally {
 			rmSync(root, { recursive: true, force: true });
 		}
+	});
+
+	test("retries transient incomplete Tree evidence before failing closed", async () => {
+		let treeReads = 0;
+		const treeTimeouts: Array<number | undefined> = [];
+		const result = await runAscetEdit(
+			{
+				action: "create_method",
+				componentPath: "DEMO\\Project::Controller",
+				methodName: "stateProbe",
+				methodKind: "action",
+				intent: "preview",
+			},
+			{
+				cwd: process.cwd(),
+				executeCli: async (request) => {
+					if (request.args[1] === "get_tree") {
+						treeReads++;
+						treeTimeouts.push(request.timeoutMs);
+						return treeReads === 1 ? incompleteTreeExecution(request) : completeTreeExecution(request);
+					}
+					return directMutationExecution(request);
+				},
+			},
+			{},
+		);
+		assert.equal(result.details.outcome.status, "preflight", JSON.stringify(result.details.outcome));
+		assert.equal(treeReads, 2);
+		assert.deepEqual(treeTimeouts, [300_000, 300_000]);
+	});
+
+	test("blocks when current-database Tree evidence remains incomplete after retry", async () => {
+		let treeReads = 0;
+		const result = await runAscetEdit(
+			{
+				action: "create_method",
+				componentPath: "DEMO\\Project::Controller",
+				methodName: "stateProbe",
+				methodKind: "action",
+				intent: "preview",
+			},
+			{
+				cwd: process.cwd(),
+				executeCli: async (request) => {
+					if (request.args[1] === "get_tree") {
+						treeReads++;
+						return incompleteTreeExecution(request);
+					}
+					return directMutationExecution(request);
+				},
+			},
+			{},
+		);
+		assert.deepEqual(result.details.outcome, {
+			status: "error",
+			error: {
+				code: "shared_object_impact_unknown",
+				message: "Complete current-database Tree evidence is required before previewing create_method.",
+			},
+		});
+		assert.equal(treeReads, 2);
 	});
 
 	test("anchors top-level folder creation to the current database identity", async () => {
@@ -1172,13 +1393,12 @@ describe("ASCET edit service", () => {
 		let mutationDispatches = 0;
 		try {
 			const result = await runAscetEdit(
-				{ action: "create_folder", folderPath: "TOP_LEVEL_FIXTURE", executeWrite: true },
+				{ action: "create_folder", folderPath: "TOP_LEVEL_FIXTURE", intent: "apply" },
 				{
 					cwd: root,
 					env: { PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts") },
 					executeCli: async (request) => {
-						if (request.args[1] !== "get_tree" && request.args[1] !== "get_database_identity")
-							mutationDispatches++;
+						if (request.args[1] === "create_folder") mutationDispatches++;
 						return directMutationExecution(request);
 					},
 				},
@@ -1191,6 +1411,243 @@ describe("ASCET edit service", () => {
 		}
 	});
 
+	test("returns create_method capability failure before approval or mutation", async () => {
+		let confirmations = 0;
+		let writes = 0;
+		const result = await runAscetEdit(
+			{
+				action: "create_method",
+				componentPath: "PI_LIVE_TEST_20260812_EDITStateMachineUnderTest",
+				methodName: "stateProbe",
+				methodKind: "action",
+				intent: "apply",
+			},
+			{
+				cwd: process.cwd(),
+				executeCli: async (request) => {
+					if (request.args[1] === "preflight_create_method") {
+						return {
+							exitCode: 0,
+							stdout: JSON.stringify({
+								ok: true,
+								result: {
+									diagramName: "Main",
+									diagramRuntimeType: "LegacyDiagram",
+									capability: {
+										status: "unsupported",
+										failureCode: "create_method_capability_not_supported",
+										failureMessage: "Diagram 'Main' does not support creating 'Action'.",
+									},
+								},
+								error: null,
+							}),
+							stderr: "",
+							timedOut: false,
+							request,
+						};
+					}
+					writes++;
+					return directMutationExecution(request);
+				},
+			},
+			{
+				hasUI: true,
+				ui: {
+					confirm: async () => {
+						confirmations++;
+						return true;
+					},
+				},
+			},
+		);
+		assert.deepEqual(result.details.outcome, {
+			status: "error",
+			error: {
+				code: "create_method_capability_not_supported",
+				message: "Diagram 'Main' does not support creating 'Action'.",
+			},
+		});
+		assert.equal(confirmations, 0);
+		assert.equal(writes, 0);
+	});
+
+	test("auto-applies safe create_folder headlessly after authoritative revalidation", async () => {
+		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-folder-auto-"));
+		let writes = 0;
+		try {
+			const result = await runAscetEdit(
+				{ action: "create_folder", folderPath: "DEMOAuto", intent: "apply" },
+				{
+					cwd: root,
+					env: { PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts") },
+					executeCli: async (request) => {
+						if (request.args[1] === "create_folder") writes++;
+						return directMutationExecution(request);
+					},
+				},
+				{ hasUI: false, ascetPermission: { mode: "auto", rules: [] } },
+			);
+			assert.equal(result.details.outcome.status, "ok");
+			assert.equal(writes, 1);
+		} finally {
+			rmSync(root, { recursive: true, force: true });
+		}
+	});
+
+	test("runs one approved compound create_method call for editability acquisition and mutation", async () => {
+		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-method-compound-"));
+		let confirmations = 0;
+		let guardedWrites = 0;
+		let approvalMessage = "";
+		try {
+			const result = await runAscetEdit(
+				{
+					action: "create_method",
+					componentPath: "DEMO\\Project::Controller",
+					methodName: "stateProbe",
+					methodKind: "action",
+					intent: "apply",
+				},
+				{
+					cwd: root,
+					env: { PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts") },
+					executeCli: async (request) => {
+						if (request.args[1] === "preflight_create_method") {
+							const base = directMutationExecution(request);
+							return {
+								...base,
+								stdout: JSON.stringify({
+									ok: true,
+									result: {
+										databasePath: "C:/Repo/DB",
+										componentPath: "DEMO\\Project::Controller",
+										componentOid: "C-1",
+										componentKind: "StateMachine",
+										languageKind: "ESDL",
+										diagramName: "Main",
+										diagramExists: true,
+										diagramRuntimeType: "AscetDiagram",
+										requiredMethod: "AddAction",
+										requiredMethodAvailable: true,
+										editable: false,
+										readbackAvailable: true,
+										noOp: false,
+										plannedEffects: [
+											{ kind: "create_method", target: "DEMO\\Project::Controller::stateProbe" },
+										],
+										capability: { status: "supported" },
+									},
+									error: null,
+								}),
+							};
+						}
+						if (request.args[1] === "guarded_create_method") {
+							guardedWrites++;
+							assert.equal(request.args.includes("--acquire-editability"), true);
+						}
+						return directMutationExecution(request);
+					},
+				},
+				{
+					hasUI: true,
+					ascetPermission: { mode: "acceptEdits", rules: [] },
+					ui: {
+						confirm: async (_title, message) => {
+							confirmations++;
+							approvalMessage = message;
+							return true;
+						},
+					},
+				},
+			);
+			assert.equal(result.details.outcome.status, "ok");
+			assert.equal(confirmations, 1);
+			assert.equal(guardedWrites, 1);
+			assert.match(approvalMessage, /Request component editability/u);
+			assert.equal(approvalMessage.includes("create_method: DEMO\\Project::Controller::stateProbe"), true);
+		} finally {
+			rmSync(root, { recursive: true, force: true });
+		}
+	});
+
+	test("re-runs database, Tree, and impact evidence before execution and re-prompts on material scope change", async () => {
+		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-direct-revalidation-"));
+		const confirmationMessages: string[] = [];
+		let treeReads = 0;
+		let mutationDispatches = 0;
+		try {
+			const result = await runAscetEdit(
+				{
+					action: "set_method_code",
+					componentPath: "DEMO\\Controller",
+					methodName: "calc",
+					code: "return;",
+					intent: "apply",
+				},
+				{
+					cwd: root,
+					env: { PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts") },
+					executeCli: async (request) => {
+						const operation = request.args[1];
+						if (operation === "component_editable_check") return directMutationExecution(request);
+						if (operation === "get_database_identity") return directMutationExecution(request);
+						if (operation === "get_tree") {
+							treeReads++;
+							const items = [{ path: "DEMO\\Controller", oid: "C-1", kind: "module" }];
+							if (treeReads > 1) {
+								items.push({ path: "DEMO\\Project::Controller", oid: "C-1", kind: "module" });
+							}
+							return {
+								exitCode: 0,
+								stdout: JSON.stringify({
+									ok: true,
+									result: {
+										items,
+										coverage: {
+											status: "complete_for_scope",
+											completeness: "complete",
+											collectorCompleted: true,
+										},
+										truncated: false,
+										database: { name: "DB", path: "C:/Repo/DB" },
+									},
+									error: null,
+								}),
+								stderr: "",
+								timedOut: false,
+								request,
+							};
+						}
+						if (operation === "set_method_code") mutationDispatches++;
+						return directMutationExecution(request);
+					},
+				},
+				{
+					hasUI: true,
+					ascetPermission: { mode: "default", rules: [] },
+					ui: {
+						confirm: async (_title, message) => {
+							confirmationMessages.push(message);
+							return true;
+						},
+					},
+				},
+			);
+
+			assert.equal(result.details.outcome.status, "ok");
+			assert.equal(treeReads, 3);
+			assert.equal(mutationDispatches, 1);
+			assert.equal(confirmationMessages.length, 2);
+			for (const message of confirmationMessages) {
+				assert.equal(
+					message,
+					"Target: DEMO\\Controller\n\nChanges:\n- set_method_code: DEMO\\Controller\n\nVerification: Automatic readback",
+				);
+			}
+		} finally {
+			rmSync(root, { recursive: true, force: true });
+		}
+	});
 	test("quarantines an unknown direct method write and blocks a Package alias without confirmation", async () => {
 		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-method-quarantine-"));
 		let confirmations = 0;
@@ -1199,10 +1656,14 @@ describe("ASCET edit service", () => {
 			cwd: root,
 			env: { PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts") },
 			executeCli: async (request: AscetCliRequest): Promise<AscetCliExecutionResult> => {
-				if (request.args[1] === "get_tree" || request.args[1] === "get_database_identity") {
+				if (
+					request.args[1] === "get_tree" ||
+					request.args[1] === "get_database_identity" ||
+					request.args[1] === "component_editable_check"
+				) {
 					return directMutationExecution(request);
 				}
-				mutationDispatches++;
+				if (request.args[1] === "set_method_code") mutationDispatches++;
 				return {
 					exitCode: 1,
 					stdout: JSON.stringify({
@@ -1232,7 +1693,7 @@ describe("ASCET edit service", () => {
 					componentPath: "DEMO\\Project::Controller",
 					methodName: "calc",
 					code: "result = 1;",
-					executeWrite: true,
+					intent: "apply",
 				},
 				options,
 				context,
@@ -1245,7 +1706,7 @@ describe("ASCET edit service", () => {
 					componentPath: "Package\\Shared\\Controller",
 					methodName: "calc",
 					code: "result = 2;",
-					executeWrite: true,
+					intent: "apply",
 				},
 				options,
 				context,
@@ -1265,7 +1726,7 @@ describe("ASCET edit service", () => {
 		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-telemetry-blocked-"));
 		try {
 			const result = await runAscetEdit(
-				{ action: "create_folder", folderPath: "DEMO\\New", executeWrite: true },
+				{ action: "create_folder", folderPath: "DEMO\\New", intent: "apply" },
 				{
 					cwd: root,
 					env: { PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts") },
@@ -1321,7 +1782,7 @@ describe("ASCET edit service", () => {
 
 			await assert.rejects(
 				runAscetEdit(
-					{ action: "create_folder", folderPath: "DEMO\\New", executeWrite: true },
+					{ action: "create_folder", folderPath: "DEMO\\New", intent: "apply" },
 					{
 						cwd: root,
 						env: { PI_ASCET_EXTENSION_ARTIFACT_ROOT: artifactRoot },
@@ -1363,7 +1824,7 @@ describe("ASCET edit service", () => {
 		const root = mkdtempSync(join(tmpdir(), "pi-ascet-edit-telemetry-"));
 		try {
 			const result = await runAscetEdit(
-				{ action: "create_folder", folderPath: "DEMO\\New", executeWrite: true },
+				{ action: "create_folder", folderPath: "DEMO\\New", intent: "apply" },
 				{
 					cwd: root,
 					env: {

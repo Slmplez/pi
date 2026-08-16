@@ -1,0 +1,9 @@
+{
+  "planId": "9c0bc5c4-243e-43e1-8386-c805ab366f01",
+  "approvals": [
+    {
+      "title": "Confirm set_element_dependency plan",
+      "message": "planId: 9c0bc5c4-243e-43e1-8386-c805ab366f01\nplanFingerprint: 906bb585b9198a913ca73c8bca3b3d91cccf4df6ed55dec29b415fe88b69bbbc\nASCET edit request:\noperation: set_element_dependency\ntargetPath: PI_LIVE_FIX_20260811_13947C09\\ClassUnderTest\nelementName: P_Dependent\ndependency: dependent\ndependencyFormula: P_Input\ndependencyFormals: []\nbindingPolicy: explicit\ndependencyMappings: {\"P_Input\":{\"kind\":\"parameter\",\"name\":\"P_Input\"}}\nvariantMappings: {}\nvariantPolicy: default\nvariants: []\nvalueRestoration: {}\ntargetKind: component\nmatch: exact\ndryRun: false\nbackupDir: \nverifyReadback: false"
+    }
+  ]
+}

@@ -1,10 +1,16 @@
 import type { AscetCliJsonResult } from "../cli.ts";
 
-export type AscetEditMutationStatus = "applied" | "not_started" | "rolled_back" | "unknown";
+export type AscetEditMutationStatus =
+	| "applied"
+	| "no_op"
+	| "not_started"
+	| "partially_applied"
+	| "rolled_back"
+	| "unknown";
 
 export type AscetEditConsistencyStatus = "consistent" | "restored" | "unknown";
 
-export type AscetEditVerificationStatus = "passed" | "failed" | "missing" | "unknown";
+export type AscetEditVerificationStatus = "passed" | "failed" | "missing" | "unknown" | "not_applicable";
 
 export type AscetEditRollbackStatus = "not_required" | "passed" | "failed" | "unknown";
 
@@ -164,9 +170,55 @@ export function extractAscetEditVerification(data: unknown): AscetEditVerificati
 }
 
 export function classifyAscetEditExecution(raw: AscetCliJsonResult): AscetEditExecutionClassification {
-	const operationStatus = findNestedString(raw.ok ? raw.data : raw.error?.details, "status")?.toLowerCase();
-	const rollback = extractRollback(raw.ok ? raw.data : raw.error?.details);
+	const classificationPayload = raw.ok ? raw.data : raw.error?.details;
+	const operationStatus = findNestedString(classificationPayload, "status")?.toLowerCase();
+	const explicitMutationStatus = findNestedString(classificationPayload, "mutationstatus")?.toLowerCase();
+	const explicitVerificationStatus = findNestedString(classificationPayload, "verificationstatus")?.toLowerCase();
+	const rollback = extractRollback(classificationPayload);
 	const errorCode = raw.error?.code.toLowerCase();
+
+	if (
+		explicitMutationStatus === "applied" ||
+		explicitMutationStatus === "no_op" ||
+		explicitMutationStatus === "not_started" ||
+		explicitMutationStatus === "partially_applied" ||
+		explicitMutationStatus === "rolled_back" ||
+		explicitMutationStatus === "unknown"
+	) {
+		const verificationStatus: AscetEditVerificationStatus =
+			explicitVerificationStatus === "passed" ||
+			explicitVerificationStatus === "failed" ||
+			explicitVerificationStatus === "missing" ||
+			explicitVerificationStatus === "unknown" ||
+			explicitVerificationStatus === "not_applicable"
+				? explicitVerificationStatus
+				: "unknown";
+		const verification = createVerification(
+			verificationStatus !== "not_applicable",
+			verificationStatus === "passed" || verificationStatus === "not_applicable"
+				? true
+				: verificationStatus === "failed"
+					? false
+					: null,
+			verificationStatus,
+		);
+		return {
+			mutationStatus: explicitMutationStatus,
+			consistencyStatus:
+				explicitMutationStatus === "rolled_back"
+					? "restored"
+					: verificationStatus === "passed" || verificationStatus === "not_applicable"
+						? "consistent"
+						: "unknown",
+			verification,
+			rollback,
+			shouldInvalidateObservations:
+				explicitMutationStatus === "applied" ||
+				explicitMutationStatus === "partially_applied" ||
+				explicitMutationStatus === "rolled_back" ||
+				explicitMutationStatus === "unknown",
+		};
+	}
 
 	if (errorCode === ELEMENT_TRANSACTION_ROLLED_BACK_CODE || errorCode?.endsWith("_rolled_back") === true) {
 		return {

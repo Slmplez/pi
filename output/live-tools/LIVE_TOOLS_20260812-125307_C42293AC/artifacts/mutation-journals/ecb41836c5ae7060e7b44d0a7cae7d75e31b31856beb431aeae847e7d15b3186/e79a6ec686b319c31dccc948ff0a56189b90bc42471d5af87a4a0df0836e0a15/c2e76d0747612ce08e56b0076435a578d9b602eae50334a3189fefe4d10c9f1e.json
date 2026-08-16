@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "status": "applied",
+  "databaseFingerprint": "82d15c1e563d8f43061868480858221d57264355d2699bc9c969ea86a210cc03",
+  "targetOid": "040g00001g001qg71060i13hfleg2",
+  "targetKind": "folder",
+  "canonicalPath": "PI_LIVE_FIX_20260812_C42293AC",
+  "action": "create_component",
+  "planId": "3a5b941c-446c-4889-b3ef-8fbc0fafdfae",
+  "planFingerprint": "25445b286af078ec6c2e044967f803a14c2fb53a29612f4715f30f282f6f8090",
+  "targetImpactFingerprint": "sha256:77974ec8ad24a1c27564b71d371748afe3a5dc58b160df0a393d1942dba7ac1b",
+  "guardGeneration": 0,
+  "beforeSnapshotFingerprint": "sha256:8db869a4831c53e4812ce22212d52a3eca391ec9f940207b2adc13dc9c89364e",
+  "desiredFingerprint": "sha256:39b3d5aa6339c582c4200ae7f30b301cac1467c37d0a11a6ef79c6ae7a4e7469",
+  "beforeSnapshot": {
+    "operation": "direct_mutation_safety_preflight",
+    "validated": true,
+    "targetIdentity": {
+      "path": "PI_LIVE_FIX_20260812_C42293AC",
+      "oid": "040g00001g001qg71060i13hfleg2",
+      "kind": "folder"
+    },
+    "targetImpactFingerprint": "sha256:77974ec8ad24a1c27564b71d371748afe3a5dc58b160df0a393d1942dba7ac1b"
+  },
+  "attemptedMutation": {
+    "action": "create_component",
+    "componentPath": "PI_LIVE_FIX_20260812_C42293AC\\ClassUnderTest",
+    "kind": "class",
+    "language": "ESDL"
+  },
+  "createdAt": "2026-08-12T05:19:47.237Z",
+  "updatedAt": "2026-08-12T05:19:48.195Z",
+  "evidence": {
+    "bridgeEntered": true,
+    "backendResponseReceived": true,
+    "mutationStarted": true
+  },
+  "outcome": {
+    "operationId": "create_component"
+  }
+}

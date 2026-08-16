@@ -1,4 +1,4 @@
-import assert from "node:assert/strict";
+﻿import assert from "node:assert/strict";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -7,31 +7,59 @@ import type { AscetCliExecutionResult, AscetCliRequest } from "../cli.ts";
 import { isAscetEditableWriteGateBlockedCode } from "./editable-write-gate.ts";
 import { runAscetEdit } from "./service.ts";
 
+function success(request: AscetCliRequest, result: unknown): AscetCliExecutionResult {
+	return {
+		exitCode: 0,
+		stdout: JSON.stringify({ ok: true, result, error: null }),
+		stderr: "",
+		timedOut: false,
+		request,
+	};
+}
+
+function completeTree(request: AscetCliRequest): AscetCliExecutionResult {
+	return success(request, {
+		items: [{ path: "DEMO\\C", oid: "C-1", kind: "class" }],
+		coverage: { status: "complete_for_scope", completeness: "complete", collectorCompleted: true },
+		truncated: false,
+		database: { name: "DB", path: "C:/Repo/DB" },
+	});
+}
+
 describe("ASCET editable write gate", () => {
 	test("recognizes only the public write-gate error code", () => {
 		assert.equal(isAscetEditableWriteGateBlockedCode("editable_write_gate_blocked"), true);
 		assert.equal(isAscetEditableWriteGateBlockedCode("component_not_editable"), false);
 	});
 
-	test("does not add an editability check to ordinary preflight", async () => {
-		let dispatches = 0;
+	test("preview checks editability without dispatching the primary mutation", async () => {
+		const requests: AscetCliRequest[] = [];
 		const result = await runAscetEdit(
-			{ action: "set_method_code", componentPath: "DEMO/C", methodName: "Main", code: "return;" },
+			{ action: "set_method_code", componentPath: "DEMO/C", methodName: "Main", code: "return;", intent: "preview" },
 			{
 				cwd: process.cwd(),
-				executeCli: async () => {
-					dispatches += 1;
-					throw new Error("Preflight must not dispatch an editability check.");
+				executeCli: async (request) => {
+					requests.push(request);
+					if (request.args[1] === "get_database_identity") {
+						return success(request, { database: { name: "DB", path: "C:/Repo/DB" } });
+					}
+					if (request.args[1] === "get_tree") return completeTree(request);
+					if (request.args[1] === "component_editable_check") return success(request, true);
+					throw new Error(`Unexpected preview operation ${request.args.join(" ")}`);
 				},
 			},
 			{},
 		);
 
 		assert.equal(result.details.outcome.status, "preflight");
-		assert.equal(dispatches, 0);
+		assert.equal(requests.filter((request) => request.args[1] === "component_editable_check").length, 1);
+		assert.equal(
+			requests.some((request) => request.args[1] === "set_method_code"),
+			false,
+		);
 	});
 
-	test("maps a Bridge editable gate rejection to blocked without extra agent fields", async (context) => {
+	test("maps a same-session Bridge editable gate rejection to blocked", async (context) => {
 		const root = mkdtempSync(join(tmpdir(), "pi-ascet-editable-gate-"));
 		context.after(() => rmSync(root, { recursive: true, force: true }));
 		const requests: AscetCliRequest[] = [];
@@ -41,7 +69,7 @@ describe("ASCET editable write gate", () => {
 				componentPath: "DEMO/C",
 				methodName: "Main",
 				code: "return;",
-				executeWrite: true,
+				intent: "apply",
 			},
 			{
 				cwd: process.cwd(),
@@ -51,35 +79,22 @@ describe("ASCET editable write gate", () => {
 				},
 				executeCli: async (request: AscetCliRequest): Promise<AscetCliExecutionResult> => {
 					requests.push(request);
-					const identityRequest = request.args[1] === "get_database_identity";
-					const treeRequest = request.args[1] === "get_tree";
-					const success = identityRequest || treeRequest;
+					if (request.args[1] === "get_database_identity") {
+						return success(request, { database: { name: "DB", path: "C:/Repo/DB" } });
+					}
+					if (request.args[1] === "get_tree") return completeTree(request);
+					if (request.args[1] === "component_editable_check") return success(request, true);
 					return {
-						exitCode: success ? 0 : 2,
+						exitCode: 2,
 						stdout: JSON.stringify({
 							type: "response",
 							protocolVersion: 1,
-							ok: success,
-							result: identityRequest
-								? { database: { name: "DB", path: "C:/Repo/DB" } }
-								: treeRequest
-									? {
-											items: [{ path: "DEMO\\C", oid: "C-1", kind: "class" }],
-											coverage: {
-												status: "complete_for_scope",
-												completeness: "complete",
-												collectorCompleted: true,
-											},
-											truncated: false,
-											database: { name: "DB", path: "C:/Repo/DB" },
-										}
-									: null,
-							error: success
-								? null
-								: {
-										code: "editable_write_gate_blocked",
-										message: "ASCET write blocked because component DEMO/C is not editable.",
-									},
+							ok: false,
+							result: null,
+							error: {
+								code: "editable_write_gate_blocked",
+								message: "ASCET write blocked because component DEMO/C is not editable.",
+							},
 							meta: {
 								bridgePid: 4321,
 								bridgeGeneration: "test-generation",
@@ -97,11 +112,8 @@ describe("ASCET editable write gate", () => {
 			{ hasUI: true, ui: { confirm: async () => true } },
 		);
 
-		assert.ok(requests.length >= 2);
-		assert.equal(
-			requests.some((request) => request.args[1] === "component_editable_check"),
-			false,
-		);
+		assert.ok(requests.length >= 4);
+		assert.ok(requests.some((request) => request.args[1] === "component_editable_check"));
 		assert.deepEqual(requests.at(-1)?.args.slice(0, 2), ["exec", "set_method_code"]);
 		assert.deepEqual(result.details.outcome, {
 			status: "blocked",
@@ -110,11 +122,8 @@ describe("ASCET editable write gate", () => {
 		});
 		assert.equal(result.details.observations, undefined);
 		assert.equal(result.details.verification, undefined);
-		assert.deepEqual(JSON.parse(result.content[0]?.text ?? "{}"), {
-			error: {
-				code: "editable_write_gate_blocked",
-				message: "ASCET write blocked because component DEMO/C is not editable.",
-			},
-		});
+		assert.equal(result.details.mutationResult?.status, "blocked");
+		assert.equal(result.details.mutationResult?.mutation.status, "not_started");
+		assert.equal(result.details.mutationResult?.error?.code, "editable_write_gate_blocked");
 	});
 });

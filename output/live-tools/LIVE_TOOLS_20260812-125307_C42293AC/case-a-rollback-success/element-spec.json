@@ -1,0 +1,28 @@
+﻿{
+    "elements":  [
+                     {
+                         "scope":  "local",
+                         "modelType":  "cont",
+                         "name":  "C_FIX_A_One",
+                         "kind":  "variable"
+                     },
+                     {
+                         "scope":  "local",
+                         "modelType":  "cont",
+                         "name":  "C_FIX_A_Two",
+                         "kind":  "variable"
+                     },
+                     {
+                         "scope":  "local",
+                         "modelType":  "cont",
+                         "name":  "C_FIX_A_Three",
+                         "kind":  "variable"
+                     },
+                     {
+                         "scope":  "local",
+                         "modelType":  "cont",
+                         "name":  "C_FIX_A_Four",
+                         "kind":  "variable"
+                     }
+                 ]
+}

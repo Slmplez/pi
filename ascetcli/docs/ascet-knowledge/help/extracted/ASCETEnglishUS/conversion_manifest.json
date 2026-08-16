@@ -1,0 +1,27 @@
+{
+  "generated_at": "2026-04-01T03:07:27.452129Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\ASCETEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ASCETEnglishUS",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ASCETEnglishUS\\markdown",
+  "input_html_count": 2,
+  "converted_html_count": 2,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 12,
+  "toc_entries_count": 1,
+  "index_entries_count": 2,
+  "index_required": true,
+  "mappings": [
+    {
+      "html_rel_path": "ascet_overview.htm",
+      "md_rel_path": "ascet_overview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "etas_contact_addresses.htm",
+      "md_rel_path": "etas_contact_addresses.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

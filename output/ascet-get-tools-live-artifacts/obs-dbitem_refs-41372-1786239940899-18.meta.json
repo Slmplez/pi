@@ -1,0 +1,16 @@
+{
+  "resultId": "obs-dbitem_refs-41372-1786239940899-18",
+  "domain": "dbitem_refs",
+  "target": {
+    "path": "PlatformLibrary\\Package\\SCM_SecondaryCollisionMitigation\\Component\\Config\\CM_SCM"
+  },
+  "itemCount": 4,
+  "coverage": {
+    "status": "complete_for_scope",
+    "foldersVisited": 0,
+    "componentsScanned": 0
+  },
+  "truncated": false,
+  "source": "live",
+  "capturedAt": "2026-08-09T01:45:40.899Z"
+}

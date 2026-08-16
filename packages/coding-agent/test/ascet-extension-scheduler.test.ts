@@ -289,7 +289,7 @@ describe("ASCET scheduler diagnostics", () => {
 				targetKind: "component",
 				dryRun: true,
 				verifyReadback: true,
-				executeWrite: true,
+				intent: "apply",
 			},
 			{
 				cwd: repoRoot,
@@ -346,7 +346,7 @@ describe("ASCET scheduler diagnostics", () => {
 				ifReturnExists: "replace",
 				arguments: [{ name: "p_CmpF_MC1", type: "cont", ifExists: "keep" }],
 				verifyReadback: true,
-				executeWrite: true,
+				intent: "apply",
 			},
 			{
 				cwd: repoRoot,

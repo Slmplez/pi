@@ -43,7 +43,7 @@ Retired discovery, search, and index tools are not registered as model tools and
 
 The requirements Excel tool is temporarily hidden from the registered model-facing tool surface.
 
-Guarded write tools are preflight-only by default and require explicit interactive approval before CLI execution. Canonical `ascet_edit` returns a non-error `status: "preflight"` outcome when `executeWrite` is false. `ascet_batch_write` uses operation-specific request schemas and reports partial completion as `status: "partial"` when the ASCET batch backend returns item failures.
+Canonical `ascet_edit` requires `intent=preview|apply`. Preview is non-mutating. Apply snapshots the session permission mode (`default`, `acceptEdits`, or `auto`) and performs authoritative preflight, permission evaluation, optional interactive approval, post-approval revalidation, optional same-session editability acquisition, execution, and mandatory readback in one public tool call. `apply_element_spec` uses `elementIntent` for create/patch/upsert/restore semantics. `ascet_edit` and `ascet_batch_write` return normalized permission, preflight, editability, mutation, verification, Bridge lifecycle, and recovery sections; `DONE` is reserved for verified applied or no-op results.
 
 ## 0.2.0 Migration
 
@@ -181,9 +181,9 @@ Manual validation checklist:
 
 Start with `tree`, then pass an exact returned `path` or stable `oid` to a bounded follow-up action. Small Get results return inline. Large results are stored as an NDJSON observation with a metadata file; use Pi `find`, `grep`, and `read` against the returned paths. Observations are task evidence, not a global database index.
 
-Use `ascet_read` only for exact deep reads after the target is known: complete code, implementation metadata, dependency/formula detail, state-machine flow, or detailed block-diagram data. `read_dependent_chain` and `read_element_dependency` do not replace bounded provider discovery with Get observations.
+Use `ascet_search` for live candidate discovery, then validate an exact target with `ascet_read`. Search results are hints, not complete metadata. `ascet_get` exposes only bounded `tree` and exact Project `formulas`.
 
-`ascet_edit` includes `set_element_dependency` for dependency flag changes. It uses the same guarded write contract as other write actions: preflight by default, interactive approval when `executeWrite=true`, optional `dryRun`, optional `backupDir`, and mandatory automatic action-specific readback verification. Inspect the returned `verification` feedback and do not issue a redundant live read after verification passes. Use `ascet_read` for an explicit independent Component check and `ascet_get.formulas` for Project formulas. Successful or outcome-unknown writes invalidate affected stored observations; request fresh bounded Get data before relying on prior structure evidence.
+For dependency changes, use `ascet_edit.create_dependent_chain` with explicit Provider, Imported, Local, Formula, Formal, and DataVariant definitions. Runtime creates missing Elements, reuses exact existing Elements, rejects conflicts without overwrite, resolves an omitted Provider through live native Element Search plus exact validation, and performs mandatory automatic readback. Use `ascet_read.read_dependent_chain` when current-chain inspection is required.
 
 These actions call `runAscetCliJson`, enter the ASCET scheduler, and execute under the shared `ascet.toolapi.global` resource.
 ## Scheduler Diagnostics

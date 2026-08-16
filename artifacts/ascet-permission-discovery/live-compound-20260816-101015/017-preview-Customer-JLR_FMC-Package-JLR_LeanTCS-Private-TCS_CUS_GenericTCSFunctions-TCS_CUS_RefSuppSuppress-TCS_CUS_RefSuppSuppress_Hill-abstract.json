@@ -1,0 +1,141 @@
+{
+  "stage": "preview-Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill-abstract",
+  "request": {
+    "toolName": "ascet_edit",
+    "params": {
+      "action": "create_method",
+      "componentPath": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill",
+      "componentKind": "class",
+      "methodName": "__PiPermissionProbe__",
+      "methodKind": "abstract",
+      "ifExists": "fail",
+      "intent": "preview"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"status\": \"error\",\n  \"permission\": {\n    \"mode\": \"default\",\n    \"decision\": \"not_evaluated\"\n  },\n  \"preflight\": {\n    \"status\": \"failed\"\n  },\n  \"editability\": {\n    \"status\": \"unknown\"\n  },\n  \"mutation\": {\n    \"status\": \"not_started\"\n  },\n  \"verification\": {\n    \"status\": \"unknown\"\n  },\n  \"error\": {\n    \"code\": \"unsupported_operation\",\n    \"message\": \"Operation 'preflight_create_method' is not registered in AscetBridge.\"\n  },\n  \"bridge\": {\n    \"beforeBridge\": false,\n    \"bridgeEntered\": false,\n    \"backendResponseReceived\": false\n  },\n  \"recovery\": {\n    \"required\": false\n  }\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "error",
+        "error": {
+          "code": "unsupported_operation",
+          "message": "Operation 'preflight_create_method' is not registered in AscetBridge."
+        }
+      },
+      "raw": {
+        "ok": false,
+        "data": null,
+        "request": {
+          "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "preflight_create_method",
+            "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill",
+            "__PiPermissionProbe__",
+            "--method-kind",
+            "abstract",
+            "--if-exists",
+            "fail",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"unsupported_operation\",\"message\":\"Operation \\u0027preflight_create_method\\u0027 is not registered in AscetBridge.\"},\"meta\":{\"bridgePid\":25436,\"bridgeGeneration\":\"8e2fade9-81a6-43fb-8190-6bb8e5991d43\",\"durationMs\":9,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"preflight_create_method\"}}\r\n",
+        "stderr": "",
+        "exitCode": 2,
+        "timedOut": false,
+        "aborted": false,
+        "operationId": "preflight_create_method",
+        "stage": "cli_process",
+        "diagnostics": {
+          "operationId": "preflight_create_method",
+          "stage": "cli_process",
+          "exitCode": 2,
+          "timedOut": false,
+          "aborted": false,
+          "stderrSummary": "",
+          "stdoutSummary": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"unsupported_operation\",\"message\":\"Operation \\u0027preflight_create_method\\u0027 is not registered in AscetBridge.\"},\"meta\":{\"bridgePid\":25436,\"bridgeGeneration\":\"8e2fade9-81a6-43fb-8190-6bb8e5991d43\",\"durationMs\":9,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"preflight_create_method\"}}",
+          "retryable": false
+        },
+        "error": {
+          "code": "unsupported_operation",
+          "message": "Operation 'preflight_create_method' is not registered in AscetBridge."
+        }
+      },
+      "error": {
+        "code": "unsupported_operation",
+        "message": "Operation 'preflight_create_method' is not registered in AscetBridge."
+      },
+      "mutationResult": {
+        "status": "error",
+        "permission": {
+          "mode": "default",
+          "decision": "not_evaluated"
+        },
+        "preflight": {
+          "status": "failed"
+        },
+        "editability": {
+          "status": "unknown"
+        },
+        "mutation": {
+          "status": "not_started"
+        },
+        "verification": {
+          "status": "unknown"
+        },
+        "error": {
+          "code": "unsupported_operation",
+          "message": "Operation 'preflight_create_method' is not registered in AscetBridge."
+        },
+        "bridge": {
+          "beforeBridge": false,
+          "bridgeEntered": false,
+          "backendResponseReceived": false
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      },
+      "tool": "ascet_edit",
+      "action": "create_method",
+      "command": {
+        "logicalCommandId": "AscetCreateMethod",
+        "backendCommandId": "AscetCreateMethod",
+        "operation": "create_method"
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "preflight_create_method",
+            "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_Hill",
+            "__PiPermissionProbe__",
+            "--method-kind",
+            "abstract",
+            "--if-exists",
+            "fail",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 2,
+        "timedOut": false,
+        "stderr": ""
+      }
+    }
+  }
+}

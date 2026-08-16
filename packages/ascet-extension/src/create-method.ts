@@ -22,7 +22,7 @@ export interface AscetCreateMethodParams {
 	ifExists?: "fail" | "return-existing";
 	verifyReadback?: boolean;
 	rollbackOnFailure?: boolean;
-	executeWrite?: boolean;
+	intent?: "preview" | "apply";
 }
 
 export interface RunAscetCreateMethodOptions {
@@ -48,9 +48,7 @@ export const ascetCreateMethodParameters = Type.Object({
 	diagram: Type.Optional(Type.String()),
 	ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("return-existing")])),
 	rollbackOnFailure: Type.Optional(Type.Boolean({ description: "Ask the ASCET CLI to roll back when supported." })),
-	executeWrite: Type.Optional(
-		Type.Boolean({ description: "Defaults to false. When true, PI still requires interactive confirmation." }),
-	),
+	intent: Type.Union([Type.Literal("preview"), Type.Literal("apply")]),
 });
 
 export function buildCreateMethodArgs(params: AscetCreateMethodParams): string[] {
@@ -129,9 +127,16 @@ export async function runApprovedAscetCreateMethod(
 	options: RunAscetCreateMethodOptions,
 	ctx: AscetEditApprovalContext,
 ): Promise<AscetCreateMethodResult> {
+	if ((params.intent ?? "preview") !== "apply") {
+		return createBlockedWriteResult(params, options, {
+			approved: false,
+			code: "ascet_edit_approval_required",
+			message:
+				"Use the guarded public ascet_edit call with intent=preview for authoritative non-mutating preflight.",
+		});
+	}
 	const approval = await requestAscetEditApproval(
 		{
-			executeWrite: params.executeWrite,
 			title: "Confirm ASCET method creation",
 			message: createCreateMethodSummary(params),
 			signal: options.signal,

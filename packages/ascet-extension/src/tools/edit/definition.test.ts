@@ -184,12 +184,10 @@ test("ascet_edit applies exact scoped deny settings to the planned write target"
 			{
 				cwd: root,
 				env: { PI_ASCET_EXTENSION_ARTIFACT_ROOT: join(root, "artifacts") },
-				permissionMode: "auto",
-				getSettings: () => ({
-					ascetPermissions: {
-						rules: [{ behavior: "deny", action: "create_folder", path: "DEMO\\Denied" }],
-					},
-				}),
+				ascetPermission: {
+					mode: "auto",
+					rules: [{ behavior: "deny", action: "create_folder", path: "DEMO\\Denied" }],
+				},
 				executeCli: async (request) => {
 					if (request.args[1] === "create_folder") mutationDispatches++;
 					return guardedCreateFolderExecution(request);

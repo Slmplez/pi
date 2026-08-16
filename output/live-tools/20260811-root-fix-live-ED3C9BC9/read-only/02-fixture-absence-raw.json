@@ -1,0 +1,39 @@
+{
+  "ok": false,
+  "data": null,
+  "request": {
+    "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+    "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+    "args": [
+      "exec",
+      "get_tree",
+      "--request-json",
+      "{\"targetPathPrefix\":\"PI_LIVE_ROOTFIX_20260811_ED3C9BC9\",\"depth\":4,\"maxFolders\":20,\"maxComponents\":20}",
+      "--json"
+    ],
+    "timeoutMs": 180000,
+    "jobKind": "read",
+    "mutatesDatabase": false
+  },
+  "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"folder_not_found\",\"message\":\"Folder \\u0027PI_LIVE_ROOTFIX_20260811_ED3C9BC9\\u0027 was not found.\"},\"meta\":{\"bridgePid\":39044,\"bridgeGeneration\":\"ca6c65aa-4f32-4b2a-84e6-e70d0a797686\",\"durationMs\":248,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"get_tree\"}}\r\n",
+  "stderr": "",
+  "exitCode": 2,
+  "timedOut": false,
+  "aborted": false,
+  "operationId": "get_tree",
+  "stage": "cli_process",
+  "diagnostics": {
+    "operationId": "get_tree",
+    "stage": "cli_process",
+    "exitCode": 2,
+    "timedOut": false,
+    "aborted": false,
+    "stderrSummary": "",
+    "stdoutSummary": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"folder_not_found\",\"message\":\"Folder \\u0027PI_LIVE_ROOTFIX_20260811_ED3C9BC9\\u0027 was not found.\"},\"meta\":{\"bridgePid\":39044,\"bridgeGeneration\":\"ca6c65aa-4f32-4b2a-84e6-e70d0a797686\",\"durationMs\":248,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"get_tree\"}}",
+    "retryable": false
+  },
+  "error": {
+    "code": "folder_not_found",
+    "message": "Folder 'PI_LIVE_ROOTFIX_20260811_ED3C9BC9' was not found."
+  }
+}

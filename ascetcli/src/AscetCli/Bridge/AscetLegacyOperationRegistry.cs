@@ -30,6 +30,11 @@ public static class AscetLegacyOperationRegistry
         entries["component_editable_set"] = AscetComponentEditable.SetMain;
         entries["create_folder"] = AscetCreateFolder.Main;
         entries["create_method"] = AscetCreateMethod.Main;
+        entries["guarded_batch_write"] = AscetGuardedBatchWrite.Main;
+        entries["guarded_create_method"] = AscetGuardedCreateMethod.Main;
+        entries["guarded_mutation"] = AscetGuardedMutation.Main;
+        entries["preflight_create_folder"] = AscetPreflightCreateFolder.Main;
+        entries["preflight_create_method"] = AscetPreflightCreateMethod.Main;
         entries["delete_component"] = AscetDeleteComponent.Main;
         entries["delete_folder"] = AscetDeleteFolder.Main;
         entries["delete_method"] = AscetDeleteMethod.Main;
@@ -70,3 +75,4 @@ public static class AscetLegacyOperationRegistry
         return entries;
     }
 }
+

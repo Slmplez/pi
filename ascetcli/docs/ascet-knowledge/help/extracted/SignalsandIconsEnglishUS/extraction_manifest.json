@@ -1,0 +1,255 @@
+{
+  "generated_at": "2026-04-01T03:08:26.101085Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\SignalsandIconsEnglishUS.chm",
+  "unpack_dir": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\SignalsandIconsEnglishUS\\unpacked",
+  "total_files": 39,
+  "total_size_bytes": 200960,
+  "counts_by_extension": {
+    ".gif": 12,
+    ".js": 3,
+    ".xml": 1,
+    ".css": 1,
+    ".lng": 1,
+    ".htm": 17,
+    ".brs": 1,
+    ".glo": 1,
+    ".hhc": 1,
+    ".hhk": 1
+  },
+  "files": [
+    {
+      "relative_path": "button_ff.gif",
+      "size": 982,
+      "sha256": "db8ac5749041b0f8d424b03ee025457e530247115720582ef25696943bca3394",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_last.gif",
+      "size": 1003,
+      "sha256": "150a1bf9280b743924ef9609b934acebfb3229b9f65b93754b9930ecd6bff9ad",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_next.gif",
+      "size": 1000,
+      "sha256": "72e6fee35964a3e819eac94ee553ea7add536241035b421ce02694612f20399b",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_showlast.gif",
+      "size": 1003,
+      "sha256": "150a1bf9280b743924ef9609b934acebfb3229b9f65b93754b9930ecd6bff9ad",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_shownext.gif",
+      "size": 1002,
+      "sha256": "19b7cb02426501e79716113fb6a1c62a8234295bcf208dee8d3e1cda05a0af9a",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "buttons_sigview_back.gif",
+      "size": 1372,
+      "sha256": "177858a4c26b2c2d11bcef8bef1921faaca0c1b159f03227217a19f207a51a63",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "display.js",
+      "size": 5656,
+      "sha256": "85712144c31aac1d2706f3b60475055a673961f71bc37c0f4c9e9c4b85fa9b31",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "eHelp.xml",
+      "size": 371,
+      "sha256": "c23157d9e94b86e81fd9d433975cc8fd6c8f68feca82eeac8f75d07f46d3265f",
+      "extension": ".xml"
+    },
+    {
+      "relative_path": "ehlpdhtm.js",
+      "size": 125815,
+      "sha256": "16f361c6c7e9f424bd232c8b76f7e5337fa2d1bb3fb2a9bc73a6db7f92696a8d",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "HelpDesign.js",
+      "size": 264,
+      "sha256": "9398a5ba87594534fc1b6aa9b133c8d5df4313d18cea4ee50d0c9c9b311a64e9",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "image2.gif",
+      "size": 955,
+      "sha256": "ef01845c3eb043ba5a0df56e5e385fd8a78544aaadeb67de4e86c3abe3e81efe",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "image3.gif",
+      "size": 985,
+      "sha256": "e0efcc51e4884a1edcd47e810a558be80e70b9b32f734a51b0029138277dc211",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "image4.gif",
+      "size": 1000,
+      "sha256": "7440ecac61268a63d67b4346c7af37d3c7ea2503fe1ad923bcc3fac72ddc6be2",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exp_minus.gif",
+      "size": 837,
+      "sha256": "18a8ea974d756d370d6f7067283fc8c0b26f235c8e98bdaaf13a63e7dca8b1c4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exp_plus.gif",
+      "size": 842,
+      "sha256": "9ff1991cf9c6de621e2672bebf74fbc56680e3413f74d6cf18e25238701651be",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/statisch.gif",
+      "size": 831,
+      "sha256": "481cd3e8b966f0a4398b853efce140287877173b926b53d710791675a1b15aa4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Layout.css",
+      "size": 9786,
+      "sha256": "fa7b5a6453a21a0fb428753bb054c98f2002a31eaef5306319201e3e2a2673c5",
+      "extension": ".css"
+    },
+    {
+      "relative_path": "RoboHHRE.lng",
+      "size": 3586,
+      "sha256": "607e16623990c7b694bb11537edbecfbd7057fda1739bba5173e9d8a4942b18f",
+      "extension": ".lng"
+    },
+    {
+      "relative_path": "SI_create_open_signal.htm",
+      "size": 1673,
+      "sha256": "32899c46d591680e7df0ff268414b65d328f5f41522888f512a5465496d741f0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SI_Creating_a_Signal.htm",
+      "size": 1625,
+      "sha256": "957b80dcd184dfd58c14369841a8c74772f57e8a0304f453380cb0a6862178e4",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SI_Creating_Icon.htm",
+      "size": 1997,
+      "sha256": "15e61c601afcee84022900cae782812db645fc93b66b01d9559da3e0a065fdce",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SI_Exporting_Signal.htm",
+      "size": 1658,
+      "sha256": "d75bdc6c52064047815c493d204013ba9c66693676d46c7d870420cab9573416",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SI_File_Menu.htm",
+      "size": 3545,
+      "sha256": "5e07f1100d205e44f465c7bfefffc6c91b7479d3d066657ca590f27f4b9619b5",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SI_icon_editor.htm",
+      "size": 1135,
+      "sha256": "f7efdf32ae2433c8babe9ea204acc027c7e5ca3bc0b2b4f93f7b9c3c61ca4313",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SI_import_measurement_data.htm",
+      "size": 3289,
+      "sha256": "7d02c31cc85d5660ba7f5d7b441b344b76c6dd6fbc895ccf5977c6620b1fd2da",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SI_load_icon.htm",
+      "size": 2061,
+      "sha256": "61b95e7b3abef3b27e59d7a57d211d59ef0c3dccbd961de4d73ead7dd04d1b60",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SI_Navigation_Menu.htm",
+      "size": 2518,
+      "sha256": "584580415d8a47398aa8c3976c512c1ae90a1341a3fa98d52a32be4512ff7968",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SI_Overview.htm",
+      "size": 1271,
+      "sha256": "305c047e75690043774c8605c41e99a20a5788a7fee99c5866762225f29e5f6e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SI_save_icon.htm",
+      "size": 1760,
+      "sha256": "ad672a97982e488405595814e302f69293453785f2c36b2dffeb8e05006d8d10",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SI_scale_icon.htm",
+      "size": 1701,
+      "sha256": "173e1f58b2db2fceee148b6c3495fe91ead61956ea31807e4c456a38b9959bbf",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SI_signal_viewer.htm",
+      "size": 2155,
+      "sha256": "1668a79483e907f83a9aecd54f03382d2ebf4926d397f70d785803d9cd054953",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SI_start_icon_editor.htm",
+      "size": 1883,
+      "sha256": "15044c79e2b4f574ec5212cc5104b366fe43fe98f8a3c73ff9f1944302266f5c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SI_Toolbar.htm",
+      "size": 3890,
+      "sha256": "e3033b8da9e27478afadee175db25df97ef4e77529754e3382d577e213b35c5a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SI_view_measurment_data.htm",
+      "size": 2452,
+      "sha256": "7298dfad10842fd4c0fbd13f48e7f0062b14e49c0f063073fb617ff94426bad6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SI_View_Signal_Item_Window.htm",
+      "size": 1662,
+      "sha256": "7c2f07a863b78d4133ee1dff64b5703ea6c23dd961f1f5918cc04c5c1e942292",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SignalsandIconsEnglishUS.brs",
+      "size": 2,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "extension": ".brs"
+    },
+    {
+      "relative_path": "SignalsandIconsEnglishUS.glo",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "extension": ".glo"
+    },
+    {
+      "relative_path": "SignalsandIconsEnglishUS.hhc",
+      "size": 3738,
+      "sha256": "8d8c787cd0aa8a14f33a9c05afb5a69086529cad222b70d301ec67a3d2988c8d",
+      "extension": ".hhc"
+    },
+    {
+      "relative_path": "SignalsandIconsEnglishUS.hhk",
+      "size": 3655,
+      "sha256": "cf78da1a0ededb3ac0b264354509ba4deb2de89492ebfbe897f6cc844297ad6c",
+      "extension": ".hhk"
+    }
+  ]
+}

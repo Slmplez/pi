@@ -1,0 +1,753 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="index">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Action">
+    <param name="Name" value="State Machines - Overview">
+    <param name="Local" value="SM_overview.htm">
+    <param name="Name" value="Actions">
+    <param name="Local" value="SM_actions.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="as block diagram">
+      <param name="Name" value="block-diagram">
+      <param name="Local" value="SM_blockDiagram.htm">
+      <param name="Name" value="opening_diagram">
+      <param name="Local" value="SM_opening_diagram.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="in state editor">
+      <param name="Name" value="specifying_actions">
+      <param name="Local" value="specifying_actions.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="assign">
+      <param name="Name" value="assigning actions">
+      <param name="Local" value="SM_AssignActions.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="in ESDL">
+      <param name="Name" value="Opening a Diagram for Actions/Conditions">
+      <param name="Local" value="SM_opening_diagram.htm">
+      <param name="Name" value="Actions/Conditions in Separate Diagrams">
+      <param name="Local" value="SM_conditions_actions.htm">
+      <param name="Name" value="Creating an ESDL Diagram for Actions/Conditions">
+      <param name="Local" value="SM_Create_ESDL_Diagram_for_ActionsConditions.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="specify">
+      <param name="Name" value="specifying_conditions">
+      <param name="Local" value="specifying_conditions.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="in transition editor">
+      <param name="Name" value="Specifying Conditions and Transition Actions in the Transition Editor">
+      <param name="Local" value="specifying_conditions_transition.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="in separate diagram">
+      <param name="Name" value="conditions-actions">
+      <param name="Local" value="SM_conditions_actions.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="in state diagram">
+      <param name="Name" value="conditions_actions_state">
+      <param name="Local" value="conditions_actions_state.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="add">
+      <param name="Name" value="add-condition">
+      <param name="Local" value="SM_add_condition.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="argument (state machine)">
+      <param name="Name" value="Communication with Other Components">
+      <param name="Local" value="communications_components.htm">
+      <param name="Name" value="Adding Arguments to Conditions/Actions">
+      <param name="Local" value="adding_arguments.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="delete unused">
+      <param name="Name" value="Searching/Deleting Unused Methods/Triggers">
+      <param name="Local" value="za_searchdel_unused_methodstriggers.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Actions/Conditions diagram">
+    <param name="See Also" value="Actions/Conditions diagram">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="block diagram">
+      <param name="Name" value="block-diagram">
+      <param name="Local" value="SM_blockDiagram.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="ESDL">
+      <param name="Name" value="Creating an ESDL Diagram for Actions/Conditions">
+      <param name="Local" value="SM_Create_ESDL_Diagram_for_ActionsConditions.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Condition">
+    <param name="Name" value="the_statemachine">
+    <param name="Local" value="SM_overview.htm">
+    <param name="Name" value="Conditions">
+    <param name="Local" value="SM_conditions.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="add">
+      <param name="Name" value="Adding an Action or Condition">
+      <param name="Local" value="SM_add_condition.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="as block diagram">
+      <param name="Name" value="Creating a BDE Diagram for Actions/Conditions">
+      <param name="Local" value="SM_blockDiagram.htm">
+      <param name="Name" value="Opening a Diagram for Actions/Conditions">
+      <param name="Local" value="SM_opening_diagram.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="in ESDL">
+      <param name="Name" value="Conditions and Actions in the State Diagram">
+      <param name="Local" value="conditions_actions_state.htm">
+      <param name="Name" value="Opening a Diagram for Actions/Conditions">
+      <param name="Local" value="SM_opening_diagram.htm">
+      <param name="Name" value="Creating an ESDL Diagram for Actions/Conditions">
+      <param name="Local" value="SM_Create_ESDL_Diagram_for_ActionsConditions.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="in separate diagram">
+      <param name="Name" value="Actions/Conditions in Separate Diagrams">
+      <param name="Local" value="SM_conditions_actions.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="in transition editor">
+      <param name="Name" value="Specifying Conditions and Transition Actions in the Transition Editor">
+      <param name="Local" value="specifying_conditions_transition.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="specify">
+      <param name="Name" value="Specifying Conditions and Actions">
+      <param name="Local" value="specifying_conditions.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="in state diagram">
+      <param name="Name" value="Conditions and Actions in the State Diagram">
+      <param name="Local" value="conditions_actions_state.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="argument (state machine)">
+      <param name="Name" value="Communication with Other Components">
+      <param name="Local" value="communications_components.htm">
+      <param name="Name" value="Adding Arguments to Conditions/Actions">
+      <param name="Local" value="adding_arguments.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="diagram">
+    <param name="See Also" value="diagram">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Actions/Conditions (BDE)">
+      <param name="Name" value="block-diagram">
+      <param name="Local" value="SM_blockDiagram.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Actions/Conditions (ESDL)">
+      <param name="Name" value="esdl">
+      <param name="Local" value="SM_Create_ESDL_Diagram_for_ActionsConditions.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="editor">
+    <param name="See Also" value="editor">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="state machine">
+      <param name="Name" value="State Machines - Overview">
+      <param name="Local" value="SM_overview.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="experiment">
+    <param name="See Also" value="experiment">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="with state machines">
+      <param name="Name" value="state_machines">
+      <param name="Local" value="SM_experiment_with_state_machines.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Hierarchy state">
+    <param name="Name" value="HierarchyStates">
+    <param name="Local" value="SM_hierarchystates.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="closed">
+      <param name="Name" value="ClosedHierarchy">
+      <param name="Local" value="SM_ClosedHierarchy.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="open">
+      <param name="Name" value="AddopenHierarchy">
+      <param name="Local" value="addopenhierarchy.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Junction">
+    <param name="See Also" value="Junction">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="create">
+      <param name="Name" value="creating_junctions">
+      <param name="Local" value="creating_junctions.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit">
+      <param name="Name" value="editing_junctions">
+      <param name="Local" value="editing_junctions.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="menu options">
+    <param name="See Also" value="menu options">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="state machine editor">
+      <param name="Name" value="MenuBar">
+      <param name="Local" value="SM_menubar.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="methods">
+    <param name="See Also" value="methods">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="public ~ in state machine">
+      <param name="Name" value="create_public_diagram">
+      <param name="Local" value="SM_create_public_diagram.htm">
+      <param name="Name" value="add_public_method">
+      <param name="Local" value="add_public_method.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="delete unused">
+      <param name="Name" value="Searching/Deleting Unused Methods/Triggers">
+      <param name="Local" value="za_searchdel_unused_methodstriggers.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Start state">
+    <param name="Name" value="defining-startstate">
+    <param name="Local" value="SM_Define_StartState.htm">
+    <param name="Name" value="Start State">
+    <param name="Local" value="SM_start_state.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="State">
+    <param name="Name" value="the_statemachine">
+    <param name="Local" value="SM_overview.htm">
+    <param name="Name" value="states">
+    <param name="Local" value="SM_states.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="animation">
+      <param name="Name" value="using-statemachine">
+      <param name="Local" value="using-statemachine.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="arrange">
+      <param name="Name" value="layout_states">
+      <param name="Local" value="layout_states.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="assign action">
+      <param name="Name" value="assigning actions">
+      <param name="Local" value="SM_AssignActions.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="create transition">
+      <param name="Name" value="create_transition">
+      <param name="Local" value="create_transition.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit">
+      <param name="Name" value="editing_state">
+      <param name="Local" value="editing_state.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Hierarchy">
+      <param name="Name" value="HierarchyStates">
+      <param name="Local" value="SM_hierarchystates.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="rename">
+      <param name="Name" value="renaming_state">
+      <param name="Local" value="renaming_state.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="State diagram">
+    <param name="Name" value="State Machines - Overview">
+    <param name="Local" value="SM_overview.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="State machine">
+    <param name="Name" value="the_statemachine">
+    <param name="Local" value="SM_overview.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="actions">
+      <param name="Name" value="the_statemachine">
+      <param name="Local" value="SM_overview.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="add trigger argument">
+      <param name="Name" value="adding_triggerargument">
+      <param name="Local" value="adding_triggerargument.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="animate states">
+      <param name="Name" value="using-statemachine">
+      <param name="Local" value="using-statemachine.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="create">
+      <param name="Name" value="creating_new">
+      <param name="Local" value="SM_creating_new.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="editor">
+      <param name="Name" value="the_statemachine">
+      <param name="Local" value="SM_overview.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="experiment">
+      <param name="Name" value="state_machines">
+      <param name="Local" value="SM_experiment_with_state_machines.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="input">
+      <param name="Name" value="adding_inputs">
+      <param name="Local" value="adding_inputs.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="insert comment line">
+      <param name="Name" value="automatic_insertion">
+      <param name="Local" value="automatic_insertion.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="output">
+      <param name="Name" value="adding_inputs">
+      <param name="Local" value="adding_inputs.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="public methods">
+      <param name="Name" value="public_methods">
+      <param name="Local" value="SM_public_methods.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="start state">
+      <param name="Name" value="defining-startstate">
+      <param name="Local" value="SM_Define_StartState.htm">
+      <param name="Name" value="Start State">
+      <param name="Local" value="SM_start_state.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="trigger">
+      <param name="Name" value="insert_trigger">
+      <param name="Local" value="SM_insert_trigger.htm">
+      <param name="Name" value="Triggers">
+      <param name="Local" value="SM_triggers.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="use public method">
+      <param name="Name" value="using_pm_external">
+      <param name="Local" value="using_pm_external.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="condition">
+      <param name="Name" value="the_statemachine">
+      <param name="Local" value="SM_overview.htm">
+      <param name="Name" value="Conditions">
+      <param name="Local" value="SM_conditions.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="transition">
+      <param name="Name" value="the_statemachine">
+      <param name="Local" value="SM_overview.htm">
+      <param name="Name" value="Transitions">
+      <param name="Local" value="SM_transitions.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="action">
+      <param name="Name" value="Actions">
+      <param name="Local" value="SM_actions.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="hierarchy">
+      <param name="Name" value="Hierarchy">
+      <param name="Local" value="SM_hierarchy.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="history">
+      <param name="Name" value="History">
+      <param name="Local" value="SM_History.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="junction">
+      <param name="Name" value="Junctions">
+      <param name="Local" value="sm_junctions.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="class">
+      <param name="Name" value="State Machines as Classes">
+      <param name="Local" value="SM_State_Machines_as_Classes.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="state variable">
+      <param name="Name" value="State Variables">
+      <param name="Local" value="SM_StateVariables.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="class">
+    <param name="See Also" value="class">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="state machine">
+      <param name="Name" value="State Machines as Classes">
+      <param name="Local" value="SM_State_Machines_as_Classes.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="State machine editor">
+    <param name="Name" value="State Machines - Overview">
+    <param name="Local" value="SM_overview.htm">
+    <param name="Name" value="Description of the Window Elements">
+    <param name="Local" value="SM_description_of_window_elements.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="menu options">
+      <param name="Name" value="MenuBar">
+      <param name="Local" value="SM_menubar.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="toolbars">
+      <param name="Name" value="Toolbars">
+      <param name="Local" value="SM_Toolbar.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Trigger">
+    <param name="Name" value="Triggers">
+    <param name="Local" value="SM_triggers.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="insert">
+      <param name="Name" value="insert_trigger">
+      <param name="Local" value="SM_insert_trigger.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="of state machine">
+      <param name="Name" value="insert_trigger">
+      <param name="Local" value="SM_insert_trigger.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="argument">
+      <param name="Name" value="Rules for Trigger Arguments">
+      <param name="Local" value="SM_Rules_for_Trigger_Arguments.htm">
+      <param name="Name" value="Adding a Trigger Argument">
+      <param name="Local" value="adding_triggerargument.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="delete unused">
+      <param name="Name" value="Searching/Deleting Unused Methods/Triggers">
+      <param name="Local" value="za_searchdel_unused_methodstriggers.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="State editors">
+    <param name="Name" value="assigning actions">
+    <param name="Local" value="SM_AssignActions.htm">
+    <param name="Name" value="specifying_actions">
+    <param name="Local" value="specifying_actions.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Transition">
+    <param name="Name" value="the_statemachine">
+    <param name="Local" value="SM_overview.htm">
+    <param name="Name" value="Transitions">
+    <param name="Local" value="SM_transitions.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="action">
+      <param name="Name" value="assigning triggers">
+      <param name="Local" value="SM_AssignTriggers.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="condition">
+      <param name="Name" value="assigning triggers">
+      <param name="Local" value="SM_AssignTriggers.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="create">
+      <param name="Name" value="create_transition">
+      <param name="Local" value="create_transition.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit path">
+      <param name="Name" value="change_path_transition">
+      <param name="Local" value="change_path_transition.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="priority">
+      <param name="Name" value="assigning triggers">
+      <param name="Local" value="SM_AssignTriggers.htm">
+      <param name="Name" value="Transitions">
+      <param name="Local" value="SM_transitions.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="trigger">
+      <param name="Name" value="assigning triggers">
+      <param name="Local" value="SM_AssignTriggers.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit appearance">
+      <param name="Name" value="change_appearance_transition">
+      <param name="Local" value="change_appearance_transition.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Transition editor">
+    <param name="Name" value="specifying_conditions_transition">
+    <param name="Local" value="specifying_conditions_transition.htm">
+    <param name="Name" value="assigning triggers">
+    <param name="Local" value="SM_AssignTriggers.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="hierarchy">
+    <param name="Name" value="Hierarchy">
+    <param name="Local" value="SM_hierarchy.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="History">
+    <param name="See Also" value="History">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="state machine">
+      <param name="Name" value="Hierarchy">
+      <param name="Local" value="SM_hierarchy.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Of state machines">
+    <param name="Name" value="Triggers">
+    <param name="Local" value="SM_triggers.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="toolbar">
+    <param name="See Also" value="toolbar">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="configure">
+      <param name="Name" value="Configuring a Toolbar">
+      <param name="Local" value="IntroductionEnglishUS.chm::/INT_Configuring_Toolbar.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="conventions">
+    <param name="See Also" value="conventions">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="reserved keywords">
+      <param name="Name" value="Reserved Keywords">
+      <param name="Local" value="introductionenglishus.chm::/INT_Reserved_Keywords.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="reserved keywords">
+    <param name="Name" value="Reserved Keywords">
+    <param name="Local" value="introductionenglishus.chm::/INT_Reserved_Keywords.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="keyword">
+    <param name="See Also" value="keyword">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="reserved">
+      <param name="Name" value="Reserved Keywords">
+      <param name="Local" value="introductionenglishus.chm::/INT_Reserved_Keywords.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="ASCET Code Generation Messages">
+    <param name="Name" value="List of Warning Messages">
+    <param name="Local" value="ComponentManagerEnglishUS.chm::/List_of_Warning_Messages.htm">
+    <param name="Name" value="List of Information Messages">
+    <param name="Local" value="ComponentManagerEnglishUS.chm::/List_of_Information_Messages.htm">
+    <param name="Name" value="List of Error Messages">
+    <param name="Local" value="ComponentManagerEnglishUS.chm::/List_of_Error_Messages.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Error Messages">
+    <param name="Name" value="List of Error Messages">
+    <param name="Local" value="ComponentManagerEnglishUS.chm::/List_of_Error_Messages.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Information messages">
+    <param name="Name" value="List of Information Messages">
+    <param name="Local" value="ComponentManagerEnglishUS.chm::/List_of_Information_Messages.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Warning messages">
+    <param name="Name" value="List of Warning Messages">
+    <param name="Local" value="ComponentManagerEnglishUS.chm::/List_of_Warning_Messages.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="element">
+    <param name="See Also" value="element">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="delete">
+      <param name="Name" value="Searching/Deleting Unused Elements">
+      <param name="Local" value="sm_unusedelements.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="show unused">
+      <param name="Name" value="Searching/Deleting Unused Elements">
+      <param name="Local" value="sm_unusedelements.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="copy">
+      <param name="Name" value="Copying Elements in the Outline Tab">
+      <param name="Local" value="IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="diagram item">
+    <param name="See Also" value="diagram item">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="delete">
+      <param name="Name" value="Searching/Deleting Unused Elements">
+      <param name="Local" value="sm_unusedelements.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="copy">
+    <param name="See Also" value="copy">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="element">
+      <param name="Name" value="Copying Elements in the Outline Tab">
+      <param name="Local" value="IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="buttons">
+    <param name="See Also" value="buttons">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="state machine editor">
+      <param name="Name" value="Toolbars">
+      <param name="Local" value="SM_Toolbar.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="argument">
+    <param name="See Also" value="argument">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="trigger ~ (state machine)">
+      <param name="Name" value="Adding a Trigger Argument">
+      <param name="Local" value="adding_triggerargument.htm">
+      <param name="Name" value="Trigger Arguments for External Communication">
+      <param name="Local" value="SM_Trigger_Arguments_for_Communication.htm">
+      <param name="Name" value="Rules for Trigger Arguments">
+      <param name="Local" value="SM_Rules_for_Trigger_Arguments.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="action ~ (state machine)">
+      <param name="Name" value="Communication with Other Components">
+      <param name="Local" value="communications_components.htm">
+      <param name="Name" value="Adding Arguments to Conditions/Actions">
+      <param name="Local" value="adding_arguments.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="condition ~ (state machine)">
+      <param name="Name" value="Communication with Other Components">
+      <param name="Local" value="communications_components.htm">
+      <param name="Name" value="Adding Arguments to Conditions/Actions">
+      <param name="Local" value="adding_arguments.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="return value">
+    <param name="See Also" value="return value">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="condition (state machine)">
+      <param name="Name" value="Adding Arguments to Conditions/Actions">
+      <param name="Local" value="adding_arguments.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="variable">
+    <param name="See Also" value="variable">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="sm">
+      <param name="Name" value="State Variables">
+      <param name="Local" value="SM_StateVariables.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="state ~">
+      <param name="Name" value="State Variables">
+      <param name="Local" value="SM_StateVariables.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="state variable">
+    <param name="Name" value="State Variables">
+    <param name="Local" value="SM_StateVariables.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="reinitialize">
+      <param name="Name" value="Specifying a Reinitialization Method for State Variables">
+      <param name="Local" value="sm_specifyresetmethod_statevariables.htm">
+    </object>
+    </ul>
+</ul>
+</html>

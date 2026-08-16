@@ -1,0 +1,6 @@
+{
+  "action": "delete_folder",
+  "folderPath": "PI_LIVE_ROOTFIX_20260811_ED3C9BC9",
+  "ifMissing": "ignore",
+  "executeWrite": true
+}

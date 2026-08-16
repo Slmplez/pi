@@ -1,3 +1,11 @@
+import { ascetBatchActionContracts } from "../tools/actions/contracts/batch.ts";
+import { ascetDependencyActionContracts } from "../tools/actions/contracts/dependency.ts";
+import { ascetDiffActionContracts } from "../tools/actions/contracts/diff.ts";
+import { ascetEditActionContracts } from "../tools/actions/contracts/edit.ts";
+import { ascetGetActionContracts } from "../tools/actions/contracts/get.ts";
+import { ascetOpsActionContracts } from "../tools/actions/contracts/ops.ts";
+import { ascetReadActionContracts } from "../tools/actions/contracts/read.ts";
+import type { AscetActionContract } from "../tools/actions/contracts/types.ts";
 import { resolveAscetBackendCommandId } from "./command-aliases.ts";
 
 export type AscetRouteCategory = "domain" | "ops";
@@ -8,447 +16,63 @@ export interface AscetRouteManifestEntry {
 	logicalCommandId: string;
 	operation: string;
 	category: AscetRouteCategory;
+	when?: Readonly<Record<string, string>>;
 }
 
 export interface AscetRouteEntry extends AscetRouteManifestEntry {
 	backendCommandId: string;
 }
 
+function toRouteManifestEntries(contracts: readonly AscetActionContract[]): AscetRouteManifestEntry[] {
+	return contracts.flatMap((contract) => {
+		if (contract.execution.kind === "native-search") return [];
+		const base = {
+			toolName: contract.tool,
+			action: contract.action,
+			category: contract.execution.kind === "local" ? contract.execution.category : ("domain" as const),
+		};
+		return [
+			...(contract.execution.kind === "bridge" ? (contract.execution.variants ?? []) : []).map((variant) => ({
+				...base,
+				logicalCommandId: variant.logicalCommandId,
+				operation: variant.operation,
+				when: variant.when,
+			})),
+			{
+				...base,
+				logicalCommandId: contract.execution.logicalCommandId,
+				operation: contract.execution.operation,
+			},
+		];
+	});
+}
+
+const ascetBatchRouteManifestEntries = toRouteManifestEntries(ascetBatchActionContracts);
+const ascetOpsRouteManifestEntries = toRouteManifestEntries(ascetOpsActionContracts);
+const ascetGetRouteManifestEntries = toRouteManifestEntries(ascetGetActionContracts);
+const ascetDiffRouteManifestEntries = toRouteManifestEntries(ascetDiffActionContracts);
+const ascetEditRouteManifestEntries = toRouteManifestEntries(ascetEditActionContracts);
+const ascetReadRouteManifestEntries = toRouteManifestEntries([
+	...ascetReadActionContracts,
+	...ascetDependencyActionContracts.filter((contract) => contract.tool === "ascet_read"),
+]);
+const ascetDependencyEditRouteManifestEntries = toRouteManifestEntries(
+	ascetDependencyActionContracts.filter((contract) => contract.tool === "ascet_edit"),
+);
+
 export const ascetRouteManifestEntries = [
-	{
-		toolName: "ascet_status",
-		action: "status",
-		logicalCommandId: "PiAscetStatus",
-		operation: "status",
-		category: "ops",
-	},
-	{
-		toolName: "ascet_capabilities",
-		action: "search_actions",
-		logicalCommandId: "PiAscetCapabilities",
-		operation: "capabilities",
-		category: "ops",
-	},
-	{
-		toolName: "ascet_recover",
-		action: "status",
-		logicalCommandId: "PiAscetRecoverStatus",
-		operation: "recover_status",
-		category: "ops",
-	},
-	{
-		toolName: "ascet_recover",
-		action: "clear_extension_temp",
-		logicalCommandId: "PiAscetRecoverClearExtensionTemp",
-		operation: "clear_extension_temp",
-		category: "ops",
-	},
-	{
-		toolName: "ascet_recover",
-		action: "scheduler_status",
-		logicalCommandId: "PiAscetRecoverSchedulerStatus",
-		operation: "scheduler_status",
-		category: "ops",
-	},
-	{
-		toolName: "ascet_recover",
-		action: "scheduler_recover",
-		logicalCommandId: "PiAscetRecoverSchedulerRecover",
-		operation: "scheduler_recover",
-		category: "ops",
-	},
-	{
-		toolName: "ascet_recover",
-		action: "clear_stale_cli_lock",
-		logicalCommandId: "PiAscetRecoverClearStaleCliLock",
-		operation: "clear_stale_cli_lock",
-		category: "ops",
-	},
-	{
-		toolName: "ascet_recover",
-		action: "reconcile_mutation",
-		logicalCommandId: "PiAscetRecoverReconcileMutation",
-		operation: "reconcile_mutation",
-		category: "ops",
-	},
+	...ascetOpsRouteManifestEntries,
+	...ascetBatchRouteManifestEntries,
 
-	{
-		toolName: "ascet_get",
-		action: "database_identity",
-		logicalCommandId: "AscetGetDatabaseIdentity",
-		operation: "get_database_identity",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_get",
-		action: "tree",
-		logicalCommandId: "AscetGetTree",
-		operation: "get_tree",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_get",
-		action: "database_catalog",
-		logicalCommandId: "AscetGetDatabaseCatalog",
-		operation: "get_database_catalog",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_get",
-		action: "elements",
-		logicalCommandId: "AscetGetElements",
-		operation: "get_elements",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_get",
-		action: "formulas",
-		logicalCommandId: "AscetGetFormulas",
-		operation: "get_formulas",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_get",
-		action: "component_refs",
-		logicalCommandId: "AscetGetComponentRefs",
-		operation: "get_component_refs",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_get",
-		action: "bde_edges",
-		logicalCommandId: "AscetGetBdeEdges",
-		operation: "get_bde_edges",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_get",
-		action: "import_binding",
-		logicalCommandId: "AscetGetImportBinding",
-		operation: "get_import_binding",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_get",
-		action: "dbitem_refs",
-		logicalCommandId: "AscetGetDbitemRefs",
-		operation: "get_dbitem_refs",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_read",
-		action: "read",
-		logicalCommandId: "AscetReadComponentSummary",
-		operation: "read_component_summary",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_read",
-		action: "read_code",
-		logicalCommandId: "AscetReadCode",
-		operation: "read_code",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_read",
-		action: "read_method_signature",
-		logicalCommandId: "AscetReadMethodSignature",
-		operation: "read_method_signature",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_read",
-		action: "read_element",
-		logicalCommandId: "AscetReadElementCatalog",
-		operation: "read_element_catalog",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_read",
-		action: "read_implementation",
-		logicalCommandId: "AscetReadImplementation",
-		operation: "read_implementation",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_read",
-		action: "read_block_diagram",
-		logicalCommandId: "AscetReadBlockDiagram",
-		operation: "read_block_diagram",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_read",
-		action: "read_state_machine_flow",
-		logicalCommandId: "AscetReadStateMachineFlow",
-		operation: "read_state_machine_flow",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_read",
-		action: "read_dependent_chain",
-		logicalCommandId: "AscetReadDependentChain",
-		operation: "read_dependent_chain",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_read",
-		action: "read_element_dependency",
-		logicalCommandId: "AscetReadElementDependency",
-		operation: "read_element_dependency",
-		category: "domain",
-	},
+	...ascetGetRouteManifestEntries,
 
-	{
-		toolName: "ascet_diff",
-		action: "diff",
-		logicalCommandId: "AscetDiffComponentSnapshot",
-		operation: "diff_component_snapshot",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_diff",
-		action: "diff_method",
-		logicalCommandId: "AscetDiffMethodCode",
-		operation: "diff_method_code",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_diff",
-		action: "diff_component_snapshot",
-		logicalCommandId: "AscetDiffComponentSnapshot",
-		operation: "diff_component_snapshot",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_diff",
-		action: "diff_state_machine_domain",
-		logicalCommandId: "AscetDiffStateMachineDomain",
-		operation: "diff_state_machine_domain",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_diff",
-		action: "diff_element_spec",
-		logicalCommandId: "AscetDiffElementSpec",
-		operation: "diff_element_spec",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_diff",
-		action: "diff_project_formulas",
-		logicalCommandId: "AscetDiffProjectFormulas",
-		operation: "diff_project_formulas",
-		category: "domain",
-	},
+	...ascetReadRouteManifestEntries,
 
-	{
-		toolName: "ascet_edit",
-		action: "create_folder",
-		logicalCommandId: "AscetCreateFolder",
-		operation: "create_folder",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_edit",
-		action: "delete_folder",
-		logicalCommandId: "AscetDeleteFolder",
-		operation: "delete_folder",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_edit",
-		action: "create_component",
-		logicalCommandId: "AscetCreateComponent",
-		operation: "create_component",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_edit",
-		action: "create_method",
-		logicalCommandId: "AscetCreateMethod",
-		operation: "create_method",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_edit",
-		action: "set_method_signature",
-		logicalCommandId: "AscetSetMethodSignature",
-		operation: "set_method_signature",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_edit",
-		action: "delete_component",
-		logicalCommandId: "AscetDeleteComponent",
-		operation: "delete_component",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_edit",
-		action: "delete_method",
-		logicalCommandId: "AscetDeleteMethod",
-		operation: "delete_method",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_edit",
-		action: "set_method_code",
-		logicalCommandId: "AscetSetMethodCode",
-		operation: "set_method_code",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_edit",
-		action: "set_module_code",
-		logicalCommandId: "AscetSetModuleCode",
-		operation: "set_module_code",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_edit",
-		action: "set_state_machine_code",
-		logicalCommandId: "AscetSetStateMachineCode",
-		operation: "set_state_machine_code",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_edit",
-		action: "set_enumerators",
-		logicalCommandId: "AscetSetEnumerators",
-		operation: "set_enumerators",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_edit",
-		action: "apply_element_spec",
-		logicalCommandId: "AscetApplyElementSpec",
-		operation: "apply_element_spec",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_edit",
-		action: "apply_project_formula",
-		logicalCommandId: "AscetApplyProjectFormula",
-		operation: "apply_project_formula",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_edit",
-		action: "create_dependent_chain",
-		logicalCommandId: "AscetCreateDependentChain",
-		operation: "configure_parameter_dependency_chain_execute",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_edit",
-		action: "set_element_dependency",
-		logicalCommandId: "AscetSetElementDependency",
-		operation: "set_element_dependency",
-		category: "domain",
-	},
+	...ascetDiffRouteManifestEntries,
 
-	{
-		toolName: "configure_parameter_dependency_chain",
-		action: "execute",
-		logicalCommandId: "AscetConfigureParameterDependencyChainExecute",
-		operation: "configure_parameter_dependency_chain_execute",
-		category: "domain",
-	},
+	...ascetEditRouteManifestEntries,
 
-	{
-		toolName: "ascet_batch_write",
-		action: "batch_set_method_code",
-		logicalCommandId: "AscetBatchSetMethodCode",
-		operation: "batch_set_method_code",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_batch_write",
-		action: "batch_set_element_spec",
-		logicalCommandId: "AscetBatchApplyElementSpec",
-		operation: "batch_set_element_spec",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_batch_write",
-		action: "batch_create_component",
-		logicalCommandId: "AscetBatchCreateComponent",
-		operation: "batch_create_component",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_batch_write",
-		action: "batch_create_method",
-		logicalCommandId: "AscetBatchCreateMethod",
-		operation: "batch_create_method",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_batch_write",
-		action: "batch_set_project_formula",
-		logicalCommandId: "AscetBatchApplyProjectFormula",
-		operation: "batch_set_project_formula",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_batch_write",
-		action: "batch_delete_component",
-		logicalCommandId: "AscetBatchDeleteComponent",
-		operation: "batch_delete_component",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_batch_write",
-		action: "batch_delete_method",
-		logicalCommandId: "AscetBatchDeleteMethod",
-		operation: "batch_delete_method",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_batch_write",
-		action: "batch_create_folder",
-		logicalCommandId: "AscetBatchCreateFolder",
-		operation: "batch_create_folder",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_batch_write",
-		action: "batch_delete_folder",
-		logicalCommandId: "AscetBatchDeleteFolder",
-		operation: "batch_delete_folder",
-		category: "domain",
-	},
-
-	{
-		toolName: "ascet_edit",
-		action: "check",
-		logicalCommandId: "AscetComponentEditableCheck",
-		operation: "component_editable_check",
-		category: "domain",
-	},
-	{
-		toolName: "ascet_edit",
-		action: "set",
-		logicalCommandId: "AscetComponentEditableSet",
-		operation: "component_editable_set",
-		category: "domain",
-	},
-
-	{
-		toolName: "ascet_scheduler_status",
-		action: "status",
-		logicalCommandId: "PiAscetSchedulerStatus",
-		operation: "scheduler_status",
-		category: "ops",
-	},
-	{
-		toolName: "ascet_scheduler_status",
-		action: "recover",
-		logicalCommandId: "PiAscetSchedulerRecover",
-		operation: "scheduler_recover",
-		category: "ops",
-	},
+	...ascetDependencyEditRouteManifestEntries,
 ] as const satisfies readonly AscetRouteManifestEntry[];
 
 export const ascetRouteEntries = ascetRouteManifestEntries.map((entry) => ({

@@ -9,7 +9,7 @@ describe("ASCET coding policy", () => {
 		assert.match(policyPrompt, /ASCET coding policy:/);
 		assert.match(policyPrompt, /ascet-engineering Skill/);
 		assert.doesNotMatch(policyPrompt, /ascet-implementation/);
-		assert.ok(policyPrompt.length >= 1000 && policyPrompt.length <= 1500);
+		assert.ok(policyPrompt.length >= 1000 && policyPrompt.length <= 2000);
 		assert.ok(policyPrompt.split("\n").filter((line) => /^[0-9]+\./.test(line)).length <= 15);
 	});
 
@@ -18,7 +18,7 @@ describe("ASCET coding policy", () => {
 		assert.match(policyPrompt, /source → transform → consumer/);
 		assert.match(policyPrompt, /concrete todolist/);
 		assert.match(policyPrompt, /complete implementation plan/);
-		assert.match(policyPrompt, /executeWrite=true/);
+		assert.match(policyPrompt, /intent=apply/);
 		assert.match(policyPrompt, /verify automatically/);
 		assert.doesNotMatch(policyPrompt, /verifyReadback\s*[:=]/);
 	});

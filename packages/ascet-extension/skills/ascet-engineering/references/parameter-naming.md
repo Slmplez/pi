@@ -6,4 +6,4 @@ New Provider Exported Parameters use `P_<Name>`. Consumer Imported Parameters us
 
 A dependent chain is Local Dependent `C_...` -> Imported `P_...` -> same-named Exported `P_...` -> Provider Component. The value/source, type, unit, range, initial, calibration/constant role, implementation, dependency formals, typed mappings, variant policy, and ESDL/BDE usage point must be explicit.
 
-After exact-target discovery, create the complete chain with one `configure_parameter_dependency_chain` call. Use `ascet_edit.set_element_dependency` only when the local Element already exists and only its dependency state must change.
+After exact-target discovery, read the current chain with `ascet_read.read_dependent_chain`, then use `ascet_edit.set_dependent_chain` for existing Provider, Imported, and Local Parameters.

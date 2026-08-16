@@ -110,10 +110,7 @@ public static class ExecCommand
                     {
                         throw new AscetReadException("database_not_open", operation, "GetCurrentDataBase returned null. Open a database in ASCET first.");
                     }
-                    AscetDatabaseRef databaseRef = new AscetDatabaseRef();
-                    databaseRef.Name = database.GetName();
-                    Ascet tool = session.GetToolHandle();
-                    databaseRef.Path = tool == null ? String.Empty : (tool.GetDataBasePath() ?? String.Empty);
+                    AscetDatabaseRef databaseRef = AscetDatabaseIdentityResolver.Resolve(database, session.GetToolHandle());
                     return getReader.Execute(operation, payload, database, databaseRef);
                 }
             });
@@ -151,10 +148,7 @@ public static class ExecCommand
                     {
                         throw new AscetReadException("database_not_open", operation, "GetCurrentDataBase returned null. Open a database in ASCET first.");
                     }
-                    AscetDatabaseRef databaseRef = new AscetDatabaseRef();
-                    databaseRef.Name = database.GetName();
-                    Ascet tool = session.GetToolHandle();
-                    databaseRef.Path = tool == null ? String.Empty : (tool.GetDataBasePath() ?? String.Empty);
+                    AscetDatabaseRef databaseRef = AscetDatabaseIdentityResolver.Resolve(database, session.GetToolHandle());
                     result = databaseCatalogReader.Execute(payload, database, databaseRef);
                 }
                 finally

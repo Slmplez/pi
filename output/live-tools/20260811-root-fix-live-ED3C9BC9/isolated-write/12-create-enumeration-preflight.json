@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"status\": \"preflight\",\n  \"plan\": {\n    \"action\": \"create_component\",\n    \"params\": {\n      \"action\": \"create_component\",\n      \"component\": \"PI_LIVE_ROOTFIX_20260811_ED3C9BC9/EnumerationUnderTest\",\n      \"kind\": \"enumeration\",\n      \"executeWrite\": false\n    }\n  },\n  \"nextStep\": \"Set executeWrite=true and confirm in the UI to apply this ASCET write.\"\n}"
+    }
+  ],
+  "details": {
+    "outcome": {
+      "status": "preflight",
+      "plan": {
+        "action": "create_component",
+        "params": {
+          "action": "create_component",
+          "componentPath": "PI_LIVE_ROOTFIX_20260811_ED3C9BC9\\EnumerationUnderTest",
+          "kind": "enumeration",
+          "executeWrite": false
+        }
+      },
+      "nextStep": "Set executeWrite=true and confirm in the UI to apply this ASCET write."
+    }
+  }
+}

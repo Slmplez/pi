@@ -1,0 +1,56 @@
+{
+  "tool": "ascet_read",
+  "params": {
+    "action": "read_implementation",
+    "componentPath": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010::CM_AVH",
+    "implementationMode": "default",
+    "timeoutMs": 300000
+  },
+  "elapsedMs": 311,
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"error\": {\n    \"code\": \"legacy_operation_failed\",\n    \"message\": \"target_not_found [resolve_target]: No ASCET item was found at 'CN_Libary\\\\CNMS_IPB20\\\\IPBCustGeneral\\\\IPBCustGeneral_ECU_CSW_BB88010'.\",\n    \"details\": {\n      \"stderr\": \"target_not_found [resolve_target]: No ASCET item was found at 'CN_Libary\\\\CNMS_IPB20\\\\IPBCustGeneral\\\\IPBCustGeneral_ECU_CSW_BB88010'.\",\n      \"stdout\": \"{\\\"type\\\":\\\"response\\\",\\\"protocolVersion\\\":1,\\\"ok\\\":false,\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":\\\"legacy_operation_failed\\\",\\\"message\\\":\\\"target_not_found [resolve_target]: No ASCET item was found at \\\\u0027CN_Libary\\\\\\\\CNMS_IPB20\\\\\\\\IPBCustGeneral\\\\\\\\IPBCustGeneral_ECU_CSW_BB88010\\\\u0027.\\\"},\\\"meta\\\":{\\\"bridgePid\\\":34516,\\\"bridgeGeneration\\\":\\\"b7c0479a-4ed0-44a2-bde2-b1780bc4ea93\\\",\\\"durationMs\\\":199,\\\"sessionPolicy\\\":\\\"fresh_session\\\",\\\"mutationStarted\\\":false,\\\"mode\\\":\\\"exec\\\",\\\"operation\\\":\\\"read_implementation\\\"}}\",\n      \"exitCode\": 2,\n      \"operationId\": \"read_implementation\",\n      \"stage\": \"cli_process\",\n      \"retryable\": false,\n      \"stderrSummary\": \"target_not_found [resolve_target]: No ASCET item was found at 'CN_Libary\\\\CNMS_IPB20\\\\IPBCustGeneral\\\\IPBCustGeneral_ECU_CSW_BB88010'.\",\n      \"stdoutSummary\": \"{\\\"type\\\":\\\"response\\\",\\\"protocolVersion\\\":1,\\\"ok\\\":false,\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":\\\"legacy_operation_failed\\\",\\\"message\\\":\\\"target_not_found [resolve_target]: No ASCET item was found at \\\\u0027CN_Libary\\\\\\\\CNMS_IPB20\\\\\\\\IPBCustGeneral\\\\\\\\IPBCustGeneral_ECU_CSW_BB88010\\\\u0027.\\\"},\\\"meta\\\":{\\\"bridgePid\\\":34516,\\\"bridgeGeneration\\\":\\\"b7c0479a-4ed0-44a2-bde2-b1780bc4ea93\\\",\\\"durationMs\\\":199,\\\"sessionPolicy\\\":\\\"fresh_session\\\",\\\"mutationStarted\\\":false,\\\"mode\\\":\\\"exec\\\",\\\"operation\\\":\\\"read_implementation\\\"}}\"\n    }\n  }\n}"
+      }
+    ],
+    "details": {
+      "tool": "ascet_read",
+      "action": "read_implementation",
+      "command": {
+        "logicalCommandId": "AscetReadImplementation",
+        "backendCommandId": "AscetReadImplementation",
+        "operation": "read_implementation"
+      },
+      "error": {
+        "code": "legacy_operation_failed",
+        "message": "target_not_found [resolve_target]: No ASCET item was found at 'CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010'.",
+        "details": {
+          "stderr": "target_not_found [resolve_target]: No ASCET item was found at 'CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010'.\r\n",
+          "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"legacy_operation_failed\",\"message\":\"target_not_found [resolve_target]: No ASCET item was found at \\u0027CN_Libary\\\\CNMS_IPB20\\\\IPBCustGeneral\\\\IPBCustGeneral_ECU_CSW_BB88010\\u0027.\"},\"meta\":{\"bridgePid\":34516,\"bridgeGeneration\":\"b7c0479a-4ed0-44a2-bde2-b1780bc4ea93\",\"durationMs\":199,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"read_implementation\"}}\r\n",
+          "exitCode": 2
+        }
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:/Repo/09_ASCETCopilot/pi-ascet-extension-prototype/packages/ascet-extension/ascet-cli/bin/AscetBridge.exe",
+          "args": [
+            "exec",
+            "read_implementation",
+            "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010::CM_AVH",
+            "--default",
+            "--json"
+          ],
+          "timeoutMs": 300000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 2,
+        "timedOut": false,
+        "stderr": "target_not_found [resolve_target]: No ASCET item was found at 'CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010'.\r\n",
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"legacy_operation_failed\",\"message\":\"target_not_found [resolve_target]: No ASCET item was found at \\u0027CN_Libary\\\\CNMS_IPB20\\\\IPBCustGeneral\\\\IPBCustGeneral_ECU_CSW_BB88010\\u0027.\"},\"meta\":{\"bridgePid\":34516,\"bridgeGeneration\":\"b7c0479a-4ed0-44a2-bde2-b1780bc4ea93\",\"durationMs\":199,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"read_implementation\"}}\r\n"
+      }
+    }
+  }
+}

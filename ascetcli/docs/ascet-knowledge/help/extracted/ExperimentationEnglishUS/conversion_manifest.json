@@ -1,0 +1,1341 @@
+{
+  "generated_at": "2026-04-01T03:08:04.836454Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\ExperimentationEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ExperimentationEnglishUS",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ExperimentationEnglishUS\\markdown",
+  "input_html_count": 221,
+  "converted_html_count": 221,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 72,
+  "toc_entries_count": 249,
+  "index_entries_count": 289,
+  "index_required": true,
+  "mappings": [
+    {
+      "html_rel_path": "activate_deactivate_trigger.htm",
+      "md_rel_path": "activate_deactivate_trigger.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "actuate_trigger_manually.htm",
+      "md_rel_path": "actuate_trigger_manually.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "add_remove_sample_points.htm",
+      "md_rel_path": "add_remove_sample_points.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "adjust_logging_options.htm",
+      "md_rel_path": "adjust_logging_options.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "analyze_measur_data.htm",
+      "md_rel_path": "analyze_measur_data.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "assign_channels_identical_names.htm",
+      "md_rel_path": "assign_channels_identical_names.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "assign_element_existing_measu.htm",
+      "md_rel_path": "assign_element_existing_measu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "assign_element_measurement.htm",
+      "md_rel_path": "assign_element_measurement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "bit_display.htm",
+      "md_rel_path": "bit_display.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "calibrating_element.htm",
+      "md_rel_path": "calibrating_element.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "calibration_system.htm",
+      "md_rel_path": "calibration_system.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "calibration_windows.htm",
+      "md_rel_path": "calibration_windows.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "change_2d_editor_display.htm",
+      "md_rel_path": "change_2d_editor_display.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "change_blockdia_display.htm",
+      "md_rel_path": "change_blockdia_display.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "change_color_settings_oscilloscope.htm",
+      "md_rel_path": "change_color_settings_oscilloscope.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "change_display_measur_win.htm",
+      "md_rel_path": "change_display_measur_win.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "change_display_ooptions_numerical.htm",
+      "md_rel_path": "change_display_ooptions_numerical.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "change_graphical_table_display.htm",
+      "md_rel_path": "change_graphical_table_display.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "change_log_file.htm",
+      "md_rel_path": "change_log_file.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "change_measur_win_title.htm",
+      "md_rel_path": "change_measur_win_title.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "change_the_display.htm",
+      "md_rel_path": "change_the_display.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "change_title_calibration_win.htm",
+      "md_rel_path": "change_title_calibration_win.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "close_all_measure_window.htm",
+      "md_rel_path": "close_all_measure_window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "codegen_dbtoolarge.htm",
+      "md_rel_path": "codegen_dbtoolarge.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "constant_mode.htm",
+      "md_rel_path": "constant_mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "convert_mdf_famos.htm",
+      "md_rel_path": "convert_mdf_famos.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "copy_channels_measur_win.htm",
+      "md_rel_path": "copy_channels_measur_win.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "copy_oscilloscope_win.htm",
+      "md_rel_path": "copy_oscilloscope_win.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "cyclic_mode.htm",
+      "md_rel_path": "cyclic_mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "data_editors_calibration_variables.htm",
+      "md_rel_path": "data_editors_calibration_variables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "data_generator.htm",
+      "md_rel_path": "data_generator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "data_logger.htm",
+      "md_rel_path": "data_logger.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "data_transfer_host.htm",
+      "md_rel_path": "data_transfer_host.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "define_data_generator_channels.htm",
+      "md_rel_path": "define_data_generator_channels.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "define_global_elements_default.htm",
+      "md_rel_path": "define_global_elements_default.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "define_multipart_trigger.htm",
+      "md_rel_path": "define_multipart_trigger.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "define_simple_trigger_events.htm",
+      "md_rel_path": "define_simple_trigger_events.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "define_trigger_condition.htm",
+      "md_rel_path": "define_trigger_condition.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "delete_channels.htm",
+      "md_rel_path": "delete_channels.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "delete_channes_measur_win.htm",
+      "md_rel_path": "delete_channes_measur_win.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "display_keyboard_commands.htm",
+      "md_rel_path": "display_keyboard_commands.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "display_setup.htm",
+      "md_rel_path": "display_setup.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_1d_graphical_editor.htm",
+      "md_rel_path": "EE_1d_graphical_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_2d_graphical_editor.htm",
+      "md_rel_path": "EE_2d_graphical_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_3d_graphical_editor.htm",
+      "md_rel_path": "EE_3d_graphical_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_Activate_AutomaticMonitorMode.htm",
+      "md_rel_path": "EE_Activate_AutomaticMonitorMode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_AssignArrayMatrix_MeasurementWindow.htm",
+      "md_rel_path": "EE_AssignArrayMatrix_MeasurementWindow.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_axis_menu.htm",
+      "md_rel_path": "EE_axis_menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_BackAnimationExperimentWindow.htm",
+      "md_rel_path": "EE_BackAnimationExperimentWindow.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_block_diagram_navigation.htm",
+      "md_rel_path": "EE_block_diagram_navigation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_button_bar_offline_experiment.htm",
+      "md_rel_path": "EE_button_bar_offline_experiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_ButtonBar_DataLogger.htm",
+      "md_rel_path": "EE_ButtonBar_DataLogger.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_calibration_menu_options.htm",
+      "md_rel_path": "EE_calibration_menu_options.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_calibration_view_menu.htm",
+      "md_rel_path": "EE_calibration_view_menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_CalibrationWindows_UI.htm",
+      "md_rel_path": "EE_CalibrationWindows_UI.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_ChangeExperimentWindowLook.htm",
+      "md_rel_path": "EE_ChangeExperimentWindowLook.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_ComponentPane.htm",
+      "md_rel_path": "EE_ComponentPane.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_ControlMenu_DataLoggerWindow_Experiment.htm",
+      "md_rel_path": "EE_ControlMenu_DataLoggerWindow_Experiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_data_manipulation.htm",
+      "md_rel_path": "EE_data_manipulation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_DataLogging.htm",
+      "md_rel_path": "EE_DataLogging.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_DataManipulation.htm",
+      "md_rel_path": "EE_DataManipulation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_define_signal.htm",
+      "md_rel_path": "EE_define_signal.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_DepParam_in_Experiment.htm",
+      "md_rel_path": "EE_DepParam_in_Experiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_Description_WindowElements.htm",
+      "md_rel_path": "EE_Description_WindowElements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_Description_WindowElements_DataLogger.htm",
+      "md_rel_path": "EE_Description_WindowElements_DataLogger.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_display_informatiion_variables.htm",
+      "md_rel_path": "EE_display_informatiion_variables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_DisplayOptions.htm",
+      "md_rel_path": "EE_DisplayOptions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_DisplaySetup_Window.htm",
+      "md_rel_path": "EE_DisplaySetup_Window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_DisplaySetupWindow_2DGraph.htm",
+      "md_rel_path": "EE_DisplaySetupWindow_2DGraph.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_edit_all_sample_points.htm",
+      "md_rel_path": "EE_edit_all_sample_points.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_edit_enumeration.htm",
+      "md_rel_path": "EE_edit_enumeration.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_edit_exisiting_sample_points.htm",
+      "md_rel_path": "EE_edit_exisiting_sample_points.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_edit_logical_value.htm",
+      "md_rel_path": "EE_edit_logical_value.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_edit_measur_win.htm",
+      "md_rel_path": "EE_edit_measur_win.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_edit_menu.htm",
+      "md_rel_path": "EE_edit_menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_edit_numerical_value.htm",
+      "md_rel_path": "EE_edit_numerical_value.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_edit_several_numerical_value.htm",
+      "md_rel_path": "EE_edit_several_numerical_value.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_edit_several_output_values.htm",
+      "md_rel_path": "EE_edit_several_output_values.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_edit_single_output_value.htm",
+      "md_rel_path": "EE_edit_single_output_value.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_edit_table_1d_g_e.htm",
+      "md_rel_path": "EE_edit_table_1d_g_e.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_edit_table_2d_g_e.htm",
+      "md_rel_path": "EE_edit_table_2d_g_e.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_EditMenu_Experiment.htm",
+      "md_rel_path": "EE_EditMenu_Experiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ee_editor_combinedtypes.htm",
+      "md_rel_path": "ee_editor_combinedtypes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_enumeration_editor.htm",
+      "md_rel_path": "EE_enumeration_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ee_environment_browser_window.htm",
+      "md_rel_path": "ee_environment_browser_window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_Example_SinusStimulationMode.htm",
+      "md_rel_path": "EE_Example_SinusStimulationMode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_experiment_menu.htm",
+      "md_rel_path": "EE_experiment_menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_ExperimentMenu_BackAnimation.htm",
+      "md_rel_path": "EE_ExperimentMenu_BackAnimation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_extras_measur_win.htm",
+      "md_rel_path": "EE_extras_measur_win.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_extras_menu.htm",
+      "md_rel_path": "EE_extras_menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_ExtrasMenu_DataLoggerWindow_Experiment.htm",
+      "md_rel_path": "EE_ExtrasMenu_DataLoggerWindow_Experiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_ExtrasMenu_Experiment.htm",
+      "md_rel_path": "EE_ExtrasMenu_Experiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_file_measur_win.htm",
+      "md_rel_path": "EE_file_measur_win.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_file_menu.htm",
+      "md_rel_path": "EE_file_menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_FileMenu_DataLoggerWindow_Experiment.htm",
+      "md_rel_path": "EE_FileMenu_DataLoggerWindow_Experiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ee_filter_treePane.htm",
+      "md_rel_path": "ee_filter_treePane.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_GraphicalEditors.htm",
+      "md_rel_path": "EE_GraphicalEditors.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_HelpMenu_Experiment.htm",
+      "md_rel_path": "EE_HelpMenu_Experiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_Leaving_the_Experiment_Environment.htm",
+      "md_rel_path": "EE_Leaving_the_Experiment_Environment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ee_load_dcm_file_window.htm",
+      "md_rel_path": "ee_load_dcm_file_window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_Logging_Options_Window.htm",
+      "md_rel_path": "EE_Logging_Options_Window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_logical_editor.htm",
+      "md_rel_path": "EE_logical_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_measurement_window_menu_option.htm",
+      "md_rel_path": "EE_measurement_window_menu_option.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_MeasurementWindowsGUI.htm",
+      "md_rel_path": "EE_MeasurementWindowsGUI.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_menu_bar.htm",
+      "md_rel_path": "EE_menu_bar.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_MenuBar_BackAnimationExperiment.htm",
+      "md_rel_path": "EE_MenuBar_BackAnimationExperiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_monitor.htm",
+      "md_rel_path": "EE_monitor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_numeric_editor.htm",
+      "md_rel_path": "EE_numeric_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_OptionsMenu_DataLoggerWindow_Experiment.htm",
+      "md_rel_path": "EE_OptionsMenu_DataLoggerWindow_Experiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_Overview.htm",
+      "md_rel_path": "EE_Overview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_readData_externalFiles.htm",
+      "md_rel_path": "EE_readData_externalFiles.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_Reference_UserInterface.htm",
+      "md_rel_path": "EE_Reference_UserInterface.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_Run_BackAnimationExperiment.htm",
+      "md_rel_path": "EE_Run_BackAnimationExperiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_running_offline_experiments.htm",
+      "md_rel_path": "EE_running_offline_experiments.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_RunOfflineExperiment.htm",
+      "md_rel_path": "EE_RunOfflineExperiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ee_save_experimental_environment_as_window.htm",
+      "md_rel_path": "ee_save_experimental_environment_as_window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_SaveEnvironment_for_Component.htm",
+      "md_rel_path": "EE_SaveEnvironment_for_Component.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_SetTableSizeInterpolationRoutine.htm",
+      "md_rel_path": "EE_SetTableSizeInterpolationRoutine.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_SettingTimeBehavior.htm",
+      "md_rel_path": "EE_SettingTimeBehavior.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_setup_dataExchange_Options.htm",
+      "md_rel_path": "EE_setup_dataExchange_Options.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_setup_eventGenerator.htm",
+      "md_rel_path": "EE_setup_eventGenerator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_SetupUse_oscilloscope.htm",
+      "md_rel_path": "EE_SetupUse_oscilloscope.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_ShiftChannels_in_MeasurementWindow.htm",
+      "md_rel_path": "EE_ShiftChannels_in_MeasurementWindow.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_StartStop_BackAnimationExperiment.htm",
+      "md_rel_path": "EE_StartStop_BackAnimationExperiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_StimulusDialogWindow.htm",
+      "md_rel_path": "EE_StimulusDialogWindow.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_table_editor.htm",
+      "md_rel_path": "EE_table_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_Toolbar_BackAnimation.htm",
+      "md_rel_path": "EE_Toolbar_BackAnimation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_ToolsMenu_BackAnimation.htm",
+      "md_rel_path": "EE_ToolsMenu_BackAnimation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_ToolsMenu_Experiment.htm",
+      "md_rel_path": "EE_ToolsMenu_Experiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_Using_Label_Lists.htm",
+      "md_rel_path": "EE_Using_Label_Lists.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_view_measur_win.htm",
+      "md_rel_path": "EE_view_measur_win.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_view_menu.htm",
+      "md_rel_path": "EE_view_menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "EE_WindowMenu_Experiment.htm",
+      "md_rel_path": "EE_WindowMenu_Experiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "event_generator.htm",
+      "md_rel_path": "event_generator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "event_options.htm",
+      "md_rel_path": "event_options.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "exchange_attributes_measur_win.htm",
+      "md_rel_path": "exchange_attributes_measur_win.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "exchange_data_applications.htm",
+      "md_rel_path": "exchange_data_applications.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "export_environment.htm",
+      "md_rel_path": "export_environment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "gaussian_mode.htm",
+      "md_rel_path": "gaussian_mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "highlight_netpoints_3d_editor.htm",
+      "md_rel_path": "highlight_netpoints_3d_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "horizontal_vertical_bar_display.htm",
+      "md_rel_path": "horizontal_vertical_bar_display.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "insert_new_sample_points.htm",
+      "md_rel_path": "insert_new_sample_points.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "interpolate_signal.htm",
+      "md_rel_path": "interpolate_signal.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "launch_1d_graphical_editor.htm",
+      "md_rel_path": "launch_1d_graphical_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "load_environment.htm",
+      "md_rel_path": "load_environment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "loading_saving_experi.htm",
+      "md_rel_path": "loading_saving_experi.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "log_data.htm",
+      "md_rel_path": "log_data.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "logging_mode.htm",
+      "md_rel_path": "logging_mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "matrix_mode.htm",
+      "md_rel_path": "matrix_mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "measurement_system.htm",
+      "md_rel_path": "measurement_system.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "monitor-element.htm",
+      "md_rel_path": "monitor-element.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "monitor_events_events_tracer.htm",
+      "md_rel_path": "monitor_events_events_tracer.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "move_channels_measur_win.htm",
+      "md_rel_path": "move_channels_measur_win.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "moving_variables_calibration_win.htm",
+      "md_rel_path": "moving_variables_calibration_win.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "navigate_down_blockdiagram.htm",
+      "md_rel_path": "navigate_down_blockdiagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "navigate_up_blockdiagram.htm",
+      "md_rel_path": "navigate_up_blockdiagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "numerical_display.htm",
+      "md_rel_path": "numerical_display.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "open_data_logger.htm",
+      "md_rel_path": "open_data_logger.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "open_experi_environ_offline.htm",
+      "md_rel_path": "open_experi_environ_offline.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "opening_settingup_experi_environ.htm",
+      "md_rel_path": "opening_settingup_experi_environ.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "oscilloscope.htm",
+      "md_rel_path": "oscilloscope.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "output_format.htm",
+      "md_rel_path": "output_format.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "prepare_transient_sample.htm",
+      "md_rel_path": "prepare_transient_sample.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "print_oscilloscope_output.htm",
+      "md_rel_path": "print_oscilloscope_output.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "read_write_current_dataset.htm",
+      "md_rel_path": "read_write_current_dataset.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "recorder.htm",
+      "md_rel_path": "recorder.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "remove_signal.htm",
+      "md_rel_path": "remove_signal.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "remove_variables_calibration_win.htm",
+      "md_rel_path": "remove_variables_calibration_win.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "rotate_coordination_system.htm",
+      "md_rel_path": "rotate_coordination_system.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "save_environment.htm",
+      "md_rel_path": "save_environment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "save_environment_different_name.htm",
+      "md_rel_path": "save_environment_different_name.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "save_oscilloscope_data_file.htm",
+      "md_rel_path": "save_oscilloscope_data_file.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "scale_measur_channels.htm",
+      "md_rel_path": "scale_measur_channels.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "select_signal_repitition.htm",
+      "md_rel_path": "select_signal_repitition.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "set_pre_post_trigger_time.htm",
+      "md_rel_path": "set_pre_post_trigger_time.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "setup_1d_g_e.htm",
+      "md_rel_path": "setup_1d_g_e.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "setup_acquisition_lists.htm",
+      "md_rel_path": "setup_acquisition_lists.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "setup_analysis.htm",
+      "md_rel_path": "setup_analysis.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "setup_analysis_lists.htm",
+      "md_rel_path": "setup_analysis_lists.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "setup_asynchronous_event.htm",
+      "md_rel_path": "setup_asynchronous_event.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "setup_automatic_stop.htm",
+      "md_rel_path": "setup_automatic_stop.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "setup_bar_display.htm",
+      "md_rel_path": "setup_bar_display.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "setup_breakpoint_condi.htm",
+      "md_rel_path": "setup_breakpoint_condi.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "setup_channel_data_generator.htm",
+      "md_rel_path": "setup_channel_data_generator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "setup_channels_logged.htm",
+      "md_rel_path": "setup_channels_logged.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "setup_data_generator.htm",
+      "md_rel_path": "setup_data_generator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "setup_dependent_event.htm",
+      "md_rel_path": "setup_dependent_event.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "setup_event.htm",
+      "md_rel_path": "setup_event.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "setup_event_directly.htm",
+      "md_rel_path": "setup_event_directly.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "setup_measur_channels.htm",
+      "md_rel_path": "setup_measur_channels.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "setup_numerical_display.htm",
+      "md_rel_path": "setup_numerical_display.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "setup_numerical_editor.htm",
+      "md_rel_path": "setup_numerical_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "setup_oscilloscope_window.htm",
+      "md_rel_path": "setup_oscilloscope_window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "setup_segment_event.htm",
+      "md_rel_path": "setup_segment_event.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "setup_stimulation_mode.htm",
+      "md_rel_path": "setup_stimulation_mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "setup_table_editor.htm",
+      "md_rel_path": "setup_table_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "show_hide_lists.htm",
+      "md_rel_path": "show_hide_lists.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "show_hide_measur_channels.htm",
+      "md_rel_path": "show_hide_measur_channels.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "start-offline_experiment.htm",
+      "md_rel_path": "start-offline_experiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "start_2d_g_e.htm",
+      "md_rel_path": "start_2d_g_e.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "start_3d_grraphical_editor.htm",
+      "md_rel_path": "start_3d_grraphical_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "start_analysis_mode.htm",
+      "md_rel_path": "start_analysis_mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "step_experiment.htm",
+      "md_rel_path": "step_experiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "stop-offline_experiment.htm",
+      "md_rel_path": "stop-offline_experiment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "stop_data_logging.htm",
+      "md_rel_path": "stop_data_logging.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "switch_between_diagrams_compo.htm",
+      "md_rel_path": "switch_between_diagrams_compo.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "switch_environment.htm",
+      "md_rel_path": "switch_environment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "switch_timed_stepmode.htm",
+      "md_rel_path": "switch_timed_stepmode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "table_mode.htm",
+      "md_rel_path": "table_mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "target_register_buffer.htm",
+      "md_rel_path": "target_register_buffer.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "toggle_perspective_2d_editor.htm",
+      "md_rel_path": "toggle_perspective_2d_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "use_sample_points_display.htm",
+      "md_rel_path": "use_sample_points_display.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "view_automatic_display.htm",
+      "md_rel_path": "view_automatic_display.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "view_clear_text_window.htm",
+      "md_rel_path": "view_clear_text_window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "view_debug_info.htm",
+      "md_rel_path": "view_debug_info.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "view_implementation.htm",
+      "md_rel_path": "view_implementation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "view_manual_display.htm",
+      "md_rel_path": "view_manual_display.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "view_save_text_window.htm",
+      "md_rel_path": "view_save_text_window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "working_calibration_window.htm",
+      "md_rel_path": "working_calibration_window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "working_measur_win.htm",
+      "md_rel_path": "working_measur_win.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "write_data_external_files.htm",
+      "md_rel_path": "write_data_external_files.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

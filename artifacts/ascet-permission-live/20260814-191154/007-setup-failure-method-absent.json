@@ -1,0 +1,57 @@
+{
+  "stage": "setup-failure-method-absent",
+  "startedAt": "2026-08-14T11:12:06.022Z",
+  "finishedAt": "2026-08-14T11:12:06.837Z",
+  "request": {
+    "toolName": "ascet_read",
+    "params": {
+      "action": "read_method_signature",
+      "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+      "methodName": "PiForcedFailure"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"error\": {\n    \"code\": \"method_not_found\",\n    \"message\": \"Method 'PiForcedFailure' was not found in component 'PlatformLibrary\\\\Package\\\\AntiLockController\\\\Private\\\\SMC\\\\KeepAlive\\\\KeepAlive_PSoll_Controller'.\",\n    \"details\": {\n      \"stdout\": \"{\\\"type\\\":\\\"response\\\",\\\"protocolVersion\\\":1,\\\"ok\\\":false,\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":\\\"method_not_found\\\",\\\"message\\\":\\\"Method \\\\u0027PiForcedFailure\\\\u0027 was not found in component \\\\u0027PlatformLibrary\\\\\\\\Package\\\\\\\\AntiLockController\\\\\\\\Private\\\\\\\\SMC\\\\\\\\KeepAlive\\\\\\\\KeepAlive_PSoll_Controller\\\\u0027.\\\"},\\\"meta\\\":{\\\"bridgePid\\\":39816,\\\"bridgeGeneration\\\":\\\"1a27381b-6f32-4bc2-a3ca-5e6f0a8534a1\\\",\\\"durationMs\\\":409,\\\"sessionPolicy\\\":\\\"fresh_session\\\",\\\"mutationStarted\\\":false,\\\"mode\\\":\\\"exec\\\",\\\"operation\\\":\\\"read_method_signature\\\"}}\",\n      \"exitCode\": 2,\n      \"operationId\": \"read_method_signature\",\n      \"stage\": \"cli_process\",\n      \"retryable\": false,\n      \"stdoutSummary\": \"{\\\"type\\\":\\\"response\\\",\\\"protocolVersion\\\":1,\\\"ok\\\":false,\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":\\\"method_not_found\\\",\\\"message\\\":\\\"Method \\\\u0027PiForcedFailure\\\\u0027 was not found in component \\\\u0027PlatformLibrary\\\\\\\\Package\\\\\\\\AntiLockController\\\\\\\\Private\\\\\\\\SMC\\\\\\\\KeepAlive\\\\\\\\KeepAlive_PSoll_Controller\\\\u0027.\\\"},\\\"meta\\\":{\\\"bridgePid\\\":39816,\\\"bridgeGeneration\\\":\\\"1a27381b-6f32-4bc2-a3ca-5e6f0a8534a1\\\",\\\"durationMs\\\":409,\\\"sessionPolicy\\\":\\\"fresh_session\\\",\\\"mutationStarted\\\":false,\\\"mode\\\":\\\"exec\\\",\\\"operation\\\":\\\"read_method_signature\\\"}}\"\n    }\n  }\n}"
+      }
+    ],
+    "details": {
+      "tool": "ascet_read",
+      "action": "read_method_signature",
+      "command": {
+        "logicalCommandId": "AscetReadMethodSignature",
+        "backendCommandId": "AscetReadMethodSignature",
+        "operation": "read_method_signature"
+      },
+      "error": {
+        "code": "method_not_found",
+        "message": "Method 'PiForcedFailure' was not found in component 'PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller'.",
+        "details": {
+          "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"method_not_found\",\"message\":\"Method \\u0027PiForcedFailure\\u0027 was not found in component \\u0027PlatformLibrary\\\\Package\\\\AntiLockController\\\\Private\\\\SMC\\\\KeepAlive\\\\KeepAlive_PSoll_Controller\\u0027.\"},\"meta\":{\"bridgePid\":39816,\"bridgeGeneration\":\"1a27381b-6f32-4bc2-a3ca-5e6f0a8534a1\",\"durationMs\":409,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"read_method_signature\"}}\r\n",
+          "exitCode": 2
+        }
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:/Repo/09_ASCETCopilot/pi-ascet-extension-prototype/packages/ascet-extension/ascet-cli/bin/AscetBridge.exe",
+          "args": [
+            "exec",
+            "read_method_signature",
+            "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+            "PiForcedFailure",
+            "--json"
+          ],
+          "timeoutMs": 90000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 2,
+        "timedOut": false,
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"method_not_found\",\"message\":\"Method \\u0027PiForcedFailure\\u0027 was not found in component \\u0027PlatformLibrary\\\\Package\\\\AntiLockController\\\\Private\\\\SMC\\\\KeepAlive\\\\KeepAlive_PSoll_Controller\\u0027.\"},\"meta\":{\"bridgePid\":39816,\"bridgeGeneration\":\"1a27381b-6f32-4bc2-a3ca-5e6f0a8534a1\",\"durationMs\":409,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"read_method_signature\"}}\r\n"
+      }
+    }
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "status": "applied",
+  "databaseFingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c",
+  "targetOid": "040g00001g001qg7107g6n8jnc7g0",
+  "targetKind": "class",
+  "canonicalPath": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass",
+  "action": "delete_component",
+  "planId": "6711b9fa-c05e-464f-ad0a-5c040215114d",
+  "planFingerprint": "7a28d4a8191da51df77cee348c44897531a376923619c319179dcdd0596e377d",
+  "targetImpactFingerprint": "sha256:c4232b9c5bb42d2a01a43a727e3d3f0234d40a160e3bb8672d7c37820d445691",
+  "guardGeneration": 0,
+  "beforeSnapshotFingerprint": "sha256:f08f3e41d41b2f3558715d4c4d1432ea70a94b9e61a714a6ef26387ee39ca381",
+  "desiredFingerprint": "sha256:edba9e4b4733664617719d434bb3af73a1870df99a249f5e56ac599a3291826e",
+  "beforeSnapshot": {
+    "operation": "authoritative_single_call_preflight",
+    "validated": true,
+    "authoritativePlan": {
+      "operation": "registered_guarded_operation_preflight",
+      "validated": true,
+      "result": {
+        "targetPath": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass",
+        "editable": true,
+        "capability": {
+          "status": "supported",
+          "source": "registered_closed_operation"
+        },
+        "readbackAvailable": true,
+        "noOp": false
+      }
+    },
+    "normalizedEvidence": {
+      "version": 1,
+      "action": "delete_component",
+      "paramsFingerprint": "edba9e4b4733664617719d434bb3af73a1870df99a249f5e56ac599a3291826e",
+      "database": {
+        "path": "C:\\Repo\\F05_IPB_L2_0429",
+        "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+      },
+      "target": {
+        "path": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass",
+        "oid": "040g00001g001qg7107g6n8jnc7g0",
+        "kind": "class"
+      },
+      "impact": {
+        "complete": true,
+        "sharedObject": false,
+        "ownerPath": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass",
+        "affectedProjects": [],
+        "fingerprint": "sha256:c4232b9c5bb42d2a01a43a727e3d3f0234d40a160e3bb8672d7c37820d445691"
+      },
+      "capability": {
+        "status": "supported",
+        "operation": "registered_guarded_operation_preflight",
+        "evidence": {
+          "status": "supported",
+          "source": "registered_closed_operation"
+        }
+      },
+      "editability": {
+        "applicable": true,
+        "status": "editable",
+        "canRequestEditable": false
+      },
+      "effects": [
+        {
+          "kind": "delete_component",
+          "target": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass",
+          "description": "delete_component: DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass"
+        }
+      ],
+      "verification": {
+        "available": true,
+        "operation": "delete_component_readback",
+        "target": {
+          "path": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass"
+        }
+      },
+      "riskModifiers": [],
+      "noOp": false,
+      "generatedAt": "2026-08-15T02:48:41.480Z",
+      "approvalMaterialFingerprint": "aae6988195ee40dd81c028fe29eab6cae54f91c2b7a7c7d96ba5d36d1ce8a1fb"
+    },
+    "permissionMode": "default",
+    "permissionDecision": "ask",
+    "risk": "high",
+    "approvedAt": "2026-08-15T02:47:15.615Z",
+    "revalidatedAt": "2026-08-15T02:48:41.480Z",
+    "targetIdentity": {
+      "path": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass",
+      "oid": "040g00001g001qg7107g6n8jnc7g0",
+      "kind": "class"
+    },
+    "targetImpactFingerprint": "sha256:c4232b9c5bb42d2a01a43a727e3d3f0234d40a160e3bb8672d7c37820d445691"
+  },
+  "attemptedMutation": {
+    "action": "delete_component",
+    "componentPath": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass",
+    "ifMissing": "ignore"
+  },
+  "createdAt": "2026-08-15T02:48:41.496Z",
+  "updatedAt": "2026-08-15T02:48:42.592Z",
+  "evidence": {
+    "bridgeEntered": true,
+    "backendResponseReceived": true,
+    "mutationStarted": true
+  },
+  "outcome": {
+    "operationId": "delete_component"
+  }
+}

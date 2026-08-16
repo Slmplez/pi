@@ -445,7 +445,9 @@ internal sealed class AscetReadHostServer : IDisposable
 
         return
             String.Equals(left.Name ?? String.Empty, right.Name ?? String.Empty, StringComparison.Ordinal) &&
-            String.Equals(left.Path ?? String.Empty, right.Path ?? String.Empty, StringComparison.Ordinal);
+            String.Equals(left.Path ?? String.Empty, right.Path ?? String.Empty, StringComparison.Ordinal) &&
+            String.Equals(left.CanonicalPath ?? String.Empty, right.CanonicalPath ?? String.Empty, StringComparison.Ordinal) &&
+            String.Equals(left.IdentityStatus ?? String.Empty, right.IdentityStatus ?? String.Empty, StringComparison.Ordinal);
     }
 
     private static AscetReadHostSessionSnapshot CaptureSessionSnapshot(AscetSession session)
@@ -462,11 +464,7 @@ internal sealed class AscetReadHostServer : IDisposable
             throw new AscetReadException("database_not_open", "capture_session", "GetCurrentDataBase returned null. Open a database in ASCET first.");
         }
 
-        AscetDatabaseRef databaseRef = new AscetDatabaseRef
-        {
-            Name = database.GetName(),
-            Path = tool.GetDataBasePath()
-        };
+        AscetDatabaseRef databaseRef = AscetDatabaseIdentityResolver.Resolve(database, tool);
 
         return new AscetReadHostSessionSnapshot(database, databaseRef);
     }

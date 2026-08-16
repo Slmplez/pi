@@ -204,7 +204,7 @@ release/ascet-copilot/README.md
 npm --workspace @earendil-works/pi-coding-agent test -- test/ascet-extension-bosch-llmfarm-tls.test.ts
 npm --workspace @earendil-works/pi-coding-agent test -- test/ascet-extension-bosch-llmfarm-provider.test.ts
 npm run check
-npm pack --workspace @zeerke/ascet-copilot-extension --dry-run
+npm pack --workspace @vaf-agentworks/ascet-copilot-extension --dry-run
 ```
 
 验收点：
@@ -233,7 +233,7 @@ $env:NODE_OPTIONS
 ### 安装新扩展
 
 ```powershell
-pi update --extension npm:@zeerke/ascet-copilot
+pi update --extension npm:@vaf-agentworks/ascet-copilot
 ```
 
 重启 Pi 后确认 ASCET Copilot 扩展已加载。
@@ -371,7 +371,7 @@ pi
 ```powershell
 npm --workspace @earendil-works/pi-coding-agent test -- test/ascet-extension-bosch-llmfarm-tls.test.ts test/ascet-extension-bosch-llmfarm-provider.test.ts
 npm run check
-npm pack --workspace @zeerke/ascet-copilot-extension --dry-run
+npm pack --workspace @vaf-agentworks/ascet-copilot-extension --dry-run
 ```
 
 本地验证覆盖：

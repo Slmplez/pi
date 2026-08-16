@@ -17,7 +17,7 @@ import { createAscetStatusReport } from "./status.ts";
 export interface AscetCreateFolderParams {
 	folderPath: string;
 	verifyReadback?: boolean;
-	executeWrite?: boolean;
+	intent?: "preview" | "apply";
 }
 
 export interface RunAscetCreateFolderOptions {
@@ -32,9 +32,7 @@ export type AscetCreateFolderResult = AscetCliJsonResult;
 
 export const ascetCreateFolderParameters = Type.Object({
 	folderPath: Type.String({ description: "ASCET folder path to create.", minLength: 1 }),
-	executeWrite: Type.Optional(
-		Type.Boolean({ description: "Defaults to false. When true, PI still requires interactive confirmation." }),
-	),
+	intent: Type.Union([Type.Literal("preview"), Type.Literal("apply")]),
 });
 
 export function buildCreateFolderArgs(params: AscetCreateFolderParams): string[] {
@@ -99,9 +97,16 @@ export async function runApprovedAscetCreateFolder(
 	options: RunAscetCreateFolderOptions,
 	ctx: AscetEditApprovalContext,
 ): Promise<AscetCreateFolderResult> {
+	if ((params.intent ?? "preview") !== "apply") {
+		return createBlockedWriteResult(params, options, {
+			approved: false,
+			code: "ascet_edit_approval_required",
+			message:
+				"Use the guarded public ascet_edit call with intent=preview for authoritative non-mutating preflight.",
+		});
+	}
 	const approval = await requestAscetEditApproval(
 		{
-			executeWrite: params.executeWrite,
 			title: "Confirm ASCET folder creation",
 			message: createCreateFolderSummary(params),
 			signal: options.signal,

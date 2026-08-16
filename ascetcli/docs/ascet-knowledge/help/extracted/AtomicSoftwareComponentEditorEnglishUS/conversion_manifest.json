@@ -1,0 +1,1395 @@
+{
+  "generated_at": "2026-04-01T03:07:32.610380Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\AtomicSoftwareComponentEditorEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AtomicSoftwareComponentEditorEnglishUS\\markdown",
+  "input_html_count": 230,
+  "converted_html_count": 230,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 227,
+  "toc_entries_count": 287,
+  "index_entries_count": 440,
+  "index_required": true,
+  "mappings": [
+    {
+      "html_rel_path": "asc_accessmessages.htm",
+      "md_rel_path": "asc_accessmessages.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASC_addstatementblock.htm",
+      "md_rel_path": "ASC_addstatementblock.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asc_assertoperator.htm",
+      "md_rel_path": "asc_assertoperator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASC_AUTOSAR_Interfaces.htm",
+      "md_rel_path": "ASC_AUTOSAR_Interfaces.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asc_blocklocalsequencecalls.htm",
+      "md_rel_path": "asc_blocklocalsequencecalls.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asc_contextmenubrowseview.htm",
+      "md_rel_path": "asc_contextmenubrowseview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asc_conversionattributeswindow.htm",
+      "md_rel_path": "asc_conversionattributeswindow.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asc_conversionoperator.htm",
+      "md_rel_path": "asc_conversionoperator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asc_convertconnectorsequencecall.htm",
+      "md_rel_path": "asc_convertconnectorsequencecall.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASC_ConvertDiagramElementsStatementBlock.htm",
+      "md_rel_path": "ASC_ConvertDiagramElementsStatementBlock.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asc_copymove_items_betweendiagram.htm",
+      "md_rel_path": "asc_copymove_items_betweendiagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASC_CreateComputationClass.htm",
+      "md_rel_path": "ASC_CreateComputationClass.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asc_createinterrunnablevariable.htm",
+      "md_rel_path": "asc_createinterrunnablevariable.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASC_ExampleAccessingCalibrationParameters.htm",
+      "md_rel_path": "ASC_ExampleAccessingCalibrationParameters.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASC_ExampleAccessMessages.htm",
+      "md_rel_path": "ASC_ExampleAccessMessages.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asc_exampleassertoperator.htm",
+      "md_rel_path": "asc_exampleassertoperator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asC_exampleselementsnavigationtab.htm",
+      "md_rel_path": "asC_exampleselementsnavigationtab.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asc_examplestatementblock.htm",
+      "md_rel_path": "asc_examplestatementblock.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASC_ExportMessageParameterMappings.htm",
+      "md_rel_path": "ASC_ExportMessageParameterMappings.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASC_ExportSelections_Window.htm",
+      "md_rel_path": "ASC_ExportSelections_Window.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASC_Filter_MappingViews.htm",
+      "md_rel_path": "ASC_Filter_MappingViews.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASC_ImportMessageParameterMappings.htm",
+      "md_rel_path": "ASC_ImportMessageParameterMappings.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASC_InterrunnableVariables.htm",
+      "md_rel_path": "ASC_InterrunnableVariables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASC_MapMessagesParameters.htm",
+      "md_rel_path": "ASC_MapMessagesParameters.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASC_MessageMapping.htm",
+      "md_rel_path": "ASC_MessageMapping.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASC_MessageMappingView.htm",
+      "md_rel_path": "ASC_MessageMappingView.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASC_MessageMappingView_ExternalAccess.htm",
+      "md_rel_path": "ASC_MessageMappingView_ExternalAccess.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASC_MessageMappingView_InternalAccess.htm",
+      "md_rel_path": "ASC_MessageMappingView_InternalAccess.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASC_PerformCalculation.htm",
+      "md_rel_path": "ASC_PerformCalculation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asc_rte_irviread_rte_irviwrite.htm",
+      "md_rel_path": "asc_rte_irviread_rte_irviwrite.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asc_rtedread.htm",
+      "md_rel_path": "asc_rtedread.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asc_rteirv_read_rte_irvwrite.htm",
+      "md_rel_path": "asc_rteirv_read_rte_irvwrite.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asc_searchdel_unused_methodsrunnables.htm",
+      "md_rel_path": "asc_searchdel_unused_methodsrunnables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASC_SearchDeleteUnusedElements.htm",
+      "md_rel_path": "ASC_SearchDeleteUnusedElements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASC_SpecifyMatrixAddition.htm",
+      "md_rel_path": "ASC_SpecifyMatrixAddition.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asc_statementblocks.htm",
+      "md_rel_path": "asc_statementblocks.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asc_useassertoperator.htm",
+      "md_rel_path": "asc_useassertoperator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asc_useconversionoperator.htm",
+      "md_rel_path": "asc_useconversionoperator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASC_used.htm",
+      "md_rel_path": "ASC_used.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASC_UseGraphicalHierarchies_StatementBlocks.htm",
+      "md_rel_path": "ASC_UseGraphicalHierarchies_StatementBlocks.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASC_UseMatrixArgument_Example.htm",
+      "md_rel_path": "ASC_UseMatrixArgument_Example.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASC_ViewsArea.htm",
+      "md_rel_path": "ASC_ViewsArea.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asc_working_on_swc.htm",
+      "md_rel_path": "asc_working_on_swc.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCaccessCalibrationParameters.htm",
+      "md_rel_path": "ASCaccessCalibrationParameters.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascaddargument.htm",
+      "md_rel_path": "ascaddargument.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascaddhierarchy.htm",
+      "md_rel_path": "ascaddhierarchy.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascaddimplcasttoconnect.htm",
+      "md_rel_path": "ascaddimplcasttoconnect.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascaddimplementationcast.htm",
+      "md_rel_path": "ascaddimplementationcast.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascaddinputhiera.htm",
+      "md_rel_path": "ascaddinputhiera.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCaddLocalvariables.htm",
+      "md_rel_path": "ASCaddLocalvariables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascaddreturnvalue.htm",
+      "md_rel_path": "ascaddreturnvalue.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascaddsequence.htm",
+      "md_rel_path": "ascaddsequence.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCadjustProjectSettingsSWC.htm",
+      "md_rel_path": "ASCadjustProjectSettingsSWC.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCanalyzeAtomicSWC.htm",
+      "md_rel_path": "ASCanalyzeAtomicSWC.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascappearancehierarchy.htm",
+      "md_rel_path": "ascappearancehierarchy.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascargumentsmenu.htm",
+      "md_rel_path": "ascargumentsmenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascargumentstab.htm",
+      "md_rel_path": "ascargumentstab.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCarithmeticOperators.htm",
+      "md_rel_path": "ASCarithmeticOperators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCAssignComponent.htm",
+      "md_rel_path": "ASCAssignComponent.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCassignEventsToRunnables.htm",
+      "md_rel_path": "ASCassignEventsToRunnables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCassignindividual.htm",
+      "md_rel_path": "ASCassignindividual.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascassignment.htm",
+      "md_rel_path": "ascassignment.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCassignSequence.htm",
+      "md_rel_path": "ASCassignSequence.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascautomaticallyassign.htm",
+      "md_rel_path": "ascautomaticallyassign.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCbasicBlocksPalette.htm",
+      "md_rel_path": "ASCbasicBlocksPalette.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascbasicelement.htm",
+      "md_rel_path": "ascbasicelement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCbrowseView.htm",
+      "md_rel_path": "ASCbrowseView.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCbuildMenu.htm",
+      "md_rel_path": "ASCbuildMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCcalibration.htm",
+      "md_rel_path": "ASCcalibration.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascchangeappearance.htm",
+      "md_rel_path": "ascchangeappearance.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascchangeASWCDisplay.htm",
+      "md_rel_path": "ascchangeASWCDisplay.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascchangeinputpins.htm",
+      "md_rel_path": "ascchangeinputpins.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascchangesequence.htm",
+      "md_rel_path": "ascchangesequence.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCChangevisibility.htm",
+      "md_rel_path": "ASCChangevisibility.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCClientServerCommunication.htm",
+      "md_rel_path": "ASCClientServerCommunication.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asccommentsandnotes.htm",
+      "md_rel_path": "asccommentsandnotes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCcomparisonOperators.htm",
+      "md_rel_path": "ASCcomparisonOperators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asccomplexelements.htm",
+      "md_rel_path": "asccomplexelements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCcomponentPane.htm",
+      "md_rel_path": "ASCcomponentPane.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCconditionaloperators.htm",
+      "md_rel_path": "ASCconditionaloperators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascconfigureautosarxmloutput.htm",
+      "md_rel_path": "ascconfigureautosarxmloutput.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascconnectdiagram.htm",
+      "md_rel_path": "ascconnectdiagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCcontextMenuComponents.htm",
+      "md_rel_path": "ASCcontextMenuComponents.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCcontextMenuControlFlowOperators.htm",
+      "md_rel_path": "ASCcontextMenuControlFlowOperators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCcontextMenuCPcomponentsAndElements.htm",
+      "md_rel_path": "ASCcontextMenuCPcomponentsAndElements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCcontextMenuDiagramMethodOrRunnable.htm",
+      "md_rel_path": "ASCcontextMenuDiagramMethodOrRunnable.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCcontextMenuElements.htm",
+      "md_rel_path": "ASCcontextMenuElements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asccontextmenumiscdiagramelements.htm",
+      "md_rel_path": "asccontextmenumiscdiagramelements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCcontextMenuOperators.htm",
+      "md_rel_path": "ASCcontextMenuOperators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asccontextmenus.htm",
+      "md_rel_path": "asccontextmenus.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCcontextmenusPanes.htm",
+      "md_rel_path": "ASCcontextmenusPanes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCcontextMenuSpecificationView.htm",
+      "md_rel_path": "ASCcontextMenuSpecificationView.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCcontrolFlowOperators.htm",
+      "md_rel_path": "ASCcontrolFlowOperators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascconverthierarchy.htm",
+      "md_rel_path": "ascconverthierarchy.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asccreatearray.htm",
+      "md_rel_path": "asccreatearray.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCcreateAtomicSoftwareComponent.htm",
+      "md_rel_path": "ASCcreateAtomicSoftwareComponent.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asccreateconnectors.htm",
+      "md_rel_path": "asccreateconnectors.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asccreatediagram.htm",
+      "md_rel_path": "asccreatediagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asccreatedistribution.htm",
+      "md_rel_path": "asccreatedistribution.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCcreateEvent.htm",
+      "md_rel_path": "ASCcreateEvent.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCcreateExclusiveArea.htm",
+      "md_rel_path": "ASCcreateExclusiveArea.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asccreategroup.htm",
+      "md_rel_path": "asccreategroup.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asccreatemethod.htm",
+      "md_rel_path": "asccreatemethod.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asccreatenormal.htm",
+      "md_rel_path": "asccreatenormal.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCcreateRunnable.htm",
+      "md_rel_path": "ASCcreateRunnable.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCCreatesequence.htm",
+      "md_rel_path": "ASCCreatesequence.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCcreateSWCcontent.htm",
+      "md_rel_path": "ASCcreateSWCcontent.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asccutcopypaste.htm",
+      "md_rel_path": "asccutcopypaste.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCDataExchange.htm",
+      "md_rel_path": "ASCDataExchange.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCdeassignEventsFromRunnables.htm",
+      "md_rel_path": "ASCdeassignEventsFromRunnables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCdefineSWCsignature.htm",
+      "md_rel_path": "ASCdefineSWCsignature.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asceditarguments.htm",
+      "md_rel_path": "asceditarguments.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCeditImplementationRunnable.htm",
+      "md_rel_path": "ASCeditImplementationRunnable.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asceditincludedcomponent.htm",
+      "md_rel_path": "asceditincludedcomponent.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asceditingswc.htm",
+      "md_rel_path": "asceditingswc.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCeditMenu.htm",
+      "md_rel_path": "ASCeditMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asceditnotes.htm",
+      "md_rel_path": "asceditnotes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCeditorOverview.htm",
+      "md_rel_path": "ASCeditorOverview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCEditSequence.htm",
+      "md_rel_path": "ASCEditSequence.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCeditSequenceCalls.htm",
+      "md_rel_path": "ASCeditSequenceCalls.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asceditsignature.htm",
+      "md_rel_path": "asceditsignature.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCelementsPalette.htm",
+      "md_rel_path": "ASCelementsPalette.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCenableConcurrentInvocation_ServerRunnable.htm",
+      "md_rel_path": "ASCenableConcurrentInvocation_ServerRunnable.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCenableDisableModes.htm",
+      "md_rel_path": "ASCenableDisableModes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCEventMenu.htm",
+      "md_rel_path": "ASCEventMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCeventSpecificationView.htm",
+      "md_rel_path": "ASCeventSpecificationView.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCexampleMappingExportFiles.htm",
+      "md_rel_path": "ASCexampleMappingExportFiles.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCexclusiveAreas.htm",
+      "md_rel_path": "ASCexclusiveAreas.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascexiteditor.htm",
+      "md_rel_path": "ascexiteditor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascexportdata.htm",
+      "md_rel_path": "ascexportdata.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascexpressions.htm",
+      "md_rel_path": "ascexpressions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCextrasMenu.htm",
+      "md_rel_path": "ASCextrasMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCfileMenu.htm",
+      "md_rel_path": "ASCfileMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascfiltercomponentpane.htm",
+      "md_rel_path": "ascfiltercomponentpane.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCgenerateAUTOSARCode.htm",
+      "md_rel_path": "ASCgenerateAUTOSARCode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascgraphicalhierarchies.htm",
+      "md_rel_path": "ascgraphicalhierarchies.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASChelpMenu.htm",
+      "md_rel_path": "ASChelpMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascimplementationcasts.htm",
+      "md_rel_path": "ascimplementationcasts.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascImplementationDataTypeBool.htm",
+      "md_rel_path": "ascImplementationDataTypeBool.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascincludecomponent.htm",
+      "md_rel_path": "ascincludecomponent.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascincludecomponentblocklibrary.htm",
+      "md_rel_path": "ascincludecomponentblocklibrary.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCIncrementordecrement.htm",
+      "md_rel_path": "ASCIncrementordecrement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCinputOperators.htm",
+      "md_rel_path": "ASCinputOperators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascinsertenumeration.htm",
+      "md_rel_path": "ascinsertenumeration.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCinsertMenu.htm",
+      "md_rel_path": "ASCinsertMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asclayoutincludedcomponents.htm",
+      "md_rel_path": "asclayoutincludedcomponents.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASClibraryPalette.htm",
+      "md_rel_path": "ASClibraryPalette.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascloaddiagram.htm",
+      "md_rel_path": "ascloaddiagram.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asclocalstab.htm",
+      "md_rel_path": "asclocalstab.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "asclocalvariablemenu.htm",
+      "md_rel_path": "asclocalvariablemenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASClogicalOperators.htm",
+      "md_rel_path": "ASClogicalOperators.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCmakeClientRequest_on_Port.htm",
+      "md_rel_path": "ASCmakeClientRequest_on_Port.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCMappingMenu.htm",
+      "md_rel_path": "ASCMappingMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascmatrixargument.htm",
+      "md_rel_path": "ascmatrixargument.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCmenuBar.htm",
+      "md_rel_path": "ASCmenuBar.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascmiscbasicblocks.htm",
+      "md_rel_path": "ascmiscbasicblocks.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascmoveelements.htm",
+      "md_rel_path": "ascmoveelements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascmoveRunnablesMethods.htm",
+      "md_rel_path": "ascmoveRunnablesMethods.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCMovesequence.htm",
+      "md_rel_path": "ASCMovesequence.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascnavigatehierarchy.htm",
+      "md_rel_path": "ascnavigatehierarchy.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascnegationoperator.htm",
+      "md_rel_path": "ascnegationoperator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascopeneditor.htm",
+      "md_rel_path": "ascopeneditor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCPalettes.htm",
+      "md_rel_path": "ASCPalettes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCParameterMappingView.htm",
+      "md_rel_path": "ASCParameterMappingView.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascplaceelement.htm",
+      "md_rel_path": "ascplaceelement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCportsInterfaces.htm",
+      "md_rel_path": "ASCportsInterfaces.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascpositionoperator.htm",
+      "md_rel_path": "ascpositionoperator.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascprintblock.htm",
+      "md_rel_path": "ascprintblock.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCreceiveFromPort.htm",
+      "md_rel_path": "ASCreceiveFromPort.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascrenamedeleteElement.htm",
+      "md_rel_path": "ascrenamedeleteElement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCrenameDeleteEvents.htm",
+      "md_rel_path": "ASCrenameDeleteEvents.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascrenameordelete.htm",
+      "md_rel_path": "ascrenameordelete.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCResetindividual.htm",
+      "md_rel_path": "ASCResetindividual.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCResetSequence.htm",
+      "md_rel_path": "ASCResetSequence.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascresolvinghierarchy.htm",
+      "md_rel_path": "ascresolvinghierarchy.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascreturnmenu.htm",
+      "md_rel_path": "ascreturnmenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascreturntab.htm",
+      "md_rel_path": "ascreturntab.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCrteAccessMacros.htm",
+      "md_rel_path": "ASCrteAccessMacros.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCrteCall.htm",
+      "md_rel_path": "ASCrteCall.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCrteCalprm.htm",
+      "md_rel_path": "ASCrteCalprm.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCrteEnterRTEExit.htm",
+      "md_rel_path": "ASCrteEnterRTEExit.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCrteIRead.htm",
+      "md_rel_path": "ASCrteIRead.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCrteIWrite.htm",
+      "md_rel_path": "ASCrteIWrite.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCrteIWriteRef.htm",
+      "md_rel_path": "ASCrteIWriteRef.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCrteMode.htm",
+      "md_rel_path": "ASCrteMode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCrteRead.htm",
+      "md_rel_path": "ASCrteRead.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCrteWrite.htm",
+      "md_rel_path": "ASCrteWrite.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCRunnableEntity.htm",
+      "md_rel_path": "ASCRunnableEntity.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCRunnableMenu.htm",
+      "md_rel_path": "ASCRunnableMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascsavecomponent.htm",
+      "md_rel_path": "ascsavecomponent.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascscalesequence.htm",
+      "md_rel_path": "ascscalesequence.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCSearchResultsView.htm",
+      "md_rel_path": "ASCSearchResultsView.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascselectdefaultmethodrunnable.htm",
+      "md_rel_path": "ascselectdefaultmethodrunnable.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCsenderReceiverCommunication.htm",
+      "md_rel_path": "ASCsenderReceiverCommunication.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCsendToPort.htm",
+      "md_rel_path": "ASCsendToPort.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascsequencecalls.htm",
+      "md_rel_path": "ascsequencecalls.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascsetsizedrawingarea.htm",
+      "md_rel_path": "ascsetsizedrawingarea.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCSettingsTab.htm",
+      "md_rel_path": "ASCSettingsTab.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCsetUpEvent.htm",
+      "md_rel_path": "ASCsetUpEvent.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascshiftDiagramRunnableMethod.htm",
+      "md_rel_path": "ascshiftDiagramRunnableMethod.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascshiftsequence.htm",
+      "md_rel_path": "ascshiftsequence.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascsignatureeditor.htm",
+      "md_rel_path": "ascsignatureeditor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCspecificatonView.htm",
+      "md_rel_path": "ASCspecificatonView.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCspecifyAtomicSWC.htm",
+      "md_rel_path": "ASCspecifyAtomicSWC.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCspecifyCalibrationInterfacePrototype.htm",
+      "md_rel_path": "ASCspecifyCalibrationInterfacePrototype.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCspecifyClientServerInterfacePrototype.htm",
+      "md_rel_path": "ASCspecifyClientServerInterfacePrototype.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCSpecifyingEvents.htm",
+      "md_rel_path": "ASCSpecifyingEvents.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCspecifySRIprototype.htm",
+      "md_rel_path": "ASCspecifySRIprototype.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascstatements.htm",
+      "md_rel_path": "ascstatements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCswcMultipleDiagrams.htm",
+      "md_rel_path": "ASCswcMultipleDiagrams.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCtoolbarBasicBlocks.htm",
+      "md_rel_path": "ASCtoolbarBasicBlocks.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCtoolbarElements.htm",
+      "md_rel_path": "ASCtoolbarElements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCtoolbarGeneral.htm",
+      "md_rel_path": "ASCtoolbarGeneral.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCtoolbars.htm",
+      "md_rel_path": "ASCtoolbars.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCtoolsMenu.htm",
+      "md_rel_path": "ASCtoolsMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascuseif.htm",
+      "md_rel_path": "ascuseif.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascusenumbers.htm",
+      "md_rel_path": "ascusenumbers.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascuseswitch.htm",
+      "md_rel_path": "ascuseswitch.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascusewhileloop.htm",
+      "md_rel_path": "ascusewhileloop.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCusingExclusiveAreas.htm",
+      "md_rel_path": "ASCusingExclusiveAreas.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCusingModeGroups.htm",
+      "md_rel_path": "ASCusingModeGroups.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascviewconnectedelements.htm",
+      "md_rel_path": "ascviewconnectedelements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCviewMenu.htm",
+      "md_rel_path": "ASCviewMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ascviewoccurrence.htm",
+      "md_rel_path": "ascviewoccurrence.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCwindowDesc.htm",
+      "md_rel_path": "ASCwindowDesc.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCwindowsMenu.htm",
+      "md_rel_path": "ASCwindowsMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ASCworking_on_Included_Components.htm",
+      "md_rel_path": "ASCworking_on_Included_Components.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "codegen_dbtoolarge.htm",
+      "md_rel_path": "codegen_dbtoolarge.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "RCE_CreateInterrunnableVariable_Record.htm",
+      "md_rel_path": "RCE_CreateInterrunnableVariable_Record.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SWC_FilterCriteria_Window.htm",
+      "md_rel_path": "SWC_FilterCriteria_Window.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

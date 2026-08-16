@@ -1,0 +1,59 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"error\": {\n    \"code\": \"legacy_operation_failed\",\n    \"message\": \"Exception[0]: AscetReadException\\r\\nMessage: No ASCET item was found at 'PI_LIVE_FIX_20260812_2257A020\\\\ClassUnderTest'.\\r\\nStackTrace:\\r\\n   at ToolApiAscetTargetResolutionBackend.ResolveDatabasePath(String path)\\r\\n   at AscetTargetResolver.Resolve(AscetTargetRequest request)\\r\\n   at AscetReadDomainServiceBase.ResolveItemByPath(AscetSession session, String componentPath)\\r\\n   at ComponentElementSyncService.ResolveComponent(AscetSession session, String componentPath, String operation, AscetDiscreteComponent& discrete, CodeComponent& code)\\r\\n   at ComponentElementSyncService.<>c__DisplayClass5.<ReadCatalogInSession>b__4(AscetSession currentSession)\\r\\n   at AscetReadDomainServiceBase.ExecuteWithBoundSession[T](String operation, AscetSession session, Func`2 action)\\r\\n   at ComponentElementSyncService.ReadCatalogInSession(AscetSession session, AscetItemRef component)\\r\\n   at ComponentElementSyncService.<>c__DisplayClass1.<ReadCatalog>b__0(AscetSession session)\\r\\n   at AscetReadDomainServiceBase.ExecuteWithSession[T](String operation, Func`2 action)\\r\\n   at ComponentElementSyncService.ReadCatalog(AscetItemRef component)\\r\\n   at AscetReadElementCatalog.Main(String[] args)\"\n  }\n}"
+    }
+  ],
+  "details": {
+    "outcome": {
+      "status": "error",
+      "error": {
+        "code": "legacy_operation_failed",
+        "message": "Exception[0]: AscetReadException\r\nMessage: No ASCET item was found at 'PI_LIVE_FIX_20260812_2257A020\\ClassUnderTest'.\r\nStackTrace:\r\n   at ToolApiAscetTargetResolutionBackend.ResolveDatabasePath(String path)\r\n   at AscetTargetResolver.Resolve(AscetTargetRequest request)\r\n   at AscetReadDomainServiceBase.ResolveItemByPath(AscetSession session, String componentPath)\r\n   at ComponentElementSyncService.ResolveComponent(AscetSession session, String componentPath, String operation, AscetDiscreteComponent& discrete, CodeComponent& code)\r\n   at ComponentElementSyncService.<>c__DisplayClass5.<ReadCatalogInSession>b__4(AscetSession currentSession)\r\n   at AscetReadDomainServiceBase.ExecuteWithBoundSession[T](String operation, AscetSession session, Func`2 action)\r\n   at ComponentElementSyncService.ReadCatalogInSession(AscetSession session, AscetItemRef component)\r\n   at ComponentElementSyncService.<>c__DisplayClass1.<ReadCatalog>b__0(AscetSession session)\r\n   at AscetReadDomainServiceBase.ExecuteWithSession[T](String operation, Func`2 action)\r\n   at ComponentElementSyncService.ReadCatalog(AscetItemRef component)\r\n   at AscetReadElementCatalog.Main(String[] args)"
+      }
+    },
+    "raw": {
+      "ok": false,
+      "data": null,
+      "request": {
+        "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+        "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+        "args": [
+          "exec",
+          "read_element_catalog",
+          "PI_LIVE_FIX_20260812_2257A020\\ClassUnderTest",
+          "--json"
+        ],
+        "timeoutMs": 240000,
+        "jobKind": "read",
+        "mutatesDatabase": false
+      },
+      "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"legacy_operation_failed\",\"message\":\"Exception[0]: AscetReadException\\r\\nMessage: No ASCET item was found at \\u0027PI_LIVE_FIX_20260812_2257A020\\\\ClassUnderTest\\u0027.\\r\\nStackTrace:\\r\\n   at ToolApiAscetTargetResolutionBackend.ResolveDatabasePath(String path)\\r\\n   at AscetTargetResolver.Resolve(AscetTargetRequest request)\\r\\n   at AscetReadDomainServiceBase.ResolveItemByPath(AscetSession session, String componentPath)\\r\\n   at ComponentElementSyncService.ResolveComponent(AscetSession session, String componentPath, String operation, AscetDiscreteComponent\\u0026 discrete, CodeComponent\\u0026 code)\\r\\n   at ComponentElementSyncService.\\u003c\\u003ec__DisplayClass5.\\u003cReadCatalogInSession\\u003eb__4(AscetSession currentSession)\\r\\n   at AscetReadDomainServiceBase.ExecuteWithBoundSession[T](String operation, AscetSession session, Func`2 action)\\r\\n   at ComponentElementSyncService.ReadCatalogInSession(AscetSession session, AscetItemRef component)\\r\\n   at ComponentElementSyncService.\\u003c\\u003ec__DisplayClass1.\\u003cReadCatalog\\u003eb__0(AscetSession session)\\r\\n   at AscetReadDomainServiceBase.ExecuteWithSession[T](String operation, Func`2 action)\\r\\n   at ComponentElementSyncService.ReadCatalog(AscetItemRef component)\\r\\n   at AscetReadElementCatalog.Main(String[] args)\"},\"meta\":{\"bridgePid\":36124,\"bridgeGeneration\":\"c4a5da8c-376f-4850-ab4c-44addf3ef20a\",\"durationMs\":374,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"read_element_catalog\"}}\r\n",
+      "stderr": "Exception[0]: AscetReadException\r\nMessage: No ASCET item was found at 'PI_LIVE_FIX_20260812_2257A020\\ClassUnderTest'.\r\nStackTrace:\r\n   at ToolApiAscetTargetResolutionBackend.ResolveDatabasePath(String path)\r\n   at AscetTargetResolver.Resolve(AscetTargetRequest request)\r\n   at AscetReadDomainServiceBase.ResolveItemByPath(AscetSession session, String componentPath)\r\n   at ComponentElementSyncService.ResolveComponent(AscetSession session, String componentPath, String operation, AscetDiscreteComponent& discrete, CodeComponent& code)\r\n   at ComponentElementSyncService.<>c__DisplayClass5.<ReadCatalogInSession>b__4(AscetSession currentSession)\r\n   at AscetReadDomainServiceBase.ExecuteWithBoundSession[T](String operation, AscetSession session, Func`2 action)\r\n   at ComponentElementSyncService.ReadCatalogInSession(AscetSession session, AscetItemRef component)\r\n   at ComponentElementSyncService.<>c__DisplayClass1.<ReadCatalog>b__0(AscetSession session)\r\n   at AscetReadDomainServiceBase.ExecuteWithSession[T](String operation, Func`2 action)\r\n   at ComponentElementSyncService.ReadCatalog(AscetItemRef component)\r\n   at AscetReadElementCatalog.Main(String[] args)\r\n\r\n\r\n",
+      "exitCode": 2,
+      "timedOut": false,
+      "aborted": false,
+      "operationId": "read_element_catalog",
+      "stage": "cli_process",
+      "diagnostics": {
+        "operationId": "read_element_catalog",
+        "stage": "cli_process",
+        "exitCode": 2,
+        "timedOut": false,
+        "aborted": false,
+        "stderrSummary": "AscetReadException\nMessage: No ASCET item was found at 'PI_LIVE_FIX_20260812_2257A020\\ClassUnderTest'.\nStackTrace:",
+        "stdoutSummary": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"legacy_operation_failed\",\"message\":\"Exception[0]: AscetReadException\\r\\nMessage: No ASCET item was found at \\u0027PI_LIVE_FIX_20260812_2257A020\\\\ClassUnderTest\\u0027.\\r\\nStackTrace:\\r\\n   at ToolApiAscetTargetResolutionBackend.ResolveDatabasePath(String path)\\r\\n   at AscetTargetResolver.Resolve(AscetTargetRequest request)\\r\\n   at AscetReadDomainServiceBase.ResolveItemByPath(AscetSession session, String componentPath)\\r\\n   at ComponentElementSyncService.ResolveComponent(AscetSession session, String componentPath, String operation, AscetDiscreteComponent\\u0026 discrete, CodeComponent\\u0026 code)\\r\\n   at ComponentElementSyncService.\\u003c\\u003ec__DisplayClass5.\\u003cReadCatalogInSession\\u003eb__4(AscetSession currentSession)\\r\\n   at AscetReadDomainServiceBase.ExecuteWithBoundSession[T](String operation, AscetSession session, Func`2 action)\\r\\n   at ComponentElementSyncService.ReadCatalogInSession(AscetSe...",
+        "retryable": false
+      },
+      "error": {
+        "code": "legacy_operation_failed",
+        "message": "Exception[0]: AscetReadException\r\nMessage: No ASCET item was found at 'PI_LIVE_FIX_20260812_2257A020\\ClassUnderTest'.\r\nStackTrace:\r\n   at ToolApiAscetTargetResolutionBackend.ResolveDatabasePath(String path)\r\n   at AscetTargetResolver.Resolve(AscetTargetRequest request)\r\n   at AscetReadDomainServiceBase.ResolveItemByPath(AscetSession session, String componentPath)\r\n   at ComponentElementSyncService.ResolveComponent(AscetSession session, String componentPath, String operation, AscetDiscreteComponent& discrete, CodeComponent& code)\r\n   at ComponentElementSyncService.<>c__DisplayClass5.<ReadCatalogInSession>b__4(AscetSession currentSession)\r\n   at AscetReadDomainServiceBase.ExecuteWithBoundSession[T](String operation, AscetSession session, Func`2 action)\r\n   at ComponentElementSyncService.ReadCatalogInSession(AscetSession session, AscetItemRef component)\r\n   at ComponentElementSyncService.<>c__DisplayClass1.<ReadCatalog>b__0(AscetSession session)\r\n   at AscetReadDomainServiceBase.ExecuteWithSession[T](String operation, Func`2 action)\r\n   at ComponentElementSyncService.ReadCatalog(AscetItemRef component)\r\n   at AscetReadElementCatalog.Main(String[] args)"
+      }
+    },
+    "error": {
+      "code": "legacy_operation_failed",
+      "message": "Exception[0]: AscetReadException\r\nMessage: No ASCET item was found at 'PI_LIVE_FIX_20260812_2257A020\\ClassUnderTest'.\r\nStackTrace:\r\n   at ToolApiAscetTargetResolutionBackend.ResolveDatabasePath(String path)\r\n   at AscetTargetResolver.Resolve(AscetTargetRequest request)\r\n   at AscetReadDomainServiceBase.ResolveItemByPath(AscetSession session, String componentPath)\r\n   at ComponentElementSyncService.ResolveComponent(AscetSession session, String componentPath, String operation, AscetDiscreteComponent& discrete, CodeComponent& code)\r\n   at ComponentElementSyncService.<>c__DisplayClass5.<ReadCatalogInSession>b__4(AscetSession currentSession)\r\n   at AscetReadDomainServiceBase.ExecuteWithBoundSession[T](String operation, AscetSession session, Func`2 action)\r\n   at ComponentElementSyncService.ReadCatalogInSession(AscetSession session, AscetItemRef component)\r\n   at ComponentElementSyncService.<>c__DisplayClass1.<ReadCatalog>b__0(AscetSession session)\r\n   at AscetReadDomainServiceBase.ExecuteWithSession[T](String operation, Func`2 action)\r\n   at ComponentElementSyncService.ReadCatalog(AscetItemRef component)\r\n   at AscetReadElementCatalog.Main(String[] args)"
+    }
+  }
+}

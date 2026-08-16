@@ -1,0 +1,501 @@
+{
+  "generated_at": "2026-04-01T03:07:34.209173Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\AutomaticDocumentationEnglishUS.chm",
+  "unpack_dir": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\AutomaticDocumentationEnglishUS\\unpacked",
+  "total_files": 80,
+  "total_size_bytes": 345424,
+  "counts_by_extension": {
+    ".htm": 49,
+    ".brs": 1,
+    ".glo": 1,
+    ".hhc": 1,
+    ".hhk": 1,
+    ".gif": 22,
+    ".js": 2,
+    ".xml": 1,
+    ".css": 1,
+    ".lng": 1
+  },
+  "files": [
+    {
+      "relative_path": "AD_ASCET_DocContents_Window.htm",
+      "size": 1935,
+      "sha256": "75136b7e514fe396257125b30a885d9dd881b3ce03bb5a74ecfdfe2cce7869ea",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AD_BDE_Tab.htm",
+      "size": 6645,
+      "sha256": "ac64e6e6b0bc7255fe9ff3c5c7e181ecac3a1a8fe562f89ea72ecca7bf5ca261",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AD_create_docu_views.htm",
+      "size": 2285,
+      "sha256": "9e38b6caf695c82f43c8f5656375f1d117fe5c753f92898d384d722a136f1be0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AD_CreateUseDefaultViewConfiguration.htm",
+      "size": 2527,
+      "sha256": "17079f6e0c7c044c7c1a78dd419e7814d08c2fec6376ce028369e422b9a4232b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AD_Document_Menu.htm",
+      "size": 1553,
+      "sha256": "6be1bd48cb46cb4fb31b16282ec041eb32cbe2a27cde617410edb5e6932d7bff",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AD_Documentation_Contents_Window.htm",
+      "size": 2634,
+      "sha256": "5f8cb72d0a88f1afbf3c8c65c12e79b47cb6d3221a3ebc0f81911b247c08e0c4",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AD_Documentation_Tab.htm",
+      "size": 5464,
+      "sha256": "776ed539a225bbeb7b63d82d1f10db3c9a393e2a75c9ddd005d8b938237a4cb0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AD_EditMenu_NotesEditor.htm",
+      "size": 1723,
+      "sha256": "9c14ad7db0a2836d0ebfe8a7bb7620fd8ab4846da3a2d0f94235ae94fe0f78a9",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AD_EditView_of_DiagramItem.htm",
+      "size": 14219,
+      "sha256": "168790ac7671c1e0e63d897997bb4e4c3f0ebf469a5f318c0bf9f01c0b90b021",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AD_Element_Properties_Window.htm",
+      "size": 4377,
+      "sha256": "f725f573c75f31a0e37a5c1a364b468d44fd6e34b32efd1d97bf254caab9d193",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AD_Elements_Tab.htm",
+      "size": 2773,
+      "sha256": "d657f1852a42f0067e679de4e517b4a3fabbf92cef5a673280f676da83baa1c6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AD_ExampleViewExportFile.htm",
+      "size": 3757,
+      "sha256": "a54102615465a7c67e14597abfc44bfca83ff4da1fb35b5a36cd360ddb588652",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AD_InstallMiKTeX.htm",
+      "size": 13143,
+      "sha256": "bcdd5c006a9d2604352683e90047dfbbb34a807a9d8a3c90b31d82e04f5cb67e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AD_notes.htm",
+      "size": 1455,
+      "sha256": "b13833236620f52209b29a7339b73dc7fd76b06c5f6450c11bf503b88d825661",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AD_NotesEditorWindow.htm",
+      "size": 2792,
+      "sha256": "2dd98adc1246be4d63133f1de80f353db8e0f54f324bde249f6ad78a9bfa1329",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AD_Overview.htm",
+      "size": 1400,
+      "sha256": "a4dfa3cd4ff3ce1171893384c1354c736af168af3dd9652a3e509b500dfb5cd9",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AD_ProvidePathLaTeX.htm",
+      "size": 3148,
+      "sha256": "916c1e5b6a78fba8846e781ce1193102e7b6fc2ee5b05c6ea1a0610cfd795281",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AD_TextSegmentsMenu.htm",
+      "size": 2042,
+      "sha256": "b7eb22cd2ee9f949dea72178e6f3144be965eb38fa59168d6d35133b5c415a8d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AD_views.htm",
+      "size": 2869,
+      "sha256": "0772ce0e960149d46d34c5ce847d5c062eaac1da6a53d1ebdd131824a37b7feb",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AD_Views_Window.htm",
+      "size": 2892,
+      "sha256": "cd52bc2b22d26ad3e33c539f50a9ae4eeb8c12abf8f3d734175f197f20847a43",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AD_ViewsMenu_NotesEditor.htm",
+      "size": 1157,
+      "sha256": "52845ecfc14a63f685e165506196fe8b7a74799d6c1744ee8e92fb28052fff58",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AD_ViewsWindow_GraphicalEditors.htm",
+      "size": 6043,
+      "sha256": "5fd0f5ae15f0c3cc89e801aa71babcd2a0ebcec7220c0a594033407015d4cac2",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AD_Working_on_Notes.htm",
+      "size": 1287,
+      "sha256": "2983053ff7d701d8a2d78a1d21bc654d025c89b6d5293e016822051690b06faa",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AD_Working_on_Views.htm",
+      "size": 1726,
+      "sha256": "be990fcb487893409939ba1501fa1352fd632bdeadb98d139092166ebb9fee9a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "ascii_format.htm",
+      "size": 1353,
+      "sha256": "27405620b12bbd96aced0d0161dd8aca194fb2af012792f3b37c01320ffb9aea",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "assign_text_segment.htm",
+      "size": 1736,
+      "sha256": "7f3a6a4ef9eacaa844668ba944a593adb46fe3b492c53aae5228658bad96bdcb",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "AutomaticDocumentationEnglishUS.brs",
+      "size": 2,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "extension": ".brs"
+    },
+    {
+      "relative_path": "AutomaticDocumentationEnglishUS.glo",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "extension": ".glo"
+    },
+    {
+      "relative_path": "AutomaticDocumentationEnglishUS.hhc",
+      "size": 10059,
+      "sha256": "9a9d6e23013269e9f19dea336dc59b3d1f3925d4ba5cb494d4d0900865166817",
+      "extension": ".hhc"
+    },
+    {
+      "relative_path": "AutomaticDocumentationEnglishUS.hhk",
+      "size": 10076,
+      "sha256": "db0e633047576fb4d307f7ea75b4a2ef33f155ef13e3214b96cd9a95338bcd9e",
+      "extension": ".hhk"
+    },
+    {
+      "relative_path": "BUTTON.GIF",
+      "size": 844,
+      "sha256": "6d10387853fe90ec87f720a6460a8cd1d2559683e66c81683a705a5e0e6f2ea9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_editviews.gif",
+      "size": 1058,
+      "sha256": "c46a75cbd32b27ab0d559fde43a11f1da79d899678ec25e9f8bead6a7e617416",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_openfile.gif",
+      "size": 998,
+      "sha256": "e7b962dfd5841cdbbbf3dd51edba0051a2cea8ebb5a3f1c9b8f727d9574e2ce0",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "button_views_plus.gif",
+      "size": 135,
+      "sha256": "ef41ed5db728982f24f599c0df40b538168c39d1e32ef9dfb8247a5af858bece",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "change_selection.htm",
+      "size": 1799,
+      "sha256": "eac5960ab34653090dae988b11de2dfe90cdc51f04400f52ea097ada1dd4c1f8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "change_view_display_diagram.htm",
+      "size": 1363,
+      "sha256": "2b8ed1dff22ac5bd12f29ef1f4793bfe7870c400a8b86af5cb9db43fd95f00ba",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "create_note.htm",
+      "size": 1755,
+      "sha256": "b7c8ad9bd28d75037ceb321986e947bf307e75fe5c596826f8716448d5a28eea",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "create_text_segment.htm",
+      "size": 2297,
+      "sha256": "ba8289dd5824332c4584af416b0b6d51df6a701ab3b54c9b1121b0223ac9d56e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "deassign_view.htm",
+      "size": 1136,
+      "sha256": "7cfb18f235344da6cf0b7f14aaa9b8e4ff6180e3f012a793e44acfe9a9c5bfb7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "determine_content_docu_file.htm",
+      "size": 3140,
+      "sha256": "11f75f5cd9a3580179b421691db886adb0f8a409030669e610ff3126e3c8dcfc",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "display.js",
+      "size": 5656,
+      "sha256": "85712144c31aac1d2706f3b60475055a673961f71bc37c0f4c9e9c4b85fa9b31",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "docu_file_output_formats.htm",
+      "size": 1632,
+      "sha256": "c0bc8e3b05ee5259a5a1d39f5ec43117f69f83b92fe88f1f8b5999b4e17ad6e7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "edit_text_segment.htm",
+      "size": 2617,
+      "sha256": "16cf10b0843d5b61798ad38b6ae61cb21935cee697e80daaf23e3774ab698507",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "eHelp.xml",
+      "size": 371,
+      "sha256": "c3b452c1050c8a00b931cc443496eb9df28c6bfa371a416b3394fc2b41d2074b",
+      "extension": ".xml"
+    },
+    {
+      "relative_path": "ehlpdhtm.js",
+      "size": 125833,
+      "sha256": "f36db3b4d00f02be6031d2078bc4aeaaa533bf00f60d9bcd71a6890d6c17a69e",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "Exporting_Views.htm",
+      "size": 2760,
+      "sha256": "6e667af440d8e2ceda4fab1ce644c3029c758de303a7911e3e44aeb138fa9708",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "generate_docu_folder_database.htm",
+      "size": 2989,
+      "sha256": "351b7132bb4994eaf82a2211d5451aa0f892cd8030769ff4a120eb49c4119ee2",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "generating_documentation.htm",
+      "size": 1443,
+      "sha256": "7457ff56b8e6a7ccc915125a6da595dd74429d85a11e488a6446ccfffe7702e0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Global_Settings_Elem_Grps.htm",
+      "size": 3730,
+      "sha256": "0e9cd870dc3ecbc56d53366367c5c73170fb2e0a2c5af86acd2841bfe9995095",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "html_format.htm",
+      "size": 1138,
+      "sha256": "b3dcc4d197907ee4086be7ae06e022012a47421883d0a4f1017151047349ab8e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "image2.gif",
+      "size": 1691,
+      "sha256": "53b573e832fad53c7ef9ceb40590ea0fe2607cdd429b995d127e9be62766a781",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exp_minus.gif",
+      "size": 837,
+      "sha256": "18a8ea974d756d370d6f7067283fc8c0b26f235c8e98bdaaf13a63e7dca8b1c4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exp_plus.gif",
+      "size": 842,
+      "sha256": "9ff1991cf9c6de621e2672bebf74fbc56680e3413f74d6cf18e25238701651be",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/statisch.gif",
+      "size": 831,
+      "sha256": "481cd3e8b966f0a4398b853efce140287877173b926b53d710791675a1b15aa4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Importing_Views.htm",
+      "size": 1583,
+      "sha256": "3d5651ca094d45c603bc70a8d5693485efc3bed234cb2f63a4fc0baeb8610428",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "Layout.css",
+      "size": 11899,
+      "sha256": "07bab7998a3f98a2fb95a4aa4d843e4c1b60434b45703954e3fe80ceda895fa7",
+      "extension": ".css"
+    },
+    {
+      "relative_path": "notes_editor2.gif",
+      "size": 960,
+      "sha256": "dccb7812cc7e0d0e9002e697263d8bb5e2e9cc8c8349285b77b5a6e5bf1c58b3",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Options_for_Element_Types.htm",
+      "size": 1466,
+      "sha256": "aeb344ef5ee3e2dfe8229f2a5b7d3e5e0fbec3f7f8392803f7aa4573d412c246",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "postscript_format.htm",
+      "size": 1403,
+      "sha256": "dbffd028febb6f3ecac3202b0bdfe4fce70d8ba44dfa103abbec7931a7c5e48f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "RoboHHRE.lng",
+      "size": 3586,
+      "sha256": "607e16623990c7b694bb11537edbecfbd7057fda1739bba5173e9d8a4942b18f",
+      "extension": ".lng"
+    },
+    {
+      "relative_path": "rtf_format.htm",
+      "size": 1065,
+      "sha256": "c4498d0a2118f20d8643cd16a11e247d9964b241f98edf0b4d39ee26d5533918",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "select_default_view.htm",
+      "size": 2904,
+      "sha256": "99eb82eccb311215543318cc1f39f392cd7d1415be3c44d3807bd55896fc89c9",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "select_items_gen_docu.htm",
+      "size": 3339,
+      "sha256": "6801f6d65c0cb1606116ec93475de9c3ca9993c01dce11a84567125617b0e0a6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "set_options_docu_generation.htm",
+      "size": 2887,
+      "sha256": "72861970fcc4791f0693bda38db80bb3f4628ca5840708ae58b8b4f2a009800f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "store_docu_contents.htm",
+      "size": 1824,
+      "sha256": "7b7cd81922a1f3c710a1579bfb90d8e2bf4a093186f83f190cf9ac68237ec2e5",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "view_generated_docu.htm",
+      "size": 1061,
+      "sha256": "4d83186c4d850256c4e9599ec21c287228455ce491b732b37285e459d0ed5732",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "view_text_segment_assignments.htm",
+      "size": 1482,
+      "sha256": "0282512f5fb9619b30ec0ff464a6449e34c05679167de4419d8322af81ea3e57",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "views_asline copy.gif",
+      "size": 1875,
+      "sha256": "4e35d0cd326ffd9187ac466c8ae3e0fe0f77d426cab7d0a46d907021aeaab316",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "views_comment1.gif",
+      "size": 2157,
+      "sha256": "50424232886cbacc6e9929a7b63c825feb683ac17a0217f032c5ebbce8d75351",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "views_comment2.gif",
+      "size": 1866,
+      "sha256": "3114c5253412a96c6efb7d44d55a406a7ece44790a836cefcf3833ff2e313a48",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "views_contour copy.gif",
+      "size": 2203,
+      "sha256": "fef8f0f5166ee66017feebf394610b20e49b33671fec681fe34e587602478e2e",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "views_hidecont copy.gif",
+      "size": 2864,
+      "sha256": "84e08066a9d80e904f295dfe8bac19308771213ce12f6cd97b26406078efb68c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "views_invisible copy.gif",
+      "size": 1742,
+      "sha256": "d3798544129b8467b3e0073947b5f8d28d47e9b0cc28d2f981f47b1ad97c76d0",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "views_locals_1.gif",
+      "size": 2683,
+      "sha256": "8851a97879e68eb9d5284c221b18e21a5c3a2b28d1af7eac916a2a5f381b2bd6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "views_locals_2.gif",
+      "size": 2610,
+      "sha256": "5e303ae26156acfe90fb47320b1426662f1886fefd366b8e69ea6f003fafd21b",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "views_normal copy.gif",
+      "size": 2864,
+      "sha256": "84e08066a9d80e904f295dfe8bac19308771213ce12f6cd97b26406078efb68c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "views_sequence1.gif",
+      "size": 2163,
+      "sha256": "25f09a5e53a5984971ae620f4cd0bafc3182d5b2c258e704ff559dfd7fb23579",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "views_sequence2.gif",
+      "size": 2083,
+      "sha256": "82e22ee95ba21b0d8f21ff034bbe34adbe3f34782d761c5e6d0510577890b00e",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "views_sequence3.gif",
+      "size": 2483,
+      "sha256": "1998debfb65877126e2027c60b22038c06f7a7327c7bbf71efe3361e81d4acf3",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "views_sequence4.gif",
+      "size": 2405,
+      "sha256": "fe839bb0cea52fd5595c983ec641c4edc6b19cd93630d692cdbace7b0a888700",
+      "extension": ".gif"
+    }
+  ]
+}

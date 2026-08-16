@@ -1,0 +1,16 @@
+﻿{
+    "rawEventCount":  19,
+    "ledgerEventCount":  19,
+    "summaryEventCount":  19,
+    "countMatches":  true,
+    "rawSha256":  "be429a587700497c6ae5c25312de69866b31c78774be49856753929be337b2df",
+    "ledgerShaMatches":  true,
+    "summaryShaMatches":  true,
+    "failedAttemptCount":  1,
+    "failedAttemptRetained":  true,
+    "unknownOutcome":  true,
+    "cleanupRequired":  true,
+    "unexpectedWrites":  0,
+    "isolatedFixtureWrites":  6,
+    "cleanupWrites":  3
+}

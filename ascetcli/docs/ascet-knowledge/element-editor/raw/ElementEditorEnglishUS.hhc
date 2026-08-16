@@ -1,0 +1,137 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="toc">
+  <param name="Image Width" value="16">
+  <param name="Window Styles" value="0x800427">
+  <param name="ExWindow Styles" value="0x100">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Properties Editor">
+    <param name="Local" value="EEd_Overview.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Overview">
+      <param name="Local" value="EEd_Overview.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Basics">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Instances and Occurrences">
+        <param name="Local" value="EEd_instances_occurrences.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Element Configuration">
+        <param name="Local" value="EEd_element_configuration.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Imported Elements">
+        <param name="Local" value="EEd_ImportedElements.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Dependent Elements">
+        <param name="Local" value="EEd_dependent_elements.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Temporary Variables">
+        <param name="Local" value="IntroductionEnglishUS.chm::/INT_temporary_variables.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Calibration Access">
+        <param name="Local" value="eed_calibrationaccess.htm">
+      </object>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Instructions">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Opening the Properties Editor">
+        <param name="Local" value="EEd_open_element_editor.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Editing the Configuration of a Scalar Element">
+        <param name="Local" value="EEd_edit_element_configuration.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Editing the Configuration of a Composite Element">
+        <param name="Local" value="eed_editconfiguration_compositeelement.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Specifying an Array or Matrix with Variable Size">
+        <param name="Local" value="Eed_SpecifyArrayMatrix_VariableSize.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Editing the Configuration of a Complex Element">
+        <param name="Local" value="eed_editconfiguration_complexelement.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Editing the Element Scope">
+        <param name="Local" value="EEd_EditElementScope.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Editing the Calibration Access">
+        <param name="Local" value="EEd_EditCalibrationAccess.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Enabling or Disabling Elements">
+        <param name="Local" value="EEd_enable_diabale_elements.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Specifying a Reference">
+        <param name="Local" value="EEd_Specifying_a_Reference.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Creating the Formula for Dependent Parameters">
+        <param name="Local" value="EEd_create_fromula_dependent.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Editing the Formula of a Dependent Parameter">
+        <param name="Local" value="EEd_edit_formula_dependent.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Editing Dependent Parameters">
+        <param name="Local" value="DataEditorEnglishUS.chm::/DEd_Editing_Dependent_Parameters.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Using Temporary Variables">
+        <param name="Local" value="EEd_use_temporary_variables.htm">
+      </object>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Reference to User Interface">
+      <param name="Local" value="EEd_Reference_to_User_Interface.htm">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Properties Editor for Basic Elements">
+        <param name="Local" value="EED_Element_Editor_Basic_Elements.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Properties Editor for Interrunnable Variables">
+        <param name="Local" value="eed_for_interrunnablevariables.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Properties Editor for CT Block Elements">
+        <param name="Local" value="EEd_Element_Editor_CT_Block_Elements.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Properties Editor for Included Components">
+        <param name="Local" value="EEd_Element_Editor_Included_Component.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Properties Editor for Implementation Casts, Record Elements and Mode Groups">
+        <param name="Local" value="EEd_PropertiesEditor_ModeGroups.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Formula Editor for Dependent Parameters">
+        <param name="Local" value="EEd_Formula_Editor_Dependent_Parameters.htm">
+      </object>
+      </ul>
+    </ul>
+</ul>
+</html>

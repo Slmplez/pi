@@ -1,0 +1,412 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="toc">
+  <param name="Image Width" value="16">
+  <param name="Window Styles" value="0x800427">
+  <param name="ExWindow Styles" value="0x100">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="C Code Editor">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Overview">
+      <param name="Local" value="CC_Overview.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Safety Information">
+      <param name="Local" value="IntroductionEnglishUS.chm::/int_safetyinformation.htm">
+      <param name="ImageNumber" value="3">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="General Safety Information">
+        <param name="Local" value="IntroductionEnglishUS.chm::/int_safetyadvicegeneral.htm">
+        <param name="ImageNumber" value="38">
+      </object>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Basics">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="C Code Components">
+        <param name="Local" value="cc_c_code_components.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Structure">
+        <param name="Local" value="cc_structure.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Methods and Processes">
+        <param name="Local" value="cc_methods_and_processes.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Conversion of Methods or Processes">
+        <param name="Local" value="BlockDiagramEditorEnglishUS.chm::/BDE_Conversion_MethodsProcesses.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Variables and Function Parameters">
+        <param name="Local" value="CC_Overview_VariablesFunctionParameters.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Accessing Elements">
+          <param name="Local" value="CC_Accessing_Elements.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Automatically Generated define Statements for Instance Variables">
+          <param name="Local" value="CC_Automatic_define_Statements_InstanceVariables.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Working with Basic Elements">
+          <param name="Local" value="CC_Working_with_Basic_Elements.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Messages">
+          <param name="Local" value="CC_Messages.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Example: Messages">
+          <param name="Local" value="CC_Example__Messages.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Arguments">
+          <param name="Local" value="CC_Arguments.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Local Variables">
+          <param name="Local" value="CC_Local_Variables.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Arrays and Matrices">
+          <param name="Local" value="CC_Arrays_and_Matrices.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Characteristic Lines">
+          <param name="Local" value="CC_Characteristic_Lines.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Characteristic Maps">
+          <param name="Local" value="CC_Characteristic_Maps.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Header">
+        <param name="Local" value="CC_Header.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="External Source Code">
+        <param name="Local" value="CC_External_Source_Code.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Programming Model Interface">
+        <param name="Local" value="cc_programming_model_interface.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Access Macros">
+        <param name="Local" value="CC_Overview_-_Access_Macros.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Direct Access">
+          <param name="Local" value="CC_Direct_Acess.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Length of Arrays">
+          <param name="Local" value="CC_Length_of_Arrays.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Resource Access">
+          <param name="Local" value="CC_Resource_Access.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Access to Private Methods">
+          <param name="Local" value="CC_Acess_to_Private_Methods.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Making Arrays Available for Usage in External C Code">
+          <param name="Local" value="CC_Making_Arrays_Avaiable_for_Usage_in_External_C-Code.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Using the C Code Editor">
+        <param name="Local" value="CC_using_CCode_component.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Specifying Components in C Code">
+        <param name="Local" value="creating_method_process.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="External Editor">
+        <param name="Local" value="external_editor.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="External Source Editor">
+        <param name="Local" value="using_external_source.htm">
+      </object>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Instructions">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Creating a C Code Component">
+        <param name="Local" value="creating_c_code.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Filtering the Tree Pane">
+        <param name="Local" value="cc_filtering_the_component_pane.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Searching the Tree Pane">
+        <param name="Local" value="IntroductionEnglishUS.chm::/INT_SearchTreePane.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Copying Elements in the Outline Tab">
+        <param name="Local" value="IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Configuring a Toolbar">
+        <param name="Local" value="IntroductionEnglishUS.chm::/INT_Configuring_Toolbar.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Specifying Components in C Code">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Specifying a Method or Process">
+          <param name="Local" value="CC_specifying_method.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Selecting a Default Method/Process">
+          <param name="Local" value="cc_selectdefaultmethodprocess.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Copying C Code for Single Classes or Modules">
+          <param name="Local" value="copy_ccode_single.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Using Copy From">
+          <param name="Local" value="CC_copy_code_from.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing the Code for a Method or Process">
+          <param name="Local" value="CC_edit_code.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Finding and Replacing C Code">
+          <param name="Local" value="search_replace_ccode.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Searching/Deleting Unused Elements">
+          <param name="Local" value="CC_SearchDeleteUnusedElements.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Saving a Method or Process">
+          <param name="Local" value="CC_saving_method.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Printing the C Code">
+          <param name="Local" value="printing_ccode.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Including a Component via the Block Library">
+          <param name="Local" value="cc_includecomponent_blocklibrary.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Converting a Method or Process">
+          <param name="Local" value="BlockDiagramEditorEnglishUS.chm::/BDE_Convert_MethodProcess.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="External Editor">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Opening an External Editor">
+          <param name="Local" value="open-external-editor.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Closing an External Editor">
+          <param name="Local" value="CC_close_external_editor.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Ending the External Editor Mode">
+          <param name="Local" value="end-external-editor.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Using the External Source Editor">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Integrating an External Source File">
+          <param name="Local" value="integrating_external_source.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Adding a Header File to the Source Module">
+          <param name="Local" value="adding_headerfile.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Testing the External Module">
+          <param name="Local" value="testing-external_module.htm">
+        </object>
+        </ul>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Reference to User Interface">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="C Code Editor - Window Elements">
+        <param name="Local" value="CC_Description_of_Window_Elements.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Toolbars">
+          <param name="Local" value="CC_Toolbars.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Toolbar General">
+            <param name="Local" value="CC_Toolbar_General.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Toolbar Elements">
+            <param name="Local" value="CC_Toolbar_Elements.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Menus">
+          <param name="Local" value="CC_menu_bar.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="File Menu">
+            <param name="Local" value="CC_File_Menu.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Edit Menu">
+            <param name="Local" value="CC_edit.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="View Menu">
+            <param name="Local" value="CC_view.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Insert Menu">
+            <param name="Local" value="CC_Insert_Menu.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Build Menu">
+            <param name="Local" value="CC_Build_Menu.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Extras Menu">
+            <param name="Local" value="CC_Extras_Menu.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Tools Menu">
+            <param name="Local" value="CC_Tools_Menu.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Window Menu">
+            <param name="Local" value="CC_Window_Menu.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Help Menu">
+            <param name="Local" value="CC_Help_Menu.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Tree Pane">
+          <param name="Local" value="cc_componentpane.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Context Menu for Components and Elements">
+            <param name="Local" value="cc_contextmenu_componentselements.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Context Menu for Diagrams, Methods and Processes">
+            <param name="Local" value="cc_contextmenu_diagrammethods.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Views">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Specification View">
+            <param name="Local" value="CC_Specification_View.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Context Menu Specification View">
+            <param name="Local" value="CC_ContextMenu_SpecificationView.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Search Results View">
+            <param name="Local" value="CC_SearchResultsView.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Browse View">
+            <param name="Local" value="CC_Browse_View.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Context Menu Browse View and Search Results View">
+            <param name="Local" value="cc_contextmenu_browseview.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="External Editor View">
+            <param name="Local" value="CC_External_Editor_View.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Palettes">
+          <param name="Local" value="CC_Palettes.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Elements Palette">
+            <param name="Local" value="CC_Elements_Palette.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Library Palette">
+            <param name="Local" value="CC_Library_Palette.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="External Source Editor Window">
+          <param name="Local" value="CC_External_Source_Editor.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="File Menu (External Source Editor)">
+            <param name="Local" value="CC_FileMenu_ExternalSourceEditor.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Edit Menu (External Source Editor)">
+            <param name="Local" value="CC_EditMenu_ExternalSourceEditor.htm">
+          </object>
+          </ul>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Miscellaneous">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Find/Replace Dialog Window">
+          <param name="Local" value="IntroductionEnglishUS.chm::/INT_FindReplace_Window.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Toolbar Configuration Window">
+          <param name="Local" value="IntroductionEnglishUS.chm::/INT_Toolbar_Configuration_Window.htm">
+        </object>
+        </ul>
+      </ul>
+    </ul>
+</ul>
+</html>

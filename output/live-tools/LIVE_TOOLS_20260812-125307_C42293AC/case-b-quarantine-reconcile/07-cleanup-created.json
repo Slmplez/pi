@@ -1,0 +1,18 @@
+{
+  "ok": true,
+  "action": "reconcile_mutation",
+  "data": {
+    "reconciliation": {
+      "mode": "cleanup_created",
+      "status": "rolled_back",
+      "generation": 3,
+      "evidenceFingerprint": "sha256:60369ab98a80330a60f23c815a029d6c3763b223c536fae9b6ec30f9667cdcba",
+      "removedElements": [
+        "C_FIX_B_Four",
+        "C_FIX_B_One",
+        "C_FIX_B_Three",
+        "C_FIX_B_Two"
+      ]
+    }
+  }
+}

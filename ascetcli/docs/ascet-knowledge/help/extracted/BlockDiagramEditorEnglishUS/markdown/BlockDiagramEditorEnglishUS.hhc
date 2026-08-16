@@ -1,0 +1,1146 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="toc">
+  <param name="Image Width" value="16">
+  <param name="Window Styles" value="0x800427">
+  <param name="ExWindow Styles" value="0x100">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Block Diagram Editor">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Overview ">
+      <param name="Local" value="BDE_Overview.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Basics">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Graphical Description of Elements">
+        <param name="Local" value="bde_graphical_description_of_elements.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Basic Elements">
+        <param name="Local" value="bde_overview_-_basic_elements.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Basic Scalar Elements">
+          <param name="Local" value="BDE_Basic_Scalar_Elements.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Messages">
+          <param name="Local" value="BDE_Messages.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Arrays and Matrices">
+          <param name="Local" value="BDE_Arrays_and_Matrices.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Get and Set Ports for Arrays and Matrices">
+          <param name="Local" value="BDE_Get_and_Set_Ports_for_Arrays_and_Matrices.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Characteristic Lines and Maps">
+          <param name="Local" value="BDE_Characteristic_Tables.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Resources">
+          <param name="Local" value="BDE_Resources.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Implementation Casts">
+          <param name="Local" value="BDE_Implementation_Casts.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Elements of User-Defined Type">
+        <param name="Local" value="bde_elements_of_user-defined_type.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Definitions">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Expressions">
+          <param name="Local" value="BDE_Expressions.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Statements">
+          <param name="Local" value="BDE_Statements.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Assignment">
+          <param name="Local" value="BDE_Assignment.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Component Signature">
+        <param name="Local" value="DefiningInterface.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Classes">
+          <param name="Local" value="BDE_Classes.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Modules">
+          <param name="Local" value="BDE_Modules.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Directions of Method Arguments">
+          <param name="Local" value="BDE_DirectionsMethodArguments.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Complex Types as Signature Elements">
+          <param name="Local" value="BDE_ComplexTypes.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Conversion of Methods or Processes">
+          <param name="Local" value="BDE_Conversion_MethodsProcesses.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Creating Block Diagrams">
+        <param name="Local" value="Creatingblockdiagram.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Arrays,Matrices,Characteristic Lines and Maps">
+          <param name="Local" value="BDE_ArraysMatrices.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Components as Complex Elements">
+          <param name="Local" value="BDE_ComplexElements.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Comments and Notes">
+          <param name="Local" value="CommentsandNotes.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Editing Block Diagrams">
+        <param name="Local" value="EditingBlockDiagram.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Copying or Moving Graphical Items">
+          <param name="Local" value="BDE_CopyMove_GraphicItems.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Flow Chart: Copying or Moving Graphical Items">
+          <param name="Local" value="BDE_Flowchart_CopyMoveItems.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Layout of Included Components">
+          <param name="Local" value="BDE_Layout.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="The Semantics of Block Diagrams">
+        <param name="Local" value="bde_the_semantics_of_block_diagrams.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Sequence Calls">
+        <param name="Local" value="BDE_SequenceCalls.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing Individual Sequence Calls">
+          <param name="Local" value="BDE_EditIndividualSequenceCalls.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing  Several Sequence Calls">
+          <param name="Local" value="Editingsequence.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Connectors">
+          <param name="Local" value="Connectors.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Block-Local Sequence Calls">
+          <param name="Local" value="BDE_BlockLocal_SequenceCalls.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Navigate between Diagrams">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Components with Multiple Diagrams">
+          <param name="Local" value="ComponentsMultiple.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Navigating between Components">
+          <param name="Local" value="NavigatingComponents.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Graphical Hierarchies">
+        <param name="Local" value="GraphicalHierarchies.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Statement Blocks">
+        <param name="Local" value="BDE_StatementBlocks.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Block-Local Sequence Calls">
+          <param name="Local" value="BDE_BlockLocal_SequenceCalls.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Example: Statement Block">
+          <param name="Local" value="BDE_Example_StatementBlock.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Analyzing Components">
+        <param name="Local" value="AnalyzingComponents.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Implementation Casts in Block Diagrams">
+        <param name="Local" value="BDE_ImplementationCasts.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Automatic Naming  of Implementation Casts">
+        <param name="Local" value="Automatic_Naming__of_Implementation_Casts.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Data Exchange">
+        <param name="Local" value="DataExchange.htm">
+      </object>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Instructions">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Opening the Block Diagram Editor">
+        <param name="Local" value="Opening.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Opening an Oversized Component">
+        <param name="Local" value="BDE_Opening_an_Oversized_Component.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Creating a New Diagram">
+        <param name="Local" value="BDE_Createnew.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Loading a Diagram">
+        <param name="Local" value="LoadDiagram.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Shifting a Diagram">
+        <param name="Local" value="MoveDiagram.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Navigating Between Different Levels of a Block Diagram">
+        <param name="Local" value="Navigatedifferent.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Selecting a View of the Diagram">
+        <param name="Local" value="BDE_Selecting_View_the_Diagram.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Saving a Component Specification">
+        <param name="Local" value="SavingDiagrams.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Exiting the Block Diagram Editor">
+        <param name="Local" value="Exiting.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Defining a Component Signature">
+        <param name="Local" value="BDE_DefineComponentSignature.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Creating a Method">
+          <param name="Local" value="CreateMethod.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Creating a Process">
+          <param name="Local" value="Createprocess.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Selecting a Default Method/Process">
+          <param name="Local" value="BDE_SelectDefaultMethodProcess.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing the Signature of a Method or Process">
+          <param name="Local" value="EditMethod.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Adding an Argument to the Method">
+          <param name="Local" value="Addargument.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Assigning a Component as an Argument">
+          <param name="Local" value="BDE_AssignComponent.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Adding a Return Value to the Method">
+          <param name="Local" value="Returnvalue.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Adding Local Variables to the Method or Process">
+          <param name="Local" value="BDE_Localvariables.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing Arguments and Local Variables">
+          <param name="Local" value="EditArguments.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Moving Methods and Processes Between Diagrams">
+          <param name="Local" value="MoveMethods.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Renaming or Deleting a Diagram, Method or Process">
+          <param name="Local" value="RenameorDelete.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Converting a Method or Process">
+          <param name="Local" value="BDE_Convert_MethodProcess.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Searching/Deleting Unused Processes/Methods">
+          <param name="Local" value="bde_searchdel_unused_procsmethodsrunnables.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Using a Matrix Argument (Example)">
+          <param name="Local" value="BDE_UseMatrixArgument_Example.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Creating the Matrix Argument">
+            <param name="Local" value="Matrixargument.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Creating the Computation Class">
+            <param name="Local" value="Computationclass.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Specifying the Matrix Addition">
+            <param name="Local" value="Matrixaddition.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Performing the Calculation">
+            <param name="Local" value="Performcalculation.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Characteristic Line as Argument (Example)">
+          <param name="Local" value="BDE_CharacteristicLineArgument_Example.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Preparations">
+            <param name="Local" value="Preparations.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Passing the Characteristic Line as Method Argument">
+            <param name="Local" value="Passcharacteristic.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Using the Characteristic Line as Method Argument">
+            <param name="Local" value="Usecharacteristic.htm">
+          </object>
+          </ul>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Creating the Block Diagram Content">
+        <param name="Local" value="bde_createcontent.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Placing a Signature Element">
+          <param name="Local" value="PlaceElement.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Creating a Basic Element">
+          <param name="Local" value="BasicElement.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Inserting an Enumeration">
+          <param name="Local" value="InsertEnumeration.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Creating an Array or Matrix">
+          <param name="Local" value="CreateArray.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Creating a Normal or Fixed Characteristic Line/Map">
+          <param name="Local" value="Createnormal.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Creating a Distribution">
+          <param name="Local" value="CreateDistribution.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Creating a Group Characteristic Line/Map">
+          <param name="Local" value="Creategroup.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Creating a Message">
+          <param name="Local" value="BDE_CreateMessage.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Including a Component as a  Complex Element">
+          <param name="Local" value="IncludeComponent.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Including a Component via the Block Library">
+          <param name="Local" value="BDE_IncludeComponent_BlockLibrary.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Positioning an Operator">
+          <param name="Local" value="PositionOperator.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Connecting  Diagram Elements">
+          <param name="Local" value="Connectdiagram.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Using the If Statements">
+          <param name="Local" value="UseIf.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Using the Switch">
+          <param name="Local" value="UseSwitch.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Using the While Loop">
+          <param name="Local" value="Usewhileloop.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Using the Verify Operator">
+          <param name="Local" value="BDE_UseVerifyOperator.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Using the Conversion Operator">
+          <param name="Local" value="BDE_UseConversionOperator.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Using the Assert Operator">
+          <param name="Local" value="BDE_Use_AssertOperator.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Using Temporary Variables">
+          <param name="Local" value="ElementEditorEnglishUS.chm::/EEd_use_temporary_variables.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Adding and Editing a Comment">
+          <param name="Local" value="Addcomment.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Adding and Editing a Literal">
+          <param name="Local" value="BDE_AddLiteral.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Renaming or Deleting an Element">
+          <param name="Local" value="BDE_rename_delete.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Searching/Deleting Unused Elements">
+          <param name="Local" value="BDE_SearchDeleteUnusedElements.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Copying Elements in the Outline Tab">
+          <param name="Local" value="IntroductionEnglishUS.chm::/int_copyingelements_outlinetab.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Inserting an Element into a Connection">
+          <param name="Local" value="BDE_InsertElement_in_Connection.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Removing a Connection">
+          <param name="Local" value="Deleteconnection.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Removing an Element">
+          <param name="Local" value="BDE_RemoveElement.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Copying/Moving Diagram Items in the Same Diagram">
+          <param name="Local" value="BDE_Cutcopypaste.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Copying/Moving Diagram Items Between Diagrams">
+          <param name="Local" value="BDE_CopyMove_Items_betweenDiagram.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Replacing a Diagram Item">
+          <param name="Local" value="ReplaceDiagram.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Implementation Casts">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Adding Implementation Casts to Operators Automatically">
+            <param name="Local" value="Addimplementation.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Adding Implementation Casts to a Connection Automatically">
+            <param name="Local" value="Addtoconnect.htm">
+          </object>
+          </ul>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Sequence Calls">
+        <param name="Local" value="BDE_WorkingOnSequenceCalls.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing a Sequence Call in the Sequence Editor">
+          <param name="Local" value="EditSequence.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Using Numbers Already Assigned">
+          <param name="Local" value="Usenumbers.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Automatically Assigning Individual Sequence Calls">
+          <param name="Local" value="Assignindividual.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Incrementing/Decrementing Individual Sequence Calls">
+          <param name="Local" value="Incrementordecrement.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Resetting an Individual Sequence Call">
+          <param name="Local" value="Resetindividual.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Changing the Visibility of Individual Sequence Calls">
+          <param name="Local" value="Changevisibility.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Automatically Assigning Sequence Calls">
+          <param name="Local" value="AssignSequence.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Automatically Assigning Sequence Calls from a Specific Number">
+          <param name="Local" value="BDE_AutomaticallyAssign.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Adding Sequence Calls to an Existing Sequence">
+          <param name="Local" value="AddSequence.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Scaling Sequence Calls">
+          <param name="Local" value="ScaleSequence.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Shifting Several Sequence Calls">
+          <param name="Local" value="ShiftSequence.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Resetting Several Sequence Calls">
+          <param name="Local" value="ResetSequence.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Creating a Sequence of Protected Sequence Calls">
+          <param name="Local" value="Createsequence.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Moving Between Sequence Calls">
+          <param name="Local" value="Movesequence.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Changing the Visibility of Several Sequence Calls">
+          <param name="Local" value="ChangeSequence.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Creating and Removing Connectors">
+          <param name="Local" value="CreateConnectors.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Toggling Between Connector and Block-Local Sequence Call">
+          <param name="Local" value="BDE_Convert_Connector_SequenceCall.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Using Graphical Hierarchies and Statement Blocks">
+        <param name="Local" value="BDE_UseHierarchiesStatementBlocks.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Adding a Hierarchy">
+          <param name="Local" value="BDE_AddHierarchy.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Adding a Statement Block">
+          <param name="Local" value="BDE_AddStatementBlock.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Adding Input and Output Pins to the Hierarchy/Statement Block">
+          <param name="Local" value="Addinputhiera.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Converting Diagram Elements into a Hierarchy Block">
+          <param name="Local" value="Converthierarchy.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Converting Diagram Elements into a Statement Block">
+          <param name="Local" value="BDE_Convert_DiagramElements_StatementBlock.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Moving Elements Into/Out of a Hierarchy or Statement Block">
+          <param name="Local" value="Moveelements.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Changing the Appearance of a Hierarchy or Statement Block">
+          <param name="Local" value="appearancehierarchy.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Changing the Appearance of Input and Output Pins">
+          <param name="Local" value="Changeinputpins.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Navigating Between Hierarchy/Statement Block Levels">
+          <param name="Local" value="Navigatehierarchy.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Resolving a Hierarchy or Statement Block">
+          <param name="Local" value="Resolvinghierarchy.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Working on Block Diagrams">
+        <param name="Local" value="BDE_Working_on_BlockDiagrams.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Viewing Elements">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Viewing all Graphical Occurrences of an Element">
+            <param name="Local" value="ViewElements.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Viewing All Elements Connected to an Item">
+            <param name="Local" value="ViewItem.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Changing the Way a Block Diagram is Displayed">
+            <param name="Local" value="ViewingandPrinting.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Appearance and Views">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Changing the Appearance of a Diagram Item">
+            <param name="Local" value="Changeappearance.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Editing the Views of a Diagram Item">
+            <param name="Local" value="AutomaticDocumentationEnglishUS.chm::/AD_EditView_of_DiagramItem.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Data Exchange">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Exporting the Data Set of a Component">
+            <param name="Local" value="ExportData.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Writing the Data from an Array or a Table to a File">
+            <param name="Local" value="WriteData.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Reading the Data for an Array or a Table from a File">
+            <param name="Local" value="ReadData.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Printing/Exporting Block Diagrams">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Setting up the Printing Area">
+            <param name="Local" value="BDE_Setting_up_the_Printing_Area.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Printing a Block Diagram">
+            <param name="Local" value="Printblock.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Exporting a Block Diagram">
+            <param name="Local" value="BDE_Export_BlockDiagram.htm">
+          </object>
+          </ul>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Working on Included Components">
+        <param name="Local" value="bde_work_includedcomponents.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing an Included Component">
+          <param name="Local" value="BDE_Editcomponent.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing the Size of a Graphical Occurrence">
+          <param name="Local" value="Editsize.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing Ports">
+          <param name="Local" value="Editports.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Show/Hide Ports of an Included Component">
+          <param name="Local" value="Public_Methods.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Using Changes as a New Default Layout">
+          <param name="Local" value="BDE_Defaultlayout.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Restoring the Default Layout">
+          <param name="Local" value="Restoredefault.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing the Notes for a Component">
+          <param name="Local" value="BDE_Editnotes.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Replacing an Included Component">
+          <param name="Local" value="bde_replaceincludedcomponent.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Analysis and Experiment">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Analyzing a Diagram">
+          <param name="Local" value="AnalyzeDiagram.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Generating Code for a Component">
+          <param name="Local" value="GenerateCode.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Starting an Offline Experiment">
+          <param name="Local" value="startoffline.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Defining Global Elements in the Default Project">
+          <param name="Local" value="BDE_Globalelements.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Viewing the Generated Code">
+          <param name="Local" value="Viewcode.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Editor Settings">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Setting the Size of the Drawing Area">
+          <param name="Local" value="BDE_Setting_the_Size_of_the_Drawing_Area.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Configuring a Toolbar">
+          <param name="Local" value="IntroductionEnglishUS.chm::/INT_Configuring_Toolbar.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Filtering the Tree Pane">
+          <param name="Local" value="BDE_Filtering_the_Component_Pane.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Searching the Tree Pane">
+          <param name="Local" value="IntroductionEnglishUS.chm::/INT_SearchTreePane.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Changing the Grid in the Drawing Area">
+          <param name="Local" value="Changing_Grid_Drawing_Area.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Show or Hide Window Elements">
+          <param name="Local" value="ShoworHide.htm">
+        </object>
+        </ul>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Reference to User Interface">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Block Diagram Editor">
+        <param name="Local" value="BDE_Description_of_Window_Elements.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Menus">
+          <param name="Local" value="BDE_MenuBar.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="File Menu">
+            <param name="Local" value="BDE_FileMenu.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Edit Menu">
+            <param name="Local" value="BDE_EditMenu.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="View Menu">
+            <param name="Local" value="BDE_ViewMenu.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Insert Menu">
+            <param name="Local" value="BDE_InsertMenu.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Build Menu">
+            <param name="Local" value="BDE_BuildMenu.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Extras Menu">
+            <param name="Local" value="BDE_ExtrasMenu.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Tools Menu">
+            <param name="Local" value="BDE_ToolsMenu.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Window Menu">
+            <param name="Local" value="BDE_WindowMenu.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Help Menu">
+            <param name="Local" value="BDE_HelpMenu.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Toolbars">
+          <param name="Local" value="bde_toolbars.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Toolbar General">
+            <param name="Local" value="bde_toolbargeneral.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Toolbar Elements">
+            <param name="Local" value="bde_toolbarelements.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Toolbar Basic Blocks">
+            <param name="Local" value="bde_toolbarbasicblocks.htm">
+          </object>
+          <ul>
+            <li><object type="text/sitemap">
+              <param name="Name" value="Arithmetic Operators">
+              <param name="Local" value="bde_arithmeticoperators.htm">
+            </object>
+            <li><object type="text/sitemap">
+              <param name="Name" value="Logical Operators">
+              <param name="Local" value="BDE_logicalOperators.htm">
+            </object>
+            <li><object type="text/sitemap">
+              <param name="Name" value="Comparison Operators">
+              <param name="Local" value="BDE_comparisonOperators.htm">
+            </object>
+            <li><object type="text/sitemap">
+              <param name="Name" value="Input Operators">
+              <param name="Local" value="BDE_inputOperators.htm">
+            </object>
+            <li><object type="text/sitemap">
+              <param name="Name" value="Conversion Operator">
+              <param name="Local" value="BDE_ConversionOperator.htm">
+            </object>
+            <li><object type="text/sitemap">
+              <param name="Name" value="Assert Operator">
+              <param name="Local" value="BDE_Assert_Operator.htm">
+            </object>
+            <li><object type="text/sitemap">
+              <param name="Name" value="Conditional Operators">
+              <param name="Local" value="BDE_conditionalOperators.htm">
+            </object>
+            <li><object type="text/sitemap">
+              <param name="Name" value="Control Flow Operators">
+              <param name="Local" value="BDE_controlFlowOperators.htm">
+            </object>
+            <li><object type="text/sitemap">
+              <param name="Name" value="Miscellaneous Operators">
+              <param name="Local" value="BDE_MiscBasicBlocks.htm">
+            </object>
+            </ul>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Tree Pane">
+          <param name="Local" value="BDE_Component_Pane.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Examples: Elements in Navigation Tab">
+            <param name="Local" value="BDE_Examples_Elements_NavigationTab.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Context Menus">
+          <param name="Local" value="bde_contextmenus.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Context Menu for Components and Elements">
+            <param name="Local" value="BDE_ContextMenu_ComponentsElements.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Context Menu for Diagrams, Methods and Processes">
+            <param name="Local" value="BDE_ContextMenu_DiagramMethods.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Context Menu for Hierarchies and Statement Blocks">
+            <param name="Local" value="BDE_ContextMenu_Hierarchies_StatementBlocks.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Context Menu - Elements and Included Components">
+            <param name="Local" value="bde_contextmenu_elementincludedcomponent.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Context Menu - Operators and Control Flow Elements">
+            <param name="Local" value="BDE_ContextMenu_OperatorsControlflow.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Context Menu - Miscellaneous Diagram Elements">
+            <param name="Local" value="bde_contextmenu_miscdiagramelements.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Palettes">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Elements Palette">
+            <param name="Local" value="bde_elementspalette.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Basic Blocks Palette">
+            <param name="Local" value="bde_basicblockspalette.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Library Palette">
+            <param name="Local" value="bde_librarypalette.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Views">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Browse View">
+            <param name="Local" value="BDE_Browse_View.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Context Menu Browse View">
+            <param name="Local" value="BDE_ContextMenu_BrowseView.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Search Results View">
+            <param name="Local" value="bde_SearchResultsView.htm">
+          </object>
+          </ul>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Graphical Elements">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Operators">
+          <param name="Local" value="BDE_OperatorsSummary.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Arithmetic Operators">
+            <param name="Local" value="bde_arithmeticoperators.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Logical Operators">
+            <param name="Local" value="BDE_logicalOperators.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Comparison Operators">
+            <param name="Local" value="BDE_comparisonOperators.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Multiplex Operator">
+            <param name="Local" value="multiplex_operator.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Case Operator">
+            <param name="Local" value="BDE_case_operator.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Abs Operator">
+            <param name="Local" value="abs_operator.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Max and Min Operators">
+            <param name="Local" value="max_and_min_operators.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Between Operator">
+            <param name="Local" value="BDE_between_operator.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Negation Operator">
+            <param name="Local" value="negation_operator.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Conversion Operator">
+            <param name="Local" value="BDE_ConversionOperator.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Examples: Conversion Operator">
+            <param name="Local" value="BDE_Example_ConversionOperator.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Assert Operator">
+            <param name="Local" value="BDE_Assert_Operator.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Example: Assert Operator">
+            <param name="Local" value="BDE_Example_AssertOperator.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Control Flow Elements">
+          <param name="Local" value="BDE_ControlFlow_Summary.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="If...Then">
+            <param name="Local" value="BDE_ifthen.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="If...Then...Else">
+            <param name="Local" value="ifthenelse.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Switch">
+            <param name="Local" value="BDE_switch.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="While">
+            <param name="Local" value="BDE_while.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Break Operator">
+            <param name="Local" value="the_break_statement.htm">
+          </object>
+          </ul>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Signature Editor">
+        <param name="Local" value="bde_interface_editor.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Arguments Menu">
+          <param name="Local" value="BDE_Arguments_Menu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Return Menu">
+          <param name="Local" value="BDE_Return_Menu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Local Variable Menu">
+          <param name="Local" value="BDE_Local_Variable_Menu.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Arguments Tab">
+          <param name="Local" value="BDE_Arguments_Tab.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Return Tab">
+          <param name="Local" value="bde_return_tab.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Locals Tab">
+          <param name="Local" value="bde_locals_tab.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Settings Tab">
+          <param name="Local" value="BDE_SettingsTab.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Max and Variant Size for Dialog Window">
+          <param name="Local" value="bde_maxvariantsize_window.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Miscellaneous">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Assert Attributes Dialog Window">
+          <param name="Local" value="BDE_AssertAttributes_Window.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Connection Popup Window">
+          <param name="Local" value="BDE_ConnectionPopupWindow.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Conversion Attributes Dialog Window">
+          <param name="Local" value="BDE_ConversionAttributesWindow.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Distribution for Dialog Window">
+          <param name="Local" value="BDE_DistributionforDialogWindow.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Enumeration / Mode Group Selection Window">
+          <param name="Local" value="bde_enumeration_selection_window.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Insert/Edit Comment Dialog Window">
+          <param name="Local" value="BDE_InsertEditComment_Window.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Occurrences for Dialog Window">
+          <param name="Local" value="BDE_OccurrencesDialogWindow.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Paths for Window">
+          <param name="Local" value="BDE_PathsForWindow.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Print Diagrams Window">
+          <param name="Local" value="BDE_Print_Diagrams_Window.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Select Item Window">
+          <param name="Local" value="bde_select_item_window.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Sequence Editor">
+          <param name="Local" value="Editingindividual.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Toolbar Configuration Window">
+          <param name="Local" value="IntroductionEnglishUS.chm::/INT_Toolbar_Configuration_Window.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Views Window">
+          <param name="Local" value="AutomaticDocumentationEnglishUS.chm::/AD_ViewsWindow_GraphicalEditors.htm">
+        </object>
+        </ul>
+      </ul>
+    </ul>
+</ul>
+</html>

@@ -1,0 +1,55 @@
+{
+  "tool": "ascet_get",
+  "params": {
+    "action": "component_refs",
+    "target": {
+      "path": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010::CM_AVH"
+    },
+    "delivery": "inline"
+  },
+  "elapsedMs": 336,
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"error\": {\n    \"code\": \"target_not_found\",\n    \"message\": \"No ASCET database item was found at 'CN_Libary\\\\CNMS_IPB20\\\\IPBCustGeneral\\\\IPBCustGeneral_ECU_CSW_BB88010'.\",\n    \"details\": {\n      \"stdout\": \"{\\\"type\\\":\\\"response\\\",\\\"protocolVersion\\\":1,\\\"ok\\\":false,\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":\\\"target_not_found\\\",\\\"message\\\":\\\"No ASCET database item was found at \\\\u0027CN_Libary\\\\\\\\CNMS_IPB20\\\\\\\\IPBCustGeneral\\\\\\\\IPBCustGeneral_ECU_CSW_BB88010\\\\u0027.\\\"},\\\"meta\\\":{\\\"bridgePid\\\":31132,\\\"bridgeGeneration\\\":\\\"0c0ec719-b0dc-455e-9db3-c09112860cab\\\",\\\"durationMs\\\":217,\\\"sessionPolicy\\\":\\\"fresh_session\\\",\\\"mutationStarted\\\":false,\\\"mode\\\":\\\"exec\\\",\\\"operation\\\":\\\"get_component_refs\\\"}}\",\n      \"exitCode\": 2,\n      \"operationId\": \"get_component_refs\",\n      \"stage\": \"cli_process\",\n      \"retryable\": false,\n      \"stdoutSummary\": \"{\\\"type\\\":\\\"response\\\",\\\"protocolVersion\\\":1,\\\"ok\\\":false,\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":\\\"target_not_found\\\",\\\"message\\\":\\\"No ASCET database item was found at \\\\u0027CN_Libary\\\\\\\\CNMS_IPB20\\\\\\\\IPBCustGeneral\\\\\\\\IPBCustGeneral_ECU_CSW_BB88010\\\\u0027.\\\"},\\\"meta\\\":{\\\"bridgePid\\\":31132,\\\"bridgeGeneration\\\":\\\"0c0ec719-b0dc-455e-9db3-c09112860cab\\\",\\\"durationMs\\\":217,\\\"sessionPolicy\\\":\\\"fresh_session\\\",\\\"mutationStarted\\\":false,\\\"mode\\\":\\\"exec\\\",\\\"operation\\\":\\\"get_component_refs\\\"}}\"\n    }\n  }\n}"
+      }
+    ],
+    "details": {
+      "tool": "ascet_get",
+      "action": "component_refs",
+      "command": {
+        "logicalCommandId": "AscetGetComponentRefs",
+        "backendCommandId": "AscetGetComponentRefs",
+        "operation": "get_component_refs"
+      },
+      "error": {
+        "code": "target_not_found",
+        "message": "No ASCET database item was found at 'CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010'.",
+        "details": {
+          "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"target_not_found\",\"message\":\"No ASCET database item was found at \\u0027CN_Libary\\\\CNMS_IPB20\\\\IPBCustGeneral\\\\IPBCustGeneral_ECU_CSW_BB88010\\u0027.\"},\"meta\":{\"bridgePid\":31132,\"bridgeGeneration\":\"0c0ec719-b0dc-455e-9db3-c09112860cab\",\"durationMs\":217,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"get_component_refs\"}}\r\n",
+          "exitCode": 2
+        }
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:/Repo/09_ASCETCopilot/pi-ascet-extension-prototype/packages/ascet-extension/ascet-cli/bin/AscetBridge.exe",
+          "args": [
+            "exec",
+            "get_component_refs",
+            "--request-json",
+            "{\"path\":\"CN_Libary\\\\CNMS_IPB20\\\\IPBCustGeneral\\\\IPBCustGeneral_ECU_CSW_BB88010::CM_AVH\"}",
+            "--json"
+          ],
+          "timeoutMs": 180000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 2,
+        "timedOut": false,
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"target_not_found\",\"message\":\"No ASCET database item was found at \\u0027CN_Libary\\\\CNMS_IPB20\\\\IPBCustGeneral\\\\IPBCustGeneral_ECU_CSW_BB88010\\u0027.\"},\"meta\":{\"bridgePid\":31132,\"bridgeGeneration\":\"0c0ec719-b0dc-455e-9db3-c09112860cab\",\"durationMs\":217,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"get_component_refs\"}}\r\n"
+      }
+    }
+  }
+}

@@ -57,7 +57,7 @@ It is the small, agent-facing chooser for:
 - `ascet_read`
 - `ascet_diff`
 - `ascet_edit`
-- `configure_parameter_dependency_chain`
+- `ascet_read.read_dependent_chain` and `ascet_edit.create_dependent_chain`
 - `ascet_batch_write` when explicitly enabled
 - ASCET check and diagnostics surfaces
 

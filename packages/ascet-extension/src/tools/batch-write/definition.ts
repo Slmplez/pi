@@ -1,4 +1,4 @@
-import {
+﻿import {
 	createBatchWriteOutcome,
 	formatBatchWriteResult,
 	runApprovedAscetBatchWrite,
@@ -20,7 +20,7 @@ function prepareAscetBatchWriteArguments(args: unknown): AscetBatchWriteParams {
 export const ascetBatchWriteTool = defineSequentialAscetTool({
 	name: "ascet_batch_write",
 	label: "ASCET batch write",
-	description: "Run one ASCET batch write operation after explicit interactive confirmation.",
+	description: "Run one permission-aware guarded ASCET batch write operation with mandatory readback.",
 	...ascetBatchWritePrompt,
 	parameters: ascetBatchWriteParameters,
 	prepareArguments: prepareAscetBatchWriteArguments,
@@ -46,11 +46,13 @@ export const ascetBatchWriteTool = defineSequentialAscetTool({
 			ctx,
 		);
 		const outcome = createBatchWriteOutcome(result);
+		const content = result.mutationResult ?? outcome;
 		return {
-			content: [{ type: "text", text: JSON.stringify(outcome, null, 2) }],
+			content: [{ type: "text", text: JSON.stringify(content, null, 2) }],
 			details: {
 				...createAscetCliToolDetails("ascet_batch_write", params.operation, result),
 				outcome,
+				mutationResult: result.mutationResult,
 				rawContent: formatBatchWriteResult(result),
 			},
 		};

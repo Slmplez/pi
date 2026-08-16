@@ -1,0 +1,76 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="toc">
+  <param name="Image Width" value="16">
+  <param name="Window Styles" value="0x800427">
+  <param name="ExWindow Styles" value="0x100">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Container">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Overview">
+      <param name="Local" value="CNT_Overview.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Instructions">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Creating a Container">
+        <param name="Local" value="CNT_Creating_a_Container.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Selecting the Container View">
+        <param name="Local" value="CNT_invoke_containerview.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Working with Containers">
+        <param name="Local" value="CNT_working_containers.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Adding Database/Workspace Items (Context Menu)">
+          <param name="Local" value="CNT_add_databaseitem.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Adding Database/Workspace Items (Drag &amp; Drop)">
+          <param name="Local" value="CNT_add_database_dd.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Adding Items via the Container View">
+          <param name="Local" value="CNT_AddItemsViaContainerView.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Renaming Added Items">
+          <param name="Local" value="CNT_rename_added_items.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Editing Items">
+          <param name="Local" value="CNT_edit_items.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Deleting Items from the Container">
+          <param name="Local" value="CNT_delete_item_container.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Sorting the Container View">
+          <param name="Local" value="CNT_sort_container_view.htm">
+        </object>
+        </ul>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Reference to User Interface">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Container View">
+        <param name="Local" value="CNT_Container_View.htm">
+      </object>
+      </ul>
+    </ul>
+</ul>
+</html>

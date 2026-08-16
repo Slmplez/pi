@@ -1,0 +1,29 @@
+{
+  "tool": "ascet_get",
+  "params": {
+    "action": "database_identity"
+  },
+  "elapsedMs": 1,
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"error\":{\"code\":\"ascet_action_unavailable\",\"message\":\"ASCET action ascet_get.database_identity is not active in the current profile.\"},\"recover\":{\"tool\":\"ascet_capabilities\",\"action\":\"search_actions\",\"query\":\"database_identity\"}}"
+      }
+    ],
+    "details": {
+      "error": {
+        "code": "ascet_action_unavailable",
+        "message": "ASCET action ascet_get.database_identity is not active in the current profile."
+      },
+      "recover": {
+        "tool": "ascet_capabilities",
+        "action": "search_actions",
+        "query": "database_identity"
+      },
+      "tool": "ascet_get",
+      "action": "database_identity",
+      "state": "hidden"
+    }
+  }
+}

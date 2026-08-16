@@ -1,0 +1,521 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="toc">
+  <param name="Image Width" value="16">
+  <param name="Window Styles" value="0x800427">
+  <param name="ExWindow Styles" value="0x100">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Introduction">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Overview">
+      <param name="Local" value="INT_Overview.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Safety Information">
+      <param name="Local" value="int_safetyinformation.htm">
+      <param name="ImageNumber" value="3">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="General Safety Information">
+        <param name="Local" value="int_safetyadvicegeneral.htm">
+        <param name="ImageNumber" value="38">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="NVRAM Safety Information">
+        <param name="Local" value="INTECRIOConnectivityRPEnglishUS.chm::/IIO_NVRAMSafetyInformation.htm">
+      </object>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Basics">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Typical Workflow">
+        <param name="Local" value="INT_Typical_Workflow.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Components">
+        <param name="Local" value="INT_Overview_Components.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Kinds of Components">
+          <param name="Local" value="INT_Component_Types.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Modules">
+          <param name="Local" value="int_modules.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Classes">
+          <param name="Local" value="INT_Classes.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Modules vs. Classes">
+          <param name="Local" value="INT_Modules_vs._Classes.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Definition and Instantiation of Components">
+          <param name="Local" value="INT_Definition_and_Instantiation_of_Components.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Compatibility of Component Instances">
+          <param name="Local" value="int_compatibilitycomponentinstances.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="The Interface of Components">
+          <param name="Local" value="INT_Overview_ComponentInterface.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="The Interface of Classes">
+            <param name="Local" value="int_the_interface_of_classes.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="The Interface of Modules">
+            <param name="Local" value="INT_The_Interface_of_Modules.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Reusing Components">
+          <param name="Local" value="INT_Overview_ReusingComponents.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Hierarchical Class Structure">
+            <param name="Local" value="INT_Hierarchical_Class_Structure.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Hierarchical Module Structure">
+            <param name="Local" value="INT_Hierarchical_Module_Structure.htm">
+          </object>
+          </ul>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Types and Elements">
+        <param name="Local" value="int_types_and_elements.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Scalar Types">
+          <param name="Local" value="INT_scalar_summary.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Scalar Types: Continuous">
+            <param name="Local" value="INT_scalar_types__continuous.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Scalar Types: Limited Integer">
+            <param name="Local" value="INT_ScalarTypes_LimitedInteger.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Scalar Types: Wrap-Around Integer">
+            <param name="Local" value="INT_ScalarTypes_WrapAroundInteger.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Scalar Types: Logical">
+            <param name="Local" value="INT_scalar_types__logical.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Scalar Types: Signed Discrete">
+            <param name="Local" value="INT_scalar_types__signed_discrete.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Scalar Types: Unsigned Discrete">
+            <param name="Local" value="INT_scalar_types__unsigned_discrete.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Converting sdisc/udisc to limitInt/wrapInt">
+            <param name="Local" value="INT_Convert_SdiscUdisc_to_limitInt_wrapInt.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Composite Types">
+          <param name="Local" value="INT_composite_summaryct.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Array">
+            <param name="Local" value="INT_Array.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Matrix">
+            <param name="Local" value="INT_matrix.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Variant Size for Arrays and Matrices">
+            <param name="Local" value="INT_VariantSize_ArraysMatrices.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Variable Size for Arrays and Matrices">
+            <param name="Local" value="INT_VariableSize_ArraysMatrices.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Compatibility Check for Arrays and Matrices">
+            <param name="Local" value="ins_compatibilitycheck_arraysmatrices.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Characteristic Lines and Maps">
+            <param name="Local" value="INT_characteristic_lines_and_maps.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Group Table and Distribution">
+            <param name="Local" value="INT_group_table_and_distribution.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Fixed Table">
+            <param name="Local" value="INT_fixed_table.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Real-Time Language Constructs">
+          <param name="Local" value="INT_summaryrt.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Messages">
+            <param name="Local" value="INT_messages.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Resources">
+            <param name="Local" value="INT_resources.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="dT Variable">
+            <param name="Local" value="INT_dt_parameter.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Special Types">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Enumeration">
+            <param name="Local" value="INT_enumeration.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Literals">
+            <param name="Local" value="INT_literals.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Data Type Names">
+          <param name="Local" value="INT_DataTypeNames.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Example: a_user_def.h">
+          <param name="Local" value="INT_Example_a_user_def.h.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="The Kind of Elements">
+          <param name="Local" value="INT_summaryke.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Variables">
+            <param name="Local" value="INT_variables.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Parameters">
+            <param name="Local" value="INT_parameters.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Constants and System Constants">
+            <param name="Local" value="INT_constants_and_system_constants.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Implementation Casts">
+            <param name="Local" value="INT_implementation_casts.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Temporary Variables">
+            <param name="Local" value="INT_temporary_variables.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Virtual Variables/Parameters">
+            <param name="Local" value="INT_virtual_variables_parameters.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Dependent Parameters">
+            <param name="Local" value="INT_dependent_parameters.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="The Scope of Elements">
+          <param name="Local" value="INT_the_scope_of_elements.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="User-Defined Model Types">
+          <param name="Local" value="INT_User-Defined_Model_Types.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Redundant Data Storage">
+          <param name="Local" value="INT_RedundantDataStorage.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Code Generation with Redundant Data Storage">
+            <param name="Local" value="INT_CodeGen_RedundantDataStorage.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Complement Service for Redundant Data Storage">
+            <param name="Local" value="INT_ComplementService_RDS.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Memory Classes for Redundant Data Storage">
+            <param name="Local" value="INT_MemoryClasses_RedundantDataStorage.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Example: Memory Class for Redundant Data Storage">
+            <param name="Local" value="INT_Example_MemClassRedundantDataStorage.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="References">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Value Types and Reference Types">
+            <param name="Local" value="INT_ValueTypes_ReferenceTypes.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Explicit References">
+            <param name="Local" value="INT_ExplicitReferences.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Initialization of Explicit References">
+            <param name="Local" value="INT_InitExplicitReferences.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Migration and Conversion of References">
+            <param name="Local" value="INT_MigrationConversion_of_References.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Interpolation Routines">
+          <param name="Local" value="INT_InterpolationRoutines.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="User-Defined Interpolation Routines">
+            <param name="Local" value="INT_UserDefinedInterpolationRoutines.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Mapping File for User-Defined Interpolation Routine">
+            <param name="Local" value="INT_MappingFileUDIR.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="High-Resolution Interpolation Routines">
+            <param name="Local" value="INT_HighRes_InterpolationRoutines.htm">
+          </object>
+          </ul>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Data and Implementations">
+        <param name="Local" value="int_overview_DataImplementations.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Data">
+          <param name="Local" value="INT_Data.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Example: Data">
+          <param name="Local" value="INT_Example__Data.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Implementations">
+          <param name="Local" value="INT_Overview_Implementations.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Implementations for Scalar Types">
+            <param name="Local" value="INT_Implementations_for_Scalar_Types.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Example: Implementations for Scalar Types">
+            <param name="Local" value="INT_Example_Implementations_ScalarTypes.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="The Implementation of Composite Types">
+            <param name="Local" value="int_the_implementation_of_composite_types.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="The Implementation of User-Defined Types">
+            <param name="Local" value="int_the_implementation_of_user-defined_types.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="The Implementation of Methods and Processes">
+            <param name="Local" value="INT_The_Implementation_of_Methods_and_Processes.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Rescalable Implementations">
+          <param name="Local" value="INT_RescalableImplementations.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Elements with Rescalable Implementation">
+            <param name="Local" value="INT_ElementsRescalableImpl.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Operations with Rescalable Elements">
+            <param name="Local" value="INT_OperationsRescalableElements.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Components with Rescalable Elements">
+            <param name="Local" value="int_componentsrescalableelements.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Integer Arithmetic with Rescalable Elements">
+            <param name="Local" value="Int_IntegerArithmetic_RescalableElements.htm">
+          </object>
+          </ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Implementation Casts">
+          <param name="Local" value="int_overview_implementation_casts.htm">
+        </object>
+        <ul>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Example: Implementation Casts">
+            <param name="Local" value="INT_Example__Implementation_Casts.htm">
+          </object>
+          <li><object type="text/sitemap">
+            <param name="Name" value="Properties of Implementation Casts">
+            <param name="Local" value="INT_Properties_of_Implementation_Casts.htm">
+          </object>
+          </ul>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Code Generation with Implementations">
+        <param name="Local" value="INT_Overview_CodeGen_w_Implementations.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Example: Code Generation for an Addition">
+          <param name="Local" value="INT_Example__Code_Generation_for_an_Addition.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Transformation of Data under Implementation">
+          <param name="Local" value="INT_Transformation_of_Data_under_Implementation.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="General Rules for the Implementation Transformation">
+          <param name="Local" value="INT_General_Rules_for_the_Implementation_Transformation.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Intellectual Property Protection">
+        <param name="Local" value="ComponentManagerEnglishUS.chm::/CM_IntellectualPropertyProtection.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Licensing">
+        <param name="Local" value="INT_Licensing.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Reserved Keywords">
+        <param name="Local" value="INT_Reserved_Keywords.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="ASCET Automation API">
+        <param name="Local" value="INT_ASCETAutomationAPI.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="ASCET Links">
+        <param name="Local" value="int_ascetlinks.htm">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="ASCET Links: Addressable Objects">
+          <param name="Local" value="INT_ASCETLinks_AddressableObjects.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="ASCET Links: Examples">
+          <param name="Local" value="INT_ASCETLinks_Examples.htm">
+        </object>
+        </ul>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Instructions">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Launching ASCET">
+        <param name="Local" value="INT_Launching_ASCET.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Starting the ETAS License Manager">
+        <param name="Local" value="INT_Starting_the_ETAS_License_Manager.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Configuring a Toolbar">
+        <param name="Local" value="INT_Configuring_Toolbar.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Copying Elements in the Outline Tab">
+        <param name="Local" value="int_copyingelements_outlinetab.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Example: Copying Elements in the Outline Tab">
+        <param name="Local" value="INT_Example_CopyElementsOutlineTab.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Searching the Tree Pane">
+        <param name="Local" value="INT_SearchTreePane.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Example: Searching the Outline Tab in Type-Ahead Mode">
+        <param name="Local" value="INT_Example_SearchOutline_TypeAhead.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Including User-Defined Interpolation Routines">
+        <param name="Local" value="INT_IncludeUDIR.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Creating an Option Set for an Interpolation Routine">
+        <param name="Local" value="INT_CreateOptionSet_UDIR.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Creating the Mapping for User-Defined Interpolation Routines">
+        <param name="Local" value="INT_CreateMapping_UDIR.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Importing Dependent Parameters">
+        <param name="Local" value="INT_Importing_Dependent_Parameters.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Using References Without Initialization">
+        <param name="Local" value="INT_UseReferencesWithoutInit.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Testing the New Behavior for Integer Types">
+        <param name="Local" value="INT_Test_NewBehavior_IntegerTypes.htm">
+      </object>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Reference to User Interface">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Find/Replace Dialog Window">
+        <param name="Local" value="INT_FindReplace_Window.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Search in Tree Window">
+        <param name="Local" value="INT_SearchTreeWindow.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Toolbar Configuration Window">
+        <param name="Local" value="INT_Toolbar_Configuration_Window.htm">
+      </object>
+      </ul>
+    </ul>
+</ul>
+</html>

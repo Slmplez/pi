@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<HelpSystem DefaultUrl="SCM_Overview.htm" Glossary="Content/Glossary.htm" Alias="Content/Data/Alias.xml" Skin="Data/SkinNewWindow/Skin.xml" Skins="NewWindow" BuildTime="2015-12-01 19:34:07" BuildVersion="10.0.0.0" TargetType="HtmlHelp" SkinTemplateFolder="Skin/" InPreviewMode="false" MoveOutputContentToRoot="false" MakeFileLowerCase="false" UseCustomTopicFileExtension="false">
+    <Subsystems />
+</HelpSystem>

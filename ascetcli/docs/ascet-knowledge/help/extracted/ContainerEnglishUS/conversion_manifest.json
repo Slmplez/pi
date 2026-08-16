@@ -1,0 +1,87 @@
+{
+  "generated_at": "2026-04-01T03:07:54.359315Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\ContainerEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ContainerEnglishUS",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ContainerEnglishUS\\markdown",
+  "input_html_count": 12,
+  "converted_html_count": 12,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 18,
+  "toc_entries_count": 15,
+  "index_entries_count": 9,
+  "index_required": true,
+  "mappings": [
+    {
+      "html_rel_path": "CNT_add_database_dd.htm",
+      "md_rel_path": "CNT_add_database_dd.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CNT_add_databaseitem.htm",
+      "md_rel_path": "CNT_add_databaseitem.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CNT_AddItemsViaContainerView.htm",
+      "md_rel_path": "CNT_AddItemsViaContainerView.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CNT_Container_View.htm",
+      "md_rel_path": "CNT_Container_View.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CNT_Creating_a_Container.htm",
+      "md_rel_path": "CNT_Creating_a_Container.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CNT_delete_item_container.htm",
+      "md_rel_path": "CNT_delete_item_container.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CNT_edit_items.htm",
+      "md_rel_path": "CNT_edit_items.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CNT_invoke_containerview.htm",
+      "md_rel_path": "CNT_invoke_containerview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CNT_Overview.htm",
+      "md_rel_path": "CNT_Overview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CNT_rename_added_items.htm",
+      "md_rel_path": "CNT_rename_added_items.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CNT_sort_container_view.htm",
+      "md_rel_path": "CNT_sort_container_view.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "CNT_working_containers.htm",
+      "md_rel_path": "CNT_working_containers.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

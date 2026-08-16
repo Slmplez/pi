@@ -1,0 +1,807 @@
+{
+  "generated_at": "2026-04-01T03:07:20.635750Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\ASCET_SCMEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ASCET_SCMEnglishUS",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ASCET_SCMEnglishUS\\markdown",
+  "input_html_count": 132,
+  "converted_html_count": 132,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 139,
+  "toc_entries_count": 155,
+  "index_entries_count": 140,
+  "index_required": true,
+  "mappings": [
+    {
+      "html_rel_path": "Glossary.htm",
+      "md_rel_path": "Glossary.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Activating_Deactivating_SimpleMode.htm",
+      "md_rel_path": "SCM_Activating_Deactivating_SimpleMode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Add_and_Commit_Configuration_Dialog_Box.htm",
+      "md_rel_path": "SCM_Add_and_Commit_Configuration_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Add_and_Commit_Configuration_Dialog_Box_Simple_Mode.htm",
+      "md_rel_path": "SCM_Add_and_Commit_Configuration_Dialog_Box_Simple_Mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Add_and_Commit_Dialog_Box.htm",
+      "md_rel_path": "SCM_Add_and_Commit_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Adding_and_Committing_an_Item.htm",
+      "md_rel_path": "SCM_Adding_and_Committing_an_Item.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Adding_and_Committing_an_Item_Simple_Mode.htm",
+      "md_rel_path": "SCM_Adding_and_Committing_an_Item_Simple_Mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_AdditionalCommandsSubmenu.htm",
+      "md_rel_path": "SCM_AdditionalCommandsSubmenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Appearance_Options_for_ASCET-SCM.htm",
+      "md_rel_path": "SCM_Appearance_Options_for_ASCET-SCM.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_ASCET-SCM_Architecture.htm",
+      "md_rel_path": "SCM_ASCET-SCM_Architecture.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_ASCET-SCM_Delete_Elements_Dialog_Box.htm",
+      "md_rel_path": "SCM_ASCET-SCM_Delete_Elements_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_ASCET-SCM_Menu.htm",
+      "md_rel_path": "SCM_ASCET-SCM_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_ASCET-SCM_Scripting_Interface.htm",
+      "md_rel_path": "SCM_ASCET-SCM_Scripting_Interface.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_CExample.htm",
+      "md_rel_path": "SCM_CExample.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Checking_out.htm",
+      "md_rel_path": "SCM_Checking_out.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Checking_out_a_Configuration.htm",
+      "md_rel_path": "SCM_Checking_out_a_Configuration.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Checking_out_Configurations_Simple_Mode.htm",
+      "md_rel_path": "SCM_Checking_out_Configurations_Simple_Mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Checking_out_Items.htm",
+      "md_rel_path": "SCM_Checking_out_Items.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Checking_out_Items_Simple_Mode.htm",
+      "md_rel_path": "SCM_Checking_out_Items_Simple_Mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Checkout_Configuration_Dialog_Box.htm",
+      "md_rel_path": "SCM_Checkout_Configuration_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Checkout_Configuration_Dialog_Box_Simple_Mode.htm",
+      "md_rel_path": "SCM_Checkout_Configuration_Dialog_Box_Simple_Mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Checkout_Dialog_Box.htm",
+      "md_rel_path": "SCM_Checkout_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Checkout_Dialog_Box_Simple_Mode.htm",
+      "md_rel_path": "SCM_Checkout_Dialog_Box_Simple_Mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Commit_Configuration_Dialog_Box.htm",
+      "md_rel_path": "SCM_Commit_Configuration_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Commit_Configuration_Dialog_Box_Simple_Mode.htm",
+      "md_rel_path": "SCM_Commit_Configuration_Dialog_Box_Simple_Mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Commit_Dialog_Box.htm",
+      "md_rel_path": "SCM_Commit_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Commit_Dialog_Box_Simple_Mode.htm",
+      "md_rel_path": "SCM_Commit_Dialog_Box_Simple_Mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Commit_without_Previous_Lock_Dialog_Box.htm",
+      "md_rel_path": "SCM_Commit_without_Previous_Lock_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Commit_Without_Previous_Lock_Dialog_Box_Simple_Mode.htm",
+      "md_rel_path": "SCM_Commit_Without_Previous_Lock_Dialog_Box_Simple_Mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Committing.htm",
+      "md_rel_path": "SCM_Committing.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Committing_a_Configuration.htm",
+      "md_rel_path": "SCM_Committing_a_Configuration.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Committing_a_Configuration_Simple_Mode.htm",
+      "md_rel_path": "SCM_Committing_a_Configuration_Simple_Mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Committing_an_Item.htm",
+      "md_rel_path": "SCM_Committing_an_Item.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Compare_Configuration_Dialog_Box.htm",
+      "md_rel_path": "SCM_Compare_Configuration_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Compare_Configuration_Dialog_Box_Simple_Mode.htm",
+      "md_rel_path": "SCM_Compare_Configuration_Dialog_Box_Simple_Mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Comparing_Configuration_Versions.htm",
+      "md_rel_path": "SCM_Comparing_Configuration_Versions.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Comparing_Configuration_Versions_Simple_Mode.htm",
+      "md_rel_path": "SCM_Comparing_Configuration_Versions_Simple_Mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Configuration_Details_Dialog_Box.htm",
+      "md_rel_path": "SCM_Configuration_Details_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_ConfigurationExampleClearCase.htm",
+      "md_rel_path": "SCM_ConfigurationExampleClearCase.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_ConfigurationExampleMKS.htm",
+      "md_rel_path": "SCM_ConfigurationExampleMKS.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_ConfigurationExamplePerforce.htm",
+      "md_rel_path": "SCM_ConfigurationExamplePerforce.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_ConfigurationExampleSourceSafe.htm",
+      "md_rel_path": "SCM_ConfigurationExampleSourceSafe.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_ConfigurationExamplesOverview.htm",
+      "md_rel_path": "SCM_ConfigurationExamplesOverview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_ConfigurationExampleTFS.htm",
+      "md_rel_path": "SCM_ConfigurationExampleTFS.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_ConfigurationManagementSubmenu.htm",
+      "md_rel_path": "SCM_ConfigurationManagementSubmenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Configurations.htm",
+      "md_rel_path": "SCM_Configurations.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Conflicts.htm",
+      "md_rel_path": "SCM_Conflicts.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Conflicts_Found_Dialog_Box.htm",
+      "md_rel_path": "SCM_Conflicts_Found_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Connection_between_ASCET_and_the_Software_Version_Control_System.htm",
+      "md_rel_path": "SCM_Connection_between_ASCET_and_the_Software_Version_Control_System.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Context_Menu_for_Added_Items.htm",
+      "md_rel_path": "SCM_Context_Menu_for_Added_Items.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Context_Menu_for_Selected_Items.htm",
+      "md_rel_path": "SCM_Context_Menu_for_Selected_Items.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Context_Menu_for_the_Result_Dialog_Box.htm",
+      "md_rel_path": "SCM_Context_Menu_for_the_Result_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Context_Menu_for_the_Update_and_Commit_Dialog_Boxes.htm",
+      "md_rel_path": "SCM_Context_Menu_for_the_Update_and_Commit_Dialog_Boxes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Context_Menu_for_the_Verify_Configuration_and_Compare_Configuration_Dialog_Boxes.htm",
+      "md_rel_path": "SCM_Context_Menu_for_the_Verify_Configuration_and_Compare_Configuration_Dialog_Boxes.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Creating_a_Configuration.htm",
+      "md_rel_path": "SCM_Creating_a_Configuration.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Creating_a_Configuration_Simple_Mode.htm",
+      "md_rel_path": "SCM_Creating_a_Configuration_Simple_Mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_CustomizeMenusIcons_Examples.htm",
+      "md_rel_path": "SCM_CustomizeMenusIcons_Examples.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_CustomizingMenusIcons.htm",
+      "md_rel_path": "SCM_CustomizingMenusIcons.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Delete_Dialog_Box.htm",
+      "md_rel_path": "SCM_Delete_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_DeleteItemFromRepository.htm",
+      "md_rel_path": "SCM_DeleteItemFromRepository.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Detailed_Result_Information_Dialog_Box.htm",
+      "md_rel_path": "SCM_Detailed_Result_Information_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Driver_Selection_Dialog_Box.htm",
+      "md_rel_path": "SCM_Driver_Selection_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Edit_Attribute_Value_Dialog_Box.htm",
+      "md_rel_path": "SCM_Edit_Attribute_Value_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Edit_without_Lock_Dialog_Box.htm",
+      "md_rel_path": "SCM_Edit_without_Lock_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_EditCommandEntries.htm",
+      "md_rel_path": "SCM_EditCommandEntries.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Editing_Items_in_Offline_Mode.htm",
+      "md_rel_path": "SCM_Editing_Items_in_Offline_Mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_EditSCMMenu.htm",
+      "md_rel_path": "SCM_EditSCMMenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_EditSCMToolbar.htm",
+      "md_rel_path": "SCM_EditSCMToolbar.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_FAQs.htm",
+      "md_rel_path": "SCM_FAQs.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Fundamentals_of_Software_Configuration_Management.htm",
+      "md_rel_path": "SCM_Fundamentals_of_Software_Configuration_Management.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Handling_Configurations.htm",
+      "md_rel_path": "SCM_Handling_Configurations.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Handling_Imported_Components.htm",
+      "md_rel_path": "SCM_Handling_Imported_Components.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_ImportantNote_UseSCMwithToolAPI.htm",
+      "md_rel_path": "SCM_ImportantNote_UseSCMwithToolAPI.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Importing_Data_from_the_Subversion_Repository.htm",
+      "md_rel_path": "SCM_Importing_Data_from_the_Subversion_Repository.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_IncludingReferencesSubmenu.htm",
+      "md_rel_path": "SCM_IncludingReferencesSubmenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Item_Details_Dialog_Box.htm",
+      "md_rel_path": "SCM_Item_Details_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Items_under_Source_Control_Dialog_Box.htm",
+      "md_rel_path": "SCM_Items_under_Source_Control_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Keyboard_Operation_Simple_mode.htm",
+      "md_rel_path": "SCM_Keyboard_Operation_Simple_mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Loading_a_Configuration.htm",
+      "md_rel_path": "SCM_Loading_a_Configuration.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Local_Modifications_Detected_Dialog_Box.htm",
+      "md_rel_path": "SCM_Local_Modifications_Detected_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Locking_a_Configuration.htm",
+      "md_rel_path": "SCM_Locking_a_Configuration.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Locking_an_Item.htm",
+      "md_rel_path": "SCM_Locking_an_Item.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Locking_and_Unlocking.htm",
+      "md_rel_path": "SCM_Locking_and_Unlocking.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Managing_ASCET_Folders.htm",
+      "md_rel_path": "SCM_Managing_ASCET_Folders.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Menu_withoutVersionManagement.htm",
+      "md_rel_path": "SCM_Menu_withoutVersionManagement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Online_versus_Offline_Mode.htm",
+      "md_rel_path": "SCM_Online_versus_Offline_Mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Overlay_Icons.htm",
+      "md_rel_path": "SCM_Overlay_Icons.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Overview.htm",
+      "md_rel_path": "SCM_Overview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Repository.htm",
+      "md_rel_path": "SCM_Repository.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Repository_Selection_Dialog_Box.htm",
+      "md_rel_path": "SCM_Repository_Selection_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Result_Dialog_Box.htm",
+      "md_rel_path": "SCM_Result_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Select_Revision_Dialog_Box.htm",
+      "md_rel_path": "SCM_Select_Revision_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Selecting_a_Repository.htm",
+      "md_rel_path": "SCM_Selecting_a_Repository.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Selecting_or_Creating_a_Repository_Folder_for_an_Item.htm",
+      "md_rel_path": "SCM_Selecting_or_Creating_a_Repository_Folder_for_an_Item.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Setting_up_an_ASCET-Subversion_Connection.htm",
+      "md_rel_path": "SCM_Setting_up_an_ASCET-Subversion_Connection.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Setting_up_Subversion_for_Use_with_ASCET-SCM.htm",
+      "md_rel_path": "SCM_Setting_up_Subversion_for_Use_with_ASCET-SCM.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Show_Log_Dialog_Box.htm",
+      "md_rel_path": "SCM_Show_Log_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_ShowSubmenu.htm",
+      "md_rel_path": "SCM_ShowSubmenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_SimpleUI.htm",
+      "md_rel_path": "SCM_SimpleUI.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Software_Version_Management_Systems.htm",
+      "md_rel_path": "SCM_Software_Version_Management_Systems.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_SourceControlSubmenu.htm",
+      "md_rel_path": "SCM_SourceControlSubmenu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Special_Use_Case__Handling_Imported_Components.htm",
+      "md_rel_path": "SCM_Special_Use_Case__Handling_Imported_Components.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Subversion_Settings_Dialog_Box.htm",
+      "md_rel_path": "SCM_Subversion_Settings_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Time_Consuming_Operation_Dialog_Box.htm",
+      "md_rel_path": "SCM_Time_Consuming_Operation_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Tool_Options_for_ASCET-SCM.htm",
+      "md_rel_path": "SCM_Tool_Options_for_ASCET-SCM.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Toolbar_Icons.htm",
+      "md_rel_path": "SCM_Toolbar_Icons.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Typical_Workflow_-_Using_Subversion_for_Revision_Control.htm",
+      "md_rel_path": "SCM_Typical_Workflow_-_Using_Subversion_for_Revision_Control.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Unlocking_a_Configuration.htm",
+      "md_rel_path": "SCM_Unlocking_a_Configuration.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Unlocking_an_Item.htm",
+      "md_rel_path": "SCM_Unlocking_an_Item.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Update_and_Lock_Dialog_Box.htm",
+      "md_rel_path": "SCM_Update_and_Lock_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Update_Configuration_Dialog_Box.htm",
+      "md_rel_path": "SCM_Update_Configuration_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Update_Configuration_Dialog_Box_Simple_Mode.htm",
+      "md_rel_path": "SCM_Update_Configuration_Dialog_Box_Simple_Mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Update_Configuration_to_Latest_Dialog_Box_Simple_Mode.htm",
+      "md_rel_path": "SCM_Update_Configuration_to_Latest_Dialog_Box_Simple_Mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Update_Dialog_Box.htm",
+      "md_rel_path": "SCM_Update_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Update_Dialog_Box_Simple_Mode.htm",
+      "md_rel_path": "SCM_Update_Dialog_Box_Simple_Mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Update_to_Latest_Configuration_Dialog_Box.htm",
+      "md_rel_path": "SCM_Update_to_Latest_Configuration_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Update_to_Latest_Dialog_Box_Simple_Mode.htm",
+      "md_rel_path": "SCM_Update_to_Latest_Dialog_Box_Simple_Mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Update_to_Latest_DialogBox.htm",
+      "md_rel_path": "SCM_Update_to_Latest_DialogBox.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Update_to_LatestRevision.htm",
+      "md_rel_path": "SCM_Update_to_LatestRevision.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_UpdateConfigurations_LatestRevision.htm",
+      "md_rel_path": "SCM_UpdateConfigurations_LatestRevision.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Updating.htm",
+      "md_rel_path": "SCM_Updating.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Updating_a_Configuration.htm",
+      "md_rel_path": "SCM_Updating_a_Configuration.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Updating_Configurations_Simple_Mode.htm",
+      "md_rel_path": "SCM_Updating_Configurations_Simple_Mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Updating_Configurations_to_Latest_Revision_Simple_Mode.htm",
+      "md_rel_path": "SCM_Updating_Configurations_to_Latest_Revision_Simple_Mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Updating_Items.htm",
+      "md_rel_path": "SCM_Updating_Items.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Updating_Items_Simple_Mode.htm",
+      "md_rel_path": "SCM_Updating_Items_Simple_Mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Updating_Items_to_Latest_Revision_Simple_Mode.htm",
+      "md_rel_path": "SCM_Updating_Items_to_Latest_Revision_Simple_Mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Verify_Configuration_Dialog_Box.htm",
+      "md_rel_path": "SCM_Verify_Configuration_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_VerifyConfiguration_DialogBox.htm",
+      "md_rel_path": "SCM_VerifyConfiguration_DialogBox.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Version_Details_Dialog_Box.htm",
+      "md_rel_path": "SCM_Version_Details_Dialog_Box.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Version_Handling_based_on_MSSCCI.htm",
+      "md_rel_path": "SCM_Version_Handling_based_on_MSSCCI.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "SCM_Version_Handling_based_on_Subversion.htm",
+      "md_rel_path": "SCM_Version_Handling_based_on_Subversion.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

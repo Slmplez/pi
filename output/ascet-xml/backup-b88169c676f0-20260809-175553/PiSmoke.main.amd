@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ComponentMain toolVersion="V6.1.5_2.2.0" schemaVersion="6.1.1.0">
+	<Component name="PiSmoke" nameSpace="/__pi_set_enumerators_live_20260809__" OID="_040g00001g001qg7104hgvhe8fcg2" timeStamp="2026-08-09T09:55:52" componentType="ASCET_Class" specificationType="ESDL">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-09T09:55:52" timeStampCounter="1016"/>
+		<CustomerSpecificAttributes>
+			<ConfigurationManagement edition="true" versionID="" configurationID=""/>
+			<RequirementsManagement requirementsID=""/>
+			<AccessManagement read="true" write="true" import="true"/>
+		</CustomerSpecificAttributes>
+		<Elements>
+			<Element name="P_Smoke" OID="_040g00001g001qg7104hgvhqunh02" ignore="false">
+				<Comment></Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="local" virtual="false" dependent="false" volatile="false" calibrated="true" set="false" get="false" read="true" write="false" reference="false"/>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+		</Elements>
+		<MethodSignatures>
+			<MethodSignature name="calc" OID="_040g00001g001qg7104hgvhecbfg2" public="true" default="false" defaultMethod="false" hidden="false" availableForOS="false">
+				<Arguments>
+					<Argument name="input" OID="_040g00001g001qg7104hgvhif7gg2" ignore="false">
+						<Comment></Comment>
+						<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+							<ScalarType>
+								<PrimitiveAttributes kind="parameter" scope="local" virtual="false" dependent="false" volatile="false" calibrated="false" read="true" write="false"/>
+							</ScalarType>
+						</ElementAttributes>
+					</Argument>
+				</Arguments>
+				<Return OID="_040g00001g001qg7104hgvhi9bg02">
+					<Comment></Comment>
+					<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+						<ScalarType>
+							<PrimitiveAttributes kind="parameter" scope="local" virtual="false" dependent="false" volatile="false" calibrated="false" read="true" write="false"/>
+						</ScalarType>
+					</ElementAttributes>
+				</Return>
+			</MethodSignature>
+		</MethodSignatures>
+		<TimeStamps>
+			<TimeStamp timeStampKey="methodsTimeStampKey" timeStampValue="2026-08-09T09:55:50"/>
+		</TimeStamps>
+	</Component>
+	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+		<SignedInfo>
+			<CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+			<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+			<Reference>
+				<Transforms>
+					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+				</Transforms>
+				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+				<DigestValue>qKtsTG7NbI0wrF4mkkxUVdZQ7i8=</DigestValue>
+			</Reference>
+		</SignedInfo>
+		<SignatureValue>oaHrj7ytiWyIvzAvH29DC/sMAujfHvBNzEE3oX/usYS34xU/otUGzyuW4avVPcyU
+t/nPaCIf3iQbzeUSS9oGKMhOg95NuoqUX19vqWXS7Wn7Ps3ejxf1p4UpD+ertLHh
+MKDCwH2bxIq6JTJX6t+P8rck8I7ZR1EPYahPjjN0rl1uUwRE9AIR3d8NkGAWsEFU
+QPTd7Kp9q/hsVqOKHUUDBDYoZz5EwjEyDJroq4L/j6qIDVgk+7hSVa2JpLCkzVU/
+S6WrWlg9kGYiAJ3/Z6FYweiu7HTxHJnp51gPHRZC/iAgy4umBOfB5Iy0RMWUKe6c
+owrRNvD35wF9/1v1HUWKJg==</SignatureValue>
+		<KeyInfo>
+			<KeyName>Etas Ascet Verification</KeyName>
+		</KeyInfo>
+	</Signature>
+</ComponentMain>

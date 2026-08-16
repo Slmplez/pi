@@ -1,0 +1,17 @@
+{
+  "ok": false,
+  "ascetCwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+  "smokeRoot": "DEMO\\__pi_permission_smoke__20260814-081116",
+  "regressionComponent": "Customer\\GAC\\Package\\AVH_AutomaticVehicleHold\\Private\\GAC_AVH_Autonomous_StandByControl_Activating",
+  "readOnlyComponent": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_DSCOFF",
+  "failureComponent": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\KeepAlive\\KeepAlive_PSoll_Controller",
+  "expectedDatabaseFingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c",
+  "approvalDelayMs": 31000,
+  "cleanupResults": [
+    {
+      "stage": "cleanup-verification",
+      "error": "Error: Tool response did not contain an outcome."
+    }
+  ],
+  "error": "Tool response did not contain an outcome."
+}

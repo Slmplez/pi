@@ -1,0 +1,10 @@
+{
+    "status":  "failed",
+    "started":  "\/Date(1786788581601)\/",
+    "failed":  {
+                   "value":  "\/Date(1786790011940)\/",
+                   "DisplayHint":  2,
+                   "DateTime":  "Saturday, August 15, 2026 6:33:31 PM"
+               },
+    "message":  "Concurrent failure 1: exit= stdout={\"ok\":true,\"mode\":\"comp\",\"q\":\"_PCA\",\"ui\":true,\"count\":1,\"items\":[\"_PCA (PlatformLibrary\\\\Package\\\\AntiLockController\\\\Parameter\\\\private\\\\SMC\\\\Regler)\"],\"ms\":601,\"waitMs\":7}\r\n stderr="
+}

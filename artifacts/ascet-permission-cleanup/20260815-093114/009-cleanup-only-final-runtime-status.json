@@ -1,0 +1,197 @@
+{
+  "stage": "cleanup-only-final-runtime-status",
+  "startedAt": "2026-08-15T01:31:24.211Z",
+  "finishedAt": "2026-08-15T01:31:24.852Z",
+  "request": {
+    "toolName": "ascet_status",
+    "params": {}
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "ASCET status: ready\nASCET installation: ready\nASCET mode: bundle\nASCET extension: C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\nASCET source: C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\nASCET Bridge: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe\nASCET contracts: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts\ncli-catalog.json: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts\\cli-catalog.json\nASCET DLL: ready\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\Ascetapidll\\Etas.AscetNET.dll\nASCET ToolAPI: ready\n  ASCET live ToolAPI quick self-test\n  elapsedMs: 639\nASCET scheduler: ready\nASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nRecent:\n- ascet-job-1 ascet_status/selftest agent=system state=succeeded (queueWait=0ms, exec=810ms)\n- ascet-job-2 ascet_get/get_database_identity agent=system state=succeeded (queueWait=0ms, exec=626ms)\n- ascet-job-3 ascet_get/get_tree agent=system state=failed (queueWait=0ms, exec=672ms) error=folder_not_found\n- ascet-job-4 ascet_cli/read_method_signature agent=system state=failed (queueWait=0ms, exec=547ms) error=method_not_found\n- ascet-job-5 ascet_get/get_tree agent=system state=failed (queueWait=0ms, exec=662ms) error=folder_not_found\n- ascet-job-6 ascet_cli/read_method_signature agent=system state=failed (queueWait=0ms, exec=689ms) error=method_not_found\n- ascet-job-7 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=0ms, exec=507ms)\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none"
+      }
+    ],
+    "details": {
+      "ok": true,
+      "paths": {
+        "mode": "bundle",
+        "ascetAgentRoot": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+        "extensionRoot": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension",
+        "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+        "contractsRoot": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts",
+        "catalogPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts\\cli-catalog.json"
+      },
+      "checks": {
+        "cliExists": true,
+        "contractsRootExists": true,
+        "catalogExists": true
+      },
+      "summary": "ASCET status: ready\nASCET installation: ready\nASCET mode: bundle\nASCET extension: C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\nASCET source: C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\nASCET Bridge: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe\nASCET contracts: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts\ncli-catalog.json: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts\\cli-catalog.json\nASCET DLL: ready\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\Ascetapidll\\Etas.AscetNET.dll\nASCET ToolAPI: ready\n  ASCET live ToolAPI quick self-test\n  elapsedMs: 639\nASCET scheduler: ready\nASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nRecent:\n- ascet-job-1 ascet_status/selftest agent=system state=succeeded (queueWait=0ms, exec=810ms)\n- ascet-job-2 ascet_get/get_database_identity agent=system state=succeeded (queueWait=0ms, exec=626ms)\n- ascet-job-3 ascet_get/get_tree agent=system state=failed (queueWait=0ms, exec=672ms) error=folder_not_found\n- ascet-job-4 ascet_cli/read_method_signature agent=system state=failed (queueWait=0ms, exec=547ms) error=method_not_found\n- ascet-job-5 ascet_get/get_tree agent=system state=failed (queueWait=0ms, exec=662ms) error=folder_not_found\n- ascet-job-6 ascet_cli/read_method_signature agent=system state=failed (queueWait=0ms, exec=689ms) error=method_not_found\n- ascet-job-7 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=0ms, exec=507ms)\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none",
+      "installationOk": true,
+      "dllOk": true,
+      "runtimeOk": true,
+      "schedulerOk": true,
+      "dll": {
+        "ok": true,
+        "path": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\Ascetapidll\\Etas.AscetNET.dll"
+      },
+      "runtime": {
+        "ok": true,
+        "commandId": "selftest",
+        "description": "ASCET live ToolAPI quick self-test",
+        "elapsedMs": 639,
+        "exitCode": 0,
+        "timedOut": false,
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"profile\":\"quick\",\"passed\":true,\"status\":\"passed\",\"stdout\":\"Log File: C:\\\\ProgramData\\\\ETAS\\\\LogFiles\\\\AscetBridge\\\\Cebra\\r\\nProgram Path: C:\\\\Program Files (x86)\\\\ETAS\\\\ASCET6.1.5\\\\Cebra\\r\\nDatabase: C:\\\\Repo\\\\F05_IPB_L2_0429\\r\\nDatabasePath: C:\\\\Repo\\\\\\r\\nTopFolders: 11\\r\\n\",\"stderr\":\"\",\"inProcess\":true},\"error\":null,\"meta\":{\"bridgePid\":26956,\"bridgeGeneration\":\"4eaacbb3-80e1-471e-89d1-843c177182cf\",\"durationMs\":342,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"selftest\",\"operation\":\"quick\"}}\r\n",
+        "stderr": ""
+      },
+      "scheduler": {
+        "ok": true,
+        "scheduler": {
+          "hostState": "healthy",
+          "runningJob": null,
+          "queuedJobs": [],
+          "recentJobs": [
+            {
+              "jobId": "ascet-job-1",
+              "agentId": "system",
+              "toolName": "ascet_status",
+              "commandId": "selftest",
+              "kind": "read",
+              "priority": "normal",
+              "resourceKey": "ascet.toolapi.global",
+              "state": "succeeded",
+              "queuedAt": 1786757479671,
+              "startedAt": 1786757479671,
+              "queueWaitMs": 0,
+              "finishedAt": 1786757480481,
+              "executionMs": 810
+            },
+            {
+              "jobId": "ascet-job-2",
+              "agentId": "system",
+              "toolName": "ascet_get",
+              "commandId": "get_database_identity",
+              "kind": "read",
+              "priority": "normal",
+              "resourceKey": "ascet.toolapi.global",
+              "state": "succeeded",
+              "queuedAt": 1786757480485,
+              "startedAt": 1786757480485,
+              "queueWaitMs": 0,
+              "finishedAt": 1786757481111,
+              "executionMs": 626
+            },
+            {
+              "jobId": "ascet-job-3",
+              "agentId": "system",
+              "toolName": "ascet_get",
+              "commandId": "get_tree",
+              "kind": "read",
+              "priority": "normal",
+              "resourceKey": "ascet.toolapi.global",
+              "state": "failed",
+              "queuedAt": 1786757481119,
+              "startedAt": 1786757481119,
+              "queueWaitMs": 0,
+              "finishedAt": 1786757481791,
+              "executionMs": 672,
+              "errorCode": "folder_not_found",
+              "errorMessage": "Folder 'DEMO\\__pi_permission_smoke__20260814-191154' was not found."
+            },
+            {
+              "jobId": "ascet-job-4",
+              "agentId": "system",
+              "toolName": "ascet_cli",
+              "commandId": "read_method_signature",
+              "kind": "read",
+              "priority": "normal",
+              "resourceKey": "ascet.toolapi.global",
+              "state": "failed",
+              "queuedAt": 1786757481794,
+              "startedAt": 1786757481794,
+              "queueWaitMs": 0,
+              "finishedAt": 1786757482341,
+              "executionMs": 547,
+              "errorCode": "method_not_found",
+              "errorMessage": "Method 'PiCompoundMethod' was not found in component 'Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_DSCOFF'."
+            },
+            {
+              "jobId": "ascet-job-5",
+              "agentId": "system",
+              "toolName": "ascet_get",
+              "commandId": "get_tree",
+              "kind": "read",
+              "priority": "normal",
+              "resourceKey": "ascet.toolapi.global",
+              "state": "failed",
+              "queuedAt": 1786757482344,
+              "startedAt": 1786757482344,
+              "queueWaitMs": 0,
+              "finishedAt": 1786757483006,
+              "executionMs": 662,
+              "errorCode": "folder_not_found",
+              "errorMessage": "Folder 'DEMO\\__pi_permission_smoke__20260814-191154' was not found."
+            },
+            {
+              "jobId": "ascet-job-6",
+              "agentId": "system",
+              "toolName": "ascet_cli",
+              "commandId": "read_method_signature",
+              "kind": "read",
+              "priority": "normal",
+              "resourceKey": "ascet.toolapi.global",
+              "state": "failed",
+              "queuedAt": 1786757483010,
+              "startedAt": 1786757483010,
+              "queueWaitMs": 0,
+              "finishedAt": 1786757483699,
+              "executionMs": 689,
+              "errorCode": "method_not_found",
+              "errorMessage": "Method 'PiCompoundMethod' was not found in component 'Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_RefSuppSuppress\\TCS_CUS_RefSuppSuppress_DSCOFF'."
+            },
+            {
+              "jobId": "ascet-job-7",
+              "agentId": "system",
+              "toolName": "ascet_edit",
+              "commandId": "component_editable_check",
+              "kind": "read",
+              "priority": "normal",
+              "resourceKey": "ascet.toolapi.global",
+              "state": "succeeded",
+              "queuedAt": 1786757483702,
+              "startedAt": 1786757483702,
+              "queueWaitMs": 0,
+              "finishedAt": 1786757484209,
+              "executionMs": 507
+            }
+          ],
+          "pendingByAgent": {},
+          "activeCount": 0,
+          "resource": {
+            "key": "ascet.toolapi.global",
+            "active": 0,
+            "queued": 0,
+            "concurrency": 1,
+            "runningJob": null
+          }
+        },
+        "cliLock": {
+          "locked": false,
+          "path": "C:\\Users\\NHJ3SZH\\AppData\\Local\\PI\\ascet\\locks\\ascet-toolapi.lock"
+        },
+        "operationHealth": [],
+        "summary": "ASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nRecent:\n- ascet-job-1 ascet_status/selftest agent=system state=succeeded (queueWait=0ms, exec=810ms)\n- ascet-job-2 ascet_get/get_database_identity agent=system state=succeeded (queueWait=0ms, exec=626ms)\n- ascet-job-3 ascet_get/get_tree agent=system state=failed (queueWait=0ms, exec=672ms) error=folder_not_found\n- ascet-job-4 ascet_cli/read_method_signature agent=system state=failed (queueWait=0ms, exec=547ms) error=method_not_found\n- ascet-job-5 ascet_get/get_tree agent=system state=failed (queueWait=0ms, exec=662ms) error=folder_not_found\n- ascet-job-6 ascet_cli/read_method_signature agent=system state=failed (queueWait=0ms, exec=689ms) error=method_not_found\n- ascet-job-7 ascet_edit/component_editable_check agent=system state=succeeded (queueWait=0ms, exec=507ms)\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none"
+      },
+      "tool": "ascet_status",
+      "action": "status",
+      "command": {
+        "logicalCommandId": "PiAscetStatus",
+        "backendCommandId": "PiAscetStatus",
+        "operation": "status"
+      }
+    }
+  }
+}

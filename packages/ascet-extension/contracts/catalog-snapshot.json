@@ -1,15 +1,17 @@
 {
   "version": 1,
-  "catalogFingerprint": "b9956074fb2958b5544656d2701b5579b4e1336f4c57d7a4880de0a6ee72cb90",
+  "catalogFingerprint": "3b054b468b0946d6ebbd256483a70eafbb88b53fef1922b7273361e725461102",
   "actions": [
     {
       "id": "ascet_batch_write.batch_create_component",
-      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
+      "schemaFingerprint": "469b8cb1cc10b3031fc8583b93a9a71fe8fe569ad137cc22af523f86261aaece",
       "rulesFingerprint": "16f410507d136f584e3783f9a342a8ee707ab2c5f82085b5edfc50298a183e67",
-      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
-          "action"
+          "operation",
+          "requests",
+          "intent"
         ],
         "optional": []
       },
@@ -17,18 +19,20 @@
       "result": {
         "shape": "result",
         "fields": [
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_batch_write.batch_create_folder",
-      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
+      "schemaFingerprint": "469b8cb1cc10b3031fc8583b93a9a71fe8fe569ad137cc22af523f86261aaece",
       "rulesFingerprint": "16f410507d136f584e3783f9a342a8ee707ab2c5f82085b5edfc50298a183e67",
-      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
-          "action"
+          "operation",
+          "requests",
+          "intent"
         ],
         "optional": []
       },
@@ -36,18 +40,20 @@
       "result": {
         "shape": "result",
         "fields": [
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_batch_write.batch_create_method",
-      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
+      "schemaFingerprint": "469b8cb1cc10b3031fc8583b93a9a71fe8fe569ad137cc22af523f86261aaece",
       "rulesFingerprint": "16f410507d136f584e3783f9a342a8ee707ab2c5f82085b5edfc50298a183e67",
-      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
-          "action"
+          "operation",
+          "requests",
+          "intent"
         ],
         "optional": []
       },
@@ -55,18 +61,20 @@
       "result": {
         "shape": "result",
         "fields": [
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_batch_write.batch_delete_component",
-      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
+      "schemaFingerprint": "469b8cb1cc10b3031fc8583b93a9a71fe8fe569ad137cc22af523f86261aaece",
       "rulesFingerprint": "16f410507d136f584e3783f9a342a8ee707ab2c5f82085b5edfc50298a183e67",
-      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
-          "action"
+          "operation",
+          "requests",
+          "intent"
         ],
         "optional": []
       },
@@ -74,18 +82,20 @@
       "result": {
         "shape": "result",
         "fields": [
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_batch_write.batch_delete_folder",
-      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
+      "schemaFingerprint": "469b8cb1cc10b3031fc8583b93a9a71fe8fe569ad137cc22af523f86261aaece",
       "rulesFingerprint": "16f410507d136f584e3783f9a342a8ee707ab2c5f82085b5edfc50298a183e67",
-      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
-          "action"
+          "operation",
+          "requests",
+          "intent"
         ],
         "optional": []
       },
@@ -93,18 +103,20 @@
       "result": {
         "shape": "result",
         "fields": [
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_batch_write.batch_delete_method",
-      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
+      "schemaFingerprint": "469b8cb1cc10b3031fc8583b93a9a71fe8fe569ad137cc22af523f86261aaece",
       "rulesFingerprint": "16f410507d136f584e3783f9a342a8ee707ab2c5f82085b5edfc50298a183e67",
-      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
-          "action"
+          "operation",
+          "requests",
+          "intent"
         ],
         "optional": []
       },
@@ -112,18 +124,20 @@
       "result": {
         "shape": "result",
         "fields": [
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_batch_write.batch_set_element_spec",
-      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
+      "schemaFingerprint": "469b8cb1cc10b3031fc8583b93a9a71fe8fe569ad137cc22af523f86261aaece",
       "rulesFingerprint": "16f410507d136f584e3783f9a342a8ee707ab2c5f82085b5edfc50298a183e67",
-      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
-          "action"
+          "operation",
+          "requests",
+          "intent"
         ],
         "optional": []
       },
@@ -131,18 +145,20 @@
       "result": {
         "shape": "result",
         "fields": [
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_batch_write.batch_set_method_code",
-      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
+      "schemaFingerprint": "469b8cb1cc10b3031fc8583b93a9a71fe8fe569ad137cc22af523f86261aaece",
       "rulesFingerprint": "16f410507d136f584e3783f9a342a8ee707ab2c5f82085b5edfc50298a183e67",
-      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
-          "action"
+          "operation",
+          "requests",
+          "intent"
         ],
         "optional": []
       },
@@ -150,18 +166,20 @@
       "result": {
         "shape": "result",
         "fields": [
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_batch_write.batch_set_project_formula",
-      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
+      "schemaFingerprint": "469b8cb1cc10b3031fc8583b93a9a71fe8fe569ad137cc22af523f86261aaece",
       "rulesFingerprint": "16f410507d136f584e3783f9a342a8ee707ab2c5f82085b5edfc50298a183e67",
-      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
-          "action"
+          "operation",
+          "requests",
+          "intent"
         ],
         "optional": []
       },
@@ -169,13 +187,13 @@
       "result": {
         "shape": "result",
         "fields": [
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_capabilities.search_actions",
-      "schemaFingerprint": "a85ed507a0beb97da2f75719466e7d1c664ee373d4cea51ec7ca0f0f630f3156",
+      "schemaFingerprint": "1340deaf75776b04a0b048d094fcb9639f245329ae3933b93cc3a3eabca4434b",
       "rulesFingerprint": "c9d74cbedc9ec6efe28c48ff162b3570906844ff5f057e16a5900623c34b3de7",
       "resultFingerprint": "27b9d0af51786f014fafffbe49862f2aef7f3f77b512a20b2ece413926432e94",
       "schema": {
@@ -189,16 +207,7 @@
           "limit",
           "includeHidden",
           "detailLevel"
-        ],
-        "enums": {
-          "action": [
-            "search_actions"
-          ],
-          "detailLevel": [
-            "summary",
-            "full"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
@@ -211,9 +220,9 @@
     },
     {
       "id": "ascet_diff.diff",
-      "schemaFingerprint": "5ac9e230f78e255192938262e3bc65e2514dcccbaed11f53cd9709eac9b65423",
+      "schemaFingerprint": "d8e38d41146c0ae859994d141818dfa7c543a4e807851d313ed158a0e3415079",
       "rulesFingerprint": "8836729a11718ae25be13d7d7c6593824d9d5d6068ed18f6978c0f68251273e6",
-      "resultFingerprint": "8bad60e6e7ac90d51ccf7091b9f3f1c00d0059a267d59c18ba053fb9a490b6db",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
@@ -224,33 +233,21 @@
           "objectKind",
           "changesOnly",
           "timeoutMs"
-        ],
-        "enums": {
-          "action": [
-            "diff"
-          ],
-          "objectKind": [
-            "class",
-            "module",
-            "statemachine"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "diff",
+        "shape": "result",
         "fields": [
-          "left",
-          "right",
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_diff.diff_component_snapshot",
-      "schemaFingerprint": "e8031299db15e168a2073b26db644c2fbd2967b168f959953f12b389d0a14188",
+      "schemaFingerprint": "9d95d0963b8549754db8b49eb60f2259bf77ebb687ed86a7355cda66abedeefd",
       "rulesFingerprint": "5eac3fcebe740b7a447f488003ff4df0f9430e50cf30a7ace0cef0c60dbe5fd1",
-      "resultFingerprint": "8bad60e6e7ac90d51ccf7091b9f3f1c00d0059a267d59c18ba053fb9a490b6db",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
@@ -260,28 +257,21 @@
         "optional": [
           "changesOnly",
           "timeoutMs"
-        ],
-        "enums": {
-          "action": [
-            "diff_component_snapshot"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "diff",
+        "shape": "result",
         "fields": [
-          "left",
-          "right",
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_diff.diff_element_spec",
-      "schemaFingerprint": "547cc0603c4ffe8e9486bd2e8f5d1a7368ce96443bbda683335c31546b110f08",
+      "schemaFingerprint": "5e86a9e7df081227a4dfabee77c78b4d63b071e0162012a22b929d1fd71a323a",
       "rulesFingerprint": "284cf68db53c4950b3dc289b571b4a0685651770d35d8d43ffe86b996cd1d0b7",
-      "resultFingerprint": "8bad60e6e7ac90d51ccf7091b9f3f1c00d0059a267d59c18ba053fb9a490b6db",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
@@ -291,28 +281,21 @@
         "optional": [
           "changesOnly",
           "timeoutMs"
-        ],
-        "enums": {
-          "action": [
-            "diff_element_spec"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "diff",
+        "shape": "result",
         "fields": [
-          "left",
-          "right",
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_diff.diff_method",
-      "schemaFingerprint": "394356b0e4619376ec5a21ae22a1bb00978ffa8aef8706cf0e73b71c2d56c6d4",
+      "schemaFingerprint": "39d3d69dc0ffcba00731ba4170bc85972105f03f20375fdaac39730b8ee53b5a",
       "rulesFingerprint": "0c4781a235370dc1421c1445374f5186eb7ca52728daaf3a6d8df201c2f73d25",
-      "resultFingerprint": "8bad60e6e7ac90d51ccf7091b9f3f1c00d0059a267d59c18ba053fb9a490b6db",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
@@ -323,28 +306,21 @@
         "optional": [
           "changesOnly",
           "timeoutMs"
-        ],
-        "enums": {
-          "action": [
-            "diff_method"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "diff",
+        "shape": "result",
         "fields": [
-          "left",
-          "right",
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_diff.diff_project_formulas",
-      "schemaFingerprint": "f67dde138949b653aef3918d4123584e6f66482a2e18aee946f1da0bc94c021e",
+      "schemaFingerprint": "9d95d0963b8549754db8b49eb60f2259bf77ebb687ed86a7355cda66abedeefd",
       "rulesFingerprint": "e6ef50ace65caae979aede6751fe96440b827b0625289344a54326bfba62e929",
-      "resultFingerprint": "8bad60e6e7ac90d51ccf7091b9f3f1c00d0059a267d59c18ba053fb9a490b6db",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
@@ -354,28 +330,21 @@
         "optional": [
           "changesOnly",
           "timeoutMs"
-        ],
-        "enums": {
-          "action": [
-            "diff_project_formulas"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "diff",
+        "shape": "result",
         "fields": [
-          "left",
-          "right",
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_diff.diff_state_machine_domain",
-      "schemaFingerprint": "cd1574871f978f5d872a879cccfbffb83ed60ab4ecdc015b0fcc6f8af9608c56",
+      "schemaFingerprint": "9d95d0963b8549754db8b49eb60f2259bf77ebb687ed86a7355cda66abedeefd",
       "rulesFingerprint": "bccaea246f6f2ed503088aad5cde9583b3cf288ba28b1a2b162b510678d78269",
-      "resultFingerprint": "8bad60e6e7ac90d51ccf7091b9f3f1c00d0059a267d59c18ba053fb9a490b6db",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
@@ -385,28 +354,21 @@
         "optional": [
           "changesOnly",
           "timeoutMs"
-        ],
-        "enums": {
-          "action": [
-            "diff_state_machine_domain"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "diff",
+        "shape": "result",
         "fields": [
-          "left",
-          "right",
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_edit.apply_element_spec",
-      "schemaFingerprint": "2c7903a193f34c9bea321985413b7c16c5dcbb7503be980da5a74ebfb7328d25",
+      "schemaFingerprint": "b8a024584e68f1dc6bf42e7e2c824c5a75f5afcaef32436c3f8f4f4c125b5496",
       "rulesFingerprint": "547667329c3db6c1548609b76bbd394839ecc4ed545b60cf0a4796537d4a98b2",
-      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
@@ -422,21 +384,6 @@
           "deleteMissing",
           "recreateIncompatible"
         ],
-        "enums": {
-          "action": [
-            "apply_element_spec"
-          ],
-          "intent": [
-            "preview",
-            "apply"
-          ],
-          "elementIntent": [
-            "create",
-            "patch",
-            "upsert",
-            "restore"
-          ]
-        },
         "variants": [
           {
             "required": [
@@ -452,13 +399,7 @@
               "implementationTarget",
               "deleteMissing",
               "recreateIncompatible"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
+            ]
           },
           {
             "required": [
@@ -474,13 +415,7 @@
               "implementationTarget",
               "deleteMissing",
               "recreateIncompatible"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
+            ]
           },
           {
             "required": [
@@ -496,13 +431,7 @@
               "implementationTarget",
               "deleteMissing",
               "recreateIncompatible"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
+            ]
           },
           {
             "required": [
@@ -518,13 +447,7 @@
               "implementationTarget",
               "deleteMissing",
               "recreateIncompatible"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
+            ]
           }
         ]
       },
@@ -534,20 +457,17 @@
         "statemachine"
       ],
       "result": {
-        "shape": "writePreflightOrResult",
+        "shape": "result",
         "fields": [
-          "status",
-          "changed",
-          "verification",
-          "observations"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_edit.apply_project_formula",
-      "schemaFingerprint": "273db8d99e188d87518b926db6a8c66790a97d7061f030ee6803c7fc484b0fba",
+      "schemaFingerprint": "4a3400ca33d69b7a5f2c608694446dc3dc4dc28cdbd8d9fb06fc8c0419582db6",
       "rulesFingerprint": "d3febaf28e21a24bbe10e8a00ea41cc0f541464ba71b9d00b550b594e8e9b27e",
-      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
@@ -558,530 +478,41 @@
         "optional": [
           "mode",
           "deleteMissing"
-        ],
-        "enums": {
-          "action": [
-            "apply_project_formula"
-          ],
-          "mode": [
-            "restore"
-          ],
-          "intent": [
-            "preview",
-            "apply"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "writePreflightOrResult",
+        "shape": "result",
         "fields": [
-          "status",
-          "changed",
-          "verification",
-          "observations"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_edit.check",
-      "schemaFingerprint": "7af58a0d2e3de4847c4a35421f2d6194c49f5feb2c603f3d2d7d594cc2da8e72",
+      "schemaFingerprint": "9954da9fcd52e75d728be580889449ffe79b97c409da9a8c49b9dd5161e7592c",
       "rulesFingerprint": "e02c0a3a7f70dd0cbbdbc703f6ac344dff4fd4b3870ea26da8b3b9466226a75c",
-      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
-        "required": [],
-        "optional": [
-          "language",
-          "ifExists",
-          "rollbackOnFailure",
-          "componentKind",
-          "diagram",
-          "returnType",
-          "arguments",
-          "ifReturnExists",
-          "ifMissing",
-          "code",
-          "codeFile",
-          "operation",
-          "section",
-          "methodName",
-          "stateName",
-          "sourceState",
-          "targetState",
-          "priority",
-          "projectPath",
-          "dataTarget",
-          "implementationTarget",
-          "deleteMissing",
-          "recreateIncompatible",
-          "mode"
+        "required": [
+          "mode",
+          "componentPath"
         ],
-        "enums": {
-          "action": [
-            "create_folder",
-            "create_component",
-            "create_method",
-            "set_method_signature",
-            "delete_component",
-            "delete_method",
-            "delete_folder",
-            "set_method_code",
-            "set_module_code",
-            "set_state_machine_code",
-            "set_enumerators",
-            "apply_element_spec",
-            "apply_project_formula",
-            "create_dependent_chain"
-          ],
-          "intent": [
-            "preview",
-            "apply"
-          ],
-          "kind": [
-            "class",
-            "module",
-            "statemachine",
-            "enumeration"
-          ],
-          "language": [
-            "ESDL",
-            "BDE",
-            "C"
-          ],
-          "ifExists": [
-            "fail",
-            "return-existing"
-          ],
-          "componentKind": [
-            "class",
-            "module",
-            "statemachine"
-          ],
-          "methodKind": [
-            "abstract",
-            "process",
-            "action",
-            "condition",
-            "trigger"
-          ],
-          "returnType": [
-            "cont",
-            "sdisc",
-            "udisc",
-            "log"
-          ],
-          "ifReturnExists": [
-            "fail",
-            "keep",
-            "replace"
-          ],
-          "ifMissing": [
-            "fail",
-            "ignore"
-          ],
-          "operation": [
-            "set-method",
-            "set-header",
-            "set-external-c-code",
-            "set-state-entry-esdl",
-            "set-state-exit-esdl",
-            "set-state-static-esdl",
-            "bind-state-entry-method",
-            "bind-state-exit-method",
-            "bind-state-static-method",
-            "set-transition-condition-esdl",
-            "set-transition-action-esdl",
-            "bind-transition-condition-method",
-            "bind-transition-action-method",
-            "set-start-state"
-          ],
-          "section": [
-            "set-method",
-            "set-header",
-            "set-external-c-code"
-          ],
-          "elementIntent": [
-            "create",
-            "patch",
-            "upsert",
-            "restore"
-          ],
-          "mode": [
-            "restore",
-            "check",
-            "set"
-          ]
-        },
-        "variants": [
-          {
-            "required": [
-              "action",
-              "folderPath",
-              "intent"
-            ],
-            "optional": [],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "kind",
-              "intent"
-            ],
-            "optional": [
-              "language",
-              "ifExists",
-              "rollbackOnFailure"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "methodName",
-              "methodKind",
-              "intent"
-            ],
-            "optional": [
-              "componentKind",
-              "diagram",
-              "ifExists"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "methodName",
-              "intent"
-            ],
-            "optional": [
-              "returnType",
-              "arguments",
-              "ifReturnExists"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "intent"
-            ],
-            "optional": [
-              "ifMissing"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "methodName",
-              "intent"
-            ],
-            "optional": [
-              "ifMissing"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "folderPath",
-              "intent"
-            ],
-            "optional": [
-              "ifMissing"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "methodName",
-              "intent"
-            ],
-            "optional": [
-              "code",
-              "codeFile"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "modulePath",
-              "intent"
-            ],
-            "optional": [
-              "operation",
-              "section",
-              "methodName",
-              "code",
-              "codeFile"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "stateMachinePath",
-              "operation",
-              "intent"
-            ],
-            "optional": [
-              "stateName",
-              "sourceState",
-              "targetState",
-              "priority",
-              "methodName",
-              "code",
-              "codeFile"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "enumerators",
-              "intent"
-            ],
-            "optional": [],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "intent",
-              "elementIntent",
-              "elements"
-            ],
-            "optional": [
-              "projectPath",
-              "dataTarget",
-              "implementationTarget",
-              "deleteMissing",
-              "recreateIncompatible"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "intent",
-              "elementIntent",
-              "elements"
-            ],
-            "optional": [
-              "projectPath",
-              "dataTarget",
-              "implementationTarget",
-              "deleteMissing",
-              "recreateIncompatible"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "intent",
-              "elementIntent",
-              "elements"
-            ],
-            "optional": [
-              "projectPath",
-              "dataTarget",
-              "implementationTarget",
-              "deleteMissing",
-              "recreateIncompatible"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "intent",
-              "elementIntent",
-              "elements"
-            ],
-            "optional": [
-              "projectPath",
-              "dataTarget",
-              "implementationTarget",
-              "deleteMissing",
-              "recreateIncompatible"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "projectPath",
-              "specFile",
-              "intent"
-            ],
-            "optional": [
-              "mode",
-              "deleteMissing"
-            ],
-            "when": {
-              "mode": [
-                "restore"
-              ],
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "provider",
-              "consumer",
-              "binding",
-              "intent"
-            ],
-            "optional": [],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "mode",
-              "componentPath"
-            ],
-            "optional": [],
-            "when": {
-              "mode": [
-                "check"
-              ]
-            }
-          },
-          {
-            "required": [
-              "mode",
-              "componentPath",
-              "intent"
-            ],
-            "optional": [],
-            "when": {
-              "mode": [
-                "set"
-              ],
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          }
-        ]
+        "optional": []
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "writePreflightOrResult",
+        "shape": "result",
         "fields": [
-          "status",
-          "changed",
-          "verification",
-          "observations"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_edit.create_component",
-      "schemaFingerprint": "a994d8041ac390900a8be817c52e0fb259237b1d7abb30c307a2baeac6dd535b",
+      "schemaFingerprint": "dbb304754c4c6204bdafb691831e7e921723aa85eb65d94f9491f3f5ecbc0497",
       "rulesFingerprint": "a7876b92f29f5f34bb218fee0b0f1c69e76bd5c95ad2db86e791dcbacdafdb0a",
-      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
@@ -1093,46 +524,19 @@
           "language",
           "ifExists",
           "rollbackOnFailure"
-        ],
-        "enums": {
-          "action": [
-            "create_component"
-          ],
-          "kind": [
-            "class",
-            "module",
-            "statemachine",
-            "enumeration"
-          ],
-          "language": [
-            "ESDL",
-            "BDE",
-            "C"
-          ],
-          "ifExists": [
-            "fail",
-            "return-existing"
-          ],
-          "intent": [
-            "preview",
-            "apply"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "writePreflightOrResult",
+        "shape": "result",
         "fields": [
-          "status",
-          "changed",
-          "verification",
-          "observations"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_edit.create_dependent_chain",
-      "schemaFingerprint": "33b1f08e5faea2e5758576ac29c9310eee1f9c56675a7836f92c9a55c41a7abb",
+      "schemaFingerprint": "dad0cdec9e837f53c7d1c6363d9f8563067e5a122b0a464b3ede54b46d4e06f4",
       "rulesFingerprint": "e7b7d6c5cdd0df99721256dcd1c549aaac65683369d0df2f718dc833caa77bc5",
       "resultFingerprint": "d6c085ccf187be25e8c0c3e545b2f580d88cca86bf28738ad9b2fc9f22ff317e",
       "schema": {
@@ -1143,16 +547,7 @@
           "binding",
           "intent"
         ],
-        "optional": [],
-        "enums": {
-          "action": [
-            "create_dependent_chain"
-          ],
-          "intent": [
-            "preview",
-            "apply"
-          ]
-        }
+        "optional": []
       },
       "supportedObjectKinds": [
         "class",
@@ -1173,42 +568,30 @@
     },
     {
       "id": "ascet_edit.create_folder",
-      "schemaFingerprint": "c57ece0cc7c3ba8a19e91fec7f6fb92c725ab405dce9b3976d5775cdc30d9311",
+      "schemaFingerprint": "fd97b679c7d6f92e26753faab733e4fdcbfde34a3e0feabcb0097bbe25299102",
       "rulesFingerprint": "423c15011de6b6bb52d9305bd047bf172ebaef433588572cc34e9dbdfe327214",
-      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
           "folderPath",
           "intent"
         ],
-        "optional": [],
-        "enums": {
-          "action": [
-            "create_folder"
-          ],
-          "intent": [
-            "preview",
-            "apply"
-          ]
-        }
+        "optional": []
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "writePreflightOrResult",
+        "shape": "result",
         "fields": [
-          "status",
-          "changed",
-          "verification",
-          "observations"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_edit.create_method",
-      "schemaFingerprint": "f79eb1faee1a67dd7f596c20e7a202841cf010f930bc1b4a107bf0263b790f4b",
+      "schemaFingerprint": "1ad8f7007472fef6d0621acdaa7033393fc7d0f7fbafb459bfed30d7c5cb5760",
       "rulesFingerprint": "8e3e910a068870a5961b3cbf5e58a28bdff83baf500c70036cdcd000bb7be839",
-      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
@@ -1221,49 +604,21 @@
           "componentKind",
           "diagram",
           "ifExists"
-        ],
-        "enums": {
-          "action": [
-            "create_method"
-          ],
-          "componentKind": [
-            "class",
-            "module",
-            "statemachine"
-          ],
-          "methodKind": [
-            "abstract",
-            "process",
-            "action",
-            "condition",
-            "trigger"
-          ],
-          "ifExists": [
-            "fail",
-            "return-existing"
-          ],
-          "intent": [
-            "preview",
-            "apply"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "writePreflightOrResult",
+        "shape": "result",
         "fields": [
-          "status",
-          "changed",
-          "verification",
-          "observations"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_edit.delete_component",
-      "schemaFingerprint": "4ff036b5438a16262b090425b93324301a368288bb357f90596f7dc5f1d036cd",
+      "schemaFingerprint": "f5cd022865a65e1c0031dd3071e1bbdb8c604c7720dba711ac2ff080e02977df",
       "rulesFingerprint": "423c15011de6b6bb52d9305bd047bf172ebaef433588572cc34e9dbdfe327214",
-      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
@@ -1272,37 +627,21 @@
         ],
         "optional": [
           "ifMissing"
-        ],
-        "enums": {
-          "action": [
-            "delete_component"
-          ],
-          "ifMissing": [
-            "fail",
-            "ignore"
-          ],
-          "intent": [
-            "preview",
-            "apply"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "writePreflightOrResult",
+        "shape": "result",
         "fields": [
-          "status",
-          "changed",
-          "verification",
-          "observations"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_edit.delete_folder",
-      "schemaFingerprint": "0673d0e770eac056ab3207833cd544d1b7830ec3272a067ff6bbe7dd2def9fa5",
+      "schemaFingerprint": "e0485037fe598f2d7490912c2563c485d1956e961e3871aa135cae77825138ce",
       "rulesFingerprint": "423c15011de6b6bb52d9305bd047bf172ebaef433588572cc34e9dbdfe327214",
-      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
@@ -1311,37 +650,21 @@
         ],
         "optional": [
           "ifMissing"
-        ],
-        "enums": {
-          "action": [
-            "delete_folder"
-          ],
-          "ifMissing": [
-            "fail",
-            "ignore"
-          ],
-          "intent": [
-            "preview",
-            "apply"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "writePreflightOrResult",
+        "shape": "result",
         "fields": [
-          "status",
-          "changed",
-          "verification",
-          "observations"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_edit.delete_method",
-      "schemaFingerprint": "91886052bc9519f5e3172d8c984d99324eb8d3bf1a03db035fc5d5de6c975875",
+      "schemaFingerprint": "402ff388ac48f7c73f3dce2b6b99b1a994fa09c4f0c3b9e4fd56f97437443e0a",
       "rulesFingerprint": "423c15011de6b6bb52d9305bd047bf172ebaef433588572cc34e9dbdfe327214",
-      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
@@ -1351,531 +674,42 @@
         ],
         "optional": [
           "ifMissing"
-        ],
-        "enums": {
-          "action": [
-            "delete_method"
-          ],
-          "ifMissing": [
-            "fail",
-            "ignore"
-          ],
-          "intent": [
-            "preview",
-            "apply"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "writePreflightOrResult",
+        "shape": "result",
         "fields": [
-          "status",
-          "changed",
-          "verification",
-          "observations"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_edit.set",
-      "schemaFingerprint": "7af58a0d2e3de4847c4a35421f2d6194c49f5feb2c603f3d2d7d594cc2da8e72",
+      "schemaFingerprint": "0cfaa0736a021bb06d30b18283d0e577668e320406b5767b9d75302df18ee3cf",
       "rulesFingerprint": "0b4a3b4b099010e0cbfd170f0ba343b77a004e2780a3a1af5a1c0a43e389dc07",
-      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
-        "required": [],
-        "optional": [
-          "language",
-          "ifExists",
-          "rollbackOnFailure",
-          "componentKind",
-          "diagram",
-          "returnType",
-          "arguments",
-          "ifReturnExists",
-          "ifMissing",
-          "code",
-          "codeFile",
-          "operation",
-          "section",
-          "methodName",
-          "stateName",
-          "sourceState",
-          "targetState",
-          "priority",
-          "projectPath",
-          "dataTarget",
-          "implementationTarget",
-          "deleteMissing",
-          "recreateIncompatible",
-          "mode"
+        "required": [
+          "mode",
+          "componentPath",
+          "intent"
         ],
-        "enums": {
-          "action": [
-            "create_folder",
-            "create_component",
-            "create_method",
-            "set_method_signature",
-            "delete_component",
-            "delete_method",
-            "delete_folder",
-            "set_method_code",
-            "set_module_code",
-            "set_state_machine_code",
-            "set_enumerators",
-            "apply_element_spec",
-            "apply_project_formula",
-            "create_dependent_chain"
-          ],
-          "intent": [
-            "preview",
-            "apply"
-          ],
-          "kind": [
-            "class",
-            "module",
-            "statemachine",
-            "enumeration"
-          ],
-          "language": [
-            "ESDL",
-            "BDE",
-            "C"
-          ],
-          "ifExists": [
-            "fail",
-            "return-existing"
-          ],
-          "componentKind": [
-            "class",
-            "module",
-            "statemachine"
-          ],
-          "methodKind": [
-            "abstract",
-            "process",
-            "action",
-            "condition",
-            "trigger"
-          ],
-          "returnType": [
-            "cont",
-            "sdisc",
-            "udisc",
-            "log"
-          ],
-          "ifReturnExists": [
-            "fail",
-            "keep",
-            "replace"
-          ],
-          "ifMissing": [
-            "fail",
-            "ignore"
-          ],
-          "operation": [
-            "set-method",
-            "set-header",
-            "set-external-c-code",
-            "set-state-entry-esdl",
-            "set-state-exit-esdl",
-            "set-state-static-esdl",
-            "bind-state-entry-method",
-            "bind-state-exit-method",
-            "bind-state-static-method",
-            "set-transition-condition-esdl",
-            "set-transition-action-esdl",
-            "bind-transition-condition-method",
-            "bind-transition-action-method",
-            "set-start-state"
-          ],
-          "section": [
-            "set-method",
-            "set-header",
-            "set-external-c-code"
-          ],
-          "elementIntent": [
-            "create",
-            "patch",
-            "upsert",
-            "restore"
-          ],
-          "mode": [
-            "restore",
-            "check",
-            "set"
-          ]
-        },
-        "variants": [
-          {
-            "required": [
-              "action",
-              "folderPath",
-              "intent"
-            ],
-            "optional": [],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "kind",
-              "intent"
-            ],
-            "optional": [
-              "language",
-              "ifExists",
-              "rollbackOnFailure"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "methodName",
-              "methodKind",
-              "intent"
-            ],
-            "optional": [
-              "componentKind",
-              "diagram",
-              "ifExists"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "methodName",
-              "intent"
-            ],
-            "optional": [
-              "returnType",
-              "arguments",
-              "ifReturnExists"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "intent"
-            ],
-            "optional": [
-              "ifMissing"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "methodName",
-              "intent"
-            ],
-            "optional": [
-              "ifMissing"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "folderPath",
-              "intent"
-            ],
-            "optional": [
-              "ifMissing"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "methodName",
-              "intent"
-            ],
-            "optional": [
-              "code",
-              "codeFile"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "modulePath",
-              "intent"
-            ],
-            "optional": [
-              "operation",
-              "section",
-              "methodName",
-              "code",
-              "codeFile"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "stateMachinePath",
-              "operation",
-              "intent"
-            ],
-            "optional": [
-              "stateName",
-              "sourceState",
-              "targetState",
-              "priority",
-              "methodName",
-              "code",
-              "codeFile"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "enumerators",
-              "intent"
-            ],
-            "optional": [],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "intent",
-              "elementIntent",
-              "elements"
-            ],
-            "optional": [
-              "projectPath",
-              "dataTarget",
-              "implementationTarget",
-              "deleteMissing",
-              "recreateIncompatible"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "intent",
-              "elementIntent",
-              "elements"
-            ],
-            "optional": [
-              "projectPath",
-              "dataTarget",
-              "implementationTarget",
-              "deleteMissing",
-              "recreateIncompatible"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "intent",
-              "elementIntent",
-              "elements"
-            ],
-            "optional": [
-              "projectPath",
-              "dataTarget",
-              "implementationTarget",
-              "deleteMissing",
-              "recreateIncompatible"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "componentPath",
-              "intent",
-              "elementIntent",
-              "elements"
-            ],
-            "optional": [
-              "projectPath",
-              "dataTarget",
-              "implementationTarget",
-              "deleteMissing",
-              "recreateIncompatible"
-            ],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "projectPath",
-              "specFile",
-              "intent"
-            ],
-            "optional": [
-              "mode",
-              "deleteMissing"
-            ],
-            "when": {
-              "mode": [
-                "restore"
-              ],
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "action",
-              "provider",
-              "consumer",
-              "binding",
-              "intent"
-            ],
-            "optional": [],
-            "when": {
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          },
-          {
-            "required": [
-              "mode",
-              "componentPath"
-            ],
-            "optional": [],
-            "when": {
-              "mode": [
-                "check"
-              ]
-            }
-          },
-          {
-            "required": [
-              "mode",
-              "componentPath",
-              "intent"
-            ],
-            "optional": [],
-            "when": {
-              "mode": [
-                "set"
-              ],
-              "intent": [
-                "preview",
-                "apply"
-              ]
-            }
-          }
-        ]
+        "optional": []
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "writePreflightOrResult",
+        "shape": "result",
         "fields": [
-          "status",
-          "changed",
-          "verification",
-          "observations"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_edit.set_enumerators",
-      "schemaFingerprint": "cf1159592107a75d44693bfd16115fe2b29f4efde4e10f774dad988a5d78bb28",
+      "schemaFingerprint": "bcd638026c4ae21bbf01f703982a4a9f5e89329a566c53e66657038edbe9ae02",
       "rulesFingerprint": "423c15011de6b6bb52d9305bd047bf172ebaef433588572cc34e9dbdfe327214",
-      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
@@ -1883,33 +717,21 @@
           "enumerators",
           "intent"
         ],
-        "optional": [],
-        "enums": {
-          "action": [
-            "set_enumerators"
-          ],
-          "intent": [
-            "preview",
-            "apply"
-          ]
-        }
+        "optional": []
       },
       "supportedObjectKinds": [
         "enumeration"
       ],
       "result": {
-        "shape": "writePreflightOrResult",
+        "shape": "result",
         "fields": [
-          "status",
-          "changed",
-          "verification",
-          "observations"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_edit.set_method_code",
-      "schemaFingerprint": "9f8b4f6def715b0ad517bcc80db4d718d96fd40d6431c9890f3821951fd1cbc1",
+      "schemaFingerprint": "6b94ea3844c62f05e125795616bccbf306596ddd12ebcb4e18ef30e586dd8717",
       "rulesFingerprint": "db36e76d30d8b4263c4c01c410b0c97a9e65e0fe1e90f8b12cb6f8ad6afafbc6",
       "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
       "schema": {
@@ -1922,16 +744,7 @@
         "optional": [
           "code",
           "codeFile"
-        ],
-        "enums": {
-          "action": [
-            "set_method_code"
-          ],
-          "intent": [
-            "preview",
-            "apply"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
@@ -1946,9 +759,9 @@
     },
     {
       "id": "ascet_edit.set_method_signature",
-      "schemaFingerprint": "b1e38e5cfb05368e0b0349e5cd95843f5e6001ef69873ac7d342e8bb6651420d",
+      "schemaFingerprint": "8bc79c0be80c44a2fe009814e154bd9cc96db9fc4bcb07dad2b67612465bdd98",
       "rulesFingerprint": "25c6f988c10619c697824d06f19b5f9c7a4453fa1a3294f23dd464cb1b3cda8b",
-      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
@@ -1960,44 +773,21 @@
           "returnType",
           "arguments",
           "ifReturnExists"
-        ],
-        "enums": {
-          "action": [
-            "set_method_signature"
-          ],
-          "returnType": [
-            "cont",
-            "sdisc",
-            "udisc",
-            "log"
-          ],
-          "ifReturnExists": [
-            "fail",
-            "keep",
-            "replace"
-          ],
-          "intent": [
-            "preview",
-            "apply"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "writePreflightOrResult",
+        "shape": "result",
         "fields": [
-          "status",
-          "changed",
-          "verification",
-          "observations"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_edit.set_module_code",
-      "schemaFingerprint": "6670578f2b7b8a5fdddb0266e5de849ad2720a8f7554b52a72e7df51f8b88211",
+      "schemaFingerprint": "04569265c3b9e513b19d545f5b5d6c92e0b291b4f8a3725361a5ee45761231c3",
       "rulesFingerprint": "9f19c4d729618655f70fe656fd36bcf6f6a1518f016da5b69895510d1e143109",
-      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
@@ -2010,43 +800,21 @@
           "methodName",
           "code",
           "codeFile"
-        ],
-        "enums": {
-          "action": [
-            "set_module_code"
-          ],
-          "operation": [
-            "set-method",
-            "set-header",
-            "set-external-c-code"
-          ],
-          "section": [
-            "set-method",
-            "set-header",
-            "set-external-c-code"
-          ],
-          "intent": [
-            "preview",
-            "apply"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "writePreflightOrResult",
+        "shape": "result",
         "fields": [
-          "status",
-          "changed",
-          "verification",
-          "observations"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_edit.set_state_machine_code",
-      "schemaFingerprint": "1d1adf9156a7baf771d07e40356386d461e978381989165b12e5e6ddb6c3267b",
+      "schemaFingerprint": "50f64376cad16efc2734e04882db469b08834fcf60bab31d2e8d166dd514a31b",
       "rulesFingerprint": "68c65d88b32cbf628f4441002aed9e09330739f6dae2fcb06c2a6f6388c489de",
-      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
@@ -2062,46 +830,20 @@
           "methodName",
           "code",
           "codeFile"
-        ],
-        "enums": {
-          "action": [
-            "set_state_machine_code"
-          ],
-          "operation": [
-            "set-method",
-            "set-state-entry-esdl",
-            "set-state-exit-esdl",
-            "set-state-static-esdl",
-            "bind-state-entry-method",
-            "bind-state-exit-method",
-            "bind-state-static-method",
-            "set-transition-condition-esdl",
-            "set-transition-action-esdl",
-            "bind-transition-condition-method",
-            "bind-transition-action-method",
-            "set-start-state"
-          ],
-          "intent": [
-            "preview",
-            "apply"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "writePreflightOrResult",
+        "shape": "result",
         "fields": [
-          "status",
-          "changed",
-          "verification",
-          "observations"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_get.formulas",
-      "schemaFingerprint": "ce87e505bbef3e5b54599fc671836c51cdd47df9d69e66ffe72eda25f2c0a33b",
-      "rulesFingerprint": "308a35b0df6408498a8d16b23547d4de4c1172626dc009f6e52b36bbd06ee41f",
+      "schemaFingerprint": "f4a81f811be84a89872bcc5440cdb494810ea4ecaa33ee67e7ad78975bbae7b0",
+      "rulesFingerprint": "786b1a17dc7062eb7f28ca8f105ade5f5bd0c2df21e35303bc02701b2914f6d0",
       "resultFingerprint": "352f2d71bf6e25ec4d6371461d1e309aa061b730c9e943b1982cc170253177fc",
       "schema": {
         "required": [
@@ -2110,14 +852,11 @@
         ],
         "optional": [
           "name"
-        ],
-        "enums": {
-          "action": [
-            "formulas"
-          ]
-        }
+        ]
       },
-      "supportedObjectKinds": [],
+      "supportedObjectKinds": [
+        "project"
+      ],
       "result": {
         "shape": "items",
         "fields": [
@@ -2130,8 +869,8 @@
     },
     {
       "id": "ascet_get.tree",
-      "schemaFingerprint": "ed9237f01ed938d47490427aadca3f25f024af9228812808cb42a2fd95c26f4b",
-      "rulesFingerprint": "ad497faa2cc5d9ae7451744891638b9f78035f1c2873fc10ed5bc7ab6a0e059b",
+      "schemaFingerprint": "7224cd370dbc4a5e5beb0265e3533b595eccd06640717cbdf7908bd74fe554e9",
+      "rulesFingerprint": "1ac52b6570ece57be51ba7ae30d9fcc4426ce94151cdce87d137cbab724960c7",
       "resultFingerprint": "352f2d71bf6e25ec4d6371461d1e309aa061b730c9e943b1982cc170253177fc",
       "schema": {
         "required": [
@@ -2140,17 +879,12 @@
         "optional": [
           "path",
           "depth"
-        ],
-        "enums": {
-          "action": [
-            "tree"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [
         "database",
-        "project",
         "folder",
+        "project",
         "class",
         "module",
         "statemachine",
@@ -2168,33 +902,27 @@
     },
     {
       "id": "ascet_read.read",
-      "schemaFingerprint": "3fc0998c1c06d55efb40889ed6d7602b9a826f7ec657805cdefdec403f98ad86",
+      "schemaFingerprint": "f4e6412e09a6407099f3b87871a2fb46c125817ef03e196cd19845431ab8bccb",
       "rulesFingerprint": "b9d5863cb58d8c63e3c18f3c55ebb458c644221e79d87fde4aff2066795f68e3",
-      "resultFingerprint": "72eb32bd2fe4e9d13e97b1c658715cb02eb04a31d23a0b0c8068222d964c7cd3",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
           "componentPath"
         ],
-        "optional": [],
-        "enums": {
-          "action": [
-            "read"
-          ]
-        }
+        "optional": []
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "liveRead",
+        "shape": "result",
         "fields": [
-          "component",
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_read.read_block_diagram",
-      "schemaFingerprint": "770c618e8f8fd08bd0ea8369bbbb15f70a0af679e4fc33178a07e6b0c0f879ca",
+      "schemaFingerprint": "b36a6a4f7e29a5caa69b6095f125c2f169c5c1182215642a34c712ff46fc2fe1",
       "rulesFingerprint": "505da93f2bb0b3a667192fcc712ad76ba41ab6fecd2fcbe50fbc0b37dbac9208",
       "resultFingerprint": "54be0b9503f00140f66a013530dcd4d11ea5bc75ad4ebc5198d374b3113c1be6",
       "schema": {
@@ -2205,12 +933,7 @@
         "optional": [
           "diagramName",
           "timeoutMs"
-        ],
-        "enums": {
-          "action": [
-            "read_block_diagram"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
@@ -2225,7 +948,7 @@
     },
     {
       "id": "ascet_read.read_code",
-      "schemaFingerprint": "1680a0699f0c1e644a6dd4c112e83acb686edc6287ece92291e2ab62ee485646",
+      "schemaFingerprint": "4ec46643ff0d98a645ca6b4a179ab5afd7b37e41dfcf63b18987d1c3776ddf10",
       "rulesFingerprint": "a761ac44e26952040e246efd4a2e3b04786b4dcabc40097b76ef52b076c531ef",
       "resultFingerprint": "764d33b1ca715dc1a658b81cdd1b26e0e2432c99fc2743e995027bcf57ffaa8c",
       "schema": {
@@ -2237,23 +960,7 @@
           "methodName",
           "section",
           "detailLevel"
-        ],
-        "enums": {
-          "action": [
-            "read_code"
-          ],
-          "section": [
-            "header",
-            "external-c",
-            "all",
-            "body"
-          ],
-          "detailLevel": [
-            "summary",
-            "topology",
-            "full"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
@@ -2268,7 +975,7 @@
     },
     {
       "id": "ascet_read.read_dependent_chain",
-      "schemaFingerprint": "651d05723d3c9b213d71a07258e02e3dbb4db119c1c1e04a3aa0c7f85093cf70",
+      "schemaFingerprint": "c1181a00b64563a30169cf396e5bbad81388ed01cb5cf34358550a956eb17911",
       "rulesFingerprint": "75cf0a92c0e7dc14c860293df05df47b13e29b56fe32a80f6676bba0308c8b16",
       "resultFingerprint": "67a19c2264f74d5bdd5aa6ec2e857c8064ef5b5a4b9895c705c5fdec8907133b",
       "schema": {
@@ -2279,12 +986,7 @@
         ],
         "optional": [
           "exporterComponentPath"
-        ],
-        "enums": {
-          "action": [
-            "read_dependent_chain"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
@@ -2298,9 +1000,9 @@
     },
     {
       "id": "ascet_read.read_element",
-      "schemaFingerprint": "beb848d5b779ba2609b5fafbc46e3d1d3e226f910bcdb2f2e93ad3f6085c4f0c",
+      "schemaFingerprint": "091d335862c74a6e541b15982b3e845cdc87c97d41989f69c700c3b8e459ca1c",
       "rulesFingerprint": "3d213b805930522113a9741c9feaab71e76019354fa795202ea5ced226e70a5f",
-      "resultFingerprint": "72eb32bd2fe4e9d13e97b1c658715cb02eb04a31d23a0b0c8068222d964c7cd3",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
@@ -2309,19 +1011,13 @@
         ],
         "optional": [
           "timeoutMs"
-        ],
-        "enums": {
-          "action": [
-            "read_element"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "liveRead",
+        "shape": "result",
         "fields": [
-          "component",
-          "items"
+          "error"
         ]
       }
     },
@@ -2329,7 +1025,7 @@
       "id": "ascet_read.read_element_dependency",
       "schemaFingerprint": "295e6c743223299a3881126c09a3751698552b8cfa45a04c723ccecc8494e7ca",
       "rulesFingerprint": "b4a88240b2b5ee70ebcd66cbb56a747d20ac7b71971ab8db416ba7cfeafa4ad1",
-      "resultFingerprint": "72eb32bd2fe4e9d13e97b1c658715cb02eb04a31d23a0b0c8068222d964c7cd3",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
@@ -2378,18 +1074,17 @@
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "liveRead",
+        "shape": "result",
         "fields": [
-          "component",
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_read.read_implementation",
-      "schemaFingerprint": "1e0c5a2be0ed7dd4193db80a518bb96a32147107c4920fba7469b8c1aae264f4",
+      "schemaFingerprint": "9618b9d248a0c0001a2b5600d71f5e1e4a25d70850cbf562bb17fb727a26b934",
       "rulesFingerprint": "07df63fac577f21d4c83d44f10d14da4a6b7992d3dc671e97663c31b51c3d419",
-      "resultFingerprint": "72eb32bd2fe4e9d13e97b1c658715cb02eb04a31d23a0b0c8068222d964c7cd3",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
@@ -2399,18 +1094,7 @@
           "implementationMode",
           "implementationName",
           "timeoutMs"
-        ],
-        "enums": {
-          "action": [
-            "read_implementation"
-          ],
-          "implementationMode": [
-            "list",
-            "default",
-            "class-impl",
-            "impl"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [
         "class",
@@ -2419,45 +1103,38 @@
         "enumeration"
       ],
       "result": {
-        "shape": "liveRead",
+        "shape": "result",
         "fields": [
-          "component",
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_read.read_method_signature",
-      "schemaFingerprint": "5e1c1d5d08db51461ca9660479510e465343507334f74b43022ae0f34b7e08c6",
+      "schemaFingerprint": "24891a927b7dcaa0efe627ce2a071578a8ed39bb1aecc13fede3f9a0dcd24a18",
       "rulesFingerprint": "22790524d010a4f876e10efed2212b6a7212d6917ad2cb52f879974ea8c3050c",
-      "resultFingerprint": "72eb32bd2fe4e9d13e97b1c658715cb02eb04a31d23a0b0c8068222d964c7cd3",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
           "componentPath",
           "methodName"
         ],
-        "optional": [],
-        "enums": {
-          "action": [
-            "read_method_signature"
-          ]
-        }
+        "optional": []
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "liveRead",
+        "shape": "result",
         "fields": [
-          "component",
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_read.read_state_machine_flow",
-      "schemaFingerprint": "a0178f15bf9f3b8de4041c628e033b95c9976d5d750f105c4d7802ac45572496",
+      "schemaFingerprint": "a8a60031434d9a40c95014e5200c0c6b778b0acdd22abe9ec627b68172b84320",
       "rulesFingerprint": "53eb6d3a9942f6cd8357602df19946a1231d9d4feaea1337193beb63f95211c7",
-      "resultFingerprint": "72eb32bd2fe4e9d13e97b1c658715cb02eb04a31d23a0b0c8068222d964c7cd3",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
@@ -2466,88 +1143,59 @@
         "optional": [
           "detailLevel",
           "traceDepth"
-        ],
-        "enums": {
-          "action": [
-            "read_state_machine_flow"
-          ],
-          "detailLevel": [
-            "summary",
-            "topology",
-            "full"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "liveRead",
+        "shape": "result",
         "fields": [
-          "component",
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_recover.clear_extension_temp",
-      "schemaFingerprint": "ae13080f45a5cd5b79b376399bf7a3a64edb3f8cba44041730e5aba177f94941",
+      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
       "rulesFingerprint": "bf1ff4921c7f1660f8ac215796954fcc63f4a7e79387de91d522546ab7720a6c",
-      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action"
         ],
-        "optional": [],
-        "enums": {
-          "action": [
-            "status",
-            "clear_extension_temp",
-            "scheduler_status",
-            "scheduler_recover",
-            "clear_stale_cli_lock"
-          ]
-        }
+        "optional": []
       },
       "supportedObjectKinds": [],
       "result": {
         "shape": "result",
         "fields": [
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_recover.clear_stale_cli_lock",
-      "schemaFingerprint": "ae13080f45a5cd5b79b376399bf7a3a64edb3f8cba44041730e5aba177f94941",
+      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
       "rulesFingerprint": "8241ed3bd19bd90f595a42883f975cd2b55ef63235d0fdb4dc65a9e97dda1867",
-      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action"
         ],
-        "optional": [],
-        "enums": {
-          "action": [
-            "status",
-            "clear_extension_temp",
-            "scheduler_status",
-            "scheduler_recover",
-            "clear_stale_cli_lock"
-          ]
-        }
+        "optional": []
       },
       "supportedObjectKinds": [],
       "result": {
         "shape": "result",
         "fields": [
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_recover.reconcile_mutation",
-      "schemaFingerprint": "efbaecd7d7624afa2153272dec5d422e97a50543ad1507592ddd7f15da8dc073",
+      "schemaFingerprint": "d409b6258152ce645aef4930cf4d7402613a050cc99438f1cbee89500bc32fe4",
       "rulesFingerprint": "8fe824980072dea03d964c57f0dd5adaf8a9d9d0c53ccb2391cc51aea405454a",
-      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action",
@@ -2557,20 +1205,6 @@
           "expectedGeneration"
         ],
         "optional": [],
-        "enums": {
-          "action": [
-            "reconcile_mutation"
-          ],
-          "mode": [
-            "inspect",
-            "rollback_to_before",
-            "cleanup_created",
-            "accept_current"
-          ],
-          "intent": [
-            "apply"
-          ]
-        },
         "variants": [
           {
             "required": [
@@ -2580,12 +1214,7 @@
               "targetOid",
               "expectedGeneration"
             ],
-            "optional": [],
-            "when": {
-              "mode": [
-                "inspect"
-              ]
-            }
+            "optional": []
           },
           {
             "required": [
@@ -2596,17 +1225,7 @@
               "expectedGeneration",
               "intent"
             ],
-            "optional": [],
-            "when": {
-              "mode": [
-                "rollback_to_before",
-                "cleanup_created",
-                "accept_current"
-              ],
-              "intent": [
-                "apply"
-              ]
-            }
+            "optional": []
           }
         ]
       },
@@ -2614,161 +1233,116 @@
       "result": {
         "shape": "result",
         "fields": [
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_recover.scheduler_recover",
-      "schemaFingerprint": "ae13080f45a5cd5b79b376399bf7a3a64edb3f8cba44041730e5aba177f94941",
+      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
       "rulesFingerprint": "9818f536d6f3c752b04db37f592dd9738db50cff84b539aa8ee0af73bf7c2fa3",
-      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action"
         ],
-        "optional": [],
-        "enums": {
-          "action": [
-            "status",
-            "clear_extension_temp",
-            "scheduler_status",
-            "scheduler_recover",
-            "clear_stale_cli_lock"
-          ]
-        }
+        "optional": []
       },
       "supportedObjectKinds": [],
       "result": {
         "shape": "result",
         "fields": [
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_recover.scheduler_status",
-      "schemaFingerprint": "ae13080f45a5cd5b79b376399bf7a3a64edb3f8cba44041730e5aba177f94941",
+      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
       "rulesFingerprint": "f18e91b94e99a6368eac7fd60107d0d5c369ec2da803b004e23c7301345be364",
-      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action"
         ],
-        "optional": [],
-        "enums": {
-          "action": [
-            "status",
-            "clear_extension_temp",
-            "scheduler_status",
-            "scheduler_recover",
-            "clear_stale_cli_lock"
-          ]
-        }
+        "optional": []
       },
       "supportedObjectKinds": [],
       "result": {
         "shape": "result",
         "fields": [
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_recover.status",
-      "schemaFingerprint": "ae13080f45a5cd5b79b376399bf7a3a64edb3f8cba44041730e5aba177f94941",
+      "schemaFingerprint": "d2cf54421321eeff058078812d4cbddff219e3d3f832ccc2bcb567d327ef5afc",
       "rulesFingerprint": "a0d7b69e053dee6e200cd4043436e1a73d29b993d1847db87db61b48377632f8",
-      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [
           "action"
         ],
-        "optional": [],
-        "enums": {
-          "action": [
-            "status",
-            "clear_extension_temp",
-            "scheduler_status",
-            "scheduler_recover",
-            "clear_stale_cli_lock"
-          ]
-        }
+        "optional": []
       },
       "supportedObjectKinds": [],
       "result": {
         "shape": "result",
         "fields": [
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_scheduler_status.recover",
-      "schemaFingerprint": "10b49c1bcee229cbeac22ea2838c5960c89146a5ee9b073fe2722eeca4dfc45d",
+      "schemaFingerprint": "ae96addb935bc374aa8f271a4451b95681bfab31cd22e4f2b89948c958767c1b",
       "rulesFingerprint": "b7d6a5481876bccb7ac0f8dde30bc703f432da9cd9b712931e268b00f9cddc49",
-      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
-        "required": [],
-        "optional": [
-          "action",
-          "format"
+        "required": [
+          "action"
         ],
-        "enums": {
-          "action": [
-            "status",
-            "recover"
-          ],
-          "format": [
-            "text",
-            "json"
-          ]
-        }
+        "optional": [
+          "format"
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
         "shape": "result",
         "fields": [
-          "items"
+          "error"
         ]
       }
     },
     {
       "id": "ascet_scheduler_status.status",
-      "schemaFingerprint": "10b49c1bcee229cbeac22ea2838c5960c89146a5ee9b073fe2722eeca4dfc45d",
+      "schemaFingerprint": "ee7dddcaab092db556177629b4dcb63865ba3fe4f559695f0b9bb9049ab2f2fe",
       "rulesFingerprint": "283420890fdb1aa457d690a423cd2a5ee08eae7d9122f087e86b7e45c73f910e",
-      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [],
         "optional": [
           "action",
           "format"
-        ],
-        "enums": {
-          "action": [
-            "status",
-            "recover"
-          ],
-          "format": [
-            "text",
-            "json"
-          ]
-        }
+        ]
       },
       "supportedObjectKinds": [],
       "result": {
         "shape": "result",
         "fields": [
-          "items"
+          "error"
         ]
       }
     },
     {
-      "id": "ascet_search.*",
-      "schemaFingerprint": "635108bdc37e8e136f46995ba796bbbfffd0a512df305b4246577e59e33b7f76",
-      "rulesFingerprint": "b971fc9640bf94e27771ec7af84dece579ab4cf3f5e6bca83f36cb75c81eac1f",
+      "id": "ascet_search.search",
+      "schemaFingerprint": "02383218b7fa617bc7ebe35806ca60fb236097af3d8305aab0887fa2de8788f8",
+      "rulesFingerprint": "78317ddfa4fc9994d00ae9c8b75636bffc57b41550755f628ee53a78b2c35be4",
       "resultFingerprint": "df1be2bb74ca14e486caafca7148cbccdd3e0f43efd26f7013a73c79745417ab",
       "schema": {
         "required": [
+          "action",
           "mode",
           "q"
         ],
@@ -2805,7 +1379,7 @@
       "id": "ascet_status.status",
       "schemaFingerprint": "ea1dcc4db4123606dff315e9e587ea336d36217fa44315111489e4c577a75333",
       "rulesFingerprint": "8b4e992bf0c0d7de91de2c6dcdc26ebed750be8b1ffd55b7309c718c1623a7b2",
-      "resultFingerprint": "c5ebc1402351cf161840a2c5f2cc5c089c441b9faf6e45d4aa781b5caa55fcf2",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [],
         "optional": [
@@ -2816,7 +1390,7 @@
       "result": {
         "shape": "result",
         "fields": [
-          "items"
+          "error"
         ]
       }
     }

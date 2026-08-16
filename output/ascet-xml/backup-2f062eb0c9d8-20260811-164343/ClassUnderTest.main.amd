@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ComponentMain toolVersion="V6.1.5_2.2.0" schemaVersion="6.1.1.0">
+	<Component name="ClassUnderTest" nameSpace="/PI_LIVE_FIX_20260811_13947C09" OID="_040g00001g001qg7105g94f0sjvg0" timeStamp="2026-08-11T08:36:27" componentType="ASCET_Class" specificationType="ESDL">
+		<TimeStamp timeStampKey="applicationTimeStamp" timeStampValue="2026-08-11T08:36:27" timeStampCounter="494"/>
+		<CustomerSpecificAttributes>
+			<ConfigurationManagement edition="true" versionID="" configurationID=""/>
+			<RequirementsManagement requirementsID=""/>
+			<AccessManagement read="true" write="true" import="true"/>
+		</CustomerSpecificAttributes>
+		<Elements>
+			<Element name="P_Dependent" OID="_040g00001g001qg7105g94mlas402" ignore="false">
+				<Comment>ASCET isolated live validation dependent</Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="local" virtual="false" dependent="false" volatile="false" calibrated="false" set="false" get="false" read="true" write="false" reference="false"/>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+			<Element name="P_Input" OID="_040g00001g001qg7105g94mkhc3g2" ignore="false">
+				<Comment>ASCET isolated live validation input</Comment>
+				<ElementAttributes modelType="scalar" basicModelType="cont" unit="">
+					<ScalarType>
+						<PrimitiveAttributes kind="parameter" scope="exported" virtual="false" dependent="false" volatile="false" calibrated="false" set="false" get="false" read="true" write="false" reference="false"/>
+					</ScalarType>
+				</ElementAttributes>
+			</Element>
+		</Elements>
+		<MethodSignatures>
+			<MethodSignature name="calc" OID="_040g00001g001qg7105g94f1g42g2" public="true" default="false" defaultMethod="false" hidden="false" availableForOS="false"/>
+		</MethodSignatures>
+		<TimeStamps>
+			<TimeStamp timeStampKey="exportImportTimeStampKey" timeStampValue="2026-08-11T08:36:27"/>
+			<TimeStamp timeStampKey="methodsTimeStampKey" timeStampValue="2026-08-11T08:35:25"/>
+		</TimeStamps>
+	</Component>
+	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+		<SignedInfo>
+			<CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+			<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+			<Reference>
+				<Transforms>
+					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+				</Transforms>
+				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+				<DigestValue>t4JUdsa1f2VKy+gO0bT4fGb1oxk=</DigestValue>
+			</Reference>
+		</SignedInfo>
+		<SignatureValue>WNzZdwW/y4yGupdY+I7Bpc+J1kHnxD84ASWu2Bpx72VzVSS4Thz9T//g0AG+MDKF
+1XcAnJ6FBkvLl7/j10REgcaWoWVzzrrFsfqLAUuywo8xqZR1IFk79ELjFEZ0dcCu
+4qXSsXJaFZuIgJSKnvK4kwlfyyHeA27unDH3MNsgijcQ2EIAbGDIbv1aFg+S2vzg
++neD19PkzU5wA9GdFKpI2GsAE3yZBL4BsBI74jJf3wCYE0jq3xOEx0ZIcuP135hl
+w9HBdJ3uRspVSFtcGN6lIZKnWZK1OjiOB4Am1+XYDNlo3Qw4fdH93JhgeRdNaN2/
+wXsLqXA+GSlXSCA26BtcTg==</SignatureValue>
+		<KeyInfo>
+			<KeyName>Etas Ascet Verification</KeyName>
+		</KeyInfo>
+	</Signature>
+</ComponentMain>

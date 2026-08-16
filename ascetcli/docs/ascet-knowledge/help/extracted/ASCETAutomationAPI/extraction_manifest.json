@@ -1,0 +1,887 @@
+{
+  "generated_at": "2026-04-01T03:07:24.914275Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\ASCETAutomationAPI.chm",
+  "unpack_dir": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ASCETAutomationAPI\\unpacked",
+  "total_files": 145,
+  "total_size_bytes": 626107,
+  "counts_by_extension": {
+    ".png": 5,
+    ".gif": 8,
+    ".css": 2,
+    ".html": 128,
+    ".hhc": 1,
+    ".hhk": 1
+  },
+  "files": [
+    {
+      "relative_path": "AllPrint.png",
+      "size": 5731,
+      "sha256": "1804faeaf384eb126ff4891c482614c90a04cd3a7d8a76720955cf13b33c5ea2",
+      "extension": ".png"
+    },
+    {
+      "relative_path": "AllScreen.gif",
+      "size": 943,
+      "sha256": "a17a305a7867019bf8bf4edd5d90fda9cd057f576d0e75643d3276097d4f1ddf",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "BottomTab.gif",
+      "size": 951,
+      "sha256": "bbfc009942b03a992d2a6db26a5a7cab0cae821aa9ea0be1d11f5a14abee74a9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ChoicePrint.png",
+      "size": 8048,
+      "sha256": "72949865d6c950158b13ba01a1474377db2f84acce91438fa97f98d6be4d7821",
+      "extension": ".png"
+    },
+    {
+      "relative_path": "ChoiceScreen.gif",
+      "size": 988,
+      "sha256": "182615df2d3e672f57100bac518011e2206c9847a8196920373290576f7d116d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Folder.gif",
+      "size": 907,
+      "sha256": "f8014d2bd1f4e384a126489c478806efdb1ac2b63a8690dd022f073146a42435",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "GeneratedStyles.css",
+      "size": 3046,
+      "sha256": "65782f930ee77971470c841d6def1d785941921c4b08ce175a444f6a50a2ab60",
+      "extension": ".css"
+    },
+    {
+      "relative_path": "Help1Styles.css",
+      "size": 7252,
+      "sha256": "569fd25318ca57819371f548500a812262eef795eaa6c4a46183b092818546b8",
+      "extension": ".css"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-Build.html",
+      "size": 3987,
+      "sha256": "be4cd14d13fa5dd19d2535fdefed3084eafef7d76384ede529905c61223aa5a2",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-CleanProject.html",
+      "size": 4228,
+      "sha256": "879abeecd8ff4e14d9a9141aa2d7bf58bfe31690fbcf3f18b1f39f503a319772",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-CloseMessageDialog.html",
+      "size": 2187,
+      "sha256": "3f5e3f94a89e72bc680f4e96e34bfd560a3ae138ff70fe99d218e41e3d66929f",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-Compile.html",
+      "size": 3995,
+      "sha256": "c1774dfe0efd37106fa5243ded65406d67f8872ef19fe9c907881af04ecf52b5",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-CompileUsingProject.html",
+      "size": 5085,
+      "sha256": "5e285f01e973418ebbe689bc9e9204c777901952d05a7fe26cb538fd10f17ba5",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-ExportBuildResults.html",
+      "size": 3497,
+      "sha256": "14125cd9457979b1049f168e9a29c91c95cfdaf2be1c394eda8a7f0572ada46c",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-ExportGeneratedCode.html",
+      "size": 4442,
+      "sha256": "57d1dfa4a7062dd4728028f9cf5571040c3e5c703a9057a2d52d6bed823a3282",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-ExportGeneratedCodeRecursive.html",
+      "size": 4613,
+      "sha256": "7bdc3fab7b456aedb8370fb094e510a514fbe1c617dbaa198fc0a70f8c6b26a8",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-ExportGeneratedGenericCode.html",
+      "size": 4627,
+      "sha256": "c5460a6ca26eaff66aff4be62e60a1872f4ea2a70f5ca43a36636877a16e7b96",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-GenerateCode.html",
+      "size": 4027,
+      "sha256": "5a9236ab27e1e120d03b37a3e35dfb74ddafcb2bf26736404309b116d0848861",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-GenerateCodeUsingProject.html",
+      "size": 5117,
+      "sha256": "05a628309924726142503d2eeb20a6724c7085aad07cdaade987b7e230737e44",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-GetLastErrorNumber.html",
+      "size": 2125,
+      "sha256": "c434bbdbcc064247badc6bb3ac5dcc93d027e01b1751a3cf130b680445fa38f5",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-GetLastErrorText.html",
+      "size": 2116,
+      "sha256": "ebed2734a6a51b2ded39e65ab5b569ef59af7467d62d862fdcad97b7bacfb4c7",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-OpenMessageDialog.html",
+      "size": 3485,
+      "sha256": "84ae9a98d2378d1f06e4f26ed57c115f78edefbc822cc45585e722eb9455c416",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-ReadProjectProperties.html",
+      "size": 4685,
+      "sha256": "15188a12f606c41d7da1793ab8d402e46a55b12ddb064d9abb4b45d9055aace6",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-Rebuild.html",
+      "size": 3996,
+      "sha256": "0a3da8f1b3957706f36584cca17d4528f4d57a50822bbcd470478e0735ea8c3c",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-Touch.html",
+      "size": 3996,
+      "sha256": "eaa0f0a2f9b91d01dfc9a40004f49e3d851e9b4b3f086c788806c48edb8c9a82",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-TouchRecursive.html",
+      "size": 4042,
+      "sha256": "d8d69003af7d232e1437da7aeadc5d0f3117ef67c61274b337b5f624c45f7e5c",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-TouchRecursiveUsingProject.html",
+      "size": 5129,
+      "sha256": "74503ceb58f9efbc4308fe20e032e1f696249626634ac00ef6daffa77150899d",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-TouchUsingProject.html",
+      "size": 5083,
+      "sha256": "a622d13b8321b6dd14454d4e3f59549a3ed18498669592e855d9ea7ebf278874",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-TransferFiles.html",
+      "size": 4786,
+      "sha256": "9991cf759c7b8ef7f5670eb2dd6da0ad9596c0584eb07dc24eb37b87a5792f00",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-WriteAsam2MCToFile.html",
+      "size": 4638,
+      "sha256": "6c3cc5fae650537499d0be8dfc8b5b1e23946a226ba19e3ab9686e2ba857a28b",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-WriteAsam2MCToPath.html",
+      "size": 4672,
+      "sha256": "d0c52cdc6ea54eef3935a6e5092605914336e83d6b300523136bdffc670213f5",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface-WriteProjectProperties.html",
+      "size": 4554,
+      "sha256": "ba3a1dc075f9af70ff0e826b3cac3afcd3f9d90906841b5a17b8a10189b33a29",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Build-Interface.html",
+      "size": 15763,
+      "sha256": "c412311981a834a6234e9f56ad299589be9daa5e3b5b4f82e3e49be54bfa8160",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Editor-Interface-AscetLink.html",
+      "size": 3219,
+      "sha256": "a52e4e915d481e1eb99a1b3f66a410355f4cad446f9dbb9cc4f8a470bf484c64",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Editor-Interface-CloseComponentEditor.html",
+      "size": 3885,
+      "sha256": "d9c0a5da001ffee406e6315722528a8e11f5405f8ff8f3f41c96b66e6f2cabd7",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Editor-Interface-CloseComponentEditorForElement.html",
+      "size": 5038,
+      "sha256": "4cae22465d82b52c35b0a1707329b580bbdba1dc52d2b4c8df5bf38c7ea3bf00",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Editor-Interface-CloseEditorForElement.html",
+      "size": 4827,
+      "sha256": "e1bb5520a64f6ea2af2148b27234ad2c45199cc3d544b7d4e05aff172c8697cf",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Editor-Interface-CloseMessageDialog.html",
+      "size": 2187,
+      "sha256": "3f5e3f94a89e72bc680f4e96e34bfd560a3ae138ff70fe99d218e41e3d66929f",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Editor-Interface-DetectUnusedElements.html",
+      "size": 4990,
+      "sha256": "4701e0f93d84616b8ffbe3f35cc68c104cc09be61c2c94fa6f50b6b203b0445f",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Editor-Interface-DetectUnusedElementsInProject.html",
+      "size": 3590,
+      "sha256": "4481ffa574caf2829da48b1aa55b3909e12b75642d7bcfec4dbb986c939090d2",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Editor-Interface-GetLastErrorNumber.html",
+      "size": 2125,
+      "sha256": "c434bbdbcc064247badc6bb3ac5dcc93d027e01b1751a3cf130b680445fa38f5",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Editor-Interface-GetLastErrorText.html",
+      "size": 2116,
+      "sha256": "ebed2734a6a51b2ded39e65ab5b569ef59af7467d62d862fdcad97b7bacfb4c7",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Editor-Interface-OpenComponentEditor.html",
+      "size": 4045,
+      "sha256": "8d705eeb62678950dc513ba0e88885f6c830e7cdc8353a9026f4732b505d7cb9",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Editor-Interface-OpenComponentEditorForElement.html",
+      "size": 5270,
+      "sha256": "2f28c5339895f03fab0b1c42587aa9f7a9c2d1b2113992938d3614f390265bbd",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Editor-Interface-OpenDataEditorForElement.html",
+      "size": 5350,
+      "sha256": "b9adeed06a93fb4d1b8285f075ec4373a4da0da2396517a979a903233e4f355b",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Editor-Interface-OpenImplementationEditorForElement.html",
+      "size": 5421,
+      "sha256": "5bddb8af305504a0cc14847302dfc1601c504adc87f5f6fe34645ca889550ec0",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Editor-Interface-OpenMessageDialog.html",
+      "size": 3485,
+      "sha256": "84ae9a98d2378d1f06e4f26ed57c115f78edefbc822cc45585e722eb9455c416",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Editor-Interface-OpenPropertyEditorForElement.html",
+      "size": 5378,
+      "sha256": "4518d805921f98ebddf83cdd180de2b4d19f6e6eb74b8ed929a795662ffa7b56",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Editor-Interface-SelectComponent.html",
+      "size": 3784,
+      "sha256": "f5ab34be1f8102c976f9ada6649441d13435a18bbf315ea3caedf04ba312fd21",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Editor-Interface-WriteAllProjectFiles.html",
+      "size": 3893,
+      "sha256": "4c15a834c3c9207ae37a2510244f22b07cadf2cfc82e718d4d0de2feaa9c721f",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Editor-Interface.html",
+      "size": 12014,
+      "sha256": "3a431ac742e558d275638bf86f7161a6c62983a6042a103f901158b11e3fb456",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-CloseExperiment.html",
+      "size": 2380,
+      "sha256": "5e96c28f1df459f9daf5abab282fa016eed2f9a45bcdcb9442fb5830a852b487",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-CloseMessageDialog.html",
+      "size": 2187,
+      "sha256": "3f5e3f94a89e72bc680f4e96e34bfd560a3ae138ff70fe99d218e41e3d66929f",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-GetLastErrorNumber.html",
+      "size": 2125,
+      "sha256": "c434bbdbcc064247badc6bb3ac5dcc93d027e01b1751a3cf130b680445fa38f5",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-GetLastErrorText.html",
+      "size": 2116,
+      "sha256": "ebed2734a6a51b2ded39e65ab5b569ef59af7467d62d862fdcad97b7bacfb4c7",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-IsExperimentOpen.html",
+      "size": 2215,
+      "sha256": "ebad8fdb153534bc17053048d93654dc4498a96da3ba3fbba1e9f38df57958de",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-LoadParameters.html",
+      "size": 3489,
+      "sha256": "0720f317ae773e6723af56d70b52de6660f26cbebcc663aedcf7d4616c2884be",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-OpenExperiment.html",
+      "size": 5302,
+      "sha256": "60656e85cadec6071bb752171f1ff8caf38bd35e6f9b523f88d6ce33ac523c22",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-OpenExperimentConfiguration.html",
+      "size": 3571,
+      "sha256": "cea84952724e6987bb7cd5fe0c56cd2e69f784265528ce79eff1405a556a594f",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-OpenMessageDialog.html",
+      "size": 3485,
+      "sha256": "84ae9a98d2378d1f06e4f26ed57c115f78edefbc822cc45585e722eb9455c416",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-PauseExperiment.html",
+      "size": 2442,
+      "sha256": "048c53cc434114755ce9364efe28e3832e90ac9f3ff8ddb97ada9b08072998a7",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-ReadHexScalarValue.html",
+      "size": 4065,
+      "sha256": "f25b02334fc197715d55b1b14f1d8e5baf24878e7ea89e5b7f70852583efba1d",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-ReadPhysicalScalarValue.html",
+      "size": 4073,
+      "sha256": "163a0d1c5b54d9bd3787913cc3e53da93243f46c11d233cf23217c519a2c8d1f",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-ReconnectExperiment.html",
+      "size": 5767,
+      "sha256": "66fd58f5cc0c9f04ca35bf29a15369063ddd7eef3dfc76b1530782589a5af76f",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-ReinitializeParameters.html",
+      "size": 2470,
+      "sha256": "a97101b19035f76f0af28a7fea5a387c1ed5f4766a2f9e094b24dcdc4b80c979",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-ReinitializeVariables.html",
+      "size": 2465,
+      "sha256": "6b2514e8395a811a8e761ffc644100a23895287b9069d92e181c51a6d4c3f687",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-SaveParameters.html",
+      "size": 3477,
+      "sha256": "673ec1d983bfa0d1fa30a1cc4584685658a302524db8834a6c39c673b620bfeb",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-SetDataLoggerFile.html",
+      "size": 3363,
+      "sha256": "112576576b813e68ffaab552f2676e24fc801aabd324bcedf6c9039a4ffc9801",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-SetStepMode.html",
+      "size": 4363,
+      "sha256": "315c17055b4384d9da22e1084ad2591b60939889d94f698e3959de89992e09f0",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-StartDataLogging.html",
+      "size": 2464,
+      "sha256": "297dcfe3031e0fdabadd989509699092bbf35d2bafa79af56c10e27dfcb81ecc",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-StartExperiment.html",
+      "size": 2605,
+      "sha256": "52dc966a0cf2572abdb50798c181d24dba392e6f79cec0731e632798b9a434c5",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-StartMeasurement.html",
+      "size": 2441,
+      "sha256": "9fb08734adb83cd4aa829858ee25203ed22d007c36b44a80757c98af72e9d6a0",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-StartOperatingSystem.html",
+      "size": 2469,
+      "sha256": "92d9481a211deca59ab17f72372962b67500d67df6c68e11e235cd92121ae83c",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-StepExperiment.html",
+      "size": 2742,
+      "sha256": "11ba3e840a237abfdaf22d69354b1da249eda4511f1938d569e2c18de4c2ad78",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-StopDataLogging.html",
+      "size": 2448,
+      "sha256": "4503b22e56a52ec90dc3b896b94a2cb37a5f40a2831d81368a35d737f6dbe520",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-StopExperiment.html",
+      "size": 2409,
+      "sha256": "da31b8c435c841ce27dc138c5ed5c15f7f1ef24ad818cf9b4c60054be6deefd1",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-StopMeasurement.html",
+      "size": 2372,
+      "sha256": "4cfcbfd01bbdebcf6f836f57ff6628131af783f412e4bbab8354fe4c82ec6f5c",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-StopOperatingSystem.html",
+      "size": 2461,
+      "sha256": "32540a8b4b85ed7ca7842330fb1b2265aa6e38e739d2eb7ac18a23161f85638d",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-UpdateDependentParameters.html",
+      "size": 2486,
+      "sha256": "34ec559ee1995f7af1166845dca6e5359c0c51e0e8d455c22f202184fe76b5a1",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-WriteHexScalarValue.html",
+      "size": 4397,
+      "sha256": "d93730d60bb4bea7f2ecca173723578def0de041168a7fd70d8b9f2e47d84fd1",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-WritePhysicalScalarValue.html",
+      "size": 4405,
+      "sha256": "427b8b41039f19401cb802f59a516c12ad562ca8fb2338d8749c4e219268337e",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface-WriteTargetDebuggerContentsToFile.html",
+      "size": 3653,
+      "sha256": "8ecfb4023e4ff8664bf9216f7c7db9a22b681c829155e42fb66dc3746a91fe1e",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Experiment-Interface.html",
+      "size": 18839,
+      "sha256": "c21e261362c3daee6908a0fdf59ddca15f4df6fa455d59bdad2f7e81f3ed9894",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-About.html",
+      "size": 2086,
+      "sha256": "7627ed229e727c190f092a1dc8fa59c6eeff3badcf2d8f7a6b6fbbd4940d8bab",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-ActivateNoSaveMode.html",
+      "size": 2317,
+      "sha256": "d84b7a7e6de8d1b21606439c454e9c45871a40f2615d4d2948b159b3b145730b",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-ApiVersion.html",
+      "size": 2135,
+      "sha256": "45399b78a07509e4686a9dfeaa8cfba88c4229962cca386ffae5c480f647e9ef",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-ClearMonitorContents.html",
+      "size": 2141,
+      "sha256": "0d703538384f8c903ff52a23721bfb1041f2ba56d55c6fc95244df8cb12dc4a6",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-CloseCurrentDatabase.html",
+      "size": 2285,
+      "sha256": "896ad8c161b5a0bf580b863e3b16d73259aa7b7e1f5b9412d0831ead2c79b53f",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-CloseDataStorage.html",
+      "size": 2330,
+      "sha256": "fb163ae33c74d93919b75a95203f826c5a032c4867628cf42202d694485ae3a8",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-CloseMessageDialog.html",
+      "size": 2187,
+      "sha256": "3f5e3f94a89e72bc680f4e96e34bfd560a3ae138ff70fe99d218e41e3d66929f",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-ConvertDatabaseToWorkspace.html",
+      "size": 4546,
+      "sha256": "8b6c6c845125585656678c21a56b398d15ab63b403e2d8a5b7472f94b4dabc7f",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-CreateDatabase.html",
+      "size": 4182,
+      "sha256": "efab901a343ed6993175c2b3ab01384225169ba6bed0473707a1deb34eeed63b",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-CreateWorkspace.html",
+      "size": 4658,
+      "sha256": "9624a1f0dc557e3b339007d3dbc9e618ecf502e8f2eea589794a45cd0c864426",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-DatabasePath.html",
+      "size": 2221,
+      "sha256": "dd1fb188d64a5d63b6c0af3b620287bf894466b390362fd075ba2476456896fc",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-DataStoragePath.html",
+      "size": 2259,
+      "sha256": "10d8b51bfd5fd3c238cfedb1e721f140d11c58fbf66c182fd5c4652494a134e9",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-ExportBuildMessagesAsXMLToFile.html",
+      "size": 3281,
+      "sha256": "25cf4b1093051d362078a3bc1a27f6f61586e321df94264548c0209da8b450bc",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-ExportItemToPath.html",
+      "size": 4579,
+      "sha256": "925414e5808dc2d95dd9b4c0de7ce7a30b5daa89711bd8139ac7db579bfe160b",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-ExportItemToPathWithOptions.html",
+      "size": 5325,
+      "sha256": "b0dc10b6fb7381b7e013b65f66b15ac128cf7d5a9d854179369c057fdc99ab7f",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-ExportItemToZipFile.html",
+      "size": 4416,
+      "sha256": "d58e847b602dd0dcd579dc24827944d9ec7e7b10371e1afe3800a3161e44ef7b",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-ExportItemToZipFileWithOptions.html",
+      "size": 5292,
+      "sha256": "2975c6456f0f2d47f098d940d1ab72d55fb2a8105b4b8faa4d1af1dbd01b183d",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-ExportItemWithReferencesToPath.html",
+      "size": 4609,
+      "sha256": "b18877636feb5a9108ec0c39d7ace85ee07d68e541c34a641c2768b381fb45b5",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-ExportItemWithReferencesToZipFile.html",
+      "size": 4499,
+      "sha256": "4af4c019dccf0422ec9cbc37f0c2493f4756ceed8006627ece7796456719e1d8",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-ExportMappingForComponentToFile.html",
+      "size": 4519,
+      "sha256": "6cde7d5509d12a88c8e23b73c2f12933884da0104da5227fb03b18a510f516fc",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-exportMappingForSoftwareComponent_toFile.html",
+      "size": 3949,
+      "sha256": "b050912eb5ab4188f990ca9a57e7699ea70681d2e9293d3336f3f709bdb99adc",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-FlashTarget.html",
+      "size": 4386,
+      "sha256": "fc6e8354bd8ca1bab553ef2d4285f33d1b5ff87e8a2eb8738688fa5309893257",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-GetLastErrorNumber.html",
+      "size": 2125,
+      "sha256": "c434bbdbcc064247badc6bb3ac5dcc93d027e01b1751a3cf130b680445fa38f5",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-GetLastErrorText.html",
+      "size": 2116,
+      "sha256": "ebed2734a6a51b2ded39e65ab5b569ef59af7467d62d862fdcad97b7bacfb4c7",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-GetProcessId.html",
+      "size": 2127,
+      "sha256": "a41ba30cd5a5bf824c365cc6fea823c92c716db7522517d36daab14e2fdda5d3",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-ImportFromFile.html",
+      "size": 3791,
+      "sha256": "a0ed33aa7e17854f4e4a4589c77327fd485258110531aa150e54055e607341a3",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-ImportFromPath.html",
+      "size": 3741,
+      "sha256": "7871bb8e1b45ed6ecfb614865a4fbee2c9e700e5c3013de8d77df8f8d885e9df",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-ImportFromZipFile.html",
+      "size": 3811,
+      "sha256": "50e70d01705311f8ef687d46bac552dbfe825519e6d3b4027665c0405cd3ac26",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-ImportMappingForComponentFromFile.html",
+      "size": 4526,
+      "sha256": "53287615d9aee4c7f444111df1a19eefc00b742e1af17ff055dcf5d737149531",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-importMappingForSoftwareComponent_fromFile.html",
+      "size": 3932,
+      "sha256": "ed7f6478961c98fdc795495300f6853f5e96304b6639ddff445c1efd64f97b8e",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-ImportWithReferencesFromFile.html",
+      "size": 4064,
+      "sha256": "753d9b9f75f3616081aa5f1327c1e2a8af6293c3e8e900f7f0d7bdde7fe8acae",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-ImportWithReferencesFromPath.html",
+      "size": 3963,
+      "sha256": "026182116436f7913a51576311c0a38f482d05eee689ffc37352090524bd08a1",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-OpenAndConvertDatabase.html",
+      "size": 4013,
+      "sha256": "976ca9d47849ad11a61046ae86d882c0120714cb0b95c37618a7a101b5a0605a",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-OpenDatabase.html",
+      "size": 3686,
+      "sha256": "2b67cc5f27716417dbf08994d8c90ccdd5b0d8e379ebee4a6aa31686e6abeb12",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-OpenMessageDialog.html",
+      "size": 3485,
+      "sha256": "84ae9a98d2378d1f06e4f26ed57c115f78edefbc822cc45585e722eb9455c416",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-OpenWorkspace.html",
+      "size": 3611,
+      "sha256": "a3af7d78b5d287f1fbff7d20c2295be0e9dd1bc0833d4368a0dfa7eece67bc19",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-Ping.html",
+      "size": 2127,
+      "sha256": "5050397b057568c0dffc4f730260396c8a6ab9761da21822dc43f66688de9805",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-ReadToolOptions.html",
+      "size": 3510,
+      "sha256": "5367715187b8a869f664f44ed46ba3ee65066669514680a6bc6e85d52a0802b8",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-SearchForHardware.html",
+      "size": 2463,
+      "sha256": "83f842f6eb0874aa1f279ed53c8a7f7824d3644b6d58519664878c72c8674cc3",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-SelectHardwareForProject.html",
+      "size": 4469,
+      "sha256": "b5cb3db3c158d77d83dc903477d83241f4ce57d0c090f1178bfcbc4b9b9fe258",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-Shutdown.html",
+      "size": 2264,
+      "sha256": "5caf919d40367518d7c96384265a27f187e0b9ad4b5deda86e43fe1efb702a72",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-SwitchLoggingOff.html",
+      "size": 2149,
+      "sha256": "da9e0bbc99cdde2b39c546b595db2cca8f11d82b3f9848f758a4c439d4b41516",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-SwitchLoggingOn.html",
+      "size": 2117,
+      "sha256": "cffd7b8bcc06ae9b2505bb5e403b5adaa6f786f746dc63693cf29bb9c8052a5e",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-ToolVersion.html",
+      "size": 2137,
+      "sha256": "b0fb113d14053dc19b893188a8e044f2ba53f1c84345544d0d6131d1afa4fcd6",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-WriteMonitorContentsToPath.html",
+      "size": 3537,
+      "sha256": "9757889f4417e4ce5f6dedbe8a5f0d005e24877fcfdfef8ad6c9285770a275f8",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-WriteTextToMonitor.html",
+      "size": 2983,
+      "sha256": "82d2559827333906d2f046bf978d709612387ef4d0f278bc0c93e17da25e9f82",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface-WriteToolOptions.html",
+      "size": 3378,
+      "sha256": "84fdc61ad1923da6453f26074c29ebada841a148989bbd0cea533a858f9230c0",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "ME-ASCET_Automation_API_Tool-Interface.html",
+      "size": 26545,
+      "sha256": "16a8d7d44062bcecfa59aca4e1885189f7ddc4aa8524aa570435ba7405d556f9",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "Overview.html",
+      "size": 3391,
+      "sha256": "1f4992f909e9c1c725a2cbff4c0c0cf235277ab5321ab97aea3b319a959af693",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "Page.gif",
+      "size": 915,
+      "sha256": "f0131984662ef17dcd6365b01aaf89f0b5d6430fafcedf4d29a8084e80d13cfa",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "PrimaryKeyPrint.png",
+      "size": 919,
+      "sha256": "f326435985f05d4c8a8288da6b0dcfaeee35eeeaa347ae8072f2fe42b5ca7fde",
+      "extension": ".png"
+    },
+    {
+      "relative_path": "PrimaryKeyScreen.gif",
+      "size": 856,
+      "sha256": "7cdd3b08274e7fa1e9cadb9ed4f676ba10d7c4a5963b3a92703cfc18299b89b3",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "SequencePrint.png",
+      "size": 12707,
+      "sha256": "3b252f29d8ddcf065ce6850840db2a5dd1bdaec20487ec2a42c1a6130856dab8",
+      "extension": ".png"
+    },
+    {
+      "relative_path": "SequenceScreen.gif",
+      "size": 1024,
+      "sha256": "33f1d9f80a09d4e2c72b5bb578d904d774b6f5a7d02a55943d983ee0811bd3b0",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "techwriter.hhc",
+      "size": 33047,
+      "sha256": "a1af2a75118d8eb3bba1ad78ff5a3b1c49127246df9eed0de20edc8697089d96",
+      "extension": ".hhc"
+    },
+    {
+      "relative_path": "techwriter.hhk",
+      "size": 31876,
+      "sha256": "624b3e3866d09df9e5868d15c9187418add9033ae1ae372f4ee4a66a6bea72e8",
+      "extension": ".hhk"
+    },
+    {
+      "relative_path": "TopTab.gif",
+      "size": 1016,
+      "sha256": "86b82a3cecdd5d4318f297c76cbafb817ba5a3a3d0c18cd7d5a17f274de0fe04",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "watermark.png",
+      "size": 8105,
+      "sha256": "c4891951bc71794cf29a1fc60f7d858f5c1bc27e854412f3adbbe7bfe81ce149",
+      "extension": ".png"
+    },
+    {
+      "relative_path": "WS-ASCET_Automation_API_Build-Interface.html",
+      "size": 2101,
+      "sha256": "8a99c8c84d36896e20a8aeb284de9f45a1f7dac659135cd46e236f8ba30726d9",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "WS-ASCET_Automation_API_Editor-Interface.html",
+      "size": 2131,
+      "sha256": "39edea045f616ea7c35dc05305b8d8f930acd02c62204232e7cb8661400fa57d",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "WS-ASCET_Automation_API_Experiment-Interface.html",
+      "size": 2134,
+      "sha256": "7e7ab6f018e6429375a03c30c676abb757c3972c8929371b223af5ccdf1e09a6",
+      "extension": ".html"
+    },
+    {
+      "relative_path": "WS-ASCET_Automation_API_Tool-Interface.html",
+      "size": 2109,
+      "sha256": "0141982d7d32614a0ac308504bc8bb43b64dd4a22ddfb18321b30b8fe02c2923",
+      "extension": ".html"
+    }
+  ]
+}

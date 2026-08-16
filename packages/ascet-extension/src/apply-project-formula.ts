@@ -26,7 +26,7 @@ export const ascetApplyProjectFormulaParameters = Type.Object({
 	specFile: Type.String({ description: "Path to project formula spec JSON file.", minLength: 1 }),
 	mode: Type.Optional(Type.Literal("restore")),
 	deleteMissing: Type.Optional(Type.Boolean()),
-	executeWrite: Type.Optional(Type.Boolean({ description: "When true, PI still requires interactive confirmation." })),
+	intent: Type.Union([Type.Literal("preview"), Type.Literal("apply")]),
 });
 
 export function buildApplyProjectFormulaArgs(params: AscetApplyProjectFormulaParams): string[] {

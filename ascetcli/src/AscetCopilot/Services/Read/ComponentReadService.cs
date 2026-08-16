@@ -162,14 +162,7 @@ public sealed class ComponentReadService
                 throw new AscetReadException("database_not_open", "component_catalog_read", "GetCurrentDataBase returned null. Open a database in ASCET first.");
             }
 
-            AscetDatabaseRef databaseRef = new AscetDatabaseRef();
-            databaseRef.Name = database.GetName();
-
-            Ascet tool = session.GetToolHandle();
-            if (tool != null)
-            {
-                databaseRef.Path = tool.GetDataBasePath();
-            }
+            AscetDatabaseRef databaseRef = AscetDatabaseIdentityResolver.Resolve(database, session.GetToolHandle());
 
             return ReadBoundDatabase(request, database, databaseRef);
         }
@@ -721,6 +714,9 @@ public sealed class ComponentReadService
         AscetDatabaseRef clone = new AscetDatabaseRef();
         clone.Name = databaseRef.Name;
         clone.Path = databaseRef.Path;
+        clone.CanonicalPath = databaseRef.CanonicalPath;
+        clone.IdentityStatus = databaseRef.IdentityStatus;
+        clone.IdentityIssues = databaseRef.IdentityIssues == null ? null : new List<string>(databaseRef.IdentityIssues);
         return clone;
     }
 

@@ -1,0 +1,1647 @@
+{
+  "generated_at": "2026-04-01T03:07:19.124177Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\ASCET_SCMEnglishUS.chm",
+  "unpack_dir": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ASCET_SCMEnglishUS\\unpacked",
+  "total_files": 271,
+  "total_size_bytes": 1950033,
+  "counts_by_extension": {
+    ".hhc": 1,
+    ".hhk": 1,
+    ".xml": 5,
+    ".jpg": 20,
+    ".gif": 91,
+    ".png": 4,
+    ".js": 13,
+    ".htm": 132,
+    ".bmp": 1,
+    ".css": 3
+  },
+  "files": [
+    {
+      "relative_path": "_Temp.hhc",
+      "size": 30656,
+      "sha256": "c77dd1cc3384b4a201787620470f46c5812f2fa7067ae623c17a1c1899a73c3d",
+      "extension": ".hhc"
+    },
+    {
+      "relative_path": "_Temp.hhk",
+      "size": 35188,
+      "sha256": "4353616f6670c864f41571c23ed46df5842840e39ccd9c87836321e2a2aef51f",
+      "extension": ".hhk"
+    },
+    {
+      "relative_path": "ASCET_SCMEnglishUS.xml",
+      "size": 457,
+      "sha256": "45089df5ce4123f0ea387c5a1e7c9f4184636eb04ed3c78405de3cdff48dc984",
+      "extension": ".xml"
+    },
+    {
+      "relative_path": "Data/Alias.xml",
+      "size": 3757,
+      "sha256": "766745bb5fcb1b64cb78d1d6b8f2ace64c7331d4a6d897002e9d830f7e7dea57",
+      "extension": ".xml"
+    },
+    {
+      "relative_path": "Data/HelpSystem.xml",
+      "size": 457,
+      "sha256": "45089df5ce4123f0ea387c5a1e7c9f4184636eb04ed3c78405de3cdff48dc984",
+      "extension": ".xml"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/AccordionIconsBackground.jpg",
+      "size": 349,
+      "sha256": "0ba32242ea5334772a2cdb59fc1a3fea4e040231012a765b703458b54c0a507a",
+      "extension": ".jpg"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/AddComment.gif",
+      "size": 333,
+      "sha256": "8efa4ba14c894b27f05c3619c0df09c70b935d85345d5a85e122521a4e689fee",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/AddComment_over.gif",
+      "size": 429,
+      "sha256": "b4d79b4be8ab71ad82bbe526483a8797fcf4beeb3d574f837753d1aaf714752d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/AddComment_selected.gif",
+      "size": 438,
+      "sha256": "e0ea4f36c2eb02994eaf6b078a6c484860dc018e828c8839888c80d696b4278f",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/AddSearchToFavorites.gif",
+      "size": 352,
+      "sha256": "3f5ba9c73160671a51a0495c25ab6a3bbecf0147843dbca2d40129eabc187d4e",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/AddSearchToFavorites_over.gif",
+      "size": 458,
+      "sha256": "ca04af267d264397eeb4bc2fd7a6bf2d1dfee0bbacfc5872f57fe155ad4ebefc",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/AddSearchToFavorites_selected.gif",
+      "size": 476,
+      "sha256": "d6b2531df0865226e65198a17515b82ec4edd634d93a5bbc4d999dbe23a36f0e",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/Book.gif",
+      "size": 123,
+      "sha256": "48fa3ba8154075e041ffa0e8a43703c58522adbfcf6827e3ab65f5e549685d89",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/BookOpen.gif",
+      "size": 187,
+      "sha256": "99d8aa124b7513a638d8511e1e08690dbc835dd3c37c67553cefd1c6323a5d0b",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/BrowsesequencesAccordionBackground.jpg",
+      "size": 349,
+      "sha256": "0ba32242ea5334772a2cdb59fc1a3fea4e040231012a765b703458b54c0a507a",
+      "extension": ".jpg"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/BrowsesequencesAccordionBackground_over.jpg",
+      "size": 386,
+      "sha256": "31f1087e4f63ef4868f1ad3a22aadc34b2e2dae681b177aa495336e9c64f06b3",
+      "extension": ".jpg"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/BrowsesequencesIcon.gif",
+      "size": 214,
+      "sha256": "d0f7d789e25c0c9341d87c40cadd8ba217d41653b7285aa96f157d55422309a0",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/Comment.gif",
+      "size": 197,
+      "sha256": "d5a3d9cd4111954ffe132eb831a42ca3645010e9c8a88ba8aaa277e49d6ef5e5",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/CommentReply.gif",
+      "size": 326,
+      "sha256": "351b77e1d829f188da2b5fd4a09468ca2e2056136915788fa60c27bb5414ceb2",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/CommunityAccordionBackground.jpg",
+      "size": 349,
+      "sha256": "0ba32242ea5334772a2cdb59fc1a3fea4e040231012a765b703458b54c0a507a",
+      "extension": ".jpg"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/CommunityAccordionBackground_over.jpg",
+      "size": 386,
+      "sha256": "31f1087e4f63ef4868f1ad3a22aadc34b2e2dae681b177aa495336e9c64f06b3",
+      "extension": ".jpg"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/CommunityIcon.gif",
+      "size": 947,
+      "sha256": "c77d7178718228a595ccf7bdaf8bc6ee83d4fb7825209dafbf859eb272af3a98",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/Delete.gif",
+      "size": 212,
+      "sha256": "f8344694d53e7fe9204fa38fd133c7b2f6a8424cc31c27650611af9bb26db4d0",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/Delete_over.gif",
+      "size": 424,
+      "sha256": "53a17cf3cd3f6a2f2ba74247906f39547f94c961492ea1463cbebc55763f260d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/Delete_selected.gif",
+      "size": 450,
+      "sha256": "d6e4360b3377836f0f9cf58bb6fa1eeff703c5f60ac59e5825fdb9683d588c4d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/FavoritesAccordionBackground.jpg",
+      "size": 349,
+      "sha256": "0ba32242ea5334772a2cdb59fc1a3fea4e040231012a765b703458b54c0a507a",
+      "extension": ".jpg"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/FavoritesAccordionBackground_over.jpg",
+      "size": 386,
+      "sha256": "31f1087e4f63ef4868f1ad3a22aadc34b2e2dae681b177aa495336e9c64f06b3",
+      "extension": ".jpg"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/FavoritesIcon.gif",
+      "size": 220,
+      "sha256": "cbed2f11c889637b892ca49834e53b2b803fba7b19d33d9d70abee1ecaff6237",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/GlossaryAccordionBackground.jpg",
+      "size": 349,
+      "sha256": "0ba32242ea5334772a2cdb59fc1a3fea4e040231012a765b703458b54c0a507a",
+      "extension": ".jpg"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/GlossaryAccordionBackground_over.jpg",
+      "size": 386,
+      "sha256": "31f1087e4f63ef4868f1ad3a22aadc34b2e2dae681b177aa495336e9c64f06b3",
+      "extension": ".jpg"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/GlossaryIcon.gif",
+      "size": 345,
+      "sha256": "74f1e42eda567f6e00176547375a494469f89f21f3111825ae1cd31c01182072",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/header.png",
+      "size": 1542,
+      "sha256": "129a1df0296c8e04aab8825742115694b8679bffa324598e443e11edb519ca64",
+      "extension": ".png"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/IndexAccordionBackground.jpg",
+      "size": 349,
+      "sha256": "0ba32242ea5334772a2cdb59fc1a3fea4e040231012a765b703458b54c0a507a",
+      "extension": ".jpg"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/IndexAccordionBackground_over.jpg",
+      "size": 386,
+      "sha256": "31f1087e4f63ef4868f1ad3a22aadc34b2e2dae681b177aa495336e9c64f06b3",
+      "extension": ".jpg"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/IndexHeadingBG.png",
+      "size": 990,
+      "sha256": "3cbdea236dfaf896716386b5660a5139f20efa5b6a257fe97fd12c9f9503afcd",
+      "extension": ".png"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/IndexIcon.gif",
+      "size": 340,
+      "sha256": "2683157a2d989068d886d92e9adf7b6c5222f7d2f3cd5b13d45ddc7c79dd49d4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/NavigationBottomGradient.jpg",
+      "size": 314,
+      "sha256": "0299355363d6d63e754bf3f9bcdce156621c8dd723605d535e4916ed72e512b4",
+      "extension": ".jpg"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/NavigationBottomGradient_selected.jpg",
+      "size": 337,
+      "sha256": "f3d4093605fc2c58008c1279c6eb6c0f0393f45ee03822d4954ab7dd8e623702",
+      "extension": ".jpg"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/NavigationTopGradient.jpg",
+      "size": 317,
+      "sha256": "c0d049b099a52611c5a54636436415a1c864f507b539459d1c4f8964f5a770b5",
+      "extension": ".jpg"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/RefreshTopicComments.gif",
+      "size": 951,
+      "sha256": "5061eae65f6b63d13330e243dde7dc524a5f9e5725d379870f9b91ba306e6147",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/RefreshTopicComments_over.gif",
+      "size": 1057,
+      "sha256": "34decb632375bee535885ce301024da4b12aed5f84b7c03aaa39ae86fea423ef",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/RefreshTopicComments_selected.gif",
+      "size": 1065,
+      "sha256": "8970a101375d618d6985f3a4c8da66477aa37731797de38b197b6f80c4436eb7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/ReplyComment.gif",
+      "size": 336,
+      "sha256": "a33968dc3b2f72d0929aa5f0a7e47cdc828888bf8ae674e9af3d37a76f70acb3",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/ReplyComment_over.gif",
+      "size": 643,
+      "sha256": "b0000ad90f8a16e908b274f6036c17af0eeff8d611e3fc1b8706085baf6eac27",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/ReplyComment_selected.gif",
+      "size": 651,
+      "sha256": "e3447e21633d92db8185d0a06c3afca17df89216b424ab37372490279df29655",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/SearchAccordionBackground.jpg",
+      "size": 349,
+      "sha256": "0ba32242ea5334772a2cdb59fc1a3fea4e040231012a765b703458b54c0a507a",
+      "extension": ".jpg"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/SearchAccordionBackground_over.jpg",
+      "size": 386,
+      "sha256": "31f1087e4f63ef4868f1ad3a22aadc34b2e2dae681b177aa495336e9c64f06b3",
+      "extension": ".jpg"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/SearchBG.png",
+      "size": 1001,
+      "sha256": "c58b6ca60d1f8a045a7b31a2997e32b40e5ca61860ea5bc310d79d501458ce4a",
+      "extension": ".png"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/SearchIcon.gif",
+      "size": 219,
+      "sha256": "1fec6d9fc5ab87ce04776354779195ab7aa15f24f56376c3bb13258b4add06a6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/Skin.xml",
+      "size": 720,
+      "sha256": "74eefd95c9eb3521668d484193452143e374b7bafc1f000fa2b2dec5d605ca16",
+      "extension": ".xml"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/Stylesheet.xml",
+      "size": 42712,
+      "sha256": "0c0bdeedeae5a90b3e775db693847809a6cec8941d14ef4d8d5ad88ce85b0951",
+      "extension": ".xml"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/TocAccordionBackground.jpg",
+      "size": 349,
+      "sha256": "0ba32242ea5334772a2cdb59fc1a3fea4e040231012a765b703458b54c0a507a",
+      "extension": ".jpg"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/TocAccordionBackground_over.jpg",
+      "size": 386,
+      "sha256": "31f1087e4f63ef4868f1ad3a22aadc34b2e2dae681b177aa495336e9c64f06b3",
+      "extension": ".jpg"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/TocIcon.gif",
+      "size": 123,
+      "sha256": "48fa3ba8154075e041ffa0e8a43703c58522adbfcf6827e3ab65f5e549685d89",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/ToolbarBackground.jpg",
+      "size": 349,
+      "sha256": "0ba32242ea5334772a2cdb59fc1a3fea4e040231012a765b703458b54c0a507a",
+      "extension": ".jpg"
+    },
+    {
+      "relative_path": "Data/SkinNewWindow/Topic.gif",
+      "size": 340,
+      "sha256": "143914da2f997033c78eab0ea901423830598ea75c35ef619fc6a8058d9a33d6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "ehlpdhtm.js",
+      "size": 125637,
+      "sha256": "80832fd9ef23d18f98ac82b226c00492d9c949f4bef37899f532127980e3696f",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "Glossary.htm",
+      "size": 14139,
+      "sha256": "c5ffa393f05986dba4fe911d3346620abfa9ee910d03e4089883cbde90beb89d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "images/baby_down.jpg",
+      "size": 935,
+      "sha256": "068daa1916d2c128c25ae5d6066591b945f7afad3af788217e57e71025ff22a1",
+      "extension": ".jpg"
+    },
+    {
+      "relative_path": "images/button.bmp",
+      "size": 1222,
+      "sha256": "bda931b7210049d25bc4b394af2743c4e35b9bccb9958f923dad410136c87fdd",
+      "extension": ".bmp"
+    },
+    {
+      "relative_path": "images/button_addselection.gif",
+      "size": 1127,
+      "sha256": "55b8fa7d30a38e52be433e4c6d8561de3525bc70934b4afbb31da2072b538765",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/button_ASCEToptions.gif",
+      "size": 1817,
+      "sha256": "ed680591d0130bc8b5778fe74df85d32a5df6d4878d0efbb17928eaf13637f95",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/button_compare.gif",
+      "size": 1122,
+      "sha256": "74808accc4c3de59eb0ef286e63fc3c41582edd1f0dbc48ff12873ffe9a787bc",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/button_deselect.gif",
+      "size": 1124,
+      "sha256": "9cd5f0c4a55978c41921b1a936d623322c1f692d13bc7aa6191c0cf00dc3cde7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/button_deselect_26x26.gif",
+      "size": 1266,
+      "sha256": "28b42700ce1d0f1bb2fdf6aa8db0b00bdb177a07b80d66ea4899e1b216e3236b",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/button_dots.gif",
+      "size": 896,
+      "sha256": "42d1420408161ba58a5bc7fc8aeb1731ed80cf770e6b71c7aba579c7c58cc074",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/button_filterrepositorycontent.gif",
+      "size": 723,
+      "sha256": "124370cdebf983b4f45229274b475d82b8d66259fa91ec846227c6900a878fc8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/button_OpenRepo.gif",
+      "size": 1097,
+      "sha256": "eda49125fd9de56f0b4a0acc93c5828487b0cd9ceaac0e49ceab2996d5cb4f80",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/button_removeselection.gif",
+      "size": 1119,
+      "sha256": "a0de5f9a25e4621bf617d05af585594bbb253fef3b5c816c19b9848e8724d2d4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/button_select.gif",
+      "size": 1094,
+      "sha256": "a5a7286c345d6e8ef6f8ec3c40170a4a89ee2ed4f47a6ee81ddca3f6f8089701",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/button_select_26x26.gif",
+      "size": 1227,
+      "sha256": "38d65365b6abc0b2086ac635e4f80b758c0e58ef593b2d3482c73b74cb56d898",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/button_select_loupe.gif",
+      "size": 1169,
+      "sha256": "ec8e811e3d56bc4c67e71fc2a0627f6029841d42750019e281d4669130a8b1a7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/config_modified.gif",
+      "size": 1917,
+      "sha256": "6b35911791338575fb68fce6d4f426ab9ec76064b20a84d706f656e1bbda0682",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/example_menuconf_1.gif",
+      "size": 5616,
+      "sha256": "b1921be79fe8d64d3d1d09759f50484cae2ea6fc1360539716bcf9290c176253",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/example_menuconf_2.gif",
+      "size": 14639,
+      "sha256": "bb76139431f01e110dde3b0b9f0f90a8a4c6780afd6487a73932c5db76121358",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/example_menuconf_3.gif",
+      "size": 7527,
+      "sha256": "00dd4d2e84b6796f5962475aa0cee23ac6627c431f799b18ca0af34a4a5b9f2c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/example_menuconf_4.gif",
+      "size": 14874,
+      "sha256": "696b229f4062a4f56f04a0564c77834a72d83a02f408612e62a18c439df18352",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/example_menuconf_6.gif",
+      "size": 4453,
+      "sha256": "86a932217a95ae5bd850511a1cbb797b58e1c21f938beb1df032ec219c797b92",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exampleClearCase.gif",
+      "size": 8224,
+      "sha256": "8e9755af2e84fab39baedaf4046761e4ae2a367f13235fd9be1c651e8d1d51fc",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exampleMKS.gif",
+      "size": 9542,
+      "sha256": "96ed34af78b816e96d84d2b42fadbd75aa3e65bdc2433290640d0cbf23e59a47",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exampleOverview.gif",
+      "size": 5463,
+      "sha256": "0b8733efe4b40abca3f2f6aff8ddd23e8b7fc7607c9cff0e065ffc2c94c35da8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/examplePerforce1.gif",
+      "size": 9727,
+      "sha256": "25f590730824272a28ca17f46b6393046158c4aa4e438b7799867acf53e23f51",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/examplePerforce2a.gif",
+      "size": 61714,
+      "sha256": "297a5e31c2c0c6607fe196d0d69c2ceeecd4c6993fb6d423d410060a74aeed6d",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exampleSourceSafe1.gif",
+      "size": 9859,
+      "sha256": "b61e7326822523513c2fb265f2431369624cb403b6425d6a6688f1f3d6c835ab",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exampleSourceSafe2.gif",
+      "size": 13487,
+      "sha256": "45cfca2c7bb529673dc532e8f40de285a70e6deda309c01d8789e1c90199dca6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exampleSourceSafe3.gif",
+      "size": 14374,
+      "sha256": "2ba0e6d82bb3c3edbade26bf6c708d5fe3b916fb292e2a38873cba78e7c089ae",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exampleTFS1.gif",
+      "size": 9813,
+      "sha256": "92447110ffafdc8d02f52f911b614a80f7d59cedc331898f0123b26d1ab107f7",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/exampleTFS2.gif",
+      "size": 30020,
+      "sha256": "1494b354de4cbc7ad1925dfe3865ad0088784103bd38de96d6dade62f889feb8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/icon_connectRepository.gif",
+      "size": 977,
+      "sha256": "863cc1db56c34dc0b035b46d72df9121c95f0f0e77648f0cf21d3bdbfe1197a6",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/icon_editWithoutLock.gif",
+      "size": 975,
+      "sha256": "d3fcff188affdcb4e7775c0abcf34a063bf3896b342f431a0aaf7ce8f6ff027e",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/icon_lockConfig.gif",
+      "size": 907,
+      "sha256": "4334bd237a21d8555b0570d4851958176e8e26fdbdbbd863f394b0c14f3af27c",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/icon_project.gif",
+      "size": 1282,
+      "sha256": "514eb61e938c87536715fba41717bf8d514ffee5e8e411111c043a333db7b55f",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/icon_unlockConfig.gif",
+      "size": 902,
+      "sha256": "9d540358e64d9d493f0e95317525a126c1df57af0010cb3c429e12d6c546839b",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image15.gif",
+      "size": 990,
+      "sha256": "1290ca13c632301a6ec003ea2c71fded9002c1e4a98d4e4ef111f99fb9f25855",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image16.gif",
+      "size": 972,
+      "sha256": "cf6930f54a6ba09fc4f23cc3cf657d37b19d142ebc37c3f9aba32c7724782993",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image17.gif",
+      "size": 919,
+      "sha256": "088c9df242fbae6a63caf94277e2bf0dd4db1c502dfc766a480aa049293d6273",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image18.gif",
+      "size": 959,
+      "sha256": "1c4714238c63c039f074529217e444d0a47cd9a53d2077eeb94d7b3d37f162d3",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image19.gif",
+      "size": 960,
+      "sha256": "0009a02ef838d680c61f8bb93db26b3a3963eb8b527cf600418efade0950f589",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image2.gif",
+      "size": 1017,
+      "sha256": "09dc4db62dd720a5b4e80650ad63aa6c93ba8a59562bc7e2a7f2d97febaf685a",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image20.gif",
+      "size": 950,
+      "sha256": "1a77bfaf70ce2e82a4309914c9ed9ef41a2243e7dce18d27b5f6fa489aad93b3",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image21.gif",
+      "size": 1007,
+      "sha256": "ee4bb12eb90a4fa6799cb3f0823897b3028c07d19089ca5d4ac46a5d649f0579",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image22.gif",
+      "size": 891,
+      "sha256": "7ff018ce97f78fd5449d7eecee7fccbcb312f756557db3c62ad86a97cd810d20",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image23.gif",
+      "size": 891,
+      "sha256": "32c9247bc1e25a02bd8a6d6af73c2c14cddd7c6b7d3a0170897f52d3195418e5",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image24.gif",
+      "size": 891,
+      "sha256": "a6cb9b9fcb67221e0efd2bf47cf82545e8f48ac97135445b3392311b3dd0a252",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image24b.gif",
+      "size": 874,
+      "sha256": "154fd4448bbcc561d81428a6831e1de7f3216114b069c0bd456e19c337afa0f9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image25.gif",
+      "size": 896,
+      "sha256": "c95bf522058a5773e4a5cd4c75db06199fe6003d7aea3b90c875d855db21bfdf",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image26.gif",
+      "size": 889,
+      "sha256": "d24fffc85613fb8968a5c1f91aadd523fda90bd74f1a9cef114543ab0342a6a9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image27.gif",
+      "size": 894,
+      "sha256": "545fcc0711a45685229d72b9a46235e9bc8bba28910e6bec6b240986ef1a23e4",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image28.gif",
+      "size": 970,
+      "sha256": "a978a7998f85b3ede372489973bb975e7291d81f4d9207a4f7af23f2a54f0617",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image29.gif",
+      "size": 973,
+      "sha256": "73fa4449459ebd23d4dfccc1393b494215ef766161879386ae2c0c90d8d5910f",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image30.gif",
+      "size": 975,
+      "sha256": "7ca31701c987270b3f5bfc5b5f8679c9583356a495a44e7a99499c43f27a9c4b",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image31.gif",
+      "size": 970,
+      "sha256": "1ccc9070b7a2d9603a76b6b67d55149a185136d869d5ec1d491acd829ba941b8",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image32.gif",
+      "size": 972,
+      "sha256": "e70dd9923ed75f9751e6c19172d5e9bb8de90440dc7295111636a40a6dcf6dcf",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image33.gif",
+      "size": 973,
+      "sha256": "d53565b632b37934dfd7846a6ba2dd0806002e16110c0115e35bae5a8600a02e",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image34.gif",
+      "size": 881,
+      "sha256": "c3cc8104df9904304a71510f614f0eb7db06899a6a9cb31d3eaf75d8ca3fecf5",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image4.gif",
+      "size": 919,
+      "sha256": "55bac827121bd49f254b9564e1567b4b73901f8607a83d7152151b23c50fb9cc",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image6.gif",
+      "size": 945,
+      "sha256": "2ef4435b91744fa4d98e86fc2f53663dca03df1d5374f5ef8b3727e11fdedbb9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image7.gif",
+      "size": 902,
+      "sha256": "e5a1667ae6b578761bd7e99e2b1e7665b5c5117715a9673669108c245064df9f",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/image8.gif",
+      "size": 919,
+      "sha256": "795cb197d47d34342a3fc3216879fce78129a50c97ef00db2b9c4f019167162e",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/item_modified.gif",
+      "size": 1257,
+      "sha256": "7a08a7081901d478f5fb5c518ad09abd2f4cf783e1a7852ae955bd95d8b73a99",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "images/RepositoryPath.gif",
+      "size": 3391,
+      "sha256": "83d91d8bea02dabefd240b0ccd7096f1e11c2e787d2175fffce55bc39bd79c4b",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "Resources/Stylesheets/layout.css",
+      "size": 9746,
+      "sha256": "4df8444c4930751ed1db48b1d12806e6d3f88b892916922d88b9de108b3fe72d",
+      "extension": ".css"
+    },
+    {
+      "relative_path": "SCM_Activating_Deactivating_SimpleMode.htm",
+      "size": 3072,
+      "sha256": "8a639170f1c95fc5ab29b10f9fb1799088227ad2161ff0833cd7dc8e20c2bf15",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Add_and_Commit_Configuration_Dialog_Box.htm",
+      "size": 3329,
+      "sha256": "458f38350b9ff754a7caa2c825f5a11868d80ee0ea55a8227799f9b2ec2358e6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Add_and_Commit_Configuration_Dialog_Box_Simple_Mode.htm",
+      "size": 7330,
+      "sha256": "5e6807798f27fa950d489058356e25c67168d6ff0b4d53d045decceaf711d5a9",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Add_and_Commit_Dialog_Box.htm",
+      "size": 3271,
+      "sha256": "35a92a808aa275135182734ca9ca72a3ffbfd3302a920f7dd176b56ae961f95e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Adding_and_Committing_an_Item.htm",
+      "size": 4242,
+      "sha256": "6b4009a31811b4a095dc0ab502212cff7dbc1fd5210fdd6859c9454ba562d1ce",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Adding_and_Committing_an_Item_Simple_Mode.htm",
+      "size": 3823,
+      "sha256": "5e55c7bb305a43d85f32c84f91387e615b4b761f44ce5bd1f917e507a9ee97aa",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_AdditionalCommandsSubmenu.htm",
+      "size": 5986,
+      "sha256": "0c15eec4de38a204588f205d47cf24bc5b6cdc0a8ac536e216e4b5cac78d1763",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Appearance_Options_for_ASCET-SCM.htm",
+      "size": 6908,
+      "sha256": "de31c2d9fabf8e2459079bb91b83e731b5fefec5bba51afc25ae6e1eab57ab3d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_ASCET-SCM_Architecture.htm",
+      "size": 3588,
+      "sha256": "54c01358ace1b3562daee134a5440b14c84c545ff5111b0e663958a763a58bfa",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_ASCET-SCM_Delete_Elements_Dialog_Box.htm",
+      "size": 2775,
+      "sha256": "7871224bc7c2fe1f453a0e85b64914af9ac00f3c8ebc12f6aed7b5f4b1a11221",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_ASCET-SCM_Menu.htm",
+      "size": 12958,
+      "sha256": "365547d46803b3b472b4379887149fd88e3c42ffeec69f0eec49d9e7185da611",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_ASCET-SCM_Scripting_Interface.htm",
+      "size": 14328,
+      "sha256": "4217f3ab4b59a2120ec9a7afc05064a55508161488c22a363c03a658c85a5af0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_CExample.htm",
+      "size": 4228,
+      "sha256": "9efe44e39f55f40d011620239935b390d79b3950b67400bd261953c5f1f2b126",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Checking_out.htm",
+      "size": 4532,
+      "sha256": "837f65aaa0120cf07f6b1f72e2397a3d234c6f90cf9468e6e3dfb97d8fef4f1e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Checking_out_a_Configuration.htm",
+      "size": 10448,
+      "sha256": "73bca03a1de911471cc6d3a71fc58c99770152aebcac8341d80c79f41aff7bb7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Checking_out_Configurations_Simple_Mode.htm",
+      "size": 5419,
+      "sha256": "56bd0a3c688c485d659dbe64a87c837dd3e047a02a9068037a245f593f9ace4b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Checking_out_Items.htm",
+      "size": 9002,
+      "sha256": "59ee8abf46f307e204af0c7353bc1ffd5eb9e588ac6eb120e68eb22fb1700871",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Checking_out_Items_Simple_Mode.htm",
+      "size": 4916,
+      "sha256": "b8bec88b3eb1b6cd05d73296d0f077314261a010a7099684b054eac8531aa680",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Checkout_Configuration_Dialog_Box.htm",
+      "size": 9931,
+      "sha256": "c1e196c9e8bb5d1374a205cb6e99faac2950f3ca78bdc599c2f4bf704a385e3d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Checkout_Configuration_Dialog_Box_Simple_Mode.htm",
+      "size": 9060,
+      "sha256": "79384faf66e54bc4c328f81682e5784df468fc16c8ab97d62ea62ab1e0e1b3e8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Checkout_Dialog_Box.htm",
+      "size": 9519,
+      "sha256": "0e0671d7e498a2c6a89852ec669b2f24c747c7d8812f9a3afb90c000de56202c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Checkout_Dialog_Box_Simple_Mode.htm",
+      "size": 8940,
+      "sha256": "a5dd3e3545cf7af2185e737046af788c9f382bb71e2899dda3f2fa8ef3062f1f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Commit_Configuration_Dialog_Box.htm",
+      "size": 8736,
+      "sha256": "a6e7a26c6c18ddfdada64174b597626b3c4560a47548e92d203f049dd6fb6c56",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Commit_Configuration_Dialog_Box_Simple_Mode.htm",
+      "size": 7219,
+      "sha256": "f43073272422ab5e01f3a81fdbf5c245c4824690bab172a4e129c7fb77b49b15",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Commit_Dialog_Box.htm",
+      "size": 7534,
+      "sha256": "9820168501012aa6d7be15b09955848256c9e8cb701c2f29a1b4bcd32f5994e1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Commit_Dialog_Box_Simple_Mode.htm",
+      "size": 7091,
+      "sha256": "5da49bfa52623f8eaac1e8020b81f7605f07f5365e860aa5e7fa39388b0f7cc8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Commit_without_Previous_Lock_Dialog_Box.htm",
+      "size": 7761,
+      "sha256": "2f70f3c74374f6b8d2c9dd34eaaf3d6ff00e626d8d699694315b8a6122a422a5",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Commit_Without_Previous_Lock_Dialog_Box_Simple_Mode.htm",
+      "size": 7051,
+      "sha256": "96be1066a362784135fb7ce56041d0f08a310f289c7bfc45731bcd10e12b1067",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Committing.htm",
+      "size": 3617,
+      "sha256": "ef628c388191d80649ed66acf4c9ab2258f2fd33449e31d018bc4ae6c5e2c26b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Committing_a_Configuration.htm",
+      "size": 5596,
+      "sha256": "98d1b2ed140cb7f9f9732c3a595b51cd1e9918cd4094b749b87d254b6aa5c2eb",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Committing_a_Configuration_Simple_Mode.htm",
+      "size": 3875,
+      "sha256": "05b2442d5a015f5ea92205136b556ef5f9db825a7d702c100158cf23af929fc3",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Committing_an_Item.htm",
+      "size": 4401,
+      "sha256": "8366b0e205135f6fd7dec0a5ca257bc6bc573bb610e850cf0e068509e75f188a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Compare_Configuration_Dialog_Box.htm",
+      "size": 6478,
+      "sha256": "b727ea329e2c4ef42e77f831588a4d2a33f88993442e4076086683c3bf4d05f6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Compare_Configuration_Dialog_Box_Simple_Mode.htm",
+      "size": 7185,
+      "sha256": "6e8e6ded41839186873dd127c8b54f7399be21474fff6093e206d2b76b2756c5",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Comparing_Configuration_Versions.htm",
+      "size": 5473,
+      "sha256": "0b61aefe8a318ba7ef2ff37112e0e44abe7bf18dd68c8eb36f7390eeacbd8c14",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Comparing_Configuration_Versions_Simple_Mode.htm",
+      "size": 4238,
+      "sha256": "4ba504b96dffd08be73ecb8cbd170668333bc0b8cb1270ecfc93d443fc8375cc",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Configuration_Details_Dialog_Box.htm",
+      "size": 3004,
+      "sha256": "ec46b1e8910e80b06261240e3277f20d8e704fd7ad031f012dc65bdfba1b3fa1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_ConfigurationExampleClearCase.htm",
+      "size": 6899,
+      "sha256": "4980f1b655be4fbc0efc742346e78aa9a234894cad179d25bb331a9bf8a213c7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_ConfigurationExampleMKS.htm",
+      "size": 6863,
+      "sha256": "3c4dc429402513c4cfb83f15e58f8a325ca9dbabc9e8d63229c2f1a742ddb49b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_ConfigurationExamplePerforce.htm",
+      "size": 8771,
+      "sha256": "49aa49588a07ff807a8631f721f8de8d91b0f10bb8f19af2820093abbf50fe29",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_ConfigurationExampleSourceSafe.htm",
+      "size": 8989,
+      "sha256": "b3f5a08b16c9774c9857bf8c1a8e28d8f5451f28dc7f0a6f6f302295889d8486",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_ConfigurationExamplesOverview.htm",
+      "size": 3547,
+      "sha256": "abe6e8013c977799dc65060e33bfb425aa4cf3798e328bb289f8727d58172fc6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_ConfigurationExampleTFS.htm",
+      "size": 8651,
+      "sha256": "157b9a9be61c9b78204dd95884b71e308d4abd1b32eba6a92e0a4adb64f339bb",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_ConfigurationManagementSubmenu.htm",
+      "size": 6943,
+      "sha256": "0b8b45cf45cd424c03e79c818319a0f34f6b8d4e5cc0d427fb84e288c7592032",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Configurations.htm",
+      "size": 4779,
+      "sha256": "0f96d7aa9be94da2a164c77f64e8bf9370affe4628294f390fe46ea548be4b0b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Conflicts.htm",
+      "size": 4351,
+      "sha256": "fa81ba9a5653080e6aaa5f5300931016d8f75a631cace7141860ee64638aba5d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Conflicts_Found_Dialog_Box.htm",
+      "size": 23546,
+      "sha256": "552ae4aa0503a5bc2c9ff74a75b852e88b73888cdb7dcbaab3224adc4001ef95",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Connection_between_ASCET_and_the_Software_Version_Control_System.htm",
+      "size": 2704,
+      "sha256": "001e814cda43f19df29de5d08651e38651cb88aeb98df5f5f53c9a267e1bd487",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Context_Menu_for_Added_Items.htm",
+      "size": 3385,
+      "sha256": "3b4e54f7becef4a5c03d8263d6cc2e6399e645dc547b83525e69904f156542c1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Context_Menu_for_Selected_Items.htm",
+      "size": 3194,
+      "sha256": "99faa27d014668d62ee58b5cc8006e402dd44b987c5f25c35229e757d3030bf7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Context_Menu_for_the_Result_Dialog_Box.htm",
+      "size": 3513,
+      "sha256": "7381f3e82b26ea73b22d06e74e3262215d3cf95bcfa0cd2beca20cd02616a337",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Context_Menu_for_the_Update_and_Commit_Dialog_Boxes.htm",
+      "size": 3647,
+      "sha256": "8f850ee062428eb37acfd4e98ec433942ccc1881c250a9fc2f4149a71bd81db5",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Context_Menu_for_the_Verify_Configuration_and_Compare_Configuration_Dialog_Boxes.htm",
+      "size": 2644,
+      "sha256": "b3a8eb6cbc01785b8c83028f1c9f0d72cd218ebe626671411df0d2b330ea91e7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Creating_a_Configuration.htm",
+      "size": 4068,
+      "sha256": "603f93bdd103ff53b225aa7609f9cffa10f362e670615f424eeab06b56502e7d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Creating_a_Configuration_Simple_Mode.htm",
+      "size": 3804,
+      "sha256": "61ff7a1ac76e837816443c5ca291e6b44b7088955cae9cf6641e5bf4f63fb05e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_CustomizeMenusIcons_Examples.htm",
+      "size": 13122,
+      "sha256": "6f86b35741a45149f681596711bbf016df6fbfacc26682b0a12cb32faebc10af",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_CustomizingMenusIcons.htm",
+      "size": 5875,
+      "sha256": "3605f3ef9b7cf66a314346e03064707ea14bf1435c09abbc6dcdba7d2ee1d616",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Delete_Dialog_Box.htm",
+      "size": 3889,
+      "sha256": "8c46db32c8b91bab218f5ae64fc7d0ceb1f458280d81aff6cc552167e0c02386",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_DeleteItemFromRepository.htm",
+      "size": 4794,
+      "sha256": "89da84ea7e6516af5751f274811e1c020e47b401ad79697cc3385d70f6509e8c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Detailed_Result_Information_Dialog_Box.htm",
+      "size": 2446,
+      "sha256": "6b7c591b5abb4c2368103cb9819d0207e722c6bdc81c12d1584409ae2289f15c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Driver_Selection_Dialog_Box.htm",
+      "size": 3506,
+      "sha256": "cde15031868ebce3a00915230e7c700197e67f6e2bd5225188bb557cfa36aa1f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Edit_Attribute_Value_Dialog_Box.htm",
+      "size": 3389,
+      "sha256": "7a6f1daa253ea1c448fc89dcbcf2b4f953a4af6b6c243ab96b2a7638ad8085ba",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Edit_without_Lock_Dialog_Box.htm",
+      "size": 2973,
+      "sha256": "f7cff3f3d45638b581e0ac1d44dc36e33e4acc8340cb82a19e6a95e0735bb640",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_EditCommandEntries.htm",
+      "size": 9638,
+      "sha256": "72c15684bff0d5241099c5369958962bc99b230992fe92cf9f2b1cc09ddbe54a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Editing_Items_in_Offline_Mode.htm",
+      "size": 3591,
+      "sha256": "1573801fe846587d10b305373579102633b1d00e4e0dba0799af168df275f3f6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_EditSCMMenu.htm",
+      "size": 3658,
+      "sha256": "e1f35f17311f70fc29604e44423c25ec066e59f0bd5f9590f07bf21002658dd1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_EditSCMToolbar.htm",
+      "size": 3083,
+      "sha256": "47a007412278362e6b6282a3e2d2a9cf01bdeea5c312f09f5803b2f13a0dfac8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_FAQs.htm",
+      "size": 18542,
+      "sha256": "c6453d0686fb10cec850f1be08fa3cd27a587b53dc3fd700d0fa21a9c1d0d9a7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Fundamentals_of_Software_Configuration_Management.htm",
+      "size": 5646,
+      "sha256": "84e6cfeb54ceb48cca9f2c97de2bd7fac2664fc513b197f6e6c7a537768c9d80",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Handling_Configurations.htm",
+      "size": 4468,
+      "sha256": "a91a1ea338ae3e3a9a3a9da0f58b28876555f43e2e3041dfbb3132ccdfc1f9c8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Handling_Imported_Components.htm",
+      "size": 4394,
+      "sha256": "f26c50832e7254176869f4970b0c4fac30e604b5e5242cbd8b3c05014dd31837",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_ImportantNote_UseSCMwithToolAPI.htm",
+      "size": 5273,
+      "sha256": "572932a44466a3344759d83fbe9254ed680375282ea16d3376a0432ab4fac35e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Importing_Data_from_the_Subversion_Repository.htm",
+      "size": 3864,
+      "sha256": "c4d431f16a3a26537171865756383cd866ac31d5753bc1994e1bf296a8aaba7c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_IncludingReferencesSubmenu.htm",
+      "size": 4065,
+      "sha256": "831ff138aed0183c3cb2c2f8c119279848a336ef18d7a792f350df3f5364527b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Item_Details_Dialog_Box.htm",
+      "size": 3265,
+      "sha256": "805e7b3a03ec8ca3d02ba05ccb0ae96c6ada2d5e18939c74dc3f2aa8a892fe6e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Items_under_Source_Control_Dialog_Box.htm",
+      "size": 2947,
+      "sha256": "d5fd35635a792de8e2c48ff9113493264e50559a208d8f648c7826fce3a80c1a",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Keyboard_Operation_Simple_mode.htm",
+      "size": 4224,
+      "sha256": "2e77e0ba192de4f253953e053faef31603499aa5c04ac57991e94929fbbd6bf8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Loading_a_Configuration.htm",
+      "size": 4304,
+      "sha256": "ed3033aa1afbeccb9b2267c7f33a4eaabef875fc76a7d143e5320f96c1d18cde",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Local_Modifications_Detected_Dialog_Box.htm",
+      "size": 3065,
+      "sha256": "72468dcf6c2f7084a5baeebf8a197fd813fb36e2d89c6b2b682de9f57a50af10",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Locking_a_Configuration.htm",
+      "size": 4606,
+      "sha256": "c396e58419e144f1c0a464e6b5f973ab99fef826dc7b001186d89838d0ba20a8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Locking_an_Item.htm",
+      "size": 4131,
+      "sha256": "6565a9e1658df7c16d186838932fbfa7745a239973d181b4d2bab0d25c4b59d7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Locking_and_Unlocking.htm",
+      "size": 4305,
+      "sha256": "6a243cdf6b7d92fc1251cb030b9c6ddfe762b841bf589b0a15cf2dec71a72164",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Managing_ASCET_Folders.htm",
+      "size": 3361,
+      "sha256": "3f93511700845e08a604d4a1c46f5609303c2f1da7e1697d194a2b71c6031091",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Menu_withoutVersionManagement.htm",
+      "size": 5948,
+      "sha256": "409e10dbf49ce55c44f68bdd516c2c01d11f816c9873afe4eddfad32c675a6a7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Online_versus_Offline_Mode.htm",
+      "size": 3388,
+      "sha256": "3c52fae07a8ff09b7b857f7c67fd7088a0ea388ab339f5a94ef4d986582adb24",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Overlay_Icons.htm",
+      "size": 13015,
+      "sha256": "f48004ec3bf83bc51365b1825bed20d69157f1238f63620f016ba40616434b92",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Overview.htm",
+      "size": 3860,
+      "sha256": "0456c365a66bc49f1db5676144fd0971197280ab2d0e0bde39fe150aa16e850e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Repository.htm",
+      "size": 3562,
+      "sha256": "25cc818d8755727b8582b2b0a475aafa66574877900cd824c3a604506bfc5be7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Repository_Selection_Dialog_Box.htm",
+      "size": 2655,
+      "sha256": "c6f6c17b3aaca25e7aad17fe676b5cbc93d1061f4f47b01ddd1e740ab825d283",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Result_Dialog_Box.htm",
+      "size": 24299,
+      "sha256": "4881534e55e6d58ece70fef370a3bcc541df88969ad61629d47df153dd85e465",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Select_Revision_Dialog_Box.htm",
+      "size": 2577,
+      "sha256": "b939dfc85b915fc8e81118c5ff6c5c323182288b5ccce4db767d9f47e3052eb7",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Selecting_a_Repository.htm",
+      "size": 6267,
+      "sha256": "6c6b087ba57389f84ca5bd3191d50c94e1a3e0d9b02ea63498ba14bbee80de22",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Selecting_or_Creating_a_Repository_Folder_for_an_Item.htm",
+      "size": 4678,
+      "sha256": "1aa1224b8c14fa564596406b871fbeda458b9ece7fa145e1d45fe76c3b4837f8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Setting_up_an_ASCET-Subversion_Connection.htm",
+      "size": 6187,
+      "sha256": "a61190fb572ac48a09e469ff87a5cdc7375e530fe9bafe5f26c3a34ba82c69f2",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Setting_up_Subversion_for_Use_with_ASCET-SCM.htm",
+      "size": 2809,
+      "sha256": "cff818699bb28f8f96582fc264d90b4b12bf967cb4784a2c6da0b5104465675b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Show_Log_Dialog_Box.htm",
+      "size": 5467,
+      "sha256": "4acbb3238f18da02b7c0a5144adc9eb629b6245e1cb990425356879085206d5f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_ShowSubmenu.htm",
+      "size": 5297,
+      "sha256": "32895e836c5521e26aec629da0475f8e24616c08c139a7ed9e9008883635de94",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_SimpleUI.htm",
+      "size": 3051,
+      "sha256": "ad0407fdc8ce3f53c32d6a96c1def9b5db97000f7f3adb25fe298f8f7985d16c",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Software_Version_Management_Systems.htm",
+      "size": 3716,
+      "sha256": "70b9f1f3c3a5c048d1b8cc1ee44cabc517a4944de76eac0783ce7e7d7436a4ce",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_SourceControlSubmenu.htm",
+      "size": 5261,
+      "sha256": "b01712e49e602df0227d85a80ea418437addf4d5a279b2906546c7674f6557e8",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Special_Use_Case__Handling_Imported_Components.htm",
+      "size": 5990,
+      "sha256": "e418773659c62e32126c1ccf60508ab11100d3a038e14f3c9b560ef1c4da9ca1",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Subversion_Settings_Dialog_Box.htm",
+      "size": 6283,
+      "sha256": "6a840257fa8ea7bbafa6b4f1471f50dd00ac235f5d18989554b7908a4bd1d641",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Time_Consuming_Operation_Dialog_Box.htm",
+      "size": 2115,
+      "sha256": "8e291ab23acf2ba7a3bf70b300f47816cf76a69720a69f1a4105096af032e9e0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Tool_Options_for_ASCET-SCM.htm",
+      "size": 6758,
+      "sha256": "d206e9d465427274c283187ca99666dc43d253671a68c5ef4a49330dc52bd2b0",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Toolbar_Icons.htm",
+      "size": 32627,
+      "sha256": "293007b0f55b9a8b7b197ea4ff5633abf7414b978ebf1094c9d103b9bde5ac99",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Typical_Workflow_-_Using_Subversion_for_Revision_Control.htm",
+      "size": 7779,
+      "sha256": "d0e87f3180e3ab811b58b815ae0a6bbd8affcf4f6428730a89f741cb15268b84",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Unlocking_a_Configuration.htm",
+      "size": 4325,
+      "sha256": "ab28d8e4b4f61d5c5970e091a9516bcf58fed535387ebcaebbae865cfcdd60b6",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Unlocking_an_Item.htm",
+      "size": 4164,
+      "sha256": "8406659ba4b01535507bf5055b1a3d6f1ddffe887dad4d64213fbf36f5d5f171",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Update_and_Lock_Dialog_Box.htm",
+      "size": 3207,
+      "sha256": "c9672ebb3380526105e0c958370283057f8b90dbd4bb2e1977f5fdb252e26b2d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Update_Configuration_Dialog_Box.htm",
+      "size": 11436,
+      "sha256": "5b808bd79952769bdadf1711be516673c85598c0e7d4e0d3a182488fdda8d870",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Update_Configuration_Dialog_Box_Simple_Mode.htm",
+      "size": 8994,
+      "sha256": "6a6c0ca206ee5ab775fedae63c733c074f22bc5c21fe2362d57995bce1a42202",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Update_Configuration_to_Latest_Dialog_Box_Simple_Mode.htm",
+      "size": 9366,
+      "sha256": "96b46c9a37417aea72272a20f0261bf2265ec9d65a4b681208128110fd927189",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Update_Dialog_Box.htm",
+      "size": 7037,
+      "sha256": "e2962c0e91a6f2f18829a41c22c066afd3750a20955b1a3bfc0006e2f087d519",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Update_Dialog_Box_Simple_Mode.htm",
+      "size": 8739,
+      "sha256": "048a7600f20a1e22e6bc10cf11711f6dea1508015990177b29f5abced2f0b393",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Update_to_Latest_Configuration_Dialog_Box.htm",
+      "size": 8153,
+      "sha256": "5674c2568bdd69ffdaf2be07e4ff12ecd8636981dc6b7e4d33fb66dd4d27ce73",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Update_to_Latest_Dialog_Box_Simple_Mode.htm",
+      "size": 8942,
+      "sha256": "f3fd643abb5a77e9f4d2ebd67e88097b87c9ee7d1ff1102706551d169f5745f4",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Update_to_Latest_DialogBox.htm",
+      "size": 4582,
+      "sha256": "65b065a2be39c747d381a6dd456dd043759a9208b8c999dc9d7581afd0e1436e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Update_to_LatestRevision.htm",
+      "size": 4416,
+      "sha256": "4c25ce5e933748a254de98b2707acc2e1bdf2bf6747fa036bc35b34795c5e98f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_UpdateConfigurations_LatestRevision.htm",
+      "size": 5295,
+      "sha256": "e0e2e8f2531d49363e33e9caf7932fa475b6c54414c46cbdcf24bb47e1c53861",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Updating.htm",
+      "size": 4671,
+      "sha256": "64751f4d57e7349dffa27f57e00c8c360e801b35427cdb228bc43b3d82927072",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Updating_a_Configuration.htm",
+      "size": 10304,
+      "sha256": "0c51a9a405324c678364d891df08d83c809d9cf8b89c824c7d53af215ce2d315",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Updating_Configurations_Simple_Mode.htm",
+      "size": 5139,
+      "sha256": "28621a445d661ae6049499afa9dae94fcc99e4d5f9ca524483d93e3ee18a314e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Updating_Configurations_to_Latest_Revision_Simple_Mode.htm",
+      "size": 5335,
+      "sha256": "fdf814ee93bbda906f7157d78111ede63b9cba0218480e859034551ffdc6370e",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Updating_Items.htm",
+      "size": 6377,
+      "sha256": "673fe8756d0c44987fbfa7840cc65a92d5bb01b8be2c62658a227f093d6c8b8b",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Updating_Items_Simple_Mode.htm",
+      "size": 4746,
+      "sha256": "810aae2e1105b5f6fd9a5812ac0238db64c717b0946b2f94a843e04175d678bf",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Updating_Items_to_Latest_Revision_Simple_Mode.htm",
+      "size": 5038,
+      "sha256": "6d011d0e9929021f528eb779f9215df1635fb259a060a32fbf574bbd4c179517",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Verify_Configuration_Dialog_Box.htm",
+      "size": 7207,
+      "sha256": "1ca1a241d61c78fb9192302c0164913bdd3e6e46c72adbb2292622ed7e183663",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_VerifyConfiguration_DialogBox.htm",
+      "size": 6445,
+      "sha256": "1fb618cc5b3e9bcf0e5577015d800c0e8a6e67e0944fcc886a66911f4007071f",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Version_Details_Dialog_Box.htm",
+      "size": 7229,
+      "sha256": "7a95191518fb8a2c801873bfd8bdd4e08bfe74fc09bb8d56837dd666f771c494",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Version_Handling_based_on_MSSCCI.htm",
+      "size": 3356,
+      "sha256": "4713358c27352857eb21db3150fa745792e79e7f7201d96b808893cbdff1ea5d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SCM_Version_Handling_based_on_Subversion.htm",
+      "size": 5864,
+      "sha256": "fe05464e66a2c856dbda9b59a3a95b0f21149c4ede2277db8434f0d2019eee7d",
+      "extension": ".htm"
+    },
+    {
+      "relative_path": "SkinSupport/DropDownClosed.gif",
+      "size": 864,
+      "sha256": "8cd1a6e71221244599c471e20be73175d30fd68103ea2decb358b5e92761c0a3",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "SkinSupport/DropDownOpen.gif",
+      "size": 865,
+      "sha256": "ea6eb9305f8be631e0ebc0dafe4becb7f54674ac6595f32af7d1610d5999f4b9",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "SkinSupport/Images/MCSlider_controls.png",
+      "size": 2806,
+      "sha256": "257206c4fd6bcee36927eb0ef2ba087b5dfc6c9a18df7f8553878bf847616226",
+      "extension": ".png"
+    },
+    {
+      "relative_path": "SkinSupport/Images/MCSlider_loader.gif",
+      "size": 8581,
+      "sha256": "6d46e2cf165a5a0584afba7bc9663da292ee08c97cfc7613de6013ed05be892a",
+      "extension": ".gif"
+    },
+    {
+      "relative_path": "SkinSupport/jquery.js",
+      "size": 267739,
+      "sha256": "b79048269194de2a460e6b267695f420be996434fad12f90e3712a1c5b3b2544",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "SkinSupport/MadCap.css",
+      "size": 4989,
+      "sha256": "dfe7953080eab542eef1fa95c936516edd0295f1c4ea5d7e5f0c73c05a1236da",
+      "extension": ".css"
+    },
+    {
+      "relative_path": "SkinSupport/MadCapAliasFile.js",
+      "size": 3844,
+      "sha256": "2504ad25de460a4b280ab64652103bb0cdd13038c4ffef5242801984ed2d374f",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "SkinSupport/MadCapBody.js",
+      "size": 20845,
+      "sha256": "74bf81cf9f78c33eb62cd4c8eba50c603fadc1ab1ed3cb572190863adad11c95",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "SkinSupport/MadCapBodyEnd.js",
+      "size": 3895,
+      "sha256": "1b18b14fdb9b5acd6ef7e746447427ad095d1135923bf3fd4202d9c5829b8e98",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "SkinSupport/MadCapEffects.js",
+      "size": 25652,
+      "sha256": "611a3453b4b2f2d554bc6b9147ee3b16a078fabce629fa4bf77ccc3400fb1689",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "SkinSupport/MadCapEffectsMenu.js",
+      "size": 11698,
+      "sha256": "65318f3287ba8ca8aaeedf969d84a3b9441cab9779918a7f8a918b049d7e4d0e",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "SkinSupport/MadCapGlobal.js",
+      "size": 7218,
+      "sha256": "2f0b2bd668433b6c9c5c5511cd4142198e4f50c9cdc6253f370123cb4cd121e8",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "SkinSupport/MadCapGlossary.js",
+      "size": 3024,
+      "sha256": "6a6774d14ab9334814f4888fd7db3391f2812b002f1de84b43d0a792db6e8d9d",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "SkinSupport/MadCapHighlighter.js",
+      "size": 6712,
+      "sha256": "664e6d9000b02f5e0987654de6b9c7521eb2f413ab8d669ec9c85ab6e0ad1e94",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "SkinSupport/MadCapMerging.js",
+      "size": 55948,
+      "sha256": "9eff4c3b619edc6457c054eab57d9bb9f69354da6afdeb2534444710a0b1ba8e",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "SkinSupport/MadCapSlideshow.js",
+      "size": 30357,
+      "sha256": "09773064ee7ae188659119431dbc2621a83088afe6f72132ff83ca251e419f6a",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "SkinSupport/MadCapUtilities.js",
+      "size": 121835,
+      "sha256": "c61065b2ca1c0521f4f03281a0c774e9445b550179593b096ff3c64ce08c6b3b",
+      "extension": ".js"
+    },
+    {
+      "relative_path": "SkinSupport/Slideshow.css",
+      "size": 4673,
+      "sha256": "6511d11b33cbcb00c7a5ad38d8e7b804f635d744f412c6df36ef8b99605134c6",
+      "extension": ".css"
+    }
+  ]
+}

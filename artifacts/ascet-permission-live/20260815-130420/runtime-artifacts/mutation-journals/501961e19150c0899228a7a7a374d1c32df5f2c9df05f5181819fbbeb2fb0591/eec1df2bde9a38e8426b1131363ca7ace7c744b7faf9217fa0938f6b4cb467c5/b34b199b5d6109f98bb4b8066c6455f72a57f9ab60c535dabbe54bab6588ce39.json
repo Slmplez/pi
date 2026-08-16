@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "status": "applied",
+  "databaseFingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c",
+  "targetOid": "040g00001g001qg7107g7tv9fk200",
+  "targetKind": "folder",
+  "canonicalPath": "DEMO\\__pi_permission_smoke__20260815-130420\\AcceptEdits",
+  "action": "delete_folder",
+  "planId": "cc97320a-daea-4a04-94f2-ca5c78eecb8d",
+  "planFingerprint": "d5b867515cd287d1e87d6d5dcb773014b10f2bdef8937b5322146839e51b2890",
+  "targetImpactFingerprint": "sha256:89589bd4a51a336357b06e6eb33ad0d44748a3eed0009a5568ed7b591d858245",
+  "guardGeneration": 0,
+  "beforeSnapshotFingerprint": "sha256:e9e2a2cfe22881154633b7ca57eb3ee04fec6b25d2369f43b31e3c38e197d75f",
+  "desiredFingerprint": "sha256:d2bd09ceee58a4b64dfc260c3088f920324e85013e5713bacd0289158ac39673",
+  "beforeSnapshot": {
+    "operation": "authoritative_single_call_preflight",
+    "validated": true,
+    "authoritativePlan": {
+      "operation": "registered_guarded_operation_preflight",
+      "validated": true,
+      "result": {
+        "targetPath": "DEMO\\__pi_permission_smoke__20260815-130420\\AcceptEdits",
+        "editable": "not_applicable",
+        "capability": {
+          "status": "supported",
+          "source": "registered_closed_operation"
+        },
+        "readbackAvailable": true,
+        "noOp": false
+      }
+    },
+    "normalizedEvidence": {
+      "version": 1,
+      "action": "delete_folder",
+      "paramsFingerprint": "d2bd09ceee58a4b64dfc260c3088f920324e85013e5713bacd0289158ac39673",
+      "database": {
+        "path": "C:\\Repo\\F05_IPB_L2_0429",
+        "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+      },
+      "target": {
+        "path": "DEMO\\__pi_permission_smoke__20260815-130420\\AcceptEdits",
+        "oid": "040g00001g001qg7107g7tv9fk200",
+        "kind": "folder"
+      },
+      "impact": {
+        "complete": true,
+        "sharedObject": false,
+        "ownerPath": "DEMO\\__pi_permission_smoke__20260815-130420\\AcceptEdits",
+        "affectedProjects": [],
+        "fingerprint": "sha256:89589bd4a51a336357b06e6eb33ad0d44748a3eed0009a5568ed7b591d858245"
+      },
+      "capability": {
+        "status": "supported",
+        "operation": "registered_guarded_operation_preflight",
+        "evidence": {
+          "status": "supported",
+          "source": "registered_closed_operation"
+        }
+      },
+      "editability": {
+        "applicable": false,
+        "status": "not_applicable",
+        "canRequestEditable": false
+      },
+      "effects": [
+        {
+          "kind": "delete_folder",
+          "target": "DEMO\\__pi_permission_smoke__20260815-130420\\AcceptEdits",
+          "description": "delete_folder: DEMO\\__pi_permission_smoke__20260815-130420\\AcceptEdits"
+        }
+      ],
+      "verification": {
+        "available": true,
+        "operation": "delete_folder_readback",
+        "target": {
+          "path": "DEMO\\__pi_permission_smoke__20260815-130420\\AcceptEdits"
+        }
+      },
+      "riskModifiers": [],
+      "noOp": false,
+      "generatedAt": "2026-08-15T05:24:48.724Z",
+      "approvalMaterialFingerprint": "719c7e2cc102efa97ede9d86d23c20b26363cbbf9a49e023a5b0c555f6b56c43"
+    },
+    "permissionMode": "default",
+    "permissionDecision": "ask",
+    "risk": "high",
+    "approvedAt": "2026-08-15T05:24:25.978Z",
+    "revalidatedAt": "2026-08-15T05:24:48.724Z",
+    "targetIdentity": {
+      "path": "DEMO\\__pi_permission_smoke__20260815-130420\\AcceptEdits",
+      "oid": "040g00001g001qg7107g7tv9fk200",
+      "kind": "folder"
+    },
+    "targetImpactFingerprint": "sha256:89589bd4a51a336357b06e6eb33ad0d44748a3eed0009a5568ed7b591d858245"
+  },
+  "attemptedMutation": {
+    "action": "delete_folder",
+    "folderPath": "DEMO\\__pi_permission_smoke__20260815-130420\\AcceptEdits",
+    "ifMissing": "ignore"
+  },
+  "createdAt": "2026-08-15T05:24:48.740Z",
+  "updatedAt": "2026-08-15T05:24:49.808Z",
+  "evidence": {
+    "bridgeEntered": true,
+    "backendResponseReceived": true,
+    "mutationStarted": true
+  },
+  "outcome": {
+    "operationId": "delete_folder"
+  }
+}

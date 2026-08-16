@@ -1,0 +1,38 @@
+Log File: C:\ProgramData\ETAS\LogFiles\AscetBridge\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+Component: Customer\XiaoMi\Package\AVH\NextEV\AVH_DeactivationDecision_Xiaomi
+Kind: Class
+Language: ESDL
+Diagrams: 1
+  - BlockDiagram: Main
+Methods: 2
+  - AbstractMethod: AVHDeactivationByBrakePedal
+  - AbstractMethod: calc
+
+Program Path: C:\Program Files (x86)\ETAS\ASCET6.1.5\Cebra
+=== Method: AVHDeactivationByBrakePedal (AbstractMethod) ===
+return AVHDeactivationByBrakePedal;
+
+
+=== Method: calc (AbstractMethod) ===
+/* This class decides whether a deactivation of AVH is possible	*/
+/* and sends the deactivation flag to the next instance if the 	*/
+/* required deactivation condition is fulfilled*/
+
+if  (   (AvhState == AVHState_Hold || LfcHoldActive == true)
+     && BrakePedalIsApplied == true
+     && DeactivationAllowedAfterActivation == true
+     && InputRodStroke > C_AVH_InputRodStrokeOffset
+	 && OnePedalToStop_Active == false
+    )
+{
+    AVHDeactivationByBrakePedal = true;
+}
+else
+{
+    AVHDeactivationByBrakePedal = false;
+}
+
+

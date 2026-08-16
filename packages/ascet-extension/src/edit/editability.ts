@@ -7,8 +7,7 @@ import {
 } from "../cli.ts";
 import { normalizeAscetPath } from "../core/path.ts";
 import { evaluateAscetPermission } from "../permissions/evaluate.ts";
-import { parseAscetPermissionRules } from "../permissions/settings.ts";
-import type { PermissionMode } from "../permissions/types.ts";
+import { type AscetPermissionSnapshot, resolveAscetPermissionSnapshot } from "../permissions/types.ts";
 import type { AscetScheduler } from "../scheduler/scheduler.ts";
 import { createAscetStatusReport } from "../status.ts";
 import { toToolSuccessPayload } from "../tool-response-contract.ts";
@@ -32,8 +31,7 @@ export interface RunAscetEditabilityOptions {
 }
 
 export interface AscetEditabilityContext extends AscetEditApprovalContext {
-	permissionMode?: PermissionMode;
-	getSettings?: () => Readonly<Record<string, unknown>>;
+	ascetPermission?: AscetPermissionSnapshot;
 }
 
 function normalizeComponentPath(componentPath: string): string {
@@ -154,11 +152,12 @@ export async function runApprovedAscetEditability(
 
 	const descriptor = getAscetEditAction("set")?.permission;
 	if (!descriptor) throw new Error("Missing ASCET editability permission descriptor.");
+	const permission = resolveAscetPermissionSnapshot(ctx);
 	const decision = evaluateAscetPermission({
-		mode: ctx.permissionMode ?? "default",
+		mode: permission.mode,
 		action: "set",
 		descriptor,
-		rules: parseAscetPermissionRules(ctx.getSettings?.()),
+		rules: permission.rules,
 		path: params.componentPath,
 		hardGatesPassed: true,
 		evidenceComplete: true,

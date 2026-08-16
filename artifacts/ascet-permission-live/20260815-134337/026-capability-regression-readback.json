@@ -1,0 +1,57 @@
+{
+  "stage": "capability-regression-readback",
+  "startedAt": "2026-08-15T05:53:43.658Z",
+  "finishedAt": "2026-08-15T05:53:44.242Z",
+  "request": {
+    "toolName": "ascet_read",
+    "params": {
+      "action": "read_method_signature",
+      "componentPath": "Customer\\GAC\\Package\\AVH_AutomaticVehicleHold\\Private\\GAC_AVH_Autonomous_StandByControl_Activating",
+      "methodName": "PiUnsupportedAction"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"error\": {\n    \"code\": \"method_not_found\",\n    \"message\": \"Method 'PiUnsupportedAction' was not found in component 'Customer\\\\GAC\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Private\\\\GAC_AVH_Autonomous_StandByControl_Activating'.\",\n    \"details\": {\n      \"stdout\": \"{\\\"type\\\":\\\"response\\\",\\\"protocolVersion\\\":1,\\\"ok\\\":false,\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":\\\"method_not_found\\\",\\\"message\\\":\\\"Method \\\\u0027PiUnsupportedAction\\\\u0027 was not found in component \\\\u0027Customer\\\\\\\\GAC\\\\\\\\Package\\\\\\\\AVH_AutomaticVehicleHold\\\\\\\\Private\\\\\\\\GAC_AVH_Autonomous_StandByControl_Activating\\\\u0027.\\\"},\\\"meta\\\":{\\\"bridgePid\\\":18940,\\\"bridgeGeneration\\\":\\\"56d00b08-09cf-44eb-9585-ca3ef61b8da8\\\",\\\"durationMs\\\":231,\\\"sessionPolicy\\\":\\\"fresh_session\\\",\\\"mutationStarted\\\":false,\\\"mode\\\":\\\"exec\\\",\\\"operation\\\":\\\"read_method_signature\\\"}}\",\n      \"exitCode\": 2,\n      \"operationId\": \"read_method_signature\",\n      \"stage\": \"cli_process\",\n      \"retryable\": false,\n      \"stdoutSummary\": \"{\\\"type\\\":\\\"response\\\",\\\"protocolVersion\\\":1,\\\"ok\\\":false,\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":\\\"method_not_found\\\",\\\"message\\\":\\\"Method \\\\u0027PiUnsupportedAction\\\\u0027 was not found in component \\\\u0027Customer\\\\\\\\GAC\\\\\\\\Package\\\\\\\\AVH_AutomaticVehicleHold\\\\\\\\Private\\\\\\\\GAC_AVH_Autonomous_StandByControl_Activating\\\\u0027.\\\"},\\\"meta\\\":{\\\"bridgePid\\\":18940,\\\"bridgeGeneration\\\":\\\"56d00b08-09cf-44eb-9585-ca3ef61b8da8\\\",\\\"durationMs\\\":231,\\\"sessionPolicy\\\":\\\"fresh_session\\\",\\\"mutationStarted\\\":false,\\\"mode\\\":\\\"exec\\\",\\\"operation\\\":\\\"read_method_signature\\\"}}\"\n    }\n  }\n}"
+      }
+    ],
+    "details": {
+      "tool": "ascet_read",
+      "action": "read_method_signature",
+      "command": {
+        "logicalCommandId": "AscetReadMethodSignature",
+        "backendCommandId": "AscetReadMethodSignature",
+        "operation": "read_method_signature"
+      },
+      "error": {
+        "code": "method_not_found",
+        "message": "Method 'PiUnsupportedAction' was not found in component 'Customer\\GAC\\Package\\AVH_AutomaticVehicleHold\\Private\\GAC_AVH_Autonomous_StandByControl_Activating'.",
+        "details": {
+          "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"method_not_found\",\"message\":\"Method \\u0027PiUnsupportedAction\\u0027 was not found in component \\u0027Customer\\\\GAC\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Private\\\\GAC_AVH_Autonomous_StandByControl_Activating\\u0027.\"},\"meta\":{\"bridgePid\":18940,\"bridgeGeneration\":\"56d00b08-09cf-44eb-9585-ca3ef61b8da8\",\"durationMs\":231,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"read_method_signature\"}}\r\n",
+          "exitCode": 2
+        }
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+          "cliPath": "C:/Repo/09_ASCETCopilot/pi-ascet-extension-prototype/packages/ascet-extension/ascet-cli/bin/AscetBridge.exe",
+          "args": [
+            "exec",
+            "read_method_signature",
+            "Customer\\GAC\\Package\\AVH_AutomaticVehicleHold\\Private\\GAC_AVH_Autonomous_StandByControl_Activating",
+            "PiUnsupportedAction",
+            "--json"
+          ],
+          "timeoutMs": 90000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 2,
+        "timedOut": false,
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"method_not_found\",\"message\":\"Method \\u0027PiUnsupportedAction\\u0027 was not found in component \\u0027Customer\\\\GAC\\\\Package\\\\AVH_AutomaticVehicleHold\\\\Private\\\\GAC_AVH_Autonomous_StandByControl_Activating\\u0027.\"},\"meta\":{\"bridgePid\":18940,\"bridgeGeneration\":\"56d00b08-09cf-44eb-9585-ca3ef61b8da8\",\"durationMs\":231,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"read_method_signature\"}}\r\n"
+      }
+    }
+  }
+}

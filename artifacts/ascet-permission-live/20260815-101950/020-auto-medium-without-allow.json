@@ -1,0 +1,336 @@
+{
+  "stage": "auto-medium-without-allow",
+  "startedAt": "2026-08-15T02:33:48.798Z",
+  "finishedAt": "2026-08-15T02:36:41.335Z",
+  "request": {
+    "toolName": "ascet_edit",
+    "params": {
+      "action": "apply_element_spec",
+      "componentPath": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass",
+      "elementIntent": "create",
+      "elements": [
+        {
+          "role": "standardPrimitive",
+          "name": "P_AutoMedium",
+          "kind": "parameter",
+          "modelType": "cont",
+          "scope": "local",
+          "data": {
+            "value": 0
+          },
+          "physicalRange": {
+            "min": -1,
+            "max": 1
+          },
+          "impl": {
+            "valueType": "real32"
+          }
+        }
+      ],
+      "intent": "apply"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"status\": \"ok\",\n  \"permission\": {\n    \"mode\": \"auto\",\n    \"decision\": \"ask\",\n    \"risk\": \"medium\",\n    \"reason\": \"Auto mode requires a scoped allow rule for the primary medium-risk write.\"\n  },\n  \"preflight\": {\n    \"status\": \"passed\",\n    \"evidence\": {\n      \"version\": 1,\n      \"action\": \"apply_element_spec\",\n      \"paramsFingerprint\": \"866ba4a024c6dc1946b5e51879f2802614acac4cb30605db0e7fa91785767871\",\n      \"database\": {\n        \"path\": \"C:/Repo/F05_IPB_L2_0429\",\n        \"fingerprint\": \"71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c\"\n      },\n      \"target\": {\n        \"path\": \"DEMO/__pi_permission_smoke__20260815-101950/EditableClass\",\n        \"oid\": \"040g00001g001qg7107g6n8jnc7g0\",\n        \"kind\": \"component\"\n      },\n      \"impact\": {\n        \"complete\": true,\n        \"sharedObject\": false,\n        \"ownerPath\": \"DEMO/__pi_permission_smoke__20260815-101950/EditableClass\",\n        \"fingerprint\": \"sha256:c4232b9c5bb42d2a01a43a727e3d3f0234d40a160e3bb8672d7c37820d445691\"\n      },\n      \"capability\": {\n        \"status\": \"supported\",\n        \"operation\": \"authoritative_element_preflight\",\n        \"evidence\": {\n          \"component\": \"DEMO/__pi_permission_smoke__20260815-101950/EditableClass\",\n          \"addedElements\": [\n            {\n              \"name\": \"P_AutoMedium\",\n              \"kind\": \"Parameter\",\n              \"signature\": \"Parameter ModelType=cont Scope=local\"\n            }\n          ],\n          \"summary\": \"1 added, 0 removed, 0 modified, 0 incompatible\"\n        }\n      },\n      \"editability\": {\n        \"applicable\": true,\n        \"status\": \"editable\",\n        \"canRequestEditable\": false\n      },\n      \"effects\": [\n        {\n          \"kind\": \"apply_element_spec\",\n          \"target\": \"DEMO/__pi_permission_smoke__20260815-101950/EditableClass\",\n          \"description\": \"ASCET edit request:\\noperation: apply_element_spec\\ncomponentPath: DEMO\\\\__pi_permission_smoke__20260815-101950\\\\EditableClass\\nelementIntent: create\\nelements: 1\\nprojectPath: \\ndeleteMissing: false\\nrecreateIncompatible: false\\nverifyReadback: false\"\n        }\n      ],\n      \"verification\": {\n        \"available\": true,\n        \"operation\": \"apply_element_spec_readback\",\n        \"target\": {\n          \"path\": \"DEMO/__pi_permission_smoke__20260815-101950/EditableClass\"\n        }\n      },\n      \"noOp\": false,\n      \"generatedAt\": \"2026-08-15T02:36:39.850Z\",\n      \"approvalMaterialFingerprint\": \"ff1625ddfa0c3ca651c90d95b34b59aebd56e626973a82e094ea40d7ef025d84\"\n    }\n  },\n  \"editability\": {\n    \"status\": \"editable\"\n  },\n  \"mutation\": {\n    \"status\": \"applied\"\n  },\n  \"verification\": {\n    \"status\": \"passed\"\n  },\n  \"audit\": {\n    \"approvedAt\": \"2026-08-15T02:35:14.180Z\",\n    \"revalidatedAt\": \"2026-08-15T02:36:39.850Z\",\n    \"preflightFingerprint\": \"866ba4a024c6dc1946b5e51879f2802614acac4cb30605db0e7fa91785767871\",\n    \"approvalMaterialFingerprint\": \"ff1625ddfa0c3ca651c90d95b34b59aebd56e626973a82e094ea40d7ef025d84\"\n  },\n  \"bridge\": {\n    \"beforeBridge\": true,\n    \"bridgeEntered\": true,\n    \"backendResponseReceived\": true\n  },\n  \"recovery\": {\n    \"required\": false\n  }\n}"
+      }
+    ],
+    "details": {
+      "outcome": {
+        "status": "ok",
+        "verified": true,
+        "data": {
+          "changed": {
+            "operationName": "apply_element_spec",
+            "sequenceNumber": 1,
+            "writeSucceeded": true,
+            "summary": "1 created, 0 updated, 0 incompatible.",
+            "payload": {
+              "ComponentPath": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass",
+              "ComponentKind": "Class",
+              "LanguageKind": "ESDL",
+              "Mode": "Apply",
+              "DeleteMissingRequested": false,
+              "RecreateIncompatibleRequested": false,
+              "ElementResults": [
+                {
+                  "name": "P_AutoMedium",
+                  "kind": "parameter",
+                  "status": "created",
+                  "changedFields": [
+                    "physicalRange",
+                    "data.value",
+                    "impl.valueType"
+                  ],
+                  "readbackVerified": true
+                }
+              ],
+              "Summary": {
+                "created": 1,
+                "updated": 0,
+                "skipped": 0,
+                "failed": 0,
+                "removed": 0,
+                "incompatible": 0
+              },
+              "CreatedElements": [
+                "P_AutoMedium"
+              ],
+              "UpdatedElements": [],
+              "SkippedElements": [],
+              "RemovedElements": [],
+              "IncompatibleElements": [],
+              "Issues": [],
+              "WriteSucceeded": true,
+              "VerifyReadbackRequested": true,
+              "ReadbackVerified": true
+            }
+          },
+          "verification": {
+            "mode": "automatic_readback",
+            "source": "write_command",
+            "required": true,
+            "requested": true,
+            "verified": true,
+            "status": "passed"
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      },
+      "raw": {
+        "ok": true,
+        "data": {
+          "type": "response",
+          "protocolVersion": 1,
+          "ok": true,
+          "result": {
+            "operationName": "apply_element_spec",
+            "sequenceNumber": 1,
+            "writeSucceeded": true,
+            "summary": "1 created, 0 updated, 0 incompatible.",
+            "payload": {
+              "ComponentPath": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass",
+              "ComponentKind": "Class",
+              "LanguageKind": "ESDL",
+              "Mode": "Apply",
+              "DeleteMissingRequested": false,
+              "RecreateIncompatibleRequested": false,
+              "ElementResults": [
+                {
+                  "name": "P_AutoMedium",
+                  "kind": "parameter",
+                  "status": "created",
+                  "changedFields": [
+                    "physicalRange",
+                    "data.value",
+                    "impl.valueType"
+                  ],
+                  "readbackVerified": true
+                }
+              ],
+              "Summary": {
+                "created": 1,
+                "updated": 0,
+                "skipped": 0,
+                "failed": 0,
+                "removed": 0,
+                "incompatible": 0
+              },
+              "CreatedElements": [
+                "P_AutoMedium"
+              ],
+              "UpdatedElements": [],
+              "SkippedElements": [],
+              "RemovedElements": [],
+              "IncompatibleElements": [],
+              "Issues": [],
+              "WriteSucceeded": true,
+              "VerifyReadbackRequested": true,
+              "ReadbackVerified": true
+            },
+            "verification": {
+              "requested": true,
+              "attempted": true,
+              "succeeded": true,
+              "summary": "element_spec_matches",
+              "details": {}
+            }
+          },
+          "error": null,
+          "meta": {
+            "bridgePid": 3316,
+            "bridgeGeneration": "57f665e8-4187-47ca-88ad-fc1161fec070",
+            "durationMs": 1126,
+            "sessionPolicy": "fresh_session",
+            "mutationStarted": true,
+            "mode": "exec",
+            "operation": "apply_element_spec"
+          }
+        },
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "apply_element_spec",
+            "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass",
+            "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\artifacts\\ascet-permission-live\\20260815-101950\\runtime-artifacts\\element-spec-plans\\inline-19508-1786761315454-d790e0d9-afc3-4978-a968-cdaf4d5abde1.json",
+            "--verify-readback",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "write",
+          "mutatesDatabase": true
+        },
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"operationName\":\"apply_element_spec\",\"sequenceNumber\":1,\"writeSucceeded\":true,\"summary\":\"1 created, 0 updated, 0 incompatible.\",\"payload\":{\"ComponentPath\":\"DEMO\\\\__pi_permission_smoke__20260815-101950\\\\EditableClass\",\"ComponentKind\":\"Class\",\"LanguageKind\":\"ESDL\",\"Mode\":\"Apply\",\"DeleteMissingRequested\":false,\"RecreateIncompatibleRequested\":false,\"ElementResults\":[{\"name\":\"P_AutoMedium\",\"kind\":\"parameter\",\"status\":\"created\",\"changedFields\":[\"physicalRange\",\"data.value\",\"impl.valueType\"],\"readbackVerified\":true}],\"Summary\":{\"created\":1,\"updated\":0,\"skipped\":0,\"failed\":0,\"removed\":0,\"incompatible\":0},\"CreatedElements\":[\"P_AutoMedium\"],\"UpdatedElements\":[],\"SkippedElements\":[],\"RemovedElements\":[],\"IncompatibleElements\":[],\"Issues\":[],\"WriteSucceeded\":true,\"VerifyReadbackRequested\":true,\"ReadbackVerified\":true},\"verification\":{\"requested\":true,\"attempted\":true,\"succeeded\":true,\"summary\":\"element_spec_matches\",\"details\":{}}},\"error\":null,\"meta\":{\"bridgePid\":3316,\"bridgeGeneration\":\"57f665e8-4187-47ca-88ad-fc1161fec070\",\"durationMs\":1126,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":true,\"mode\":\"exec\",\"operation\":\"apply_element_spec\"}}\r\n",
+        "stderr": "",
+        "exitCode": 0,
+        "timedOut": false,
+        "aborted": false,
+        "operationId": "apply_element_spec"
+      },
+      "observations": {
+        "invalidated": []
+      },
+      "verification": {
+        "mode": "automatic_readback",
+        "source": "write_command",
+        "required": true,
+        "requested": true,
+        "verified": true,
+        "status": "passed"
+      },
+      "mutationResult": {
+        "status": "ok",
+        "permission": {
+          "mode": "auto",
+          "decision": "ask",
+          "risk": "medium",
+          "reason": "Auto mode requires a scoped allow rule for the primary medium-risk write."
+        },
+        "preflight": {
+          "status": "passed",
+          "evidence": {
+            "version": 1,
+            "action": "apply_element_spec",
+            "paramsFingerprint": "866ba4a024c6dc1946b5e51879f2802614acac4cb30605db0e7fa91785767871",
+            "database": {
+              "path": "C:\\Repo\\F05_IPB_L2_0429",
+              "fingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c"
+            },
+            "target": {
+              "path": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass",
+              "oid": "040g00001g001qg7107g6n8jnc7g0",
+              "kind": "component"
+            },
+            "impact": {
+              "complete": true,
+              "sharedObject": false,
+              "ownerPath": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass",
+              "affectedProjects": [],
+              "fingerprint": "sha256:c4232b9c5bb42d2a01a43a727e3d3f0234d40a160e3bb8672d7c37820d445691"
+            },
+            "capability": {
+              "status": "supported",
+              "operation": "authoritative_element_preflight",
+              "evidence": {
+                "ComponentPath": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass",
+                "AddedElements": [
+                  {
+                    "Name": "P_AutoMedium",
+                    "Kind": "Parameter",
+                    "Signature": "Parameter ModelType=cont Scope=local"
+                  }
+                ],
+                "RemovedElements": [],
+                "ModifiedElements": [],
+                "IncompatibleElements": [],
+                "SkippedElements": [],
+                "Summary": "1 added, 0 removed, 0 modified, 0 incompatible"
+              }
+            },
+            "editability": {
+              "applicable": true,
+              "status": "editable",
+              "canRequestEditable": false
+            },
+            "effects": [
+              {
+                "kind": "apply_element_spec",
+                "target": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass",
+                "description": "ASCET edit request:\noperation: apply_element_spec\ncomponentPath: DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass\nelementIntent: create\nelements: 1\nprojectPath: \ndeleteMissing: false\nrecreateIncompatible: false\nverifyReadback: false"
+              }
+            ],
+            "verification": {
+              "available": true,
+              "operation": "apply_element_spec_readback",
+              "target": {
+                "path": "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass"
+              }
+            },
+            "riskModifiers": [],
+            "noOp": false,
+            "generatedAt": "2026-08-15T02:36:39.850Z",
+            "approvalMaterialFingerprint": "ff1625ddfa0c3ca651c90d95b34b59aebd56e626973a82e094ea40d7ef025d84"
+          }
+        },
+        "editability": {
+          "status": "editable"
+        },
+        "mutation": {
+          "status": "applied"
+        },
+        "verification": {
+          "status": "passed"
+        },
+        "audit": {
+          "approvedAt": "2026-08-15T02:35:14.180Z",
+          "revalidatedAt": "2026-08-15T02:36:39.850Z",
+          "preflightFingerprint": "866ba4a024c6dc1946b5e51879f2802614acac4cb30605db0e7fa91785767871",
+          "approvalMaterialFingerprint": "ff1625ddfa0c3ca651c90d95b34b59aebd56e626973a82e094ea40d7ef025d84"
+        },
+        "bridge": {
+          "beforeBridge": true,
+          "bridgeEntered": true,
+          "backendResponseReceived": true
+        },
+        "recovery": {
+          "required": false,
+          "actions": []
+        }
+      },
+      "tool": "ascet_edit",
+      "action": "apply_element_spec",
+      "command": {
+        "logicalCommandId": "AscetApplyElementSpec",
+        "backendCommandId": "AscetApplyElementSpec",
+        "operation": "apply_element_spec"
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+          "args": [
+            "exec",
+            "apply_element_spec",
+            "DEMO\\__pi_permission_smoke__20260815-101950\\EditableClass",
+            "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\artifacts\\ascet-permission-live\\20260815-101950\\runtime-artifacts\\element-spec-plans\\inline-19508-1786761315454-d790e0d9-afc3-4978-a968-cdaf4d5abde1.json",
+            "--verify-readback",
+            "--json"
+          ],
+          "timeoutMs": 120000,
+          "jobKind": "write",
+          "mutatesDatabase": true
+        },
+        "exitCode": 0,
+        "timedOut": false,
+        "stderr": ""
+      }
+    }
+  }
+}

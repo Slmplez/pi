@@ -1,0 +1,459 @@
+{
+  "generated_at": "2026-04-01T03:08:07.188078Z",
+  "input_chm": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\ImplementationEditorEnglishUS.chm",
+  "output_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS",
+  "markdown_root": "E:\\Rep\\AscetCopolit\\docs\\ascet-knowledge\\help\\extracted\\ImplementationEditorEnglishUS\\markdown",
+  "input_html_count": 74,
+  "converted_html_count": 74,
+  "failed_html_count": 0,
+  "copied_non_html_assets": 21,
+  "toc_entries_count": 82,
+  "index_entries_count": 94,
+  "index_required": true,
+  "mappings": [
+    {
+      "html_rel_path": "activate_automatic_impl.htm",
+      "md_rel_path": "activate_automatic_impl.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "adjust_impl.htm",
+      "md_rel_path": "adjust_impl.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "assign_impl_type.htm",
+      "md_rel_path": "assign_impl_type.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "automatic_conversion_op_impl.htm",
+      "md_rel_path": "automatic_conversion_op_impl.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "define_impl_tables.htm",
+      "md_rel_path": "define_impl_tables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Excluding_Zero.htm",
+      "md_rel_path": "Excluding_Zero.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Ied_AutomaticConversion_OperatorImplementation_ResultsA.htm",
+      "md_rel_path": "Ied_AutomaticConversion_OperatorImplementation_ResultsA.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ied_autosartab.htm",
+      "md_rel_path": "ied_autosartab.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_Consistency_Checks.htm",
+      "md_rel_path": "IEd_Consistency_Checks.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ied_create_copy_implementation.htm",
+      "md_rel_path": "ied_create_copy_implementation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_DealingWithOperatorImpl.htm",
+      "md_rel_path": "IEd_DealingWithOperatorImpl.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_Deleting_Implementation.htm",
+      "md_rel_path": "IEd_Deleting_Implementation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_division.htm",
+      "md_rel_path": "IEd_division.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_edit_process_method.htm",
+      "md_rel_path": "IEd_edit_process_method.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_Element_Menu.htm",
+      "md_rel_path": "IEd_Element_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_Examples_RulesFormulas.htm",
+      "md_rel_path": "IEd_Examples_RulesFormulas.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_ExternalStruct_Tab.htm",
+      "md_rel_path": "IEd_ExternalStruct_Tab.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_Formulas.htm",
+      "md_rel_path": "IEd_Formulas.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_Impl_Argu_ReturnValues_of_Methods.htm",
+      "md_rel_path": "IEd_Impl_Argu_ReturnValues_of_Methods.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_impl_arrays_matrices_tables.htm",
+      "md_rel_path": "IEd_impl_arrays_matrices_tables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_impl_comp_proj_s.htm",
+      "md_rel_path": "IEd_impl_comp_proj_s.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_Impl_Editor_for_Scalar_Nonlogical_Elements.htm",
+      "md_rel_path": "IEd_Impl_Editor_for_Scalar_Nonlogical_Elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ied_implementation_editor_methodsprocesses.htm",
+      "md_rel_path": "ied_implementation_editor_methodsprocesses.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ied_implementation_editor_non-scalar_elements.htm",
+      "md_rel_path": "ied_implementation_editor_non-scalar_elements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_Implementation_for_AddSubWindow.htm",
+      "md_rel_path": "IEd_Implementation_for_AddSubWindow.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_Implementation_Menu.htm",
+      "md_rel_path": "IEd_Implementation_Menu.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IED_Implementation_NonLogicalElements.htm",
+      "md_rel_path": "IED_Implementation_NonLogicalElements.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IED_ImplementationComponents.htm",
+      "md_rel_path": "IED_ImplementationComponents.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_ImplementationEditor_for_ComponentsProjects.htm",
+      "md_rel_path": "IEd_ImplementationEditor_for_ComponentsProjects.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_ImplementationforOperatorWindow.htm",
+      "md_rel_path": "IEd_ImplementationforOperatorWindow.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_Implementing_Records.htm",
+      "md_rel_path": "IEd_Implementing_Records.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IED_ImplementingReferences.htm",
+      "md_rel_path": "IED_ImplementingReferences.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_ImplRefEditor.htm",
+      "md_rel_path": "IEd_ImplRefEditor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_Limitations.htm",
+      "md_rel_path": "IEd_Limitations.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Ied_multiplexer_max_min.htm",
+      "md_rel_path": "Ied_multiplexer_max_min.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_multiplication.htm",
+      "md_rel_path": "IEd_multiplication.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_open_compo_project.htm",
+      "md_rel_path": "IEd_open_compo_project.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_open_impl.htm",
+      "md_rel_path": "IEd_open_impl.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_open_impl_editor.htm",
+      "md_rel_path": "IEd_open_impl_editor.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_open_impleditor_for_element.htm",
+      "md_rel_path": "IEd_open_impleditor_for_element.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_open_impleditor_includedcomponent.htm",
+      "md_rel_path": "IEd_open_impleditor_includedcomponent.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_Overview.htm",
+      "md_rel_path": "IEd_Overview.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_Reference_to_UserInterface.htm",
+      "md_rel_path": "IEd_Reference_to_UserInterface.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_ReferencesWindow.htm",
+      "md_rel_path": "IEd_ReferencesWindow.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_Select_DefaultImplementation.htm",
+      "md_rel_path": "IEd_Select_DefaultImplementation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_select_formula.htm",
+      "md_rel_path": "IEd_select_formula.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_select_impl.htm",
+      "md_rel_path": "IEd_select_impl.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_Settings_Tab.htm",
+      "md_rel_path": "IEd_Settings_Tab.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "IEd_SpecifyMemLoc_StateVariables.htm",
+      "md_rel_path": "IEd_SpecifyMemLoc_StateVariables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "ied_specifyrescalableimplementations.htm",
+      "md_rel_path": "ied_specifyrescalableimplementations.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "impl_impl_casts.htm",
+      "md_rel_path": "impl_impl_casts.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "impl_localvariables.htm",
+      "md_rel_path": "impl_localvariables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "impl_method_process.htm",
+      "md_rel_path": "impl_method_process.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "impl_scalar_nonlogical.htm",
+      "md_rel_path": "impl_scalar_nonlogical.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "impl_temporary_variables.htm",
+      "md_rel_path": "impl_temporary_variables.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Master_Page.htm",
+      "md_rel_path": "Master_Page.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "method_process_impl.htm",
+      "md_rel_path": "method_process_impl.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "open_incld_impl.htm",
+      "md_rel_path": "open_incld_impl.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "operator_impl.htm",
+      "md_rel_path": "operator_impl.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "rename_individual_op_impl.htm",
+      "md_rel_path": "rename_individual_op_impl.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "replace_op_impl.htm",
+      "md_rel_path": "replace_op_impl.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "search_op_impl.htm",
+      "md_rel_path": "search_op_impl.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "select_memory_location.htm",
+      "md_rel_path": "select_memory_location.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "set_limitation.htm",
+      "md_rel_path": "set_limitation.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "set_masterpg_impl.htm",
+      "md_rel_path": "set_masterpg_impl.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "set_overflow_handling.htm",
+      "md_rel_path": "set_overflow_handling.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "specify_enum_impl.htm",
+      "md_rel_path": "specify_enum_impl.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "specify_impl-logicalelement.htm",
+      "md_rel_path": "specify_impl-logicalelement.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "specify_impl-master.htm",
+      "md_rel_path": "specify_impl-master.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "specify_impl_mode.htm",
+      "md_rel_path": "specify_impl_mode.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "specifying_individual_impl.htm",
+      "md_rel_path": "specifying_individual_impl.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "using_impl_types.htm",
+      "md_rel_path": "using_impl_types.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "Value_Tab.htm",
+      "md_rel_path": "Value_Tab.md",
+      "status": "converted",
+      "error": null
+    },
+    {
+      "html_rel_path": "view_op_impl.htm",
+      "md_rel_path": "view_op_impl.md",
+      "status": "converted",
+      "error": null
+    }
+  ]
+}

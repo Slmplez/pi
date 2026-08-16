@@ -1,0 +1,95 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="toc">
+  <param name="Image Width" value="16">
+  <param name="Window Styles" value="0x800427">
+  <param name="ExWindow Styles" value="0x100">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Layout Editor">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Overview">
+      <param name="Local" value="LEd_Overview.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Basics">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Editing a Class Layout">
+        <param name="Local" value="editing_class_layout.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Editing the Layout of Other Components">
+        <param name="Local" value="editing_layout_other_comp.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Flexible Layout">
+        <param name="Local" value="led_flexiblelayout.htm">
+      </object>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Instructions">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Opening the Layout Editor">
+        <param name="Local" value="LEd_open_layout_editor.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Modifying the Diagram Block">
+        <param name="Local" value="LEd_modify_diagram_block.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Moving the Ports">
+        <param name="Local" value="move_ports.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Modifying the Block Attributes">
+        <param name="Local" value="modify_block_attributes.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Changing the Default Attributes for New Blocks">
+        <param name="Local" value="change_default_newblocks.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Assigning an Icon to a Component">
+        <param name="Local" value="assign_icon_class.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Enabling and Disabling Methods, Processes, Runnable Entities">
+        <param name="Local" value="enable_disable_methods.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Modifying the Layout Editor Display">
+        <param name="Local" value="modify_layout_editor_display.htm">
+      </object>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Reference to User Interface">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Layout Editor - Window Elements">
+        <param name="Local" value="LEd_Description_of_Window_Elements.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Layout Menu">
+        <param name="Local" value="LEd_Layout_Menu.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="View Menu">
+        <param name="Local" value="LDe_View_Menu.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Layout Settings for Window">
+        <param name="Local" value="LEd_Layout_Settings_for_Window.htm">
+      </object>
+      </ul>
+    </ul>
+</ul>
+</html>

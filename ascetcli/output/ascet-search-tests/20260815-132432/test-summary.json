@@ -1,0 +1,132 @@
+﻿{
+    "runId":  "20260815-132432",
+    "generatedAt":  "2026-08-15T14:09:46.1365916+08:00",
+    "verdict":  "PASS_STAGED_VALIDATION",
+    "ascet":  {
+                  "version":  "6.1.5_2.2.0",
+                  "pid":  25888,
+                  "database":  "C:\\Repo\\F05_IPB_L2_0429",
+                  "responding":  true
+              },
+    "stages":  {
+                   "offlineBuild":  "PASS",
+                   "npmCheck":  "PASS",
+                   "liveModeMatrix":  {
+                                          "status":  "PASS",
+                                          "modes":  10
+                                      },
+                   "uiContract":  "PASS",
+                   "concurrencyContract":  "PASS",
+                   "safeFaultInjection":  "PASS",
+                   "sequentialSoak":  {
+                                          "status":  "PASS",
+                                          "calls":  100,
+                                          "failures":  0
+                                      },
+                   "concurrentSoak":  {
+                                          "status":  "PASS",
+                                          "calls":  40,
+                                          "batches":  5,
+                                          "batchSize":  8,
+                                          "failures":  0
+                                      },
+                   "finalAudit":  "PASS"
+               },
+    "modes":  {
+                  "comp":  {
+                               "query":  "_PCA",
+                               "count":  1,
+                               "status":  "PASS"
+                           },
+                  "comp-ref":  {
+                                   "query":  "_PCA",
+                                   "count":  1,
+                                   "status":  "PASS"
+                               },
+                  "method":  {
+                                 "query":  "calc",
+                                 "count":  5929,
+                                 "status":  "PASS"
+                             },
+                  "method-ref":  {
+                                     "query":  "calc",
+                                     "count":  5929,
+                                     "status":  "PASS"
+                                 },
+                  "method-element":  {
+                                         "query":  "VLC3IsInControl",
+                                         "count":  20,
+                                         "status":  "PASS"
+                                     },
+                  "element":  {
+                                  "query":  "PCA_Ctrl_slMin_RA",
+                                  "count":  1,
+                                  "status":  "PASS"
+                              },
+                  "element-ref":  {
+                                      "query":  "PCA_Ctrl_slMin_RA",
+                                      "count":  2,
+                                      "status":  "PASS"
+                                  },
+                  "sender":  {
+                                 "query":  "calc",
+                                 "count":  4,
+                                 "status":  "PASS"
+                             },
+                  "receiver":  {
+                                   "query":  "calc",
+                                   "count":  4,
+                                   "status":  "PASS"
+                               },
+                  "text":  {
+                               "query":  "VLC3IsInControl",
+                               "count":  26,
+                               "status":  "PASS"
+                           }
+              },
+    "sequentialPerformance":  {
+                                  "averageWallMs":  7582.17,
+                                  "maxWallMs":  44889,
+                                  "wallMs":  764304
+                              },
+    "concurrentPerformance":  {
+                                  "queuedCalls":  35,
+                                  "averageWaitMs":  17448.18,
+                                  "maxWaitMs":  71332,
+                                  "averageWallMs":  24170.2,
+                                  "maxWallMs":  74543,
+                                  "wallMs":  203857
+                              },
+    "resourceAudit":  {
+                          "sequentialWorkingSetDelta":  -1347584,
+                          "sequentialHandleDelta":  0,
+                          "concurrentWorkingSetDelta":  360448,
+                          "concurrentHandleDelta":  0,
+                          "finalWorkingSetDeltaFromBaseline":  -1290240,
+                          "finalHandleDeltaFromBaseline":  -1,
+                          "finalChildWindows":  0,
+                          "finalOpenWindows":  0,
+                          "unsavedEditors":  0,
+                          "severeLogHits":  0
+                      },
+    "concurrencySemantics":  "Concurrent CLI processes are accepted and serialized per ASCET PID by the named mutex; native Search UI is not executed in parallel.",
+    "skippedUnsafe":  [
+                          "ASCET not running",
+                          "multiple ASCET processes",
+                          "database closed",
+                          "ASCET terminated during search",
+                          "manual native Find already running"
+                      ],
+    "releaseGate":  {
+                        "stagedValidationPassed":  true,
+                        "plannedSequentialCalls":  500,
+                        "executedSequentialCalls":  100,
+                        "plannedConcurrentCalls":  400,
+                        "executedConcurrentCalls":  40,
+                        "fullReleaseNightlyGateExecuted":  false
+                    },
+    "observations":  [
+                         "The first concurrent harness revision treated a null PowerShell Process.ExitCode as failure even though the CLI returned success JSON; the harness was corrected and the formal run passed.",
+                         "One final-state sample transiently reported openWindows=1; the immediate retry and three subsequent interval samples all reported openWindows=0 and native Search child windows=0."
+                     ]
+}

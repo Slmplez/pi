@@ -1,0 +1,97 @@
+{
+  "ok": false,
+  "folder": "TEST\\__pi_element_live_20260808053624",
+  "stages": [],
+  "cleanup": [
+    {
+      "componentPath": "TEST\\__pi_element_live_20260808053624\\Consumer",
+      "result": {
+        "status": "ok",
+        "data": {
+          "changed": {
+            "componentPath": "TEST\\__pi_element_live_20260808053624\\Consumer",
+            "folderPath": "TEST\\__pi_element_live_20260808053624",
+            "componentName": "Consumer",
+            "deleted": false,
+            "alreadyMissing": true,
+            "verifyReadbackRequested": true,
+            "readbackVerified": true,
+            "summary": "Component 'TEST\\__pi_element_live_20260808053624\\Consumer' is already missing."
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    },
+    {
+      "componentPath": "TEST\\__pi_element_live_20260808053624\\Provider",
+      "result": {
+        "status": "ok",
+        "data": {
+          "changed": {
+            "componentPath": "TEST\\__pi_element_live_20260808053624\\Provider",
+            "folderPath": "TEST\\__pi_element_live_20260808053624",
+            "componentName": "Provider",
+            "deleted": false,
+            "alreadyMissing": true,
+            "verifyReadbackRequested": true,
+            "readbackVerified": true,
+            "summary": "Component 'TEST\\__pi_element_live_20260808053624\\Provider' is already missing."
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    },
+    {
+      "componentPath": "TEST\\__pi_element_live_20260808053624\\Inline",
+      "result": {
+        "status": "ok",
+        "data": {
+          "changed": {
+            "componentPath": "TEST\\__pi_element_live_20260808053624\\Inline",
+            "folderPath": "TEST\\__pi_element_live_20260808053624",
+            "componentName": "Inline",
+            "deleted": false,
+            "alreadyMissing": true,
+            "verifyReadbackRequested": true,
+            "readbackVerified": true,
+            "summary": "Component 'TEST\\__pi_element_live_20260808053624\\Inline' is already missing."
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    },
+    {
+      "folder": "TEST\\__pi_element_live_20260808053624",
+      "result": {
+        "status": "ok",
+        "data": {
+          "changed": {
+            "folderPath": "TEST\\__pi_element_live_20260808053624",
+            "deleted": false,
+            "alreadyMissing": true,
+            "verifyReadbackRequested": true,
+            "readbackVerified": true,
+            "summary": "Folder 'TEST\\__pi_element_live_20260808053624' is already missing."
+          },
+          "observations": {
+            "invalidated": []
+          }
+        },
+        "warnings": []
+      }
+    }
+  ],
+  "error": {
+    "message": "create_folder: {\"status\":\"error\",\"error\":{\"code\":\"ascet_edit_invalid_parameter\",\"message\":\"Invalid parameters for ascet_edit action 'create_folder'. Unknown properties and values not accepted by the action contract are rejected.\"}}",
+    "stack": "Error: create_folder: {\"status\":\"error\",\"error\":{\"code\":\"ascet_edit_invalid_parameter\",\"message\":\"Invalid parameters for ascet_edit action 'create_folder'. Unknown properties and values not accepted by the action contract are rejected.\"}}\n    at outcome (C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\ascet-element-write-live-smoke.ts:20:93)\n    at edit (C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\ascet-element-write-live-smoke.ts:21:29)\n    at async test (C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\ascet-element-write-live-smoke.ts:26:22)\n    at async <anonymous> (C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\ascet-element-write-live-smoke.ts:52:5)"
+  }
+}

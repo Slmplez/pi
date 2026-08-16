@@ -1,0 +1,295 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="index">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="arithmetic services">
+    <param name="Name" value="Overview">
+    <param name="Local" value="AS_Overview.htm">
+    <param name="Name" value="Searching for an Entry">
+    <param name="Local" value="searching_entry.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="usage in ASCET">
+      <param name="Name" value="Using Arithmetic Services in ASCET">
+      <param name="Local" value="AS_Using_Arith_Serv_ASCET.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="allowable ~">
+      <param name="Name" value="Allowable Arithmetic Services">
+      <param name="Local" value="AS_Allowable_Arithmetic_Services.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="allowable types">
+      <param name="Name" value="Allowable Types">
+      <param name="Local" value="AS_Allowable_Types.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="creating">
+      <param name="Name" value="Creating and Saving Arithmetic Services">
+      <param name="Local" value="AS_Creating_and_Saving_Arith_Ser.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="definition">
+      <param name="Name" value="Summary">
+      <param name="Local" value="AS_Def_Arith_Serv_.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="function">
+      <param name="Name" value="Functionality of an Arithmetic Service">
+      <param name="Local" value="AS_Functionality_of_an_Arithmetic_Service.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="function declaration">
+      <param name="Name" value="Function Declaration">
+      <param name="Local" value="AS_Function_Declaration.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="function key">
+      <param name="Name" value="Function Key">
+      <param name="Local" value="AS_Function_Key.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="saving">
+      <param name="Name" value="Creating and Saving Arithmetic Services">
+      <param name="Local" value="AS_Creating_and_Saving_Arith_Ser.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="services.ini">
+      <param name="Name" value="Overview">
+      <param name="Local" value="AS_Overview.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="AS editor">
+    <param name="Name" value="Interface Editor for Arithmetic Services">
+    <param name="Local" value="interface_editor_as.htm">
+    <param name="Name" value="Functions of the AS Editor">
+    <param name="Local" value="functions_as_editor.htm">
+    <param name="Name" value="Launching the AS Editor">
+    <param name="Local" value="AS_Launching_the_AS_Editor.htm">
+    <param name="Name" value="Launching the AS Editor from ASCET">
+    <param name="Local" value="launching_as_ascet.htm">
+    <param name="Name" value="Launching the AS Editor from the ASCET Start Menu">
+    <param name="Local" value="launching_as_ascet_start.htm">
+    <param name="Name" value="Launching the AS Editor from Windows Explorer">
+    <param name="Local" value="launching_as_windows.htm">
+    <param name="Name" value="User Interface of the AS Editor">
+    <param name="Local" value="user_interface_as-editor.htm">
+    <param name="Name" value="File Menu">
+    <param name="Local" value="AS_file_menu.htm">
+    <param name="Name" value="Sets Menu">
+    <param name="Local" value="AS_sets__menu.htm">
+    <param name="Name" value="View Menu">
+    <param name="Local" value="AS_view_menu.htm">
+    <param name="Name" value="Entries Menu">
+    <param name="Local" value="enteries_menu.htm">
+    <param name="Name" value="? Menu">
+    <param name="Local" value="AS_about_menu.htm">
+    <param name="Name" value="Status Bar">
+    <param name="Local" value="AS_status_bar.htm">
+    <param name="Name" value="Tool Bar">
+    <param name="Local" value="AS_tool_bars.htm">
+    <param name="Name" value="Changing the View of the AS Editor">
+    <param name="Local" value="change_view_as_editor.htm">
+    <param name="Name" value="Elements of the Browse Area">
+    <param name="Local" value="elements_browse_area.htm">
+    <param name="Name" value="Elements of the Button Area">
+    <param name="Local" value="elements_button_area.htm">
+    <param name="Name" value="Elements of the Edit Area">
+    <param name="Local" value="elements_edit_area.htm">
+    <param name="Name" value="Saving a File">
+    <param name="Local" value="saving_file.htm">
+    <param name="Name" value="Loading a File">
+    <param name="Local" value="loading_file.htm">
+    <param name="Name" value="Selecting a Set">
+    <param name="Local" value="selecting_a_set.htm">
+    <param name="Name" value="Creating a Set">
+    <param name="Local" value="creating_set.htm">
+    <param name="Name" value="Deleting a Set">
+    <param name="Local" value="deleting_set.htm">
+    <param name="Name" value="Duplicating a Set">
+    <param name="Local" value="duplicating_set.htm">
+    <param name="Name" value="Renaming a Set">
+    <param name="Local" value="renaming_set.htm">
+    <param name="Name" value="Selecting an Entry">
+    <param name="Local" value="AS_selecting_entry.htm">
+    <param name="Name" value="Creating an Entry">
+    <param name="Local" value="creating_entry.htm">
+    <param name="Name" value="Specifying an Entry">
+    <param name="Local" value="specifying_entry.htm">
+    <param name="Name" value="Updating an Entry">
+    <param name="Local" value="updating_entry.htm">
+    <param name="Name" value="Deleting an Entry">
+    <param name="Local" value="AS_deleting_entry.htm">
+    <param name="Name" value="Converting a Comment into an Entry">
+    <param name="Local" value="converting_entry_comment.htm">
+    <param name="Name" value="Converting an Entry into a Comment">
+    <param name="Local" value="converting_comment_entry.htm">
+    <param name="Name" value="Searching for an Entry">
+    <param name="Local" value="searching_entry.htm">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="buttons">
+      <param name="Name" value="Tool Bar">
+      <param name="Local" value="AS_tool_bars.htm">
+      <param name="Name" value="Elements of the Button Area">
+      <param name="Local" value="elements_button_area.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="browse area">
+      <param name="Name" value="Elements of the Browse Area">
+      <param name="Local" value="elements_browse_area.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="convert comment into entry">
+      <param name="Name" value="Converting a Comment into an Entry">
+      <param name="Local" value="converting_entry_comment.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="convert entry into comment">
+      <param name="Name" value="Converting an Entry into a Comment">
+      <param name="Local" value="converting_comment_entry.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="creating a set">
+      <param name="Name" value="Creating a Set">
+      <param name="Local" value="creating_set.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Creating an entry">
+      <param name="Name" value="Creating an Entry">
+      <param name="Local" value="creating_entry.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="deleting a set">
+      <param name="Name" value="Deleting a Set">
+      <param name="Local" value="deleting_set.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="deleting an entry">
+      <param name="Name" value="Deleting an Entry">
+      <param name="Local" value="AS_deleting_entry.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="edit area">
+      <param name="Name" value="Elements of the Edit Area">
+      <param name="Local" value="elements_edit_area.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="editor interface">
+      <param name="Name" value="User Interface of the AS Editor">
+      <param name="Local" value="user_interface_as-editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="managing entries">
+      <param name="Name" value="Managing Entries">
+      <param name="Local" value="AS_Managing_Entries.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="managing Sets">
+      <param name="Name" value="Managing Sets">
+      <param name="Local" value="AS_Managing_Sets.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="menu commands">
+      <param name="Name" value="Menu Bar">
+      <param name="Local" value="AS_menu_bar.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="renaming a set">
+      <param name="Name" value="Renaming a Set">
+      <param name="Local" value="renaming_set.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="starting">
+      <param name="Name" value="Launching the AS Editor from Windows Explorer">
+      <param name="Local" value="launching_as_windows.htm">
+      <param name="Name" value="Launching the AS Editor from the ASCET Start Menu">
+      <param name="Local" value="launching_as_ascet_start.htm">
+      <param name="Name" value="Launching the AS Editor from ASCET">
+      <param name="Local" value="launching_as_ascet.htm">
+      <param name="Name" value="Launching the AS Editor">
+      <param name="Local" value="AS_Launching_the_AS_Editor.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="duplicating a set">
+      <param name="Name" value="Duplicating a Set">
+      <param name="Local" value="duplicating_set.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="searching for an entry">
+      <param name="Name" value="Searching for an Entry">
+      <param name="Local" value="searching_entry.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="selecting a set">
+      <param name="Name" value="Selecting a Set">
+      <param name="Local" value="selecting_a_set.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="specifying an entry">
+      <param name="Name" value="Specifying an Entry">
+      <param name="Local" value="specifying_entry.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="updating an entry">
+      <param name="Name" value="Updating an Entry">
+      <param name="Local" value="updating_entry.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="load file">
+      <param name="Name" value="Loading a File">
+      <param name="Local" value="loading_file.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="buttons">
+    <param name="See Also" value="buttons">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="AS editor">
+      <param name="Name" value="Tool Bar">
+      <param name="Local" value="AS_tool_bars.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="editor">
+    <param name="See Also" value="editor">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="AS editor">
+      <param name="Name" value="Interface Editor for Arithmetic Services">
+      <param name="Local" value="interface_editor_as.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="user interface">
+    <param name="See Also" value="user interface">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="AS-Editor">
+      <param name="Name" value="User Interface of the AS Editor">
+      <param name="Local" value="user_interface_as-editor.htm">
+    </object>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="menu options">
+    <param name="See Also" value="menu options">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="AS editor">
+      <param name="Name" value="User Interface of the AS Editor">
+      <param name="Local" value="user_interface_as-editor.htm">
+    </object>
+    </ul>
+</ul>
+</html>

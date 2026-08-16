@@ -1,0 +1,137 @@
+{
+  "version": 1,
+  "status": "applied",
+  "databaseFingerprint": "49be9da8ddaa5ac7b09b24a394229cbbd9a9dc3dbabadf9704da7ff25633274a",
+  "targetOid": "040g00001g001qg71060i85ff2002",
+  "targetKind": "component",
+  "canonicalPath": "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+  "action": "apply_element_spec",
+  "planId": "a7718bf1-5eb3-4527-8c73-43a332d83699",
+  "planFingerprint": "e265b87c636f925725d7d38b7f9c5218238dd44d38a334610910fa98c78f14f4",
+  "targetImpactFingerprint": "sha256:0d81277e0b76a4629a04fa14d63f7f1f949ea8eaba542f3095b615e2475253cc",
+  "guardGeneration": 3,
+  "beforeSnapshotFingerprint": "sha256:e31f163ac2b2d0c7604e9da50aad9845069f35758efd1e934d99568b22029f85",
+  "desiredFingerprint": "sha256:b00e7c8ec81106662806481eba08d68c663e53d6463a6cf8b042a7af0ddc9ff0",
+  "beforeSnapshot": {
+    "capabilities": {
+      "elements": [
+        {
+          "blockingCodes": [],
+          "capabilityStatus": "validated",
+          "dataConfiguration": {
+            "configurationName": "Data",
+            "selected": true,
+            "source": "defaultDataConfiguration"
+          },
+          "dataItemResolvable": true,
+          "implementationConfiguration": {
+            "configurationName": "Impl",
+            "selected": true,
+            "source": "defaultImplementationConfiguration"
+          },
+          "implementationItemResolvable": true,
+          "name": "C_FIX_PostReconcile",
+          "operation": "create"
+        }
+      ],
+      "validated": true
+    },
+    "catalogIdentity": {
+      "componentOID": "040g00001g001qg71060i85ff2002"
+    },
+    "catalogSnapshot": {
+      "componentConfigurationProvenance": {
+        "classDataConfiguration": {
+          "configurationName": "ClassUnderTest",
+          "selected": true,
+          "source": "classDataConfiguration"
+        },
+        "classImplementationConfiguration": {
+          "configurationName": "ClassUnderTest",
+          "selected": true,
+          "source": "classImplementationConfiguration"
+        },
+        "defaultDataConfiguration": {
+          "configurationName": "Data",
+          "selected": true,
+          "source": "defaultDataConfiguration"
+        },
+        "defaultImplementationConfiguration": {
+          "configurationName": "Impl",
+          "selected": true,
+          "source": "defaultImplementationConfiguration"
+        }
+      },
+      "elements": [],
+      "identity": {
+        "componentOID": "040g00001g001qg71060i85ff2002"
+      }
+    },
+    "limitations": [],
+    "liveElementCount": 0,
+    "liveSnapshotHash": "3577c3da806c30180dbb5ff04d6ee46d2cb982e254e6a3c6e14f7b6f2e190705",
+    "normalizedSpec": {
+      "elements": [
+        {
+          "kind": "variable",
+          "modelType": "cont",
+          "name": "C_FIX_PostReconcile",
+          "scope": "local"
+        }
+      ]
+    },
+    "normalizedSpecHash": "0c8b87c0d5d68e3b13b55bd0ff30b03374ab38e630c94c82b2592900fc540ab2",
+    "operation": "authoritative_element_preflight",
+    "resolvedIntent": "create",
+    "resolvedOperations": [
+      {
+        "name": "C_FIX_PostReconcile",
+        "operation": "create"
+      }
+    ],
+    "result": {
+      "AddedElements": [
+        {
+          "Kind": "Variable",
+          "Name": "C_FIX_PostReconcile",
+          "Signature": "Variable ModelType=cont Scope=local"
+        }
+      ],
+      "ComponentPath": "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+      "IncompatibleElements": [],
+      "ModifiedElements": [],
+      "RemovedElements": [],
+      "SkippedElements": [],
+      "Summary": "1 added, 0 removed, 0 modified, 0 incompatible"
+    },
+    "validated": true,
+    "warnings": [
+      "C_FIX_PostReconcile: data.value omitted; ASCET default data will be used.",
+      "C_FIX_PostReconcile: implementation omitted; ASCET default implementation will be used."
+    ]
+  },
+  "attemptedMutation": {
+    "action": "apply_element_spec",
+    "componentPath": "PI_LIVE_FIX_20260812_EE770C82\\ClassUnderTest",
+    "elements": [
+      {
+        "kind": "variable",
+        "modelType": "cont",
+        "name": "C_FIX_PostReconcile",
+        "role": "standardPrimitive",
+        "scope": "local"
+      }
+    ],
+    "intent": "create"
+  },
+  "createdAt": "2026-08-12T05:57:53.430Z",
+  "updatedAt": "2026-08-12T05:57:54.396Z",
+  "evidence": {
+    "bridgeEntered": true,
+    "backendResponseReceived": true,
+    "mutationStarted": true
+  },
+  "outcome": {
+    "operationId": "apply_element_spec"
+  }
+}

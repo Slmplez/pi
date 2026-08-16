@@ -26,9 +26,7 @@ export const ascetRecoverTool = defineSequentialAscetTool({
 			signal,
 			executeCli: ctx.executeCli,
 			confirm:
-				ctx.hasUI && ctx.ui?.confirm
-					? (title, message) => ctx.ui!.confirm(title, message, { signal, timeout: 30_000 })
-					: undefined,
+				ctx.hasUI && ctx.ui?.confirm ? (title, message) => ctx.ui!.confirm(title, message, { signal }) : undefined,
 		});
 		const route = routeAscetAction({ toolName: "ascet_recover", action: params.action });
 		return {

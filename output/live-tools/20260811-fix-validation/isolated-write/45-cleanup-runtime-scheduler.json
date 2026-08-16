@@ -1,0 +1,137 @@
+{
+  "ok": true,
+  "paths": {
+    "mode": "bundle",
+    "ascetAgentRoot": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+    "extensionRoot": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension",
+    "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+    "contractsRoot": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts",
+    "catalogPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts\\cli-catalog.json"
+  },
+  "checks": {
+    "cliExists": true,
+    "contractsRootExists": true,
+    "catalogExists": true
+  },
+  "summary": "ASCET status: ready\nASCET installation: ready\nASCET mode: bundle\nASCET extension: C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\nASCET source: C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\nASCET Bridge: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe\nASCET contracts: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts\ncli-catalog.json: OK\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\contracts\\cli-catalog.json\nASCET DLL: ready\n  C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\Ascetapidll\\Etas.AscetNET.dll\nASCET ToolAPI: ready\n  ASCET live ToolAPI quick self-test\n  elapsedMs: 386\nASCET scheduler: ready\nASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nRecent:\n- ascet-job-1 ascet_cli/delete_component agent=system state=succeeded (queueWait=0ms, exec=966ms)\n- ascet-job-2 ascet_cli/delete_component agent=system state=succeeded (queueWait=0ms, exec=748ms)\n- ascet-job-3 ascet_cli/delete_folder agent=system state=succeeded (queueWait=0ms, exec=547ms)\n- ascet-job-4 ascet_get/get_tree agent=system state=failed (queueWait=0ms, exec=568ms) error=folder_not_found\n- ascet-job-5 ascet_get/get_database_identity agent=system state=succeeded (queueWait=0ms, exec=459ms)\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none",
+  "installationOk": true,
+  "dllOk": true,
+  "runtimeOk": true,
+  "schedulerOk": true,
+  "dll": {
+    "ok": true,
+    "path": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\Ascetapidll\\Etas.AscetNET.dll"
+  },
+  "runtime": {
+    "ok": true,
+    "commandId": "selftest",
+    "description": "ASCET live ToolAPI quick self-test",
+    "elapsedMs": 386,
+    "exitCode": 0,
+    "timedOut": false,
+    "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"profile\":\"quick\",\"passed\":true,\"status\":\"passed\",\"stdout\":\"Log File: C:\\\\ProgramData\\\\ETAS\\\\LogFiles\\\\AscetBridge\\\\Cebra\\r\\nProgram Path: C:\\\\Program Files (x86)\\\\ETAS\\\\ASCET6.1.5\\\\Cebra\\r\\nDatabase: C:\\\\Repo\\\\F05_IPB_L2_0429\\r\\nDatabasePath: C:\\\\Repo\\\\\\r\\nTopFolders: 11\\r\\n\",\"stderr\":\"\",\"inProcess\":true},\"error\":null,\"meta\":{\"bridgePid\":36280,\"bridgeGeneration\":\"75c69e84-d92f-47b4-8ec9-ee9f57d3be5a\",\"durationMs\":278,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"selftest\",\"operation\":\"quick\"}}\r\n",
+    "stderr": ""
+  },
+  "scheduler": {
+    "ok": true,
+    "scheduler": {
+      "hostState": "healthy",
+      "runningJob": null,
+      "queuedJobs": [],
+      "recentJobs": [
+        {
+          "jobId": "ascet-job-1",
+          "agentId": "system",
+          "toolName": "ascet_cli",
+          "commandId": "delete_component",
+          "kind": "write",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786438070039,
+          "startedAt": 1786438070039,
+          "queueWaitMs": 0,
+          "finishedAt": 1786438071005,
+          "executionMs": 966
+        },
+        {
+          "jobId": "ascet-job-2",
+          "agentId": "system",
+          "toolName": "ascet_cli",
+          "commandId": "delete_component",
+          "kind": "write",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786438071010,
+          "startedAt": 1786438071010,
+          "queueWaitMs": 0,
+          "finishedAt": 1786438071758,
+          "executionMs": 748
+        },
+        {
+          "jobId": "ascet-job-3",
+          "agentId": "system",
+          "toolName": "ascet_cli",
+          "commandId": "delete_folder",
+          "kind": "write",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786438071763,
+          "startedAt": 1786438071763,
+          "queueWaitMs": 0,
+          "finishedAt": 1786438072310,
+          "executionMs": 547
+        },
+        {
+          "jobId": "ascet-job-4",
+          "agentId": "system",
+          "toolName": "ascet_get",
+          "commandId": "get_tree",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "failed",
+          "queuedAt": 1786438072314,
+          "startedAt": 1786438072314,
+          "queueWaitMs": 0,
+          "finishedAt": 1786438072882,
+          "executionMs": 568,
+          "errorCode": "folder_not_found",
+          "errorMessage": "Folder 'PI_LIVE_FIX_20260811_13947C09' was not found."
+        },
+        {
+          "jobId": "ascet-job-5",
+          "agentId": "system",
+          "toolName": "ascet_get",
+          "commandId": "get_database_identity",
+          "kind": "read",
+          "priority": "normal",
+          "resourceKey": "ascet.toolapi.global",
+          "state": "succeeded",
+          "queuedAt": 1786438072885,
+          "startedAt": 1786438072885,
+          "queueWaitMs": 0,
+          "finishedAt": 1786438073344,
+          "executionMs": 459
+        }
+      ],
+      "pendingByAgent": {},
+      "activeCount": 0,
+      "resource": {
+        "key": "ascet.toolapi.global",
+        "active": 0,
+        "queued": 0,
+        "concurrency": 1,
+        "runningJob": null
+      }
+    },
+    "cliLock": {
+      "locked": false,
+      "path": "C:\\Users\\NHJ3SZH\\AppData\\Local\\PI\\ascet\\locks\\ascet-toolapi.lock"
+    },
+    "operationHealth": [],
+    "summary": "ASCET Scheduler Status\n\nHost: healthy\nActive: 0\nResource: ascet.toolapi.global active=0 queued=0 concurrency=1\nPending: 0\nRunning: none\n\nPending by agent: {}\n\nRecent:\n- ascet-job-1 ascet_cli/delete_component agent=system state=succeeded (queueWait=0ms, exec=966ms)\n- ascet-job-2 ascet_cli/delete_component agent=system state=succeeded (queueWait=0ms, exec=748ms)\n- ascet-job-3 ascet_cli/delete_folder agent=system state=succeeded (queueWait=0ms, exec=547ms)\n- ascet-job-4 ascet_get/get_tree agent=system state=failed (queueWait=0ms, exec=568ms) error=folder_not_found\n- ascet-job-5 ascet_get/get_database_identity agent=system state=succeeded (queueWait=0ms, exec=459ms)\n\nCLI Lock:\n  owner: none\n\nOperation Health:\n  degraded: none"
+  }
+}

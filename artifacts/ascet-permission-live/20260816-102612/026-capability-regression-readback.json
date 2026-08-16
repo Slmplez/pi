@@ -1,0 +1,57 @@
+{
+  "stage": "capability-regression-readback",
+  "startedAt": "2026-08-16T02:35:11.930Z",
+  "finishedAt": "2026-08-16T02:35:12.611Z",
+  "request": {
+    "toolName": "ascet_read",
+    "params": {
+      "action": "read_method_signature",
+      "componentPath": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Vehicle\\VehXDynamicWSS\\AxWss\\Classes\\aFzg_Zustand",
+      "methodName": "PiUnsupportedAction"
+    }
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"error\": {\n    \"code\": \"method_not_found\",\n    \"message\": \"Method 'PiUnsupportedAction' was not found in component 'PlatformLibrary\\\\Package\\\\AntiLockController\\\\Private\\\\SMC\\\\Vehicle\\\\VehXDynamicWSS\\\\AxWss\\\\Classes\\\\aFzg_Zustand'.\",\n    \"details\": {\n      \"stdout\": \"{\\\"type\\\":\\\"response\\\",\\\"protocolVersion\\\":1,\\\"ok\\\":false,\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":\\\"method_not_found\\\",\\\"message\\\":\\\"Method \\\\u0027PiUnsupportedAction\\\\u0027 was not found in component \\\\u0027PlatformLibrary\\\\\\\\Package\\\\\\\\AntiLockController\\\\\\\\Private\\\\\\\\SMC\\\\\\\\Vehicle\\\\\\\\VehXDynamicWSS\\\\\\\\AxWss\\\\\\\\Classes\\\\\\\\aFzg_Zustand\\\\u0027.\\\"},\\\"meta\\\":{\\\"bridgePid\\\":38508,\\\"bridgeGeneration\\\":\\\"081d3725-c6a5-4090-b26a-4937da3e0ff5\\\",\\\"durationMs\\\":341,\\\"sessionPolicy\\\":\\\"fresh_session\\\",\\\"mutationStarted\\\":false,\\\"mode\\\":\\\"exec\\\",\\\"operation\\\":\\\"read_method_signature\\\"}}\",\n      \"exitCode\": 2,\n      \"operationId\": \"read_method_signature\",\n      \"stage\": \"cli_process\",\n      \"retryable\": false,\n      \"stdoutSummary\": \"{\\\"type\\\":\\\"response\\\",\\\"protocolVersion\\\":1,\\\"ok\\\":false,\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":\\\"method_not_found\\\",\\\"message\\\":\\\"Method \\\\u0027PiUnsupportedAction\\\\u0027 was not found in component \\\\u0027PlatformLibrary\\\\\\\\Package\\\\\\\\AntiLockController\\\\\\\\Private\\\\\\\\SMC\\\\\\\\Vehicle\\\\\\\\VehXDynamicWSS\\\\\\\\AxWss\\\\\\\\Classes\\\\\\\\aFzg_Zustand\\\\u0027.\\\"},\\\"meta\\\":{\\\"bridgePid\\\":38508,\\\"bridgeGeneration\\\":\\\"081d3725-c6a5-4090-b26a-4937da3e0ff5\\\",\\\"durationMs\\\":341,\\\"sessionPolicy\\\":\\\"fresh_session\\\",\\\"mutationStarted\\\":false,\\\"mode\\\":\\\"exec\\\",\\\"operation\\\":\\\"read_method_signature\\\"}}\"\n    }\n  }\n}"
+      }
+    ],
+    "details": {
+      "tool": "ascet_read",
+      "action": "read_method_signature",
+      "command": {
+        "logicalCommandId": "AscetReadMethodSignature",
+        "backendCommandId": "AscetReadMethodSignature",
+        "operation": "read_method_signature"
+      },
+      "error": {
+        "code": "method_not_found",
+        "message": "Method 'PiUnsupportedAction' was not found in component 'PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Vehicle\\VehXDynamicWSS\\AxWss\\Classes\\aFzg_Zustand'.",
+        "details": {
+          "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"method_not_found\",\"message\":\"Method \\u0027PiUnsupportedAction\\u0027 was not found in component \\u0027PlatformLibrary\\\\Package\\\\AntiLockController\\\\Private\\\\SMC\\\\Vehicle\\\\VehXDynamicWSS\\\\AxWss\\\\Classes\\\\aFzg_Zustand\\u0027.\"},\"meta\":{\"bridgePid\":38508,\"bridgeGeneration\":\"081d3725-c6a5-4090-b26a-4937da3e0ff5\",\"durationMs\":341,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"read_method_signature\"}}\r\n",
+          "exitCode": 2
+        }
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\F05_IPB_L2_0429",
+          "cliPath": "C:/Repo/09_ASCETCopilot/pi-ascet-extension-prototype/packages/ascet-extension/ascet-cli/bin/AscetBridge.exe",
+          "args": [
+            "exec",
+            "read_method_signature",
+            "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Vehicle\\VehXDynamicWSS\\AxWss\\Classes\\aFzg_Zustand",
+            "PiUnsupportedAction",
+            "--json"
+          ],
+          "timeoutMs": 90000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 2,
+        "timedOut": false,
+        "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":false,\"result\":null,\"error\":{\"code\":\"method_not_found\",\"message\":\"Method \\u0027PiUnsupportedAction\\u0027 was not found in component \\u0027PlatformLibrary\\\\Package\\\\AntiLockController\\\\Private\\\\SMC\\\\Vehicle\\\\VehXDynamicWSS\\\\AxWss\\\\Classes\\\\aFzg_Zustand\\u0027.\"},\"meta\":{\"bridgePid\":38508,\"bridgeGeneration\":\"081d3725-c6a5-4090-b26a-4937da3e0ff5\",\"durationMs\":341,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"read_method_signature\"}}\r\n"
+      }
+    }
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "startedAt": "2026-08-09T02:07:12.143Z",
+  "serial": true,
+  "cases": [
+    {
+      "name": "unfiltered",
+      "request": {
+        "action": "component_refs",
+        "target": {
+          "path": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010"
+        },
+        "delivery": "inline"
+      },
+      "ok": true,
+      "pass": true,
+      "elapsedMs": 3147,
+      "itemCount": 95,
+      "cmScmCount": 1,
+      "coverage": {
+        "status": "complete_for_scope",
+        "foldersVisited": 0,
+        "componentsScanned": 1
+      }
+    },
+    {
+      "name": "name_CM_SCM",
+      "request": {
+        "action": "component_refs",
+        "target": {
+          "path": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010"
+        },
+        "filters": {
+          "name": "CM_SCM"
+        },
+        "delivery": "inline"
+      },
+      "ok": true,
+      "pass": true,
+      "elapsedMs": 546,
+      "itemCount": 1,
+      "cmScmCount": 1,
+      "coverage": {
+        "status": "complete_for_scope",
+        "foldersVisited": 0,
+        "componentsScanned": 1
+      }
+    },
+    {
+      "name": "scope_exported",
+      "request": {
+        "action": "component_refs",
+        "target": {
+          "path": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010"
+        },
+        "filters": {
+          "scope": [
+            "exported"
+          ]
+        },
+        "delivery": "inline"
+      },
+      "ok": true,
+      "pass": true,
+      "elapsedMs": 559,
+      "itemCount": 95,
+      "cmScmCount": 1,
+      "coverage": {
+        "status": "complete_for_scope",
+        "foldersVisited": 0,
+        "componentsScanned": 1
+      }
+    },
+    {
+      "name": "scope_imported",
+      "request": {
+        "action": "component_refs",
+        "target": {
+          "path": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010"
+        },
+        "filters": {
+          "scope": [
+            "imported"
+          ]
+        },
+        "delivery": "inline"
+      },
+      "ok": true,
+      "pass": true,
+      "elapsedMs": 555,
+      "itemCount": 0,
+      "cmScmCount": 0,
+      "coverage": {
+        "status": "complete_for_scope",
+        "foldersVisited": 0,
+        "componentsScanned": 1
+      }
+    },
+    {
+      "name": "name_scope_match",
+      "request": {
+        "action": "component_refs",
+        "target": {
+          "path": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010"
+        },
+        "filters": {
+          "name": "CM_SCM",
+          "scope": [
+            "exported"
+          ]
+        },
+        "delivery": "inline"
+      },
+      "ok": true,
+      "pass": true,
+      "elapsedMs": 563,
+      "itemCount": 1,
+      "cmScmCount": 1,
+      "coverage": {
+        "status": "complete_for_scope",
+        "foldersVisited": 0,
+        "componentsScanned": 1
+      }
+    },
+    {
+      "name": "name_scope_mismatch",
+      "request": {
+        "action": "component_refs",
+        "target": {
+          "path": "CN_Libary\\CNMS_IPB20\\IPBCustGeneral\\IPBCustGeneral_ECU_CSW_BB88010"
+        },
+        "filters": {
+          "name": "CM_SCM",
+          "scope": [
+            "imported"
+          ]
+        },
+        "delivery": "inline"
+      },
+      "ok": true,
+      "pass": true,
+      "elapsedMs": 459,
+      "itemCount": 0,
+      "cmScmCount": 0,
+      "coverage": {
+        "status": "complete_for_scope",
+        "foldersVisited": 0,
+        "componentsScanned": 1
+      }
+    }
+  ],
+  "completedAt": "2026-08-09T02:07:17.978Z"
+}

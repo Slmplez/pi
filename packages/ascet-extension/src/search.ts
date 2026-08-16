@@ -1,30 +1,19 @@
 ﻿import { existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
-import { Type } from "typebox";
 import { type AscetCliExecutionResult, type AscetCliJsonResult, type AscetCliRequest, runAscetCliJson } from "./cli.ts";
 import type { AscetScheduler } from "./scheduler/scheduler.ts";
 import { resolveAscetStatusPaths } from "./status.ts";
 
-export const ascetSearchModes = [
-	"comp",
-	"comp-ref",
-	"method",
-	"method-ref",
-	"method-element",
-	"element",
-	"element-ref",
-	"sender",
-	"receiver",
-	"text",
-] as const;
+import { openAiObjectSchema } from "./tools/_shared/openai-schema.ts";
+import {
+	type AscetSearchParams,
+	type AscetSearchQuery,
+	ascetSearchActionParameters,
+} from "./tools/actions/contracts/search.ts";
 
-export type AscetSearchMode = (typeof ascetSearchModes)[number];
+export { type AscetSearchMode, type AscetSearchParams, ascetSearchModes } from "./tools/actions/contracts/search.ts";
 
-export interface AscetSearchParams {
-	mode: AscetSearchMode;
-	q: string;
-	limit?: number;
-}
+export const ascetSearchParameters = openAiObjectSchema<AscetSearchParams>(ascetSearchActionParameters);
 
 export interface RunAscetSearchOptions {
 	cwd: string;
@@ -50,15 +39,6 @@ export type AscetSearchNormalizedResult =
 
 const DEFAULT_LIMIT = 20;
 const DEFAULT_TIMEOUT_MS = 300_000;
-
-export const ascetSearchParameters = Type.Object(
-	{
-		mode: Type.String({ enum: [...ascetSearchModes] }),
-		q: Type.String({ minLength: 1, maxLength: 512 }),
-		limit: Type.Optional(Type.Integer({ minimum: 1, maximum: 100 })),
-	},
-	{ additionalProperties: false },
-);
 
 function asRecord(value: unknown): Record<string, unknown> | undefined {
 	return value !== null && typeof value === "object" && !Array.isArray(value)
@@ -101,7 +81,7 @@ export function resolveAscetSearchPath(options: { cwd: string; env?: Record<stri
 }
 
 export async function runAscetSearch(
-	params: AscetSearchParams,
+	params: AscetSearchQuery,
 	options: RunAscetSearchOptions,
 ): Promise<AscetCliJsonResult> {
 	const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
@@ -144,7 +124,7 @@ export async function runAscetSearch(
 }
 
 export function normalizeAscetSearchResult(
-	params: AscetSearchParams,
+	params: AscetSearchQuery,
 	result: AscetCliJsonResult,
 ): AscetSearchNormalizedResult {
 	if (!result.ok) {

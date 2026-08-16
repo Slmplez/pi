@@ -1,0 +1,17 @@
+﻿[
+    {
+        "test":  "packages/ascet-extension/src/edit/service.test.ts",
+        "exitCode":  1,
+        "log":  "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\LIVE_TOOLS_20260812-105126_F1DF11BC\\seven-bug-fix\\10-non-live\\service.test-edit.txt"
+    },
+    {
+        "test":  "packages/ascet-extension/src/tools/edit/schema.test.ts",
+        "exitCode":  0,
+        "log":  "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\LIVE_TOOLS_20260812-105126_F1DF11BC\\seven-bug-fix\\10-non-live\\schema.test-edit.txt"
+    },
+    {
+        "test":  "packages/ascet-extension/src/tools/edit/definition.test.ts",
+        "exitCode":  1,
+        "log":  "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\output\\live-tools\\LIVE_TOOLS_20260812-105126_F1DF11BC\\seven-bug-fix\\10-non-live\\definition.test-edit.txt"
+    }
+]

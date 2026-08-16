@@ -1,0 +1,278 @@
+{
+  "tool": "ascet_get",
+  "params": {
+    "action": "component_refs",
+    "target": {
+      "path": "PlatformProjects\\Gen10\\ESP10\\ESP4DPB\\Product\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD"
+    },
+    "delivery": "inline"
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"delivery\": \"inline\",\n  \"items\": [\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::LDMSelectedControllerT5\",\n      \"scope\": \"imported\",\n      \"targetPath\": \"PlatformLibrary\\\\Package\\\\LDMLibrary\\\\public\\\\LDMSelectedController\",\n      \"targetOid\": \"040qm0076k001l8710cg652njcfg0\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::CM_AVH_CustDeactType\",\n      \"scope\": \"exported\",\n      \"targetPath\": \"PlatformLibrary\\\\Package\\\\CSM_CentralizedStandstillManagement\\\\Public\\\\Enumeration\\\\CSM_DeactType\",\n      \"targetOid\": \"040gpc88gm3g1oo70sc0vauv9sfhc\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::Temp_CSMDriveUnitState_Off\",\n      \"scope\": \"local\",\n      \"targetPath\": \"PlatformLibrary\\\\Package\\\\CSM_CentralizedStandstillManagement\\\\Public\\\\Enumeration\\\\CSM_StateDrvUnit\",\n      \"targetOid\": \"040qm00000001oo718405bs4almis\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::Temp_CSMDriveUnitState_On\",\n      \"scope\": \"local\",\n      \"targetPath\": \"PlatformLibrary\\\\Package\\\\CSM_CentralizedStandstillManagement\\\\Public\\\\Enumeration\\\\CSM_StateDrvUnit\",\n      \"targetOid\": \"040qm00000001oo718405bs4almis\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AvhRequest\",\n      \"scope\": \"imported\",\n      \"targetPath\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\private\\\\AVHRequest\",\n      \"targetOid\": \"040qm011gk001lo714ag68g304rjs\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::CM_AVH_CSMDriveUnitState\",\n      \"scope\": \"exported\",\n      \"targetPath\": \"PlatformLibrary\\\\Package\\\\CSM_CentralizedStandstillManagement\\\\Public\\\\Enumeration\\\\CSM_StateDrvUnit\",\n      \"targetOid\": \"040qm00000001oo718405bs4almis\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::Temp_PwrModSts_On\",\n      \"scope\": \"local\",\n      \"targetPath\": \"PlatformLibrary\\\\Package\\\\CSM_CentralizedStandstillManagement\\\\Public\\\\Enumeration\\\\CSM_CurrentSystemMode\",\n      \"targetOid\": \"040qm00000001p070c207of67flg4\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::CSMHoldState\",\n      \"scope\": \"imported\",\n      \"targetPath\": \"PlatformLibrary\\\\Package\\\\CSM_CentralizedStandstillManagement\\\\Public\\\\Enumeration\\\\CSM_HoldState\",\n      \"targetOid\": \"040gpc88gm3g1oo70sbgjl8gqqs0m\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AvhSet\",\n      \"scope\": \"imported\",\n      \"targetPath\": \"Customer\\\\XiaoMi\\\\Package\\\\AVH\\\\AvhSet_XiaoMi\",\n      \"targetOid\": \"040g00001g001pg71g2g5n2nbocg4\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::CSMCurrentSystemMode\",\n      \"scope\": \"imported\",\n      \"targetPath\": \"PlatformLibrary\\\\Package\\\\CSM_CentralizedStandstillManagement\\\\Public\\\\Enumeration\\\\CSM_CurrentSystemMode\",\n      \"targetOid\": \"040qm00000001p070c207of67flg4\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AvhState\",\n      \"scope\": \"imported\",\n      \"targetPath\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\public\\\\AVHState\",\n      \"targetOid\": \"040qm011gk001lo7148g5p1qh5f5u\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::CSMGearboxType\",\n      \"scope\": \"imported\",\n      \"targetPath\": \"PlatformLibrary\\\\Package\\\\CSM_CentralizedStandstillManagement\\\\Public\\\\Enumeration\\\\CSM_GearboxType\",\n      \"targetOid\": \"040qm00000001oo718404f00rgrh2\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_Standstill_TurnOnDelay\",\n      \"scope\": \"local\",\n      \"targetPath\": \"PlatformLibrary\\\\Package\\\\CSM_CentralizedStandstillManagement\\\\Public\\\\CSM_DelayTurnToTrue\",\n      \"targetOid\": \"040gpc88gm3g1oo714cgv7c7bvjg2\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_SwitchLogic\",\n      \"scope\": \"local\",\n      \"targetPath\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\private\\\\AVH_SwitchLogic\",\n      \"targetOid\": \"040qm00000001p070gb0774m8p52e\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::HoldForceSufficient\",\n      \"scope\": \"local\",\n      \"targetPath\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\private\\\\AVH_HoldForceSufficient\",\n      \"targetOid\": \"040gpc83142g1no70of3d09v78920\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_DriveOffRequested\",\n      \"scope\": \"local\",\n      \"targetPath\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\private\\\\AVH_DriveOffRequested\",\n      \"targetOid\": \"040gpc8314301o070o7hr3i0c99gg\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_NvM_SetData\",\n      \"scope\": \"local\",\n      \"targetPath\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\private\\\\AVH_NvM_SetData\",\n      \"targetOid\": \"040qm00b00001o07104g6f5n3l32u\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_BrakePedalPatternDetection_Xiaomi\",\n      \"scope\": \"local\",\n      \"targetPath\": \"Customer\\\\XiaoMi\\\\Package\\\\AVH\\\\NextEV\\\\AVH_BrakePedalPatternDetection_Xiaomi\",\n      \"targetOid\": \"040g00001g001po704c6jnp7upph0\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_CustStandbyLogic\",\n      \"scope\": \"local\",\n      \"targetPath\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\private\\\\AVH_CustStandbyLogic\",\n      \"targetOid\": \"040qm00000001p070g70acd60dsl4\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_NvM_ReadData\",\n      \"scope\": \"local\",\n      \"targetPath\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\private\\\\AVH_NvM_ReadData\",\n      \"targetOid\": \"040qm00b00001o07104g6koelq742\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_CustTempDisable\",\n      \"scope\": \"local\",\n      \"targetPath\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\private\\\\AVH_CustTempDisable\",\n      \"targetOid\": \"040qm00000001p070g1gbvrc7i9la\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_ButtonLogic\",\n      \"scope\": \"local\",\n      \"targetPath\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\private\\\\AVH_ButtonLogic\",\n      \"targetOid\": \"040qm00000001p070ge07d1dsdj0k\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_DriverPresentF\",\n      \"scope\": \"local\",\n      \"targetPath\": \"PlatformLibrary\\\\Package\\\\CSM_CentralizedStandstillManagement\\\\Public\\\\CSM_DriverPresentF\",\n      \"targetOid\": \"040qm00000001p070cfgal334iq38\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_CustStateLogic\",\n      \"scope\": \"local\",\n      \"targetPath\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\private\\\\AVH_CustStateLogic\",\n      \"targetOid\": \"040qm00000001p070g0g73haa790a\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_SwitchAdaption\",\n      \"scope\": \"local\",\n      \"targetPath\": \"Customer\\\\XiaoMi\\\\Package\\\\AVH\\\\AVH_SwitchAdaption_XiaoMi\",\n      \"targetOid\": \"040g00001g001pg71g2g5lt47ru02\"\n    },\n    {\n      \"sourcePath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n      \"sourceOid\": \"040gpc83142g1no70o90q9iltgggg\",\n      \"elementPath\": \"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_ForceStandbyLogic\",\n      \"scope\": \"local\",\n      \"targetPath\": \"PlatformLibrary\\\\Package\\\\AVH_AutomaticVehicleHold\\\\private\\\\AVH_ForceStandbyLogic\",\n      \"targetOid\": \"040qm00b00001o07104g5dji7rn0c\"\n    }\n  ],\n  \"coverage\": {\n    \"status\": \"partial\",\n    \"scopeKind\": \"item\",\n    \"scopeId\": \"path:PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\",\n    \"completeness\": \"bounded\",\n    \"truncated\": false,\n    \"foldersVisited\": 0,\n    \"componentsScanned\": 1,\n    \"identityKinds\": [],\n    \"collectorStarted\": false,\n    \"collectorCompleted\": false,\n    \"rootCollectionAvailable\": false,\n    \"projectCollectionAvailable\": false,\n    \"missingOidCount\": 26,\n    \"missingPathCount\": 26\n  },\n  \"truncated\": false,\n  \"source\": \"live\",\n  \"sourceIdentity\": {\n    \"database\": {\n      \"name\": \"C:\\\\Repo\\\\11_ASCETCopilotLiveTest\\\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\\\ASW\\\\Db\\\\AscetDb_20260707223121\",\n      \"path\": \"C:\\\\Repo\\\\11_ASCETCopilotLiveTest\\\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\\\ASW\\\\Db\\\\\",\n      \"fingerprint\": \"49be9da8ddaa5ac7b09b24a394229cbbd9a9dc3dbabadf9704da7ff25633274a\"\n    }\n  }\n}"
+      }
+    ],
+    "details": {
+      "tool": "ascet_get",
+      "action": "component_refs",
+      "command": {
+        "logicalCommandId": "AscetGetComponentRefs",
+        "backendCommandId": "AscetGetComponentRefs",
+        "operation": "get_component_refs"
+      },
+      "data": {
+        "items": [
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::LDMSelectedControllerT5",
+            "scope": "imported",
+            "targetPath": "PlatformLibrary/Package/LDMLibrary/public/LDMSelectedController",
+            "targetOid": "040qm0076k001l8710cg652njcfg0"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::CM_AVH_CustDeactType",
+            "scope": "exported",
+            "targetPath": "PlatformLibrary/Package/CSM_CentralizedStandstillManagement/Public/Enumeration/CSM_DeactType",
+            "targetOid": "040gpc88gm3g1oo70sc0vauv9sfhc"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::Temp_CSMDriveUnitState_Off",
+            "scope": "local",
+            "targetPath": "PlatformLibrary/Package/CSM_CentralizedStandstillManagement/Public/Enumeration/CSM_StateDrvUnit",
+            "targetOid": "040qm00000001oo718405bs4almis"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::Temp_CSMDriveUnitState_On",
+            "scope": "local",
+            "targetPath": "PlatformLibrary/Package/CSM_CentralizedStandstillManagement/Public/Enumeration/CSM_StateDrvUnit",
+            "targetOid": "040qm00000001oo718405bs4almis"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AvhRequest",
+            "scope": "imported",
+            "targetPath": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/private/AVHRequest",
+            "targetOid": "040qm011gk001lo714ag68g304rjs"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::CM_AVH_CSMDriveUnitState",
+            "scope": "exported",
+            "targetPath": "PlatformLibrary/Package/CSM_CentralizedStandstillManagement/Public/Enumeration/CSM_StateDrvUnit",
+            "targetOid": "040qm00000001oo718405bs4almis"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::Temp_PwrModSts_On",
+            "scope": "local",
+            "targetPath": "PlatformLibrary/Package/CSM_CentralizedStandstillManagement/Public/Enumeration/CSM_CurrentSystemMode",
+            "targetOid": "040qm00000001p070c207of67flg4"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::CSMHoldState",
+            "scope": "imported",
+            "targetPath": "PlatformLibrary/Package/CSM_CentralizedStandstillManagement/Public/Enumeration/CSM_HoldState",
+            "targetOid": "040gpc88gm3g1oo70sbgjl8gqqs0m"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AvhSet",
+            "scope": "imported",
+            "targetPath": "Customer/XiaoMi/Package/AVH/AvhSet_XiaoMi",
+            "targetOid": "040g00001g001pg71g2g5n2nbocg4"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::CSMCurrentSystemMode",
+            "scope": "imported",
+            "targetPath": "PlatformLibrary/Package/CSM_CentralizedStandstillManagement/Public/Enumeration/CSM_CurrentSystemMode",
+            "targetOid": "040qm00000001p070c207of67flg4"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AvhState",
+            "scope": "imported",
+            "targetPath": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/public/AVHState",
+            "targetOid": "040qm011gk001lo7148g5p1qh5f5u"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::CSMGearboxType",
+            "scope": "imported",
+            "targetPath": "PlatformLibrary/Package/CSM_CentralizedStandstillManagement/Public/Enumeration/CSM_GearboxType",
+            "targetOid": "040qm00000001oo718404f00rgrh2"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_Standstill_TurnOnDelay",
+            "scope": "local",
+            "targetPath": "PlatformLibrary/Package/CSM_CentralizedStandstillManagement/Public/CSM_DelayTurnToTrue",
+            "targetOid": "040gpc88gm3g1oo714cgv7c7bvjg2"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_SwitchLogic",
+            "scope": "local",
+            "targetPath": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/private/AVH_SwitchLogic",
+            "targetOid": "040qm00000001p070gb0774m8p52e"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::HoldForceSufficient",
+            "scope": "local",
+            "targetPath": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/private/AVH_HoldForceSufficient",
+            "targetOid": "040gpc83142g1no70of3d09v78920"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_DriveOffRequested",
+            "scope": "local",
+            "targetPath": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/private/AVH_DriveOffRequested",
+            "targetOid": "040gpc8314301o070o7hr3i0c99gg"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_NvM_SetData",
+            "scope": "local",
+            "targetPath": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/private/AVH_NvM_SetData",
+            "targetOid": "040qm00b00001o07104g6f5n3l32u"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_BrakePedalPatternDetection_Xiaomi",
+            "scope": "local",
+            "targetPath": "Customer/XiaoMi/Package/AVH/NextEV/AVH_BrakePedalPatternDetection_Xiaomi",
+            "targetOid": "040g00001g001po704c6jnp7upph0"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_CustStandbyLogic",
+            "scope": "local",
+            "targetPath": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/private/AVH_CustStandbyLogic",
+            "targetOid": "040qm00000001p070g70acd60dsl4"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_NvM_ReadData",
+            "scope": "local",
+            "targetPath": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/private/AVH_NvM_ReadData",
+            "targetOid": "040qm00b00001o07104g6koelq742"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_CustTempDisable",
+            "scope": "local",
+            "targetPath": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/private/AVH_CustTempDisable",
+            "targetOid": "040qm00000001p070g1gbvrc7i9la"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_ButtonLogic",
+            "scope": "local",
+            "targetPath": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/private/AVH_ButtonLogic",
+            "targetOid": "040qm00000001p070ge07d1dsdj0k"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_DriverPresentF",
+            "scope": "local",
+            "targetPath": "PlatformLibrary/Package/CSM_CentralizedStandstillManagement/Public/CSM_DriverPresentF",
+            "targetOid": "040qm00000001p070cfgal334iq38"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_CustStateLogic",
+            "scope": "local",
+            "targetPath": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/private/AVH_CustStateLogic",
+            "targetOid": "040qm00000001p070g0g73haa790a"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_SwitchAdaption",
+            "scope": "local",
+            "targetPath": "Customer/XiaoMi/Package/AVH/AVH_SwitchAdaption_XiaoMi",
+            "targetOid": "040g00001g001pg71g2g5lt47ru02"
+          },
+          {
+            "sourcePath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+            "sourceOid": "040gpc83142g1no70o90q9iltgggg",
+            "elementPath": "PlatformProjects/Gen10/ESP10/ESP4DPB/Product/ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD::AVH_ForceStandbyLogic",
+            "scope": "local",
+            "targetPath": "PlatformLibrary/Package/AVH_AutomaticVehicleHold/private/AVH_ForceStandbyLogic",
+            "targetOid": "040qm00b00001o07104g5dji7rn0c"
+          }
+        ],
+        "coverage": {
+          "status": "partial",
+          "scopeKind": "item",
+          "scopeId": "path:PlatformProjects\\Gen10\\ESP10\\ESP4DPB\\Product\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD",
+          "completeness": "bounded",
+          "truncated": false,
+          "foldersVisited": 0,
+          "componentsScanned": 1,
+          "collectorStarted": false,
+          "collectorCompleted": false,
+          "rootCollectionAvailable": false,
+          "projectCollectionAvailable": false,
+          "missingOidCount": 26,
+          "missingPathCount": 26
+        },
+        "truncated": false,
+        "source": "live",
+        "database": {
+          "name": "C:\\Repo\\11_ASCETCopilotLiveTest\\AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599\\ASW\\Db\\AscetDb_20260707223121",
+          "path": "C:/Repo/11_ASCETCopilotLiveTest/AscetDb_Xiaomi_ESP_OBD_upgrade_to_FSR1_int_XmN3xAPPx821031xD5EDxECCxOPD_7599/ASW/Db/"
+        }
+      },
+      "diagnostics": {
+        "request": {
+          "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+          "cliPath": "C:/Repo/09_ASCETCopilot/pi-ascet-extension-prototype/packages/ascet-extension/ascet-cli/bin/AscetBridge.exe",
+          "args": [
+            "exec",
+            "get_component_refs",
+            "--request-json",
+            "{\"path\":\"PlatformProjects\\\\Gen10\\\\ESP10\\\\ESP4DPB\\\\Product\\\\ESP4DPBCust1MotxWD_ECU_CSW_BB88962::CM_AVH_1MotxWD\"}",
+            "--json"
+          ],
+          "timeoutMs": 180000,
+          "jobKind": "read",
+          "mutatesDatabase": false
+        },
+        "exitCode": 0,
+        "timedOut": false
+      }
+    }
+  }
+}

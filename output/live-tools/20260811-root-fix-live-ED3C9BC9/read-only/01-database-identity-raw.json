@@ -1,0 +1,90 @@
+{
+  "ok": true,
+  "data": {
+    "type": "response",
+    "protocolVersion": 1,
+    "ok": true,
+    "result": {
+      "items": [],
+      "coverage": {
+        "status": "complete_for_scope",
+        "scopeKind": "database",
+        "scopeId": "database:C:\\Repo\\",
+        "completeness": "complete",
+        "truncated": false,
+        "foldersVisited": 0,
+        "componentsScanned": 0,
+        "identityKinds": [],
+        "collectorStarted": true,
+        "collectorCompleted": true,
+        "rootCollectionAvailable": true,
+        "projectCollectionAvailable": false,
+        "missingOidCount": 0,
+        "missingPathCount": 0,
+        "collectors": {
+          "database": {
+            "started": true,
+            "completed": true,
+            "itemCount": 1
+          },
+          "projects": {
+            "started": false,
+            "completed": false,
+            "itemCount": 0
+          },
+          "folders": {
+            "started": false,
+            "completed": false,
+            "itemCount": 0
+          },
+          "components": {
+            "started": false,
+            "completed": false,
+            "itemCount": 0
+          },
+          "enumerations": {
+            "started": false,
+            "completed": false,
+            "itemCount": 0
+          }
+        }
+      },
+      "truncated": false,
+      "source": "live",
+      "database": {
+        "name": "C:\\Repo\\F05_IPB_L2_0429",
+        "path": "C:\\Repo\\"
+      }
+    },
+    "error": null,
+    "meta": {
+      "bridgePid": 30892,
+      "bridgeGeneration": "882dfa58-4ef0-450d-884b-246a2dfc3d6c",
+      "durationMs": 179,
+      "sessionPolicy": "fresh_session",
+      "mutationStarted": false,
+      "mode": "exec",
+      "operation": "get_database_identity"
+    }
+  },
+  "request": {
+    "cwd": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype",
+    "cliPath": "C:\\Repo\\09_ASCETCopilot\\pi-ascet-extension-prototype\\packages\\ascet-extension\\ascet-cli\\bin\\AscetBridge.exe",
+    "args": [
+      "exec",
+      "get_database_identity",
+      "--request-json",
+      "{}",
+      "--json"
+    ],
+    "timeoutMs": 120000,
+    "jobKind": "read",
+    "mutatesDatabase": false
+  },
+  "stdout": "{\"type\":\"response\",\"protocolVersion\":1,\"ok\":true,\"result\":{\"items\":[],\"coverage\":{\"status\":\"complete_for_scope\",\"scopeKind\":\"database\",\"scopeId\":\"database:C:\\\\Repo\\\\\",\"completeness\":\"complete\",\"truncated\":false,\"foldersVisited\":0,\"componentsScanned\":0,\"identityKinds\":[],\"collectorStarted\":true,\"collectorCompleted\":true,\"rootCollectionAvailable\":true,\"projectCollectionAvailable\":false,\"missingOidCount\":0,\"missingPathCount\":0,\"collectors\":{\"database\":{\"started\":true,\"completed\":true,\"itemCount\":1},\"projects\":{\"started\":false,\"completed\":false,\"itemCount\":0},\"folders\":{\"started\":false,\"completed\":false,\"itemCount\":0},\"components\":{\"started\":false,\"completed\":false,\"itemCount\":0},\"enumerations\":{\"started\":false,\"completed\":false,\"itemCount\":0}}},\"truncated\":false,\"source\":\"live\",\"database\":{\"name\":\"C:\\\\Repo\\\\F05_IPB_L2_0429\",\"path\":\"C:\\\\Repo\\\\\"}},\"error\":null,\"meta\":{\"bridgePid\":30892,\"bridgeGeneration\":\"882dfa58-4ef0-450d-884b-246a2dfc3d6c\",\"durationMs\":179,\"sessionPolicy\":\"fresh_session\",\"mutationStarted\":false,\"mode\":\"exec\",\"operation\":\"get_database_identity\"}}\r\n",
+  "stderr": "",
+  "exitCode": 0,
+  "timedOut": false,
+  "aborted": false,
+  "operationId": "get_database_identity"
+}

@@ -1,0 +1,547 @@
+===== PAGE 1 =====
+[Int][MX11][26RC07][BCS][AEB刹停之后AVH
+接管再起步AVH异常置位EPB拉起]​
+1. 问题描述​
+1. 项目：MX11​
+2. 软件版本（BCP / BCS ）TR：26RC07​
+3. 车辆(两驱 or 四驱)variant/台架：​
+4. 驾驶模式：蠕行模式下​
+5. 测试工况case：AEB刹停，踩油门起步​
+6. 期望（需求要求）：起步工况下AVH不置位，EPB不拉起​
+7. 实际表现： AEB刹停之后AVH接管再起步AVH异常置位EPB拉起​
+8. 云端诊断DTC和对应报错时间： NA​
+9. 云端对应DTC的DTCSnapshot FD00/FD01/FD02信息： NA​
+10. 问题点：​
+a. 售后YU7，26RC07 有一台车在AEB刹停进入AVH后，起步，有车速7kph左右踩了一下制动，直
+接进了AVH，然后EPB拉起了，为什么EPB会拉起？​
+b. 故障逻辑是否与之前的问题原因一样？​
+上层ADAS请求AVH激活Hold，同时在同一个proc中驾驶员踩下油门，导致此时CSM Hold还没有开
+始建压，主缸保压压力为0的时候进入driveoff逻辑.​
+​
+[Ext]Fx接口智驾退出后，车辆低速状态下，AVH异常激活紧接EPB异常拉起​
+11. 数据：​
+a. CAN数据（问题时间点截图）:​
+
+===== PAGE 2 =====
+​
+
+===== PAGE 3 =====
+
+===== PAGE 4 =====
+​
+​
+SigData_HXML2R011TA045485_20260806_1630.xlsx
+b. 产线Wireshark数据：NA​
+c. EED数据：NA​
+d. CBDS数据：NA​
+2. 问题分析​
+2.1 AI分析结论：​
+2.1.1 从AEB请求AVH的class: AVH_CustStateLogic 以及 AVH收到请求之后和
+driveoff做仲裁的class: AVH_TriggerAvhStatemachine分析：
+结合数据时序，这个链条确实存在理论上的可能，但需要把每个环节的因果关系严格对应到代码逻辑
+上。​
+1.
+AVH_CustStateLogic ：AEB 请求 AVH 过程中，驾驶员深踩油门会怎样​
+AVH_CustStateLogic.c 第 274–371 行核心逻辑：​
+Code block​
+CustTrigRelease =​
+   SkidDetected​
+|  | (ParkBrakeBttnReleaseReq && FS_AVH_ReleaseByAPBButton && 
+(DriverBrakeApplied |  | DriverAccelPedalApplied)) |  |  |  |  |  |​
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |​
+|  | (FS_AVH_HMIType==1 && AVHButtonPressed && AvhStandby && 
+(DriverBrakeApplied |  | DriverAccelPedalApplied)) |  |  |  |  |  |​
+|  | (FS_AVH_HMIType==2 && !AVHSwitchOn && AvhState==1 && (DriverBrakeApplied 
+|  | DriverAccelPedalApplied)) |  |  |  |  |  |​
+|  | (GearBoxValid && AvhGear==0) |  |  |  |  |  |  |  |​
+1
+2
+3
+4
+5
+6
+7
+
+===== PAGE 5 =====
+|  | AVHDeactivationByBrakePedal; |  |  |  |  |  |  |  |​
+关键结论：​
+•
+驾驶员深踩油门本身不会直接触发 CustTrigRelease ，因为上述条件中 
+DriverAccelPedalApplied 只在“EPB 释放按钮被按下”或“AVH 按钮被按下”或“AVH 
+开关关闭”时才起作用。​
+•
+但是，深踩油门会通过 AVH_DriveOffRequested 触发 AVH 状态机的 DriveOff 路径，使 
+AVH 从 Hold 退出到 Standby。​
+•
+另外，AVHDeactivationByBrakePedal 是制动踏板深度相关，与油门无关。​
+所以：AEB 请求 AVH 的 2 秒内，如果驾驶员深踩油门，AVH 会因为 DriveOffRequested 而退出 
+Hold，进入 DriveOff/Standby，而不是因为 CustTrigRelease 。​
+2.
+AVH_TriggerAvhStatemachine ：DriveOff 与 Hold 的仲裁​
+AVH_TriggerAvhStatemachine.c 第 337–345 行：​
+Code block​
+req_DriveOff = (!trig_Release) && (TargetStateAvh == 2) && AvhValidityOk​
+               && (CurrentSystemMode == 4) && DriveOffRequested;​
+​
+trig_Hold = HoldCoreConditions && (!CustCondDisableHold)​
+            && ((DriverBrakeApplied && VehStandstill && HoldForceSufficient​
+                 && AVHActivationByBrakePedal && 
+P_FS_AVH_EnableStandardActivation​
+                 && (!req_DriveOff))​
+- CustTrigHold​
+- AlcReqAvhByDriver)​
+            && (!trig_Release);​
+关键逻辑：​
+•
+req_DriveOff 和 trig_Hold 是互斥的。如果 DriveOffRequested 为真，则 
+req_DriveOff 为真，trig_Hold 中标准激活路径被 (!req_DriveOff) 阻断。​
+•
+但 trig_Hold 还有另外两条路径： ​
+◦
+CustTrigHold ：驾驶员主动触发 AVH（如拨片或按钮）。​
+8
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+
+===== PAGE 6 =====
+◦
+AlcReqAvhByDriver ：VLC 相关的驾驶员请求接管（第 308–311 行，条件较严格，需要 
+VLCReqMode_Main_Com1K1  == 1 && VLCReqMode_Main_Com1 == 0 &&  
+VLCShutdownMode_Main_Com1 == 2 && VehStandstill &&  CSMHoldState 
+== 1 ）。​
+因此，深踩油门时：​
+•
+req_DriveOff = true ​
+•
+trig_Hold 的标准路径被关闭​
+•
+如果 CustTrigHold 和 AlcReqAvhByDriver 都不为真，AVH 会从 Hold 退出​
+3. 第一次 AVH 退出 = 深踩油门导致 DriveOff​
+数据对应：​
+这与代码逻辑一致：AEB 激活请求 AVH 后约 0.35 秒，驾驶员深踩油门 → DriveOffRequested 
+置位 → req_DriveOff 为真 → AVH 从 Hold 退出到 DriveOff/Standby。​
+此时由于 AVH 退出，CSM 的保持压力请求（CSMHoldReq_AVH ）会变为 DriveOff 值（2 或 3），
+液压系统开始泄压。所以你会看到 BCP 从 14.1 bar 逐渐下降到 0 bar。​
+4. 第二次 AVH Active：没有主缸压力时为什么还能置起来​
+第二次 AVH Active 在 09:40:08.263，此时：​
+•
+Acc% 无有效值（上一条有效为 9.668%，再往前是 63.5%）​
+•
+Ped% 在 09:40:08.327 才第一次出现 0%​
+•
+BCP 在 09:40:08.147 为 0 bar​
+•
+Spd 在 09:40:08.202 为 0 kph​
+可能机制：​
+
+===== PAGE 7 =====
+1.
+AVHActivationByBrakePedal 状态记忆 在 
+AVH_ActivationByBrakePedal_Xiaomi.c 第 419–422 行：​
+Code block​
+AVHActivationByBrakePedal =​
+   ActivationAllowedInNewBrakeCycle​
+   && AVHPressureSufficient​
+   && (!DeactivationBrakeCycle)​
+   && (!OnePedalToStop_Active);​
+1. 只要在之前的制动循环中 AVHPressureSufficient 曾为真，且没有发生 
+AVHDeactivationByBrakePedal ，该信号就会保持为 true，即使主缸压力已经降到 0。​
+2.
+CSMBrakePedalApplied 布尔判定有迟滞CSMBrakePedalApplied 不一定与 
+BrkPedlPerct 同步归零，可能基于输入杆行程或主缸压力阈值，存在一定的释放迟滞。​
+3.
+CSMHoldState 尚未回到 0 第一次 AVH 退出后，CSM 可能仍处在 DriveOff（状态 6）或 Deact
+（状态 7），只要 CSMHoldState != 0 ，CSM_HOLDACTIVE 等模块仍可能输出 Active。
+4.
+AlcReqAvhByDriver 被置位 第 308–311 行：​
+Code block​
+if ((VLCReqMode_Main_Com1K1 == 1) && (VLCReqMode_Main_Com1 == 0)​
+    && (VLCShutdownMode_Main_Com1 == 2) && VehStandstill && (CSMHoldState == 
+1))​
+{​
+   AlcReqAvhByDriver = true;​
+}​
+1. 如果此时满足 VLC 相关条件，AlcReqAvhByDriver 会直接置位 trig_Hold ，绕过 
+req_DriveOff 和制动踏板判定。​
+因此，第二次 AVH Active 在代码上是可能发生的，但前提是 AVHActivationByBrakePedal 或 
+AlcReqAvhByDriver 或 CSMBrakePedalApplied 中至少一个仍为 true。​
+5. 第三次 AVH Active 与 Roll Prevention 导致 EPB 拉起​
+第三次 AVH Active 在 09:40:11.003，随后：​
+•
+车速从 0 逐渐上升到约 7.8 kph​
+•
+制动踏板百分比上升到 1% → 7% → 13% → 15%​
+1
+2
+3
+4
+5
+1
+2
+3
+4
+5
+
+===== PAGE 8 =====
+•
+主缸压力有小幅波动（0.3 ~ 16.8 bar）​
+AVH_TriggerAvhStatemachine.c 第 347–348 行：​
+Code block​
+trig_MechHold =​
+| (TargetStateAvh != 2) |  | (!AvhValidityOk) |  | (CurrentSystemMode != 4) |  
+|​
+| --- | --- | --- | --- | --- | --- |​
+|  | (!DriverPresence) |  | (AvhTimeUp && (AvhState == 1)) |  |  |​
+|  | RollPrevOver |  | (StateDrvUnit == 0) |  | CustTrigTakeOver; |​
+RollPrevOver 来自 CSM_RollPrevNMax.c ：​
+Code block​
+if (FcnActive)  // 即 AvhHoldActive​
+{​
+   if (CsmNRollPrev > CsmNRollPrevK1)​
+   {​
+      CounterNRollPrev += CsmNRollPrev - CsmNRollPrevK1;​
+   }​
+   MaxCountRollPrevReached = CounterNRollPrev >= min(C_CSM_RollPrevNMax, 
+NMaxRollPrev);​
+}​
+也就是说：​
+•
+只要 AVH 在 Active（AvhHoldActive = true ），CSM 就会统计溜坡次数 
+CSMCountRollPrev 。​
+•
+当车辆在 AVH Hold 状态下检测到轮速（车辆开始移动），CSMCountRollPrev 增加。
+•
+当累计次数超过阈值（C_CSM_RollPrevNMax ，标定值）时，RollPrevOver 置位。​
+•
+RollPrevOver 会触发 trig_MechHold ，AVH 状态机从 Hold 进入 MechHold，并请求 
+EPB 夹紧（AVHParkReq = 3 ）。​
+这与你的描述一致：​
+AVH 在 Hold 状态下识别到有轮速 → Roll Prevention 逻辑触发 → 增压 → 第三次 AVH 置位 →  
+eventually 拉起 EPB。​
+6. 整个链条是否成立​
+1
+2
+3
+4
+5
+1
+2
+3
+4
+5
+6
+7
+8
+
+===== PAGE 9 =====
+把各个环节串起来：​
+Code block​
+AEB 自动制动激活​
+    ↓​
+AEB 状态机进入 Hold，SsmSelCon_AEB = true，CSMHoldReq_AEB = 4​
+    ↓​
+CSM StandstillArbitrator 仲裁 → Ena_AVH = true，CSMHoldState = Hold​
+    ↓​
+AVH 进入 Active（第一次，09:40:06.643）​
+    ↓​
+驾驶员深踩油门（09:40:06.994，Acc = 49%）​
+    ↓​
+DriveOffRequested = true → req_DriveOff = true​
+    ↓​
+AVH 从 Hold 退出到 DriveOff/Standby（09:40:07.643）​
+    ↓​
+CSMHoldReq_AVH 变为 DriveOff/Release，液压系统泄压（BCP → 0）​
+    ↓​
+但 AVHActivationByBrakePedal / CSMBrakePedalApplied 仍保持为真​
+或 AlcReqAvhByDriver 被置位​
+    ↓​
+trig_Hold 再次满足 → AVH 重新进入 Active（第二次，09:40:08.263）​
+    ↓​
+车辆开始移动，轮速出现​
+    ↓​
+CSMCountRollPrev 增加 → RollPrevOver 置位​
+    ↓​
+trig_MechHold = true → AVH 进入 MechHold​
+    ↓​
+AVHParkReq = 3 → CSM 请求 EPB 夹紧​
+    ↓​
+APB Applying → Applied（09:40:13.363 ~ 09:40:14.403）​
+7. 结论​
+你的假设（在AEB激活请求AVH  2秒过程中驾驶员深踩油门是否会存在如数据表现的这样，AVH中途
+退出了，同时又泄压了，然后又在没有压力的时候置起来，最终导致后续因为AVH在Hold状态下识别
+到有轮速，进入了Roll  Prevention逻辑，增压AVH第三次置位，拉起EPB.）在代码逻辑上基本成
+立。​
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+
+===== PAGE 10 =====
+1. AEB 请求 AVH 过程中，驾驶员深踩油门会导致 AVH 中途退出 Hold，因为 
+DriveOffRequested 置位，触发 req_DriveOff ，AVH 进入 DriveOff/Standby。​
+2. AVH 退出后液压系统会泄压，因为 CSMHoldReq_AVH 从 Hold 请求变为 Release/DriveOff 请
+求。​
+3. AVH 在没有明显主缸压力时再次置位是可能的，因为 AVHActivationByBrakePedal 具有制
+动循环记忆特性，或 AlcReqAvhByDriver / CSMBrakePedalApplied 迟滞仍保持为真。​
+4. 第三次 AVH Active 后，车辆在 Hold 状态下检测到轮速，会触发 Roll Prevention 逻辑，
+RollPrevOver 置位后进入 MechHold，请求 EPB 夹紧。​
+8. 需要验证的关键点​
+要完全确认这个链条，需要补充以下信号：​
+•
+CM_AVH_DriveoffRequested ​
+•
+CM_AVH_AVHActivationByBrakePedal ​
+•
+CSMBrakePedalApplied ​
+•
+CSMHoldState ​
+•
+AvhState ​
+•
+SsmSelCon_AEB ​
+•
+CSMHoldReq_AEB ​
+•
+CSMCountRollPrev ​
+•
+AvhMaxCountRollPrevReached ​
+•
+AvhParkReq ​
+如果这些信号的时间顺序与上述链条一致，则可以确认你的根因分析。​
+深度分析 AVH_BrakePedalPatternDetection_Xiaomi 后，结论如下。​
+2.1.2 class：AVH_BrakePedalPatternDetection_Xiaomi 深度分析​
+1. 该 Class 的核心逻辑​
+AVH_BrakePedalPatternDetection_Xiaomi.c 是小米定制的制动踏板模式检测模块，内部
+串行调用了三个子模块：​
+Code block​
+void AVH_BrakePedalPatternDetection_Xiaomi_calc(​
+1
+
+===== PAGE 11 =====
+    BrakePedalIsApplied,    // 制动踏板是否踩下（布尔）​
+    InputRodStroke_AVH,     // 输入杆行程​
+    AxSlope,                // 坡度​
+    ABrkAct,                // 实际制动减速度​
+    BrakeSysReferenceMass,  // 制动系统参考质量​
+    AvhGear,                // 档位（D=1, R=-1）​
+    GearBoxValid,​
+    AvhState,               // AVH 内部状态​
+    OnePedalToStop_Active,​
+    LfcHoldActive​
+)​
+{​
+    //​
+1. 计算 AVHActivationByBrakePedal​
+    AVH_ActivationByBrakePedal_Xiaomi_calc(..., AVHDeactivationByBrakePedal(), 
+...);​
+​
+    //​
+2. 计算 DeactivationAllowedAfterActivation​
+    AVH_PrevImmDeactivation_Xiaomi_calc(BrakePedalIsApplied, AvhState, 
+LfcHoldActive);​
+​
+    //​
+3. 计算 AVHDeactivationByBrakePedal​
+    AVH_DeactivationDecision_Xiaomi_calc(...);​
+}​
+2. 关键标定值（当前代码中）​
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+
+===== PAGE 12 =====
+注意：C_AVH_DGearActivationPressure = 0 意味着 D 挡下只要有任何正的制动减速度
+（ABrkAct > 0 ），AVHPressureSufficient 就会为 true。
+3. 问题场景是否存在​
+存在。 具体场景如下：​
+2.1.3 激活门槛过低​
+AVH_ActivationByBrakePedal_Xiaomi.c 第 373–378 行：​
+Code block​
+if (GearBoxValid && (AvhGear == 1))  // D 挡​
+{​
+    AVHPressureSuffcient = (abs(ABrkAct) > AAct_DGear_Sufficient);​
+}​
+由于 C_AVH_DGearActivationPressure = 0 且坡度补偿为 0，
+AAct_DGear_Sufficient 计算后接近 0。因此：​
+•
+只要 AEB 制动产生了极小的实际减速度，AVHPressureSuffcient 就会置 true；​
+•
+一旦 AVHPressureSuffcient 为 true，且 DeactivationBrakeCycle 为 false，
+AVHActivationByBrakePedal 就会置 true。​
+2.1.4 制动循环记忆导致“无压力也能复用”​
+AVHActivationByBrakePedal 的输出条件（第 419–422 行）：​
+Code block​
+AVHActivationByBrakePedal =​
+   ActivationAllowedInNewBrakeCycle      // AvhState != 1​
+   && AVHPressureSuffcient​
+   && (!DeactivationBrakeCycle)​
+   && (!OnePedalToStop_Active);​
+但 DeactivationBrakeCycle 的复位条件（第 411–416 行）：​
+Code block​
+if ((!BrakePedalIsApplied) && (!AVHPressureSuffcient))​
+{​
+1
+2
+3
+4
+1
+2
+3
+4
+5
+1
+2
+
+===== PAGE 13 =====
+    DeactivationBrakeCycle = false;​
+}​
+也就是说，只有当 制动踏板完全松开 AND 制动压力/减速度不足 时，
+DeactivationBrakeCycle 才会复位。​
+在 AEB 转 AVH 的过程中：​
+1. AEB 制动 → ABrkAct 足够大 → AVHPressureSuffcient = true → 
+AVHActivationByBrakePedal = true 。​
+2. 驾驶员深踩油门 → AVH 退出 Hold（AvhState != 1 ），进入 DriveOff/Standby。​
+3. 液压系统开始泄压，BCP 降到 0。​
+4. 但此时 AVHPressureSuffcient 可能仍为 true（如果 ABrkAct 的下降有迟滞，或 CSM 仍
+在保持一定压力）。​
+5. 即使 AVHPressureSuffcient 变为 false，只要 BrakePedalIsApplied 仍为 true，
+DeactivationBrakeCycle 不会复位。​
+6. 下一次调用时，如果 AVHPressureSuffcient 再次为 true（比如残余压力波动），
+AVHActivationByBrakePedal 会重新置 true。​
+这与数据吻合：第二次 AVH Active 时 BCP ≈ 0，但 AVH 仍被激活。​
+4. 如何从 CAN 数据分析出来​
+需要同时观察以下信号的时间顺序：​
+判定依据：​
+•
+如果 AVHActivationByBrakePedal 在 BCPMstCylP = 0 时仍为 true，说明存在制动循
+环记忆或激活门槛过低问题。​
+3
+4
+
+===== PAGE 14 =====
+•
+如果 CSMBrakePedalApplied 在 BrkPedlPerct = 0 时仍为 true，说明制动踏板布尔判
+定有迟滞。​
+5. 代码逻辑结合 AEB 转 AVH 是否合理​
+从功能安全角度看，该逻辑存在一定风险，但在标定上属于“可接受”范围：​
+2.1.5 合理之处​
+•
+AEB 自动制动后，车辆刹停，需要 AVH 接管保持，这是正常功能。​
+•
+AVHActivationByBrakePedal 的制动循环记忆是为了避免驾驶员在等红灯时轻微松踏板就
+导致 AVH 频繁退出。
+2.1.6 不合理/风险之处​
+•
+C_AVH_DGearActivationPressure = 0 导致 D 挡激活门槛过低。AEB 产生的轻微制动即
+可触发 AVH 激活，这在 AEB 转 AVH 场景下可能过于敏感。​
+•
+DeactivationBrakeCycle 复位条件过于宽松。只要 BrakePedalIsApplied 为 true，
+即使压力已经降到 0，DeactivationBrakeCycle 也不会复位，导致下一次压力波动时 
+AVHActivationByBrakePedal 重新置 true。​
+•
+AEB 制动与驾驶员制动在踏板模式检测上没有区分。AEB 制动时驾驶员可能根本没有踩踏板，但系
+统仍按“驾驶员制动循环”处理。​
+2.1.7 修复建议​
+方案 1：提高 D 挡 AEB 转 AVH 的激活压力阈值（推荐）​
+将 C_AVH_DGearActivationPressure 从 0 提高到合理值（如 2–4 bar 或等效减速度），避免 
+AEB 轻微制动就触发 AVH 踏板激活。​
+Code block​
+// 原值​
+const real64 P___P_AVH_DGearActivationPressure = 0.0;​
+// 建议​
+const real64 P___P_AVH_DGearActivationPressure = 2.0; // 或根据实车标定​
+注意：这会影响正常驾驶员踩踏板触发 AVH 的灵敏度，需要在实车上充分标定。
+1
+2
+3
+4
+
+===== PAGE 15 =====
+方案 2：区分 AEB 制动与驾驶员制动​
+在 AVH_BrakePedalPatternDetection_Xiaomi 中增加一个输入信号，表示当前制动请求是
+否来自 AEB。如果是 AEB 请求，则不将 AVHActivationByBrakePedal 置 true，而是由 AEB 的 
+SsmSelCon_AEB 直接触发 AVH。
+但这需要改状态机逻辑，影响较大。​
+方案 3：优化 DeactivationBrakeCycle 复位条件​
+增加压力阈值判定：当主缸压力低于某个阈值（如 0.5 bar）且保持一段时间时，强制复位 
+DeactivationBrakeCycle ，即使 BrakePedalIsApplied 仍为 true。​
+Code block​
+// 示例修改思路​
+| if ((!BrakePedalIsApplied) |  | (BCPMstCylP < C_AVH_DeactPressureThr)) |​
+| --- | --- | --- |​
+{​
+    DeactivationBrakeCycle = false;​
+}​
+方案 4：AVH 退出 Hold 后延迟允许重新激活​
+在 AVH_TriggerAvhStatemachine 中增加从 DriveOff/Release 重新进入 Hold 的防抖延时，避
+免压力波动导致 AVH 频繁进出。
+2.1.8 结论​
+问题场景确实存在，根因在于 AVH_BrakePedalPatternDetection_Xiaomi 中 D 挡 AVH 激
+活门槛过低（C_AVH_DGearActivationPressure = 0 ），加上 
+DeactivationBrakeCycle 复位条件对压力下降不敏感，导致 AEB 转 AVH 过程中即使驾驶员深
+踩油门、主缸压力已泄，AVH 仍可能因残余制动循环记忆而重新激活。​
+后续车辆在 AVH Hold 状态下出现轮速时，触发 Roll Prevention 逻辑，AVH 进入 MechHold 并请求 
+EPB 夹紧，最终表现为“拉起 EPB”。​
+最简修复方案是标定调整：适当提高 C_AVH_DGearActivationPressure ，使 AEB 轻微制动不
+会触发 AVH 踏板激活模式。​
+1
+2
+3
+4
+5
+6

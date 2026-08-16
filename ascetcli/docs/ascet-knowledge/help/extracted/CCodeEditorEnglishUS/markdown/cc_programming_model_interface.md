@@ -1,0 +1,3 @@
+# Programming Model Interface
+
+In earlier ASCET versions, the names of classes and methods could only be used in C code, if they were labeled with an escape symbol ("@"). By means of this mechanism, the so called Programming Model Interface (PMI) was activated. Since ASCET 4.x, class and method names are recognized automatically, i.e. no escape symbol is necessary and the PMI is used by default (see also the description of [code generation options](ProjectEditorEnglishUS.chm::/PE_Settings_for_Window.htm)). Therefore, the escape symbol is obsolete and should not be used any longer when modelling in C code. For backward compatibility, however, the escape symbol can still be used when modifying the respective code generation option.

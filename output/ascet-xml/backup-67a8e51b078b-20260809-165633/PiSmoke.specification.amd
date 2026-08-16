@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Specifications toolVersion="V6.1.5_2.2.0" schemaVersion="6.1.0.0">
+	<Layout graphicOID="-1" flexibleCreated="false" hidePinNames="false" hideName="false" hideClassName="false" hideIcon="false">
+		<LineStyle width="1" type="LineSolid">
+			<Color red="0" green="0" blue="0"/>
+		</LineStyle>
+		<FillColor red="65535" green="65535" blue="65535"/>
+		<Position x="0" y="0"/>
+		<LabelPosition x="0" y="70"/>
+		<Interfaces/>
+		<Size x="60" y="60"/>
+		<Icon>
+			<Size x="60" y="60"/>
+		</Icon>
+	</Layout>
+	<Specification name="Main" public="public">
+		<ESDLSpecification>
+			<ESDLCode>
+				<MethodBodies>
+					<MethodBody methodName="calc" methodOID="_040g00001g001qg7104hghurau4g2">
+						<CodeBlock></CodeBlock>
+					</MethodBody>
+				</MethodBodies>
+			</ESDLCode>
+		</ESDLSpecification>
+	</Specification>
+	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+		<SignedInfo>
+			<CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+			<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+			<Reference>
+				<Transforms>
+					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+				</Transforms>
+				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+				<DigestValue>Q2GQxDyxBoMLEQO4Jo8r/GGw/DU=</DigestValue>
+			</Reference>
+		</SignedInfo>
+		<SignatureValue>h3TdIHO7Y3ItaoAdPuM5Xnu88qZnimaUQyB6YZiXP+sGuPwbKgYKnhJRZ61f9bTP
+sNpIH9LMVxWS7nOZi089gbxFOhkq6t1fq2/x8F9bRHSGkVt1aOLBKYkPKpKZifGW
+oOeqJ/mzeajXaMQLsnpArE0NNIlGvKo/qR59Ka3DTv+usZYSwTk4VqGo5pF5DEI6
+Mo3H2aTqelfVxXTPlYzevQzaxKTmi6icuaMPI7j7QwTD8EctRR+HE/xDhNFvY22Y
+S8N15zycrJ/JxnBeij0cMLGlNURJ0wqbvmkrfrlRV+TmvmPqIf5kQ3+lS/WAAuWX
+8N+WY2kIXhAT7l9ItlV9wA==</SignatureValue>
+		<KeyInfo>
+			<KeyName>Etas Ascet Verification</KeyName>
+		</KeyInfo>
+	</Signature>
+</Specifications>

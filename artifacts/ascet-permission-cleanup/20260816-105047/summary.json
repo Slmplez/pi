@@ -1,0 +1,42 @@
+{
+  "ok": true,
+  "mode": "cleanup_only",
+  "ascetCwd": "C:\\Repo\\F05_IPB_L2_0429",
+  "smokeRoot": "DEMO\\__pi_permission_smoke__20260816-102612",
+  "expectedDatabaseFingerprint": "71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c",
+  "cleanupMethodComponent": "Customer\\JLR_FMC\\Package\\JLR_LeanTCS\\Private\\TCS_CUS_GenericTCSFunctions\\TCS_CUS_EnableTCSwithoutPW\\TCS_CUS_EnableTCSwithoutPW",
+  "cleanupMethodName": "PiCompoundMethod",
+  "cleanupFailureComponent": "PlatformLibrary\\Package\\AntiLockController\\Private\\SMC\\Axle\\AxleControl",
+  "cleanupFailureMethod": "PiForcedFailure",
+  "finalEditableState": {
+    "status": "ok",
+    "data": true,
+    "warnings": []
+  },
+  "cleanupResults": [
+    {
+      "stage": "cleanup-only-method",
+      "status": "already_absent"
+    },
+    {
+      "stage": "cleanup-only-failure-method",
+      "status": "already_absent"
+    },
+    {
+      "stage": "cleanup-only-editable-component",
+      "status": "already_absent"
+    },
+    {
+      "stage": "cleanup-only-auto-folder",
+      "status": "already_absent"
+    },
+    {
+      "stage": "cleanup-only-accept-folder",
+      "status": "already_absent"
+    },
+    {
+      "stage": "cleanup-only-root-folder",
+      "status": "already_absent"
+    }
+  ]
+}
