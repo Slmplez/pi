@@ -1,4 +1,4 @@
-import { Type } from "typebox";
+﻿import { Type } from "typebox";
 import {
 	type AscetParameterDataDecision,
 	type AscetParameterImplementationDecision,
@@ -136,10 +136,46 @@ export const ascetReadDependentChainActionParameters = Type.Object(
 	{ additionalProperties: false },
 );
 
+const ascetDependentChainElementSchema = Type.Record(Type.String({ minLength: 1 }), Type.Unknown());
+
 const ascetDependentChainReadSuccessSchema = Type.Object(
 	{
-		found: Type.Boolean(),
-		chain: Type.Optional(Type.Unknown()),
+		found: Type.Literal(true),
+		chain: Type.Object(
+			{
+				local: Type.Object({
+					componentPath: Type.String({ minLength: 1 }),
+					element: Type.String({ minLength: 1 }),
+				}),
+				imported: Type.Object({
+					componentPath: Type.String({ minLength: 1 }),
+					element: Type.String({ minLength: 1 }),
+				}),
+				exported: Type.Object({
+					componentPath: Type.String({ minLength: 1 }),
+					element: Type.String({ minLength: 1 }),
+				}),
+			},
+			{ additionalProperties: false },
+		),
+		provider: Type.Object(
+			{
+				componentPath: Type.String({ minLength: 1 }),
+				element: ascetDependentChainElementSchema,
+			},
+			{ additionalProperties: false },
+		),
+		consumer: Type.Object(
+			{
+				componentPath: Type.String({ minLength: 1 }),
+				imported: ascetDependentChainElementSchema,
+				local: ascetDependentChainElementSchema,
+			},
+			{ additionalProperties: false },
+		),
+		dependencyFormula: ascetDependentChainElementSchema,
+		binding: ascetDependentChainElementSchema,
+		complete: Type.Literal(true),
 	},
 	{ additionalProperties: false },
 );
@@ -195,7 +231,10 @@ export const ascetReadDependentChainActionContract = defineAscetAction({
 			"local imported exported parameter",
 		],
 		nextActions: ["ascet_edit.create_dependent_chain"],
-		result: { shape: "dependentChain", fields: ["found", "chain", "error"] },
+		result: {
+			shape: "dependentChain",
+			fields: ["found", "chain", "provider", "consumer", "dependencyFormula", "binding", "complete", "error"],
+		},
 		summary:
 			"Exact dependency-chain read for a Local Parameter with an optional explicit Exported provider constraint.",
 		rules: [

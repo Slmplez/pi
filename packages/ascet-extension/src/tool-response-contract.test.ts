@@ -83,6 +83,16 @@ describe("tool response contract", () => {
 		});
 	});
 
+	test("preserves empty semantic arrays and empty code text", () => {
+		assert.deepEqual(compactObject({ text: "", elements: [], implementations: [], states: [], transitions: [] }), {
+			text: "",
+			elements: [],
+			implementations: [],
+			states: [],
+			transitions: [],
+		});
+	});
+
 	test("keeps empty result shape stable", () => {
 		assert.deepEqual(createPagedResult([]), {
 			total: 0,

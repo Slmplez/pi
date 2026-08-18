@@ -196,6 +196,14 @@ export async function runAscetReadDependentChain(
 	if (!metadata.ok) return metadata;
 	const importedName = extractImportedElementName(metadata);
 	if (!importedName) {
+		const payload = getPayload(metadata.data);
+		const dependent = isRecord(payload?.dependent) ? payload.dependent : undefined;
+		if (dependent && !isLocalDependentParameter(dependent)) {
+			return failure(metadata, "not_dependent_chain", "Element is not a dependent chain target.", {
+				componentPath: readString(payload, "component") ?? params.componentPath,
+				dependentElement: readString(dependent, "name") ?? params.dependentElement,
+			});
+		}
 		return failure(
 			metadata,
 			"incomplete_chain",
@@ -236,66 +244,127 @@ export function formatReadDependentChainResult(result: AscetReadDependentChainRe
 
 export function createDependentChainOutput(result: AscetReadDependentChainResult): JsonRecord {
 	if (!result.ok) {
-		const details = isRecord(result.error?.details) ? result.error.details : undefined;
-		return {
-			found: false,
-			error: {
-				code: result.error?.code ?? "read_dependent_chain_failed",
-				message: result.error?.message ?? "ASCET dependency-chain read failed.",
-				...(Array.isArray(details?.candidates) ? { candidates: details.candidates } : {}),
-			},
-		};
+		return createPublicDependentChainError(
+			result.error?.code ?? "read_dependent_chain_failed",
+			result.error?.message ?? "ASCET dependency-chain read failed.",
+			result.error?.details,
+		);
 	}
 	const payload = getPayload(result.data);
 	if (!payload || payload.complete !== true) {
-		return {
-			found: false,
-			error: {
-				code: "incomplete_chain",
-				message: "The existing dependency metadata is incomplete.",
-			},
-		};
+		const dependent = isRecord(payload?.dependent) ? payload.dependent : undefined;
+		const componentPath = readString(payload, "component");
+		const dependentElement = readString(dependent, "name");
+		const isDependentParameter = isLocalDependentParameter(dependent);
+		return createPublicDependentChainError(
+			isDependentParameter ? "incomplete_chain" : "not_dependent_chain",
+			isDependentParameter
+				? "The existing dependency metadata is incomplete."
+				: "Element is not a dependent chain target.",
+			{ ...(componentPath ? { componentPath } : {}), ...(dependentElement ? { dependentElement } : {}) },
+		);
 	}
 	const componentPath = readString(payload, "component");
 	const dependent = isRecord(payload.dependent) ? payload.dependent : undefined;
 	const dependentElement = readString(dependent, "name");
 	const inputs = Array.isArray(payload.inputs) ? payload.inputs : [];
 	const imported = new Set<string>();
-	const exported = new Map<string, string>();
+	const importedElements = new Map<string, JsonRecord>();
+	const exported = new Map<string, { owner: string; element: JsonRecord }>();
 	for (const input of inputs) {
 		if (!isRecord(input)) continue;
 		if (isRecord(input.value)) {
 			const name = readString(input.value, "name");
-			if (name && readString(input.value, "scope")?.toLowerCase() === "imported") imported.add(name);
+			if (name && readString(input.value, "scope")?.toLowerCase() === "imported") {
+				imported.add(name);
+				importedElements.set(name, input.value);
+			}
 		}
 		if (isRecord(input.export) && input.export.exists === true) {
 			const name = readString(input.export, "name");
 			const owner = readString(input.export, "owner");
 			if (name && owner && readString(input.export, "scope")?.toLowerCase() === "exported") {
-				exported.set(`${owner.toLowerCase()}\u0000${name}`, owner);
+				exported.set(`${owner.toLowerCase()}\u0000${name}`, { owner, element: input.export });
 			}
 		}
 	}
 	if (!componentPath || !dependentElement || imported.size !== 1 || exported.size !== 1) {
-		return {
-			found: false,
-			error: {
-				code: "incomplete_chain",
-				message: "The resolved dependency chain is not a single exact Local/Imported/Exported path.",
-			},
-		};
+		return createPublicDependentChainError(
+			"incomplete_chain",
+			"The resolved dependency chain is not a single exact Local/Imported/Exported path.",
+		);
 	}
 	const importedElement = [...imported][0];
 	const exportedKey = [...exported.keys()][0];
 	const separator = exportedKey.indexOf("\u0000");
 	const exportedElement = exportedKey.slice(separator + 1);
+	const provider = exported.get(exportedKey);
+	const importedRecord = importedElements.get(importedElement);
+	if (!provider || !importedRecord || !dependent) {
+		return createPublicDependentChainError(
+			"incomplete_chain",
+			"The resolved dependency chain is missing Provider, Imported, or Local metadata.",
+		);
+	}
+	const providerComponentPath = readString(payload, "exporter") ?? provider.owner;
+	const dependencyFormula = isRecord(payload.dependencyFormula) ? payload.dependencyFormula : undefined;
+	const binding = isRecord(payload.binding) ? payload.binding : deriveDependentChainBinding(payload);
 	return {
 		found: true,
 		chain: {
 			local: { componentPath, element: dependentElement },
 			imported: { componentPath, element: importedElement },
-			exported: { componentPath: exported.get(exportedKey), element: exportedElement },
+			exported: { componentPath: providerComponentPath, element: exportedElement },
 		},
+		provider: { componentPath: providerComponentPath, element: provider.element },
+		consumer: { componentPath, imported: importedRecord, local: dependent },
+		...(dependencyFormula ? { dependencyFormula } : {}),
+		...(binding ? { binding } : {}),
+		complete: true,
+	};
+}
+
+function createPublicDependentChainError(code: string, message: string, details?: unknown): JsonRecord {
+	const detailRecord = isRecord(details) ? details : undefined;
+	return {
+		error: {
+			code,
+			message,
+			...(detailRecord ?? {}),
+		},
+	};
+}
+
+function deriveDependentChainBinding(payload: JsonRecord): JsonRecord | undefined {
+	const dependencyFormula = isRecord(payload.dependencyFormula) ? payload.dependencyFormula : undefined;
+	const formula = readString(dependencyFormula, "code");
+	const mappings = Array.isArray(dependencyFormula?.mappings) ? dependencyFormula.mappings : [];
+	const unique = new Map<string, { formal: string; imported: string }>();
+	for (const mapping of mappings) {
+		if (!isRecord(mapping)) continue;
+		const formal = readString(mapping, "formal");
+		const imported = readString(mapping, "imported");
+		if (formal && imported) unique.set(`${formal}\u0000${imported}`, { formal, imported });
+	}
+	if (!formula || unique.size !== 1) return undefined;
+	const mapping = [...unique.values()][0];
+	const inputs = Array.isArray(payload.inputs) ? payload.inputs : [];
+	const variants = [
+		...new Set(
+			inputs.flatMap((input) => {
+				if (!isRecord(input)) return [];
+				const variant = readString(input, "variant");
+				return variant ? [variant] : [];
+			}),
+		),
+	];
+	const nonDefaultVariants = variants.filter((variant) => variant.toLowerCase() !== "default");
+	return {
+		importedElement: mapping.imported,
+		formula,
+		formal: mapping.formal,
+		variantPolicy: nonDefaultVariants.length === 0 ? "default" : "selected",
+		...(nonDefaultVariants.length > 0 ? { variants: nonDefaultVariants } : {}),
 	};
 }
 
@@ -364,6 +433,14 @@ function isParameterWithScope(element: JsonRecord | undefined, scope: "imported"
 	return (
 		readString(element, "kind")?.toLowerCase() === "parameter" &&
 		readString(element, "scope")?.toLowerCase() === scope
+	);
+}
+
+function isLocalDependentParameter(element: JsonRecord | undefined): boolean {
+	return (
+		readString(element, "kind")?.toLowerCase() === "parameter" &&
+		readString(element, "scope")?.toLowerCase() === "local" &&
+		readString(element, "dependency")?.toLowerCase() === "dependent"
 	);
 }
 

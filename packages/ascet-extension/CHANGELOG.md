@@ -30,6 +30,7 @@
 
 ### Fixed
 
+- Fixed ASCET Read Tools to preserve large and empty results as machine-readable JSON, restore implementation and StateMachine detail modes, return complete dependency chains, and distinguish unavailable Project enumeration from empty dependency results.
 - Fixed TCM-backed component editability so `ascet_edit` uses `ReserveItem` followed by `CreateEdition`, and reports a failed write when the component remains read-only.
 - Fixed capability and readback failures to stop before approval, removed the fixed approval timeout, and made final rendering fail closed so `DONE` means only verified applied or no-op mutations.
 - Fixed scoped permission rules for create operations to match the planned mutation target instead of the existing parent safety anchor.
@@ -40,6 +41,7 @@
 - Fixed public schema validation to recognize literal values nested in `anyOf`/`oneOf`, so valid actions such as `ascet_scheduler_status` recovery are not rejected as unknown.
 - Fixed the startup UI update checker to read `dist-tags.latest` from the internal Nexus registry and isolate cached results by registry URL.
 - Fixed aggregate package publication to exclude generated `.tgz` files and prevent recursive tarball bundling.
+- Fixed release packaging and cleanup-only validation to follow the current `ascet-engineering` Skill references and accept already-removed ASCET smoke targets.
 
 - Fixed Bosch LLM Farm slow first-token requests to use effective provider-scoped 15-minute timeouts and five agent-level retries without showing intermediate retry errors.
 - Fixed `ascet_get` `component_refs` name and scope filters being ignored.

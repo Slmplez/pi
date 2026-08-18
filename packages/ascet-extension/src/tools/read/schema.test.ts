@@ -124,6 +124,34 @@ describe("ascet_read schema", () => {
 		assert.equal(request.action, "read_element");
 	});
 
+	test("requires implementationName only for explicit impl mode", () => {
+		assert.equal(
+			Value.Check(ascetReadParameters, {
+				action: "read_implementation",
+				componentPath: "DEMO\\PID",
+				implementationMode: "impl",
+			}),
+			false,
+		);
+		assert.equal(
+			Value.Check(ascetReadParameters, {
+				action: "read_implementation",
+				componentPath: "DEMO\\PID",
+				implementationMode: "impl",
+				implementationName: "Impl",
+			}),
+			true,
+		);
+		assert.equal(
+			Value.Check(ascetReadParameters, {
+				action: "read_implementation",
+				componentPath: "DEMO\\PID",
+				implementationMode: "default",
+			}),
+			true,
+		);
+	});
+
 	test("does not expose unsupported implementation traversal controls", () => {
 		const schema = getActionSchema("read_implementation") as { properties?: Record<string, unknown> } | undefined;
 		const properties = schema?.properties ?? {};

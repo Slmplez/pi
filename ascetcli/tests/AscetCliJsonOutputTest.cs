@@ -54,6 +54,8 @@ public static class AscetCliJsonOutputTest
             TestDiffMethodCodeRecognizesStructuredMethodNotFound();
             TestReadStateMachineFlowParsesDetailLevel();
             TestReadStateMachineFlowSummaryJsonIsCompact();
+            TestReadStateMachineFlowTopologyJsonIsDistinct();
+            TestReadStateMachineFlowFullJsonPreservesNestedFieldsAndTraceDepth();
             TestReadBlockDiagramJsonDefaultsToSemanticGraph();
             TestReadBlockDiagramSemanticOperationsTraceControlAndDataFlow();
             Console.WriteLine("AscetCliJsonOutputTest passed.");
@@ -1214,6 +1216,10 @@ public static class AscetCliJsonOutputTest
             new string[] { "DEMO\\SM", "--json" });
         AssertEqual("full", defaultLevel.DetailLevel, "read_state_machine_flow should default to full detail level.");
 
+        AscetReadStateMachineFlowArguments topology = AscetReadStateMachineFlow.ParseArguments(
+            new string[] { "DEMO\\SM", "--detail-level", "topology", "--json" });
+        AssertEqual("topology", topology.DetailLevel, "read_state_machine_flow should preserve topology detail level.");
+
         AssertInvalidArgument(
             delegate() { AscetReadStateMachineFlow.ParseArguments(new string[] { "DEMO\\SM", "--detail-level", "verbose" }); },
             "read_state_machine_flow should reject unsupported detail levels.");
@@ -1260,6 +1266,100 @@ public static class AscetCliJsonOutputTest
         AssertTrue(full.ContainsKey("StateFlows"), "full detail output should preserve StateFlows.");
         AssertTrue(full.ContainsKey("TransitionFlows"), "full detail output should preserve TransitionFlows.");
         AssertTrue(!full.ContainsKey("DetailLevel"), "full detail output should preserve the previous payload shape.");
+    }
+
+    private static void TestReadStateMachineFlowTopologyJsonIsDistinct()
+    {
+        AscetStateMachineFlowSummary summary = new AscetStateMachineFlowSummary
+        {
+            ComponentPath = "DEMO\\SM",
+            LanguageKind = AscetLanguageKind.ESDL,
+            DiagramName = "Main",
+            StateFlows = new List<AscetStateFlowRef>
+            {
+                new AscetStateFlowRef { StateName = "Idle", IsStartState = true },
+                new AscetStateFlowRef { StateName = "Run", IsStartState = false }
+            },
+            TransitionFlows = new List<AscetTransitionFlowRef>
+            {
+                new AscetTransitionFlowRef { TransitionName = "Idle_to_Run", SourceState = "Idle", TargetState = "Run", Priority = 1 }
+            },
+            Summary = "Flow summary."
+        };
+
+        Dictionary<string, object> topology = DeserializeObject(AscetReadStateMachineFlow.FormatJsonOutput(summary, "topology", 3));
+        AssertEqual("topology", GetString(topology, "DetailLevel"), "topology output should expose its detail level.");
+        AssertEqual("3", GetString(topology, "TraceDepth"), "topology output should expose the requested trace depth.");
+        AssertTrue(topology.ContainsKey("States"), "topology output should expose machine-readable states.");
+        AssertTrue(topology.ContainsKey("Transitions"), "topology output should expose machine-readable transitions.");
+        AssertTrue(!topology.ContainsKey("StateFlows"), "topology output should not be the full flow payload.");
+        AssertTrue(!topology.ContainsKey("StateNames"), "topology output should not be the summary name projection.");
+
+        Dictionary<string, object> state = (Dictionary<string, object>)ToList(topology["States"])[0];
+        Dictionary<string, object> transition = (Dictionary<string, object>)ToList(topology["Transitions"])[0];
+        AssertEqual("Idle", GetString(state, "StateName"), "topology state should preserve its name.");
+        AssertEqual("Idle_to_Run", GetString(transition, "TransitionName"), "topology transition should preserve its name.");
+        AssertEqual("Idle", GetString(transition, "SourceState"), "topology transition should preserve its source.");
+        AssertEqual("Run", GetString(transition, "TargetState"), "topology transition should preserve its target.");
+    }
+
+    private static void TestReadStateMachineFlowFullJsonPreservesNestedFieldsAndTraceDepth()
+    {
+        AscetStateMachineFlowSummary summary = new AscetStateMachineFlowSummary
+        {
+            ComponentPath = "DEMO\\SM",
+            LanguageKind = AscetLanguageKind.ESDL,
+            DiagramName = "Main",
+            StateFlows = new List<AscetStateFlowRef>
+            {
+                new AscetStateFlowRef
+                {
+                    StateName = "Idle",
+                    Bindings = new List<AscetFlowBindingRef>
+                    {
+                        new AscetFlowBindingRef
+                        {
+                            Code = "enter();",
+                            CodeAnalysis = new AscetCodeAnalysisRef
+                            {
+                                Reads = new List<string> { "input" },
+                                Writes = new List<string> { "state" }
+                            }
+                        }
+                    }
+                }
+            },
+            TransitionFlows = new List<AscetTransitionFlowRef>
+            {
+                new AscetTransitionFlowRef
+                {
+                    TransitionName = "Idle_to_Run",
+                    Action = new AscetFlowBindingRef { Code = "run();" }
+                }
+            },
+            ReferenceTrace = new List<AscetReferenceTraceNodeRef>
+            {
+                new AscetReferenceTraceNodeRef
+                {
+                    ComponentPath = "DEMO\\Dep",
+                    Children = new List<AscetReferenceTraceNodeRef>
+                    {
+                        new AscetReferenceTraceNodeRef { ComponentPath = "DEMO\\Leaf" }
+                    }
+                }
+            }
+        };
+
+        Dictionary<string, object> full = DeserializeObject(AscetReadStateMachineFlow.FormatJsonOutput(summary, "full", 2));
+        AssertEqual("2", GetString(full, "TraceDepth"), "full detail output should expose the requested trace depth.");
+        Dictionary<string, object> state = (Dictionary<string, object>)ToList(full["StateFlows"])[0];
+        Dictionary<string, object> binding = (Dictionary<string, object>)ToList(state["Bindings"])[0];
+        AssertEqual("enter();", GetString(binding, "Code"), "full detail output should preserve binding code.");
+        AssertEqual("input", ToList(GetDictionary(binding, "CodeAnalysis")["Reads"])[0].ToString(), "full detail output should preserve nested code analysis.");
+        Dictionary<string, object> transition = (Dictionary<string, object>)ToList(full["TransitionFlows"])[0];
+        AssertEqual("run();", GetString(GetDictionary(transition, "Action"), "Code"), "full detail output should preserve nested transition action code.");
+        Dictionary<string, object> trace = (Dictionary<string, object>)ToList(full["ReferenceTrace"])[0];
+        AssertEqual("DEMO\\Leaf", GetString((Dictionary<string, object>)ToList(trace["Children"])[0], "ComponentPath"), "full detail output should preserve nested reference trace.");
     }
 
     private static void TestReadBlockDiagramJsonDefaultsToSemanticGraph()

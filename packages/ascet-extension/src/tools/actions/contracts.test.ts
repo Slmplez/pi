@@ -71,6 +71,144 @@ describe("ASCET action contracts", () => {
 		assert.equal(Value.Check(tree.result, { count: 1, items: [], diagnostics: {} }), false);
 	});
 
+	test("validates read_code full and summary results without allowing field loss", () => {
+		const contract = getAscetActionContract("ascet_read", "read_code");
+		assert.ok(contract);
+		assert.equal(
+			Value.Check(contract.result, {
+				component: "DEMO/PID",
+				detailLevel: "full",
+				text: "out = in;",
+				hash: "abc",
+				lineCount: 1,
+				byteCount: 9,
+			}),
+			true,
+		);
+		assert.equal(
+			Value.Check(contract.result, {
+				component: "DEMO/PID",
+				detailLevel: "full",
+				hash: "abc",
+				lineCount: 1,
+				byteCount: 9,
+			}),
+			false,
+		);
+		assert.equal(
+			Value.Check(contract.result, {
+				component: "DEMO/PID",
+				detailLevel: "summary",
+				hash: "abc",
+				lineCount: 1,
+				byteCount: 9,
+			}),
+			true,
+		);
+	});
+
+	test("validates state-machine summary, topology, and full results", () => {
+		const contract = getAscetActionContract("ascet_read", "read_state_machine_flow");
+		assert.ok(contract);
+		assert.equal(
+			Value.Check(contract.result, {
+				component: "DEMO/SM",
+				detailLevel: "topology",
+				counts: { stateFlows: 1, transitionFlows: 0 },
+				states: [{ name: "Idle", isStartState: true }],
+				transitions: [],
+			}),
+			true,
+		);
+		assert.equal(
+			Value.Check(contract.result, {
+				component: "DEMO/SM",
+				stateFlows: [{ stateName: "Idle" }],
+				transitionFlows: [],
+				dependencyChains: [],
+				referenceTrace: [],
+			}),
+			true,
+		);
+		assert.equal(
+			Value.Check(contract.result, {
+				component: "DEMO/SM",
+				stateFlows: [{ stateName: "Idle" }],
+				dependencyChains: [],
+				referenceTrace: [],
+			}),
+			false,
+		);
+	});
+
+	test("validates implementation list and selected implementation results", () => {
+		const contract = getAscetActionContract("ascet_read", "read_implementation");
+		assert.ok(contract);
+		assert.equal(
+			Value.Check(contract.result, {
+				component: "DEMO/PID",
+				kind: "Class",
+				implementationSourceKind: "ImplementationConfiguration",
+				implementations: [{ name: "Impl", isDefault: true, isClassImplementation: false }],
+			}),
+			true,
+		);
+		assert.equal(
+			Value.Check(contract.result, {
+				component: "DEMO/PID",
+				kind: "Class",
+				implementationSourceKind: "ImplementationConfiguration",
+				mode: "Default",
+				resolvedImplementationName: "Impl",
+				elements: [],
+			}),
+			true,
+		);
+		assert.equal(
+			Value.Check(contract.result, {
+				component: "DEMO/PID",
+				kind: "Class",
+				implementationSourceKind: "ImplementationConfiguration",
+				mode: "Default",
+				resolvedImplementationName: "Impl",
+			}),
+			false,
+		);
+	});
+
+	test("validates read_element_dependency success and capability errors", () => {
+		const contract = getAscetActionContract("ascet_read", "read_element_dependency");
+		assert.ok(contract);
+		assert.equal(
+			Value.Check(contract.result, {
+				target: "DEMO/Component",
+				kind: "component",
+				element: "P_Threshold",
+				total: 1,
+				items: [{ dependency: "dependent", formula: "P_Source" }],
+			}),
+			true,
+		);
+		assert.equal(
+			Value.Check(contract.result, {
+				target: "DEMO/Component",
+				kind: "component",
+				element: "P_Threshold",
+				total: 1,
+			}),
+			false,
+		);
+		assert.equal(
+			Value.Check(contract.result, {
+				error: {
+					code: "project_component_enumeration_unavailable",
+					message: "Project enumeration is unavailable.",
+				},
+			}),
+			true,
+		);
+	});
+
 	test("accepts dependency-chain preview before readback verification", () => {
 		const contract = getAscetActionContract("ascet_edit", "create_dependent_chain");
 		assert.ok(contract);

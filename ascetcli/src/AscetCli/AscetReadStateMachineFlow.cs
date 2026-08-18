@@ -34,7 +34,7 @@ public static class AscetReadStateMachineFlow
             AscetItemPath parsed = AscetItemPath.Parse(arguments.ComponentPath);
             AscetItemRef component = locator.FindItemInFolder(parsed.ItemName, parsed.FolderPath);
             AscetStateMachineFlowSummary summary = service.GetFlowSummary(component, arguments.TraceDepth);
-            string output = arguments.EmitJson ? FormatJsonOutput(summary, arguments.DetailLevel) : FormatTextOutput(summary);
+            string output = arguments.EmitJson ? FormatJsonOutput(summary, arguments.DetailLevel, arguments.TraceDepth) : FormatTextOutput(summary);
 
             Console.SetOut(originalOut);
             Console.Write(output);
@@ -60,7 +60,7 @@ public static class AscetReadStateMachineFlow
     {
         if (args == null || args.Length < 1)
         {
-            throw new AscetReadException("invalid_argument", "parse_arguments", "usage: AscetCli.exe exec read_state_machine_flow <component-path> [--trace-depth <n>] [--detail-level summary|full] [--json]");
+            throw new AscetReadException("invalid_argument", "parse_arguments", "usage: AscetCli.exe exec read_state_machine_flow <component-path> [--trace-depth <n>] [--detail-level summary|topology|full] [--json]");
         }
 
         AscetReadStateMachineFlowArguments result = new AscetReadStateMachineFlowArguments
@@ -106,9 +106,10 @@ public static class AscetReadStateMachineFlow
 
                 string detailLevel = (args[++i] ?? String.Empty).Trim().ToLowerInvariant();
                 if (!String.Equals(detailLevel, "summary", StringComparison.Ordinal)
+                    && !String.Equals(detailLevel, "topology", StringComparison.Ordinal)
                     && !String.Equals(detailLevel, "full", StringComparison.Ordinal))
                 {
-                    throw new AscetReadException("invalid_argument", "parse_arguments", "Detail level must be summary or full.");
+                    throw new AscetReadException("invalid_argument", "parse_arguments", "Detail level must be summary, topology or full.");
                 }
 
                 result.DetailLevel = detailLevel;
@@ -151,13 +152,18 @@ public static class AscetReadStateMachineFlow
 
     public static string FormatJsonOutput(AscetStateMachineFlowSummary summary, string detailLevel)
     {
+        return FormatJsonOutput(summary, detailLevel, null);
+    }
+
+    public static string FormatJsonOutput(AscetStateMachineFlowSummary summary, string detailLevel, int? traceDepth)
+    {
         if (summary == null)
         {
             throw new AscetReadException("invalid_argument", "format_json_output", "Flow summary must not be null.");
         }
 
         JavaScriptSerializer serializer = new JavaScriptSerializer();
-        return AscetJsonContract.Serialize(BuildSerializableSummary(summary, detailLevel));
+        return AscetJsonContract.Serialize(BuildSerializableSummary(summary, detailLevel, traceDepth));
     }
 
     private static void AppendStateFlows(StringBuilder builder, IList<AscetStateFlowRef> flows)
@@ -386,11 +392,16 @@ public static class AscetReadStateMachineFlow
         }
     }
 
-    private static IDictionary<string, object> BuildSerializableSummary(AscetStateMachineFlowSummary summary, string detailLevel)
+    private static IDictionary<string, object> BuildSerializableSummary(AscetStateMachineFlowSummary summary, string detailLevel, int? traceDepth)
     {
         if (String.Equals((detailLevel ?? String.Empty).Trim(), "summary", StringComparison.OrdinalIgnoreCase))
         {
             return BuildSerializableCompactSummary(summary);
+        }
+
+        if (String.Equals((detailLevel ?? String.Empty).Trim(), "topology", StringComparison.OrdinalIgnoreCase))
+        {
+            return BuildSerializableTopology(summary, traceDepth);
         }
 
         Dictionary<string, object> result = new Dictionary<string, object>();
@@ -401,6 +412,28 @@ public static class AscetReadStateMachineFlow
         result["TransitionFlows"] = BuildSerializableTransitionFlows(summary.TransitionFlows);
         result["DependencyChains"] = BuildSerializableDependencyChains(summary.DependencyChains);
         result["ReferenceTrace"] = BuildSerializableReferenceTrace(summary.ReferenceTrace);
+        result["Summary"] = summary.Summary ?? String.Empty;
+        if (traceDepth.HasValue)
+        {
+            result["TraceDepth"] = traceDepth.Value;
+        }
+        return result;
+    }
+
+    private static IDictionary<string, object> BuildSerializableTopology(AscetStateMachineFlowSummary summary, int? traceDepth)
+    {
+        Dictionary<string, object> result = new Dictionary<string, object>();
+        result["ComponentPath"] = summary.ComponentPath ?? String.Empty;
+        result["LanguageKind"] = summary.LanguageKind.ToString();
+        result["DiagramName"] = summary.DiagramName ?? String.Empty;
+        result["DetailLevel"] = "topology";
+        if (traceDepth.HasValue)
+        {
+            result["TraceDepth"] = traceDepth.Value;
+        }
+        result["Counts"] = BuildSerializableCompactCounts(summary);
+        result["States"] = BuildSerializableTopologyStates(summary.StateFlows);
+        result["Transitions"] = BuildSerializableTopologyTransitions(summary.TransitionFlows);
         result["Summary"] = summary.Summary ?? String.Empty;
         return result;
     }
@@ -469,6 +502,47 @@ public static class AscetReadStateMachineFlow
         return result;
     }
 
+    private static IList<IDictionary<string, object>> BuildSerializableTopologyStates(IList<AscetStateFlowRef> flows)
+    {
+        List<IDictionary<string, object>> result = new List<IDictionary<string, object>>();
+        if (flows == null)
+        {
+            return result;
+        }
+
+        for (int i = 0; i < flows.Count; i++)
+        {
+            AscetStateFlowRef flow = flows[i];
+            Dictionary<string, object> entry = new Dictionary<string, object>();
+            entry["StateName"] = flow == null ? String.Empty : (flow.StateName ?? String.Empty);
+            entry["IsStartState"] = flow != null && flow.IsStartState;
+            result.Add(entry);
+        }
+
+        return result;
+    }
+
+    private static IList<IDictionary<string, object>> BuildSerializableTopologyTransitions(IList<AscetTransitionFlowRef> flows)
+    {
+        List<IDictionary<string, object>> result = new List<IDictionary<string, object>>();
+        if (flows == null)
+        {
+            return result;
+        }
+
+        for (int i = 0; i < flows.Count; i++)
+        {
+            AscetTransitionFlowRef flow = flows[i];
+            Dictionary<string, object> entry = new Dictionary<string, object>();
+            entry["TransitionName"] = flow == null ? String.Empty : (flow.TransitionName ?? String.Empty);
+            entry["SourceState"] = flow == null ? String.Empty : (flow.SourceState ?? String.Empty);
+            entry["TargetState"] = flow == null ? String.Empty : (flow.TargetState ?? String.Empty);
+            entry["Priority"] = flow == null ? 0 : flow.Priority;
+            result.Add(entry);
+        }
+
+        return result;
+    }
     private static IList<IDictionary<string, object>> BuildSerializableStateFlows(IList<AscetStateFlowRef> flows)
     {
         List<IDictionary<string, object>> result = new List<IDictionary<string, object>>();

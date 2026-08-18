@@ -19,6 +19,22 @@ export interface AscetReadImplementationParams {
 	timeoutMs?: number;
 }
 
+export interface AscetReadImplementationArgumentDetails {
+	mode: "impl";
+	parameter: "implementationName";
+}
+
+export class AscetReadImplementationArgumentError extends Error {
+	readonly code = "invalid_argument";
+	readonly details: AscetReadImplementationArgumentDetails;
+
+	constructor(details: AscetReadImplementationArgumentDetails) {
+		super("implementationName is required when mode is impl");
+		this.name = "AscetReadImplementationArgumentError";
+		this.details = details;
+	}
+}
+
 export interface RunAscetReadImplementationOptions {
 	cwd: string;
 	env?: Record<string, string | undefined>;
@@ -47,7 +63,10 @@ export function buildReadImplementationArgs(params: AscetReadImplementationParam
 	} else if (params.mode === "class-impl") {
 		args.push("--class-impl");
 	} else if (params.mode === "impl") {
-		args.push("--impl", params.implementationName ?? "");
+		if (params.implementationName === undefined || params.implementationName.trim().length === 0) {
+			throw new AscetReadImplementationArgumentError({ mode: "impl", parameter: "implementationName" });
+		}
+		args.push("--impl", params.implementationName);
 	}
 	args.push("--json");
 	return args;
@@ -70,5 +89,5 @@ export function getReadImplementationEnumerationReadback(
 }
 
 export function formatReadImplementationResult(result: AscetReadImplementationResult): string {
-	return formatAscetCliJsonResult("read_implementation", result);
+	return formatAscetCliJsonResult("read_implementation", result, { largeSuccess: "inline" });
 }

@@ -39,5 +39,5 @@ export async function runAscetReadBlockDiagram(
 }
 
 export function formatReadBlockDiagramResult(result: AscetReadBlockDiagramResult): string {
-	return formatAscetCliJsonResult("read_block_diagram", result);
+	return formatAscetCliJsonResult("read_block_diagram", result, { largeSuccess: "inline" });
 }

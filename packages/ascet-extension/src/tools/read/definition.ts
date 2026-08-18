@@ -74,7 +74,7 @@ async function runAscetRead(params: AscetReadParams, options: RunOptions): Promi
 				{
 					componentPath: params.componentPath,
 					traceDepth: params.traceDepth,
-					detailLevel: params.detailLevel === "topology" ? "summary" : params.detailLevel,
+					detailLevel: params.detailLevel,
 				},
 				options,
 			);
@@ -119,14 +119,42 @@ function applyReadCodeDetailLevel(
 	detailLevel: "summary" | "topology" | "full" | undefined,
 	result: AscetCliJsonResult,
 ): AscetCliJsonResult {
-	if (detailLevel === undefined || detailLevel === "full" || !result.ok) {
+	if (!result.ok) {
 		return result;
 	}
-	const data = trimFullText(result.data, detailLevel);
+	const data =
+		detailLevel === undefined || detailLevel === "full"
+			? addFullTextSummary(result.data)
+			: trimFullText(result.data, detailLevel);
 	return {
 		...result,
 		data,
 		stdout: JSON.stringify(data),
+	};
+}
+
+function addFullTextSummary(data: unknown): unknown {
+	if (data === null || typeof data !== "object" || Array.isArray(data)) {
+		return data;
+	}
+	const envelope = data as Record<string, unknown>;
+	const result = envelope.result;
+	if (result === null || typeof result !== "object" || Array.isArray(result)) {
+		return data;
+	}
+	const payload = result as Record<string, unknown>;
+	const text =
+		typeof payload.text === "string" ? payload.text : typeof payload.code === "string" ? payload.code : undefined;
+	if (text === undefined) {
+		return data;
+	}
+	return {
+		...envelope,
+		result: {
+			...payload,
+			detailLevel: "full",
+			...createHashSummary({ text }),
+		},
 	};
 }
 
@@ -155,7 +183,7 @@ function trimObjectText(
 	const summary = createHashSummary({ text, language });
 	return {
 		...rest,
-		...(detailLevel === "topology" ? { detailLevel } : {}),
+		detailLevel,
 		...summary,
 	};
 }

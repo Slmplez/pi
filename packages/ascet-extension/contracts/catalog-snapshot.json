@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "catalogFingerprint": "898a3a6e5434356a1f53277ac06596cd04ca43185e65b420a102ab74319c3eae",
+  "catalogFingerprint": "9ca26e14b3f7bfdf534cca55e2552da520d63990317c507809d3588d7f0b1d1c",
   "actions": [
     {
       "id": "ascet_batch_write.batch_create_component",
@@ -986,7 +986,7 @@
       "id": "ascet_read.read_code",
       "schemaFingerprint": "4ec46643ff0d98a645ca6b4a179ab5afd7b37e41dfcf63b18987d1c3776ddf10",
       "rulesFingerprint": "a761ac44e26952040e246efd4a2e3b04786b4dcabc40097b76ef52b076c531ef",
-      "resultFingerprint": "764d33b1ca715dc1a658b81cdd1b26e0e2432c99fc2743e995027bcf57ffaa8c",
+      "resultFingerprint": "f137f42d246262a86f3140dbda1b4d72db5bc3831c6a46bfb351583bd0a69888",
       "schema": {
         "required": [
           "action",
@@ -1005,7 +1005,11 @@
           "component",
           "name",
           "section",
-          "text"
+          "detailLevel",
+          "text",
+          "hash",
+          "lineCount",
+          "byteCount"
         ]
       }
     },
@@ -1013,7 +1017,7 @@
       "id": "ascet_read.read_dependent_chain",
       "schemaFingerprint": "c1181a00b64563a30169cf396e5bbad81388ed01cb5cf34358550a956eb17911",
       "rulesFingerprint": "75cf0a92c0e7dc14c860293df05df47b13e29b56fe32a80f6676bba0308c8b16",
-      "resultFingerprint": "67a19c2264f74d5bdd5aa6ec2e857c8064ef5b5a4b9895c705c5fdec8907133b",
+      "resultFingerprint": "9cfa21a5c219e1df6f1b6f49c574bc7a9cf7ca597bd5de7d658590137c857044",
       "schema": {
         "required": [
           "action",
@@ -1030,6 +1034,11 @@
         "fields": [
           "found",
           "chain",
+          "provider",
+          "consumer",
+          "dependencyFormula",
+          "binding",
+          "complete",
           "error"
         ]
       }
@@ -1061,7 +1070,7 @@
       "id": "ascet_read.read_element_dependency",
       "schemaFingerprint": "295e6c743223299a3881126c09a3751698552b8cfa45a04c723ccecc8494e7ca",
       "rulesFingerprint": "b4a88240b2b5ee70ebcd66cbb56a747d20ac7b71971ab8db416ba7cfeafa4ad1",
-      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
+      "resultFingerprint": "28109a820f491e11b86170d1b54bcc178aab6c387896dbeecaf3a327a4522e03",
       "schema": {
         "required": [
           "action",
@@ -1110,26 +1119,64 @@
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "result",
+        "shape": "elementDependency",
         "fields": [
+          "target",
+          "kind",
+          "element",
+          "total",
+          "items",
           "error"
         ]
       }
     },
     {
       "id": "ascet_read.read_implementation",
-      "schemaFingerprint": "9618b9d248a0c0001a2b5600d71f5e1e4a25d70850cbf562bb17fb727a26b934",
+      "schemaFingerprint": "91f9ed51fb846f4a754a36b6cb5e56adf0fc317e4e19ee75b71defe1674cd09c",
       "rulesFingerprint": "07df63fac577f21d4c83d44f10d14da4a6b7992d3dc671e97663c31b51c3d419",
-      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
+      "resultFingerprint": "05f702133815d273a58c2b46220ca313e944031b6814ae74abc394dba06b4753",
       "schema": {
         "required": [
           "action",
           "componentPath"
         ],
         "optional": [
-          "implementationMode",
-          "implementationName",
-          "timeoutMs"
+          "timeoutMs",
+          "implementationMode"
+        ],
+        "enums": {
+          "action": [
+            "read_implementation"
+          ],
+          "implementationMode": [
+            "impl",
+            "list",
+            "default",
+            "class-impl"
+          ]
+        },
+        "variants": [
+          {
+            "required": [
+              "action",
+              "componentPath",
+              "implementationMode",
+              "implementationName"
+            ],
+            "optional": [
+              "timeoutMs"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "componentPath"
+            ],
+            "optional": [
+              "implementationMode",
+              "timeoutMs"
+            ]
+          }
         ]
       },
       "supportedObjectKinds": [
@@ -1139,9 +1186,14 @@
         "enumeration"
       ],
       "result": {
-        "shape": "result",
+        "shape": "implementation",
         "fields": [
-          "error"
+          "component",
+          "kind",
+          "implementationSourceKind",
+          "implementations",
+          "mode",
+          "elements"
         ]
       }
     },
@@ -1170,7 +1222,7 @@
       "id": "ascet_read.read_state_machine_flow",
       "schemaFingerprint": "a8a60031434d9a40c95014e5200c0c6b778b0acdd22abe9ec627b68172b84320",
       "rulesFingerprint": "53eb6d3a9942f6cd8357602df19946a1231d9d4feaea1337193beb63f95211c7",
-      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
+      "resultFingerprint": "b0ed86ff07da0e2d4e153182649274ba4dd9b583e11f2832a4d17360abcff305",
       "schema": {
         "required": [
           "action",
@@ -1183,9 +1235,15 @@
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "result",
+        "shape": "stateMachineFlow",
         "fields": [
-          "error"
+          "component",
+          "detailLevel",
+          "states",
+          "transitions",
+          "stateFlows",
+          "transitionFlows",
+          "traceDepth"
         ]
       }
     },

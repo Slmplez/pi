@@ -53,7 +53,7 @@ export async function runAscetReadTextCode(
 }
 
 export function formatReadTextCodeResult(result: AscetReadTextCodeResult): string {
-	return formatAscetCliJsonResult("read_text_code", result);
+	return formatAscetCliJsonResult("read_text_code", result, { largeSuccess: "inline" });
 }
 
 function normalizeReadTextCodeResult(

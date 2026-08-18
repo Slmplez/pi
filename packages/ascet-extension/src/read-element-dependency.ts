@@ -8,6 +8,7 @@ import {
 } from "./cli.ts";
 import { normalizeAscetPath } from "./core/path.ts";
 import type { AscetScheduler } from "./scheduler/scheduler.ts";
+import { unwrapToolSuccessPayload } from "./tool-response-contract.ts";
 
 export type AscetReadElementDependencyTargetKind = "auto" | "component" | "folder" | "project";
 
@@ -72,14 +73,37 @@ export async function runAscetReadElementDependency(
 	params: AscetReadElementDependencyParams,
 	options: RunAscetReadElementDependencyOptions,
 ): Promise<AscetReadElementDependencyResult> {
-	return runAscetCliJson(buildReadElementDependencyArgs(params), {
+	const result = await runAscetCliJson(buildReadElementDependencyArgs(params), {
 		...options,
 		toolName: "ascet_read",
 		commandId: "read_element_dependency",
 		jobKind: "read",
 	});
+	if (!result.ok || !hasIssue(result.data, "project_component_enumeration_unavailable")) {
+		return result;
+	}
+	return {
+		...result,
+		ok: false,
+		data: null,
+		stage: "result",
+		error: {
+			code: "project_component_enumeration_unavailable",
+			message: "ASCET cannot enumerate project components for dependency inspection.",
+			details: { targetKind: params.targetKind ?? "auto", retryable: false },
+		},
+	};
+}
+
+function hasIssue(data: unknown, issue: string): boolean {
+	const payload = unwrapToolSuccessPayload(data);
+	if (payload === null || typeof payload !== "object" || Array.isArray(payload)) {
+		return false;
+	}
+	const issues = (payload as Record<string, unknown>).issues;
+	return Array.isArray(issues) && issues.includes(issue);
 }
 
 export function formatReadElementDependencyResult(result: AscetReadElementDependencyResult): string {
-	return formatAscetCliJsonResult("read_element_dependency", result);
+	return formatAscetCliJsonResult("read_element_dependency", result, { largeSuccess: "inline" });
 }

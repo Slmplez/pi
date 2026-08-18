@@ -85,7 +85,7 @@ export async function runAscetReadElement(
 }
 
 export function formatReadElementResult(result: AscetReadElementResult): string {
-	return formatAscetCliJsonResult("read_element", result);
+	return formatAscetCliJsonResult("read_element", result, { largeSuccess: "inline" });
 }
 
 function findExactElement(data: unknown, elementName: string): Record<string, unknown> | undefined {

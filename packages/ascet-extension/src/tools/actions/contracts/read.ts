@@ -49,6 +49,104 @@ const targetKindSchema = Type.Optional(
 	Type.Union([Type.Literal("auto"), Type.Literal("component"), Type.Literal("folder"), Type.Literal("project")]),
 );
 const readResultSchema = Type.Union([Type.Object({}, { additionalProperties: true }), ascetPublicErrorResultSchema]);
+const readCodeCommonResultProperties = {
+	component: Type.String({ minLength: 1 }),
+	kind: Type.Optional(Type.String({ minLength: 1 })),
+	language: Type.Optional(Type.String({ minLength: 1 })),
+	section: Type.Optional(Type.String({ minLength: 1 })),
+	name: Type.Optional(Type.String({ minLength: 1 })),
+	hash: Type.String({ minLength: 1 }),
+	lineCount: Type.Integer({ minimum: 0 }),
+	byteCount: Type.Integer({ minimum: 0 }),
+};
+const readCodeResultSchema = Type.Union([
+	Type.Object(
+		{
+			...readCodeCommonResultProperties,
+			detailLevel: Type.Literal("full"),
+			text: Type.String(),
+		},
+		{ additionalProperties: true },
+	),
+	Type.Object(
+		{
+			...readCodeCommonResultProperties,
+			detailLevel: Type.Union([Type.Literal("summary"), Type.Literal("topology")]),
+		},
+		{ additionalProperties: true },
+	),
+	ascetPublicErrorResultSchema,
+]);
+
+const readElementDependencyResultSchema = Type.Union([
+	Type.Object(
+		{
+			target: Type.String({ minLength: 1 }),
+			kind: Type.String({ minLength: 1 }),
+			element: Type.String({ minLength: 1 }),
+			total: Type.Integer({ minimum: 0 }),
+			items: Type.Array(Type.Unknown()),
+		},
+		{ additionalProperties: true },
+	),
+	ascetPublicErrorResultSchema,
+]);
+const readImplementationResultSchema = Type.Union([
+	Type.Object(
+		{
+			component: Type.String({ minLength: 1 }),
+			kind: Type.String({ minLength: 1 }),
+			implementationSourceKind: Type.String({ minLength: 1 }),
+			implementations: Type.Array(Type.Unknown()),
+		},
+		{ additionalProperties: true },
+	),
+	Type.Object(
+		{
+			component: Type.String({ minLength: 1 }),
+			kind: Type.String({ minLength: 1 }),
+			implementationSourceKind: Type.String({ minLength: 1 }),
+			mode: Type.String({ minLength: 1 }),
+			elements: Type.Array(Type.Unknown()),
+		},
+		{ additionalProperties: true },
+	),
+	ascetPublicErrorResultSchema,
+]);
+
+const readStateMachineFlowResultSchema = Type.Union([
+	Type.Object(
+		{
+			component: Type.String({ minLength: 1 }),
+			detailLevel: Type.Literal("summary"),
+			counts: Type.Record(Type.String({ minLength: 1 }), Type.Integer({ minimum: 0 })),
+			stateNames: Type.Array(Type.String()),
+			transitionNames: Type.Array(Type.String()),
+		},
+		{ additionalProperties: true },
+	),
+	Type.Object(
+		{
+			component: Type.String({ minLength: 1 }),
+			detailLevel: Type.Literal("topology"),
+			counts: Type.Record(Type.String({ minLength: 1 }), Type.Integer({ minimum: 0 })),
+			states: Type.Array(Type.Unknown()),
+			transitions: Type.Array(Type.Unknown()),
+		},
+		{ additionalProperties: true },
+	),
+	Type.Object(
+		{
+			component: Type.String({ minLength: 1 }),
+			stateFlows: Type.Array(Type.Unknown()),
+			transitionFlows: Type.Array(Type.Unknown()),
+			dependencyChains: Type.Array(Type.Unknown()),
+			referenceTrace: Type.Array(Type.Unknown()),
+		},
+		{ additionalProperties: true },
+	),
+	ascetPublicErrorResultSchema,
+]);
 
 const readSummaryParameters = Type.Object({
 	action: Type.Literal("read"),
@@ -68,15 +166,31 @@ const readMethodSignatureParameters = Type.Object({
 	componentPath: componentPathSchema,
 	methodName: Type.String({ minLength: 1 }),
 });
-const readImplementationParameters = Type.Object({
-	action: Type.Literal("read_implementation"),
-	componentPath: componentPathSchema,
-	implementationMode: Type.Optional(
-		Type.Union([Type.Literal("list"), Type.Literal("default"), Type.Literal("class-impl"), Type.Literal("impl")]),
+const readImplementationParameters = openAiObjectUnionSchema<
+	Extract<AscetReadParams, { action: "read_implementation" }>
+>([
+	Type.Object(
+		{
+			action: Type.Literal("read_implementation"),
+			componentPath: componentPathSchema,
+			implementationMode: Type.Literal("impl"),
+			implementationName: Type.String({ minLength: 1 }),
+			timeoutMs: Type.Optional(Type.Integer({ minimum: 1, maximum: 300_000 })),
+		},
+		{ additionalProperties: false },
 	),
-	implementationName: Type.Optional(Type.String()),
-	timeoutMs: Type.Optional(Type.Integer({ minimum: 1, maximum: 300_000 })),
-});
+	Type.Object(
+		{
+			action: Type.Literal("read_implementation"),
+			componentPath: componentPathSchema,
+			implementationMode: Type.Optional(
+				Type.Union([Type.Literal("list"), Type.Literal("default"), Type.Literal("class-impl")]),
+			),
+			timeoutMs: Type.Optional(Type.Integer({ minimum: 1, maximum: 300_000 })),
+		},
+		{ additionalProperties: false },
+	),
+]);
 const readElementParameters = Type.Object({
 	action: Type.Literal("read_element"),
 	componentPath: componentPathSchema,
@@ -133,7 +247,7 @@ export const ascetReadActionContracts = [
 		visibility: "public",
 		profiles: ASCET_READ_PROFILES,
 		parameters: readCodeParameters,
-		result: readResultSchema,
+		result: readCodeResultSchema,
 		execution: { kind: "bridge", logicalCommandId: "AscetReadCode", operation: "read_text_code" },
 		guidance: {
 			compact: "read complete live code; not global code search",
@@ -142,7 +256,10 @@ export const ascetReadActionContracts = [
 			avoidWhen: ["Need candidate discovery by name or code text; use ascet_search first."],
 			aliases: ["complete code", "full code", "method body", "live code", "read code", "open code"],
 			nextActions: ["ascet_edit.set_method_code", "ascet_diff.diff_method"],
-			result: { shape: "codeText", fields: ["component", "name", "section", "text"] },
+			result: {
+				shape: "codeText",
+				fields: ["component", "name", "section", "detailLevel", "text", "hash", "lineCount", "byteCount"],
+			},
 			summary: "Read complete code live from ASCET only after resolving the target.",
 			rules: [
 				'Use read_code when the user explicitly needs live code; it returns complete live text by default. Use detailLevel="summary" only when a hash/count summary is enough.',
@@ -217,9 +334,13 @@ export const ascetReadActionContracts = [
 		profiles: ASCET_READ_PROFILES,
 		supportedObjectKinds: ["class", "module", "statemachine", "enumeration"],
 		parameters: readImplementationParameters,
-		result: readResultSchema,
+		result: readImplementationResultSchema,
 		execution: { kind: "bridge", logicalCommandId: "AscetReadImplementation", operation: "read_implementation" },
 		guidance: {
+			result: {
+				shape: "implementation",
+				fields: ["component", "kind", "implementationSourceKind", "implementations", "mode", "elements"],
+			},
 			summary: "Read implementation metadata for a resolved component or Enumeration.",
 			rules: [
 				"Use read_implementation when implementation metadata matters more than code text.",
@@ -268,13 +389,25 @@ export const ascetReadActionContracts = [
 		visibility: "public",
 		profiles: ASCET_READ_PROFILES,
 		parameters: readStateMachineFlowParameters,
-		result: readResultSchema,
+		result: readStateMachineFlowResultSchema,
 		execution: {
 			kind: "bridge",
 			logicalCommandId: "AscetReadStateMachineFlow",
 			operation: "read_state_machine_flow",
 		},
 		guidance: {
+			result: {
+				shape: "stateMachineFlow",
+				fields: [
+					"component",
+					"detailLevel",
+					"states",
+					"transitions",
+					"stateFlows",
+					"transitionFlows",
+					"traceDepth",
+				],
+			},
 			summary: "Read state-machine flow only for resolved StateMachine targets.",
 			rules: [
 				"Use read_state_machine_flow only for resolved StateMachine targets; for classes/modules use read_code or read_implementation.",
@@ -295,13 +428,14 @@ export const ascetReadActionContracts = [
 		visibility: "public",
 		profiles: ASCET_READ_PROFILES,
 		parameters: readElementDependencyParameters,
-		result: readResultSchema,
+		result: readElementDependencyResultSchema,
 		execution: {
 			kind: "bridge",
 			logicalCommandId: "AscetReadElementDependency",
 			operation: "read_element_dependency",
 		},
 		guidance: {
+			result: { shape: "elementDependency", fields: ["target", "kind", "element", "total", "items", "error"] },
 			summary: "Read dependency flag and formula for one existing element.",
 			rules: [
 				"Use read_element_dependency only when you need the raw dependency flag or formula; use read_dependent_chain before create_dependent_chain when inspecting an existing chain.",

@@ -112,18 +112,17 @@ export function normalizeApiPath(path: string): string {
 }
 
 export function compactObject<T = unknown>(value: T, key = ""): unknown {
-	if (value === null || value === undefined || value === "") {
+	if (value === null || value === undefined) {
 		return undefined;
 	}
 	if (typeof value === "string") {
+		if (value === "") {
+			return key === "text" || key === "code" || key === "body" ? "" : undefined;
+		}
 		return shouldNormalizeStringAsPath(key) ? normalizeApiPath(value) : value;
 	}
 	if (Array.isArray(value)) {
-		const items = value.map((entry) => compactObject(entry, key)).filter((entry) => entry !== undefined);
-		if (items.length === 0 && key !== "items") {
-			return undefined;
-		}
-		return items;
+		return value.map((entry) => compactObject(entry, key)).filter((entry) => entry !== undefined);
 	}
 	if (!isRecord(value)) {
 		return value;

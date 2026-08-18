@@ -3,6 +3,7 @@ import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, test } from "node:test";
+import { Value } from "typebox/value";
 import type { AscetCliExecutionResult, AscetCliRequest } from "./cli.ts";
 import {
 	buildReadDependentChainArgs,
@@ -10,6 +11,7 @@ import {
 	parseAscetElementSearchHint,
 	runAscetReadDependentChain,
 } from "./read-dependent-chain.ts";
+import { ascetReadDependentChainActionContract } from "./tools/actions/contracts/dependency.ts";
 
 function execution(request: AscetCliRequest, result: Record<string, unknown>): AscetCliExecutionResult {
 	return {
@@ -67,9 +69,24 @@ function resolvedResult(request: AscetCliRequest, provider = "FeatureA\\Provider
 	return execution(request, {
 		component: "FeatureA\\Consumer",
 		exporter: provider,
-		dependent: { name: "C_Threshold", kind: "parameter", scope: "local", dependency: "dependent" },
+		dependent: {
+			name: "C_Threshold",
+			kind: "parameter",
+			scope: "local",
+			dependency: "dependent",
+			modelType: "cont",
+		},
+		dependencyFormula: {
+			exists: true,
+			code: "P_Threshold",
+			expression: "P_Threshold",
+			references: ["P_Threshold"],
+			mappings: [{ formal: "P_Threshold", imported: "P_Threshold", importedScope: "imported" }],
+		},
+		binding: { formal: "P_Threshold", formula: "P_Threshold", variantPolicy: "default" },
 		inputs: [
 			{
+				formal: { name: "P_Threshold" },
 				value: { name: "P_Threshold", scope: "imported", kind: "parameter", type: "ScalarElement" },
 				export: {
 					exists: true,
@@ -83,6 +100,22 @@ function resolvedResult(request: AscetCliRequest, provider = "FeatureA\\Provider
 		complete: true,
 		issues: [],
 	});
+}
+
+function resolvedResultWithoutBackendBinding(request: AscetCliRequest, variants: string[]): AscetCliExecutionResult {
+	const result = resolvedResult(request);
+	const response = JSON.parse(result.stdout) as { result: Record<string, unknown> };
+	const inputs = Array.isArray(response.result.inputs) ? response.result.inputs : [];
+	const firstInput = inputs[0];
+	if (!firstInput || typeof firstInput !== "object" || Array.isArray(firstInput)) {
+		throw new Error("Test fixture must contain one input object.");
+	}
+	response.result = {
+		...response.result,
+		inputs: variants.map((variant) => ({ ...(firstInput as Record<string, unknown>), variant })),
+	};
+	delete response.result.binding;
+	return { ...result, stdout: JSON.stringify(response) };
 }
 
 function identityResult(request: AscetCliRequest): AscetCliExecutionResult {
@@ -116,7 +149,7 @@ describe("ASCET read dependent chain", () => {
 		);
 	});
 
-	test("formats one concise resolved chain", () => {
+	test("formats complete Provider/Imported/Local metadata and binding data", () => {
 		const request: AscetCliRequest = { cwd: ".", cliPath: "AscetBridge.exe", args: [] };
 		const result = resolvedResult(request);
 		const cliResult = {
@@ -128,14 +161,122 @@ describe("ASCET read dependent chain", () => {
 			exitCode: 0,
 			timedOut: false,
 		};
-		assert.deepEqual(JSON.parse(formatReadDependentChainResult(cliResult)), {
+		const output = JSON.parse(formatReadDependentChainResult(cliResult));
+		assert.deepEqual(output, {
 			found: true,
 			chain: {
 				local: { componentPath: "FeatureA\\Consumer", element: "C_Threshold" },
 				imported: { componentPath: "FeatureA\\Consumer", element: "P_Threshold" },
 				exported: { componentPath: "FeatureA\\Provider", element: "P_Threshold" },
 			},
+			provider: {
+				componentPath: "FeatureA\\Provider",
+				element: {
+					exists: true,
+					discovery: "explicit",
+					name: "P_Threshold",
+					scope: "exported",
+					owner: "FeatureA\\Provider",
+				},
+			},
+			consumer: {
+				componentPath: "FeatureA\\Consumer",
+				imported: { name: "P_Threshold", scope: "imported", kind: "parameter", type: "ScalarElement" },
+				local: {
+					name: "C_Threshold",
+					kind: "parameter",
+					scope: "local",
+					dependency: "dependent",
+					modelType: "cont",
+				},
+			},
+			dependencyFormula: {
+				exists: true,
+				code: "P_Threshold",
+				expression: "P_Threshold",
+				references: ["P_Threshold"],
+				mappings: [{ formal: "P_Threshold", imported: "P_Threshold", importedScope: "imported" }],
+			},
+			binding: { formal: "P_Threshold", formula: "P_Threshold", variantPolicy: "default" },
+			complete: true,
 		});
+		assert.equal(Value.Check(ascetReadDependentChainActionContract.result, output), true);
+		const { binding: _binding, ...withoutBinding } = output;
+		assert.equal(Value.Check(ascetReadDependentChainActionContract.result, withoutBinding), false);
+	});
+
+	test("formats non-chain targets as the public error shape", () => {
+		const request: AscetCliRequest = { cwd: ".", cliPath: "AscetBridge.exe", args: [] };
+		const output = JSON.parse(
+			formatReadDependentChainResult({
+				ok: false,
+				data: null,
+				request,
+				stdout: "",
+				stderr: "",
+				exitCode: 1,
+				timedOut: false,
+				error: {
+					code: "not_dependent_chain",
+					message: "Element is not a dependent chain target.",
+					details: { componentPath: "FeatureA\\Consumer", dependentElement: "P_Regular" },
+				},
+			}),
+		);
+		assert.deepEqual(output, {
+			error: {
+				code: "not_dependent_chain",
+				message: "Element is not a dependent chain target.",
+				componentPath: "FeatureA\\Consumer",
+				dependentElement: "P_Regular",
+			},
+		});
+		assert.equal(Value.Check(ascetReadDependentChainActionContract.result, output), true);
+		assert.equal("found" in output, false);
+	});
+
+	test("derives binding when the backend exposes only formula mappings and input variants", () => {
+		const request: AscetCliRequest = { cwd: ".", cliPath: "AscetBridge.exe", args: [] };
+		const defaultResult = resolvedResultWithoutBackendBinding(request, ["default"]);
+		const defaultOutput = JSON.parse(
+			formatReadDependentChainResult({
+				ok: true,
+				data: JSON.parse(defaultResult.stdout),
+				request,
+				stdout: defaultResult.stdout,
+				stderr: defaultResult.stderr,
+				exitCode: 0,
+				timedOut: false,
+			}),
+		);
+		assert.deepEqual(defaultOutput.binding, {
+			importedElement: "P_Threshold",
+			formula: "P_Threshold",
+			formal: "P_Threshold",
+			variantPolicy: "default",
+		});
+
+		const selectedResult = resolvedResultWithoutBackendBinding(request, ["default", "Sport"]);
+		const selectedOutput = JSON.parse(
+			formatReadDependentChainResult({
+				ok: true,
+				data: JSON.parse(selectedResult.stdout),
+				request,
+				stdout: selectedResult.stdout,
+				stderr: selectedResult.stderr,
+				exitCode: 0,
+				timedOut: false,
+			}),
+		);
+		assert.deepEqual(selectedOutput.binding, {
+			importedElement: "P_Threshold",
+			formula: "P_Threshold",
+			formal: "P_Threshold",
+			variantPolicy: "selected",
+			variants: ["Sport"],
+		});
+		assert.equal(Value.Check(ascetReadDependentChainActionContract.result, defaultOutput), true);
+		assert.equal(Value.Check(ascetReadDependentChainActionContract.result, selectedOutput), true);
 	});
 
 	test("uses one exact backend call when Provider is explicit", async () => {
@@ -274,6 +415,42 @@ describe("ASCET read dependent chain", () => {
 		);
 		assert.equal(result.ok, false);
 		assert.equal(result.error?.code, "incomplete_chain");
+		assert.equal(searchCalled, false);
+	});
+
+	test("classifies an ordinary imported parameter before provider resolution", async () => {
+		let searchCalled = false;
+		const result = await runAscetReadDependentChain(
+			{ componentPath: "FeatureA\\Consumer", dependentElement: "P_Regular" },
+			{
+				cwd: process.cwd(),
+				executeCli: async (request) => {
+					if (request.args[0] === "element") searchCalled = true;
+					if (request.args[1] === "get_database_identity") return identityResult(request);
+					return execution(request, {
+						component: "FeatureA\\Consumer",
+						dependent: { name: "P_Regular", kind: "parameter", scope: "imported", dependency: "independent" },
+						dependencyFormula: { exists: false, mappings: [] },
+						inputs: [],
+						complete: false,
+					});
+				},
+			},
+		);
+		assert.equal(result.ok, false);
+		assert.equal(result.error?.code, "not_dependent_chain");
+		assert.deepEqual(result.error?.details, {
+			componentPath: "FeatureA\\Consumer",
+			dependentElement: "P_Regular",
+		});
+		assert.deepEqual(JSON.parse(formatReadDependentChainResult(result)), {
+			error: {
+				code: "not_dependent_chain",
+				message: "Element is not a dependent chain target.",
+				componentPath: "FeatureA\\Consumer",
+				dependentElement: "P_Regular",
+			},
+		});
 		assert.equal(searchCalled, false);
 	});
 });

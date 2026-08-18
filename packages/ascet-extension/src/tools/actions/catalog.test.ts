@@ -91,7 +91,10 @@ describe("ASCET action catalog", () => {
 		assert.match(readRules, /exact Consumer Component and Local Parameter/);
 		assert.match(readRules, /live native Element Search/);
 		assert.match(readRules, /Never choose the first same-named result/);
-		assert.deepEqual(read?.result, { shape: "dependentChain", fields: ["found", "chain", "error"] });
+		assert.deepEqual(read?.result, {
+			shape: "dependentChain",
+			fields: ["found", "chain", "provider", "consumer", "dependencyFormula", "binding", "complete", "error"],
+		});
 		assert.match(write?.compact ?? "", /create-or-verify one Provider\/Imported\/Local Parameter dependency chain/);
 		assert.match(writeRules, /Missing Elements are created/);
 		assert.match(writeRules, /live native Element Search/);

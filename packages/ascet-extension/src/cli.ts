@@ -1053,11 +1053,22 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 	};
 }
 
-export function formatAscetCliJsonResult(operation: string, result: AscetCliJsonResult): string {
+export interface FormatAscetCliJsonResultOptions {
+	largeSuccess?: "artifact" | "inline";
+}
+
+export function formatAscetCliJsonResult(
+	operation: string,
+	result: AscetCliJsonResult,
+	options: FormatAscetCliJsonResultOptions = {},
+): string {
 	if (result.ok) {
 		const payload = toToolSuccessPayload(result.data);
 		const formatted = JSON.stringify(payload, null, 2) ?? "null";
-		if (Buffer.byteLength(formatted, "utf8") <= getFormatArtifactThresholdBytes()) {
+		if (
+			options.largeSuccess === "inline" ||
+			Buffer.byteLength(formatted, "utf8") <= getFormatArtifactThresholdBytes()
+		) {
 			return formatted;
 		}
 		return formatPersistedSuccess(operation, result, formatted);

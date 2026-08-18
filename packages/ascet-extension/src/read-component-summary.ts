@@ -36,5 +36,5 @@ export async function runAscetReadComponentSummary(
 }
 
 export function formatReadComponentSummaryResult(result: AscetCliJsonResult): string {
-	return formatAscetCliJsonResult("read_component_summary", result);
+	return formatAscetCliJsonResult("read_component_summary", result, { largeSuccess: "inline" });
 }
