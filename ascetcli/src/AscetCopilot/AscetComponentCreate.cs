@@ -196,7 +196,7 @@ public sealed class ComponentCreateService : AscetReadDomainServiceBase, ICompon
                 {
                     Resolved = resolved,
                     ReadbackVerified = readbackVerified,
-                    SaveSucceeded = true
+                    SaveSucceeded = saveSucceeded
                 };
             });
 

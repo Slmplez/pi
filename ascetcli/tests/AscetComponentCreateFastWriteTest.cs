@@ -42,6 +42,8 @@ public static class AscetComponentCreateFastWriteTest
         AssertTrue(verifyIndex > saveIndex, "create_component must perform exact-path verification after save in the same session.");
         AssertTrue(method.IndexOf("if (!returnExisting)", StringComparison.Ordinal) >= 0, "create_component must retain returnExisting conflict behavior.");
         AssertTrue(method.IndexOf("rollbackOnFailure && created", StringComparison.Ordinal) >= 0, "create_component must retain rollback behavior for created components.");
+        AssertTrue(method.IndexOf("SaveSucceeded = saveSucceeded", StringComparison.Ordinal) >= 0, "create_component no-op session result must not report Save success without a Save attempt.");
+        AssertFalse(method.IndexOf("SaveSucceeded = true", StringComparison.Ordinal) >= 0, "create_component no-op session result must not hard-code Save success.");
 
         string writeServiceSource = System.IO.File.ReadAllText(FindComponentWriteServiceSourcePath());
         AssertFalse(writeServiceSource.IndexOf("CreateComponentVerificationHook", StringComparison.Ordinal) >= 0, "ComponentWriteService must not retain a locator-based create_component verification hook.");
