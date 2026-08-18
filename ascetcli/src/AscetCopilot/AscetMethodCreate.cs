@@ -12,10 +12,22 @@ public sealed class AscetMethodCreateResult
     public string DiagramName { get; set; }
     public bool Created { get; set; }
     public bool AlreadyExisted { get; set; }
+    public bool Changed { get; set; }
+    public string MutationStatus { get; set; }
+    public bool SaveAttempted { get; set; }
     public string TargetKey { get; set; }
     public bool VerifyReadbackRequested { get; set; }
     public bool RollbackOnFailureRequested { get; set; }
     public bool ReadbackVerified { get; set; }
+    public string SaveState { get; set; }
+    public bool SaveSucceeded { get; set; }
+    public bool Verified { get; set; }
+    public string VerificationStatus { get; set; }
+    public string VerificationMode { get; set; }
+    public int SessionCount { get; set; }
+    public int SaveCount { get; set; }
+    public int EditableRetryCount { get; set; }
+    public int NativeMutationAttemptCount { get; set; }
     public string Summary { get; set; }
 }
 
@@ -41,6 +53,11 @@ public sealed class MethodCreateService : MethodCatalogService, IMethodCreateSer
         string normalizedDiagramName = String.IsNullOrWhiteSpace(diagramName) ? "Main" : diagramName.Trim();
         bool created = false;
         bool alreadyExisted = false;
+        bool saveAttempted = false;
+        bool saveSucceeded = false;
+        bool readbackVerified = false;
+        int saveCount = 0;
+        int nativeMutationAttemptCount = 0;
         AscetItemRef component = null;
 
         try
@@ -71,12 +88,18 @@ public sealed class MethodCreateService : MethodCatalogService, IMethodCreateSer
                         throw new AscetReadException("method_already_exists", "create_method", "Method '" + methodName + "' already exists in component '" + componentPath + "'.");
                     }
 
+                    if (verifyReadback)
+                    {
+                        readbackVerified = VerifyMethodInSession(session, componentPath, methodName, methodKind);
+                    }
+
                     return true;
                 }
 
                 RequireComponentEditableInSession(session, componentPath, "create_method");
                 CodeComponent codeComponent = ResolveCodeComponent(session, componentPath);
                 object diagram = ResolveOrCreateDiagram(codeComponent, normalizedDiagramName);
+                nativeMutationAttemptCount++;
                 CreateMethodOnDiagram(diagram, methodName, methodKind, componentPath, normalizedDiagramName);
                 created = true;
 
@@ -85,21 +108,22 @@ public sealed class MethodCreateService : MethodCatalogService, IMethodCreateSer
                     throw new AscetReadException("forced_failure", "create_method", "Forced failure after method creation for rollback verification.");
                 }
 
+                AscetDataBase database = session.GetCurrentDatabaseHandle();
+                saveAttempted = true;
+                saveCount++;
+                if (!database.Save())
+                {
+                    throw new AscetReadException("create_method_failed", "create_method", "Failed to save current database after creating method '" + methodName + "' in component '" + componentPath + "'.");
+                }
+
+                saveSucceeded = true;
+                if (verifyReadback)
+                {
+                    readbackVerified = VerifyMethodInSession(session, componentPath, methodName, methodKind);
+                }
+
                 return true;
             });
-
-            bool readbackVerified = false;
-            if (verifyReadback)
-            {
-                AscetMethodRef method = GetMethod(componentPath, methodName);
-                readbackVerified = method != null &&
-                    String.Equals(method.Name ?? String.Empty, methodName, StringComparison.Ordinal) &&
-                    (method.MethodKind == methodKind || methodKind == AscetMethodKind.Unknown);
-                if (!readbackVerified)
-                {
-                    throw new AscetReadException("readback_mismatch", "create_method", "Readback verification failed for method '" + methodName + "' in component '" + componentPath + "'.");
-                }
-            }
 
             return new AscetMethodCreateResult
             {
@@ -113,6 +137,18 @@ public sealed class MethodCreateService : MethodCatalogService, IMethodCreateSer
                 VerifyReadbackRequested = verifyReadback,
                 RollbackOnFailureRequested = rollbackOnFailure,
                 ReadbackVerified = readbackVerified,
+                SaveSucceeded = saveSucceeded,
+                Changed = created,
+                MutationStatus = created ? "applied" : "no_op",
+                SaveAttempted = saveAttempted,
+                SaveState = created ? (saveSucceeded ? "saved" : "failed") : "not_required",
+                Verified = readbackVerified,
+                VerificationStatus = verifyReadback ? (readbackVerified ? "passed" : "failed") : "not_requested",
+                SessionCount = 1,
+                SaveCount = saveCount,
+                EditableRetryCount = 0,
+                NativeMutationAttemptCount = nativeMutationAttemptCount,
+                VerificationMode = "same_session_exact_path",
                 Summary = BuildSummary(componentPath, methodName, methodKind, normalizedDiagramName, created, alreadyExisted)
             };
         }
@@ -154,6 +190,11 @@ public sealed class MethodCreateService : MethodCatalogService, IMethodCreateSer
         string normalizedDiagramName = String.IsNullOrWhiteSpace(diagramName) ? "Main" : diagramName.Trim();
         bool created = false;
         bool alreadyExisted = false;
+        bool saveAttempted = false;
+        bool saveSucceeded = false;
+        bool readbackVerified = false;
+        int saveCount = 0;
+        int nativeMutationAttemptCount = 0;
         AscetItemRef component = null;
 
         try
@@ -184,12 +225,18 @@ public sealed class MethodCreateService : MethodCatalogService, IMethodCreateSer
                         throw new AscetReadException("method_already_exists", "create_method", "Method '" + methodName + "' already exists in component '" + componentPath + "'.");
                     }
 
+                    if (verifyReadback)
+                    {
+                        readbackVerified = VerifyMethodInSession(currentSession, componentPath, methodName, methodKind);
+                    }
+
                     return true;
                 }
 
                 RequireComponentEditableInSession(currentSession, componentPath, "create_method");
                 CodeComponent codeComponent = ResolveCodeComponent(currentSession, componentPath);
                 object diagram = ResolveOrCreateDiagram(codeComponent, normalizedDiagramName);
+                nativeMutationAttemptCount++;
                 CreateMethodOnDiagram(diagram, methodName, methodKind, componentPath, normalizedDiagramName);
                 created = true;
 
@@ -198,27 +245,22 @@ public sealed class MethodCreateService : MethodCatalogService, IMethodCreateSer
                     throw new AscetReadException("forced_failure", "create_method", "Forced failure after method creation for rollback verification.");
                 }
 
+                AscetDataBase database = currentSession.GetCurrentDatabaseHandle();
+                saveAttempted = true;
+                saveCount++;
+                if (!database.Save())
+                {
+                    throw new AscetReadException("create_method_failed", "create_method", "Failed to save current database after creating method '" + methodName + "' in component '" + componentPath + "'.");
+                }
+
+                saveSucceeded = true;
+                if (verifyReadback)
+                {
+                    readbackVerified = VerifyMethodInSession(currentSession, componentPath, methodName, methodKind);
+                }
+
                 return true;
             });
-
-            bool readbackVerified = false;
-            if (verifyReadback)
-            {
-                AscetMethodRef method = ExecuteWithBoundSession("verify_create_method", session, delegate(AscetSession currentSession)
-                {
-                    DataBaseItem item = ResolveItemByPath(currentSession, componentPath);
-                    AscetItemRef currentComponent = Classifier.ToItemRef(item);
-                    MethodHandle handle = FindMethodHandle(CollectMethodHandles(currentSession, currentComponent), currentComponent.Path, methodName);
-                    return handle.Reference;
-                });
-                readbackVerified = method != null &&
-                    String.Equals(method.Name ?? String.Empty, methodName, StringComparison.Ordinal) &&
-                    (method.MethodKind == methodKind || methodKind == AscetMethodKind.Unknown);
-                if (!readbackVerified)
-                {
-                    throw new AscetReadException("readback_mismatch", "create_method", "Readback verification failed for method '" + methodName + "' in component '" + componentPath + "'.");
-                }
-            }
 
             return new AscetMethodCreateResult
             {
@@ -232,6 +274,18 @@ public sealed class MethodCreateService : MethodCatalogService, IMethodCreateSer
                 VerifyReadbackRequested = verifyReadback,
                 RollbackOnFailureRequested = rollbackOnFailure,
                 ReadbackVerified = readbackVerified,
+                SaveSucceeded = saveSucceeded,
+                Changed = created,
+                MutationStatus = created ? "applied" : "no_op",
+                SaveAttempted = saveAttempted,
+                SaveState = created ? (saveSucceeded ? "saved" : "failed") : "not_required",
+                Verified = readbackVerified,
+                VerificationStatus = verifyReadback ? (readbackVerified ? "passed" : "failed") : "not_requested",
+                SessionCount = 1,
+                SaveCount = saveCount,
+                EditableRetryCount = 0,
+                NativeMutationAttemptCount = nativeMutationAttemptCount,
+                VerificationMode = "same_session_exact_path",
                 Summary = BuildSummary(componentPath, methodName, methodKind, normalizedDiagramName, created, alreadyExisted)
             };
         }
@@ -251,6 +305,23 @@ public sealed class MethodCreateService : MethodCatalogService, IMethodCreateSer
 
             throw;
         }
+    }
+
+    private bool VerifyMethodInSession(AscetSession session, string componentPath, string methodName, AscetMethodKind methodKind)
+    {
+        DataBaseItem item = ResolveItemByPath(session, componentPath);
+        AscetItemRef currentComponent = Classifier.ToItemRef(item);
+        MethodHandle handle = FindMethodHandle(CollectMethodHandles(session, currentComponent), currentComponent.Path, methodName);
+        AscetMethodRef method = handle == null ? null : handle.Reference;
+        bool verified = method != null &&
+            String.Equals(method.Name ?? String.Empty, methodName, StringComparison.Ordinal) &&
+            (method.MethodKind == methodKind || methodKind == AscetMethodKind.Unknown);
+        if (!verified)
+        {
+            throw new AscetReadException("readback_mismatch", "create_method", "Readback verification failed for method '" + methodName + "' in component '" + componentPath + "'.");
+        }
+
+        return true;
     }
 
     private void ValidateMethodKind(AscetItemRef component, AscetMethodKind methodKind)

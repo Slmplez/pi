@@ -74,7 +74,6 @@ describe("ASCET action catalog", () => {
 			"ascet_get.bde_edges",
 			"ascet_get.import_binding",
 			"ascet_get.dbitem_refs",
-			"ascet_edit.set_element_dependency",
 			"configure_parameter_dependency_chain.execute",
 		]) {
 			assert.equal(entries.has(id), false, id);
@@ -85,6 +84,7 @@ describe("ASCET action catalog", () => {
 		const entries = entriesById();
 		const read = entries.get("ascet_read.read_dependent_chain");
 		const write = entries.get("ascet_edit.create_dependent_chain");
+		const setDependency = entries.get("ascet_edit.set_element_dependency");
 		const readRules = read?.rules.join("\n") ?? "";
 		const writeRules = write?.rules.join("\n") ?? "";
 
@@ -96,6 +96,9 @@ describe("ASCET action catalog", () => {
 		assert.match(writeRules, /Missing Elements are created/);
 		assert.match(writeRules, /live native Element Search/);
 		assert.match(writeRules, /automatic full readback/);
+		assert.match(setDependency?.compact ?? "", /set dependency flag\/formula/);
+		assert.ok(setDependency?.schema.required.includes("elementName"));
+		assert.ok(setDependency?.schema.required.includes("dependency"));
 		assert.deepEqual(write?.result, {
 			shape: "dependentChainWrite",
 			fields: ["ok", "changed", "verified", "created", "configured", "code"],

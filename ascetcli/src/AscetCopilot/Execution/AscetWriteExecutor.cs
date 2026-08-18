@@ -37,10 +37,12 @@ public sealed class AscetWriteActionResult
     {
         Summary = String.Empty;
         Payload = new Dictionary<string, object>(StringComparer.Ordinal);
+        Verification = null;
     }
 
     public string Summary { get; set; }
     public Dictionary<string, object> Payload { get; set; }
+    public WriteVerificationResult Verification { get; set; }
 }
 
 public sealed class AscetWriteError
@@ -87,6 +89,118 @@ public sealed class AscetWriteExecutionResult
     public AscetWriteError Error { get; set; }
 }
 
+public sealed class AscetCodeWriteTransactionResult
+{
+    public AscetCodeWriteTransactionResult()
+    {
+        OperationName = String.Empty;
+        PreviousValue = String.Empty;
+        NewValue = String.Empty;
+        MutationStatus = "not_started";
+        SaveState = "not_required";
+        VerificationStatus = "not_requested";
+        VerificationMode = String.Empty;
+        SessionCount = 1;
+        SaveCount = 0;
+        EditableRetryCount = 0;
+        NativeMutationAttemptCount = 0;
+    }
+
+    public string OperationName { get; set; }
+    public string PreviousValue { get; set; }
+    public string NewValue { get; set; }
+    public bool Changed { get; set; }
+    public string MutationStatus { get; set; }
+    public bool SaveAttempted { get; set; }
+    public bool SaveSucceeded { get; set; }
+    public string SaveState { get; set; }
+    public bool Verified { get; set; }
+    public string VerificationStatus { get; set; }
+    public string VerificationMode { get; set; }
+    public int SessionCount { get; set; }
+    public int SaveCount { get; set; }
+    public int EditableRetryCount { get; set; }
+    public int NativeMutationAttemptCount { get; set; }
+}
+
+public static class AscetCodeWriteTransaction
+{
+    public static AscetCodeWriteTransactionResult Execute(
+        string operationName,
+        string previousValue,
+        string requestedValue,
+        bool verifyReadback,
+        Func<bool> mutate,
+        Func<bool> save,
+        Func<string> readback)
+    {
+        string operation = operationName ?? String.Empty;
+        string previous = previousValue ?? String.Empty;
+        string requested = requestedValue ?? String.Empty;
+        if (mutate == null)
+        {
+            throw new ArgumentNullException("mutate");
+        }
+        if (save == null)
+        {
+            throw new ArgumentNullException("save");
+        }
+        if (readback == null)
+        {
+            throw new ArgumentNullException("readback");
+        }
+
+        bool changed = !String.Equals(previous, requested, StringComparison.Ordinal);
+        AscetCodeWriteTransactionResult result = new AscetCodeWriteTransactionResult
+        {
+            OperationName = operation,
+            PreviousValue = previous,
+            NewValue = requested,
+            Changed = changed,
+            MutationStatus = changed ? "applied" : "no_op",
+            SaveAttempted = changed,
+            SaveState = changed ? "unknown" : "not_required",
+            NativeMutationAttemptCount = changed ? 1 : 0
+        };
+
+        if (changed)
+        {
+            if (!mutate())
+            {
+                throw new AscetReadException("set_code_failed", operation, "ASCET returned false while writing code.");
+            }
+
+            result.SaveSucceeded = save();
+            if (!result.SaveSucceeded)
+            {
+                result.SaveState = "failed";
+                throw new AscetReadException("save_failed", operation, "ASCET database Save returned false after writing code.");
+            }
+
+            result.SaveState = "saved";
+            result.SaveCount = 1;
+        }
+
+        if (verifyReadback)
+        {
+            string actual = readback() ?? String.Empty;
+            if (!String.Equals(actual, requested, StringComparison.Ordinal))
+            {
+                throw new AscetReadException("readback_mismatch", operation, "Same-session code readback did not match the requested value.");
+            }
+
+            result.Verified = true;
+            result.VerificationStatus = "passed";
+            result.VerificationMode = "same_session_exact_value";
+        }
+        else
+        {
+            result.VerificationMode = "not_requested";
+        }
+
+        return result;
+    }
+}
 public sealed class AscetWriteExecutor
 {
     private readonly object syncRoot;
@@ -129,7 +243,7 @@ public sealed class AscetWriteExecutor
             try
             {
                 AscetWriteActionResult writeResult = request.ExecuteWrite(context) ?? new AscetWriteActionResult();
-                WriteVerificationResult verification = verificationService.Verify(
+                WriteVerificationResult verification = writeResult.Verification ?? verificationService.Verify(
                     request.VerifyAfterWrite,
                     new WriteVerificationRequest
                     {

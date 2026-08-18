@@ -29,6 +29,7 @@ public sealed class ExecMethodWriteService : IExecMethodCodeWriteService
     private readonly IMethodWriteService writer;
     private readonly AscetWriteExecutor executor;
     private readonly IMethodConsistencyService consistency;
+    private readonly bool consistencyEnabled;
 
     public ExecMethodWriteService()
         : this(new ComponentLocatorService(), new MethodWriteService(), null, null)
@@ -51,7 +52,8 @@ public sealed class ExecMethodWriteService : IExecMethodCodeWriteService
         this.executor = executor ?? new AscetWriteExecutor(
             new WriteVerificationService(
                 new SetMethodCodeVerificationHook()));
-        this.consistency = consistency ?? new MethodConsistencyService();
+        this.consistency = consistency;
+        consistencyEnabled = consistency != null;
     }
 
     public SetMethodCodeWriteRequest ParseExecArguments(string[] args)
@@ -87,18 +89,18 @@ public sealed class ExecMethodWriteService : IExecMethodCodeWriteService
             {
                 AscetItemPath parsed = AscetItemPath.Parse(request.ComponentPath);
                 AscetItemRef component = locator.FindItemInFolder(parsed.ItemName, parsed.FolderPath);
-                MethodConsistencySnapshot snapshot = consistency.Capture(component, request.MethodName);
+                MethodConsistencySnapshot snapshot = consistencyEnabled ? consistency.Capture(component, request.MethodName) : null;
                 AscetMethodWriteResult result = null;
                 bool writeCompleted = false;
                 try
                 {
-                    result = writer.SetMethodCode(component, request.MethodName, request.Code, false);
+                    result = writer.SetMethodCode(component, request.MethodName, request.Code, request.VerifyReadback);
                     writeCompleted = true;
-                    consistency.Validate(component, request.MethodName, request.Code);
+                    if (consistencyEnabled) { consistency.Validate(component, request.MethodName, request.Code); }
                 }
                 catch (Exception validationError)
                 {
-                    if (!writeCompleted)
+                    if (!consistencyEnabled || !writeCompleted)
                     {
                         throw;
                     }
@@ -146,11 +148,50 @@ public sealed class ExecMethodWriteService : IExecMethodCodeWriteService
                 AscetWriteActionResult actionResult = new AscetWriteActionResult();
                 actionResult.Summary = BuildSummary(result);
                 actionResult.Payload = BuildPayload(result);
+                actionResult.Verification = BuildVerification(result);
                 return actionResult;
             }
         });
     }
 
+    private static WriteVerificationResult BuildVerification(AscetMethodWriteResult result)
+    {
+        if (result == null)
+        {
+            return WriteVerificationResult.CreateFailure("write_failed", "set_method_code", "Method write returned no result.");
+        }
+
+        WriteVerificationResult verification = new WriteVerificationResult
+        {
+            Requested = result.VerifyReadbackRequested,
+            Attempted = result.VerifyReadbackRequested,
+            Succeeded = !result.VerifyReadbackRequested || result.ReadbackVerified,
+            Summary = result.VerifyReadbackRequested && result.ReadbackVerified ? "method_code_matches" : (result.VerifyReadbackRequested ? String.Empty : "verification_not_requested")
+        };
+        verification.Details["changed"] = result.Changed;
+        verification.Details["mutationStatus"] = result.MutationStatus ?? String.Empty;
+        verification.Details["saveAttempted"] = result.SaveAttempted;
+        verification.Details["saveSucceeded"] = result.SaveSucceeded;
+        verification.Details["saveState"] = result.SaveState ?? String.Empty;
+        verification.Details["verified"] = result.Verified;
+        verification.Details["verificationMode"] = result.VerificationMode ?? String.Empty;
+        verification.Details["sessionCount"] = result.SessionCount;
+        verification.Details["saveCount"] = result.SaveCount;
+        verification.Details["editableRetryCount"] = result.EditableRetryCount;
+        verification.Details["nativeMutationAttemptCount"] = result.NativeMutationAttemptCount;
+        if (!verification.Succeeded)
+        {
+            verification.Error = new AscetWriteError
+            {
+                Code = "readback_mismatch",
+                Operation = "set_method_code",
+                Stage = "verify",
+                Message = "Same-session method-code readback did not match the requested value.",
+                ExceptionType = String.Empty
+            };
+        }
+        return verification;
+    }
     private static string[] RemoveJsonFlag(string[] args)
     {
         if (args == null || args.Length == 0)
@@ -195,6 +236,19 @@ public sealed class ExecMethodWriteService : IExecMethodCodeWriteService
         payload["WriteSucceeded"] = result != null && result.WriteSucceeded;
         payload["VerifyReadbackRequested"] = result != null && result.VerifyReadbackRequested;
         payload["ReadbackVerified"] = result != null && result.ReadbackVerified;
+
+        payload["changed"] = result != null && result.Changed;
+        payload["mutationStatus"] = result == null ? String.Empty : (result.MutationStatus ?? String.Empty);
+        payload["saveAttempted"] = result != null && result.SaveAttempted;
+        payload["saveSucceeded"] = result != null && result.SaveSucceeded;
+        payload["saveState"] = result == null ? String.Empty : (result.SaveState ?? String.Empty);
+        payload["verified"] = result != null && result.Verified;
+        payload["verificationStatus"] = result == null ? String.Empty : (result.VerificationStatus ?? String.Empty);
+        payload["verificationMode"] = result == null ? String.Empty : (result.VerificationMode ?? String.Empty);
+        payload["sessionCount"] = result == null ? 0 : result.SessionCount;
+        payload["saveCount"] = result == null ? 0 : result.SaveCount;
+        payload["editableRetryCount"] = result == null ? 0 : result.EditableRetryCount;
+        payload["nativeMutationAttemptCount"] = result == null ? 0 : result.NativeMutationAttemptCount;
         return payload;
     }
 

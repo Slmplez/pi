@@ -9,9 +9,21 @@ import type { AscetMutationPreflightEvidence } from "./preflight/types.ts";
 export type AscetMutationEnvelopeStatus = "ok" | "blocked" | "error" | "partial" | "rolled_back" | "unknown";
 export type AscetMutationStatus = "applied" | "no_op" | "not_started" | "partially_applied" | "rolled_back" | "unknown";
 export type AscetVerificationStatus = "passed" | "failed" | "missing" | "unknown" | "not_applicable";
+export type AscetSaveState = "saved" | "not_required" | "failed" | "unknown";
 
 export interface AscetMutationResultEnvelope {
 	status: AscetMutationEnvelopeStatus;
+	changed?: boolean;
+	mutationStatus: AscetMutationStatus;
+	saveAttempted?: boolean;
+	saveSucceeded?: boolean;
+	saveState?: AscetSaveState;
+	verified?: boolean;
+	verificationMode?: string;
+	sessionCount?: number;
+	saveCount?: number;
+	editableRetryCount?: number;
+	nativeMutationAttemptCount?: number;
 	permission: {
 		mode: PermissionMode;
 		decision: AscetPermissionBehavior | "not_evaluated";

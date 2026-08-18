@@ -183,6 +183,19 @@ public static class AscetApplyProjectFormula
         builder.Append("WriteSucceeded: ").Append(result.WriteSucceeded).AppendLine();
         builder.Append("VerifyReadbackRequested: ").Append(result.VerifyReadbackRequested).AppendLine();
         builder.Append("ReadbackVerified: ").Append(result.ReadbackVerified).AppendLine();
+        builder.Append("SaveSucceeded: ").Append(result.SaveSucceeded).AppendLine();
+        builder.Append("VerificationMode: ").Append(result.VerificationMode ?? String.Empty).AppendLine();
+        builder.Append("changed: ").Append(result.Changed).AppendLine();
+        builder.Append("mutationStatus: ").Append(result.MutationStatus ?? String.Empty).AppendLine();
+        builder.Append("saveAttempted: ").Append(result.SaveAttempted).AppendLine();
+        builder.Append("saveState: ").Append(result.SaveState ?? String.Empty).AppendLine();
+        builder.Append("verified: ").Append(result.Verified).AppendLine();
+        builder.Append("verificationStatus: ").Append(result.VerificationStatus ?? String.Empty).AppendLine();
+        builder.Append("verificationMode: ").Append(result.VerificationMode ?? String.Empty).AppendLine();
+        builder.Append("sessionCount: ").Append(result.SessionCount).AppendLine();
+        builder.Append("saveCount: ").Append(result.SaveCount).AppendLine();
+        builder.Append("editableRetryCount: ").Append(result.EditableRetryCount).AppendLine();
+        builder.Append("nativeMutationAttemptCount: ").Append(result.NativeMutationAttemptCount).AppendLine();
         return builder.ToString();
     }
 
@@ -199,6 +212,20 @@ public static class AscetApplyProjectFormula
         payload["WriteSucceeded"] = result != null && result.WriteSucceeded;
         payload["VerifyReadbackRequested"] = result != null && result.VerifyReadbackRequested;
         payload["ReadbackVerified"] = result != null && result.ReadbackVerified;
+        payload["SaveSucceeded"] = result != null && result.SaveSucceeded;
+        payload["VerificationMode"] = result == null ? String.Empty : (result.VerificationMode ?? String.Empty);
+        payload["changed"] = result != null && result.Changed;
+        payload["mutationStatus"] = result == null ? String.Empty : (result.MutationStatus ?? String.Empty);
+        payload["saveAttempted"] = result != null && result.SaveAttempted;
+        payload["saveSucceeded"] = result != null && result.SaveSucceeded;
+        payload["saveState"] = result == null ? String.Empty : (result.SaveState ?? String.Empty);
+        payload["verified"] = result != null && result.Verified;
+        payload["verificationStatus"] = result == null ? String.Empty : (result.VerificationStatus ?? String.Empty);
+        payload["verificationMode"] = result == null ? String.Empty : (result.VerificationMode ?? String.Empty);
+        payload["sessionCount"] = result == null ? 0 : result.SessionCount;
+        payload["saveCount"] = result == null ? 0 : result.SaveCount;
+        payload["editableRetryCount"] = result == null ? 0 : result.EditableRetryCount;
+        payload["nativeMutationAttemptCount"] = result == null ? 0 : result.NativeMutationAttemptCount;
         return AscetJsonContract.Serialize(payload);
     }
 

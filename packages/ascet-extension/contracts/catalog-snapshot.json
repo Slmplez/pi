@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "catalogFingerprint": "3b054b468b0946d6ebbd256483a70eafbb88b53fef1922b7273361e725461102",
+  "catalogFingerprint": "898a3a6e5434356a1f53277ac06596cd04ca43185e65b420a102ab74319c3eae",
   "actions": [
     {
       "id": "ascet_batch_write.batch_create_component",
@@ -696,6 +696,42 @@
           "intent"
         ],
         "optional": []
+      },
+      "supportedObjectKinds": [],
+      "result": {
+        "shape": "result",
+        "fields": [
+          "error"
+        ]
+      }
+    },
+    {
+      "id": "ascet_edit.set_element_dependency",
+      "schemaFingerprint": "1dd216d5eade6c072b18ce14902598bcbfd241841d2d082f1f05541315483222",
+      "rulesFingerprint": "e157acf3aa5afea8f1912d59c361f37256ac26bf3c19ef089c3b809bfd0d55e1",
+      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
+      "schema": {
+        "required": [
+          "action",
+          "elementName",
+          "dependency",
+          "intent"
+        ],
+        "optional": [
+          "targetPath",
+          "componentPath",
+          "dependencyFormula",
+          "dependencyFormals",
+          "bindingPolicy",
+          "dependencyMappings",
+          "variantMappings",
+          "variantPolicy",
+          "variants",
+          "valueRestoration",
+          "clearDependencyFormula",
+          "targetKind",
+          "match"
+        ]
       },
       "supportedObjectKinds": [],
       "result": {

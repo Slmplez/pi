@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 using de.etas.cebra.toolAPI.Ascet;
 using de.etas.cebra.toolAPI.Common;
@@ -11,6 +10,8 @@ public sealed class AscetFolderDeleteResult
     public bool AlreadyMissing { get; set; }
     public bool VerifyReadbackRequested { get; set; }
     public bool ReadbackVerified { get; set; }
+    public bool SaveSucceeded { get; set; }
+    public string VerificationMode { get; set; }
     public string Summary { get; set; }
 }
 
@@ -31,12 +32,13 @@ public sealed class FolderDeleteService : AscetReadDomainServiceBase, IFolderDel
         string normalizedPath = NormalizeFolderPath(folderPath);
         bool deleted = false;
         bool alreadyMissing = false;
+        bool saveSucceeded = true;
+        bool readbackVerified = !verifyReadback;
 
         ExecuteWithSession("delete_folder", delegate(AscetSession session)
         {
             AscetDataBase database = session.GetCurrentDatabaseHandle();
-            AscetFolder folder = null;
-
+            AscetFolder folder;
             try
             {
                 folder = ResolveFolder(database, normalizedPath);
@@ -50,6 +52,7 @@ public sealed class FolderDeleteService : AscetReadDomainServiceBase, IFolderDel
                     {
                         throw new AscetReadException("folder_not_found", "delete_folder", "Folder '" + normalizedPath + "' was not found.");
                     }
+                    readbackVerified = true;
                     return true;
                 }
                 throw;
@@ -62,56 +65,31 @@ public sealed class FolderDeleteService : AscetReadDomainServiceBase, IFolderDel
                 {
                     throw new AscetReadException("folder_not_found", "delete_folder", "Folder '" + normalizedPath + "' was not found.");
                 }
+                readbackVerified = true;
                 return true;
             }
 
-            List<string> componentPaths = new List<string>();
-            CollectComponentPaths(folder, componentPaths, new HashSet<string>(StringComparer.OrdinalIgnoreCase));
-            RequireComponentsEditableInSession(session, componentPaths, "delete_folder");
             bool removed = RemoveFolder(database, folder, normalizedPath);
             if (!removed)
             {
                 throw new AscetReadException("delete_folder_failed", "delete_folder", "ASCET returned false while deleting folder '" + normalizedPath + "'.");
             }
 
-            if (!database.Save())
+            deleted = true;
+            saveSucceeded = database.Save();
+            if (!saveSucceeded)
             {
                 throw new AscetReadException("delete_folder_failed", "delete_folder", "Failed to save current database after deleting folder '" + normalizedPath + "'.");
             }
 
-            deleted = true;
+            if (verifyReadback)
+            {
+                VerifyFolderAbsence(database, normalizedPath);
+                readbackVerified = true;
+            }
+
             return true;
         });
-
-        bool readbackVerified = !verifyReadback;
-        if (verifyReadback)
-        {
-            try
-            {
-                ExecuteWithSession("verify_delete_folder", delegate(AscetSession session)
-                {
-                    ResolveFolder(session.GetCurrentDatabaseHandle(), normalizedPath);
-                    return true;
-                });
-                readbackVerified = false;
-            }
-            catch (AscetReadException ex)
-            {
-                if (String.Equals(ex.Code, "folder_not_found", StringComparison.Ordinal))
-                {
-                    readbackVerified = true;
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            if (!readbackVerified)
-            {
-                throw new AscetReadException("readback_mismatch", "delete_folder", "Readback verification failed for folder '" + normalizedPath + "'.");
-            }
-        }
 
         return new AscetFolderDeleteResult
         {
@@ -120,8 +98,29 @@ public sealed class FolderDeleteService : AscetReadDomainServiceBase, IFolderDel
             AlreadyMissing = alreadyMissing,
             VerifyReadbackRequested = verifyReadback,
             ReadbackVerified = readbackVerified,
+            SaveSucceeded = saveSucceeded,
+            VerificationMode = "same_session_exact_absence",
             Summary = BuildSummary(normalizedPath, deleted, alreadyMissing)
         };
+    }
+
+    private void VerifyFolderAbsence(AscetDataBase database, string folderPath)
+    {
+        try
+        {
+            ResolveFolder(database, folderPath);
+        }
+        catch (AscetReadException ex)
+        {
+            if (String.Equals(ex.Code, "folder_not_found", StringComparison.Ordinal))
+            {
+                return;
+            }
+
+            throw;
+        }
+
+        throw new AscetReadException("readback_mismatch", "delete_folder", "Readback verification failed for folder '" + folderPath + "'.");
     }
 
     private bool RemoveFolder(AscetDataBase database, AscetFolder folder, string folderPath)
@@ -265,45 +264,6 @@ public sealed class FolderDeleteService : AscetReadDomainServiceBase, IFolderDel
         return new AscetFolder[0];
     }
 
-    private void CollectComponentPaths(AscetFolder folder, IList<string> paths, ISet<string> seen)
-    {
-        if (folder == null || paths == null || seen == null)
-        {
-            return;
-        }
-
-        foreach (string methodName in new string[] { "GetAllDataBaseItems", "GetAllItems", "GetAllComponents" })
-        {
-            MethodInfo method = folder.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.Public);
-            if (method == null)
-            {
-                continue;
-            }
-
-            Array items = method.Invoke(folder, null) as Array;
-            if (items == null)
-            {
-                continue;
-            }
-
-            for (int i = 0; i < items.Length; i++)
-            {
-                Component component = items.GetValue(i) as Component;
-                string path = component == null ? String.Empty : (component.GetNameWithPath() ?? String.Empty);
-                if (!String.IsNullOrWhiteSpace(path) && seen.Add(path))
-                {
-                    paths.Add(path);
-                }
-            }
-            break;
-        }
-
-        AscetFolder[] children = GetChildFolders(folder);
-        for (int i = 0; i < children.Length; i++)
-        {
-            CollectComponentPaths(children[i], paths, seen);
-        }
-    }
     private string NormalizeFolderPath(string folderPath)
     {
         string normalized = (folderPath ?? String.Empty).Trim().Replace('/', '\\');

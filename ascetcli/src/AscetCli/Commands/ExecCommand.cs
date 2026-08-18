@@ -764,33 +764,25 @@ public static class ExecCommand
     {
         WriteVerificationResult verification = new WriteVerificationResult();
         verification.Requested = signature != null && signature.VerifyReadbackRequested;
-        verification.Attempted = signature != null && signature.VerifyReadbackRequested;
-        bool argumentsVerified = true;
-        if (signature != null && signature.Arguments != null)
-        {
-            for (int i = 0; i < signature.Arguments.Count; i++)
-            {
-                argumentsVerified = argumentsVerified && signature.Arguments[i] != null && signature.Arguments[i].ReadbackVerified;
-            }
-        }
-
-        verification.Succeeded = signature == null || !signature.VerifyReadbackRequested || (signature.ReadbackVerified && argumentsVerified);
+        verification.Attempted = verification.Requested;
+        verification.Succeeded = signature == null || !verification.Requested || signature.ReadbackVerified;
         verification.Summary = signature == null
             ? String.Empty
-            : (signature.VerifyReadbackRequested
-                ? (verification.Succeeded ? "method_signature_readback_matches" : "method_signature_readback_mismatch")
+            : (verification.Requested
+                ? (verification.Succeeded ? "method_signature_target_method_identity_matches" : "method_signature_target_method_identity_mismatch")
                 : "verification_not_requested");
         if (signature != null)
         {
-            verification.Details["returnElementModelType"] = signature.ReturnElementModelType ?? String.Empty;
-            verification.Details["returnElementIsMethodReturn"] = signature.ReturnElementIsMethodReturn;
-            verification.Details["argumentCount"] = signature.Arguments == null ? 0 : signature.Arguments.Count;
+            verification.Details["targetKey"] = signature.TargetKey ?? String.Empty;
+            verification.Details["saveSucceeded"] = signature.SaveSucceeded;
+            verification.Details["verificationMode"] = signature.VerificationMode ?? String.Empty;
+            verification.Details["methodKind"] = signature.MethodKind.ToString();
         }
 
         AscetWriteExecutionResult result = new AscetWriteExecutionResult();
         result.OperationName = "set_method_signature";
         result.SequenceNumber = 1;
-        result.Succeeded = verification.Succeeded;
+        result.Succeeded = signature != null && verification.Succeeded;
         result.WriteSucceeded = signature != null;
         result.Summary = signature == null ? String.Empty : (signature.Summary ?? String.Empty);
         result.Payload = MethodSignatureService.BuildPayload(signature);
@@ -802,14 +794,13 @@ public static class ExecCommand
                 Code = "readback_mismatch",
                 Operation = "set_method_signature",
                 Stage = "verify",
-                Message = "Method signature readback did not match the requested type.",
+                Message = "Method target or method identity readback did not match.",
                 Details = verification.Details
             };
         }
 
         return result;
     }
-
     private static AscetWriteExecutionResult ExecuteSetElementDependency(AscetSetElementDependencyArguments arguments)
     {
         AscetSetElementDependencyArguments safeArguments = arguments ?? new AscetSetElementDependencyArguments();
@@ -1286,6 +1277,13 @@ public static class ExecCommand
             return;
         }
 
+        if (String.Equals(operationName, "set_method_signature", StringComparison.Ordinal))
+        {
+            payload["verifyReadbackRequested"] = verifyRequested;
+            payload["readbackVerified"] = readbackVerified;
+            return;
+        }
+
         if (String.Equals(operationName, "set_method_code", StringComparison.Ordinal)
             || String.Equals(operationName, "apply_element_spec", StringComparison.Ordinal))
         {
@@ -1467,7 +1465,7 @@ public static class ExecCommand
             if (trimmed.StartsWith("StackTrace:", StringComparison.OrdinalIgnoreCase)
                 || trimmed.StartsWith("at ", StringComparison.Ordinal)
                 || trimmed.StartsWith("at\t", StringComparison.Ordinal)
-                || trimmed.StartsWith("ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¿Ãƒâ€šÃ‚Â½ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¿Ãƒâ€šÃ‚Â½ ", StringComparison.Ordinal))
+                || trimmed.StartsWith("ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½ ", StringComparison.Ordinal))
             {
                 break;
             }

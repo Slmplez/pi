@@ -21,6 +21,8 @@ public sealed class AscetCreateFolderResult
     public int ExistingCount { get; set; }
     public bool VerifyReadbackRequested { get; set; }
     public bool ReadbackVerified { get; set; }
+    public bool SaveSucceeded { get; set; }
+    public string VerificationMode { get; set; }
     public string Summary { get; set; }
 }
 
@@ -37,35 +39,39 @@ public sealed class FolderCreateService : AscetReadDomainServiceBase, IFolderCre
         int createdCount = 0;
         int existingCount = 0;
 
-        ExecuteWithSession("create_folder", delegate(AscetSession session)
+        FolderCreateSessionResult sessionResult = ExecuteWithSession("create_folder", delegate(AscetSession session)
         {
             AscetDataBase database = session.GetCurrentDatabaseHandle();
             EnsureFolderPath(database, normalizedPath, ref createdCount, ref existingCount);
-            if (createdCount > 0 && !database.Save())
+
+            bool saveSucceeded = true;
+            if (createdCount > 0)
+            {
+                saveSucceeded = database.Save();
+            }
+            if (!saveSucceeded)
             {
                 throw new AscetReadException("create_folder_failed", "create_folder", "Failed to save current database after creating folder '" + normalizedPath + "'.");
             }
-            return true;
+
+            AscetFolder folder = ResolveFolder(database, normalizedPath);
+            return new FolderCreateSessionResult
+            {
+                SaveSucceeded = saveSucceeded,
+                ReadbackPath = folder == null ? String.Empty : (folder.GetNameWithPath() ?? String.Empty)
+            };
         });
 
-        bool readbackVerified = !verifyReadback;
-        string readbackPath = ExecuteWithSession("verify_create_folder", delegate(AscetSession session)
-        {
-            AscetFolder folder = ResolveFolder(session.GetCurrentDatabaseHandle(), normalizedPath);
-            return folder == null ? String.Empty : (folder.GetNameWithPath() ?? String.Empty);
-        });
+        string readbackPath = sessionResult == null ? String.Empty : (sessionResult.ReadbackPath ?? String.Empty);
         if (!String.IsNullOrWhiteSpace(readbackPath))
         {
             readbackPath = NormalizeFolderPath(readbackPath);
         }
 
-        if (verifyReadback)
+        bool readbackVerified = !verifyReadback || String.Equals(readbackPath, normalizedPath, StringComparison.Ordinal);
+        if (verifyReadback && !readbackVerified)
         {
-            readbackVerified = String.Equals(readbackPath, normalizedPath, StringComparison.Ordinal);
-            if (!readbackVerified)
-            {
-                throw new AscetReadException("readback_mismatch", "create_folder", "Readback verification failed for folder '" + normalizedPath + "'.");
-            }
+            throw new AscetReadException("readback_mismatch", "create_folder", "Readback verification failed for folder '" + normalizedPath + "'.");
         }
 
         return new AscetCreateFolderResult
@@ -76,8 +82,16 @@ public sealed class FolderCreateService : AscetReadDomainServiceBase, IFolderCre
             ExistingCount = existingCount,
             VerifyReadbackRequested = verifyReadback,
             ReadbackVerified = readbackVerified,
+            SaveSucceeded = sessionResult != null && sessionResult.SaveSucceeded,
+            VerificationMode = "same_session_exact_path",
             Summary = BuildSummary(normalizedPath, createdCount, existingCount)
         };
+    }
+
+    private sealed class FolderCreateSessionResult
+    {
+        public bool SaveSucceeded { get; set; }
+        public string ReadbackPath { get; set; }
     }
 
     private void EnsureFolderPath(AscetDataBase database, string folderPath, ref int createdCount, ref int existingCount)
@@ -416,6 +430,21 @@ public static class AscetCreateFolder
         payload["existingCount"] = result == null ? 0 : result.ExistingCount;
         payload["verifyReadbackRequested"] = result != null && result.VerifyReadbackRequested;
         payload["readbackVerified"] = result != null && result.ReadbackVerified;
+        bool changed = result != null && result.Created;
+        bool verified = result != null && result.ReadbackVerified;
+        bool saveSucceeded = changed && result.SaveSucceeded;
+        payload["changed"] = changed;
+        payload["mutationStatus"] = changed ? "applied" : "no_op";
+        payload["saveAttempted"] = changed;
+        payload["saveSucceeded"] = saveSucceeded;
+        payload["saveState"] = changed ? (saveSucceeded ? "saved" : "failed") : "not_required";
+        payload["verified"] = verified;
+        payload["verificationStatus"] = verified ? "passed" : "failed";
+        payload["sessionCount"] = result == null ? 0 : 1;
+        payload["saveCount"] = changed ? 1 : 0;
+        payload["editableRetryCount"] = 0;
+        payload["nativeMutationAttemptCount"] = changed ? 1 : 0;
+        payload["verificationMode"] = result == null ? String.Empty : (result.VerificationMode ?? String.Empty);
         payload["summary"] = result == null ? String.Empty : (result.Summary ?? String.Empty);
         return AscetJsonContract.Serialize(payload);
     }

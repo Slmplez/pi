@@ -18,7 +18,9 @@ describe("ascet_edit schema", () => {
 		assert.equal(schemaFor(schemas, "create_folder")?.properties?.componentPath, undefined);
 		assert.equal(schemaFor(schemas, "create_folder")?.properties?.methodName, undefined);
 
-		assert.equal(schemaFor(schemas, "set_element_dependency"), undefined);
+		assert.ok(schemaFor(schemas, "set_element_dependency")?.properties?.targetPath);
+		assert.ok(schemaFor(schemas, "set_element_dependency")?.properties?.elementName);
+		assert.ok(schemaFor(schemas, "set_element_dependency")?.properties?.dependency);
 		assert.equal(schemaFor(schemas, "set_dependent_chain"), undefined);
 		assert.ok(schemaFor(schemas, "create_dependent_chain")?.properties?.provider);
 		assert.ok(schemaFor(schemas, "create_dependent_chain")?.properties?.consumer);
@@ -49,7 +51,7 @@ function actionName(schema: unknown): string | undefined {
 	return Array.isArray(action.enum) && typeof action.enum[0] === "string" ? action.enum[0] : undefined;
 }
 
-test("does not expose the internal set_element_dependency backend", () => {
+test("exposes set_element_dependency through the public ascet_edit schema", () => {
 	assert.equal(
 		Value.Check(ascetEditParameters, {
 			action: "set_element_dependency",
@@ -57,6 +59,17 @@ test("does not expose the internal set_element_dependency backend", () => {
 			elementName: "C_K",
 			dependency: "dependent",
 			intent: "apply",
+		}),
+		true,
+	);
+	assert.equal(
+		Value.Check(ascetEditParameters, {
+			action: "set_element_dependency",
+			targetPath: "FeatureA\\Consumer",
+			elementName: "C_K",
+			dependency: "dependent",
+			intent: "apply",
+			unknownField: true,
 		}),
 		false,
 	);

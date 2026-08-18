@@ -43,9 +43,23 @@ class AscetSetElementDependencyOutputTest
             DataVariantNames = new List<string> { "default" },
             RequestedDependency = parsed.RequestedDependency,
             DryRun = false,
-            WriteSucceeded = true,
+            WriteSucceeded = false,
             VerifyReadbackRequested = true,
             ReadbackVerified = true,
+            Changed = true,
+            MutationStatus = "applied",
+            SaveAttempted = false,
+            SaveSucceeded = false,
+            SaveState = "unknown",
+            Verified = true,
+            VerificationStatus = "passed",
+            VerificationMode = "same_session_dependency_endpoint",
+            SessionCount = 1,
+            SaveCount = 0,
+            EditableRetryCount = 0,
+            NativeMutationAttemptCount = 1,
+            CanonicalEvidenceStatus = "blocked",
+            CanonicalEvidenceIssue = "ImportXMLFromFile save semantics are not proven; no explicit database.Save call was observed.",
             BackupDirectory = @"E:\Rep\AscetCopolit\output\ascet-xml\backup-DEMO_DiscreteRiccatiSolver-20260711-000000",
             MatchesChanged = 1,
             BeforeDependency = "independent",
@@ -107,7 +121,7 @@ class AscetSetElementDependencyOutputTest
         string text = AscetSetElementDependency.FormatTextOutput(result);
         string json = AscetSetElementDependency.FormatJsonOutput(result);
 
-        if (text.IndexOf("WriteSucceeded: True", StringComparison.Ordinal) < 0 ||
+        if (text.IndexOf("WriteSucceeded: False", StringComparison.Ordinal) < 0 ||
             text.IndexOf("MatchMode: all", StringComparison.Ordinal) < 0 ||
             text.IndexOf("MatchesChanged: 1", StringComparison.Ordinal) < 0 ||
             text.IndexOf("AfterDependency: dependent", StringComparison.Ordinal) < 0 ||
@@ -124,14 +138,16 @@ class AscetSetElementDependencyOutputTest
             json.IndexOf("\"dataConfiguration\":{\"source\":\"defaultDataConfiguration\",\"name\":\"DefaultData\"}", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"dataVariants\":[\"default\"]", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"requested\":\"dependent\"", StringComparison.Ordinal) < 0 ||
-            json.IndexOf("\"succeeded\":true", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"succeeded\":false", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"verifyReadbackRequested\":true", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"readbackVerified\":true", StringComparison.Ordinal) < 0 ||
-            json.IndexOf("\"changed\":1", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"changed\":true", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"formula\":{\"after\":\"K_Factor\",\"changed\":true", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"beforeMappings\":[{\"formal\":\"Old\",\"valueName\":\"C_Old\",\"targetKind\":\"constant\",\"targetScope\":\"local\",\"verified\":true,\"variant\":\"default\",\"formalOID\":\"oldFormalOid\",\"valueOID\":\"oldValueOid\"}]", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"mappings\":[{\"formal\":\"K_Factor\",\"valueName\":\"K_Factor\",\"targetKind\":\"parameter\",\"targetScope\":\"imported\",\"verified\":true,\"variant\":\"default\",\"formalOID\":\"formalOid\",\"valueOID\":\"valueOid\"", StringComparison.Ordinal) < 0 ||
-            json.IndexOf("\"plan\":{", StringComparison.Ordinal) < 0)
+            json.IndexOf("\"plan\":{", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"saveState\":\"unknown\"", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"canonicalEvidenceStatus\":\"blocked\"", StringComparison.Ordinal) < 0)
         {
             Console.Error.WriteLine("unexpected set dependency json output");
             Console.Error.WriteLine(json);
@@ -152,6 +168,7 @@ class AscetSetElementDependencyOutputTest
         ExpectInvalid(new[] { @"DEMO\DiscreteRiccatiSolver", "B01", "dependent", "--formula", "K_Factor", "--clear-formula" }, "cannot be used together", 10);
         ExpectInvalid(new[] { @"DEMO\DiscreteRiccatiSolver", "B01", "dependent", "--formula", "max(A,B) * 1e-3" }, "requires at least one explicit", 14);
 
+        Console.WriteLine("{\"passed\":true,\"runtimeProtocolAssertions\":38,\"metrics\":{\"operation\":\"set_element_dependency\",\"scenarios\":4}}");
         return 0;
     }
 

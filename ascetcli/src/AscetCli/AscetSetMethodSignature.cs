@@ -165,6 +165,8 @@ public static class AscetSetMethodSignature
         builder.Append("ReturnAlreadyExisted: ").Append(result != null && result.ReturnAlreadyExisted).AppendLine();
         builder.Append("VerifyReadbackRequested: ").Append(result != null && result.VerifyReadbackRequested).AppendLine();
         builder.Append("ReadbackVerified: ").Append(result != null && result.ReadbackVerified).AppendLine();
+        builder.Append("SaveSucceeded: ").Append(result != null && result.SaveSucceeded).AppendLine();
+        builder.Append("VerificationMode: ").Append(result == null ? String.Empty : (result.VerificationMode ?? String.Empty)).AppendLine();
         builder.Append("ReturnElementName: ").Append(result == null ? String.Empty : (result.ReturnElementName ?? String.Empty)).AppendLine();
         builder.Append("ReturnElementModelType: ").Append(result == null ? String.Empty : (result.ReturnElementModelType ?? String.Empty)).AppendLine();
         builder.Append("Arguments: ").Append(result == null || result.Arguments == null ? 0 : result.Arguments.Count).AppendLine();

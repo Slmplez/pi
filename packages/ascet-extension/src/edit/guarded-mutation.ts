@@ -41,6 +41,7 @@ export interface RunGuardedAscetMutationInput {
 function baseEnvelope(mode: PermissionMode): AscetMutationResultEnvelope {
 	return {
 		status: "error",
+		mutationStatus: "not_started",
 		permission: { mode, decision: "not_evaluated" },
 		preflight: { status: "not_run" },
 		editability: { status: "not_applicable" },

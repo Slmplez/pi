@@ -630,6 +630,18 @@ public sealed class AscetElementSyncResult
     public bool WriteSucceeded { get; set; }
     public bool VerifyReadbackRequested { get; set; }
     public bool ReadbackVerified { get; set; }
+    public bool Changed { get; set; }
+    public string MutationStatus { get; set; }
+    public bool SaveAttempted { get; set; }
+    public bool SaveSucceeded { get; set; }
+    public string SaveState { get; set; }
+    public bool Verified { get; set; }
+    public string VerificationStatus { get; set; }
+    public string VerificationMode { get; set; }
+    public int SessionCount { get; set; }
+    public int SaveCount { get; set; }
+    public int EditableRetryCount { get; set; }
+    public int NativeMutationAttemptCount { get; set; }
     public AscetElementApplyMode Mode { get; set; }
     public bool DeleteMissingRequested { get; set; }
     public bool RecreateIncompatibleRequested { get; set; }
@@ -4024,9 +4036,11 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
 
             CommitTableVisibility(session, resolved.Path, spec, created, updated, options.ProjectPath);
             FlushTableEditsIfRequested(session, spec);
-            if (saveDatabase)
+            bool saveAttempted = hasMutation && saveDatabase;
+            bool saveSucceeded = false;
+            if (saveAttempted)
             {
-                SaveCurrentDatabaseAfterElementWrites(session, created, updated, removed);
+                saveSucceeded = SaveCurrentDatabaseAfterElementWrites(session, created, updated, removed);
             }
 
             bool verifiedInSession = false;
@@ -4054,6 +4068,18 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
                 WriteSucceeded = true,
                 VerifyReadbackRequested = verifyReadback,
                 ReadbackVerified = verifiedInSession,
+                Changed = hasMutation,
+                MutationStatus = hasMutation ? "applied" : "no_op",
+                SaveAttempted = saveAttempted,
+                SaveSucceeded = saveSucceeded,
+                SaveState = saveSucceeded ? "saved" : (saveAttempted ? "failed" : "not_required"),
+                Verified = !verifyReadback || verifiedInSession,
+                VerificationStatus = !verifyReadback || verifiedInSession ? "passed" : "failed",
+                VerificationMode = "same_session_target_resolve",
+                SessionCount = 1,
+                SaveCount = saveSucceeded ? 1 : 0,
+                EditableRetryCount = 0,
+                NativeMutationAttemptCount = hasMutation ? 1 : 0,
                 Mode = options.Mode,
                 DeleteMissingRequested = options.DeleteMissing,
                 RecreateIncompatibleRequested = options.RecreateIncompatible
@@ -4064,6 +4090,8 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
         {
             VerifyReadbackInSession(session, component.Path, spec);
             result.ReadbackVerified = true;
+            result.Verified = true;
+            result.VerificationStatus = "passed";
             MarkElementResultsReadbackVerified(result.ElementResults);
         }
 
@@ -4473,14 +4501,14 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
         }
     }
 
-    private void SaveCurrentDatabaseAfterElementWrites(AscetSession session, IList<string> createdNames, IList<string> updatedNames, IList<string> removedNames)
+    private bool SaveCurrentDatabaseAfterElementWrites(AscetSession session, IList<string> createdNames, IList<string> updatedNames, IList<string> removedNames)
     {
         if (session == null ||
             ((createdNames == null || createdNames.Count == 0) &&
              (updatedNames == null || updatedNames.Count == 0) &&
              (removedNames == null || removedNames.Count == 0)))
         {
-            return;
+            return false;
         }
 
         AscetDataBase database = session.GetCurrentDatabaseHandle();
@@ -4493,6 +4521,8 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
         {
             throw new AscetReadException("save_database_failed", "apply_element_spec", "Failed to save the current database after applying element changes.");
         }
+
+        return true;
     }
 
     private void FlushTableEditsIfRequested(AscetSession session, AscetElementSpecDocument spec)

@@ -108,13 +108,6 @@ internal sealed class AscetWriteHostDispatcher
             GetOptionalBool(payload, "rollbackOnFailure"),
             GetOptionalBool(payload, "returnExisting") || String.Equals(GetOptionalString(payload, "ifExists"), "return-existing", StringComparison.OrdinalIgnoreCase));
 
-        if (result != null && result.Created && result.VerifyReadbackRequested)
-        {
-            VerifyCreatedComponentInFreshSession(
-                context,
-                result,
-                NormalizeRequiredString(payload, "componentPath", "create_component"));
-        }
 
         return BuildWriteResultPayload(
             "create_component",
@@ -365,6 +358,8 @@ internal sealed class AscetWriteHostDispatcher
         payload["verifyReadbackRequested"] = result != null && result.VerifyReadbackRequested;
         payload["rollbackOnFailureRequested"] = result != null && result.RollbackOnFailureRequested;
         payload["readbackVerified"] = result != null && result.ReadbackVerified;
+        payload["saveSucceeded"] = result != null && result.SaveSucceeded;
+        payload["verificationMode"] = result == null ? String.Empty : (result.VerificationMode ?? String.Empty);
         payload["summary"] = result == null ? String.Empty : (result.Summary ?? String.Empty);
         payload["expectedDefaultScaffold"] = AscetComponentScaffoldMetadata.BuildExpectedDefaultScaffold(result);
         return payload;
@@ -383,126 +378,10 @@ internal sealed class AscetWriteHostDispatcher
         payload["verifyReadbackRequested"] = result != null && result.VerifyReadbackRequested;
         payload["rollbackOnFailureRequested"] = result != null && result.RollbackOnFailureRequested;
         payload["readbackVerified"] = result != null && result.ReadbackVerified;
+        payload["saveSucceeded"] = result != null && result.SaveSucceeded;
+        payload["verificationMode"] = result == null ? String.Empty : (result.VerificationMode ?? String.Empty);
         payload["summary"] = result == null ? String.Empty : (result.Summary ?? String.Empty);
         return payload;
-    }
-
-    private void VerifyCreatedComponentInFreshSession(
-        AscetWriteHostDispatchContext context,
-        AscetComponentCreateResult result,
-        string requestedComponentPath)
-    {
-        int[] retryDelaysMs = new int[] { 0, 200, 500 };
-        AscetReadException lastAscetError = null;
-
-        for (int attempt = 0; attempt < retryDelaysMs.Length; attempt++)
-        {
-            if (retryDelaysMs[attempt] > 0)
-            {
-                Thread.Sleep(retryDelaysMs[attempt]);
-            }
-
-            try
-            {
-                AscetItemRef resolved;
-                using (AscetSession verifySession = OpenVerificationSession(
-                    context == null ? null : context.DatabaseRef,
-                    "verify_create_component_after_refresh"))
-                {
-                    resolved = _componentCreateService.ReadComponentInSession(
-                        verifySession,
-                        result.ComponentPath ?? requestedComponentPath);
-                }
-
-                bool readbackVerified = resolved != null &&
-                    String.Equals(resolved.Path ?? String.Empty, result.ComponentPath ?? String.Empty, StringComparison.Ordinal) &&
-                    resolved.Kind == result.ComponentKind &&
-                    (result.ComponentKind == AscetComponentKind.StateMachine || resolved.LanguageKind == result.LanguageKind);
-
-                if (!readbackVerified)
-                {
-                    throw new AscetReadException(
-                        "readback_mismatch",
-                        "create_component",
-                        "Readback verification failed for component '" + (result.ComponentPath ?? String.Empty) + "'.");
-                }
-
-                result.ComponentPath = resolved.Path ?? result.ComponentPath;
-                if (result.ComponentKind == AscetComponentKind.StateMachine)
-                {
-                    result.LanguageKind = resolved.LanguageKind;
-                }
-
-                result.ReadbackVerified = true;
-                return;
-            }
-            catch (AscetReadException ex)
-            {
-                lastAscetError = ex;
-                if (!String.Equals(ex.Code, "database_not_open", StringComparison.Ordinal) &&
-                    !String.Equals(ex.Code, "component_not_found", StringComparison.Ordinal))
-                {
-                    throw;
-                }
-            }
-        }
-
-        if (lastAscetError != null)
-        {
-            throw lastAscetError;
-        }
-    }
-
-    private static AscetSession OpenVerificationSession(AscetDatabaseRef databaseRef, string operation)
-    {
-        AscetSession session = new AscetSession();
-        if (session == null)
-        {
-            throw new AscetReadException("tool_connect_failed", operation, "Failed to create ASCET ToolAPI session.");
-        }
-
-        Ascet tool = session.GetToolHandle();
-        if (tool == null)
-        {
-            session.Dispose();
-            throw new AscetReadException("tool_connect_failed", operation, "ASCET ToolAPI session handle is not available.");
-        }
-
-        AscetDataBase database = null;
-        try
-        {
-            database = tool.GetCurrentDataBase();
-        }
-        catch (Exception ex)
-        {
-            session.Dispose();
-            throw new AscetReadException("database_binding_invalid", operation, "Failed to resolve the current ASCET database handle.", ex);
-        }
-
-        if (database == null)
-        {
-            string databasePath = databaseRef == null ? String.Empty : (databaseRef.Path ?? String.Empty);
-            if (!String.IsNullOrWhiteSpace(databasePath) && Directory.Exists(databasePath))
-            {
-                try
-                {
-                    database = tool.OpenDataBase(databasePath);
-                }
-                catch (Exception ex)
-                {
-                    session.Dispose();
-                    throw new AscetReadException("database_binding_invalid", operation, "Failed to reopen ASCET database '" + databasePath + "'.", ex);
-                }
-            }
-        }
-
-        if (database == null)
-        {
-            session.Dispose();
-            throw new AscetReadException("database_not_open", operation, "GetCurrentDataBase returned null. Open a database in ASCET first.");
-        }
-
-        return session;
     }
 
     private static Dictionary<string, object> BuildMethodWritePayload(AscetMethodWriteResult result)
@@ -518,6 +397,18 @@ internal sealed class AscetWriteHostDispatcher
         payload["writeSucceeded"] = result != null && result.WriteSucceeded;
         payload["verifyReadbackRequested"] = result != null && result.VerifyReadbackRequested;
         payload["readbackVerified"] = result != null && result.ReadbackVerified;
+        payload["changed"] = result != null && result.Changed;
+        payload["mutationStatus"] = result == null ? String.Empty : (result.MutationStatus ?? String.Empty);
+        payload["saveAttempted"] = result != null && result.SaveAttempted;
+        payload["saveSucceeded"] = result != null && result.SaveSucceeded;
+        payload["saveState"] = result == null ? String.Empty : (result.SaveState ?? String.Empty);
+        payload["verified"] = result != null && result.Verified;
+        payload["verificationStatus"] = result == null ? String.Empty : (result.VerificationStatus ?? String.Empty);
+        payload["verificationMode"] = result == null ? String.Empty : (result.VerificationMode ?? String.Empty);
+        payload["sessionCount"] = result == null ? 0 : result.SessionCount;
+        payload["saveCount"] = result == null ? 0 : result.SaveCount;
+        payload["editableRetryCount"] = result == null ? 0 : result.EditableRetryCount;
+        payload["nativeMutationAttemptCount"] = result == null ? 0 : result.NativeMutationAttemptCount;
         return payload;
     }
 

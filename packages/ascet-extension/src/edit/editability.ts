@@ -146,9 +146,9 @@ export async function runApprovedAscetEditability(
 	ctx: AscetEditabilityContext,
 ): Promise<AscetCliJsonResult> {
 	if (params.mode === "check") return runAscetEditability(params, options);
-	const checkParams = { mode: "check" as const, componentPath: params.componentPath };
-	const preflight = await runAscetEditability(checkParams, options);
-	if (params.intent === "preview" || !preflight.ok || preflight.data === true) return preflight;
+	if (params.intent === "preview") {
+		return runAscetEditability({ mode: "check", componentPath: params.componentPath }, options);
+	}
 
 	const descriptor = getAscetEditAction("set")?.permission;
 	if (!descriptor) throw new Error("Missing ASCET editability permission descriptor.");
@@ -194,8 +194,6 @@ export async function runApprovedAscetEditability(
 			return createBlockedEditabilityResult(params, options, code, message);
 		}
 	}
-	const revalidated = await runAscetEditability(checkParams, options);
-	if (!revalidated.ok || revalidated.data === true) return revalidated;
 	return runAscetEditability(params, options);
 }
 

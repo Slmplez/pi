@@ -40,9 +40,7 @@ public sealed class ComponentWriteService : IExecComponentWriteService
     public ComponentWriteService(IComponentCreateService creator, AscetWriteExecutor executor)
     {
         this.creator = creator ?? new ComponentCreateService();
-        this.executor = executor ?? new AscetWriteExecutor(
-            new WriteVerificationService(
-                new CreateComponentVerificationHook()));
+        this.executor = executor ?? new AscetWriteExecutor();
     }
 
     public CreateComponentWriteRequest ParseExecArguments(string[] args)
@@ -76,7 +74,7 @@ public sealed class ComponentWriteService : IExecComponentWriteService
         return executor.Execute(new AscetWriteRequest
         {
             OperationName = "create_component",
-            VerifyAfterWrite = request.VerifyReadback,
+            VerifyAfterWrite = false,
             Metadata = metadata,
             ExecuteWrite = delegate(AscetWriteContext context)
             {
@@ -84,16 +82,47 @@ public sealed class ComponentWriteService : IExecComponentWriteService
                     request.ComponentPath,
                     request.ComponentKind,
                     request.LanguageKind,
-                    false,
+                    request.VerifyReadback,
                     request.RollbackOnFailure,
                     request.ReturnExisting);
 
                 AscetWriteActionResult actionResult = new AscetWriteActionResult();
                 actionResult.Summary = result == null ? String.Empty : (result.Summary ?? String.Empty);
                 actionResult.Payload = BuildPayload(result);
+                actionResult.Verification = BuildSameSessionVerification(result);
                 return actionResult;
             }
         });
+    }
+
+    private static WriteVerificationResult BuildSameSessionVerification(AscetComponentCreateResult result)
+    {
+        if (result == null || !result.VerifyReadbackRequested)
+        {
+            return new WriteVerificationResult
+            {
+                Requested = false,
+                Attempted = false,
+                Succeeded = true,
+                Summary = "verification_not_requested"
+            };
+        }
+
+        if (result.ReadbackVerified)
+        {
+            return new WriteVerificationResult
+            {
+                Requested = true,
+                Attempted = true,
+                Succeeded = true,
+                Summary = result.VerificationMode ?? "same_session_exact_path"
+            };
+        }
+
+        return WriteVerificationResult.CreateFailure(
+            "verification_failed",
+            "create_component",
+            "Same-session create_component verification did not succeed.");
     }
 
     private static Dictionary<string, object> BuildPayload(AscetComponentCreateResult result)
@@ -109,158 +138,22 @@ public sealed class ComponentWriteService : IExecComponentWriteService
         payload["verifyReadbackRequested"] = result != null && result.VerifyReadbackRequested;
         payload["rollbackOnFailureRequested"] = result != null && result.RollbackOnFailureRequested;
         payload["readbackVerified"] = result != null && result.ReadbackVerified;
+        payload["saveSucceeded"] = result != null && result.SaveSucceeded;
+        payload["changed"] = result != null && result.Changed;
+        payload["mutationStatus"] = result == null ? String.Empty : (result.MutationStatus ?? String.Empty);
+        payload["saveAttempted"] = result != null && result.SaveAttempted;
+        payload["saveState"] = result == null ? String.Empty : (result.SaveState ?? String.Empty);
+        payload["verified"] = result != null && result.Verified;
+        payload["verificationStatus"] = result == null ? String.Empty : (result.VerificationStatus ?? String.Empty);
+        payload["verificationMode"] = result == null ? String.Empty : (result.VerificationMode ?? String.Empty);
+        payload["sessionCount"] = result == null ? 0 : result.SessionCount;
+        payload["saveCount"] = result == null ? 0 : result.SaveCount;
+        payload["editableRetryCount"] = result == null ? 0 : result.EditableRetryCount;
+        payload["nativeMutationAttemptCount"] = result == null ? 0 : result.NativeMutationAttemptCount;
         payload["summary"] = result == null ? String.Empty : (result.Summary ?? String.Empty);
         payload["expectedDefaultScaffold"] = AscetComponentScaffoldMetadata.BuildExpectedDefaultScaffold(result);
         return payload;
     }
 
-    private sealed class CreateComponentVerificationHook : IWriteVerificationHook
-    {
-        private readonly IComponentLocatorService locator;
-        private readonly IComponentDeleteService deleter;
 
-        public CreateComponentVerificationHook()
-            : this(new ComponentLocatorService(), new ComponentDeleteService())
-        {
-        }
-
-        public CreateComponentVerificationHook(IComponentLocatorService locator, IComponentDeleteService deleter)
-        {
-            this.locator = locator ?? new ComponentLocatorService();
-            this.deleter = deleter ?? new ComponentDeleteService();
-        }
-
-        public WriteVerificationResult Verify(WriteVerificationRequest request)
-        {
-            string componentPath = GetString(request, "componentPath");
-            if (String.IsNullOrWhiteSpace(componentPath))
-            {
-                return WriteVerificationResult.CreateFailure(
-                    "verification_failed",
-                    "create_component",
-                    "Component path is required for create_component verification.");
-            }
-
-            string expectedKind = GetString(request, "componentKind");
-            string expectedLanguageKind = GetString(request, "languageKind");
-            bool rollbackOnFailure = GetBoolean(request, "rollbackOnFailure");
-            bool created = GetBoolean(request == null ? null : request.WriteResult, "created");
-
-            try
-            {
-                AscetItemPath parsed = AscetItemPath.Parse(componentPath);
-                AscetItemRef resolved = locator.FindItemInFolder(parsed.ItemName, parsed.FolderPath);
-                if (resolved == null)
-                {
-                    TryRollback(componentPath, rollbackOnFailure, created);
-                    return WriteVerificationResult.CreateFailure(
-                        "readback_mismatch",
-                        "create_component",
-                        "Created component '" + componentPath + "' was not found during readback verification.");
-                }
-
-                if (!String.Equals(resolved.Path ?? String.Empty, componentPath, StringComparison.Ordinal))
-                {
-                    TryRollback(componentPath, rollbackOnFailure, created);
-                    return WriteVerificationResult.CreateFailure(
-                        "readback_mismatch",
-                        "create_component",
-                        "Readback resolved component '" + (resolved.Path ?? String.Empty) + "' instead of '" + componentPath + "'.");
-                }
-
-                if (!String.Equals(resolved.Kind.ToString(), expectedKind, StringComparison.Ordinal))
-                {
-                    TryRollback(componentPath, rollbackOnFailure, created);
-                    return WriteVerificationResult.CreateFailure(
-                        "readback_mismatch",
-                        "create_component",
-                        "Readback resolved component kind '" + resolved.Kind.ToString() + "' instead of '" + expectedKind + "'.");
-                }
-
-                if (!String.Equals(expectedKind, AscetComponentKind.StateMachine.ToString(), StringComparison.Ordinal) &&
-                    !String.Equals(resolved.LanguageKind.ToString(), expectedLanguageKind, StringComparison.Ordinal))
-                {
-                    TryRollback(componentPath, rollbackOnFailure, created);
-                    return WriteVerificationResult.CreateFailure(
-                        "readback_mismatch",
-                        "create_component",
-                        "Readback resolved language '" + resolved.LanguageKind.ToString() + "' instead of '" + expectedLanguageKind + "'.");
-                }
-
-                return WriteVerificationResult.CreateSuccess("component_exists");
-            }
-            catch (Exception ex)
-            {
-                TryRollback(componentPath, rollbackOnFailure, created);
-                return new WriteVerificationResult
-                {
-                    Requested = true,
-                    Attempted = true,
-                    Succeeded = false,
-                    Summary = String.Empty,
-                    Error = WriteVerificationService.CreateStructuredError("verification_failed", "create_component", "verify", ex)
-                };
-            }
-        }
-
-        private void TryRollback(string componentPath, bool rollbackOnFailure, bool created)
-        {
-            if (!rollbackOnFailure || !created || String.IsNullOrWhiteSpace(componentPath))
-            {
-                return;
-            }
-
-            try
-            {
-                deleter.DeleteComponent(componentPath, false, true);
-            }
-            catch
-            {
-            }
-        }
-
-        private static string GetString(WriteVerificationRequest request, string key)
-        {
-            if (request == null || request.Metadata == null || String.IsNullOrWhiteSpace(key) || !request.Metadata.ContainsKey(key))
-            {
-                return String.Empty;
-            }
-
-            return Convert.ToString(request.Metadata[key]) ?? String.Empty;
-        }
-
-        private static bool GetBoolean(WriteVerificationRequest request, string key)
-        {
-            if (request == null || request.Metadata == null || String.IsNullOrWhiteSpace(key) || !request.Metadata.ContainsKey(key))
-            {
-                return false;
-            }
-
-            object value = request.Metadata[key];
-            if (value is bool)
-            {
-                return (bool)value;
-            }
-
-            bool parsed;
-            return Boolean.TryParse(Convert.ToString(value), out parsed) && parsed;
-        }
-
-        private static bool GetBoolean(AscetWriteActionResult result, string key)
-        {
-            if (result == null || result.Payload == null || String.IsNullOrWhiteSpace(key) || !result.Payload.ContainsKey(key))
-            {
-                return false;
-            }
-
-            object value = result.Payload[key];
-            if (value is bool)
-            {
-                return (bool)value;
-            }
-
-            bool parsed;
-            return Boolean.TryParse(Convert.ToString(value), out parsed) && parsed;
-        }
-    }
 }

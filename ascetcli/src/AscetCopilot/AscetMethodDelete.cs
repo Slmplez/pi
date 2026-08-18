@@ -16,6 +16,8 @@ public sealed class AscetMethodDeleteResult
     public string TargetKey { get; set; }
     public bool VerifyReadbackRequested { get; set; }
     public bool ReadbackVerified { get; set; }
+    public bool SaveSucceeded { get; set; }
+    public string VerificationMode { get; set; }
     public string Summary { get; set; }
 }
 
@@ -28,35 +30,10 @@ public sealed class MethodDeleteService : MethodCatalogService, IMethodDeleteSer
 {
     public AscetMethodDeleteResult DeleteMethod(string componentPath, string methodName, bool verifyReadback, bool ignoreMissing)
     {
-        AscetMethodDeleteResult result = ExecuteWithSession("delete_method", delegate(AscetSession session)
+        return ExecuteWithSession("delete_method", delegate(AscetSession session)
         {
-            return DeleteMethodInSession(session, componentPath, methodName, false, ignoreMissing);
+            return DeleteMethodInSession(session, componentPath, methodName, verifyReadback, ignoreMissing);
         });
-        result.VerifyReadbackRequested = verifyReadback;
-        if (!verifyReadback)
-        {
-            return result;
-        }
-
-        try
-        {
-            GetMethod(componentPath, methodName);
-            result.ReadbackVerified = false;
-        }
-        catch (AscetReadException ex)
-        {
-            if (!String.Equals(ex.Code, "method_not_found", StringComparison.Ordinal))
-            {
-                throw;
-            }
-            result.ReadbackVerified = true;
-        }
-
-        if (!result.ReadbackVerified)
-        {
-            throw new AscetReadException("readback_mismatch", "delete_method", "Readback verification failed for deleted method '" + methodName + "' in component '" + componentPath + "'.");
-        }
-        return result;
     }
 
     internal AscetMethodDeleteResult DeleteMethodInSession(AscetSession session, string componentPath, string methodName, bool verifyReadback, bool ignoreMissing)
@@ -76,11 +53,14 @@ public sealed class MethodDeleteService : MethodCatalogService, IMethodDeleteSer
             throw new AscetReadException("invalid_argument", "delete_method", "Method name must not be empty.");
         }
 
+        AscetDataBase database = session.GetCurrentDatabaseHandle();
         DataBaseItem item = ResolveItemByPath(session, componentPath);
         AscetItemRef component = Classifier.ToItemRef(item);
         MethodHandleWithDiagram found = FindMethod(session, component, methodName);
         bool deleted = false;
         bool alreadyMissing = found == null;
+        bool saveSucceeded = true;
+        bool readbackVerified = !verifyReadback;
         AscetMethodKind methodKind = AscetMethodKind.Unknown;
         string diagramName = String.Empty;
 
@@ -98,9 +78,13 @@ public sealed class MethodDeleteService : MethodCatalogService, IMethodDeleteSer
             RequireComponentEditableInSession(session, componentPath, "delete_method");
             RemoveMethodFromDiagram(found, componentPath, methodName);
             deleted = true;
+            saveSucceeded = database.Save();
+            if (!saveSucceeded)
+            {
+                throw new AscetReadException("delete_method_failed", "delete_method", "Failed to save current database after deleting method '" + methodName + "' in component '" + componentPath + "'.");
+            }
         }
 
-        bool readbackVerified = !verifyReadback;
         if (verifyReadback)
         {
             DataBaseItem readbackItem = ResolveItemByPath(session, componentPath);
@@ -123,6 +107,8 @@ public sealed class MethodDeleteService : MethodCatalogService, IMethodDeleteSer
             TargetKey = componentPath + "::" + methodName,
             VerifyReadbackRequested = verifyReadback,
             ReadbackVerified = readbackVerified,
+            SaveSucceeded = saveSucceeded,
+            VerificationMode = "same_session_exact_absence",
             Summary = BuildSummary(componentPath, methodName, deleted, alreadyMissing)
         };
     }

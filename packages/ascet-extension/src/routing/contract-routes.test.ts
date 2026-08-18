@@ -42,11 +42,16 @@ describe("ASCET contract-derived routes", () => {
 			"ascet_get.bde_edges",
 			"ascet_get.import_binding",
 			"ascet_get.dbitem_refs",
-			"ascet_edit.set_element_dependency",
 			"configure_parameter_dependency_chain.execute",
 		]) {
 			assert.equal(ids.has(id), false, id);
 		}
+	});
+
+	test("routes the public set_element_dependency action directly", () => {
+		const route = routeAscetAction({ toolName: "ascet_edit", action: "set_element_dependency" });
+		assert.equal(route.logicalCommandId, "AscetSetElementDependency");
+		assert.equal(route.operation, "set_element_dependency");
 	});
 
 	test("routes generic diff actions through declarative object-kind variants", () => {

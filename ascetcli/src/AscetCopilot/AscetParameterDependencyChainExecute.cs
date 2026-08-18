@@ -241,6 +241,7 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
             }
             bool rollbackPassed = rollbackErrors.Count == 0;
             Dictionary<string, object> result = BaseResult(rollbackPassed ? "rolled_back" : "rollback_failed", operationId, true, true);
+            AddCanonicalEvidence(result, true, "failed", null, null, "unknown", rollbackPassed, rollbackPassed ? "passed" : "failed", "same_session_dependency_chain_endpoint", 1, null, null, null, "blocked", "Mutation failed after starting; Save and mutation counters are not exposed for the composed path.");
             result["stages"] = stages;
             result["originalError"] = ErrorPayload(originalError);
             Dictionary<string, object> rollback = new Dictionary<string, object>();
@@ -624,6 +625,7 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
     private static Dictionary<string, object> Preview(string operationId, Dictionary<string, object> beforeState, IList<Dictionary<string, object>> stages, IList<Dictionary<string, object>> targets, bool noOp)
     {
         Dictionary<string, object> result = BaseResult("preview", operationId, false, false);
+        AddCanonicalEvidence(result, false, "preview", false, false, "not_required", false, "not_run", "same_session_dependency_chain_endpoint", 1, 0, 0, 0, "not_applicable", "Preview does not produce a mutation result.");
         result["beforeState"] = beforeState;
         result["stages"] = stages;
         result["targets"] = targets;
@@ -652,9 +654,11 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
         }
     }
 
-    private static Dictionary<string, object> Success(string status, string operationId, bool writesPerformed, bool mutationStarted, IList<Dictionary<string, object>> stages)
+    internal static Dictionary<string, object> Success(string status, string operationId, bool writesPerformed, bool mutationStarted, IList<Dictionary<string, object>> stages)
     {
-        Dictionary<string, object> result = BaseResult(status, operationId, writesPerformed, mutationStarted);
+        bool noOp = String.Equals(status, "no_change", StringComparison.Ordinal);
+        Dictionary<string, object> result = BaseResult(noOp ? status : (writesPerformed ? "outcome_unknown" : status), operationId, writesPerformed, mutationStarted);
+        AddCanonicalEvidence(result, writesPerformed, writesPerformed ? "applied" : "no_op", noOp ? false : (bool?)null, noOp ? false : (bool?)null, noOp ? "not_required" : "unknown", true, "passed", "same_session_dependency_chain_endpoint", 1, noOp ? (int?)0 : null, noOp ? (int?)0 : null, noOp ? (int?)0 : null, noOp ? "complete" : "blocked", noOp ? String.Empty : "Save counters are not exposed for the composed element-sync/import path; changed result is outcome-unknown.");
         result["stages"] = stages;
         result["verification"] = new Dictionary<string, object> { { "status", "passed" }, { "verified", true } };
         result["rollback"] = new Dictionary<string, object> { { "required", false }, { "status", "not_required" } };
@@ -664,6 +668,7 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
     private static Dictionary<string, object> Rejected(string operationId, IList<Dictionary<string, object>> conflicts, IList<Dictionary<string, object>> stages)
     {
         Dictionary<string, object> result = BaseResult("rejected", operationId, false, false);
+        AddCanonicalEvidence(result, false, "rejected", false, false, "not_required", false, "not_run", "same_session_dependency_chain_endpoint", 1, 0, 0, 0, "complete", String.Empty);
         result["conflicts"] = conflicts;
         result["stages"] = stages;
         result["rollback"] = new Dictionary<string, object> { { "required", false }, { "status", "not_required" } };
@@ -677,10 +682,44 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
             ? "blocked"
             : "rejected";
         Dictionary<string, object> result = BaseResult(status, operationId, false, false);
+        AddCanonicalEvidence(result, false, "failed", false, false, "not_attempted", false, "failed", "same_session_dependency_chain_endpoint", null, 0, 0, 0, "blocked", "The operation failed before complete canonical counters were available.");
         result["error"] = ErrorPayload(error);
         result["stages"] = stages;
         result["rollback"] = new Dictionary<string, object> { { "required", false }, { "status", "not_required" } };
         return result;
+    }
+
+    private static void AddCanonicalEvidence(
+        IDictionary<string, object> result,
+        bool changed,
+        string mutationStatus,
+        bool? saveAttempted,
+        bool? saveSucceeded,
+        string saveState,
+        bool verified,
+        string verificationStatus,
+        string verificationMode,
+        int? sessionCount,
+        int? saveCount,
+        int? editableRetryCount,
+        int? nativeMutationAttemptCount,
+        string evidenceStatus,
+        string evidenceIssue)
+    {
+        result["changed"] = changed;
+        result["mutationStatus"] = mutationStatus;
+        result["saveAttempted"] = saveAttempted;
+        result["saveSucceeded"] = saveSucceeded;
+        result["saveState"] = saveState;
+        result["verified"] = verified;
+        result["verificationStatus"] = verificationStatus;
+        result["verificationMode"] = verificationMode;
+        result["sessionCount"] = sessionCount;
+        result["saveCount"] = saveCount;
+        result["editableRetryCount"] = editableRetryCount;
+        result["nativeMutationAttemptCount"] = nativeMutationAttemptCount;
+        result["canonicalEvidenceStatus"] = evidenceStatus;
+        if (!String.IsNullOrWhiteSpace(evidenceIssue)) result["canonicalEvidenceIssue"] = evidenceIssue;
     }
 
     private static Dictionary<string, object> BaseResult(string status, string operationId, bool writesPerformed, bool mutationStarted)

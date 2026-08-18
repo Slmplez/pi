@@ -37,7 +37,8 @@ describe("ASCET prompt coordination", () => {
 		assert.doesNotMatch(get, /ascet_get\.(elements|database_catalog|import_binding)/);
 		assert.match(read, /ascet_read\.read_dependent_chain/);
 		assert.match(edit, /ascet_edit\.create_dependent_chain/);
-		assert.doesNotMatch(edit, /set_element_dependency|configure_parameter_dependency_chain/);
+		assert.match(edit, /ascet_edit\.set_element_dependency/);
+		assert.doesNotMatch(edit, /configure_parameter_dependency_chain/);
 	});
 
 	test("keeps detailed dependency rules available on demand", () => {
@@ -92,7 +93,7 @@ describe("ASCET prompt coordination", () => {
 		assert.deepEqual(actionInstructionIds({ tool: "ascet_get" }), ["ascet_get.tree", "ascet_get.formulas"]);
 		assert.equal(getActionInstruction("ascet_read.read_code")?.action, "read_code");
 		assert.deepEqual(actionInstructionIds({ tool: "configure_parameter_dependency_chain" }), []);
-		assert.equal(getActionInstruction("ascet_edit.set_element_dependency"), undefined);
+		assert.equal(getActionInstruction("ascet_edit.set_element_dependency")?.action, "set_element_dependency");
 		assert.ok(
 			findActionInstructions({ profile: "write-preflight", tags: ["provider-discovery"] }).some(
 				(instruction) => instruction.id === "ascet_edit.create_dependent_chain",
@@ -105,7 +106,7 @@ describe("ASCET prompt coordination", () => {
 
 		assert.match(capabilities, /ASCET action guide/);
 		assert.match(capabilities, /search_actions/);
-		assert.match(capabilities, /ascet_search\.\*/);
+		assert.match(capabilities, /ascet_search\.search/);
 		assert.match(capabilities, /ascet_read\.read_code: read complete live code/);
 		assert.doesNotMatch(capabilities, /\bascet_batch_write\b/);
 	});

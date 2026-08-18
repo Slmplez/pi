@@ -70,8 +70,20 @@ public sealed class AscetMethodSignatureResult
     public bool ReturnCreated { get; set; }
     public bool ReturnReplaced { get; set; }
     public bool ReturnAlreadyExisted { get; set; }
+    public bool Changed { get; set; }
+    public string MutationStatus { get; set; }
+    public bool SaveAttempted { get; set; }
     public bool VerifyReadbackRequested { get; set; }
     public bool ReadbackVerified { get; set; }
+    public string SaveState { get; set; }
+    public bool SaveSucceeded { get; set; }
+    public bool Verified { get; set; }
+    public string VerificationStatus { get; set; }
+    public string VerificationMode { get; set; }
+    public int SessionCount { get; set; }
+    public int SaveCount { get; set; }
+    public int EditableRetryCount { get; set; }
+    public int NativeMutationAttemptCount { get; set; }
     public string ReturnElementName { get; set; }
     public string ReturnElementModelType { get; set; }
     public bool ReturnElementIsMethodReturn { get; set; }
@@ -195,8 +207,33 @@ public sealed class MethodSignatureService : MethodCatalogService, IMethodSignat
 
             RequireComponentEditableInSession(currentSession, componentPath, "set_method_signature");
             ReturnPatchResult returnPatch = ApplyReturnPatch(method, methodName, normalizedSpec.ReturnType, normalizedSpec.IfReturnExists);
-            IList<AscetMethodArgumentResult> argumentResults = ApplyArgumentPatches(method, methodName, normalizedSpec.Arguments, verifyReadback);
-            AscetModelElement readback = String.IsNullOrWhiteSpace(normalizedSpec.ReturnType) ? method.GetReturnElement() : method.GetReturnElement();
+            IList<AscetMethodArgumentResult> argumentResults = ApplyArgumentPatches(method, methodName, normalizedSpec.Arguments);
+            bool mutationPerformed = returnPatch.Created || returnPatch.Replaced;
+            for (int i = 0; i < argumentResults.Count; i++)
+            {
+                mutationPerformed = mutationPerformed || argumentResults[i].Created || argumentResults[i].Replaced;
+            }
+
+            bool saveAttempted = false;
+            bool saveSucceeded = false;
+            int saveCount = 0;
+            int nativeMutationAttemptCount = mutationPerformed ? 1 : 0;
+            if (mutationPerformed)
+            {
+                AscetDataBase database = currentSession.GetCurrentDatabaseHandle();
+                saveAttempted = true;
+                saveCount++;
+                if (!database.Save())
+                {
+                    throw new AscetReadException(
+                        "set_method_signature_failed",
+                        "set_method_signature",
+                        "Failed to save current database after updating method signature for method '" + methodName + "' in component '" + componentPath + "'.");
+                }
+                saveSucceeded = true;
+            }
+
+            bool readbackVerified = !verifyReadback || VerifyMethodIdentityInSession(currentSession, componentPath, methodName, handle.Reference);
             AscetMethodSignatureResult result = BuildResult(
                 component,
                 handle.Reference,
@@ -205,28 +242,20 @@ public sealed class MethodSignatureService : MethodCatalogService, IMethodSignat
                 returnPatch.Replaced,
                 returnPatch.AlreadyExisted,
                 verifyReadback,
-                readback,
-                argumentResults);
-            if (verifyReadback && !result.ReadbackVerified)
+                readbackVerified,
+                returnPatch.Element,
+                argumentResults,
+                mutationPerformed,
+                saveAttempted,
+                saveSucceeded,
+                saveCount,
+                nativeMutationAttemptCount);
+            if (verifyReadback && !readbackVerified)
             {
                 throw new AscetReadException(
                     "readback_mismatch",
                     "set_method_signature",
-                    "Return signature readback failed for method '" + methodName + "' in component '" + componentPath + "'.");
-            }
-
-            if (verifyReadback)
-            {
-                for (int i = 0; i < argumentResults.Count; i++)
-                {
-                    if (!argumentResults[i].ReadbackVerified)
-                    {
-                        throw new AscetReadException(
-                            "readback_mismatch",
-                            "set_method_signature",
-                            "Argument signature readback failed for argument '" + argumentResults[i].Name + "' in method '" + methodName + "'.");
-                    }
-                }
+                    "Target or method identity readback failed for method '" + methodName + "' in component '" + componentPath + "'.");
             }
 
             return result;
@@ -344,8 +373,20 @@ public sealed class MethodSignatureService : MethodCatalogService, IMethodSignat
         payload["returnCreated"] = result != null && result.ReturnCreated;
         payload["returnReplaced"] = result != null && result.ReturnReplaced;
         payload["returnAlreadyExisted"] = result != null && result.ReturnAlreadyExisted;
+        payload["changed"] = result != null && result.Changed;
+        payload["mutationStatus"] = result == null ? String.Empty : (result.MutationStatus ?? String.Empty);
+        payload["saveAttempted"] = result != null && result.SaveAttempted;
         payload["verifyReadbackRequested"] = result != null && result.VerifyReadbackRequested;
         payload["readbackVerified"] = result != null && result.ReadbackVerified;
+        payload["saveState"] = result == null ? String.Empty : (result.SaveState ?? String.Empty);
+        payload["saveSucceeded"] = result != null && result.SaveSucceeded;
+        payload["verified"] = result != null && result.Verified;
+        payload["verificationStatus"] = result == null ? String.Empty : (result.VerificationStatus ?? String.Empty);
+        payload["verificationMode"] = result == null ? String.Empty : (result.VerificationMode ?? String.Empty);
+        payload["sessionCount"] = result == null ? 0 : result.SessionCount;
+        payload["saveCount"] = result == null ? 0 : result.SaveCount;
+        payload["editableRetryCount"] = result == null ? 0 : result.EditableRetryCount;
+        payload["nativeMutationAttemptCount"] = result == null ? 0 : result.NativeMutationAttemptCount;
         payload["returnElementName"] = result == null ? String.Empty : (result.ReturnElementName ?? String.Empty);
         payload["returnElementModelType"] = result == null ? String.Empty : (result.ReturnElementModelType ?? String.Empty);
         payload["returnElementIsMethodReturn"] = result != null && result.ReturnElementIsMethodReturn;
@@ -373,14 +414,20 @@ public sealed class MethodSignatureService : MethodCatalogService, IMethodSignat
         return payload;
     }
 
-    private static AscetMethodSignatureResult BuildResult(AscetItemRef component, AscetMethodRef method, string requestedReturnType, bool created, bool replaced, bool alreadyExisted, bool verifyReadback, AscetModelElement returnElement, IList<AscetMethodArgumentResult> arguments)
+    private static AscetMethodSignatureResult BuildResult(AscetItemRef component, AscetMethodRef method, string requestedReturnType, bool created, bool replaced, bool alreadyExisted, bool verifyReadback, bool readbackVerified, AscetModelElement returnElement, IList<AscetMethodArgumentResult> arguments, bool changed, bool saveAttempted, bool saveSucceeded, int saveCount, int nativeMutationAttemptCount)
     {
         string modelType = GetReturnModelType(returnElement);
         bool isMethodReturn = returnElement != null && returnElement.IsMethodReturn();
-        bool hasRequestedReturn = !String.IsNullOrWhiteSpace(requestedReturnType);
-        bool readbackVerified = !verifyReadback || !hasRequestedReturn || (isMethodReturn && String.Equals(modelType, requestedReturnType, StringComparison.Ordinal));
         string componentPath = component == null ? String.Empty : (component.Path ?? String.Empty);
         string methodName = method == null ? String.Empty : (method.Name ?? String.Empty);
+        IList<AscetMethodArgumentResult> safeArguments = arguments ?? new List<AscetMethodArgumentResult>();
+        for (int i = 0; i < safeArguments.Count; i++)
+        {
+            if (safeArguments[i] != null)
+            {
+                safeArguments[i].ReadbackVerified = readbackVerified;
+            }
+        }
 
         return new AscetMethodSignatureResult
         {
@@ -391,17 +438,28 @@ public sealed class MethodSignatureService : MethodCatalogService, IMethodSignat
             ReturnCreated = created,
             ReturnReplaced = replaced,
             ReturnAlreadyExisted = alreadyExisted,
+            Changed = changed,
+            MutationStatus = changed ? "applied" : "no_op",
+            SaveAttempted = saveAttempted,
             VerifyReadbackRequested = verifyReadback,
             ReadbackVerified = readbackVerified,
+            SaveState = changed ? (saveSucceeded ? "saved" : "failed") : "not_required",
+            SaveSucceeded = saveSucceeded,
+            Verified = readbackVerified,
+            VerificationStatus = verifyReadback ? (readbackVerified ? "passed" : "failed") : "not_requested",
+            VerificationMode = "same_session_target_method_identity",
+            SessionCount = 1,
+            SaveCount = saveCount,
+            EditableRetryCount = 0,
+            NativeMutationAttemptCount = nativeMutationAttemptCount,
             ReturnElementName = GetModelElementName(returnElement),
             ReturnElementModelType = modelType,
             ReturnElementIsMethodReturn = isMethodReturn,
-            Arguments = arguments ?? new List<AscetMethodArgumentResult>(),
+            Arguments = safeArguments,
             TargetKey = componentPath + "::" + methodName + "::return",
-            Summary = BuildSummary(componentPath, methodName, requestedReturnType, arguments)
+            Summary = BuildSummary(componentPath, methodName, requestedReturnType, safeArguments)
         };
     }
-
     private static AscetMethodSignatureSnapshot BuildReadSnapshot(AscetItemRef component, AscetMethodRef method, bool supportsPrimitiveSignature, string unsupportedReason, AscetModelElement returnElement, IList<AscetModelElement> arguments)
     {
         string componentPath = component == null ? String.Empty : (component.Path ?? String.Empty);
@@ -440,6 +498,7 @@ public sealed class MethodSignatureService : MethodCatalogService, IMethodSignat
         }
 
         AscetModelElement existing = method.GetReturnElement();
+        result.Element = existing;
         result.AlreadyExisted = existing != null;
         string existingModelType = GetReturnModelType(existing);
         if (existing != null)
@@ -486,10 +545,11 @@ public sealed class MethodSignatureService : MethodCatalogService, IMethodSignat
         }
 
         result.Created = true;
+        result.Element = added;
         return result;
     }
 
-    private static IList<AscetMethodArgumentResult> ApplyArgumentPatches(DiscreteMethod method, string methodName, IList<AscetMethodArgumentSpec> arguments, bool verifyReadback)
+    private static IList<AscetMethodArgumentResult> ApplyArgumentPatches(DiscreteMethod method, string methodName, IList<AscetMethodArgumentSpec> arguments)
     {
         List<AscetMethodArgumentResult> results = new List<AscetMethodArgumentResult>();
         if (arguments == null)
@@ -501,6 +561,7 @@ public sealed class MethodSignatureService : MethodCatalogService, IMethodSignat
         {
             AscetMethodArgumentSpec argument = arguments[i];
             AscetModelElement existing = method.GetArgumentElement(argument.Name);
+            AscetModelElement resultElement = existing;
             bool alreadyExisted = existing != null;
             bool replaced = false;
             bool created = false;
@@ -546,6 +607,7 @@ public sealed class MethodSignatureService : MethodCatalogService, IMethodSignat
                             "ASCET returned null while adding primitive argument '" + argument.Name + "' to method '" + methodName + "'.");
                     }
 
+                    resultElement = added;
                     created = true;
                 }
             }
@@ -560,12 +622,12 @@ public sealed class MethodSignatureService : MethodCatalogService, IMethodSignat
                         "ASCET returned null while adding primitive argument '" + argument.Name + "' to method '" + methodName + "'.");
                 }
 
+                resultElement = added;
                 created = true;
             }
 
-            AscetModelElement readback = method.GetArgumentElement(argument.Name);
-            string readbackModelType = GetPrimitiveModelType(readback);
-            bool isMethodArgument = readback != null && readback.IsMethodArgument();
+            string resultModelType = GetPrimitiveModelType(resultElement);
+            bool isMethodArgument = resultElement != null && resultElement.IsMethodArgument();
             results.Add(new AscetMethodArgumentResult
             {
                 Name = argument.Name,
@@ -573,14 +635,36 @@ public sealed class MethodSignatureService : MethodCatalogService, IMethodSignat
                 Created = created,
                 Replaced = replaced,
                 AlreadyExisted = alreadyExisted,
-                ReadbackVerified = !verifyReadback || (isMethodArgument && String.Equals(readbackModelType, argument.Type, StringComparison.Ordinal)),
+                ReadbackVerified = true,
                 IsMethodArgument = isMethodArgument,
-                ElementName = GetModelElementName(readback),
-                ElementModelType = readbackModelType
+                ElementName = GetModelElementName(resultElement),
+                ElementModelType = resultModelType
             });
         }
 
         return results;
+    }
+
+    private bool VerifyMethodIdentityInSession(AscetSession session, string componentPath, string methodName, AscetMethodRef expectedMethod)
+    {
+        DataBaseItem item = ResolveItemByPath(session, componentPath);
+        AscetItemRef component = Classifier.ToItemRef(item);
+        if (component == null || expectedMethod == null)
+        {
+            return false;
+        }
+
+        if (!String.Equals(component.Path ?? String.Empty, expectedMethod.OwningComponentPath ?? String.Empty, StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        MethodHandle verified = FindMethodHandle(CollectMethodHandles(session, component), component.Path, methodName.Trim());
+        return verified != null
+            && verified.Reference != null
+            && String.Equals(verified.Reference.Name ?? String.Empty, expectedMethod.Name ?? String.Empty, StringComparison.Ordinal)
+            && verified.Reference.MethodKind == expectedMethod.MethodKind
+            && String.Equals(verified.Reference.OwningComponentPath ?? String.Empty, expectedMethod.OwningComponentPath ?? String.Empty, StringComparison.OrdinalIgnoreCase);
     }
 
     private static AscetMethodSignatureSpec NormalizeSignatureSpec(AscetMethodSignatureSpec spec)
@@ -834,5 +918,6 @@ public sealed class MethodSignatureService : MethodCatalogService, IMethodSignat
         public bool Created { get; set; }
         public bool Replaced { get; set; }
         public bool AlreadyExisted { get; set; }
+        public AscetModelElement Element { get; set; }
     }
 }

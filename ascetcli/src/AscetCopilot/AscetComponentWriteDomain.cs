@@ -19,6 +19,18 @@ public sealed class AscetTextCodeWriteResult
     public bool WriteSucceeded { get; set; }
     public bool VerifyReadbackRequested { get; set; }
     public bool ReadbackVerified { get; set; }
+    public bool Changed { get; set; }
+    public string MutationStatus { get; set; }
+    public bool SaveAttempted { get; set; }
+    public bool SaveSucceeded { get; set; }
+    public string SaveState { get; set; }
+    public bool Verified { get; set; }
+    public string VerificationStatus { get; set; }
+    public string VerificationMode { get; set; }
+    public int SessionCount { get; set; }
+    public int SaveCount { get; set; }
+    public int EditableRetryCount { get; set; }
+    public int NativeMutationAttemptCount { get; set; }
 }
 
 public sealed class AscetStateSelector
@@ -45,6 +57,18 @@ public sealed class AscetStateMachineWriteResult
     public bool WriteSucceeded { get; set; }
     public bool VerifyReadbackRequested { get; set; }
     public bool ReadbackVerified { get; set; }
+    public bool Changed { get; set; }
+    public string MutationStatus { get; set; }
+    public bool SaveAttempted { get; set; }
+    public bool SaveSucceeded { get; set; }
+    public string SaveState { get; set; }
+    public bool Verified { get; set; }
+    public string VerificationStatus { get; set; }
+    public string VerificationMode { get; set; }
+    public int SessionCount { get; set; }
+    public int SaveCount { get; set; }
+    public int EditableRetryCount { get; set; }
+    public int NativeMutationAttemptCount { get; set; }
 }
 
 public sealed class AscetComponentWriteCapabilities
@@ -231,48 +255,45 @@ public sealed class TextCodeWriteService : AscetReadDomainServiceBase, ITextCode
             throw new AscetReadException("invalid_argument", operation, "Code must not be null.");
         }
 
-        string previousCode = ExecuteWithSession(operation, delegate(AscetSession session)
+        return ExecuteWithSession(operation, delegate(AscetSession session)
         {
             FunctionalComponent functionalComponent = ResolveFunctionalComponent(session, component);
-            string existingCode = getter(functionalComponent) ?? String.Empty;
+            string previousCode = getter(functionalComponent) ?? String.Empty;
             RequireComponentEditableInSession(session, component.Path, operation);
-            bool writeSucceeded = setter(functionalComponent, code);
-            if (!writeSucceeded)
-            {
-                throw new AscetReadException("set_text_code_failed", operation, "ASCET returned false while writing '" + writeKind.ToString() + "' for component '" + component.Path + "'.");
-            }
+            AscetCodeWriteTransactionResult transaction = AscetCodeWriteTransaction.Execute(
+                operation,
+                previousCode,
+                code,
+                verifyReadback,
+                delegate { return setter(functionalComponent, code); },
+                delegate { return session.GetCurrentDatabaseHandle().Save(); },
+                delegate { return getter(functionalComponent) ?? String.Empty; });
 
-            return existingCode;
+            return new AscetTextCodeWriteResult
+            {
+                ComponentPath = component.Path,
+                ComponentKind = component.Kind,
+                LanguageKind = component.LanguageKind,
+                WriteKind = writeKind,
+                PreviousCodeLength = previousCode.Length,
+                NewCodeLength = code.Length,
+                WriteSucceeded = true,
+                VerifyReadbackRequested = verifyReadback,
+                ReadbackVerified = transaction.Verified,
+                Changed = transaction.Changed,
+                MutationStatus = transaction.MutationStatus,
+                SaveAttempted = transaction.SaveAttempted,
+                SaveSucceeded = transaction.SaveSucceeded,
+                SaveState = transaction.SaveState,
+                Verified = transaction.Verified,
+                VerificationStatus = transaction.VerificationStatus,
+                VerificationMode = transaction.VerificationMode,
+                SessionCount = transaction.SessionCount,
+                SaveCount = transaction.SaveCount,
+                EditableRetryCount = transaction.EditableRetryCount,
+                NativeMutationAttemptCount = transaction.NativeMutationAttemptCount
+            };
         });
-
-        bool readbackVerified = !verifyReadback;
-        if (verifyReadback)
-        {
-            string readbackCode = ExecuteWithSession("verify_" + operation, delegate(AscetSession session)
-            {
-                FunctionalComponent functionalComponent = ResolveFunctionalComponent(session, component);
-                return getter(functionalComponent) ?? String.Empty;
-            });
-
-            readbackVerified = String.Equals(readbackCode, code, StringComparison.Ordinal);
-            if (!readbackVerified)
-            {
-                throw new AscetReadException("readback_mismatch", operation, "Readback verification failed while writing '" + writeKind.ToString() + "' for component '" + component.Path + "'.");
-            }
-        }
-
-        return new AscetTextCodeWriteResult
-        {
-            ComponentPath = component.Path,
-            ComponentKind = component.Kind,
-            LanguageKind = component.LanguageKind,
-            WriteKind = writeKind,
-            PreviousCodeLength = previousCode.Length,
-            NewCodeLength = code.Length,
-            WriteSucceeded = true,
-            VerifyReadbackRequested = verifyReadback,
-            ReadbackVerified = readbackVerified
-        };
     }
 }
 
@@ -379,41 +400,23 @@ public sealed class StateMachineWriteService : MethodCatalogService, IStateMachi
     public AscetStateMachineWriteResult SetStartState(AscetItemRef stateMachine, AscetStateSelector selector, bool verifyReadback)
     {
         AscetComponentWriteUtilities.RequireComponentKind(stateMachine, AscetComponentKind.StateMachine, "set_start_state");
-
-        string targetName = String.Empty;
-        string previousValue = ExecuteWithSession("set_start_state", delegate(AscetSession session)
+        return ExecuteWithSession("set_start_state", delegate(AscetSession session)
         {
             State state = ResolveState(session, stateMachine, selector, "set_start_state");
-            targetName = state.GetName() ?? String.Empty;
+            string targetName = state.GetName() ?? String.Empty;
+            string previousValue = state.IsStartState() ? "true" : "false";
             RequireComponentEditableInSession(session, stateMachine.Path, "set_start_state");
-            string existingValue = state.IsStartState() ? "true" : "false";
-            bool writeSucceeded = state.SetStartState();
-            if (!writeSucceeded)
-            {
-                throw new AscetReadException("set_start_state_failed", "set_start_state", "ASCET returned false while setting start state '" + state.GetName() + "' in component '" + stateMachine.Path + "'.");
-            }
-
-            return existingValue;
+            AscetCodeWriteTransactionResult transaction = AscetCodeWriteTransaction.Execute(
+                "set_start_state",
+                previousValue,
+                "true",
+                verifyReadback,
+                delegate { return state.SetStartState(); },
+                delegate { return session.GetCurrentDatabaseHandle().Save(); },
+                delegate { return state.IsStartState() ? "true" : "false"; });
+            return BuildWriteResult(stateMachine, "SetStartState", targetName, transaction, verifyReadback);
         });
-
-        bool readbackVerified = !verifyReadback;
-        if (verifyReadback)
-        {
-            readbackVerified = ExecuteWithSession("verify_set_start_state", delegate(AscetSession session)
-            {
-                State state = ResolveState(session, stateMachine, selector, "verify_set_start_state");
-                return state.IsStartState();
-            });
-
-            if (!readbackVerified)
-            {
-                throw new AscetReadException("readback_mismatch", "set_start_state", "Readback verification failed for state '" + targetName + "' in component '" + stateMachine.Path + "'.");
-            }
-        }
-
-        return BuildWriteResult(stateMachine, "SetStartState", targetName, previousValue, "true", verifyReadback, readbackVerified);
     }
-
     private AscetStateMachineWriteResult WriteStateEsdl(string operation, AscetItemRef stateMachine, AscetStateSelector selector, string code, bool verifyReadback, Func<State, string> getter, Func<State, string, bool> setter)
     {
         AscetComponentWriteUtilities.RequireStateMachineEsdl(stateMachine, operation);
@@ -422,41 +425,23 @@ public sealed class StateMachineWriteService : MethodCatalogService, IStateMachi
             throw new AscetReadException("invalid_argument", operation, "Code must not be null.");
         }
 
-        string targetName = String.Empty;
-        string previousValue = ExecuteWithSession(operation, delegate(AscetSession session)
+        return ExecuteWithSession(operation, delegate(AscetSession session)
         {
             State state = ResolveState(session, stateMachine, selector, operation);
+            string targetName = state.GetName() ?? String.Empty;
+            string previousValue = getter(state) ?? String.Empty;
             RequireComponentEditableInSession(session, stateMachine.Path, operation);
-            targetName = state.GetName() ?? String.Empty;
-            string existingValue = getter(state) ?? String.Empty;
-            bool writeSucceeded = setter(state, code);
-            if (!writeSucceeded)
-            {
-                throw new AscetReadException("set_state_action_failed", operation, "ASCET returned false while writing state action for state '" + state.GetName() + "' in component '" + stateMachine.Path + "'.");
-            }
-
-            return existingValue;
+            AscetCodeWriteTransactionResult transaction = AscetCodeWriteTransaction.Execute(
+                operation,
+                previousValue,
+                code,
+                verifyReadback,
+                delegate { return setter(state, code); },
+                delegate { return session.GetCurrentDatabaseHandle().Save(); },
+                delegate { return getter(state) ?? String.Empty; });
+            return BuildWriteResult(stateMachine, operation, targetName, transaction, verifyReadback);
         });
-
-        bool readbackVerified = !verifyReadback;
-        if (verifyReadback)
-        {
-            string readbackValue = ExecuteWithSession("verify_" + operation, delegate(AscetSession session)
-            {
-                State state = ResolveState(session, stateMachine, selector, "verify_" + operation);
-                return getter(state) ?? String.Empty;
-            });
-
-            readbackVerified = String.Equals(readbackValue, code, StringComparison.Ordinal);
-            if (!readbackVerified)
-            {
-                throw new AscetReadException("readback_mismatch", operation, "Readback verification failed for state '" + targetName + "' in component '" + stateMachine.Path + "'.");
-            }
-        }
-
-        return BuildWriteResult(stateMachine, operation, targetName, previousValue, code, verifyReadback, readbackVerified);
     }
-
     private AscetStateMachineWriteResult BindStateMethod(string operation, AscetItemRef stateMachine, AscetStateSelector selector, string methodName, bool verifyReadback, Func<State, AbstractMethod> getter, Func<State, AbstractMethod, bool> setter)
     {
         AscetComponentWriteUtilities.RequireComponentKind(stateMachine, AscetComponentKind.StateMachine, operation);
@@ -465,42 +450,28 @@ public sealed class StateMachineWriteService : MethodCatalogService, IStateMachi
             throw new AscetReadException("invalid_argument", operation, "Method name must not be empty.");
         }
 
-        string targetName = String.Empty;
-        string previousValue = ExecuteWithSession(operation, delegate(AscetSession session)
+        return ExecuteWithSession(operation, delegate(AscetSession session)
         {
             State state = ResolveState(session, stateMachine, selector, operation);
             MethodHandle method = FindMethodHandle(CollectMethodHandles(session, stateMachine), stateMachine.Path, methodName);
-            targetName = state.GetName() ?? String.Empty;
+            string targetName = state.GetName() ?? String.Empty;
             AbstractMethod previousMethod = getter(state);
-            string existingValue = previousMethod == null ? String.Empty : (previousMethod.GetName() ?? String.Empty);
+            string previousValue = previousMethod == null ? String.Empty : (previousMethod.GetName() ?? String.Empty);
             RequireComponentEditableInSession(session, stateMachine.Path, operation);
-            bool writeSucceeded = setter(state, method.Method);
-            if (!writeSucceeded)
-            {
-                throw new AscetReadException("bind_state_method_failed", operation, "ASCET returned false while binding method '" + methodName + "' to state '" + state.GetName() + "' in component '" + stateMachine.Path + "'.");
-            }
-
-            return existingValue;
+            AscetCodeWriteTransactionResult transaction = AscetCodeWriteTransaction.Execute(
+                operation,
+                previousValue,
+                methodName,
+                verifyReadback,
+                delegate { return setter(state, method.Method); },
+                delegate { return session.GetCurrentDatabaseHandle().Save(); },
+                delegate
+                {
+                    AbstractMethod readbackMethod = getter(state);
+                    return readbackMethod == null ? String.Empty : (readbackMethod.GetName() ?? String.Empty);
+                });
+            return BuildWriteResult(stateMachine, operation, targetName, transaction, verifyReadback);
         });
-
-        bool readbackVerified = !verifyReadback;
-        if (verifyReadback)
-        {
-            string readbackName = ExecuteWithSession("verify_" + operation, delegate(AscetSession session)
-            {
-                State state = ResolveState(session, stateMachine, selector, "verify_" + operation);
-                AbstractMethod readbackMethod = getter(state);
-                return readbackMethod == null ? String.Empty : (readbackMethod.GetName() ?? String.Empty);
-            });
-
-            readbackVerified = String.Equals(readbackName, methodName, StringComparison.Ordinal);
-            if (!readbackVerified)
-            {
-                throw new AscetReadException("readback_mismatch", operation, "Readback verification failed for state '" + targetName + "' in component '" + stateMachine.Path + "'.");
-            }
-        }
-
-        return BuildWriteResult(stateMachine, operation, targetName, previousValue, methodName, verifyReadback, readbackVerified);
     }
     private AscetStateMachineWriteResult WriteTransitionEsdl(string operation, AscetItemRef stateMachine, AscetTransitionSelector selector, string code, bool verifyReadback, Func<Transition, string> getter, Func<Transition, string, bool> setter)
     {
@@ -510,42 +481,24 @@ public sealed class StateMachineWriteService : MethodCatalogService, IStateMachi
             throw new AscetReadException("invalid_argument", operation, "Code must not be null.");
         }
 
-        string targetName = String.Empty;
-        string previousValue = ExecuteWithSession(operation, delegate(AscetSession session)
+        return ExecuteWithSession(operation, delegate(AscetSession session)
         {
             Transition transition = ResolveTransition(session, stateMachine, selector, operation);
             AscetTransitionRef transitionRef = BuildTransitionRef(transition);
-            targetName = transitionRef == null ? AscetComponentWriteUtilities.DescribeTransitionSelector(selector) : (transitionRef.SourceName + "->" + transitionRef.TargetName);
+            string targetName = transitionRef == null ? AscetComponentWriteUtilities.DescribeTransitionSelector(selector) : (transitionRef.SourceName + "->" + transitionRef.TargetName);
+            string previousValue = getter(transition) ?? String.Empty;
             RequireComponentEditableInSession(session, stateMachine.Path, operation);
-            string existingValue = getter(transition) ?? String.Empty;
-            bool writeSucceeded = setter(transition, code);
-            if (!writeSucceeded)
-            {
-                throw new AscetReadException("set_transition_action_failed", operation, "ASCET returned false while writing transition code for '" + targetName + "' in component '" + stateMachine.Path + "'.");
-            }
-
-            return existingValue;
+            AscetCodeWriteTransactionResult transaction = AscetCodeWriteTransaction.Execute(
+                operation,
+                previousValue,
+                code,
+                verifyReadback,
+                delegate { return setter(transition, code); },
+                delegate { return session.GetCurrentDatabaseHandle().Save(); },
+                delegate { return getter(transition) ?? String.Empty; });
+            return BuildWriteResult(stateMachine, operation, targetName, transaction, verifyReadback);
         });
-
-        bool readbackVerified = !verifyReadback;
-        if (verifyReadback)
-        {
-            string readbackValue = ExecuteWithSession("verify_" + operation, delegate(AscetSession session)
-            {
-                Transition transition = ResolveTransition(session, stateMachine, selector, "verify_" + operation);
-                return getter(transition) ?? String.Empty;
-            });
-
-            readbackVerified = String.Equals(readbackValue, code, StringComparison.Ordinal);
-            if (!readbackVerified)
-            {
-                throw new AscetReadException("readback_mismatch", operation, "Readback verification failed for transition '" + targetName + "' in component '" + stateMachine.Path + "'.");
-            }
-        }
-
-        return BuildWriteResult(stateMachine, operation, targetName, previousValue, code, verifyReadback, readbackVerified);
     }
-
     private AscetStateMachineWriteResult BindTransitionMethod(string operation, AscetItemRef stateMachine, AscetTransitionSelector selector, string methodName, bool verifyReadback, Func<Transition, AbstractMethod> getter, Func<Transition, AbstractMethod, bool> setter)
     {
         AscetComponentWriteUtilities.RequireComponentKind(stateMachine, AscetComponentKind.StateMachine, operation);
@@ -554,45 +507,30 @@ public sealed class StateMachineWriteService : MethodCatalogService, IStateMachi
             throw new AscetReadException("invalid_argument", operation, "Method name must not be empty.");
         }
 
-        string targetName = String.Empty;
-        string previousValue = ExecuteWithSession(operation, delegate(AscetSession session)
+        return ExecuteWithSession(operation, delegate(AscetSession session)
         {
             Transition transition = ResolveTransition(session, stateMachine, selector, operation);
             MethodHandle method = FindMethodHandle(CollectMethodHandles(session, stateMachine), stateMachine.Path, methodName);
             AscetTransitionRef transitionRef = BuildTransitionRef(transition);
-            targetName = transitionRef == null ? AscetComponentWriteUtilities.DescribeTransitionSelector(selector) : (transitionRef.SourceName + "->" + transitionRef.TargetName);
-            RequireComponentEditableInSession(session, stateMachine.Path, operation);
+            string targetName = transitionRef == null ? AscetComponentWriteUtilities.DescribeTransitionSelector(selector) : (transitionRef.SourceName + "->" + transitionRef.TargetName);
             AbstractMethod previousMethod = getter(transition);
-            string existingValue = previousMethod == null ? String.Empty : (previousMethod.GetName() ?? String.Empty);
-            bool writeSucceeded = setter(transition, method.Method);
-            if (!writeSucceeded)
-            {
-                throw new AscetReadException("bind_transition_method_failed", operation, "ASCET returned false while binding method '" + methodName + "' to transition '" + targetName + "' in component '" + stateMachine.Path + "'.");
-            }
-
-            return existingValue;
+            string previousValue = previousMethod == null ? String.Empty : (previousMethod.GetName() ?? String.Empty);
+            RequireComponentEditableInSession(session, stateMachine.Path, operation);
+            AscetCodeWriteTransactionResult transaction = AscetCodeWriteTransaction.Execute(
+                operation,
+                previousValue,
+                methodName,
+                verifyReadback,
+                delegate { return setter(transition, method.Method); },
+                delegate { return session.GetCurrentDatabaseHandle().Save(); },
+                delegate
+                {
+                    AbstractMethod readbackMethod = getter(transition);
+                    return readbackMethod == null ? String.Empty : (readbackMethod.GetName() ?? String.Empty);
+                });
+            return BuildWriteResult(stateMachine, operation, targetName, transaction, verifyReadback);
         });
-
-        bool readbackVerified = !verifyReadback;
-        if (verifyReadback)
-        {
-            string readbackName = ExecuteWithSession("verify_" + operation, delegate(AscetSession session)
-            {
-                Transition transition = ResolveTransition(session, stateMachine, selector, "verify_" + operation);
-                AbstractMethod readbackMethod = getter(transition);
-                return readbackMethod == null ? String.Empty : (readbackMethod.GetName() ?? String.Empty);
-            });
-
-            readbackVerified = String.Equals(readbackName, methodName, StringComparison.Ordinal);
-            if (!readbackVerified)
-            {
-                throw new AscetReadException("readback_mismatch", operation, "Readback verification failed for transition '" + targetName + "' in component '" + stateMachine.Path + "'.");
-            }
-        }
-
-        return BuildWriteResult(stateMachine, operation, targetName, previousValue, methodName, verifyReadback, readbackVerified);
     }
-
     private State ResolveState(AscetSession session, AscetItemRef stateMachine, AscetStateSelector selector, string operation)
     {
         if (selector == null || String.IsNullOrWhiteSpace(selector.Name))
@@ -695,7 +633,7 @@ public sealed class StateMachineWriteService : MethodCatalogService, IStateMachi
         return true;
     }
 
-    private AscetStateMachineWriteResult BuildWriteResult(AscetItemRef stateMachine, string operation, string targetName, string previousValue, string newValue, bool verifyReadback, bool readbackVerified)
+    private AscetStateMachineWriteResult BuildWriteResult(AscetItemRef stateMachine, string operation, string targetName, AscetCodeWriteTransactionResult transaction, bool verifyReadback)
     {
         return new AscetStateMachineWriteResult
         {
@@ -703,11 +641,22 @@ public sealed class StateMachineWriteService : MethodCatalogService, IStateMachi
             LanguageKind = stateMachine.LanguageKind,
             Operation = operation,
             TargetName = targetName,
-            PreviousValue = previousValue ?? String.Empty,
-            NewValue = newValue ?? String.Empty,
+            PreviousValue = transaction.PreviousValue,
+            NewValue = transaction.NewValue,
             WriteSucceeded = true,
             VerifyReadbackRequested = verifyReadback,
-            ReadbackVerified = readbackVerified
+            ReadbackVerified = transaction.Verified,
+            Changed = transaction.Changed,
+            MutationStatus = transaction.MutationStatus,
+            SaveAttempted = transaction.SaveAttempted,
+            SaveSucceeded = transaction.SaveSucceeded,
+            SaveState = transaction.SaveState,
+            Verified = transaction.Verified,
+            VerificationMode = transaction.VerificationMode,
+            SessionCount = transaction.SessionCount,
+            SaveCount = transaction.SaveCount,
+            EditableRetryCount = transaction.EditableRetryCount,
+            NativeMutationAttemptCount = transaction.NativeMutationAttemptCount
         };
     }
 }

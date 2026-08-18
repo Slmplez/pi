@@ -12,6 +12,8 @@ public sealed class AscetComponentDeleteResult
     public bool AlreadyMissing { get; set; }
     public bool VerifyReadbackRequested { get; set; }
     public bool ReadbackVerified { get; set; }
+    public bool SaveSucceeded { get; set; }
+    public string VerificationMode { get; set; }
     public string Summary { get; set; }
 }
 
@@ -32,19 +34,31 @@ public sealed class ComponentDeleteService : AscetReadDomainServiceBase, ICompon
         AscetItemPath parsed = AscetItemPath.Parse(componentPath);
         bool deleted = false;
         bool alreadyMissing = false;
+        bool saveSucceeded = true;
+        bool readbackVerified = !verifyReadback;
 
         ExecuteWithSession("delete_component", delegate(AscetSession session)
         {
             AscetDataBase database = session.GetCurrentDatabaseHandle();
-            DataBaseItem item = database.GetItemInFolder(parsed.ItemName, parsed.FolderPath);
-            if (item == null)
+            DataBaseItem item = null;
+            try
             {
+                item = ResolveItem(session, parsed.ItemName, parsed.FolderPath);
+            }
+            catch (AscetReadException ex)
+            {
+                if (!String.Equals(ex.Code, "component_not_found", StringComparison.Ordinal))
+                {
+                    throw;
+                }
+
                 alreadyMissing = true;
                 if (!ignoreMissing)
                 {
                     throw new AscetReadException("component_not_found", "delete_component", "Component '" + componentPath + "' was not found.");
                 }
 
+                readbackVerified = true;
                 return true;
             }
 
@@ -63,38 +77,20 @@ public sealed class ComponentDeleteService : AscetReadDomainServiceBase, ICompon
             }
 
             deleted = true;
+            saveSucceeded = database.Save();
+            if (!saveSucceeded)
+            {
+                throw new AscetReadException("delete_component_failed", "delete_component", "Failed to save current database after deleting component '" + componentPath + "'.");
+            }
+
+            if (verifyReadback)
+            {
+                VerifyComponentAbsence(session, parsed, componentPath);
+                readbackVerified = true;
+            }
+
             return true;
         });
-
-        bool readbackVerified = !verifyReadback;
-        if (verifyReadback)
-        {
-            try
-            {
-                ExecuteWithSession("verify_delete_component", delegate(AscetSession session)
-                {
-                    ResolveItem(session, parsed.ItemName, parsed.FolderPath);
-                    return true;
-                });
-                readbackVerified = false;
-            }
-            catch (AscetReadException ex)
-            {
-                if (String.Equals(ex.Code, "component_not_found", StringComparison.Ordinal))
-                {
-                    readbackVerified = true;
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            if (!readbackVerified)
-            {
-                throw new AscetReadException("readback_mismatch", "delete_component", "Readback verification failed for component '" + componentPath + "'.");
-            }
-        }
 
         return new AscetComponentDeleteResult
         {
@@ -105,8 +101,29 @@ public sealed class ComponentDeleteService : AscetReadDomainServiceBase, ICompon
             AlreadyMissing = alreadyMissing,
             VerifyReadbackRequested = verifyReadback,
             ReadbackVerified = readbackVerified,
+            SaveSucceeded = saveSucceeded,
+            VerificationMode = "same_session_exact_absence",
             Summary = BuildSummary(componentPath, deleted, alreadyMissing)
         };
+    }
+
+    private void VerifyComponentAbsence(AscetSession session, AscetItemPath parsed, string componentPath)
+    {
+        try
+        {
+            ResolveItem(session, parsed.ItemName, parsed.FolderPath);
+        }
+        catch (AscetReadException ex)
+        {
+            if (String.Equals(ex.Code, "component_not_found", StringComparison.Ordinal))
+            {
+                return;
+            }
+
+            throw;
+        }
+
+        throw new AscetReadException("readback_mismatch", "delete_component", "Readback verification failed for component '" + componentPath + "'.");
     }
 
     private AscetFolder ResolveFolder(AscetDataBase database, string folderPath)

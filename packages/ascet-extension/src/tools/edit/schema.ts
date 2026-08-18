@@ -6,9 +6,7 @@ import type { AscetEditParams as LegacyAscetEditParams } from "../../edit/servic
 import { openAiObjectUnionSchema } from "../_shared/openai-schema.ts";
 import { ascetEditabilityActionSchemas, ascetPublicMutationActionSchemas } from "../actions/contracts/edit.ts";
 
-export type AscetEditParams =
-	| Exclude<LegacyAscetEditParams, { action: "set_element_dependency" }>
-	| AscetCreateDependentChainParams;
+export type AscetEditParams = LegacyAscetEditParams | AscetCreateDependentChainParams;
 
 export const ascetEditParameters = openAiObjectUnionSchema<AscetEditParams>([
 	...ascetPublicMutationActionSchemas,

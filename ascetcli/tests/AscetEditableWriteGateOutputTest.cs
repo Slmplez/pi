@@ -9,7 +9,7 @@ public static class AscetEditableWriteGateOutputTest
         {
             TestEditableStateTruthTable();
             TestDependencyGateTargetsOnlyMutations();
-            TestBatchGateRunsBeforeFirstMutation();
+            TestBatchFastPathSkipsBatchGate();
             TestFailureMutationMetadata();
             Console.WriteLine("AscetEditableWriteGateOutputTest passed.");
             return 0;
@@ -75,7 +75,7 @@ public static class AscetEditableWriteGateOutputTest
             AscetSetElementDependencyService.RequiresDependencyWrite(independent, restorationWrite),
             "data restoration must require an editable gate");
     }
-    private static void TestBatchGateRunsBeforeFirstMutation()
+    private static void TestBatchFastPathSkipsBatchGate()
     {
         CountingComponentWriteService componentWriter = new CountingComponentWriteService();
         BlockingBatchEditableWriteGate gate = new BlockingBatchEditableWriteGate();
@@ -116,21 +116,11 @@ public static class AscetEditableWriteGateOutputTest
             }
         };
 
-        AscetReadException blocked = null;
-        try
-        {
-            executor.Execute(requests);
-        }
-        catch (AscetReadException ex)
-        {
-            blocked = ex;
-        }
+        IList<AscetBatchResultItemDto> results = executor.Execute(requests);
 
-        AssertTrue(blocked != null, "batch editable gate should reject the whole batch.");
-        AssertEqual("editable_write_gate_blocked", blocked.Code, "batch editable gate error code");
-        AssertEqual(1, gate.Calls, "batch editable gate call count");
-        AssertEqual(2, gate.LastRequestCount, "batch editable gate must inspect the complete request set");
-        AssertEqual(0, componentWriter.ExecuteCalls, "batch editable gate must run before the first item mutation");
+        AssertEqual(2, results.Count, "batch fast path should execute each item without a batch preflight gate.");
+        AssertEqual(0, gate.Calls, "batch fast path must not open a batch editability session.");
+        AssertEqual(1, componentWriter.ExecuteCalls, "batch fast path should dispatch the first write directly.");
     }
 
     private static void TestFailureMutationMetadata()
@@ -174,7 +164,12 @@ public static class AscetEditableWriteGateOutputTest
         public AscetWriteExecutionResult Execute(CreateComponentWriteRequest request)
         {
             ExecuteCalls += 1;
-            throw new Exception("Mutation dispatched before editable gate.");
+                        return new AscetWriteExecutionResult
+            {
+                Succeeded = true,
+                WriteSucceeded = true,
+                Verification = new WriteVerificationResult { Succeeded = true }
+            };
         }
     }
 

@@ -152,7 +152,7 @@ export const ascetApplyProjectFormulaActionSchema = strictObject({
 	deleteMissing: Type.Optional(Type.Boolean()),
 	...ascetWriteControlProperties,
 });
-export const ascetSetElementDependencyInternalSchema = strictObject({
+export const ascetSetElementDependencyActionSchema = strictObject({
 	action: Type.Literal("set_element_dependency"),
 	targetPath: Type.Optional(Type.String({ minLength: 1 })),
 	componentPath: Type.Optional(Type.String({ minLength: 1 })),
@@ -222,12 +222,10 @@ export const ascetPublicMutationActionSchemas = [
 	ascetSetEnumeratorsActionSchema,
 	ascetApplyElementSpecPlanSchema,
 	ascetApplyProjectFormulaActionSchema,
+	ascetSetElementDependencyActionSchema,
 ] as const;
 
-export const ascetMutationActionSchemas = [
-	...ascetPublicMutationActionSchemas,
-	ascetSetElementDependencyInternalSchema,
-] as const;
+export const ascetMutationActionSchemas = ascetPublicMutationActionSchemas;
 
 export const ascetEditabilityActionSchemas = [
 	Type.Object(
@@ -780,6 +778,43 @@ export const ascetEditActionContracts = [
 				},
 			],
 			tags: ["write", "element"],
+		},
+	}),
+	defineAscetAction({
+		tool: "ascet_edit",
+		action: "set_element_dependency",
+		selector: "action",
+		visibility: "public",
+		profiles: ASCET_WRITE_PROFILES,
+		parameters: ascetSetElementDependencyActionSchema,
+		result: writeResultSchema,
+		execution: {
+			kind: "bridge",
+			logicalCommandId: "AscetSetElementDependency",
+			operation: "set_element_dependency",
+		},
+		guidance: {
+			summary: "set dependency flag/formula on an existing local parameter only",
+			rules: [
+				...writePreflightRules,
+				"Use one exact target path and element name; never infer dependency mappings from formula tokens.",
+				"Use create_dependent_chain when Provider, Imported, or Local endpoints must be created.",
+			],
+			fewShots: [
+				{
+					intent: "set an existing local dependency",
+					args: {
+						action: "set_element_dependency",
+						targetPath: "FeatureA/Consumer",
+						elementName: "C_Threshold",
+						dependency: "dependent",
+						dependencyFormula: "P_Threshold",
+						dependencyMappings: { P_Threshold: "P_Threshold" },
+						intent: "apply",
+					},
+				},
+			],
+			tags: ["write", "element", "dependency"],
 		},
 	}),
 	defineAscetAction({

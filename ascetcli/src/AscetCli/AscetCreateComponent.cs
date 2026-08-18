@@ -213,6 +213,18 @@ public static class AscetCreateComponent
         builder.Append("VerifyReadbackRequested: ").Append(result != null && result.VerifyReadbackRequested).AppendLine();
         builder.Append("RollbackOnFailureRequested: ").Append(result != null && result.RollbackOnFailureRequested).AppendLine();
         builder.Append("ReadbackVerified: ").Append(result != null && result.ReadbackVerified).AppendLine();
+        builder.Append("Changed: ").Append(result != null && result.Changed).AppendLine();
+        builder.Append("MutationStatus: ").Append(result == null ? String.Empty : (result.MutationStatus ?? String.Empty)).AppendLine();
+        builder.Append("SaveAttempted: ").Append(result != null && result.SaveAttempted).AppendLine();
+        builder.Append("SaveSucceeded: ").Append(result != null && result.SaveSucceeded).AppendLine();
+        builder.Append("SaveState: ").Append(result == null ? String.Empty : (result.SaveState ?? String.Empty)).AppendLine();
+        builder.Append("Verified: ").Append(result != null && result.Verified).AppendLine();
+        builder.Append("VerificationStatus: ").Append(result == null ? String.Empty : (result.VerificationStatus ?? String.Empty)).AppendLine();
+        builder.Append("VerificationMode: ").Append(result == null ? String.Empty : (result.VerificationMode ?? String.Empty)).AppendLine();
+        builder.Append("SessionCount: ").Append(result == null ? 0 : result.SessionCount).AppendLine();
+        builder.Append("SaveCount: ").Append(result == null ? 0 : result.SaveCount).AppendLine();
+        builder.Append("EditableRetryCount: ").Append(result == null ? 0 : result.EditableRetryCount).AppendLine();
+        builder.Append("NativeMutationAttemptCount: ").Append(result == null ? 0 : result.NativeMutationAttemptCount).AppendLine();
         builder.Append("Summary: ").Append(result == null ? String.Empty : (result.Summary ?? String.Empty)).AppendLine();
         return builder.ToString();
     }
@@ -230,6 +242,18 @@ public static class AscetCreateComponent
         payload["verifyReadbackRequested"] = result != null && result.VerifyReadbackRequested;
         payload["rollbackOnFailureRequested"] = result != null && result.RollbackOnFailureRequested;
         payload["readbackVerified"] = result != null && result.ReadbackVerified;
+        payload["saveSucceeded"] = result != null && result.SaveSucceeded;
+        payload["changed"] = result != null && result.Changed;
+        payload["mutationStatus"] = result == null ? String.Empty : (result.MutationStatus ?? String.Empty);
+        payload["saveAttempted"] = result != null && result.SaveAttempted;
+        payload["saveState"] = result == null ? String.Empty : (result.SaveState ?? String.Empty);
+        payload["verified"] = result != null && result.Verified;
+        payload["verificationStatus"] = result == null ? String.Empty : (result.VerificationStatus ?? String.Empty);
+        payload["verificationMode"] = result == null ? String.Empty : (result.VerificationMode ?? String.Empty);
+        payload["sessionCount"] = result == null ? 0 : result.SessionCount;
+        payload["saveCount"] = result == null ? 0 : result.SaveCount;
+        payload["editableRetryCount"] = result == null ? 0 : result.EditableRetryCount;
+        payload["nativeMutationAttemptCount"] = result == null ? 0 : result.NativeMutationAttemptCount;
         payload["summary"] = result == null ? String.Empty : (result.Summary ?? String.Empty);
         payload["expectedDefaultScaffold"] = AscetComponentScaffoldMetadata.BuildExpectedDefaultScaffold(result);
         return AscetJsonContract.Serialize(payload);

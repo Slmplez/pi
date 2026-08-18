@@ -623,6 +623,7 @@ function batchExecutionEnvelope(
 				: [];
 	return {
 		status,
+		mutationStatus,
 		permission: batchPermission(decision),
 		preflight: { status: "passed", evidence: batchPreflightEvidence(preflight) },
 		editability: batchGuardedEditability(result.data, batchInitialEditability(preflight, requiresEditableTarget)),
@@ -656,6 +657,7 @@ function batchPreExecutionEnvelope(input: {
 		: undefined;
 	return {
 		status: input.status,
+		mutationStatus: "not_started",
 		permission: input.decision ? batchPermission(input.decision) : { mode: input.mode, decision: "not_evaluated" },
 		preflight: input.preflight
 			? { status: "passed", evidence: batchPreflightEvidence(input.preflight) }

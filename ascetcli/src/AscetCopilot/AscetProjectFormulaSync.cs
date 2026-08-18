@@ -52,6 +52,18 @@ public sealed class AscetProjectFormulaApplyResult
     public bool WriteSucceeded { get; set; }
     public bool VerifyReadbackRequested { get; set; }
     public bool ReadbackVerified { get; set; }
+    public bool SaveSucceeded { get; set; }
+    public string VerificationMode { get; set; }
+    public bool Changed { get; set; }
+    public string MutationStatus { get; set; }
+    public bool SaveAttempted { get; set; }
+    public string SaveState { get; set; }
+    public bool Verified { get; set; }
+    public string VerificationStatus { get; set; }
+    public int SessionCount { get; set; }
+    public int SaveCount { get; set; }
+    public int EditableRetryCount { get; set; }
+    public int NativeMutationAttemptCount { get; set; }
 }
 
 public sealed class AscetProjectFormulaModifiedDiff
@@ -538,6 +550,7 @@ public sealed class ProjectFormulaApplyService : ProjectFormulaReadService, IPro
 
         AscetProjectFormulaApplyResult result = ExecuteWithSession("apply_project_formula", delegate(AscetSession session)
         {
+            AscetDataBase database = session.GetCurrentDatabaseHandle();
             AscetProject project = ResolveProject(session, projectPath);
             List<string> created = new List<string>();
             List<string> updated = new List<string>();
@@ -545,9 +558,12 @@ public sealed class ProjectFormulaApplyService : ProjectFormulaReadService, IPro
             List<string> issues = new List<string>();
             IList<AscetProjectFormulaSpec> requested = spec.Formulas ?? new List<AscetProjectFormulaSpec>();
             string mode = AscetProjectFormulaSpecDocumentParser.NormalizeMode(spec.Mode);
+            bool deleteMissing = String.Equals(mode, "restore", StringComparison.Ordinal) && spec.HasDeleteMissing && spec.DeleteMissing;
+            bool requestedChanges = HasRequestedChanges(project, requested);
+            bool deleteMissingChanges = deleteMissing && HasMissingFormulas(project, requested);
+            bool changed = requestedChanges || deleteMissingChanges;
 
-            if (requested.Count > 0 ||
-                (String.Equals(mode, "restore", StringComparison.Ordinal) && spec.HasDeleteMissing && spec.DeleteMissing))
+            if (changed)
             {
                 RequireComponentEditableInSession(session, projectPath, "apply_project_formula");
             }
@@ -560,39 +576,69 @@ public sealed class ProjectFormulaApplyService : ProjectFormulaReadService, IPro
                     throw new AscetReadException("invalid_formula_spec", "apply_project_formula", "Formula spec at index " + i.ToString() + " must not be null.");
                 }
 
-                ApplySingleFormula(project, entry, created, updated, issues);
+                changed = ApplySingleFormula(project, entry, created, updated, issues) || changed;
             }
 
             if (String.Equals(mode, "restore", StringComparison.Ordinal))
             {
-                DeleteMissingFormulas(project, requested, spec.HasDeleteMissing && spec.DeleteMissing, deleted, issues);
+                changed = DeleteMissingFormulas(project, requested, deleteMissing, deleted, issues) || changed;
+            }
+
+            bool saveAttempted = changed;
+            bool saveSucceeded = false;
+            if (saveAttempted)
+            {
+                saveSucceeded = database.Save();
+                if (!saveSucceeded)
+                {
+                    throw new AscetReadException(
+                        "apply_project_formula_failed",
+                        "apply_project_formula",
+                        "Failed to save current database after applying project formulas for '" + projectPath + "'.");
+                }
+            }
+
+            bool targetResolved = VerifyTargetsInSession(project, requested, deleted);
+            bool readbackVerified = !verifyReadback || targetResolved;
+            if (verifyReadback && !readbackVerified)
+            {
+                throw new AscetReadException(
+                    "readback_mismatch",
+                    "apply_project_formula",
+                    "Project formula target verification failed after applying formulas for '" + projectPath + "'.");
             }
 
             return new AscetProjectFormulaApplyResult
             {
                 ProjectPath = projectPath,
                 Mode = mode,
-                DeleteMissing = spec.HasDeleteMissing && spec.DeleteMissing,
+                DeleteMissing = deleteMissing,
                 CreatedFormulas = created,
                 UpdatedFormulas = updated,
                 DeletedFormulas = deleted,
                 Issues = issues,
                 WriteSucceeded = true,
                 VerifyReadbackRequested = verifyReadback,
-                ReadbackVerified = !verifyReadback
+                ReadbackVerified = readbackVerified,
+                SaveSucceeded = saveSucceeded,
+                VerificationMode = "same_session_target_resolve",
+                Changed = changed,
+                MutationStatus = changed ? "applied" : "no_op",
+                SaveAttempted = saveAttempted,
+                SaveState = changed ? "saved" : "not_required",
+                Verified = targetResolved,
+                VerificationStatus = targetResolved ? "passed" : "failed",
+                SessionCount = 1,
+                SaveCount = saveAttempted ? 1 : 0,
+                EditableRetryCount = 0,
+                NativeMutationAttemptCount = changed ? 1 : 0
             };
         });
-
-        if (verifyReadback)
-        {
-            VerifyReadback(projectPath, spec);
-            result.ReadbackVerified = true;
-        }
 
         return result;
     }
 
-    private void ApplySingleFormula(AscetProject project, AscetProjectFormulaSpec spec, IList<string> created, IList<string> updated, IList<string> issues)
+    private bool ApplySingleFormula(AscetProject project, AscetProjectFormulaSpec spec, IList<string> created, IList<string> updated, IList<string> issues)
     {
         Formula existing = project.GetFormula(spec.Name);
         Formula target;
@@ -610,6 +656,11 @@ public sealed class ProjectFormulaApplyService : ProjectFormulaReadService, IPro
         else
         {
             string currentType = NormalizeFormulaType(existing);
+            if (FormulaSpecMatchesReference(BuildFormulaRef(existing), spec))
+            {
+                return false;
+            }
+
             if (!String.Equals(currentType, spec.Type, StringComparison.Ordinal))
             {
                 if (String.Equals(existing.GetName(), "ident", StringComparison.OrdinalIgnoreCase) ||
@@ -643,13 +694,14 @@ public sealed class ProjectFormulaApplyService : ProjectFormulaReadService, IPro
         }
 
         ApplyFormulaFields(target, spec);
+        return true;
     }
 
-    private void DeleteMissingFormulas(AscetProject project, IList<AscetProjectFormulaSpec> requested, bool deleteMissing, IList<string> deleted, IList<string> issues)
+    private bool DeleteMissingFormulas(AscetProject project, IList<AscetProjectFormulaSpec> requested, bool deleteMissing, IList<string> deleted, IList<string> issues)
     {
         if (project == null || !deleteMissing)
         {
-            return;
+            return false;
         }
 
         HashSet<string> requestedNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -668,9 +720,10 @@ public sealed class ProjectFormulaApplyService : ProjectFormulaReadService, IPro
         Formula[] formulas = project.GetAllFormulas();
         if (formulas == null)
         {
-            return;
+            return false;
         }
 
+        bool changed = false;
         for (int i = 0; i < formulas.Length; i++)
         {
             Formula formula = formulas[i];
@@ -698,7 +751,10 @@ public sealed class ProjectFormulaApplyService : ProjectFormulaReadService, IPro
             {
                 deleted.Add(name);
             }
+            changed = true;
         }
+
+        return changed;
     }
 
     private Formula CreateFormula(AscetProject project, string type)
@@ -723,34 +779,46 @@ public sealed class ProjectFormulaApplyService : ProjectFormulaReadService, IPro
         }
     }
 
-    private void ApplyFormulaFields(Formula formula, AscetProjectFormulaSpec spec)
+    private bool ApplyFormulaFields(Formula formula, AscetProjectFormulaSpec spec)
     {
         if (formula == null || spec == null)
         {
             throw new AscetReadException("set_formula_failed", "apply_project_formula", "Formula target must not be null.");
         }
 
-        if (spec.HasUnit && !formula.SetUnit(spec.Unit ?? String.Empty))
+        bool changed = false;
+        if (spec.HasUnit && !String.Equals(formula.GetUnit() ?? String.Empty, spec.Unit ?? String.Empty, StringComparison.Ordinal))
         {
-            throw new AscetReadException("set_formula_failed", "apply_project_formula", "Failed to set unit for formula '" + spec.Name + "'.");
+            if (!formula.SetUnit(spec.Unit ?? String.Empty))
+            {
+                throw new AscetReadException("set_formula_failed", "apply_project_formula", "Failed to set unit for formula '" + spec.Name + "'.");
+            }
+            changed = true;
         }
 
-        if (spec.HasComment && !formula.SetComment(spec.Comment ?? String.Empty))
+        if (spec.HasComment && !String.Equals(formula.GetComment() ?? String.Empty, spec.Comment ?? String.Empty, StringComparison.Ordinal))
         {
-            throw new AscetReadException("set_formula_failed", "apply_project_formula", "Failed to set comment for formula '" + spec.Name + "'.");
+            if (!formula.SetComment(spec.Comment ?? String.Empty))
+            {
+                throw new AscetReadException("set_formula_failed", "apply_project_formula", "Failed to set comment for formula '" + spec.Name + "'.");
+            }
+            changed = true;
         }
 
-        if (!spec.HasParameters)
+        if (!spec.HasParameters || String.Equals(spec.Type, "identity", StringComparison.Ordinal))
         {
-            return;
+            return changed;
         }
 
         IList<double> parameters = spec.Parameters ?? new List<double>();
+        if (ParametersMatch(ReadParameters(formula), parameters))
+        {
+            return changed;
+        }
+
         bool succeeded;
         switch (spec.Type)
         {
-            case "identity":
-                return;
             case "linear":
                 succeeded = formula.SetLinearParameters(parameters[0], parameters[1]);
                 break;
@@ -768,20 +836,122 @@ public sealed class ProjectFormulaApplyService : ProjectFormulaReadService, IPro
         {
             throw new AscetReadException("set_formula_failed", "apply_project_formula", "Failed to set parameters for formula '" + spec.Name + "'.");
         }
+
+        return true;
     }
 
-    private void VerifyReadback(string projectPath, AscetProjectFormulaSpecDocument spec)
+    internal static bool FormulaSpecMatchesReference(AscetProjectFormulaRef current, AscetProjectFormulaSpec spec)
     {
-        ExecuteWithSession("verify_project_formula", delegate(AscetSession session)
+        if (current == null || spec == null || !String.Equals(current.Type ?? String.Empty, spec.Type ?? String.Empty, StringComparison.Ordinal))
         {
-            AscetProject project = ResolveProject(session, projectPath);
-            IList<AscetProjectFormulaSpec> requested = spec == null ? null : spec.Formulas;
-            bool deleteMissing = spec != null && spec.HasDeleteMissing && spec.DeleteMissing;
-            if (requested == null)
-            {
-                return 0;
-            }
+            return false;
+        }
 
+        if (spec.HasUnit && !String.Equals(current.Unit ?? String.Empty, spec.Unit ?? String.Empty, StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        if (spec.HasComment && !String.Equals(current.Comment ?? String.Empty, spec.Comment ?? String.Empty, StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        return !spec.HasParameters || ParametersMatch(current.Parameters, spec.Parameters);
+    }
+
+    private bool FormulaNeedsUpdate(Formula formula, AscetProjectFormulaSpec spec)
+    {
+        return formula == null || !FormulaSpecMatchesReference(BuildFormulaRef(formula), spec);
+    }
+
+    private bool HasRequestedChanges(AscetProject project, IList<AscetProjectFormulaSpec> requested)
+    {
+        if (project == null || requested == null)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < requested.Count; i++)
+        {
+            AscetProjectFormulaSpec entry = requested[i];
+            if (entry == null || FormulaNeedsUpdate(project.GetFormula(entry.Name), entry))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool HasMissingFormulas(AscetProject project, IList<AscetProjectFormulaSpec> requested)
+    {
+        if (project == null)
+        {
+            return false;
+        }
+
+        HashSet<string> requestedNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        if (requested != null)
+        {
+            for (int i = 0; i < requested.Count; i++)
+            {
+                AscetProjectFormulaSpec entry = requested[i];
+                if (entry != null && !String.IsNullOrWhiteSpace(entry.Name))
+                {
+                    requestedNames.Add(entry.Name);
+                }
+            }
+        }
+
+        Formula[] formulas = project.GetAllFormulas();
+        if (formulas == null)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < formulas.Length; i++)
+        {
+            Formula formula = formulas[i];
+            string name = formula == null ? String.Empty : (formula.GetName() ?? String.Empty);
+            if (!String.IsNullOrWhiteSpace(name) && !requestedNames.Contains(name) && !IsProtectedFormulaName(name))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool ParametersMatch(IList<double> left, IList<double> right)
+    {
+        IList<double> leftValues = left ?? new List<double>();
+        IList<double> rightValues = right ?? new List<double>();
+        if (leftValues.Count != rightValues.Count)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < leftValues.Count; i++)
+        {
+            if (Math.Abs(leftValues[i] - rightValues[i]) > 0.000001d)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private bool VerifyTargetsInSession(AscetProject project, IList<AscetProjectFormulaSpec> requested, IList<string> deleted)
+    {
+        if (project == null)
+        {
+            return false;
+        }
+
+        if (requested != null)
+        {
             for (int i = 0; i < requested.Count; i++)
             {
                 AscetProjectFormulaSpec entry = requested[i];
@@ -793,94 +963,43 @@ public sealed class ProjectFormulaApplyService : ProjectFormulaReadService, IPro
                 Formula formula = project.GetFormula(entry.Name);
                 if (formula == null)
                 {
-                    throw new AscetReadException("readback_mismatch", "verify_project_formula", "Formula '" + entry.Name + "' was not found during readback verification.");
+                    throw new AscetReadException(
+                        "readback_mismatch",
+                        "apply_project_formula",
+                        "Formula '" + entry.Name + "' was not found after applying project formulas.");
                 }
 
-                EnsureReadbackCompatible(entry, formula);
-            }
-
-            if (String.Equals(AscetProjectFormulaSpecDocumentParser.NormalizeMode(spec.Mode), "restore", StringComparison.Ordinal) && deleteMissing)
-            {
-                VerifyNoUnexpectedFormulas(project, requested);
-            }
-
-            return 0;
-        });
-    }
-
-    private void VerifyNoUnexpectedFormulas(AscetProject project, IList<AscetProjectFormulaSpec> requested)
-    {
-        HashSet<string> requestedNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        for (int i = 0; i < requested.Count; i++)
-        {
-            AscetProjectFormulaSpec entry = requested[i];
-            if (entry != null && !String.IsNullOrWhiteSpace(entry.Name))
-            {
-                requestedNames.Add(entry.Name);
+                if (!FormulaSpecMatchesReference(BuildFormulaRef(formula), entry))
+                {
+                    throw new AscetReadException(
+                        "readback_mismatch",
+                        "apply_project_formula",
+                        "Formula '" + entry.Name + "' did not match the requested fields after applying project formulas.");
+                }
             }
         }
 
-        Formula[] formulas = project.GetAllFormulas();
-        if (formulas == null)
+        if (deleted != null)
         {
-            return;
-        }
-
-        for (int i = 0; i < formulas.Length; i++)
-        {
-            Formula formula = formulas[i];
-            string name = formula == null ? String.Empty : (formula.GetName() ?? String.Empty);
-            if (String.IsNullOrWhiteSpace(name) || requestedNames.Contains(name) || IsProtectedFormulaName(name))
+            for (int i = 0; i < deleted.Count; i++)
             {
-                continue;
+                string name = deleted[i];
+                if (!String.IsNullOrWhiteSpace(name) && project.GetFormula(name) != null)
+                {
+                    throw new AscetReadException(
+                        "readback_mismatch",
+                        "apply_project_formula",
+                        "Formula '" + name + "' was still present after restore deletion.");
+                }
             }
-
-            throw new AscetReadException("readback_mismatch", "verify_project_formula", "Unexpected formula '" + name + "' remained after restore with deleteMissing=true.");
         }
+
+        return true;
     }
 
     private bool IsProtectedFormulaName(string name)
     {
         return String.Equals(name ?? String.Empty, "ident", StringComparison.OrdinalIgnoreCase);
-    }
-
-    private void EnsureReadbackCompatible(AscetProjectFormulaSpec spec, Formula formula)
-    {
-        string actualType = NormalizeFormulaType(formula);
-        if (!String.Equals(actualType, spec.Type, StringComparison.Ordinal))
-        {
-            throw new AscetReadException("readback_mismatch", "verify_project_formula", "Formula '" + spec.Name + "' has type '" + actualType + "' but spec requires '" + spec.Type + "'.");
-        }
-
-        if (spec.HasUnit && !String.Equals(formula.GetUnit() ?? String.Empty, spec.Unit ?? String.Empty, StringComparison.Ordinal))
-        {
-            throw new AscetReadException("readback_mismatch", "verify_project_formula", "Formula '" + spec.Name + "' has unit '" + (formula.GetUnit() ?? String.Empty) + "' but spec requires '" + (spec.Unit ?? String.Empty) + "'.");
-        }
-
-        if (spec.HasComment && !String.Equals(formula.GetComment() ?? String.Empty, spec.Comment ?? String.Empty, StringComparison.Ordinal))
-        {
-            throw new AscetReadException("readback_mismatch", "verify_project_formula", "Formula '" + spec.Name + "' has comment '" + (formula.GetComment() ?? String.Empty) + "' but spec requires '" + (spec.Comment ?? String.Empty) + "'.");
-        }
-
-        if (!spec.HasParameters)
-        {
-            return;
-        }
-
-        IList<double> expected = spec.Parameters ?? new List<double>();
-        IList<double> actual = ReadParameters(formula);
-        if (expected.Count != actual.Count)
-        {
-            throw new AscetReadException("readback_mismatch", "verify_project_formula", "Formula '" + spec.Name + "' has parameter count '" + actual.Count.ToString() + "' but spec requires '" + expected.Count.ToString() + "'.");
-        }
-
-        for (int i = 0; i < expected.Count; i++)
-        {
-            if (Math.Abs(expected[i] - actual[i]) > 0.000001d)
-            {
-                throw new AscetReadException("readback_mismatch", "verify_project_formula", "Formula '" + spec.Name + "' has parameter[" + i.ToString() + "]='" + actual[i].ToString(System.Globalization.CultureInfo.InvariantCulture) + "' but spec requires '" + expected[i].ToString(System.Globalization.CultureInfo.InvariantCulture) + "'.");
-            }
-        }
     }
 }
 

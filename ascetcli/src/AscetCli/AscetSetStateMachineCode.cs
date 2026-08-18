@@ -334,6 +334,18 @@ public static class AscetSetStateMachineCode
         entry["WriteSucceeded"] = result != null && result.WriteSucceeded;
         entry["VerifyReadbackRequested"] = result != null && result.VerifyReadbackRequested;
         entry["ReadbackVerified"] = result != null && result.ReadbackVerified;
+        entry["changed"] = result != null && result.Changed;
+        entry["mutationStatus"] = result == null ? String.Empty : (result.MutationStatus ?? String.Empty);
+        entry["saveAttempted"] = result != null && result.SaveAttempted;
+        entry["saveSucceeded"] = result != null && result.SaveSucceeded;
+        entry["saveState"] = result == null ? String.Empty : (result.SaveState ?? String.Empty);
+        entry["verified"] = result != null && result.Verified;
+        entry["verificationStatus"] = result == null ? String.Empty : (result.VerificationStatus ?? String.Empty);
+        entry["verificationMode"] = result == null ? String.Empty : (result.VerificationMode ?? String.Empty);
+        entry["sessionCount"] = result == null ? 0 : result.SessionCount;
+        entry["saveCount"] = result == null ? 0 : result.SaveCount;
+        entry["editableRetryCount"] = result == null ? 0 : result.EditableRetryCount;
+        entry["nativeMutationAttemptCount"] = result == null ? 0 : result.NativeMutationAttemptCount;
         return AscetJsonContract.Serialize(entry);
     }
 
@@ -364,6 +376,18 @@ public static class AscetSetStateMachineCode
         entry["WriteSucceeded"] = result != null && result.WriteSucceeded;
         entry["VerifyReadbackRequested"] = result != null && result.VerifyReadbackRequested;
         entry["ReadbackVerified"] = result != null && result.ReadbackVerified;
+        entry["changed"] = result != null && result.Changed;
+        entry["mutationStatus"] = result == null ? String.Empty : (result.MutationStatus ?? String.Empty);
+        entry["saveAttempted"] = result != null && result.SaveAttempted;
+        entry["saveSucceeded"] = result != null && result.SaveSucceeded;
+        entry["saveState"] = result == null ? String.Empty : (result.SaveState ?? String.Empty);
+        entry["verified"] = result != null && result.Verified;
+        entry["verificationStatus"] = result == null ? String.Empty : (result.VerificationStatus ?? String.Empty);
+        entry["verificationMode"] = result == null ? String.Empty : (result.VerificationMode ?? String.Empty);
+        entry["sessionCount"] = result == null ? 0 : result.SessionCount;
+        entry["saveCount"] = result == null ? 0 : result.SaveCount;
+        entry["editableRetryCount"] = result == null ? 0 : result.EditableRetryCount;
+        entry["nativeMutationAttemptCount"] = result == null ? 0 : result.NativeMutationAttemptCount;
         return AscetJsonContract.Serialize(entry);
     }
 

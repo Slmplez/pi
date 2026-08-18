@@ -308,7 +308,6 @@ public sealed class AscetBatchWriteExecutor : IAscetBatchWriteExecutor
         }
 
         AscetToolApiBootstrap.ConfigureAssemblyResolution();
-        editableWriteGate.RequireEditable(requests);
 
         List<AscetBatchResultItemDto> results = new List<AscetBatchResultItemDto>();
         for (int i = 0; i < requests.Count; i++)
@@ -1205,6 +1204,10 @@ public sealed class AscetBatchWriteExecutor : IAscetBatchWriteExecutor
         payload["VerifyReadbackRequested"] = result != null && result.VerifyReadbackRequested;
         payload["RollbackOnFailureRequested"] = result != null && result.RollbackOnFailureRequested;
         payload["ReadbackVerified"] = result != null && result.ReadbackVerified;
+        payload["saveSucceeded"] = result != null && result.SaveSucceeded;
+        payload["verificationMode"] = result == null ? String.Empty : (result.VerificationMode ?? String.Empty);
+        payload["SaveSucceeded"] = result != null && result.SaveSucceeded;
+        payload["VerificationMode"] = result == null ? String.Empty : (result.VerificationMode ?? String.Empty);
         return payload;
     }
 
@@ -1221,6 +1224,8 @@ public sealed class AscetBatchWriteExecutor : IAscetBatchWriteExecutor
         payload["WriteSucceeded"] = result != null && result.WriteSucceeded;
         payload["VerifyReadbackRequested"] = result != null && result.VerifyReadbackRequested;
         payload["ReadbackVerified"] = result != null && result.ReadbackVerified;
+        payload["saveSucceeded"] = result != null && result.SaveSucceeded;
+        payload["verificationMode"] = result == null ? String.Empty : (result.VerificationMode ?? String.Empty);
         return payload;
     }
 
@@ -1234,6 +1239,8 @@ public sealed class AscetBatchWriteExecutor : IAscetBatchWriteExecutor
         payload["AlreadyMissing"] = result != null && result.AlreadyMissing;
         payload["VerifyReadbackRequested"] = result != null && result.VerifyReadbackRequested;
         payload["ReadbackVerified"] = result != null && result.ReadbackVerified;
+        payload["saveSucceeded"] = result != null && result.SaveSucceeded;
+        payload["verificationMode"] = result == null ? String.Empty : (result.VerificationMode ?? String.Empty);
         return payload;
     }
 
@@ -1249,6 +1256,8 @@ public sealed class AscetBatchWriteExecutor : IAscetBatchWriteExecutor
         payload["TargetKey"] = result == null ? String.Empty : (result.TargetKey ?? String.Empty);
         payload["VerifyReadbackRequested"] = result != null && result.VerifyReadbackRequested;
         payload["ReadbackVerified"] = result != null && result.ReadbackVerified;
+        payload["saveSucceeded"] = result != null && result.SaveSucceeded;
+        payload["verificationMode"] = result == null ? String.Empty : (result.VerificationMode ?? String.Empty);
         return payload;
     }
 
@@ -1260,6 +1269,8 @@ public sealed class AscetBatchWriteExecutor : IAscetBatchWriteExecutor
         payload["AlreadyMissing"] = result != null && result.AlreadyMissing;
         payload["VerifyReadbackRequested"] = result != null && result.VerifyReadbackRequested;
         payload["ReadbackVerified"] = result != null && result.ReadbackVerified;
+        payload["saveSucceeded"] = result != null && result.SaveSucceeded;
+        payload["verificationMode"] = result == null ? String.Empty : (result.VerificationMode ?? String.Empty);
         return payload;
     }
 
@@ -1272,6 +1283,8 @@ public sealed class AscetBatchWriteExecutor : IAscetBatchWriteExecutor
         payload["ExistingCount"] = result == null ? 0 : result.ExistingCount;
         payload["VerifyReadbackRequested"] = result != null && result.VerifyReadbackRequested;
         payload["ReadbackVerified"] = result != null && result.ReadbackVerified;
+        payload["saveSucceeded"] = result != null && result.SaveSucceeded;
+        payload["verificationMode"] = result == null ? String.Empty : (result.VerificationMode ?? String.Empty);
         return payload;
     }
 

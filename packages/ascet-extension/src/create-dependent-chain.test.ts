@@ -1,4 +1,4 @@
-import assert from "node:assert/strict";
+﻿import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { describe, test } from "node:test";
 import { Value } from "typebox/value";
@@ -6,7 +6,7 @@ import type { AscetCliExecutionResult, AscetCliRequest } from "./cli.ts";
 import {
 	type AscetCreateDependentChainParams,
 	ascetCreateDependentChainActionSchema,
-	runAscetCreateDependentChain,
+	runLegacyAscetCreateDependentChain,
 } from "./create-dependent-chain.ts";
 import { createAscetScheduler } from "./scheduler/scheduler.ts";
 import { ascetEditParameters } from "./tools/edit/schema.ts";
@@ -124,7 +124,7 @@ function bridgeRequest(requestValue: AscetCliRequest): Record<string, unknown> {
 	return JSON.parse(readFileSync(requestValue.args[2], "utf8")) as Record<string, unknown>;
 }
 
-describe("create_dependent_chain", () => {
+describe("legacy create_dependent_chain recovery flow", () => {
 	test("exposes only the compact create schema and rejects old set fields", () => {
 		assert.equal(Value.Check(ascetCreateDependentChainActionSchema, request()), true);
 		assert.equal(Value.Check(ascetEditParameters, request()), true);
@@ -144,7 +144,7 @@ describe("create_dependent_chain", () => {
 		let confirmations = 0;
 		let applyCalls = 0;
 		let previewCalls = 0;
-		const result = await runAscetCreateDependentChain(
+		const result = await runLegacyAscetCreateDependentChain(
 			request("preview"),
 			{
 				cwd: process.cwd(),
@@ -187,7 +187,7 @@ describe("create_dependent_chain", () => {
 		let previewCalls = 0;
 		let applyCalls = 0;
 		let applyBody: Record<string, unknown> | undefined;
-		const result = await runAscetCreateDependentChain(
+		const result = await runLegacyAscetCreateDependentChain(
 			request("apply"),
 			{
 				cwd: process.cwd(),
@@ -233,7 +233,7 @@ describe("create_dependent_chain", () => {
 	test("idempotent apply performs preview verification and returns without approval or mutation", async () => {
 		let confirmations = 0;
 		let applyCalls = 0;
-		const result = await runAscetCreateDependentChain(
+		const result = await runLegacyAscetCreateDependentChain(
 			request("apply"),
 			{
 				cwd: process.cwd(),
@@ -269,7 +269,7 @@ describe("create_dependent_chain", () => {
 
 	test("headless apply returns the standard approval-required error without mutation", async () => {
 		let applyCalls = 0;
-		const result = await runAscetCreateDependentChain(
+		const result = await runLegacyAscetCreateDependentChain(
 			request("apply"),
 			{
 				cwd: process.cwd(),
@@ -294,7 +294,7 @@ describe("create_dependent_chain", () => {
 
 	test("read-only targets authorize editability acquisition inside the apply Bridge session", async () => {
 		let applyBody: Record<string, unknown> | undefined;
-		const result = await runAscetCreateDependentChain(
+		const result = await runLegacyAscetCreateDependentChain(
 			request("apply"),
 			{
 				cwd: process.cwd(),
@@ -321,7 +321,7 @@ describe("create_dependent_chain", () => {
 		let confirmations = 0;
 		let previews = 0;
 		let applyCalls = 0;
-		const result = await runAscetCreateDependentChain(
+		const result = await runLegacyAscetCreateDependentChain(
 			request("apply"),
 			{
 				cwd: process.cwd(),
@@ -356,7 +356,7 @@ describe("create_dependent_chain", () => {
 	});
 
 	test("conflicts and rolled-back writes produce compact failure results", async () => {
-		const conflict = await runAscetCreateDependentChain(
+		const conflict = await runLegacyAscetCreateDependentChain(
 			request("preview"),
 			{
 				cwd: process.cwd(),
@@ -376,7 +376,7 @@ describe("create_dependent_chain", () => {
 		);
 		assert.deepEqual(JSON.parse(conflict.content[0].text), { ok: false, code: "element_conflict", target: "local" });
 
-		const rolledBack = await runAscetCreateDependentChain(
+		const rolledBack = await runLegacyAscetCreateDependentChain(
 			request("apply"),
 			{
 				cwd: process.cwd(),
@@ -424,12 +424,12 @@ describe("create_dependent_chain", () => {
 			}
 		};
 		const [first, second] = await Promise.all([
-			runAscetCreateDependentChain(
+			runLegacyAscetCreateDependentChain(
 				request("apply"),
 				{ cwd: process.cwd(), agentId: "agent-a", executeCli, scheduler },
 				{ hasUI: true, ui: { confirm: async () => true } },
 			),
-			runAscetCreateDependentChain(
+			runLegacyAscetCreateDependentChain(
 				request("apply"),
 				{ cwd: process.cwd(), agentId: "agent-b", executeCli, scheduler },
 				{ hasUI: true, ui: { confirm: async () => true } },

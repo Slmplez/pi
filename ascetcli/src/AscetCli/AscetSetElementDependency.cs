@@ -68,6 +68,20 @@ public sealed class AscetSetElementDependencyResult
     public string OverlayMode { get; set; }
     public IList<string> OverlaySpecHashes { get; set; }
     public IDictionary<string, string> OverlayElementOids { get; set; }
+    public bool Changed { get; set; }
+    public string MutationStatus { get; set; }
+    public bool SaveAttempted { get; set; }
+    public bool SaveSucceeded { get; set; }
+    public string SaveState { get; set; }
+    public bool Verified { get; set; }
+    public string VerificationStatus { get; set; }
+    public string VerificationMode { get; set; }
+    public int? SessionCount { get; set; }
+    public int? SaveCount { get; set; }
+    public int? EditableRetryCount { get; set; }
+    public int? NativeMutationAttemptCount { get; set; }
+    public string CanonicalEvidenceStatus { get; set; }
+    public string CanonicalEvidenceIssue { get; set; }
 }
 
 public sealed class AscetDependencyFormulaMappingResult
@@ -206,6 +220,20 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
                     WriteSucceeded = false,
                     VerifyReadbackRequested = arguments.VerifyReadback,
                     ReadbackVerified = false,
+                    Changed = false,
+                    MutationStatus = "preview",
+                    SaveAttempted = false,
+                    SaveSucceeded = false,
+                    SaveState = "not_required",
+                    Verified = false,
+                    VerificationStatus = "not_run",
+                    VerificationMode = "same_session_dependency_endpoint",
+                    SessionCount = 1,
+                    SaveCount = 0,
+                    EditableRetryCount = 0,
+                    NativeMutationAttemptCount = 0,
+                    CanonicalEvidenceStatus = "not_applicable",
+                    CanonicalEvidenceIssue = "Dry-run does not produce a mutation result.",
                     BackupDirectory = String.Empty,
                     SnapshotPath = snapshotPath,
                     SnapshotHash = snapshotHash,
@@ -347,9 +375,23 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
                     DataVariantNames = dataVariantNames,
                     RequestedDependency = arguments.RequestedDependency,
                     DryRun = false,
-                    WriteSucceeded = afterDependent == wantDependent && dataReadbackVerified,
+                    WriteSucceeded = !needsWrite && readbackVerified,
                     VerifyReadbackRequested = arguments.VerifyReadback,
                     ReadbackVerified = readbackVerified,
+                    Changed = matchesChanged > 0,
+                    MutationStatus = matchesChanged > 0 ? "applied" : "no_op",
+                    SaveAttempted = false,
+                    SaveSucceeded = false,
+                    SaveState = matchesChanged > 0 ? "unknown" : "not_required",
+                    Verified = readbackVerified,
+                    VerificationStatus = readbackVerified ? "passed" : "failed",
+                    VerificationMode = "same_session_dependency_endpoint",
+                    SessionCount = 1,
+                    SaveCount = 0,
+                    EditableRetryCount = 0,
+                    NativeMutationAttemptCount = matchesChanged > 0 ? 1 : 0,
+                    CanonicalEvidenceStatus = matchesChanged > 0 ? "blocked" : "complete",
+                    CanonicalEvidenceIssue = matchesChanged > 0 ? "ImportXMLFromFile save semantics are not proven; no explicit database.Save call was observed." : String.Empty,
                     BackupDirectory = backupDirectory,
                     SnapshotPath = snapshotPath,
                     SnapshotHash = snapshotHash,
@@ -831,9 +873,23 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
             ElementName = arguments.ElementName,
             RequestedDependency = arguments.RequestedDependency,
             DryRun = false,
-            WriteSucceeded = true,
+            WriteSucceeded = changed == 0 && (!arguments.VerifyReadback || allVerified),
             VerifyReadbackRequested = arguments.VerifyReadback,
             ReadbackVerified = !arguments.VerifyReadback || allVerified,
+            Changed = changed > 0,
+            MutationStatus = changed > 0 ? "applied" : "no_op",
+            SaveAttempted = false,
+            SaveSucceeded = false,
+            SaveState = changed > 0 ? "unknown" : "not_required",
+            Verified = !arguments.VerifyReadback || allVerified,
+            VerificationStatus = (!arguments.VerifyReadback || allVerified) ? "passed" : "failed",
+            VerificationMode = "same_session_dependency_endpoint",
+            SessionCount = changed > 0 ? (int?)null : 1,
+            SaveCount = changed > 0 ? (int?)null : 0,
+            EditableRetryCount = 0,
+            NativeMutationAttemptCount = changed > 0 ? (int?)null : 0,
+            CanonicalEvidenceStatus = changed > 0 ? "blocked" : "complete",
+            CanonicalEvidenceIssue = changed > 0 ? "Folder route delegates to multiple component sessions and ImportXMLFromFile save semantics are not proven." : String.Empty,
             BackupDirectory = backupRoot,
             MatchesChanged = changed,
             BeforeDependency = String.Empty,
@@ -1773,10 +1829,11 @@ public static class AscetSetElementDependency
     {
         TextWriter originalOut = Console.Out;
         StringWriter suppressedOut = null;
+        AscetSetElementDependencyArguments parsed = null;
 
         try
         {
-            AscetSetElementDependencyArguments parsed = ParseArguments(args);
+            parsed = ParseArguments(args);
             if (parsed.EmitJson)
             {
                 suppressedOut = new StringWriter();
@@ -1795,6 +1852,10 @@ public static class AscetSetElementDependency
         catch (Exception ex)
         {
             Console.SetOut(originalOut);
+            if (parsed != null && parsed.EmitJson)
+            {
+                Console.Write(FormatJsonFailure(ex));
+            }
             Console.Error.WriteLine(AscetElementDependencyPlanSupport.FormatException(ex));
             return 1;
         }
@@ -2068,6 +2129,23 @@ public static class AscetSetElementDependency
             payload["dataVariants"] = result.DataVariantNames;
         }
         payload["requested"] = result == null ? String.Empty : (result.RequestedDependency ?? String.Empty);
+        payload["changed"] = result != null && result.Changed;
+        payload["mutationStatus"] = result == null ? String.Empty : (result.MutationStatus ?? String.Empty);
+        payload["saveAttempted"] = result != null && result.SaveAttempted;
+        payload["saveSucceeded"] = result != null && result.SaveSucceeded;
+        payload["saveState"] = result == null ? String.Empty : (result.SaveState ?? String.Empty);
+        payload["verified"] = result != null && result.Verified;
+        payload["verificationStatus"] = result == null ? String.Empty : (result.VerificationStatus ?? String.Empty);
+        payload["verificationMode"] = result == null ? String.Empty : (result.VerificationMode ?? String.Empty);
+        payload["sessionCount"] = result == null ? null : result.SessionCount;
+        payload["saveCount"] = result == null ? null : result.SaveCount;
+        payload["editableRetryCount"] = result == null ? null : result.EditableRetryCount;
+        payload["nativeMutationAttemptCount"] = result == null ? null : result.NativeMutationAttemptCount;
+        payload["canonicalEvidenceStatus"] = result == null ? "blocked" : (result.CanonicalEvidenceStatus ?? String.Empty);
+        if (result != null && !String.IsNullOrWhiteSpace(result.CanonicalEvidenceIssue))
+        {
+            payload["canonicalEvidenceIssue"] = result.CanonicalEvidenceIssue;
+        }
         if (result != null && !String.IsNullOrWhiteSpace(result.MatchMode) && !String.Equals(result.MatchMode, "exact", StringComparison.OrdinalIgnoreCase))
         {
             payload["match"] = result.MatchMode;
@@ -2134,6 +2212,33 @@ public static class AscetSetElementDependency
             payload["issues"] = result.Issues;
         }
         payload["plan"] = BuildPlanPayload(result == null ? null : result.Plan);
+        return AscetJsonContract.Serialize(payload);
+    }
+
+    public static string FormatJsonFailure(Exception error)
+    {
+        AscetReadException ascet = error as AscetReadException;
+        Dictionary<string, object> payload = new Dictionary<string, object>();
+        payload["changed"] = false;
+        payload["mutationStatus"] = "failed";
+        payload["saveAttempted"] = null;
+        payload["saveSucceeded"] = null;
+        payload["saveState"] = "unknown";
+        payload["verified"] = false;
+        payload["verificationStatus"] = "failed";
+        payload["verificationMode"] = "same_session_dependency_endpoint";
+        payload["sessionCount"] = null;
+        payload["saveCount"] = null;
+        payload["editableRetryCount"] = null;
+        payload["nativeMutationAttemptCount"] = null;
+        payload["canonicalEvidenceStatus"] = "blocked";
+        payload["canonicalEvidenceIssue"] = "The operation failed before complete canonical counters were available.";
+        payload["error"] = new Dictionary<string, object>
+        {
+            { "code", ascet == null ? "tool_api_error" : (ascet.Code ?? "tool_api_error") },
+            { "message", error == null ? String.Empty : (error.Message ?? String.Empty) },
+            { "operation", ascet == null ? "set_element_dependency" : (ascet.Operation ?? "set_element_dependency") }
+        };
         return AscetJsonContract.Serialize(payload);
     }
 

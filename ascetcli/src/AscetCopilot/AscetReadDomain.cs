@@ -248,6 +248,18 @@ public sealed class AscetMethodWriteResult
     public bool WriteSucceeded { get; set; }
     public bool VerifyReadbackRequested { get; set; }
     public bool ReadbackVerified { get; set; }
+    public bool Changed { get; set; }
+    public string MutationStatus { get; set; }
+    public bool SaveAttempted { get; set; }
+    public bool SaveSucceeded { get; set; }
+    public string SaveState { get; set; }
+    public bool Verified { get; set; }
+    public string VerificationStatus { get; set; }
+    public string VerificationMode { get; set; }
+    public int SessionCount { get; set; }
+    public int SaveCount { get; set; }
+    public int EditableRetryCount { get; set; }
+    public int NativeMutationAttemptCount { get; set; }
 }
 
 public sealed class AscetTextCode
@@ -2706,74 +2718,11 @@ public sealed class MethodWriteService : MethodCatalogService, IMethodWriteServi
 {
     public AscetMethodWriteResult SetMethodCode(AscetItemRef component, string methodName, string code, bool verifyReadback)
     {
-        if (component == null)
+        ValidateRequest(component, methodName, code);
+        return ExecuteWithSession("set_method_code", delegate(AscetSession session)
         {
-            throw new AscetReadException("invalid_argument", "set_method_code", "Component reference must not be null.");
-        }
-
-        if (String.IsNullOrWhiteSpace(methodName))
-        {
-            throw new AscetReadException("invalid_argument", "set_method_code", "Method name must not be empty.");
-        }
-
-        if (code == null)
-        {
-            throw new AscetReadException("invalid_argument", "set_method_code", "Code must not be null.");
-        }
-
-        AscetMethodRef resolvedMethod = null;
-        string previousCode = String.Empty;
-        ExecuteWithSession("set_method_code", delegate(AscetSession session)
-        {
-            MethodHandle method = FindMethodHandle(CollectMethodHandles(session, component), component.Path, methodName);
-            resolvedMethod = method.Reference;
-            previousCode = method.Method.GetCode() ?? String.Empty;
-            RequireComponentEditableInSession(session, component.Path, "set_method_code");
-            bool writeSucceeded = method.Method.SetCode(code);
-
-            if (!writeSucceeded)
-            {
-                throw new AscetReadException(
-                    "set_code_failed",
-                    "set_method_code",
-                    "ASCET returned false while writing method '" + methodName + "' in component '" + component.Path + "'.");
-            }
-
-            return true;
+            return SetMethodCodeInCurrentSession(session, component, methodName, code, verifyReadback);
         });
-
-        bool readbackVerified = !verifyReadback;
-        if (verifyReadback)
-        {
-            string readbackCode = ExecuteWithSession("verify_method_code_readback", delegate(AscetSession session)
-            {
-                MethodHandle readbackMethod = FindMethodHandle(CollectMethodHandles(session, component), component.Path, methodName);
-                return readbackMethod.Method.GetCode() ?? String.Empty;
-            });
-
-            readbackVerified = String.Equals(readbackCode, code, StringComparison.Ordinal);
-            if (!readbackVerified)
-            {
-                throw new AscetReadException(
-                    "readback_mismatch",
-                    "set_method_code",
-                    "Readback verification failed for method '" + methodName + "' in component '" + component.Path + "'.");
-            }
-        }
-
-        return new AscetMethodWriteResult
-        {
-            ComponentPath = component.Path,
-            ComponentKind = component.Kind,
-            LanguageKind = component.LanguageKind,
-            MethodName = resolvedMethod == null ? methodName : (resolvedMethod.Name ?? methodName),
-            MethodKind = resolvedMethod == null ? AscetMethodKind.Unknown : resolvedMethod.MethodKind,
-            PreviousCodeLength = previousCode.Length,
-            NewCodeLength = code.Length,
-            WriteSucceeded = true,
-            VerifyReadbackRequested = verifyReadback,
-            ReadbackVerified = readbackVerified
-        };
     }
 
     internal AscetMethodWriteResult SetMethodCodeInSession(AscetSession session, AscetItemRef component, string methodName, string code, bool verifyReadback)
@@ -2782,78 +2731,70 @@ public sealed class MethodWriteService : MethodCatalogService, IMethodWriteServi
         {
             throw new ArgumentNullException("session");
         }
-
-        if (component == null)
+        ValidateRequest(component, methodName, code);
+        return ExecuteWithBoundSession("set_method_code", session, delegate(AscetSession currentSession)
         {
-            throw new AscetReadException("invalid_argument", "set_method_code", "Component reference must not be null.");
-        }
-
-        if (String.IsNullOrWhiteSpace(methodName))
-        {
-            throw new AscetReadException("invalid_argument", "set_method_code", "Method name must not be empty.");
-        }
-
-        if (code == null)
-        {
-            throw new AscetReadException("invalid_argument", "set_method_code", "Code must not be null.");
-        }
-
-        AscetMethodRef resolvedMethod = null;
-        string previousCode = String.Empty;
-        ExecuteWithBoundSession("set_method_code", session, delegate(AscetSession currentSession)
-        {
-            MethodHandle method = FindMethodHandle(CollectMethodHandles(currentSession, component), component.Path, methodName);
-            resolvedMethod = method.Reference;
-            previousCode = method.Method.GetCode() ?? String.Empty;
-            RequireComponentEditableInSession(currentSession, component.Path, "set_method_code");
-            bool writeSucceeded = method.Method.SetCode(code);
-
-            if (!writeSucceeded)
-            {
-                throw new AscetReadException(
-                    "set_code_failed",
-                    "set_method_code",
-                    "ASCET returned false while writing method '" + methodName + "' in component '" + component.Path + "'.");
-            }
-
-            return true;
+            return SetMethodCodeInCurrentSession(currentSession, component, methodName, code, verifyReadback);
         });
+    }
 
-        bool readbackVerified = !verifyReadback;
-        if (verifyReadback)
-        {
-            string readbackCode = ExecuteWithBoundSession("verify_method_code_readback", session, delegate(AscetSession currentSession)
-            {
-                MethodHandle readbackMethod = FindMethodHandle(CollectMethodHandles(currentSession, component), component.Path, methodName);
-                return readbackMethod.Method.GetCode() ?? String.Empty;
-            });
-
-            readbackVerified = String.Equals(readbackCode, code, StringComparison.Ordinal);
-            if (!readbackVerified)
-            {
-                throw new AscetReadException(
-                    "readback_mismatch",
-                    "set_method_code",
-                    "Readback verification failed for method '" + methodName + "' in component '" + component.Path + "'.");
-            }
-        }
+    private AscetMethodWriteResult SetMethodCodeInCurrentSession(AscetSession session, AscetItemRef component, string methodName, string code, bool verifyReadback)
+    {
+        MethodHandle method = FindMethodHandle(CollectMethodHandles(session, component), component.Path, methodName);
+        string previousCode = method.Method.GetCode() ?? String.Empty;
+        RequireComponentEditableInSession(session, component.Path, "set_method_code");
+        AscetCodeWriteTransactionResult transaction = AscetCodeWriteTransaction.Execute(
+            "set_method_code",
+            previousCode,
+            code,
+            verifyReadback,
+            delegate { return method.Method.SetCode(code); },
+            delegate { return session.GetCurrentDatabaseHandle().Save(); },
+            delegate { return method.Method.GetCode() ?? String.Empty; });
 
         return new AscetMethodWriteResult
         {
             ComponentPath = component.Path,
             ComponentKind = component.Kind,
             LanguageKind = component.LanguageKind,
-            MethodName = resolvedMethod == null ? methodName : resolvedMethod.Name,
-            MethodKind = resolvedMethod == null ? AscetMethodKind.Unknown : resolvedMethod.MethodKind,
+            MethodName = method.Reference == null ? methodName : (method.Reference.Name ?? methodName),
+            MethodKind = method.Reference == null ? AscetMethodKind.Unknown : method.Reference.MethodKind,
             PreviousCodeLength = previousCode.Length,
             NewCodeLength = code.Length,
             WriteSucceeded = true,
             VerifyReadbackRequested = verifyReadback,
-            ReadbackVerified = readbackVerified
+            ReadbackVerified = transaction.Verified,
+            Changed = transaction.Changed,
+            MutationStatus = transaction.MutationStatus,
+            SaveAttempted = transaction.SaveAttempted,
+            SaveSucceeded = transaction.SaveSucceeded,
+            SaveState = transaction.SaveState,
+            Verified = transaction.Verified,
+            VerificationStatus = transaction.VerificationStatus,
+            VerificationMode = transaction.VerificationMode,
+            SessionCount = transaction.SessionCount,
+            SaveCount = transaction.SaveCount,
+            EditableRetryCount = transaction.EditableRetryCount,
+            NativeMutationAttemptCount = transaction.NativeMutationAttemptCount
         };
     }
-}
 
+    private static void ValidateRequest(AscetItemRef component, string methodName, string code)
+    {
+        if (component == null)
+        {
+            throw new AscetReadException("invalid_argument", "set_method_code", "Component reference must not be null.");
+        }
+        if (String.IsNullOrWhiteSpace(methodName))
+        {
+            throw new AscetReadException("invalid_argument", "set_method_code", "Method name must not be empty.");
+        }
+        if (code == null)
+        {
+            throw new AscetReadException("invalid_argument", "set_method_code", "Code must not be null.");
+        }
+    }
+}
 public sealed class TextCodeService : AscetReadDomainServiceBase, ITextCodeService
 {
     public AscetTextCode GetTextCode(AscetItemRef component)

@@ -123,6 +123,8 @@ public static class AscetDeleteComponent
         builder.Append("AlreadyMissing: ").Append(result != null && result.AlreadyMissing).AppendLine();
         builder.Append("VerifyReadbackRequested: ").Append(result != null && result.VerifyReadbackRequested).AppendLine();
         builder.Append("ReadbackVerified: ").Append(result != null && result.ReadbackVerified).AppendLine();
+        builder.Append("SaveSucceeded: ").Append(result != null && result.SaveSucceeded).AppendLine();
+        builder.Append("VerificationMode: ").Append(result == null ? String.Empty : (result.VerificationMode ?? String.Empty)).AppendLine();
         builder.Append("Summary: ").Append(result == null ? String.Empty : (result.Summary ?? String.Empty)).AppendLine();
         return builder.ToString();
     }
@@ -137,6 +139,21 @@ public static class AscetDeleteComponent
         payload["alreadyMissing"] = result != null && result.AlreadyMissing;
         payload["verifyReadbackRequested"] = result != null && result.VerifyReadbackRequested;
         payload["readbackVerified"] = result != null && result.ReadbackVerified;
+        bool changed = result != null && result.Deleted;
+        bool missingNoOp = result != null && result.AlreadyMissing && !changed;
+        bool verified = result != null && result.ReadbackVerified;
+        payload["saveSucceeded"] = changed && result.SaveSucceeded;
+        payload["verificationMode"] = result == null ? String.Empty : (result.VerificationMode ?? String.Empty);
+        payload["changed"] = changed;
+        payload["mutationStatus"] = changed ? "applied" : (missingNoOp ? "no_op" : "unknown");
+        payload["saveAttempted"] = changed;
+        payload["saveState"] = changed ? (result.SaveSucceeded ? "saved" : "failed") : "not_required";
+        payload["verified"] = verified;
+        payload["verificationStatus"] = verified ? "passed" : "failed";
+        payload["sessionCount"] = result == null ? 0 : 1;
+        payload["saveCount"] = changed ? 1 : 0;
+        payload["editableRetryCount"] = 0;
+        payload["nativeMutationAttemptCount"] = changed ? 1 : 0;
         payload["summary"] = result == null ? String.Empty : (result.Summary ?? String.Empty);
         return AscetJsonContract.Serialize(payload);
     }

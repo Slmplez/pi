@@ -77,11 +77,15 @@ describe("ASCET editability actions", () => {
 		assert.equal(preflight.data, false);
 		assert.deepEqual(previewArgs, ["exec", "component_editable_check", "DEMO\\PID", "--json"]);
 
+		let applyCliCalls = 0;
 		const notGranted = await runApprovedAscetEditability(
 			{ mode: "set", componentPath: "DEMO/PID", intent: "apply" },
 			{
 				cwd: process.cwd(),
-				executeCli: async (request) => successfulExecution(request, { ok: true, result: false, error: null }),
+				executeCli: async (request) => {
+					applyCliCalls += 1;
+					return successfulExecution(request, { ok: true, result: false, error: null });
+				},
 			},
 			{
 				hasUI: true,
@@ -93,6 +97,7 @@ describe("ASCET editability actions", () => {
 			},
 		);
 		assert.equal(notGranted.error?.code, "ascet_edit_confirmation_not_granted");
+		assert.equal(applyCliCalls, 0);
 		assert.deepEqual(notGranted.data, {
 			operation: "component_editable_set",
 			writeExecuted: false,
@@ -131,13 +136,13 @@ describe("ASCET editability actions", () => {
 		);
 
 		const result = await resultPromise;
-		assert.equal(checkCalls, 1);
+		assert.equal(checkCalls, 0);
 		assert.equal(setCalls, 0);
 		assert.equal(result.error?.code, "ascet_edit_operation_aborted_before_write");
 		assert.equal((result.data as { preflightOnly?: boolean } | null)?.preflightOnly, undefined);
 	});
 
-	test("set returns a no-op without confirmation when the target is already editable", async () => {
+	test("set asks before Bridge and executes one native operation", async () => {
 		let confirmations = 0;
 		let setCalls = 0;
 		const result = await runApprovedAscetEditability(
@@ -162,8 +167,8 @@ describe("ASCET editability actions", () => {
 
 		assert.equal(result.ok, true);
 		assert.equal(result.data, true);
-		assert.equal(confirmations, 0);
-		assert.equal(setCalls, 0);
+		assert.equal(confirmations, 1);
+		assert.equal(setCalls, 1);
 	});
 	test("normalizes direct, object, and envelope results to the agent payload", async () => {
 		for (const cliResult of [false, { editable: true }, { result: false }, { result: { editable: true } }]) {

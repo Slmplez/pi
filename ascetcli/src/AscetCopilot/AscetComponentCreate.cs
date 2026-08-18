@@ -16,6 +16,18 @@ public sealed class AscetComponentCreateResult
     public bool VerifyReadbackRequested { get; set; }
     public bool RollbackOnFailureRequested { get; set; }
     public bool ReadbackVerified { get; set; }
+    public bool SaveSucceeded { get; set; }
+    public bool Changed { get; set; }
+    public string MutationStatus { get; set; }
+    public bool SaveAttempted { get; set; }
+    public string SaveState { get; set; }
+    public bool Verified { get; set; }
+    public string VerificationStatus { get; set; }
+    public string VerificationMode { get; set; }
+    public int SessionCount { get; set; }
+    public int SaveCount { get; set; }
+    public int EditableRetryCount { get; set; }
+    public int NativeMutationAttemptCount { get; set; }
     public string Summary { get; set; }
 }
 
@@ -123,10 +135,14 @@ public sealed class ComponentCreateService : AscetReadDomainServiceBase, ICompon
 
         bool created = false;
         bool alreadyExisted = false;
+        bool saveAttempted = false;
+        bool saveSucceeded = false;
+        int saveCount = 0;
+        int nativeMutationAttemptCount = 0;
 
         try
         {
-            ExecuteWithSession("create_component", delegate(AscetSession session)
+            ComponentCreateSessionResult sessionResult = ExecuteWithSession("create_component", delegate(AscetSession session)
             {
                 AscetDataBase database = session.GetCurrentDatabaseHandle();
                 AscetFolder folder = ResolveFolder(database, parsed.FolderPath);
@@ -138,53 +154,78 @@ public sealed class ComponentCreateService : AscetReadDomainServiceBase, ICompon
                     {
                         throw new AscetReadException("component_already_exists", "create_component", "Component '" + componentPath + "' already exists.");
                     }
-
-                    return true;
                 }
-
-                CreateInFolder(folder, parsed.ItemName, componentKind, languageKind);
-                created = true;
-
-                if (String.Equals(Environment.GetEnvironmentVariable("ASCET_FAIL_AFTER_CREATE_COMPONENT"), "1", StringComparison.Ordinal))
+                else
                 {
-                    throw new AscetReadException("forced_failure", "create_component", "Forced failure after component creation for rollback verification.");
+                    CreateInFolder(folder, parsed.ItemName, componentKind, languageKind);
+                    created = true;
+
+                    if (String.Equals(Environment.GetEnvironmentVariable("ASCET_FAIL_AFTER_CREATE_COMPONENT"), "1", StringComparison.Ordinal))
+                    {
+                        throw new AscetReadException("forced_failure", "create_component", "Forced failure after component creation for rollback verification.");
+                    }
+
+                    saveAttempted = true;
+                    nativeMutationAttemptCount = 1;
+                    saveSucceeded = database.Save();
+                    if (!saveSucceeded)
+                    {
+                        throw new AscetReadException("create_component_failed", "create_component", "Failed to save current database after creating component '" + componentPath + "'.");
+                    }
+
+                    saveCount = 1;
                 }
 
-                return true;
-            });
-
-            bool readbackVerified = false;
-            AscetItemRef resolved = null;
-            if (verifyReadback)
-            {
-                resolved = ExecuteWithSession("verify_create_component", delegate(AscetSession session)
+                AscetItemRef resolved = null;
+                bool readbackVerified = false;
+                if (verifyReadback)
                 {
                     DataBaseItem item = ResolveItem(session, parsed.ItemName, parsed.FolderPath);
-                    return Classifier.ToItemRef(item);
-                });
-
-                readbackVerified = resolved != null &&
-                    String.Equals(resolved.Path ?? String.Empty, componentPath, StringComparison.Ordinal) &&
-                    resolved.Kind == componentKind &&
-                    ((componentKind != AscetComponentKind.Class && componentKind != AscetComponentKind.Module) || resolved.LanguageKind == languageKind);
-                if (!readbackVerified)
-                {
-                    throw new AscetReadException("readback_mismatch", "create_component", "Readback verification failed for component '" + componentPath + "'.");
+                    resolved = Classifier.ToItemRef(item);
+                    readbackVerified = resolved != null &&
+                        String.Equals(resolved.Path ?? String.Empty, componentPath, StringComparison.Ordinal) &&
+                        resolved.Kind == componentKind &&
+                        ((componentKind != AscetComponentKind.Class && componentKind != AscetComponentKind.Module) || resolved.LanguageKind == languageKind);
+                    if (!readbackVerified)
+                    {
+                        throw new AscetReadException("readback_mismatch", "create_component", "Readback verification failed for component '" + componentPath + "'.");
+                    }
                 }
-            }
 
+                return new ComponentCreateSessionResult
+                {
+                    Resolved = resolved,
+                    ReadbackVerified = readbackVerified,
+                    SaveSucceeded = true
+                };
+            });
+
+            AscetItemRef resolvedComponent = sessionResult == null ? null : sessionResult.Resolved;
+            bool readbackVerifiedResult = sessionResult != null && sessionResult.ReadbackVerified;
             return new AscetComponentCreateResult
             {
-                ComponentPath = resolved == null ? componentPath : (resolved.Path ?? componentPath),
+                ComponentPath = resolvedComponent == null ? componentPath : (resolvedComponent.Path ?? componentPath),
                 FolderPath = parsed.FolderPath,
                 ComponentName = parsed.ItemName,
                 ComponentKind = componentKind,
-                LanguageKind = (componentKind == AscetComponentKind.StateMachine || componentKind == AscetComponentKind.Enumeration) && resolved != null ? resolved.LanguageKind : languageKind,
+                LanguageKind = (componentKind == AscetComponentKind.StateMachine || componentKind == AscetComponentKind.Enumeration) && resolvedComponent != null ? resolvedComponent.LanguageKind : languageKind,
                 Created = created,
                 AlreadyExisted = alreadyExisted,
                 VerifyReadbackRequested = verifyReadback,
                 RollbackOnFailureRequested = rollbackOnFailure,
-                ReadbackVerified = readbackVerified,
+                ReadbackVerified = readbackVerifiedResult,
+                SaveSucceeded = sessionResult != null && sessionResult.SaveSucceeded,
+                Changed = created,
+                MutationStatus = created ? "applied" : "no_op",
+                SaveAttempted = saveAttempted,
+                SaveState = created ? (saveSucceeded ? "saved" : "failed") : "not_required",
+                Verified = !verifyReadback || readbackVerifiedResult,
+                VerificationStatus = !verifyReadback || readbackVerifiedResult ? "passed" : "failed",
+                VerificationMode = "same_session_exact_path",
+                SessionCount = 1,
+                SaveCount = saveCount,
+                EditableRetryCount = 0,
+                NativeMutationAttemptCount = nativeMutationAttemptCount,
                 Summary = BuildSummary(componentPath, componentKind, languageKind, created, alreadyExisted)
             };
         }
@@ -204,6 +245,13 @@ public sealed class ComponentCreateService : AscetReadDomainServiceBase, ICompon
 
             throw;
         }
+    }
+
+    private sealed class ComponentCreateSessionResult
+    {
+        public AscetItemRef Resolved { get; set; }
+        public bool ReadbackVerified { get; set; }
+        public bool SaveSucceeded { get; set; }
     }
 
     internal AscetComponentCreateResult CreateComponentInSession(AscetSession session, string componentPath, AscetComponentKind componentKind, AscetLanguageKind languageKind, bool verifyReadback, bool rollbackOnFailure, bool returnExisting)
@@ -228,6 +276,10 @@ public sealed class ComponentCreateService : AscetReadDomainServiceBase, ICompon
 
         bool created = false;
         bool alreadyExisted = false;
+        bool saveAttempted = false;
+        bool saveSucceeded = false;
+        int saveCount = 0;
+        int nativeMutationAttemptCount = 0;
 
         try
         {
@@ -255,12 +307,21 @@ public sealed class ComponentCreateService : AscetReadDomainServiceBase, ICompon
                     throw new AscetReadException("forced_failure", "create_component", "Forced failure after component creation for rollback verification.");
                 }
 
+                saveAttempted = true;
+                nativeMutationAttemptCount = 1;
+                saveSucceeded = database.Save();
+                if (!saveSucceeded)
+                {
+                    throw new AscetReadException("create_component_failed", "create_component", "Failed to save current database after creating component '" + componentPath + "'." );
+                }
+
+                saveCount = 1;
                 return true;
             });
 
             bool readbackVerified = false;
             AscetItemRef resolved = null;
-            if (verifyReadback && !created)
+            if (verifyReadback)
             {
                 resolved = ReadComponentInSession(session, componentPath);
 
@@ -286,6 +347,18 @@ public sealed class ComponentCreateService : AscetReadDomainServiceBase, ICompon
                 VerifyReadbackRequested = verifyReadback,
                 RollbackOnFailureRequested = rollbackOnFailure,
                 ReadbackVerified = readbackVerified,
+                SaveSucceeded = saveSucceeded,
+                Changed = created,
+                MutationStatus = created ? "applied" : "no_op",
+                SaveAttempted = saveAttempted,
+                SaveState = created ? (saveSucceeded ? "saved" : "failed") : "not_required",
+                Verified = !verifyReadback || readbackVerified,
+                VerificationStatus = !verifyReadback || readbackVerified ? "passed" : "failed",
+                VerificationMode = "same_session_exact_path",
+                SessionCount = 1,
+                SaveCount = saveCount,
+                EditableRetryCount = 0,
+                NativeMutationAttemptCount = nativeMutationAttemptCount,
                 Summary = BuildSummary(componentPath, componentKind, languageKind, created, alreadyExisted)
             };
         }
