@@ -63,7 +63,11 @@ export function createAscetExposureController(
 		}
 		const current = pi.getActiveTools?.() ?? [];
 		const nonAscet = current.filter((name) => !allAscetToolNameSet.has(name));
-		pi.setActiveTools([...new Set([...nonAscet, ...activeAscetTools])]);
+		const next = [...new Set([...nonAscet, ...activeAscetTools])];
+		if (current.length === next.length && current.every((name, index) => name === next[index])) {
+			return;
+		}
+		pi.setActiveTools(next);
 	}
 
 	return {

@@ -30,6 +30,7 @@
 
 ### Fixed
 
+- Fixed ASCET profile activation to skip redundant `setActiveTools` updates when the final ordered tool list is unchanged.
 - Fixed ASCET Read Tools to preserve large and empty results as machine-readable JSON, restore implementation and StateMachine detail modes, return complete dependency chains, and distinguish unavailable Project enumeration from empty dependency results.
 - Fixed TCM-backed component editability so `ascet_edit` uses `ReserveItem` followed by `CreateEdition`, and reports a failed write when the component remains read-only.
 - Fixed capability and readback failures to stop before approval, removed the fixed approval timeout, and made final rendering fail closed so `DONE` means only verified applied or no-op mutations.

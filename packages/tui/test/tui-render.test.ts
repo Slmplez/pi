@@ -483,6 +483,140 @@ describe("TUI content shrinkage", () => {
 });
 
 describe("TUI differential rendering", () => {
+	it("does not redraw scrollback when only an offscreen header changes", async () => {
+		const terminal = new LoggingVirtualTerminal(40, 5);
+		const tui = new TUI(terminal);
+		const component = new TestComponent();
+		tui.addChild(component);
+
+		component.lines = ["Header", ...Array.from({ length: 10 }, (_, i) => `Chat ${i}`), "Editor"];
+		tui.start();
+		await terminal.waitForRender();
+
+		const redrawsBefore = tui.fullRedraws;
+		terminal.clearWrites();
+		component.lines = ["Header changed", ...Array.from({ length: 10 }, (_, i) => `Chat ${i}`), "Editor"];
+		tui.requestRender();
+		await terminal.waitForRender();
+
+		assert.strictEqual(tui.fullRedraws, redrawsBefore, "offscreen header changes should stay differential");
+		assert.ok(!terminal.getWrites().includes("\x1b[3J"), "offscreen header changes must not clear scrollback");
+		assert.strictEqual(terminal.getViewport().at(-1), "Editor", "the viewport should remain anchored at the editor");
+
+		tui.stop();
+	});
+
+	it("skips offscreen changes while updating visible lines in the same frame", async () => {
+		const terminal = new LoggingVirtualTerminal(40, 5);
+		const tui = new TUI(terminal);
+		const component = new TestComponent();
+		tui.addChild(component);
+
+		component.lines = ["Header", ...Array.from({ length: 10 }, (_, i) => `Chat ${i}`), "Editor"];
+		tui.start();
+		await terminal.waitForRender();
+
+		const redrawsBefore = tui.fullRedraws;
+		terminal.clearWrites();
+		component.lines = ["Header changed", ...Array.from({ length: 10 }, (_, i) => `Chat ${i}`), "Editor changed"];
+		tui.requestRender();
+		await terminal.waitForRender();
+
+		assert.strictEqual(tui.fullRedraws, redrawsBefore, "mixed changes should stay differential");
+		assert.ok(!terminal.getWrites().includes("\x1b[3J"), "mixed changes must not clear scrollback");
+		assert.strictEqual(terminal.getViewport().at(-1), "Editor changed", "visible editor changes should render");
+
+		tui.stop();
+	});
+
+	it("handles ANSI and wide-character offscreen changes with the same layout", async () => {
+		const terminal = new LoggingVirtualTerminal(40, 5);
+		const tui = new TUI(terminal);
+		const component = new TestComponent();
+		tui.addChild(component);
+
+		component.lines = [
+			"\x1b[31m\u754c\u9762\u{1f680}\x1b[0m",
+			...Array.from({ length: 10 }, (_, i) => `Chat ${i}`),
+			"Editor",
+		];
+		tui.start();
+		await terminal.waitForRender();
+
+		const redrawsBefore = tui.fullRedraws;
+		terminal.clearWrites();
+		component.lines = [
+			"\x1b[32m\u754c\u9762\u{1f680}\x1b[0m",
+			...Array.from({ length: 10 }, (_, i) => `Chat ${i}`),
+			"Editor",
+		];
+		tui.requestRender();
+		await terminal.waitForRender();
+
+		assert.strictEqual(
+			tui.fullRedraws,
+			redrawsBefore,
+			"same-layout ANSI and wide-character changes should stay differential",
+		);
+		assert.ok(!terminal.getWrites().includes("\x1b[3J"), "same-layout offscreen changes must not clear scrollback");
+		assert.strictEqual(terminal.getViewport().at(-1), "Editor", "the viewport should remain anchored at the editor");
+
+		tui.stop();
+	});
+
+	it("keeps the full redraw fallback when an offscreen change changes the line count", async () => {
+		const terminal = new LoggingVirtualTerminal(40, 5);
+		const tui = new TUI(terminal);
+		const component = new TestComponent();
+		tui.addChild(component);
+
+		component.lines = ["Header", ...Array.from({ length: 10 }, (_, i) => `Chat ${i}`), "Editor"];
+		tui.start();
+		await terminal.waitForRender();
+
+		const redrawsBefore = tui.fullRedraws;
+		terminal.clearWrites();
+		component.lines = ["Header", "Header detail", ...Array.from({ length: 10 }, (_, i) => `Chat ${i}`), "Editor"];
+		tui.requestRender();
+		await terminal.waitForRender();
+
+		assert.ok(tui.fullRedraws > redrawsBefore, "line-count changes should keep the full redraw fallback");
+		assert.ok(
+			terminal.getWrites().includes("\x1b[3J"),
+			"line-count changes may clear scrollback through the fallback",
+		);
+
+		tui.stop();
+	});
+
+	it("keeps the Kitty image safety fallback for offscreen image changes", async () => {
+		setCapabilities({ images: "kitty", trueColor: true, hyperlinks: true });
+		try {
+			const terminal = new LoggingVirtualTerminal(40, 5);
+			const tui = new TUI(terminal);
+			const component = new TestComponent();
+			tui.addChild(component);
+
+			const oldImage = encodeKitty("AAAA", { columns: 2, rows: 1, imageId: 91, moveCursor: false });
+			const newImage = encodeKitty("BBBB", { columns: 2, rows: 1, imageId: 92, moveCursor: false });
+			component.lines = [oldImage, ...Array.from({ length: 10 }, (_, i) => `Chat ${i}`), "Editor"];
+			tui.start();
+			await terminal.waitForRender();
+
+			const redrawsBefore = tui.fullRedraws;
+			terminal.clearWrites();
+			component.lines = [newImage, ...Array.from({ length: 10 }, (_, i) => `Chat ${i}`), "Editor"];
+			tui.requestRender();
+			await terminal.waitForRender();
+
+			assert.ok(tui.fullRedraws > redrawsBefore, "offscreen image changes should keep the full redraw fallback");
+			assert.ok(terminal.getWrites().includes("\x1b[3J"), "the image fallback should preserve scrollback clearing");
+
+			tui.stop();
+		} finally {
+			resetCapabilitiesCache();
+		}
+	});
 	it("tracks cursor correctly when content shrinks with unchanged remaining lines", async () => {
 		const terminal = new VirtualTerminal(40, 10);
 		const tui = new TUI(terminal);

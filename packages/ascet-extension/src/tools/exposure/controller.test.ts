@@ -4,35 +4,67 @@ import type { AscetCliExecutionResult, AscetCliRequest } from "../../cli.ts";
 import { createAscetExposureController } from "./controller.ts";
 import { profileTools } from "./profiles.ts";
 
-function createPiHarness(initialActive: string[] = ["non_ascet_tool"]) {
+const baseActiveTools = [
+	"non_ascet_tool",
+	"find",
+	"grep",
+	"read",
+	"ascet_search",
+	"ascet_get",
+	"ascet_read",
+	"ascet_status",
+	"ascet_capabilities",
+	"ascet_recover",
+	"ascet_scheduler_status",
+	"ascet_diff",
+	"ascet_edit",
+];
+
+function createPiHarness(
+	initialActive: string[] = ["non_ascet_tool"],
+	options: { includeSetActiveTools?: boolean } = {},
+) {
 	const registered: Array<{ name: string; promptGuidelines?: readonly string[] }> = [];
 	const registeredTools: Array<{ name?: string; execute?: (...args: unknown[]) => unknown }> = [];
 	let active = [...initialActive];
+	let setActiveToolsCalls = 0;
+	const pi = {
+		registerTool(tool: unknown) {
+			const candidate = tool as {
+				name?: string;
+				promptGuidelines?: readonly string[];
+				execute?: (...args: unknown[]) => unknown;
+			};
+			registeredTools.push(candidate);
+			if (candidate.name) {
+				registered.push({ name: candidate.name, promptGuidelines: candidate.promptGuidelines });
+			}
+		},
+		getActiveTools() {
+			return active;
+		},
+		...(options.includeSetActiveTools === false
+			? {}
+			: {
+					setActiveTools(toolNames: string[]) {
+						setActiveToolsCalls++;
+						active = [...toolNames];
+					},
+				}),
+	};
 	return {
 		registered,
 		registeredTools,
 		get active() {
 			return active;
 		},
-		pi: {
-			registerTool(tool: unknown) {
-				const candidate = tool as {
-					name?: string;
-					promptGuidelines?: readonly string[];
-					execute?: (...args: unknown[]) => unknown;
-				};
-				registeredTools.push(candidate);
-				if (candidate.name) {
-					registered.push({ name: candidate.name, promptGuidelines: candidate.promptGuidelines });
-				}
-			},
-			getActiveTools() {
-				return active;
-			},
-			setActiveTools(toolNames: string[]) {
-				active = [...toolNames];
-			},
+		get setActiveToolsCalls() {
+			return setActiveToolsCalls;
 		},
+		setActiveToolsExternally(toolNames: string[]) {
+			active = [...toolNames];
+		},
+		pi,
 	};
 }
 
@@ -43,6 +75,44 @@ describe("ASCET exposure controller", () => {
 
 		exposure.activateProfile("base");
 
+		assert.deepEqual(harness.active, baseActiveTools);
+		assert.equal(
+			harness.registered.some((tool) => tool.name === "ascet_batch_write"),
+			false,
+		);
+	});
+
+	test("activates the same base profile only once", () => {
+		const harness = createPiHarness();
+		const exposure = createAscetExposureController(harness.pi, { env: {} });
+
+		exposure.activateProfile("base");
+		exposure.activateProfile("base");
+		exposure.activateProfile("base");
+
+		assert.equal(harness.setActiveToolsCalls, 1);
+		assert.deepEqual(harness.active, baseActiveTools);
+	});
+
+	test("does not set active tools when the current list already matches the target", () => {
+		const harness = createPiHarness(baseActiveTools);
+		const exposure = createAscetExposureController(harness.pi, { env: {} });
+
+		exposure.activateProfile("base");
+
+		assert.equal(harness.setActiveToolsCalls, 0);
+		assert.deepEqual(harness.active, baseActiveTools);
+	});
+
+	test("updates active tools once for a profile change and no-ops on repetition", () => {
+		const harness = createPiHarness();
+		const exposure = createAscetExposureController(harness.pi, { env: {} });
+
+		exposure.activateProfile("base");
+		exposure.activateProfile("advanced-read");
+		exposure.activateProfile("advanced-read");
+
+		assert.equal(harness.setActiveToolsCalls, 2);
 		assert.deepEqual(harness.active, [
 			"non_ascet_tool",
 			"find",
@@ -53,15 +123,56 @@ describe("ASCET exposure controller", () => {
 			"ascet_read",
 			"ascet_status",
 			"ascet_capabilities",
-			"ascet_recover",
-			"ascet_scheduler_status",
-			"ascet_diff",
-			"ascet_edit",
 		]);
-		assert.equal(
-			harness.registered.some((tool) => tool.name === "ascet_batch_write"),
-			false,
-		);
+	});
+
+	test("treats a different final tool order as a required update", () => {
+		const harness = createPiHarness([
+			"non_ascet_tool",
+			...baseActiveTools.slice(1, 4),
+			...baseActiveTools.slice(4).reverse(),
+		]);
+		const exposure = createAscetExposureController(harness.pi, { env: {} });
+
+		exposure.activateProfile("base");
+
+		assert.equal(harness.setActiveToolsCalls, 1);
+		assert.deepEqual(harness.active, baseActiveTools);
+	});
+
+	test("preserves external non-ASCET tool changes and updates only when needed", () => {
+		const harness = createPiHarness();
+		const exposure = createAscetExposureController(harness.pi, { env: {} });
+
+		exposure.activateProfile("base");
+		harness.setActiveToolsExternally([...baseActiveTools, "third_party_tool"]);
+		exposure.activateProfile("base");
+		exposure.activateProfile("base");
+
+		assert.equal(harness.setActiveToolsCalls, 2);
+		assert.deepEqual(harness.active, [
+			...baseActiveTools.slice(0, 4),
+			"third_party_tool",
+			...baseActiveTools.slice(4),
+		]);
+	});
+
+	test("repairs duplicate and wrong-profile ASCET tools", () => {
+		const harness = createPiHarness(["non_ascet_tool", "ascet_read", "ascet_read", "ascet_batch_write"]);
+		const exposure = createAscetExposureController(harness.pi, { env: {} });
+
+		exposure.activateProfile("base");
+
+		assert.equal(harness.setActiveToolsCalls, 1);
+		assert.deepEqual(harness.active, baseActiveTools);
+	});
+
+	test("does not throw when setActiveTools is unavailable", () => {
+		const harness = createPiHarness(["non_ascet_tool"], { includeSetActiveTools: false });
+		const exposure = createAscetExposureController(harness.pi, { env: {} });
+
+		assert.doesNotThrow(() => exposure.activateProfile("base"));
+		assert.deepEqual(exposure.getMetadata().activeTools, baseActiveTools.slice(1));
 	});
 
 	test("keeps the base profile free of duplicated workflow guidance", () => {
@@ -91,8 +202,8 @@ describe("ASCET exposure controller", () => {
 				.reverse()
 				.find((tool) => tool.name === "ascet_get")
 				?.promptGuidelines?.join("\n") ?? "";
-		assert.match(getPrompt, /exact resolved targets/);
-		assert.match(getPrompt, /outgoing relationships only/);
+		assert.match(getPrompt, /validate the exact target/);
+		assert.match(getPrompt, /Use ascet_search comp-ref or element-ref for live reference candidates/);
 		assert.doesNotMatch(getPrompt, /after tree resolves/);
 	});
 	test("does not expose retired ascet_verify in any profile", () => {

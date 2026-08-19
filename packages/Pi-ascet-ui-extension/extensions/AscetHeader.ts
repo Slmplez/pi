@@ -20,7 +20,7 @@ import {
 	createReleaseRows,
 	type UpdateState,
 } from "./releaseInfo.ts";
-import { randomStartupTip } from "./tips.ts";
+import { randomStartupTip, type StartupTip } from "./tips.ts";
 
 export interface HeaderModelInfo {
 	id?: string;
@@ -33,6 +33,16 @@ export interface HeaderSessionInfo {
 	sessionDir?: string;
 	currentSessionFile?: string;
 }
+
+type HeaderDependencies = {
+	loadRecentSessions: typeof loadRecentSessions;
+	checkForUpdates: typeof checkAscetCopilotUpdate;
+	randomStartupTip: typeof randomStartupTip;
+};
+
+type InternalAscetHeaderOptions = AscetHeaderOptions & {
+	__testDependencies?: Partial<HeaderDependencies>;
+};
 
 export interface AscetHeaderOptions {
 	model?: HeaderModelInfo;
@@ -48,14 +58,17 @@ const MIN_DASHBOARD_WIDTH = 86;
 const LEFT_WIDTH = 28;
 const FEEDBACK_ANIMATION_MS = 5000;
 const FEEDBACK_TICK_MS = 50;
+const RELEASE_ROW_COUNT = 5;
+const RECENT_SESSION_ROW_COUNT = 4;
 
 export class AscetHeader implements Component {
 	private readonly tui: TUI;
 	private readonly theme: Theme;
 	private readonly options: AscetHeaderOptions;
+	private readonly dependencies: HeaderDependencies;
 	private readonly start = Date.now();
 	private readonly colorScheme = nextLogoColorScheme();
-	private readonly startupTip = randomStartupTip();
+	private readonly startupTip: StartupTip;
 	private introTimer: ReturnType<typeof setInterval> | undefined;
 	private feedbackTimer: ReturnType<typeof setInterval> | undefined;
 	private animating = true;
@@ -67,11 +80,20 @@ export class AscetHeader implements Component {
 		this.tui = tui;
 		this.theme = theme;
 		this.options = options;
+		const internalOptions = options as InternalAscetHeaderOptions;
+		this.dependencies = {
+			loadRecentSessions,
+			checkForUpdates: checkAscetCopilotUpdate,
+			randomStartupTip,
+			...internalOptions.__testDependencies,
+		};
+		this.startupTip = this.dependencies.randomStartupTip();
 		this.introTimer = setInterval(() => {
 			if (Date.now() - this.start >= INTRO_MS) {
 				this.animating = false;
 				this.stopIntroTimer();
 			}
+			if (this.disposed) return;
 			this.tui.requestRender();
 		}, INTRO_TICK_MS);
 		if (this.startupTip.kind === "feedback") {
@@ -79,6 +101,7 @@ export class AscetHeader implements Component {
 				if (Date.now() - this.start >= FEEDBACK_ANIMATION_MS) {
 					this.stopFeedbackTimer();
 				}
+				if (this.disposed) return;
 				this.tui.requestRender();
 			}, FEEDBACK_TICK_MS);
 		}
@@ -215,7 +238,7 @@ export class AscetHeader implements Component {
 			return;
 		}
 		try {
-			const sessions = await loadRecentSessions({
+			const sessions = await this.dependencies.loadRecentSessions({
 				cwd: session.cwd,
 				sessionDir: session.sessionDir,
 				currentSessionFile: session.currentSessionFile,
@@ -230,7 +253,12 @@ export class AscetHeader implements Component {
 	}
 
 	private async checkForUpdates(): Promise<void> {
-		const updateState = await checkAscetCopilotUpdate();
+		let updateState: UpdateState;
+		try {
+			updateState = await this.dependencies.checkForUpdates();
+		} catch {
+			updateState = { status: "unavailable", reason: "unknown" };
+		}
 		if (this.disposed) return;
 		this.updateState = updateState;
 		this.tui.requestRender();
@@ -238,33 +266,32 @@ export class AscetHeader implements Component {
 
 	private renderReleaseRows(width: number): string[] {
 		const rows = createReleaseRows(this.updateState);
-		return rows.map((row, index) => {
+		const renderedRows = rows.map((row, index) => {
 			const text = truncateToWidth(row, Math.max(1, width), "", false);
 			if (index === 0) return this.theme.bold(text);
 			return index === rows.length - 1 && this.updateState.status !== "available"
 				? this.theme.fg("dim", text)
 				: text;
 		});
+		return padRows(renderedRows, RELEASE_ROW_COUNT);
 	}
 
 	private renderRecentSessionRows(width: number): string[] {
 		const rows = [this.theme.bold("Recent sessions")];
+		let contentRows: string[];
 		if (this.recentSessionsState.status === "loading") {
-			return [...rows, this.theme.fg("dim", "Loading...")];
-		}
-		if (this.recentSessionsState.status === "error") {
-			return [...rows, this.theme.fg("dim", "Unavailable")];
-		}
-		if (this.recentSessionsState.sessions.length === 0) {
-			return [...rows, this.theme.fg("dim", "No recent sessions")];
-		}
-		return [
-			...rows,
-			...this.recentSessionsState.sessions.slice(0, 3).map((session) => {
+			contentRows = [this.theme.fg("dim", "Loading...")];
+		} else if (this.recentSessionsState.status === "error") {
+			contentRows = [this.theme.fg("dim", "Unavailable")];
+		} else if (this.recentSessionsState.sessions.length === 0) {
+			contentRows = [this.theme.fg("dim", "No recent sessions")];
+		} else {
+			contentRows = this.recentSessionsState.sessions.slice(0, 3).map((session) => {
 				const text = `• ${session.title} · ${session.time}`;
 				return truncateToWidth(text, Math.max(1, width), "", false);
-			}),
-		];
+			});
+		}
+		return padRows([...rows, ...contentRows], RECENT_SESSION_ROW_COUNT);
 	}
 
 	private rule(width: number): string {
@@ -290,6 +317,11 @@ function centerCell(text: string, width: number): string {
 	const remaining = Math.max(0, width - visibleWidth(fitted));
 	const left = Math.floor(remaining / 2);
 	return " ".repeat(left) + fitted + " ".repeat(remaining - left);
+}
+
+function padRows(rows: string[], rowCount: number): string[] {
+	const boundedRows = rows.slice(0, rowCount);
+	return boundedRows.concat(Array.from({ length: rowCount - boundedRows.length }, () => ""));
 }
 
 function italic(text: string): string {

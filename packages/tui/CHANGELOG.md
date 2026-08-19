@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Avoided clearing terminal scrollback when unchanged-layout text changes occur above the visible TUI viewport.
+
 ## [0.80.3] - 2026-06-30
 
 ### Added

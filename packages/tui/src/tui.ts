@@ -1158,6 +1158,15 @@ export class TUI extends Container {
 		return { firstChanged: expandedFirstChanged, lastChanged: expandedLastChanged };
 	}
 
+	private containsKittyImageInRange(lines: string[], first: number, last: number): boolean {
+		const start = Math.max(0, first);
+		const end = Math.min(last, lines.length - 1);
+		for (let i = start; i <= end; i++) {
+			if (isImageLine(lines[i] ?? "")) return true;
+		}
+		return false;
+	}
+
 	private deleteChangedKittyImages(firstChanged: number, lastChanged: number): string {
 		if (firstChanged < 0 || lastChanged < firstChanged) return "";
 
@@ -1450,8 +1459,40 @@ export class TUI extends Container {
 			return;
 		}
 
-		// Differential rendering can only touch what was actually visible.
-		// If the first changed line is above the previous viewport, we need a full redraw.
+		// Differential rendering cannot rewrite scrollback safely. When the line structure is
+		// unchanged, skip ordinary text changes above the viewport and only render visible lines.
+		if (firstChanged < prevViewportTop && newLines.length === this.previousLines.length) {
+			const offscreenLastChanged = Math.min(lastChanged, prevViewportTop - 1);
+			const offscreenHasKittyImage =
+				this.containsKittyImageInRange(this.previousLines, firstChanged, offscreenLastChanged) ||
+				this.containsKittyImageInRange(newLines, firstChanged, offscreenLastChanged);
+			if (!offscreenHasKittyImage) {
+				let firstVisibleChanged = -1;
+				let lastVisibleChanged = -1;
+				for (let i = prevViewportTop; i < newLines.length; i++) {
+					if (this.previousLines[i] !== newLines[i]) {
+						if (firstVisibleChanged === -1) firstVisibleChanged = i;
+						lastVisibleChanged = i;
+					}
+				}
+
+				if (firstVisibleChanged === -1) {
+					this.previousLines = newLines;
+					this.previousKittyImageIds = this.collectKittyImageIds(newLines);
+					this.previousWidth = width;
+					this.previousHeight = height;
+					this.previousViewportTop = prevViewportTop;
+					this.cursorRow = Math.max(0, newLines.length - 1);
+					this.positionHardwareCursor(cursorPos, newLines.length);
+					return;
+				}
+
+				firstChanged = firstVisibleChanged;
+				lastChanged = lastVisibleChanged;
+			}
+		}
+
+		// Other changes above the viewport keep the existing full redraw fallback.
 		if (firstChanged < prevViewportTop) {
 			logRedraw(`firstChanged < viewportTop (${firstChanged} < ${prevViewportTop})`);
 			fullRender(true);
