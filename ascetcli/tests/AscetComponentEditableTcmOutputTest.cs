@@ -151,6 +151,11 @@ public abstract class AscetReadDomainServiceBase
         session.ResolveCount++;
         return session.Item;
     }
+
+    protected T ExecuteWithBoundSession<T>(string operation, AscetSession session, Func<AscetSession, T> action)
+    {
+        return action(session);
+    }
 }
 
 public static class AscetToolApiBootstrap

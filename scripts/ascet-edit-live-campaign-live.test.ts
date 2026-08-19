@@ -153,19 +153,25 @@ test("live invoker isolates telemetry IDs and returns public readback with Bridg
 				};
 			},
 		});
-		const first = fixtureAction({ id: "case-1", scenario: "changed-success", request: { action: "create_folder" }, objectManifest: { root: "fixture" }, expectedOutcome: "changed-success", readback: { tool: "ascet_get", params: { action: "tree" } } });
+		const first = fixtureAction({ id: "case-1", scenario: "changed-success", request: { action: "create_folder" }, objectManifest: { root: "fixture" }, expectedOutcome: "changed-success", readback: { id: "tree", tool: "ascet_get", params: { action: "tree" }, phase: "independent" } });
 		const second = fixtureAction({ id: "case-2", scenario: "confirmed-no-op", request: { action: "create_folder" }, objectManifest: { root: "fixture" }, expectedOutcome: "confirmed-no-op" });
 		const firstInvocation = await invoker.invoke(first.action, first.variant, first.scenario);
 		const secondInvocation = await invoker.invoke(second.action, second.variant, second.scenario);
-		const readback = await invoker.readback(first.action, first.variant, first.scenario);
+		const readback = await invoker.readback(first.action, first.variant, first.scenario, first.scenario.readback as { id: string; tool: string; params: Record<string, unknown>; phase: "independent" });
 		assert.match(String(firstInvocation.telemetry), /case-1/);
 		assert.match(String(secondInvocation.telemetry), /case-2/);
 		assert.notEqual(contexts[0].env.PI_ASCET_EXTENSION_ARTIFACT_ROOT, contexts[1].env.PI_ASCET_EXTENSION_ARTIFACT_ROOT);
 		assert.match(String(contexts[0].env.PI_ASCET_EXTENSION_ARTIFACT_ROOT).replaceAll("\\", "/"), /\/runtime-artifacts\/[0-9a-f]{16}\/write$/);
 		assert.equal(contexts[0].env.PI_ASCET_RUN_ID, "01-create_folder-create-folder-folder-case-1-01");
 		assert.equal(contexts[0].env.PI_ASCET_ATTEMPT_ID, "001");
-		assert.deepEqual((readback as { publicResult: unknown }).publicResult, (await invoker.readback(first.action, first.variant, first.scenario) as { publicResult: unknown }).publicResult);
+		assert.deepEqual((readback as { publicResult: unknown }).publicResult, (await invoker.readback(first.action, first.variant, first.scenario, first.scenario.readback as { id: string; tool: string; params: Record<string, unknown>; phase: "independent" }) as { publicResult: unknown }).publicResult);
 		assert.ok((readback as { bridgeEvidence: unknown }).bridgeEvidence);
+        const before = { id: "before", tool: "ascet_get", params: { action: "tree", checkpoint: "before" }, phase: "precondition" as const };
+        const after = { id: "after", tool: "ascet_get", params: { action: "tree", checkpoint: "after" }, phase: "postcondition" as const };
+        await invoker.readback(first.action, first.variant, first.scenario, before);
+        await invoker.readback(first.action, first.variant, first.scenario, after);
+        assert.equal(contexts.at(-2)?.env.PI_ASCET_PHASE_ID, "readback-before-precondition");
+        assert.equal(contexts.at(-1)?.env.PI_ASCET_PHASE_ID, "readback-after-postcondition");
 		assert.match(readFileSync(join(String(contexts[0].env.PI_ASCET_EXTENSION_ARTIFACT_ROOT), "telemetry", "element-write.jsonl"), "utf8"), /case-1/);
 	} finally {
 		rmSync(root, { recursive: true, force: true });

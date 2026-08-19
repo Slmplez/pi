@@ -95,6 +95,9 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
         bool consumerWritten = false;
         bool localWritten = false;
         bool dependencyWritten = false;
+        bool saveAttempted = false;
+        bool saveSucceeded = false;
+        int saveCount = 0;
         AscetItemRef providerRef = new AscetItemRef { Path = request.Provider.ComponentPath };
         AscetItemRef consumerRef = new AscetItemRef { Path = request.Consumer.ComponentPath };
         AscetElementCatalogReadResult providerBefore = null;
@@ -149,7 +152,7 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
             if (!providerNeedsWrite && !consumerNeedsWrite && !localNeedsWrite && !dependencyNeedsWrite)
             {
                 VerifyFinalState(session, request, providerRef, consumerRef);
-                return WithTargets(Success("no_change", operationId, false, false, stages), editableTargets);
+                return WithTargets(Success("no_change", operationId, false, false, stages, false, false, 0), editableTargets);
             }
 
             EnsureComponentsEditableInSession(
@@ -160,7 +163,7 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
             if (providerNeedsWrite)
             {
                 mutationStarted = true;
-                AscetElementSyncResult applied = _elementSync.ApplyInSession(session, providerRef, request.Provider.Spec, null, true, true);
+                AscetElementSyncResult applied = _elementSync.ApplyInSession(session, providerRef, request.Provider.Spec, null, true, false);
                 providerWritten = HasCreated(applied);
                 RequireElementReadback(applied, "provider");
                 ReplaceStage(stages, "provider", "created", true);
@@ -170,7 +173,7 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
             if (consumerNeedsWrite)
             {
                 mutationStarted = true;
-                AscetElementSyncResult applied = _elementSync.ApplyInSession(session, consumerRef, request.Consumer.Spec, null, true, true);
+                AscetElementSyncResult applied = _elementSync.ApplyInSession(session, consumerRef, request.Consumer.Spec, null, true, false);
                 consumerWritten = HasCreated(applied);
                 RequireElementReadback(applied, "consumer");
                 ReplaceStage(stages, "consumer", "created", true);
@@ -180,7 +183,7 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
             if (localNeedsWrite)
             {
                 mutationStarted = true;
-                AscetElementSyncResult applied = _elementSync.ApplyInSession(session, consumerRef, request.Local.Spec, null, true, true);
+                AscetElementSyncResult applied = _elementSync.ApplyInSession(session, consumerRef, request.Local.Spec, null, true, false);
                 localWritten = HasCreated(applied);
                 RequireElementReadback(applied, "local");
                 ReplaceStage(stages, "local", "created", true);
@@ -190,7 +193,7 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
             if (dependencyNeedsWrite)
             {
                 mutationStarted = true;
-                AscetSetElementDependencyResult applied = _dependencyService.SetInSession(session, BuildDependencyArguments(request, false, String.Empty));
+                AscetSetElementDependencyResult applied = _dependencyService.SetInSession(session, BuildDependencyArguments(request, false, String.Empty), false);
                 dependencyWritten = applied != null && applied.MatchesChanged > 0;
                 if (applied == null || !applied.WriteSucceeded || !applied.ReadbackVerified)
                     throw new AscetReadException("readback_mismatch", "configure_parameter_dependency_chain_execute", "Dependency write did not pass mandatory readback.");
@@ -198,8 +201,21 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
                 ThrowIfInjectedFailure("dependency");
             }
 
+            if (mutationStarted)
+            {
+                var database = session.GetCurrentDatabaseHandle();
+                if (database == null)
+                    throw new AscetReadException("database_not_open", "configure_parameter_dependency_chain_execute", "Failed to resolve the current database before committing the dependency chain.");
+
+                saveAttempted = true;
+                saveCount++;
+                if (!database.Save())
+                    throw new AscetReadException("save_database_failed", "configure_parameter_dependency_chain_execute", "Failed to save the current database after applying the dependency chain.");
+                saveSucceeded = true;
+            }
+
             VerifyFinalState(session, request, providerRef, consumerRef);
-            return WithTargets(Success("committed", operationId, true, mutationStarted, stages),
+            return WithTargets(Success("committed", operationId, true, mutationStarted, stages, saveAttempted, saveSucceeded, saveCount),
                 ReadEditableTargets(session, providerBefore, consumerBefore));
         }
         catch (Exception originalError)
@@ -241,7 +257,7 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
             }
             bool rollbackPassed = rollbackErrors.Count == 0;
             Dictionary<string, object> result = BaseResult(rollbackPassed ? "rolled_back" : "rollback_failed", operationId, true, true);
-            AddCanonicalEvidence(result, true, "failed", null, null, "unknown", rollbackPassed, rollbackPassed ? "passed" : "failed", "same_session_dependency_chain_endpoint", 1, null, null, null, "blocked", "Mutation failed after starting; Save and mutation counters are not exposed for the composed path.");
+            AddCanonicalEvidence(result, true, "failed", saveAttempted, saveSucceeded, saveAttempted ? (saveSucceeded ? "saved" : "failed") : "not_attempted", rollbackPassed, rollbackPassed ? "passed" : "failed", "same_session_dependency_chain_endpoint", 1, saveCount, 0, 1, "blocked", "Mutation failed; the result is not a successful canonical write.");
             result["stages"] = stages;
             result["originalError"] = ErrorPayload(originalError);
             Dictionary<string, object> rollback = new Dictionary<string, object>();
@@ -654,11 +670,11 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
         }
     }
 
-    internal static Dictionary<string, object> Success(string status, string operationId, bool writesPerformed, bool mutationStarted, IList<Dictionary<string, object>> stages)
+    internal static Dictionary<string, object> Success(string status, string operationId, bool writesPerformed, bool mutationStarted, IList<Dictionary<string, object>> stages, bool saveAttempted, bool saveSucceeded, int saveCount)
     {
         bool noOp = String.Equals(status, "no_change", StringComparison.Ordinal);
-        Dictionary<string, object> result = BaseResult(noOp ? status : (writesPerformed ? "outcome_unknown" : status), operationId, writesPerformed, mutationStarted);
-        AddCanonicalEvidence(result, writesPerformed, writesPerformed ? "applied" : "no_op", noOp ? false : (bool?)null, noOp ? false : (bool?)null, noOp ? "not_required" : "unknown", true, "passed", "same_session_dependency_chain_endpoint", 1, noOp ? (int?)0 : null, noOp ? (int?)0 : null, noOp ? (int?)0 : null, noOp ? "complete" : "blocked", noOp ? String.Empty : "Save counters are not exposed for the composed element-sync/import path; changed result is outcome-unknown.");
+        Dictionary<string, object> result = BaseResult(status, operationId, writesPerformed, mutationStarted);
+        AddCanonicalEvidence(result, writesPerformed, writesPerformed ? "applied" : "no_op", saveAttempted, saveSucceeded, noOp ? "not_required" : (saveSucceeded ? "saved" : "failed"), true, "passed", "same_session_dependency_chain_endpoint", 1, saveCount, 0, writesPerformed ? 1 : 0, "complete", String.Empty);
         result["stages"] = stages;
         result["verification"] = new Dictionary<string, object> { { "status", "passed" }, { "verified", true } };
         result["rollback"] = new Dictionary<string, object> { { "required", false }, { "status", "not_required" } };

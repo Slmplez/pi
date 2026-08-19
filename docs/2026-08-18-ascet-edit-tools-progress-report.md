@@ -1,195 +1,86 @@
-﻿# ASCET Edit Tools Bug 修复与 Live 测试进度报告
+# ASCET Edit Tools Progress Report
 
-更新时间：2026-08-18
+Updated: 2026-08-18
 
-## 1. 当前阶段
-
-当前处于：**代码修复后的验证阶段，最终 17-action live 验收尚未完成**。
-
-已完成核心协议问题分析、部分 C#/TypeScript 修复、Bridge 重建和多项 focused test。当前主要剩余工作是：
-
-1. 验证最新 TypeScript 修改；
-2. 补跑剩余 C# focused test 和 `npm run check`；
-3. 使用当前最终 Bridge 在新 Project 上重跑关键真实写入；
-4. 依据新证据重新生成 17-action 最终矩阵。
-
-旧结论：
+## Executive status
 
 ```text
-15 PASS / 2 FAIL
+Requested full live campaign: not started
+New live calls in this continuation: 0
+Current action-level claim: conditional / requires revalidation
 ```
 
-已经失效，不应作为最终验收结论。
+The user requested all 17 public `ascet_edit` actions to be executed against ASCET live. The campaign was only inspected and then interrupted before execution. No new live write was performed by that interrupted attempt.
 
-## 2. 固定测试环境
+The previous `17 PASS / 0 FAIL / 0 BLOCKED` statement is not sufficient evidence that every action completed a durable database write. It must not be used as the result of the requested full live campaign.
+
+## Fixed environment
 
 ```text
 database: C:\Repo\F05_IPB_L2_0429
-database fingerprint: 71cf3289aea80d1926ff9e419192dad40c7e01621ffdbdfde6da15f93b74a33c
 project: PI_ASCET_EDIT_20260818_ALL_ACTIONS_008\Core\Project
-live writer: ASCET_LIVE_WRITER=1
-cleanup: 不执行，保留真实写入对象和证据
+source/package Bridge SHA-256: FBC9B9A443A0845673D53034687A3AB6C8A9D18926DCE7B596A397DF16A395CF
+cleanup: not executed; user-authorized mutation intentionally retained for this session
 ```
 
-当前 Bridge：
+The source and packaged Bridge binaries have identical SHA-256 values. The current database contains the previously authorized `mode=set` mutation. The full all-action campaign still requires per-action changed-success, no-op, negative-case, and independent readback evidence.
 
-```text
-source:
-ascetcli/output/ascet-csharp/bin/AscetBridge.exe
+## Confirmed prior repair evidence
 
-packaged:
-packages/ascet-extension/ascet-cli/bin/AscetBridge.exe
-
-SHA-256:
-4C666BB405C25C06DAA8057B92F9029F7E2D47D7FCC5F447F13CB18434245452
-```
-
-源 Bridge 与 packaged Bridge SHA-256 一致。
-
-## 3. Bug 修改进度
-
-| Bug | 状态 | 当前修改 | 验证状态 |
-|---|---|---|---|
-| public `mutationResult` 未展开 `raw.data.result.payload` | 已修改 | `service.ts` 继续读取 nested `result.payload`，公开 canonical 字段 | TypeScript focused test 待重跑 |
-| no-op 错误接受 `saveAttempted=false`、`saveSucceeded=true` | 已修改 | fast-path 要求 no-op 必须为 `saveSucceeded=false` | 新增回归测试，待重跑；真实 no-op live 待执行 |
-| no-op 被误判为 Save failure | 已修改 | 仅 changed write 的 `saveSucceeded=false` 或 `saveState=failed` 判定为 Save failure | TypeScript focused test 待重跑 |
-| code-write 测试未复制 `verificationStatus` | 已修改并通过 | `AscetCodeWriteBehaviorTest.cs` 三个 `CopyProtocol` overload 补充字段 | focused test PASS，94 assertions |
-| `set_method_signature` 成功 Save 后未稳定输出成功证据 | 已修改 | C# 写入结果补齐 canonical Save evidence | focused test PASS；最终真实 changed write 待重跑 |
-| code write 输出缺少 canonical verification 字段 | 已修改 | Module/StateMachine/Method code 路径统一输出协议字段 | focused test PASS；最终 live 待重跑 |
-| `apply_element_spec` SaveState 由 attempted 推断，失败时可能报告 `saved` | 已修改 | 改为 `saved / failed / not_required` 三态 | focused test PASS；最终 live 证据待确认 |
-| `create_component` already-existed 被当作 Save 成功 | 已修改 | 返回结果不再使用 `alreadyExisted` 推导 Save 成功 | focused test PASS；真实 no-op live 待执行 |
-| `create_folder` 内部 no-op 默认 `SaveSucceeded=true` | 部分收敛 | public formatter 已输出 no-op `saveSucceeded=false`、`saveState=not_required` | 底层内部语义仍不统一；真实 no-op live 必须验证 public contract |
-| write executor 异常路径丢失 Save/verification payload | 未修复 | catch 路径仍返回空 `Payload` | 当前成功写入非直接 blocker；失败证据完整性问题仍存在 |
-| Formula JSON 同时输出大小写重复字段 | 未修复 | 同时存在 `SaveSucceeded/saveSucceeded`、`VerificationMode/verificationMode` | PowerShell 等大小写不敏感解析器可能失败 |
-| `set_element_dependency` 无 authoritative Save 证据 | 未修复 | 旧 live 为 changed=true，但 `saveAttempted=false`、`saveCount=0` | 当前明确 FAIL |
-| `create_dependent_chain` 被 extension `write_rejected` | 未修复 | 尚无可证明 canonical Bridge result | 当前明确 FAIL |
-
-## 4. Focused Test 进度
-
-已通过：
-
-```text
-AscetCodeWriteBehaviorTest                    PASS, 94 assertions
-AscetComponentCreateFastWriteTest             PASS
-AscetApplyElementSpecFastWriteTest             PASS
-AscetSetMethodSignatureOutputTest              PASS
-```
-
-待执行或重新执行：
-
-```text
-packages/ascet-extension/src/edit/service.fast-path.test.ts
-预期：10 tests
-
-AscetSetElementDependencyOutputTest
-npm run check
-```
-
-说明：最新 TypeScript 修改发生在上一次 `npm run check` 之后，因此之前的 check 结果不能作为最终结果。
-
-## 5. Live 测试进度
-
-### 5.1 已保留证据
-
-```text
-artifacts/ascet-edit-live/source-20260818-create-folder-canonical-002/
-artifacts/ascet-edit-live/source-20260818-remaining-actions-001/
-artifacts/ascet-edit-live/source-20260818-method-code-retest-001/
-artifacts/ascet-edit-live/source-20260818-dependent-chain-direct-001/
-artifacts/ascet-edit-live/source-20260818-project-formula-direct-001/
-artifacts/ascet-edit-live/source-20260818-all-actions-008/
-```
-
-`source-20260818-all-actions-008` 当前只有 runtime telemetry、stdout 和 stderr，共 3 个文件；尚未形成完整的逐 action request/response/readback 证据集。
-
-### 5.2 当前保守 action 矩阵
-
-以下是当前可用于继续测试的保守分类，不是最终验收结果：
-
-| Public action | 当前状态 | 说明 |
+| Action | Current evidence status | Evidence |
 |---|---|---|
-| `create_folder` | 暂定 PASS | changed write 有旧证据；最终 Bridge no-op 待重跑 |
-| `create_component` | 暂定 PASS | changed write 有旧证据；最终 Bridge no-op 待重跑 |
-| `create_method` | 暂定 PASS | 有真实创建证据 |
-| `create_dependent_chain` | FAIL | `write_rejected`，缺少 canonical result |
-| `set_method_signature` | 待最终重跑 | 修复和 focused test 已完成，需 fresh method changed write |
-| `delete_component` | 暂定 PASS | 有真实删除证据 |
-| `delete_method` | 暂定 PASS | 有真实删除证据 |
-| `delete_folder` | 暂定 PASS | 有真实删除证据 |
-| `set_method_code` | 暂定 PASS | 有真实代码写入和独立 readback 证据 |
-| `set_module_code` | 待最终重跑 | 需当前 Bridge `set-method` changed write |
-| `set_state_machine_code` | 待最终重跑 | 需当前 Bridge `set-method` changed write |
-| `set_enumerators` | 待最终重跑 | 需新有序枚举值和顺序 readback |
-| `apply_element_spec` | 暂定 PASS | 有真实 element 写入证据 |
-| `apply_project_formula` | CONDITIONAL PASS | Bridge write/readback 成功；独立 public readback 尚未闭环 |
-| `set_element_dependency` | FAIL | mutation/readback 成功但无 Save 证据 |
-| `mode=check` | 暂定 PASS | read-only，返回 `editable=true` |
-| `mode=set` | BLOCKED | 未证明 `editable=false -> true` 状态转换 |
+| `create_dependent_chain` | Confirmed changed write and independent readback | `artifacts/ascet-edit-live/source-20260818-edit-fixes-live-004/` |
+| `set_element_dependency` | Confirmed changed write and independent readback | `artifacts/ascet-edit-live/source-20260818-edit-fixes-live-003/` |
+| `mode=set` | Confirmed `editable=false -> true` on current database | `artifacts/ascet-edit-live/source-20260818-mode-set-live-001/` |
 
-当前统计：
+These three results are the completed repair scope. They do not substitute for a fresh live run of all 17 actions.
+
+## Important evidence correction
+
+The historical targeted campaign is not a 17-action pass:
 
 ```text
-provisional PASS:       9
-pending final rerun:    4
-conditional PASS:       1
-FAIL:                   2
-BLOCKED:                1
-total:                 17
+artifacts/ascet-edit-live/source-20260818-final-targeted-003/campaign-summary.json
+
+PASS:     8
+FAIL:     0
+BLOCKED:  212
 ```
 
-所有 provisional PASS 仍需结合当前 Bridge SHA 和最终证据审查后才能转为 final PASS。
-
-## 6. 下一轮真实写入测试
-
-按以下顺序执行：
-
-1. `set_method_signature`
-   - 创建 fresh method；
-   - 执行真实 changed write；
-   - 要求 `saveSucceeded=true`、`saveCount=1`。
-2. `set_enumerators`
-   - 写入新的有序列表；
-   - 精确验证名称和顺序。
-3. `set_module_code`
-   - target：`PI_ASCET_EDIT_20260818_ALL_ACTIONS_008\Core\PiSmokeModule`；
-   - operation：`set-method`。
-4. `set_state_machine_code`
-   - target：`PI_ASCET_EDIT_20260818_ALL_ACTIONS_008\Core\PiSmokeStateMachine`；
-   - operation：`set-method`；
-   - method：`trigger`。
-5. `create_component` no-op
-   - `ifExists=return-existing`；
-   - 必须证明 `saveAttempted=false`、`saveSucceeded=false`、`saveState=not_required`、`saveCount=0`。
-6. `create_folder` no-op
-   - 对已存在路径重复创建；
-   - 要求相同 no-op Save 语义。
-7. `apply_project_formula`
-   - 补独立 public formulas readback。
-8. `mode=set`
-   - 只有找到 `editable=false` fixture 并证明 `false -> true` 才能 PASS；否则保持 BLOCKED。
-
-每次 live 必须保留：
+Also, `set_method_signature` has retained evidence showing `changed=true` and `mutationStatus=applied`, but `saveState=failed` and `saveSucceeded=false`; this is a partial mutation, not a durable-write PASS:
 
 ```text
-public request
-public response
-Bridge request
-Bridge stdout/stderr
-telemetry
-readback
-Bridge SHA-256
-timing
+artifacts/ascet-edit-live/source-20260818-signature-debug-001/set-signature.response.json
 ```
 
-## 7. 完成条件
+`mode=check` is read-only by design, and confirmed-no-op scenarios are expected not to write.
 
-最终验收前必须同时满足：
+## Verification already completed before the new campaign request
 
-- TypeScript focused test PASS；
-- 所有相关 C# focused tests PASS；
-- `npm run check` PASS；
-- 当前 packaged Bridge SHA 被记录；
-- 关键 action 使用当前 Bridge 完成 fresh live write；
-- no-op Save 语义通过真实验证；
-- Luna 对最终证据和 action 分类完成复审；
-- `docs/2026-08-18-ascet-edit-tools-acceptance-spec.md` 移除过时的 `15 PASS / 2 FAIL` 结论并写入最终矩阵。
+```text
+AscetSetElementDependencyOutputTest:  PASS, 38 runtime assertions
+AscetDependencyCanonicalOutputTest:   PASS, 30 runtime assertions
+AscetComponentEditableTcmOutputTest: PASS
+ASCET live harness tests:              PASS, 19/19
+npm run check:                         PASS (FINAL_EXIT_CODE=0)
+```
+
+## Recorded live test plan
+
+The database-bound full test plan is recorded at:
+
+`	ext
+docs/2026-08-18-ascet-edit-tools-all-actions-live-test-plan.md
+`
+
+## Full all-action live campaign state
+
+```text
+17-action changed-success live runs: not started
+17-action confirmed-no-op live runs: not started
+17-action negative-case live runs:    not started
+Independent readback audit:           not started
+Campaign result:                      pending
+```
+
+The next execution must retain one evidence directory per campaign and classify each action only when its response proves the expected mutation/save/readback contract. The legacy folder-target route of `set_element_dependency` remains a known variant caveat.

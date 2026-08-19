@@ -7,6 +7,7 @@ export type JsonRecord = Record<string, unknown>;
 type CampaignChannel = "source" | "packaged";
 type CampaignStatus = "PASS" | "FAIL" | "BLOCKED" | "NOT_RUN";
 export type ScenarioKind = "changed-success" | "confirmed-no-op" | "invalid-selector" | "bridge-failure";
+export type ReadbackPhase = "independent" | "precondition" | "postcondition";
 export const REQUIRED_SCENARIOS: readonly ScenarioKind[] = ["changed-success", "confirmed-no-op", "invalid-selector", "bridge-failure"];
 
 export const ACTION_MATRIX = [
@@ -30,6 +31,13 @@ export const ACTION_MATRIX = [
 ] as const;
 
 export type ActionName = (typeof ACTION_MATRIX)[number];
+
+export interface ReadbackSpec {
+    id: string;
+    tool: string;
+    params: JsonRecord;
+    phase: ReadbackPhase;
+}
 
 export const REQUIRED_VARIANT_MATRIX = {
 	create_folder: ["folder"],
@@ -78,7 +86,7 @@ export interface ActionScenario {
 	scenario: ScenarioKind;
 	request: JsonRecord;
 	bridgeRequest?: JsonRecord;
-	readback?: { tool: string; params: JsonRecord };
+	readback?: ReadbackSpec | ReadbackSpec[];
 	objectManifest: JsonRecord;
 	expectedOutcome: ScenarioKind;
 	execution?: "ready" | "blocked";
@@ -137,7 +145,7 @@ export interface ReadbackInvocation {
 
 export interface CampaignInvoker {
 	invoke(action: ActionPlan, variant: ActionVariant, scenario: ActionScenario): Promise<PublicInvocation>;
-	readback(action: ActionPlan, variant: ActionVariant, scenario: ActionScenario): Promise<ReadbackInvocation>;
+	readback(action: ActionPlan, variant: ActionVariant, scenario: ActionScenario, readback: ReadbackSpec): Promise<ReadbackInvocation>;
 }
 
 export interface CampaignOptions {
@@ -265,6 +273,33 @@ function validateRequestPaths(value: unknown, root: string): void {
 	}
 }
 
+export function getReadbackSpecs(scenario: ActionScenario): ReadbackSpec[] {
+    if (!scenario.readback) return [];
+    const specs = Array.isArray(scenario.readback) ? scenario.readback : [scenario.readback];
+    return specs.map((spec, index) => ({ ...spec, id: spec.id || `readback-${index + 1}`, phase: spec.phase || "independent" }));
+}
+function validateReadbackSpecs(action: ActionPlan, variant: ActionVariant, scenario: ActionScenario): ReadbackSpec[] {
+	const specs = getReadbackSpecs(scenario);
+	const ids = new Set<string>();
+	for (const spec of specs) {
+		if (!spec.id || ids.has(spec.id) || !spec.tool || !spec.params || !["independent", "precondition", "postcondition"].includes(spec.phase)) {
+			throw new Error(`Action ${action.id}/${variant.variant}/${scenario.scenario} has an invalid readback specification.`);
+		}
+		ids.add(spec.id);
+		try {
+			validateRequestPaths(spec.params, campaignDisposableRoot(scenario.objectManifest));
+		} catch (error) {
+			throw new Error(`Action ${action.id}/${variant.variant}/${scenario.scenario} has an unsafe readback path: ${outcomeError(error)}`);
+		}
+	}
+	if ((action.action === "set_element_dependency" || action.action === "create_dependent_chain") && (scenario.scenario === "changed-success" || scenario.scenario === "confirmed-no-op") && !specs.some((spec) => spec.phase === "independent")) {
+		throw new Error(`Action ${action.id}/${variant.variant}/${scenario.scenario} requires an independent readback.`);
+	}
+    if (action.action === "mode=set" && scenario.scenario === "changed-success" && (!specs.some((spec) => spec.phase === "precondition") || !specs.some((spec) => spec.phase === "postcondition"))) {
+		throw new Error(`Action ${action.id}/${variant.variant}/${scenario.scenario} requires precondition and postcondition readbacks.`);
+	}
+	return specs;
+}
 function validateReadyRequestPaths(action: ActionPlan, variant: ActionVariant, scenario: ActionScenario): void {
 	const root = campaignDisposableRoot(scenario.objectManifest);
 	try {
@@ -320,7 +355,10 @@ export function validateCampaignPlan(plan: CampaignPlan): void {
                 if (scenario.execution !== "ready" && scenario.execution !== "blocked") {
                     throw new Error(`Action ${action.id}/${variant.variant}/${scenario.scenario} has invalid execution; use ready or blocked.`);
                 }
-                if (scenario.execution === "ready") validateReadyRequestPaths(action, variant, scenario);
+                if (scenario.execution === "ready") {
+                    validateReadyRequestPaths(action, variant, scenario);
+                    validateReadbackSpecs(action, variant, scenario);
+                }
 			}
 		}
 	}
@@ -389,9 +427,19 @@ function hasPublicFailure(value: unknown): boolean {
 	return value.status === "error" || value.status === "failed" || value.status === "failure" || outcome?.status === "error" || outcome?.status === "partial" || outcome?.status === "blocked";
 }
 
+interface CapturedReadback {
+	 spec: ReadbackSpec;
+	 invocation?: ReadbackInvocation;
+	 error?: string;
+}
+
 function readbackPassed(readback: ReadbackInvocation | undefined): boolean {
 	if (!readback || readback.bridgeEvidence?.exitCode !== 0) return false;
 	return readback.bridgeEvidence.request !== undefined && readback.bridgeEvidence.stdout !== undefined && !hasPublicFailure(readback.publicResult);
+}
+
+function allReadbacksPassed(readbacks: CapturedReadback[], required: ReadbackSpec[]): boolean {
+	return required.length === readbacks.length && readbacks.every((readback) => !readback.error && readbackPassed(readback.invocation));
 }
 
 function canonicalApplied(result: JsonRecord | undefined): boolean {
@@ -407,10 +455,10 @@ function canonicalFailure(result: JsonRecord | undefined): boolean {
 	return result !== undefined && result.changed !== true && result.mutationStatus !== "applied";
 }
 
-function evidenceStatus(invocation: PublicInvocation, readback: ReadbackInvocation | undefined, scenario: ActionScenario, error?: unknown): CampaignStatus {
+function evidenceStatus(invocation: PublicInvocation, readbacks: CapturedReadback[], scenario: ActionScenario, error?: unknown): CampaignStatus {
 	if (error) return "FAIL";
 	if (!hasBridgeEvidence(invocation)) return "BLOCKED";
-	if (scenario.readback && !readbackPassed(readback)) return "BLOCKED";
+	if (!allReadbacksPassed(readbacks, getReadbackSpecs(scenario))) return "BLOCKED";
 	if (invocation.telemetry === undefined) return "BLOCKED";
 	const result = canonicalResult(invocation);
 	if ((scenario.scenario === "changed-success" || scenario.scenario === "confirmed-no-op") && hasPublicFailure(invocation.response)) return "BLOCKED";
@@ -477,10 +525,25 @@ export async function runCampaign(plan: CampaignPlan, options: CampaignOptions):
 					writeJsonOnce(join(runPath, "object-manifest.json"), scenario.objectManifest);
 					writeJsonOnce(join(runPath, "request", "public-tool-request.json"), scenario.request);
 					writeJsonOnce(join(runPath, "cleanup", "decision.json"), { status: "pending-human-review", cleanupAllowed: false });
+					const readbackSpecs = getReadbackSpecs(scenario);
 					let invocation: PublicInvocation = { response: { status: "not-run" } };
-					let readback: ReadbackInvocation | undefined;
+					const capturedReadbacks: CapturedReadback[] = [];
 					let error: string | undefined;
-					const preconditionBlocked = scenario.execution === "blocked";
+					let preconditionBlocked = scenario.execution === "blocked";
+					const captureReadback = async (spec: ReadbackSpec): Promise<boolean> => {
+						try {
+							const result = await options.invoker.readback(action, variant, scenario, spec);
+							capturedReadbacks.push({ spec, invocation: result });
+							return readbackPassed(result);
+						} catch (caught) {
+							capturedReadbacks.push({ spec, error: outcomeError(caught) });
+							return false;
+						}
+					};
+					const writeReadbackEvidence = (): void => {
+						writeJsonOnce(join(runPath, "readback", "request.json"), { steps: readbackSpecs });
+						writeJsonOnce(join(runPath, "readback", "result.json"), { steps: capturedReadbacks });
+					};
 					if (preconditionBlocked) {
 						invocation = {
 							response: { status: "blocked", code: "campaign_precondition_blocked", blockers: scenario.preconditionBlockers ?? [] },
@@ -491,27 +554,42 @@ export async function runCampaign(plan: CampaignPlan, options: CampaignOptions):
 						writeJsonOnce(join(runPath, "request", "bridge-request.json"), scenario.bridgeRequest ?? { evidence: "not-captured", reason: "Scenario was precondition-blocked before ASCET invocation." });
 						writeBridgeEvidence(runPath, undefined);
 					} else {
-						try {
-							invocation = await options.invoker.invoke(action, variant, scenario);
-							writeJsonOnce(join(runPath, "result", "public-tool-result.json"), invocation.response);
-							writeJsonOnce(join(runPath, "result", "normalized-result.json"), invocation.normalizedResult ?? invocation.response);
-							writeJsonOnce(join(runPath, "request", "bridge-request.json"), invocation.bridge?.request ?? scenario.bridgeRequest ?? { evidence: "not-captured" });
-							writeBridgeEvidence(runPath, invocation.bridge);
-							writeTelemetry(runPath, invocation.telemetry);
-							if (scenario.readback) {
-								writeJsonOnce(join(runPath, "readback", "request.json"), scenario.readback);
-								readback = await options.invoker.readback(action, variant, scenario);
-								writeJsonOnce(join(runPath, "readback", "result.json"), readback);
+						for (const spec of readbackSpecs.filter((candidate) => candidate.phase === "precondition")) {
+							if (!(await captureReadback(spec))) {
+								preconditionBlocked = true;
+                                error = `Readback precondition failed: ${spec.id}`;
+								break;
 							}
-						} catch (caught) {
-							error = outcomeError(caught);
-							writeJsonOnce(join(runPath, "result", "public-tool-result.json"), { error });
-							writeJsonOnce(join(runPath, "result", "normalized-result.json"), { status: "error", error });
-							writeJsonOnce(join(runPath, "request", "bridge-request.json"), invocation.bridge?.request ?? scenario.bridgeRequest ?? { evidence: "not-captured", reason: "Invocation threw before Bridge request evidence was returned." });
-							writeBridgeEvidence(runPath, invocation.bridge);
+						}
+						if (preconditionBlocked) {
+							invocation = {
+								response: { status: "blocked", code: "campaign_precondition_blocked", blockers: [error ?? "readback_precondition_failed"] },
+								normalizedResult: { status: "blocked", blockers: [error ?? "readback_precondition_failed"] },
+							};
+							writeJsonOnce(join(runPath, "result", "public-tool-result.json"), invocation.response);
+							writeJsonOnce(join(runPath, "result", "normalized-result.json"), invocation.normalizedResult);
+							writeJsonOnce(join(runPath, "request", "bridge-request.json"), scenario.bridgeRequest ?? { evidence: "not-captured", reason: "Readback precondition failed before ASCET invocation." });
+							writeBridgeEvidence(runPath, undefined);
+						} else {
+							try {
+								invocation = await options.invoker.invoke(action, variant, scenario);
+								writeJsonOnce(join(runPath, "result", "public-tool-result.json"), invocation.response);
+								writeJsonOnce(join(runPath, "result", "normalized-result.json"), invocation.normalizedResult ?? invocation.response);
+								writeJsonOnce(join(runPath, "request", "bridge-request.json"), invocation.bridge?.request ?? scenario.bridgeRequest ?? { evidence: "not-captured" });
+								writeBridgeEvidence(runPath, invocation.bridge);
+								writeTelemetry(runPath, invocation.telemetry);
+								for (const spec of readbackSpecs.filter((candidate) => candidate.phase !== "precondition")) await captureReadback(spec);
+							} catch (caught) {
+								error = outcomeError(caught);
+								writeJsonOnce(join(runPath, "result", "public-tool-result.json"), { error });
+								writeJsonOnce(join(runPath, "result", "normalized-result.json"), { status: "error", error });
+								writeJsonOnce(join(runPath, "request", "bridge-request.json"), invocation.bridge?.request ?? scenario.bridgeRequest ?? { evidence: "not-captured", reason: "Invocation threw before Bridge request evidence was returned." });
+								writeBridgeEvidence(runPath, invocation.bridge);
+							}
 						}
 					}
-					const status = preconditionBlocked ? "BLOCKED" : evidenceStatus(invocation, readback, scenario, error);
+					writeReadbackEvidence();
+					const status = preconditionBlocked ? "BLOCKED" : evidenceStatus(invocation, capturedReadbacks, scenario, error);
 					const finishedAt = now();
 					const runManifest = {
 						schemaVersion: 1,
@@ -534,8 +612,8 @@ export async function runCampaign(plan: CampaignPlan, options: CampaignOptions):
 						preconditionBlockers: scenario.preconditionBlockers ?? [],
 						ascetCall: preconditionBlocked ? "not_started" : "started",
 						bridgeEvidence: invocation.bridge ? "captured" : "missing",
-						readback: scenario.readback ? (readback === undefined ? "missing" : "captured") : "not-applicable",
-						telemetry: invocation.telemetry ? "captured" : "missing",
+						readback: readbackSpecs.length === 0 ? "not-applicable" : allReadbacksPassed(capturedReadbacks, readbackSpecs) ? "captured" : "missing",
+                        readbackSteps: capturedReadbacks.map(({ spec, invocation, error: readbackError }) => ({ id: spec.id, phase: spec.phase, status: readbackError ? "error" : readbackPassed(invocation) ? "passed" : "failed", error: readbackError ?? null })),
 						retentionState: "pending-human-review",
 						cleanupAllowed: false,
 						error: error ?? null,

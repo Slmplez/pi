@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 
 class AscetSetElementDependencyOutputTest
 {
@@ -43,23 +44,23 @@ class AscetSetElementDependencyOutputTest
             DataVariantNames = new List<string> { "default" },
             RequestedDependency = parsed.RequestedDependency,
             DryRun = false,
-            WriteSucceeded = false,
+            WriteSucceeded = true,
             VerifyReadbackRequested = true,
             ReadbackVerified = true,
             Changed = true,
             MutationStatus = "applied",
-            SaveAttempted = false,
-            SaveSucceeded = false,
-            SaveState = "unknown",
+            SaveAttempted = true,
+            SaveSucceeded = true,
+            SaveState = "saved",
             Verified = true,
             VerificationStatus = "passed",
             VerificationMode = "same_session_dependency_endpoint",
             SessionCount = 1,
-            SaveCount = 0,
+            SaveCount = 1,
             EditableRetryCount = 0,
             NativeMutationAttemptCount = 1,
-            CanonicalEvidenceStatus = "blocked",
-            CanonicalEvidenceIssue = "ImportXMLFromFile save semantics are not proven; no explicit database.Save call was observed.",
+            CanonicalEvidenceStatus = "complete",
+            CanonicalEvidenceIssue = String.Empty,
             BackupDirectory = @"E:\Rep\AscetCopolit\output\ascet-xml\backup-DEMO_DiscreteRiccatiSolver-20260711-000000",
             MatchesChanged = 1,
             BeforeDependency = "independent",
@@ -96,7 +97,7 @@ class AscetSetElementDependencyOutputTest
                     Issue = String.Empty
                 }
             },
-            AttemptedMethods = new List<string> { "ExportXMLToFile(backup)", "ImportXMLFromFile" },
+            AttemptedMethods = new List<string> { "ExportXMLToFile(backup)", "ImportXMLFromFile", "database.Save" },
             Issues = new List<string>(),
             Plan = new AscetElementDependencyPlanResult
             {
@@ -121,7 +122,7 @@ class AscetSetElementDependencyOutputTest
         string text = AscetSetElementDependency.FormatTextOutput(result);
         string json = AscetSetElementDependency.FormatJsonOutput(result);
 
-        if (text.IndexOf("WriteSucceeded: False", StringComparison.Ordinal) < 0 ||
+        if (text.IndexOf("WriteSucceeded: True", StringComparison.Ordinal) < 0 ||
             text.IndexOf("MatchMode: all", StringComparison.Ordinal) < 0 ||
             text.IndexOf("MatchesChanged: 1", StringComparison.Ordinal) < 0 ||
             text.IndexOf("AfterDependency: dependent", StringComparison.Ordinal) < 0 ||
@@ -138,7 +139,7 @@ class AscetSetElementDependencyOutputTest
             json.IndexOf("\"dataConfiguration\":{\"source\":\"defaultDataConfiguration\",\"name\":\"DefaultData\"}", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"dataVariants\":[\"default\"]", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"requested\":\"dependent\"", StringComparison.Ordinal) < 0 ||
-            json.IndexOf("\"succeeded\":false", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"succeeded\":true", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"verifyReadbackRequested\":true", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"readbackVerified\":true", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"changed\":true", StringComparison.Ordinal) < 0 ||
@@ -146,13 +147,20 @@ class AscetSetElementDependencyOutputTest
             json.IndexOf("\"beforeMappings\":[{\"formal\":\"Old\",\"valueName\":\"C_Old\",\"targetKind\":\"constant\",\"targetScope\":\"local\",\"verified\":true,\"variant\":\"default\",\"formalOID\":\"oldFormalOid\",\"valueOID\":\"oldValueOid\"}]", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"mappings\":[{\"formal\":\"K_Factor\",\"valueName\":\"K_Factor\",\"targetKind\":\"parameter\",\"targetScope\":\"imported\",\"verified\":true,\"variant\":\"default\",\"formalOID\":\"formalOid\",\"valueOID\":\"valueOid\"", StringComparison.Ordinal) < 0 ||
             json.IndexOf("\"plan\":{", StringComparison.Ordinal) < 0 ||
-            json.IndexOf("\"saveState\":\"unknown\"", StringComparison.Ordinal) < 0 ||
-            json.IndexOf("\"canonicalEvidenceStatus\":\"blocked\"", StringComparison.Ordinal) < 0)
+            json.IndexOf("\"saveAttempted\":true", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"saveSucceeded\":true", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"saveState\":\"saved\"", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"saveCount\":1", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"canonicalEvidenceStatus\":\"complete\"", StringComparison.Ordinal) < 0)
         {
             Console.Error.WriteLine("unexpected set dependency json output");
             Console.Error.WriteLine(json);
             return 3;
         }
+
+        ExpectDeferredSaveOverload();
+        ExpectConfirmedNoOpCanonicalOutput();
+        ExpectIndependentRestorationWriteDecision();
 
         ExpectXmlFormulaWrite();
         ExpectLogFormulaWriteUsesAscetStyleFormalOid();
@@ -170,6 +178,124 @@ class AscetSetElementDependencyOutputTest
 
         Console.WriteLine("{\"passed\":true,\"runtimeProtocolAssertions\":38,\"metrics\":{\"operation\":\"set_element_dependency\",\"scenarios\":4}}");
         return 0;
+    }
+
+    private static void ExpectDeferredSaveOverload()
+    {
+        MethodInfo method = typeof(AscetSetElementDependencyService).GetMethod(
+            "SetInSession",
+            BindingFlags.Instance | BindingFlags.NonPublic,
+            null,
+            new[] { typeof(AscetSession), typeof(AscetSetElementDependencyArguments), typeof(bool) },
+            null);
+        if (method == null || !method.IsAssembly)
+        {
+            Console.Error.WriteLine("internal deferred Save overload is missing");
+            Environment.Exit(18);
+        }
+    }
+
+    private static void ExpectConfirmedNoOpCanonicalOutput()
+    {
+        AscetSetElementDependencyResult noOp = new AscetSetElementDependencyResult
+        {
+            TargetPath = @"DEMO\DiscreteRiccatiSolver",
+            TargetKind = "component",
+            ElementName = "B01",
+            RequestedDependency = "dependent",
+            WriteSucceeded = true,
+            ReadbackVerified = true,
+            Changed = false,
+            MutationStatus = "no_op",
+            SaveAttempted = false,
+            SaveSucceeded = false,
+            SaveState = "not_required",
+            Verified = true,
+            VerificationStatus = "passed",
+            VerificationMode = "same_session_dependency_endpoint",
+            SessionCount = 1,
+            SaveCount = 0,
+            EditableRetryCount = 0,
+            NativeMutationAttemptCount = 0,
+            CanonicalEvidenceStatus = "complete",
+            CanonicalEvidenceIssue = String.Empty
+        };
+        string json = AscetSetElementDependency.FormatJsonOutput(noOp);
+        if (json.IndexOf("\"succeeded\":true", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"changed\":false", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"mutationStatus\":\"no_op\"", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"saveAttempted\":false", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"saveSucceeded\":false", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"saveState\":\"not_required\"", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"saveCount\":0", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"nativeMutationAttemptCount\":0", StringComparison.Ordinal) < 0 ||
+            json.IndexOf("\"canonicalEvidenceStatus\":\"complete\"", StringComparison.Ordinal) < 0)
+        {
+            Console.Error.WriteLine("unexpected confirmed no-op canonical output");
+            Console.Error.WriteLine(json);
+            Environment.Exit(19);
+        }
+    }
+
+    private static void ExpectIndependentRestorationWriteDecision()
+    {
+        AscetSetElementDependencyArguments arguments = new AscetSetElementDependencyArguments
+        {
+            RequestedDependency = "independent",
+            RestorationPolicy = "ascetDefault",
+            VariantPolicy = "default",
+            VariantNames = new List<string>()
+        };
+        IList<AscetElementDependencyDataVariantState> numericDefault = new List<AscetElementDependencyDataVariantState>
+        {
+            new AscetElementDependencyDataVariantState
+            {
+                VariantName = "default",
+                HasDependency = false,
+                HasScalarType = true,
+                ScalarTypeXml = "<ScalarType><Numeric value=\"0.0\" /></ScalarType>",
+                Mappings = new List<AscetElementDependencyDataVariantMapping>()
+            }
+        };
+        if (AscetSetElementDependencyService.RequiresIndependentDataWrite(numericDefault, arguments, null))
+        {
+            Console.Error.WriteLine("ascetDefault Numeric 0.0 must be a confirmed no-op");
+            Environment.Exit(20);
+        }
+
+        IList<AscetElementDependencyDataVariantState> logicDefault = new List<AscetElementDependencyDataVariantState>
+        {
+            new AscetElementDependencyDataVariantState
+            {
+                VariantName = "default",
+                HasDependency = false,
+                HasScalarType = true,
+                ScalarTypeXml = "<ScalarType><Logic value=\"false\" /></ScalarType>",
+                Mappings = new List<AscetElementDependencyDataVariantMapping>()
+            }
+        };
+        if (AscetSetElementDependencyService.RequiresIndependentDataWrite(logicDefault, arguments, null))
+        {
+            Console.Error.WriteLine("ascetDefault Logic false must be a confirmed no-op");
+            Environment.Exit(21);
+        }
+
+        IList<AscetElementDependencyDataVariantState> numericNonDefault = new List<AscetElementDependencyDataVariantState>
+        {
+            new AscetElementDependencyDataVariantState
+            {
+                VariantName = "default",
+                HasDependency = false,
+                HasScalarType = true,
+                ScalarTypeXml = "<ScalarType><Numeric value=\"1.0\" /></ScalarType>",
+                Mappings = new List<AscetElementDependencyDataVariantMapping>()
+            }
+        };
+        if (!AscetSetElementDependencyService.RequiresIndependentDataWrite(numericNonDefault, arguments, null))
+        {
+            Console.Error.WriteLine("ascetDefault Numeric non-default must require a write");
+            Environment.Exit(22);
+        }
     }
 
     private static void ExpectInvalid(string[] args, string expectedMessagePart, int exitCode)

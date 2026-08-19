@@ -18,6 +18,7 @@ import {
 	type ActionVariant,
 	type CampaignInvoker,
 	type CampaignPlan,
+    type ReadbackSpec,
 } from "./ascet-edit-live-campaign.ts";
 
 function expectedRunCount(): number {
@@ -47,7 +48,7 @@ const bridgeSha256 = createHash("sha256").update(readFileSync(resolve(process.cw
 					id: `${action}-${variant}-${scenario}`,
 					scenario,
 					request: { action, variant, scenario, fixtureRoot: `PI_LIVE_EVIDENCE_fixture_${actionIndex + 1}_${variantIndex + 1}_${scenario}`, targetPath: `PI_LIVE_EVIDENCE_fixture_${actionIndex + 1}_${variantIndex + 1}_${scenario}\\Target` },
-					readback: { tool: "fixture_readback", params: { action, variant, scenario } },
+                    readback: action === "mode=set" && scenario === "changed-success" ? [{ id: "before-editable", tool: "fixture_readback", params: { action, variant, scenario, checkpoint: "before" }, phase: "precondition" }, { id: "after-editable", tool: "fixture_readback", params: { action, variant, scenario, checkpoint: "after" }, phase: "postcondition" }] : { id: "independent", tool: "fixture_readback", params: { action, variant, scenario }, phase: "independent" },
 					objectManifest: { root: `PI_LIVE_EVIDENCE_fixture_${actionIndex + 1}_${variantIndex + 1}_${scenario}`, parent: "PI_LIVE_EVIDENCE_fixture_parent", siblingMarkers: ["sibling-marker"] },
 					expectedOutcome: scenario,
                     execution: "ready",
@@ -73,9 +74,9 @@ function completeInvoker(failure?: { action: string; variant: string; scenario: 
 				normalizedResult: scenario.scenario === "changed-success" ? { changed: true, mutationStatus: "applied", saveAttempted: true, saveSucceeded: true, saveState: "saved", verified: true, verificationStatus: "passed", verificationMode: "same_session", sessionCount: 1, saveCount: 1, editableRetryCount: 0, nativeMutationAttemptCount: 1 } : scenario.scenario === "confirmed-no-op" ? { changed: false, mutationStatus: "no_op", saveAttempted: false, saveSucceeded: false, saveState: "not_required", verified: true, verificationStatus: "passed", verificationMode: "same_session", sessionCount: 1, saveCount: 0, editableRetryCount: 0, nativeMutationAttemptCount: 0 } : { changed: false, mutationStatus: bridgeFailure ? "failed" : "rejected", verified: false, sessionCount: 1, saveCount: 0, nativeMutationAttemptCount: 0 },
 			};
 		},
-		async readback(action: ActionPlan, variant: ActionVariant, scenario: ActionScenario) {
-			if (failedReadback?.action === action.action && failedReadback.variant === variant.variant && failedReadback.scenario === scenario.scenario) return { publicResult: { status: "error", error: { code: "target_not_found" } }, bridgeEvidence: { request: scenario.readback, stdout: { error: "target_not_found" }, stderr: "target_not_found", exitCode: 2 } };
-			return { publicResult: { ok: true, variant: variant.variant, scenario: scenario.scenario }, bridgeEvidence: { request: scenario.readback, stdout: { ok: true }, stderr: "", exitCode: 0 } };
+        async readback(action: ActionPlan, variant: ActionVariant, scenario: ActionScenario, readback: ReadbackSpec) {
+            if (failedReadback?.action === action.action && failedReadback.variant === variant.variant && failedReadback.scenario === scenario.scenario) return { publicResult: { status: "error", error: { code: "target_not_found" } }, bridgeEvidence: { request: readback, stdout: { error: "target_not_found" }, stderr: "target_not_found", exitCode: 2 } };
+            return { publicResult: { ok: true, variant: variant.variant, scenario: scenario.scenario, readbackId: readback.id, phase: readback.phase }, bridgeEvidence: { request: readback, stdout: { ok: true }, stderr: "", exitCode: 0 } };
 		},
 	};
 }
@@ -165,6 +166,13 @@ test("campaign template contains every spec-required variant and scenario", () =
             for (const scenario of variant.scenarios) scenario.execution = "ready";
         }
     }
+	const modeSet = template.actions.find((action) => action.action === "mode=set");
+	assert.ok(modeSet);
+	const modeSetChanged = modeSet.variants.flatMap((variant) => variant.scenarios).find((scenario) => scenario.scenario === "changed-success");
+	assert.ok(modeSetChanged);
+	assert.ok(Array.isArray(modeSetChanged.readback));
+	assert.ok(modeSetChanged.readback.some((readback) => readback.phase === "precondition"));
+	assert.ok(modeSetChanged.readback.some((readback) => readback.phase === "postcondition"));
 	validateCampaignPlan(template);
 	const stateMachine = template.actions.find((action) => action.action === "set_state_machine_code");
 	assert.ok(stateMachine);
@@ -323,6 +331,31 @@ test("missing Bridge evidence is BLOCKED and never promoted to PASS", async () =
 	} finally {
 		rmSync(root, { recursive: true, force: true });
 	}
+});
+
+test("targeted Edit actions capture independent and transition readbacks", async () => {
+    const root = mkdtempSync(join(tmpdir(), "ascet-live-harness-targeted-readbacks-"));
+    try {
+        const summary = await runCampaign(planFor(), {
+            outputRoot: join(root, "source-campaign"),
+            invoker: completeInvoker(),
+            acquireWriter: () => () => undefined,
+        });
+        for (const actionName of ["set_element_dependency", "create_dependent_chain"] as const) {
+            for (const scenarioName of ["changed-success", "confirmed-no-op"] as const) {
+                const row = summary.actions.find((run) => run.action === actionName && run.scenario === scenarioName);
+                assert.equal(row?.status, "PASS");
+                const readback = JSON.parse(readFileSync(join(row!.runPath, "readback", "result.json"), "utf8")) as { steps: Array<{ spec: { phase: string } }> };
+                assert.deepEqual(readback.steps.map((step) => step.spec.phase), ["independent"]);
+            }
+        }
+        const modeSet = summary.actions.find((run) => run.action === "mode=set" && run.scenario === "changed-success");
+        assert.equal(modeSet?.status, "PASS");
+        const modeReadback = JSON.parse(readFileSync(join(modeSet!.runPath, "readback", "result.json"), "utf8")) as { steps: Array<{ spec: { id: string; phase: string } }> };
+        assert.deepEqual(modeReadback.steps.map((step) => [step.spec.id, step.spec.phase]), [["before-editable", "precondition"], ["after-editable", "postcondition"]]);
+    } finally {
+        rmSync(root, { recursive: true, force: true });
+    }
 });
 
 test("writer lock is exclusive and requires the explicit live-writer opt-in", () => {

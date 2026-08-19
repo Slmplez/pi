@@ -111,11 +111,16 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
 
         return ExecuteWithSession("set_element_dependency", delegate(AscetSession session)
         {
-            return SetInSession(session, arguments);
+            return SetInSession(session, arguments, true);
         });
     }
 
     public AscetSetElementDependencyResult SetInSession(AscetSession session, AscetSetElementDependencyArguments arguments)
+    {
+        return SetInSession(session, arguments, true);
+    }
+
+    internal AscetSetElementDependencyResult SetInSession(AscetSession session, AscetSetElementDependencyArguments arguments, bool saveDatabase)
     {
         Validate(arguments);
         if (String.Equals(arguments.TargetKind, "folder", StringComparison.OrdinalIgnoreCase))
@@ -141,10 +146,9 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
             bool needsFormulaWrite = (hasFormula && !String.Equals(beforeFormula, arguments.DependencyFormula, StringComparison.Ordinal)) ||
                 (hasFormula && hasMappings) ||
                 (arguments.ClearDependencyFormula && !String.IsNullOrWhiteSpace(beforeFormula));
-            bool needsDataWrite = !wantDependent && !String.IsNullOrWhiteSpace(arguments.RestorationPolicy);
-            bool needsWrite = RequiresDependencyWrite(match, arguments);
+            bool restoresIndependentData = !wantDependent && !String.IsNullOrWhiteSpace(arguments.RestorationPolicy);
             IList<AscetElementDependencyDataVariantState> beforeDataVariants =
-                (hasFormula || needsDataWrite)
+                (hasFormula || restoresIndependentData)
                     ? ReadLiveDataVariantStates(component, arguments.TargetPath, arguments.ElementName, arguments.OverlaySpecFiles, attempted)
                     : new List<AscetElementDependencyDataVariantState>();
             AscetDependencySnapshotRecord restorationSnapshot = null;
@@ -166,6 +170,8 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
                 snapshotHash = AscetDependencySnapshotStore.ComputeStateHash(beforeDataVariants);
                 snapshotMode = "capture";
             }
+            bool needsDataWrite = restoresIndependentData && RequiresIndependentDataWrite(beforeDataVariants, arguments, effectiveRestorationValues);
+            bool needsWrite = RequiresDependencyWrite(match, arguments, needsDataWrite);
 
             string componentOid = ReadObjectString(component, "GetOID");
             if (String.IsNullOrWhiteSpace(componentOid))
@@ -262,6 +268,9 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
             string afterFormula = beforeFormula;
             bool backupCreated = false;
             bool snapshotSaved = false;
+            bool saveAttempted = false;
+            bool saveSucceeded = false;
+            int saveCount = 0;
 
             try
             {
@@ -284,6 +293,24 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
 
                     ApplyXmlDependency(session, component, arguments.TargetPath, arguments.ElementName, wantDependent, arguments.DependencyFormula, arguments.DependencyMappings, arguments.DependencyMappingKinds, arguments.VariantDependencyMappings, arguments.VariantDependencyMappingKinds, arguments.ClearDependencyFormula, arguments.VariantPolicy, arguments.VariantNames, arguments.RestorationPolicy, effectiveRestorationValues, attempted);
                     matchesChanged = 1;
+
+                    if (saveDatabase)
+                    {
+                        AscetDataBase database = session.GetCurrentDatabaseHandle();
+                        if (database == null)
+                        {
+                            throw new AscetReadException("database_not_open", "set_element_dependency", "Failed to resolve the current database before committing dependency changes.");
+                        }
+
+                        saveAttempted = true;
+                        saveCount++;
+                        attempted.Add("database.Save");
+                        saveSucceeded = database.Save();
+                        if (!saveSucceeded)
+                        {
+                            throw new AscetReadException("save_database_failed", "set_element_dependency", "Failed to save the current database after applying dependency changes.");
+                        }
+                    }
                 }
 
                 CodeComponent readbackComponent = ResolveCodeComponent(session, arguments.TargetPath);
@@ -375,23 +402,29 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
                     DataVariantNames = dataVariantNames,
                     RequestedDependency = arguments.RequestedDependency,
                     DryRun = false,
-                    WriteSucceeded = !needsWrite && readbackVerified,
+                    WriteSucceeded = readbackVerified && (!needsWrite || !saveDatabase || saveSucceeded),
                     VerifyReadbackRequested = arguments.VerifyReadback,
                     ReadbackVerified = readbackVerified,
                     Changed = matchesChanged > 0,
                     MutationStatus = matchesChanged > 0 ? "applied" : "no_op",
-                    SaveAttempted = false,
-                    SaveSucceeded = false,
-                    SaveState = matchesChanged > 0 ? "unknown" : "not_required",
+                    SaveAttempted = saveAttempted,
+                    SaveSucceeded = saveSucceeded,
+                    SaveState = matchesChanged > 0
+                        ? (saveDatabase ? (saveSucceeded ? "saved" : "failed") : "deferred")
+                        : "not_required",
                     Verified = readbackVerified,
                     VerificationStatus = readbackVerified ? "passed" : "failed",
                     VerificationMode = "same_session_dependency_endpoint",
                     SessionCount = 1,
-                    SaveCount = 0,
+                    SaveCount = saveCount,
                     EditableRetryCount = 0,
                     NativeMutationAttemptCount = matchesChanged > 0 ? 1 : 0,
-                    CanonicalEvidenceStatus = matchesChanged > 0 ? "blocked" : "complete",
-                    CanonicalEvidenceIssue = matchesChanged > 0 ? "ImportXMLFromFile save semantics are not proven; no explicit database.Save call was observed." : String.Empty,
+                    CanonicalEvidenceStatus = matchesChanged > 0
+                        ? (saveDatabase ? "complete" : "deferred")
+                        : "complete",
+                    CanonicalEvidenceIssue = matchesChanged > 0 && !saveDatabase
+                        ? "Save is deferred to the composed transaction owner."
+                        : String.Empty,
                     BackupDirectory = backupDirectory,
                     SnapshotPath = snapshotPath,
                     SnapshotHash = snapshotHash,
@@ -433,7 +466,8 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
                         beforeFormula,
                         beforeDataVariants,
                         backupDirectory,
-                        attempted);
+                        attempted,
+                        saveDatabase);
                 }
                 catch (Exception rollbackError)
                 {
@@ -670,6 +704,13 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
 
     internal static bool RequiresDependencyWrite(AscetElementDependencyPlanMatch match, AscetSetElementDependencyArguments arguments)
     {
+        bool wantDependent = arguments != null && String.Equals(arguments.RequestedDependency, "dependent", StringComparison.OrdinalIgnoreCase);
+        bool needsDataWrite = !wantDependent && arguments != null && !String.IsNullOrWhiteSpace(arguments.RestorationPolicy);
+        return RequiresDependencyWrite(match, arguments, needsDataWrite);
+    }
+
+    internal static bool RequiresDependencyWrite(AscetElementDependencyPlanMatch match, AscetSetElementDependencyArguments arguments, bool needsDataWrite)
+    {
         if (match == null)
         {
             throw new ArgumentNullException("match");
@@ -689,8 +730,146 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
         bool needsFormulaWrite = (hasFormula && !String.Equals(beforeFormula, arguments.DependencyFormula, StringComparison.Ordinal)) ||
             (hasFormula && hasMappings) ||
             (arguments.ClearDependencyFormula && !String.IsNullOrWhiteSpace(beforeFormula));
-        bool needsDataWrite = !wantDependent && !String.IsNullOrWhiteSpace(arguments.RestorationPolicy);
         return needsDependencyWrite || needsFormulaWrite || needsDataWrite;
+    }
+
+    internal static bool RequiresIndependentDataWrite(
+        IList<AscetElementDependencyDataVariantState> states,
+        AscetSetElementDependencyArguments arguments,
+        IDictionary<string, string> restorationValues)
+    {
+        if (arguments == null)
+        {
+            throw new ArgumentNullException("arguments");
+        }
+
+        string policy = arguments.RestorationPolicy == null ? String.Empty : arguments.RestorationPolicy.Trim();
+        IList<AscetElementDependencyDataVariantState> selected = FilterVariantStates(states, arguments.VariantPolicy, arguments.VariantNames);
+        if (selected.Count == 0)
+        {
+            return true;
+        }
+
+        for (int i = 0; i < selected.Count; i++)
+        {
+            AscetElementDependencyDataVariantState state = selected[i];
+            if (state == null || state.HasDependency || !state.HasScalarType)
+            {
+                return true;
+            }
+
+            string variantName = state.VariantName ?? String.Empty;
+            if (String.Equals(policy, "fromSnapshot", StringComparison.OrdinalIgnoreCase))
+            {
+                string expectedXml = restorationValues != null && restorationValues.ContainsKey(variantName) ? restorationValues[variantName] : String.Empty;
+                if (!ScalarTypeXmlEquals(state.ScalarTypeXml, expectedXml))
+                {
+                    return true;
+                }
+                continue;
+            }
+
+            if (String.Equals(policy, "explicit", StringComparison.OrdinalIgnoreCase))
+            {
+                string expectedValue = restorationValues != null && restorationValues.ContainsKey(variantName) ? restorationValues[variantName] : String.Empty;
+                if (String.IsNullOrWhiteSpace(expectedValue) || !ScalarTypeValueEquals(state.ScalarTypeXml, expectedValue))
+                {
+                    return true;
+                }
+                continue;
+            }
+
+            if (String.Equals(policy, "ascetDefault", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!ScalarTypeMatchesAscetDefault(state.ScalarTypeXml))
+                {
+                    return true;
+                }
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private static bool ScalarTypeXmlEquals(string actualXml, string expectedXml)
+    {
+        if (String.IsNullOrWhiteSpace(actualXml) || String.IsNullOrWhiteSpace(expectedXml))
+        {
+            return false;
+        }
+
+        try
+        {
+            XmlDocument actual = new XmlDocument();
+            actual.LoadXml(actualXml);
+            XmlDocument expected = new XmlDocument();
+            expected.LoadXml(expectedXml);
+            return actual.DocumentElement != null && expected.DocumentElement != null &&
+                String.Equals(actual.DocumentElement.OuterXml, expected.DocumentElement.OuterXml, StringComparison.Ordinal);
+        }
+        catch (XmlException)
+        {
+            return false;
+        }
+    }
+
+    private static bool ScalarTypeValueEquals(string scalarTypeXml, string expectedValue)
+    {
+        XmlElement value = ReadScalarValueElement(scalarTypeXml);
+        return value != null && String.Equals(value.GetAttribute("value") ?? String.Empty, expectedValue, StringComparison.Ordinal);
+    }
+
+    private static bool ScalarTypeMatchesAscetDefault(string scalarTypeXml)
+    {
+        XmlElement value = ReadScalarValueElement(scalarTypeXml);
+        if (value == null)
+        {
+            return false;
+        }
+
+        if (String.Equals(value.Name, "Numeric", StringComparison.Ordinal))
+        {
+            return String.Equals(value.GetAttribute("value") ?? String.Empty, "0.0", StringComparison.Ordinal);
+        }
+        if (String.Equals(value.Name, "Logic", StringComparison.Ordinal))
+        {
+            return String.Equals(value.GetAttribute("value") ?? String.Empty, "false", StringComparison.OrdinalIgnoreCase);
+        }
+        return false;
+    }
+
+    private static XmlElement ReadScalarValueElement(string scalarTypeXml)
+    {
+        if (String.IsNullOrWhiteSpace(scalarTypeXml))
+        {
+            return null;
+        }
+
+        try
+        {
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(scalarTypeXml);
+            XmlElement scalarType = document.DocumentElement;
+            if (scalarType == null || !String.Equals(scalarType.Name, "ScalarType", StringComparison.Ordinal))
+            {
+                return null;
+            }
+            for (int i = 0; i < scalarType.ChildNodes.Count; i++)
+            {
+                XmlElement child = scalarType.ChildNodes[i] as XmlElement;
+                if (child != null)
+                {
+                    return child;
+                }
+            }
+        }
+        catch (XmlException)
+        {
+        }
+        return null;
     }
     private AscetSetElementDependencyResult SetFolder(AscetSetElementDependencyArguments arguments)
     {
@@ -1591,7 +1770,8 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
         string expectedFormula,
         IList<AscetElementDependencyDataVariantState> expectedDataVariants,
         string backupDirectory,
-        IList<string> attempted)
+        IList<string> attempted,
+        bool saveDatabase)
     {
         string main = AscetElementDependencyXml.FindMainAmd(backupDirectory);
         if (String.IsNullOrWhiteSpace(main))
@@ -1608,6 +1788,15 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
         if (restored == null)
         {
             throw new AscetReadException("dependency_write_rollback_failed", "set_element_dependency", "ASCET ImportXMLFromFile returned null while restoring component '" + componentPath + "'.");
+        }
+
+        if (saveDatabase)
+        {
+            attempted.Add("database.Save(rollback)");
+            if (!database.Save())
+            {
+                throw new AscetReadException("dependency_write_rollback_failed", "set_element_dependency", "Failed to save the current database after restoring component '" + componentPath + "'.");
+            }
         }
 
         CodeComponent restoredComponent = ResolveCodeComponent(session, componentPath);

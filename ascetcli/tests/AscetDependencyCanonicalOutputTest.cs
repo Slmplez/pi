@@ -8,12 +8,12 @@ class AscetDependencyCanonicalOutputTest
         try
         {
             TestSetElementDependencyNoOp();
-            TestSetElementDependencyChangedSaveEvidenceBlocked();
+            TestSetElementDependencyChangedSaveEvidencePassed();
             TestSetElementDependencyFailure();
             TestDependencyChainNoOp();
-            TestDependencyChainChangedSaveEvidenceBlocked();
+            TestDependencyChainChangedSaveEvidencePassed();
             TestDependencyChainFailure();
-            Console.WriteLine("{\"passed\":true,\"runtimeProtocolAssertions\":30,\"metrics\":{\"operations\":2,\"scenarios\":6,\"saveEvidenceBlocked\":2}}");
+            Console.WriteLine("{\"passed\":true,\"runtimeProtocolAssertions\":30,\"metrics\":{\"operations\":2,\"scenarios\":6,\"saveEvidenceBlocked\":0}}");
             return 0;
         }
         catch (Exception error)
@@ -60,7 +60,7 @@ class AscetDependencyCanonicalOutputTest
         AssertContains(json, "\"nativeMutationAttemptCount\":0", "set dependency no-op mutation count");
     }
 
-    private static void TestSetElementDependencyChangedSaveEvidenceBlocked()
+    private static void TestSetElementDependencyChangedSaveEvidencePassed()
     {
         AscetSetElementDependencyResult result = new AscetSetElementDependencyResult
         {
@@ -68,32 +68,34 @@ class AscetDependencyCanonicalOutputTest
             TargetKind = "component",
             ElementName = "C_Threshold",
             RequestedDependency = "dependent",
-            WriteSucceeded = false,
+            WriteSucceeded = true,
             ReadbackVerified = true,
             MatchesChanged = 1,
             Changed = true,
             MutationStatus = "applied",
-            SaveAttempted = false,
-            SaveSucceeded = false,
-            SaveState = "unknown",
+            SaveAttempted = true,
+            SaveSucceeded = true,
+            SaveState = "saved",
             Verified = true,
             VerificationStatus = "passed",
             VerificationMode = "same_session_dependency_endpoint",
             SessionCount = 1,
-            SaveCount = 0,
+            SaveCount = 1,
             EditableRetryCount = 0,
             NativeMutationAttemptCount = 1,
-            CanonicalEvidenceStatus = "blocked",
-            CanonicalEvidenceIssue = "ImportXMLFromFile save semantics are not proven; explicit database.Save was not observed."
+            CanonicalEvidenceStatus = "complete",
+            CanonicalEvidenceIssue = String.Empty
         };
 
         string json = AscetSetElementDependency.FormatJsonOutput(result);
         AssertContains(json, "\"changed\":true", "set dependency changed");
         AssertContains(json, "\"mutationStatus\":\"applied\"", "set dependency applied status");
-        AssertContains(json, "\"saveState\":\"unknown\"", "set dependency unknown save state");
-        AssertContains(json, "\"canonicalEvidenceStatus\":\"blocked\"", "set dependency blocked evidence");
-        AssertContains(json, "ImportXMLFromFile save semantics are not proven", "set dependency evidence issue");
-        AssertContains(json, "\"write\":{\"dryRun\":false,\"succeeded\":false", "set dependency must not claim write success");
+        AssertContains(json, "\"saveAttempted\":true", "set dependency save attempted");
+        AssertContains(json, "\"saveSucceeded\":true", "set dependency save succeeded");
+        AssertContains(json, "\"saveState\":\"saved\"", "set dependency saved state");
+        AssertContains(json, "\"saveCount\":1", "set dependency save count");
+        AssertContains(json, "\"canonicalEvidenceStatus\":\"complete\"", "set dependency complete evidence");
+        AssertContains(json, "\"write\":{\"dryRun\":false,\"succeeded\":true", "set dependency must claim write success");
     }
 
     private static void TestSetElementDependencyFailure()
@@ -117,7 +119,10 @@ class AscetDependencyCanonicalOutputTest
             "chain-no-op",
             false,
             false,
-            new List<Dictionary<string, object>>());
+            new List<Dictionary<string, object>>(),
+            false,
+            false,
+            0);
 
         AssertEqual(false, result["changed"], "chain no-op changed");
         AssertEqual("no_op", result["mutationStatus"], "chain no-op status");
@@ -129,23 +134,26 @@ class AscetDependencyCanonicalOutputTest
         AssertEqual("complete", result["canonicalEvidenceStatus"], "chain no-op evidence");
     }
 
-    private static void TestDependencyChainChangedSaveEvidenceBlocked()
+    private static void TestDependencyChainChangedSaveEvidencePassed()
     {
         Dictionary<string, object> result = AscetParameterDependencyChainExecuteService.Success(
             "committed",
             "chain-changed",
             true,
             true,
-            new List<Dictionary<string, object>>());
+            new List<Dictionary<string, object>>(),
+            true,
+            true,
+            1);
 
-        AssertEqual("outcome_unknown", result["status"], "chain changed status");
+        AssertEqual("committed", result["status"], "chain changed status");
         AssertEqual(true, result["changed"], "chain changed changed");
         AssertEqual("applied", result["mutationStatus"], "chain changed status field");
-        AssertEqual("unknown", result["saveState"], "chain changed save state");
-        AssertTrue(result["saveAttempted"] == null, "chain changed save attempted must be unknown");
-        AssertTrue(result["saveCount"] == null, "chain changed save count must be unknown");
-        AssertEqual("blocked", result["canonicalEvidenceStatus"], "chain changed evidence");
-        AssertContains(Convert.ToString(result["canonicalEvidenceIssue"]), "Save counters are not exposed", "chain changed evidence issue");
+        AssertEqual(true, result["saveAttempted"], "chain changed save attempted");
+        AssertEqual(true, result["saveSucceeded"], "chain changed save succeeded");
+        AssertEqual("saved", result["saveState"], "chain changed save state");
+        AssertEqual(1, result["saveCount"], "chain changed save count");
+        AssertEqual("complete", result["canonicalEvidenceStatus"], "chain changed evidence");
     }
 
     private static void TestDependencyChainFailure()

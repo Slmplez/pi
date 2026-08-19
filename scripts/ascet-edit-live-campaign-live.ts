@@ -296,26 +296,24 @@ export function createLiveInvoker(options: LiveInvokerOptions): CampaignInvoker 
 		const response = await executeTool(toolName, request, { cwd: options.cwd, env, hasUI: true, ui: { confirm: async () => true } }, new AbortController().signal);
 		return { response, telemetry: telemetryFrom(identity), bridge: extractBridgeEvidence(response) };
 	}
-	return {
-		async invoke(action, variant, scenario) {
-			const identity = runIdentity(options, action, variant, scenario, "write");
-			const invocation = await call("ascet_edit", scenario.request, identity);
-			return {
-				response: invocation.response,
-				bridge: invocation.bridge,
-				telemetry: invocation.telemetry,
-				normalizedResult: extractCanonicalResult(invocation.response),
-			};
-		},
-		async readback(action, variant, scenario) {
-			if (!scenario.readback) return undefined;
-			const identity = runIdentity(options, action, variant, scenario, "readback");
-			const invocation = await call(scenario.readback.tool, scenario.readback.params, identity);
-			return { publicResult: invocation.response, bridgeEvidence: invocation.bridge, telemetry: invocation.telemetry };
-		},
-	};
+    return {
+        async invoke(action, variant, scenario) {
+            const identity = runIdentity(options, action, variant, scenario, "write");
+            const invocation = await call("ascet_edit", scenario.request, identity);
+            return {
+                response: invocation.response,
+                bridge: invocation.bridge,
+                telemetry: invocation.telemetry,
+                normalizedResult: extractCanonicalResult(invocation.response),
+            };
+        },
+        async readback(action, variant, scenario, readback) {
+            const identity = runIdentity(options, action, variant, scenario, `readback-${safePart(readback.id)}-${readback.phase}`);
+            const invocation = await call(readback.tool, readback.params, identity);
+            return { publicResult: invocation.response, bridgeEvidence: invocation.bridge, telemetry: invocation.telemetry };
+        },
+    };
 }
-
 function usage(): never {
 	console.error("Usage: node scripts/ascet-edit-live-campaign-live.ts --plan <plan.json> --output <campaign-dir> --execute [--cwd <ascet-cwd>]");
 	process.exit(2);
