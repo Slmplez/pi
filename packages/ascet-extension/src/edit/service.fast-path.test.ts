@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, test } from "node:test";
@@ -38,9 +39,15 @@ function bridgeResult(
 	};
 }
 
-function options(calls: string[][], result?: unknown, allowEditability = false) {
+function options(
+	calls: string[][],
+	result?: unknown,
+	allowEditability = false,
+	env?: Record<string, string | undefined>,
+) {
 	return {
 		cwd: process.cwd(),
+		...(env ? { env } : {}),
 		executeCli: async (request: AscetCliRequest) => {
 			calls.push(request.args);
 			if (
@@ -378,4 +385,175 @@ describe("ASCET edit fast path", () => {
 			assert.equal(calls[0]?.[1], mode === "check" ? "component_editable_check" : "component_editable_set");
 		}
 	});
+});
+
+function elementSpecFiles(artifactRoot: string): string[] {
+	const partition = createHash("sha256").update(artifactRoot).digest("hex").slice(0, 16);
+	const directory = join(tmpdir(), "pi-ascet-extension", "element-spec-plans", partition);
+	return existsSync(directory)
+		? readdirSync(directory).filter((file) => file.startsWith("inline-") && file.endsWith(".json"))
+		: [];
+}
+
+test("identity create and patch use one Bridge call without a synthesized Project", async () => {
+	for (const elementIntent of ["create", "patch"] as const) {
+		const calls: string[][] = [];
+		const elements =
+			elementIntent === "create"
+				? [
+						{
+							role: "standardPrimitive",
+							name: "P_Identity",
+							kind: "parameter",
+							modelType: "udisc",
+							scope: "local",
+							impl: { formula: "ident" },
+						},
+					]
+				: [{ role: "standardPrimitive", name: "P_Identity", impl: { formula: "ident" } }];
+		const result = await runAscetEdit(
+			{
+				action: "apply_element_spec",
+				componentPath: "PI_EDIT_TEST_READWRITE_004/Core/ClassUnderTest",
+				elementIntent,
+				elements,
+				intent: "apply",
+			},
+			options(calls),
+			approvingContext,
+		);
+		assert.equal(result.details.outcome.status, "ok");
+		assert.equal(calls.length, 1);
+		assert.equal(calls[0]?.[1], "apply_element_spec");
+		assert.equal(calls[0]?.includes("--project-path"), false);
+	}
+});
+
+test("IDENT and no formula remain valid without a Project", async () => {
+	for (const impl of [{ formula: " IDENT " }, undefined]) {
+		const calls: string[][] = [];
+		const element = {
+			role: "standardPrimitive",
+			name: "P_Default",
+			kind: "parameter",
+			modelType: "udisc",
+			scope: "local",
+			...(impl ? { impl } : {}),
+		};
+		const result = await runAscetEdit(
+			{
+				action: "apply_element_spec",
+				componentPath: "PI_EDIT_TEST_READWRITE_004/Core/ClassUnderTest",
+				elementIntent: "create",
+				elements: [element],
+				intent: "apply",
+			},
+			options(calls),
+			approvingContext,
+		);
+		assert.equal(result.details.outcome.status, "ok");
+		assert.equal(calls.length, 1);
+	}
+});
+
+test("custom formula without Project is rejected before Bridge and leaves no temp spec", async () => {
+	const calls: string[][] = [];
+	const artifactRoot = mkdtempSync(join(tmpdir(), "ascet-edit-preflight-artifacts-"));
+	const env = { PI_ASCET_EXTENSION_ARTIFACT_ROOT: artifactRoot };
+	const before = elementSpecFiles(artifactRoot);
+	try {
+		const result = await runAscetEdit(
+			{
+				action: "apply_element_spec",
+				componentPath: "PI_EDIT_TEST_READWRITE_004/Core/ClassUnderTest",
+				elementIntent: "create",
+				elements: [
+					{
+						role: "standardPrimitive",
+						name: "P_Custom",
+						kind: "parameter",
+						modelType: "udisc",
+						scope: "local",
+						impl: { formula: "CustomFormula" },
+					},
+				],
+				intent: "apply",
+			},
+			options(calls, undefined, false, env),
+			approvingContext,
+		);
+		assert.equal(result.details.outcome.status, "error");
+		assert.equal(result.details.error?.code, "ascet_edit_project_context_required");
+		assert.equal(result.details.mutationResult?.mutationStatus, "not_started");
+		assert.equal(calls.length, 0);
+		assert.deepEqual(elementSpecFiles(artifactRoot), before);
+	} finally {
+		rmSync(artifactRoot, { recursive: true, force: true });
+	}
+});
+
+test("mixed identity and custom formulas are rejected before Bridge", async () => {
+	const calls: string[][] = [];
+	const result = await runAscetEdit(
+		{
+			action: "apply_element_spec",
+			componentPath: "PI_EDIT_TEST_READWRITE_004/Core/ClassUnderTest",
+			elementIntent: "create",
+			elements: [
+				{
+					role: "standardPrimitive",
+					name: "P_Identity",
+					kind: "parameter",
+					modelType: "udisc",
+					scope: "local",
+					impl: { formula: "ident" },
+				},
+				{
+					role: "standardPrimitive",
+					name: "P_Custom",
+					kind: "parameter",
+					modelType: "udisc",
+					scope: "local",
+					impl: { formula: "CustomFormula" },
+				},
+			],
+			intent: "apply",
+		},
+		options(calls),
+		approvingContext,
+	);
+	assert.equal(result.details.outcome.status, "error");
+	assert.equal(result.details.error?.code, "ascet_edit_project_context_required");
+	assert.equal(calls.length, 0);
+});
+
+test("custom formula with explicit Project reaches Bridge with normalized caller path", async () => {
+	const calls: string[][] = [];
+	const result = await runAscetEdit(
+		{
+			action: "apply_element_spec",
+			componentPath: "PI_EDIT_TEST_READWRITE_004/Core/ClassUnderTest",
+			projectPath: "PI_EDIT_TEST_READWRITE_004/Core/FormulaProject",
+			elementIntent: "create",
+			elements: [
+				{
+					role: "standardPrimitive",
+					name: "P_Custom",
+					kind: "parameter",
+					modelType: "udisc",
+					scope: "local",
+					impl: { formula: "CustomFormula" },
+				},
+			],
+			intent: "apply",
+		},
+		options(calls),
+		approvingContext,
+	);
+	assert.equal(result.details.outcome.status, "ok");
+	assert.equal(calls.length, 1);
+	const request = calls[0]!;
+	const flag = request.indexOf("--project-path");
+	assert.ok(flag >= 0);
+	assert.equal(request[flag + 1], "PI_EDIT_TEST_READWRITE_004\\Core\\FormulaProject");
 });

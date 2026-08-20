@@ -537,6 +537,18 @@ function stripRole(element: Record<string, unknown>): Record<string, unknown> {
 	return result;
 }
 
+export function requiresExplicitProjectContext(elements: readonly AscetElementInput[]): boolean {
+	const isCustomFormula = (value: unknown): boolean => {
+		if (typeof value !== "string") return false;
+		const formula = value.trim();
+		return formula.length > 0 && formula.toLowerCase() !== "ident";
+	};
+	return elements.some((element) => {
+		const implementation = isRecord(element.implementation) ? element.implementation : undefined;
+		const impl = isRecord(element.impl) ? element.impl : undefined;
+		return isCustomFormula(implementation?.formula) || isCustomFormula(impl?.formula);
+	});
+}
 export function normalizeAscetElementSpec(
 	intent: AscetApplyElementIntent,
 	inputs: readonly Record<string, unknown>[],

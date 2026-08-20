@@ -1,4 +1,4 @@
-﻿import assert from "node:assert/strict";
+import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import { createActionCatalogSnapshot, diffActionCatalogSnapshots, listActionCatalogEntries } from "./catalog.ts";
 
@@ -139,6 +139,20 @@ describe("ASCET action catalog", () => {
 		assert.match(rules, /Local Dependent Parameter creation.*decision groups/);
 		assert.match(rules, /Imported Parameters are the exception/);
 		assert.match(rules, /limitAssignments=null/);
+	});
+
+	test("publishes explicit formula Project-context rules for apply_element_spec", () => {
+		const rules = entriesById().get("ascet_edit.apply_element_spec")?.rules.join("\n") ?? "";
+
+		assert.match(
+			rules,
+			/ident is ASCET(?:'|’|\\u2019)s built-in default identity formula and does not require projectPath/u,
+		);
+		assert.match(rules, /Any non-ident impl\.formula requires one explicit projectPath/u);
+		assert.match(rules, /Never infer a Project from componentPath, Folder layout, or a sibling item named Project/u);
+		assert.match(rules, /Do not create a Project merely to satisfy ident validation/u);
+		assert.match(rules, /custom formula.*exactly one explicit Project/u);
+		assert.match(rules, /ascet_edit_project_context_required.*project_context_required.*invalid_formula_reference/u);
 	});
 
 	test("publishes stable action fingerprints and classifies breaking schema drift", () => {

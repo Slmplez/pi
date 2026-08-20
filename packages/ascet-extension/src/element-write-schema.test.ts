@@ -6,6 +6,7 @@ import {
 	ascetElementRoleValues,
 	ascetElementWriteContractMetadata,
 	normalizeAscetElementSpec,
+	requiresExplicitProjectContext,
 } from "./element-spec-contract.ts";
 import { ascetSetElementDependencyParameters, buildSetElementDependencyArgs } from "./set-element-dependency.ts";
 
@@ -353,5 +354,22 @@ test("dependency overlay specs are internal-only and encoded for composite prefl
 	assert.deepEqual(
 		args.filter((_arg, index) => args[index - 1] === "--overlay-spec"),
 		["consumer.json", "local.json"],
+	);
+});
+
+test("requiresExplicitProjectContext distinguishes identity from custom formulas", () => {
+	assert.equal(requiresExplicitProjectContext([]), false);
+	assert.equal(requiresExplicitProjectContext([{ name: "P_NoFormula" }]), false);
+	assert.equal(requiresExplicitProjectContext([{ name: "P_Identity", impl: { formula: " IDENT " } }]), false);
+	assert.equal(requiresExplicitProjectContext([{ name: "P_Custom", impl: { formula: "CustomFormula" } }]), true);
+	assert.equal(
+		requiresExplicitProjectContext([
+			{
+				role: "providerExportedParameter",
+				name: "P_Provider",
+				implementation: { mode: "explicit", formula: "CustomFormula" },
+			},
+		]),
+		true,
 	);
 });

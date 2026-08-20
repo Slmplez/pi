@@ -217,10 +217,6 @@ internal static class AscetElementFormulaRules
         HashSet<string> formulas = BuildFormulaNameSet(availableFormulaNames);
         Dictionary<string, AscetExistingElementState> existing = BuildExistingElementIndex(existingElements);
         string effectiveProjectPath = NormalizeProjectPath(projectPath);
-        if (String.IsNullOrWhiteSpace(effectiveProjectPath))
-        {
-            effectiveProjectPath = InferProjectPathForComponent(componentPath);
-        }
 
         for (int i = 0; i < spec.Elements.Count; i++)
         {
@@ -231,6 +227,19 @@ internal static class AscetElementFormulaRules
             }
 
             string formulaName = element.Impl.Formula.Trim();
+            if (IsIdentityFormula(formulaName))
+            {
+                continue;
+            }
+
+            if (String.IsNullOrWhiteSpace(effectiveProjectPath))
+            {
+                throw new AscetReadException(
+                    "project_context_required",
+                    "validate_element_formula",
+                    "Element '" + (element.Name ?? String.Empty) + "' uses non-ident formula '" + formulaName + "' and requires an explicit projectPath.");
+            }
+
             if (!formulas.Contains(formulaName))
             {
                 throw new AscetReadException(
@@ -245,6 +254,29 @@ internal static class AscetElementFormulaRules
         }
     }
 
+    internal static bool ContainsProjectFormulaReferences(AscetElementSpecDocument spec)
+    {
+        if (spec == null || spec.Elements == null)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < spec.Elements.Count; i++)
+        {
+            AscetElementSpec element = spec.Elements[i];
+            if (element == null || element.Impl == null || String.IsNullOrWhiteSpace(element.Impl.Formula))
+            {
+                continue;
+            }
+
+            if (IsIdentityFormula(element.Impl.Formula) == false)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
     public static string NormalizeProjectPath(string projectPath)
     {
         string normalized = String.IsNullOrWhiteSpace(projectPath)
@@ -346,7 +378,7 @@ internal static class AscetElementFormulaRules
         return String.Empty;
     }
 
-    private static bool IsIdentityFormula(string formulaName)
+    internal static bool IsIdentityFormula(string formulaName)
     {
         return String.Equals(NormalizeToken(formulaName), "ident", StringComparison.Ordinal);
     }
@@ -4948,18 +4980,26 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
 
     private void ValidateProjectFormulas(AscetSession session, AscetItemRef component, AscetElementSpecDocument spec, IList<AscetExistingElementState> existingElements, string explicitProjectPath)
     {
-        if (!ContainsFormulaReferences(spec))
+        if (AscetElementFormulaRules.ContainsProjectFormulaReferences(spec) == false)
         {
             return;
         }
 
+        if (String.IsNullOrWhiteSpace(AscetElementFormulaRules.NormalizeProjectPath(explicitProjectPath)))
+        {
+            throw new AscetReadException(
+                "project_context_required",
+                "validate_element_formula",
+                "An explicit projectPath is required when an element specifies a non-ident implementation formula.");
+        }
+
         AscetProject project;
-        string projectPath = ResolveProjectPathForFormulaValidation(session, component, explicitProjectPath, out project);
+        string projectPath = ResolveProjectPathForFormulaValidation(session, explicitProjectPath, out project);
 
         if (project == null)
         {
             throw new AscetReadException(
-                "invalid_formula_reference",
+                "invalid_project_target",
                 "validate_element_formula",
                 "Resolved item '" + projectPath + "' is not an ASCET project for formula validation.");
         }
@@ -4981,101 +5021,36 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
         AscetElementFormulaRules.ValidateForProjectContext(component.Path, spec, formulaNames, existingElements, projectPath);
     }
 
-    private string ResolveProjectPathForFormulaValidation(AscetSession session, AscetItemRef component, string explicitProjectPath, out AscetProject project)
+
+    private string ResolveProjectPathForFormulaValidation(AscetSession session, string explicitProjectPath, out AscetProject project)
     {
         string normalizedExplicit = AscetElementFormulaRules.NormalizeProjectPath(explicitProjectPath);
-        if (!String.IsNullOrWhiteSpace(normalizedExplicit))
+        if (String.IsNullOrWhiteSpace(normalizedExplicit))
         {
-            DataBaseItem explicitItem = ResolveItemByPath(session, normalizedExplicit);
-            project = explicitItem as AscetProject;
-            return normalizedExplicit;
+            project = null;
+            throw new AscetReadException(
+                "project_context_required",
+                "validate_element_formula",
+                "An explicit projectPath is required when an element specifies a non-ident implementation formula.");
         }
 
-        IList<string> candidates = BuildProjectPathCandidates(component == null ? null : component.Path);
-        AscetReadException lastFailure = null;
-        for (int i = 0; i < candidates.Count; i++)
+        DataBaseItem explicitItem;
+        try
         {
-            string candidate = candidates[i];
-            try
-            {
-                DataBaseItem item = ResolveItemByPath(session, candidate);
-                project = item as AscetProject;
-                if (project != null)
-                {
-                    return candidate;
-                }
-            }
-            catch (AscetReadException ex)
-            {
-                lastFailure = ex;
-            }
+            explicitItem = ResolveItemByPath(session, normalizedExplicit);
+        }
+        catch (AscetReadException ex)
+        {
+            project = null;
+            throw new AscetReadException(
+                "project_not_found",
+                "validate_element_formula",
+                "Failed to resolve explicit project '" + normalizedExplicit + "' for formula validation.",
+                ex);
         }
 
-        string inferred = candidates.Count == 0
-            ? AscetElementFormulaRules.InferProjectPathForComponent(component == null ? null : component.Path)
-            : candidates[0];
-        throw new AscetReadException(
-            "invalid_formula_reference",
-            "validate_element_formula",
-            "Failed to resolve project '" + inferred + "' for formula validation of component '" + (component == null ? String.Empty : (component.Path ?? String.Empty)) + "'.",
-            lastFailure);
-    }
-
-    private IList<string> BuildProjectPathCandidates(string componentPath)
-    {
-        List<string> candidates = new List<string>();
-        AddProjectPathCandidate(candidates, AscetElementFormulaRules.InferProjectPathForComponent(componentPath));
-
-        AscetItemPath parsed = AscetItemPath.Parse(componentPath);
-        string folderPath = parsed.FolderPath ?? String.Empty;
-        while (!String.IsNullOrWhiteSpace(folderPath))
-        {
-            int separator = folderPath.LastIndexOf('\\');
-            folderPath = separator < 0 ? String.Empty : folderPath.Substring(0, separator);
-            AddProjectPathCandidate(candidates, String.IsNullOrWhiteSpace(folderPath) ? "Project" : folderPath + "\\Project");
-        }
-
-        AddProjectPathCandidate(candidates, "Project");
-        return candidates;
-    }
-
-    private void AddProjectPathCandidate(IList<string> candidates, string candidate)
-    {
-        string normalized = AscetElementFormulaRules.NormalizeProjectPath(candidate);
-        if (String.IsNullOrWhiteSpace(normalized))
-        {
-            return;
-        }
-
-        for (int i = 0; i < candidates.Count; i++)
-        {
-            if (String.Equals(candidates[i], normalized, StringComparison.OrdinalIgnoreCase))
-            {
-                return;
-            }
-        }
-
-        candidates.Add(normalized);
-    }
-
-    private bool ContainsFormulaReferences(AscetElementSpecDocument spec)
-    {
-        IList<AscetElementSpec> elements = spec == null ? null : spec.Elements;
-        if (elements == null)
-        {
-            return false;
-        }
-
-        for (int i = 0; i < elements.Count; i++)
-        {
-            AscetElementSpec current = elements[i];
-            if (current != null && current.Impl != null && !String.IsNullOrWhiteSpace(current.Impl.Formula))
-            {
-                return true;
-            }
-        }
-
-        return false;
+        project = explicitItem as AscetProject;
+        return normalizedExplicit;
     }
 
     private void VerifyReadbackInSession(AscetSession session, string componentPath, AscetElementSpecDocument spec)
@@ -6376,8 +6351,8 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
         int xSize = xValues.Count;
         int ySize = yValues.Count;
 
-        // Ã¤Â¸ÂÃ¨Â°Æ’Ã§â€Â¨ SetXSize/SetYSize - Ã¨Â¿â„¢Ã¤Âºâ€ºÃ¨Â°Æ’Ã§â€Â¨Ã¤Â¼Å¡Ã¥Â¯Â¼Ã¨â€¡Â´ COM Ã¥Â¯Â¹Ã¨Â±Â¡Ã¥Â¤Â±Ã¦â€¢Ë†
-        // Ã¥Â¤Â§Ã¥Â°ÂÃ¥Â·Â²Ã§Â»ÂÃ¥Å“Â¨Ã¥Ë†â€ºÃ¥Â»ÂºÃ¨Â¡Â¨Ã¦â€”Â¶Ã©â‚¬Å¡Ã¨Â¿â€¡ SetMaxXSize/SetMaxYSize Ã¨Â®Â¾Ã§Â½Â®
+        // ÃƒÂ¤Ã‚Â¸Ã‚ÂÃƒÂ¨Ã‚Â°Ã†â€™ÃƒÂ§Ã¢â‚¬ÂÃ‚Â¨ SetXSize/SetYSize - ÃƒÂ¨Ã‚Â¿Ã¢â€žÂ¢ÃƒÂ¤Ã‚ÂºÃ¢â‚¬ÂºÃƒÂ¨Ã‚Â°Ã†â€™ÃƒÂ§Ã¢â‚¬ÂÃ‚Â¨ÃƒÂ¤Ã‚Â¼Ã…Â¡ÃƒÂ¥Ã‚Â¯Ã‚Â¼ÃƒÂ¨Ã¢â‚¬Â¡Ã‚Â´ COM ÃƒÂ¥Ã‚Â¯Ã‚Â¹ÃƒÂ¨Ã‚Â±Ã‚Â¡ÃƒÂ¥Ã‚Â¤Ã‚Â±ÃƒÂ¦Ã¢â‚¬Â¢Ã‹â€ 
+        // ÃƒÂ¥Ã‚Â¤Ã‚Â§ÃƒÂ¥Ã‚Â°Ã‚ÂÃƒÂ¥Ã‚Â·Ã‚Â²ÃƒÂ§Ã‚Â»Ã‚ÂÃƒÂ¥Ã…â€œÃ‚Â¨ÃƒÂ¥Ã‹â€ Ã¢â‚¬ÂºÃƒÂ¥Ã‚Â»Ã‚ÂºÃƒÂ¨Ã‚Â¡Ã‚Â¨ÃƒÂ¦Ã¢â‚¬â€Ã‚Â¶ÃƒÂ©Ã¢â€šÂ¬Ã…Â¡ÃƒÂ¨Ã‚Â¿Ã¢â‚¬Â¡ SetMaxXSize/SetMaxYSize ÃƒÂ¨Ã‚Â®Ã‚Â¾ÃƒÂ§Ã‚Â½Ã‚Â®
         TableDebugStderr("table2d:data:before-set-xysize:" + spec.Name + ":x=" + xSize.ToString() + ":y=" + ySize.ToString());
         if (!dataItem.SetXSize(xSize))
         {
@@ -6393,7 +6368,7 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
 
         bool writeAxes = AscetElementSyncSpecRules.RequiresCustomTwoDTableAxisWrite(spec.XValues, spec.YValues);
 
-        // Ã§Â«â€¹Ã¥ÂÂ³Ã¨Â®Â¾Ã§Â½Â®Ã¦Â¨Â¡Ã¥Â¼Â: Ã¨Å½Â·Ã¥Ââ€“-Ã¤Â¿Â®Ã¦â€Â¹-Ã§Â«â€¹Ã¥ÂÂ³Ã¦Å’ÂÃ¤Â¹â€¦Ã¥Å’â€“,Ã©ÂÂ¿Ã¥â€¦Â COM Ã¥Â¯Â¹Ã¨Â±Â¡Ã§â€Å¸Ã¥â€˜Â½Ã¥â€˜Â¨Ã¦Å“Å¸Ã©â€”Â®Ã©Â¢Ëœ
+        // ÃƒÂ§Ã‚Â«Ã¢â‚¬Â¹ÃƒÂ¥Ã‚ÂÃ‚Â³ÃƒÂ¨Ã‚Â®Ã‚Â¾ÃƒÂ§Ã‚Â½Ã‚Â®ÃƒÂ¦Ã‚Â¨Ã‚Â¡ÃƒÂ¥Ã‚Â¼Ã‚Â: ÃƒÂ¨Ã…Â½Ã‚Â·ÃƒÂ¥Ã‚ÂÃ¢â‚¬â€œ-ÃƒÂ¤Ã‚Â¿Ã‚Â®ÃƒÂ¦Ã¢â‚¬ÂÃ‚Â¹-ÃƒÂ§Ã‚Â«Ã¢â‚¬Â¹ÃƒÂ¥Ã‚ÂÃ‚Â³ÃƒÂ¦Ã…â€™Ã‚ÂÃƒÂ¤Ã‚Â¹Ã¢â‚¬Â¦ÃƒÂ¥Ã…â€™Ã¢â‚¬â€œ,ÃƒÂ©Ã‚ÂÃ‚Â¿ÃƒÂ¥Ã¢â‚¬Â¦Ã‚Â COM ÃƒÂ¥Ã‚Â¯Ã‚Â¹ÃƒÂ¨Ã‚Â±Ã‚Â¡ÃƒÂ§Ã¢â‚¬ÂÃ…Â¸ÃƒÂ¥Ã¢â‚¬ËœÃ‚Â½ÃƒÂ¥Ã¢â‚¬ËœÃ‚Â¨ÃƒÂ¦Ã…â€œÃ…Â¸ÃƒÂ©Ã¢â‚¬â€Ã‚Â®ÃƒÂ©Ã‚Â¢Ã‹Å“
         if (writeAxes)
         {
             TableDebugStderr("table2d:data:before-get-xdist:" + spec.Name);

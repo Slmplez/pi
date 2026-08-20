@@ -9,7 +9,7 @@ import { buildCreateMethodArgs } from "../create-method.ts";
 import { buildDeleteComponentArgs } from "../delete-component.ts";
 import { buildDeleteFolderArgs } from "../delete-folder.ts";
 import { buildDeleteMethodArgs } from "../delete-method.ts";
-import { normalizeAscetElementSpec } from "../element-spec-contract.ts";
+import { normalizeAscetElementSpec, requiresExplicitProjectContext } from "../element-spec-contract.ts";
 import { getAscetArtifactRoot } from "../observation-store.ts";
 import { evaluateAscetPermission } from "../permissions/evaluate.ts";
 import { type AscetPermissionSnapshot, resolveAscetPermissionSnapshot } from "../permissions/types.ts";
@@ -395,6 +395,16 @@ export async function runAscetFastMutation(
 		return invalid(
 			"intent=preview is retired for ascet_edit writes; use intent=apply for the direct Bridge fast path.",
 		);
+	if (
+		params.action === "apply_element_spec" &&
+		!params.projectPath &&
+		requiresExplicitProjectContext(params.elements)
+	) {
+		return invalid(
+			"projectPath is required when apply_element_spec uses a non-ident implementation formula.",
+			"ascet_edit_project_context_required",
+		);
+	}
 	if (params.action === "set_state_machine_code" && !validStateMachineOperations.has(params.operation))
 		return invalid("Unknown state-machine write operation.");
 	const blocked = await authorize(params, options, ctx, lifecycle);

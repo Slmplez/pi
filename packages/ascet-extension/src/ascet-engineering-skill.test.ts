@@ -154,6 +154,14 @@ describe("ASCET engineering Skill", () => {
 			"Never pass a Search candidate directly to an edit action",
 		]);
 		assert.doesNotMatch(search, /ascet_search\.search\s*\r?\n\s*->\s*ascet_edit\./u);
+		assertContains(search, [
+			"Do not default to broad text queries such as `slope`, `AVH`, `state`, or `request`",
+			"Prefer a complete identifier such as `AVHActivationByBrakePedal` or `TargetStateAvh`",
+			"full signal name or full Parameter name",
+			"refine `q` before opening candidate code",
+		]);
+		const skill = readSkill();
+		assert.match(skill, /For `mode=text`, prefer a complete symbol, signal, or Parameter name/u);
 	});
 
 	test("limits public Get guidance to tree and formulas", () => {
@@ -182,6 +190,20 @@ describe("ASCET engineering Skill", () => {
 			"Binding conflict: reject without overwrite",
 			"must not also be managed by `ascet_edit.apply_element_spec`",
 		]);
+	});
+
+	test("documents identity and custom Formula Project-context rules", () => {
+		const guidance = readGuidance();
+
+		assert.match(guidance, /ident.*built-in identity formula.*does not require.*projectPath/u);
+		assert.match(guidance, /Any non-ident.*impl\.formula.*requires one explicit.*projectPath/u);
+		assert.match(guidance, /Never infer a Project from.*componentPath.*Folder layout.*sibling item named.*Project/u);
+		assert.match(guidance, /Do not create a Project merely to satisfy [`\\u0060]?ident[`\\u0060]? validation/u);
+		assert.match(guidance, /custom formula.*identify one exact existing Project.*pass.*projectPath.*explicitly/iu);
+		assert.match(
+			guidance,
+			/ascet_edit_project_context_required.*project_context_required.*distinct from.*invalid_formula_reference/iu,
+		);
 	});
 
 	test("documents UI implementation types, range selection, and ascetDefault semantics", () => {

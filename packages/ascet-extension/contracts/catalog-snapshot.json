@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "catalogFingerprint": "9ca26e14b3f7bfdf534cca55e2552da520d63990317c507809d3588d7f0b1d1c",
+  "catalogFingerprint": "4c6500aabcb3c87f0fb7799ed094463c98286bda24d09107d1efa3b6d4c44bc7",
   "actions": [
     {
       "id": "ascet_batch_write.batch_create_component",
@@ -367,7 +367,7 @@
     {
       "id": "ascet_edit.apply_element_spec",
       "schemaFingerprint": "b8a024584e68f1dc6bf42e7e2c824c5a75f5afcaef32436c3f8f4f4c125b5496",
-      "rulesFingerprint": "547667329c3db6c1548609b76bbd394839ecc4ed545b60cf0a4796537d4a98b2",
+      "rulesFingerprint": "8469f46230d19ec28c664ddea988f8f9f691ab975c4aa090478674ccb369f636",
       "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
       "schema": {
         "required": [

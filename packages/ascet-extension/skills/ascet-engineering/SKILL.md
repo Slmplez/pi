@@ -15,6 +15,7 @@ Active Tool schemas and Action Contracts are authoritative for public Tool names
 
 - Exact validated target: skip Search, read only the exact surfaces needed, design the smallest safe change, invoke the matching public edit action, and inspect automatic verification.
 - Fuzzy target: use `ascet_search.search` for bounded candidate discovery, then resolve one exact target and validate it with the matching read action before any edit.
+- Text search query: For `mode=text`, prefer a complete symbol, signal, or Parameter name instead of a broad domain word; refine a high-count or truncated query before reading candidates.
 - Discovery-only request: return Search candidates without reading every candidate unless the user asks for an engineering conclusion.
 - Customer integration or shared feature work: load ownership References only when the requested layer, canonical definition, or affected consumers are unclear.
 - Dependency-chain work: keep complete chains separate from ordinary Element changes.
@@ -43,6 +44,7 @@ Before a non-trivial apply, record the exact target, requested behavior, code or
 - Ordinary Elements use `ascet_edit.apply_element_spec`; complete Parameter Dependency Chains use `ascet_edit.create_dependent_chain`. Do not manage the same chain Elements through both actions.
 - Search, Get, and Read results are interpreted by their Action Contract and do not require write verification.
 - Mutation completion requires successful required automatic verification. Stop and report blocked, error, partial, rolled-back, unknown, or missing-verification outcomes.
+- Formula context: `ident` is ASCET's built-in identity formula and needs no Project; non-`ident` `impl.formula` requires one explicit Project path. Never infer or create a Project for identity validation; load `references/elements-fast-path.md` for the exact rules.
 
 ## Reference loading
 

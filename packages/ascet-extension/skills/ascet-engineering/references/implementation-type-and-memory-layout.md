@@ -78,7 +78,9 @@ The public request may use `sint8`, `sint16`, or `sint32`. The Bridge normalizes
 
 ## Formula, range, and limit rules
 
-- Use `formula="ident"` for an explicit identity conversion.
+- Use `formula="ident"` for an explicit identity conversion. `ident` is ASCET's built-in default and does not require `projectPath` or Project formula membership.
+- Any non-`ident` `impl.formula` is Project-defined: pass one exact explicit `projectPath` and validate the formula only against that Project. Never infer `componentPath` parentage or create a sibling `Project` item.
+- Report `project_context_required` when a non-`ident` formula has no explicit Project context; reserve `invalid_formula_reference` for a formula missing from a valid explicit Project.
 - A non-identity Formula requires continuous model semantics and a non-real implementation representation.
 - Real implementation representations must not use a non-identity Formula.
 - A ranged discrete Parameter requires `limitAssignments=true`.
