@@ -8,6 +8,7 @@ public static class AscetElementMutationTransactionTest
         TestFourthFailureRollsBackFirstThreeInReverseOrder();
         TestRollbackFailureReturnsUnknownStatus();
         TestIncompleteSnapshotPreventsMutation();
+        TestImportedPrimitiveRollbackSnapshotCompleteness();
         TestBatchFailureAfterMutationRollsBack();
         TestBatchRollbackFailureIsUnknown();
         TestBatchFailureBeforeMutationDoesNotRollback();
@@ -101,6 +102,75 @@ public static class AscetElementMutationTransactionTest
             return;
         }
         throw new InvalidOperationException("Expected mutation_snapshot_incomplete.");
+    }
+
+    private static void TestImportedPrimitiveRollbackSnapshotCompleteness()
+    {
+        AscetExistingElementState imported = new AscetExistingElementState
+        {
+            Name = "P_AEB_MaxAllowedActivations",
+            Kind = AscetElementSpecKind.Variable,
+            ModelType = "udisc",
+            Scope = "imported"
+        };
+
+        Equal(true, ComponentElementSyncService.IsExistingElementFullyRestorableForRollback(imported), "imported primitive snapshot completeness");
+
+        imported.Name = String.Empty;
+        Equal(false, ComponentElementSyncService.IsExistingElementFullyRestorableForRollback(imported), "imported primitive requires a name");
+        imported.Name = "P_AEB_MaxAllowedActivations";
+        imported.ModelType = String.Empty;
+        Equal(false, ComponentElementSyncService.IsExistingElementFullyRestorableForRollback(imported), "imported primitive requires a model type");
+        imported.ModelType = "udisc";
+        imported.Scope = String.Empty;
+        Equal(false, ComponentElementSyncService.IsExistingElementFullyRestorableForRollback(imported), "imported primitive requires a scope");
+        imported.Scope = "imported";
+        imported.Kind = AscetElementSpecKind.Unknown;
+        Equal(false, ComponentElementSyncService.IsExistingElementFullyRestorableForRollback(imported), "imported primitive requires a known kind");
+
+        AscetExistingElementState importedArray = new AscetExistingElementState
+        {
+            Name = "ImportedArray",
+            Kind = AscetElementSpecKind.Array,
+            ModelType = "udisc",
+            Scope = "imported",
+            Length = 2
+        };
+        Equal(true, ComponentElementSyncService.IsExistingElementFullyRestorableForRollback(importedArray), "imported array with positive length is restorable");
+        importedArray.Length = null;
+        Equal(false, ComponentElementSyncService.IsExistingElementFullyRestorableForRollback(importedArray), "imported array requires length");
+        importedArray.Length = 0;
+        Equal(false, ComponentElementSyncService.IsExistingElementFullyRestorableForRollback(importedArray), "imported array requires positive length");
+
+        AscetExistingElementState importedEnumeration = new AscetExistingElementState
+        {
+            Name = "ImportedEnumeration",
+            Kind = AscetElementSpecKind.Enumeration,
+            ModelType = "enum",
+            Scope = "imported",
+            EnumerationPath = "Enums\\State"
+        };
+        Equal(true, ComponentElementSyncService.IsExistingElementFullyRestorableForRollback(importedEnumeration), "imported enumeration with path is restorable");
+        importedEnumeration.EnumerationPath = String.Empty;
+        Equal(false, ComponentElementSyncService.IsExistingElementFullyRestorableForRollback(importedEnumeration), "imported enumeration requires a path");
+
+        AscetExistingElementState local = new AscetExistingElementState
+        {
+            Name = "LocalValue",
+            Kind = AscetElementSpecKind.Variable,
+            ModelType = "udisc",
+            Scope = "local"
+        };
+        Equal(false, ComponentElementSyncService.IsExistingElementFullyRestorableForRollback(local), "local primitive must retain configuration requirements");
+
+        AscetExistingElementState exported = new AscetExistingElementState
+        {
+            Name = "ExportedValue",
+            Kind = AscetElementSpecKind.Variable,
+            ModelType = "udisc",
+            Scope = "exported"
+        };
+        Equal(false, ComponentElementSyncService.IsExistingElementFullyRestorableForRollback(exported), "exported primitive must retain configuration requirements");
     }
 
     private static void TestBatchFailureAfterMutationRollsBack()

@@ -4270,6 +4270,11 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
 
     private bool IsExistingElementFullyRestorable(AscetExistingElementState state)
     {
+        return IsExistingElementFullyRestorableForRollback(state);
+    }
+
+    internal static bool IsExistingElementFullyRestorableForRollback(AscetExistingElementState state)
+    {
         if (state == null || state.Kind == AscetElementSpecKind.Unknown)
         {
             return false;
@@ -4282,10 +4287,53 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
         {
             return HasSelectedDataConfiguration(state);
         }
+        if (IsImportedPrimitive(state))
+        {
+            if (!IsKnownPrimitiveKind(state.Kind) ||
+                String.IsNullOrWhiteSpace(state.Name) ||
+                String.IsNullOrWhiteSpace(state.ModelType) ||
+                String.IsNullOrWhiteSpace(state.Scope))
+            {
+                return false;
+            }
+
+            if (state.Kind == AscetElementSpecKind.Array)
+            {
+                return state.Length.HasValue && state.Length.Value > 0;
+            }
+            if (state.Kind == AscetElementSpecKind.Enumeration)
+            {
+                return !String.IsNullOrWhiteSpace(state.EnumerationPath);
+            }
+            return true;
+        }
         return HasSelectedDataConfiguration(state) && HasSelectedImplementationConfiguration(state);
     }
 
-    private bool HasSelectedDataConfiguration(AscetExistingElementState state)
+    private static bool IsImportedPrimitive(AscetExistingElementState state)
+    {
+        return state != null &&
+            state.Kind != AscetElementSpecKind.Unknown &&
+            state.Kind != AscetElementSpecKind.Component &&
+            state.Kind != AscetElementSpecKind.Table &&
+            String.Equals(state.Scope, "imported", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsKnownPrimitiveKind(AscetElementSpecKind kind)
+    {
+        switch (kind)
+        {
+            case AscetElementSpecKind.Variable:
+            case AscetElementSpecKind.Parameter:
+            case AscetElementSpecKind.Array:
+            case AscetElementSpecKind.Enumeration:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private static bool HasSelectedDataConfiguration(AscetExistingElementState state)
     {
         return state != null &&
             state.ConfigurationProvenance != null &&
@@ -4293,7 +4341,7 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
             state.ConfigurationProvenance.DataConfiguration.Selected;
     }
 
-    private bool HasSelectedImplementationConfiguration(AscetExistingElementState state)
+    private static bool HasSelectedImplementationConfiguration(AscetExistingElementState state)
     {
         return state != null &&
             state.ConfigurationProvenance != null &&

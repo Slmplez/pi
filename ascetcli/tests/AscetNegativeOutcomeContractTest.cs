@@ -31,7 +31,10 @@ public static class AscetNegativeOutcomeContractTest
             "element_not_found",
             "element_conflict",
             "formula_conflict",
-            "editable_write_gate_blocked"
+            "editable_write_gate_blocked",
+            "mutation_snapshot_incomplete",
+            "apply_requires_recreate",
+            "restore_requires_recreate"
         };
 
         for (int i = 0; i < codes.Length; i++)

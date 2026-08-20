@@ -239,6 +239,9 @@ internal static class AscetCliEnvelope
             case "method_return_type_mismatch":
             case "method_signature_not_element_spec":
             case "target_identity_mismatch":
+            case "mutation_snapshot_incomplete":
+            case "apply_requires_recreate":
+            case "restore_requires_recreate":
                 return true;
             default:
                 return false;
