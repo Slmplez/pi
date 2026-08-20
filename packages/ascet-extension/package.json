@@ -1,6 +1,6 @@
 {
 	"name": "@vaf-agentworks/ascet-copilot-extension",
-	"version": "0.1.41",
+	"version": "0.1.43",
 	"description": "ASCET Copilot tool extension for Pi.",
 	"type": "module",
 	"main": "./src/index.ts",

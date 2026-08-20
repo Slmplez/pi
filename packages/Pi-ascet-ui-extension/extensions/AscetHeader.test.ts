@@ -20,13 +20,13 @@ const updateCases: readonly UpdateCase[] = [
 	},
 	{
 		label: "current",
-		state: { status: "current", latestVersion: "0.1.42" },
-		assertText: "0.1.42 - Up to date",
+		state: { status: "current", latestVersion: "0.1.43" },
+		assertText: "0.1.43 - Up to date",
 	},
 	{
 		label: "available",
-		state: { status: "available", latestVersion: "0.1.43" },
-		assertText: "0.1.42 -> 0.1.43",
+		state: { status: "available", latestVersion: "0.1.44" },
+		assertText: "0.1.43 -> 0.1.44",
 	},
 	{
 		label: "unavailable",
@@ -283,7 +283,7 @@ test("dispose ignores completed recent sessions and update checks", async () => 
 	try {
 		setup.header.dispose();
 		recent.resolve([{ title: "Old session", time: "10:00" }]);
-		update.resolve({ status: "current", latestVersion: "0.1.42" });
+		update.resolve({ status: "current", latestVersion: "0.1.43" });
 		await flushPromises();
 
 		assert.equal(tui.requestRenderCalls, 0);

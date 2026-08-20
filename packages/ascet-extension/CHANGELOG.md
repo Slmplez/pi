@@ -49,6 +49,9 @@
 - Fixed failed or unknown ASCET write outcomes retaining stale task-scoped observations when the mutation may already have started.
 
 - Fixed ASCET tool results leaking runtime callbacks and AbortSignals into Pi Agent transport payloads, causing structured-clone failures after completed operations.
+- Fixed Edit Tools zero-save no-op handling, save and telemetry reporting, fresh readback verification, and mutationStarted-aware negative outcomes.
+- Fixed dependency-chain P_/C_ naming consistency, short temporary request paths, and Bridge timing propagation.
+- Fixed `ascet-engineering` implementation guidance to use `impl.valueType`, select integer types from complete ranges, match ASCET UI type sets, and explain `ascetDefault` semantics.
 
 ### Removed
 

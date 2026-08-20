@@ -48,7 +48,7 @@ export const ASCET_COPILOT_NPM_REGISTRY =
 
 export const ASCET_COPILOT_RELEASE: ReleaseInfo = {
 	packageName: "@vaf-agentworks/ascet-copilot",
-	version: "0.1.41",
+	version: "0.1.43",
 	highlights: [
 		"Single-session parameter dependency execution",
 		"Canonical ASCET get, read, diff, and edit tools",

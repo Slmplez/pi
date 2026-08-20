@@ -1,6 +1,6 @@
 {
   "name": "@vaf-agentworks/ascet-copilot",
-  "version": "0.1.41",
+  "version": "0.1.43",
   "description": "ASCET Copilot package bundle for Pi.",
   "type": "module",
   "license": "MIT",
@@ -16,8 +16,8 @@
     "access": "restricted"
   },
   "dependencies": {
-    "@vaf-agentworks/ascet-copilot-extension": "0.1.41",
-    "@vaf-agentworks/ascet-copilot-ui": "0.1.41",
+    "@vaf-agentworks/ascet-copilot-extension": "0.1.43",
+    "@vaf-agentworks/ascet-copilot-ui": "0.1.43",
     "pi-subagents": "0.34.0",
     "@juicesharp/rpiv-todo": "1.20.0",
     "@juicesharp/rpiv-ask-user-question": "1.20.0",
