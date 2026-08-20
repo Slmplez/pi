@@ -1,5 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
 import { mkdirSync, unlinkSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { unwrapToolSuccessPayload } from "../tool-response-contract.ts";
 
@@ -26,7 +27,8 @@ export function findElementSpecDocument(value: unknown): ElementSpecDocument | u
 }
 
 export function writeTemporaryElementSpec(spec: ElementSpecDocument, artifactRoot: string): string {
-	const directory = join(artifactRoot, "element-spec-plans");
+	const artifactRootPartition = createHash("sha256").update(artifactRoot).digest("hex").slice(0, 16);
+	const directory = join(tmpdir(), "pi-ascet-extension", "element-spec-plans", artifactRootPartition);
 	mkdirSync(directory, { recursive: true });
 	const filePath = join(directory, `inline-${process.pid}-${Date.now()}-${randomUUID()}.json`);
 	writeFileSync(filePath, `${JSON.stringify(spec, null, 2)}\n`, "utf8");

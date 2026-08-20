@@ -9,6 +9,7 @@ public static class AscetSetEnumeratorsOutputTest
         {
             TestArgumentParsing();
             TestEnumeratorValidation();
+            TestReadArgumentParsing();
             TestPayload();
             Console.WriteLine("AscetSetEnumeratorsOutputTest passed.");
             return 0;
@@ -43,6 +44,20 @@ public static class AscetSetEnumeratorsOutputTest
         AssertTrue(parsed.EmitJson, "--json should be preserved.");
     }
 
+    private static void TestReadArgumentParsing()
+    {
+        string path = AscetReadEnumerators.ParseComponentPath(new string[] { @"\DEMO/SmokeEnum", "--json" });
+        AssertEqual(@"DEMO\SmokeEnum", path, "Read enumeration path should normalize slashes.");
+        try
+        {
+            AscetReadEnumerators.ParseComponentPath(new string[] { "--json" });
+            throw new Exception("Missing read enumeration path should fail.");
+        }
+        catch (AscetReadException ex)
+        {
+            AssertEqual("invalid_argument", ex.Code, "Missing read enumeration path should return invalid_argument.");
+        }
+    }
     private static void TestEnumeratorValidation()
     {
         string[] normalized = EnumerationWriteService.NormalizeEnumerators(

@@ -12,6 +12,8 @@ class AscetElementWriteOptimizationOutputTest
         ExpectUnknownField("{\"elements\":[{\"name\":\"P\",\"kind\":\"parameter\",\"modelType\":\"cont\",\"scope\":\"local\",\"physicalRange\":{\"min\":0,\"max\":1,\"extra\":true}}]}", "elements[0].physicalRange.extra", 5);
         ExpectImportedLogicalRejectsLocalData();
         ExpectPlannerAllowsRecoverableDefaultCreation();
+        ExpectPlannerSkipsMatchingMutableValues();
+        Console.WriteLine("AscetElementWriteOptimizationOutputTest passed.");
         return 0;
     }
 
@@ -52,6 +54,33 @@ class AscetElementWriteOptimizationOutputTest
         }
     }
 
+    private static void ExpectPlannerSkipsMatchingMutableValues()
+    {
+        ComponentElementSyncPlanner planner = new ComponentElementSyncPlanner();
+        AscetElementSpecDocument matching = AscetElementSpecDocumentParser.ParseJson(
+            "{\"elements\":[{\"name\":\"P_Local\",\"kind\":\"parameter\",\"modelType\":\"cont\",\"scope\":\"local\",\"comment\":\"same\"}]}"
+        );
+        AscetElementSyncPlan plan = planner.Plan(
+            matching,
+            new List<AscetExistingElementState>
+            {
+                new AscetExistingElementState
+                {
+                    Name = "P_Local",
+                    Kind = AscetElementSpecKind.Parameter,
+                    ModelType = "cont",
+                    Scope = "local",
+                    Comment = "same"
+                }
+            },
+            true,
+            true);
+        if (plan.ElementsToUpdate == null || plan.ElementsToUpdate.Count != 0 ||
+            plan.SkippedElements == null || plan.SkippedElements.Count != 1)
+        {
+            throw new Exception("Matching mutable values must be planned as a no-op.");
+        }
+    }
     private static void ExpectPlannerAllowsRecoverableDefaultCreation()
     {
         ComponentElementSyncPlanner planner = new ComponentElementSyncPlanner();

@@ -180,6 +180,7 @@ public static class AscetComponentEditableTcmOutputTest
         TestTcmDriverIdUsesReserveAndCreateEdition();
         TestTcmDriverNameUsesReserveAndCreateEdition();
         TestGenericDriverUsesLock();
+        TestAlreadyEditableIsNoOp();
         TestFailedSetReturnsStructuredError();
         Console.WriteLine("AscetComponentEditableTcmOutputTest passed.");
         return 0;
@@ -192,6 +193,8 @@ public static class AscetComponentEditableTcmOutputTest
         AscetComponentEditableResult result = new AscetEditableService().SetEditable("DEMO\\PID");
 
         AssertTrue(result.Editable, "TCM set must create an editable edition.");
+        AssertTrue(!result.BeforeEditable && result.AfterEditable && result.Changed, "TCM set must report false-to-true telemetry.");
+        AssertEqual(1, result.NativeMutationAttemptCount, "TCM set must report one SCM mutation attempt.");
         AssertCommands(context.Scm.Commands, "ReserveItem", "CreateEdition");
         AssertEqual(3, context.Session.ResolveCount, "TCM set must re-resolve after reserve and after create edition.");
     }
@@ -217,6 +220,17 @@ public static class AscetComponentEditableTcmOutputTest
         AssertEqual(2, context.Session.ResolveCount, "Generic set must re-resolve after Lock.");
     }
 
+    private static void TestAlreadyEditableIsNoOp()
+    {
+        Component component = new Component(false, true);
+        AscetSCMInterface scm = new AscetSCMInterface(component, "<scmDriverName>TCM</scmDriverName>", false);
+        AscetReadDomainServiceBase.CurrentSession = new AscetSession(component, scm);
+        AscetComponentEditableResult result = new AscetEditableService().SetEditable("DEMO\\PID");
+        AssertTrue(result.Editable && result.BeforeEditable && result.AfterEditable, "Already editable component must remain editable.");
+        AssertTrue(!result.Changed, "Already editable component must report changed=false.");
+        AssertEqual(0, result.NativeMutationAttemptCount, "Already editable component must not issue an SCM mutation.");
+        AssertCommands(scm.Commands);
+    }
     private static void TestFailedSetReturnsStructuredError()
     {
         CreateContext("<scmDriverId>SVN</scmDriverId>", false);
@@ -236,6 +250,8 @@ public static class AscetComponentEditableTcmOutputTest
         string json = output.ToString();
         AssertEqual(2, exitCode, "A set operation that leaves the component read-only must fail.");
         AssertContains(json, "\"editable\":false", "Failure output must preserve the final editability state.");
+        AssertContains(json, "\"changed\":false", "Failure output must expose mutation telemetry.");
+        AssertContains(json, "\"saveState\":\"not_applicable\"", "SCM mutation output must mark database Save as not applicable.");
         AssertContains(json, "\"code\":\"component_not_editable\"", "Failure output must expose a stable error code.");
     }
 

@@ -1,4 +1,4 @@
-﻿import { Value } from "typebox/value";
+import { Value } from "typebox/value";
 import type { AscetCliJsonResult } from "./cli.ts";
 import {
 	type ConfigureParameterDependencyChainOptions,
@@ -355,11 +355,20 @@ function validateParams(params: AscetCreateDependentChainParams): { code: string
 	if (params.binding.variantPolicy !== "selected" && params.binding.variants !== undefined) {
 		return { code: "binding_invalid", message: "binding.variants is only valid for selected variants." };
 	}
+	if (!/^P_.+/u.test(params.provider.element.name)) {
+		return { code: "provider_parameter_name_invalid", message: "provider.element.name must use P_<Name>." };
+	}
+	if (!/^P_.+/u.test(params.consumer.importedElement.name)) {
+		return { code: "imported_parameter_name_invalid", message: "consumer.importedElement.name must use P_<Name>." };
+	}
 	if (params.provider.element.name !== params.consumer.importedElement.name) {
 		return {
-			code: "binding_invalid",
+			code: "provider_imported_parameter_name_mismatch",
 			message: "Provider Exported and Consumer Imported Parameter names must match exactly.",
 		};
+	}
+	if (!/^C_.+/u.test(params.consumer.localElement.name)) {
+		return { code: "local_parameter_name_invalid", message: "consumer.localElement.name must use C_<Name>." };
 	}
 	if (params.provider.element.modelType.toLowerCase() !== params.consumer.importedElement.modelType.toLowerCase()) {
 		return {

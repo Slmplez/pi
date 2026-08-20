@@ -7,6 +7,19 @@ using de.etas.cebra.toolAPI.Common;
 public sealed class AscetComponentEditableResult
 {
     public bool Editable { get; set; }
+    public bool BeforeEditable { get; set; }
+    public bool AfterEditable { get; set; }
+    public bool Changed { get; set; }
+    public string MutationStatus { get; set; }
+    public bool SaveAttempted { get; set; }
+    public bool SaveSucceeded { get; set; }
+    public string SaveState { get; set; }
+    public bool Verified { get; set; }
+    public string VerificationStatus { get; set; }
+    public string VerificationMode { get; set; }
+    public int SessionCount { get; set; }
+    public int SaveCount { get; set; }
+    public int NativeMutationAttemptCount { get; set; }
 }
 
 public sealed class AscetEditableService : AscetReadDomainServiceBase
@@ -59,7 +72,9 @@ public sealed class AscetEditableService : AscetReadDomainServiceBase
 
             bool wasVersion = component.IsVersion();
             bool wasEdition = component.IsEdition();
-            if (setEditable && wasVersion && !wasEdition)
+            bool beforeEditable = wasEdition || !(wasVersion || wasEdition);
+            int nativeMutationAttemptCount = 0;
+            if (setEditable && !beforeEditable)
             {
                 AscetSCMInterface scm = currentSession.GetToolHandle().GetSCMInterface();
                 if (scm == null)
@@ -71,6 +86,7 @@ public sealed class AscetEditableService : AscetReadDomainServiceBase
                 }
 
                 DataBaseItem[] items = new DataBaseItem[] { component };
+                nativeMutationAttemptCount = 1;
                 if (IsTcmDriver(scm))
                 {
                     scm.ExecuteSCMScriptingCommandForItems("ReserveItem", items);
@@ -111,9 +127,24 @@ public sealed class AscetEditableService : AscetReadDomainServiceBase
             bool isVersion = component.IsVersion();
             bool isEdition = component.IsEdition();
             bool usesScmState = wasVersion || wasEdition || isVersion || isEdition;
+            bool afterEditable = isEdition || !usesScmState;
+            bool changed = beforeEditable != afterEditable;
             return new AscetComponentEditableResult
             {
-                Editable = isEdition || !usesScmState
+                Editable = afterEditable,
+                BeforeEditable = beforeEditable,
+                AfterEditable = afterEditable,
+                Changed = changed,
+                MutationStatus = setEditable ? (changed ? "applied" : "no_op") : "read_only",
+                SaveAttempted = false,
+                SaveSucceeded = false,
+                SaveState = "not_applicable",
+                Verified = !setEditable || afterEditable,
+                VerificationStatus = !setEditable || afterEditable ? "passed" : "failed",
+                VerificationMode = "same_session_scm_state",
+                SessionCount = 1,
+                SaveCount = 0,
+                NativeMutationAttemptCount = nativeMutationAttemptCount
             };
         });
     }
@@ -175,6 +206,22 @@ public static class AscetComponentEditable
             bool editable = result != null && result.Editable;
             Dictionary<string, object> payload = new Dictionary<string, object>();
             payload["editable"] = editable;
+            if (setEditable && result != null)
+            {
+                payload["beforeEditable"] = result.BeforeEditable;
+                payload["afterEditable"] = result.AfterEditable;
+                payload["changed"] = result.Changed;
+                payload["mutationStatus"] = result.MutationStatus ?? String.Empty;
+                payload["saveAttempted"] = result.SaveAttempted;
+                payload["saveSucceeded"] = result.SaveSucceeded;
+                payload["saveState"] = result.SaveState ?? String.Empty;
+                payload["verified"] = result.Verified;
+                payload["verificationStatus"] = result.VerificationStatus ?? String.Empty;
+                payload["verificationMode"] = result.VerificationMode ?? String.Empty;
+                payload["sessionCount"] = result.SessionCount;
+                payload["saveCount"] = result.SaveCount;
+                payload["nativeMutationAttemptCount"] = result.NativeMutationAttemptCount;
+            }
             if (setEditable && !editable)
             {
                 Dictionary<string, object> error = new Dictionary<string, object>();

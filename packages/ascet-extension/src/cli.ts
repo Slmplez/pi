@@ -724,6 +724,14 @@ function summarizeFailureText(value: string, maxLength = 1000): string {
 	return normalized.length <= maxLength ? normalized : `${normalized.slice(0, maxLength)}...`;
 }
 
+function addNotStartedWriteMetadata(details: unknown): Record<string, unknown> {
+	return {
+		...(asRecord(details) ?? {}),
+		retryable: true,
+		requiresReadback: false,
+	};
+}
+
 function isControlPlaneRequest(args: string[]): boolean {
 	return args[0] === "capabilities" || (args[0] === "selftest" && args[1]?.toLowerCase() === "offline");
 }
@@ -874,15 +882,15 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 		if (error instanceof AscetCliProcessError) {
 			const failedExecution = error.execution;
 			const structuredError = getStructuredCliProcessError(error);
-			const dispatchStarted = failedExecution.spawnSucceeded === true || failedExecution.requestDispatched === true;
+			const bridgeMutationStarted = getBridgeMutationStarted(failedExecution);
+			const structuredErrorDetails =
+				structuredError !== undefined && jobKind === "write" && bridgeMutationStarted === false
+					? addNotStartedWriteMetadata(structuredError.details)
+					: structuredError?.details;
 			const preserveStructuredError =
-				structuredError !== undefined &&
-				(jobKind !== "write" ||
-					!dispatchStarted ||
-					structuredError.code === "editable_write_gate_blocked" ||
-					getBridgeMutationStarted(failedExecution) === false);
+				structuredError !== undefined && (jobKind !== "write" || bridgeMutationStarted === false);
 			const mappedFailure = preserveStructuredError
-				? { code: structuredError.code, details: structuredError.details }
+				? { code: structuredError.code, details: structuredErrorDetails }
 				: mapWriteFailure(jobKind, structuredError?.code ?? error.resultCode, failedExecution);
 			const mappedDetails =
 				!preserveStructuredError && structuredError
@@ -923,7 +931,7 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 							code: structuredError.code,
 							message: structuredError.message,
 							stage: structuredError.stage,
-							details: structuredError.details,
+							details: structuredErrorDetails,
 							operation: structuredError.operation,
 						}
 					: {

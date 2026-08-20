@@ -2667,7 +2667,7 @@ public sealed class ComponentElementSyncPlanner
             if (existing.TryGetValue(element.Name ?? String.Empty, out state))
             {
                 EnsureCompatible(element, state);
-                if (HasMutableUpdates(element))
+                if (BuildMutableFieldChanges(element, state).Count > 0)
                 {
                     toUpdate.Add(element);
                 }
@@ -3527,21 +3527,6 @@ public sealed class ComponentElementSyncPlanner
         }
     }
 
-    private bool HasMutableUpdates(AscetElementSpec spec)
-    {
-        return spec != null &&
-               (spec.Data != null ||
-                !String.IsNullOrWhiteSpace(spec.EnumerationPath) ||
-                !String.IsNullOrWhiteSpace(spec.TableDimension) ||
-                spec.XValues != null ||
-                spec.Values != null ||
-                spec.PhysicalRange != null ||
-                spec.Calibration.HasValue ||
-                !String.IsNullOrWhiteSpace(spec.Unit) ||
-                !String.IsNullOrWhiteSpace(spec.Comment) ||
-                HasMutableImplementationUpdates(spec.Impl));
-    }
-
     private int GetListCount(IList<object> values)
     {
         return values == null ? 0 : values.Count;
@@ -3555,16 +3540,6 @@ public sealed class ComponentElementSyncPlanner
                String.Equals(existing.TableDimension, "2d", StringComparison.Ordinal) &&
                (GetListCount(spec.XValues) != GetListCount(existing.XValues) ||
                 GetListCount(spec.YValues) != GetListCount(existing.YValues));
-    }
-
-    private bool HasMutableImplementationUpdates(AscetElementImplSpec spec)
-    {
-        return spec != null &&
-               (!String.IsNullOrWhiteSpace(spec.MemoryLocation) ||
-                !String.IsNullOrWhiteSpace(spec.ValueType) ||
-                spec.ImplementationRange != null ||
-                !String.IsNullOrWhiteSpace(spec.Formula) ||
-                spec.LimitAssignments.HasValue);
     }
 
     private bool TryGetExpectedLimitAssignments(AscetElementSpec spec, out bool expected)

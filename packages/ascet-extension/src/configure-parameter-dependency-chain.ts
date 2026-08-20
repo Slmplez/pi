@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { mkdirSync, unlinkSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { Type } from "typebox";
 import { Value } from "typebox/value";
@@ -20,7 +21,6 @@ import {
 	ascetProviderExportedParameterCreateSchema,
 	normalizeAscetElementSpec,
 } from "./element-spec-contract.ts";
-import { getAscetArtifactRoot } from "./observation-store.ts";
 import { renderAscetToolCall, renderAscetToolResult } from "./rendering.ts";
 import type { AscetDependencyMappingTarget } from "./set-element-dependency.ts";
 import { openAiObjectSchema } from "./tools/_shared/openai-schema.ts";
@@ -291,7 +291,7 @@ function buildBridgeRequest(
 }
 
 function writeBridgeRequest(request: Record<string, unknown>): string {
-	const directory = join(getAscetArtifactRoot(), "dependency-chain-requests");
+	const directory = join(tmpdir(), "pi-ascet-extension", "dependency-chain-requests");
 	mkdirSync(directory, { recursive: true });
 	const path = join(directory, `execute-${process.pid}-${Date.now()}-${randomUUID()}.json`);
 	writeFileSync(path, `${JSON.stringify(request, null, 2)}\n`, { encoding: "utf8", mode: 0o600 });
@@ -317,6 +317,11 @@ function normalizeBridgeResult(data: unknown): ConfigureParameterDependencyChain
 				: data;
 	if (candidate === null || typeof candidate !== "object" || Array.isArray(candidate)) return undefined;
 	const result = candidate as Record<string, unknown>;
+	const meta =
+		envelope.type === "response" && envelope.meta !== null && typeof envelope.meta === "object"
+			? (envelope.meta as Record<string, unknown>)
+			: undefined;
+	const bridgeDurationMs = typeof meta?.durationMs === "number" ? meta.durationMs : undefined;
 	const status = result.status;
 	if (
 		status !== "preview" &&
@@ -336,6 +341,7 @@ function normalizeBridgeResult(data: unknown): ConfigureParameterDependencyChain
 		writesPerformed: result.writesPerformed === true,
 		mutationStarted: result.mutationStarted === true,
 		consistency: "compensating",
+		...(bridgeDurationMs === undefined ? {} : { bridgeDurationMs }),
 	};
 }
 

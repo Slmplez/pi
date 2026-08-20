@@ -38,6 +38,20 @@ public sealed class AscetEnumeratorWriteResult
     public string Summary { get; set; }
 }
 
+public sealed class AscetEnumerationReadResult
+{
+    public AscetEnumerationReadResult()
+    {
+        ComponentPath = String.Empty;
+        ComponentOid = String.Empty;
+        Enumerators = new List<string>();
+    }
+
+    public string ComponentPath { get; set; }
+    public string ComponentOid { get; set; }
+    public IList<string> Enumerators { get; set; }
+}
+
 public sealed class AscetSetEnumeratorsArguments
 {
     public AscetSetEnumeratorsArguments()
@@ -66,8 +80,8 @@ public sealed class EnumerationWriteService : AscetReadDomainServiceBase
         SetEnumeratorsSessionResult sessionResult = ExecuteWithSession("set_enumerators", delegate(AscetSession session)
         {
             AscetDataBase database = session.GetCurrentDatabaseHandle();
-            AscetEnumeration enumeration = ResolveEnumeration(session, normalizedPath);
-            previousEnumerators.AddRange(ReadEnumerators(enumeration));
+            AscetEnumeration enumeration = ResolveEnumeration(session, normalizedPath, "set_enumerators");
+            previousEnumerators.AddRange(ReadEnumeratorValues(enumeration));
             bool changed = !EnumeratorsMatch(previousEnumerators, normalizedEnumerators);
             bool saveAttempted = false;
             bool saveSucceeded = false;
@@ -96,9 +110,9 @@ public sealed class EnumerationWriteService : AscetReadDomainServiceBase
                 }
             }
 
-            AscetEnumeration resolvedEnumeration = ResolveEnumeration(session, normalizedPath);
+            AscetEnumeration resolvedEnumeration = ResolveEnumeration(session, normalizedPath, "set_enumerators");
             bool targetResolved = resolvedEnumeration != null;
-            List<string> actualEnumerators = ReadEnumerators(resolvedEnumeration);
+            List<string> actualEnumerators = ReadEnumeratorValues(resolvedEnumeration);
             bool contentMatches = EnumeratorsMatch(actualEnumerators, normalizedEnumerators);
             bool verified = !verifyReadback || (targetResolved && contentMatches);
             return new SetEnumeratorsSessionResult
@@ -150,6 +164,23 @@ public sealed class EnumerationWriteService : AscetReadDomainServiceBase
             NativeMutationAttemptCount = sessionResult == null ? 0 : sessionResult.NativeMutationAttemptCount,
             Summary = "Set " + normalizedEnumerators.Length + " enumerators for " + normalizedPath + "."
         };
+    }
+
+    public AscetEnumerationReadResult ReadEnumerators(string componentPath)
+    {
+        string normalizedPath = AscetDatabaseExplorerCommon.NormalizePath(componentPath, "component_path");
+        return ExecuteWithSession("read_enumerators", delegate(AscetSession session)
+        {
+            AscetEnumeration enumeration = ResolveEnumeration(session, normalizedPath, "read_enumerators");
+            System.Reflection.MethodInfo getOid = enumeration.GetType().GetMethod("GetOID", Type.EmptyTypes) ?? enumeration.GetType().GetMethod("GetOid", Type.EmptyTypes);
+            object oidValue = getOid == null ? null : getOid.Invoke(enumeration, null);
+            return new AscetEnumerationReadResult
+            {
+                ComponentPath = normalizedPath,
+                ComponentOid = Convert.ToString(oidValue) ?? String.Empty,
+                Enumerators = ReadEnumeratorValues(enumeration)
+            };
+        });
     }
 
     private sealed class SetEnumeratorsSessionResult
@@ -220,7 +251,7 @@ public sealed class EnumerationWriteService : AscetReadDomainServiceBase
         return true;
     }
 
-    private AscetEnumeration ResolveEnumeration(AscetSession session, string componentPath)
+    private AscetEnumeration ResolveEnumeration(AscetSession session, string componentPath, string operation)
     {
         DataBaseItem item = ResolveItemByPath(session, componentPath);
         AscetEnumeration enumeration = item as AscetEnumeration;
@@ -235,11 +266,11 @@ public sealed class EnumerationWriteService : AscetReadDomainServiceBase
             : itemRef.Kind.ToString();
         throw new AscetReadException(
             "unsupported_component_kind",
-            "set_enumerators",
+            operation,
             "Component '" + componentPath + "' must be an enumeration, but resolved kind '" + resolvedKind + "'.");
     }
 
-    private static List<string> ReadEnumerators(AscetEnumeration enumeration)
+    internal static List<string> ReadEnumeratorValues(AscetEnumeration enumeration)
     {
         string[] values = enumeration == null ? null : enumeration.GetEnumerators();
         List<string> result = new List<string>();
@@ -255,6 +286,69 @@ public sealed class EnumerationWriteService : AscetReadDomainServiceBase
     }
 }
 
+public static class AscetReadEnumerators
+{
+    public static int Main(string[] args)
+    {
+        TextWriter originalOut = Console.Out;
+        StringWriter suppressedOut = null;
+        try
+        {
+            string componentPath = ParseComponentPath(args);
+            suppressedOut = new StringWriter();
+            Console.SetOut(suppressedOut);
+            AscetToolApiBootstrap.ConfigureAssemblyResolution();
+            AscetEnumerationReadResult result = new EnumerationWriteService().ReadEnumerators(componentPath);
+            Console.SetOut(originalOut);
+            Dictionary<string, object> payload = new Dictionary<string, object>();
+            payload["componentPath"] = result.ComponentPath ?? String.Empty;
+            payload["componentOid"] = result.ComponentOid ?? String.Empty;
+            payload["enumerators"] = result.Enumerators ?? new List<string>();
+            Console.Write(AscetJsonContract.Serialize(payload));
+            return 0;
+        }
+        catch (Exception ex)
+        {
+            Console.SetOut(originalOut);
+            Console.Error.WriteLine(FormatException(ex));
+            return 1;
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+            if (suppressedOut != null)
+            {
+                suppressedOut.Dispose();
+            }
+        }
+    }
+
+    internal static string ParseComponentPath(string[] args)
+    {
+        if (args == null || args.Length < 1 || String.Equals(args[0], "--json", StringComparison.OrdinalIgnoreCase))
+        {
+            throw new AscetReadException("invalid_argument", "parse_arguments", "usage: AscetBridge.exe exec read_enumerators <enumeration-path> --json");
+        }
+        for (int i = 1; i < args.Length; i++)
+        {
+            if (!String.Equals(args[i], "--json", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new AscetReadException("invalid_argument", "parse_arguments", "Unknown argument '" + args[i] + "'.");
+            }
+        }
+        return AscetDatabaseExplorerCommon.NormalizePath(args[0], "component_path");
+    }
+
+    private static string FormatException(Exception ex)
+    {
+        AscetReadException ascet = ex as AscetReadException;
+        if (ascet != null)
+        {
+            return ascet.Code + ":" + ascet.Operation + ":" + ascet.Message;
+        }
+        return ex.GetType().FullName + ":" + ex.Message;
+    }
+}
 public static class AscetSetEnumerators
 {
     public static int Main(string[] args)

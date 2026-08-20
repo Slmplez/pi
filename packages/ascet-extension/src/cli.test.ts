@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, test } from "node:test";
 import { type AscetCliJsonResult, executeAscetCli, formatAscetCliJsonResult, runAscetCliJson } from "./cli.ts";
+import { classifyAscetEditExecution } from "./edit/verification.ts";
 import { getAscetCliLockSnapshot } from "./scheduler/cli-lock.ts";
 import { createAscetScheduler } from "./scheduler/scheduler.ts";
 
@@ -762,6 +763,29 @@ describe("ASCET Bridge Milestone A transport semantics", () => {
 				requiresReadback: true,
 				backend: { code: "write_failed", stage: undefined, details: undefined, operation: undefined },
 			});
+			assert.equal(classifyAscetEditExecution(structuredUnknown).mutationStatus, "unknown");
+
+			const structuredUndefined = await runAscetCliJson(["exec", "create_folder", "\\\\Safe", "--json"], {
+				cwd: fixture.cwd,
+				env: fixture.env,
+				jobKind: "write",
+				executeCli: async (request) => ({
+					exitCode: 2,
+					stdout: JSON.stringify({
+						ok: false,
+						error: { code: "target_not_found", message: "target missing" },
+					}),
+					stderr: "",
+					timedOut: false,
+					spawnAttempted: true,
+					spawnSucceeded: true,
+					requestDispatched: true,
+					processClosed: true,
+					request,
+				}),
+			});
+			assert.equal(structuredUndefined.error?.code, "write_outcome_unknown");
+			assert.equal(classifyAscetEditExecution(structuredUndefined).mutationStatus, "unknown");
 
 			const editableGateBlocked = await runAscetCliJson(
 				["exec", "set_method_code", "Demo\\ReadOnly", "Main", "return;", "--json"],
@@ -782,7 +806,7 @@ describe("ASCET Bridge Milestone A transport semantics", () => {
 								bridgeGeneration: "test-generation",
 								durationMs: 1,
 								sessionPolicy: "fresh_session",
-								mutationStarted: null,
+								mutationStarted: false,
 							},
 						}),
 						stderr: "",
@@ -797,6 +821,12 @@ describe("ASCET Bridge Milestone A transport semantics", () => {
 			);
 			assert.equal(editableGateBlocked.error?.code, "editable_write_gate_blocked");
 			assert.equal(editableGateBlocked.error?.message, "not editable");
+			assert.deepEqual(editableGateBlocked.error?.details, {
+				retryable: true,
+				requiresReadback: false,
+			});
+			assert.equal(classifyAscetEditExecution(editableGateBlocked).mutationStatus, "not_started");
+			assert.equal(classifyAscetEditExecution(editableGateBlocked).shouldInvalidateObservations, false);
 
 			const structuredNotStarted = await runAscetCliJson(["exec", "create_folder", "\\Safe", "--json"], {
 				cwd: fixture.cwd,
@@ -809,7 +839,7 @@ describe("ASCET Bridge Milestone A transport semantics", () => {
 						protocolVersion: 1,
 						ok: false,
 						result: null,
-						error: { code: "invalid_arguments", message: "target missing" },
+						error: { code: "target_not_found", message: "target missing" },
 						meta: {
 							bridgePid: 4321,
 							bridgeGeneration: "test-generation",
@@ -827,8 +857,15 @@ describe("ASCET Bridge Milestone A transport semantics", () => {
 					request,
 				}),
 			});
-			assert.equal(structuredNotStarted.error?.code, "invalid_arguments");
+			assert.equal(structuredNotStarted.error?.code, "target_not_found");
 			assert.equal(structuredNotStarted.error?.message, "target missing");
+			assert.deepEqual(structuredNotStarted.error?.details, {
+				retryable: true,
+				requiresReadback: false,
+			});
+			const notStartedClassification = classifyAscetEditExecution(structuredNotStarted);
+			assert.equal(notStartedClassification.mutationStatus, "not_started");
+			assert.equal(notStartedClassification.shouldInvalidateObservations, false);
 
 			const invalidEnvelope = await runAscetCliJson(["-e", "process.stdout.write('{}')"], {
 				cwd: fixture.cwd,

@@ -1,12 +1,26 @@
-﻿import assert from "node:assert/strict";
+import assert from "node:assert/strict";
 import { existsSync, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 import { setTimeout as delay } from "node:timers/promises";
 import type { AscetCliExecutionResult, AscetCliRequest } from "../../cli.ts";
+import { removeTemporaryElementSpec, writeTemporaryElementSpec } from "../../edit/element-spec-plan.ts";
 import { ascetEditTool } from "./definition.ts";
 
+test("inline element specs use a short OS temp path for long artifact roots", () => {
+	const root = mkdtempSync(join(tmpdir(), "ascet-element-spec-long-root-"));
+	const artifactRoot = join(root, ...Array.from({ length: 12 }, (_, index) => `campaign-${index}-${"x".repeat(24)}`));
+	const specFile = writeTemporaryElementSpec({ elements: [] }, artifactRoot);
+	try {
+		assert.equal(existsSync(specFile), true);
+		assert.equal(specFile.startsWith(artifactRoot), false);
+		assert.ok(specFile.length < artifactRoot.length);
+	} finally {
+		removeTemporaryElementSpec(specFile);
+		rmSync(root, { recursive: true, force: true });
+	}
+});
 test("apply_element_spec keeps its generated spec alive until delayed Bridge consumption completes", async () => {
 	const root = mkdtempSync(join(tmpdir(), "ascet-element-spec-lifetime-"));
 	let observedSpecFile: string | undefined;

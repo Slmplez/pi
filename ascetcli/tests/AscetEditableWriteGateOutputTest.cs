@@ -64,7 +64,32 @@ public static class AscetEditableWriteGateOutputTest
         };
         AssertTrue(
             AscetSetElementDependencyService.RequiresDependencyWrite(dependent, mappingWrite),
-            "formula mapping write must require an editable gate");
+            "formula mapping write without live mapping state must require an editable gate");
+
+        List<AscetElementDependencyDataVariantState> matchingMappings = new List<AscetElementDependencyDataVariantState>
+        {
+            new AscetElementDependencyDataVariantState
+            {
+                VariantName = "default",
+                HasDependency = true,
+                Mappings = new List<AscetElementDependencyDataVariantMapping>
+                {
+                    new AscetElementDependencyDataVariantMapping
+                    {
+                        FormalName = "P_Input",
+                        ValueName = "P_Input",
+                        ValueKind = "parameter"
+                    }
+                }
+            }
+        };
+        AssertTrue(
+            !AscetSetElementDependencyService.RequiresDependencyWrite(dependent, mappingWrite, false, matchingMappings),
+            "matching formula mappings must not require an editable gate or repeat the write");
+        matchingMappings[0].Mappings[0].ValueName = "P_Other";
+        AssertTrue(
+            AscetSetElementDependencyService.RequiresDependencyWrite(dependent, mappingWrite, false, matchingMappings),
+            "different formula mappings must require an editable gate");
 
         AscetSetElementDependencyArguments restorationWrite = new AscetSetElementDependencyArguments
         {

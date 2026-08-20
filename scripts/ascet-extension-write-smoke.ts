@@ -79,6 +79,38 @@ const writeContext = {
 	},
 };
 
+type VerificationEvidence = {
+	status?: unknown;
+	verified?: unknown;
+};
+
+type OutcomeVerificationData = VerificationEvidence & {
+	verificationStatus?: unknown;
+	verification?: VerificationEvidence;
+};
+
+function asRecord(value: unknown): Record<string, unknown> | undefined {
+	return typeof value === "object" && value !== null && !Array.isArray(value)
+		? value as Record<string, unknown>
+		: undefined;
+}
+
+function readVerificationEvidence(value: unknown): VerificationEvidence | undefined {
+	const record = asRecord(value);
+	return record ? { status: record.status, verified: record.verified } : undefined;
+}
+
+function readOutcomeVerificationData(value: unknown): OutcomeVerificationData | undefined {
+	const record = asRecord(value);
+	return record
+		? {
+				verified: record.verified,
+				verificationStatus: record.verificationStatus,
+				verification: readVerificationEvidence(record.verification),
+			}
+		: undefined;
+}
+
 async function executeTool(toolName: string, params: Record<string, unknown>, ctx: Record<string, unknown>) {
 	const tool = extension?.tools.get(toolName)?.definition;
 	if (!tool) {
@@ -95,18 +127,16 @@ async function executeTool(toolName: string, params: Record<string, unknown>, ct
 			outcome.status === "ok" &&
 			params.intent === "apply";
 		if (executedMutation) {
-			const verification = response.details?.verification as { status?: unknown } | undefined;
-			const mutationVerification = response.details?.mutationResult?.verification as
-				| { status?: unknown; verified?: unknown }
-				| undefined;
-			const outcomeData = outcome.data as
-				| { verification?: { status?: unknown; verified?: unknown } }
-				| undefined;
+			const verification = readVerificationEvidence(response.details?.verification);
+			const mutationVerification = readVerificationEvidence(response.details?.mutationResult?.verification);
+			const outcomeData = readOutcomeVerificationData(outcome.data);
 			const verificationPassed =
 				outcome.verified === true ||
 				verification?.status === "passed" ||
 				mutationVerification?.status === "passed" ||
 				mutationVerification?.verified === true ||
+				outcomeData?.verified === true ||
+				outcomeData?.verificationStatus === "passed" ||
 				outcomeData?.verification?.status === "passed" ||
 				outcomeData?.verification?.verified === true;
 			if (!verificationPassed) {
@@ -149,7 +179,7 @@ async function cleanupSmokeArtifacts() {
 			cleanup.push({ action, outcome: response.details.outcome });
 		} catch (error) {
 			const message = error instanceof Error ? error.message : String(error);
-			const missingTarget = ["component_not_found", "target_not_found", "method_not_found", "folder_not_found"].find(
+			const missingTarget = ["component_not_found", "target_not_found", "method_not_found", "folder_not_found", "plan_target_identity_missing"].find(
 				(code) => message.includes(code),
 			);
 			if (!missingTarget) throw error;

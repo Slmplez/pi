@@ -119,16 +119,16 @@ PI_ASCET_EDIT_20260819_ALL_ACTIONS_001
 
 ```text
 LiveClass\M_Live
-LiveClass\P_Live
-LiveModule\T_Live
+LiveModule\P_Live
+LiveStateMachine\T_Live
 DeleteMethodHost\M_Delete
 ```
 
 用途约定：
 
-- `M_Live`：`set_method_signature` 和 `set_method_code` 的主目标；
-- `P_Live`：`create_method` 的主目标，changed 前不得存在；
-- `T_Live`：module/state-machine code 和 binding 场景的固定方法名；
+- `M_Live`：Class abstract method；作为 `create_method` primary、`set_method_signature` 和 `set_method_code` 的主目标；
+- `P_Live`：Module process method；作为 `set_module_code operation=set-method` 的主目标；
+- `T_Live`：StateMachine trigger method；作为 `set_state_machine_code operation=set-method` 的主目标；
 - `M_Delete`：`delete_method` 的专用目标。
 
 `DeleteClass` 是 `delete_component` 的专用目标，`DeleteFolder` 是专用空目录目标。若 component kind 不允许某种 method/binding，必须在 fixture manifest 中记录等价 host 和 selector，不能改用共享对象或保留 TODO。
@@ -167,6 +167,42 @@ PI_LIVE_20260819_001_IDENTITY
 5. restore 不会删除其他操作者后来新增的 formula。
 
 任一条件不满足，停止 cleanup，标记 `BLOCKED_NEEDS_REVIEW`，不得强制恢复 anchor project。
+
+### 4.4 Phase A 冻结对象和值
+
+正式生成 campaign JSON 前，以下值必须原样冻结；不得在执行时临时改名或猜测字段。
+
+| 类别 | 冻结值 |
+|---|---|
+| Component | `LiveClass=class/ESDL`、`LiveModule=module/ESDL`、`LiveStateMachine=statemachine/ESDL`、`LiveEnum=enumeration`、`DepProvider=class/ESDL`、`DepConsumer=class/ESDL`、`DeleteMethodHost=class/ESDL`、`DeleteClass=class/ESDL` |
+| Method | `LiveClass\M_Live=abstract`、`LiveModule\P_Live=process`、`LiveStateMachine\T_Live=trigger`、`DeleteMethodHost\M_Delete=abstract` |
+| Signature | `M_Live` return=`cont`；arguments=`input:cont`、`enabled:log`；existing policy=`replace` |
+| Method code | `// PI_LIVE_20260819_001_METHOD` |
+| Module code | `operation=set-method`、method=`P_Live`、marker=`// PI_LIVE_20260819_001_MODULE` |
+| State-machine code | `operation=set-method`、method=`T_Live`、marker=`// PI_LIVE_20260819_001_STATE_MACHINE` |
+| Enumerators | `PI_LIVE_OFF`、`PI_LIVE_ON`、`PI_LIVE_ERROR`，顺序固定 |
+| Standard element | `LiveClass::C_Spec_Live`，`role=standardPrimitive`、`kind=parameter`、`modelType=cont`、`scope=local`、`data.value=1.25`、physical range=`[-10,10]`、implementation valueType=`real32` |
+| Project formula | `PI_LIVE_20260819_001_IDENTITY`，`type=identity`，comment=`PI ASCET edit tools 2026-08-19 live acceptance` |
+| Chain endpoint | exported/imported=`ChainProvider_Live`；local=`LocalDependent_Live`；formula/formal=`ChainProvider_Live`；variantPolicy=`default` |
+| Set-only dependency endpoint | exported/imported=`SetProvider_Live`；local independent=`LocalSet_Live`；changed request 将其设为 dependent，formula/formal=`SetProvider_Live`，explicit mapping `SetProvider_Live -> SetProvider_Live` |
+
+`create_dependent_chain` 只操作 Chain endpoint。`set_element_dependency` 只操作 Set-only endpoint，避免前一个 action 已把同一 local element 置为最终状态而导致 changed 场景退化为 no-op。
+
+Set-only endpoint 由已审查的 setup phase 通过 public `ascet_edit.apply_element_spec` 建立：Provider exported、Consumer imported 和 Consumer local independent 三个 element 都必须有完整显式 spec，并在 `set_element_dependency` changed 前由独立 CLI 证明 local element 为 independent。它们的 setup 结果不能替代 `apply_element_spec` primary action 的 `LiveClass::C_Spec_Live` 证据。
+
+Project formula spec 文件内容冻结为：
+
+```json
+{
+  "formulas": [
+    {
+      "name": "PI_LIVE_20260819_001_IDENTITY",
+      "type": "identity",
+      "comment": "PI ASCET edit tools 2026-08-19 live acceptance"
+    }
+  ]
+}
+```
 
 ## 5. Readiness gate：写入前必须全部通过
 
@@ -223,19 +259,19 @@ Phase A 回答每个公开 action 是否有数据库级主路径。每个 action
 |---|---|---|---|---|---|
 | `create_folder` | public `ascet_edit` 创建 fresh folder；要求 folder 出现且 Save exactly once。 | 立即重复同一 request；`changed=false`、zero-save。 | 新 Bridge `get_tree` 读取 parent，比较 folder 存在、path/OID 正确。 | fresh root 内缺失 child/非法 selector；无 mutation/Save，root 外路径禁止。 | 最后删除专用空 folder。 |
 | `create_component` | 创建 `LiveClass`；比较 kind/language。 | 重复同一 path/kind/language；不得再次 Save。 | `read_component_snapshot`/summary 新进程比较 path、OID、kind、language、editable、成员。 | parent/component 不存在或 kind 错误；现有 fixture 不变。 | 依赖 action 完成后删除专用 component。 |
-| `create_method` | 在 `LiveClass` 创建不存在的 `P_Live`。 | 重复同一 component/method/kind；不得创建第二个 method。 | 新进程 component snapshot/method surface 比较名称、kind、diagram/operation。 | component 不存在或 method kind 非法；不得写入。 | 完成 code 相关测试后删除 `P_Live` 或 host。 |
-| `create_dependent_chain` | 在 `DepProvider`/`DepConsumer` 创建 exported/imported/local 和唯一 formula/formal/mapping。 | 重复完全相同 chain；chain unchanged、zero-save。 | 新进程 `read_dependent_chain` 比较 provider/exported、consumer/imported/local、formula、formal、variant、mapping、OID。 | provider/consumer 缺失、modelType 不匹配、formal 无效；不得留下 partial chain。 | 按依赖逆序删除 local/imported/export。 |
-| `set_method_signature` | 修改 `LiveClass\M_Live` return type、参数顺序、名称和类型。 | 提交完全相同 signature；no-op、zero-save。 | 新进程 `read_method_signature` 逐字段比较 return、参数顺序/名称/类型和 ifExists。 | method 不存在、type 非法、参数冲突；确认无部分签名变化。 | 恢复 baseline signature 或删除专用 host。 |
+| `create_method` | 在 `LiveClass` 创建不存在的 abstract method `M_Live`；setup 另建 `LiveModule\P_Live` process 和 `LiveStateMachine\T_Live` trigger。 | 重复同一 component/method/kind；不得创建第二个 method。 | 新进程 `list_methods` 比较名称、methodKind 和 owningComponentPath。 | component 不存在或 method kind 与 component kind 不匹配；不得写入。 | 完成 signature/code 测试后随专用 host 删除。 |
+| `create_dependent_chain` | 在 `DepProvider`/`DepConsumer` 创建 exported/imported/local 和唯一 formula/formal/mapping。 | 重复完全相同 chain；chain unchanged、zero-save。 | 新进程 `read_dependent_chain` 比较 provider/exported、consumer/imported/local、formula、formal、variant、mapping、OID。 | provider/consumer 缺失、modelType 不匹配、formal 无效；不得留下 partial chain。 | 当前 public action 没有 delete-element；完成 dependency 证据后删除专用 `DepConsumer`、`DepProvider` component。 |
+| `set_method_signature` | 修改 `LiveClass\M_Live` return type、参数顺序、名称和类型。 | 提交完全相同 signature；no-op、zero-save。 | 新进程 `read_method_signature` 逐字段比较 return type、参数顺序、名称和类型；`ifExists` 是请求策略，不作为数据库字段比较。 | method 不存在、type 非法、参数冲突；确认无部分签名变化。 | 恢复 baseline signature 或删除专用 host。 |
 | `delete_method` | 删除 `DeleteMethodHost\M_Delete`，目标无后续依赖。 | 用安全 missing policy 重复删除；no-op、zero-save。 | 新进程读取 host method 列表，断言 `M_Delete` 缺失，不能只依赖 target read 失败。 | 错误 host、不存在 method、越界 selector；其他方法不变。 | action 完成 cleanup；host 最后删除。 |
 | `delete_component` | 删除专用 `DeleteClass`。 | 相同 selector 和安全 missing policy 重复删除；no-op。 | 新进程读 parent tree，断言 component path/OID 缺失且 sibling digest 不变。 | 不存在 component、错误 kind、root 外 selector；不得误删。 | action 完成 cleanup。 |
 | `delete_folder` | 删除专用且为空的 `DeleteFolder`。 | 重复相同删除；safe no-op、zero-save。 | 新进程读 parent tree，断言 folder 缺失，parent sibling digest 不变。 | 不存在、非空或越界 folder；禁止递归影响其他 fixture。 | 必须最后执行；非空则 BLOCKED。 |
 | `set_method_code` | 对 `LiveClass\M_Live` 写入唯一 code marker。 | 重复完全相同 code；no-op。 | 新进程 `read_method_code` 比较规范化后的完整 code 和 marker。 | method/component 不存在或 code 无效；原 code digest 不得异常变化。 | 恢复 baseline code 或删除 host。 |
-| `set_module_code` | 对 `LiveModule` 指定 operation/surface 写入唯一 marker；method surface 使用 `T_Live`。 | 重复相同 operation/method/code；no-op。 | 新进程读取对应 module surface，比较 operation、section、method 和完整 code。 | module/operation/method/code 无效；其他 surface 不变。 | 恢复 module baseline。 |
-| `set_state_machine_code` | 对 `LiveStateMachine` 预建 state/transition/method surface 写入唯一 marker。 | 重复完全相同 state-machine request；no-op。 | 新进程 `read_state_machine_snapshot`/`read_state_machine` 比较 state、transition、start-state、binding、code surface。 | state/transition/operation/binding 无效；图和其他 transition 不变。 | 恢复 baseline，再删除状态机。 |
-| `set_enumerators` | 对 `LiveEnum` 写入冻结的唯一 enumerator 列表。 | 重复相同完整列表；no-op。 | 新进程 `read_element_catalog` 或 enumeration read，比较完整列表、顺序、值、类型。 | 重复值、空列表、错误 selector；不得部分覆盖。 | 恢复 baseline 或删除 enum。 |
-| `apply_element_spec` | 对指定 component 应用冻结 element spec；mode、roles、kind、modelType、range、data、implementation 全部固定。 | 同一 spec、mode、flags 重复；no-op、zero-save。 | 新进程 `get_elements`/`read_element_catalog` 逐 element 比较名称、kind、scope、modelType、range、data、implementation、role fields。 | component/spec/enum/reference/dependency 无效；不得 partial mutation。 | 删除新增 elements；恢复 patch baseline；不得误用 deleteMissing。 |
+| `set_module_code` | Phase A 对 `LiveModule\P_Live` 执行 `operation=set-method` 并写入唯一 marker；header/external-C 放 Phase B。 | 重复相同 operation/method/code；no-op。 | 新进程 `read_module_snapshot`/method-code surface 比较 `P_Live` 完整 code 和其他 module surface 未变化。 | module/operation/method/code 无效；其他 surface 不变。 | 恢复 module baseline或删除专用 module。 |
+| `set_state_machine_code` | Phase A 对 `LiveStateMachine\T_Live` 执行 `operation=set-method` 并写入唯一 marker；state/transition/binding/start-state operations 放 Phase B。 | 重复完全相同 request；no-op。 | 新进程 `read_state_machine_snapshot`/`read_state_machine` 比较 `T_Live` code surface 和其余图结构未变化。 | method/operation 无效；图和其他 transition 不变。 | 恢复 baseline或删除专用状态机。 |
+| `set_enumerators` | 对 `LiveEnum` 写入冻结的唯一 ordered list，例如 `PI_LIVE_OFF,PI_LIVE_ON,PI_LIVE_ERROR`。 | 重复相同完整列表；no-op。 | 当前 CLI 没有支持 enumeration 的只读 snapshot/read operation；`get_tree` 只能证明 kind，`get_elements`/`read_element_catalog` 不支持 enumeration。P0-5 未解决前 changed/no-op 必须 `BLOCKED`，不得用同一 write response 冒充独立 readback。 | 重复值、空列表、错误 selector；不得部分覆盖。 | readback gate 解决并取证后删除专用 enum。 |
+| `apply_element_spec` | 对 `LiveClass` 应用冻结的 `C_Spec_Live` create spec；role、kind、modelType、range、data、implementation 全部固定。 | 同一 spec、mode、flags 重复；no-op、zero-save。 | 新进程 `get_elements`/`read_element_catalog` 逐字段比较名称、kind、scope、modelType、range、data、implementation。 | component/spec/enum/reference/dependency 无效；不得 partial mutation。 | 不在共享对象上使用 `deleteMissing`；完成证据后删除专用 `LiveClass` host，或仅在完整 baseline restore 已验证时恢复。 |
 | `apply_project_formula` | anchor project 追加唯一 `PI_LIVE_20260819_001_IDENTITY` formula。 | 完全相同 formula spec 重复；formula unchanged、zero-save。 | 新进程 `get_formulas` 比较完整 formula body，并证明三个 baseline formula 不变。 | project/spec/冲突/越界 selector；anchor baseline 不得破坏。 | 仅 digest guard 通过时删除唯一 formula；否则 BLOCKED_NEEDS_REVIEW。 |
-| `set_element_dependency` | canonical component-target exact route：Consumer local element 连接 Provider chain。 | 重复相同 target/element/dependency/formula/mapping；no-op、zero-save。 | 新进程 `read_dependent_chain` 加 `read_element_dependency` 比较 flag、formula、formal、mapping、provider、value。 | element/provider/formal/mapping 无效；不得留下 partial dependency。legacy folder-target 放 Phase B。 | 恢复 independent/value baseline，再删除 fixture。 |
+| `set_element_dependency` | canonical component-target exact route：将预置 independent `DepConsumer::LocalSet_Live` 设为 dependent，formula/formal=`SetProvider_Live`，使用 explicit mapping。 | 重复相同 target/element/dependency/formula/mapping；no-op、zero-save。 | 新进程 `read_dependent_chain` 加 `read_element_dependency` 比较 flag、formula、formal、mapping、provider 和 local identity。 | element/provider/formal/mapping 无效；不得留下 partial dependency。legacy folder-target 放 Phase B。 | 完成证据后删除专用 `DepConsumer`、`DepProvider` component。 |
 | `mode=check` | 这是只读 check，不是 mutation changed；检查专用/安全 component editable 状态。 | 立即重复 check；仍只读、zero-save。 | 新进程 `component_editable_check` 比较 boolean 和 baseline；无 mutation/Save。 | component/selector 不存在；任何数据库状态不得改变。 | 无写 cleanup。 |
 | `mode=set` | 仅在专用 TCM `editable=false` fixture 上执行 `false -> true`；当前对象均 true，缺 fixture 则 BLOCKED。 | 对 `editable=true` 对象重复 set；按契约 no-op、zero-save。 | 新进程 before/after check；changed 比较 `false -> true`，no-op 比较 `true -> true`。 | 非专用只读对象、缺失 selector、PlatformLibrary/Customer；拒绝写入。 | 只清理专用 TCM fixture，不触碰共享库。 |
 
@@ -376,9 +412,13 @@ total scenarios: 220
 
 `mode=check/set` 不得使用普通 `canonicalApplied()`/`canonicalNoOp()`。必须独立判定：check 为 boolean + no mutation/no Save；set changed 为 `false -> true`；set no-op 为 `true -> true` + zero-save。
 
+### P0-5：enumeration read-only contract
+
+当前 CLI catalog 有 `set_enumerators`，但没有支持 enumeration 的只读 `read_enumerators`/snapshot；`get_tree` 只返回 path/OID/kind，`get_elements` 和 `read_element_catalog` 的 objectKinds 不包含 enumeration。执行 Phase A 前必须新增或确认一个无 mutation 的独立读取路径，能返回完整 ordered enumerator list。再次调用 write/no-op 不能单独替代该语义 readback；在此 gate 解决前，`set_enumerators` changed/no-op 为 `BLOCKED`。
+
 ### P1-1：all-actions independent readback
 
-所有 changed-success 和 confirmed-no-op 都强制至少一个 independent CLI readback，不能只对 dependency 和 mode=set 强制。
+所有 changed-success 和 confirmed-no-op 都强制至少一个 independent read-only CLI readback，不能只对 dependency 和 mode=set 强制。没有对应只读 operation 的 action 必须先补齐 read contract，不能降级为 same-session verification。
 
 ### P1-2：filesystem path 与 ASCET path 分离
 
@@ -468,38 +508,42 @@ verdict
 8. 写入本轮 run manifest
 ```
 
-### 11.2 Fixture setup
+### 11.2 Foundation actions 和 fixture setup
+
+三个 create action 的 primary changed 场景本身就是 setup，禁止在它们的 Phase A 验收前预建同名 primary target：
 
 ```text
-9. public ascet_edit create_folder/create_component/create_method
-10. 每个新建对象立即用新的 AscetBridge.exe 进程 readback
-11. 创建/确认 LiveClass\M_Live、LiveModule\T_Live、DeleteMethodHost\M_Delete
-12. 预建 LiveStateMachine 的 state/transition/binding surface
-13. 预建 DepProvider/DepConsumer element baseline
-14. 如有专用 TCM fixture，确认 component_editable_check=false
+9. create_folder：创建 fresh root -> fresh readback -> same-request no-op -> fresh readback -> negative
+10. 使用额外、已记录的 create_folder setup call 创建 Core 和专用 DeleteFolder
+11. create_component：创建 LiveClass -> fresh readback -> same-request no-op -> fresh readback -> negative
+12. 使用额外、已记录的 create_component setup call 创建 LiveModule、LiveStateMachine、LiveEnum、DepProvider、DepConsumer、DeleteMethodHost、DeleteClass
+13. create_method：创建 LiveClass\M_Live -> fresh readback -> same-request no-op -> fresh readback -> negative
+14. 使用额外、已记录的 create_method setup call 创建 LiveModule\P_Live、LiveStateMachine\T_Live、DeleteMethodHost\M_Delete
+15. 每个 setup 对象都立即用新的 AscetBridge.exe 进程 readback；setup 结果不替代对应 action 的 primary verdict
+16. 冻结 Set-only dependency endpoint 的完整显式 element specs；此时不执行 apply_element_spec write
+17. Phase A 只要求 state-machine set-method surface；state/transition/binding/start-state fixture 留给 Phase B
+18. 如有专用 TCM fixture，确认 component_editable_check=false
 ```
 
-### 11.3 Phase A
+### 11.3 Phase A 其余 actions
 
 ```text
-15. create_folder
-16. create_component
-17. create_method
-18. set_method_signature -> fresh readback -> same-request no-op -> fresh readback -> negative
-19. set_method_code -> fresh readback -> same-request no-op -> fresh readback -> negative
-20. set_module_code -> fresh readback -> same-request no-op -> fresh readback -> negative
-21. set_state_machine_code -> fresh readback -> same-request no-op -> fresh readback -> negative
-22. set_enumerators -> fresh readback -> same-request no-op -> fresh readback -> negative
-23. apply_element_spec -> fresh readback -> same-request no-op -> fresh readback -> negative
-24. apply_project_formula -> fresh readback -> same-request no-op -> fresh readback -> negative
-25. create_dependent_chain -> fresh readback -> same-request no-op -> fresh readback -> negative
-26. set_element_dependency canonical route -> fresh readback -> no-op -> fresh readback -> negative
-27. mode=check -> fresh readback -> repeated check -> fresh readback -> negative
-28. mode=set changed only if P0 fixture gate passed；否则 BLOCKED
-29. mode=set no-op on editable=true fixture when safe
-30. delete_method -> fresh readback -> no-op -> fresh readback -> negative
-31. delete_component -> fresh readback -> no-op -> fresh readback -> negative
-32. delete_folder -> fresh readback -> no-op -> fresh readback -> negative
+19. set_method_signature -> fresh readback -> same-request no-op -> fresh readback -> negative
+20. set_method_code -> fresh readback -> same-request no-op -> fresh readback -> negative
+21. set_module_code -> fresh readback -> same-request no-op -> fresh readback -> negative
+22. set_state_machine_code -> fresh readback -> same-request no-op -> fresh readback -> negative
+23. set_enumerators：仅在 P0-5 独立只读 enumeration contract 可用后执行；否则 changed/no-op BLOCKED
+24. apply_element_spec primary C_Spec_Live -> fresh readback -> same-request no-op -> fresh readback -> negative
+25. 使用额外、已记录的 apply_element_spec setup call 建立 SetProvider_Live/imported/LocalSet_Live；fresh CLI 确认 LocalSet_Live 为 independent
+26. apply_project_formula -> fresh readback -> same-request no-op -> fresh readback -> negative
+27. create_dependent_chain Chain endpoint -> fresh readback -> same-request no-op -> fresh readback -> negative
+28. set_element_dependency Set-only endpoint -> fresh readback -> no-op -> fresh readback -> negative
+29. mode=check -> fresh readback -> repeated check -> fresh readback -> negative
+30. mode=set changed only if P0 fixture gate passed；否则 BLOCKED
+31. mode=set no-op on editable=true fixture when safe
+32. delete_method -> fresh readback -> no-op -> fresh readback -> negative
+33. delete_component -> fresh readback -> no-op -> fresh readback -> negative
+34. delete_folder -> fresh readback -> no-op -> fresh readback -> negative
 ```
 
 删除顺序固定为：
@@ -513,16 +557,16 @@ delete_method -> delete_component -> delete_folder
 ### 11.4 Phase B 和 cleanup
 
 ```text
-33. 冻结 55 variants manifest
-34. 对每个 variant 执行 changed-success/no-op/negative/bridge-failure
-35. changed/no-op 后立即执行 fresh CLI readback
-36. 汇总 scenario verdict，再单独汇总 action verdict
-37. 审查 partial、save failure、BLOCKED 和 unexpected diff
-38. 再读 database identity、anchor OID 和 formula digest
-39. 通过 digest guard 后 restore anchor formula
-40. 按 fixture manifest 逆序 cleanup
-41. fresh CLI 确认 fixture root 不存在或为空
-42. 保存 cleanup decision/result 和 scheduler-after
+35. 冻结 55 variants manifest
+36. 对每个 variant 执行 changed-success/no-op/negative/bridge-failure
+37. changed/no-op 后立即执行 fresh CLI readback
+38. 汇总 scenario verdict，再单独汇总 action verdict
+39. 审查 partial、save failure、BLOCKED 和 unexpected diff
+40. 再读 database identity、anchor OID 和 formula digest
+41. 通过 digest guard 后 restore anchor formula
+42. 按 fixture manifest 逆序 cleanup
+43. fresh CLI 确认 fixture root 不存在或为空
+44. 保存 cleanup decision/result 和 scheduler-after
 ```
 
 ## 12. 可复制的只读 CLI 命令
@@ -551,7 +595,7 @@ Get-FileHash -Algorithm SHA256 -LiteralPath $sourceBridge
 ### 12.3 Database root 和 fresh root
 
 ```powershell
-$rootRequest = '{\"scope\":\"database\",\"depth\":1,\"maxFolders\":200,\"maxComponents\":200}'
+$rootRequest = '{\"depth\":1,\"maxFolders\":200,\"maxComponents\":200}'
 & $bridge exec get_tree --request-json $rootRequest --json
 
 $freshRootRequest = '{\"path\":\"PI_ASCET_EDIT_20260819_ALL_ACTIONS_001\",\"depth\":2,\"maxFolders\":50,\"maxComponents\":100}'
@@ -565,9 +609,10 @@ $freshRootRequest = '{\"path\":\"PI_ASCET_EDIT_20260819_ALL_ACTIONS_001\",\"dept
 ```powershell
 $anchor = 'PI_ASCET_EDIT_20260818_ALL_ACTIONS_008\Core\Project'
 
-& $bridge exec read_component_snapshot $anchor --trace-depth 1 --json
+$anchorTreeRequest = '{\"path\":\"PI_ASCET_EDIT_20260818_ALL_ACTIONS_008\\Core\\Project\",\"depth\":1,\"maxFolders\":10,\"maxComponents\":20}'
+& $bridge exec get_tree --request-json $anchorTreeRequest --json
 
-$formulaRequest = '{\"projectPath\":\"PI_ASCET_EDIT_20260818_ALL_ACTIONS_008\\Core\\Project\"}'
+$formulaRequest = '{\"path\":\"PI_ASCET_EDIT_20260818_ALL_ACTIONS_008\\Core\\Project\"}'
 & $bridge exec get_formulas --request-json $formulaRequest --json
 ```
 
@@ -583,6 +628,7 @@ $component = 'PI_ASCET_EDIT_20260819_ALL_ACTIONS_001\Core\LiveClass'
 $elementRequest = '{\"path\":\"PI_ASCET_EDIT_20260819_ALL_ACTIONS_001\\Core\\LiveClass\"}'
 & $bridge exec get_elements --request-json $elementRequest --json
 & $bridge exec read_element_catalog $component --json
+& $bridge exec list_methods $component --json
 & $bridge exec read_method_signature $component 'M_Live' --json
 & $bridge exec read_method_code $component 'M_Live' --json
 ```
@@ -593,6 +639,8 @@ $provider = 'PI_ASCET_EDIT_20260819_ALL_ACTIONS_001\Core\DepProvider'
 
 & $bridge exec read_dependent_chain $consumer 'LocalDependent_Live' --exporter $provider --json
 & $bridge exec read_element_dependency $consumer 'LocalDependent_Live' --target-kind component --json
+& $bridge exec read_dependent_chain $consumer 'LocalSet_Live' --exporter $provider --json
+& $bridge exec read_element_dependency $consumer 'LocalSet_Live' --target-kind component --json
 ```
 
 ### 12.6 Module、state machine、editable
@@ -664,11 +712,12 @@ Phase B: 55 variants / 220 scenarios 均有 verdict
 2. 所有 no-op 都有 zero-save 和 unchanged readback；
 3. `mode=check` 有真实只读证据；
 4. `mode=set` changed 只有在专用 TCM `editable=false` fixture 上才能 PASS；否则明确 BLOCKED；
-5. 每个 action 的 negative safety 已验证；
-6. bridge-failure 只有真实注入且 contract 通过才算 PASS；
-7. database identity、Bridge hash、HEAD、fixture manifest 全部匹配；
-8. anchor formula digest guard 通过；
-9. cleanup 完成，或有明确授权保留和原因；
-10. 没有任何 raw Bridge write 被计入 `ascet_edit` acceptance。
+5. `set_enumerators` 只有在 P0-5 独立只读 ordered-list readback 可用后才能 PASS；
+6. 每个 action 的 negative safety 已验证；
+7. bridge-failure 只有真实注入且 contract 通过才算 PASS；
+8. database identity、Bridge hash、HEAD、fixture manifest 全部匹配；
+9. anchor formula digest guard 通过；
+10. cleanup 完成，或有明确授权保留和原因；
+11. 没有任何 raw Bridge write 被计入 `ascet_edit` acceptance。
 
 截至 2026-08-19，fresh root 为 `target_not_found`。本文件只定义执行方案；未因本次文档编辑执行任何数据库 write，也未生成 campaign JSON。

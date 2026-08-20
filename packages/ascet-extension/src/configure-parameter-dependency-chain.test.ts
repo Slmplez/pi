@@ -125,33 +125,70 @@ describe("configure_parameter_dependency_chain execute", () => {
 		assert.equal(Value.Check(configureParameterDependencyChainParameters, { mode: "commit", planId: "x" }), false);
 	});
 
-	test("rejects invalid naming and mapping before confirmation or Bridge execution", async () => {
-		const fixture = createFixture();
-		let confirmed = false;
-		let calls = 0;
-		try {
-			const definition = createDefinition();
-			definition.local.element.name = "P_Threshold";
-			const result = await runConfigureParameterDependencyChain(
-				definition,
-				{
-					cwd: fixture.cwd,
-					cliPath: fixture.cliPath,
-					executeCli: async (request) => {
-						calls += 1;
-						return bridgeExecution(request, { status: "committed", mutationStarted: true });
-					},
+	test("rejects invalid P_/C_ naming and provider/imported mismatch before confirmation or Bridge execution", async () => {
+		const scenarios: Array<{
+			name: string;
+			mutate: (definition: ConfigureParameterDependencyDefinition) => void;
+			errorCode: string;
+		}> = [
+			{
+				name: "provider without P_ prefix",
+				mutate: (definition) => {
+					definition.provider.element.name = "Threshold";
 				},
-				approvedContext(() => {
-					confirmed = true;
-				}),
-			);
-			assert.equal(result.status, "rejected");
-			assert.equal(result.mutationStarted, false);
-			assert.equal(confirmed, false);
-			assert.equal(calls, 0);
-		} finally {
-			fixture.cleanup();
+				errorCode: "provider_parameter_name_invalid",
+			},
+			{
+				name: "consumer without P_ prefix",
+				mutate: (definition) => {
+					definition.consumer.element.name = "Threshold";
+				},
+				errorCode: "imported_parameter_name_invalid",
+			},
+			{
+				name: "provider/imported name mismatch",
+				mutate: (definition) => {
+					definition.consumer.element.name = "P_OtherThreshold";
+				},
+				errorCode: "provider_imported_parameter_name_mismatch",
+			},
+			{
+				name: "local dependent without C_ prefix",
+				mutate: (definition) => {
+					definition.local.element.name = "Threshold";
+				},
+				errorCode: "local_parameter_name_invalid",
+			},
+		];
+		for (const scenario of scenarios) {
+			const fixture = createFixture();
+			let confirmed = false;
+			let calls = 0;
+			try {
+				const definition = createDefinition();
+				scenario.mutate(definition);
+				const result = await runConfigureParameterDependencyChain(
+					definition,
+					{
+						cwd: fixture.cwd,
+						cliPath: fixture.cliPath,
+						executeCli: async (request) => {
+							calls += 1;
+							return bridgeExecution(request, { status: "committed", mutationStarted: true });
+						},
+					},
+					approvedContext(() => {
+						confirmed = true;
+					}),
+				);
+				assert.equal(result.status, "rejected", scenario.name);
+				assert.equal(result.error?.code, scenario.errorCode, scenario.name);
+				assert.equal(result.mutationStarted, false, scenario.name);
+				assert.equal(confirmed, false, scenario.name);
+				assert.equal(calls, 0, scenario.name);
+			} finally {
+				fixture.cleanup();
+			}
 		}
 	});
 
@@ -161,6 +198,12 @@ describe("configure_parameter_dependency_chain execute", () => {
 		const calls: AscetCliRequest[] = [];
 		let requestPath = "";
 		let requestDocument: Record<string, unknown> | undefined;
+		const previousArtifactRoot = process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT;
+		const longArtifactRoot = join(
+			fixture.cwd,
+			...Array.from({ length: 12 }, (_, index) => `campaign-${index}-${"x".repeat(24)}`),
+		);
+		process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT = longArtifactRoot;
 		try {
 			const result = await runConfigureParameterDependencyChain(
 				createDefinition(),
@@ -189,6 +232,7 @@ describe("configure_parameter_dependency_chain execute", () => {
 				}),
 			);
 			assert.equal(result.status, "committed");
+			assert.equal(result.bridgeDurationMs, 1);
 			assert.equal(confirmations, 1);
 			assert.equal(calls.length, 1);
 			assert.deepEqual(calls[0]?.args.slice(0, 2), ["exec", "configure_parameter_dependency_chain_execute"]);
@@ -199,8 +243,12 @@ describe("configure_parameter_dependency_chain execute", () => {
 					?.name,
 				"P_Threshold",
 			);
+			assert.equal(requestPath.startsWith(longArtifactRoot), false);
+			assert.ok(requestPath.length < longArtifactRoot.length);
 			assert.equal(existsSync(requestPath), false);
 		} finally {
+			if (previousArtifactRoot === undefined) delete process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT;
+			else process.env.PI_ASCET_EXTENSION_ARTIFACT_ROOT = previousArtifactRoot;
 			fixture.cleanup();
 		}
 	});

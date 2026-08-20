@@ -35,6 +35,13 @@ public sealed class InProcessLegacyOperationException : Exception
     }
 }
 
+internal sealed class LegacyOperationFailureDetails
+{
+    public string Code { get; set; }
+    public string Operation { get; set; }
+    public string Message { get; set; }
+}
+
 public static class InProcessLegacyOperationAdapter
 {
     private const int ExitCodeStructuredError = 2;
@@ -55,21 +62,17 @@ public static class InProcessLegacyOperationAdapter
         if (invocation.ExitCode != 0)
         {
             Dictionary<string, object> envelope = TryParseObject(invocation.Stdout);
-            Dictionary<string, object> error = GetDictionary(envelope, "error");
-            string code = GetString(error, "code");
-            string message = GetString(error, "message");
-            if (String.IsNullOrWhiteSpace(code))
-            {
-                code = "legacy_operation_failed";
-            }
-            if (String.IsNullOrWhiteSpace(message))
-            {
-                message = FirstNonEmpty(
-                    invocation.Stderr,
-                    invocation.Stdout,
-                    "Legacy operation returned exit code " + invocation.ExitCode.ToString(CultureInfo.InvariantCulture) + ".");
-            }
-            return WriteFailure(operation, code, message, invocation.Stdout, invocation.Stderr, ReadMutationStarted(envelope) ?? AscetCliEnvelope.ResolveFailureMutationStarted(IsMutatingOperation(operation), code));
+            LegacyOperationFailureDetails failure = ParseFailureDetails(
+                invocation.Stdout,
+                invocation.Stderr,
+                invocation.ExitCode);
+            return WriteFailure(
+                operation,
+                failure.Code,
+                failure.Message,
+                invocation.Stdout,
+                invocation.Stderr,
+                ReadMutationStarted(envelope) ?? AscetCliEnvelope.ResolveFailureMutationStarted(IsMutatingOperation(operation), failure.Code));
         }
 
         Dictionary<string, object> result = TryParseObject(invocation.Stdout);
@@ -82,7 +85,7 @@ public static class InProcessLegacyOperationAdapter
         {
             Console.Error.Write(invocation.Stderr);
         }
-        return AscetCliEnvelope.WriteSuccess(AscetCliEnvelope.Success("exec", operation, result, IsMutatingOperation(operation)));
+        return AscetCliEnvelope.WriteSuccess(AscetCliEnvelope.Success("exec", operation, result, ResolveSuccessMutationStarted(operation, result)));
     }
 
     public static void ValidateInvocationArguments(string operation, string[] args)
@@ -218,12 +221,15 @@ public static class InProcessLegacyOperationAdapter
         Dictionary<string, object> parsed = TryParseObject(invocation.Stdout);
         if (invocation.ExitCode != 0)
         {
-            Dictionary<string, object> error = GetDictionary(parsed, "error");
+            LegacyOperationFailureDetails failure = ParseFailureDetails(
+                invocation.Stdout,
+                invocation.Stderr,
+                invocation.ExitCode);
             throw new InProcessLegacyOperationException(
-                FirstNonEmpty(GetString(error, "code"), String.Empty, "in_process_operation_failed"),
+                failure.Code,
                 operation ?? String.Empty,
-                FirstNonEmpty(GetString(error, "message"), invocation.Stderr, "In-process operation failed."),
-                ReadMutationStarted(parsed),
+                failure.Message,
+                ReadMutationStarted(parsed) ?? AscetCliEnvelope.ResolveFailureMutationStarted(IsMutatingOperation(operation), failure.Code),
                 parsed);
         }
 
@@ -238,12 +244,15 @@ public static class InProcessLegacyOperationAdapter
         object okValue;
         if (parsed.TryGetValue("ok", out okValue) && okValue is bool && !(bool)okValue)
         {
-            Dictionary<string, object> error = GetDictionary(parsed, "error");
+            LegacyOperationFailureDetails failure = ParseFailureDetails(
+                invocation.Stdout,
+                invocation.Stderr,
+                invocation.ExitCode);
             throw new InProcessLegacyOperationException(
-                FirstNonEmpty(GetString(error, "code"), String.Empty, "in_process_operation_failed"),
+                failure.Code,
                 operation ?? String.Empty,
-                FirstNonEmpty(GetString(error, "message"), invocation.Stderr, "In-process operation failed."),
-                ReadMutationStarted(parsed),
+                failure.Message,
+                ReadMutationStarted(parsed) ?? AscetCliEnvelope.ResolveFailureMutationStarted(IsMutatingOperation(operation), failure.Code),
                 parsed);
         }
 
@@ -272,10 +281,103 @@ public static class InProcessLegacyOperationAdapter
                 mutationStarted));
     }
 
+    internal static bool ResolveSuccessMutationStarted(string operation, IDictionary<string, object> result)
+    {
+        if (!IsMutatingOperation(operation))
+        {
+            return false;
+        }
+        object changed;
+        if (result != null && result.TryGetValue("changed", out changed) && changed is bool)
+        {
+            return (bool)changed;
+        }
+        return true;
+    }
     private static bool IsMutatingOperation(string operation)
     {
         OperationDescriptor descriptor;
         return OperationRegistry.TryResolve(operation, out descriptor) && descriptor.MutatesDatabase;
+    }
+
+    internal static LegacyOperationFailureDetails ParseFailureDetails(string stdout, string stderr, int exitCode)
+    {
+        Dictionary<string, object> envelope = TryParseObject(stdout);
+        Dictionary<string, object> error = GetDictionary(envelope, "error");
+        LegacyOperationFailureDetails stderrFailure = ParseLegacyStderr(stderr);
+        return new LegacyOperationFailureDetails
+        {
+            Code = FirstNonEmpty(
+                GetString(error, "code"),
+                stderrFailure == null ? String.Empty : stderrFailure.Code,
+                "legacy_operation_failed"),
+            Operation = FirstNonEmpty(
+                GetString(error, "operation"),
+                stderrFailure == null ? String.Empty : stderrFailure.Operation,
+                String.Empty),
+            Message = FirstNonEmpty(
+                GetString(error, "message"),
+                stderrFailure == null ? String.Empty : stderrFailure.Message,
+                FirstNonEmpty(
+                    stderr,
+                    stdout,
+                    "Legacy operation returned exit code " + exitCode.ToString(CultureInfo.InvariantCulture) + "."))
+        };
+    }
+
+    private static LegacyOperationFailureDetails ParseLegacyStderr(string stderr)
+    {
+        string[] lines = (stderr ?? String.Empty).Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < lines.Length; i++)
+        {
+            string line = (lines[i] ?? String.Empty).Trim();
+            int firstSeparator = line.IndexOf(':');
+            if (firstSeparator <= 0)
+            {
+                continue;
+            }
+
+            int secondSeparator = line.IndexOf(':', firstSeparator + 1);
+            if (secondSeparator <= firstSeparator + 1)
+            {
+                continue;
+            }
+
+            string code = line.Substring(0, firstSeparator).Trim();
+            string operation = line.Substring(firstSeparator + 1, secondSeparator - firstSeparator - 1).Trim();
+            if (!IsLegacyCodeToken(code) || String.IsNullOrWhiteSpace(operation))
+            {
+                continue;
+            }
+
+            return new LegacyOperationFailureDetails
+            {
+                Code = code,
+                Operation = operation,
+                Message = line.Substring(secondSeparator + 1).Trim()
+            };
+        }
+
+        return null;
+    }
+
+    private static bool IsLegacyCodeToken(string value)
+    {
+        if (String.IsNullOrWhiteSpace(value))
+        {
+            return false;
+        }
+
+        for (int i = 0; i < value.Length; i++)
+        {
+            char character = value[i];
+            if (!(Char.IsLetterOrDigit(character) || character == '_' || character == '-'))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private static Dictionary<string, object> TryParseObject(string raw)

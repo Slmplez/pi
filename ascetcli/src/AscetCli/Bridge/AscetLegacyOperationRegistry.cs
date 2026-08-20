@@ -56,6 +56,7 @@ public static class AscetLegacyOperationRegistry
         entries["read_element_catalog"] = AscetReadElementCatalog.Main;
         entries["read_element_refs"] = AscetReadElementRefs.Main;
         entries["read_implementation"] = AscetReadImplementation.Main;
+        entries["read_enumerators"] = AscetReadEnumerators.Main;
         entries["read_method_code"] = AscetReadMethodCode.Main;
         entries["read_module_closure"] = AscetReadModuleClosure.Main;
         entries["read_module_snapshot"] = AscetReadModuleSnapshot.Main;

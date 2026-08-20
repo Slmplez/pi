@@ -158,6 +158,7 @@ public static class OperationRegistry
         RegisterTyped(descriptors, "read_element_dependency", ExecutionLane.LegacyRead, false, BatchSupportShape.None, OperationExecutionProfile.ExpensiveScan(200));
         RegisterLegacy(descriptors, "read_element_refs", ExecutionLane.LegacyRead, false, BatchSupportShape.None);
         RegisterLegacy(descriptors, "read_implementation", ExecutionLane.PooledRead, true, BatchSupportShape.None);
+        RegisterLegacy(descriptors, "read_enumerators", ExecutionLane.LegacyRead, false, BatchSupportShape.None);
         RegisterTyped(descriptors, "read_dependent_chain", ExecutionLane.LegacyRead, false, BatchSupportShape.None);
         RegisterTyped(descriptors, "read_method_code", ExecutionLane.PooledRead, true, BatchSupportShape.None);
         RegisterTyped(descriptors, "read_method_signature", ExecutionLane.PooledRead, true, BatchSupportShape.None);
@@ -281,6 +282,7 @@ public static class OperationRegistry
             case "read_component_children":
             case "read_component_summary":
             case "read_element_dependency":
+            case "read_enumerators":
             case "read_method_signature":
                 return RouteVisibility.InternalRuntime;
             default:

@@ -37,8 +37,8 @@ public static class AscetOperationRegistrySmoke
     private static void TestRegistryCoverage()
     {
         IList<OperationDescriptor> descriptors = OperationRegistry.GetAll();
-        AssertEqual(67, descriptors.Count, "OperationRegistry descriptor count changed without updating the migration inventory.");
-        AssertEqual(66, AscetBridgeOperationRegistry.GetAll().Count, "Bridge should expose every live operation and exclude no-session capabilities.");
+        AssertEqual(73, descriptors.Count, "OperationRegistry descriptor count changed without updating the migration inventory.");
+        AssertEqual(72, AscetBridgeOperationRegistry.GetAll().Count, "Bridge should expose every live operation and exclude no-session capabilities.");
         AssertTrue(OperationRegistry.ResolveOrThrow("capabilities").SessionPolicy == SessionPolicy.NoSession, "capabilities must remain no-session.");
     }
 
@@ -59,7 +59,7 @@ public static class AscetOperationRegistrySmoke
                 AssertTrue(AscetLegacyOperationRegistry.TryResolve(descriptor.OperationId, out entryPoint), descriptor.OperationId + " must have an explicit legacy delegate.");
             }
         }
-        AssertEqual(38, legacyCount, "Legacy operation inventory changed without updating the migration audit.");
+        AssertEqual(44, legacyCount, "Legacy operation inventory changed without updating the migration audit.");
     }
 
     private static void TestAllDescriptorInvariants()
@@ -113,8 +113,8 @@ public static class AscetOperationRegistrySmoke
             }
         }
 
-        AssertEqual(53, publicCount, "Public contract route inventory changed without updating contract coverage.");
-        AssertEqual(13, internalCount, "Internal runtime route inventory changed without updating the migration audit.");
+        AssertEqual(56, publicCount, "Public contract route inventory changed without updating contract coverage.");
+        AssertEqual(16, internalCount, "Internal runtime route inventory changed without updating the migration audit.");
         AssertEqual(1, diagnosticCount, "Diagnostic route inventory changed without updating the migration audit.");
     }
 
@@ -133,6 +133,10 @@ public static class AscetOperationRegistrySmoke
         OperationDescriptor fragileRead = OperationRegistry.ResolveOrThrow("read_block_diagram");
         AssertEqual("fragile", fragileRead.ExecutionProfile.HostSafety, "read_block_diagram should retain fragile-read metadata.");
         AssertTrue(fragileRead.HandlerKind == OperationHandlerKind.Typed, "read_block_diagram already has an in-process typed path.");
+
+        OperationDescriptor readEnumerators = OperationRegistry.ResolveOrThrow("read_enumerators");
+        AssertTrue(!readEnumerators.MutatesDatabase, "read_enumerators must remain read-only.");
+        AssertTrue(readEnumerators.HandlerKind == OperationHandlerKind.LegacyOneShotAdapter, "read_enumerators must use the in-process legacy adapter.");
 
         OperationDescriptor enumerators = OperationRegistry.ResolveOrThrow("set_enumerators");
         AssertTrue(enumerators.MutatesDatabase, "set_enumerators must declare mutation.");

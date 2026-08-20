@@ -196,11 +196,54 @@ internal static class AscetCliEnvelope
             return false;
         }
 
-        return String.Equals(code, "editable_write_gate_blocked", StringComparison.Ordinal)
-            ? (bool?)false
-            : null;
+        return IsPreMutationFailureCode(code) ? (bool?)false : null;
     }
 
+    internal static bool IsPreMutationFailureCode(string code)
+    {
+        string normalized = (code ?? String.Empty).Trim().ToLowerInvariant();
+        switch (normalized)
+        {
+            case "invalid_argument":
+            case "invalid_arguments":
+            case "invalid_request":
+            case "invalid_json":
+            case "invalid_element_spec":
+            case "invalid_dependency_mapping":
+            case "invalid_dependency_target":
+            case "unsupported_method_kind":
+            case "target_not_found":
+            case "component_not_found":
+            case "folder_not_found":
+            case "method_not_found":
+            case "element_not_found":
+            case "folder_already_exists":
+            case "component_already_exists":
+            case "method_already_exists":
+            case "method_return_already_exists":
+            case "method_argument_already_exists":
+            case "element_ambiguous":
+            case "method_ambiguous":
+            case "element_conflict":
+            case "formula_conflict":
+            case "editable_write_gate_blocked":
+            case "target_is_folder":
+            case "request_too_large":
+            case "not_implemented":
+            case "not_registered":
+            case "database_binding_invalid":
+            case "dependency_mappings_required":
+            case "dependency_mapping_formals_mismatch":
+            case "dependency_not_element_spec":
+            case "method_argument_type_mismatch":
+            case "method_return_type_mismatch":
+            case "method_signature_not_element_spec":
+            case "target_identity_mismatch":
+                return true;
+            default:
+                return false;
+        }
+    }
     private static bool? ResolveMutationStarted(string mode, string operation, bool? mutationStarted)
     {
         if (mutationStarted.HasValue)

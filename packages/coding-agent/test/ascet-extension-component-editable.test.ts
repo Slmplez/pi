@@ -98,6 +98,45 @@ describe("ASCET component editable PI tool", () => {
 		});
 	});
 
+	it("preserves structured mode=set mutation telemetry", async () => {
+		const result = await runAscetEditability(
+			{ mode: "set", componentPath: "DEMO\\PID", intent: "apply" },
+			{
+				cwd: repoRoot,
+				executeCli: async (request: AscetCliRequest): Promise<AscetCliExecutionResult> => ({
+					exitCode: 0,
+					stdout: JSON.stringify({
+						ok: true,
+						result: {
+							editable: true,
+							beforeEditable: true,
+							afterEditable: true,
+							changed: false,
+							mutationStatus: "no_op",
+							saveAttempted: false,
+							saveState: "not_applicable",
+							nativeMutationAttemptCount: 0,
+						},
+						error: null,
+						meta: { mode: "exec", mutationStarted: false },
+					}),
+					stderr: "",
+					timedOut: false,
+					request,
+				}),
+			},
+		);
+
+		expect(result.ok).toBe(true);
+		expect(result.data).toMatchObject({ editable: true, changed: false, mutationStatus: "no_op" });
+		expect(
+			JSON.parse(formatAscetEditabilityResult(result, { mode: "set", componentPath: "DEMO\\PID", intent: "apply" })),
+		).toMatchObject({
+			editable: true,
+			changed: false,
+			mutationStatus: "no_op",
+		});
+	});
 	it("registers the canonical PI tool and returns bare boolean tool content", async () => {
 		const ascetExtension = await loadAscetExtension();
 		const tool = ascetExtension?.tools.get("ascet_edit")?.definition;
@@ -199,11 +238,8 @@ describe("ASCET component editable PI tool", () => {
 		const text = response.content[0]?.type === "text" ? response.content[0].text : "";
 
 		expect(confirmCalled).toBe(true);
-		expect(executedOperations).toEqual([
-			"component_editable_check",
-			"component_editable_check",
-			"component_editable_set",
-		]);
+		expect(executedOperations).toEqual(["component_editable_set"]);
+
 		expect(JSON.parse(text)).toMatchObject({ error: { code: "component_not_editable" } });
 		expect(text).not.toContain('"ok"');
 		expect(text).not.toContain('"action"');

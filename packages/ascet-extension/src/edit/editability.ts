@@ -61,6 +61,14 @@ function getEditableBoolean(data: unknown): boolean | undefined {
 	return undefined;
 }
 
+function getEditablePayload(data: unknown): Record<string, unknown> | undefined {
+	if (!data || typeof data !== "object" || Array.isArray(data)) return undefined;
+	const candidate = data as Record<string, unknown>;
+	if (typeof candidate.editable === "boolean") return candidate;
+	return candidate.result && typeof candidate.result === "object" && !Array.isArray(candidate.result)
+		? (candidate.result as Record<string, unknown>)
+		: undefined;
+}
 function normalizeBooleanResult(result: AscetCliJsonResult, operation: string): AscetCliJsonResult {
 	if (!result.ok) return result;
 	const editable = getEditableBoolean(result.data);
@@ -75,6 +83,10 @@ function normalizeBooleanResult(result: AscetCliJsonResult, operation: string): 
 					message: "ASCET completed component_editable_set but the component remained read-only.",
 				},
 			};
+		}
+		if (operation === "component_editable_set") {
+			const payload = getEditablePayload(result.data);
+			if (payload) return { ...result, data: payload };
 		}
 		return { ...result, data: editable };
 	}
@@ -200,6 +212,9 @@ export async function runApprovedAscetEditability(
 export function formatAscetEditabilityResult(result: AscetCliJsonResult, params?: AscetEditabilityParams): string {
 	if (result.ok && typeof result.data === "boolean") {
 		return JSON.stringify(toToolSuccessPayload({ editable: result.data }), null, 2);
+	}
+	if (result.ok && result.data !== null && typeof result.data === "object" && !Array.isArray(result.data)) {
+		return JSON.stringify(toToolSuccessPayload(result.data), null, 2);
 	}
 	return formatAscetCliJsonResult(params ? getAscetEditabilityOperation(params.mode) : "editability", result);
 }

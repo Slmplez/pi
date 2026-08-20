@@ -18,6 +18,7 @@ public static class AscetSetMethodSignatureOutputTest
             TestInvalidArguments();
             TestFormatJsonIncludesArguments();
             TestFormatJsonIncludesCanonicalMutationFields();
+            TestExactReplacementDecision();
             TestSaveSuccessIsRecordedAfterDatabaseSave();
             Console.WriteLine("AscetSetMethodSignatureOutputTest passed.");
             return 0;
@@ -253,6 +254,15 @@ public static class AscetSetMethodSignatureOutputTest
         AssertEqual(0, Convert.ToInt32(noOpPayload["nativeMutationAttemptCount"]), "signature no-op result must report zero native mutation attempts.");
     }
 
+    private static void TestExactReplacementDecision()
+    {
+        AssertFalse(
+            MethodSignatureService.RequiresPrimitiveReplacement("cont", "cont"),
+            "replace must be a no-op when the existing primitive type already matches.");
+        AssertTrue(
+            MethodSignatureService.RequiresPrimitiveReplacement("cont", "log"),
+            "replace must mutate when the requested primitive type differs.");
+    }
     private static void TestSaveSuccessIsRecordedAfterDatabaseSave()
     {
         string root = Environment.GetEnvironmentVariable("ASCET_REPO_ROOT");

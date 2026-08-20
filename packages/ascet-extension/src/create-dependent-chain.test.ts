@@ -1,4 +1,4 @@
-﻿import assert from "node:assert/strict";
+import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { describe, test } from "node:test";
 import { Value } from "typebox/value";
@@ -6,6 +6,7 @@ import type { AscetCliExecutionResult, AscetCliRequest } from "./cli.ts";
 import {
 	type AscetCreateDependentChainParams,
 	ascetCreateDependentChainActionSchema,
+	runAscetCreateDependentChain,
 	runLegacyAscetCreateDependentChain,
 } from "./create-dependent-chain.ts";
 import { createAscetScheduler } from "./scheduler/scheduler.ts";
@@ -124,6 +125,73 @@ function bridgeRequest(requestValue: AscetCliRequest): Record<string, unknown> {
 	return JSON.parse(readFileSync(requestValue.args[2], "utf8")) as Record<string, unknown>;
 }
 
+describe("create_dependent_chain public contract", () => {
+	test("rejects invalid P_/C_ naming and provider/imported mismatch before approval or Bridge execution", async () => {
+		const scenarios: Array<{
+			name: string;
+			mutate: (params: AscetCreateDependentChainParams) => void;
+			errorCode: string;
+		}> = [
+			{
+				name: "provider without P_ prefix",
+				mutate: (params) => {
+					params.provider.element.name = "Threshold";
+				},
+				errorCode: "provider_parameter_name_invalid",
+			},
+			{
+				name: "imported without P_ prefix",
+				mutate: (params) => {
+					params.consumer.importedElement.name = "Threshold";
+				},
+				errorCode: "imported_parameter_name_invalid",
+			},
+			{
+				name: "exported/imported name mismatch",
+				mutate: (params) => {
+					params.consumer.importedElement.name = "P_OtherThreshold";
+				},
+				errorCode: "provider_imported_parameter_name_mismatch",
+			},
+			{
+				name: "local dependent without C_ prefix",
+				mutate: (params) => {
+					params.consumer.localElement.name = "Threshold";
+				},
+				errorCode: "local_parameter_name_invalid",
+			},
+		];
+		for (const scenario of scenarios) {
+			const params = request("apply");
+			scenario.mutate(params);
+			let confirmations = 0;
+			let bridgeCalls = 0;
+			const result = await runAscetCreateDependentChain(
+				params,
+				{
+					cwd: process.cwd(),
+					executeCli: async (requestValue) => {
+						bridgeCalls++;
+						return execution(requestValue, committedResult());
+					},
+				},
+				{
+					hasUI: true,
+					ui: {
+						confirm: async () => {
+							confirmations++;
+							return true;
+						},
+					},
+				},
+			);
+			assert.equal(result.details.outcome.status, "error", scenario.name);
+			assert.equal(result.details.error?.code, scenario.errorCode, scenario.name);
+			assert.equal(confirmations, 0, scenario.name);
+			assert.equal(bridgeCalls, 0, scenario.name);
+		}
+	});
+});
 describe("legacy create_dependent_chain recovery flow", () => {
 	test("exposes only the compact create schema and rejects old set fields", () => {
 		assert.equal(Value.Check(ascetCreateDependentChainActionSchema, request()), true);

@@ -524,6 +524,11 @@ public sealed class MethodSignatureService : MethodCatalogService, IMethodSignat
                 return result;
             }
 
+            if (!RequiresPrimitiveReplacement(existingModelType, returnType))
+            {
+                return result;
+            }
+
             if (!method.RemoveReturnElement())
             {
                 throw new AscetReadException(
@@ -549,6 +554,10 @@ public sealed class MethodSignatureService : MethodCatalogService, IMethodSignat
         return result;
     }
 
+    internal static bool RequiresPrimitiveReplacement(string existingType, string requestedType)
+    {
+        return !String.Equals(existingType ?? String.Empty, requestedType ?? String.Empty, StringComparison.Ordinal);
+    }
     private static IList<AscetMethodArgumentResult> ApplyArgumentPatches(DiscreteMethod method, string methodName, IList<AscetMethodArgumentSpec> arguments)
     {
         List<AscetMethodArgumentResult> results = new List<AscetMethodArgumentResult>();
@@ -587,7 +596,7 @@ public sealed class MethodSignatureService : MethodCatalogService, IMethodSignat
                             "Method '" + methodName + "' already has argument '" + argument.Name + "' of type '" + existingModelType + "', not requested type '" + argument.Type + "'.");
                     }
                 }
-                else
+                else if (RequiresPrimitiveReplacement(existingModelType, argument.Type))
                 {
                     if (!method.RemoveArgumentElement(existing))
                     {

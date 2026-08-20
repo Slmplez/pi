@@ -21,7 +21,6 @@ const repoRoot = resolve(process.cwd());
 const ascetCwd = resolve(process.env.ASCET_SMOKE_CWD ?? repoRoot);
 const configuredComponentPath = process.env.ASCET_SMOKE_COMPONENT;
 const configuredTreePath = process.env.ASCET_SMOKE_TREE_PREFIX;
-const preflightFolderPath = process.env.ASCET_SMOKE_PREFLIGHT_FOLDER ?? "__pi_ascet_live_smoke_preflight__";
 const extensionPath = resolve(repoRoot, ".pi/extensions/ascet/index.ts");
 const loadResult = await loadExtensions([extensionPath], repoRoot);
 
@@ -150,11 +149,7 @@ const diff = await callTool("ascet_diff", {
 	changesOnly: true,
 	timeoutMs: 300_000,
 });
-const writePreview = await callTool("ascet_edit", {
-	action: "create_folder",
-	folderPath: preflightFolderPath,
-	intent: "preview",
-});
+
 const schedulerAfter = await callTool("ascet_scheduler_status", { action: "status", format: "json" });
 
 console.log(
@@ -174,7 +169,6 @@ console.log(
 				readSummary: summary.payload,
 				editability: editable.payload,
 				diffSelf: diff.payload,
-				writePreview: writePreview.payload,
 				schedulerAfter: schedulerAfter.payload,
 			},
 		},

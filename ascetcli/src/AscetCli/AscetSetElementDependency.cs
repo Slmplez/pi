@@ -143,14 +143,14 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
             bool hasFormula = !String.IsNullOrWhiteSpace(arguments.DependencyFormula);
             bool hasMappings = (arguments.DependencyMappings != null && arguments.DependencyMappings.Count > 0) ||
                 (arguments.VariantDependencyMappings != null && arguments.VariantDependencyMappings.Count > 0);
-            bool needsFormulaWrite = (hasFormula && !String.Equals(beforeFormula, arguments.DependencyFormula, StringComparison.Ordinal)) ||
-                (hasFormula && hasMappings) ||
-                (arguments.ClearDependencyFormula && !String.IsNullOrWhiteSpace(beforeFormula));
             bool restoresIndependentData = !wantDependent && !String.IsNullOrWhiteSpace(arguments.RestorationPolicy);
             IList<AscetElementDependencyDataVariantState> beforeDataVariants =
                 (hasFormula || restoresIndependentData)
                     ? ReadLiveDataVariantStates(component, arguments.TargetPath, arguments.ElementName, arguments.OverlaySpecFiles, attempted)
                     : new List<AscetElementDependencyDataVariantState>();
+            bool needsFormulaWrite = (hasFormula && !String.Equals(beforeFormula, arguments.DependencyFormula, StringComparison.Ordinal)) ||
+                (hasFormula && hasMappings && RequiresRequestedMappingsWrite(beforeDataVariants, arguments)) ||
+                (arguments.ClearDependencyFormula && !String.IsNullOrWhiteSpace(beforeFormula));
             AscetDependencySnapshotRecord restorationSnapshot = null;
             IDictionary<string, string> effectiveRestorationValues = arguments.RestorationValues;
             string snapshotPath = String.Empty;
@@ -171,7 +171,7 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
                 snapshotMode = "capture";
             }
             bool needsDataWrite = restoresIndependentData && RequiresIndependentDataWrite(beforeDataVariants, arguments, effectiveRestorationValues);
-            bool needsWrite = RequiresDependencyWrite(match, arguments, needsDataWrite);
+            bool needsWrite = RequiresDependencyWrite(match, arguments, needsDataWrite, beforeDataVariants);
 
             string componentOid = ReadObjectString(component, "GetOID");
             if (String.IsNullOrWhiteSpace(componentOid))
@@ -711,6 +711,15 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
 
     internal static bool RequiresDependencyWrite(AscetElementDependencyPlanMatch match, AscetSetElementDependencyArguments arguments, bool needsDataWrite)
     {
+        return RequiresDependencyWrite(match, arguments, needsDataWrite, null);
+    }
+
+    internal static bool RequiresDependencyWrite(
+        AscetElementDependencyPlanMatch match,
+        AscetSetElementDependencyArguments arguments,
+        bool needsDataWrite,
+        IList<AscetElementDependencyDataVariantState> beforeDataVariants)
+    {
         if (match == null)
         {
             throw new ArgumentNullException("match");
@@ -728,11 +737,126 @@ public sealed class AscetSetElementDependencyService : AscetReadDomainServiceBas
             (arguments.VariantDependencyMappings != null && arguments.VariantDependencyMappings.Count > 0);
         bool needsDependencyWrite = beforeDependent != wantDependent;
         bool needsFormulaWrite = (hasFormula && !String.Equals(beforeFormula, arguments.DependencyFormula, StringComparison.Ordinal)) ||
-            (hasFormula && hasMappings) ||
+            (hasFormula && hasMappings && RequiresRequestedMappingsWrite(beforeDataVariants, arguments)) ||
             (arguments.ClearDependencyFormula && !String.IsNullOrWhiteSpace(beforeFormula));
         return needsDependencyWrite || needsFormulaWrite || needsDataWrite;
     }
 
+    internal static bool RequiresRequestedMappingsWrite(
+        IList<AscetElementDependencyDataVariantState> states,
+        AscetSetElementDependencyArguments arguments)
+    {
+        if (arguments == null)
+        {
+            throw new ArgumentNullException("arguments");
+        }
+        if (states == null)
+        {
+            return true;
+        }
+
+        if (arguments.VariantDependencyMappings != null && arguments.VariantDependencyMappings.Count > 0)
+        {
+            foreach (KeyValuePair<string, Dictionary<string, string>> variant in arguments.VariantDependencyMappings)
+            {
+                AscetElementDependencyDataVariantState state = FindVariantState(states, variant.Key);
+                IDictionary<string, string> kinds = arguments.VariantDependencyMappingKinds != null && arguments.VariantDependencyMappingKinds.ContainsKey(variant.Key)
+                    ? arguments.VariantDependencyMappingKinds[variant.Key]
+                    : null;
+                if (!MappingsMatch(state, variant.Value, kinds))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        IList<AscetElementDependencyDataVariantState> selected = FilterVariantStates(states, arguments.VariantPolicy, arguments.VariantNames);
+        if (selected.Count == 0)
+        {
+            return true;
+        }
+        for (int i = 0; i < selected.Count; i++)
+        {
+            if (!MappingsMatch(selected[i], arguments.DependencyMappings, arguments.DependencyMappingKinds))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static AscetElementDependencyDataVariantState FindVariantState(
+        IList<AscetElementDependencyDataVariantState> states,
+        string variantName)
+    {
+        for (int i = 0; i < states.Count; i++)
+        {
+            AscetElementDependencyDataVariantState state = states[i];
+            if (state != null && String.Equals(state.VariantName ?? String.Empty, variantName ?? String.Empty, StringComparison.Ordinal))
+            {
+                return state;
+            }
+        }
+        return null;
+    }
+
+    private static bool MappingsMatch(
+        AscetElementDependencyDataVariantState state,
+        IDictionary<string, string> expectedMappings,
+        IDictionary<string, string> expectedKinds)
+    {
+        if (state == null || !state.HasDependency)
+        {
+            return false;
+        }
+
+        int expectedCount = expectedMappings == null ? 0 : expectedMappings.Count;
+        int actualCount = state.Mappings == null ? 0 : state.Mappings.Count;
+        if (expectedCount != actualCount)
+        {
+            return false;
+        }
+        if (expectedMappings == null)
+        {
+            return true;
+        }
+
+        foreach (KeyValuePair<string, string> expected in expectedMappings)
+        {
+            AscetElementDependencyDataVariantMapping actual = null;
+            for (int i = 0; i < actualCount; i++)
+            {
+                AscetElementDependencyDataVariantMapping candidate = state.Mappings[i];
+                if (candidate != null && String.Equals(candidate.FormalName ?? String.Empty, expected.Key ?? String.Empty, StringComparison.Ordinal))
+                {
+                    actual = candidate;
+                    break;
+                }
+            }
+            if (actual == null || !String.Equals(actual.ValueName ?? String.Empty, expected.Value ?? String.Empty, StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            string expectedKind = expectedKinds != null && expectedKinds.ContainsKey(expected.Key)
+                ? NormalizeMappingKind(expectedKinds[expected.Key])
+                : String.Empty;
+            if (!String.IsNullOrWhiteSpace(expectedKind) &&
+                !String.Equals(NormalizeMappingKind(actual.ValueKind), expectedKind, StringComparison.Ordinal))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static string NormalizeMappingKind(string value)
+    {
+        return String.IsNullOrWhiteSpace(value)
+            ? String.Empty
+            : value.Trim().Replace("-", String.Empty).Replace("_", String.Empty).Replace(" ", String.Empty).ToLowerInvariant();
+    }
     internal static bool RequiresIndependentDataWrite(
         IList<AscetElementDependencyDataVariantState> states,
         AscetSetElementDependencyArguments arguments,
