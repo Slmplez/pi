@@ -22,6 +22,7 @@ const expectedReferences = [
 	"esdl-fast-path.md",
 	"esdl-literals-and-configuration-values.md",
 	"feature-package-workflow.md",
+	"implementation-type-and-memory-layout.md",
 	"parameter-design-and-placement.md",
 	"search-and-target-resolution.md",
 	"surface-and-signal-flow-routing.md",
@@ -181,6 +182,30 @@ describe("ASCET engineering Skill", () => {
 			"Binding conflict: reject without overwrite",
 			"must not also be managed by `ascet_edit.apply_element_spec`",
 		]);
+	});
+
+	test("documents UI implementation types, range selection, and ascetDefault semantics", () => {
+		const implementation = readReference("implementation-type-and-memory-layout.md");
+
+		assertContains(implementation, [
+			"There is no public `impl.type` field",
+			"Ordinary Element specs use `impl.valueType`",
+			"`modelType=cont`: `real64`, `real32`, `sint8`, `sint16`, `sint32`, `uint8`, `uint16`, `uint32`",
+			"`modelType=log`: `bit`, `bool`, `sint8`, `sint16`, `sint32`, `uint8`, `uint16`, `uint32`",
+			"smallest type that contains the complete required implementation/data range",
+			"`sint8` | `[-128, 127]`",
+			"`sint16` | `[-32768, 32767]`",
+			"`sint32` | `[-2147483648, 2147483647]`",
+			"`uint8` | `[0, 255]`",
+			"`uint16` | `[0, 65535]`",
+			"`uint32` | `[0, 4294967295]`",
+			"A range alone cannot determine floating-point precision",
+			"`implementation.mode=ascetDefault` is not an implementation type",
+			"no `impl` is sent",
+			"The Bridge normalizes these `sint*` names to internal `int*` aliases",
+		]);
+		assert.doesNotMatch(implementation, /"impl"\s*:\s*\{\s*"type"/u);
+		assert.doesNotMatch(implementation, /float32|double|sint64|int64/u);
 	});
 
 	test("separates read result handling from mutation completion", () => {

@@ -125,14 +125,9 @@ Run focused static coverage:
 npm --workspace @earendil-works/pi-coding-agent test -- test/ascet-extension-status.test.ts test/ascet-extension-readonly-tools.test.ts test/ascet-extension-write-tools.test.ts
 ```
 
-Run general project checks when the change affects shared package contracts:
+Run `npm run check` for the repository checks required by the release process. ASCET releases must not run repository-wide `test.sh` or `npm test`: those suites include unrelated core, AI, coding-agent, and platform coverage and are not ASCET release gates.
 
-```powershell
-.\test.sh
-npm run check
-```
-
-Do not run the full vitest suite directly. Follow `AGENTS.md` for test selection.
+If a change touches a shared core package, run only the corresponding specific test(s). Keep validation scoped to the affected package and specific tests. Do not run the full vitest suite directly; follow `AGENTS.md` for test selection.
 
 ## ASCET Live Validation
 

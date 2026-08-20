@@ -22,9 +22,9 @@ Publish `extension`, `ui`, then the aggregate package. Refresh compatible bundle
 - Keep aggregate dependencies and `bundledDependencies` synchronized.
 - Update compatible stable external dependencies automatically before every release.
 - Do not take breaking dependency updates unless the user explicitly approves them.
-- Do not publish until focused tests, packaging checks, required live ASCET validation, and `npm run check` pass.
-- Run the repository-wide `test.sh` gate when Bash is available. On Windows without Bash/WSL, execute an equivalent PowerShell run that isolates and restores `auth.json`, sets `PI_NO_LOCAL_LLM=1`, removes provider credentials, and runs `npm test`.
-- Treat failures from untouched packages as baseline exceptions only after the user explicitly accepts the unverified scope. Never waive failures in changed packages, packaging, ASCET live validation, or `npm run check`.
+- Do not publish until the affected ASCET focused tests, packaging checks, required live ASCET validation, and `npm run check` pass.
+- Never run repository-wide `test.sh` or `npm test` for an ASCET release. Those suites include unrelated core, AI, coding-agent, and platform coverage and are not ASCET release gates.
+- If a change touches a shared core package, run only the corresponding specific test(s); keep validation scoped to the affected package.
 - Request one explicit confirmation immediately before the first irreversible `npm publish`.
 - Publish serially. Never use batch publication.
 - Write generated `.tgz` files only to a temporary directory outside every package source directory.
@@ -107,22 +107,20 @@ npm --workspace @vaf-agentworks/ascet-copilot-extension run verify-assets
 npm --workspace @vaf-agentworks/ascet-copilot-extension run verify-isolated-install
 ```
 
-Run focused release tests:
+Run the affected ASCET focused release tests:
 
 ```powershell
 npm --workspace @vaf-agentworks/ascet-copilot-ui test
 node --test scripts/prepare-ascet-copilot-npm-release.test.mjs
 ```
 
-Run the repository-required gates:
+When runtime or Bridge code changes, also run:
 
 ```powershell
-bash ./test.sh
-npm run check
+powershell -NoProfile -ExecutionPolicy Bypass -File .\ascetcli\scripts\test-ascet-bridge.ps1
 ```
 
-On Windows without Bash/WSL, use the equivalent PowerShell gate described above and record any accepted untouched-package baseline failures in the final release summary.
-
+Run `npm run check`. Do not run repository-wide `test.sh` or `npm test`; they are outside the ASCET release gate. If a shared core package is touched, run only its corresponding specific test(s).
 For runtime, Bridge, tool, contract, prompt, or Skill changes, run the required serial real ASCET Live validation against the approved database. Treat nominal preflight or plan output as insufficient. Require committed writes, readback evidence, cleanup-only verification, and zero residual locks. If live validation is skipped, obtain explicit user acceptance and state the unverified scope.
 
 ## 4. Pack the First-Party Packages

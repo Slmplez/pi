@@ -59,6 +59,7 @@ Before a non-trivial apply, record the exact target, requested behavior, code or
 | ESDL design and signal reuse | `references/esdl-design-and-signal-reuse.md` |
 | ESDL literals and configuration values | `references/esdl-literals-and-configuration-values.md` |
 | Ordinary Elements | `references/elements-fast-path.md` |
+| Implementation type, memory location, Formula, and ranges | `references/implementation-type-and-memory-layout.md` |
 | Parameter naming and placement | `references/parameter-design-and-placement.md` |
 | Complete dependency chains | `references/dependency-advanced-path.md` |
 | Task sizing and evidence-backed change design | `references/task-planning-and-change-design.md` |

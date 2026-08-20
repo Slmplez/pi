@@ -6,4 +6,6 @@ Create or patch an ordinary Element with `ascet_edit.apply_element_spec`. For an
 
 For a new ordinary Element, define its owner, role, kind, model type, scope, unit, range, data/default source, implementation, calibration or constant role, and ESDL/BDE usage point. Stop if required information is unknown.
 
+Use `references/implementation-type-and-memory-layout.md` whenever value type, memory location, Formula, implementation range, or limit assignments are read or changed. Use `impl.valueType` for ordinary Elements; `impl.type` is invalid.
+
 Elements that form a complete Parameter Dependency Chain belong to `ascet_edit.create_dependent_chain`, not this ordinary Element path.

@@ -15,3 +15,5 @@ Create-or-reuse behavior is mandatory:
 - Successful apply: require automatic full readback.
 
 The Provider, Imported, and Local Elements in a complete chain must not also be managed by `ascet_edit.apply_element_spec` in the same change. Stop rather than guess Formula, Formal, mapping, DataVariant, type, unit, range, value, or implementation metadata.
+
+Use `references/implementation-type-and-memory-layout.md` for Provider and Local implementation decisions. These roles use `implementation.mode=explicit|ascetDefault`; they do not accept public `impl.type`.

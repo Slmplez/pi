@@ -1,4 +1,4 @@
-﻿import { spawnSync } from "node:child_process";
+import { spawnSync } from "node:child_process";
 
 const npmCli = process.env.npm_execpath;
 if (!npmCli) {
@@ -22,23 +22,22 @@ const paths = reports[0].files.map((file) => file.path.replaceAll("\\", "/"));
 const expectedSkillFiles = [
 	"skills/ascet-engineering/SKILL.md",
 	"skills/ascet-engineering/agents/openai.yaml",
-	"skills/ascet-engineering/references/scope-resolution-and-ownership.md",
+	"skills/ascet-engineering/references/search-and-target-resolution.md",
 	"skills/ascet-engineering/references/database-root-discovery.md",
+	"skills/ascet-engineering/references/target-scope-and-ownership.md",
+	"skills/ascet-engineering/references/cnms-cust-routing-and-ownership.md",
 	"skills/ascet-engineering/references/customer-integration-workflow.md",
 	"skills/ascet-engineering/references/feature-package-workflow.md",
-	"skills/ascet-engineering/references/class-path-project-context.md",
-	"skills/ascet-engineering/references/project-to-esdl-signal-flow.md",
+	"skills/ascet-engineering/references/implementation-type-and-memory-layout.md",
+	"skills/ascet-engineering/references/surface-and-signal-flow-routing.md",
 	"skills/ascet-engineering/references/esdl-fast-path.md",
-	"skills/ascet-engineering/references/elements-fast-path.md",
-	"skills/ascet-engineering/references/parameter-naming.md",
-	"skills/ascet-engineering/references/parameter-provider-placement.md",
-	"skills/ascet-engineering/references/dependency-advanced-path.md",
-	"skills/ascet-engineering/references/bde-and-surface-routing.md",
-	"skills/ascet-engineering/references/task-planning-and-implementation-plan.md",
 	"skills/ascet-engineering/references/esdl-design-and-signal-reuse.md",
 	"skills/ascet-engineering/references/esdl-literals-and-configuration-values.md",
-	"skills/ascet-engineering/references/tool-recipes.md",
-	"skills/ascet-engineering/references/write-execution.md",
+	"skills/ascet-engineering/references/elements-fast-path.md",
+	"skills/ascet-engineering/references/parameter-design-and-placement.md",
+	"skills/ascet-engineering/references/dependency-advanced-path.md",
+	"skills/ascet-engineering/references/task-planning-and-change-design.md",
+	"skills/ascet-engineering/references/tool-routing-and-write-execution.md",
 ];
 const missingSkillFiles = expectedSkillFiles.filter((path) => !paths.includes(path));
 if (missingSkillFiles.length > 0) {
