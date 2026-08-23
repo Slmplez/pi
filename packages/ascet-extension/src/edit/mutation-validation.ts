@@ -1,9 +1,10 @@
-import { accessSync, constants } from "node:fs";
+import { accessSync, constants, readFileSync } from "node:fs";
 import { isAbsolute, resolve } from "node:path";
 import { normalizeAscetPath } from "../core/path.ts";
 import { requiresExplicitProjectContext } from "../element-spec-contract.ts";
 import { validateCreateMethodKindCompatibility } from "../method-kind-compatibility.ts";
 import { resolveSetElementDependencyMappings } from "../set-element-dependency.ts";
+import { inspectAiGeneratedMarkers } from "./ai-generated-marker.ts";
 import type { AscetMutationParams } from "./service.ts";
 
 export interface AscetMutationValidationError {
@@ -59,6 +60,31 @@ function hasText(value: unknown): value is string {
 function hasExactlyOneCodeSource(params: { code?: string; codeFile?: string }): boolean {
 	if (params.codeFile !== undefined && !hasText(params.codeFile)) return false;
 	return Number(params.code !== undefined) + Number(params.codeFile !== undefined) === 1;
+}
+
+function validateAiCodeMarkers(
+	params: AscetMutationParams,
+	options: { cwd: string },
+): AscetMutationValidationError | undefined {
+	if (
+		params.action !== "set_method_code" &&
+		params.action !== "set_module_code" &&
+		params.action !== "set_state_machine_code"
+	) {
+		return undefined;
+	}
+	let code = params.code;
+	if (code === undefined && params.codeFile !== undefined) {
+		const codePath = isAbsolute(params.codeFile) ? params.codeFile : resolve(options.cwd, params.codeFile);
+		try {
+			code = readFileSync(codePath, "utf8");
+		} catch {
+			return error(`Code file is not readable: ${params.codeFile}`, "ascet_edit_code_file_unreadable");
+		}
+	}
+	if (code === undefined) return undefined;
+	const inspection = inspectAiGeneratedMarkers(code);
+	return inspection.issue ? error(inspection.issue.message, inspection.issue.code) : undefined;
 }
 
 function formulaReferencesFormal(formula: string, formal: string): boolean {
@@ -304,6 +330,9 @@ export function validateAscetMutationParams(
 			if (hasTransition || hasMethod) return error("set-start-state does not accept method or transition fields.");
 		}
 	}
+
+	const codeMarkerError = validateAiCodeMarkers(params, options);
+	if (codeMarkerError) return codeMarkerError;
 
 	if (params.action === "set_enumerators") {
 		if (params.enumerators.length === 0)

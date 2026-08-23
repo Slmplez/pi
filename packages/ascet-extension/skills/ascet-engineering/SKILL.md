@@ -20,6 +20,7 @@ Active Tool schemas and Action Contracts are authoritative for public Tool names
 - Customer integration or shared feature work: load ownership References only when the requested layer, canonical definition, or affected consumers are unclear.
 - Dependency-chain work: keep complete chains separate from ordinary Element changes.
 - New calibratable or tunable values requested for use by a consumer/business Class default to the complete chain in `references/parameter-design-and-placement.md`. Treat the named/current Class as the usage site, not proof of calibration ownership; resolve and validate an external or dedicated Calibration Parameter Class as Provider before routing to `ascet_edit.create_dependent_chain`. Do not route this to `ascet_edit.apply_element_spec`; use the ordinary path only for the documented narrow exceptions. Stop rather than infer Provider ownership, metadata, or bindings.
+- AI-generated ESDL: load the ESDL write guidance before generation; use short `//[AI-GEN]` markers, preserve existing markers, and never mark unchanged user code.
 
 Never pass a Search candidate directly to an edit action. Skipping Search never skips an exact read required by the engineering decision or mutation.
 

@@ -13,4 +13,6 @@ Keep Method shell, signature, and body separate. Do not place arguments, return 
 
 When ordinary Elements are part of the change, use `ascet_edit.apply_element_spec` before the body write. When a complete Parameter Dependency Chain is part of the change, use `ascet_edit.create_dependent_chain` instead. Read current Element or chain state only when it affects design or conflict handling.
 
+AI-generated ESDL uses the short `//[AI-GEN]` marker. Put it on the first non-empty line for a full replacement body; for a local region, pair separate-line `//[AI-GEN]` and `//[/AI-GEN]` markers. Preserve existing markers; never nest, duplicate, or mark unchanged user code.
+
 Do not force an exact Method change through Project, ownership, BDE, or full Signal Flow analysis unless that evidence can alter the requested code or target.

@@ -241,6 +241,21 @@ describe("ASCET engineering Skill", () => {
 		]);
 	});
 
+	test("documents concise AI-generated ESDL markers", () => {
+		const skill = readSkill();
+		const fastPath = readReference("esdl-fast-path.md");
+		const design = readReference("esdl-design-and-signal-reuse.md");
+
+		assertContains(skill, ["AI-generated ESDL", "`//[AI-GEN]` markers", "preserve existing markers"]);
+		assertContains(fastPath, [
+			"short `//[AI-GEN]` marker",
+			"first non-empty line",
+			"`//[/AI-GEN]`",
+			"never nest, duplicate, or mark unchanged user code",
+		]);
+		assertContains(design, ["minimal contiguous regions", "unrelated user-authored code"]);
+	});
+
 	test("physically removes historical identifiers, product samples, and compatibility References", () => {
 		const guidance = readGuidance();
 

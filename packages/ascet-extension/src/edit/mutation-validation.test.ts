@@ -105,6 +105,71 @@ describe("ASCET mutation validation", () => {
 		}
 	});
 
+	test("accepts valid AI markers and unmarked code on all ESDL write surfaces", () => {
+		const cases: AscetMutationParams[] = [
+			{
+				action: "set_method_code",
+				componentPath: "D/C",
+				methodName: "run",
+				code: "//[AI-GEN]\nvalue = input;\n//[/AI-GEN]",
+				intent: "apply",
+			},
+			{
+				action: "set_module_code",
+				modulePath: "D/M",
+				operation: "set-header",
+				code: "headerValue = 1;",
+				intent: "apply",
+			},
+			{
+				action: "set_state_machine_code",
+				stateMachinePath: "D/S",
+				operation: "set-state-entry-esdl",
+				stateName: "Idle",
+				code: "//[AI-GEN]\nstateValue = input;",
+				intent: "apply",
+			},
+		];
+		for (const params of cases) assert.equal(validate(params), undefined, params.action);
+	});
+
+	test("rejects malformed AI markers before the Bridge on all code write surfaces", () => {
+		const cases: AscetMutationParams[] = [
+			{
+				action: "set_method_code",
+				componentPath: "D/C",
+				methodName: "run",
+				code: "before;\n//[AI-GEN]\nvalue = input;",
+				intent: "apply",
+			},
+			{
+				action: "set_module_code",
+				modulePath: "D/M",
+				operation: "set-header",
+				code: "//[AI-GEN] value = input;",
+				intent: "apply",
+			},
+			{
+				action: "set_state_machine_code",
+				stateMachinePath: "D/S",
+				operation: "set-state-entry-esdl",
+				stateName: "Idle",
+				code: "//[/AI-GEN]\nvalue = input;",
+				intent: "apply",
+			},
+		];
+		for (const params of cases)
+			assert.equal(
+				validate(params)?.code,
+				params.action === "set_state_machine_code"
+					? "ai_marker_unmatched_end"
+					: params.action === "set_method_code"
+						? "ai_marker_unclosed"
+						: "ai_marker_invalid_line",
+				params.action,
+			);
+	});
+
 	test("validates module operation fields", () => {
 		assert.match(
 			validate({ action: "set_module_code", modulePath: "D/M", operation: "set-method", code: "x", intent: "apply" })
