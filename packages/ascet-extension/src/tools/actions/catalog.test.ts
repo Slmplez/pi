@@ -97,8 +97,12 @@ describe("ASCET action catalog", () => {
 		});
 		assert.match(write?.compact ?? "", /create-or-verify one Provider\/Imported\/Local Parameter dependency chain/);
 		assert.match(writeRules, /Missing Elements are created/);
-		assert.match(writeRules, /live native Element Search/);
+		assert.match(writeRules, /normal write route does not discover providers/);
 		assert.match(writeRules, /automatic full readback/);
+		assert.match(writeRules, /explicit Provider\/Local implementation decisions.*limitAssignments/);
+		assert.match(writeRules, /ranged discrete Provider or Local Parameters.*implementation\.limitAssignments=true/);
+		assert.match(writeRules, /real32\/real64 use null/);
+		assert.match(writeRules, /ascetDefault.*Imported Parameters must not include implementation settings/);
 		assert.match(setDependency?.compact ?? "", /set dependency flag\/formula/);
 		assert.ok(setDependency?.schema.required.includes("elementName"));
 		assert.ok(setDependency?.schema.required.includes("dependency"));
@@ -146,7 +150,7 @@ describe("ASCET action catalog", () => {
 
 		assert.match(
 			rules,
-			/ident is ASCET(?:'|’|\\u2019)s built-in default identity formula and does not require projectPath/u,
+			/ident is ASCET(?:'|ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢|\\u2019)s built-in default identity formula and does not require projectPath/u,
 		);
 		assert.match(rules, /Any non-ident impl\.formula requires one explicit projectPath/u);
 		assert.match(rules, /Never infer a Project from componentPath, Folder layout, or a sibling item named Project/u);
