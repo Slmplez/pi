@@ -1,6 +1,6 @@
 ---
 name: ascet-engineering
-description: Tool-aligned ASCET engineering for exact or fuzzy target resolution, ESDL/BDE changes, Element and Parameter design, ownership analysis, dependency chains, and guarded edits. Use when reading, analyzing, or modifying ASCET code, models, signal flow, configuration, or dependencies.
+description: Tool-aligned ASCET engineering for exact or fuzzy target resolution, ESDL/BDE changes, Element and Parameter design, calibration-parameter placement, ownership analysis, dependency chains, and guarded edits. Use when reading, analyzing, or modifying ASCET code, models, signal flow, configuration, or dependencies.
 ---
 
 # ASCET Engineering
@@ -19,8 +19,22 @@ Active Tool schemas and Action Contracts are authoritative for public Tool names
 - Discovery-only request: return Search candidates without reading every candidate unless the user asks for an engineering conclusion.
 - Customer integration or shared feature work: load ownership References only when the requested layer, canonical definition, or affected consumers are unclear.
 - Dependency-chain work: keep complete chains separate from ordinary Element changes.
+- New calibratable or tunable values requested for use by a consumer/business Class default to the complete chain in `references/parameter-design-and-placement.md`. Treat the named/current Class as the usage site, not proof of calibration ownership; resolve and validate an external or dedicated Calibration Parameter Class as Provider before routing to `ascet_edit.create_dependent_chain`. Do not route this to `ascet_edit.apply_element_spec`; use the ordinary path only for the documented narrow exceptions. Stop rather than infer Provider ownership, metadata, or bindings.
 
 Never pass a Search candidate directly to an edit action. Skipping Search never skips an exact read required by the engineering decision or mutation.
+
+## Hard calibration configuration gate
+
+For every new calibratable or tunable dependency chain, configuration correctness is a mutation gate, not a best-effort preference. Block the mutation unless exact requirements or exact live readback provide all of the following:
+
+- The current/consumer Class is confirmed as the usage location only; it is not ownership evidence. Resolve one evidence-backed Provider Calibration Parameter Class.
+- The roles and scopes are exactly Provider Exported Parameter, Consumer Imported Parameter, and Consumer Local Dependent Parameter. The Provider Exported and Consumer Imported names match exactly as `P_<Name>`; the Local Dependent name is `C_<Name>`, unless an exact, verified legacy name is being preserved. Never create a calibratable standalone local shortcut.
+- Provider and Imported `modelType` and unit are compatible. Local `modelType`, unit, and implementation are compatible with the dependency result and the actual ESDL usage. The Provider owns the evidence-backed calibration value/data; Imported carries structural compatibility metadata only; Local Dependent receives no independent scalar data/default.
+- Range, value/data/default, implementation, and calibration decisions are explicit and evidence-backed. Validate every value/default against the selected range; integer `valueType` must cover the complete required range and signedness; real precision (`real32`/`real64`) requires an explicit engineering rule. Never use `ascetDefault` to hide an unknown decision.
+- Formula, Formal, Imported mapping, and DataVariant policy are explicit and internally consistent. Do not assume or hardcode a universal `x` mapping.
+- For existing endpoints, preserve exact compatible metadata. Any material mismatch is a conflict and must not be overwritten.
+
+After apply, automatic readback must confirm all three endpoints and the binding: exact names, roles/scopes, model and implementation types, units, range, value/data/default and calibration fields where applicable, plus Formula, Formal, Imported mapping, and DataVariant. Missing or contradictory configuration, or incomplete verification, blocks completion.
 
 ## Exact-target fast path
 
@@ -62,7 +76,7 @@ Before a non-trivial apply, record the exact target, requested behavior, code or
 | ESDL literals and configuration values | `references/esdl-literals-and-configuration-values.md` |
 | Ordinary Elements | `references/elements-fast-path.md` |
 | Implementation type, memory location, Formula, and ranges | `references/implementation-type-and-memory-layout.md` |
-| Parameter naming and placement | `references/parameter-design-and-placement.md` |
-| Complete dependency chains | `references/dependency-advanced-path.md` |
+| Calibration Parameter placement, ownership, and naming | `references/parameter-design-and-placement.md` |
+| Complete dependency chains and consumer calibration routing | `references/dependency-advanced-path.md` |
 | Task sizing and evidence-backed change design | `references/task-planning-and-change-design.md` |
 | Canonical Tool and result routing | `references/tool-routing-and-write-execution.md` |
