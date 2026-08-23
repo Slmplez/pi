@@ -61,3 +61,16 @@ test("Skill and dependency guidance distinguish formula, formal, and Imported Pa
 		assert.match(source, /Consumer Imported Parameter|consumer\.importedElement\.name/u, path);
 	}
 });
+test("hidden legacy dependency-chain metadata is explicitly recovery-only", () => {
+	for (const path of [
+		"ascetcli/contracts/cli-catalog.json",
+		"ascetcli/contracts/commands/AscetConfigureParameterDependencyChainExecute.json",
+		"packages/ascet-extension/ascet-cli/contracts/cli-catalog.json",
+		"packages/ascet-extension/ascet-cli/contracts/commands/AscetConfigureParameterDependencyChainExecute.json",
+	]) {
+		const source = read(path);
+		assert.match(source, /Legacy recovery-only dependency-chain operation/u, path);
+		assert.doesNotMatch(source, /Preview or apply one/u, path);
+		assert.match(source, /public writes use ascet_edit\.create_dependent_chain with intent=apply/u, path);
+	}
+});

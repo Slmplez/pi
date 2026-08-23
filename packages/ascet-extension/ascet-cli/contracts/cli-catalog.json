@@ -1,4 +1,4 @@
-﻿{
+{
   "version": 1,
   "generatedAt": "2026-04-06T00:00:00Z",
   "commands": [
@@ -351,7 +351,7 @@
     {
       "id": "AscetConfigureParameterDependencyChainExecute",
       "family": "write",
-      "summary": "Preview or apply one create-or-verify Provider to Imported to Local parameter dependency chain",
+      "summary": "Legacy recovery-only dependency-chain operation; public writes use ascet_edit.create_dependent_chain with intent=apply",
       "risk": "write",
       "objectKinds": [
         "class",

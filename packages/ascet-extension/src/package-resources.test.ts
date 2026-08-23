@@ -15,24 +15,22 @@ const projectRulesRoot = join(packageRoot, "templates", "ascet-project", "rules"
 const playbooksRoot = join(packageRoot, "ascet-cli", "contracts", "playbooks");
 
 const skillReferences = [
-	"scope-resolution-and-ownership.md",
-	"database-root-discovery.md",
 	"cnms-cust-routing-and-ownership.md",
 	"customer-integration-workflow.md",
-	"feature-package-workflow.md",
-	"class-path-project-context.md",
-	"project-to-esdl-signal-flow.md",
-	"esdl-fast-path.md",
-	"elements-fast-path.md",
-	"parameter-naming.md",
-	"parameter-provider-placement.md",
+	"database-root-discovery.md",
 	"dependency-advanced-path.md",
-	"bde-and-surface-routing.md",
-	"task-planning-and-implementation-plan.md",
+	"elements-fast-path.md",
 	"esdl-design-and-signal-reuse.md",
+	"esdl-fast-path.md",
 	"esdl-literals-and-configuration-values.md",
-	"tool-recipes.md",
-	"write-execution.md",
+	"feature-package-workflow.md",
+	"implementation-type-and-memory-layout.md",
+	"parameter-design-and-placement.md",
+	"search-and-target-resolution.md",
+	"surface-and-signal-flow-routing.md",
+	"target-scope-and-ownership.md",
+	"task-planning-and-change-design.md",
+	"tool-routing-and-write-execution.md",
 ] as const;
 
 describe("ASCET package resources", () => {

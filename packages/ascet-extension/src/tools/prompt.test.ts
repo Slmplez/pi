@@ -1,4 +1,4 @@
-﻿import assert from "node:assert/strict";
+import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import { compactExamplesForTool } from "./_shared/action-examples.ts";
 import { ascetCapabilitiesPrompt } from "./capabilities/prompt.ts";
@@ -95,7 +95,7 @@ describe("ASCET prompt coordination", () => {
 		assert.deepEqual(actionInstructionIds({ tool: "configure_parameter_dependency_chain" }), []);
 		assert.equal(getActionInstruction("ascet_edit.set_element_dependency")?.action, "set_element_dependency");
 		assert.ok(
-			findActionInstructions({ profile: "write-preflight", tags: ["provider-discovery"] }).some(
+			findActionInstructions({ tool: "ascet_edit", action: "create_dependent_chain" }).some(
 				(instruction) => instruction.id === "ascet_edit.create_dependent_chain",
 			),
 		);

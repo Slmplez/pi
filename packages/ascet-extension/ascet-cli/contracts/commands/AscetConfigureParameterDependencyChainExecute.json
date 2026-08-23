@@ -1,7 +1,7 @@
 {
   "id": "AscetConfigureParameterDependencyChainExecute",
   "family": "write",
-  "summary": "Preview or apply one create-or-verify Provider to Imported to Local parameter dependency chain",
+  "summary": "Legacy recovery-only dependency-chain operation; public writes use ascet_edit.create_dependent_chain with intent=apply",
   "usage": "<request-file> [--json]",
   "execution": {
     "kind": "bridge",
@@ -25,7 +25,7 @@
       "kind": "positional",
       "type": "string",
       "required": true,
-      "description": "JSON request containing intent, optional expected target-state snapshot/editability authorization, and complete Provider, Consumer Imported, Local, and Dependency definitions"
+      "description": "Legacy recovery JSON request containing intent, optional expected target-state snapshot/editability authorization, and complete Provider, Consumer Imported, Local, and Dependency definitions; public writes use ascet_edit.create_dependent_chain with intent=apply"
     },
     {
       "name": "--json",
@@ -53,7 +53,7 @@
   ],
   "examples": [
     {
-      "description": "Preview or apply one complete create-or-verify dependency chain",
+      "description": "Legacy recovery invocation; not the public model-facing dependency-chain write path",
       "command": "AscetBridge.exe exec configure_parameter_dependency_chain_execute <request-file> --json"
     }
   ],

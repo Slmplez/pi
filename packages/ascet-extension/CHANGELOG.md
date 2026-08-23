@@ -31,6 +31,7 @@
 ### Fixed
 
 - Aligned every public `ascet_edit` mutation and `mode=set` with apply-only runtime behavior, required explicit dependency-chain Provider paths and `x` Formula/Formal mapping, activated semantic validation, and standardized canonical mutation/editability evidence across Bridge result paths.
+- Fixed Skill resource and action-registry drift checks, and clarified hidden legacy dependency-chain catalog entries as recovery-only.
 
 - Fixed ASCET profile activation to skip redundant `setActiveTools` updates when the final ordered tool list is unchanged.
 - Fixed ASCET Read Tools to preserve large and empty results as machine-readable JSON, restore implementation and StateMachine detail modes, return complete dependency chains, and distinguish unavailable Project enumeration from empty dependency results.
