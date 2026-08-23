@@ -75,19 +75,40 @@ test("exposes set_element_dependency through the public ascet_edit schema", () =
 	);
 });
 
-test("requires one-call apply_element_spec intent and rejects plan/commit controls", () => {
+test("requires apply-only apply_element_spec intent and rejects empty or retired controls", () => {
+	const element = { role: "standardPrimitive", name: "P", kind: "parameter", modelType: "cont", scope: "local" };
 	for (const elementIntent of ["create", "patch", "upsert", "restore"] as const) {
 		assert.equal(
 			Value.Check(ascetEditParameters, {
 				action: "apply_element_spec",
 				componentPath: "FeatureA\\Consumer",
 				elementIntent,
-				elements: [],
-				intent: "preview",
+				elements: [element],
+				intent: "apply",
 			}),
 			true,
 		);
+		assert.equal(
+			Value.Check(ascetEditParameters, {
+				action: "apply_element_spec",
+				componentPath: "FeatureA\\Consumer",
+				elementIntent,
+				elements: [element],
+				intent: "preview",
+			}),
+			false,
+		);
 	}
+	assert.equal(
+		Value.Check(ascetEditParameters, {
+			action: "apply_element_spec",
+			componentPath: "FeatureA\\Consumer",
+			elementIntent: "patch",
+			elements: [],
+			intent: "apply",
+		}),
+		false,
+	);
 	assert.equal(
 		Value.Check(ascetEditParameters, {
 			action: "apply_element_spec",
@@ -127,10 +148,12 @@ test("accepts create_dependent_chain and rejects retired or incomplete requests"
 				implementation: { mode: "ascetDefault" },
 			},
 		},
-		binding: { formula: "P_Threshold", formal: "P_Threshold", variantPolicy: "default" },
-		intent: "preview",
+		binding: { formula: "x", formal: "x", variantPolicy: "default" },
+		intent: "apply",
 	} as const;
 	assert.equal(Value.Check(ascetEditParameters, params), true);
+	assert.equal(Value.Check(ascetEditParameters, { ...params, intent: "preview" }), false);
+	assert.equal(Value.Check(ascetEditParameters, { ...params, provider: { element: params.provider.element } }), false);
 	assert.equal(Value.Check(ascetEditParameters, { ...params, formals: ["P_Threshold"] }), false);
 	assert.equal(Value.Check(ascetEditParameters, { ...params, intent: "commit" }), false);
 	assert.equal(

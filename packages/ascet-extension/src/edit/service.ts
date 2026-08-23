@@ -1,20 +1,11 @@
 import type { AscetCliJsonResult, AscetCliLifecycleEvent } from "../cli.ts";
-import { normalizeAscetPath } from "../core/path.ts";
 import type { AscetToolOutcome } from "../core/results.ts";
 import { withInlineCodeFile } from "../core/temp-files.ts";
 import { type AscetCreateDependentChainParams, runAscetCreateDependentChain } from "../create-dependent-chain.ts";
 import type { AscetApplyElementPlanParams } from "../element-spec-contract.ts";
-import {
-	type AscetCreateMethodComponentKind,
-	validateCreateMethodKindCompatibility,
-} from "../method-kind-compatibility.ts";
+import type { AscetCreateMethodComponentKind } from "../method-kind-compatibility.ts";
 import { type AscetPermissionSnapshot, resolveAscetPermissionSnapshot } from "../permissions/types.ts";
-import {
-	type AscetDependencyMappingTarget,
-	type AscetDependencyRestorationValue,
-	resolveSetElementDependencyMappings,
-} from "../set-element-dependency.ts";
-import { ASCET_SET_STATE_MACHINE_CODE_OPERATIONS } from "../set-state-machine-code.ts";
+import type { AscetDependencyMappingTarget, AscetDependencyRestorationValue } from "../set-element-dependency.ts";
 import { compactObject, toToolFailurePayload, unwrapToolSuccessPayload } from "../tool-response-contract.ts";
 import { openAiObjectUnionSchema } from "../tools/_shared/openai-schema.ts";
 import { ascetMutationActionSchemas } from "../tools/actions/contracts/edit.ts";
@@ -24,7 +15,7 @@ import {
 	invalidateAscetEditObservations,
 	type RunAscetEditOperationOptions,
 } from "./common.ts";
-import { type AscetEditActionId, getAscetEditAction } from "./contract.ts";
+import { type AscetEditActionId, getAscetEditAction, getAscetEditActionByDiscriminator } from "./contract.ts";
 import {
 	type AscetEditabilityParams,
 	formatAscetEditabilityResult,
@@ -33,21 +24,20 @@ import {
 import { isAscetEditableWriteGateBlockedCode } from "./editable-write-gate.ts";
 import { runAscetFastMutation } from "./fast-path.ts";
 import type { AscetMutationResultEnvelope } from "./mutation-result.ts";
+import { readCanonicalMutationEvidence } from "./result-contract.ts";
 import {
 	type AscetEditExecutionClassification,
 	type AscetEditMutationStatus,
 	type AscetEditVerification,
 	classifyAscetEditExecution,
 } from "./verification.ts";
-import type { AscetMutationIntent } from "./write-control-contract.ts";
+import type { AscetPublicMutationIntent } from "./write-control-contract.ts";
 import { recordAscetWriteTelemetry } from "./write-telemetry.ts";
 
 type CodeSource = { code?: string; codeFile?: string };
-const VALID_STATE_MACHINE_OPERATIONS = new Set<string>(ASCET_SET_STATE_MACHINE_CODE_OPERATIONS);
-const VALID_STATE_MACHINE_OPERATIONS_TEXT = ASCET_SET_STATE_MACHINE_CODE_OPERATIONS.join(", ");
 
 export type AscetMutationParams =
-	| { action: "create_folder"; folderPath: string; intent: AscetMutationIntent }
+	| { action: "create_folder"; folderPath: string; intent: AscetPublicMutationIntent }
 	| {
 			action: "create_component";
 			componentPath: string;
@@ -55,7 +45,7 @@ export type AscetMutationParams =
 			language?: "ESDL" | "BDE" | "C";
 			ifExists?: "fail" | "return-existing";
 			rollbackOnFailure?: boolean;
-			intent: AscetMutationIntent;
+			intent: AscetPublicMutationIntent;
 	  }
 	| {
 			action: "create_method";
@@ -65,7 +55,7 @@ export type AscetMutationParams =
 			methodKind: "abstract" | "process" | "action" | "condition" | "trigger";
 			diagram?: string;
 			ifExists?: "fail" | "return-existing";
-			intent: AscetMutationIntent;
+			intent: AscetPublicMutationIntent;
 	  }
 	| {
 			action: "set_method_signature";
@@ -78,32 +68,32 @@ export type AscetMutationParams =
 				type: "cont" | "sdisc" | "udisc" | "log";
 				ifExists?: "fail" | "keep" | "replace";
 			}>;
-			intent: AscetMutationIntent;
+			intent: AscetPublicMutationIntent;
 	  }
 	| {
 			action: "delete_component";
 			componentPath: string;
 			ifMissing?: "fail" | "ignore";
-			intent: AscetMutationIntent;
+			intent: AscetPublicMutationIntent;
 	  }
 	| {
 			action: "delete_method";
 			componentPath: string;
 			methodName: string;
 			ifMissing?: "fail" | "ignore";
-			intent: AscetMutationIntent;
+			intent: AscetPublicMutationIntent;
 	  }
 	| {
 			action: "delete_folder";
 			folderPath: string;
 			ifMissing?: "fail" | "ignore";
-			intent: AscetMutationIntent;
+			intent: AscetPublicMutationIntent;
 	  }
 	| ({
 			action: "set_method_code";
 			componentPath: string;
 			methodName: string;
-			intent: AscetMutationIntent;
+			intent: AscetPublicMutationIntent;
 	  } & CodeSource)
 	| ({
 			action: "set_module_code";
@@ -111,7 +101,7 @@ export type AscetMutationParams =
 			operation?: "set-method" | "set-header" | "set-external-c-code";
 			section?: "set-method" | "set-header" | "set-external-c-code";
 			methodName?: string;
-			intent: AscetMutationIntent;
+			intent: AscetPublicMutationIntent;
 	  } & CodeSource)
 	| ({
 			action: "set_state_machine_code";
@@ -134,13 +124,13 @@ export type AscetMutationParams =
 			targetState?: string;
 			priority?: number;
 			methodName?: string;
-			intent: AscetMutationIntent;
+			intent: AscetPublicMutationIntent;
 	  } & CodeSource)
 	| {
 			action: "set_enumerators";
 			componentPath: string;
 			enumerators: string[];
-			intent: AscetMutationIntent;
+			intent: AscetPublicMutationIntent;
 	  }
 	| AscetApplyElementPlanParams
 	| {
@@ -149,7 +139,7 @@ export type AscetMutationParams =
 			specFile: string;
 			mode?: "restore";
 			deleteMissing?: boolean;
-			intent: AscetMutationIntent;
+			intent: AscetPublicMutationIntent;
 	  }
 	| {
 			action: "set_element_dependency";
@@ -173,8 +163,14 @@ export type AscetMutationParams =
 			match?: "exact" | "all";
 			dryRun?: boolean;
 			backupDir?: string;
-			intent: AscetMutationIntent;
+			intent: AscetPublicMutationIntent;
 	  };
+
+type WithLegacyMutationIntent<T> = T extends { intent: AscetPublicMutationIntent }
+	? Omit<T, "intent"> & { intent: "preview" | "apply" }
+	: T;
+
+export type AscetLegacyMutationParams = WithLegacyMutationIntent<AscetMutationParams>;
 
 type ExecutableAscetMutationParams = AscetMutationParams & {
 	intent: "apply";
@@ -298,29 +294,8 @@ function guardedEditability(
 }
 
 function canonicalWriteEvidence(raw: AscetCliJsonResult | undefined): Partial<AscetMutationResultEnvelope> {
-	const transport = isRecord(raw?.data) ? raw.data : undefined;
-	const result = isRecord(transport?.result) ? transport.result : transport;
-	const payload = isRecord(result?.payload) ? result.payload : result;
-	if (!payload) return {};
-	return {
-		...(typeof payload.changed === "boolean" ? { changed: payload.changed } : {}),
-		...(typeof payload.mutationStatus === "string"
-			? { mutationStatus: payload.mutationStatus as AscetMutationResultEnvelope["mutationStatus"] }
-			: {}),
-		...(typeof payload.saveAttempted === "boolean" ? { saveAttempted: payload.saveAttempted } : {}),
-		...(typeof payload.saveSucceeded === "boolean" ? { saveSucceeded: payload.saveSucceeded } : {}),
-		...(typeof payload.saveState === "string"
-			? { saveState: payload.saveState as NonNullable<AscetMutationResultEnvelope["saveState"]> }
-			: {}),
-		...(typeof payload.verified === "boolean" ? { verified: payload.verified } : {}),
-		...(typeof payload.verificationMode === "string" ? { verificationMode: payload.verificationMode } : {}),
-		...(typeof payload.sessionCount === "number" ? { sessionCount: payload.sessionCount } : {}),
-		...(typeof payload.saveCount === "number" ? { saveCount: payload.saveCount } : {}),
-		...(typeof payload.editableRetryCount === "number" ? { editableRetryCount: payload.editableRetryCount } : {}),
-		...(typeof payload.nativeMutationAttemptCount === "number"
-			? { nativeMutationAttemptCount: payload.nativeMutationAttemptCount }
-			: {}),
-	};
+	const evidence = readCanonicalMutationEvidence(raw?.data);
+	return evidence ?? {};
 }
 
 function createMutationResultEnvelope(
@@ -330,6 +305,18 @@ function createMutationResultEnvelope(
 	lifecycle: AscetWriteLifecycleEvidence,
 ): AscetMutationResultEnvelope {
 	const outcome = result.details.outcome;
+	const permissionSnapshot = resolveAscetPermissionSnapshot(ctx);
+	const databaseFingerprintKnown = permissionSnapshot.databaseFingerprint !== undefined;
+	const databaseFingerprintSource =
+		permissionSnapshot.databaseFingerprintSource ?? (databaseFingerprintKnown ? "caller" : "unavailable");
+	const audit: NonNullable<AscetMutationResultEnvelope["audit"]> = {
+		databaseFingerprintKnown,
+		databaseFingerprintSource,
+		...(permissionSnapshot.databaseFingerprint
+			? { databaseFingerprint: permissionSnapshot.databaseFingerprint }
+			: {}),
+		...lifecycle.audit,
+	};
 	const classification = result.details.raw ? classifyAscetEditExecution(result.details.raw) : undefined;
 	const partialStatus = partialMutationStatus(outcome);
 	const preflightPlan = outcome.status === "preflight" ? outcome.plan : undefined;
@@ -394,11 +381,35 @@ function createMutationResultEnvelope(
 		}
 	}
 	const preflightEvidence = lifecycle.preflight ?? preflightPlan;
+	const canonicalVerificationStatus = evidence.verificationStatus ?? verificationStatus;
 	return {
+		outcome: status === "ok" ? "succeeded" : "failed",
 		status,
-		...evidence,
+		changed: evidence.changed ?? mutationStatus === "applied",
 		mutationStatus,
-		permission: lifecycle.permission ?? { mode: resolveAscetPermissionSnapshot(ctx).mode, decision: "not_evaluated" },
+		saveAttempted: evidence.saveAttempted ?? false,
+		saveSucceeded: evidence.saveSucceeded ?? false,
+		saveState:
+			evidence.saveState ??
+			(mutationStatus === "no_op" || mutationStatus === "not_started" ? "not_required" : "unknown"),
+		verified: evidence.verified ?? canonicalVerificationStatus === "passed",
+		verificationStatus: canonicalVerificationStatus,
+		verificationMode:
+			evidence.verificationMode ?? (canonicalVerificationStatus === "not_applicable" ? "not_applicable" : "unknown"),
+		sessionCount: evidence.sessionCount ?? (lifecycle.bridgeEntered ? 1 : 0),
+		saveCount: evidence.saveCount ?? 0,
+		editableRetryCount: evidence.editableRetryCount ?? 0,
+		nativeMutationAttemptCount: evidence.nativeMutationAttemptCount ?? 0,
+		permission:
+			lifecycle.permission ??
+			({
+				mode: permissionSnapshot.mode,
+				decision: "not_evaluated",
+				databaseFingerprintKnown,
+				databaseFingerprintSource,
+				evidenceComplete: false,
+				impactUnknown: true,
+			} satisfies AscetMutationResultEnvelope["permission"]),
 		preflight: {
 			status: preflightEvidence
 				? "passed"
@@ -414,9 +425,9 @@ function createMutationResultEnvelope(
 				? { status: "unknown" }
 				: { status: "not_applicable" }),
 		mutation: { status: mutationStatus },
-		verification: { status: verificationStatus },
+		verification: { status: canonicalVerificationStatus },
 		...(error ? { error } : {}),
-		...(lifecycle.audit ? { audit: lifecycle.audit } : {}),
+		audit,
 		bridge: {
 			beforeBridge: lifecycle.beforeBridge,
 			bridgeEntered: lifecycle.bridgeEntered,
@@ -466,7 +477,7 @@ export function resolveAscetEditInvocation(params: unknown): AscetEditInvocation
 	}
 	if (Object.hasOwn(params, "action")) {
 		const action =
-			typeof params.action === "string" ? getAscetEditAction(params.action as AscetEditActionId) : undefined;
+			typeof params.action === "string" ? getAscetEditActionByDiscriminator("action", params.action) : undefined;
 		if (!action || action.discriminator.field !== "action") {
 			return undefined;
 		}
@@ -481,7 +492,7 @@ export function resolveAscetEditInvocation(params: unknown): AscetEditInvocation
 	if (!Object.hasOwn(params, "mode")) {
 		return undefined;
 	}
-	const mode = typeof params.mode === "string" ? getAscetEditAction(params.mode as AscetEditActionId) : undefined;
+	const mode = typeof params.mode === "string" ? getAscetEditActionByDiscriminator("mode", params.mode) : undefined;
 	return mode?.discriminator.field === "mode"
 		? { kind: "editability", mode: mode.id as AscetEditabilityParams["mode"] }
 		: undefined;
@@ -550,30 +561,50 @@ export async function runAscetMutation(
 		bridgeEntered: false,
 		backendResponseReceived: false,
 	};
+	let raw: AscetCliJsonResult | undefined;
 	try {
-		const raw = await runAscetFastMutation(params, options, ctx, lifecycle);
+		raw = await runAscetFastMutation(params, options, ctx, lifecycle);
 		const result = finalizeAscetMutation({ params, raw, options });
 		const enriched = attachMutationResultEnvelope(params, result, ctx, lifecycle);
 		recordMutationTelemetry(params, enriched, options, startedAt, lifecycle);
 		return enriched;
 	} catch (error) {
-		const phase = resolveTelemetryPhase(params);
-		const mutationStatus = phase !== "plan" && lifecycle.bridgeEntered ? "unknown" : "not_started";
-		const errorCode = isRecord(error) && typeof error.code === "string" ? error.code : "unexpected_exception";
-		recordAscetWriteTelemetry(options, {
-			operation: params.action,
-			phase,
-			outcome: mutationStatus === "unknown" ? "outcome_unknown" : "error",
-			durationMs: Math.max(0, Date.now() - startedAt),
-			errorCode,
-			mutationStatus,
-			bridgeEntered: lifecycle.bridgeEntered,
-			backendResponseReceived: lifecycle.backendResponseReceived,
-			mutationStarted: mutationStatus === "unknown",
-			writesPerformed: false,
-			cleanupRequired: mutationStatus === "unknown",
-		});
-		throw error;
+		const message = error instanceof Error ? error.message : String(error);
+		const canonical = readCanonicalMutationEvidence(raw?.data);
+		const mutationStatus = canonical?.mutationStatus ?? (lifecycle.bridgeEntered ? "unknown" : "not_started");
+		const errorCode = canonical
+			? "ascet_edit_post_processing_failed"
+			: mutationStatus === "unknown"
+				? "ascet_edit_write_outcome_unknown"
+				: "ascet_edit_internal_error";
+		const failureRaw: AscetCliJsonResult = {
+			...(raw ?? {
+				data: null,
+				request: { cwd: options.cwd, cliPath: "", args: [] },
+				stdout: "",
+				stderr: "",
+				exitCode: null,
+				timedOut: false,
+			}),
+			ok: false,
+			error: {
+				code: errorCode,
+				message,
+				details: {
+					mutationStatus,
+					verificationStatus:
+						canonical?.verificationStatus ?? (mutationStatus === "not_started" ? "not_applicable" : "unknown"),
+					requiresReadback: mutationStatus !== "not_started" && !canonical,
+					...(mutationStatus === "unknown"
+						? { recoveryActions: ["Re-read the target and reconcile the mutation outcome before retrying."] }
+						: {}),
+				},
+			},
+		};
+		const failed = asResponse({ status: "error", error: { code: errorCode, message } }, failureRaw);
+		const enriched = attachMutationResultEnvelope(params, failed, ctx, lifecycle);
+		recordMutationTelemetry(params, enriched, options, startedAt, lifecycle);
+		return enriched;
 	}
 }
 
@@ -791,305 +822,6 @@ function asRecord(value: unknown): Record<string, unknown> | undefined {
 function omitKeys(record: Record<string, unknown>, keys: readonly string[]): Record<string, unknown> {
 	const omit = new Set(keys);
 	return Object.fromEntries(Object.entries(record).filter(([key]) => !omit.has(key)));
-}
-
-function _normalizeAscetMutationParams(params: AscetMutationParams): AscetMutationParams {
-	if (
-		params.action === "create_component" &&
-		!params.language &&
-		(params.kind === "class" || params.kind === "module")
-	) {
-		return { ...params, language: "ESDL" };
-	}
-	if (params.action === "set_module_code" && !params.operation && params.section) {
-		return { ...params, operation: params.section };
-	}
-	if (params.action === "set_element_dependency") {
-		const targetPath = params.targetPath ?? params.componentPath;
-		if (targetPath) {
-			return {
-				...params,
-				targetPath,
-				dependencyMappings: resolveSetElementDependencyMappings(params),
-			};
-		}
-	}
-	return params;
-}
-
-function _validateAscetMutationParams(params: AscetMutationParams): AscetToolOutcome | undefined {
-	if (params.action === "set_element_dependency") {
-		if (
-			params.targetPath &&
-			params.componentPath &&
-			normalizeAscetPath(params.targetPath) !== normalizeAscetPath(params.componentPath)
-		) {
-			return {
-				status: "error",
-				error: {
-					code: "ascet_edit_conflicting_parameter",
-					message:
-						"set_element_dependency targetPath and componentPath must identify the same target when both are provided.",
-				},
-			};
-		}
-		if (!params.targetPath && !params.componentPath) {
-			return {
-				status: "error",
-				error: {
-					code: "ascet_edit_missing_parameter",
-					message: "set_element_dependency requires targetPath or componentPath.",
-				},
-			};
-		}
-		if (!params.elementName) {
-			return {
-				status: "error",
-				error: {
-					code: "ascet_edit_missing_parameter",
-					message: "set_element_dependency requires elementName.",
-				},
-			};
-		}
-		if (!params.dependency) {
-			return {
-				status: "error",
-				error: {
-					code: "ascet_edit_missing_parameter",
-					message: "set_element_dependency requires dependency.",
-				},
-			};
-		}
-		if (params.dependency === "independent" && params.dependencyFormula) {
-			return {
-				status: "error",
-				error: {
-					code: "ascet_edit_invalid_parameter",
-					message: 'set_element_dependency dependencyFormula is only valid with dependency="dependent".',
-				},
-			};
-		}
-		if (params.dependencyFormula && params.clearDependencyFormula) {
-			return {
-				status: "error",
-				error: {
-					code: "ascet_edit_invalid_parameter",
-					message: "set_element_dependency dependencyFormula and clearDependencyFormula cannot be used together.",
-				},
-			};
-		}
-		if (params.bindingPolicy === "autoExactName") {
-			if (!params.dependencyFormula || !params.dependencyFormals?.length) {
-				return {
-					status: "error",
-					error: {
-						code: "dependency_formals_required",
-						message: "bindingPolicy=autoExactName requires dependencyFormula and explicit dependencyFormals.",
-					},
-				};
-			}
-			if (params.variantMappings) {
-				return {
-					status: "error",
-					error: {
-						code: "ascet_edit_invalid_parameter",
-						message: "autoExactName does not combine with per-variant explicit mappings.",
-					},
-				};
-			}
-			const mappings = params.dependencyMappings ?? {};
-			const formals = new Set(params.dependencyFormals);
-			const deterministic =
-				Object.keys(mappings).length === formals.size &&
-				Object.entries(mappings).every(
-					([formal, target]) => formals.has(formal) && typeof target === "string" && target === formal,
-				);
-			if (!deterministic) {
-				return {
-					status: "error",
-					error: {
-						code: "auto_exact_name_mapping_mismatch",
-						message: "autoExactName mappings must be the unique exact-name mapping for every declared formal.",
-					},
-				};
-			}
-		}
-		if (
-			params.dependencyFormula &&
-			params.bindingPolicy !== "autoExactName" &&
-			(!params.dependencyMappings || Object.keys(params.dependencyMappings).length === 0) &&
-			(!params.variantMappings || Object.keys(params.variantMappings).length === 0)
-		) {
-			return {
-				status: "error",
-				error: {
-					code: "dependency_mappings_required",
-					message:
-						"set_element_dependency dependencyFormula requires explicit dependencyMappings, or autoExactName with explicit dependencyFormals; formula token inference is disabled.",
-				},
-			};
-		}
-		if (params.dependencyFormals && params.bindingPolicy !== "autoExactName") {
-			return {
-				status: "error",
-				error: {
-					code: "ascet_edit_invalid_parameter",
-					message: "dependencyFormals is only valid with bindingPolicy=autoExactName.",
-				},
-			};
-		}
-		if (
-			((params.dependencyMappings && Object.keys(params.dependencyMappings).length > 0) ||
-				(params.variantMappings && Object.keys(params.variantMappings).length > 0)) &&
-			!params.dependencyFormula
-		) {
-			return {
-				status: "error",
-				error: {
-					code: "ascet_edit_invalid_parameter",
-					message: "set_element_dependency dependencyMappings requires dependencyFormula.",
-				},
-			};
-		}
-		const writesData = params.dependency === "independent" || params.dependencyFormula !== undefined;
-		if (writesData && !params.variantPolicy) {
-			return {
-				status: "error",
-				error: {
-					code: "data_variant_selection_required",
-					message: "set_element_dependency data writes require explicit variantPolicy: default, selected, or all.",
-				},
-			};
-		}
-		if (params.variantPolicy === "selected" && (!params.variants || params.variants.length === 0)) {
-			return {
-				status: "error",
-				error: {
-					code: "data_variant_selection_required",
-					message: 'set_element_dependency variantPolicy="selected" requires variants.',
-				},
-			};
-		}
-		if (params.variantPolicy !== "selected" && params.variants) {
-			return {
-				status: "error",
-				error: {
-					code: "ascet_edit_invalid_parameter",
-					message: "set_element_dependency variants is only valid with variantPolicy=selected.",
-				},
-			};
-		}
-		if (params.variantMappings && params.variantPolicy !== "selected") {
-			return {
-				status: "error",
-				error: {
-					code: "ascet_edit_invalid_parameter",
-					message: "set_element_dependency variantMappings requires variantPolicy=selected.",
-				},
-			};
-		}
-		if (params.variantMappings && params.variants) {
-			const selected = new Set(params.variants);
-			const mapped = Object.keys(params.variantMappings);
-			if (
-				mapped.some((variant) => !selected.has(variant)) ||
-				params.variants.some((variant) => !params.variantMappings?.[variant])
-			) {
-				return {
-					status: "error",
-					error: {
-						code: "data_variant_mapping_mismatch",
-						message: "variantMappings must define exactly every selected DataVariant.",
-					},
-				};
-			}
-		}
-		if (params.dependency === "independent" && !params.valueRestoration) {
-			return {
-				status: "error",
-				error: {
-					code: "independent_value_restoration_required",
-					message:
-						"set_element_dependency independent conversion requires valueRestoration fromSnapshot, explicit, or ascetDefault.",
-				},
-			};
-		}
-		if (
-			params.valueRestoration?.policy === "explicit" &&
-			(!params.valueRestoration.valuesByVariant || Object.keys(params.valueRestoration.valuesByVariant).length === 0)
-		) {
-			return {
-				status: "error",
-				error: {
-					code: "independent_value_restoration_required",
-					message: "Explicit independent restoration requires valuesByVariant.",
-				},
-			};
-		}
-	}
-	if (params.action === "create_method" && params.componentKind) {
-		const compatibility = validateCreateMethodKindCompatibility(params);
-		if (compatibility) return { status: "error", error: compatibility };
-	}
-	if (params.action === "set_module_code" && !params.operation) {
-		return {
-			status: "error",
-			error: {
-				code: "ascet_edit_missing_parameter",
-				message: "section parameter is required for set_module_code",
-			},
-		};
-	}
-	if (params.action === "set_state_machine_code" && !params.operation) {
-		return {
-			status: "error",
-			error: {
-				code: "ascet_edit_missing_parameter",
-				message: `operation parameter is required for set_state_machine_code. Valid values: ${VALID_STATE_MACHINE_OPERATIONS_TEXT}.`,
-			},
-		};
-	}
-	if (params.action === "set_state_machine_code" && !VALID_STATE_MACHINE_OPERATIONS.has(params.operation)) {
-		return {
-			status: "error",
-			error: {
-				code: "ascet_edit_invalid_operation",
-				message: `Unknown state-machine write operation '${params.operation}'. Valid values: ${VALID_STATE_MACHINE_OPERATIONS_TEXT}.`,
-			},
-		};
-	}
-	if (params.action === "set_enumerators" && params.enumerators.length === 0) {
-		return {
-			status: "error",
-			error: {
-				code: "ascet_edit_missing_parameter",
-				message: "set_enumerators requires at least one enumerator.",
-			},
-		};
-	}
-	if (
-		params.action === "set_method_signature" &&
-		!params.returnType &&
-		(!params.arguments || params.arguments.length === 0)
-	) {
-		return {
-			status: "error",
-			error: {
-				code: "ascet_edit_missing_parameter",
-				message: "set_method_signature requires returnType or at least one argument.",
-			},
-		};
-	}
-	if (params.action === "set_element_dependency" && params.targetKind === "folder" && params.match !== "all") {
-		return {
-			status: "error",
-			error: {
-				code: "ascet_edit_invalid_scope",
-				message: 'set_element_dependency folder writes require match="all" to modify multiple candidates.',
-			},
-		};
-	}
-	return undefined;
 }
 
 export function formatAscetEditResult(result: AscetEditResult): string {

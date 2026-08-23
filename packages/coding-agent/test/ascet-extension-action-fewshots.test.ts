@@ -166,7 +166,9 @@ describe("ASCET action few-shot examples", () => {
 					? 1_200
 					: example.tool === "ascet_edit" && example.action === "apply_element_spec"
 						? 500
-						: 180;
+						: example.tool === "ascet_edit" && example.action === "set_element_dependency"
+							? 200
+							: 180;
 			expect(example.call.length, key).toBeLessThanOrEqual(maxCallLength);
 			expect(example.call, key).not.toContain("\n");
 			expect(example.call, key).toContain(`${example.tool}(`);
@@ -203,7 +205,9 @@ describe("ASCET action few-shot examples", () => {
 				? 1_200
 				: guideline.startsWith('ascet_edit({action:"apply_element_spec"')
 					? 500
-					: 180;
+					: guideline.startsWith('ascet_edit({action:"set_element_dependency"')
+						? 200
+						: 180;
 			expect(guideline.length, guideline).toBeLessThanOrEqual(maxGuidelineLength);
 		}
 	});

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Web.Script.Serialization;
 using Ascet = de.etas.cebra.toolAPI.Ascet.Ascet;
@@ -1183,15 +1184,20 @@ public static class ExecCommand
 
     private static Dictionary<string, object> BuildWriteResultPayload(AscetWriteExecutionResult result)
     {
-        Dictionary<string, object> payload = new Dictionary<string, object>(StringComparer.Ordinal);
+        WriteVerificationResult verification = result == null ? null : result.Verification;
+        Dictionary<string, object> actionPayload = result == null
+            ? new Dictionary<string, object>(StringComparer.Ordinal)
+            : CloneDictionary(result.Payload);
+        NormalizeWritePayload(result == null ? String.Empty : result.OperationName, actionPayload, result != null && result.WriteSucceeded, verification);
+        Dictionary<string, object> payload = AscetCanonicalWriteResult.NormalizeSuccess(
+            actionPayload,
+            result != null && result.WriteSucceeded,
+            verification != null && verification.Requested,
+            verification != null && verification.Attempted && verification.Succeeded);
         payload["operationName"] = result == null ? String.Empty : (result.OperationName ?? String.Empty);
         payload["sequenceNumber"] = result == null ? 0L : result.SequenceNumber;
         payload["writeSucceeded"] = result != null && result.WriteSucceeded;
         payload["summary"] = result == null ? String.Empty : (result.Summary ?? String.Empty);
-        WriteVerificationResult verification = result == null ? null : result.Verification;
-        Dictionary<string, object> nestedPayload = result == null ? new Dictionary<string, object>(StringComparer.Ordinal) : CloneDictionary(result.Payload);
-        NormalizeWritePayload(result == null ? String.Empty : result.OperationName, nestedPayload, result != null && result.WriteSucceeded, verification);
-        payload["payload"] = nestedPayload;
         payload["verification"] = BuildVerificationPayload(verification);
         return payload;
     }
@@ -1210,11 +1216,18 @@ public static class ExecCommand
     private static Dictionary<string, object> BuildWriteErrorEnvelope(string operation, AscetWriteExecutionResult result)
     {
         bool? mutationStarted = ResolveWriteMutationStarted(result);
-        return AscetCliEnvelope.Error(
-            BuildWriteErrorPayload(operation, result == null ? null : result.Error),
-            "exec",
-            operation,
-            mutationStarted);
+        Dictionary<string, object> error = BuildWriteErrorPayload(operation, result == null ? null : result.Error);
+        Dictionary<string, object> payload = AscetCanonicalWriteResult.NormalizeFailure(
+            result == null ? null : result.Payload,
+            mutationStarted,
+            Convert.ToString(error["code"], CultureInfo.InvariantCulture),
+            Convert.ToString(error["message"], CultureInfo.InvariantCulture));
+        payload["operationName"] = result == null ? operation : (result.OperationName ?? operation);
+        payload["sequenceNumber"] = result == null ? 0L : result.SequenceNumber;
+        payload["writeSucceeded"] = result != null && result.WriteSucceeded;
+        payload["summary"] = result == null ? String.Empty : (result.Summary ?? String.Empty);
+        payload["verification"] = BuildVerificationPayload(result == null ? null : result.Verification);
+        return AscetCliEnvelope.Error(error, "exec", operation, payload, mutationStarted);
     }
 
     private static Dictionary<string, object> BuildWriteErrorPayload(string fallbackOperation, AscetWriteError error)
@@ -1465,7 +1478,7 @@ public static class ExecCommand
             if (trimmed.StartsWith("StackTrace:", StringComparison.OrdinalIgnoreCase)
                 || trimmed.StartsWith("at ", StringComparison.Ordinal)
                 || trimmed.StartsWith("at\t", StringComparison.Ordinal)
-                || trimmed.StartsWith("ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½ ", StringComparison.Ordinal))
+                || trimmed.StartsWith("ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½ ", StringComparison.Ordinal))
             {
                 break;
             }

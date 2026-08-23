@@ -55,7 +55,7 @@ public static class InProcessLegacyOperationAdapter
         }
         catch (AscetReadException ex)
         {
-            return WriteFailure(operation, ex.Code, ex.Message, String.Empty, String.Empty, false);
+            return WriteFailure(operation, ex.Code, ex.Message, String.Empty, String.Empty, null, false);
         }
 
         LegacyOperationInvocationResult invocation = Invoke(entryPoint, args);
@@ -72,6 +72,7 @@ public static class InProcessLegacyOperationAdapter
                 failure.Message,
                 invocation.Stdout,
                 invocation.Stderr,
+                ExtractFailureResult(envelope),
                 ReadMutationStarted(envelope) ?? AscetCliEnvelope.ResolveFailureMutationStarted(IsMutatingOperation(operation), failure.Code));
         }
 
@@ -84,6 +85,11 @@ public static class InProcessLegacyOperationAdapter
         if (!String.IsNullOrWhiteSpace(invocation.Stderr))
         {
             Console.Error.Write(invocation.Stderr);
+        }
+        if (IsMutatingOperation(operation))
+        {
+            bool verified = ReadBoolean(result, "verified") ?? ReadBoolean(result, "readbackVerified") ?? false;
+            result = AscetCanonicalWriteResult.NormalizeSuccess(result, true, true, verified);
         }
         return AscetCliEnvelope.WriteSuccess(AscetCliEnvelope.Success("exec", operation, result, ResolveSuccessMutationStarted(operation, result)));
     }
@@ -260,7 +266,14 @@ public static class InProcessLegacyOperationAdapter
         return result ?? parsed;
     }
 
-    private static int WriteFailure(string operation, string code, string message, string stdout, string stderr, bool? mutationStarted)
+    private static int WriteFailure(
+        string operation,
+        string code,
+        string message,
+        string stdout,
+        string stderr,
+        Dictionary<string, object> result,
+        bool? mutationStarted)
     {
         if (!String.IsNullOrWhiteSpace(stderr))
         {
@@ -271,6 +284,9 @@ public static class InProcessLegacyOperationAdapter
             Console.Error.Write(stdout);
         }
 
+        Dictionary<string, object> preservedResult = IsMutatingOperation(operation)
+            ? AscetCanonicalWriteResult.NormalizeFailure(result, mutationStarted, code, message)
+            : result;
         return AscetCliEnvelope.WriteError(
             ExitCodeStructuredError,
             AscetCliEnvelope.Error(
@@ -278,6 +294,7 @@ public static class InProcessLegacyOperationAdapter
                 message ?? String.Empty,
                 "exec",
                 operation,
+                preservedResult,
                 mutationStarted));
     }
 
@@ -403,11 +420,41 @@ public static class InProcessLegacyOperationAdapter
     internal static bool? ReadMutationStarted(IDictionary<string, object> envelope)
     {
         Dictionary<string, object> meta = GetDictionary(envelope, "meta");
-        if (meta == null || !meta.ContainsKey("mutationStarted") || !(meta["mutationStarted"] is bool))
+        if (meta != null && meta.ContainsKey("mutationStarted") && meta["mutationStarted"] is bool)
         {
-            return null;
+            return (bool)meta["mutationStarted"];
         }
-        return (bool)meta["mutationStarted"];
+
+        Dictionary<string, object> result = ExtractFailureResult(envelope);
+        object operationCount;
+        if (result != null && result.TryGetValue("nativeScmOperationCount", out operationCount))
+        {
+            int count;
+            if (Int32.TryParse(Convert.ToString(operationCount, CultureInfo.InvariantCulture), out count))
+            {
+                return count > 0;
+            }
+        }
+        string mutationStatus = GetString(result, "mutationStatus");
+        if (String.Equals(mutationStatus, "not_started", StringComparison.OrdinalIgnoreCase)) return false;
+        return null;
+    }
+
+    private static Dictionary<string, object> ExtractFailureResult(IDictionary<string, object> envelope)
+    {
+        if (envelope == null) return null;
+        Dictionary<string, object> nested = GetDictionary(envelope, "result");
+        if (nested != null) return nested;
+        return envelope.ContainsKey("mutationStatus") || envelope.ContainsKey("nativeScmOperationCount")
+            ? envelope as Dictionary<string, object>
+            : null;
+    }
+
+
+    private static bool? ReadBoolean(IDictionary<string, object> payload, string key)
+    {
+        object value;
+        return payload != null && payload.TryGetValue(key, out value) && value is bool ? (bool?)value : null;
     }
 
     private static Dictionary<string, object> GetDictionary(IDictionary<string, object> payload, string key)

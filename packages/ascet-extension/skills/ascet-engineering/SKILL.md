@@ -31,7 +31,7 @@ For every new calibratable or tunable dependency chain, configuration correctnes
 - The roles and scopes are exactly Provider Exported Parameter, Consumer Imported Parameter, and Consumer Local Dependent Parameter. The Provider Exported and Consumer Imported names match exactly as `P_<Name>`; the Local Dependent name is `C_<Name>`, unless an exact, verified legacy name is being preserved. Never create a calibratable standalone local shortcut.
 - Provider and Imported `modelType` and unit are compatible. Local `modelType`, unit, and implementation are compatible with the dependency result and the actual ESDL usage. The Provider owns the evidence-backed calibration value/data; Imported carries structural compatibility metadata only; Local Dependent receives no independent scalar data/default.
 - Range, value/data/default, implementation, and calibration decisions are explicit and evidence-backed. Validate every value/default against the selected range; integer `valueType` must cover the complete required range and signedness; real precision (`real32`/`real64`) requires an explicit engineering rule. Never use `ascetDefault` to hide an unknown decision.
-- Formula, Formal, Imported mapping, and DataVariant policy are explicit and internally consistent. Do not assume or hardcode a universal `x` mapping.
+- Formula, Formal, Imported mapping, and DataVariant policy are explicit and internally consistent. For the standard single-formal identity binding, use `formula="x"`, `formal="x"`, and map `x` to the Consumer Imported Parameter; use another formal only when an exact verified contract requires it.
 - For existing endpoints, preserve exact compatible metadata. Any material mismatch is a conflict and must not be overwritten.
 
 After apply, automatic readback must confirm all three endpoints and the binding: exact names, roles/scopes, model and implementation types, units, range, value/data/default and calibration fields where applicable, plus Formula, Formal, Imported mapping, and DataVariant. Missing or contradictory configuration, or incomplete verification, blocks completion.
@@ -41,7 +41,7 @@ After apply, automatic readback must confirm all three endpoints and the binding
 1. Confirm the supplied path or identity is exact for the requested surface.
 2. Read only current code, signature, Element, implementation, diagram, flow, Formula, or dependency data that can affect the change.
 3. Reuse compatible existing objects and produce the exact ESDL, metadata, binding, or surface change.
-4. Use `intent=preview` only for an explicit non-mutating preview; use `intent=apply` when the user requested the exact write.
+4. Use `intent=apply` for every mutation. Use `mode=check` only for read-only editability inspection. Do not call `mode=check` merely to authorize a write. Do not issue a separate `mode=set` as part of an ordinary write flow.
 5. Accept passed required automatic verification as completion; do not add a redundant verification read.
 
 Do not expand a small exact ESDL or Element change into database-wide discovery, CNMS/CUST routing, complete Project impact, or full Signal Flow analysis unless evidence shows it is required.

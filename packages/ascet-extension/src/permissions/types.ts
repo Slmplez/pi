@@ -47,12 +47,15 @@ export interface AscetPermissionEvaluationInput {
 	minimumRisk?: AscetWriteRisk;
 	targetCount?: number;
 	variantCount?: number;
+	impactUnknown?: boolean;
 }
 
 export interface AscetPermissionSnapshot {
 	mode: PermissionMode;
 	rules: readonly AscetPermissionRule[];
 	configError?: string;
+	databaseFingerprint?: string;
+	databaseFingerprintSource?: "session" | "bridge" | "caller";
 }
 
 export interface AscetPermissionProvider {

@@ -22,7 +22,7 @@ Load when the change should remain local and should not expand into restructurin
 1. Confirm the exact target and exact surface before editing.
 2. Choose the narrowest specific write action.
 3. Change only what is required for the request.
-4. Execute through `ascet_edit` only after preflight and inspect its automatic verification.
+4. Execute one `ascet_edit` call with `intent="apply"`; runtime performs validation, permission handling, mutation, and automatic same-session verification.
 5. Add one larger-surface read only when the next step or risk requires it.
 
 ## Escalate When

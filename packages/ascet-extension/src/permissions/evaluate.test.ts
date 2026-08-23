@@ -120,4 +120,37 @@ describe("ASCET permission evaluator", () => {
 		assert.equal(result.risk, "high");
 		assert.equal(result.behavior, "ask");
 	});
+	test("honors database-scoped rules with known and unknown fingerprints", () => {
+		const rules = [
+			{ behavior: "allow" as const, action: "create_method" as const, path: "DEMO*" },
+			{
+				behavior: "deny" as const,
+				action: "create_method" as const,
+				path: "DEMO\\Component",
+				databaseFingerprint: "database-a",
+			},
+		];
+		assert.equal(evaluate("auto", "create_method", { rules, databaseFingerprint: "database-a" }).behavior, "deny");
+		assert.equal(evaluate("auto", "create_method", { rules, databaseFingerprint: "database-b" }).behavior, "allow");
+		assert.equal(evaluate("auto", "create_method", { rules }).behavior, "ask");
+	});
+
+	test("keeps an explicit deny authoritative when impact is unknown", () => {
+		const result = evaluate("auto", "set_element_dependency", {
+			evidenceComplete: false,
+			impactUnknown: true,
+			rules: [{ behavior: "deny", action: "set_element_dependency", path: "DEMO*" }],
+		});
+		assert.equal(result.behavior, "deny");
+	});
+
+	test("requires confirmation rather than auto-approval when impact is explicitly unknown", () => {
+		const result = evaluate("auto", "set_element_dependency", {
+			evidenceComplete: false,
+			impactUnknown: true,
+			rules: [{ behavior: "allow", action: "set_element_dependency", path: "DEMO*" }],
+		});
+		assert.equal(result.risk, "medium");
+		assert.equal(result.behavior, "ask");
+	});
 });

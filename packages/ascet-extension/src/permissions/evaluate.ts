@@ -1,4 +1,4 @@
-import { findAscetPermissionRule } from "./rules.ts";
+import { findAscetPermissionRule, matchesAscetPermissionPath } from "./rules.ts";
 import type {
 	AscetPermissionDecision,
 	AscetPermissionEvaluationInput,
@@ -13,7 +13,8 @@ function classifyRisk(input: AscetPermissionEvaluationInput): AscetWriteRisk {
 		input.descriptor.baseRisk === "medium" ||
 		input.editableAcquisitionRequired ||
 		(input.targetCount ?? 1) > 1 ||
-		(input.variantCount ?? 1) > 1
+		(input.variantCount ?? 1) > 1 ||
+		input.impactUnknown === true
 	) {
 		return "medium";
 	}
@@ -25,7 +26,8 @@ function mediumRiskRequiresPrimaryAllow(input: AscetPermissionEvaluationInput): 
 		input.minimumRisk === "medium" ||
 		input.descriptor.baseRisk === "medium" ||
 		(input.targetCount ?? 1) > 1 ||
-		(input.variantCount ?? 1) > 1
+		(input.variantCount ?? 1) > 1 ||
+		input.impactUnknown === true
 	);
 }
 
@@ -44,14 +46,20 @@ export function evaluateAscetPermission(input: AscetPermissionEvaluationInput): 
 	if (!input.hardGatesPassed) {
 		return decision(input, "deny", risk, input.hardGateReason ?? "A mandatory ASCET safety gate failed.");
 	}
-	if (!input.evidenceComplete) {
-		return decision(input, "deny", risk, "Required ASCET safety evidence is incomplete.");
-	}
 	if (input.noOp) {
 		return decision(input, "allow", risk, "Authoritative preflight proved this operation is a no-op.");
 	}
 
 	const rules = input.rules ?? [];
+	const unresolvedDatabaseScope =
+		input.databaseFingerprint === undefined &&
+		rules.some(
+			(rule) =>
+				rule.databaseFingerprint !== undefined &&
+				(rule.action === "*" || rule.action === input.action) &&
+				(rule.path === undefined ||
+					(input.path !== undefined && matchesAscetPermissionPath(rule.path, input.path))),
+		);
 	const primaryRule = findAscetPermissionRule({
 		rules,
 		action: input.action,
@@ -69,6 +77,26 @@ export function evaluateAscetPermission(input: AscetPermissionEvaluationInput): 
 
 	const denyRule = [primaryRule, editabilityRule].find((rule) => rule?.behavior === "deny");
 	if (denyRule) return decision(input, "deny", risk, denyRule.reason, denyRule);
+
+	if (unresolvedDatabaseScope) {
+		return decision(
+			input,
+			"ask",
+			risk === "safe" ? "medium" : risk,
+			"Database-scoped ASCET permission rules exist, but the active database fingerprint is unavailable; explicit confirmation is required.",
+		);
+	}
+	if (!input.evidenceComplete && input.impactUnknown === true) {
+		return decision(
+			input,
+			"ask",
+			risk === "safe" ? "medium" : risk,
+			"ASCET write impact cannot be bounded before execution; explicit confirmation is required.",
+		);
+	}
+	if (!input.evidenceComplete) {
+		return decision(input, "deny", risk, "Required ASCET safety evidence is incomplete.");
+	}
 
 	if (input.mode === "default") {
 		return decision(input, "ask", risk, "Default mode requires confirmation for every actual ASCET write.");

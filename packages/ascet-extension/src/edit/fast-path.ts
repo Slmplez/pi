@@ -9,16 +9,16 @@ import { buildCreateMethodArgs } from "../create-method.ts";
 import { buildDeleteComponentArgs } from "../delete-component.ts";
 import { buildDeleteFolderArgs } from "../delete-folder.ts";
 import { buildDeleteMethodArgs } from "../delete-method.ts";
-import { normalizeAscetElementSpec, requiresExplicitProjectContext } from "../element-spec-contract.ts";
+import { normalizeAscetElementSpec } from "../element-spec-contract.ts";
 import { getAscetArtifactRoot } from "../observation-store.ts";
 import { evaluateAscetPermission } from "../permissions/evaluate.ts";
 import { type AscetPermissionSnapshot, resolveAscetPermissionSnapshot } from "../permissions/types.ts";
-import { buildSetElementDependencyArgs, resolveSetElementDependencyMappings } from "../set-element-dependency.ts";
+import { buildSetElementDependencyArgs } from "../set-element-dependency.ts";
 import { buildSetEnumeratorsArgs } from "../set-enumerators.ts";
 import { buildSetMethodCodeArgs } from "../set-method-code.ts";
 import { buildSetMethodSignatureArgs, createMethodSignatureSpec } from "../set-method-signature.ts";
 import { buildSetModuleCodeArgs } from "../set-module-code.ts";
-import { ASCET_SET_STATE_MACHINE_CODE_OPERATIONS, buildSetStateMachineCodeArgs } from "../set-state-machine-code.ts";
+import { buildSetStateMachineCodeArgs } from "../set-state-machine-code.ts";
 import { openAiObjectUnionSchema } from "../tools/_shared/openai-schema.ts";
 import { ascetMutationActionSchemas } from "../tools/actions/contracts/edit.ts";
 import type { AscetEditApprovalContext } from "./approval.ts";
@@ -26,6 +26,13 @@ import { requestAscetEditApproval } from "./approval.ts";
 import type { RunAscetEditOperationOptions } from "./common.ts";
 import { getAscetEditAction } from "./contract.ts";
 import { removeTemporaryElementSpec, writeTemporaryElementSpec } from "./element-spec-plan.ts";
+import type { AscetMutationResultEnvelope } from "./mutation-result.ts";
+import {
+	getAscetMutationPermissionEvidence,
+	normalizeAscetMutationParams,
+	validateAscetMutationParams,
+} from "./mutation-validation.ts";
+import { extractBridgeActionPayload, isCanonicalMutationSuccess } from "./result-contract.ts";
 import type { AscetMutationParams } from "./service.ts";
 
 type FastContext = AscetEditApprovalContext & { ascetPermission?: AscetPermissionSnapshot };
@@ -34,16 +41,11 @@ export interface FastMutationLifecycle {
 	beforeBridge: boolean;
 	bridgeEntered: boolean;
 	backendResponseReceived: boolean;
-	permission?: {
-		mode: "default" | "acceptEdits" | "auto";
-		decision: "allow" | "ask" | "deny" | "not_evaluated";
-		risk?: "safe" | "medium" | "high";
-		reason?: string;
-	};
+	permission?: AscetMutationResultEnvelope["permission"];
+	audit?: AscetMutationResultEnvelope["audit"];
 }
 
 const mutationSchema = openAiObjectUnionSchema<AscetMutationParams>(ascetMutationActionSchemas);
-const validStateMachineOperations = new Set<string>(ASCET_SET_STATE_MACHINE_CODE_OPERATIONS);
 
 function isRecord(value: unknown): value is Record<string, unknown> {
 	return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -73,29 +75,6 @@ function targetPath(params: AscetMutationParams): string | undefined {
 		case "set_element_dependency":
 			return params.targetPath ?? params.componentPath;
 	}
-}
-
-function normalizeParams(params: AscetMutationParams): AscetMutationParams {
-	if (
-		params.action === "create_component" &&
-		!params.language &&
-		(params.kind === "class" || params.kind === "module")
-	) {
-		return { ...params, language: "ESDL" };
-	}
-	if (params.action === "set_module_code" && !params.operation && params.section) {
-		return { ...params, operation: params.section };
-	}
-	if (params.action === "set_element_dependency") {
-		const resolvedTarget = params.targetPath ?? params.componentPath;
-		if (resolvedTarget)
-			return {
-				...params,
-				targetPath: resolvedTarget,
-				dependencyMappings: resolveSetElementDependencyMappings(params),
-			};
-	}
-	return params;
 }
 
 function invalid(message: string, code = "ascet_edit_invalid_parameter"): AscetCliJsonResult {
@@ -129,22 +108,42 @@ async function authorize(
 	const descriptor = getAscetEditAction(params.action)?.permission;
 	if (!descriptor) return undefined;
 	const snapshot = resolveAscetPermissionSnapshot(ctx);
+	const evidence = getAscetMutationPermissionEvidence(params);
+	const path = permissionPath(params);
+	const databaseFingerprintKnown = snapshot.databaseFingerprint !== undefined;
+	const databaseFingerprintSource =
+		snapshot.databaseFingerprintSource ?? (databaseFingerprintKnown ? "caller" : "unavailable");
+	lifecycle.audit = {
+		databaseFingerprintKnown,
+		databaseFingerprintSource,
+		...(snapshot.databaseFingerprint ? { databaseFingerprint: snapshot.databaseFingerprint } : {}),
+	};
 	const decision = evaluateAscetPermission({
 		mode: snapshot.mode,
 		action: params.action,
 		descriptor,
 		rules: snapshot.rules,
-		path: permissionPath(params),
+		path,
+		databaseFingerprint: snapshot.databaseFingerprint,
 		hardGatesPassed: true,
-		evidenceComplete: true,
-		targetCount: 1,
-		variantCount: 1,
+		evidenceComplete: evidence.evidenceComplete,
+		targetCount: evidence.targetCount,
+		variantCount: evidence.variantCount,
+		impactUnknown: evidence.impactUnknown,
 	});
 	lifecycle.permission = {
 		mode: snapshot.mode,
 		decision: decision.behavior,
 		risk: decision.risk,
 		reason: decision.reason,
+		rule: decision.rule,
+		...(path ? { path } : {}),
+		databaseFingerprintKnown,
+		databaseFingerprintSource,
+		evidenceComplete: evidence.evidenceComplete,
+		...(evidence.targetCount === undefined ? {} : { targetCount: evidence.targetCount }),
+		...(evidence.variantCount === undefined ? {} : { variantCount: evidence.variantCount }),
+		impactUnknown: evidence.impactUnknown,
 	};
 	if (decision.behavior === "deny") {
 		return invalid(decision.reason, "ascet_edit_permission_denied");
@@ -158,7 +157,10 @@ async function authorize(
 		},
 		ctx,
 	);
-	if (approval.approved) return undefined;
+	if (approval.approved) {
+		lifecycle.audit = { ...lifecycle.audit, approvedAt: approval.approvedAt };
+		return undefined;
+	}
 	return {
 		...invalid(approval.message),
 		error: { code: approval.code, message: approval.message },
@@ -297,10 +299,10 @@ async function dispatch(
 }
 
 function normalizeResult(raw: AscetCliJsonResult): AscetCliJsonResult {
-	if (!raw.ok) return raw;
-	const transport = isRecord(raw.data) ? raw.data : undefined;
-	const result = isRecord(transport?.result) ? transport.result : transport;
-	const payload = isRecord(result?.payload) ? result.payload : result;
+	const payload = extractBridgeActionPayload(raw.data);
+	if (!raw.ok) return payload ? { ...raw, data: payload } : raw;
+	if (payload && isCanonicalMutationSuccess(payload)) return { ...raw, data: payload };
+
 	const changed = payload?.changed;
 	const mutationStatus = payload?.mutationStatus;
 	const saveAttempted = payload?.saveAttempted;
@@ -313,36 +315,7 @@ function normalizeResult(raw: AscetCliJsonResult): AscetCliJsonResult {
 	const saveCount = payload?.saveCount;
 	const editableRetryCount = payload?.editableRetryCount;
 	const nativeMutationAttemptCount = payload?.nativeMutationAttemptCount;
-	const commonEvidenceComplete =
-		verified === true &&
-		verificationStatus === "passed" &&
-		typeof verificationMode === "string" &&
-		verificationMode.length > 0 &&
-		sessionCount === 1 &&
-		typeof editableRetryCount === "number" &&
-		editableRetryCount >= 0 &&
-		editableRetryCount <= 1 &&
-		typeof nativeMutationAttemptCount === "number" &&
-		nativeMutationAttemptCount >= 0;
-	const appliedEvidenceComplete =
-		mutationStatus === "applied" &&
-		changed === true &&
-		saveAttempted === true &&
-		saveSucceeded === true &&
-		saveState === "saved" &&
-		saveCount === 1 &&
-		nativeMutationAttemptCount === 1;
-	const noOpEvidenceComplete =
-		mutationStatus === "no_op" &&
-		changed === false &&
-		saveAttempted === false &&
-		saveSucceeded === false &&
-		saveState === "not_required" &&
-		saveCount === 0 &&
-		nativeMutationAttemptCount === 0;
-	if (commonEvidenceComplete && (appliedEvidenceComplete || noOpEvidenceComplete)) return raw;
-
-	const saveFailed = (mutationStatus === "applied" && saveSucceeded === false) || saveState === "failed";
+	const saveFailed = saveState === "failed" || (saveAttempted === true && saveSucceeded === false);
 	const verificationFailed = verified === false || verificationStatus === "failed";
 	const saveEvidenceMissing =
 		mutationStatus === "applied" &&
@@ -357,6 +330,7 @@ function normalizeResult(raw: AscetCliJsonResult): AscetCliJsonResult {
 	return {
 		...raw,
 		ok: false,
+		data: payload ?? null,
 		error: {
 			code,
 			message:
@@ -389,24 +363,16 @@ export async function runAscetFastMutation(
 	ctx: FastContext,
 	lifecycle: FastMutationLifecycle,
 ): Promise<AscetCliJsonResult> {
-	const params = normalizeParams(input);
-	if (!Value.Check(mutationSchema, params)) return invalid("Invalid parameters for ascet_edit action.");
-	if (params.intent !== "apply")
+	if (!isRecord(input) || input.intent !== "apply") {
 		return invalid(
-			"intent=preview is retired for ascet_edit writes; use intent=apply for the direct Bridge fast path.",
-		);
-	if (
-		params.action === "apply_element_spec" &&
-		!params.projectPath &&
-		requiresExplicitProjectContext(params.elements)
-	) {
-		return invalid(
-			"projectPath is required when apply_element_spec uses a non-ident implementation formula.",
-			"ascet_edit_project_context_required",
+			"intent=apply is required for ascet_edit writes; use mode=check for read-only editability inspection.",
 		);
 	}
-	if (params.action === "set_state_machine_code" && !validStateMachineOperations.has(params.operation))
-		return invalid("Unknown state-machine write operation.");
+	if (!Value.Check(mutationSchema, input)) return invalid("Invalid parameters for ascet_edit action.");
+	const params = normalizeAscetMutationParams(input);
+	if (!Value.Check(mutationSchema, params)) return invalid("Invalid parameters for ascet_edit action.");
+	const validationError = validateAscetMutationParams(params, { cwd: options.cwd });
+	if (validationError) return invalid(validationError.message, validationError.code);
 	const blocked = await authorize(params, options, ctx, lifecycle);
 	if (blocked) return blocked;
 	return normalizeResult(

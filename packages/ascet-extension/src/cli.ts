@@ -635,12 +635,16 @@ function requireBridgeResponseEnvelope(parsed: ParseJsonResult, required: boolea
 	return { ok: false, message: "ASCET Bridge produced JSON that is not a valid protocolVersion=1 response envelope." };
 }
 
-function getBridgeMutationStarted(execution: AscetCliExecutionResult): boolean | null | undefined {
+function getBridgeResponseEnvelope(execution: AscetCliExecutionResult): Record<string, unknown> | undefined {
 	const parsed = parseJson(execution.stdout);
-	if (isParseJsonFailure(parsed) || !isBridgeResponseEnvelope(parsed.data)) {
-		return undefined;
-	}
-	const envelope = parsed.data as Record<string, unknown>;
+	return !isParseJsonFailure(parsed) && isBridgeResponseEnvelope(parsed.data)
+		? (parsed.data as Record<string, unknown>)
+		: undefined;
+}
+
+function getBridgeMutationStarted(execution: AscetCliExecutionResult): boolean | null | undefined {
+	const envelope = getBridgeResponseEnvelope(execution);
+	if (!envelope) return undefined;
 	const meta = envelope.meta as Record<string, unknown>;
 	return typeof meta.mutationStarted === "boolean" || meta.mutationStarted === null ? meta.mutationStarted : undefined;
 }
@@ -911,7 +915,7 @@ export async function runAscetCliJson(args: string[], options: RunAscetCliJsonOp
 			await health.flush();
 			return {
 				ok: false,
-				data: null,
+				data: getBridgeResponseEnvelope(failedExecution) ?? null,
 				request: createAscetCliRequestData(failedExecution.request),
 				stdout: failedExecution.stdout,
 				stderr: failedExecution.stderr,

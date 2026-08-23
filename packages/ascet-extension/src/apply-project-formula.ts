@@ -26,7 +26,7 @@ export const ascetApplyProjectFormulaParameters = Type.Object({
 	specFile: Type.String({ description: "Path to project formula spec JSON file.", minLength: 1 }),
 	mode: Type.Optional(Type.Literal("restore")),
 	deleteMissing: Type.Optional(Type.Boolean()),
-	intent: Type.Union([Type.Literal("preview"), Type.Literal("apply")]),
+	intent: Type.Literal("apply"),
 });
 
 export function buildApplyProjectFormulaArgs(params: AscetApplyProjectFormulaParams): string[] {

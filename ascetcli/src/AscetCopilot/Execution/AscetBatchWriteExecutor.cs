@@ -345,9 +345,15 @@ public sealed class AscetBatchWriteExecutor : IAscetBatchWriteExecutor
 
             if (!writeResult.Succeeded)
             {
+                AscetStructuredErrorDto error = CreateWriteError(writeResult.Error, operationId);
+                bool mutationStarted = writeResult.WriteSucceeded;
                 result.ok = false;
-                result.result = null;
-                result.error = CreateWriteError(writeResult.Error, operationId);
+                result.result = AscetCanonicalWriteResult.NormalizeFailure(
+                    writeResult.Payload,
+                    mutationStarted,
+                    error.code,
+                    error.message);
+                result.error = error;
                 return result;
             }
 
@@ -725,19 +731,21 @@ public sealed class AscetBatchWriteExecutor : IAscetBatchWriteExecutor
 
     private static Dictionary<string, object> BuildWriteResultPayload(AscetWriteExecutionResult result)
     {
-        Dictionary<string, object> payload = new Dictionary<string, object>(StringComparer.Ordinal);
+        WriteVerificationResult verification = result == null ? null : result.Verification;
+        Dictionary<string, object> actionPayload = result == null
+            ? new Dictionary<string, object>(StringComparer.Ordinal)
+            : CloneDictionary(result.Payload);
+
+        NormalizeWritePayload(result == null ? String.Empty : result.OperationName, actionPayload, result != null && result.WriteSucceeded, verification);
+        Dictionary<string, object> payload = AscetCanonicalWriteResult.NormalizeSuccess(
+            actionPayload,
+            result != null && result.WriteSucceeded,
+            verification != null && verification.Requested,
+            verification != null && verification.Attempted && verification.Succeeded);
         payload["operationName"] = result == null ? String.Empty : (result.OperationName ?? String.Empty);
         payload["sequenceNumber"] = result == null ? 0L : result.SequenceNumber;
         payload["writeSucceeded"] = result != null && result.WriteSucceeded;
         payload["summary"] = result == null ? String.Empty : (result.Summary ?? String.Empty);
-
-        WriteVerificationResult verification = result == null ? null : result.Verification;
-        Dictionary<string, object> nestedPayload = result == null
-            ? new Dictionary<string, object>(StringComparer.Ordinal)
-            : CloneDictionary(result.Payload);
-
-        NormalizeWritePayload(result == null ? String.Empty : result.OperationName, nestedPayload, result != null && result.WriteSucceeded, verification);
-        payload["payload"] = nestedPayload;
         payload["verification"] = BuildVerificationPayload(verification);
         return payload;
     }

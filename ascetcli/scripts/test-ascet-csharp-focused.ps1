@@ -1,11 +1,14 @@
-﻿# Compile and run one focused ASCET C# runtime test against the production source closure.
+# Compile and run one focused ASCET C# runtime test against the production source closure.
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $true)]
     [string]$TestSource,
 
     [Parameter(Mandatory = $true)]
-    [string]$MainType
+    [string]$MainType,
+
+    [Parameter(Mandatory = $false)]
+    [string[]]$AdditionalSource = @()
 )
 
 $ErrorActionPreference = 'Stop'
@@ -168,6 +171,7 @@ function Invoke-FocusedExecutable {
     $startInfo.CreateNoWindow = $true
     $startInfo.RedirectStandardOutput = $true
     $startInfo.RedirectStandardError = $true
+    $startInfo.EnvironmentVariables["ASCET_REPOSITORY_ROOT"] = (Join-Path $RepositoryRoot 'ascetcli')
 
     $process = New-Object System.Diagnostics.Process
     $process.StartInfo = $startInfo
@@ -273,6 +277,7 @@ try {
     Assert-AscetToolchain
     $resolvedTestSource = Resolve-RequiredTestSource -Path $TestSource
     $resolvedMainType = Resolve-MainType -TypeName $MainType
+    $resolvedAdditionalSources = @($AdditionalSource | ForEach-Object { Resolve-RequiredTestSource -Path $_ })
     $productionSources = Get-FocusedProductionSources
     Assert-FocusedProductionSourceClosure -Sources $productionSources
 
@@ -287,7 +292,7 @@ try {
     $outputPath = Join-Path $FocusedTempRoot ($resolvedMainType.Split('.')[-1] + '.exe')
     Assert-PathInsideDirectory -Path $outputPath -ParentDirectory $FocusedTempRoot
 
-    $sources = @($productionSources + $resolvedTestSource)
+    $sources = @($productionSources + $resolvedTestSource + $resolvedAdditionalSources)
     Invoke-AscetCsc `
         -OutputPath $outputPath `
         -MainType $resolvedMainType `

@@ -12,6 +12,7 @@ export type AscetVerificationStatus = "passed" | "failed" | "missing" | "unknown
 export type AscetSaveState = "saved" | "not_required" | "failed" | "unknown";
 
 export interface AscetMutationResultEnvelope {
+	outcome?: "succeeded" | "failed";
 	status: AscetMutationEnvelopeStatus;
 	changed?: boolean;
 	mutationStatus: AscetMutationStatus;
@@ -19,6 +20,7 @@ export interface AscetMutationResultEnvelope {
 	saveSucceeded?: boolean;
 	saveState?: AscetSaveState;
 	verified?: boolean;
+	verificationStatus?: AscetVerificationStatus;
 	verificationMode?: string;
 	sessionCount?: number;
 	saveCount?: number;
@@ -30,6 +32,13 @@ export interface AscetMutationResultEnvelope {
 		risk?: AscetWriteRisk;
 		reason?: string;
 		rule?: AscetPermissionRuleMatch;
+		path?: string;
+		databaseFingerprintKnown?: boolean;
+		databaseFingerprintSource?: "session" | "bridge" | "caller" | "unavailable";
+		evidenceComplete?: boolean;
+		targetCount?: number;
+		variantCount?: number;
+		impactUnknown?: boolean;
 	};
 	preflight: {
 		status: "passed" | "failed" | "not_run";
@@ -49,6 +58,9 @@ export interface AscetMutationResultEnvelope {
 		revalidatedAt?: string;
 		preflightFingerprint?: string;
 		approvalMaterialFingerprint?: string;
+		databaseFingerprint?: string;
+		databaseFingerprintKnown?: boolean;
+		databaseFingerprintSource?: "session" | "bridge" | "caller" | "unavailable";
 	};
 	bridge: {
 		beforeBridge: boolean;

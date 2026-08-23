@@ -2,7 +2,7 @@ import { Type } from "typebox";
 import type { AscetCliJsonResult } from "./cli.ts";
 import type { AscetToolContext } from "./core/tool.ts";
 import type { RunAscetEditOperationOptions } from "./edit/common.ts";
-import { type AscetEditResult, type AscetEditParams as LegacyAscetEditParams, runAscetEdit } from "./edit/service.ts";
+import { type AscetEditResult, type AscetLegacyMutationParams, runAscetEdit } from "./edit/service.ts";
 import {
 	createDependentChainOutput,
 	readAscetDatabaseFingerprint,
@@ -61,7 +61,7 @@ export const ascetSetDependentChainActionSchema = Type.Object(
 );
 
 type JsonRecord = Record<string, unknown>;
-type DependencyMutation = Extract<LegacyAscetEditParams, { action: "set_element_dependency" }>;
+type DependencyMutation = Extract<AscetLegacyMutationParams, { action: "set_element_dependency" }>;
 type ExecuteAscetEdit = typeof runAscetEdit;
 
 export async function runAscetSetDependentChain(

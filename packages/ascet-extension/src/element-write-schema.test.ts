@@ -43,7 +43,7 @@ test("apply_element_spec standalone schema rejects unsupported write-control fie
 			action: "apply_element_spec",
 			componentPath: "DEMO/PID",
 			elementIntent: "create",
-			intent: "preview",
+			intent: "apply",
 			elements: [],
 			dryRun: true,
 		}),
@@ -54,7 +54,7 @@ test("apply_element_spec standalone schema rejects unsupported write-control fie
 			action: "apply_element_spec",
 			componentPath: "DEMO/PID",
 			elementIntent: "create",
-			intent: "preview",
+			intent: "apply",
 			elements: [],
 			verifyReadback: true,
 		}),
@@ -64,7 +64,7 @@ test("apply_element_spec standalone schema rejects unsupported write-control fie
 		Value.Check(ascetApplyElementSpecParameters, {
 			componentPath: "DEMO/PID",
 			elementIntent: "create",
-			intent: "preview",
+			intent: "apply",
 			elements: [],
 			backupDir: "backup",
 		}),
@@ -99,7 +99,7 @@ test("standalone write schemas continue accepting supported requests", () => {
 			action: "apply_element_spec",
 			componentPath: "DEMO/PID",
 			elementIntent: "create",
-			intent: "preview",
+			intent: "apply",
 			elements: [{ role: "standardPrimitive", name: "P", kind: "parameter", modelType: "cont", scope: "local" }],
 		}),
 		true,
@@ -113,7 +113,7 @@ test("standalone write schemas continue accepting supported requests", () => {
 			dependencyMappings: { P_Input: { kind: "parameter", name: "P_Input" } },
 			variantPolicy: "default",
 			targetKind: "component",
-			intent: "preview",
+			intent: "apply",
 		}),
 		true,
 	);
@@ -135,7 +135,7 @@ test("apply_element_spec uses strict role-discriminated element schemas", () => 
 			action: "apply_element_spec",
 			componentPath: "DEMO/PID",
 			elementIntent: "create",
-			intent: "preview",
+			intent: "apply",
 			elements: validRoles,
 		}),
 		true,
@@ -156,7 +156,7 @@ test("apply_element_spec uses strict role-discriminated element schemas", () => 
 				action: "apply_element_spec",
 				componentPath: "DEMO/PID",
 				elementIntent: "create",
-				intent: "preview",
+				intent: "apply",
 				elements: [invalidElement],
 			}),
 			false,
@@ -222,7 +222,7 @@ test("apply_element_spec rejects public commit controls and patch accepts partia
 			action: "apply_element_spec",
 			componentPath: "DEMO/PID",
 			elementIntent: "create",
-			intent: "preview",
+			intent: "apply",
 			elements: [],
 			dataTarget: { mode: "named", name: "NotSupported" },
 		}),
@@ -232,7 +232,7 @@ test("apply_element_spec rejects public commit controls and patch accepts partia
 		Value.Check(ascetApplyElementSpecParameters, {
 			action: "apply_element_spec",
 			elementIntent: "patch",
-			intent: "preview",
+			intent: "apply",
 			componentPath: "DEMO/PID",
 			elements: [{ name: "P", comment: "Updated" }],
 		}),
@@ -242,7 +242,7 @@ test("apply_element_spec rejects public commit controls and patch accepts partia
 		Value.Check(ascetApplyElementSpecParameters, {
 			action: "apply_element_spec",
 			elementIntent: "patch",
-			intent: "preview",
+			intent: "apply",
 			componentPath: "DEMO/PID",
 			elements: [{ role: "consumerImportedParameter", name: "P", data: { value: 1 } }],
 		}),
@@ -252,7 +252,7 @@ test("apply_element_spec rejects public commit controls and patch accepts partia
 		Value.Check(ascetApplyElementSpecParameters, {
 			action: "apply_element_spec",
 			elementIntent: "patch",
-			intent: "preview",
+			intent: "apply",
 			componentPath: "DEMO/PID",
 			elements: [{ role: "consumerImportedParameter", name: "P", comment: "unsupported" }],
 		}),
@@ -312,7 +312,7 @@ test("set_element_dependency supports deterministic autoExactName with explicit 
 		dependencyFormals: ["A", "B"],
 		bindingPolicy: "autoExactName" as const,
 		variantPolicy: "default" as const,
-		intent: "preview" as const,
+		intent: "apply" as const,
 	};
 	assert.equal(Value.Check(ascetSetElementDependencyParameters, params), true);
 	const args = buildSetElementDependencyArgs(params);
@@ -371,5 +371,20 @@ test("requiresExplicitProjectContext distinguishes identity from custom formulas
 			},
 		]),
 		true,
+	);
+});
+
+test("apply_element_spec rejects accepted-but-ignored target selectors", () => {
+	const base = {
+		action: "apply_element_spec",
+		componentPath: "DEMO/PID",
+		elementIntent: "patch",
+		intent: "apply",
+		elements: [{ name: "P", comment: "Updated" }],
+	};
+	assert.equal(Value.Check(ascetApplyElementSpecParameters, { ...base, dataTarget: { mode: "default" } }), false);
+	assert.equal(
+		Value.Check(ascetApplyElementSpecParameters, { ...base, implementationTarget: { mode: "default" } }),
+		false,
 	);
 });

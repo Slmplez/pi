@@ -38,6 +38,7 @@ export function createAscetEditApprovalResultData(approval: AscetEditApprovalFai
 
 export function isAscetEditApprovalBlockedCode(code: string): boolean {
 	return (
+		code === "ascet_edit_permission_denied" ||
 		code.endsWith("_approval_required") ||
 		code.endsWith("_confirmation_not_granted") ||
 		code.endsWith("_operation_aborted_before_write") ||

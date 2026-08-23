@@ -41,7 +41,7 @@ export interface RunAscetEditOperationOptions {
 
 export interface AscetEditControlParams {
 	verifyReadback?: boolean;
-	intent?: "preview" | "apply";
+	intent?: "apply";
 }
 
 export interface AscetObservationInvalidation {
@@ -160,12 +160,12 @@ export async function runApprovedAscetEditOperation<TParams extends AscetEditCon
 	title = "Confirm ASCET edit",
 	errorPrefix: AscetEditErrorPrefix = "ascet_edit",
 ): Promise<AscetCliJsonResult> {
-	if ((params.intent ?? "preview") !== "apply") {
+	if (params.intent !== "apply") {
 		return createBlockedEditResult(operation, params, options, buildArgs, summary, {
 			approved: false,
 			code: `${errorPrefix}_approval_required`,
 			message:
-				"Use the guarded public ascet_edit call with intent=preview for authoritative non-mutating preflight.",
+				"intent=apply is required for ascet_edit writes; use mode=check for read-only editability inspection.",
 		});
 	}
 	const approval = await requestAscetEditApproval(

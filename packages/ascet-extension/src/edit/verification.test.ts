@@ -17,22 +17,18 @@ function createRawResult(overrides: Partial<AscetCliJsonResult>): AscetCliJsonRe
 }
 
 describe("ASCET edit verification", () => {
-	test("extracts case-insensitive nested readback booleans", () => {
-		assert.deepEqual(
-			extractAscetEditVerification({
-				result: {
-					VerifyReadbackRequested: true,
-					payload: [{ READBACKVERIFIED: true }],
-				},
-			}),
-			{
-				mode: "automatic_readback",
-				source: "write_command",
-				required: true,
-				requested: true,
-				verified: true,
-				status: "passed",
-			},
+	test("reads only exact top-level readback booleans", () => {
+		assert.deepEqual(extractAscetEditVerification({ verifyReadbackRequested: true, readbackVerified: true }), {
+			mode: "automatic_readback",
+			source: "write_command",
+			required: true,
+			requested: true,
+			verified: true,
+			status: "passed",
+		});
+		assert.equal(
+			extractAscetEditVerification({ result: { verifyReadbackRequested: true, readbackVerified: true } }).status,
+			"missing",
 		);
 	});
 
@@ -58,7 +54,7 @@ describe("ASCET edit verification", () => {
 		const classification = classifyAscetEditExecution(
 			createRawResult({
 				ok: true,
-				data: { result: { verifyReadbackRequested: true, readbackVerified: true } },
+				data: { verifyReadbackRequested: true, readbackVerified: true },
 				exitCode: 0,
 			}),
 		);
@@ -72,7 +68,7 @@ describe("ASCET edit verification", () => {
 		const classification = classifyAscetEditExecution(
 			createRawResult({
 				ok: true,
-				data: { result: { verifyReadbackRequested: true, readbackVerified: false } },
+				data: { verifyReadbackRequested: true, readbackVerified: false },
 				exitCode: 0,
 			}),
 		);
@@ -84,7 +80,7 @@ describe("ASCET edit verification", () => {
 
 	test("classifies a successful write without proof as applied and missing", () => {
 		const classification = classifyAscetEditExecution(
-			createRawResult({ ok: true, data: { result: { writeSucceeded: true } }, exitCode: 0 }),
+			createRawResult({ ok: true, data: { writeSucceeded: true }, exitCode: 0 }),
 		);
 
 		assert.equal(classification.mutationStatus, "applied");
@@ -131,7 +127,7 @@ describe("ASCET edit verification", () => {
 				error: {
 					code: "ascet_cli_failed",
 					message: "write was not dispatched",
-					details: { nested: { REQUIRESREADBACK: false } },
+					details: { requiresReadback: false },
 				},
 			}),
 		);
@@ -158,10 +154,8 @@ describe("ASCET edit verification", () => {
 			createRawResult({
 				ok: true,
 				data: {
-					result: {
-						status: "rolled_back",
-						rollback: { required: true, status: "passed", verified: true },
-					},
+					status: "rolled_back",
+					rollback: { required: true, status: "passed", verified: true },
 				},
 				exitCode: 0,
 			}),

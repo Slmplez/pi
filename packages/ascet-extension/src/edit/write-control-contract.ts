@@ -1,11 +1,11 @@
 import { Type } from "typebox";
 
-export type AscetMutationIntent = "preview" | "apply";
+export type AscetPublicMutationIntent = "apply";
 
 export interface AscetPublicWriteControl {
-	intent: AscetMutationIntent;
+	intent: AscetPublicMutationIntent;
 }
 
-export const ascetWriteControlProperties = {
-	intent: Type.Union([Type.Literal("preview"), Type.Literal("apply")]),
+export const ascetPublicWriteControlProperties = {
+	intent: Type.Literal("apply"),
 };

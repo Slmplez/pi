@@ -209,13 +209,129 @@ describe("ASCET action contracts", () => {
 		);
 	});
 
-	test("accepts dependency-chain preview before readback verification", () => {
+	test("requires verified dependency-chain write results", () => {
 		const contract = getAscetActionContract("ascet_edit", "create_dependent_chain");
 		assert.ok(contract);
-		assert.equal(Value.Check(contract.result, { ok: true, changed: true, effects: [] }), true);
-		assert.equal(Value.Check(contract.result, { ok: true, changed: true, verified: true }), true);
-		assert.equal(Value.Check(contract.result, { ok: false, code: "element_conflict", target: "local" }), true);
-		assert.equal(Value.Check(contract.result, { ok: false, code: "rolled_back" }), true);
+		const applied = {
+			outcome: "succeeded",
+			status: "ok",
+			changed: true,
+			mutationStatus: "applied",
+			saveAttempted: true,
+			saveSucceeded: true,
+			saveState: "saved",
+			verified: true,
+			verificationStatus: "passed",
+			verificationMode: "same_session_dependency_endpoints",
+			sessionCount: 1,
+			saveCount: 1,
+			editableRetryCount: 0,
+			nativeMutationAttemptCount: 1,
+			permission: { mode: "default", decision: "ask" },
+			preflight: { status: "not_run" },
+			editability: { status: "not_applicable" },
+			mutation: { status: "applied" },
+			verification: { status: "passed" },
+			bridge: { beforeBridge: true, bridgeEntered: true, backendResponseReceived: true },
+			recovery: { required: false, actions: [] },
+		};
+		assert.equal(Value.Check(contract.result, applied), true);
+		assert.equal(Value.Check(contract.result, { ...applied, verified: false }), false);
+		assert.equal(
+			Value.Check(contract.result, { error: { code: "element_conflict", message: "Element conflict." } }),
+			false,
+		);
+	});
+
+	test("keeps every public ascet_edit mutation apply-only", () => {
+		const contracts = listAscetActionContractsForTool("ascet_edit").filter(
+			(contract) => contract.action !== "check" && contract.action !== "set",
+		);
+		assert.equal(contracts.length, 15);
+		for (const contract of contracts) {
+			const example = contract.guidance?.fewShots?.[0]?.args;
+			assert.ok(example, contract.action);
+			assert.equal(Value.Check(contract.parameters, example), true, `${contract.action}: apply example`);
+			assert.equal(
+				Value.Check(contract.parameters, { ...example, intent: "preview" }),
+				false,
+				`${contract.action}: preview`,
+			);
+			assert.equal(
+				Value.Check(contract.result, { error: { code: "write_rejected", message: "Rejected." } }),
+				false,
+				`${contract.action}: mutation errors require canonical evidence`,
+			);
+		}
+	});
+
+	test("requires the strict SCM envelope for mode=set failures", () => {
+		const contract = getAscetActionContract("ascet_edit", "set");
+		assert.ok(contract);
+		assert.equal(Value.Check(contract.result, { error: { code: "write_rejected", message: "Rejected." } }), false);
+		assert.equal(
+			Value.Check(contract.result, {
+				outcome: "failed",
+				editable: null,
+				beforeEditable: null,
+				afterEditable: null,
+				changed: false,
+				mutationStatus: "not_started",
+				saveAttempted: false,
+				saveSucceeded: false,
+				saveState: "not_applicable",
+				verified: false,
+				verificationStatus: "not_applicable",
+				verificationMode: "same_session_scm_state",
+				sessionCount: 0,
+				saveCount: 0,
+				nativeMutationAttemptCount: 0,
+				nativeScmOperationCount: 0,
+				nativeOperations: [],
+				error: { code: "write_rejected", message: "Rejected." },
+				recovery: { required: false, actions: [] },
+			}),
+			true,
+		);
+	});
+
+	test("uses an operation-discriminated state-machine write schema", () => {
+		const contract = getAscetActionContract("ascet_edit", "set_state_machine_code");
+		assert.ok(contract);
+		assert.equal(
+			Value.Check(contract.parameters, {
+				action: "set_state_machine_code",
+				stateMachinePath: "DEMO/StateMachine",
+				operation: "set-start-state",
+				stateName: "Idle",
+				intent: "apply",
+			}),
+			true,
+		);
+		assert.equal(
+			Value.Check(contract.parameters, {
+				action: "set_state_machine_code",
+				stateMachinePath: "DEMO/StateMachine",
+				operation: "set-start-state",
+				stateName: "Idle",
+				methodName: "irrelevant",
+				intent: "apply",
+			}),
+			false,
+		);
+		assert.equal(
+			Value.Check(contract.parameters, {
+				action: "set_state_machine_code",
+				stateMachinePath: "DEMO/StateMachine",
+				operation: "bind-transition-action-method",
+				sourceState: "Idle",
+				targetState: "Run",
+				priority: 1.5,
+				methodName: "onRun",
+				intent: "apply",
+			}),
+			false,
+		);
 	});
 
 	test("validates normalized Agent content against the selected result Contract", () => {

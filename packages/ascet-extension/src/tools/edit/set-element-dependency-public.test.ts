@@ -1,4 +1,4 @@
-﻿import assert from "node:assert/strict";
+import assert from "node:assert/strict";
 import { test } from "node:test";
 import type { AscetCliExecutionResult, AscetCliRequest } from "../../cli.ts";
 import { ascetEditTool } from "./definition.ts";
@@ -12,8 +12,9 @@ test("ascet_edit exposes set_element_dependency and routes one direct Bridge ope
 			targetPath: "FeatureA/Consumer",
 			elementName: "C_Threshold",
 			dependency: "dependent",
-			dependencyFormula: "P_Threshold",
-			dependencyMappings: { P_Threshold: "P_Threshold" },
+			dependencyFormula: "x",
+			dependencyMappings: { x: "P_Threshold" },
+			variantPolicy: "default",
 			intent: "apply",
 		},
 		new AbortController().signal,
@@ -29,6 +30,7 @@ test("ascet_edit exposes set_element_dependency and routes one direct Bridge ope
 					stdout: JSON.stringify({
 						ok: true,
 						result: {
+							outcome: "succeeded",
 							changed: true,
 							mutationStatus: "applied",
 							saveAttempted: true,

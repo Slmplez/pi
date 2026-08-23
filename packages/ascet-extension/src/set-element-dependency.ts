@@ -128,7 +128,7 @@ export const ascetSetElementDependencyParameters = Type.Object(
 		match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("all")])),
 		dryRun: Type.Optional(Type.Boolean({ description: "Plan the write without importing patched XML." })),
 		backupDir: Type.Optional(Type.String({ description: "Directory for dependency write backups.", minLength: 1 })),
-		intent: Type.Union([Type.Literal("preview"), Type.Literal("apply")]),
+		intent: Type.Literal("apply"),
 	},
 	{ additionalProperties: false },
 );

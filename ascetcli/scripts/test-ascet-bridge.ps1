@@ -185,6 +185,7 @@ try {
     $tests = @(
         @{ Name = 'AscetOperationRegistrySmoke'; Source = (Get-RepoPath 'tests\AscetOperationRegistrySmoke.cs') },
         @{ Name = 'AscetBridgeAdapterSmoke'; Source = (Get-RepoPath 'tests\AscetBridgeAdapterSmoke.cs') },
+        @{ Name = 'AscetCanonicalWriteProtocolTest'; Source = (Get-RepoPath 'tests\AscetCanonicalWriteProtocolTest.cs'); AdditionalSources = @((Get-RepoPath 'src\AscetCli\Host\AscetWriteHostCapabilityService.cs'), (Get-RepoPath 'src\AscetCli\Host\AscetWriteHostDispatcher.cs')) },
         @{ Name = 'AscetDatabaseCatalogContractTest'; Source = (Get-RepoPath 'tests\AscetDatabaseCatalogContractTest.cs') },
         @{ Name = 'AscetTargetResolverContractTest'; Source = (Get-RepoPath 'tests\AscetTargetResolverContractTest.cs') },
         @{ Name = 'AscetElementMutationTransactionTest'; Source = (Get-RepoPath 'tests\AscetElementMutationTransactionTest.cs') },
@@ -198,7 +199,8 @@ try {
     )
     foreach ($test in $tests) {
         $testPath = Join-Path $testDirectory ($test.Name + '.exe')
-        Invoke-AscetCsc -OutputPath $testPath -MainType $test.Name -Sources ($sources + @($test.Source)) -References (Get-AscetReferences -IncludeWebExtensions)
+        $additionalSources = if ($null -eq $test.AdditionalSources) { @() } else { @($test.AdditionalSources) }
+        Invoke-AscetCsc -OutputPath $testPath -MainType $test.Name -Sources ($sources + @($test.Source) + $additionalSources) -References (Get-AscetReferences -IncludeWebExtensions)
         Invoke-CompiledExecutable -Path $testPath
     }
 }

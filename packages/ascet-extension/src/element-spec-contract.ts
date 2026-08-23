@@ -1,5 +1,5 @@
 import { type TProperties, Type } from "typebox";
-import { type AscetPublicWriteControl, ascetWriteControlProperties } from "./edit/write-control-contract.ts";
+import { type AscetPublicWriteControl, ascetPublicWriteControlProperties } from "./edit/write-control-contract.ts";
 import {
 	type ascetApplyElementIntentValues,
 	ascetElementKindValues,
@@ -67,21 +67,12 @@ export interface AscetLocalDependentParameterCreateInput {
 	range: AscetParameterRangeDecision;
 	implementation: AscetParameterImplementationDecision;
 }
-export interface AscetDataTarget {
-	mode: "default";
-}
-export interface AscetImplementationTarget {
-	mode: "default";
-}
-
 export interface AscetApplyElementPlanParams extends AscetPublicWriteControl {
 	action: "apply_element_spec";
 	componentPath: string;
 	elementIntent: AscetApplyElementIntent;
 	elements: AscetElementInput[];
 	projectPath?: string;
-	dataTarget?: AscetDataTarget;
-	implementationTarget?: AscetImplementationTarget;
 	deleteMissing?: boolean;
 	recreateIncompatible?: boolean;
 }
@@ -321,40 +312,35 @@ const rolePatchSchemas = [
 
 export const ascetElementPatchSchema = Type.Union([genericElementPatchSchema, ...rolePatchSchemas]);
 
-export const ascetDataTargetSchema = Type.Union([strictObject({ mode: Type.Literal("default") })]);
-export const ascetImplementationTargetSchema = Type.Union([strictObject({ mode: Type.Literal("default") })]);
-
 const planCommonProperties = {
 	action: Type.Literal("apply_element_spec"),
 	componentPath: Type.String({ minLength: 1 }),
 	projectPath: Type.Optional(Type.String({ minLength: 1 })),
-	dataTarget: Type.Optional(ascetDataTargetSchema),
-	implementationTarget: Type.Optional(ascetImplementationTargetSchema),
 	deleteMissing: Type.Optional(Type.Boolean()),
 	recreateIncompatible: Type.Optional(Type.Boolean()),
-	...ascetWriteControlProperties,
+	...ascetPublicWriteControlProperties,
 };
 
 export const ascetApplyElementSpecPlanSchema = Type.Union([
 	strictObject({
 		...planCommonProperties,
 		elementIntent: Type.Literal("create"),
-		elements: Type.Array(ascetElementCreateSchema),
+		elements: Type.Array(ascetElementCreateSchema, { minItems: 1 }),
 	}),
 	strictObject({
 		...planCommonProperties,
 		elementIntent: Type.Literal("patch"),
-		elements: Type.Array(ascetElementPatchSchema),
+		elements: Type.Array(ascetElementPatchSchema, { minItems: 1 }),
 	}),
 	strictObject({
 		...planCommonProperties,
 		elementIntent: Type.Literal("upsert"),
-		elements: Type.Array(Type.Union([ascetElementCreateSchema, ascetElementPatchSchema])),
+		elements: Type.Array(Type.Union([ascetElementCreateSchema, ascetElementPatchSchema]), { minItems: 1 }),
 	}),
 	strictObject({
 		...planCommonProperties,
 		elementIntent: Type.Literal("restore"),
-		elements: Type.Array(ascetElementCreateSchema),
+		elements: Type.Array(ascetElementCreateSchema, { minItems: 1 }),
 	}),
 ]);
 

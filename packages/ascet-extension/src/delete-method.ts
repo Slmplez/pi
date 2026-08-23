@@ -25,7 +25,7 @@ export const ascetDeleteMethodParameters = Type.Object({
 	componentPath: Type.String({ description: "ASCET component path.", minLength: 1 }),
 	methodName: Type.String({ description: "ASCET method name to delete.", minLength: 1 }),
 	ifMissing: ifMissingSchema,
-	intent: Type.Union([Type.Literal("preview"), Type.Literal("apply")]),
+	intent: Type.Literal("apply"),
 });
 
 export function buildDeleteMethodArgs(params: AscetDeleteMethodParams): string[] {

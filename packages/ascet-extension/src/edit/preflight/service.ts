@@ -1,6 +1,6 @@
 import type { RunAscetEditOperationOptions } from "../common.ts";
 import type { AscetEditActionId } from "../contract.ts";
-import type { AscetMutationParams } from "../service.ts";
+import type { AscetLegacyMutationParams } from "../service.ts";
 import { createAscetApprovalMaterialFingerprint, fingerprintAscetValue } from "./fingerprint.ts";
 import type {
 	AscetMutationPreflightEvidence,
@@ -10,7 +10,7 @@ import type {
 } from "./types.ts";
 
 export interface AscetMutationPreflightContext {
-	params: AscetMutationParams;
+	params: AscetLegacyMutationParams;
 	options: RunAscetEditOperationOptions;
 }
 
@@ -64,20 +64,20 @@ export function createAscetMutationPreflightEvidence(
 }
 
 export class AscetMutationPreflightRegistry<TResult> {
-	private readonly handlers = new Map<AscetMutationParams["action"], AscetMutationPreflightHandler<TResult>>();
+	private readonly handlers = new Map<AscetLegacyMutationParams["action"], AscetMutationPreflightHandler<TResult>>();
 	private readonly onMissing: AscetMutationPreflightHandler<TResult>;
 
 	constructor(onMissing: AscetMutationPreflightHandler<TResult>) {
 		this.onMissing = onMissing;
 	}
 
-	register(action: AscetMutationParams["action"], handler: AscetMutationPreflightHandler<TResult>): this {
+	register(action: AscetLegacyMutationParams["action"], handler: AscetMutationPreflightHandler<TResult>): this {
 		if (this.handlers.has(action)) throw new Error(`ASCET preflight handler already registered for ${action}.`);
 		this.handlers.set(action, handler);
 		return this;
 	}
 
-	has(action: AscetMutationParams["action"]): boolean {
+	has(action: AscetLegacyMutationParams["action"]): boolean {
 		return this.handlers.has(action);
 	}
 

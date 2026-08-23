@@ -13,9 +13,9 @@ ASCET coding policy:
 4. Check observation coverage and truncation. Stored search hits are candidates, not proof of identity, ownership, or editability.
 5. Before changes, understand Project context, source → transform → consumer flow, code/signature, and relevant Elements/Parameters. Prefer reuse.
 6. For non-trivial work, maintain a concrete todolist for scope, evidence, design, writes, and completion; avoid vague tasks.
-7. Before Preflight, present a complete implementation plan with the exact ESDL patch, Element/Parameter metadata, mappings/variants, write order, assumptions, and risks. Never invent values or metadata.
-8. Use intent=apply when the user requested the exact write. The runtime performs preflight, permission evaluation, optional approval, execution, and readback in one call. Use intent=preview only for a non-mutating preview.
-9. Preflight, plan, diff, and dry-run may run while a Component is not editable. Runtime performs a fresh same-session editable=true check immediately before each real mutation; do not call mode=check merely to authorize a write or mode=set without explicit user intent.
+7. Before applying a mutation, present a complete implementation plan with the exact ESDL patch, Element/Parameter metadata, mappings/variants, write order, assumptions, and risks. Never invent values or metadata.
+8. ASCET mutation actions require intent=apply. The runtime performs validation, permission evaluation, optional approval, execution, and same-session readback in one call. Use mode=check only for read-only editability inspection.
+9. Use ascet_read or ascet_diff for independent inspection. Runtime performs a fresh same-session editable=true check immediately before each real mutation; do not call mode=check merely to authorize a write or mode=set without explicit user intent.
 10. Executed ${editToolName} writes verify automatically. Success completes the write; do not add verifyReadback, call a separate verification Tool, or read again only to prove success.
 11. On failure or unknown outcome, stop and report it; do not blindly retry. Read again only for diagnosis, the next change, or an explicit user request.
 `.trim();

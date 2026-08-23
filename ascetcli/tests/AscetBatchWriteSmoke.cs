@@ -103,7 +103,7 @@ public static class AscetBatchWriteSmoke
         AssertTrue(GetBool(third, "ok"), "third batch result should succeed.");
 
         Dictionary<string, object> firstPayload = GetDictionary(first, "result");
-        AssertTrue(firstPayload != null, "successful batch write item should include normalized write payload.");
+        AssertCanonicalMutationResult(firstPayload, true, "successful batch write item");
         AssertEqual("create_component", GetString(firstPayload, "operationName"), "successful batch write item should preserve operation name.");
         AssertEqual(41, GetInt(firstPayload, "sequenceNumber", -1), "successful batch write item should preserve sequence number.");
         AssertTrue(GetBool(firstPayload, "writeSucceeded"), "successful batch write item should preserve writeSucceeded.");
@@ -120,18 +120,22 @@ public static class AscetBatchWriteSmoke
         Dictionary<string, object> secondErrorDetails = GetDictionary(secondError, "details");
         AssertTrue(secondErrorDetails != null, "failed batch write item should include structured details.");
         AssertEqual("verify", GetString(secondErrorDetails, "stage"), "failed batch write item should preserve the structured failing stage.");
+        Dictionary<string, object> secondPayload = GetDictionary(second, "result");
+        AssertCanonicalMutationResult(secondPayload, false, "failed batch write item");
+        AssertEqual("unknown", GetString(secondPayload, "mutationStatus"), "mutation-started batch failure should preserve unknown mutation status.");
+        Dictionary<string, object> secondRecovery = GetDictionary(secondPayload, "recovery");
+        AssertTrue(secondRecovery != null && GetBool(secondRecovery, "required"), "mutation-started batch failure should require recovery reconciliation.");
 
         Dictionary<string, object> thirdPayload = GetDictionary(third, "result");
-        AssertTrue(thirdPayload != null, "third batch write item should include normalized write payload.");
-        Dictionary<string, object> nestedPayload = GetDictionary(thirdPayload, "payload");
-        AssertTrue(nestedPayload != null, "third batch write item should preserve nested payload.");
-        AssertTrue(GetBool(nestedPayload, "ReadbackVerified"), "apply_element_spec payload should preserve readback verification.");
+        AssertCanonicalMutationResult(thirdPayload, true, "third batch write item");
+        AssertTrue(GetBool(thirdPayload, "ReadbackVerified"), "apply_element_spec result should preserve readback verification at the canonical result level.");
+        AssertTrue(!thirdPayload.ContainsKey("payload"), "batch write items must not wrap action evidence in result.payload.");
 
         Dictionary<string, object> meta = GetDictionary(envelope, "meta");
         AssertTrue(meta != null, "batch write should return meta.");
-        AssertEqual(1, GetInt(meta, "protocolVersion", -1), "batch write meta should preserve protocol version.");
+        AssertEqual(1, GetInt(envelope, "protocolVersion", -1), "batch write envelope should preserve protocol version.");
         AssertEqual("batch", GetString(meta, "mode"), "batch write meta.mode should be batch.");
-        AssertEqual("write", GetString(meta, "lane"), "batch write meta.lane should be write.");
+        AssertTrue(GetBool(meta, "mutationStarted"), "batch write envelope should report that the mutating batch started.");
     }
 
     private static void TestBatchWriteExecutorSerializesAndAssignsSequenceNumbers()
@@ -192,6 +196,12 @@ public static class AscetBatchWriteSmoke
         AssertTrue(first != null, "first executor result should be an object.");
         AssertTrue(second != null, "second executor result should be an object.");
         AssertTrue(third != null, "third executor result should be an object.");
+        AssertCanonicalMutationResult(first, true, "first executor result");
+        AssertCanonicalMutationResult(second, true, "second executor result");
+        AssertCanonicalMutationResult(third, true, "third executor result");
+        AssertCanonicalMutationResult(first, true, "first executor result");
+        AssertCanonicalMutationResult(second, true, "second executor result");
+        AssertCanonicalMutationResult(third, true, "third executor result");
         AssertEqual(1, GetInt(first, "sequenceNumber", -1), "first executor result should receive sequence 1.");
         AssertEqual(2, GetInt(second, "sequenceNumber", -1), "second executor result should receive sequence 2.");
         AssertEqual(3, GetInt(third, "sequenceNumber", -1), "third executor result should receive sequence 3.");
@@ -387,16 +397,18 @@ public static class AscetBatchWriteSmoke
         AssertTrue(GetBool(deleteComponent, "writeSucceeded"), "delete_component batch result should count AlreadyMissing as success.");
         AssertTrue(GetBool(deleteMethod, "writeSucceeded"), "delete_method batch result should count Deleted as success.");
 
-        Dictionary<string, object> deleteComponentPayload = GetDictionary(deleteComponent, "payload");
-        Dictionary<string, object> deleteMethodPayload = GetDictionary(deleteMethod, "payload");
-        AssertTrue(deleteComponentPayload != null, "delete_component result should include a payload.");
-        AssertTrue(deleteMethodPayload != null, "delete_method result should include a payload.");
-        AssertTrue(GetBool(deleteComponentPayload, "AlreadyMissing"), "delete_component payload should preserve AlreadyMissing.");
-        AssertTrue(GetBool(deleteComponentPayload, "VerifyReadbackRequested"), "delete_component payload should normalize verifyReadback requested.");
-        AssertTrue(GetBool(deleteComponentPayload, "ReadbackVerified"), "delete_component payload should normalize readback verification.");
-        AssertTrue(GetBool(deleteMethodPayload, "Deleted"), "delete_method payload should preserve Deleted.");
-        AssertTrue(GetBool(deleteMethodPayload, "VerifyReadbackRequested"), "delete_method payload should normalize verifyReadback requested.");
-        AssertTrue(GetBool(deleteMethodPayload, "ReadbackVerified"), "delete_method payload should normalize readback verification.");
+        AssertTrue(GetDictionary(deleteComponent, "payload") == null, "delete_component result must not nest canonical evidence under payload.");
+        AssertTrue(GetDictionary(deleteMethod, "payload") == null, "delete_method result must not nest canonical evidence under payload.");
+        AssertTrue(GetBool(deleteComponent, "AlreadyMissing"), "delete_component result should preserve AlreadyMissing.");
+        AssertTrue(GetBool(deleteComponent, "VerifyReadbackRequested"), "delete_component result should normalize verifyReadback requested.");
+        AssertTrue(GetBool(deleteComponent, "ReadbackVerified"), "delete_component result should normalize readback verification.");
+        AssertEqual("succeeded", GetString(deleteComponent, "outcome"), "delete_component result should expose canonical outcome.");
+        AssertEqual("no_op", GetString(deleteComponent, "mutationStatus"), "delete_component AlreadyMissing should be a canonical no-op.");
+        AssertTrue(GetBool(deleteMethod, "Deleted"), "delete_method result should preserve Deleted.");
+        AssertTrue(GetBool(deleteMethod, "VerifyReadbackRequested"), "delete_method result should normalize verifyReadback requested.");
+        AssertTrue(GetBool(deleteMethod, "ReadbackVerified"), "delete_method result should normalize readback verification.");
+        AssertEqual("succeeded", GetString(deleteMethod, "outcome"), "delete_method result should expose canonical outcome.");
+        AssertEqual("applied", GetString(deleteMethod, "mutationStatus"), "delete_method deletion should be canonical applied.");
     }
 
     private static void TestBatchWriteRespectsVerifyReadbackFalse()
@@ -498,23 +510,18 @@ public static class AscetBatchWriteSmoke
         AssertTrue(GetBool(writeVerification, "succeeded"), "set_method_code verifyReadback=false should still report verification success.");
         AssertTrue(GetBool(elementSpecVerification, "succeeded"), "apply_element_spec verifyReadback=false should still report verification success.");
 
-        Dictionary<string, object> createComponentPayload = GetDictionary(createComponent, "payload");
-        Dictionary<string, object> createPayload = GetDictionary(createMethod, "payload");
-        Dictionary<string, object> writePayload = GetDictionary(setMethodCode, "payload");
-        Dictionary<string, object> elementSpecPayload = GetDictionary(applyElementSpec, "payload");
-        AssertTrue(createComponentPayload != null, "create_component verifyReadback=false should include a nested payload.");
-        AssertTrue(createPayload != null, "create_method verifyReadback=false should include a nested payload.");
-        AssertTrue(writePayload != null, "set_method_code verifyReadback=false should include a nested payload.");
-        AssertTrue(elementSpecPayload != null, "apply_element_spec verifyReadback=false should include a nested payload.");
-        AssertTrue(!GetBool(createComponentPayload, "verifyReadbackRequested"), "create_component payload should preserve verifyReadback=false.");
-        AssertTrue(!GetBool(createPayload, "verifyReadbackRequested"), "create_method payload should preserve verifyReadback=false.");
-        AssertTrue(!GetBool(writePayload, "VerifyReadbackRequested"), "set_method_code payload should preserve verifyReadback=false.");
-        AssertTrue(!GetBool(elementSpecPayload, "VerifyReadbackRequested"), "apply_element_spec payload should preserve verifyReadback=false.");
-        AssertTrue(!GetBool(createComponentPayload, "readbackVerified"), "create_component payload should not mark readback verified when verification is disabled.");
-        AssertTrue(!GetBool(createPayload, "readbackVerified"), "create_method payload should not mark readback verified when verification is disabled.");
-        AssertTrue(!GetBool(writePayload, "ReadbackVerified"), "set_method_code payload should not mark readback verified when verification is disabled.");
-        AssertTrue(!GetBool(elementSpecPayload, "ReadbackVerified"), "apply_element_spec payload should not mark readback verified when verification is disabled.");
-        AssertTrue(componentWriteService.LastRequest != null && !componentWriteService.LastRequest.VerifyReadback, "create_component request should receive verifyReadback=false.");
+        AssertTrue(!createComponent.ContainsKey("payload"), "create_component must not include a nested payload.");
+        AssertTrue(!createMethod.ContainsKey("payload"), "create_method must not include a nested payload.");
+        AssertTrue(!setMethodCode.ContainsKey("payload"), "set_method_code must not include a nested payload.");
+        AssertTrue(!applyElementSpec.ContainsKey("payload"), "apply_element_spec must not include a nested payload.");
+        AssertTrue(!GetBool(createComponent, "verifyReadbackRequested"), "create_component result should preserve verifyReadback=false.");
+        AssertTrue(!GetBool(createMethod, "verifyReadbackRequested"), "create_method result should preserve verifyReadback=false.");
+        AssertTrue(!GetBool(setMethodCode, "VerifyReadbackRequested"), "set_method_code result should preserve verifyReadback=false.");
+        AssertTrue(!GetBool(applyElementSpec, "VerifyReadbackRequested"), "apply_element_spec result should preserve verifyReadback=false.");
+        AssertTrue(!GetBool(createComponent, "readbackVerified"), "create_component result should not mark readback verified when verification is disabled.");
+        AssertTrue(!GetBool(createMethod, "readbackVerified"), "create_method result should not mark readback verified when verification is disabled.");
+        AssertTrue(!GetBool(setMethodCode, "ReadbackVerified"), "set_method_code result should not mark readback verified when verification is disabled.");
+        AssertTrue(!GetBool(applyElementSpec, "ReadbackVerified"), "apply_element_spec result should not mark readback verified when verification is disabled.");        AssertTrue(componentWriteService.LastRequest != null && !componentWriteService.LastRequest.VerifyReadback, "create_component request should receive verifyReadback=false.");
         AssertTrue(methodWriteService.LastRequest != null && !methodWriteService.LastRequest.VerifyReadback, "set_method_code request should receive verifyReadback=false.");
         AssertTrue(elementSpecWriteService.LastRequest != null && !elementSpecWriteService.LastRequest.VerifyReadback, "apply_element_spec request should receive verifyReadback=false.");
     }
@@ -597,10 +604,13 @@ public static class AscetBatchWriteSmoke
         {
             Console.SetIn(new StringReader(stdinJson ?? String.Empty));
             Console.SetOut(capture);
+            AscetCliEnvelope.SetProtocolWriterForTesting(capture);
+            AscetCliEnvelope.SetProtocolWriterForTesting(capture);
             return BatchCommand.Run(new string[] { "--lane", "write", "--json" });
         }
         finally
         {
+            AscetCliEnvelope.ResetProtocolWriterForTesting();
             Console.SetIn(originalIn);
             Console.SetOut(originalOut);
             stdout = capture.ToString();
@@ -609,8 +619,8 @@ public static class AscetBatchWriteSmoke
 
     private static void TestBuiltCliBatchWriteEntryPoint()
     {
-        string exePath = FindPathUpwards("output", "ascet-csharp", "bin", "AscetCli.exe");
-        AssertTrue(File.Exists(exePath), "AscetCli.exe should exist for batch write integration smoke.");
+        string exePath = FindPathUpwards("output", "ascet-csharp", "bin", "AscetBridge.exe");
+        AssertTrue(File.Exists(exePath), "AscetBridge.exe should exist for batch write integration smoke.");
 
         ProcessStartInfo startInfo = new ProcessStartInfo
         {
@@ -640,7 +650,7 @@ public static class AscetBatchWriteSmoke
             AssertTrue(!GetBool(envelope, "ok"), "empty batch write input should fail with a structured error.");
             Dictionary<string, object> error = GetDictionary(envelope, "error");
             AssertTrue(error != null, "empty batch write input should include an error object.");
-            AssertEqual("invalid_input", GetString(error, "code"), "built AscetCli.exe batch write path should no longer return not_implemented.");
+            AssertEqual("invalid_input", GetString(error, "code"), "built AscetBridge.exe batch write path should no longer return not_implemented.");
             AssertEqual(2, process.ExitCode, "empty batch write input should still return structured-error exit code 2." + Environment.NewLine + stderr);
         }
     }
@@ -733,6 +743,25 @@ public static class AscetBatchWriteSmoke
         }
     }
 
+    private static void AssertCanonicalMutationResult(Dictionary<string, object> payload, bool succeeded, string message)
+    {
+        AssertTrue(payload != null, message + " should include a canonical result object.");
+        AssertEqual(succeeded ? "succeeded" : "failed", GetString(payload, "outcome"), message + " should preserve outcome.");
+        AssertTrue(payload.ContainsKey("changed"), message + " should include changed.");
+        AssertTrue(!String.IsNullOrWhiteSpace(GetString(payload, "mutationStatus")), message + " should include mutationStatus.");
+        AssertTrue(payload.ContainsKey("saveAttempted"), message + " should include saveAttempted.");
+        AssertTrue(payload.ContainsKey("saveSucceeded"), message + " should include saveSucceeded.");
+        AssertTrue(!String.IsNullOrWhiteSpace(GetString(payload, "saveState")), message + " should include saveState.");
+        AssertTrue(payload.ContainsKey("verified"), message + " should include verified.");
+        AssertTrue(!String.IsNullOrWhiteSpace(GetString(payload, "verificationStatus")), message + " should include verificationStatus.");
+        AssertTrue(!String.IsNullOrWhiteSpace(GetString(payload, "verificationMode")), message + " should include verificationMode.");
+        AssertTrue(payload.ContainsKey("sessionCount"), message + " should include sessionCount.");
+        AssertTrue(payload.ContainsKey("saveCount"), message + " should include saveCount.");
+        AssertTrue(payload.ContainsKey("editableRetryCount"), message + " should include editableRetryCount.");
+        AssertTrue(payload.ContainsKey("nativeMutationAttemptCount"), message + " should include nativeMutationAttemptCount.");
+        AssertTrue(!payload.ContainsKey("payload"), message + " must not nest canonical evidence under payload.");
+    }
+
     private static void AssertTrue(bool condition, string message)
     {
         if (!condition)
@@ -783,6 +812,21 @@ public static class AscetBatchWriteSmoke
             cursor = parent.FullName;
         }
 
+        string repositoryRoot = Environment.GetEnvironmentVariable("ASCET_REPOSITORY_ROOT");
+        if (!String.IsNullOrWhiteSpace(repositoryRoot))
+        {
+            string candidate = repositoryRoot;
+            for (int i = 0; i < relativeParts.Length; i++)
+            {
+                candidate = Path.Combine(candidate, relativeParts[i]);
+            }
+            string fullPath = Path.GetFullPath(candidate);
+            if (File.Exists(fullPath))
+            {
+                return fullPath;
+            }
+        }
+
         throw new Exception("Failed to resolve required path from base directory '" + AppDomain.CurrentDomain.BaseDirectory + "'.");
     }
 
@@ -830,23 +874,20 @@ public static class AscetBatchWriteSmoke
             AscetBatchResultItemDto result = new AscetBatchResultItemDto();
             result.id = id;
             result.ok = true;
-            result.result = new Dictionary<string, object>
+            Dictionary<string, object> canonical = AscetCanonicalWriteResult.NormalizeSuccess(payload, true, true, true);
+            canonical["operationName"] = operationName;
+            canonical["sequenceNumber"] = sequenceNumber;
+            canonical["writeSucceeded"] = true;
+            canonical["summary"] = summary;
+            canonical["verification"] = new Dictionary<string, object>
             {
-                { "operationName", operationName },
-                { "sequenceNumber", sequenceNumber },
-                { "writeSucceeded", true },
-                { "summary", summary },
-                { "payload", payload },
-                { "verification", new Dictionary<string, object>
-                    {
-                        { "requested", true },
-                        { "attempted", true },
-                        { "succeeded", true },
-                        { "summary", "verified" },
-                        { "details", new Dictionary<string, object>() }
-                    }
-                }
+                { "requested", true },
+                { "attempted", true },
+                { "succeeded", true },
+                { "summary", "verified" },
+                { "details", new Dictionary<string, object>() }
             };
+            result.result = canonical;
             result.error = null;
             return result;
         }
@@ -856,7 +897,7 @@ public static class AscetBatchWriteSmoke
             AscetBatchResultItemDto result = new AscetBatchResultItemDto();
             result.id = id;
             result.ok = false;
-            result.result = null;
+            result.result = AscetCanonicalWriteResult.NormalizeFailure(details, true, code, message);
             result.error = new AscetStructuredErrorDto
             {
                 code = code,

@@ -11,7 +11,21 @@ import { ascetEditManifest } from "./manifest.ts";
 function editableExecution(request: AscetCliRequest, editable: boolean): AscetCliExecutionResult {
 	return {
 		exitCode: 0,
-		stdout: JSON.stringify({ ok: true, result: editable, error: null }),
+		stdout: JSON.stringify({
+			ok: true,
+			result: {
+				outcome: "succeeded",
+				editable,
+				mutationStatus: "read_only",
+				changed: false,
+				verified: true,
+				verificationStatus: "passed",
+				verificationMode: "same_session_scm_state",
+				sessionCount: 1,
+				nativeMutationAttemptCount: 0,
+			},
+			error: null,
+		}),
 		stderr: "",
 		timedOut: false,
 		request,
@@ -120,24 +134,33 @@ test("ascet_edit check keeps the editability value and backend operation", async
 		backendCommandId: "AscetComponentEditableCheck",
 		operation: "component_editable_check",
 	});
-	assert.deepEqual(JSON.parse(result.content[0]?.text ?? "{}"), { editable: true });
+	assert.deepEqual(JSON.parse(result.content[0]?.text ?? "{}"), {
+		outcome: "succeeded",
+		editable: true,
+		mutationStatus: "read_only",
+		changed: false,
+		verified: true,
+		verificationStatus: "passed",
+		verificationMode: "same_session_scm_state",
+		sessionCount: 1,
+		nativeMutationAttemptCount: 0,
+	});
 });
 
-test("ascet_edit write actions remain preflight by default", async () => {
+test("ascet_edit rejects retired preview writes before Bridge dispatch", async () => {
 	const result = await ascetEditTool.execute(
 		"call-1",
-		{ action: "create_folder", folderPath: "DEMO/New", intent: "preview" },
+		{ action: "create_folder", folderPath: "DEMO/New", intent: "preview" } as unknown as Parameters<
+			typeof ascetEditTool.execute
+		>[1],
 		new AbortController().signal,
 		undefined,
 		{ cwd: process.cwd() },
 	);
 
-	assert.equal(result.details.outcome.status, "preflight");
-	assert.deepEqual(result.details.command, {
-		logicalCommandId: "AscetCreateFolder",
-		backendCommandId: "AscetCreateFolder",
-		operation: "create_folder",
-	});
+	assert.equal((result.details as { ok?: boolean }).ok, false);
+	assert.equal(result.details.error?.code, "invalid_variant");
+	assert.equal(result.details.command, undefined);
 });
 
 test("ascet_edit returns a blocked outcome when confirmation is not granted", async () => {

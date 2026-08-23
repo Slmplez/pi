@@ -5,6 +5,7 @@ import { Value } from "typebox/value";
 import type { AscetCliExecutionResult, AscetCliRequest } from "./cli.ts";
 import {
 	type AscetCreateDependentChainParams,
+	type AscetLegacyCreateDependentChainParams,
 	ascetCreateDependentChainActionSchema,
 	runAscetCreateDependentChain,
 	runLegacyAscetCreateDependentChain,
@@ -12,7 +13,9 @@ import {
 import { createAscetScheduler } from "./scheduler/scheduler.ts";
 import { ascetEditParameters } from "./tools/edit/schema.ts";
 
-function request(intent: "preview" | "apply" = "preview"): AscetCreateDependentChainParams {
+function request(intent: "apply"): AscetCreateDependentChainParams;
+function request(intent?: "preview"): AscetLegacyCreateDependentChainParams;
+function request(intent: "preview" | "apply" = "preview"): AscetLegacyCreateDependentChainParams {
 	return {
 		action: "create_dependent_chain",
 		provider: {
@@ -41,7 +44,7 @@ function request(intent: "preview" | "apply" = "preview"): AscetCreateDependentC
 				implementation: { mode: "ascetDefault" },
 			},
 		},
-		binding: { formula: "P_Threshold", formal: "P_Threshold", variantPolicy: "default" },
+		binding: { formula: "x", formal: "x", variantPolicy: "default" },
 		intent,
 	};
 }
@@ -102,6 +105,7 @@ function previewResult(noOp = false, stateVersion = "before-a", editable = true)
 
 function committedResult(): Record<string, unknown> {
 	return {
+		outcome: "succeeded",
 		status: "committed",
 		writesPerformed: true,
 		mutationStarted: true,
@@ -187,15 +191,64 @@ describe("create_dependent_chain public contract", () => {
 			);
 			assert.equal(result.details.outcome.status, "error", scenario.name);
 			assert.equal(result.details.error?.code, scenario.errorCode, scenario.name);
+			assert.equal(result.details.mutationResult?.mutationStatus, "not_started", scenario.name);
+			assert.equal(result.details.mutationResult?.bridge.bridgeEntered, false, scenario.name);
+			assert.equal(result.details.mutationResult?.recovery.required, false, scenario.name);
 			assert.equal(confirmations, 0, scenario.name);
 			assert.equal(bridgeCalls, 0, scenario.name);
+		}
+	});
+
+	test("rejects malformed nested input without throwing or entering Bridge", async () => {
+		let bridgeCalls = 0;
+		const result = await runAscetCreateDependentChain(
+			{
+				action: "create_dependent_chain",
+				provider: { componentPath: "FeatureA/Provider" },
+				intent: "apply",
+			} as unknown as AscetCreateDependentChainParams,
+			{
+				cwd: process.cwd(),
+				executeCli: async (requestValue) => {
+					bridgeCalls += 1;
+					return execution(requestValue, committedResult());
+				},
+			},
+			{},
+		);
+		assert.equal(result.details.error?.code, "element_definition_invalid");
+		assert.equal(result.details.mutationResult?.mutationStatus, "not_started");
+		assert.equal(bridgeCalls, 0);
+	});
+
+	test("rejects retired, missing, and unknown intent before approval or Bridge execution", async () => {
+		for (const intent of ["preview", undefined, "unknown"] as const) {
+			let bridgeCalls = 0;
+			const result = await runAscetCreateDependentChain(
+				{ ...request(), intent } as unknown as AscetCreateDependentChainParams,
+				{
+					cwd: process.cwd(),
+					executeCli: async (requestValue) => {
+						bridgeCalls += 1;
+						return execution(requestValue, committedResult());
+					},
+				},
+				{},
+			);
+			assert.equal(result.details.error?.code, "ascet_edit_invalid_parameter");
+			assert.equal(result.details.mutationResult?.mutationStatus, "not_started");
+			assert.equal(result.details.mutationResult?.sessionCount, 0);
+			assert.equal(result.details.mutationResult?.bridge.bridgeEntered, false);
+			assert.equal(bridgeCalls, 0);
 		}
 	});
 });
 describe("legacy create_dependent_chain recovery flow", () => {
 	test("exposes only the compact create schema and rejects old set fields", () => {
-		assert.equal(Value.Check(ascetCreateDependentChainActionSchema, request()), true);
-		assert.equal(Value.Check(ascetEditParameters, request()), true);
+		assert.equal(Value.Check(ascetCreateDependentChainActionSchema, request("apply")), true);
+		assert.equal(Value.Check(ascetEditParameters, request("apply")), true);
+		assert.equal(Value.Check(ascetCreateDependentChainActionSchema, request()), false);
+		assert.equal(Value.Check(ascetEditParameters, request()), false);
 		assert.equal(
 			Value.Check(ascetEditParameters, {
 				action: "set_dependent_chain",

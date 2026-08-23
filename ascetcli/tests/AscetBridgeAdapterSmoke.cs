@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Collections.Generic;
 using System.IO;
 
 public static class AscetBridgeAdapterSmoke
@@ -38,6 +39,55 @@ public static class AscetBridgeAdapterSmoke
             {
                 AssertEqual("request_too_large", ex.Code, "Oversized batch input should report request_too_large.");
             }
+
+            Dictionary<string, object> directState = new Dictionary<string, object>(StringComparer.Ordinal);
+            directState["changed"] = true;
+            directState["saveAttempted"] = true;
+            directState["saveSucceeded"] = true;
+            directState["verified"] = true;
+            Dictionary<string, object> canonicalSuccess = AscetCanonicalWriteResult.NormalizeSuccess(
+                directState,
+                true,
+                true,
+                true);
+            Dictionary<string, object> successEnvelope = AscetCliEnvelope.Success(
+                "exec",
+                "set_method_code",
+                canonicalSuccess,
+                true);
+            Dictionary<string, object> preservedSuccess = successEnvelope["result"] as Dictionary<string, object>;
+            AssertTrue(preservedSuccess != null, "Bridge success envelope must retain the canonical result at result.");
+            AssertEqual("succeeded", Convert.ToString(preservedSuccess["outcome"]), "Bridge success result must expose outcome at the canonical level.");
+            AssertEqual("applied", Convert.ToString(preservedSuccess["mutationStatus"]), "Bridge success result must expose mutationStatus at the canonical level.");
+            AssertTrue(!preservedSuccess.ContainsKey("payload"), "Bridge success result must not wrap canonical evidence in result.payload.");
+            Dictionary<string, object> partialState = new Dictionary<string, object>(StringComparer.Ordinal);
+            partialState["mutationStatus"] = "partial_failure";
+            partialState["nativeScmOperationCount"] = 2;
+            partialState["recovery"] = new Dictionary<string, object>(StringComparer.Ordinal)
+            {
+                { "required", true },
+                { "actions", new string[] { "Inspect the retained SCM reservation before retrying." } }
+            };
+            Dictionary<string, object> canonicalFailure = AscetCanonicalWriteResult.NormalizeFailure(
+                partialState,
+                true,
+                "component_editable_set_failed",
+                "CreateEdition failed after ReserveItem returned.");
+            Dictionary<string, object> envelopeError = new Dictionary<string, object>(StringComparer.Ordinal);
+            envelopeError["code"] = "component_editable_set_failed";
+            envelopeError["message"] = "CreateEdition failed after ReserveItem returned.";
+            Dictionary<string, object> failureEnvelope = AscetCliEnvelope.Error(
+                envelopeError,
+                "exec",
+                "component_editable_set",
+                canonicalFailure,
+                true);
+            Dictionary<string, object> preservedResult = failureEnvelope["result"] as Dictionary<string, object>;
+            AssertTrue(preservedResult != null, "Bridge failure envelope must retain canonical mutation result evidence.");
+            AssertEqual("partial_failure", Convert.ToString(preservedResult["mutationStatus"]), "Bridge failure result must preserve partial mutation status.");
+            AssertTrue(InProcessLegacyOperationAdapter.ReadMutationStarted(failureEnvelope) == true, "Adapter must infer mutationStarted=true from preserved native SCM evidence.");
+            Dictionary<string, object> preservedRecovery = preservedResult["recovery"] as Dictionary<string, object>;
+            AssertTrue(preservedRecovery != null && Convert.ToBoolean(preservedRecovery["required"]), "Bridge failure result must preserve required recovery evidence.");
 
             LegacyOperationInvocationResult failure = InProcessLegacyOperationAdapter.Invoke(ThrowingEntryPoint, new string[0]);
             AssertEqual(1, failure.ExitCode, "Adapter must convert exceptions to a failed invocation.");
@@ -109,6 +159,14 @@ public static class AscetBridgeAdapterSmoke
         if (!Object.ReferenceEquals(error, Console.Error))
         {
             throw new Exception("Adapter must restore Console.Error.");
+        }
+    }
+
+    private static void AssertTrue(bool condition, string message)
+    {
+        if (!condition)
+        {
+            throw new Exception(message);
         }
     }
 

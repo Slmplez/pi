@@ -21,7 +21,7 @@ Load when one exact mutation has been approved.
 
 ## Complete Dependency Chain
 
-Use `ascet_edit.create_dependent_chain` with complete explicit Provider, Imported, Local, Formula, Formal, and DataVariant definitions. The action creates missing Elements, reuses exact matches, rejects conflicts, performs guarded preview/apply, and automatically verifies the complete chain. Use `ascet_read.read_dependent_chain` only when current-state inspection is needed.
+Use `ascet_edit.create_dependent_chain` with complete explicit Provider, Imported, Local, Formula, Formal, and DataVariant definitions. The action creates missing Elements, reuses exact matches, rejects conflicts, executes apply directly and automatically verifies the complete chain. Use `ascet_read.read_dependent_chain` only when current-state inspection is needed.
 
 ## Do Not Use This When
 

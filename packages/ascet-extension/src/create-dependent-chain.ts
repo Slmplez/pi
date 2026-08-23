@@ -14,6 +14,7 @@ import type { AscetMutationResultEnvelope } from "./edit/mutation-result.ts";
 import { fingerprintAscetValue } from "./edit/preflight/fingerprint.ts";
 import { createAscetMutationPreflightEvidence } from "./edit/preflight/service.ts";
 import type { AscetMutationPreflightResult, AscetPlannedEffect } from "./edit/preflight/types.ts";
+import { readCanonicalMutationEvidence } from "./edit/result-contract.ts";
 import type {
 	AscetConsumerImportedParameterCreateInput,
 	AscetLocalDependentParameterCreateInput,
@@ -43,6 +44,12 @@ import { unwrapToolSuccessPayload } from "./tool-response-contract.ts";
 const PROVIDER_SEARCH_LIMIT = 20;
 const BRIDGE_OPERATION = "configure_parameter_dependency_chain_execute";
 type JsonRecord = Record<string, unknown>;
+
+/** @internal Legacy/recovery-only request shape. Public ascet_edit accepts apply only. */
+export type AscetLegacyCreateDependentChainParams = Omit<AscetCreateDependentChainParams, "provider" | "intent"> & {
+	provider: Omit<AscetCreateDependentChainParams["provider"], "componentPath"> & { componentPath?: string };
+	intent: "preview" | "apply";
+};
 
 export interface AscetCreateDependentChainContext extends AscetEditApprovalContext {
 	ascetPermission?: AscetPermissionSnapshot;
@@ -85,101 +92,164 @@ export async function runAscetCreateDependentChain(
 	options: ConfigureParameterDependencyChainOptions,
 	ctx: AscetCreateDependentChainContext,
 ): Promise<AscetCreateDependentChainResult> {
-	const validationError = validateParams(params);
-	if (validationError) return failedResult(validationError.code, validationError.message);
-	if (params.intent !== "apply") {
-		return failedResult(
+	const permission = resolveAscetPermissionSnapshot(ctx);
+	const raw = params as { intent?: unknown; provider?: unknown };
+	if (raw.intent !== "apply") {
+		return publicErrorResult(
 			"ascet_edit_invalid_parameter",
-			"intent=preview is retired for create_dependent_chain; use intent=apply for direct execution.",
+			"intent=apply is required for ascet_edit writes; use mode=check for read-only editability inspection.",
+			permission,
 		);
 	}
-	if (!params.provider.componentPath) {
-		return failedResult(
+	if (!isRecord(raw.provider) || !readString(raw.provider, "componentPath")) {
+		return publicErrorResult(
 			"provider_path_required",
 			"create_dependent_chain requires provider.componentPath; provider Search is not part of the normal write route.",
+			permission,
+		);
+	}
+	if (!Value.Check(ascetCreateDependentChainActionSchema, params)) {
+		return publicErrorResult(
+			"element_definition_invalid",
+			"Invalid create_dependent_chain request; unknown and incomplete fields are rejected.",
+			permission,
+		);
+	}
+	const normalizedParams = normalizeCreateDependentChainParams(params);
+	const validationError = validateParams(normalizedParams);
+	if (validationError) {
+		return publicErrorResult(
+			validationError.code,
+			validationError.message,
+			permission,
+			normalizedParams.consumer.componentPath,
 		);
 	}
 
-	const permission = resolveAscetPermissionSnapshot(ctx);
 	const descriptor = getAscetEditAction("create_dependent_chain")?.permission;
-	if (!descriptor) throw new Error("Missing create_dependent_chain permission descriptor.");
+	if (!descriptor) {
+		return publicErrorResult(
+			"ascet_edit_internal_contract_error",
+			"Missing create_dependent_chain permission descriptor.",
+			permission,
+			normalizedParams.consumer.componentPath,
+		);
+	}
 	const decision = evaluateAscetPermission({
 		mode: permission.mode,
 		action: "create_dependent_chain",
 		descriptor,
 		rules: permission.rules,
-		path: normalizeAscetPath(params.consumer.componentPath),
+		path: normalizedParams.consumer.componentPath,
+		databaseFingerprint: permission.databaseFingerprint,
 		hardGatesPassed: true,
-		evidenceComplete: true,
+		evidenceComplete: normalizedParams.binding.variantPolicy !== "all",
+		sharedObject: true,
 		targetCount: 2,
-		variantCount: params.binding.variants?.length ?? 1,
+		variantCount:
+			normalizedParams.binding.variantPolicy === "all"
+				? undefined
+				: (normalizedParams.binding.variants?.length ?? 1),
+		impactUnknown: normalizedParams.binding.variantPolicy === "all",
 	});
-	if (decision.behavior === "deny") return failedResult("ascet_edit_permission_denied", decision.reason);
+	if (decision.behavior === "deny") {
+		return publicErrorResult(
+			"ascet_edit_permission_denied",
+			decision.reason,
+			permission,
+			normalizedParams.consumer.componentPath,
+			decision,
+			normalizedParams,
+		);
+	}
 
 	let approvedAt: string | undefined;
 	if (decision.behavior === "ask") {
 		const approval = await requestAscetEditApproval(
 			{
 				title: "Confirm ASCET dependency-chain edit",
-				message: `Target: ${normalizeAscetPath(params.consumer.componentPath)}`,
+				message: `Target: ${normalizedParams.consumer.componentPath}`,
 				signal: options.signal,
 			},
 			ctx,
 		);
-		if (!approval.approved) return blockedResult(approval.code, approval.message);
+		if (!approval.approved) {
+			return publicBlockedResult(approval.code, approval.message, permission, decision, normalizedParams);
+		}
 		approvedAt = approval.approvedAt;
 	}
 
-	const bridge = await runConfigureParameterDependencyChainBridge(
-		createBridgeDefinition(params, normalizeAscetPath(params.provider.componentPath)),
-		options,
-		{ intent: "apply", acquireEditability: false },
-	);
+	const bridgeLifecycle = { beforeBridge: false, bridgeEntered: false, backendResponseReceived: false };
+	let bridge: ConfigureParameterDependencyChainResult;
+	try {
+		bridge = await runConfigureParameterDependencyChainBridge(
+			createBridgeDefinition(normalizedParams, normalizedParams.provider.componentPath),
+			{
+				...options,
+				onLifecycle: (event) => {
+					if (event.stage === "before_bridge") bridgeLifecycle.beforeBridge = true;
+					if (event.stage === "bridge_entered") bridgeLifecycle.bridgeEntered = true;
+					if (event.stage === "backend_response_received") bridgeLifecycle.backendResponseReceived = true;
+					options.onLifecycle?.(event);
+				},
+			},
+			{ intent: "apply", acquireEditability: false },
+		);
+	} catch (error) {
+		const mutationStarted = bridgeLifecycle.bridgeEntered;
+		const message = error instanceof Error ? error.message : String(error);
+		bridge = {
+			status: mutationStarted ? "unknown_outcome" : "error",
+			writesPerformed: false,
+			mutationStarted,
+			consistency: "compensating",
+			error: {
+				code: mutationStarted ? "write_outcome_unknown" : "ascet_edit_internal_error",
+				message,
+			},
+			rollback: { required: mutationStarted, status: mutationStarted ? "unknown" : "not_required" },
+		};
+	}
 	const canonical = readCanonicalDependencyResult(bridge);
 	if (!canonical) {
 		const failure = bridgeFailure(bridge);
-		return failedResult(
+		const code =
 			bridge.status === "committed" || bridge.status === "no_change"
 				? "ascet_edit_canonical_evidence_invalid"
-				: failure.code,
+				: failure.code;
+		const message =
 			bridge.status === "committed" || bridge.status === "no_change"
 				? "Dependency-chain write omitted or contradicted canonical mutation, Save, verification, or session evidence."
-				: failure.message,
-			{ bridge },
+				: failure.message;
+		return publicBridgeFailureResult(
+			bridge,
+			permission,
+			decision,
+			normalizedParams,
+			code,
+			message,
+			approvedAt,
+			bridgeLifecycle,
 		);
 	}
-
 	const effects = appliedEffects(bridge);
-	const content = {
-		ok: true as const,
-		changed: canonical.changed,
-		verified: canonical.verified,
-		created: effects.created,
-		configured: effects.configured,
-	};
 	const mutationResult: AscetMutationResultEnvelope = {
+		outcome: "succeeded",
 		status: "ok",
 		...canonical,
-		permission: {
-			mode: permission.mode,
-			decision: decision.behavior,
-			risk: decision.risk,
-			reason: decision.reason,
-			...(decision.rule ? { rule: decision.rule } : {}),
-		},
+		permission: createChainPermissionEvidence(permission, decision, normalizedParams),
 		preflight: { status: "not_run" },
 		editability: { status: "not_applicable" },
 		mutation: { status: canonical.mutationStatus },
 		verification: { status: "passed" },
-		bridge: { beforeBridge: true, bridgeEntered: true, backendResponseReceived: true },
+		bridge: bridgeLifecycle,
 		recovery: { required: false, actions: [] },
-		...(approvedAt ? { audit: { approvedAt } } : {}),
-		raw: bridge,
+		audit: createChainAudit(permission, approvedAt),
 	};
 	return {
-		content: [{ type: "text", text: JSON.stringify(content) }],
+		content: [{ type: "text", text: JSON.stringify(mutationResult) }],
 		details: {
-			outcome: { status: "ok", data: content, warnings: [] },
+			outcome: { status: "ok", data: { created: effects.created, configured: effects.configured }, warnings: [] },
 			mutationResult,
 			provider: { source: "explicit" },
 			diagnostics: bridge,
@@ -187,17 +257,19 @@ export async function runAscetCreateDependentChain(
 	};
 }
 
+/** @internal Legacy/recovery-only orchestration. Normal ascet_edit routes must never call this function. */
 export async function runLegacyAscetCreateDependentChain(
-	params: AscetCreateDependentChainParams,
+	params: AscetLegacyCreateDependentChainParams,
 	options: ConfigureParameterDependencyChainOptions,
 	ctx: AscetCreateDependentChainContext,
 ): Promise<AscetCreateDependentChainResult> {
-	const validationError = validateParams(params);
+	const normalizedParams = normalizeCreateDependentChainParams(params);
+	const validationError = validateParams(normalizedParams, true);
 	if (validationError) return failedResult(validationError.code, validationError.message);
 
 	const identityBeforeResolution = await readDatabaseIdentity(options);
 	if (!identityBeforeResolution.ok) return cliFailureResult(identityBeforeResolution.result);
-	const provider = await resolveProvider(params, options);
+	const provider = await resolveProvider(normalizedParams, options);
 	if (!provider.ok) return failedResult(provider.code, provider.message, provider.details);
 	const identityAfterResolution = await readDatabaseIdentity(options);
 	if (!identityAfterResolution.ok) return cliFailureResult(identityAfterResolution.result);
@@ -205,7 +277,7 @@ export async function runLegacyAscetCreateDependentChain(
 		return failedResult("database_changed", "ASCET database changed during Provider resolution.");
 	}
 
-	const definition = createBridgeDefinition(params, provider.provider.componentPath);
+	const definition = createBridgeDefinition(normalizedParams, provider.provider.componentPath);
 	let latestBridge: ConfigureParameterDependencyChainResult | undefined;
 	const collectPreflight = async (): Promise<AscetMutationPreflightResult> => {
 		const collected = await collectCreateDependentChainPreflight(definition, options);
@@ -215,7 +287,7 @@ export async function runLegacyAscetCreateDependentChain(
 	const permission = resolveAscetPermissionSnapshot(ctx);
 	const guarded = await runGuardedAscetMutation({
 		action: "create_dependent_chain",
-		intent: params.intent,
+		intent: normalizedParams.intent,
 		permissionMode: permission.mode,
 		rules: permission.rules,
 		signal: options.signal,
@@ -248,12 +320,12 @@ export async function runLegacyAscetCreateDependentChain(
 		},
 	});
 
-	const content = compactResult(params.intent, guarded, latestBridge);
+	const content = compactResult(normalizedParams.intent, guarded, latestBridge);
 	const error = guarded.error;
 	return {
 		content: [{ type: "text", text: JSON.stringify(content) }],
 		details: {
-			outcome: createOutcome(params.intent, content, guarded),
+			outcome: createOutcome(normalizedParams.intent, content, guarded),
 			mutationResult: guarded,
 			...(error ? { error } : {}),
 			provider: provider.provider.diagnostics,
@@ -273,6 +345,7 @@ function readCanonicalDependencyResult(
 			| "saveSucceeded"
 			| "saveState"
 			| "verified"
+			| "verificationStatus"
 			| "verificationMode"
 			| "sessionCount"
 			| "saveCount"
@@ -280,74 +353,275 @@ function readCanonicalDependencyResult(
 			| "nativeMutationAttemptCount"
 	  >
 	| undefined {
-	const changed = bridge.changed;
-	const mutationStatus = bridge.mutationStatus;
-	const saveAttempted = bridge.saveAttempted;
-	const saveSucceeded = bridge.saveSucceeded;
-	const saveState = bridge.saveState;
-	const verified = bridge.verified;
-	const verificationStatus = bridge.verificationStatus;
-	const verificationMode = bridge.verificationMode;
-	const sessionCount = bridge.sessionCount;
-	const saveCount = bridge.saveCount;
-	const editableRetryCount = bridge.editableRetryCount;
-	const nativeMutationAttemptCount = bridge.nativeMutationAttemptCount;
-	const common =
-		verified === true &&
-		verificationStatus === "passed" &&
-		typeof verificationMode === "string" &&
-		verificationMode.length > 0 &&
-		sessionCount === 1 &&
-		typeof editableRetryCount === "number" &&
-		editableRetryCount >= 0 &&
-		editableRetryCount <= 1;
-	const applied =
-		changed === true &&
-		mutationStatus === "applied" &&
-		saveAttempted === true &&
-		saveSucceeded === true &&
-		saveState === "saved" &&
-		saveCount === 1 &&
-		nativeMutationAttemptCount === 1;
-	const noOp =
-		changed === false &&
-		mutationStatus === "no_op" &&
-		saveAttempted === false &&
-		saveState === "not_required" &&
-		saveCount === 0 &&
-		nativeMutationAttemptCount === 0;
-	if (!common || (!applied && !noOp)) return undefined;
-	return {
-		changed,
-		mutationStatus,
-		saveAttempted,
-		...(typeof saveSucceeded === "boolean" ? { saveSucceeded } : {}),
-		saveState,
-		verified,
-		verificationMode,
-		sessionCount,
-		saveCount,
-		editableRetryCount,
-		nativeMutationAttemptCount,
-	};
+	const canonical = readCanonicalMutationEvidence(bridge);
+	if (!canonical || canonical.outcome !== "succeeded") return undefined;
+	return canonical;
 }
 
-function blockedResult(code: string, message: string): AscetCreateDependentChainResult {
+function publicErrorResult(
+	code: string,
+	message: string,
+	permission: ReturnType<typeof resolveAscetPermissionSnapshot>,
+	path?: string,
+	decision?: ReturnType<typeof evaluateAscetPermission>,
+	params?: AscetCreateDependentChainParams,
+): AscetCreateDependentChainResult {
+	return publicNotStartedResult("error", code, message, permission, path, decision, params);
+}
+
+function publicBlockedResult(
+	code: string,
+	message: string,
+	permission: ReturnType<typeof resolveAscetPermissionSnapshot>,
+	decision: ReturnType<typeof evaluateAscetPermission>,
+	params: AscetCreateDependentChainParams,
+): AscetCreateDependentChainResult {
+	return publicNotStartedResult("blocked", code, message, permission, params.consumer.componentPath, decision, params);
+}
+
+function publicNotStartedResult(
+	status: "error" | "blocked",
+	code: string,
+	message: string,
+	permission: ReturnType<typeof resolveAscetPermissionSnapshot>,
+	path?: string,
+	decision?: ReturnType<typeof evaluateAscetPermission>,
+	params?: AscetCreateDependentChainParams,
+): AscetCreateDependentChainResult {
+	const databaseFingerprintKnown = permission.databaseFingerprint !== undefined;
+	const permissionEvidence: AscetMutationResultEnvelope["permission"] =
+		params && decision
+			? createChainPermissionEvidence(permission, decision, params)
+			: {
+					mode: permission.mode,
+					decision: decision?.behavior ?? "not_evaluated",
+					...(decision ? { risk: decision.risk, reason: decision.reason, rule: decision.rule } : {}),
+					...(path ? { path } : {}),
+					databaseFingerprintKnown,
+					databaseFingerprintSource:
+						permission.databaseFingerprintSource ?? (databaseFingerprintKnown ? "caller" : "unavailable"),
+					evidenceComplete: false,
+					impactUnknown: true,
+				};
+	const mutationResult: AscetMutationResultEnvelope = {
+		outcome: "failed",
+		status,
+		changed: false,
+		mutationStatus: "not_started",
+		saveAttempted: false,
+		saveSucceeded: false,
+		saveState: "not_required",
+		verified: false,
+		verificationStatus: "not_applicable",
+		verificationMode: "not_applicable",
+		sessionCount: 0,
+		saveCount: 0,
+		editableRetryCount: 0,
+		nativeMutationAttemptCount: 0,
+		permission: permissionEvidence,
+		preflight: { status: decision ? "not_run" : "failed" },
+		editability: { status: "not_applicable" },
+		mutation: { status: "not_started" },
+		verification: { status: "not_applicable" },
+		error: { code, message },
+		bridge: { beforeBridge: false, bridgeEntered: false, backendResponseReceived: false },
+		recovery: { required: false, actions: [] },
+		audit: createChainAudit(permission),
+	};
 	return {
-		content: [{ type: "text", text: JSON.stringify({ ok: false, code }) }],
+		content: [{ type: "text", text: JSON.stringify(mutationResult) }],
 		details: {
-			outcome: { status: "blocked", code, message },
+			outcome:
+				status === "blocked" ? { status: "blocked", code, message } : { status: "error", error: { code, message } },
+			mutationResult,
 			error: { code, message },
 		},
 	};
 }
 
-function validateParams(params: AscetCreateDependentChainParams): { code: string; message: string } | undefined {
-	if (!Value.Check(ascetCreateDependentChainActionSchema, params)) {
+function createChainPermissionEvidence(
+	permission: ReturnType<typeof resolveAscetPermissionSnapshot>,
+	decision: ReturnType<typeof evaluateAscetPermission>,
+	params: AscetCreateDependentChainParams,
+): AscetMutationResultEnvelope["permission"] {
+	const databaseFingerprintKnown = permission.databaseFingerprint !== undefined;
+	return {
+		mode: permission.mode,
+		decision: decision.behavior,
+		risk: decision.risk,
+		reason: decision.reason,
+		...(decision.rule ? { rule: decision.rule } : {}),
+		path: params.consumer.componentPath,
+		databaseFingerprintKnown,
+		databaseFingerprintSource:
+			permission.databaseFingerprintSource ?? (databaseFingerprintKnown ? "caller" : "unavailable"),
+		evidenceComplete: params.binding.variantPolicy !== "all",
+		targetCount: 2,
+		...(params.binding.variantPolicy === "all" ? {} : { variantCount: params.binding.variants?.length ?? 1 }),
+		impactUnknown: params.binding.variantPolicy === "all",
+	};
+}
+
+function createChainAudit(
+	permission: ReturnType<typeof resolveAscetPermissionSnapshot>,
+	approvedAt?: string,
+): NonNullable<AscetMutationResultEnvelope["audit"]> {
+	const databaseFingerprintKnown = permission.databaseFingerprint !== undefined;
+	return {
+		databaseFingerprintKnown,
+		databaseFingerprintSource:
+			permission.databaseFingerprintSource ?? (databaseFingerprintKnown ? "caller" : "unavailable"),
+		...(permission.databaseFingerprint ? { databaseFingerprint: permission.databaseFingerprint } : {}),
+		...(approvedAt ? { approvedAt } : {}),
+	};
+}
+
+function publicBridgeFailureResult(
+	bridge: ConfigureParameterDependencyChainResult,
+	permission: ReturnType<typeof resolveAscetPermissionSnapshot>,
+	decision: ReturnType<typeof evaluateAscetPermission>,
+	params: AscetCreateDependentChainParams,
+	code: string,
+	message: string,
+	approvedAt?: string,
+	bridgeLifecycle: { beforeBridge: boolean; bridgeEntered: boolean; backendResponseReceived: boolean } = {
+		beforeBridge: true,
+		bridgeEntered: true,
+		backendResponseReceived: true,
+	},
+): AscetCreateDependentChainResult {
+	const evidence = readCanonicalMutationEvidence(bridge);
+	const mutationStatus =
+		evidence?.mutationStatus ??
+		(bridge.status === "rolled_back"
+			? "rolled_back"
+			: bridge.status === "rollback_failed"
+				? "partially_applied"
+				: bridge.mutationStarted
+					? "unknown"
+					: "not_started");
+	const verificationStatus = evidence?.verificationStatus ?? (bridge.mutationStarted ? "unknown" : "not_applicable");
+	const recoveryRecord = isRecord(bridge.rollback) ? bridge.rollback : undefined;
+	const recoveryRequired =
+		recoveryRecord?.required === true || mutationStatus === "partially_applied" || mutationStatus === "unknown";
+	const recoveryActions = Array.isArray(recoveryRecord?.actions)
+		? recoveryRecord.actions.filter((value): value is string => typeof value === "string" && value.trim().length > 0)
+		: [];
+	if (recoveryRequired && recoveryActions.length === 0) {
+		recoveryActions.push("Re-read both dependency-chain endpoints and reconcile the final state before retrying.");
+	}
+	const status: AscetMutationResultEnvelope["status"] =
+		mutationStatus === "rolled_back"
+			? "rolled_back"
+			: mutationStatus === "partially_applied"
+				? "partial"
+				: mutationStatus === "unknown"
+					? "unknown"
+					: "error";
+	const mutationResult: AscetMutationResultEnvelope = {
+		outcome: "failed",
+		status,
+		changed: evidence?.changed ?? bridge.writesPerformed,
+		mutationStatus,
+		saveAttempted: evidence?.saveAttempted ?? false,
+		saveSucceeded: evidence?.saveSucceeded ?? false,
+		saveState: evidence?.saveState ?? (mutationStatus === "not_started" ? "not_required" : "unknown"),
+		verified: evidence?.verified ?? false,
+		verificationStatus,
+		verificationMode:
+			evidence?.verificationMode ??
+			(bridge.mutationStarted ? "same_session_dependency_endpoints" : "not_applicable"),
+		sessionCount: evidence?.sessionCount ?? (bridgeLifecycle.bridgeEntered ? 1 : 0),
+		saveCount: evidence?.saveCount ?? 0,
+		editableRetryCount: evidence?.editableRetryCount ?? 0,
+		nativeMutationAttemptCount: evidence?.nativeMutationAttemptCount ?? (bridge.mutationStarted ? 1 : 0),
+		permission: createChainPermissionEvidence(permission, decision, params),
+		preflight: { status: "not_run" },
+		editability: { status: bridge.mutationStarted ? "unknown" : "not_applicable" },
+		mutation: { status: mutationStatus },
+		verification: { status: verificationStatus },
+		error: { code, message },
+		bridge: bridgeLifecycle,
+		recovery: { required: recoveryRequired, actions: recoveryActions },
+		audit: createChainAudit(permission, approvedAt),
+	};
+	return {
+		content: [{ type: "text", text: JSON.stringify(mutationResult) }],
+		details: {
+			outcome: { status: "error", error: { code, message } },
+			mutationResult,
+			error: { code, message },
+			diagnostics: bridge,
+		},
+	};
+}
+
+function normalizeCreateDependentChainParams<
+	T extends AscetCreateDependentChainParams | AscetLegacyCreateDependentChainParams,
+>(params: T): T {
+	const providerComponentPath = params.provider.componentPath;
+	return {
+		...params,
+		provider: {
+			...params.provider,
+			...(providerComponentPath === undefined
+				? {}
+				: { componentPath: normalizeAscetPath(providerComponentPath.trim()) }),
+			element: {
+				...params.provider.element,
+				name: params.provider.element.name.trim(),
+				modelType: params.provider.element.modelType.trim(),
+			},
+		},
+		consumer: {
+			...params.consumer,
+			componentPath: normalizeAscetPath(params.consumer.componentPath.trim()),
+			importedElement: {
+				...params.consumer.importedElement,
+				name: params.consumer.importedElement.name.trim(),
+				modelType: params.consumer.importedElement.modelType.trim(),
+			},
+			localElement: {
+				...params.consumer.localElement,
+				name: params.consumer.localElement.name.trim(),
+				modelType: params.consumer.localElement.modelType.trim(),
+			},
+		},
+		binding: {
+			...params.binding,
+			formula: params.binding.formula.trim(),
+			formal: params.binding.formal.trim(),
+			...(params.binding.variants ? { variants: params.binding.variants.map((variant) => variant.trim()) } : {}),
+		},
+	} as T;
+}
+
+function validateParams(
+	params: AscetCreateDependentChainParams | AscetLegacyCreateDependentChainParams,
+	allowLegacy = false,
+): { code: string; message: string } | undefined {
+	const schemaCandidate = allowLegacy
+		? {
+				...params,
+				provider: {
+					...params.provider,
+					componentPath: params.provider.componentPath ?? "__legacy_provider_resolution__",
+				},
+				intent: "apply",
+			}
+		: params;
+	if (!Value.Check(ascetCreateDependentChainActionSchema, schemaCandidate)) {
 		return {
 			code: "element_definition_invalid",
 			message: "Invalid create_dependent_chain request; unknown and incomplete fields are rejected.",
 		};
+	}
+	if (!/^[A-Za-z_][A-Za-z0-9_]*$/u.test(params.binding.formal)) {
+		return { code: "binding_invalid", message: "binding.formal must be a valid ASCET identifier." };
+	}
+	const escapedFormal = params.binding.formal.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
+	if (!new RegExp(`(^|[^A-Za-z0-9_])${escapedFormal}([^A-Za-z0-9_]|$)`, "u").test(params.binding.formula)) {
+		return { code: "binding_invalid", message: "binding.formula must reference binding.formal." };
 	}
 	if (params.binding.variantPolicy === "selected" && !params.binding.variants?.length) {
 		return { code: "binding_invalid", message: 'binding.variants is required for variantPolicy="selected".' };
@@ -380,7 +654,7 @@ function validateParams(params: AscetCreateDependentChainParams): { code: string
 }
 
 async function resolveProvider(
-	params: AscetCreateDependentChainParams,
+	params: AscetCreateDependentChainParams | AscetLegacyCreateDependentChainParams,
 	options: ConfigureParameterDependencyChainOptions,
 ): Promise<
 	| { ok: true; provider: ResolvedProvider }
@@ -457,7 +731,10 @@ async function resolveProvider(
 	};
 }
 
-function createBridgeDefinition(params: AscetCreateDependentChainParams, providerComponentPath: string) {
+function createBridgeDefinition(
+	params: AscetCreateDependentChainParams | AscetLegacyCreateDependentChainParams,
+	providerComponentPath: string,
+) {
 	const provider: AscetProviderExportedParameterCreateInput = {
 		role: "providerExportedParameter",
 		...params.provider.element,
@@ -487,6 +764,7 @@ function createBridgeDefinition(params: AscetCreateDependentChainParams, provide
 	};
 }
 
+/** @internal Legacy/recovery-only preview used exclusively by runLegacyAscetCreateDependentChain. */
 async function collectCreateDependentChainPreflight(
 	definition: ReturnType<typeof createBridgeDefinition>,
 	options: ConfigureParameterDependencyChainOptions,
@@ -690,7 +968,6 @@ function bridgeExecutionResult(bridge: ConfigureParameterDependencyChainResult):
 		mutationStatus: "not_started",
 		verificationStatus: "not_applicable",
 		error: failure,
-		raw: bridge,
 	};
 }
 

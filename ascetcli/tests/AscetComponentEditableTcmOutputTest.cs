@@ -56,6 +56,7 @@ namespace de.etas.cebra.toolAPI.Ascet
 
         public string BindingInformation { get; private set; }
         public bool LockCreatesEdition { get; private set; }
+        public string ThrowOnCommand { get; set; }
         public List<string> Commands { get; private set; }
 
         public string GetSourceControlBindingInformation()
@@ -71,6 +72,10 @@ namespace de.etas.cebra.toolAPI.Ascet
         public string ExecuteSCMCommand(string command, string items, string data)
         {
             Commands.Add(command);
+            if (String.Equals(command, ThrowOnCommand, StringComparison.Ordinal))
+            {
+                throw new InvalidOperationException("forced " + command + " failure");
+            }
             if (String.Equals(command, "Lock", StringComparison.Ordinal) && LockCreatesEdition)
             {
                 component.MakeEdition();
@@ -81,6 +86,10 @@ namespace de.etas.cebra.toolAPI.Ascet
         public string ExecuteSCMScriptingCommandForItems(string command, DataBaseItem[] items)
         {
             Commands.Add(command);
+            if (String.Equals(command, ThrowOnCommand, StringComparison.Ordinal))
+            {
+                throw new InvalidOperationException("forced " + command + " failure");
+            }
             if (String.Equals(command, "CreateEdition", StringComparison.Ordinal))
             {
                 component.MakeEdition();
@@ -182,6 +191,8 @@ public static class AscetComponentEditableTcmOutputTest
         TestGenericDriverUsesLock();
         TestAlreadyEditableIsNoOp();
         TestFailedSetReturnsStructuredError();
+        TestTcmPartialFailurePreservesNativeEvidence();
+        TestGenericThrownLockIsOutcomeUnknown();
         Console.WriteLine("AscetComponentEditableTcmOutputTest passed.");
         return 0;
     }
@@ -193,8 +204,9 @@ public static class AscetComponentEditableTcmOutputTest
         AscetComponentEditableResult result = new AscetEditableService().SetEditable("DEMO\\PID");
 
         AssertTrue(result.Editable, "TCM set must create an editable edition.");
-        AssertTrue(!result.BeforeEditable && result.AfterEditable && result.Changed, "TCM set must report false-to-true telemetry.");
-        AssertEqual(1, result.NativeMutationAttemptCount, "TCM set must report one SCM mutation attempt.");
+        AssertTrue(!result.BeforeEditable && result.AfterEditable == true && result.Changed, "TCM set must report false-to-true telemetry.");
+        AssertEqual(1, result.NativeMutationAttemptCount, "TCM set must report one public mutation attempt.");
+        AssertEqual(2, result.NativeScmOperationCount, "TCM set must report both native SCM commands.");
         AssertCommands(context.Scm.Commands, "ReserveItem", "CreateEdition");
         AssertEqual(3, context.Session.ResolveCount, "TCM set must re-resolve after reserve and after create edition.");
     }
@@ -226,9 +238,10 @@ public static class AscetComponentEditableTcmOutputTest
         AscetSCMInterface scm = new AscetSCMInterface(component, "<scmDriverName>TCM</scmDriverName>", false);
         AscetReadDomainServiceBase.CurrentSession = new AscetSession(component, scm);
         AscetComponentEditableResult result = new AscetEditableService().SetEditable("DEMO\\PID");
-        AssertTrue(result.Editable && result.BeforeEditable && result.AfterEditable, "Already editable component must remain editable.");
+        AssertTrue(result.Editable && result.BeforeEditable && result.AfterEditable == true, "Already editable component must remain editable.");
         AssertTrue(!result.Changed, "Already editable component must report changed=false.");
         AssertEqual(0, result.NativeMutationAttemptCount, "Already editable component must not issue an SCM mutation.");
+        AssertEqual(0, result.NativeScmOperationCount, "Already editable component must report zero native SCM commands.");
         AssertCommands(scm.Commands);
     }
     private static void TestFailedSetReturnsStructuredError()
@@ -253,6 +266,49 @@ public static class AscetComponentEditableTcmOutputTest
         AssertContains(json, "\"changed\":false", "Failure output must expose mutation telemetry.");
         AssertContains(json, "\"saveState\":\"not_applicable\"", "SCM mutation output must mark database Save as not applicable.");
         AssertContains(json, "\"code\":\"component_not_editable\"", "Failure output must expose a stable error code.");
+    }
+
+
+    private static void TestTcmPartialFailurePreservesNativeEvidence()
+    {
+        TestContext context = CreateContext("<scmDriverName>TCM</scmDriverName>", false);
+        context.Scm.ThrowOnCommand = "CreateEdition";
+        try
+        {
+            new AscetEditableService().SetEditable("DEMO\\PID");
+            throw new Exception("Expected CreateEdition failure.");
+        }
+        catch (AscetComponentEditableMutationException ex)
+        {
+            AscetComponentEditableResult result = ex.Result;
+            AssertEqual("partial_failure", result.MutationStatus, "ReserveItem success followed by CreateEdition failure must be partial_failure.");
+            AssertEqual(1, result.NativeMutationAttemptCount, "Public editability mutation attempt must be counted once.");
+            AssertEqual(2, result.NativeScmOperationCount, "Both TCM commands must be recorded.");
+            AssertTrue(result.RecoveryRequired, "Partial TCM failure must require recovery.");
+            AssertTrue(result.OriginalError != null, "Partial TCM failure must preserve the original error.");
+            AssertTrue(result.NativeOperations[0].Returned, "ReserveItem must be recorded as returned.");
+            AssertTrue(result.NativeOperations[1].Threw, "CreateEdition must be recorded as thrown.");
+            AssertCommands(context.Scm.Commands, "ReserveItem", "CreateEdition");
+        }
+    }
+
+    private static void TestGenericThrownLockIsOutcomeUnknown()
+    {
+        TestContext context = CreateContext("<scmDriverId>SVN</scmDriverId>", false);
+        context.Scm.ThrowOnCommand = "Lock";
+        try
+        {
+            new AscetEditableService().SetEditable("DEMO\\PID");
+            throw new Exception("Expected Lock failure.");
+        }
+        catch (AscetComponentEditableMutationException ex)
+        {
+            AscetComponentEditableResult result = ex.Result;
+            AssertEqual("outcome_unknown", result.MutationStatus, "A thrown Lock may have changed SCM state and must be outcome_unknown.");
+            AssertEqual(1, result.NativeScmOperationCount, "Thrown Lock must still count as an attempted SCM command.");
+            AssertTrue(result.RecoveryRequired, "Ambiguous Lock failure must require recovery.");
+            AssertTrue(result.NativeOperations[0].Threw, "Thrown Lock evidence must be retained.");
+        }
     }
 
     private static TestContext CreateContext(string bindingInformation, bool lockCreatesEdition)
@@ -289,6 +345,14 @@ public static class AscetComponentEditableTcmOutputTest
         if (!condition)
         {
             throw new Exception(message);
+        }
+    }
+
+    private static void AssertEqual(string expected, string actual, string message)
+    {
+        if (!String.Equals(expected, actual, StringComparison.Ordinal))
+        {
+            throw new Exception(message + " Expected '" + expected + "' but got '" + actual + "'.");
         }
     }
 

@@ -1,4 +1,5 @@
-﻿import { Type } from "typebox";
+import { Type } from "typebox";
+import { ascetMutationPublicResultSchema } from "../../../edit/result-contract.ts";
 import {
 	type AscetParameterDataDecision,
 	type AscetParameterImplementationDecision,
@@ -41,7 +42,7 @@ export interface AscetCreateDependentChainLocalElement {
 export interface AscetCreateDependentChainParams {
 	action: "create_dependent_chain";
 	provider: {
-		componentPath?: string;
+		componentPath: string;
 		element: AscetCreateDependentChainProviderElement;
 	};
 	consumer: {
@@ -55,7 +56,7 @@ export interface AscetCreateDependentChainParams {
 		variantPolicy: "default" | "selected" | "all";
 		variants?: string[];
 	};
-	intent: "preview" | "apply";
+	intent: "apply";
 }
 
 const providerElementSchema = Type.Object(
@@ -99,7 +100,7 @@ export const ascetCreateDependentChainActionSchema = Type.Object(
 		action: Type.Literal("create_dependent_chain"),
 		provider: Type.Object(
 			{
-				componentPath: Type.Optional(Type.String({ minLength: 1 })),
+				componentPath: Type.String({ minLength: 1 }),
 				element: providerElementSchema,
 			},
 			{ additionalProperties: false },
@@ -121,7 +122,7 @@ export const ascetCreateDependentChainActionSchema = Type.Object(
 			},
 			{ additionalProperties: false },
 		),
-		intent: Type.Union([Type.Literal("preview"), Type.Literal("apply")]),
+		intent: Type.Literal("apply"),
 	},
 	{ additionalProperties: false },
 );
@@ -178,26 +179,6 @@ const ascetDependentChainReadSuccessSchema = Type.Object(
 		complete: Type.Literal(true),
 	},
 	{ additionalProperties: false },
-);
-
-const ascetDependentChainWriteSuccessSchema = Type.Object(
-	{
-		ok: Type.Literal(true),
-		changed: Type.Boolean(),
-		verified: Type.Optional(Type.Boolean()),
-		created: Type.Optional(Type.Unknown()),
-		configured: Type.Optional(Type.Unknown()),
-		code: Type.Optional(Type.String()),
-	},
-	{ additionalProperties: true },
-);
-
-const ascetDependentChainWriteFailureSchema = Type.Object(
-	{
-		ok: Type.Literal(false),
-		code: Type.String({ minLength: 1 }),
-	},
-	{ additionalProperties: true },
 );
 
 export const ascetReadDependentChainActionContract = defineAscetAction({
@@ -265,22 +246,18 @@ export const ascetCreateDependentChainActionContract = defineAscetAction({
 	profiles: ASCET_WRITE_PROFILES,
 	supportedObjectKinds: ["class", "module", "statemachine"],
 	parameters: ascetCreateDependentChainActionSchema,
-	result: Type.Union([
-		ascetDependentChainWriteSuccessSchema,
-		ascetDependentChainWriteFailureSchema,
-		ascetPublicErrorResultSchema,
-	]),
+	result: ascetMutationPublicResultSchema,
 	execution: {
 		kind: "bridge",
 		logicalCommandId: "AscetCreateDependentChain",
 		operation: "configure_parameter_dependency_chain_execute",
 	},
 	guidance: {
-		compact: "preview or create-or-verify one Provider/Imported/Local Parameter dependency chain",
+		compact: "create-or-verify one Provider/Imported/Local Parameter dependency chain",
 		intent:
 			"Create missing Elements, reuse exact Elements, configure one explicit dependency, and verify by automatic readback.",
 		useWhen: [
-			"A complete explicit Element and binding definition is available for preview or apply.",
+			"A complete explicit Element and binding definition is available for apply.",
 			"The previous set-only case must configure a dependency between existing exact Elements.",
 		],
 		avoidWhen: [
@@ -292,21 +269,22 @@ export const ascetCreateDependentChainActionContract = defineAscetAction({
 		result: { shape: "dependentChainWrite", fields: ["ok", "changed", "verified", "created", "configured", "code"] },
 		summary: "Create or verify one Provider/Imported/Local Parameter dependency chain.",
 		rules: [
-			"By default this tool returns a non-error preflight outcome and does not write.",
-			"Use intent=apply when the user explicitly asked for the exact write; runtime permission handling performs any required confirmation in the same call. Use intent=preview only for a non-mutating preview.",
-			"Preflight and dry-run remain available when a Component is not editable.",
+			"This mutation action executes only with intent=apply.",
+			"Runtime permission handling performs any required confirmation in the same apply call.",
+			"Use mode=check for read-only editability inspection and ascet_read.read_dependent_chain for dependency inspection.",
 			"Runtime performs a fresh same-session editable=true check immediately before each real mutation.",
 			"Do not call mode=check merely to authorize a write, and never call mode=set without explicit user intent.",
 			"Executed writes always perform mandatory action-specific readback verification.",
 			"Do not request or disable verification through ascet_edit parameters.",
 			"Provide explicit Element definitions. Missing Elements are created; exact existing Elements are reused; conflicts are never overwritten.",
-			"When provider.componentPath is omitted, Runtime uses live native Element Search and accepts only one exact validated Exported Parameter.",
+			"provider.componentPath is required; the normal write route does not discover providers.",
 			"Apply always performs automatic full readback. A successful apply is verified before it is returned.",
 			"Use one explicit Formula/Formal/Imported binding only; never guess binding or DataVariant metadata.",
+			'For the standard identity binding, use formula="x", formal="x", and map x to consumer.importedElement.name; do not use the Imported Parameter name as the formal.',
 		],
 		fewShots: [
 			{
-				intent: "preview dependency chain",
+				intent: "create dependency chain",
 				args: {
 					action: "create_dependent_chain",
 					provider: {
@@ -335,12 +313,12 @@ export const ascetCreateDependentChainActionContract = defineAscetAction({
 							implementation: { mode: "ascetDefault" },
 						},
 					},
-					binding: { formula: "P_Threshold", formal: "P_Threshold", variantPolicy: "default" },
-					intent: "preview",
+					binding: { formula: "x", formal: "x", variantPolicy: "default" },
+					intent: "apply",
 				},
 			},
 		],
-		tags: ["write", "dependency", "create", "provider-discovery", "readback"],
+		tags: ["write", "dependency", "create", "readback"],
 	},
 });
 

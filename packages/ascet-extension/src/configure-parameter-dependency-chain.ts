@@ -309,12 +309,8 @@ function removeBridgeRequest(path: string): void {
 function normalizeBridgeResult(data: unknown): ConfigureParameterDependencyChainResult | undefined {
 	if (data === null || typeof data !== "object" || Array.isArray(data)) return undefined;
 	const envelope = data as Record<string, unknown>;
-	const candidate =
-		envelope.type === "response" && envelope.protocolVersion === 1
-			? envelope.result
-			: envelope.ok === true && envelope.result !== undefined
-				? envelope.result
-				: data;
+	if (!Object.hasOwn(envelope, "result")) return undefined;
+	const candidate = envelope.result;
 	if (candidate === null || typeof candidate !== "object" || Array.isArray(candidate)) return undefined;
 	const result = candidate as Record<string, unknown>;
 	const meta =
@@ -373,6 +369,13 @@ export async function runConfigureParameterDependencyChainBridge(
 			jobKind: control.intent === "apply" ? "write" : "read",
 		});
 		if (!cliResult.ok) {
+			const preserved = normalizeBridgeResult(cliResult.data);
+			if (preserved) {
+				return {
+					...preserved,
+					error: preserved.error ?? cliResult.error,
+				};
+			}
 			const unknown = cliResult.error?.code === "write_outcome_unknown";
 			return {
 				status: unknown ? "unknown_outcome" : "error",

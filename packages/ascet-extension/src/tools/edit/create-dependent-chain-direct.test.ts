@@ -1,4 +1,4 @@
-﻿import assert from "node:assert/strict";
+import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import type { AscetCliExecutionResult, AscetCliRequest } from "../../cli.ts";
@@ -46,13 +46,19 @@ test("create_dependent_chain uses one direct Bridge operation without preview or
 					implementation: { mode: "ascetDefault" },
 				},
 			},
-			binding: { formula: "P_Threshold", formal: "P_Threshold", variantPolicy: "default" },
+			binding: { formula: "x", formal: "x", variantPolicy: "default" },
 			intent: "apply",
 		},
 		new AbortController().signal,
 		undefined,
 		{
 			cwd: process.cwd(),
+			ascetPermission: {
+				mode: "default",
+				rules: [],
+				databaseFingerprint: "database-fingerprint",
+				databaseFingerprintSource: "session",
+			},
 			hasUI: true,
 			ui: { confirm: async () => true },
 			executeCli: async (request) => {
@@ -67,23 +73,15 @@ test("create_dependent_chain uses one direct Bridge operation without preview or
 				if (operation === "configure_parameter_dependency_chain_execute") {
 					const bridgeRequest = JSON.parse(readFileSync(request.args[2] ?? "", "utf8")) as {
 						intent?: string;
+						dependency?: { formula?: string; formals?: string[]; mappings?: Record<string, { name?: string }> };
 					};
-					if (bridgeRequest.intent === "preview") {
-						return response(request, {
-							status: "preview",
-							writesPerformed: false,
-							mutationStarted: false,
-							beforeState: { version: "one" },
-							targets: [
-								{ path: "FeatureA/Provider", oid: "provider", editable: true },
-								{ path: "FeatureA/Consumer", oid: "consumer", editable: true },
-							],
-							stages: [{ stage: "dependency", status: "configure" }],
-							verification: { status: "available", verified: false },
-							rollback: { required: false, status: "not_required" },
-						});
-					}
+					assert.equal(bridgeRequest.dependency?.formula, "x");
+					assert.deepEqual(bridgeRequest.dependency?.formals, ["x"]);
+					assert.deepEqual(bridgeRequest.dependency?.mappings, {
+						x: { kind: "parameter", name: "P_Threshold" },
+					});
 					return response(request, {
+						outcome: "succeeded",
 						status: "committed",
 						writesPerformed: true,
 						mutationStarted: true,
@@ -110,5 +108,19 @@ test("create_dependent_chain uses one direct Bridge operation without preview or
 	);
 
 	assert.equal(result.details.outcome.status, "ok");
+	assert.deepEqual(result.details.mutationResult?.permission, {
+		mode: "default",
+		decision: "ask",
+		risk: "high",
+		reason: "Default mode requires confirmation for every actual ASCET write.",
+		path: "FeatureA\\Consumer",
+		databaseFingerprintKnown: true,
+		databaseFingerprintSource: "session",
+		evidenceComplete: true,
+		targetCount: 2,
+		variantCount: 1,
+		impactUnknown: false,
+	});
+	assert.equal(result.details.mutationResult?.audit?.databaseFingerprint, "database-fingerprint");
 	assert.deepEqual(operations, ["configure_parameter_dependency_chain_execute"]);
 });

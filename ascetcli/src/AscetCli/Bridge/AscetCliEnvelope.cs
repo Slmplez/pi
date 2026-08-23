@@ -7,7 +7,8 @@ using System.Web.Script.Serialization;
 internal static class AscetCliEnvelope
 {
     private static readonly JavaScriptSerializer Serializer = CreateSerializer();
-    private static readonly TextWriter ProtocolWriter = CreateProtocolWriter();
+    private static readonly TextWriter DefaultProtocolWriter = CreateProtocolWriter();
+    private static TextWriter protocolWriter = DefaultProtocolWriter;
     private static readonly string BridgeGeneration = Guid.NewGuid().ToString("D");
     private static readonly Stopwatch ProcessStopwatch = Stopwatch.StartNew();
 
@@ -44,10 +45,21 @@ internal static class AscetCliEnvelope
         string operation,
         bool? mutationStarted = null)
     {
+        return Error(code, message, mode, operation, null, mutationStarted);
+    }
+
+    public static Dictionary<string, object> Error(
+        string code,
+        string message,
+        string mode,
+        string operation,
+        Dictionary<string, object> result,
+        bool? mutationStarted)
+    {
         Dictionary<string, object> error = new Dictionary<string, object>();
         error["code"] = code ?? String.Empty;
         error["message"] = message ?? String.Empty;
-        return Error(error, mode, operation, mutationStarted);
+        return Error(error, mode, operation, result, mutationStarted);
     }
 
     public static Dictionary<string, object> Error(
@@ -56,7 +68,17 @@ internal static class AscetCliEnvelope
         string operation,
         bool? mutationStarted = null)
     {
-        return CreateEnvelope(false, mode, operation, null, error, mutationStarted);
+        return Error(error, mode, operation, null, mutationStarted);
+    }
+
+    public static Dictionary<string, object> Error(
+        Dictionary<string, object> error,
+        string mode,
+        string operation,
+        Dictionary<string, object> result,
+        bool? mutationStarted)
+    {
+        return CreateEnvelope(false, mode, operation, result, error, mutationStarted);
     }
 
     public static int WriteSuccess(Dictionary<string, object> envelope)
@@ -71,8 +93,18 @@ internal static class AscetCliEnvelope
 
     public static int Write(int exitCode, Dictionary<string, object> envelope)
     {
-        ProtocolWriter.WriteLine(Serializer.Serialize(envelope ?? new Dictionary<string, object>()));
+        protocolWriter.WriteLine(Serializer.Serialize(envelope ?? new Dictionary<string, object>()));
         return exitCode;
+    }
+
+    internal static void SetProtocolWriterForTesting(TextWriter writer)
+    {
+        protocolWriter = writer ?? DefaultProtocolWriter;
+    }
+
+    internal static void ResetProtocolWriterForTesting()
+    {
+        protocolWriter = DefaultProtocolWriter;
     }
 
     public static string GetToken(string[] args, int index)

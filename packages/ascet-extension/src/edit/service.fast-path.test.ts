@@ -16,6 +16,7 @@ const approvingContext: AscetEditApprovalContext = {
 function bridgeResult(
 	request: AscetCliRequest,
 	result: unknown = {
+		outcome: "succeeded",
 		changed: true,
 		mutationStatus: "applied",
 		saveAttempted: true,
@@ -106,8 +107,8 @@ describe("ASCET edit fast path", () => {
 			{
 				action: "apply_element_spec",
 				componentPath: "DEMO/C",
-				elementIntent: "create",
-				elements: [],
+				elementIntent: "patch",
+				elements: [{ role: "standardPrimitive", name: "P" }],
 				intent: "apply",
 			},
 			{ action: "apply_project_formula", projectPath: "DEMO/P", specFile: formulaFile, intent: "apply" },
@@ -126,6 +127,15 @@ describe("ASCET edit fast path", () => {
 			for (const params of cases) {
 				const result = await runAscetEdit(params, options(calls), approvingContext);
 				assert.equal(result.details.outcome.status, "ok", params.action);
+				const permission = result.details.mutationResult?.permission;
+				assert.ok(permission, params.action);
+				assert.equal(permission.databaseFingerprintKnown, false, params.action);
+				assert.equal(permission.databaseFingerprintSource, "unavailable", params.action);
+				assert.equal(permission.variantCount, 1, params.action);
+				const unbounded = params.action === "delete_folder" || params.action === "apply_project_formula";
+				assert.equal(permission.evidenceComplete, !unbounded, params.action);
+				assert.equal(permission.impactUnknown, unbounded, params.action);
+				assert.equal(permission.targetCount, unbounded ? undefined : 1, params.action);
 				const request = calls.at(-1);
 				assert.ok(request, params.action);
 				assert.equal(request[0], "exec", params.action);
@@ -174,7 +184,7 @@ describe("ASCET edit fast path", () => {
 		assert.equal(result.details.outcome.status, "ok");
 		assert.equal(requestArgs.length, 1);
 	});
-	test("accepts canonical evidence nested in the Bridge result payload", async () => {
+	test("rejects canonical evidence nested below a retired payload wrapper", async () => {
 		const calls: string[][] = [];
 		const result = await runAscetEdit(
 			{ action: "create_component", componentPath: "DEMO/C", kind: "class", intent: "apply" },
@@ -198,18 +208,8 @@ describe("ASCET edit fast path", () => {
 			}),
 			approvingContext,
 		);
-		assert.equal(result.details.outcome.status, "ok");
-		assert.equal(result.details.mutationResult?.changed, true);
-		assert.equal(result.details.mutationResult?.mutationStatus, "applied");
-		assert.equal(result.details.mutationResult?.saveAttempted, true);
-		assert.equal(result.details.mutationResult?.saveSucceeded, true);
-		assert.equal(result.details.mutationResult?.saveState, "saved");
-		assert.equal(result.details.mutationResult?.verified, true);
-		assert.equal(result.details.mutationResult?.verificationMode, "same_session_exact_path");
-		assert.equal(result.details.mutationResult?.sessionCount, 1);
-		assert.equal(result.details.mutationResult?.saveCount, 1);
-		assert.equal(result.details.mutationResult?.editableRetryCount, 0);
-		assert.equal(result.details.mutationResult?.nativeMutationAttemptCount, 1);
+		assert.equal(result.details.outcome.status, "partial");
+		assert.equal(result.details.raw?.error?.code, "ascet_edit_canonical_evidence_invalid");
 		assert.equal(calls.length, 1);
 	});
 	test("does not execute a legacy preview or auxiliary read", async () => {
@@ -307,6 +307,7 @@ describe("ASCET edit fast path", () => {
 		const result = await runAscetEdit(
 			{ action: "create_folder", folderPath: "DEMO/New", intent: "apply" },
 			options(calls, {
+				outcome: "succeeded",
 				changed: false,
 				mutationStatus: "no_op",
 				saveAttempted: false,
@@ -331,6 +332,7 @@ describe("ASCET edit fast path", () => {
 		const result = await runAscetEdit(
 			{ action: "create_folder", folderPath: "DEMO/New", intent: "apply" },
 			options(calls, {
+				outcome: "succeeded",
 				changed: false,
 				mutationStatus: "no_op",
 				saveAttempted: false,
@@ -375,9 +377,42 @@ describe("ASCET edit fast path", () => {
 	test("keeps explicit editability modes as one native Bridge operation", async () => {
 		for (const mode of ["check", "set"] as const) {
 			const calls: string[][] = [];
+			const editabilityResult =
+				mode === "check"
+					? {
+							outcome: "succeeded",
+							editable: true,
+							mutationStatus: "read_only",
+							changed: false,
+							verified: true,
+							verificationStatus: "passed",
+							verificationMode: "same_session_scm_state",
+							sessionCount: 1,
+							nativeMutationAttemptCount: 0,
+						}
+					: {
+							outcome: "succeeded",
+							editable: true,
+							beforeEditable: true,
+							afterEditable: true,
+							changed: false,
+							mutationStatus: "no_op",
+							saveAttempted: false,
+							saveSucceeded: false,
+							saveState: "not_applicable",
+							verified: true,
+							verificationStatus: "passed",
+							verificationMode: "same_session_scm_state",
+							sessionCount: 1,
+							saveCount: 0,
+							nativeMutationAttemptCount: 0,
+							nativeScmOperationCount: 0,
+							nativeOperations: [],
+							recovery: { required: false, actions: [] },
+						};
 			const result = await runAscetEdit(
 				{ mode, componentPath: "DEMO/C", ...(mode === "set" ? { intent: "apply" } : {}) },
-				options(calls, true, true),
+				options(calls, editabilityResult, true),
 				approvingContext,
 			);
 			assert.equal(result.details.outcome.status, "ok");

@@ -24,7 +24,7 @@ export const ascetSetMethodCodeParameters = Type.Object({
 	componentPath: Type.String({ description: "ASCET component path.", minLength: 1 }),
 	methodName: Type.String({ description: "ASCET method name.", minLength: 1 }),
 	codeFile: Type.String({ description: "Path to replacement method code file.", minLength: 1 }),
-	intent: Type.Union([Type.Literal("preview"), Type.Literal("apply")]),
+	intent: Type.Literal("apply"),
 });
 
 export function buildSetMethodCodeArgs(params: AscetSetMethodCodeParams): string[] {

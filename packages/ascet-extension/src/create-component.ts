@@ -21,7 +21,7 @@ export interface AscetCreateComponentParams {
 	ifExists?: "fail" | "return-existing";
 	verifyReadback?: boolean;
 	rollbackOnFailure?: boolean;
-	intent?: "preview" | "apply";
+	intent?: "apply";
 }
 
 export interface RunAscetCreateComponentOptions {
@@ -46,7 +46,7 @@ export const ascetCreateComponentParameters = Type.Object(
 		language: Type.Optional(Type.Union([Type.Literal("ESDL"), Type.Literal("BDE"), Type.Literal("C")])),
 		ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("return-existing")])),
 		rollbackOnFailure: Type.Optional(Type.Boolean({ description: "Ask the ASCET CLI to roll back when supported." })),
-		intent: Type.Union([Type.Literal("preview"), Type.Literal("apply")]),
+		intent: Type.Literal("apply"),
 	},
 	{
 		description:
@@ -129,12 +129,12 @@ export async function runApprovedAscetCreateComponent(
 	options: RunAscetCreateComponentOptions,
 	ctx: AscetEditApprovalContext,
 ): Promise<AscetCreateComponentResult> {
-	if ((params.intent ?? "preview") !== "apply") {
+	if (params.intent !== "apply") {
 		return createBlockedWriteResult(params, options, {
 			approved: false,
 			code: "ascet_edit_approval_required",
 			message:
-				"Use the guarded public ascet_edit call with intent=preview for authoritative non-mutating preflight.",
+				"intent=apply is required for ascet_edit writes; use mode=check for read-only editability inspection.",
 		});
 	}
 	const approval = await requestAscetEditApproval(

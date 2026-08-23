@@ -7,7 +7,7 @@
 - Renamed the published ASCET Copilot packages from the `@zeerke` scope to `@vaf-agentworks` and pinned publishing to the internal `ascet-copilot-npm` Nexus registry.
 
 - Replaced the public dependency-chain write surfaces with `ascet_edit.create_dependent_chain`; it creates or verifies missing/existing Provider, Imported, and Local Parameters, configures one explicit binding, and requires automatic readback while the legacy backends remain internal.
-- Replaced public ASCET write control `executeWrite` with `intent: "preview" | "apply"`, removed public plan/commit and `planId` inputs, and moved `apply_element_spec` create/patch/upsert/restore semantics to `elementIntent`.
+- Replaced public ASCET write control `executeWrite` with apply-only `intent: "apply"`, removed public plan/commit and `planId` inputs, and moved `apply_element_spec` create/patch/upsert/restore semantics to `elementIntent`.
 
 ### Added
 
@@ -29,6 +29,8 @@
 - Batch writes now evaluate complete aggregate target impact, re-prompt after one material scope change, acquire all required editability in the guarded backend session, and preserve per-item results.
 
 ### Fixed
+
+- Aligned every public `ascet_edit` mutation and `mode=set` with apply-only runtime behavior, required explicit dependency-chain Provider paths and `x` Formula/Formal mapping, activated semantic validation, and standardized canonical mutation/editability evidence across Bridge result paths.
 
 - Fixed ASCET profile activation to skip redundant `setActiveTools` updates when the final ordered tool list is unchanged.
 - Fixed ASCET Read Tools to preserve large and empty results as machine-readable JSON, restore implementation and StateMachine detail modes, return complete dependency chains, and distinguish unavailable Project enumeration from empty dependency results.

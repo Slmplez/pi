@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "catalogFingerprint": "4c6500aabcb3c87f0fb7799ed094463c98286bda24d09107d1efa3b6d4c44bc7",
+  "catalogFingerprint": "6d877c6ac9d297f3a67d7345de7e87064518940aabe7d742fb080312ae8d8e63",
   "actions": [
     {
       "id": "ascet_batch_write.batch_create_component",
@@ -366,9 +366,9 @@
     },
     {
       "id": "ascet_edit.apply_element_spec",
-      "schemaFingerprint": "b8a024584e68f1dc6bf42e7e2c824c5a75f5afcaef32436c3f8f4f4c125b5496",
-      "rulesFingerprint": "8469f46230d19ec28c664ddea988f8f9f691ab975c4aa090478674ccb369f636",
-      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
+      "schemaFingerprint": "86edfbb7ca5e4e82e090ac61a8f084311ed30a3ae64d13050fccf1624d168980",
+      "rulesFingerprint": "827085b0629f761048cb6cfc659776d460d8c86690e7460eaf3679716e87123a",
+      "resultFingerprint": "3b8da3ff072555e973a2ce379545e96cddb29f7993e13049d299384541ad14e3",
       "schema": {
         "required": [
           "action",
@@ -379,8 +379,6 @@
         ],
         "optional": [
           "projectPath",
-          "dataTarget",
-          "implementationTarget",
           "deleteMissing",
           "recreateIncompatible"
         ],
@@ -395,8 +393,6 @@
             ],
             "optional": [
               "projectPath",
-              "dataTarget",
-              "implementationTarget",
               "deleteMissing",
               "recreateIncompatible"
             ]
@@ -411,8 +407,6 @@
             ],
             "optional": [
               "projectPath",
-              "dataTarget",
-              "implementationTarget",
               "deleteMissing",
               "recreateIncompatible"
             ]
@@ -427,8 +421,6 @@
             ],
             "optional": [
               "projectPath",
-              "dataTarget",
-              "implementationTarget",
               "deleteMissing",
               "recreateIncompatible"
             ]
@@ -443,8 +435,6 @@
             ],
             "optional": [
               "projectPath",
-              "dataTarget",
-              "implementationTarget",
               "deleteMissing",
               "recreateIncompatible"
             ]
@@ -459,6 +449,28 @@
       "result": {
         "shape": "result",
         "fields": [
+          "status",
+          "changed",
+          "mutationStatus",
+          "saveAttempted",
+          "saveSucceeded",
+          "saveState",
+          "verified",
+          "verificationStatus",
+          "verificationMode",
+          "sessionCount",
+          "saveCount",
+          "editableRetryCount",
+          "nativeMutationAttemptCount",
+          "permission",
+          "preflight",
+          "editability",
+          "mutation",
+          "verification",
+          "bridge",
+          "recovery",
+          "audit",
+          "outcome",
           "error"
         ]
       }
@@ -466,8 +478,8 @@
     {
       "id": "ascet_edit.apply_project_formula",
       "schemaFingerprint": "4a3400ca33d69b7a5f2c608694446dc3dc4dc28cdbd8d9fb06fc8c0419582db6",
-      "rulesFingerprint": "d3febaf28e21a24bbe10e8a00ea41cc0f541464ba71b9d00b550b594e8e9b27e",
-      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
+      "rulesFingerprint": "91d34e559160d3716187db3aefc685a315c8d110ed37fc7dbbc86d22e0a50206",
+      "resultFingerprint": "3b8da3ff072555e973a2ce379545e96cddb29f7993e13049d299384541ad14e3",
       "schema": {
         "required": [
           "action",
@@ -484,6 +496,28 @@
       "result": {
         "shape": "result",
         "fields": [
+          "status",
+          "changed",
+          "mutationStatus",
+          "saveAttempted",
+          "saveSucceeded",
+          "saveState",
+          "verified",
+          "verificationStatus",
+          "verificationMode",
+          "sessionCount",
+          "saveCount",
+          "editableRetryCount",
+          "nativeMutationAttemptCount",
+          "permission",
+          "preflight",
+          "editability",
+          "mutation",
+          "verification",
+          "bridge",
+          "recovery",
+          "audit",
+          "outcome",
           "error"
         ]
       }
@@ -492,7 +526,7 @@
       "id": "ascet_edit.check",
       "schemaFingerprint": "9954da9fcd52e75d728be580889449ffe79b97c409da9a8c49b9dd5161e7592c",
       "rulesFingerprint": "e02c0a3a7f70dd0cbbdbc703f6ac344dff4fd4b3870ea26da8b3b9466226a75c",
-      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
+      "resultFingerprint": "8092e004730048bb745262ecbfd6b748c924d839c9c58303693a6007a47d29fe",
       "schema": {
         "required": [
           "mode",
@@ -504,6 +538,15 @@
       "result": {
         "shape": "result",
         "fields": [
+          "outcome",
+          "editable",
+          "mutationStatus",
+          "changed",
+          "verified",
+          "verificationStatus",
+          "verificationMode",
+          "sessionCount",
+          "nativeMutationAttemptCount",
           "error"
         ]
       }
@@ -511,8 +554,8 @@
     {
       "id": "ascet_edit.create_component",
       "schemaFingerprint": "dbb304754c4c6204bdafb691831e7e921723aa85eb65d94f9491f3f5ecbc0497",
-      "rulesFingerprint": "a7876b92f29f5f34bb218fee0b0f1c69e76bd5c95ad2db86e791dcbacdafdb0a",
-      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
+      "rulesFingerprint": "0cdcb982f556e1d3477e7fa32bc94f6363c7093c8dd0d1814a9d4ec436329068",
+      "resultFingerprint": "3b8da3ff072555e973a2ce379545e96cddb29f7993e13049d299384541ad14e3",
       "schema": {
         "required": [
           "action",
@@ -530,6 +573,28 @@
       "result": {
         "shape": "result",
         "fields": [
+          "status",
+          "changed",
+          "mutationStatus",
+          "saveAttempted",
+          "saveSucceeded",
+          "saveState",
+          "verified",
+          "verificationStatus",
+          "verificationMode",
+          "sessionCount",
+          "saveCount",
+          "editableRetryCount",
+          "nativeMutationAttemptCount",
+          "permission",
+          "preflight",
+          "editability",
+          "mutation",
+          "verification",
+          "bridge",
+          "recovery",
+          "audit",
+          "outcome",
           "error"
         ]
       }
@@ -537,7 +602,7 @@
     {
       "id": "ascet_edit.create_dependent_chain",
       "schemaFingerprint": "dad0cdec9e837f53c7d1c6363d9f8563067e5a122b0a464b3ede54b46d4e06f4",
-      "rulesFingerprint": "e7b7d6c5cdd0df99721256dcd1c549aaac65683369d0df2f718dc833caa77bc5",
+      "rulesFingerprint": "c69abbb8632ab15b1ac9f14f50c0f6aacf2fe53cce5f9d418a3391256e660695",
       "resultFingerprint": "d6c085ccf187be25e8c0c3e545b2f580d88cca86bf28738ad9b2fc9f22ff317e",
       "schema": {
         "required": [
@@ -569,8 +634,8 @@
     {
       "id": "ascet_edit.create_folder",
       "schemaFingerprint": "fd97b679c7d6f92e26753faab733e4fdcbfde34a3e0feabcb0097bbe25299102",
-      "rulesFingerprint": "423c15011de6b6bb52d9305bd047bf172ebaef433588572cc34e9dbdfe327214",
-      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
+      "rulesFingerprint": "c8bcf2a11e6437818f28dae01b2fc1082da0360e2f93b9ab64450dafad0d9756",
+      "resultFingerprint": "3b8da3ff072555e973a2ce379545e96cddb29f7993e13049d299384541ad14e3",
       "schema": {
         "required": [
           "action",
@@ -583,6 +648,28 @@
       "result": {
         "shape": "result",
         "fields": [
+          "status",
+          "changed",
+          "mutationStatus",
+          "saveAttempted",
+          "saveSucceeded",
+          "saveState",
+          "verified",
+          "verificationStatus",
+          "verificationMode",
+          "sessionCount",
+          "saveCount",
+          "editableRetryCount",
+          "nativeMutationAttemptCount",
+          "permission",
+          "preflight",
+          "editability",
+          "mutation",
+          "verification",
+          "bridge",
+          "recovery",
+          "audit",
+          "outcome",
           "error"
         ]
       }
@@ -590,8 +677,8 @@
     {
       "id": "ascet_edit.create_method",
       "schemaFingerprint": "1ad8f7007472fef6d0621acdaa7033393fc7d0f7fbafb459bfed30d7c5cb5760",
-      "rulesFingerprint": "8e3e910a068870a5961b3cbf5e58a28bdff83baf500c70036cdcd000bb7be839",
-      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
+      "rulesFingerprint": "1bef55fe07f013af080f49524879d1771fe37b94c25d1ae4ec49bc7bebf56d13",
+      "resultFingerprint": "3b8da3ff072555e973a2ce379545e96cddb29f7993e13049d299384541ad14e3",
       "schema": {
         "required": [
           "action",
@@ -610,6 +697,28 @@
       "result": {
         "shape": "result",
         "fields": [
+          "status",
+          "changed",
+          "mutationStatus",
+          "saveAttempted",
+          "saveSucceeded",
+          "saveState",
+          "verified",
+          "verificationStatus",
+          "verificationMode",
+          "sessionCount",
+          "saveCount",
+          "editableRetryCount",
+          "nativeMutationAttemptCount",
+          "permission",
+          "preflight",
+          "editability",
+          "mutation",
+          "verification",
+          "bridge",
+          "recovery",
+          "audit",
+          "outcome",
           "error"
         ]
       }
@@ -617,8 +726,8 @@
     {
       "id": "ascet_edit.delete_component",
       "schemaFingerprint": "f5cd022865a65e1c0031dd3071e1bbdb8c604c7720dba711ac2ff080e02977df",
-      "rulesFingerprint": "423c15011de6b6bb52d9305bd047bf172ebaef433588572cc34e9dbdfe327214",
-      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
+      "rulesFingerprint": "c8bcf2a11e6437818f28dae01b2fc1082da0360e2f93b9ab64450dafad0d9756",
+      "resultFingerprint": "3b8da3ff072555e973a2ce379545e96cddb29f7993e13049d299384541ad14e3",
       "schema": {
         "required": [
           "action",
@@ -633,6 +742,28 @@
       "result": {
         "shape": "result",
         "fields": [
+          "status",
+          "changed",
+          "mutationStatus",
+          "saveAttempted",
+          "saveSucceeded",
+          "saveState",
+          "verified",
+          "verificationStatus",
+          "verificationMode",
+          "sessionCount",
+          "saveCount",
+          "editableRetryCount",
+          "nativeMutationAttemptCount",
+          "permission",
+          "preflight",
+          "editability",
+          "mutation",
+          "verification",
+          "bridge",
+          "recovery",
+          "audit",
+          "outcome",
           "error"
         ]
       }
@@ -640,8 +771,8 @@
     {
       "id": "ascet_edit.delete_folder",
       "schemaFingerprint": "e0485037fe598f2d7490912c2563c485d1956e961e3871aa135cae77825138ce",
-      "rulesFingerprint": "423c15011de6b6bb52d9305bd047bf172ebaef433588572cc34e9dbdfe327214",
-      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
+      "rulesFingerprint": "c8bcf2a11e6437818f28dae01b2fc1082da0360e2f93b9ab64450dafad0d9756",
+      "resultFingerprint": "3b8da3ff072555e973a2ce379545e96cddb29f7993e13049d299384541ad14e3",
       "schema": {
         "required": [
           "action",
@@ -656,6 +787,28 @@
       "result": {
         "shape": "result",
         "fields": [
+          "status",
+          "changed",
+          "mutationStatus",
+          "saveAttempted",
+          "saveSucceeded",
+          "saveState",
+          "verified",
+          "verificationStatus",
+          "verificationMode",
+          "sessionCount",
+          "saveCount",
+          "editableRetryCount",
+          "nativeMutationAttemptCount",
+          "permission",
+          "preflight",
+          "editability",
+          "mutation",
+          "verification",
+          "bridge",
+          "recovery",
+          "audit",
+          "outcome",
           "error"
         ]
       }
@@ -663,8 +816,8 @@
     {
       "id": "ascet_edit.delete_method",
       "schemaFingerprint": "402ff388ac48f7c73f3dce2b6b99b1a994fa09c4f0c3b9e4fd56f97437443e0a",
-      "rulesFingerprint": "423c15011de6b6bb52d9305bd047bf172ebaef433588572cc34e9dbdfe327214",
-      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
+      "rulesFingerprint": "c8bcf2a11e6437818f28dae01b2fc1082da0360e2f93b9ab64450dafad0d9756",
+      "resultFingerprint": "3b8da3ff072555e973a2ce379545e96cddb29f7993e13049d299384541ad14e3",
       "schema": {
         "required": [
           "action",
@@ -680,6 +833,28 @@
       "result": {
         "shape": "result",
         "fields": [
+          "status",
+          "changed",
+          "mutationStatus",
+          "saveAttempted",
+          "saveSucceeded",
+          "saveState",
+          "verified",
+          "verificationStatus",
+          "verificationMode",
+          "sessionCount",
+          "saveCount",
+          "editableRetryCount",
+          "nativeMutationAttemptCount",
+          "permission",
+          "preflight",
+          "editability",
+          "mutation",
+          "verification",
+          "bridge",
+          "recovery",
+          "audit",
+          "outcome",
           "error"
         ]
       }
@@ -687,8 +862,8 @@
     {
       "id": "ascet_edit.set",
       "schemaFingerprint": "0cfaa0736a021bb06d30b18283d0e577668e320406b5767b9d75302df18ee3cf",
-      "rulesFingerprint": "0b4a3b4b099010e0cbfd170f0ba343b77a004e2780a3a1af5a1c0a43e389dc07",
-      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
+      "rulesFingerprint": "642187a408c59fc70b5865d01fade5e03351f520cc08b9685275c091bd05da4d",
+      "resultFingerprint": "d4d84754499e1ebb5e0a0a8f2d9bc07955da84b89dda72a7cc41e99aaf8913c8",
       "schema": {
         "required": [
           "mode",
@@ -701,6 +876,32 @@
       "result": {
         "shape": "result",
         "fields": [
+          "editable",
+          "beforeEditable",
+          "afterEditable",
+          "saveAttempted",
+          "saveSucceeded",
+          "saveState",
+          "verificationMode",
+          "sessionCount",
+          "saveCount",
+          "nativeMutationAttemptCount",
+          "editableRetryCount",
+          "nativeScmOperationCount",
+          "targetPath",
+          "beforeIsVersion",
+          "beforeIsEdition",
+          "afterIsVersion",
+          "afterIsEdition",
+          "scmBindingType",
+          "originalError",
+          "nativeOperations",
+          "recovery",
+          "outcome",
+          "changed",
+          "mutationStatus",
+          "verified",
+          "verificationStatus",
           "error"
         ]
       }
@@ -708,8 +909,8 @@
     {
       "id": "ascet_edit.set_element_dependency",
       "schemaFingerprint": "1dd216d5eade6c072b18ce14902598bcbfd241841d2d082f1f05541315483222",
-      "rulesFingerprint": "e157acf3aa5afea8f1912d59c361f37256ac26bf3c19ef089c3b809bfd0d55e1",
-      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
+      "rulesFingerprint": "8392429412edd680fcb110121f49fe9d1d47a67d8adbc2ac9aac06d19fe80c3d",
+      "resultFingerprint": "3b8da3ff072555e973a2ce379545e96cddb29f7993e13049d299384541ad14e3",
       "schema": {
         "required": [
           "action",
@@ -737,6 +938,28 @@
       "result": {
         "shape": "result",
         "fields": [
+          "status",
+          "changed",
+          "mutationStatus",
+          "saveAttempted",
+          "saveSucceeded",
+          "saveState",
+          "verified",
+          "verificationStatus",
+          "verificationMode",
+          "sessionCount",
+          "saveCount",
+          "editableRetryCount",
+          "nativeMutationAttemptCount",
+          "permission",
+          "preflight",
+          "editability",
+          "mutation",
+          "verification",
+          "bridge",
+          "recovery",
+          "audit",
+          "outcome",
           "error"
         ]
       }
@@ -744,8 +967,8 @@
     {
       "id": "ascet_edit.set_enumerators",
       "schemaFingerprint": "bcd638026c4ae21bbf01f703982a4a9f5e89329a566c53e66657038edbe9ae02",
-      "rulesFingerprint": "423c15011de6b6bb52d9305bd047bf172ebaef433588572cc34e9dbdfe327214",
-      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
+      "rulesFingerprint": "c8bcf2a11e6437818f28dae01b2fc1082da0360e2f93b9ab64450dafad0d9756",
+      "resultFingerprint": "3b8da3ff072555e973a2ce379545e96cddb29f7993e13049d299384541ad14e3",
       "schema": {
         "required": [
           "action",
@@ -761,6 +984,28 @@
       "result": {
         "shape": "result",
         "fields": [
+          "status",
+          "changed",
+          "mutationStatus",
+          "saveAttempted",
+          "saveSucceeded",
+          "saveState",
+          "verified",
+          "verificationStatus",
+          "verificationMode",
+          "sessionCount",
+          "saveCount",
+          "editableRetryCount",
+          "nativeMutationAttemptCount",
+          "permission",
+          "preflight",
+          "editability",
+          "mutation",
+          "verification",
+          "bridge",
+          "recovery",
+          "audit",
+          "outcome",
           "error"
         ]
       }
@@ -768,8 +1013,8 @@
     {
       "id": "ascet_edit.set_method_code",
       "schemaFingerprint": "6b94ea3844c62f05e125795616bccbf306596ddd12ebcb4e18ef30e586dd8717",
-      "rulesFingerprint": "db36e76d30d8b4263c4c01c410b0c97a9e65e0fe1e90f8b12cb6f8ad6afafbc6",
-      "resultFingerprint": "6234b1d7bea6ab01878daafda911d27d9c978c0c2e09ee6e4f1827c25fdb1319",
+      "rulesFingerprint": "84f1e360aa88e19e12d7efa9e3c5d3a504f7cfa4302c5999df55b79170c8704d",
+      "resultFingerprint": "114347689e5b6a0c674579c957f491a5bccb8474778a731c5671e0b584e91bfb",
       "schema": {
         "required": [
           "action",
@@ -784,7 +1029,7 @@
       },
       "supportedObjectKinds": [],
       "result": {
-        "shape": "writePreflightOrResult",
+        "shape": "mutationResult",
         "fields": [
           "status",
           "changed",
@@ -796,8 +1041,8 @@
     {
       "id": "ascet_edit.set_method_signature",
       "schemaFingerprint": "8bc79c0be80c44a2fe009814e154bd9cc96db9fc4bcb07dad2b67612465bdd98",
-      "rulesFingerprint": "25c6f988c10619c697824d06f19b5f9c7a4453fa1a3294f23dd464cb1b3cda8b",
-      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
+      "rulesFingerprint": "83657ba0aadf1085cd36ffa2e572945d56aaa1ba90639c67e5efa54ab50062f7",
+      "resultFingerprint": "3b8da3ff072555e973a2ce379545e96cddb29f7993e13049d299384541ad14e3",
       "schema": {
         "required": [
           "action",
@@ -815,6 +1060,28 @@
       "result": {
         "shape": "result",
         "fields": [
+          "status",
+          "changed",
+          "mutationStatus",
+          "saveAttempted",
+          "saveSucceeded",
+          "saveState",
+          "verified",
+          "verificationStatus",
+          "verificationMode",
+          "sessionCount",
+          "saveCount",
+          "editableRetryCount",
+          "nativeMutationAttemptCount",
+          "permission",
+          "preflight",
+          "editability",
+          "mutation",
+          "verification",
+          "bridge",
+          "recovery",
+          "audit",
+          "outcome",
           "error"
         ]
       }
@@ -822,8 +1089,8 @@
     {
       "id": "ascet_edit.set_module_code",
       "schemaFingerprint": "04569265c3b9e513b19d545f5b5d6c92e0b291b4f8a3725361a5ee45761231c3",
-      "rulesFingerprint": "9f19c4d729618655f70fe656fd36bcf6f6a1518f016da5b69895510d1e143109",
-      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
+      "rulesFingerprint": "405a4feb01763e8c025f981b1ea25765d0427f9b6ece9c0b6431b67d82f32b6c",
+      "resultFingerprint": "3b8da3ff072555e973a2ce379545e96cddb29f7993e13049d299384541ad14e3",
       "schema": {
         "required": [
           "action",
@@ -842,36 +1109,228 @@
       "result": {
         "shape": "result",
         "fields": [
+          "status",
+          "changed",
+          "mutationStatus",
+          "saveAttempted",
+          "saveSucceeded",
+          "saveState",
+          "verified",
+          "verificationStatus",
+          "verificationMode",
+          "sessionCount",
+          "saveCount",
+          "editableRetryCount",
+          "nativeMutationAttemptCount",
+          "permission",
+          "preflight",
+          "editability",
+          "mutation",
+          "verification",
+          "bridge",
+          "recovery",
+          "audit",
+          "outcome",
           "error"
         ]
       }
     },
     {
       "id": "ascet_edit.set_state_machine_code",
-      "schemaFingerprint": "50f64376cad16efc2734e04882db469b08834fcf60bab31d2e8d166dd514a31b",
-      "rulesFingerprint": "68c65d88b32cbf628f4441002aed9e09330739f6dae2fcb06c2a6f6388c489de",
-      "resultFingerprint": "f023c6efbc9ebcddab2a3aea314d2da100f798beb94a4a2e44cddde9fbc9c6ed",
+      "schemaFingerprint": "5af1c97ff1c47298269204550b3089cc4b0b7867ae58134c2d927ecd3049df19",
+      "rulesFingerprint": "49717f2fef79172a3503673496c8a6645ea8741ef7786dafcee9472936853db5",
+      "resultFingerprint": "3b8da3ff072555e973a2ce379545e96cddb29f7993e13049d299384541ad14e3",
       "schema": {
         "required": [
           "action",
           "stateMachinePath",
-          "operation",
-          "intent"
+          "intent",
+          "operation"
         ],
         "optional": [
-          "stateName",
-          "sourceState",
-          "targetState",
-          "priority",
-          "methodName",
           "code",
           "codeFile"
+        ],
+        "variants": [
+          {
+            "required": [
+              "action",
+              "stateMachinePath",
+              "intent",
+              "operation",
+              "methodName"
+            ],
+            "optional": [
+              "code",
+              "codeFile"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "stateMachinePath",
+              "intent",
+              "operation",
+              "stateName"
+            ],
+            "optional": [
+              "code",
+              "codeFile"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "stateMachinePath",
+              "intent",
+              "operation",
+              "stateName"
+            ],
+            "optional": [
+              "code",
+              "codeFile"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "stateMachinePath",
+              "intent",
+              "operation",
+              "stateName"
+            ],
+            "optional": [
+              "code",
+              "codeFile"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "stateMachinePath",
+              "intent",
+              "operation",
+              "stateName",
+              "methodName"
+            ],
+            "optional": []
+          },
+          {
+            "required": [
+              "action",
+              "stateMachinePath",
+              "intent",
+              "operation",
+              "stateName",
+              "methodName"
+            ],
+            "optional": []
+          },
+          {
+            "required": [
+              "action",
+              "stateMachinePath",
+              "intent",
+              "operation",
+              "stateName",
+              "methodName"
+            ],
+            "optional": []
+          },
+          {
+            "required": [
+              "action",
+              "stateMachinePath",
+              "intent",
+              "operation",
+              "sourceState",
+              "targetState",
+              "priority"
+            ],
+            "optional": [
+              "code",
+              "codeFile"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "stateMachinePath",
+              "intent",
+              "operation",
+              "sourceState",
+              "targetState",
+              "priority"
+            ],
+            "optional": [
+              "code",
+              "codeFile"
+            ]
+          },
+          {
+            "required": [
+              "action",
+              "stateMachinePath",
+              "intent",
+              "operation",
+              "sourceState",
+              "targetState",
+              "priority",
+              "methodName"
+            ],
+            "optional": []
+          },
+          {
+            "required": [
+              "action",
+              "stateMachinePath",
+              "intent",
+              "operation",
+              "sourceState",
+              "targetState",
+              "priority",
+              "methodName"
+            ],
+            "optional": []
+          },
+          {
+            "required": [
+              "action",
+              "stateMachinePath",
+              "intent",
+              "operation",
+              "stateName"
+            ],
+            "optional": []
+          }
         ]
       },
       "supportedObjectKinds": [],
       "result": {
         "shape": "result",
         "fields": [
+          "status",
+          "changed",
+          "mutationStatus",
+          "saveAttempted",
+          "saveSucceeded",
+          "saveState",
+          "verified",
+          "verificationStatus",
+          "verificationMode",
+          "sessionCount",
+          "saveCount",
+          "editableRetryCount",
+          "nativeMutationAttemptCount",
+          "permission",
+          "preflight",
+          "editability",
+          "mutation",
+          "verification",
+          "bridge",
+          "recovery",
+          "audit",
+          "outcome",
           "error"
         ]
       }

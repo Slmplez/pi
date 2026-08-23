@@ -337,9 +337,16 @@ internal sealed class AscetWriteHostDispatcher
 
     private Dictionary<string, object> BuildWriteResultPayload(string operation, Dictionary<string, object> payload, AscetWriteHostDispatchContext context)
     {
-        Dictionary<string, object> result = new Dictionary<string, object>();
+        Dictionary<string, object> actionPayload = payload ?? new Dictionary<string, object>(StringComparer.Ordinal);
+        bool writeSucceeded = GetOptionalBool(actionPayload, "writeSucceeded") || GetOptionalBool(actionPayload, "saveSucceeded");
+        bool verificationRequested = GetOptionalBool(actionPayload, "verifyReadbackRequested");
+        bool verificationSucceeded = GetOptionalBool(actionPayload, "readbackVerified");
+        Dictionary<string, object> result = AscetCanonicalWriteResult.NormalizeSuccess(
+            actionPayload,
+            writeSucceeded,
+            verificationRequested,
+            verificationSucceeded);
         result["operation"] = operation ?? String.Empty;
-        result["payload"] = payload ?? new Dictionary<string, object>();
         result["database"] = BuildDatabasePayload(context == null ? null : context.DatabaseRef);
         result["host"] = BuildHostPayload(context, _capabilityService.ToHostCommandId(operation));
         return result;

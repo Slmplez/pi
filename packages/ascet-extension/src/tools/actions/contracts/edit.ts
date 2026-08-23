@@ -1,5 +1,10 @@
 import { type TProperties, Type } from "typebox";
-import { ascetWriteControlProperties } from "../../../edit/write-control-contract.ts";
+import {
+	ascetEditabilityCheckResultSchema,
+	ascetEditabilitySetResultSchema,
+	ascetMutationPublicResultSchema,
+} from "../../../edit/result-contract.ts";
+import { ascetPublicWriteControlProperties } from "../../../edit/write-control-contract.ts";
 import { ascetApplyElementSpecPlanSchema } from "../../../element-spec-contract.ts";
 import { ASCET_WRITE_PROFILES } from "./profiles.ts";
 import { ascetPublicErrorResultSchema } from "./shared-results.ts";
@@ -38,20 +43,7 @@ const methodKindSchema = Type.Union([
 	Type.Literal("condition"),
 	Type.Literal("trigger"),
 ]);
-const stateMachineOperationSchema = Type.Union([
-	Type.Literal("set-method"),
-	Type.Literal("set-state-entry-esdl"),
-	Type.Literal("set-state-exit-esdl"),
-	Type.Literal("set-state-static-esdl"),
-	Type.Literal("bind-state-entry-method"),
-	Type.Literal("bind-state-exit-method"),
-	Type.Literal("bind-state-static-method"),
-	Type.Literal("set-transition-condition-esdl"),
-	Type.Literal("set-transition-action-esdl"),
-	Type.Literal("bind-transition-condition-method"),
-	Type.Literal("bind-transition-action-method"),
-	Type.Literal("set-start-state"),
-]);
+
 const moduleCodeOperationSchema = Type.Union([
 	Type.Literal("set-method"),
 	Type.Literal("set-header"),
@@ -61,7 +53,7 @@ const moduleCodeOperationSchema = Type.Union([
 export const ascetCreateFolderActionSchema = strictObject({
 	action: Type.Literal("create_folder"),
 	folderPath: Type.String({ minLength: 1 }),
-	...ascetWriteControlProperties,
+	...ascetPublicWriteControlProperties,
 });
 export const ascetCreateComponentActionSchema = strictObject({
 	action: Type.Literal("create_component"),
@@ -70,7 +62,7 @@ export const ascetCreateComponentActionSchema = strictObject({
 	language: Type.Optional(Type.Union([Type.Literal("ESDL"), Type.Literal("BDE"), Type.Literal("C")])),
 	ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("return-existing")])),
 	rollbackOnFailure: Type.Optional(Type.Boolean()),
-	...ascetWriteControlProperties,
+	...ascetPublicWriteControlProperties,
 });
 export const ascetCreateMethodActionSchema = strictObject({
 	action: Type.Literal("create_method"),
@@ -80,7 +72,7 @@ export const ascetCreateMethodActionSchema = strictObject({
 	methodKind: methodKindSchema,
 	diagram: Type.Optional(Type.String({ minLength: 1 })),
 	ifExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("return-existing")])),
-	...ascetWriteControlProperties,
+	...ascetPublicWriteControlProperties,
 });
 export const ascetSetMethodSignatureActionSchema = strictObject({
 	action: Type.Literal("set_method_signature"),
@@ -89,33 +81,33 @@ export const ascetSetMethodSignatureActionSchema = strictObject({
 	returnType: Type.Optional(primitiveSignatureTypeSchema),
 	arguments: Type.Optional(Type.Array(methodSignatureArgumentSchema)),
 	ifReturnExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("keep"), Type.Literal("replace")])),
-	...ascetWriteControlProperties,
+	...ascetPublicWriteControlProperties,
 });
 export const ascetDeleteComponentActionSchema = strictObject({
 	action: Type.Literal("delete_component"),
 	componentPath: Type.String({ minLength: 1 }),
 	ifMissing: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")])),
-	...ascetWriteControlProperties,
+	...ascetPublicWriteControlProperties,
 });
 export const ascetDeleteMethodActionSchema = strictObject({
 	action: Type.Literal("delete_method"),
 	componentPath: Type.String({ minLength: 1 }),
 	methodName: Type.String({ minLength: 1 }),
 	ifMissing: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")])),
-	...ascetWriteControlProperties,
+	...ascetPublicWriteControlProperties,
 });
 export const ascetDeleteFolderActionSchema = strictObject({
 	action: Type.Literal("delete_folder"),
 	folderPath: Type.String({ minLength: 1 }),
 	ifMissing: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("ignore")])),
-	...ascetWriteControlProperties,
+	...ascetPublicWriteControlProperties,
 });
 export const ascetSetMethodCodeActionSchema = strictObject({
 	action: Type.Literal("set_method_code"),
 	componentPath: Type.String({ minLength: 1 }),
 	methodName: Type.String({ minLength: 1 }),
 	...codeSourceSchema,
-	...ascetWriteControlProperties,
+	...ascetPublicWriteControlProperties,
 });
 export const ascetSetModuleCodeActionSchema = strictObject({
 	action: Type.Literal("set_module_code"),
@@ -124,25 +116,67 @@ export const ascetSetModuleCodeActionSchema = strictObject({
 	section: Type.Optional(moduleCodeOperationSchema),
 	methodName: Type.Optional(Type.String({ minLength: 1 })),
 	...codeSourceSchema,
-	...ascetWriteControlProperties,
+	...ascetPublicWriteControlProperties,
 });
-export const ascetSetStateMachineCodeActionSchema = strictObject({
+const stateMachineWriteBase = {
 	action: Type.Literal("set_state_machine_code"),
 	stateMachinePath: Type.String({ minLength: 1 }),
-	operation: stateMachineOperationSchema,
-	stateName: Type.Optional(Type.String()),
-	sourceState: Type.Optional(Type.String()),
-	targetState: Type.Optional(Type.String()),
-	priority: Type.Optional(Type.Number()),
-	methodName: Type.Optional(Type.String({ minLength: 1 })),
-	...codeSourceSchema,
-	...ascetWriteControlProperties,
-});
+	...ascetPublicWriteControlProperties,
+};
+export const ascetSetStateMachineCodeActionSchema = Type.Union([
+	strictObject({
+		...stateMachineWriteBase,
+		operation: Type.Literal("set-method"),
+		methodName: Type.String({ minLength: 1 }),
+		...codeSourceSchema,
+	}),
+	...(["set-state-entry-esdl", "set-state-exit-esdl", "set-state-static-esdl"] as const).map((operation) =>
+		strictObject({
+			...stateMachineWriteBase,
+			operation: Type.Literal(operation),
+			stateName: Type.String({ minLength: 1 }),
+			...codeSourceSchema,
+		}),
+	),
+	...(["bind-state-entry-method", "bind-state-exit-method", "bind-state-static-method"] as const).map((operation) =>
+		strictObject({
+			...stateMachineWriteBase,
+			operation: Type.Literal(operation),
+			stateName: Type.String({ minLength: 1 }),
+			methodName: Type.String({ minLength: 1 }),
+		}),
+	),
+	...(["set-transition-condition-esdl", "set-transition-action-esdl"] as const).map((operation) =>
+		strictObject({
+			...stateMachineWriteBase,
+			operation: Type.Literal(operation),
+			sourceState: Type.String({ minLength: 1 }),
+			targetState: Type.String({ minLength: 1 }),
+			priority: Type.Integer(),
+			...codeSourceSchema,
+		}),
+	),
+	...(["bind-transition-condition-method", "bind-transition-action-method"] as const).map((operation) =>
+		strictObject({
+			...stateMachineWriteBase,
+			operation: Type.Literal(operation),
+			sourceState: Type.String({ minLength: 1 }),
+			targetState: Type.String({ minLength: 1 }),
+			priority: Type.Integer(),
+			methodName: Type.String({ minLength: 1 }),
+		}),
+	),
+	strictObject({
+		...stateMachineWriteBase,
+		operation: Type.Literal("set-start-state"),
+		stateName: Type.String({ minLength: 1 }),
+	}),
+]);
 export const ascetSetEnumeratorsActionSchema = strictObject({
 	action: Type.Literal("set_enumerators"),
 	componentPath: Type.String({ minLength: 1 }),
 	enumerators: Type.Array(Type.String({ minLength: 1 }), { minItems: 1 }),
-	...ascetWriteControlProperties,
+	...ascetPublicWriteControlProperties,
 });
 export const ascetApplyProjectFormulaActionSchema = strictObject({
 	action: Type.Literal("apply_project_formula"),
@@ -150,7 +184,7 @@ export const ascetApplyProjectFormulaActionSchema = strictObject({
 	specFile: Type.String({ minLength: 1 }),
 	mode: Type.Optional(Type.Literal("restore")),
 	deleteMissing: Type.Optional(Type.Boolean()),
-	...ascetWriteControlProperties,
+	...ascetPublicWriteControlProperties,
 });
 export const ascetSetElementDependencyActionSchema = strictObject({
 	action: Type.Literal("set_element_dependency"),
@@ -205,7 +239,7 @@ export const ascetSetElementDependencyActionSchema = strictObject({
 	clearDependencyFormula: Type.Optional(Type.Boolean()),
 	targetKind: Type.Optional(Type.Union([Type.Literal("auto"), Type.Literal("component"), Type.Literal("folder")])),
 	match: Type.Optional(Type.Union([Type.Literal("exact"), Type.Literal("all")])),
-	...ascetWriteControlProperties,
+	...ascetPublicWriteControlProperties,
 });
 
 export const ascetPublicMutationActionSchemas = [
@@ -239,18 +273,18 @@ export const ascetEditabilityActionSchemas = [
 		{
 			mode: Type.Literal("set"),
 			componentPath: Type.String({ minLength: 1, description: "ASCET component path." }),
-			intent: Type.Union([Type.Literal("preview"), Type.Literal("apply")]),
+			intent: Type.Literal("apply"),
 		},
 		{ additionalProperties: false },
 	),
 ] as const;
 
-const writeResultSchema = Type.Union([Type.Object({}, { additionalProperties: true }), ascetPublicErrorResultSchema]);
+export const ascetWriteResultSchema = ascetMutationPublicResultSchema;
 const COMPONENT_EDIT_PROFILES = ["component-edit"] as const;
-const writePreflightRules = [
-	"By default this tool returns a non-error preflight outcome and does not write.",
-	"Use intent=apply when the user explicitly asked for the exact write; runtime permission handling performs any required confirmation in the same call. Use intent=preview only for a non-mutating preview.",
-	"Preflight and dry-run remain available when a Component is not editable.",
+const writeExecutionRules = [
+	"Mutation actions execute only with intent=apply.",
+	"Use mode=check for read-only editability inspection. Use ascet_read or ascet_diff for independent inspection or comparison.",
+	"Permission handling and any required confirmation occur in the same write call.",
 	"Runtime performs a fresh same-session editable=true check immediately before each real mutation.",
 	"Do not call mode=check merely to authorize a write, and never call mode=set without explicit user intent.",
 	"Executed writes always perform mandatory action-specific readback verification.",
@@ -279,7 +313,7 @@ const elementSpecRules = [
 	"Public ascet_edit reports ascet_edit_project_context_required when Project context is missing; direct Bridge calls report project_context_required. invalid_formula_reference means only that a valid explicit Project lacks the formula.",
 	"For explicit implementations, provide valueType, memoryLocation, formula, and limitAssignments. Use an empty formula only to explicitly select no conversion formula, and use limitAssignments=null when the option is not applicable. Ranged discrete Parameters require limitAssignments=true.",
 	"For a new enumeration, include enumerationPath and scalar data.value; do not add physicalRange. Existing-element patches may omit unchanged fields.",
-	"If any required create field is unknown, stop at preflight and resolve exact live metadata with ascet_read.read_element or ask for the value.",
+	"If any required create field is unknown, stop and resolve exact live metadata with ascet_read.read_element or ask for the value.",
 	"For an existing local dependent Parameter, omit data.value: its DataVariant stores the Dependency binding, not a ScalarType value. apply_element_spec rejects data.value for this state.",
 	"Dependency is not part of apply_element_spec JSON; use create_dependent_chain to create or verify the complete Provider/Imported/Local chain.",
 ] as const;
@@ -292,18 +326,18 @@ export const ascetEditActionContracts = [
 		visibility: "public",
 		profiles: ASCET_WRITE_PROFILES,
 		parameters: ascetCreateFolderActionSchema,
-		result: writeResultSchema,
+		result: ascetWriteResultSchema,
 		execution: { kind: "bridge", logicalCommandId: "AscetCreateFolder", operation: "create_folder" },
 		guidance: {
-			summary: "Create one ASCET folder with guarded preflight/readback behavior.",
-			rules: writePreflightRules,
+			summary: "Create one ASCET folder with direct apply and mandatory readback behavior.",
+			rules: writeExecutionRules,
 			fewShots: [
 				{
 					intent: "apply folder creation",
 					args: { action: "create_folder", folderPath: "DEMO/New", intent: "apply" },
 				},
 			],
-			tags: ["write", "folder", "preflight"],
+			tags: ["write", "folder"],
 		},
 	}),
 	defineAscetAction({
@@ -313,18 +347,18 @@ export const ascetEditActionContracts = [
 		visibility: "public",
 		profiles: ASCET_WRITE_PROFILES,
 		parameters: ascetCreateComponentActionSchema,
-		result: writeResultSchema,
+		result: ascetWriteResultSchema,
 		execution: { kind: "bridge", logicalCommandId: "AscetCreateComponent", operation: "create_component" },
 		guidance: {
 			summary: "Create one component target with kind-specific defaults and readback.",
 			rules: [
-				...writePreflightRules,
+				...writeExecutionRules,
 				"After create_component, inspect expectedDefaultScaffold.defaultEntryMethod as an unverified hint for the likely initial method.",
 				"For class and module targets, omitted language defaults to ESDL.",
 			],
 			fewShots: [
 				{
-					intent: "preflight component",
+					intent: "create component",
 					args: {
 						action: "create_component",
 						intent: "apply",
@@ -334,7 +368,7 @@ export const ascetEditActionContracts = [
 					},
 				},
 			],
-			tags: ["write", "component", "preflight"],
+			tags: ["write", "component"],
 		},
 	}),
 	defineAscetAction({
@@ -344,14 +378,14 @@ export const ascetEditActionContracts = [
 		visibility: "public",
 		profiles: ASCET_WRITE_PROFILES,
 		parameters: ascetCreateMethodActionSchema,
-		result: writeResultSchema,
+		result: ascetWriteResultSchema,
 		execution: { kind: "bridge", logicalCommandId: "AscetCreateMethod", operation: "create_method" },
 		guidance: {
 			summary: "Create one method/process/action shell compatible with the component kind.",
-			rules: [...writePreflightRules, ...methodEditRules],
+			rules: [...writeExecutionRules, ...methodEditRules],
 			fewShots: [
 				{
-					intent: "preflight method",
+					intent: "create method",
 					args: {
 						action: "create_method",
 						intent: "apply",
@@ -362,7 +396,7 @@ export const ascetEditActionContracts = [
 					},
 				},
 			],
-			tags: ["write", "method", "preflight"],
+			tags: ["write", "method"],
 		},
 	}),
 	defineAscetAction({
@@ -372,12 +406,12 @@ export const ascetEditActionContracts = [
 		visibility: "public",
 		profiles: ASCET_WRITE_PROFILES,
 		parameters: ascetSetMethodSignatureActionSchema,
-		result: writeResultSchema,
+		result: ascetWriteResultSchema,
 		execution: { kind: "bridge", logicalCommandId: "AscetSetMethodSignature", operation: "set_method_signature" },
 		guidance: {
 			summary: "Patch a method signature before writing code that depends on return values or arguments.",
 			rules: [
-				...writePreflightRules,
+				...writeExecutionRules,
 				"Use set_method_signature after create_method and before method body writes when code returns a value or reads method arguments.",
 				"Do not use apply_element_spec for method return or argument declarations.",
 			],
@@ -404,11 +438,11 @@ export const ascetEditActionContracts = [
 		visibility: "public",
 		profiles: ASCET_WRITE_PROFILES,
 		parameters: ascetDeleteComponentActionSchema,
-		result: writeResultSchema,
+		result: ascetWriteResultSchema,
 		execution: { kind: "bridge", logicalCommandId: "AscetDeleteComponent", operation: "delete_component" },
 		guidance: {
-			summary: "Delete one component through guarded write flow.",
-			rules: writePreflightRules,
+			summary: "Delete one component through the direct verified write flow.",
+			rules: writeExecutionRules,
 			fewShots: [
 				{
 					intent: "delete component",
@@ -425,11 +459,11 @@ export const ascetEditActionContracts = [
 		visibility: "public",
 		profiles: ASCET_WRITE_PROFILES,
 		parameters: ascetDeleteMethodActionSchema,
-		result: writeResultSchema,
+		result: ascetWriteResultSchema,
 		execution: { kind: "bridge", logicalCommandId: "AscetDeleteMethod", operation: "delete_method" },
 		guidance: {
-			summary: "Delete one method through guarded write flow.",
-			rules: writePreflightRules,
+			summary: "Delete one method through the direct verified write flow.",
+			rules: writeExecutionRules,
 			fewShots: [
 				{
 					intent: "delete method",
@@ -452,11 +486,11 @@ export const ascetEditActionContracts = [
 		visibility: "public",
 		profiles: ASCET_WRITE_PROFILES,
 		parameters: ascetDeleteFolderActionSchema,
-		result: writeResultSchema,
+		result: ascetWriteResultSchema,
 		execution: { kind: "bridge", logicalCommandId: "AscetDeleteFolder", operation: "delete_folder" },
 		guidance: {
-			summary: "Delete one folder through guarded write flow.",
-			rules: writePreflightRules,
+			summary: "Delete one folder through the direct verified write flow.",
+			rules: writeExecutionRules,
 			fewShots: [
 				{
 					intent: "delete folder",
@@ -473,14 +507,14 @@ export const ascetEditActionContracts = [
 		visibility: "public",
 		profiles: ASCET_WRITE_PROFILES,
 		parameters: ascetSetMethodCodeActionSchema,
-		result: writeResultSchema,
+		result: ascetWriteResultSchema,
 		execution: { kind: "bridge", logicalCommandId: "AscetSetMethodCode", operation: "set_method_code" },
 		guidance: {
 			aliases: ["write method code", "set method body", "update method code", "modify code"],
 			nextActions: ["ascet_read.read_code"],
-			result: { shape: "writePreflightOrResult", fields: ["status", "changed", "verification", "observations"] },
+			result: { shape: "mutationResult", fields: ["status", "changed", "verification", "observations"] },
 			summary: "Set one class/module method body.",
-			rules: [...writePreflightRules, ...codeEditRules],
+			rules: [...writeExecutionRules, ...codeEditRules],
 			fewShots: [
 				{
 					intent: "set method body",
@@ -503,12 +537,12 @@ export const ascetEditActionContracts = [
 		visibility: "public",
 		profiles: ASCET_WRITE_PROFILES,
 		parameters: ascetSetModuleCodeActionSchema,
-		result: writeResultSchema,
+		result: ascetWriteResultSchema,
 		execution: { kind: "bridge", logicalCommandId: "AscetSetModuleCode", operation: "set_module_code" },
 		guidance: {
 			summary: "Set module method, header, or external C code surfaces.",
 			rules: [
-				...writePreflightRules,
+				...writeExecutionRules,
 				...codeEditRules,
 				"Provide operation as set-method, set-header, or set-external-c-code.",
 			],
@@ -558,12 +592,12 @@ export const ascetEditActionContracts = [
 		visibility: "public",
 		profiles: ASCET_WRITE_PROFILES,
 		parameters: ascetSetStateMachineCodeActionSchema,
-		result: writeResultSchema,
+		result: ascetWriteResultSchema,
 		execution: { kind: "bridge", logicalCommandId: "AscetSetStateMachineCode", operation: "set_state_machine_code" },
 		guidance: {
 			summary: "Set state-machine method, state, transition, binding, or start-state code.",
 			rules: [
-				...writePreflightRules,
+				...writeExecutionRules,
 				...codeEditRules,
 				"Use the exact state-machine operation variant required by the target.",
 			],
@@ -727,11 +761,11 @@ export const ascetEditActionContracts = [
 		profiles: ASCET_WRITE_PROFILES,
 		supportedObjectKinds: ["enumeration"],
 		parameters: ascetSetEnumeratorsActionSchema,
-		result: writeResultSchema,
+		result: ascetWriteResultSchema,
 		execution: { kind: "bridge", logicalCommandId: "AscetSetEnumerators", operation: "set_enumerators" },
 		guidance: {
 			summary: "Set enumeration values for an ASCET enumeration component.",
-			rules: writePreflightRules,
+			rules: writeExecutionRules,
 			fewShots: [
 				{
 					intent: "set enum values",
@@ -754,11 +788,11 @@ export const ascetEditActionContracts = [
 		profiles: ASCET_WRITE_PROFILES,
 		supportedObjectKinds: ["class", "module", "statemachine"],
 		parameters: ascetApplyElementSpecPlanSchema,
-		result: writeResultSchema,
+		result: ascetWriteResultSchema,
 		execution: { kind: "bridge", logicalCommandId: "AscetApplyElementSpec", operation: "apply_element_spec" },
 		guidance: {
 			summary: "Apply structured primitive element specs from evidence, not guesses.",
-			rules: [...writePreflightRules, ...elementSpecRules],
+			rules: [...writeExecutionRules, ...elementSpecRules],
 			fewShots: [
 				{
 					intent: "plan element creation",
@@ -793,7 +827,7 @@ export const ascetEditActionContracts = [
 		visibility: "public",
 		profiles: ASCET_WRITE_PROFILES,
 		parameters: ascetSetElementDependencyActionSchema,
-		result: writeResultSchema,
+		result: ascetWriteResultSchema,
 		execution: {
 			kind: "bridge",
 			logicalCommandId: "AscetSetElementDependency",
@@ -802,7 +836,7 @@ export const ascetEditActionContracts = [
 		guidance: {
 			summary: "set dependency flag/formula on an existing local parameter only",
 			rules: [
-				...writePreflightRules,
+				...writeExecutionRules,
 				"Use one exact target path and element name; never infer dependency mappings from formula tokens.",
 				"Use create_dependent_chain when Provider, Imported, or Local endpoints must be created.",
 			],
@@ -811,11 +845,12 @@ export const ascetEditActionContracts = [
 					intent: "set an existing local dependency",
 					args: {
 						action: "set_element_dependency",
-						targetPath: "FeatureA/Consumer",
-						elementName: "C_Threshold",
+						targetPath: "F/C",
+						elementName: "L",
 						dependency: "dependent",
-						dependencyFormula: "P_Threshold",
-						dependencyMappings: { P_Threshold: "P_Threshold" },
+						dependencyFormula: "x",
+						dependencyMappings: { x: "P" },
+						variantPolicy: "default",
 						intent: "apply",
 					},
 				},
@@ -830,12 +865,12 @@ export const ascetEditActionContracts = [
 		visibility: "public",
 		profiles: ASCET_WRITE_PROFILES,
 		parameters: ascetApplyProjectFormulaActionSchema,
-		result: writeResultSchema,
+		result: ascetWriteResultSchema,
 		execution: { kind: "bridge", logicalCommandId: "AscetApplyProjectFormula", operation: "apply_project_formula" },
 		guidance: {
-			summary: "Apply structured project formula specs through guarded write flow.",
+			summary: "Apply structured project formula specs through the direct verified write flow.",
 			rules: [
-				...writePreflightRules,
+				...writeExecutionRules,
 				"Use apply_project_formula only for Project targets and formula-spec JSON artifacts.",
 			],
 			fewShots: [
@@ -860,7 +895,7 @@ export const ascetEditActionContracts = [
 		visibility: "public",
 		profiles: COMPONENT_EDIT_PROFILES,
 		parameters: ascetEditabilityActionSchemas[0],
-		result: writeResultSchema,
+		result: Type.Union([ascetEditabilityCheckResultSchema, ascetPublicErrorResultSchema]),
 		execution: {
 			kind: "bridge",
 			logicalCommandId: "AscetComponentEditableCheck",
@@ -872,7 +907,7 @@ export const ascetEditActionContracts = [
 				"Use mode=check only to inspect current SCM state; write authorization is enforced independently by a fresh runtime same-session check.",
 			],
 			fewShots: [{ intent: "check editable", args: { mode: "check", componentPath: "DEMO/PID" } }],
-			tags: ["write", "scm", "preflight"],
+			tags: ["read", "scm", "editability"],
 		},
 	}),
 	defineAscetAction({
@@ -882,13 +917,13 @@ export const ascetEditActionContracts = [
 		visibility: "public",
 		profiles: COMPONENT_EDIT_PROFILES,
 		parameters: ascetEditabilityActionSchemas[1],
-		result: writeResultSchema,
+		result: ascetEditabilitySetResultSchema,
 		execution: { kind: "bridge", logicalCommandId: "AscetComponentEditableSet", operation: "component_editable_set" },
 		guidance: {
-			summary: "Request an ASCET SCM lock through guarded write flow.",
+			summary: "Request an ASCET SCM lock through the direct verified write flow.",
 			rules: [
 				"Use mode=set only when the user intends to make the component editable.",
-				"Use intent=apply when the user explicitly asks to request editability; use intent=preview to inspect the current state without writing.",
+				"Use intent=apply when the user explicitly asks to request editability; use mode=check to inspect the current state without writing.",
 			],
 			fewShots: [{ intent: "lock component", args: { mode: "set", componentPath: "DEMO/PID", intent: "apply" } }],
 			tags: ["write", "scm"],

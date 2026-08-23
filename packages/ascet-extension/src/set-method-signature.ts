@@ -49,7 +49,7 @@ export const ascetSetMethodSignatureParameters = Type.Object({
 	returnType: Type.Optional(primitiveSignatureType),
 	ifReturnExists: Type.Optional(Type.Union([Type.Literal("fail"), Type.Literal("keep"), Type.Literal("replace")])),
 	arguments: Type.Optional(Type.Array(methodSignatureArgumentSchema)),
-	intent: Type.Union([Type.Literal("preview"), Type.Literal("apply")]),
+	intent: Type.Literal("apply"),
 });
 
 export function buildSetMethodSignatureArgs(

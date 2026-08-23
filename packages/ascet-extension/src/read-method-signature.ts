@@ -39,5 +39,5 @@ export async function runAscetReadMethodSignature(
 }
 
 export function formatReadMethodSignatureResult(result: AscetReadMethodSignatureResult): string {
-	return formatAscetCliJsonResult("read_method_signature", result);
+	return formatAscetCliJsonResult("read_method_signature", result, { largeSuccess: "inline" });
 }

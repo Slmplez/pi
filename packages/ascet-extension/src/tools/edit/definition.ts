@@ -1,5 +1,6 @@
 import type { AscetCliExecutionResult, AscetCliRequest } from "../../cli.ts";
 import { type AscetToolContext, defineSequentialAscetTool } from "../../core/tool.ts";
+import { isRecord } from "../../edit/result-contract.ts";
 import { formatAscetEditResult, getAscetEditActionId, runAscetEdit } from "../../edit/service.ts";
 import { routeAscetAction } from "../../routing/router.ts";
 import type { AscetScheduler } from "../../scheduler/scheduler.ts";
@@ -31,7 +32,7 @@ function prepareAscetEditArguments(args: unknown): AscetEditParams {
 export const ascetEditTool = defineSequentialAscetTool({
 	name: "ascet_edit",
 	label: "ASCET edit",
-	description: "Run a guarded ASCET mutation or inspect/request component editability.",
+	description: "Execute a verified ASCET mutation or inspect/request component editability.",
 	...ascetEditPrompt,
 	parameters: ascetEditParameters,
 	prepareArguments: prepareAscetEditArguments,
@@ -75,8 +76,9 @@ export const ascetEditTool = defineSequentialAscetTool({
 				value:
 					"mode" in params &&
 					result.details.outcome.status === "ok" &&
-					typeof result.details.outcome.data === "boolean"
-						? result.details.outcome.data
+					isRecord(result.details.outcome.data) &&
+					typeof result.details.outcome.data.editable === "boolean"
+						? result.details.outcome.data.editable
 						: undefined,
 				command: route
 					? {
