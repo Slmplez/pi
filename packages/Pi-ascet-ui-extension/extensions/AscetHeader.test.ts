@@ -5,13 +5,16 @@ import { visibleWidth } from "@earendil-works/pi-tui";
 import type { TUI } from "@earendil-works/pi-tui";
 import { AscetHeader, type AscetHeaderOptions } from "./AscetHeader.ts";
 import { loadRecentSessions, type RecentSessionView } from "./recentSessions.ts";
-import { checkAscetCopilotUpdate, type UpdateState } from "./releaseInfo.ts";
+import { ASCET_COPILOT_RELEASE, checkAscetCopilotUpdate, type UpdateState } from "./releaseInfo.ts";
 import { randomStartupTip, type StartupTip } from "./tips.ts";
 
 const TEST_WIDTHS = [85, 86, 120];
 const COMPACT_WIDTH = 85;
 const INTRO_TICK_MS = 33;
 const INTRO_MS = 3000;
+const currentReleaseVersion = ASCET_COPILOT_RELEASE.version;
+const currentReleaseParts = currentReleaseVersion.split(".").map((part) => Number.parseInt(part, 10));
+const nextReleaseVersion = `${currentReleaseParts[0]}.${currentReleaseParts[1]}.${currentReleaseParts[2] + 1}`;
 
 const updateCases: readonly UpdateCase[] = [
 	{
@@ -20,13 +23,13 @@ const updateCases: readonly UpdateCase[] = [
 	},
 	{
 		label: "current",
-		state: { status: "current", latestVersion: "0.1.43" },
-		assertText: "0.1.43 - Up to date",
+		state: { status: "current", latestVersion: currentReleaseVersion },
+		assertText: `${currentReleaseVersion} - Up to date`,
 	},
 	{
 		label: "available",
-		state: { status: "available", latestVersion: "0.1.44" },
-		assertText: "0.1.43 -> 0.1.44",
+		state: { status: "available", latestVersion: nextReleaseVersion },
+		assertText: `${currentReleaseVersion} -> ${nextReleaseVersion}`,
 	},
 	{
 		label: "unavailable",
@@ -283,7 +286,7 @@ test("dispose ignores completed recent sessions and update checks", async () => 
 	try {
 		setup.header.dispose();
 		recent.resolve([{ title: "Old session", time: "10:00" }]);
-		update.resolve({ status: "current", latestVersion: "0.1.43" });
+		update.resolve({ status: "current", latestVersion: currentReleaseVersion });
 		await flushPromises();
 
 		assert.equal(tui.requestRenderCalls, 0);

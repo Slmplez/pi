@@ -162,3 +162,37 @@ When releasing Pi Agent with domain extensions such as ASCET, also follow `docs/
 ## User Override
 
 If the user's instructions conflict with any rule in this document, ask for explicit confirmation before overriding. Only then execute their instructions.
+
+## Agent Team Model Routing
+
+### Coordinator / Analysis
+
+- Model: `gpt-5.6-sol`
+- Reasoning effort: `high`
+- Responsibilities:
+  - Analyze and decompose tasks
+  - Coordinate sub-agents
+  - Review execution results
+  - Make final decisions
+
+### Execution / Implementation
+
+- Model: `gpt-5.6-luna`
+- Reasoning effort: `xhigh`
+- Responsibilities:
+  - Modify files
+  - Implement bounded changes
+  - Run focused validation
+  - Report changed paths and test results
+
+### Review
+
+- Model: `gpt-5.6-sol`
+- Reasoning effort: `high`
+
+### Restrictions
+
+- Use `gpt-5.6-luna` with `xhigh` for execution and test-fix agents.
+- Use `gpt-5.6-sol` with `high` for analysis, coordination, and final review.
+- Do not change the global default away from `gpt-5.6-sol` with `high`.
+- The shared routing rules do not replace explicit model selection when spawning an agent.
