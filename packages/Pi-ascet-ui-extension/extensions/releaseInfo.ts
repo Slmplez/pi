@@ -72,7 +72,7 @@ export async function checkAscetCopilotUpdate(options: UpdateCheckOptions = {}):
 
 	try {
 		const cached = await readCache();
-		if (isFreshCache(cached, now, cacheTtlMs, registryUrl)) {
+		if (isFreshCache(cached, currentVersion, now, cacheTtlMs, registryUrl)) {
 			return createUpdateState(currentVersion, cached.latestVersion);
 		}
 
@@ -110,7 +110,7 @@ export function createReleaseRows(state: UpdateState, release: ReleaseInfo = ASC
 	}
 
 	if (state.status === "current") {
-		return ["Release", `${release.version} - Up to date`, ...release.highlights];
+		return ["Release", release.version, ...release.highlights];
 	}
 
 	if (state.status === "unavailable") {
@@ -190,6 +190,7 @@ function createUpdateState(currentVersion: string, latestVersion: string): Updat
 
 function isFreshCache(
 	cache: CachedUpdateInfo | undefined,
+	currentVersion: string,
 	now: Date,
 	cacheTtlMs: number,
 	registryUrl: string,
@@ -197,6 +198,7 @@ function isFreshCache(
 	return (
 		typeof cache?.latestVersion === "string" &&
 		cache.registryUrl === registryUrl &&
+		isVersionGreater(cache.latestVersion, currentVersion) &&
 		Number.isFinite(cache.checkedAt) &&
 		now.getTime() - cache.checkedAt >= 0 &&
 		now.getTime() - cache.checkedAt < cacheTtlMs

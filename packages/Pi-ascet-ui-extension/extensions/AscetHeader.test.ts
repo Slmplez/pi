@@ -24,7 +24,7 @@ const updateCases: readonly UpdateCase[] = [
 	{
 		label: "current",
 		state: { status: "current", latestVersion: currentReleaseVersion },
-		assertText: `${currentReleaseVersion} - Up to date`,
+		assertText: currentReleaseVersion,
 	},
 	{
 		label: "available",

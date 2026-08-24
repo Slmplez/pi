@@ -93,6 +93,48 @@ test("checkAscetCopilotUpdate uses fresh cache from the same registry without ne
 	assert.deepEqual(state, { status: "available", latestVersion: "0.1.2" });
 });
 
+test("checkAscetCopilotUpdate refreshes fresh cache at the current version", async () => {
+	let fetchCalled = false;
+	const state = await checkAscetCopilotUpdate({
+		currentVersion: "0.1.45",
+		now,
+		fetchLatestVersion: async () => {
+			fetchCalled = true;
+			return "0.1.46";
+		},
+		readCache: async () => ({
+			checkedAt: now.getTime() - 1_000,
+			latestVersion: "0.1.45",
+			registryUrl: ASCET_COPILOT_NPM_REGISTRY,
+		}),
+		writeCache: async () => {},
+	});
+
+	assert.equal(fetchCalled, true);
+	assert.deepEqual(state, { status: "available", latestVersion: "0.1.46" });
+});
+
+test("checkAscetCopilotUpdate refreshes a cached version below the current version", async () => {
+	let fetchCalled = false;
+	const state = await checkAscetCopilotUpdate({
+		currentVersion: "0.1.46",
+		now,
+		fetchLatestVersion: async () => {
+			fetchCalled = true;
+			return "0.1.47";
+		},
+		readCache: async () => ({
+			checkedAt: now.getTime() - 1_000,
+			latestVersion: "0.1.45",
+			registryUrl: ASCET_COPILOT_NPM_REGISTRY,
+		}),
+		writeCache: async () => {},
+	});
+
+	assert.equal(fetchCalled, true);
+	assert.deepEqual(state, { status: "available", latestVersion: "0.1.47" });
+});
+
 test("checkAscetCopilotUpdate ignores cache entries from another registry", async () => {
 	let fetchCalled = false;
 	const state = await checkAscetCopilotUpdate({
@@ -180,7 +222,7 @@ test("createReleaseRows renders concise release and update text", () => {
 		createReleaseRows({ status: "current", latestVersion: currentVersion }, ASCET_COPILOT_RELEASE),
 		[
 			"Release",
-			`${currentVersion} - Up to date`,
+			currentVersion,
 			"Single-session parameter dependency execution",
 			"Canonical ASCET get, read, diff, and edit tools",
 			"ASCET engineering Skill and guarded writes",
