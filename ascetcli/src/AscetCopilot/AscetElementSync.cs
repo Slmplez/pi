@@ -3760,6 +3760,29 @@ public sealed class ComponentElementSyncService : AscetReadDomainServiceBase, IC
         });
     }
 
+    public void ValidateProjectFormulasInSession(AscetSession session, AscetItemRef component, AscetElementSpecDocument spec, string projectPath)
+    {
+        if (component == null)
+        {
+            throw new AscetReadException("invalid_argument", "validate_element_formula", "Component reference must not be null.");
+        }
+
+        if (spec == null)
+        {
+            throw new AscetReadException("invalid_argument", "validate_element_formula", "Element spec document must not be null.");
+        }
+
+        ExecuteWithBoundSession("validate_element_formula", session, delegate(AscetSession currentSession)
+        {
+            AscetDiscreteComponent discrete;
+            CodeComponent code;
+            AscetItemRef resolved = ResolveComponent(currentSession, component.Path, "validate_element_formula", out discrete, out code);
+            IList<AscetExistingElementState> existing = AscetElementCatalogReader.ReadExistingElements(discrete, code);
+            ValidateProjectFormulas(currentSession, resolved, spec, existing, projectPath);
+            return 0;
+        });
+    }
+
     public AscetElementSpecDiffResult Diff(AscetItemRef component, AscetElementSpecDocument spec)
     {
         return ExecuteWithSession("diff_element_spec", delegate(AscetSession session)

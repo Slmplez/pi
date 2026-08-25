@@ -14,11 +14,10 @@ import { checkAscetDatabaseIdentityForWrite, type RunAscetEditOperationOptions }
 import { recordAscetWriteTelemetry } from "./edit/write-telemetry.ts";
 import {
 	type AscetConsumerImportedParameterCreateInput,
-	type AscetLocalDependentParameterCreateInput,
-	type AscetProviderExportedParameterCreateInput,
+	type AscetParameterImplementationDecision,
 	ascetConsumerImportedParameterCreateSchema,
-	ascetLocalDependentParameterCreateSchema,
-	ascetProviderExportedParameterCreateSchema,
+	ascetParameterDataDecisionSchema,
+	ascetParameterRangeDecisionSchema,
 	normalizeAscetElementSpec,
 } from "./element-spec-contract.ts";
 import { renderAscetToolCall, renderAscetToolResult } from "./rendering.ts";
@@ -31,15 +30,41 @@ const TOOL_NAME = "configure_parameter_dependency_chain";
 
 export type ConfigureParameterDependencyTarget = AscetDependencyMappingTarget;
 
+type ExplicitParameterImplementationDecision = Extract<AscetParameterImplementationDecision, { mode: "explicit" }>;
+type ConfigureProviderElement = {
+	[key: string]: unknown;
+	role: "providerExportedParameter";
+	name: string;
+	modelType: string;
+	unit: string;
+	comment: string;
+	calibration: boolean;
+	range: { mode: "none" | "physical" | "implementation"; min?: unknown; max?: unknown };
+	data: { mode: "explicit"; value: unknown } | { mode: "ascetDefault" };
+	implementation: ExplicitParameterImplementationDecision;
+};
+type ConfigureLocalElement = {
+	[key: string]: unknown;
+	role: "localDependentParameter";
+	name: string;
+	modelType: string;
+	unit: string;
+	comment: string;
+	calibration: boolean;
+	range: { mode: "none" | "physical" | "implementation"; min?: unknown; max?: unknown };
+	implementation: ExplicitParameterImplementationDecision;
+};
+
 export interface ConfigureParameterDependencyElement<TElement> {
 	componentPath: string;
+	projectPath?: string;
 	element: TElement;
 }
 
 export interface ConfigureParameterDependencyDefinition {
-	provider: ConfigureParameterDependencyElement<AscetProviderExportedParameterCreateInput>;
+	provider: ConfigureParameterDependencyElement<ConfigureProviderElement>;
 	consumer: ConfigureParameterDependencyElement<AscetConsumerImportedParameterCreateInput>;
-	local: ConfigureParameterDependencyElement<AscetLocalDependentParameterCreateInput>;
+	local: ConfigureParameterDependencyElement<ConfigureLocalElement>;
 	dependency: {
 		formula: string;
 		formals: string[];
@@ -94,18 +119,60 @@ const dependencyTargetSchema = Type.Object(
 	{ additionalProperties: false },
 );
 
+const explicitImplementationSchema = Type.Object(
+	{
+		mode: Type.Literal("explicit"),
+		valueType: Type.String({ minLength: 1 }),
+		memoryLocation: Type.String({ minLength: 1 }),
+		formula: Type.String({ minLength: 1 }),
+		limitAssignments: Type.Union([Type.Boolean(), Type.Null()]),
+	},
+	{ additionalProperties: false },
+);
+
+const providerElementSchema = Type.Object(
+	{
+		role: Type.Literal("providerExportedParameter"),
+		name: Type.String({ minLength: 1 }),
+		modelType: Type.String({ minLength: 1 }),
+		unit: Type.String(),
+		comment: Type.String(),
+		calibration: Type.Boolean(),
+		range: ascetParameterRangeDecisionSchema,
+		data: ascetParameterDataDecisionSchema,
+		implementation: explicitImplementationSchema,
+	},
+	{ additionalProperties: false },
+);
+
+const localElementSchema = Type.Object(
+	{
+		role: Type.Literal("localDependentParameter"),
+		name: Type.String({ minLength: 1 }),
+		modelType: Type.String({ minLength: 1 }),
+		unit: Type.String(),
+		comment: Type.String(),
+		calibration: Type.Boolean(),
+		range: ascetParameterRangeDecisionSchema,
+		implementation: explicitImplementationSchema,
+	},
+	{ additionalProperties: false },
+);
+
 const configureParameterDependencyChainSchema = Type.Object(
 	{
 		provider: Type.Object(
 			{
 				componentPath: Type.String({ minLength: 1 }),
-				element: ascetProviderExportedParameterCreateSchema,
+				projectPath: Type.Optional(Type.String({ minLength: 1 })),
+				element: providerElementSchema,
 			},
 			{ additionalProperties: false },
 		),
 		consumer: Type.Object(
 			{
 				componentPath: Type.String({ minLength: 1 }),
+				projectPath: Type.Optional(Type.String({ minLength: 1 })),
 				element: ascetConsumerImportedParameterCreateSchema,
 			},
 			{ additionalProperties: false },
@@ -113,7 +180,8 @@ const configureParameterDependencyChainSchema = Type.Object(
 		local: Type.Object(
 			{
 				componentPath: Type.String({ minLength: 1 }),
-				element: ascetLocalDependentParameterCreateSchema,
+				projectPath: Type.Optional(Type.String({ minLength: 1 })),
+				element: localElementSchema,
 			},
 			{ additionalProperties: false },
 		),
@@ -172,6 +240,18 @@ function validateChainDefinition(params: ConfigureParameterDependencyDefinition)
 	if (!/^C_.+/u.test(params.local.element.name)) {
 		return { code: "local_parameter_name_invalid", message: "local.element.name must use C_<Name>." };
 	}
+	const providerFormulaError = validateImplementationProjectContext(
+		"provider",
+		params.provider.element.implementation,
+		params.provider.projectPath,
+	);
+	if (providerFormulaError) return providerFormulaError;
+	const localFormulaError = validateImplementationProjectContext(
+		"local",
+		params.local.element.implementation,
+		params.local.projectPath ?? params.consumer.projectPath,
+	);
+	if (localFormulaError) return localFormulaError;
 	const formals = [...params.dependency.formals].sort();
 	const mappingFormals = Object.keys(params.dependency.mappings).sort();
 	if (
@@ -204,6 +284,27 @@ function validateChainDefinition(params: ConfigureParameterDependencyDefinition)
 		return {
 			code: "configure_parameter_dependency_chain_invalid_parameter",
 			message: "dependency.variants is only valid with dependency.variantPolicy=selected.",
+		};
+	}
+	return undefined;
+}
+
+function validateImplementationProjectContext(
+	target: "provider" | "local",
+	implementation: ExplicitParameterImplementationDecision,
+	projectPath: string | undefined,
+): ChainValidationError | undefined {
+	const formula = implementation.formula.trim();
+	if (formula.length === 0) {
+		return {
+			code: "element_definition_invalid",
+			message: `${target}.element.implementation.formula must not be empty.`,
+		};
+	}
+	if (formula.toLowerCase() !== "ident" && !projectPath?.trim()) {
+		return {
+			code: "project_context_required",
+			message: `${target}.projectPath is required when ${target}.element.implementation.formula is not ident.`,
 		};
 	}
 	return undefined;
@@ -267,14 +368,17 @@ function buildBridgeRequest(
 		acquireEditability: control.acquireEditability === true,
 		provider: {
 			componentPath: normalizeAscetPath(params.provider.componentPath),
+			...(params.provider.projectPath ? { projectPath: normalizeAscetPath(params.provider.projectPath) } : {}),
 			spec: normalizeElement(params.provider.element),
 		},
 		consumer: {
 			componentPath: normalizeAscetPath(params.consumer.componentPath),
+			...(params.consumer.projectPath ? { projectPath: normalizeAscetPath(params.consumer.projectPath) } : {}),
 			spec: normalizeElement(params.consumer.element),
 		},
 		local: {
 			componentPath: normalizeAscetPath(params.local.componentPath),
+			...(params.local.projectPath ? { projectPath: normalizeAscetPath(params.local.projectPath) } : {}),
 			spec: normalizeElement(params.local.element),
 		},
 		dependency: {

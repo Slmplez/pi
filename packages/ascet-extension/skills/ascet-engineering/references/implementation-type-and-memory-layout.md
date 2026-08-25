@@ -38,7 +38,7 @@ Provider/Local creation requires one implementation decision:
 }
 ```
 
-`implementation.mode=ascetDefault` is not an implementation type. It is allowed only for a Provider/Local creation decision when the explicit engineering decision is to let ASCET choose its default implementation:
+`implementation.mode=ascetDefault` is not an implementation type. The generic Element path may use it only when its contract explicitly permits ASCET to choose the default implementation. A dependent-chain Provider or Local uses a complete `implementation.mode=explicit` decision:
 
 ```json
 {
@@ -48,7 +48,7 @@ Provider/Local creation requires one implementation decision:
 }
 ```
 
-When this decision is normalized, no `impl` is sent; ASCET applies its default implementation during creation. Do not use it for an existing Element patch, to reset an implementation, or to hide unknown implementation requirements. For `implementation.mode=explicit`, `valueType`, `memoryLocation`, `formula`, and `limitAssignments` are required by the active contract. An empty `formula` (`""`) explicitly means no conversion Formula; normalization omits the Formula rather than treating it as an ASCET default.
+When this generic decision is normalized, no `impl` is sent; ASCET applies its default implementation during creation. Do not use it for a dependent-chain Provider or Local, an existing Element patch, to reset an implementation, or to hide unknown implementation requirements. For `implementation.mode=explicit`, `valueType`, `memoryLocation`, `formula`, and `limitAssignments` are required by the active contract. An empty `formula` (`""`) explicitly means no conversion Formula; normalization omits the Formula rather than treating it as an ASCET default.
 
 ## ASCET UI type sets
 

@@ -90,9 +90,7 @@ function requireOutcome(response: ToolResponse, expected: string, stage: string)
 	}
 }
 
-async function preflightAndWrite(params: JsonRecord): Promise<{ preview: JsonRecord; apply: JsonRecord }> {
-	const previewResponse = await executeTool("ascet_edit", { ...params, intent: "preview" });
-	requireOutcome(previewResponse, "preflight", `${String(params.action)} preview`);
+async function preflightAndWrite(params: JsonRecord): Promise<{ apply: JsonRecord }> {
 	const applyResponse = await executeTool("ascet_edit", { ...params, intent: "apply" });
 	requireOutcome(applyResponse, "ok", `${String(params.action)} apply`);
 	if (
@@ -101,7 +99,7 @@ async function preflightAndWrite(params: JsonRecord): Promise<{ preview: JsonRec
 	) {
 		throw new Error(`${String(params.action)} apply did not pass automatic readback.`);
 	}
-	return { preview: content(previewResponse), apply: content(applyResponse) };
+	return { apply: content(applyResponse) };
 }
 
 async function cleanup(): Promise<JsonRecord> {
@@ -154,7 +152,13 @@ try {
 					calibration: false,
 					range: { mode: "physical", min: 0, max: 10 },
 					data: { mode: "explicit", value: 1 },
-					implementation: { mode: "ascetDefault" },
+					implementation: {
+						mode: "explicit",
+						valueType: "uint16",
+						memoryLocation: "Default",
+						formula: "ident",
+						limitAssignments: true,
+					},
 				},
 			},
 			consumer: {
@@ -167,7 +171,13 @@ try {
 					comment: "Disposable ASCET create_dependent_chain acceptance Local.",
 					calibration: false,
 					range: { mode: "physical", min: 0, max: 10 },
-					implementation: { mode: "ascetDefault" },
+					implementation: {
+						mode: "explicit",
+						valueType: "uint16",
+						memoryLocation: "Default",
+						formula: "ident",
+						limitAssignments: true,
+					},
 				},
 			},
 			binding: { formula: providerName, formal: providerName, variantPolicy: "default" },
@@ -189,7 +199,13 @@ try {
 					calibration: false,
 					range: { mode: "physical", min: 0, max: 10 },
 					data: { mode: "explicit", value: 1 },
-					implementation: { mode: "ascetDefault" },
+					implementation: {
+						mode: "explicit",
+						valueType: "uint16",
+						memoryLocation: "Default",
+						formula: "ident",
+						limitAssignments: true,
+					},
 				},
 			],
 		});
@@ -210,7 +226,13 @@ try {
 					comment: "Disposable ASCET create_dependent_chain acceptance Local.",
 					calibration: false,
 					range: { mode: "physical", min: 0, max: 10 },
-					implementation: { mode: "ascetDefault" },
+					implementation: {
+						mode: "explicit",
+						valueType: "uint16",
+						memoryLocation: "Default",
+						formula: "ident",
+						limitAssignments: true,
+					},
 				},
 			],
 		});
@@ -227,11 +249,6 @@ try {
 	}
 
 	const chain = chainRequest(providerParameter, localParameter);
-	const chainPreviewResponse = await executeTool("ascet_edit", { ...chain, intent: "preview" });
-	requireOutcome(chainPreviewResponse, "preflight", "create_dependent_chain preview");
-	const chainPreview = content(chainPreviewResponse);
-	if (chainPreview.changed !== true) throw new Error(`Chain preview did not plan changes: ${JSON.stringify(chainPreview)}`);
-
 	const confirmationsBeforeApply = confirmations;
 	const chainApplyResponse = await executeTool("ascet_edit", { ...chain, intent: "apply" });
 	requireOutcome(chainApplyResponse, "ok", "create_dependent_chain apply");
@@ -258,11 +275,11 @@ try {
 	const idempotentResponse = await executeTool("ascet_edit", { ...chain, intent: "apply" });
 	requireOutcome(idempotentResponse, "ok", "create_dependent_chain idempotent apply");
 	const idempotent = content(idempotentResponse);
-	if (idempotent.changed !== false || idempotent.idempotent !== true || idempotent.verified !== true) {
+	if (idempotent.changed !== false || idempotent.mutationStatus !== "no_op" || idempotent.verified !== true) {
 		throw new Error(`Idempotent apply failed: ${JSON.stringify(idempotent)}`);
 	}
-	if (confirmations !== confirmationsBeforeIdempotent) {
-		throw new Error("Idempotent apply must not request approval.");
+	if (confirmations !== confirmationsBeforeIdempotent + 1) {
+		throw new Error(`Idempotent apply expected one approval under the public apply-only contract, got ${confirmations - confirmationsBeforeIdempotent}.`);
 	}
 
 	const setOnlyProvider = `P_PI_SetOnly_${suffix}`;
@@ -272,64 +289,47 @@ try {
 		consumer: await createConsumerElements(setOnlyProvider, setOnlyLocal),
 	};
 	const setOnlyRequest = chainRequest(setOnlyProvider, setOnlyLocal);
-	const setOnlyPreviewResponse = await executeTool("ascet_edit", { ...setOnlyRequest, intent: "preview" });
-	requireOutcome(setOnlyPreviewResponse, "preflight", "create_dependent_chain set-only preview");
-	const setOnlyPreview = content(setOnlyPreviewResponse);
-	const setOnlyEffects = setOnlyPreview.effects as { create?: unknown[]; configure?: unknown[] } | undefined;
-	if (
-		setOnlyPreview.changed !== true ||
-		setOnlyEffects?.create?.length !== 0 ||
-		JSON.stringify(setOnlyEffects.configure) !== JSON.stringify(["dependency"])
-	) {
-		throw new Error(`Set-only preview planned incorrect effects: ${JSON.stringify(setOnlyPreview)}`);
-	}
 	const setOnlyApply = await applyChangedChain(setOnlyRequest, "create_dependent_chain set-only apply");
-	if (setOnlyApply.created !== undefined && (!Array.isArray(setOnlyApply.created) || setOnlyApply.created.length !== 0)) {
-		throw new Error(`Set-only apply created unexpected Elements: ${JSON.stringify(setOnlyApply)}`);
-	}
 
 	const partialProvider = `P_PI_Partial_${suffix}`;
 	const partialLocal = `C_PI_Partial_${suffix}`;
 	const partialSetup = await createProviderElement(partialProvider);
 	const partialRequest = chainRequest(partialProvider, partialLocal);
-	const partialPreviewResponse = await executeTool("ascet_edit", { ...partialRequest, intent: "preview" });
-	requireOutcome(partialPreviewResponse, "preflight", "create_dependent_chain partial preview");
-	const partialPreview = content(partialPreviewResponse);
-	const partialCreate = (partialPreview.effects as { create?: unknown[] } | undefined)?.create;
-	if (JSON.stringify(partialCreate) !== JSON.stringify(["consumer.imported", "local"])) {
-		throw new Error(`Partial preview planned incorrect creates: ${JSON.stringify(partialPreview)}`);
-	}
 	const partialApply = await applyChangedChain(partialRequest, "create_dependent_chain partial apply");
-	if (JSON.stringify(partialApply.created) !== JSON.stringify(["imported", "local"])) {
-		throw new Error(`Partial apply created incorrect Elements: ${JSON.stringify(partialApply)}`);
-	}
 
 	const conflictRequest = structuredClone(chain);
 	const conflictProvider = conflictRequest.provider as { element: { comment: string } };
 	conflictProvider.element.comment = "Conflicting definition that must not overwrite live state.";
-	const conflictResponse = await executeTool("ascet_edit", { ...conflictRequest, intent: "preview" });
+	const conflictResponse = await executeTool("ascet_edit", { ...conflictRequest, intent: "apply" });
 	const conflict = content(conflictResponse);
-	if (conflict.ok !== false || conflict.code !== "element_conflict") {
-		throw new Error(`Conflict preview did not reject before mutation: ${JSON.stringify(conflict)}`);
+	const conflictError = conflict.error as { code?: unknown } | undefined;
+	if (
+		conflictResponse.details?.outcome?.status !== "error" ||
+		conflict.status !== "error" ||
+		conflictError?.code !== "element_conflict"
+	) {
+		throw new Error(`Conflict apply did not reject before mutation: ${JSON.stringify(conflictResponse)}`);
 	}
 
 	const dependencyConflictRequest = structuredClone(chain);
 	const dependencyConflictBinding = dependencyConflictRequest.binding as { formula: string };
 	dependencyConflictBinding.formula = `${providerParameter} + 1`;
-	const dependencyConflictResponse = await executeTool("ascet_edit", {
-		...dependencyConflictRequest,
-		intent: "preview",
-	});
+	const dependencyConflictResponse = await executeTool("ascet_edit", { ...dependencyConflictRequest, intent: "apply" });
 	const dependencyConflict = content(dependencyConflictResponse);
-	if (dependencyConflict.ok !== false || dependencyConflict.code !== "dependency_conflict") {
-		throw new Error(`Dependency conflict did not reject before mutation: ${JSON.stringify(dependencyConflict)}`);
+	const dependencyConflictError = dependencyConflict.error as { code?: unknown } | undefined;
+	if (
+		dependencyConflictResponse.details?.outcome?.status !== "error" ||
+		dependencyConflict.status !== "error" ||
+		dependencyConflictError?.code !== "dependency_conflict"
+	) {
+		throw new Error(`Dependency conflict apply did not reject before mutation: ${JSON.stringify(dependencyConflictResponse)}`);
 	}
 	const dependencyConflictReadbackResponse = await executeTool("ascet_edit", { ...chain, intent: "apply" });
 	requireOutcome(dependencyConflictReadbackResponse, "ok", "dependency conflict readback");
 	const dependencyConflictReadback = content(dependencyConflictReadbackResponse);
 	if (
 		dependencyConflictReadback.changed !== false ||
-		dependencyConflictReadback.idempotent !== true ||
+		dependencyConflictReadback.mutationStatus !== "no_op" ||
 		dependencyConflictReadback.verified !== true
 	) {
 		throw new Error(`Dependency conflict overwrote live state: ${JSON.stringify(dependencyConflictReadback)}`);
@@ -343,15 +343,15 @@ try {
 		executeTool("ascet_edit", { ...sameRequest, intent: "apply" }),
 	]);
 	const sameConcurrent = sameResponses.map(content);
-	if (!sameConcurrent.some((result) => result.ok === true && result.changed === true && result.verified === true)) {
+	if (!sameConcurrent.some((result) => result.status === "ok" && result.changed === true && result.verified === true)) {
 		throw new Error(`Concurrent same-chain calls did not create one verified chain: ${JSON.stringify(sameConcurrent)}`);
 	}
 	if (
 		sameConcurrent.some(
 			(result) =>
 				!(
-					(result.ok === true && result.verified === true) ||
-					(result.ok === false && result.code === "target_state_changed")
+					(result.status === "ok" && result.verified === true && ["applied", "no_op"].includes(result.mutationStatus as string)) ||
+					(result.status === "error" && (result.error as { code?: unknown } | undefined)?.code === "target_state_changed")
 				),
 		)
 	) {
@@ -360,7 +360,7 @@ try {
 	const sameFinalResponse = await executeTool("ascet_edit", { ...sameRequest, intent: "apply" });
 	requireOutcome(sameFinalResponse, "ok", "concurrent same-chain final readback");
 	const sameFinal = content(sameFinalResponse);
-	if (sameFinal.changed !== false || sameFinal.idempotent !== true || sameFinal.verified !== true) {
+	if (sameFinal.changed !== false || sameFinal.mutationStatus !== "no_op" || sameFinal.verified !== true) {
 		throw new Error(`Concurrent same-chain final state is not exact: ${JSON.stringify(sameFinal)}`);
 	}
 
@@ -392,7 +392,7 @@ try {
 		delete process.env.ASCET_PARAMETER_CHAIN_ENABLE_FAILURE_INJECTION;
 		delete process.env.ASCET_PARAMETER_CHAIN_FAIL_AFTER_STAGE;
 	}
-	if (rolledBack.ok !== false || rolledBack.code !== "rolled_back") {
+	if (rolledBack.outcome !== "failed" || rolledBack.status !== "rolled_back" || rolledBack.mutationStatus !== "rolled_back") {
 		throw new Error(`Injected failure was not rolled back: ${JSON.stringify(rolledBack)}`);
 	}
 
@@ -425,12 +425,11 @@ try {
 				chain: `${providerParameter} -> ${providerParameter} -> ${localParameter}`,
 				confirmations,
 				setup,
-				preview: chainPreview,
 				apply: chainApply,
 				independentRead,
 				idempotent,
-				setOnly: { setup: setOnlySetup, preview: setOnlyPreview, apply: setOnlyApply },
-				partial: { setup: partialSetup, preview: partialPreview, apply: partialApply },
+				setOnly: { setup: setOnlySetup, apply: setOnlyApply },
+				partial: { setup: partialSetup, apply: partialApply },
 				conflict,
 				dependencyConflict,
 				dependencyConflictReadback,

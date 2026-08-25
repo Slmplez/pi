@@ -38,29 +38,38 @@ test("model-facing ascet_edit sources contain no retired public preview contract
 	}
 });
 
-test("live and generated tool rules describe the same apply-only dependent-chain contract", () => {
+test("live and generated tool rules expose the compact dependent-chain construction guide", () => {
 	const liveRules = read(".ascet/rules/tools/pi-ascet-tools.md");
 	const templateRules = read("packages/ascet-extension/templates/ascet-project/rules/tools/pi-ascet-tools.md");
 	assert.equal(templateRules, liveRules);
 	for (const source of [liveRules, templateRules]) {
+		assert.match(
+			source,
+			/`ascet_edit\.create_dependent_chain`: Create one Provider Exported P_<Name> -> Consumer Imported P_<Name> -> Consumer Local Dependent C_<Name> Parameter chain/u,
+		);
+		assert.match(source, /explicit implementation with valueType, memoryLocation, formula, and limitAssignments/u);
+		assert.match(
+			source,
+			/ident needs no projectPath; another formula needs the matching Provider or Consumer projectPath/u,
+		);
+		assert.match(source, /formula="x", formal="x"; apply verifies readback/u);
 		assert.match(source, /one `ascet_edit` call with `intent="apply"`/u);
-		assert.match(source, /`mode="check"` only for read-only editability inspection/u);
-		assert.match(source, /`formula="x"`, `formal="x"`, and map `x` to the Consumer Imported Parameter/u);
+		assert.doesNotMatch(source, /ascetDefault is (?:not supported for this action|not accepted)/u);
 	}
 });
 
-test("Skill and dependency guidance distinguish formula, formal, and Imported Parameter mapping", () => {
-	for (const path of [
-		"packages/ascet-extension/skills/ascet-engineering/SKILL.md",
-		"packages/ascet-extension/skills/ascet-engineering/references/dependency-advanced-path.md",
-		"packages/ascet-extension/src/tools/actions/contracts/dependency.ts",
-	]) {
-		const source = read(path);
-		assert.ok(source.includes('formula="x"') || source.includes('formula=\\"x\\"'), path);
-		assert.ok(source.includes('formal="x"') || source.includes('formal=\\"x\\"'), path);
-		assert.match(source, /Consumer Imported Parameter|consumer\.importedElement\.name/u, path);
-	}
+test("dependency guidance keeps the public binding shape free of mapping fields", () => {
+	const contract = read("packages/ascet-extension/src/tools/actions/contracts/dependency.ts");
+	const dependency = read("packages/ascet-extension/skills/ascet-engineering/references/dependency-advanced-path.md");
+
+	assert.ok(contract.includes('binding.formula="x"'));
+	assert.ok(contract.includes('binding.formal="x"'));
+	assert.ok(contract.includes('binding.variantPolicy="default"'));
+	assert.match(contract, /Do not add a mapping field/u);
+	assert.doesNotMatch(contract, /binding\.mappings/u);
+	assert.doesNotMatch(dependency, /binding\.mappings/u);
 });
+
 test("hidden legacy dependency-chain metadata is explicitly recovery-only", () => {
 	for (const path of [
 		"ascetcli/contracts/cli-catalog.json",
@@ -73,4 +82,18 @@ test("hidden legacy dependency-chain metadata is explicitly recovery-only", () =
 		assert.doesNotMatch(source, /Preview or apply one/u, path);
 		assert.match(source, /public writes use ascet_edit\.create_dependent_chain with intent=apply/u, path);
 	}
+});
+
+test("dependent-chain guidance keeps explicit implementation and Project-scoped custom-formula semantics", () => {
+	const contract = read("packages/ascet-extension/src/tools/actions/contracts/dependency.ts");
+	const dependency = read("packages/ascet-extension/skills/ascet-engineering/references/dependency-advanced-path.md");
+	assert.match(contract, /Provider and Local each require implementation\.mode="explicit"/u);
+	assert.match(contract, /Use formula="ident" without projectPath.*each Formula must exist in that Project/isu);
+	assert.match(contract, /Imported contains only name, modelType, and optional unit/u);
+	assert.match(
+		dependency,
+		/Provider and Local have complete explicit implementation decisions; Imported remains structural/u,
+	);
+	assert.match(dependency, /Resolve each custom Formula against exact Project evidence/u);
+	assert.doesNotMatch(contract, /ascetDefault is not supported for this action/u);
 });

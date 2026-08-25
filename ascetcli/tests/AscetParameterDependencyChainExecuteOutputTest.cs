@@ -15,6 +15,9 @@ public static class AscetParameterDependencyChainExecuteOutputTest
             File.WriteAllText(path, RequestJson(), Encoding.UTF8);
             AscetParameterDependencyChainExecuteRequest request = AscetParameterDependencyChainExecuteParser.ParseFile(path);
             AssertEqual("F\\Provider", request.Provider.ComponentPath, "provider path");
+            AssertEqual("F\\ProviderProject", request.Provider.ProjectPath, "provider project path");
+            AssertEqual("F\\ConsumerProject", request.Consumer.ProjectPath, "consumer project path");
+            AssertEqual("F\\ConsumerProject", request.Local.ProjectPath, "local project path");
             AssertEqual("P_Threshold", request.Provider.Spec.Elements[0].Name, "provider name");
             AssertEqual("P_Threshold", request.Consumer.Spec.Elements[0].Name, "imported name");
             AssertEqual("C_Threshold", request.Local.Spec.Elements[0].Name, "local name");
@@ -25,6 +28,7 @@ public static class AscetParameterDependencyChainExecuteOutputTest
             AssertTrue(descriptor.MutatesDatabase, "chain route must mutate");
             AssertTrue(!descriptor.HostEligible && !descriptor.SupportsBatch, "chain route must be one-shot and non-batch");
             TestEditableGateFailureIsBlockedBeforeMutation();
+            TestProjectContextFlowsThroughWriteAndRollback();
             Console.WriteLine("AscetParameterDependencyChainExecuteOutputTest passed.");
             return 0;
         }
@@ -39,6 +43,22 @@ public static class AscetParameterDependencyChainExecuteOutputTest
         }
     }
 
+    private static void TestProjectContextFlowsThroughWriteAndRollback()
+    {
+        string root = Environment.GetEnvironmentVariable("ASCET_REPO_ROOT");
+        if (String.IsNullOrWhiteSpace(root))
+        {
+            root = Directory.GetCurrentDirectory();
+        }
+
+        string source = File.ReadAllText(Path.Combine(root, "ascetcli", "src", "AscetCopilot", "AscetParameterDependencyChainExecute.cs"));
+        AssertContains(source, "ProjectPath = request.Provider.ProjectPath", "Provider Apply must receive Provider ProjectPath");
+        AssertContains(source, "ProjectPath = request.Consumer.ProjectPath", "Imported Apply must receive Consumer ProjectPath");
+        AssertContains(source, "ProjectPath = request.Local.ProjectPath", "Local Apply must receive Local ProjectPath");
+        AssertContains(source, "request.Provider.Spec.Elements[0].Name, providerElementBefore, request.Provider.ProjectPath", "Provider rollback must receive Provider ProjectPath");
+        AssertContains(source, "request.Consumer.Spec.Elements[0].Name, consumerElementBefore, request.Consumer.ProjectPath", "Imported rollback must receive Consumer ProjectPath");
+        AssertContains(source, "request.Local.Spec.Elements[0].Name, localElementBefore, request.Local.ProjectPath", "Local rollback must receive Local ProjectPath");
+    }
     private static void TestEditableGateFailureIsBlockedBeforeMutation()
     {
         Dictionary<string, object> result = AscetParameterDependencyChainExecuteService.FailureBeforeMutation(
@@ -66,13 +86,18 @@ public static class AscetParameterDependencyChainExecuteOutputTest
     {
         return "{" +
             "\"intent\":\"preview\",\"expectedBeforeState\":{\"provider\":null,\"imported\":null,\"local\":null,\"dependency\":{}},\"acquireEditability\":true," +
-            "\"provider\":{\"componentPath\":\"F\\\\Provider\",\"spec\":{\"elements\":[{\"name\":\"P_Threshold\",\"kind\":\"parameter\",\"modelType\":\"cont\",\"scope\":\"exported\",\"unit\":\"\",\"comment\":\"Provider\",\"calibration\":false}]}}," +
-            "\"consumer\":{\"componentPath\":\"F\\\\Consumer\",\"spec\":{\"elements\":[{\"name\":\"P_Threshold\",\"kind\":\"parameter\",\"modelType\":\"cont\",\"scope\":\"imported\"}]}}," +
-            "\"local\":{\"componentPath\":\"F\\\\Consumer\",\"spec\":{\"elements\":[{\"name\":\"C_Threshold\",\"kind\":\"parameter\",\"modelType\":\"cont\",\"scope\":\"local\",\"unit\":\"\",\"comment\":\"Local\",\"calibration\":false}]}}," +
+            "\"provider\":{\"componentPath\":\"F\\\\Provider\",\"projectPath\":\"F\\\\ProviderProject\",\"spec\":{\"elements\":[{\"name\":\"P_Threshold\",\"kind\":\"parameter\",\"modelType\":\"cont\",\"scope\":\"exported\",\"unit\":\"\",\"comment\":\"Provider\",\"calibration\":false}]}}," +
+            "\"consumer\":{\"componentPath\":\"F\\\\Consumer\",\"projectPath\":\"F\\\\ConsumerProject\",\"spec\":{\"elements\":[{\"name\":\"P_Threshold\",\"kind\":\"parameter\",\"modelType\":\"cont\",\"scope\":\"imported\"}]}}," +
+            "\"local\":{\"componentPath\":\"F\\\\Consumer\",\"projectPath\":\"F\\\\ConsumerProject\",\"spec\":{\"elements\":[{\"name\":\"C_Threshold\",\"kind\":\"parameter\",\"modelType\":\"cont\",\"scope\":\"local\",\"unit\":\"\",\"comment\":\"Local\",\"calibration\":false}]}}," +
             "\"dependency\":{\"targetPath\":\"F\\\\Consumer\",\"elementName\":\"C_Threshold\",\"formula\":\"P_Threshold\",\"formals\":[\"P_Threshold\"],\"bindingPolicy\":\"explicit\",\"mappings\":{\"P_Threshold\":{\"kind\":\"parameter\",\"name\":\"P_Threshold\"}},\"variantPolicy\":\"default\"}" +
             "}";
     }
 
+    private static void AssertContains(string source, string expected, string message)
+    {
+        if (source.IndexOf(expected, StringComparison.Ordinal) < 0)
+            throw new Exception(message + ": expected source fragment was not found.");
+    }
     private static void AssertTrue(bool condition, string message)
     {
         if (!condition) throw new Exception(message);

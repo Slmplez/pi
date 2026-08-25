@@ -32,10 +32,10 @@ For every new calibratable or tunable dependency chain, configuration correctnes
 - The roles and scopes are exactly Provider Exported Parameter, Consumer Imported Parameter, and Consumer Local Dependent Parameter. The Provider Exported and Consumer Imported names match exactly as `P_<Name>`; the Local Dependent name is `C_<Name>`, unless an exact, verified legacy name is being preserved. Never create a calibratable standalone local shortcut.
 - Provider and Imported `modelType` and unit are compatible. Local `modelType`, unit, and implementation are compatible with the dependency result and the actual ESDL usage. The Provider owns the evidence-backed calibration value/data; Imported carries structural compatibility metadata only; Local Dependent receives no independent scalar data/default.
 - Range, value/data/default, implementation, and calibration decisions are explicit and evidence-backed. Validate every value/default against the selected range; integer `valueType` must cover the complete required range and signedness; real precision (`real32`/`real64`) requires an explicit engineering rule. Never use `ascetDefault` to hide an unknown decision.
-- Formula, Formal, Imported mapping, and DataVariant policy are explicit and internally consistent. For the standard single-formal identity binding, use `formula="x"`, `formal="x"`, and map `x` to the Consumer Imported Parameter; use another formal only when an exact verified contract requires it.
+- Formula, Formal, and DataVariant policy are explicit and internally consistent. Use the active action contract for the public binding request; do not infer dependency inputs or variants.
 - For existing endpoints, preserve exact compatible metadata. Any material mismatch is a conflict and must not be overwritten.
 
-After apply, automatic readback must confirm all three endpoints and the binding: exact names, roles/scopes, model and implementation types, units, range, value/data/default and calibration fields where applicable, plus Formula, Formal, Imported mapping, and DataVariant. Missing or contradictory configuration, or incomplete verification, blocks completion.
+After apply, automatic readback must confirm all three endpoints and the binding. Missing or contradictory configuration, or incomplete verification, blocks completion.
 
 ## Exact-target fast path
 
@@ -59,7 +59,7 @@ Before a non-trivial apply, record the exact target, requested behavior, code or
 - Ordinary Elements use `ascet_edit.apply_element_spec`; complete Parameter Dependency Chains use `ascet_edit.create_dependent_chain`. Do not manage the same chain Elements through both actions.
 - Search, Get, and Read results are interpreted by their Action Contract and do not require write verification.
 - Mutation completion requires successful required automatic verification. Stop and report blocked, error, partial, rolled-back, unknown, or missing-verification outcomes.
-- Formula context: `ident` is ASCET's built-in identity formula and needs no Project; non-`ident` `impl.formula` requires one explicit Project path. Never infer or create a Project for identity validation; load `references/elements-fast-path.md` for the exact rules.
+- Formula context and dependency-chain request fields are defined by the active action contract. Validate custom Formula references against exact Project evidence; never infer or create a Project for identity validation.
 
 ## Reference loading
 

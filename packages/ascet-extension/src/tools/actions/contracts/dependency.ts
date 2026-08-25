@@ -5,12 +5,16 @@ import {
 	type AscetParameterImplementationDecision,
 	type AscetParameterRangeDecision,
 	ascetParameterDataDecisionSchema,
-	ascetParameterImplementationDecisionSchema,
 	ascetParameterRangeDecisionSchema,
 } from "../../../element-spec-contract.ts";
 import { ASCET_READ_PROFILES, ASCET_WRITE_PROFILES } from "./profiles.ts";
 import { ascetPublicErrorResultSchema } from "./shared-results.ts";
 import { defineAscetAction } from "./types.ts";
+
+export type AscetCreateDependentChainExplicitImplementation = Extract<
+	AscetParameterImplementationDecision,
+	{ mode: "explicit" }
+>;
 
 export interface AscetCreateDependentChainProviderElement {
 	name: string;
@@ -20,7 +24,7 @@ export interface AscetCreateDependentChainProviderElement {
 	calibration: boolean;
 	range: AscetParameterRangeDecision;
 	data: AscetParameterDataDecision;
-	implementation: AscetParameterImplementationDecision;
+	implementation: AscetCreateDependentChainExplicitImplementation;
 }
 
 export interface AscetCreateDependentChainImportedElement {
@@ -36,17 +40,19 @@ export interface AscetCreateDependentChainLocalElement {
 	comment: string;
 	calibration: boolean;
 	range: AscetParameterRangeDecision;
-	implementation: AscetParameterImplementationDecision;
+	implementation: AscetCreateDependentChainExplicitImplementation;
 }
 
 export interface AscetCreateDependentChainParams {
 	action: "create_dependent_chain";
 	provider: {
 		componentPath: string;
+		projectPath?: string;
 		element: AscetCreateDependentChainProviderElement;
 	};
 	consumer: {
 		componentPath: string;
+		projectPath?: string;
 		importedElement: AscetCreateDependentChainImportedElement;
 		localElement: AscetCreateDependentChainLocalElement;
 	};
@@ -59,6 +65,17 @@ export interface AscetCreateDependentChainParams {
 	intent: "apply";
 }
 
+const explicitImplementationSchema = Type.Object(
+	{
+		mode: Type.Literal("explicit"),
+		valueType: Type.String({ minLength: 1 }),
+		memoryLocation: Type.String({ minLength: 1 }),
+		formula: Type.String({ minLength: 1 }),
+		limitAssignments: Type.Union([Type.Boolean(), Type.Null()]),
+	},
+	{ additionalProperties: false },
+);
+
 const providerElementSchema = Type.Object(
 	{
 		name: Type.String({ minLength: 1 }),
@@ -68,7 +85,7 @@ const providerElementSchema = Type.Object(
 		calibration: Type.Boolean(),
 		range: ascetParameterRangeDecisionSchema,
 		data: ascetParameterDataDecisionSchema,
-		implementation: ascetParameterImplementationDecisionSchema,
+		implementation: explicitImplementationSchema,
 	},
 	{ additionalProperties: false },
 );
@@ -90,7 +107,7 @@ const localElementSchema = Type.Object(
 		comment: Type.String(),
 		calibration: Type.Boolean(),
 		range: ascetParameterRangeDecisionSchema,
-		implementation: ascetParameterImplementationDecisionSchema,
+		implementation: explicitImplementationSchema,
 	},
 	{ additionalProperties: false },
 );
@@ -101,6 +118,7 @@ export const ascetCreateDependentChainActionSchema = Type.Object(
 		provider: Type.Object(
 			{
 				componentPath: Type.String({ minLength: 1 }),
+				projectPath: Type.Optional(Type.String({ minLength: 1 })),
 				element: providerElementSchema,
 			},
 			{ additionalProperties: false },
@@ -108,6 +126,7 @@ export const ascetCreateDependentChainActionSchema = Type.Object(
 		consumer: Type.Object(
 			{
 				componentPath: Type.String({ minLength: 1 }),
+				projectPath: Type.Optional(Type.String({ minLength: 1 })),
 				importedElement: importedElementSchema,
 				localElement: localElementSchema,
 			},
@@ -253,9 +272,10 @@ export const ascetCreateDependentChainActionContract = defineAscetAction({
 		operation: "configure_parameter_dependency_chain_execute",
 	},
 	guidance: {
-		compact: "create-or-verify one Provider/Imported/Local Parameter dependency chain",
+		compact:
+			'Create one Provider Exported P_<Name> -> Consumer Imported P_<Name> -> Consumer Local Dependent C_<Name> Parameter chain. Provider and Local require explicit implementation with valueType, memoryLocation, formula, and limitAssignments; Imported is structural only. ident needs no projectPath; another formula needs the matching Provider or Consumer projectPath. Standard binding uses formula="x", formal="x"; apply verifies readback.',
 		intent:
-			"Create missing Elements, reuse exact Elements, configure one explicit dependency, and verify by automatic readback.",
+			"Create missing compatible endpoints, reuse exact endpoints, configure one dependency, and verify it by automatic readback.",
 		useWhen: [
 			"A complete explicit Element and binding definition is available for apply.",
 			"The previous set-only case must configure a dependency between existing exact Elements.",
@@ -269,25 +289,17 @@ export const ascetCreateDependentChainActionContract = defineAscetAction({
 		result: { shape: "dependentChainWrite", fields: ["ok", "changed", "verified", "created", "configured", "code"] },
 		summary: "Create or verify one Provider/Imported/Local Parameter dependency chain.",
 		rules: [
-			"This mutation action executes only with intent=apply.",
-			"Runtime permission handling performs any required confirmation in the same apply call.",
-			"Use mode=check for read-only editability inspection and ascet_read.read_dependent_chain for dependency inspection.",
-			"Runtime performs a fresh same-session editable=true check immediately before each real mutation.",
-			"Do not call mode=check merely to authorize a write, and never call mode=set without explicit user intent.",
-			"Executed writes always perform mandatory action-specific readback verification.",
-			"Do not request or disable verification through ascet_edit parameters.",
-			"Provide explicit Element definitions. Missing Elements are created; exact existing Elements are reused; conflicts are never overwritten.",
-			"For explicit Provider/Local implementation decisions, provide valueType, memoryLocation, formula, and limitAssignments; limitAssignments is not universally forbidden.",
-			"For ranged discrete Provider or Local Parameters, set implementation.limitAssignments=true; for real32/real64 use null because the option is not applicable.",
-			"For implementation.mode=ascetDefault, omit explicit implementation fields; Imported Parameters must not include implementation settings.",
-			"provider.componentPath is required; the normal write route does not discover providers.",
-			"Apply always performs automatic full readback. A successful apply is verified before it is returned.",
-			"Use one explicit Formula/Formal/Imported binding only; never guess binding or DataVariant metadata.",
-			'For the standard identity binding, use formula="x", formal="x", and map x to consumer.importedElement.name; do not use the Imported Parameter name as the formal.',
+			"Use this action once for one complete Provider Exported P_<Name> -> Consumer Imported P_<Name> -> Consumer Local Dependent C_<Name> chain.",
+			'Provider and Local each require implementation.mode="explicit" with valueType, memoryLocation, formula, and limitAssignments.',
+			"For a ranged discrete implementation, set limitAssignments=true. For real32 or real64, set limitAssignments=null.",
+			"Imported contains only name, modelType, and optional unit. Provider and Imported names must match exactly.",
+			'Use formula="ident" without projectPath. Another Provider formula requires provider.projectPath; another Local formula requires consumer.projectPath; each Formula must exist in that Project.',
+			'For the standard one-input binding, use binding.formula="x", binding.formal="x", and binding.variantPolicy="default". Do not add a mapping field.',
+			'Use intent="apply". Missing compatible endpoints are created, exact endpoints are reused, conflicts are rejected, and success includes automatic readback.',
 		],
 		fewShots: [
 			{
-				intent: "create dependency chain",
+				intent: "create identity dependency chain",
 				args: {
 					action: "create_dependent_chain",
 					provider: {
@@ -296,11 +308,17 @@ export const ascetCreateDependentChainActionContract = defineAscetAction({
 							name: "P_Threshold",
 							modelType: "cont",
 							unit: "",
-							comment: "",
-							calibration: false,
-							range: { mode: "none" },
-							data: { mode: "ascetDefault" },
-							implementation: { mode: "ascetDefault" },
+							comment: "Threshold calibration",
+							calibration: true,
+							range: { mode: "implementation", min: 0, max: 65_535 },
+							data: { mode: "explicit", value: 100 },
+							implementation: {
+								mode: "explicit",
+								valueType: "uint16",
+								memoryLocation: "Default",
+								formula: "ident",
+								limitAssignments: true,
+							},
 						},
 					},
 					consumer: {
@@ -310,10 +328,64 @@ export const ascetCreateDependentChainActionContract = defineAscetAction({
 							name: "C_Threshold",
 							modelType: "cont",
 							unit: "",
+							comment: "Threshold dependency",
+							calibration: false,
+							range: { mode: "implementation", min: 0, max: 65_535 },
+							implementation: {
+								mode: "explicit",
+								valueType: "uint16",
+								memoryLocation: "Default",
+								formula: "ident",
+								limitAssignments: true,
+							},
+						},
+					},
+					binding: { formula: "x", formal: "x", variantPolicy: "default" },
+					intent: "apply",
+				},
+			},
+			{
+				intent: "create dependency chain with Project formulas",
+				args: {
+					action: "create_dependent_chain",
+					provider: {
+						componentPath: "FeatureA/Provider",
+						projectPath: "<Provider Project containing ProviderFormula>",
+						element: {
+							name: "P_Value",
+							modelType: "cont",
+							unit: "",
+							comment: "",
+							calibration: true,
+							range: { mode: "implementation", min: 0, max: 65_535 },
+							data: { mode: "explicit", value: 100 },
+							implementation: {
+								mode: "explicit",
+								valueType: "uint16",
+								memoryLocation: "Default",
+								formula: "<ProviderFormula>",
+								limitAssignments: true,
+							},
+						},
+					},
+					consumer: {
+						componentPath: "FeatureA/Consumer",
+						projectPath: "<Consumer Project containing LocalFormula>",
+						importedElement: { name: "P_Value", modelType: "cont", unit: "" },
+						localElement: {
+							name: "C_Value",
+							modelType: "cont",
+							unit: "",
 							comment: "",
 							calibration: false,
-							range: { mode: "none" },
-							implementation: { mode: "ascetDefault" },
+							range: { mode: "implementation", min: 0, max: 65_535 },
+							implementation: {
+								mode: "explicit",
+								valueType: "uint16",
+								memoryLocation: "Default",
+								formula: "<LocalFormula>",
+								limitAssignments: true,
+							},
 						},
 					},
 					binding: { formula: "x", formal: "x", variantPolicy: "default" },

@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import { Value } from "typebox/value";
+import {
+	ascetCreateDependentChainActionContract,
+	ascetCreateDependentChainActionSchema,
+} from "../actions/contracts/dependency.ts";
 import { ascetEditParameters } from "./schema.ts";
 
 describe("ascet_edit schema", () => {
@@ -124,6 +128,7 @@ test("accepts create_dependent_chain and rejects retired or incomplete requests"
 		action: "create_dependent_chain",
 		provider: {
 			componentPath: "FeatureA\\Provider",
+			projectPath: "FeatureA\\ProviderProject",
 			element: {
 				name: "P_Threshold",
 				modelType: "cont",
@@ -132,11 +137,18 @@ test("accepts create_dependent_chain and rejects retired or incomplete requests"
 				calibration: false,
 				range: { mode: "none" },
 				data: { mode: "ascetDefault" },
-				implementation: { mode: "ascetDefault" },
+				implementation: {
+					mode: "explicit",
+					valueType: "uint16",
+					memoryLocation: "Default",
+					formula: "ident",
+					limitAssignments: true,
+				},
 			},
 		},
 		consumer: {
 			componentPath: "FeatureA\\Consumer",
+			projectPath: "FeatureA\\ConsumerProject",
 			importedElement: { name: "P_Threshold", modelType: "cont", unit: "" },
 			localElement: {
 				name: "C_Threshold",
@@ -145,7 +157,13 @@ test("accepts create_dependent_chain and rejects retired or incomplete requests"
 				comment: "",
 				calibration: false,
 				range: { mode: "none" },
-				implementation: { mode: "ascetDefault" },
+				implementation: {
+					mode: "explicit",
+					valueType: "uint16",
+					memoryLocation: "Default",
+					formula: "ident",
+					limitAssignments: true,
+				},
 			},
 		},
 		binding: { formula: "x", formal: "x", variantPolicy: "default" },
@@ -165,4 +183,95 @@ test("accepts create_dependent_chain and rejects retired or incomplete requests"
 		}),
 		false,
 	);
+});
+
+test("rejects ascetDefault implementations and Imported implementation metadata", () => {
+	const valid = {
+		action: "create_dependent_chain",
+		provider: {
+			componentPath: "FeatureA\\Provider",
+			element: {
+				name: "P_Threshold",
+				modelType: "cont",
+				unit: "",
+				comment: "",
+				calibration: false,
+				range: { mode: "none" },
+				data: { mode: "ascetDefault" },
+				implementation: {
+					mode: "explicit",
+					valueType: "uint16",
+					memoryLocation: "Default",
+					formula: "ident",
+					limitAssignments: true,
+				},
+			},
+		},
+		consumer: {
+			componentPath: "FeatureA\\Consumer",
+			importedElement: { name: "P_Threshold", modelType: "cont", unit: "" },
+			localElement: {
+				name: "C_Threshold",
+				modelType: "cont",
+				unit: "",
+				comment: "",
+				calibration: false,
+				range: { mode: "none" },
+				implementation: {
+					mode: "explicit",
+					valueType: "uint16",
+					memoryLocation: "Default",
+					formula: "ident",
+					limitAssignments: true,
+				},
+			},
+		},
+		binding: { formula: "x", formal: "x", variantPolicy: "default" },
+		intent: "apply",
+	} as const;
+	assert.equal(Value.Check(ascetEditParameters, valid), true);
+	assert.equal(
+		Value.Check(ascetEditParameters, {
+			...valid,
+			provider: {
+				...valid.provider,
+				element: { ...valid.provider.element, implementation: { mode: "ascetDefault" } },
+			},
+		}),
+		false,
+	);
+	assert.equal(
+		Value.Check(ascetEditParameters, {
+			...valid,
+			consumer: {
+				...valid.consumer,
+				importedElement: { ...valid.consumer.importedElement, implementation: { mode: "explicit" } },
+			},
+		}),
+		false,
+	);
+});
+
+test("publishes schema-valid identity and Project-Formula dependent-chain few-shots", () => {
+	const fewShots = ascetCreateDependentChainActionContract.guidance.fewShots ?? [];
+	assert.equal(fewShots.length, 2);
+	const [identity, customFormula] = fewShots;
+	assert.ok(identity);
+	assert.ok(customFormula);
+
+	assert.equal(Value.Check(ascetCreateDependentChainActionSchema, identity.args), true);
+	const identityJson = JSON.stringify(identity.args);
+	assert.doesNotMatch(identityJson, /"projectPath"/u);
+	assert.match(identityJson, /"formula":"ident"/u);
+	assert.match(identityJson, /"limitAssignments":true/u);
+	assert.match(identityJson, /"binding":\{"formula":"x","formal":"x","variantPolicy":"default"\}/u);
+	assert.doesNotMatch(identityJson, /"mappings"/u);
+
+	assert.equal(Value.Check(ascetCreateDependentChainActionSchema, customFormula.args), true);
+	const customFormulaJson = JSON.stringify(customFormula.args);
+	assert.match(customFormulaJson, /"projectPath":"<Provider Project containing ProviderFormula>"/u);
+	assert.match(customFormulaJson, /"projectPath":"<Consumer Project containing LocalFormula>"/u);
+	assert.match(customFormulaJson, /"formula":"<ProviderFormula>"/u);
+	assert.match(customFormulaJson, /"formula":"<LocalFormula>"/u);
+	assert.doesNotMatch(customFormulaJson, /"mappings"/u);
 });

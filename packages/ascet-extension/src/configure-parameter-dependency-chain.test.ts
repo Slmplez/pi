@@ -1,4 +1,4 @@
-import assert from "node:assert/strict";
+﻿import assert from "node:assert/strict";
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -15,6 +15,7 @@ function createDefinition(): ConfigureParameterDependencyDefinition {
 	return {
 		provider: {
 			componentPath: "DEMO/Provider",
+			projectPath: "DEMO\\ProviderProject",
 			element: {
 				role: "providerExportedParameter",
 				name: "P_Threshold",
@@ -24,11 +25,18 @@ function createDefinition(): ConfigureParameterDependencyDefinition {
 				calibration: false,
 				range: { mode: "none" },
 				data: { mode: "ascetDefault" },
-				implementation: { mode: "ascetDefault" },
+				implementation: {
+					mode: "explicit",
+					valueType: "uint16",
+					memoryLocation: "Default",
+					formula: "ident",
+					limitAssignments: true,
+				},
 			},
 		},
 		consumer: {
 			componentPath: "DEMO/Consumer",
+			projectPath: "DEMO\\ConsumerProject",
 			element: {
 				role: "consumerImportedParameter",
 				name: "P_Threshold",
@@ -38,6 +46,7 @@ function createDefinition(): ConfigureParameterDependencyDefinition {
 		},
 		local: {
 			componentPath: "DEMO/Consumer",
+			projectPath: "DEMO\\ConsumerProject",
 			element: {
 				role: "localDependentParameter",
 				name: "C_Threshold",
@@ -46,7 +55,13 @@ function createDefinition(): ConfigureParameterDependencyDefinition {
 				comment: "Dependent local",
 				calibration: false,
 				range: { mode: "none" },
-				implementation: { mode: "ascetDefault" },
+				implementation: {
+					mode: "explicit",
+					valueType: "uint16",
+					memoryLocation: "Default",
+					formula: "ident",
+					limitAssignments: true,
+				},
 			},
 		},
 		dependency: {
@@ -238,6 +253,9 @@ describe("configure_parameter_dependency_chain execute", () => {
 			assert.deepEqual(calls[0]?.args.slice(0, 2), ["exec", "configure_parameter_dependency_chain_execute"]);
 			assert.ok(requestDocument);
 			assert.equal((requestDocument?.dependency as { elementName?: string }).elementName, "C_Threshold");
+			assert.equal((requestDocument?.provider as { projectPath?: string }).projectPath, "DEMO\\ProviderProject");
+			assert.equal((requestDocument?.consumer as { projectPath?: string }).projectPath, "DEMO\\ConsumerProject");
+			assert.equal((requestDocument?.local as { projectPath?: string }).projectPath, "DEMO\\ConsumerProject");
 			assert.equal(
 				((requestDocument?.provider as { spec?: { elements?: Array<{ name?: string }> } }).spec?.elements ?? [])[0]
 					?.name,

@@ -37,6 +37,23 @@ describe("ASCET prompt coordination", () => {
 		assert.doesNotMatch(get, /ascet_get\.(elements|database_catalog|import_binding)/);
 		assert.match(read, /ascet_read\.read_dependent_chain/);
 		assert.match(edit, /ascet_edit\.create_dependent_chain/);
+		assert.match(
+			edit,
+			/Provider Exported P_<Name> -> Consumer Imported P_<Name> -> Consumer Local Dependent C_<Name>/,
+		);
+		assert.match(edit, /explicit implementation with valueType, memoryLocation, formula, and limitAssignments/);
+		assert.match(
+			edit,
+			/ident needs no projectPath; another formula needs the matching Provider or Consumer projectPath/,
+		);
+		assert.match(edit, /formula="x", formal="x"/);
+		assert.match(edit, /apply verifies readback/);
+		assert.match(edit, /P_Threshold/);
+		assert.doesNotMatch(
+			edit,
+			/<Provider Project containing ProviderFormula>|<Consumer Project containing LocalFormula>|<ProviderFormula>|<LocalFormula>/,
+		);
+		assert.doesNotMatch(edit, /ascetDefault is not supported for this action/);
 		assert.match(edit, /ascet_edit\.set_element_dependency/);
 		assert.doesNotMatch(edit, /configure_parameter_dependency_chain/);
 	});
@@ -50,9 +67,21 @@ describe("ASCET prompt coordination", () => {
 
 		assert.match(write, /element's code role and explicit requirements/);
 		assert.match(write, /Provider Exported Parameter creation/);
-		assert.match(write, /Missing Elements are created/);
-		assert.match(write, /automatic full readback/);
+		assert.match(write, /limitAssignments=true.*limitAssignments=null/);
+		assert.match(write, /provider\.projectPath.*consumer\.projectPath/);
+		assert.match(write, /Do not add a mapping field/);
+		assert.match(write, /Missing compatible endpoints are created/);
+		assert.match(write, /automatic readback/);
+		assert.doesNotMatch(write, /ascetDefault is not supported for this action/);
 		assert.doesNotMatch(write, /verifyReadback=true/);
+
+		const detailedExamples = buildToolPromptGuidelines({
+			tool: "ascet_edit",
+			actions: ["create_dependent_chain"],
+			includeExamples: true,
+		}).join("\n");
+		assert.match(detailedExamples, /<Provider Project containing ProviderFormula>/);
+		assert.match(detailedExamples, /<Consumer Project containing LocalFormula>/);
 	});
 
 	test("reduces default family prompt volume by at least 70 percent", () => {

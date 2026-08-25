@@ -8,6 +8,7 @@ using System.Web.Script.Serialization;
 public sealed class AscetParameterDependencyChainElementRequest
 {
     public string ComponentPath { get; set; }
+    public string ProjectPath { get; set; }
     public AscetElementSpecDocument Spec { get; set; }
 }
 
@@ -115,6 +116,9 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
             providerElementBefore = FindElement(providerBefore, request.Provider.Spec.Elements[0].Name);
             consumerElementBefore = FindElement(consumerBefore, request.Consumer.Spec.Elements[0].Name);
             localElementBefore = FindElement(consumerBefore, request.Local.Spec.Elements[0].Name);
+            _elementSync.ValidateProjectFormulasInSession(session, providerRef, request.Provider.Spec, request.Provider.ProjectPath);
+            _elementSync.ValidateProjectFormulasInSession(session, consumerRef, request.Consumer.Spec, request.Consumer.ProjectPath);
+            _elementSync.ValidateProjectFormulasInSession(session, consumerRef, request.Local.Spec, request.Local.ProjectPath);
             AscetElementSpecDiffResult providerDiff = _elementSync.DiffInSession(session, providerRef, request.Provider.Spec);
             AscetElementSpecDiffResult consumerDiff = _elementSync.DiffInSession(session, consumerRef, request.Consumer.Spec);
             AscetElementSpecDiffResult localDiff = _elementSync.DiffInSession(session, consumerRef, request.Local.Spec);
@@ -163,7 +167,7 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
             if (providerNeedsWrite)
             {
                 mutationStarted = true;
-                AscetElementSyncResult applied = _elementSync.ApplyInSession(session, providerRef, request.Provider.Spec, null, true, false);
+                AscetElementSyncResult applied = _elementSync.ApplyInSession(session, providerRef, request.Provider.Spec, new AscetElementApplyOptions { ProjectPath = request.Provider.ProjectPath }, true, false);
                 providerWritten = HasCreated(applied);
                 RequireElementReadback(applied, "provider");
                 ReplaceStage(stages, "provider", "created", true);
@@ -173,7 +177,7 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
             if (consumerNeedsWrite)
             {
                 mutationStarted = true;
-                AscetElementSyncResult applied = _elementSync.ApplyInSession(session, consumerRef, request.Consumer.Spec, null, true, false);
+                AscetElementSyncResult applied = _elementSync.ApplyInSession(session, consumerRef, request.Consumer.Spec, new AscetElementApplyOptions { ProjectPath = request.Consumer.ProjectPath }, true, false);
                 consumerWritten = HasCreated(applied);
                 RequireElementReadback(applied, "consumer");
                 ReplaceStage(stages, "consumer", "created", true);
@@ -183,7 +187,7 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
             if (localNeedsWrite)
             {
                 mutationStarted = true;
-                AscetElementSyncResult applied = _elementSync.ApplyInSession(session, consumerRef, request.Local.Spec, null, true, false);
+                AscetElementSyncResult applied = _elementSync.ApplyInSession(session, consumerRef, request.Local.Spec, new AscetElementApplyOptions { ProjectPath = request.Local.ProjectPath }, true, false);
                 localWritten = HasCreated(applied);
                 RequireElementReadback(applied, "local");
                 ReplaceStage(stages, "local", "created", true);
@@ -226,11 +230,11 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
             if (dependencyWritten || localWritten)
                 TryRollback("dependency", rollbackStages, rollbackErrors, delegate() { RestoreDependency(session, request, dependencyBefore); });
             if (localWritten)
-                TryRollback("local", rollbackStages, rollbackErrors, delegate() { RestoreElement(session, consumerRef, request.Local.Spec.Elements[0].Name, localElementBefore); });
+                TryRollback("local", rollbackStages, rollbackErrors, delegate() { RestoreElement(session, consumerRef, request.Local.Spec.Elements[0].Name, localElementBefore, request.Local.ProjectPath); });
             if (consumerWritten)
-                TryRollback("consumer", rollbackStages, rollbackErrors, delegate() { RestoreElement(session, consumerRef, request.Consumer.Spec.Elements[0].Name, consumerElementBefore); });
+                TryRollback("consumer", rollbackStages, rollbackErrors, delegate() { RestoreElement(session, consumerRef, request.Consumer.Spec.Elements[0].Name, consumerElementBefore, request.Consumer.ProjectPath); });
             if (providerWritten)
-                TryRollback("provider", rollbackStages, rollbackErrors, delegate() { RestoreElement(session, providerRef, request.Provider.Spec.Elements[0].Name, providerElementBefore); });
+                TryRollback("provider", rollbackStages, rollbackErrors, delegate() { RestoreElement(session, providerRef, request.Provider.Spec.Elements[0].Name, providerElementBefore, request.Provider.ProjectPath); });
             if (rollbackErrors.Count == 0)
             {
                 try
@@ -509,7 +513,7 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
         });
     }
 
-    private void RestoreElement(AscetSession session, AscetItemRef component, string elementName, AscetElementSpec before)
+    private void RestoreElement(AscetSession session, AscetItemRef component, string elementName, AscetElementSpec before, string projectPath)
     {
         if (before == null)
         {
@@ -521,7 +525,7 @@ public sealed class AscetParameterDependencyChainExecuteService : AscetReadDomai
             session,
             component,
             document,
-            new AscetElementApplyOptions { Mode = AscetElementApplyMode.Restore, DeleteMissing = false, RecreateIncompatible = true },
+            new AscetElementApplyOptions { Mode = AscetElementApplyMode.Restore, DeleteMissing = false, RecreateIncompatible = true, ProjectPath = projectPath },
             true,
             true);
         if (restored == null || !restored.WriteSucceeded || !restored.ReadbackVerified)
@@ -908,6 +912,7 @@ public static class AscetParameterDependencyChainExecuteParser
         return new AscetParameterDependencyChainElementRequest
         {
             ComponentPath = GetString(value, "componentPath"),
+            ProjectPath = AscetElementFormulaRules.NormalizeProjectPath(GetString(value, "projectPath")),
             Spec = AscetElementSpecDocumentParser.ParseJson(AscetJsonContract.Serialize(specValue))
         };
     }

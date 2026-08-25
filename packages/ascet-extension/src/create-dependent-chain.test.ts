@@ -1,4 +1,4 @@
-import assert from "node:assert/strict";
+﻿import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { describe, test } from "node:test";
 import { Value } from "typebox/value";
@@ -20,6 +20,7 @@ function request(intent: "preview" | "apply" = "preview"): AscetLegacyCreateDepe
 		action: "create_dependent_chain",
 		provider: {
 			componentPath: "FeatureA\\Provider",
+			projectPath: "FeatureA\\ProviderProject",
 			element: {
 				name: "P_Threshold",
 				modelType: "cont",
@@ -28,11 +29,18 @@ function request(intent: "preview" | "apply" = "preview"): AscetLegacyCreateDepe
 				calibration: false,
 				range: { mode: "none" },
 				data: { mode: "ascetDefault" },
-				implementation: { mode: "ascetDefault" },
+				implementation: {
+					mode: "explicit",
+					valueType: "uint16",
+					memoryLocation: "Default",
+					formula: "ident",
+					limitAssignments: true,
+				},
 			},
 		},
 		consumer: {
 			componentPath: "FeatureA\\Consumer",
+			projectPath: "FeatureA\\ConsumerProject",
 			importedElement: { name: "P_Threshold", modelType: "cont", unit: "" },
 			localElement: {
 				name: "C_Threshold",
@@ -41,7 +49,13 @@ function request(intent: "preview" | "apply" = "preview"): AscetLegacyCreateDepe
 				comment: "Dependent",
 				calibration: false,
 				range: { mode: "none" },
-				implementation: { mode: "ascetDefault" },
+				implementation: {
+					mode: "explicit",
+					valueType: "uint16",
+					memoryLocation: "Default",
+					formula: "ident",
+					limitAssignments: true,
+				},
 			},
 		},
 		binding: { formula: "x", formal: "x", variantPolicy: "default" },
@@ -221,6 +235,54 @@ describe("create_dependent_chain public contract", () => {
 		assert.equal(bridgeCalls, 0);
 	});
 
+	test("requires Project context for non-ident Provider and Local formulas before approval or Bridge execution", async () => {
+		const scenarios = [
+			{
+				name: "provider custom formula",
+				mutate: (params: AscetCreateDependentChainParams) => {
+					params.provider.element.implementation.formula = "Time_5ms";
+					delete params.provider.projectPath;
+				},
+			},
+			{
+				name: "local custom formula",
+				mutate: (params: AscetCreateDependentChainParams) => {
+					params.consumer.localElement.implementation.formula = "Force_N_P64";
+					delete params.consumer.projectPath;
+				},
+			},
+		] as const;
+		for (const scenario of scenarios) {
+			const params = request("apply");
+			scenario.mutate(params);
+			let confirmations = 0;
+			let bridgeCalls = 0;
+			const result = await runAscetCreateDependentChain(
+				params,
+				{
+					cwd: process.cwd(),
+					executeCli: async (requestValue) => {
+						bridgeCalls++;
+						return execution(requestValue, committedResult());
+					},
+				},
+				{
+					hasUI: true,
+					ui: {
+						confirm: async () => {
+							confirmations++;
+							return true;
+						},
+					},
+				},
+			);
+			assert.equal(result.details.error?.code, "project_context_required", scenario.name);
+			assert.equal(result.details.mutationResult?.mutationStatus, "not_started", scenario.name);
+			assert.equal(result.details.mutationResult?.bridge.bridgeEntered, false, scenario.name);
+			assert.equal(confirmations, 0, scenario.name);
+			assert.equal(bridgeCalls, 0, scenario.name);
+		}
+	});
 	test("rejects retired, missing, and unknown intent before approval or Bridge execution", async () => {
 		for (const intent of ["preview", undefined, "unknown"] as const) {
 			let bridgeCalls = 0;

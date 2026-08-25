@@ -95,14 +95,27 @@ describe("ASCET action catalog", () => {
 			shape: "dependentChain",
 			fields: ["found", "chain", "provider", "consumer", "dependencyFormula", "binding", "complete", "error"],
 		});
-		assert.match(write?.compact ?? "", /create-or-verify one Provider\/Imported\/Local Parameter dependency chain/);
-		assert.match(writeRules, /Missing Elements are created/);
-		assert.match(writeRules, /normal write route does not discover providers/);
-		assert.match(writeRules, /automatic full readback/);
-		assert.match(writeRules, /explicit Provider\/Local implementation decisions.*limitAssignments/);
-		assert.match(writeRules, /ranged discrete Provider or Local Parameters.*implementation\.limitAssignments=true/);
-		assert.match(writeRules, /real32\/real64 use null/);
-		assert.match(writeRules, /ascetDefault.*Imported Parameters must not include implementation settings/);
+		const compact = write?.compact ?? "";
+		assert.match(
+			compact,
+			/Provider Exported P_<Name> -> Consumer Imported P_<Name> -> Consumer Local Dependent C_<Name>/,
+		);
+		assert.match(compact, /explicit implementation with valueType, memoryLocation, formula, and limitAssignments/);
+		assert.match(
+			compact,
+			/ident needs no projectPath; another formula needs the matching Provider or Consumer projectPath/,
+		);
+		assert.match(compact, /formula="x", formal="x"/);
+		assert.match(compact, /apply verifies readback/);
+		assert.match(writeRules, /Provider and Local each require implementation\.mode="explicit"/);
+		assert.match(writeRules, /ranged discrete implementation.*limitAssignments=true/);
+		assert.match(writeRules, /real32 or real64.*limitAssignments=null/);
+		assert.match(writeRules, /Provider and Imported names must match exactly/);
+		assert.match(writeRules, /provider\.projectPath.*consumer\.projectPath/);
+		assert.match(writeRules, /Do not add a mapping field/);
+		assert.match(writeRules, /Missing compatible endpoints are created/);
+		assert.match(writeRules, /automatic readback/);
+		assert.doesNotMatch(writeRules, /ascetDefault is not supported for this action/);
 		assert.match(setDependency?.compact ?? "", /set dependency flag\/formula/);
 		assert.ok(setDependency?.schema.required.includes("elementName"));
 		assert.ok(setDependency?.schema.required.includes("dependency"));

@@ -1,4 +1,4 @@
-import assert from "node:assert/strict";
+﻿import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import type { AscetCliExecutionResult, AscetCliRequest } from "../../cli.ts";
@@ -22,6 +22,7 @@ test("create_dependent_chain uses one direct Bridge operation without preview or
 			action: "create_dependent_chain",
 			provider: {
 				componentPath: "FeatureA/Provider",
+				projectPath: "FeatureA/ProviderProject",
 				element: {
 					name: "P_Threshold",
 					modelType: "cont",
@@ -30,11 +31,18 @@ test("create_dependent_chain uses one direct Bridge operation without preview or
 					calibration: false,
 					range: { mode: "none" },
 					data: { mode: "ascetDefault" },
-					implementation: { mode: "ascetDefault" },
+					implementation: {
+						mode: "explicit",
+						valueType: "uint16",
+						memoryLocation: "Default",
+						formula: "ident",
+						limitAssignments: true,
+					},
 				},
 			},
 			consumer: {
 				componentPath: "FeatureA/Consumer",
+				projectPath: "FeatureA/ConsumerProject",
 				importedElement: { name: "P_Threshold", modelType: "cont", unit: "" },
 				localElement: {
 					name: "C_Threshold",
@@ -43,7 +51,13 @@ test("create_dependent_chain uses one direct Bridge operation without preview or
 					comment: "Dependent",
 					calibration: false,
 					range: { mode: "none" },
-					implementation: { mode: "ascetDefault" },
+					implementation: {
+						mode: "explicit",
+						valueType: "uint16",
+						memoryLocation: "Default",
+						formula: "ident",
+						limitAssignments: true,
+					},
 				},
 			},
 			binding: { formula: "x", formal: "x", variantPolicy: "default" },
@@ -73,8 +87,14 @@ test("create_dependent_chain uses one direct Bridge operation without preview or
 				if (operation === "configure_parameter_dependency_chain_execute") {
 					const bridgeRequest = JSON.parse(readFileSync(request.args[2] ?? "", "utf8")) as {
 						intent?: string;
+						provider?: { projectPath?: string };
+						consumer?: { projectPath?: string };
+						local?: { projectPath?: string };
 						dependency?: { formula?: string; formals?: string[]; mappings?: Record<string, { name?: string }> };
 					};
+					assert.equal(bridgeRequest.provider?.projectPath, "FeatureA\\ProviderProject");
+					assert.equal(bridgeRequest.consumer?.projectPath, "FeatureA\\ConsumerProject");
+					assert.equal(bridgeRequest.local?.projectPath, "FeatureA\\ConsumerProject");
 					assert.equal(bridgeRequest.dependency?.formula, "x");
 					assert.deepEqual(bridgeRequest.dependency?.formals, ["x"]);
 					assert.deepEqual(bridgeRequest.dependency?.mappings, {

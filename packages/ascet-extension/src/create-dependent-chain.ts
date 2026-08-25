@@ -1,4 +1,4 @@
-import { Value } from "typebox/value";
+﻿import { Value } from "typebox/value";
 import type { AscetCliJsonResult } from "./cli.ts";
 import {
 	type ConfigureParameterDependencyChainOptions,
@@ -22,11 +22,13 @@ import type {
 } from "./element-spec-contract.ts";
 import { getAscetDatabaseIdentity, runAscetGet } from "./get.ts";
 import {
+	type AscetCreateDependentChainExplicitImplementation,
 	type AscetCreateDependentChainParams,
 	ascetCreateDependentChainActionSchema,
 } from "./tools/actions/contracts/dependency.ts";
 
 export {
+	type AscetCreateDependentChainExplicitImplementation,
 	type AscetCreateDependentChainImportedElement,
 	type AscetCreateDependentChainLocalElement,
 	type AscetCreateDependentChainParams,
@@ -564,6 +566,9 @@ function normalizeCreateDependentChainParams<
 		...params,
 		provider: {
 			...params.provider,
+			...(params.provider.projectPath === undefined
+				? {}
+				: { projectPath: normalizeAscetPath(params.provider.projectPath.trim()) }),
 			...(providerComponentPath === undefined
 				? {}
 				: { componentPath: normalizeAscetPath(providerComponentPath.trim()) }),
@@ -575,6 +580,9 @@ function normalizeCreateDependentChainParams<
 		},
 		consumer: {
 			...params.consumer,
+			...(params.consumer.projectPath === undefined
+				? {}
+				: { projectPath: normalizeAscetPath(params.consumer.projectPath.trim()) }),
 			componentPath: normalizeAscetPath(params.consumer.componentPath.trim()),
 			importedElement: {
 				...params.consumer.importedElement,
@@ -644,10 +652,43 @@ function validateParams(
 	if (!/^C_.+/u.test(params.consumer.localElement.name)) {
 		return { code: "local_parameter_name_invalid", message: "consumer.localElement.name must use C_<Name>." };
 	}
+	const providerFormulaError = validateImplementationProjectContext(
+		"provider",
+		params.provider.element.implementation,
+		params.provider.projectPath,
+	);
+	if (providerFormulaError) return providerFormulaError;
+	const localFormulaError = validateImplementationProjectContext(
+		"local",
+		params.consumer.localElement.implementation,
+		params.consumer.projectPath,
+	);
+	if (localFormulaError) return localFormulaError;
 	if (params.provider.element.modelType.toLowerCase() !== params.consumer.importedElement.modelType.toLowerCase()) {
 		return {
 			code: "provider_incompatible",
 			message: "Provider and Consumer Imported Parameter model types must match.",
+		};
+	}
+	return undefined;
+}
+
+function validateImplementationProjectContext(
+	target: "provider" | "local",
+	implementation: AscetCreateDependentChainExplicitImplementation,
+	projectPath: string | undefined,
+): { code: string; message: string } | undefined {
+	const formula = implementation.formula.trim();
+	if (formula.length === 0) {
+		return {
+			code: "element_definition_invalid",
+			message: `${target} implementation.formula must not be empty.`,
+		};
+	}
+	if (formula.toLowerCase() !== "ident" && !projectPath?.trim()) {
+		return {
+			code: "project_context_required",
+			message: `${target}.projectPath is required when ${target} implementation.formula is not ident.`,
 		};
 	}
 	return undefined;
@@ -748,9 +789,21 @@ function createBridgeDefinition(
 		...params.consumer.localElement,
 	};
 	return {
-		provider: { componentPath: providerComponentPath, element: provider },
-		consumer: { componentPath: normalizeAscetPath(params.consumer.componentPath), element: consumer },
-		local: { componentPath: normalizeAscetPath(params.consumer.componentPath), element: local },
+		provider: {
+			componentPath: providerComponentPath,
+			...(params.provider.projectPath ? { projectPath: normalizeAscetPath(params.provider.projectPath) } : {}),
+			element: provider,
+		},
+		consumer: {
+			componentPath: normalizeAscetPath(params.consumer.componentPath),
+			...(params.consumer.projectPath ? { projectPath: normalizeAscetPath(params.consumer.projectPath) } : {}),
+			element: consumer,
+		},
+		local: {
+			componentPath: normalizeAscetPath(params.consumer.componentPath),
+			...(params.consumer.projectPath ? { projectPath: normalizeAscetPath(params.consumer.projectPath) } : {}),
+			element: local,
+		},
 		dependency: {
 			formula: params.binding.formula,
 			formals: [params.binding.formal],

@@ -21,6 +21,9 @@
 
 ### Changed
 
+- Changed dependent-chain creation to require explicit Provider and Local implementation metadata and support Project-scoped implementation formulas.
+
+
 - Simplified ASCET confirmation dialogs to show only the target, planned changes, and automatic verification.
 - Reduced ASCET System and Tool Prompts to Skill routing and Descriptor-generated action guidance; model-facing schemas no longer accept `verifyReadback`.
 
